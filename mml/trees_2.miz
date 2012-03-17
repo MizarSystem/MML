@@ -8,7 +8,7 @@ environ
 
  vocabularies TREES_1, FUNCT_1, FINSEQ_1, ZFMISC_1, RELAT_1, BOOLE, ORDERS_1,
       ORDINAL1, TARSKI, FINSET_1, CARD_1, ARYTM_1, FUNCOP_1, TREES_2, HAHNBAN,
-      PRELAMB, MCART_1;
+      PRELAMB, MCART_1, ARYTM;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, RELAT_1, MCART_1,
       XCMPLX_0, FUNCT_1, REAL_1, NAT_1, NUMBERS, FINSEQ_1, FINSET_1, CARD_1,
       RELSET_1, BINOP_1, FUNCT_2, FUNCOP_1, TREES_1, XXREAL_0;
@@ -918,7 +918,7 @@ then A27:    Z in X by A1,A23,A24;
    take Y; thus thesis by A1,A17;
   end;
 
-scheme FuncExOfMinNat { P[set,Element of NAT], X()->set }:
+scheme FuncExOfMinNat { P[set,Nat], X()->set }:
  ex f st dom f = X() & for x st x in X() ex n st f.x = n & P[x,n] &
    for m st P[x,m] holds n <= m
   provided
@@ -936,11 +936,16 @@ A4:    z = l & P[x,l] & for m st P[x,m] holds l <= m;
      end;
 A5:  for x st x in X() ex y st Q[x,y]
      proof let x;
-       defpred X[Element of NAT] means P[x,$1];
+       defpred X[Nat] means P[x,$1];
       assume x in X();
-then A6:    ex n st X[n] by A1;
-           ex n st X[n] & for m st X[m] holds n <= m from NAT_1:sch 5(A6);
-      hence thesis;
+then ex n st X[n] by A1;
+then A6:    ex n be Nat st X[n] by A1;
+consider n be Nat such that
+A7: X[n] & for m be Nat st X[m] holds n <= m from NAT_1:sch 5(A6);
+A8: n in NAT by ORDINAL1:def 13;
+    take n;
+    for m st X[m] holds n <= m by A7;
+      hence thesis by A7,A8;
      end;
    thus ex f st dom f = X() & for x st x in X() holds Q[x,f.x]
     from FUNCT_1:sch 2(A2,A5);

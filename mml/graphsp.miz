@@ -8,11 +8,11 @@ environ
 
  vocabularies ARYTM_1, INT_1, RELAT_1, SCM_1, RLVECT_1, AMI_3, GRAPHSP,
       FUNCT_1, BOOLE, FINSET_1, ORDERS_1, FINSEQ_1, CARD_1, FUNCT_2, GRAPH_1,
-      FINSEQ_4, GRAPH_5, GRAPH_4, MSAFREE2, FUNCT_4;
+      FINSEQ_4, GRAPH_5, GRAPH_4, MSAFREE2, FUNCT_4, ARYTM;
  notations XCMPLX_0, XXREAL_0, REAL_1, NAT_1, INT_1, TARSKI, XBOOLE_0,
-      SUBSET_1, RELAT_1, FUNCT_1, FINSEQ_1, FINSEQ_2, FINSEQ_4, CARD_1,
+      SUBSET_1, RELAT_1, FUNCT_1, FINSEQ_1, SEQ_1, FINSEQ_2, FINSEQ_4, CARD_1,
       FINSET_1, GRAPH_1, PARTFUN1, FUNCT_2, CQC_SIM1, GRAPH_4, GRAPH_3,
-      GRAPH_5, BINARITH, DOMAIN_1, RVSUM_1, GOBOARD1, NUMBERS, FUNCT_7;
+      GRAPH_5, BINARITH, DOMAIN_1, RVSUM_1, NUMBERS, FUNCT_7;
  constructors PARTFUN1, DOMAIN_1, XXREAL_0, REAL_1, NAT_1, FINSEQ_4, FINSOP_1,
       BINARITH, FUNCT_7, CQC_SIM1, GOBOARD1, GRAPH_4, GRAPH_5;
  registrations XBOOLE_0, ORDINAL1, RELSET_1, FUNCT_2, FINSET_1, FRAENKEL,
@@ -254,11 +254,12 @@ A2: p is_orientedpath_of v1,v2;
         FT=the Target of G;
 A3: p <> {} & FS.(p.1) = v1 & FT.(p.(len p))= v2 by A2,GRAPH_5:def 3;
 then A4: len p >= 1 by FINSEQ_1:28;
-    defpred PP[Element of NAT] means $1 >=1 & $1<=len p & FS.(p.$1) in U;
-A5: for k st PP[k] holds k <= len p;
-A6: ex k st PP[k] by A1,A3,A4;
-    consider k such that
-A7: PP[k] & for n st PP[n] holds n <= k from NAT_1:sch 6(A5,A6);
+    defpred PP[Nat] means $1 >=1 & $1<=len p & FS.(p.$1) in U;
+A5: for k be Nat st PP[k] holds k <= len p;
+A6: ex k be Nat st PP[k] by A1,A3,A4;
+    consider k be Nat such that
+A7: PP[k] & for n be Nat st PP[n] holds n <= k from NAT_1:sch 6(A5,A6);
+    reconsider k as Element of NAT by ORDINAL1:def 13;
     reconsider vx=FS.(p.k) as Vertex of G by A7,Lm3;
 A8: p.k in the Edges of G by A7,Th2;
     per cases;
@@ -865,13 +866,13 @@ definition let g be Element of Funcs(REAL*,REAL*),f be Element of REAL*;
   end;
 end;
 
-definition let f be Element of REAL*, n be Element of NAT;
+definition let f be Element of REAL*, n be Nat;
   func OuterVx(f,n) -> Subset of NAT equals
    {i: i in dom f & 1 <= i & i <= n & f.i <> -1 & f.(n+i) <> -1};
   coherence
   proof
      set NS={i: i in dom f & 1 <= i & i <= n & f.i <> -1 & f.(n+i) <> -1};
-         NS c= NAT
+     NS c= NAT
      proof
         let x be set;
         assume x in NS;
@@ -884,17 +885,21 @@ definition let f be Element of REAL*, n be Element of NAT;
 end;
 
 definition let f be Element of Funcs(REAL*,REAL*),g be Element of REAL*,
-               n be Element of NAT;
+               n be Nat;
   assume A1: ex i st OuterVx((repeat f).i.g,n) = {};
   func LifeSpan(f,g,n) -> Element of NAT means :Def4:
     OuterVx((repeat f).it.g,n) = {} &
-    for k being Element of NAT st OuterVx((repeat f).k.g,n) = {} holds it <= k;
+    for k being Nat st OuterVx((repeat f).k.g,n) = {} holds it <= k;
    existence
    proof
-     defpred P[Element of NAT] means OuterVx((repeat f).$1.g,n) = {};
-A2:  ex k st P[k] by A1;
-       ex k st P[k] & for n st P[n] holds k <= n from NAT_1:sch 5(A2);
-     hence thesis;
+     defpred P[Nat] means OuterVx((repeat f).$1.g,n) = {};
+A2:  ex k be Nat st P[k] by A1;
+     ex k be Nat st P[k] & for n be Nat st P[n] holds k <= n
+       from NAT_1:sch 5(A2); then
+     consider k be Nat such that
+A3:  P[k] & for n be Nat st P[n] holds k <= n;
+     k in NAT by ORDINAL1:def 13;
+     hence thesis by A3;
    end;
    uniqueness
    proof let it1, it2 be Element of NAT;
@@ -1163,18 +1168,19 @@ definition let X be finite Subset of NAT,f be Element of REAL*,n;
           consider x being Element of X' such that
      A3:  for y being Element of X' holds F(x) <= F(y) from GRAPH_5:sch 2;
           reconsider x as Element of NAT;
-          defpred P[Element of NAT] means
+          defpred P[Nat] means
             $1 in X & f/.(2*n+x) = f/.(2*n+$1);
-     A4:  ex i st P[i];
-          consider i such that
-     A5:  P[i] & for k st P[k] holds i <= k from NAT_1:sch 5(A4);
+     A4:  ex i be Nat st P[i];
+          consider i be Nat such that
+     A5:  P[i] & for k be Nat st P[k] holds i <= k from NAT_1:sch 5(A4);
+          reconsider i as Element of NAT by ORDINAL1:def 13;
           take F=i;
           hereby
             assume X<>{};
             take i=F;
             thus i=F & i in X by A5;
             thus for k st k in X holds f/.(2*n+i) <= f/.(2*n+k) by A3,A5;
-           thus for k st k in X & f/.(2*n+i) = f/.(2*n+k) holds i <= k by A5;
+            thus for k st k in X & f/.(2*n+i) = f/.(2*n+k) holds i <= k by A5;
           end;
           thus X={} implies F=0 by A2;
    end;
@@ -1307,10 +1313,10 @@ theorem Th32:
   i in dom f & i > n & i <> n*n+3*n+1 implies (findmin n).f.i=f.i
 proof
     set k=Argmin(OuterVx(f,n),f,n),
-        mi=n*n+3*n+1;
+    mi=n*n+3*n+1;
     assume A1: i in dom f & i > n & i <> mi;
 A2: (findmin n).f.i = ((f,mi):=(k,-1)).i by Def11;
-        k <= n by Th31;
+    k <= n by Th31;
     hence (findmin n).f.i=f.i by A1,A2,Th19;
 end;
 
@@ -1333,7 +1339,7 @@ end;
 theorem Th34:
   dom ((findmin n).f) = dom f
 proof
-        (findmin n).f = (f,n*n+3*n+1):=(Argmin(OuterVx(f,n),f,n),-1) by Def11;
+    (findmin n).f = (f,n*n+3*n+1):=(Argmin(OuterVx(f,n),f,n),-1) by Def11;
     hence thesis by Th21;
 end;
 
@@ -1348,11 +1354,11 @@ end;
 Lm7:
      3*n < n*n+3*n+1 & n < n*n+3*n+1 & 2*n < n*n+3*n+1
 proof
-         3*n <= n*n+3*n by NAT_1:12;
+     3*n <= n*n+3*n by NAT_1:12;
      hence A1:  3*n < n*n+3*n +1 by NAT_1:13;
-         n <= 3*n by Lm6;
+     n <= 3*n by Lm6;
      hence n < n*n+3*n+1 by A1,XXREAL_0:2;
-         2*n <= 3*n by NAT_1:4;
+     2*n <= 3*n by NAT_1:4;
      hence thesis by A1,XXREAL_0:2;
 end;
 

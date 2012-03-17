@@ -1052,10 +1052,10 @@ suppose ex n st for m st n<=m holds s2.m=x0;
 end;
 suppose A9: for n ex m st n<=m & s2.m<>x0;
  then consider m1 be Element of NAT such that A10: 0<=m1 & s2.m1<>x0;
- defpred P[Element of NAT] means s2.$1<>x0;
- A11: ex m st P[m] by A10;
- consider M be Element of NAT such that
- A12: P[M] & for n st P[n] holds M<=n from NAT_1:sch 5(A11);
+ defpred P[set] means s2.$1<>x0;
+ A11: ex m be Nat st P[m] by A10;
+ consider M be Nat such that
+ A12: P[M] & for n be Nat st P[n] holds M<=n from NAT_1:sch 5(A11);
  A13: now let n; consider m such that A14: n+1<=m & s2.m<>x0 by A9;
   take m; thus n<m & s2.m<>x0 by A14,NAT_1:13;
  end;
@@ -1064,13 +1064,15 @@ suppose A9: for n ex m st n<=m & s2.m<>x0;
  defpred R[set,set,set] means P[$2,$3];
  A15: for n for x be Element of NAT ex y be Element of NAT st R[n,x,y]
  proof let n; let x be Element of NAT;
-   defpred P[Element of NAT] means x<$1 & s2.$1<>x0;
-  A16: ex m st P[m] by A13;
-  consider l be Element of NAT such that A17: P[l] &
-   for k st P[k] holds l<=k from NAT_1:sch 5(A16);
-   take l; thus thesis by A17;
+   defpred P[Nat] means x<$1 & s2.$1<>x0;
+   ex m st P[m] by A13;
+   then
+  A16: ex m be Nat st P[m];
+  consider l be Nat such that A17: P[l] &
+   for k be Nat st P[k] holds l<=k from NAT_1:sch 5(A16);
+   take l; l in NAT by ORDINAL1:def 13; hence thesis by A17;
  end;
- reconsider M' = M as Element of NAT;
+ reconsider M' = M as Element of NAT by ORDINAL1:def 13;
  consider F be Function of NAT,NAT such that
  A18: F.0=M' & for n be Element of NAT holds R[n,F.n,F.(n+1)] from
 RECDEF_1:sch 2(A15);
@@ -1086,12 +1088,13 @@ RECDEF_1:sch 2(A15);
  then reconsider F as increasing Seq_of_Nat by A19,SEQM_3:def 8,def 11;
 A21: for n st s2.n<>x0 ex m st F.m=n
  proof
-   defpred P[Element of NAT] means s2.$1<>x0 & for m holds F.m<>$1;
-   assume A22: ex n st P[n];
-  consider M1 be Element of NAT such that A23: P[M1] &
-  for n st P[n] holds M1<=n from NAT_1:sch 5(A22);
-  defpred E[Element of NAT] means $1<M1 & s2.$1<>x0 & ex m st F.m=$1;
-  A24: ex n st E[n]
+   defpred P[set] means s2.$1<>x0 & for m holds F.m<>$1;
+   assume ex n st P[n];
+   then A22: ex n be Nat st P[n];
+  consider M1 be Nat such that A23: P[M1] &
+  for n be Nat st P[n] holds M1<=n from NAT_1:sch 5(A22);
+  defpred E[Nat] means $1<M1 & s2.$1<>x0 & ex m st F.m=$1;
+  A24: ex n being Nat st E[n]
   proof take M;
    A25: M<=M1 by A12,A23;
         M <> M1 by A18,A23;
@@ -1099,9 +1102,9 @@ A21: for n st s2.n<>x0 ex m st F.m=n
    thus s2.M<>x0 by A12;
    take 0; thus thesis by A18;
   end;
-  A26: for n st E[n] holds n <= M1;
-  consider MX be Element of NAT such that A27: E[MX] &
-  for n st E[n] holds n<=MX from NAT_1:sch 6(A26,A24);
+  A26: for n being Nat st E[n] holds n <= M1;
+  consider MX be Nat such that A27: E[MX] &
+  for n being Nat st E[n] holds n<=MX from NAT_1:sch 6(A26,A24);
   A28: for k st MX<k & k<M1 holds s2.k=x0
   proof given k such that A29: MX<k & k<M1 & s2.k<>x0;
        now per cases;
@@ -1114,6 +1117,8 @@ A21: for n st s2.n<>x0 ex m st F.m=n
   consider m such that A30: F.m=MX by A27;
   A31: MX<F.(m+1) & s2.(F.(m+1))<>x0 &
       for k st MX<k & s2.k<>x0 holds F.(m+1)<=k by A18,A30;
+      M1 in NAT by ORDINAL1:def 13;
+      then
   A32: F.(m+1)<=M1 by A18,A23,A27,A30;
       now assume F.(m+1)<>M1; then F.(m+1)<M1 by A32,REAL_1:def 5;
 hence contradiction by A28,A31;

@@ -8,7 +8,7 @@ environ
 
  vocabularies FINSEQ_1, FINSET_1, BOOLE, FUNCT_1, RELAT_1, ABSVALUE, ARYTM_1,
       CAT_1, FUNCT_2, SUBSET_1, PRE_TOPC, TARSKI, RELAT_2, SETFAM_1, CARD_1,
-      FIN_TOPO, HAHNBAN, FINSEQ_4, ORDERS_1, EQREL_1;
+      FIN_TOPO, HAHNBAN, FINSEQ_4, ORDERS_1, EQREL_1, ARYTM;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0,
       FINSET_1, NAT_1, SETFAM_1, RELAT_1, EQREL_1, FUNCT_1, PARTFUN1, FUNCT_2,
       FUNCOP_1, DOMAIN_1, RELSET_1, FINSEQ_1, FINSEQ_4, CARD_1, INT_2,
@@ -121,11 +121,11 @@ proof
   consider f being Function of NAT,bool X() such that
     A4:f.0 = B() and
 A5:for n being Element of NAT holds f.(n+1) = F(n,f.n) from RECDEF_1:sch 4;
-    defpred P[Element of NAT] means f.$1 c= A();
+    defpred P[Nat] means f.$1 c= A();
   A6:P[0] by A2,A4;
   A7:now
     let n be Element of NAT such that A8:P[n];
-        f.(n+1) = F(f.n) by A5;
+    f.(n+1) = F(f.n) by A5;
     hence P[n+1] by A3,A8;
   end;
   A9:for n being Element of NAT holds P[n] from NAT_1:sch 1(A6,A7);
@@ -137,7 +137,7 @@ A5:for n being Element of NAT holds f.(n+1) = F(n,f.n) from RECDEF_1:sch 4;
       then x c= A() by A9;
       hence x in bool A();
     end;
-      bool A() is finite by A1,FINSET_1:24;
+    bool A() is finite by A1,FINSET_1:24;
   then A11:rng f is finite by A10,FINSET_1:13;
   A12:dom f = NAT by FUNCT_2:def 1;
   then A13:rng f <> {} by A4,FUNCT_1:def 5;
@@ -145,10 +145,10 @@ A5:for n being Element of NAT holds f.(n+1) = F(n,f.n) from RECDEF_1:sch 4;
     proof
       let i be Element of NAT;
       A15:f.(i+1) = F(f.i) by A5;
-       f.i c= A() by A9;
+      f.i c= A() by A9;
       hence f.i c= f.(i+1) by A3,A15;
     end;
-      rng f is c=-linear
+    rng f is c=-linear
     proof
       let B,C be set;
       assume B in rng f;
@@ -159,19 +159,20 @@ A5:for n being Element of NAT holds f.(n+1) = F(n,f.n) from RECDEF_1:sch 4;
   A17:j in NAT & C = f.j by A12,FUNCT_1:def 5;
       reconsider i as Element of NAT by A16;
       reconsider j as Element of NAT by A17;
-        i <= j or j <= i;
+      i <= j or j <= i;
       hence B c= C or C c= B by A14,A16,A17,MEASURE2:22;
     end;
   then consider m being set such that
     A18:m in rng f and
     A19:for C being set st C in rng f holds C c= m
       by A11,A13,FINSET_1:31;
-    defpred P[Element of NAT] means $1 in NAT & f.$1=m;
-      m in f.:NAT by A18,FUNCT_2:45;
-  then A20:ex k being Element of NAT st P[k] by FUNCT_2:116;
-  consider k being Element of NAT such that
+    defpred P[set] means $1 in NAT & f.$1=m;
+    m in f.:NAT by A18,FUNCT_2:45;
+  then consider k being Element of NAT such that Z1: P[k] by FUNCT_2:116;
+  A20:ex k being Nat st P[k] by Z1;
+  consider k being Nat such that
     A21:P[k] and
-    A22:for n being Element of NAT st P[n] holds k <= n from NAT_1:sch 5(A20);
+    A22:for n being Nat st P[n] holds k <= n from NAT_1:sch 5(A20);
 A23:  k+1 in Seg(k+1) by FINSEQ_1:6;
   deffunc G(Nat) = f.(abs($1-1));
   consider z being FinSequence of bool X() such that
@@ -209,16 +210,18 @@ A36:   i in dom z by A24,A31,FINSEQ_1:def 3;
     end;
   thus F(z/.len z)=z/.len z
     proof
+      k in NAT by ORDINAL1:def 13; then
       A37:f.k c= f.(k+1) by A14;
-       k+1 in NAT;
+      k+1 in NAT;
       then k+1 in dom f by FUNCT_2:def 1;
       then f.(k+1) in rng f by FUNCT_1:def 5;
       then A38: f.(k+1) c= f.k by A19,A21;
 A39:   len z = 0 or len z in Seg(len z) by FINSEQ_1:5;
 then A40:   len z in dom z by A24,FINSEQ_1:def 3;
+      reconsider k'=k as Element of NAT by ORDINAL1:def 13;
 A41:  z.len z = f.(abs(k+1-1)) by A24,A25,A39
                         .= f.k by ABSVALUE:def 1;
-      hence F(z/.len z) = F(f.k) by A40,PARTFUN1:def 8
+      hence F(z/.len z) = F(f.k') by A40,PARTFUN1:def 8
                          .= f.(k+1) by A5
                          .= z.len z by A37,A38,A41,XBOOLE_0:def 10
                          .= z/.len z by A40,PARTFUN1:def 8;

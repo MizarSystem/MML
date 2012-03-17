@@ -7,12 +7,13 @@
 environ
 
  vocabularies AMI_3, INT_1, POWER, ARYTM_1, FINSEQ_1, AMI_1, SCM_1, FUNCT_1,
-      PRE_FF, GROUP_1, NAT_1, FIB_FUSC;
+      PRE_FF, GROUP_1, NAT_1, FIB_FUSC, ARYTM;
  notations XCMPLX_0, SUBSET_1, NUMBERS, INT_1, NAT_1, NEWTON, POWER, FINSEQ_1,
       AMI_1, SCM_1, AMI_3, PRE_FF, XXREAL_0;
- constructors XXREAL_0, REAL_1, NAT_1, MEMBERED, NEWTON, POWER, PRE_FF, SCM_1;
+ constructors XXREAL_0, REAL_1, NAT_1, MEMBERED, SEQ_1, NEWTON, POWER, PRE_FF,
+      SCM_1;
  registrations SUBSET_1, SETFAM_1, NUMBERS, XREAL_0, INT_1, MEMBERED, AMI_3;
- requirements REAL, NUMERALS, SUBSET, ARITHM;
+ requirements REAL, NUMERALS, SUBSET, ARITHM, BOOLE;
  theorems REAL_1, NAT_1, INT_1, POWER, NEWTON, SCM_1, PRE_FF, AMI_3, AMI_1,
       XREAL_1, XXREAL_0, ORDINAL1;
  schemes NAT_1;
@@ -609,7 +610,7 @@ theorem Th5:
          (n = 0 implies LifeSpan s = 1) &
          (n > 0 implies LifeSpan s = 6 * ([\ log(2, n) /] + 1) + 1)
 proof
-  defpred P[Element of NAT] means
+  defpred P[Nat] means
   for N, A, B being Element of NAT,
          s being State-consisting of 0, 0, 0,
                                      Fusc_Program,
@@ -619,10 +620,10 @@ proof
          (Result s).dl.3 = Fusc N &
          ($1 = 0 implies LifeSpan s = 1) &
          ($1 > 0 implies LifeSpan s = 6 * ([\ log(2, $1) /] + 1)+1);
-A1: for k being Element of NAT
-st for n being Element of NAT st n < k holds P[n] holds P[k]
-    proof let nn be Element of NAT; assume
-A2: for n' being Element of NAT st n' < nn holds
+A1: for k being Nat
+st for n being Nat st n < k holds P[n] holds P[k]
+    proof let nn be Nat; assume
+A2: for n' being Nat st n' < nn holds
      for N, A, B being Element of NAT,
          s being State-consisting of 0, 0, 0,
                                      Fusc_Program,
@@ -640,6 +641,7 @@ A2: for n' being Element of NAT st n' < nn holds
 A3: N > 0 & Fusc N = A * Fusc nn + B * Fusc (nn+1);
 
 set c2 = dl.0, n = dl.1, a = dl.2, b = dl.3, aux = dl.4;
+   reconsider n2 = nn as Element of NAT by ORDINAL1:def 13;
 
 A4: IC s = il.0 by SCM_1:14;
 
@@ -681,8 +683,8 @@ A25:  s2.c2 = 2 & s2.n = nn & s2.a = A & s2.b = B
  by A6,A16,A22,Lm8,SCM_1:18;
    set s3 = (Computation s).(2+1);
 A26: IC s3 = il.(2+1) by A7,A23,Lm8,SCM_1:22;
-A27:  s3.n = nn qua Integer div 2 by A7,A23,A24,A25,Lm8,SCM_1:22;
-A28: s3.aux = nn qua Integer mod 2 by A7,A23,A24,A25,Lm8,SCM_1:22;
+A27:  s3.n = n2 div 2 by A7,A23,A24,A25,Lm8,SCM_1:22;
+A28: s3.aux = nn mod 2 by A7,A23,A24,A25,Lm8,SCM_1:22;
 A29:  s3.c2 =2 & s3.a =A & s3.b =B by A7,A23,A25,Lm7,Lm8,SCM_1:22;
      reconsider nn' = s3.n as Element of NAT by A27,PRE_FF:7;
 
@@ -690,11 +692,11 @@ A29:  s3.c2 =2 & s3.a =A & s3.b =B by A7,A23,A25,Lm7,Lm8,SCM_1:22;
    set s5 = (Computation s).(4+1);
    set s6 = (Computation s).(5+1);
 A30:
-   nn qua Integer mod 2 = nn - (nn qua Integer div 2) * 2 by INT_1:def 8;
-  per cases;
-  suppose
+   nn mod 2 = nn - (nn div 2) * 2 by INT_1:def 8;
+   per cases;
+   suppose
 A31: s3.aux <> 0;
-then A32: s3.aux = 1 by A28,PRE_FF:6;
+     then A32: s3.aux = 1 by A28,PRE_FF:6;
 A33: IC s4 = il.(3+1) by A8,A26,A31,SCM_1:24;
 A34:  s4.c2 = 2 & s4.n = s3.n & s4.a = A & s4.b = B
  by A8,A26,A29,SCM_1:24;
@@ -704,7 +706,9 @@ A37:  s5.c2 = 2 & s5.n = s3.n & s5.a = A by A9,A33,A34,Lm7,SCM_1:19;
 A38: IC s6 = il.0 by A10,A35,SCM_1:23;
 A39:  s6.c2 = 2 & s6.n = s3.n & s6.a = A & s6.b = s5.b
  by A10,A35,A37,SCM_1:23;
-A40: nn = 2 * nn' + 1 by A27,A28,A30,A32;
+   nn mod 2 + (nn div 2) * 2 = nn by A30;
+   then
+A40: nn = 2 * nn' + 1 by A27,A28,A32;
     s6.il.0 = n =0_goto il.8 & s6.il.1 = aux := c2 &
 s6.il.2 = Divide(n, aux) &
 s6.il.3 = aux =0_goto il.6 & s6.il.4 = AddTo(b, a) & s6.il.5 = goto il.0 &
@@ -800,8 +804,8 @@ end;
       (nn > 0 implies LifeSpan s = 6 * ([\ log(2, nn) /] + 1) + 1)
  by A17,A18,REAL_1:def 5;
 end;
-
-thus for n being Element of NAT holds P[n] from NAT_1:sch 4 ( A1 );
+ for n being Nat holds P[n] from NAT_1:sch 4 ( A1 );
+hence thesis;
 end;
 
 theorem

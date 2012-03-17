@@ -46,6 +46,7 @@
 <Adjective nr="7" value="false"/>
 <Adjective nr="16"/>
 <Adjective nr="20"/>
+<Adjective nr="90"/>
 <Adjective nr="92"/>
 </Cluster>
 </RCluster>
@@ -61,15 +62,16 @@
 <Adjective nr="6"/>
 <Adjective nr="16"/>
 <Adjective nr="20"/>
+<Adjective nr="90"/>
 </Cluster>
 </RCluster>
 <RCluster>
 <ArgTypes/>
 <Typ kind="M" nr="7">
 <Cluster/>
-<Func kind="K" nr="124">
+<Func kind="K" nr="125">
 <Func kind="U" nr="1">
-<Func kind="K" nr="245">
+<Func kind="K" nr="246">
 <Num nr="2"/>
 </Func>
 </Func>

@@ -9,16 +9,16 @@ environ
  vocabularies SCMFSA6A, SCMFSA_2, CARD_1, SCMFSA8B, SCMFSA8A, SCMFSA_4,
       FUNCT_4, CAT_1, AMI_3, RELAT_1, BOOLE, AMI_1, AMI_5, FUNCT_1, ARYTM_1,
       RELOC, SF_MASTR, SCMFSA7B, UNIALG_2, AMI_2, SCM_1, CARD_3, SCMFSA6B,
-      FUNCOP_1, SCMFSA_9;
+      FUNCOP_1, SCMFSA_9, ARYTM;
  notations TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, XCMPLX_0, NAT_1, RELAT_1,
       FUNCT_1, FUNCT_2, FUNCT_4, CARD_1, CARD_3, AMI_1, SCMFSA_2, SCMFSA_4,
       SCMFSA_5, SCMFSA6A, SF_MASTR, SCMFSA6B, SCMFSA7B, SCMFSA8A, SCMFSA8B,
       XXREAL_0;
- constructors XXREAL_0, NAT_1, AMI_5, SCMFSA_5, SCMFSA6A, SF_MASTR, SCMFSA6B,
-      SCMFSA8A, SCMFSA8B;
+ constructors XXREAL_0, NAT_1, SEQ_1, AMI_5, SCMFSA_5, SCMFSA6A, SF_MASTR,
+      SCMFSA6B, SCMFSA8A, SCMFSA8B;
  registrations SETFAM_1, FUNCT_1, RELSET_1, FRAENKEL, NUMBERS, XREAL_0, NAT_1,
       INT_1, CARD_3, TREES_2, AMI_1, SCMFSA_2, SCMFSA_4, SF_MASTR, SCMFSA6B,
-      SCMFSA7B, SCMFSA8A, ORDINAL1;
+      SCMFSA7B, SCMFSA8A, ORDINAL1, XBOOLE_0;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions SCMFSA_2, SCMFSA_4;
  theorems TARSKI, NAT_1, FUNCT_1, FUNCT_4, REAL_1, AMI_1, SCMFSA_2, SCMFSA_4,
@@ -1126,30 +1126,36 @@ proof
     .=StepWhile=0(a,I,sk).1;
 end;
 
-scheme MinIndex { F(Element of NAT)->Element of NAT,j() -> Element of NAT} :
+scheme MinIndex { F(Nat)->Nat,j() -> Nat} :
   ex k st F(k)=0 & for n st F(n)=0 holds k <= n
    provided
 A1: F(0) = j() and
 A2: for k holds (F(k+1) < F(k) or F(k) = 0)
 proof
-    defpred P[Element of NAT] means ex n st $1 = F(n);
-A3:  ex k st P[k] by A1;
-A4:  for k st k <> 0 & P[k] ex m st m < k & P[m]
-    proof let k; assume
+    defpred P[Nat] means ex n st $1 = F(n);
+A3:  ex k be Nat st P[k] by A1;
+A4:  for k be Nat st k <> 0 & P[k] ex m be Nat st m < k & P[m]
+    proof let k be Nat; assume
 A5:    k <> 0 & P[k];
        then consider n such that
 A6:    k = F(n);
        take F(n + 1);
        thus thesis by A2,A5,A6;
     end;
-    defpred X[Element of NAT] means F($1)=0;
+    defpred X[Nat] means F($1)=0;
         P[0] from NAT_1:sch 7(A3,A4);
-then A7:  ex k st X[k];
-    thus ex k st X[k] & for n st X[n] holds k <= n from NAT_1:sch 5(A7);
+then A7:  ex k be Nat st X[k];
+    consider k be Nat such that
+A8: X[k] and
+A10: for n be Nat st X[n] holds k <= n from NAT_1:sch 5(A7);
+     reconsider k as Element of NAT by ORDINAL1:def 13;
+     take k;
+    for n st X[n] holds k <= n by A10;
+    hence thesis by A8;
 end;
 
 theorem
-     for f,g being Function holds f +* g +* g = f +* g
+  for f,g being Function holds f +* g +* g = f +* g
 proof
    let f,g be Function;
    thus f +* g +* g = f +*( g +* g ) by FUNCT_4:15
@@ -1420,10 +1426,10 @@ then A33:              s.a = 0 by A2,A32;
 Th22;
               end;
               suppose A34: q > p;
-                 defpred P2[Element of NAT] means
+                 defpred P2[Nat] means
                  $1<=m & $1<>0 & (ex k st StepWhile=0(a,I,s).$1=
                  (Computation s1).k & k <= q);
-A35:              for i be Element of NAT st P2[i] holds i <= m;
+A35:              for i be Nat st P2[i] holds i <= m;
 A36:              now
                    take k=p;
                    thus StepWhile=0(a,I,s).1=(Computation s1).k &
@@ -1431,11 +1437,11 @@ A36:              now
                  end;
                      0+1 < m +1 by A30,XREAL_1:8;
 then 1 <= m by NAT_1:13;
-then A37:              ex t be Element of NAT st P2[t] by A36;
-                     ex k st P2[k] & for i st P2[i] holds i <= k from NAT_1:sch
-6(A35,A37);
-                 then consider t being Element of NAT such that
-A38:              P2[t] & for i st P2[i] holds i <= t;
+then A37:              ex t be Nat st P2[t] by A36;
+                     consider t be Nat such that
+A38:                 P2[t] &
+                 for i be Nat st P2[i] holds i <= t from NAT_1:sch 6(A35,A37);
+                 reconsider t as Element of NAT by ORDINAL1:def 13;
                      now per cases;
                     suppose t=m;
                        then consider r being Element of NAT such that
@@ -1470,9 +1476,7 @@ then A48:                   IC Dt =insloc 0 by A46,A47,Th22;
 A49:                   now assume A50: z2 <= q;
 A51:                     now take k=z2;thus
                               StepWhile=0(a,I,s).(t+1)=(Computation s1).k & k
-<=
-q
-                          by A44,A48,A50,Th31;
+<= q            by A44,A48,A50,Th31;
                         end;
                          t+1 <= m by A42,NAT_1:13;
                         then t+1 <= t by A38,A51;
@@ -2567,10 +2571,10 @@ then A33:           s.a > 0 by A2,A32;
               hence IC (Computation s1).q in dom while>0(a,I) by A31,A33,Th47;
             end;
             suppose A34: q > p;
-              defpred P2[Element of NAT] means
+              defpred P2[Nat] means
                 $1<=m & $1<>0 & (ex k st StepWhile>0(a,I,s).$1=
                 (Computation s1).k & k <= q);
-A35:           for i be Element of NAT st P2[i] holds i <= m;
+A35:           for i be Nat st P2[i] holds i <= m;
 A36:           now
                  take k=p;
                  thus StepWhile>0(a,I,s).1=(Computation s1).k & k <= q
@@ -2578,11 +2582,11 @@ A36:           now
               end;
                   0+1 < m +1 by A30,XREAL_1:8;
 then 1 <= m by NAT_1:13;
-then A37:           ex t be Element of NAT st P2[t] by A36;
-                  ex k st P2[k] & for i st P2[i] holds i <= k from NAT_1:sch 6
+then A37:           ex t be Nat st P2[t] by A36;
+              consider t be Nat such that
+A38:          P2[t] & for i be Nat st P2[i] holds i <= t from NAT_1:sch 6
 (A35,A37);
-              then consider t being Element of NAT such that
-A38:           P2[t] & for i st P2[i] holds i <= t;
+                 reconsider t as Element of NAT by ORDINAL1:def 13;
                   now per cases;
                  suppose t=m;
                    then consider r being Element of NAT such that

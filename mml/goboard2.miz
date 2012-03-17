@@ -13,12 +13,13 @@ environ
       GOBOARD2, FINSEQ_4, ARYTM;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0,
       XREAL_0, COMPLEX1, REAL_1, NAT_1, RELAT_1, FUNCT_1, PARTFUN1, FINSEQ_1,
-      FINSET_1, STRUCT_0, PRE_TOPC, CARD_1, SEQ_4, FINSEQ_4, MATRIX_1, EUCLID,
-      TOPREAL1, GOBOARD1, XXREAL_0;
+      SEQ_1, FINSET_1, STRUCT_0, PRE_TOPC, CARD_1, SEQ_4, FINSEQ_4, MATRIX_1,
+      EUCLID, TOPREAL1, GOBOARD1, XXREAL_0;
  constructors PARTFUN1, SQUARE_1, NAT_1, COMPLEX1, SEQ_4, FINSEQ_4, TOPREAL1,
       GOBOARD1;
  registrations XBOOLE_0, FUNCT_1, RELSET_1, FINSET_1, NUMBERS, XXREAL_0,
-      XREAL_0, NAT_1, MEMBERED, FINSEQ_1, STRUCT_0, EUCLID, GOBOARD1;
+      XREAL_0, NAT_1, MEMBERED, FINSEQ_1, STRUCT_0, EUCLID, GOBOARD1, SEQ_1,
+      INT_1;
  requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, TOPREAL1, GOBOARD1, XBOOLE_0;
  theorems TARSKI, REAL_1, NAT_1, ZFMISC_1, FUNCT_1, FINSEQ_1, ABSVALUE, CARD_1,
@@ -199,9 +200,10 @@ begin
 canceled;
 
 theorem Th3:
+for n being Nat
 for f being FinSequence
   holds 1 <= n & n+1 <= len f iff n in dom f & n+1 in dom f
- proof let f be FinSequence;
+ proof let n be Nat; let f be FinSequence;
   thus 1<=n & n+1 <= len f implies n in dom f & n+1 in dom f
    proof assume
     A1: 1<=n & n+1 <= len f;
@@ -209,14 +211,14 @@ for f being FinSequence
     then 1<=n+1 & n<=len f by A1,XXREAL_0:2;
     hence thesis by A1,FINSEQ_3:27;
    end;
-  assume n in dom f & n+1 in dom f;
-  hence thesis by FINSEQ_3:27;
+  thus thesis by FINSEQ_3:27;
  end;
 
 theorem Th4:
+for n being Nat
 for f being FinSequence
   holds 1 <= n & n+2 <= len f iff n in dom f & n+1 in dom f & n+2 in dom f
- proof let f be FinSequence;
+ proof let n be Nat;let f be FinSequence;
   thus 1<=n & n+2 <= len f implies n in dom f & n+1 in dom f & n+2 in dom f
    proof assume
     A1: 1<=n & n+2 <= len f;
@@ -252,7 +254,7 @@ holds
  proof assume
   A1: for n,m st m>n+1 & n in dom f & n+1 in dom f & m in dom f & m+1 in dom f
         holds LSeg(f,n) misses LSeg(f,m);
-  let n,m such that
+  let n,m be Nat such that
   A2: m>n+1;
 A3:   n <= n+1 & m <= m+1 by NAT_1:11;
    per cases;
@@ -465,7 +467,7 @@ theorem
     hence thesis by A1,A2,RELAT_1:97;
    end;
    suppose A3: i<=len f;
-    let n,m; assume
+    let n,m be Nat; assume
          m>n+1;
     then A4: LSeg(f,n) misses LSeg(f,m) & dom f1=dom f /\ Seg i
      by A1,A2,FUNCT_1:68,TOPREAL1:def 9;
@@ -541,17 +543,18 @@ theorem
   A2: f2 is special and
   A3: (f1/.len f1)`1=(f2/.1)`1 or (f1/.len f1)`2=(f2/.1)`2;
   set f = f1^f2;
-  let n;
-   set p =f/.n, q =f/.(n+1);
+  let n be Nat;
   assume that
   A4: 1 <= n & n+1 <= len f;
+  reconsider n as Element of NAT by ORDINAL1:def 13;
+   set p =f/.n, q =f/.(n+1);
   A5: dom f1=Seg len f1 & dom f2=Seg len f2 & len f=len f1+len f2 &
   n+1-len f1=n-len f1+1 by FINSEQ_1:35,def 3;
    per cases;
    suppose A6: n+1 <= len f1;
     then n in dom f1 & n+1 in dom f1 by A4,Th3;
     then f1/.n=p & f1/.(n+1)=q by FINSEQ_4:83;
-    hence p`1=q`1 or p`2=q`2 by A1,A4,A6,TOPREAL1:def 7;
+    hence thesis by A1,A4,A6,TOPREAL1:def 7;
    end;
    suppose len f1 < n+1;
     then A7: len f1<=n by NAT_1:13;
@@ -744,7 +747,7 @@ A8: for n st n in dom f & n+1 in dom f holds f/.n <> f/.(n+1);
       thus [i,j] in Indices G & f1/.n=G*(i,j) by A14,A16,A17,FINSEQ_4:86;
      end;
      A18: f1 is special
-      proof let n;
+      proof let n be Nat;
        set p =f1/.n, q =f1/.(n+1);
       assume
 A19:   1 <= n & n+1 <= len f1;
@@ -1028,7 +1031,8 @@ q2`2 &
             defpred P2[Nat] means
             len g1<=$1 & $1<=len g & for q st q=g/.$1 holds q`2>=p1`2;
             A94: now
-              take n=len g1;
+            reconsider n=len g1 as Nat;
+            take n;
               thus P2[n]
               proof
                thus len g1<=n & n<=len g by A63,REAL_2:173;
@@ -1041,9 +1045,11 @@ q2`2 &
                hence p1`2<=q`2 by A93;
               end;
              end;
-            A96: for n holds P2[n] implies n<=len g;
-            consider ma be Element of NAT such that
-            A97: P2[ma] & for n st P2[n] holds n<=ma from NAT_1:sch 6(A96,A94);
+            A96: for n be Nat holds P2[n] implies n<=len g;
+            consider ma be Nat such that
+            A97: P2[ma] & for n be Nat st P2[n] holds n<=ma
+            from NAT_1:sch 6(A96,A94);
+            reconsider ma as Element of NAT by ORDINAL1:def 13;
                  now per cases;
              suppose A98: ma=len g;
                   j2+1<=i2 by A45,NAT_1:13;
@@ -1326,7 +1332,8 @@ q2`2 &
             defpred P2[Nat] means
             len g1<=$1 & $1<=len g & for q st q=g/.$1 holds q`2<=p1`2;
             A167: now
-              take n=len g1;
+              reconsider n=len g1 as Nat;
+              take n;
               thus P2[n]
               proof
                thus len g1<=n & n<=len g by A134,REAL_2:173;
@@ -1339,10 +1346,11 @@ q2`2 &
                hence q`2<=p1`2 by A166;
               end;
              end;
-            A169: for n holds P2[n] implies n<=len g;
-            consider ma be Element of NAT such that
-            A170: P2[ma] & for n st P2[n] holds n<=ma from NAT_1:sch 6
+            A169: for n be Nat holds P2[n] implies n<=len g;
+            consider ma be Nat such that
+            A170: P2[ma] & for n be Nat st P2[n] holds n<=ma from NAT_1:sch 6
 (A169,A167);
+reconsider ma as Element of NAT by ORDINAL1:def 13;
                  now per cases;
              suppose A171: ma=len g;
                   i2+1<=j2 by A119,NAT_1:13;
@@ -1631,7 +1639,8 @@ q2`1 &
             defpred P2[Nat] means
             len g1<=$1 & $1<=len g & for q st q=g/.$1 holds q`1>=p1`1;
             A241: now
-              take n=len g1;
+              reconsider n=len g1 as Nat;
+              take n;
               thus P2[n]
               proof
                thus len g1<=n & n<=len g by A211,REAL_2:173;
@@ -1644,10 +1653,11 @@ q2`1 &
                hence p1`1<=q`1 by A240;
               end;
              end;
-            A243: for n holds P2[n] implies n<=len g;
-            consider ma be Element of NAT such that
-            A244: P2[ma] & for n st P2[n] holds n<=ma from NAT_1:sch 6
+            A243: for n be Nat holds P2[n] implies n<=len g;
+            consider ma be Nat such that
+            A244: P2[ma] & for n be Nat st P2[n] holds n<=ma from NAT_1:sch 6
 (A243,A241);
+reconsider ma as Element of NAT by ORDINAL1:def 13;
                  now per cases;
              suppose A245: ma=len g;
                   j1+1<=i1 by A193,NAT_1:13;
@@ -1921,7 +1931,8 @@ q2`1 &
             defpred P2[Nat] means
             len g1<=$1 & $1<=len g & for q st q=g/.$1 holds q`1<=p1`1;
             A311: now
-              take n=len g1;
+              reconsider n=len g1 as Nat;
+              take n;
               thus P2[n]
               proof
                thus len g1<=n & n<=len g by A281,REAL_2:173;
@@ -1934,10 +1945,11 @@ q2`1 &
                hence q`1<=p1`1 by A310;
               end;
              end;
-            A313: for n holds P2[n] implies n<=len g;
-            consider ma be Element of NAT such that
-            A314: P2[ma] & for n st P2[n] holds n<=ma from NAT_1:sch 6
+            A313: for n be Nat holds P2[n] implies n<=len g;
+            consider ma be Nat such that
+            A314: P2[ma] & for n be Nat st P2[n] holds n<=ma from NAT_1:sch 6
 (A313,A311);
+reconsider ma as Element of NAT by ORDINAL1:def 13;
                  now per cases;
              suppose A315: ma=len g;
                   i1+1<=j1 by A266,NAT_1:13;

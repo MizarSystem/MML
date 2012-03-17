@@ -11,10 +11,10 @@ environ
       MATRIX_2, MSAFREE2, XREAL_0, NAT_1, INT_1, PRE_TOPC, REALSET1, RELAT_1,
       RELAT_2, CHORD, TOPGEN_1, SQUARE_1, GRAPH_2, MEMBERED, BHSP_3;
  notations TARSKI, XBOOLE_0, SUBSET_1, SEQ_4, ORDINAL1, INT_1, XCMPLX_0,
-      XXREAL_0, DOMAIN_1, RELAT_1, FUNCT_1, PARTFUN1,
-      FUNCT_2, FINSEQ_1, CARD_1,
-      FINSET_1, NAT_1, GLIB_000, GLIB_001, GLIB_002, ZFMISC_1, FUNCOP_1, ABIAN,
-      ENUMSET1, FINSEQ_4, NUMBERS, GRAPH_2, PRE_CIRC, MEMBERED;
+      XXREAL_0, DOMAIN_1, RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2, FINSEQ_1,
+      CARD_1, FINSET_1, NAT_1, GLIB_000, GLIB_001, GLIB_002, ZFMISC_1,
+      FUNCOP_1, ABIAN, ENUMSET1, FINSEQ_4, NUMBERS, GRAPH_2, PRE_CIRC,
+      MEMBERED;
  constructors DOMAIN_1, XXREAL_0, REAL_1, NAT_1, NAT_D, FINSEQ_4, BINARITH,
       PRE_CIRC, GRAPH_2, GLIB_001, GLIB_002;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1, FUNCOP_1,
@@ -967,14 +967,15 @@ A2: S.edgeSeq() = W.edgeSeq();
      len S = 2*len W.edgeSeq() + 1 by A2,GLIB_001:def 15;
 then A3: len S = len W by GLIB_001:def 15;
     defpred P[Nat] means $1 in dom S implies S.$1 = W.$1;
-A4: now let k be Element of NAT such that
-    A5: for n being Element of NAT st n < k holds P[n];
+A4: now let k be Nat such that
+    A5: for n being Nat st n < k holds P[n];
+A100: k in NAT by ORDINAL1:def 13;
         per cases;
         suppose k in dom S;
         then A6: 1 <= k & k <= len S by FINSEQ_3:27;
           per cases;
           suppose A7: k is even;
-              then S.k = S.edgeSeq().(k div 2) by A6,GLIB_001:78;
+              then S.k = S.edgeSeq().(k div 2) by A6,GLIB_001:78,A100;
               hence P[k] by A2,A3,A6,A7,GLIB_001:78; end;
           suppose k is odd;
             then reconsider kk=k as odd Nat;
@@ -1006,7 +1007,7 @@ A4: now let k be Element of NAT such that
           end; end;
         suppose not k in dom S; hence P[k]; end;
     end;
-A14: for n being Element of NAT holds P[n] from NAT_1:sch 4(A4);
+A14: for n being Nat holds P[n] from NAT_1:sch 4(A4);
      now let k be Nat such that A15: 1 <= k & k <= len S;
          k in dom S by A15,FINSEQ_3:27;
         hence S.k = W.k by A14;
@@ -2727,9 +2728,6 @@ A9: M = Min & card M = F.Min by A6;
      M in dom F by A7;
 then A10: F/.M = F.M by PARTFUN1:def 8;
 
-     now per cases;
-    suppose M = {}; hence M is minimal by Th78; end;
-    suppose M <> {};
          now assume not M is minimal;
             then consider T being Subset of M such that
         A11: T<>M & T is VertexSeparator of a,b by Def9;
@@ -2744,10 +2742,8 @@ then A10: F/.M = F.M by PARTFUN1:def 8;
              card T <> card M by A11,TRIANG_1:3;
             hence contradiction by A13,A14,REAL_1:def 5;
         end;
-        hence M is minimal; end;
+        hence thesis;
     end;
-    hence thesis;
-end;
 
 theorem Th80: :: VS13
 :: Property "symmetry" for 2 argument modes could be used if we had it
@@ -2838,13 +2834,6 @@ proof
              W.find(W.k) <= k by A10,GLIB_001:116;
         then A14: W.find(x) <= len W by A10,XXREAL_0:2;
         then A15: W.find(x)+(-2) <= len W+0 by XREAL_1:9;
-            per cases;
-            suppose A16: W.j in T;
-                 W.j in the_Vertices_of G & W.j in W.vertices()
-                    by A13,A15,GLIB_001:8,88;
-                hence thesis by A16;
-            end;
-            suppose not W.j in T;
               assume
             A17: not ex y being Vertex of G st y in T & y in W.vertices();
                     set P = W.cut(1,j);
@@ -2895,7 +2884,6 @@ proof
                     then W.(j+1) Joins Wj,x,G by A9,GLIB_001:def 19;
                     then Wj,x are_adjacent by Def3;
                     hence contradiction by A6,A31,A32;
-                end;
             end;
          x in {x} by TARSKI:def 1;
     then A33: T <> S by A5,XBOOLE_0:def 4;
@@ -3878,10 +3866,10 @@ A10: for k being Nat st for a being Nat st a < k holds P[a] holds P[k] proof
       hence contradiction by A1,A42,A46,A62,A63,A64,Th92; end;
     end;
 
-A65: for k being Element of NAT st
-        for a being Element of NAT st a < k holds P[a] holds P[k] proof
-        let k be Element of NAT such that
-    A66: for a being Element of NAT st a < k holds P[a];
+A65: for k being Nat st
+        for a being Nat st a < k holds P[a] holds P[k] proof
+        let k be Nat such that
+    A66: for a being Nat st a < k holds P[a];
          for a being Nat st a < k holds P[a] proof
            let a be Nat such that A67: a < k;
             a in NAT by ORDINAL1:def 13;
@@ -3889,7 +3877,7 @@ A65: for k being Element of NAT st
         end;
       hence P[k] by A10;
     end;
- A68: for k being Element of NAT holds P[k] from NAT_1:sch 4(A65);
+ A68: for k being Nat holds P[k] from NAT_1:sch 4(A65);
 
 A69: now let n be odd Nat such that A70: n <= len P-2;
          len P-2 <= len P-2+4 by XREAL_1:33;
@@ -4558,17 +4546,17 @@ then A49: not d,x are_adjacent by A44,Th52;
    defpred Pmax[Nat] means
    $1 in dom P & $1 is odd & $1 < len P & ex e being set st e Joins x,P.($1),G;
    deffunc N() = len P;
-A50: for k being Element of NAT st Pmax[k] holds k <= N();
+A50: for k being Nat st Pmax[k] holds k <= N();
 A51: 1 < len P by A29,XXREAL_0:2;
 then A52: 1 in dom P by FINSEQ_3:27;
 A53: 2*0+1 is odd;
      ex e being set st e Joins x,P.1,G by A26,A48,Def3;
-then A54: ex k being Element of NAT st Pmax[k] by A51,A52,A53;
-    consider k being Element of NAT such that
+then A54: ex k being Nat st Pmax[k] by A51,A52,A53;
+    consider k being Nat such that
 A55: Pmax[k] and
-A56: for i being Element of NAT st Pmax[i] holds k >= i
+A56: for i being Nat st Pmax[i] holds k >= i
          from NAT_1:sch 6(A50,A54);
-    reconsider k as odd Element of NAT by A55;
+    reconsider k as odd Element of NAT by A55,ORDINAL1:def 13;
 A57: k <= j & j < len P by A55,Th3,XREAL_1:46;
 A58: P.k <> P.j by A49,A55,Def3;
 A59: now assume A60: P.k = P.(len P);
@@ -5291,19 +5279,11 @@ A25: ag,bg are_adjacent & ag,cg are_adjacent & not bg,cg are_adjacent
            then vb < b..V by A42,XXREAL_0:2;
          hence contradiction by A38,FINSEQ_4:34;
        end;
-       per cases by A28,A36,A38,REAL_1:def 5;
-       suppose va < vb;
        thus ex a,b,c being Vertex of G, va,vb,vc being Nat st
              b<>c & a,b are_adjacent & a,c are_adjacent &
              va in dom V & vb in dom V & vc in dom V &
              V.va = a & V.vb = b & V.vc = c & va < vb & va < vc &
-             not b,c are_adjacent by A26,A27,A28,A34,A36,A38,A39,A41; end;
-       suppose vb < va;
-       thus ex a,b,c being Vertex of G, va,vb,vc being Nat st
-             b<>c & a,b are_adjacent & a,c are_adjacent &
-             va in dom V & vb in dom V & vc in dom V &
-             V.va = a & V.vb = b & V.vc = c & va < vb & va < vc &
-             not b,c are_adjacent by A26,A27,A28,A34,A36,A38,A39,A41; end;
+             not b,c are_adjacent by A26,A27,A28,A34,A36,A38,A39,A41;
    end;
   hence thesis by A3;
 end;

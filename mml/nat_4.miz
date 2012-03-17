@@ -8,8 +8,8 @@ environ
 
  vocabularies NAT_1, SQUARE_1, ARYTM_3, INT_1, FINSET_1, ARYTM_1, ABSVALUE,
       FILTER_0, MATRIX_2, CARD_1, POWER, FINSEQ_1, PEPIN, RELAT_1, GROUP_1,
-      ARYTM, ORDINAL2, NAT_LAT, NAT_3, ALGSEQ_1, FUNCT_1, CARD_3, BOOLE,
-      FINSEQ_2, VECTSP_1, MEMBERED, NEWTON, QC_LANG1, RLVECT_1, PREPOWER;
+      ARYTM, NAT_LAT, NAT_3, ALGSEQ_1, FUNCT_1, CARD_3, BOOLE, FINSEQ_2,
+      VECTSP_1, MEMBERED, NEWTON, QC_LANG1, RLVECT_1, PREPOWER;
  notations SUBSET_1, XXREAL_0, PREPOWER, TARSKI, XBOOLE_0, ORDINAL1, NUMBERS,
       XCMPLX_0, XREAL_0, INT_1, NAT_1, NAT_D, CARD_1, BINARITH, ABIAN,
       SQUARE_1, NEWTON, FINSET_1, PEPIN, NAT_3, RELAT_1, REAL_1, FUNCT_1,
@@ -19,7 +19,7 @@ environ
       PRE_CIRC, WSIERP_1, ABIAN, PEPIN, POLYNOM2, NAT_3;
  registrations XBOOLE_0, RELAT_1, FUNCT_1, ORDINAL1, FINSET_1, NUMBERS,
       XCMPLX_0, XXREAL_0, XREAL_0, NAT_1, INT_1, MEMBERED, FINSEQ_1, SEQ_1,
-      FINSEQ_2, RVSUM_1, NEWTON, PRE_CIRC, POLYNOM1, CIRCCMB3, NAT_3;
+      FINSEQ_2, RVSUM_1, NEWTON, PRE_CIRC, POLYNOM1, SEQM_3, NAT_3;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions TARSKI, MEMBERED, RVSUM_1, FINSEQ_2, NEWTON;
  theorems TARSKI, REAL_1, NAT_1, NAT_2, INT_1, FINSEQ_1, CARD_1, XBOOLE_1,
@@ -53,16 +53,16 @@ theorem Th2:
   end;
 
 theorem Th3:
-  for a,n being natural number st a>1 holds a|^n > n
+  for a,n being Nat st a>1 holds a|^n > n
   proof
-    defpred P[natural number] means
-    for a being natural number st a>1 holds a|^$1 > $1;
+    defpred P[Nat] means
+    for a being Nat st a>1 holds a|^$1 > $1;
 A1: P[0] by NEWTON:9;
-A2: for n being natural number holds P[n] implies P[n+1]
+A2: for n being Nat holds P[n] implies P[n+1]
     proof
-      let n be natural number;
+      let n be Nat;
       assume A3: P[n];
-       now let a be natural number;
+       now let a be Nat;
         assume A4: a>1;
         then a>=1+1 by NAT_1:13;
 then A5:     a*n>=2*n by XREAL_1:66;
@@ -82,7 +82,7 @@ then A6:       a*n>=n+1 by A5,XXREAL_0:2;
       end;
       hence thesis;
     end;
-     for n being natural number holds P[n] from NAT_1:sch 2(A1,A2);
+     for n being Nat holds P[n] from NAT_1:sch 2(A1,A2);
     hence thesis;
   end;
 
@@ -542,7 +542,7 @@ theorem Th12:
      now
       let p be Nat;
       assume A1: not p is prime & not p<=1;
-      then consider n being natural number such that
+      then consider n being Nat such that
 A2:   n divides p & n<>1 & n<>p by INT_2:def 5;
       reconsider n as Element of NAT by ORDINAL1:def 13;
       take n;
@@ -639,7 +639,7 @@ then p divides a by NAT_D:def 5;
     then consider i being Nat such that
 A4: a=p*i by NAT_D:def 3;
      ((p*i mod p)|^k) mod p = 1 by A1,A4,PEPIN:12;
-    then 0|^k mod p = 1 by NAT_D:13;
+    then 0 qua Nat|^k mod p = 1 by NAT_D:13;
     then p*0 mod p = 1 by A1,NEWTON:16;
     hence contradiction by NAT_D:13;
   end;
@@ -806,21 +806,21 @@ proof
 end;
 
 theorem Th20:
-  for a,b being non empty natural number holds
+  for a,b being non empty Nat holds
     (for p being Element of NAT st p is prime holds p |-count a <= p |-count b)
       implies ex c being Element of NAT st b=a*c
   proof
-    let a,b be non empty natural number;
+    let a,b be non empty Nat;
     assume A1: for p being Element of NAT st p is prime
     holds p |-count a <= p |-count b;
     defpred P[Element of NAT] means
-    for a,b being non empty natural number st card(support pfexp b)=$1 holds
+    for a,b being non empty Nat st card(support pfexp b)=$1 holds
       (for p being Element of NAT st p is prime
       holds p |-count a <= p |-count b)
         implies (ex c being Element of NAT st b=a*c);
     A2: P[0]
     proof
-      let a,b be non empty natural number;
+      let a,b be non empty Nat;
       assume A3: card support pfexp b=0;
        (for p being Element of NAT st p is prime
       holds p |-count a <= p |-count b)
@@ -850,12 +850,12 @@ theorem Th20:
       end;
       hence thesis;
     end;
-    A8: for a being non empty natural number, x being Prime
-      holds a div (x|^(x|-count a)) is non empty natural number
+    A8: for a being non empty Nat, x being Prime
+      holds a div (x|^(x|-count a)) is non empty Nat
     proof
-      let a be non empty natural number;
+      let a be non empty Nat;
       let x be Prime;
-      assume A9: not(a div (x|^(x|-count a)) is non empty natural number);
+      assume A9: not(a div (x|^(x|-count a)) is non empty Nat);
       per cases;
       suppose x|-count a=0;
         then A10: x|^(x|-count a)=1 by NEWTON:9;
@@ -867,26 +867,26 @@ theorem Th20:
         then A11: x>1 & x|-count a>0 by INT_2:def 5;
         set xca=x|^(x|-count a);
         A12: ex t being Nat
-        st a = xca * 0 + t & t < xca by A9,NAT_D:def 1;
+        st a = xca * (0 qua Nat) + t & t < xca by A9,NAT_D:def 1;
          xca divides a by A11,NAT_3:def 7;
         hence contradiction by A12,NAT_D:7;
       end;
     end;
-    A13: for n1,n2 being non empty natural number st n1 divides n2
+    A13: for n1,n2 being non empty Nat st n1 divides n2
       holds (n2 div n1)*n1 = n2
     proof
-      let n1,n2 be non empty natural number;
+      let n1,n2 be non empty Nat;
       assume n1 divides n2;
       then ex a being Nat st n2=n1*a by NAT_D:def 3;
       hence thesis by NAT_D:18;
     end;
-    A14: for b,b1 being non empty natural number, x being Prime,
+    A14: for b,b1 being non empty Nat, x being Prime,
     n being Element of NAT
       st card(support pfexp b)=n+1 & b1=b div (x|^(x|-count b))
          & x in support pfexp b
       holds card(support pfexp b1)=n
     proof
-      let b,b1 be non empty natural number;
+      let b,b1 be non empty Nat;
       let x be Prime;
       let n be Element of NAT;
       assume A15: card(support pfexp b)=n+1;
@@ -914,21 +914,21 @@ A21:   x in NAT by ORDINAL1:def 13;
         hence contradiction by A23,NAT_D:def 3;
       end;
       then A24: x|^xcb,b1 are_relative_prime by A21,EULER_2:32;
-      reconsider b1 as non empty natural number;
+      reconsider b1 as non empty Nat;
        card support pfexp (x|^xcb*b1) =
       card support pfexp x|^xcb + card support pfexp b1 by A24,NAT_3:47;
       then n+1=card {x} + card support pfexp b1 by A15,A19,A20,NAT_3:42;
       then n+1=1+card (support pfexp b1) by CARD_2:60;
       hence thesis;
     end;
-    A25: for a,a1,b,b1 being non empty natural number, x being Prime
+    A25: for a,a1,b,b1 being non empty Nat, x being Prime
       st (for p being Element of NAT st p is prime
       holds p |-count a <= p |-count b)
         & a1=a div (x|^(x|-count a)) & b1=b div (x|^(x|-count b))
       holds (for p being Element of NAT st p is prime
       holds p |-count a1 <= p |-count b1)
     proof
-      let a,a1,b,b1 be non empty natural number;
+      let a,a1,b,b1 be non empty Nat;
       let x be Prime;
       assume A26: for p being Element of NAT st p is prime
         holds p |-count a <= p |-count b;
@@ -968,12 +968,12 @@ NAT_3:31;
     proof
       let n be Element of NAT;
       assume A37: P[n];
-       for a,b being non empty natural number st card(support pfexp b)=n+1
+       for a,b being non empty Nat st card(support pfexp b)=n+1
         holds (for p being Element of NAT st p is prime
         holds p |-count a <= p |-count b)
         implies (ex c being Element of NAT st b=a*c)
       proof
-        let a,b be non empty natural number;
+        let a,b be non empty Nat;
         assume A38: card(support pfexp b)=n+1;
         assume A39: for p being Element of NAT st p is prime
           holds p |-count a <= p |-count b;
@@ -984,7 +984,7 @@ NAT_3:31;
 A41:     x in NAT by ORDINAL1:def 13;
         set a1=a div (x|^(x|-count a));
         set b1=b div (x|^(x|-count b));
-        reconsider a1,b1 as non empty natural number by A8;
+        reconsider a1,b1 as non empty Nat by A8;
         A42: card(support pfexp b1)=n by A14,A38,A40;
          for p being Element of NAT st p is prime
         holds p |-count a1 <= p |-count b1
@@ -1013,11 +1013,11 @@ A41:     x in NAT by ORDINAL1:def 13;
   end;
 
 theorem Th21:
-  for a,b being non empty natural number holds
+  for a,b being non empty Nat holds
     (for p being Element of NAT st p is prime holds p |-count a = p |-count b)
   implies a=b
 proof
-  let a,b be non empty natural number;
+  let a,b be non empty Nat;
   assume A1: for p being Element of NAT st p is prime
   holds p |-count a = p |-count b;
   then for p being Element of NAT st p is prime
@@ -2270,13 +2270,13 @@ theorem Th45:
   holds Product Sgm{p where p is prime Element of NAT:p<=n+1} <= 4 to_power n
 proof
   let n be Element of NAT;
-  defpred P[Element of NAT] means
+  defpred P[Nat] means
   Product Sgm{p where p is prime Element of NAT:p<=$1+1}<=(4 to_power $1);
-  A1: for m being Element of NAT st (for n being Element of NAT st n < m
+  A1: for m being Nat st (for n being Nat st n < m
   holds P[n]) holds P[m]
   proof
-    let m be Element of NAT;
-    assume A2: for n being Element of NAT st n < m holds P[n];
+    let m be Nat;
+    assume A2: for n being Nat st n < m holds P[n];
     per cases by XXREAL_0:1;
     suppose m<1;
       then A3: m=0 by NAT_1:14;
@@ -2440,7 +2440,7 @@ A24:      ex y' being prime Element of NAT st y'=a & y'<=k+1 by A22;
             reconsider r as Element of NAT by A34;
             A35: 2*k+1-k+k>=0+k by A34,XREAL_1:8;
             then A36: b = (2*k+1)!/((k!)*(r!)) by NEWTON:def 3;
-            A37: a is non empty natural number by A29,Th42;
+            A37: a is non empty Nat by A29,Th42;
             A38: b>0
             proof
               assume b<=0;
@@ -2656,7 +2656,7 @@ XCMPLX_1:88
       end;
     end;
   end;
-   for n being Element of NAT holds P[n] from NAT_1:sch 4(A1);
+   for n being Nat holds P[n] from NAT_1:sch 4(A1);
   hence thesis;
 end;
 

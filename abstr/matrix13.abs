@@ -13,7 +13,7 @@ environ
       INT_1, ABSVALUE, QC_LANG1, ROUGHS_1, NEWTON, CARD_FIN, GR_CY_1, FREEALG,
       FSM_1, XREAL_0, SEQ_1, MATRLIN, MATRIX_1, MATRIX_2, MATRIX_3, MATRIX11,
       LAPLACE, MATRIX13, VECTSP_1, VECTSP_9, PRVECT_1, RLVECT_1, RLVECT_2,
-      RLVECT_3, LMOD_7, COMPLEX1, CLASSES1, SEQM_3;
+      RLVECT_3, LMOD_7, COMPLEX1, CLASSES1, ARYTM;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, CARD_1, XCMPLX_0,
       XXREAL_0, NAT_1, NAT_D, FINSET_1, RELAT_1, RELSET_1, FUNCT_1, PARTFUN1,
       FUNCT_2, SETWOP_2, FINSEQ_1, BINOP_1, STRUCT_0, FUNCOP_1, RLVECT_1,
@@ -37,8 +37,8 @@ begin :: Triangular Matrices
 
  reserve x,y,X,Y for set,
       D for non empty set,
-      i,j,k,l,m,n,m',n' for Element of NAT,
-      i0,j0,n0,m0 for non zero Element of NAT,
+      i,j,k,l,m,n,m',n' for Nat,
+      i0,j0,n0,m0 for non zero Nat,
       K for Field,
       a,b for Element of K,
       p for FinSequence of K,
@@ -122,7 +122,7 @@ theorem :: MATRIX13:16
 begin :: The Rank of Matrices
 
 definition
-  let D be non empty set; let M be Matrix of D; let n,m be Nat;
+  let D be non empty set; let M be Matrix of D; let n,m;
   let nt be Element of n-tuples_on NAT;
   let mt be Element of m-tuples_on NAT;
   func Segm(M,nt,mt) -> Matrix of n,m,D means
@@ -260,6 +260,13 @@ registration
   let X be without_zero set, Y be set;
   cluster X \ Y -> without_zero;
   cluster X /\ Y -> without_zero;
+end;
+
+definition
+  let i be Nat;
+  redefine func {i} ->  Subset of NAT;
+  let j be Nat;
+  redefine func {i,j} ->  Subset of NAT;
 end;
 
 theorem :: MATRIX13:43
@@ -522,7 +529,8 @@ end;
 
 theorem :: MATRIX13:99
   for M be diagonal Matrix of K
-    for NonZero be set st NonZero ={i:[i,i] in Indices M & M*(i,i)<>0.K}
+    for NonZero be set st NonZero =
+       {i where i is Element of NAT:[i,i] in Indices M & M*(i,i)<>0.K}
       for P,Q st [:P,Q:] c= Indices M & card P = card Q &
                  Det EqSegm(M,P,Q)<>0.K
        holds P c= NonZero & Q c= NonZero;
@@ -533,7 +541,8 @@ theorem :: MATRIX13:100
 
 theorem :: MATRIX13:101
   for M be diagonal Matrix of K
-    for NonZero be set st NonZero={i:[i,i] in Indices M & M*(i,i)<>0.K}
+    for NonZero be set st
+       NonZero={i where i is Element of NAT:[i,i] in Indices M & M*(i,i)<>0.K}
       holds the_rank_of M = Card NonZero;
 
  reserve v,v1,v2,u,w for Vector of n-VectSp_over K,
@@ -628,6 +637,7 @@ end;
 
 theorem :: MATRIX13:112
   dim (n-VectSp_over K) = n;
+
 
 theorem :: MATRIX13:113
   for M,i,a st for j st j in Seg m holds M*(j,i) = a

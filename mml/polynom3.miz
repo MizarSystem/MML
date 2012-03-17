@@ -11,13 +11,13 @@ environ
       FINSET_1, TRIANG_1, ARYTM_1, CARD_1, VECTSP_1, NORMSP_1, FUNCT_2,
       POLYNOM1, ALGSEQ_1, FUNCOP_1, FUNCT_4, ARYTM_3, LATTICES, ALGSTR_2,
       GROUP_1, BINOP_1, DTCONSTR, RFINSEQ, POLYNOM3, FINSEQ_4, VECTSP_2,
-      GR_CY_1;
+      GR_CY_1, ARYTM;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, XCMPLX_0, ORDERS_1,
       STRUCT_0, NAT_1, RELAT_1, RELAT_2, RELSET_1, PARTFUN1, CARD_1, FINSET_1,
       FUNCT_1, FUNCT_2, TRIANG_1, FINSEQ_1, FINSEQ_2, FINSEQ_5, FINSOP_1,
-      FINSEQOP, RFINSEQ, BINOP_1, RVSUM_1, FVSUM_1, TREES_4, WSIERP_1, MATRLIN,
-      BINARITH, GROUP_1, DTCONSTR, RLVECT_1, VECTSP_1, NORMSP_1, POLYNOM1,
-      ALGSEQ_1, XXREAL_0, BHSP_1;
+      SEQ_1, FINSEQOP, RFINSEQ, BINOP_1, RVSUM_1, FVSUM_1, TREES_4, WSIERP_1,
+      MATRLIN, BINARITH, GROUP_1, DTCONSTR, RLVECT_1, VECTSP_1, NORMSP_1,
+      POLYNOM1, ALGSEQ_1, XXREAL_0, BHSP_1;
  constructors BINOP_1, SQUARE_1, NAT_1, FINSEQOP, FINSOP_1, REALSET1, RFINSEQ,
       BINARITH, FINSEQ_5, WSIERP_1, ALGSEQ_1, BHSP_1, DTCONSTR, TRIANG_1,
       POLYNOM1;
@@ -1420,7 +1420,7 @@ begin  :: Polynomials
     thus n >= len p implies n is_at_least_length_of p
     proof
      assume A1: n >= len p;
-     let i be Element of NAT;
+     let i be Nat;
       assume i >= n;
       then i >= len p by A1,XXREAL_0:2;
       hence p.i = 0.L by ALGSEQ_1:22;
@@ -1447,16 +1447,21 @@ proof
    then consider f be Function of NAT,the carrier of R() such that
     A2: for x be Element of NAT holds
      x<A() & f.x=F(x) or x>=A() & f.x=0.R();
-        ex n be Element of NAT st for i be Element of NAT st i >= n
+     ex n be Nat st for i be Nat st i >= n
         holds f.i = 0.R()
    proof
     take A();
-    thus thesis by A2;
+    let i be Nat; i in NAT by ORDINAL1:def 13;
+    hence thesis by A2;
    end;
    then reconsider f as AlgSequence of R() by ALGSEQ_1:def 2;
    A3:len f <= A()
    proof
-         for i be Element of NAT st i>=A() holds f.i=0.R() by A2;
+     now let i be Nat;
+       i in NAT by ORDINAL1:def 13;
+       hence i>=A() implies f.i=0.R() by A2;
+     end;
+    
     then A() is_at_least_length_of f by ALGSEQ_1:def 3;
     hence thesis by ALGSEQ_1:def 4;
    end;
@@ -1475,14 +1480,15 @@ proof
    coherence
    proof
     take s=len p + len q;
-    let i be Element of NAT;
+    let i be Nat;
      assume A1: i >= s;
           len p + len q >= len p by NAT_1:11;
      then i >= len p by A1,XXREAL_0:2;
      then A2: p.i = 0.L by ALGSEQ_1:22;
-          len p + len q >= len q by NAT_1:11;
+A4:  i in NAT by ORDINAL1:def 13;
+     len p + len q >= len q by NAT_1:11;
      then A3: i >= len q by A1,XXREAL_0:2;
-     thus (p+q).i = p.i + q.i by NORMSP_1:def 5
+     thus (p+q).i = p.i + q.i by NORMSP_1:def 5,A4
         .= 0.L + 0.L by A2,A3,ALGSEQ_1:22
         .= 0.L by RLVECT_1:def 7;
    end;
@@ -1501,10 +1507,11 @@ proof
     assume that
      A1: n is_at_least_length_of p and
      A2: n is_at_least_length_of q;
-    let i be Element of NAT;
+    let i be Nat;
+A3: i in NAT by ORDINAL1:def 13;
      assume i>=n;
      then p.i = 0.L & q.i = 0.L by A1,A2,ALGSEQ_1:def 3;
-     hence (p+q).i = 0.L + 0.L by NORMSP_1:def 5
+     hence (p+q).i = 0.L + 0.L by NORMSP_1:def 5,A3
         .= 0.L by RLVECT_1:def 7;
    end;
 
@@ -1577,9 +1584,10 @@ proof
    coherence
    proof
     take s=len p;
-    let i be Element of NAT;
+    let i be Nat;
      assume A1: i >= s;
-     thus (-p).i = -p.i by BHSP_1:def 10
+     i in NAT by ORDINAL1:def 13;
+     hence (-p).i = -p.i by BHSP_1:def 10
         .= - 0.L by A1,ALGSEQ_1:22
         .= 0.L by RLVECT_1:25;
    end;
@@ -1632,9 +1640,10 @@ Lm1:
    coherence
    proof
     take 0;
-    let i be Element of NAT;
+    let i be Nat;
      assume i >= 0;
-     thus (0_.(L)).i = 0.L by FUNCOP_1:13;
+     i in NAT by ORDINAL1:def 13;
+     hence thesis by FUNCOP_1:13;
    end;
   end;
 
@@ -1685,26 +1694,28 @@ canceled;
    coherence
    proof
     take 1;
-    let i be Element of NAT;
+    let i be Nat;
+A1: i in NAT by ORDINAL1:def 13;
      assume i >= 1;
      hence (1_.(L)).i = (0_.(L)).i by FUNCT_7:34
-        .= 0.L by FUNCOP_1:13;
+        .= 0.L by FUNCOP_1:13,A1;
    end;
   end;
 
   theorem Th31:
    for L be non empty multLoopStr_0 holds
     (1_.(L)).0 = 1.L &
-    for n be Element of NAT st n <> 0 holds (1_.(L)).n = 0.L
+    for n be Nat st n <> 0 holds (1_.(L)).n = 0.L
    proof
     let L be non empty multLoopStr_0;
          the carrier of L is non empty & 0 in NAT;
     then 0 in dom 0_.(L) by FUNCT_2:def 1;
     hence (1_.(L)).0 = 1.L by FUNCT_7:33;
-    let n be Element of NAT;
+    let n be Nat;
+A1: n in NAT by ORDINAL1:def 13;
     assume n <> 0;
     hence (1_.(L)).n = (0_.(L)).n by FUNCT_7:34
-       .= 0.L by FUNCOP_1:13;
+       .= 0.L by FUNCOP_1:13,A1;
    end;
 
   definition
@@ -1789,7 +1800,9 @@ canceled;
    coherence
    proof
     take s = len p + len q;
-    let i be Element of NAT;
+    let i be Nat;
+    i in NAT by ORDINAL1:def 13;
+    then
      consider r be FinSequence of the carrier of L such that
       A1: len r = i+1 and
       A2: (p*'q).i = Sum r and

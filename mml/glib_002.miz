@@ -9,7 +9,7 @@ environ
  vocabularies AMI_1, ARYTM_1, BOOLE, CARD_1, CAT_1, FINSEQ_1, FINSET_1,
       FUNCOP_1, FUNCT_1, GLIB_000, GLIB_001, GLIB_002, GRAPH_1, MATRIX_2,
       MSAFREE2, MSUALG_1, NEWTON, ORDINAL1, QUANTAL1, PBOOLE, PRE_TOPC,
-      REALSET1, RELAT_1, RELAT_2, TARSKI, TOPGEN_1, TREES_1, SETFAM_1;
+      REALSET1, RELAT_1, RELAT_2, TARSKI, TOPGEN_1, TREES_1, SETFAM_1, ARYTM;
  notations TARSKI, XBOOLE_0, ZFMISC_1, NUMBERS, SUBSET_1, SETFAM_1, DOMAIN_1,
       XCMPLX_0, ABIAN, XXREAL_0, RELAT_1, FUNCT_1, CARD_1, PBOOLE, FUNCT_2,
       FINSEQ_1, FINSET_1, NAT_1, FUNCOP_1, GLIB_000, GLIB_001;
@@ -1073,47 +1073,12 @@ Lm21:
   for G being non trivial finite connected _Graph holds
    ex v1,v2 being Vertex of G st v1 <> v2 & not v1 is cut-vertex &
       not v2 is cut-vertex proof
-   defpred P[Element of NAT] means
+   defpred P[Nat] means
     for G being non trivial finite connected _Graph st
      G.order() = $1 holds ex v1,v2 being Vertex of G st v1 <> v2 &
      not v1 is cut-vertex & not v2 is cut-vertex;
-  now let k be Element of NAT; assume
- A1: for n being Element of NAT st n < k holds P[n];
-   now per cases by REAL_1:def 5;
-  suppose
-  A2: k < 2;
-    now let G be non trivial finite connected _Graph such that
-   A3: G.order() = k;
-        G.order() < 1+1 by A2,A3;
-   then A4: G.order() <= 1 by NAT_1:13;
-        1 <= G.order() by GLIB_000:28;
-       then G.order() = 1 by A4,XXREAL_0:1;
-       hence ex v1,v2 being Vertex of G st v1 <> v2 &
-       not v1 is cut-vertex & not v2 is cut-vertex by GLIB_000:29;
-   end;
-   hence P[k]; end;
-  suppose
-  A5: k = 2;
-    now let G be non trivial finite connected _Graph such that
-   A6: G.order() = k;
-       consider v1,v2 being Vertex of G such that
-   A7: v1 <> v2 by GLIB_000:24;
-   A8: G.numComponents() = 1 by Lm18;
-       take v1, v2;
-       thus v1 <> v2 by A7;
-     now let v be Vertex of G;
-        consider GRV being removeVertex of G,v;
-        assume v is cut-vertex;
-    then A9: 1 < GRV.numComponents() by A8,Def11;
-         GRV.order() + 1 = 2 by A5,A6,GLIB_000:51;
-        then reconsider GRV' = GRV as trivial _Graph by GLIB_000:29;
-         GRV' is connected;
-        hence contradiction by A9,Lm18;
-    end;
-    hence not v1 is cut-vertex & not v2 is cut-vertex;
-   end;
-   hence P[k]; end;
-  suppose 2 < k;
+  now let k be Nat; assume
+ A1: for n being Nat st n < k holds P[n];
     now let G be non trivial finite connected _Graph such that
    A10: G.order() = k;
    A11: G.numComponents() = 1 by Lm18;
@@ -1605,12 +1570,9 @@ then reconsider nm1 = n+m-1 as odd Element of NAT;
        not v1 is cut-vertex & not v2 is cut-vertex;
    end;
       hence P[k]; end;
-  end;
-     hence P[k];
- end;
-then A130: for k being Element of NAT st
-for n being Element of NAT st n < k holds P[n] holds P[k];
-A131: for k being Element of NAT holds P[k] from NAT_1:sch 4(A130);
+then A130: for k being Nat st
+for n being Nat st n < k holds P[n] holds P[k];
+A131: for k being Nat holds P[k] from NAT_1:sch 4(A130);
     let G be non trivial finite connected _Graph;
      G.order() = G.order();
     hence thesis by A131;
@@ -1688,8 +1650,8 @@ Lm23:
     v2 is endvertex & v2 in G.reachableFrom(v1) proof
     let G be non trivial finite acyclic _Graph such that
 A1: the_Edges_of G <> {}; set e = choose the_Edges_of G;
-    defpred P[Element of NAT] means ex W being Path of G st len W = $1;
-A2: now let k be Element of NAT; assume P[k];
+    defpred P[Nat] means ex W being Path of G st len W = $1;
+A2: now let k be Nat; assume P[k];
         then consider P being Path of G such that
     A3: len P = k;
          len P.vertexSeq() <= G.order() + 1 by GLIB_001:155;
@@ -1701,12 +1663,12 @@ A2: now let k be Element of NAT; assume P[k];
     set src = (the_Source_of G).e, tar = (the_Target_of G).e;
  e Joins src,tar,G by A1,GLIB_000:def 15;
 then A4: len G.walkOf(src,e,tar) = 3 by GLIB_001:15;
-then A5: ex k being Element of NAT st P[k];
-    consider k being Element of NAT such that
-A6: P[k] & for n being Element of NAT st P[n] holds n <= k
+then A5: ex k being Nat st P[k];
+    consider k being Nat such that
+A6: P[k] & for n being Nat st P[n] holds n <= k
 from NAT_1:sch 6(A2,A5);
     consider W being Path of G such that
-A7: len W = k & for n being Element of NAT st P[n] holds n <= k by A6;
+A7: len W = k & for n being Nat st P[n] holds n <= k by A6;
 A8: 3 <= len W by A4,A7;
 then A9: W is non trivial by GLIB_001:126;
 A10: now assume W.first() = W.last();
@@ -1937,8 +1899,9 @@ registration
     set F = NAT --> G;
 A1: dom F = NAT by FUNCOP_1:19;
     then reconsider F as ManySortedSet of NAT by PBOOLE:def 3;
-     now let x be Element of NAT;
-         F.x in rng F by A1,FUNCT_1:12;
+     now let x be Nat;
+       x in NAT by ORDINAL1:def 13;
+       then F.x in rng F by A1,FUNCT_1:12;
         then F.x in {G} by FUNCOP_1:14;
         hence F.x is _Graph by TARSKI:def 1;
     end; then reconsider F as GraphSeq by GLIB_000:def 55;

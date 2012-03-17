@@ -7,14 +7,14 @@
 environ
 
  vocabularies ARYTM_1, NAT_1, INT_1, ARYTM_3, FINSEQ_1, RADIX_1, POWER,
-      MIDSP_3, RELAT_1, FUNCT_1, RLVECT_1, RADIX_2, FINSEQ_4, GROUP_1;
+      MIDSP_3, RELAT_1, FUNCT_1, RLVECT_1, RADIX_2, FINSEQ_4, GROUP_1, ARYTM;
  notations TARSKI, NUMBERS, XCMPLX_0, REAL_1, INT_1, NAT_1, NAT_D, FUNCT_1,
       POWER, PARTFUN1, FINSEQ_1, SEQ_1, FINSEQ_4, NEWTON, BINARITH, RVSUM_1,
       GR_CY_1, WSIERP_1, RADIX_1, XXREAL_0, SUBSET_1;
  constructors PARTFUN1, REAL_1, NAT_1, NAT_D, FINSEQ_4, NEWTON, POWER,
       BINARITH, WSIERP_1, GR_CY_1, RADIX_1;
  registrations ORDINAL1, RELSET_1, NUMBERS, XXREAL_0, XREAL_0, NAT_1, INT_1,
-      MEMBERED, SEQ_1, WSIERP_1, NEWTON;
+      MEMBERED, SEQ_1, WSIERP_1, NEWTON, XBOOLE_0;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
 
 
@@ -26,24 +26,24 @@ theorem :: RADIX_2:1
    for a be Nat holds a mod 1 = 0;
 
 theorem :: RADIX_2:2
-  for a,b be Integer, n be Element of NAT st n>0 holds
+  for a,b be Integer, n be Nat st n>0 holds
     ((a mod n)+(b mod n)) mod n = (a + (b mod n)) mod n;
 
 theorem :: RADIX_2:3
-  for a,b be Integer, n be Element of NAT st n>0 holds
+  for a,b be Integer, n be Nat st n>0 holds
     (a*b) mod n = (a*(b mod n)) mod n;
 
 theorem :: RADIX_2:4
-  for a,b,i be Element of NAT st 1 <= i & 0 < b holds
+  for a,b,i be Nat st 1 <= i & 0 < b holds
     (a mod (b |^ i)) div (b |^ (i -'1)) = (a div (b |^ (i -'1))) mod b;
 
 theorem :: RADIX_2:5
-  for i,n be Element of NAT st i in Seg n holds i+1 in Seg (n+1);
+  for i,n be Nat st i in Seg n holds i+1 in Seg (n+1);
 
 begin :: Properties of Addition operation using radix-2^k SD numbers
 
 theorem :: RADIX_2:6
-  for k be Element of NAT holds Radix(k) > 0;
+  for k be Nat holds Radix(k) > 0;
 
 theorem :: RADIX_2:7
   for x be Tuple of 1,k-SD holds SDDec(x) = DigA(x,1);
@@ -53,19 +53,19 @@ theorem :: RADIX_2:8
     SD_Add_Data(x,k) + SD_Add_Carry(x)*Radix(k) = x;
 
 theorem :: RADIX_2:9
-  for n be Element of NAT
+  for n be Nat
     for x be Tuple of (n+1),k-SD, xn be Tuple of n,k-SD st
-      (for i be Element of NAT st i in Seg n holds x.i = xn.i) holds
+      (for i be Nat st i in Seg n holds x.i = xn.i) holds
         Sum DigitSD(x) = Sum(DigitSD(xn)^<*SubDigit(x,n+1,k)*>);
 
 theorem :: RADIX_2:10
-  for n be Element of NAT
+  for n be Nat
     for x be Tuple of (n+1),k-SD, xn be Tuple of n,k-SD st
-      (for i be Element of NAT st i in Seg n holds x.i = xn.i) holds
+      (for i be Nat st i in Seg n holds x.i = xn.i) holds
         SDDec(xn) + (Radix(k) |^ n)*DigA(x,n+1) = SDDec(x);
 
 theorem :: RADIX_2:11
-      for n be Element of NAT st n >= 1 holds
+  for n be Nat st n >= 1 holds
     for x,y be Tuple of n,k-SD st k >= 2 holds
       SDDec(x '+' y) + SD_Add_Carry(DigA(x,n) + DigA(y,n))
         *(Radix(k) |^ n) = SDDec(x) + SDDec(y);
@@ -104,19 +104,19 @@ definition let k,n,x be Nat;
 end;
 
 theorem :: RADIX_2:12
-  for n,k be Element of NAT, x be Tuple of n,NAT, y be Tuple of n,k-SD
+  for n,k be Nat, x be Tuple of n,NAT, y be Tuple of n,k-SD
     st x = y holds DigitSD2(x,k) = DigitSD(y);
 
 theorem :: RADIX_2:13
-  for n,k be Element of NAT, x be Tuple of n,NAT, y be Tuple of n,k-SD
+  for n,k be Nat, x be Tuple of n,NAT, y be Tuple of n,k-SD
     st x = y holds SDDec2(x,k) = SDDec(y);
 
 theorem :: RADIX_2:14
-  for x,n,k be Element of NAT holds DecSD2(x,n,k) = DecSD(x,n,k);
+  for x,n,k be Nat holds DecSD2(x,n,k) = DecSD(x,n,k);
 
 theorem :: RADIX_2:15
-  for n be Element of NAT st n >= 1 holds
-    for m,k be Element of NAT st m is_represented_by n,k holds
+  for n be Nat st n >= 1 holds
+    for m,k be Nat st m is_represented_by n,k holds
       m = SDDec2(DecSD2(m,n,k),k);
 
 begin :: Algorithm of calculation of (a*b) mod c based on
@@ -140,8 +140,8 @@ definition let q be Integer, k,f,n be Nat, c be Tuple of n,k-SD;
 end;
 
 theorem :: RADIX_2:16
-   for n be Element of NAT st n >= 1 holds
-    for q be Integer, ic,f,k be Element of NAT
+   for n be Nat st n >= 1 holds
+    for q be Integer, ic,f,k be Nat
       st ic is_represented_by n,k & f > 0 holds
        for c be Tuple of n,k-SD st c = DecSD(ic,n,k) holds
          Mul_mod(q,c,f,k).n = (q * ic) mod f;
@@ -162,13 +162,13 @@ definition let k,f,m,n be Nat, e be Tuple of n,NAT;
 
     it.1 = Table2(m,e,f,n) &
     for i be Nat st 1 <= i & i <= n - 1 holds
-      ex i1,i2 be Element of NAT st i1 = it.i & i2 = it.(i+1) &
+      ex i1,i2 be Nat st i1 = it.i & i2 = it.(i+1) &
         i2 = (((i1 |^ Radix(k)) mod f) * Table2(m,e,f,n-'i)) mod f;
 end;
 
 theorem :: RADIX_2:17
-   for n be Element of NAT st n >= 1 holds
-    for m,k,f,ie be Element of NAT st ie is_represented_by n,k & f>0 holds
+   for n be Nat st n >= 1 holds
+    for m,k,f,ie be Nat st ie is_represented_by n,k & f>0 holds
       for e be Tuple of n,NAT st e = DecSD2(ie,n,k) holds
         Pow_mod(m,e,f,k).n = (m |^ ie) mod f;
 

@@ -6,12 +6,12 @@
 
 environ
 
- vocabularies BOOLE, NUMERAL1, ARYTM, ORDINAL2, AFINSQ_1, FUNCT_1, FINSEQ_1,
-      ARYTM_1, RELAT_1, RLVECT_1, ALGSEQ_1, GROUP_1, NAT_1, MONOID_0, FINSOP_1,
-      SEQ_1, SERIES_1, PREPOWER, POWER, ARYTM_3;
+ vocabularies BOOLE, NUMERAL1, ARYTM, AFINSQ_1, FUNCT_1, FINSEQ_1, ARYTM_1,
+      RELAT_1, RLVECT_1, ALGSEQ_1, GROUP_1, NAT_1, MONOID_0, FINSOP_1, SEQ_1,
+      SERIES_1, PREPOWER, POWER, ARYTM_3;
  notations TARSKI, XBOOLE_0, SUBSET_1, FUNCT_1, ORDINAL1, RELSET_1, BINOP_1,
-      NUMBERS, XCMPLX_0, XXREAL_0, NAT_D, BINOP_2, SEQ_1, NEWTON, PREPOWER,
-      POWER, SERIES_1, AFINSQ_1, STIRL2_1, FUNCT_2;
+      NUMBERS, XCMPLX_0, XXREAL_0, NAT_1, NAT_D, BINOP_2, SEQ_1, NEWTON,
+      PREPOWER, POWER, SERIES_1, AFINSQ_1, STIRL2_1, FUNCT_2;
  constructors BINOP_1, SETWISEO, XXREAL_0, REAL_1, NAT_1, NAT_D, BINOP_2,
       SEQ_1, NEWTON, PREPOWER, SERIES_1, STIRL2_1;
  registrations XBOOLE_0, RELAT_1, FUNCT_1, ORDINAL1, NUMBERS, XXREAL_0,
@@ -28,12 +28,12 @@ environ
 begin :: Preliminaries
 
   Lm1: for d being XFinSequence holds
-  (ex n being natural number st n in dom d) iff len d > 0
+  (ex n being Nat st n in dom d) iff len d > 0
   proof
     let d be XFinSequence;
-    thus (ex n being natural number st n in dom d) implies len d > 0
+    thus (ex n being Nat st n in dom d) implies len d > 0
     proof
-      given n being natural number such that A1: n in dom d;
+      given n being Nat such that A1: n in dom d;
        n in len d by A1,AFINSQ_1:def 1;
       hence len d > 0;
     end;
@@ -55,10 +55,10 @@ theorem Th1:
 
 theorem Th2:
   for S being Real_Sequence, d being XFinSequence of NAT,
-  n being natural number
+  n being Nat
   st d=S|(n+1) holds Sum(d)=Partial_Sums(S).n
   proof
-    let S be Real_Sequence, d be XFinSequence of NAT, n be natural number;
+    let S be Real_Sequence, d be XFinSequence of NAT, n be Nat;
     assume A1: d=S|(n+1);
     then A2: dom d = dom S /\ (n+1) & for x being set st x in dom d holds
     d.x = S.x by FUNCT_1:68;
@@ -103,10 +103,10 @@ theorem Th2:
   end;
 
 theorem Th3:
-  for k,l,m being natural number holds
+  for k,l,m being Nat holds
   (k(#)(l GeoSeq))|m is XFinSequence of NAT
   proof
-    let k,l,m be natural number;
+    let k,l,m be Nat;
     set g=(k(#)(l GeoSeq))|m;
     A1: dom (k(#)(l GeoSeq)) = NAT by FUNCT_2:def 1;
     then m in dom (k(#)(l GeoSeq)) by ORDINAL1:def 13;
@@ -131,12 +131,12 @@ theorem Th3:
 theorem Th4:
   for d,e being XFinSequence of NAT st
   len d >= 1 & len d = len e &
-  for i being natural number st i in dom d holds d.i<=e.i
+  for i being Nat st i in dom d holds d.i<=e.i
   holds Sum d <= Sum e
   proof
     let d,e be XFinSequence of NAT such that
     A1: len d >=1 & len d = len e &
-    for i being natural number st i in dom d holds d.i<=e.i;
+    for i being Nat st i in dom d holds d.i<=e.i;
     consider f being Function of NAT,NAT such that
     A2: f.0 = d.0 &
     (for n being Element of NAT st n+1 < len d holds
@@ -180,12 +180,12 @@ theorem Th4:
   end;
 
 theorem Th5:
-  for d being XFinSequence of NAT, n being natural number st
-  for i being natural number st i in dom d holds n divides d.i
+  for d being XFinSequence of NAT, n being Nat st
+  for i being Nat st i in dom d holds n divides d.i
   holds n divides Sum d
   proof
-    let d be XFinSequence of NAT, n be natural number such that
-    A1: for i being natural number st i in dom d holds n divides d.i;
+    let d be XFinSequence of NAT, n be Nat such that
+    A1: for i being Nat st i in dom d holds n divides d.i;
     per cases;
     suppose len d=0;
       then Sum d = 0 by STIRL2_1:53;
@@ -225,25 +225,25 @@ theorem Th5:
   end;
 
 theorem Th6:
-  for d,e being XFinSequence of NAT, n being natural number st
+  for d,e being XFinSequence of NAT, n being Nat st
   dom d = dom e &
-  for i being natural number st i in dom d holds e.i = d.i mod n
+  for i being Nat st i in dom d holds e.i = d.i mod n
   holds Sum d mod n = Sum e mod n
   proof
-    let d,e be XFinSequence of NAT, n be natural number such that
+    let d,e be XFinSequence of NAT, n be Nat such that
     A1: dom d = dom e &
-    for i being natural number st i in dom d holds e.i = d.i mod n;
+    for i being Nat st i in dom d holds e.i = d.i mod n;
 
     defpred P[XFinSequence of NAT] means
     for e being XFinSequence of NAT st dom $1=dom e &
-    for i being natural number st i in dom $1 holds e.i = $1.i mod n
+    for i being Nat st i in dom $1 holds e.i = $1.i mod n
     holds (Sum $1) mod n = (Sum e) mod n;
 
     A2: P[<%>NAT]
     proof
       let e be XFinSequence of NAT;
       assume dom <%>NAT=dom e &
-      for i being natural number st i in dom <%>NAT holds e.i = <%>NAT.i mod n;
+      for i being Nat st i in dom <%>NAT holds e.i = <%>NAT.i mod n;
       then len e = 0 by AFINSQ_1:def 1;
       hence (Sum <%>NAT) mod n = (Sum e) mod n by AFINSQ_1:18;
     end;
@@ -256,7 +256,7 @@ theorem Th6:
       proof
         let e be XFinSequence of NAT;
         assume A5: dom (p^<%l%>)=dom e &
-        for i being natural number st i in dom (p^<%l%>) holds
+        for i being Nat st i in dom (p^<%l%>) holds
         e.i = (p^<%l%>).i mod n;
 
         defpred Q[set,set] means $2=p.$1 mod n;
@@ -269,7 +269,7 @@ theorem Th6:
         A7: dom p' = dop &
         for k being Element of NAT st k in dop holds Q[k,p'.k]
         from STIRL2_1:sch 6(A6);
-        A8: for i being natural number st i in dom p holds
+        A8: for i being Nat st i in dom p holds
         p'.i = p.i mod n by A7;
 
         A9: dom e=len p + len <%l%> by A5,AFINSQ_1:def 4
@@ -324,15 +324,15 @@ begin :: Representation of numbers in the base-$b$ numeral system
 
 definition
   let d be XFinSequence of NAT;
-  let b be natural number;
-  func value(d,b) -> natural number means :Def1:
+  let b be Nat;
+  func value(d,b) -> Nat means :Def1:
   ex d' being XFinSequence of NAT st (dom d' = dom d &
-  for i being natural number st i in dom d' holds d'.i = (d.i)*(b|^i)) &
+  for i being Nat st i in dom d' holds d'.i = (d.i)*(b|^i)) &
   it = Sum d';
   existence
   proof
 
-    deffunc F(natural number)=(d.$1)*(b|^$1);
+    deffunc F(Nat)=(d.$1)*(b|^$1);
 
     consider d' being XFinSequence such that
     A1: len d' = len d &
@@ -351,9 +351,9 @@ definition
     end;
     then reconsider d' as XFinSequence of NAT by ORDINAL1:def 8;
     A3: dom d' = len d' by AFINSQ_1:def 1 .= dom d by A1,AFINSQ_1:def 1;
-    A4: for i being natural number st i in dom d' holds d'.i = (d.i)*(b|^i)
+    A4: for i being Nat st i in dom d' holds d'.i = (d.i)*(b|^i)
     proof
-      let i be natural number;
+      let i be Nat;
       reconsider j=i as Element of NAT by ORDINAL1:def 13;
       assume i in dom d';
       then j in len d by A1,AFINSQ_1:def 1;
@@ -364,12 +364,12 @@ definition
   end;
   uniqueness
   proof
-    let k,l be natural number;
+    let k,l be Nat;
     given k' being XFinSequence of NAT such that A5: (dom k' = dom d &
-    for i being natural number st i in dom k' holds k'.i = (d.i)*(b|^i)) &
+    for i being Nat st i in dom k' holds k'.i = (d.i)*(b|^i)) &
     k = Sum k';
     given l' being XFinSequence of NAT such that A6: (dom l' = dom d &
-    for i being natural number st i in dom l' holds l'.i = (d.i)*(b|^i)) &
+    for i being Nat st i in dom l' holds l'.i = (d.i)*(b|^i)) &
     l = Sum l';
      now
       let i be Element of NAT;
@@ -381,11 +381,11 @@ definition
 end;
 
 definition
-  let n,b be natural number;
+  let n,b be Nat;
   assume A1: b>1;
   func digits(n,b) -> XFinSequence of NAT means :Def2:
   value(it,b)=n & it.(len(it)-1) <> 0 &
-  for i being natural number st i in dom it holds
+  for i being Nat st i in dom it holds
   0 <= it.i & it.i < b if n <> 0
   otherwise it = <%0%>;
   consistency;
@@ -394,7 +394,7 @@ definition
     reconsider N=n,B=b as Element of NAT by ORDINAL1:def 13;
     thus n<>0 implies ex d being XFinSequence of NAT st
     value(d,b)=n & d.(len(d)-1) <> 0 &
-    for i being natural number st i in dom d holds 0 <= d.i & d.i < b
+    for i being Nat st i in dom d holds 0 <= d.i & d.i < b
     proof
       assume A2: n<>0;
 
@@ -405,15 +405,15 @@ definition
       for i being Element of NAT holds f.(i+1)=G(i,(f.i) qua Element of NAT)
       from RECDEF_1:sch 4;
 
-      defpred R[natural number] means f.$1 = 0;
+      defpred R[Nat] means f.$1 = 0;
 
-      defpred Q[natural number] means ex i being Element of NAT st f.i = $1;
+      defpred Q[Nat] means ex i being Element of NAT st f.i = $1;
 
-      A4: ex k being Element of NAT st Q[k] by A3;
-      A5: for k being Element of NAT st k <> 0 & Q[k]
-      ex l being Element of NAT st l < k & Q[l]
+      A4: ex k being Nat st Q[k] by A3;
+      A5: for k being Nat st k <> 0 & Q[k]
+      ex l being Nat st l < k & Q[l]
       proof
-        let k be Element of NAT;
+        let k be Nat;
         assume A6: k <> 0 & Q[k];
         then consider i being Element of NAT such that
         A7: f.i=k;
@@ -424,11 +424,11 @@ definition
         thus thesis by A3,A7;
       end;
        Q[0] from NAT_1:sch 7(A4,A5);
-      then A8: ex l being Element of NAT st R[l];
-      consider l being Element of NAT such that
-      A9: R[l] & for i being Element of NAT st R[i] holds l<=i
+      then A8: ex l being Nat st R[l];
+      consider l being Nat such that
+      A9: R[l] & for i being Nat st R[i] holds l<=i
       from NAT_1:sch 5(A8);
-      consider m being natural number such that
+      consider m being Nat such that
       A10: m+1=l by A2,A3,A9,NAT_1:6;
       reconsider m as Element of NAT by ORDINAL1:def 13;
        m < l by A10,NAT_1:13;
@@ -436,12 +436,13 @@ definition
       A12: R[l] by A9;
       A13:
       now
-        let i be Element of NAT such that l <= i;
+        let i be Nat such that l <= i;
+A100:   i in NAT by ORDINAL1:def 13;
         assume R[i];
-        then f.(i+1)=0 div b by A3;
+        then f.(i+1)=0 div b by A3,A100;
         hence R[i+1] by NAT_2:4;
       end;
-      A14: for i being Element of NAT st l <= i holds R[i]
+      A14: for i being Nat st l <= i holds R[i]
       from NAT_1:sch 8(A12,A13);
       A15:
       now
@@ -485,9 +486,9 @@ definition
       end;
       then reconsider d' as XFinSequence of NAT by ORDINAL1:def 8;
       A21: dom d' = len d' by AFINSQ_1:def 1 .= dom d by A19,AFINSQ_1:def 1;
-      A22: for i being natural number st i in dom d' holds d'.i = (d.i)*(b|^i)
+      A22: for i being Nat st i in dom d' holds d'.i = (d.i)*(b|^i)
       proof
-        let i be natural number;
+        let i be Nat;
         reconsider j=i as Element of NAT by ORDINAL1:def 13;
         assume i in dom d';
         then j in len d by A19,AFINSQ_1:def 1;
@@ -552,7 +553,7 @@ definition
       hence value(d,b)=n by A21,A22,Def1;
        d.(len(d)-1) = g.m mod b by A18,A24,A26 .= g.m by A25,NAT_D:24;
       hence d.(len(d)-1) <> 0 by A11,A24,FUNCT_1:72;
-      let i be natural number;
+      let i be Nat;
       assume i in dom d;
       then d.i=g.i mod b by A18;
       hence 0 <= d.i & d.i < b by A1,NAT_D:1;
@@ -566,19 +567,19 @@ definition
     let d,e be XFinSequence of NAT;
     thus n<>0 &
     (value(d,b)=n & d.(len(d)-1) <> 0 &
-    for i being natural number st i in dom d holds 0 <= d.i & d.i < b) &
+    for i being Nat st i in dom d holds 0 <= d.i & d.i < b) &
     (value(e,b)=n & e.(len(e)-1) <> 0 &
-    for i being natural number st i in dom e holds 0 <= e.i & e.i < b)
+    for i being Nat st i in dom e holds 0 <= e.i & e.i < b)
     implies d=e
     proof
       assume n<>0; then A35: n>0;
       assume A36: (value(d,b)=n & d.(len(d)-1) <> 0 &
-      for i being natural number st i in dom d holds 0 <= d.i & d.i < b);
+      for i being Nat st i in dom d holds 0 <= d.i & d.i < b);
       assume A37: (value(e,b)=n & e.(len(e)-1) <> 0 &
-      for i being natural number st i in dom e holds 0 <= e.i & e.i < b);
+      for i being Nat st i in dom e holds 0 <= e.i & e.i < b);
       consider D being XFinSequence of NAT such that
       A38: (dom D = dom d &
-      for i being natural number st i in dom D holds D.i = (d.i)*(b|^i)) &
+      for i being Nat st i in dom D holds D.i = (d.i)*(b|^i)) &
       n = Sum D by A36,Def1;
 
       A39: len(d)-1 in dom d by A36,FUNCT_1:def 4;
@@ -602,7 +603,7 @@ definition
 
       consider E being XFinSequence of NAT such that
       A45: (dom E = dom e &
-      for i being natural number st i in dom E holds E.i = (e.i)*(b|^i)) &
+      for i being Nat st i in dom E holds E.i = (e.i)*(b|^i)) &
       n = Sum E by A37,Def1;
 
       reconsider g=((b1)(#)(b GeoSeq))|len d as XFinSequence of NAT by Th3;
@@ -623,9 +624,9 @@ definition
       A50: len D = dom D by AFINSQ_1:def 1
       .= len d by A38,AFINSQ_1:def 1
       .= len g by A46,AFINSQ_1:def 1;
-       for i being natural number st i in dom D holds D.i <= g.i
+       for i being Nat st i in dom D holds D.i <= g.i
       proof
-        let i be natural number;
+        let i be Nat;
         reconsider I=i as Element of NAT by ORDINAL1:def 13;
         assume A51: i in dom D;
         then i in len d by A38,AFINSQ_1:def 1;
@@ -682,9 +683,9 @@ definition
       A65: len E = dom E by AFINSQ_1:def 1
       .= len e by A45,AFINSQ_1:def 1
       .= len g by A61,AFINSQ_1:def 1;
-       for i being natural number st i in dom E holds E.i <= g.i
+       for i being Nat st i in dom E holds E.i <= g.i
       proof
-        let i be natural number;
+        let i be Nat;
         reconsider I=i as Element of NAT by ORDINAL1:def 13;
         assume A66: i in dom E;
         then i in len e by A45,AFINSQ_1:def 1;
@@ -763,7 +764,7 @@ x
            Sum do = 0 by A80,A83,STIRL2_1:53;
           then A88: Sum do div (b|^o) = 0 by NAT_2:4;
            now
-            let k be natural number;
+            let k be Nat;
             reconsider K=k as Element of NAT by ORDINAL1:def 13;
             assume k in dom d';
             then k in len d' by AFINSQ_1:def 1;
@@ -810,7 +811,7 @@ x
           reconsider bo1=b|^o1 as Element of NAT by ORDINAL1:def 13;
           A100: bo1 <> 0 by A1,PREPOWER:12;
 
-          consider ok1 being natural number such that
+          consider ok1 being Nat such that
           A101: ok1+1=o1;
           reconsider ok1 as Element of NAT by ORDINAL1:def 13;
           reconsider g1=((b1)(#)(b GeoSeq))|(ok1+1) as XFinSequence of NAT
@@ -829,9 +830,9 @@ x
           .= b|^o1-1;
           A105: len do1>=0+1 by A96,NAT_1:13;
           A106: len do1 = len g1 by A96,A102,AFINSQ_1:def 1;
-           for i being natural number st i in dom do1 holds do1.i <= g1.i
+           for i being Nat st i in dom do1 holds do1.i <= g1.i
           proof
-            let i be natural number;
+            let i be Nat;
             reconsider I=i as Element of NAT by ORDINAL1:def 13;
             assume A107: i in dom do1;
             then i in o1 by A91,A95,AFINSQ_1:14;
@@ -849,7 +850,7 @@ x
           then Sum do1 < b|^o1 -1 + 1 by XREAL_1:147;
           then A111: Sum do1 div (b|^o1) = 0 by NAT_D:27;
            now
-            let k be natural number;
+            let k be Nat;
             reconsider K=k as Element of NAT by ORDINAL1:def 13;
             assume A112: k in dom d'1;
             then k in len d'1 by AFINSQ_1:def 1;
@@ -927,7 +928,7 @@ x
            Sum do = 0 by A80,A121,STIRL2_1:53;
           then A126: Sum do div (b|^o) = 0 by NAT_2:4;
            now
-            let k be natural number;
+            let k be Nat;
             reconsider K=k as Element of NAT by ORDINAL1:def 13;
             assume k in dom d';
             then k in len d' by AFINSQ_1:def 1;
@@ -974,7 +975,7 @@ x
           reconsider bo1=b|^o1 as Element of NAT by ORDINAL1:def 13;
           A138: bo1 <> 0 by A1,PREPOWER:12;
 
-          consider ok1 being natural number such that
+          consider ok1 being Nat such that
           A139: ok1+1=o1;
           reconsider ok1 as Element of NAT by ORDINAL1:def 13;
           reconsider g1=((b1)(#)(b GeoSeq))|(ok1+1) as XFinSequence of NAT
@@ -993,9 +994,9 @@ x
           .= b|^o1-1;
           A143: len do1>=0+1 by A134,NAT_1:13;
           A144: len do1 = len g1 by A134,A140,AFINSQ_1:def 1;
-           for i being natural number st i in dom do1 holds do1.i <= g1.i
+           for i being Nat st i in dom do1 holds do1.i <= g1.i
           proof
-            let i be natural number;
+            let i be Nat;
             reconsider I=i as Element of NAT by ORDINAL1:def 13;
             assume A145: i in dom do1;
             then i in o1 by A70,A129,A133,AFINSQ_1:14;
@@ -1013,7 +1014,7 @@ x
           then Sum do1 < b|^o1 -1 + 1 by XREAL_1:147;
           then A149: Sum do1 div (b|^o1) = 0 by NAT_D:27;
            now
-            let k be natural number;
+            let k be Nat;
             reconsider K=k as Element of NAT by ORDINAL1:def 13;
             assume A150: k in dom d'1;
             then k in len d'1 by AFINSQ_1:def 1;
@@ -1096,7 +1097,7 @@ A45,A153;
           reconsider bo=b|^o as Element of NAT by ORDINAL1:def 13;
           A165: bo <> 0 by A1,PREPOWER:12;
 
-          consider ok being natural number such that
+          consider ok being Nat such that
           A166: ok+1=o by A157,NAT_1:6;
           reconsider ok as Element of NAT by ORDINAL1:def 13;
           reconsider g=((b1)(#)(b GeoSeq))|(ok+1) as XFinSequence of NAT
@@ -1115,9 +1116,9 @@ A45,A153;
           .= b|^o-1;
           A170: len do>=0+1 by A157,A160,NAT_1:13;
           A171: len do = len g by A160,A167,AFINSQ_1:def 1;
-           for i being natural number st i in dom do holds do.i <= g.i
+           for i being Nat st i in dom do holds do.i <= g.i
           proof
-            let i be natural number;
+            let i be Nat;
             reconsider I=i as Element of NAT by ORDINAL1:def 13;
             assume A172: i in dom do;
             then i in o by A75,A159,AFINSQ_1:14;
@@ -1135,7 +1136,7 @@ A45,A153;
           then Sum do < b|^o -1 + 1 by XREAL_1:147;
           then A176: Sum do div (b|^o) = 0 by NAT_D:27;
            now
-            let k be natural number;
+            let k be Nat;
             reconsider K=k as Element of NAT by ORDINAL1:def 13;
             assume A177: k in dom d';
             then k in len d' by AFINSQ_1:def 1;
@@ -1182,7 +1183,7 @@ A45,A153;
           reconsider bo=b|^o as Element of NAT by ORDINAL1:def 13;
           A187: bo <> 0 by A1,PREPOWER:12;
 
-          consider ok being natural number such that
+          consider ok being Nat such that
           A188: ok+1=o by A157,NAT_1:6;
           reconsider ok as Element of NAT by ORDINAL1:def 13;
           reconsider g=((b1)(#)(b GeoSeq))|(ok+1) as XFinSequence of NAT
@@ -1201,9 +1202,9 @@ A45,A153;
           .= b|^o-1;
           A192: len do>=0+1 by A157,A182,NAT_1:13;
           A193: len do = len g by A182,A189,AFINSQ_1:def 1;
-           for i being natural number st i in dom do holds do.i <= g.i
+           for i being Nat st i in dom do holds do.i <= g.i
           proof
-            let i be natural number;
+            let i be Nat;
             reconsider I=i as Element of NAT by ORDINAL1:def 13;
             assume A194: i in dom do;
             then i in o by A70,A75,A181,AFINSQ_1:14;
@@ -1221,7 +1222,7 @@ A45,A153;
           then Sum do < b|^o -1 + 1 by XREAL_1:147;
           then A198: Sum do div (b|^o) = 0 by NAT_D:27;
            now
-            let k be natural number;
+            let k be Nat;
             reconsider K=k as Element of NAT by ORDINAL1:def 13;
             assume A199: k in dom d';
             then k in len d' by AFINSQ_1:def 1;
@@ -1268,7 +1269,7 @@ A45,A153;
           reconsider bo=b|^o as Element of NAT by ORDINAL1:def 13;
           A210: bo <> 0 by A1,PREPOWER:12;
 
-          consider ok being natural number such that
+          consider ok being Nat such that
           A211: ok+1=o by A201,NAT_1:6;
           reconsider ok as Element of NAT by ORDINAL1:def 13;
           reconsider g=((b1)(#)(b GeoSeq))|(ok+1) as XFinSequence of NAT
@@ -1287,9 +1288,9 @@ A45,A153;
           .= b|^o-1;
           A215: len do>=0+1 by A201,A206,NAT_1:13;
           A216: len do = len g by A206,A212,AFINSQ_1:def 1;
-           for i being natural number st i in dom do holds do.i <= g.i
+           for i being Nat st i in dom do holds do.i <= g.i
           proof
-            let i be natural number;
+            let i be Nat;
             reconsider I=i as Element of NAT by ORDINAL1:def 13;
             assume A217: i in dom do;
             then i in o by A75,A205,AFINSQ_1:14;
@@ -1307,7 +1308,7 @@ A45,A153;
           then Sum do < b|^o -1 + 1 by XREAL_1:147;
           then A221: Sum do div (b|^o) = 0 by NAT_D:27;
            now
-            let k be natural number;
+            let k be Nat;
             reconsider K=k as Element of NAT by ORDINAL1:def 13;
             assume A222: k in dom d';
             then k in len d' by AFINSQ_1:def 1;
@@ -1354,7 +1355,7 @@ A45,A153;
           reconsider bo1=b|^o1 as Element of NAT by ORDINAL1:def 13;
           A234: bo1 <> 0 by A1,PREPOWER:12;
 
-          consider ok1 being natural number such that
+          consider ok1 being Nat such that
           A235: ok1+1=o1;
           reconsider ok1 as Element of NAT by ORDINAL1:def 13;
           reconsider g1=((b1)(#)(b GeoSeq))|(ok1+1) as XFinSequence of NAT
@@ -1373,9 +1374,9 @@ A45,A153;
           .= b|^o1-1;
           A239: len do1>=0+1 by A230,NAT_1:13;
           A240: len do1 = len g1 by A230,A236,AFINSQ_1:def 1;
-           for i being natural number st i in dom do1 holds do1.i <= g1.i
+           for i being Nat st i in dom do1 holds do1.i <= g1.i
           proof
-            let i be natural number;
+            let i be Nat;
             reconsider I=i as Element of NAT by ORDINAL1:def 13;
             assume A241: i in dom do1;
             then i in o1 by A225,A229,AFINSQ_1:14;
@@ -1393,7 +1394,7 @@ A45,A153;
           then Sum do1 < b|^o1 -1 + 1 by XREAL_1:147;
           then A245: Sum do1 div (b|^o1) = 0 by NAT_D:27;
            now
-            let k be natural number;
+            let k be Nat;
             reconsider K=k as Element of NAT by ORDINAL1:def 13;
             assume A246: k in dom d'1;
             then k in len d'1 by AFINSQ_1:def 1;
@@ -1477,7 +1478,7 @@ A45,A153;
           reconsider bo=b|^o as Element of NAT by ORDINAL1:def 13;
           A263: bo <> 0 by A1,PREPOWER:12;
 
-          consider ok being natural number such that
+          consider ok being Nat such that
           A264: ok+1=o by A201,NAT_1:6;
           reconsider ok as Element of NAT by ORDINAL1:def 13;
           reconsider g=((b1)(#)(b GeoSeq))|(ok+1) as XFinSequence of NAT
@@ -1496,9 +1497,9 @@ A45,A153;
           .= b|^o-1;
           A268: len do>=0+1 by A201,A259,NAT_1:13;
           A269: len do = len g by A259,A265,AFINSQ_1:def 1;
-           for i being natural number st i in dom do holds do.i <= g.i
+           for i being Nat st i in dom do holds do.i <= g.i
           proof
-            let i be natural number;
+            let i be Nat;
             reconsider I=i as Element of NAT by ORDINAL1:def 13;
             assume A270: i in dom do;
             then i in o by A70,A75,A258,AFINSQ_1:14;
@@ -1516,7 +1517,7 @@ A45,A153;
           then Sum do < b|^o -1 + 1 by XREAL_1:147;
           then A274: Sum do div (b|^o) = 0 by NAT_D:27;
            now
-            let k be natural number;
+            let k be Nat;
             reconsider K=k as Element of NAT by ORDINAL1:def 13;
             assume A275: k in dom d';
             then k in len d' by AFINSQ_1:def 1;
@@ -1563,7 +1564,7 @@ A45,A153;
           reconsider bo1=b|^o1 as Element of NAT by ORDINAL1:def 13;
           A287: bo1 <> 0 by A1,PREPOWER:12;
 
-          consider ok1 being natural number such that
+          consider ok1 being Nat such that
           A288: ok1+1=o1;
           reconsider ok1 as Element of NAT by ORDINAL1:def 13;
           reconsider g1=((b1)(#)(b GeoSeq))|(ok1+1) as XFinSequence of NAT
@@ -1582,9 +1583,9 @@ A45,A153;
           .= b|^o1-1;
           A292: len do1>=0+1 by A283,NAT_1:13;
           A293: len do1 = len g1 by A283,A289,AFINSQ_1:def 1;
-           for i being natural number st i in dom do1 holds do1.i <= g1.i
+           for i being Nat st i in dom do1 holds do1.i <= g1.i
           proof
-            let i be natural number;
+            let i be Nat;
             reconsider I=i as Element of NAT by ORDINAL1:def 13;
             assume A294: i in dom do1;
             then i in o1 by A70,A278,A282,AFINSQ_1:14;
@@ -1602,7 +1603,7 @@ A45,A153;
           then Sum do1 < b|^o1 -1 + 1 by XREAL_1:147;
           then A298: Sum do1 div (b|^o1) = 0 by NAT_D:27;
            now
-            let k be natural number;
+            let k be Nat;
             reconsider K=k as Element of NAT by ORDINAL1:def 13;
             assume A299: k in dom d'1;
             then k in len d'1 by AFINSQ_1:def 1;
@@ -1674,10 +1675,10 @@ A45,A153;
 end;
 
 theorem Th7:
-  for n,b being natural number st b > 1 holds
+  for n,b being Nat st b > 1 holds
   len digits(n,b) >= 1
   proof
-    let n,b be natural number;
+    let n,b be Nat;
     assume A1: b > 1;
     per cases;
     suppose n=0;
@@ -1693,10 +1694,10 @@ theorem Th7:
   end;
 
 theorem Th8:
-  for n,b being natural number st b > 1 holds
+  for n,b being Nat st b > 1 holds
   value(digits(n,b),b)=n
   proof
-    let n,b be natural number;
+    let n,b be Nat;
     assume A1: b>1;
     per cases;
     suppose n<>0;
@@ -1705,7 +1706,7 @@ theorem Th8:
     suppose A2: n=0;
       then A3: digits(n,b)= <%0%> by A1,Def2;
        now
-        let i be natural number;
+        let i be Nat;
         assume i in dom <%0%>;
         then i in {0} by AFINSQ_1:def 5,CARD_5:1;
         then A4: i=0 by TARSKI:def 1;
@@ -1727,41 +1728,41 @@ theorem Th8:
 begin :: Selected divisibility criteria
 
 theorem Th9:
-  for n,k being natural number st k=10|^n - 1 holds 9 divides k
+  for n,k being Nat st k=10|^n - 1 holds 9 divides k
   proof
-    let n,k be natural number;
+    let n,k be Nat;
     assume A1: k=10|^n - 1;
 
-    defpred P[natural number] means
-    ex k being natural number st k=(10|^$1)-1 & 9 divides k;
+    defpred P[Nat] means
+    ex k being Nat st k=(10|^$1)-1 & 9 divides k;
 
     A2: (10|^0) -1 = 1-1 by NEWTON:9 .= 0;
      9 divides 0 by NAT_D:6;
     then A3: P[0] by A2;
     A4:
     now
-      let k be natural number;
+      let k be Nat;
       assume P[k];
-      then consider l being natural number such that
+      then consider l being Nat such that
       A5: l=(10|^k)-1 & 9 divides l;
-      consider m being natural number such that
+      consider m being Nat such that
       A6: l = 9 * m by A5,NAT_D:def 3;
       A7: 10|^(k+1)-1 = (9*m+1)*10 -1 by A5,A6,NEWTON:11
       .= 9*(m*10+1);
        9 divides 9*(m*10+1) by NAT_D:def 3;
       hence P[k+1] by A7;
     end;
-     for k being natural number holds P[k] from NAT_1:sch 2(A3,A4);
-    then consider l being natural number such that
+     for k being Nat holds P[k] from NAT_1:sch 2(A3,A4);
+    then consider l being Nat such that
     A8: l=10|^n -1 & 9 divides l;
     thus 9 divides k by A1,A8;
   end;
 
 theorem
-   for n,b being natural number st b>1 holds
+   for n,b being Nat st b>1 holds
   b divides n iff digits(n,b).0 = 0
   proof
-    let n,b be natural number;
+    let n,b be Nat;
     reconsider B=b as Element of NAT by ORDINAL1:def 13;
     assume A1: b>1;
     thus b divides n implies digits(n,b).0 = 0
@@ -1769,7 +1770,7 @@ theorem
       assume A2: b divides n;
       consider d being XFinSequence of NAT such that
       A3: (dom d = dom digits(n,b) &
-      for i being natural number st i in dom d holds
+      for i being Nat st i in dom d holds
       d.i = (digits(n,b).i)*(b|^i)) & value(digits(n,b),b) = Sum d by Def1;
       A4: len digits(n,b)>=1 by A1,Th7;
       per cases by A4,XXREAL_0:1;
@@ -1809,7 +1810,7 @@ theorem
         from STIRL2_1:sch 6(A11);
 
          now
-          let i be natural number;
+          let i be Nat;
           assume A13: i in dom d';
           then i < k by A12,PRGCOR_2:1;
           then i+1 < k+1 by XREAL_1:10;
@@ -1865,10 +1866,10 @@ theorem
     assume A20: digits(n,b).0=0;
     consider d being XFinSequence of NAT such that
     A21: (dom d = dom digits(n,b) &
-    for i being natural number st i in dom d holds
+    for i being Nat st i in dom d holds
     d.i = (digits(n,b).i)*(b|^i)) & value(digits(n,b),b) = Sum d by Def1;
      now
-      let i be natural number;
+      let i be Nat;
       assume A22: i in dom d;
       per cases;
       suppose i=0;
@@ -1877,7 +1878,7 @@ theorem
         hence b divides d.i by A20,NAT_D:6;
       end;
       suppose i>0;
-        then consider j being natural number such that
+        then consider j being Nat such that
         A23: j+1=i by NAT_1:6;
          d.i = digits(n,b).i*(b|^(j+1)) by A21,A22,A23
         .= digits(n,b).i*((b|^j)*b) by NEWTON:11
@@ -1890,16 +1891,16 @@ theorem
   end;
 
 theorem
-   for n being natural number holds
+   for n being Nat holds
   2 divides n iff 2 divides digits(n,10).0
   proof
-    let n be natural number;
+    let n be Nat;
     thus 2 divides n implies 2 divides digits(n,10).0
     proof
       assume A1: 2 divides n;
       consider d being XFinSequence of NAT such that
       A2: (dom d = dom digits(n,10) &
-      for i being natural number st i in dom d holds
+      for i being Nat st i in dom d holds
       d.i = (digits(n,10).i)*(10|^i)) & value(digits(n,10),10) = Sum d by Def1;
       A3: len digits(n,10)>=1 by Th7;
       per cases by A3,XXREAL_0:1;
@@ -1930,7 +1931,7 @@ theorem
         from STIRL2_1:sch 6(A9);
 
          now
-          let i be natural number;
+          let i be Nat;
           assume A11: i in dom d';
           then i < k by A10,PRGCOR_2:1;
           then i+1 < k+1 by XREAL_1:10;
@@ -1977,10 +1978,10 @@ theorem
     assume A17: 2 divides digits(n,10).0;
     consider d being XFinSequence of NAT such that
     A18: (dom d = dom digits(n,10) &
-    for i being natural number st i in dom d holds
+    for i being Nat st i in dom d holds
     d.i = (digits(n,10).i)*(10|^i)) & value(digits(n,10),10) = Sum d by Def1;
      now
-      let i be natural number;
+      let i be Nat;
       assume A19: i in dom d;
       per cases;
       suppose i=0;
@@ -1989,7 +1990,7 @@ theorem
         hence 2 divides d.i by A17;
       end;
       suppose i>0;
-        then consider j being natural number such that
+        then consider j being Nat such that
         A20: j+1=i by NAT_1:6;
          d.i = digits(n,10).i*(10|^(j+1)) by A18,A19,A20
         .= digits(n,10).i*((10|^j)*10) by NEWTON:11
@@ -2002,13 +2003,13 @@ theorem
   end;
 
 theorem
-   for n being natural number holds
+   for n being Nat holds
   3 divides n iff 3 divides Sum digits(n,10)
   proof
-    let n be natural number;
+    let n be Nat;
       consider p being XFinSequence of NAT such that
       A1: (dom p = dom digits(n,10) &
-      for i being natural number st i in dom p holds
+      for i being Nat st i in dom p holds
       p.i = (digits(n,10).i)*(10|^i)) & value(digits(n,10),10) = Sum p by Def1;
 
       defpred Q[set,set] means $2=p.$1 mod 3;
@@ -2021,13 +2022,13 @@ theorem
       A3: dom p' = dop &
       for k being Element of NAT st k in dop holds Q[k,p'.k]
       from STIRL2_1:sch 6(A2);
-      A4: for i being natural number st i in dom p holds
+      A4: for i being Nat st i in dom p holds
       p'.i = p.i mod 3 by A3;
       A5:
       now
-        let i be natural number;
+        let i be Nat;
          10|^i > 0 by NEWTON:102;
-        then reconsider dz=10|^i - 1 as natural number by NAT_1:20;
+        then reconsider dz=10|^i - 1 as Nat by NAT_1:20;
         reconsider dz as Element of NAT by ORDINAL1:def 13;
          3 divides 3*3 & 9 divides dz by Th9,NAT_D:def 3;
         then 3 divides dz by NAT_D:4;
@@ -2058,16 +2059,16 @@ theorem
   end;
 
 theorem
-   for n being natural number holds
+   for n being Nat holds
   5 divides n iff 5 divides digits(n,10).0
   proof
-    let n be natural number;
+    let n be Nat;
     thus 5 divides n implies 5 divides digits(n,10).0
     proof
       assume A1: 5 divides n;
       consider d being XFinSequence of NAT such that
       A2: (dom d = dom digits(n,10) &
-      for i being natural number st i in dom d holds
+      for i being Nat st i in dom d holds
       d.i = (digits(n,10).i)*(10|^i)) & value(digits(n,10),10) = Sum d by Def1;
       A3: len digits(n,10)>=1 by Th7;
       per cases by A3,XXREAL_0:1;
@@ -2098,7 +2099,7 @@ theorem
         from STIRL2_1:sch 6(A9);
 
          now
-          let i be natural number;
+          let i be Nat;
           assume A11: i in dom d';
           then i < k by A10,PRGCOR_2:1;
           then i+1 < k+1 by XREAL_1:10;
@@ -2145,10 +2146,10 @@ theorem
     assume A17: 5 divides digits(n,10).0;
     consider d being XFinSequence of NAT such that
     A18: (dom d = dom digits(n,10) &
-    for i being natural number st i in dom d holds
+    for i being Nat st i in dom d holds
     d.i = (digits(n,10).i)*(10|^i)) & value(digits(n,10),10) = Sum d by Def1;
      now
-      let i be natural number;
+      let i be Nat;
       assume A19: i in dom d;
       per cases;
       suppose i=0;
@@ -2157,7 +2158,7 @@ theorem
         hence 5 divides d.i by A17;
       end;
       suppose i>0;
-        then consider j being natural number such that
+        then consider j being Nat such that
         A20: j+1=i by NAT_1:6;
          d.i = digits(n,10).i*(10|^(j+1)) by A18,A19,A20
         .= digits(n,10).i*((10|^j)*10) by NEWTON:11

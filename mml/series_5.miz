@@ -14,11 +14,11 @@ environ
  constructors REAL_1, SQUARE_1, NAT_1, BINOP_2, SEQ_1, NEWTON, SERIES_1,
       SERIES_3;
  registrations XCMPLX_0, XXREAL_0, XREAL_0, SQUARE_1, NAT_1, MEMBERED, NEWTON,
-      SERIES_3;
+      SERIES_3, XBOOLE_0;
  requirements REAL, SUBSET, BOOLE, NUMERALS, ARITHM;
  definitions SQUARE_1;
  theorems XCMPLX_1, SQUARE_1, SIN_COS2, NEWTON, POWER, XREAL_1, PREPOWER,
-      SERIES_1, SERIES_3, COMPLEX1, ABSVALUE, XXREAL_0;
+      SERIES_1, SERIES_3, COMPLEX1, ABSVALUE, XXREAL_0, ORDINAL1;
  schemes NAT_1;
 
 begin
@@ -1623,19 +1623,20 @@ theorem
 proof
    assume
 A1:for n st n>=1 holds s.n=sqrt(n) & s.0=0;
-   defpred X[Element of NAT] means Partial_Sums(s).$1<1/6*(4*$1+3)*sqrt($1);
+   defpred X[Nat] means Partial_Sums(s).$1<1/6*(4*$1+3)*sqrt($1);
 Partial_Sums(s).(1+0)
     =Partial_Sums(s).0 + s.(1+0) by SERIES_1:def 1
    .=s.0 + s.1 by SERIES_1:def 1
    .=0+s.1 by A1
    .=1 by A1,SQUARE_1:83;
 then A2:X[1] by SQUARE_1:83;
-A3:for n st n>=1 & X[n] holds X[n+1]
-   proof let n; assume
+A3:for n be Nat st n>=1 & X[n] holds X[n+1]
+   proof let n be Nat; assume
 A4:n>=1 & Partial_Sums(s).n<1/6*(4*n+3)*sqrt(n);
    then n+1>=1+1 by XREAL_1:9;
    then n+1>=1 by XXREAL_0:2;
 then A5:s.(n+1)=sqrt(n+1) by A1;
+A20: n in NAT by ORDINAL1:def 13;
     0+(16*n^2+8*n)<1+(16*n^2+8*n) by XREAL_1:10;
 then (16*n+8)*n<1*(16*n^2+8*n+1);
    then (4*(4*n+1)+4)/((4*n+1)^2)<1/n by A4,XREAL_1:108;
@@ -1659,9 +1660,9 @@ then A6:(4*n+3)/(4*n+1)<sqrt(1+n)/sqrt(n) by SQUARE_1:99;
     then Partial_Sums(s).n+sqrt(1+n)<(1/6)*sqrt(1+n)*((4*n)+7)-sqrt(1+n)+sqrt(
 1+n)
       by XREAL_1:10;
-    hence thesis by A5,SERIES_1:def 1;
+    hence thesis by A20,A5,SERIES_1:def 1;
     end;
-     for n st n>=1 holds X[n] from NAT_1:sch 8(A2,A3);
+    for n be Nat st n>=1 holds X[n] from NAT_1:sch 8(A2,A3);
     hence thesis;
 end;
 
@@ -1671,15 +1672,15 @@ theorem
 proof
    assume
 A1:for n st n>=1 holds s.n=sqrt(n) & s.0=0;
-   defpred X[Element of NAT] means Partial_Sums(s).$1>(2/3)*$1*sqrt($1);
+   defpred X[Nat] means Partial_Sums(s).$1>(2/3)*$1*sqrt($1);
 Partial_Sums(s).(1+0)
     =Partial_Sums(s).0 + s.(1+0) by SERIES_1:def 1
    .=s.0 + s.1 by SERIES_1:def 1
    .=0+s.1 by A1
    .=1 by A1,SQUARE_1:83;
 then A2:X[1] by SQUARE_1:83;
-A3:for n st n>=1 & X[n] holds X[n+1]
-   proof let n; assume
+A3:for n be Nat st n>=1 & X[n] holds X[n+1]
+   proof let n be Nat; assume
 A4:n>=1 & Partial_Sums(s).n>(2/3)*n*sqrt(n);
    then 3*n>=3*1 by XREAL_1:66;
    then 3*n>1 by XXREAL_0:2;
@@ -1710,12 +1711,13 @@ then A9:sqrt(n+1)/sqrt(n)<(2*n)/(2*n-1) by SQUARE_1:99;
 then A10:Partial_Sums(s).n+sqrt(n+1)>((2/3)*(n+1))*sqrt(n+1)-sqrt(n+1)+sqrt(n+1
 )
       by XREAL_1:10;
+A20:  n in NAT by ORDINAL1:def 13;
      n+1>=1+1 by A4,XREAL_1:9;
     then n+1>=1 by XXREAL_0:2;
     then Partial_Sums(s).n+s.(n+1)>((2/3)*(n+1))*sqrt(n+1) by A1,A10;
-    hence thesis by SERIES_1:def 1;
+    hence thesis by SERIES_1:def 1,A20;
     end;
-     for n st n>=1 holds X[n] from NAT_1:sch 8(A2,A3);
+    for n be Nat st n>=1 holds X[n] from NAT_1:sch 8(A2,A3);
     hence thesis;
    end;
 
@@ -1725,7 +1727,7 @@ theorem
 proof
   assume
 A1:for n st n>=1 holds s.n=1+1/(2*n+1) & s.0=1;
-   defpred X[Element of NAT] means Partial_Product(s).$1>(1/2)*sqrt(2*$1+3);
+   defpred X[Nat] means Partial_Product(s).$1>(1/2)*sqrt(2*$1+3);
 A2:Partial_Product(s).(1+0)
     =Partial_Product(s).0 * s.(1+0) by SERIES_3:def 1
    .=s.0 * s.1 by SERIES_3:def 1
@@ -1739,8 +1741,8 @@ A3:(1/2)*sqrt(2*1+3)=sqrt(5)/2;
    then 4/3>sqrt(5/4) by SQUARE_1:89;
    then 4/3>sqrt(5)/sqrt(2^2) by SQUARE_1:99;
 then A4:X[1] by A2,A3,SQUARE_1:89;
-A5:for n st n>=1 & X[n] holds X[n+1]
-   proof let n; assume
+A5:for n be Nat st n>=1 & X[n] holds X[n+1]
+   proof let n be Nat; assume
 A6:n>=1 & Partial_Product(s).n>(1/2)*sqrt(2*n+3);
    then Partial_Product(s).n*(1+1/(2*n+3))>((1/2)*sqrt(2*n+3))*(1+1/(2*n+3))
      by XREAL_1:70;
@@ -1774,12 +1776,13 @@ then A10:sqrt((1/sqrt(2*n+3)+sqrt(2*n+3))^2)>sqrt(2*n+5) by SQUARE_1:95;
     then (1/2)*(sqrt(2*n+3)+1/sqrt(2*n+3))>(1/2)*sqrt(2*n+5) by XREAL_1:70;
 then A11:Partial_Product(s).n*(1+1/(2*(n+1)+1))>(1/2)*sqrt(2*n+5) by A9,
 XXREAL_0:2;
+A20:  n in NAT by ORDINAL1:def 13;
      n+1>=1+1 by A6,XREAL_1:9;
     then n+1>=1 by XXREAL_0:2;
     then Partial_Product(s).n*s.(n+1)>(1/2)*sqrt(2*n+5) by A1,A11;
-    hence thesis by SERIES_3:def 1;
+    hence thesis by SERIES_3:def 1,A20;
    end;
-    for n st n>=1 holds X[n] from NAT_1:sch 8(A4,A5);
+   for n be Nat st n>=1 holds X[n] from NAT_1:sch 8(A4,A5);
    hence thesis;
 end;
 
@@ -1789,7 +1792,7 @@ theorem
 proof
    assume
 A1:for n st n>=1 holds s.n=sqrt(n*(n+1)) & s.0=0;
-   defpred X[Element of NAT] means Partial_Sums(s).$1>($1*($1+1))/2;
+   defpred X[Nat] means Partial_Sums(s).$1>($1*($1+1))/2;
 A2:Partial_Sums(s).1 = Partial_Sums(s).(0+1)
    .=Partial_Sums(s).0+s.1 by SERIES_1:def 1
    .=s.0+s.1 by SERIES_1:def 1
@@ -1801,13 +1804,14 @@ then (Partial_Sums(s).1)^2 = 2 by SQUARE_1:def 4;
 then A3:sqrt((Partial_Sums(s).1)^2)>((1*(1+1))/2) by SQUARE_1:89;
     Partial_Sums(s).1>0 by A2,SQUARE_1:93;
 then A4:X[1] by A3,SQUARE_1:89;
-A5:for n st n>=1 & X[n] holds X[n+1]
-    proof let n; assume
+A5:for n be Nat st n>=1 & X[n] holds X[n+1]
+    proof let n be Nat; assume
 A6:n>=1 & Partial_Sums(s).n>(n*(n+1))/2;
 n+2>n+1 by XREAL_1:10;
 then (n+2)*(n+1)>(n+1)^2 by XREAL_1:70;
     then sqrt((n+2)*(n+1))>sqrt((n+1)^2) by SQUARE_1:95;
 then A7:sqrt((n+2)*(n+1))>n+1 by SQUARE_1:89;
+A20:  n in NAT by ORDINAL1:def 13;
      n+1>=1+1 by A6,XREAL_1:9;
     then n+1>=1 by XXREAL_0:2;
 then A8:s.(n+1)=sqrt((n+1)*(n+1+1)) by A1;
@@ -1819,8 +1823,8 @@ then Partial_Sums(s).n+sqrt((n+1)*(n+2))-((n+1)*(n+2))/2>
       by A7,XREAL_1:52;
     then Partial_Sums(s).n+sqrt((n+1)*(n+2))-((n+1)*(n+2))/2+((n+1)*(n+2))/2>0
       +((n+1)*(n+2))/2 by XREAL_1:10;
-    hence thesis by A8,SERIES_1:def 1;
+    hence thesis by A20,A8,SERIES_1:def 1;
     end;
-     for n st n>=1 holds X[n] from NAT_1:sch 8(A4,A5);
+    for n be Nat st n>=1 holds X[n] from NAT_1:sch 8(A4,A5);
     hence thesis;
 end;

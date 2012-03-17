@@ -22,7 +22,7 @@ environ
       GOBOARD9, SPRECT_2, JORDAN8, GOBRD13;
  registrations XBOOLE_0, RELAT_1, FUNCT_1, ORDINAL1, XXREAL_0, XREAL_0, NAT_1,
       MEMBERED, FINSEQ_1, STRUCT_0, EUCLID, SPPOL_2, PSCOMP_1, GOBOARD9,
-      SPRECT_1, SPRECT_2, JORDAN8, GOBRD13;
+      SPRECT_1, SPRECT_2, JORDAN8, GOBRD13, NEWTON;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions TARSKI, GOBOARD1, GOBOARD5, GOBRD13, XBOOLE_0, PSCOMP_1;
  theorems NAT_1, FINSEQ_1, GOBOARD1, FINSEQ_4, EUCLID, FINSEQ_3, REAL_1,
@@ -1427,15 +1427,18 @@ reserve
   l, m, i1, i2, j1, j2 for Element of NAT;
 
 theorem Th30:
+  for n being Nat
   ex i st 1 <= i & i+1 <= len Gauge(C,n) &
     N-min C in cell(Gauge(C,n),i,width Gauge(C,n)-'1) &
       N-min C <> Gauge(C,n)*(i,width Gauge(C,n)-'1)
 proof
+  let n be Nat;
+A100: n in NAT by ORDINAL1:def 13;
  set G = Gauge(C,n);
 A1: len G = width G by JORDAN8:def 1;
- defpred P[Element of NAT]
+ defpred P[Nat]
    means 1 <= $1 & $1 < len G & G*($1,(width G)-'1)`1 < (N-min C)`1;
-A2:  for k st P[k] holds k <= len G;
+A2:  for k be Nat st P[k] holds k <= len G;
 A3:  len G = 2|^n+3 & len G = width G by JORDAN8:def 1;
 A4:  len G >= 4 by JORDAN8:13;
 then A5:  1 < len G by XXREAL_0:2;
@@ -1444,15 +1447,17 @@ A7:  (len G)-'1 <= len G by BINARITH:52;
        (NW-corner C)`1 <= (N-min C)`1 by PSCOMP_1:97;
 then A8:  W-bound C <= (N-min C)`1 by EUCLID:56;
 A9:  2 <= len G by A4,XXREAL_0:2;
-       G*(2,(width G)-'1)`1 = W-bound C by A1,A6,A7,JORDAN8:14;
+       G*(2,(width G)-'1)`1 = W-bound C by A1,A6,A7,A100,JORDAN8:14;
   then G*(1,(width G)-'1)`1 < W-bound C by A3,A6,A7,A9,GOBOARD5:4;
   then G*(1,(width G)-'1)`1 < (N-min C)`1 by A8,XXREAL_0:2;
-then A10:  ex k st P[k] by A5;
-     ex i st P[i] & for n st P[n] holds n <= i from NAT_1:sch 6(A2,A10);
-  then consider i such that
+then A10:  ex k be Nat st P[k] by A5;
+     ex i being Nat st P[i] &
+     for n be Nat st P[n] holds n <= i from NAT_1:sch 6(A2,A10);
+  then consider i being Nat such that
 A11:  1 <= i & i < len G and
 A12:  G*(i,(width G)-'1)`1 < (N-min C)`1 and
-A13:  for n st P[n] holds n <= i;
+A13:  for n be Nat st P[n] holds n <= i;
+      reconsider i as Element of NAT by ORDINAL1:def 13;
  take i;
  thus 1 <= i & i+1 <= len G by A11,NAT_1:13;
 A14:  LSeg(G*(i,(width G)-'1),G*(i+1,(width G)-'1)) c= cell(G,i,(width G)-'1)
@@ -1462,10 +1467,10 @@ A16:  1 <= i+1 by NAT_1:12;
       (N-min C)`2 = N-bound C by EUCLID:56;
 then A17:  G*(i,(width G)-'1)`2 = (N-min C)`2 & (N-min C)`2 = G*
 (i+1,(width G)-'1)`2
-      by A1,A11,A15,A16,JORDAN8:17;
+      by A1,A11,A15,A16,JORDAN8:17,A100;
        now assume i+1 = len G;
    then len G-'1 = i by BINARITH:39;
-then A18:   G*(i,(width G)-'1)`1 = E-bound C by A1,A6,A7,JORDAN8:15;
+then A18:   G*(i,(width G)-'1)`1 = E-bound C by A1,A6,A7,JORDAN8:15,A100;
         (NE-corner C)`1 >= (N-min C)`1 by PSCOMP_1:97;
    hence contradiction by A12,A18,EUCLID:56;
   end;
@@ -1478,6 +1483,7 @@ then A18:   G*(i,(width G)-'1)`1 = E-bound C by A1,A6,A7,JORDAN8:15;
 end;
 
 theorem Th31:
+  for n, i1, i2 being Nat holds
   1 <= i1 & i1+1 <= len Gauge(C,n) &
      N-min C in cell(Gauge(C,n),i1,width Gauge(C,n)-'1) &
        N-min C <> Gauge(C,n)*(i1,width Gauge(C,n)-'1) &
@@ -1487,6 +1493,8 @@ theorem Th31:
     implies
    i1 = i2
 proof
+  let n, i1, i2 be Nat;
+A100: i1 in NAT & i2 in NAT by ORDINAL1:def 13;
   set G = Gauge(C,n), j = width G-'1;
   assume that
 A1:  1 <= i1 & i1+1 <= len G and
@@ -1511,15 +1519,15 @@ then A15:  j < len G by NAT_1:13;
   suppose
 A16:   i1 < i2;
 then A17:   i2-'i1+i1 = i2 by BINARITH:53;
-     then i2-'i1 <= 1 by A8,A9,A13,A15,JORDAN8:10;
+     then i2-'i1 <= 1 by A100,A8,A9,A13,A15,JORDAN8:10;
      then i2-'i1 < 1 or i2-'i1 = 1 by REAL_1:def 5;
      then i2-'i1 = 0 or i2-'i1 = 1 by NAT_1:14;
     then cell(G,i1,j) /\ cell(G,i2,j) = LSeg(G*(i2,j),G*(i2,j+1))
-        by A8,A13,A15,A16,A17,GOBOARD5:26;
+        by A8,A13,A15,A16,A17,GOBOARD5:26,A100;
     then A18:  N-min C in LSeg(G*(i2,j),G*(i2,j+1)) by A2,A5,XBOOLE_0:def 3;
-A19:  [i2,j] in Indices G by A4,A8,A13,A15,GOBOARD7:10;
+A19:  [i2,j] in Indices G by A4,A8,A13,A15,GOBOARD7:10,A100;
          1 <= j+1 by NAT_1:12;
-then A20:  [i2,j+1] in Indices G by A4,A8,A14,GOBOARD7:10;
+then A20:  [i2,j+1] in Indices G by A4,A8,A14,GOBOARD7:10,A100;
      set x = (W-bound C)+(((E-bound C)-(W-bound C))/(2|^n))*(i2-2);
      set y1 = (S-bound C)+(((N-bound C)-(S-bound C))/(2|^n))*(j-2);
      set y2 = (S-bound C)+(((N-bound C)-(S-bound C))/(2|^n))*(j-1);
@@ -1538,15 +1546,15 @@ then A24:  (N-min C)`1 = G*(i2,j)`1 by A18,SPPOL_1:64;
   suppose
 A25:   i2 < i1;
 then A26:   i1-'i2+i2 = i1 by BINARITH:53;
-     then i1-'i2 <= 1 by A8,A9,A13,A15,JORDAN8:10;
+     then i1-'i2 <= 1 by A8,A9,A13,A15,JORDAN8:10,A100;
      then i1-'i2 < 1 or i1-'i2 = 1 by REAL_1:def 5;
      then i1-'i2 = 0 or i1-'i2 = 1 by NAT_1:14;
     then cell(G,i2,j) /\ cell(G,i1,j) = LSeg(G*(i1,j),G*(i1,j+1))
-        by A8,A13,A15,A25,A26,GOBOARD5:26;
+        by A8,A13,A15,A25,A26,GOBOARD5:26,A100;
     then A27:  N-min C in LSeg(G*(i1,j),G*(i1,j+1)) by A2,A5,XBOOLE_0:def 3;
-A28:  [i1,j] in Indices G by A1,A8,A13,A15,GOBOARD7:10;
+A28:  [i1,j] in Indices G by A1,A8,A13,A15,GOBOARD7:10,A100;
          1 <= j+1 by NAT_1:12;
-then A29:  [i1,j+1] in Indices G by A1,A8,A14,GOBOARD7:10;
+then A29:  [i1,j+1] in Indices G by A1,A8,A14,GOBOARD7:10,A100;
      set x = (W-bound C)+(((E-bound C)-(W-bound C))/(2|^n))*(i1-2);
      set y1 = (S-bound C)+(((N-bound C)-(S-bound C))/(2|^n))*(j-2);
      set y2 = (S-bound C)+(((N-bound C)-(S-bound C))/(2|^n))*(j-1);
@@ -1565,6 +1573,7 @@ end;
 end;
 
 theorem Th32:
+  for n being Nat
   for f being standard non constant special_circular_sequence
     st f is_sequence_on Gauge(C,n) &
       (for k st 1 <= k & k+1 <= len f
@@ -1579,6 +1588,7 @@ theorem Th32:
   holds
  N-min L~f = f/.1
 proof
+  let n be Nat;
   set G = Gauge(C,n);
   let f be standard non constant special_circular_sequence such that
 A1: f is_sequence_on G and
@@ -1659,7 +1669,8 @@ A40:    N-min C = |[(N-min C)`1,(N-min C)`2]| by EUCLID:57;
 A41:    G*(i',len G-'1) = |[G*(i',len G-'1)`1,G*(i',len G-'1)`2]|
           by EUCLID:57;
 A42:    (N-min C)`2 = N by EUCLID:56;
-        G*(i',len G-'1)`2 = N by A3,A8,JORDAN8:17;
+A100:   n in NAT by ORDINAL1:def 13;
+        then G*(i',len G-'1)`2 = N by A3,A8,JORDAN8:17;
 then A43:    G*(i',len G-'1)`1 < (N-min C)`1
          by A4,A7,A8,A28,A37,A39,A40,A41,A42,REAL_1:def 5;
 A44: i <= i' by A3,A4,A8,A13,A14,A20,A21,A26,A31,GOBOARD5:4;
@@ -1683,7 +1694,7 @@ A52:     i1 = i2 & j1+1 = j2 or i1+1 = i2 & j1 = j2 or
 A53:     1 <= i2 & i2 <= len G & 1 <= j2 & j2 <= len G by A10,A51,GOBOARD5:1;
 A54:     (N-min C)`2 = N by EUCLID:56;
 then A55:     p`2 <= (N-min C)`2 by A49,PSCOMP_1:71;
-A56:     G*(1,len G-'1)`2 = N by A11,JORDAN8:17;
+A56:     G*(1,len G-'1)`2 = N by A11,JORDAN8:17,A100;
 A57:     G*(1,len G-'1)`2 < G*(1,len G)`2 by A10,A11,A32,A33,GOBOARD5:5;
 A58:     W <= p`1 & p`1 <= E by A49,PSCOMP_1:71;
           now per cases by A19,A20,A26,A50,A52,GOBOARD1:21;
@@ -1711,7 +1722,7 @@ A64:     p`1 = r & p`2 = s by A61,EUCLID:56;
                by A8,A13,A14,A20,A26,A29,A34,A38,A40,A54,A56,A57,A60;
             N-min C <> G*(i,len G-'1) by A8,A21,A32,A33,A43,A44,SPRECT_3:25;
        hence N-min L~f = f/.1
-          by A3,A4,A6,A7,A8,A13,A14,A20,A21,A26,A46,A65,Th31;
+          by A3,A4,A6,A7,A8,A13,A14,A20,A21,A26,A46,A65,Th31,A100;
       end;
       suppose
 A66:     i = i2+1 & len G = j2;
@@ -1790,7 +1801,7 @@ end;
 
 definition
   let C be compact non vertical non horizontal non empty Subset of TOP-REAL 2;
-  let n be Element of NAT;
+  let n be Nat;
   assume
 A1:    C is connected;
   func Cage(C,n) -> clockwise_oriented
@@ -1816,6 +1827,7 @@ A1:    C is connected;
        it turns_left k,Gauge(C,n));
 existence
 proof
+   reconsider n1=n as Element of NAT by ORDINAL1:def 13;
    set G = Gauge(C,n);
    set W = W-bound C, E = E-bound C, S = S-bound C, N = N-bound C;
 A2:   len G = 2|^n+3 & len G = width G by JORDAN8:def 1;
@@ -3971,9 +3983,9 @@ then A399:       [i2+1,j2] in Indices G & F.(k+1) = (F.k)^<*G*(i2+1,j2)*>
    end;
 
 A400: for k holds P[k] from NAT_1:sch 1(A357,A358);
-defpred Q[Element of NAT] means
-$1 >= 1 & ex m st m in dom(F.$1) &
-m <> len(F.$1) & (F.$1)/.m = (F.$1)/.len(F.$1);
+defpred Q[Nat] means ex w being Element of NAT st w = $1 &
+$1 >= 1 & ex m st m in dom(F.w) &
+m <> len(F.w) & (F.w)/.m = (F.w)/.len(F.w);
    now assume
 A401:   for k st k >= 1 holds
         for m st m in dom(F.k) & m <> len(F.k)
@@ -4027,18 +4039,24 @@ A415:   card Values G <= (len G)*(width G) by GOBRD13:8;
     then card rng(F.k) <= card Values G by CARD_1:80;
     then card rng(F.k) <= (len G)*(width G) by A415,XXREAL_0:2;
     hence contradiction by A413,A414;
-   end; then A416: ex k st Q[k];
-   consider k such that
+   end; then ex k be Element of NAT st Q[k];
+   then A416: ex k be Nat st Q[k];
+   consider k be Nat such that
 A417:  Q[k] and
-A418:  for l st Q[l] holds k <= l from NAT_1:sch 5(A416);
-
+A418:  for l be Nat st Q[l] holds k <= l from NAT_1:sch 5(A416);
+   reconsider k as Element of NAT by ORDINAL1:def 13;
+  consider w being Element of NAT such that
+A1000: w = k and
+A1001: k >= 1 and
+A1002: ex m st m in dom(F.w) & m <> len(F.w) & (F.w)/.m = (F.w)/.len(F.w)
+       by A417;
    consider m such that
 A419:  m in dom(F.k) and
 A420:  m <> len(F.k) and
-A421:  (F.k)/.m = (F.k)/.len(F.k) by A417;
+A421:  (F.k)/.m = (F.k)/.len(F.k) by A1000,A1001,A1002;
 A422:  len(F.k) = k by A95;
   then reconsider f = F.k as non empty FinSequence of TOP-REAL 2 by A417,
-FINSEQ_1:25;
+FINSEQ_1:25,A1000,A1001;
 A423: f is_sequence_on G by A293;
 A424: 1 <= m & m <= len f by A419,FINSEQ_3:27;
 then A425: m < len f by A420,REAL_1:def 5;
@@ -5912,7 +5930,7 @@ A103: for k holds P[k]
 end;
 
 theorem
-       C is connected implies N-min L~Cage(C,n) = (Cage(C,n))/.1
+  C is connected implies N-min L~Cage(C,n) = (Cage(C,n))/.1
 proof
  set f = Cage(C,n);
  assume

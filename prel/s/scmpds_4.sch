@@ -10,14 +10,14 @@
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="NUMBERS"/>
+<ArticleID name="RELSET_1"/>
+<ArticleID name="MCART_1"/>
+<ArticleID name="FUNCT_2"/>
 <ArticleID name="XREAL_0"/>
 <ArticleID name="INT_1"/>
-<ArticleID name="MCART_1"/>
-<ArticleID name="RELSET_1"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
-<ArticleID name="FUNCT_2"/>
 <ArticleID name="CARD_3"/>
 <ArticleID name="FUNCT_4"/>
 <ArticleID name="FUNCOP_1"/>
@@ -40,12 +40,12 @@
 <Func kind="K" nr="12">
 <Func kind="K" nr="45"/>
 </Func>
-<Func kind="K" nr="233"/>
+<Func kind="K" nr="234"/>
 </Func>
 </Typ>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="16"/>
+<Adjective nr="19"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="21">
@@ -53,30 +53,30 @@
 <Func kind="K" nr="12">
 <Func kind="K" nr="45"/>
 </Func>
-<Func kind="K" nr="233"/>
+<Func kind="K" nr="234"/>
 </Typ>
 </ArgTypes>
 <Not>
 <For>
 <Typ kind="M" nr="3">
 <Cluster/>
-<Func kind="K" nr="118">
+<Func kind="K" nr="119">
 <Func kind="U" nr="11">
 <Func kind="K" nr="12">
 <Func kind="K" nr="45"/>
 </Func>
-<Func kind="K" nr="233"/>
+<Func kind="K" nr="234"/>
 </Func>
 </Func>
 </Typ>
 <Not>
 <And>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="202">
+<Func kind="K" nr="203">
 <Func kind="K" nr="12">
 <Func kind="K" nr="45"/>
 </Func>
-<Func kind="K" nr="233"/>
+<Func kind="K" nr="234"/>
 <Var nr="1"/>
 </Func>
 <Func kind="F" nr="3"/>
@@ -89,13 +89,13 @@
 </Typ>
 <And>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="208">
+<Func kind="K" nr="209">
 <Func kind="K" nr="12">
 <Func kind="K" nr="45"/>
 </Func>
-<Func kind="K" nr="233"/>
+<Func kind="K" nr="234"/>
 <Var nr="1"/>
-<Func kind="K" nr="253">
+<Func kind="K" nr="254">
 <Var nr="2"/>
 </Func>
 </Func>
@@ -104,11 +104,11 @@
 </Func>
 </Pred>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="234">
-<Var nr="1"/>
 <Func kind="K" nr="235">
+<Var nr="1"/>
+<Func kind="K" nr="236">
 <Var nr="2"/>
-<Num nr="0"/>
+<Func kind="K" nr="47"/>
 </Func>
 </Func>
 <Func kind="F" nr="2">

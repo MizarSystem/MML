@@ -9,7 +9,7 @@ environ
 
  vocabularies FINSEQ_1, BOOLE, FUNCT_1, RELAT_1, ARYTM_1, RELAT_2, FIN_TOPO,
       SQUARE_1, FINTOPO4, FINTOPO5, INT_1, ARYTM_3, ABSVALUE, TOPS_2, SGRAPH1,
-      XREAL_0, ORDERS_1, EQREL_1, COMPLEX1;
+      XREAL_0, ORDERS_1, EQREL_1, COMPLEX1, ARYTM;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, XCMPLX_0, XXREAL_0,
       NAT_1, RELAT_1, FUNCT_1, RELSET_1, EQREL_1, FUNCT_2, FINSEQ_1, STRUCT_0,
       FIN_TOPO, FINTOPO3, BINARITH, ENUMSET1, ORDERS_2, FINTOPO4, COMPLEX1,
@@ -23,7 +23,7 @@ environ
  theorems NAT_1, NAT_2, ZFMISC_1, REAL_1, INT_1, FUNCT_1, FUNCT_2, FINSEQ_1,
       ABSVALUE, RELSET_1, XBOOLE_0, XBOOLE_1, UNIFORM1, FIN_TOPO, FINTOPO3,
       BINARITH, ENUMSET1, STRUCT_0, FINTOPO4, TARSKI, JGRAPH_6, XREAL_1,
-      COMPLEX1, XXREAL_0;
+      COMPLEX1, XXREAL_0, ORDINAL1;
  schemes NAT_1, FUNCT_2;
 
 begin
@@ -261,9 +261,9 @@ A2: n>=0+1 by NAT_1:13;
     assume A3: for p being Element of FTSL1 n holds not f.p in U_FT(p,0);
 A4: RelStr(# Seg n,Nbdl1 n #)=FTSL1 n by FINTOPO4:def 4;
 A5: FTSL1 n is filled by FINTOPO4:18;
-    defpred P2[Element of NAT] means $1>0 &
-      for j being Element of NAT st $1<=n & j=f.$1 holds $1>j;
-     now given j being Element of NAT such that
+    defpred P2[Nat] means $1>0 &
+      for j being Nat st $1<=n & j=f.$1 holds $1>j;
+     now given j being Nat such that
   A6: j=f.n & n<=j;
   A7: n in the carrier of FTSL1 n by A2,A4;
       then f.n in the carrier of FTSL1 n by FUNCT_2:7;
@@ -274,13 +274,12 @@ A5: FTSL1 n is filled by FINTOPO4:18;
       then p2 in U_FT(p2,0) by FINTOPO3:47;
       hence contradiction by A3,A6,A8;
     end;
-then A9: for j being Element of NAT st n<=n & j=f.n holds n>j;
-then A10: ex k being Element of NAT st P2[k];
-     ex k being Element of NAT st P2[k] &
-    for m being Element of NAT st P2[m] holds k <= m
-      from NAT_1:sch 5(A10);
-    then consider k being Element of NAT such that
-A11: P2[k] & for m being Element of NAT st P2[m] holds k <= m;
+then A9: for j being Nat st n<=n & j=f.n holds n>j;
+then A10: ex k being Nat st P2[k];
+     ex k being Nat st P2[k] &
+    for m being Nat st P2[m] holds k <= m from NAT_1:sch 5(A10);
+    then consider k being Nat such that
+A11: P2[k] & for m being Nat st P2[m] holds k <= m;
 A12: k<=n by A9,A11;
 A13: 0+1<=k by A11,NAT_1:13;
 then A14: k-1>=0 by XREAL_1:50;
@@ -298,8 +297,8 @@ then A17:       k-1=0 by A14,BINARITH:def 3;
         hence contradiction by A18,FINSEQ_1:3;
       end;
       case A19: k-'1>0 &
-        ex j being Element of NAT st k-'1<=n & j=f.(k-'1) & k-'1<=j;
-        then consider j being Element of NAT such that
+        ex j being Nat st k-'1<=n & j=f.(k-'1) & k-'1<=j;
+        then consider j being Nat such that
    A20: k-'1<=n & j=f.(k-'1) & k-'1<=j;
    A21: k-'1>=0+1 by A19,NAT_1:13;
    then A22: k-'1 in the carrier of FTSL1 n by A4,A20;
@@ -324,6 +323,7 @@ then A25:    k-'1+1<=j by NAT_1:13;
           hence contradiction by A3;
         end;
         then A28: k<j by A15,A25,REAL_1:def 5;
+        k in NAT by ORDINAL1:def 13; then
         A29: k in the carrier of FTSL1 n by A4,A12,A13;
         then A30: f.k in Seg n by A4,FUNCT_2:7;
         then reconsider jn=f.k as Element of NAT;
@@ -403,22 +403,23 @@ A3: for k being Element of NAT st P[k] holds P[k+1]
   end;
 
 theorem Th9:
-  for n being non zero Element of NAT, jn,j,k being Element of NAT,
+  for n being non zero Nat, jn,j,k being Nat,
       p being Element of FTSL1 n st p=jn holds
     j in U_FT(p,k) iff j in Seg n & abs(jn-j)<= k+1
-  proof let n be non zero Element of NAT,
-  jn,j,k be Element of NAT,p be Element of FTSL1 n;
+  proof let n be non zero Nat,
+  jn,j,k be Nat,p be Element of FTSL1 n;
     assume A1: p=jn;
 A2: FTSL1 n = RelStr(# Seg n,Nbdl1 n #) by FINTOPO4:def 4;
 A3: now assume A4: j in U_FT(p,k);
-      defpred P[Element of NAT] means
-        for j2,jn2 being Element of NAT,p2 being Element of FTSL1 n
+      defpred P[Nat] means
+        for j2,jn2 being Nat,p2 being Element of FTSL1 n
         st jn2=p2 & j2 in U_FT(p2,$1) holds abs(jn2-j2)<=$1+1;
 A5:  P[0]
-      proof let j2,jn2 be Element of NAT,p2 being Element of FTSL1 n;
+      proof let j2,jn2 be Nat,p2 being Element of FTSL1 n;
         assume A6: jn2=p2 & j2 in U_FT(p2,0);
     then A7: 1<=jn2 & jn2<=n by A2,FINSEQ_1:3;
 A8:     j2 in U_FT p2 by A6,FINTOPO3:47;
+       jn2 in NAT by ORDINAL1:def 13; then
 A9:    Im(Nbdl1 n,jn2)={jn2,max(jn2-'1,1),min(jn2+1,n)}
                            by A2,A6,FINTOPO4:def 3;
         per cases by A2,A6,A8,A9,ENUMSET1:def 1;
@@ -460,11 +461,12 @@ A9:    Im(Nbdl1 n,jn2)={jn2,max(jn2-'1,1),min(jn2+1,n)}
               end;
           end;
       end;
-      A18: for i2 being Element of NAT st P[i2] holds P[i2+1]
-      proof let i2 be Element of NAT;
+      A18: for i2 being Nat st P[i2] holds P[i2+1]
+      proof let i2 be Nat;
         assume A19:P[i2];
-        let j3,jn3 be Element of NAT,p2 being Element of FTSL1 n;
+        let j3,jn3 be Nat,p2 being Element of FTSL1 n;
         assume A20: jn3=p2 & j3 in U_FT(p2,i2+1);
+         i2 in NAT by ORDINAL1:def 13; then
          U_FT(p2,i2+1)=(U_FT(p2,i2))^f by FINTOPO3:48
                     .= {x where x is Element of FTSL1 n:
         ex y being Element of FTSL1 n st
@@ -483,15 +485,16 @@ A9:    Im(Nbdl1 n,jn2)={jn2,max(jn2-'1,1),min(jn2+1,n)}
          abs(jn3-iy+(iy-j3))<=abs(jn3-iy)+abs(iy-j3) by COMPLEX1:142;
         hence abs(jn3-j3)<=i2+1+1 by A24,XXREAL_0:2;
       end;
-       for i3 being Element of NAT holds P[i3] from NAT_1:sch 1(A5,A18);
+       for i3 being Nat holds P[i3] from NAT_1:sch 2(A5,A18);
       hence j in Seg n & abs(jn-j)<= k+1 by A1,A2,A4;
     end;
      now assume A25: j in Seg n & abs(jn-j)<= k+1;
-      defpred P[Element of NAT] means
-        for j2,jn2 being Element of NAT,p2 being Element of FTSL1 n st
+      defpred P[Nat] means
+        for j2,jn2 being Nat,p2 being Element of FTSL1 n st
        jn2=p2 & j2 in Seg n & abs(jn2-j2)<= $1+1 holds j2 in U_FT(p2,$1);
 A26:  P[0]
-      proof let j2,jn2 be Element of NAT,p2 be Element of FTSL1 n;
+      proof let j2,jn2 be Nat,p2 be Element of FTSL1 n;
+A:      j2 in NAT & jn2 in NAT by ORDINAL1:def 13;
         assume A27: jn2=p2 & j2 in Seg n & abs(jn2-j2)<= 0+1;
         then A28: 1<=j2 & j2<=n by FINSEQ_1:3;
          now per cases;
@@ -521,13 +524,13 @@ then A35:        j2-jn2+jn2<=1+jn2 by XREAL_1:9;
           end;
         end;
         then j2 in {jn2,max(jn2-'1,1),min(jn2+1,n)} by ENUMSET1:def 1;
-        then j2 in U_FT p2 by A2,A27,FINTOPO4:def 3;
+        then j2 in U_FT p2 by A,A2,A27,FINTOPO4:def 3;
         hence j2 in U_FT(p2,0) by FINTOPO3:47;
       end;
-      A36: for jj being Element of NAT st P[jj] holds P[jj+1]
-      proof let jj be Element of NAT;
+      A36: for jj being Nat st P[jj] holds P[jj+1]
+      proof let jj be Nat;
         assume A37:P[jj];
-        let j2,jn2 be Element of NAT,p2 be Element of FTSL1 n;
+        let j2,jn2 be Nat,p2 be Element of FTSL1 n;
         assume A38: jn2=p2 & j2 in Seg n & abs(jn2-j2)<= jj+1+1;
         then reconsider x0=j2 as Element of FTSL1 n by A2;
         A39: 1<=j2 & j2<=n by A38,FINSEQ_1:3;
@@ -595,13 +598,14 @@ then A63:        abs(jn2-(j2-'1))<=jj+1 by A38,XREAL_1:8;
               y in U_FT(p2,jj) & x0 in U_FT y;
           end;
         end;
+        jj in NAT by ORDINAL1:def 13; then
          U_FT(p2,jj+1)=(U_FT(p2,jj))^f by FINTOPO3:48
                     .= {x where x is Element of FTSL1 n:
         ex y being Element of FTSL1 n st
           y in U_FT(p2,jj) & x in U_FT y};
         hence j2 in U_FT(p2,jj+1) by A41;
       end;
-       for ii being Element of NAT holds P[ii] from NAT_1:sch 1(A26,A36);
+      for ii being Nat holds P[ii] from NAT_1:sch 2(A26,A36);
       hence j in U_FT(p,k) by A1,A25;
     end;
     hence thesis by A3;
@@ -621,9 +625,9 @@ A3: n>=0+1 by NAT_1:13;
       not f.p in U_FT(p,km);
   A5: RelStr(# Seg n,Nbdl1 n #)=FTSL1 n by FINTOPO4:def 4;
   A6: FTSL1 n is filled by FINTOPO4:18;
-      defpred P2[Element of NAT] means $1>0 &
-        for j being Element of NAT st $1<=n & j=f.$1 holds $1>j;
-       now given j being Element of NAT such that
+      defpred P2[Nat] means $1>0 &
+        for j being Nat st $1<=n & j=f.$1 holds $1>j;
+       now given j being Nat such that
     A7: j=f.n & n<=j;
     A8: n in the carrier of FTSL1 n by A3,A5;
         then f.n in the carrier of FTSL1 n by FUNCT_2:7;
@@ -635,13 +639,12 @@ A3: n>=0+1 by NAT_1:13;
          U_FT(p2,0) c= U_FT(p2,km) by A6,Th8;
         hence contradiction by A4,A7,A9,A10;
       end;
-      then A11: for j being Element of NAT st n<=n & j=f.n holds n>j;
-      then A12: ex k being Element of NAT st P2[k];
-       ex k being Element of NAT st P2[k] &
-      for m being Element of NAT st P2[m] holds k <= m
-                      from NAT_1:sch 5(A12);
-      then consider k being Element of NAT such that
- A13: P2[k] & for m being Element of NAT st P2[m] holds k <= m;
+      then A11: for j being Nat st n<=n & j=f.n holds n>j;
+      then A12: ex k being Nat st P2[k];
+       ex k being Nat st P2[k] &
+      for m being Nat st P2[m] holds k <= m from NAT_1:sch 5(A12);
+      then consider k being Nat such that
+ A13: P2[k] & for m being Nat st P2[m] holds k <= m;
       A14: k<=n by A11,A13;
       A15: 0+1<=k by A13,NAT_1:13;
 then A16:  k-1>=0 by XREAL_1:50;
@@ -659,8 +662,8 @@ then A19:      k-1=0 by A16,BINARITH:def 3;
           hence contradiction by A20,FINSEQ_1:3;
         end;
         suppose A21: k-'1>0 &
-          ex j being Element of NAT st k-'1<=n & j=f.(k-'1) & k-'1<=j;
-          then consider j being Element of NAT such that
+          ex j being Nat st k-'1<=n & j=f.(k-'1) & k-'1<=j;
+          then consider j being Nat such that
             A22: k-'1<=n & j=f.(k-'1) & k-'1<=j;
           A23: k-'1>=0+1 by A21,NAT_1:13;
           then reconsider pkm=k-'1 as Element of FTSL1 n by A5,A22,FINSEQ_1:3;
@@ -677,8 +680,9 @@ then A19:      k-1=0 by A16,BINARITH:def 3;
 then A28:      k-'1+1<=j by NAT_1:13;
           then j-k>=0 by A17,XREAL_1:50;
           then A29: j-k=j-'k by BINARITH:def 3;
+          k in NAT by ORDINAL1:def 13; then
           A30: k in the carrier of FTSL1 n by A5,A14,A15;
-               then f.k in Seg n by A5,FUNCT_2:7;
+          then f.k in Seg n by A5,FUNCT_2:7;
           then reconsider jn=f.k as Element of NAT;
           A31: Im(Nbdl1 n,k)={k,max(k-'1,1),min(k+1,n)}
                         by A5,A30,FINTOPO4:def 3;

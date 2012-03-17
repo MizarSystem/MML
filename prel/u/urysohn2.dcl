@@ -49,7 +49,7 @@
 <Adjective nr="47"/>
 </Cluster>
 <Func kind="K" nr="10">
-<Func kind="K" nr="140"/>
+<Func kind="K" nr="141"/>
 </Func>
 </Typ>
 <Typ kind="M" nr="2">

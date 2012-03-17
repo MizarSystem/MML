@@ -10,7 +10,8 @@ environ
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0,
       REAL_1, XXREAL_0;
  constructors NUMBERS, XCMPLX_0, XXREAL_0, XREAL_0;
- registrations SUBSET_1, ORDINAL1, NUMBERS, XXREAL_0, XREAL_0, REAL_1;
+ registrations SUBSET_1, ORDINAL1, NUMBERS, XXREAL_0, XREAL_0, REAL_1,
+      XBOOLE_0;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions REAL_1;
  theorems AXIOMS, REAL_1, ORDINAL1, XCMPLX_1, XREAL_1, XXREAL_0, TARSKI;
@@ -228,50 +229,48 @@ registration let m be Nat, n be non zero Nat;
 end;
 
 scheme DefbyInd { N()->Nat, F(Nat,Nat)->Nat, P[Nat,Nat] } :
-  (for k being Element of NAT ex n being Element of NAT st P[k,n]) &
-    for k,n,m being Element of NAT st P[k,n] & P[k,m] holds n = m
+  (for k being Nat ex n being Nat st P[k,n]) &
+    for k,n,m being Nat st P[k,n] & P[k,m] holds n = m
      provided
-A1:    for k,n being Element of NAT holds P[k,n] iff
+A1:    for k,n being Nat holds P[k,n] iff
        k = 0 & n = N() or
-       ex m,l being Element of NAT st k = m + 1 & P[m,l] & n = F(k,l)
+       ex m,l being Nat st k = m + 1 & P[m,l] & n = F(k,l)
   proof
     reconsider N = N() as Element of NAT by ORDINAL1:def 13;
-      defpred P[Nat] means ex n being Element of NAT st P[$1,n];
+      defpred P[Nat] means ex n being Nat st P[$1,n];
        P[0,N] by A1;
 then A2:   P[0];
-A3: for k being Element of NAT holds P[k] implies P[k+1]
-      proof let k be Element of NAT;
-        given n being Element of NAT such that
+A3: for k being Nat holds P[k] implies P[k+1]
+      proof let k be Nat;
+        given n being Nat such that
 A4:    P[k,n];
        reconsider F = F(k+1,n) as Element of NAT by ORDINAL1:def 13;
        take F;
        thus P[k+1,F] by A1,A4;
       end;
-    thus for k being Element of NAT holds P[k] from Ind(A2,A3);
+    thus for k being Nat holds P[k] from NatInd(A2,A3);
     defpred P[Nat] means
-    for n,m being Element of NAT st P[$1,n] & P[$1,m] holds n = m;
+    for n,m being Nat st P[$1,n] & P[$1,m] holds n = m;
 A5:   P[0]
-      proof let n,m be Element of NAT such that
+      proof let n,m be Nat such that
 A6:     P[0,n] & P[0,m];
-         (not ex m,l being Element of NAT st 0 = m + 1 & P[m,l] & n = F(0,l) )
-&
-        not ex n,l being Element of NAT st 0 = n + 1 & P[n,l] & m = F(0,l);
+        (not ex m,l being Nat st 0 = m + 1 & P[m,l] & n = F(0,l))&
+        not ex n,l being Nat st 0 = n + 1 & P[n,l] & m = F(0,l);
         then n = N() & m = N() by A1,A6;
        hence n = m;
       end;
-A7:   for k being Element of NAT st P[k] holds P[k+1]
-      proof let k be Element of NAT such that
-A8:      for n,m being Element of NAT st P[k,n] & P[k,m] holds n = m;
-       let n,m be Element of NAT such that
+A7:   for k being Nat st P[k] holds P[k+1]
+      proof let k be Nat such that
+A8:      for n,m being Nat st P[k,n] & P[k,m] holds n = m;
+       let n,m be Nat such that
 A9:      P[k+1,n] & P[k+1,m];
-       consider l,u being Element of NAT such that
-A10:      k + 1 = l + 1 & P[l,u] & n = F(k + 1,u) by A1,A9;
-         ex v,w being Element of NAT  st k + 1 = v + 1 & P[v,w] & m = F(k + 1,w
-)
+       consider l,u being Nat such that
+A10:   k + 1 = l + 1 & P[l,u] & n = F(k + 1,u) by A1,A9;
+       ex v,w being Nat  st k + 1 = v + 1 & P[v,w] & m = F(k + 1,w)
          by A1,A9;
        hence n = m by A8,A10;
       end;
-    thus for k being Element of NAT holds P[k] from Ind(A5,A7);
+    thus for k being Nat holds P[k] from NatInd(A5,A7);
    end;
 
 theorem Th8:
@@ -352,84 +351,83 @@ A1:  0 + i = i;
   end;
 
 scheme CompInd { P[Nat] } :
-  for k being Element of NAT holds P[k]
+  for k being Nat holds P[k]
    provided
-A1:   for k being Element of NAT st
-      for n being Element of NAT st n < k holds P[n] holds P[k]
+A1:   for k being Nat st
+      for n being Nat st n < k holds P[n] holds P[k]
   proof
       defpred P1[Nat] means
-      for n being Element of NAT st n < $1 holds P[n];
+      for n being Nat st n < $1 holds P[n];
 A2:   P1[0] by Th2;
-A3:   for k be Element of NAT holds P1[k] implies P1[k+1]
+A3:   for k be Nat holds P1[k] implies P1[k+1]
       proof
-        let k be Element of NAT;
+        let k be Nat;
         assume
-A4:   for n being Element of NAT st n < k holds P[n];
-      let n be Element of NAT; assume n < k + 1;
+A4:   for n being Nat st n < k holds P[n];
+      let n be Nat; assume n < k + 1;
       then n <= k by Th8;
       then n < k or n = k & n <= k by REAL_1:def 5;
       hence thesis by A1,A4;
     end;
-    let k be Element of NAT;
-     for k being Element of NAT holds P1[k] from Ind(A2,A3);
-    then for n being Element of NAT st n < k holds P[n];
+    let k be Nat;
+    for k being Nat holds P1[k] from NatInd(A2,A3);
+    then for n being Nat st n < k holds P[n];
     hence thesis by A1;
    end;
 
 :: Principle of minimum
 
 scheme Min { P[Nat] } :
- ex k being Element of NAT st P[k] &
- for n being Element of NAT st P[n] holds k <= n
+ ex k being Nat st P[k] &
+ for n being Nat st P[n] holds k <= n
   provided
-A1:  ex k being Element of NAT st P[k]
-proof assume A2: not thesis;
+A1:  ex k being Nat st P[k]
+     proof assume A2: not thesis;
       defpred P1[Nat] means not P[$1];
-A3:   for k being Element of NAT st
-      for n being Element of NAT st n < k holds P1[n] holds P1[k]
-      proof let k be Element of NAT;
-A4:    not (ex n being Element of NAT st P[n] & not k <= n) implies not P[k]
+A3:   for k being Nat st
+      for n being Nat st n < k holds P1[n] holds P1[k]
+      proof let k be Nat;
+A4:    not (ex n being Nat st P[n] & not k <= n) implies not P[k]
        by A2;
-       assume for n being Element of NAT st n < k holds not P[n];
+       assume for n being Nat st n < k holds not P[n];
        hence thesis by A4;
       end;
-       for k be Element of NAT holds P1[k] from CompInd(A3);
+      for k be Nat holds P1[k] from CompInd(A3);
     hence contradiction by A1;
    end;
 
 :: Principle of maximum
 
 scheme Max { P[Nat], N()->Nat } :
-  ex k being Element of NAT st P[k] &
-  for n being Element of NAT st P[n] holds n <= k
+  ex k being Nat st P[k] &
+  for n being Nat st P[n] holds n <= k
    provided
-A1:   for k being Element of NAT st P[k] holds k <= N() and
-A2:   ex k being Element of NAT st P[k]
+A1:   for k being Nat st P[k] holds k <= N() and
+A2:   ex k being Nat st P[k]
   proof
       defpred P1[Nat] means
-      for n being Element of NAT st P[n] holds n <= $1;
+      for n being Nat st P[n] holds n <= $1;
        N() in NAT by ORDINAL1:def 13;
-      then A3:   ex k being Element of NAT st P1[k] by A1;
-    consider k being Element of NAT such that
-A4:   P1[k] &
-      for m being Element of NAT st P1[m] holds k <= m from Min(A3);
+       A3:   ex k being Nat st P1[k] by A1;
+    consider k being Nat such that
+A4:   P1[k] and
+A9:   for m being Nat st P1[m] holds k <= m from Min(A3);
     take k;
     thus P[k]
       proof assume
 A5:      not P[k];
-       consider n being Element of NAT such that
+       consider n being Nat such that
 A6:      P[n] by A2;
          n <= k & n <> k by A4,A5,A6;
        then k <> 0 by Th2;
        then consider m such that
 A7:      k = m + 1 by Th6;
-         reconsider m as Element of NAT by ORDINAL1:def 13;
-         now let n be Element of NAT; assume P[n];
+         now let n be Nat; assume P[n];
          then n <= k & n <> k by A4,A5;
          hence n <= m by A7,Th8;
         end;
-        then A8:    k <= m by A4;
-        (- m) + m + 1 = (- m) + (m + 1) & (- m) + m + 0 = (- m) + (m + 0);
+        then A8:    k <= m by A9;
+        -m + m + 1 = -m + (m + 1) & -m + m + 0 = -m + (m + 0);
        hence contradiction by A7,A8,XREAL_1:8;
       end;
     thus thesis by A4;
@@ -494,16 +492,15 @@ theorem Th16:
 scheme Regr { P[Nat] } :
   P[0]
   provided
-A1:  ex k being Element of NAT st P[k] and
-A2:  for k being Element of NAT st k <> 0 & P[k]
-     ex n being Element of NAT st n < k & P[n]
+A1:  ex k being Nat st P[k] and
+A2:  for k being Nat st k <> 0 & P[k]
+     ex n being Nat st n < k & P[n]
 proof
-A3: ex k being Element of NAT st P[k] by A1;
-   consider k being Element of NAT such that
-A4:  P[k] & for n being Element of NAT st P[n] holds k <= n from Min(A3);
-        now assume k <> 0;
-      then ex n being Element of NAT st n < k & P[n] by A2,A4;
-     hence contradiction by A4;
+   consider k being Nat such that
+A4:  P[k] & for n being Nat st P[n] holds k <= n from Min(A1);
+     now assume k <> 0;
+       then ex n being Nat st n < k & P[n] by A2,A4;
+       hence contradiction by A4;
     end;
    hence P[0] by A4;
   end;
@@ -689,12 +686,12 @@ canceled; :: NAT_1:25 - refer to NAT_1:11 and NAT_1:13
 :: from BINOM, 2006.05.28, A.T.
 
 scheme Ind1{M() -> Nat, P[Nat]} :
-  for i being Element of NAT st M() <= i holds P[i]
+  for i being Nat st M() <= i holds P[i]
 provided
   A1:P[M()] and
-  A2:for j being Element of NAT st M() <= j holds P[j] implies P[j+1]
+  A2:for j being Nat st M() <= j holds P[j] implies P[j+1]
 proof
-let i be Element of NAT;
+let i;
 assume A3: M() <= i;
 defpred Q[Nat] means P[M() + $1];
 A4: Q[0] by A1;
@@ -715,29 +712,29 @@ end;
 :: from INT_2, 2006.05.30, AG
 
 scheme CompInd1 { a() -> Nat, P[Nat] } :
-  for k being Element of NAT st k>=a() holds P[k]
+  for k being Nat st k >= a() holds P[k]
   provided
-  A1: for k being Element of NAT st k>=a() &
-  (for n being Element of NAT st n>=a() & n<k holds P[n]) holds P[k]
+  A1: for k being Nat st k>=a() &
+  (for n being Nat st n>=a() & n<k holds P[n]) holds P[k]
 proof
      defpred P1[Nat] means
-      for n being Element of NAT st (n>=a() & n<$1) holds P[n];
+      for n being Nat st (n>=a() & n<$1) holds P[n];
 A2: P1[a()];
-A3: for k being Element of NAT st k>=a() holds P1[k] implies P1[k+1]
+A3: for k being Nat st k>=a() holds P1[k] implies P1[k+1]
      proof
-      let k be Element of NAT;
+      let k be Nat;
       assume k>=a();
-      assume A4: for n being Element of NAT st n>=a() & n<k holds P[n];
-      let n be Element of NAT;
+      assume A4: for n being Nat st n>=a() & n<k holds P[n];
+      let n be Nat;
       assume A5: n>=a() & n<k+1;
       then n<=k by Th13;
       then n<k or n = k by REAL_1:def 5;
       hence thesis by A1,A4,A5;
      end;
-    let k be Element of NAT;
-A6: for k being Element of NAT st k>=a() holds P1[k] from Ind1(A2,A3);
+    let k be Nat;
+A6: for k being Nat st k>=a() holds P1[k] from Ind1(A2,A3);
     assume A7: k>=a();
-    then for n being Element of NAT st (n>=a() & n<k) holds P[n] by A6;
+    then for n being Nat st (n>=a() & n<k) holds P[n] by A6;
     hence P[k] by A1,A7;
    end;
 
@@ -897,8 +894,6 @@ A4:   now
 
 :: from HENMODEL, 2007.03.15, A.T.
 
-reserve i,k for Element of NAT;
-
 definition let A be set;
   func min* A -> Element of NAT means
     (it in A & for k st k in A holds it <= k) if
@@ -907,20 +902,23 @@ definition let A be set;
    existence
    proof
       A is non empty Subset of NAT implies
-        ex i st i in A & for k st k in A holds i <= k
+        ex i st i in A & for k be Nat st k in A holds i <= k
      proof
        assume A1: A is non empty Subset of NAT;
        consider x being Element of A;
-       defpred P[Element of NAT] means $1 in A;
+       defpred P[Nat] means $1 in A;
         x is Element of NAT by A1,TARSKI:def 3;
-then A2:    ex k st P[k] by A1;
-       thus ex k st P[k] & for i st P[i] holds k <= i from Min(A2);
+        then
+A2:     ex k be Nat st P[k] by A1;
+       ex k be Nat st
+       P[k] & for i be Nat st P[i] holds k <= i from Min(A2);
+       hence thesis;
      end;
      hence thesis;
    end;
    uniqueness
    proof
-     let i,n;
+     let i,n be Element of NAT;
       A is non empty Subset of NAT &
        (i in A & for k st k in A holds i <= k) &
           (n in A & for k st k in A holds n <= k) implies i = n

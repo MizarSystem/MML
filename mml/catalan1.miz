@@ -11,7 +11,7 @@ environ
  notations XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XXREAL_0, REAL_1,
       NAT_1, NEWTON, INT_1, BINARITH, REALSET1;
  constructors XXREAL_0, REAL_1, NAT_1, MEMBERED, NEWTON, REALSET1, BINARITH;
- registrations XXREAL_0, XREAL_0, NAT_1, INT_1, MEMBERED, NAT_2;
+ registrations XXREAL_0, XREAL_0, NAT_1, INT_1, MEMBERED, NAT_2, XBOOLE_0;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
  theorems REAL_1, NAT_1, XCMPLX_1, NAT_2, NEWTON, BINARITH, REAL_2, XREAL_0,
       ORDINAL1, INT_1, XREAL_1, XXREAL_0;
@@ -165,7 +165,7 @@ begin :: Catalan Numbers
 definition let n be natural number;
   func Catalan (n) -> Real equals
      ((2*n -' 2) choose (n -' 1)) / n;
-  coherence by XREAL_0:def 1;
+  coherence;
 end;
 
 theorem Th8:
@@ -296,17 +296,10 @@ theorem Th13:
   end;
 
 theorem Th14:
-  for k being natural number st k >= 1 holds
+  for k being natural number holds
     Catalan (k + 1) = (2*k)! / (k! * ((k+1)!))
   proof
     let k be natural number;
-    assume
-A1: k >= 1;
-    per cases by A1,REAL_1:def 5;
-    suppose k = 1;
-      hence thesis by Th12,NEWTON:19,20;
-    end;
-    suppose k > 1;
 A2:   2*k + 2 -' 2 = 2*k by BINARITH:39;
 A3:   k + 1 -' 1 = k by BINARITH:39;
       reconsider l = 2*k - k as Element of NAT by ORDINAL1:def 13;
@@ -318,7 +311,6 @@ then   (2*k) choose k = (2*k!)/((k!) * (k!)) by A4,NEWTON:def 3;
        .= (2*k!) / ((k!) * ((k!) * (k+1)))
        .= (2*k!) / ((k!) * ((k+1)!)) by NEWTON:21;
       hence thesis;
-    end;
   end;
 
 theorem Th15:
@@ -331,7 +323,7 @@ A1: n > 1;
 then n > 0;
     then reconsider k = n as non trivial Element of NAT
        by A1,NAT_2:30,ORDINAL1:def 13;
-A2: Catalan (n + 1) = (2*n)! / (n! * ((n+1)!)) by A1,Th14;
+A2: Catalan (n + 1) = (2*n)! / (n! * ((n+1)!)) by Th14;
 A3: n! > 0 by NEWTON:23;
  (n + 1)! > 0 by NEWTON:23;
 then A4: n! * ((n + 1)!) > 0 * (n!) by A3,XREAL_1:70;
@@ -398,15 +390,8 @@ A8: 2 * n -' 1 + 1 = 2 * n by A5,BINARITH:53;
 A9: 2 * (n -' 1) = 2 * (n - 1) by A2,BINARITH:50
                 .= 2 * n - 2 * 1
                 .= 2 * n -' 2 by A4,BINARITH:50;
-    per cases by A2,REAL_1:def 5;
-    suppose n = 1;
-      hence thesis by Th11,Th12;
-    end;
-    suppose n > 1;
-      then 1 + 1 <= n by NAT_1:13;
-then A10:   n -' 1 >= 1 by BINARITH:73;
 A11:   Catalan n = Catalan (n -' 1 + 1) by A2,BINARITH:53
-        .= (2 * (n -' 1))! / ((n -' 1)! * ((n -' 1 + 1)!)) by A10,Th14
+        .= (2 * (n -' 1))! / ((n -' 1)! * ((n -' 1 + 1)!)) by Th14
         .= (2 * n -' 2)! / ((n -' 1)! * (n!)) by A2,A9,BINARITH:53;
 A12:   2 * (2 - (3 / (n + 1))) = 2 * ((2 * (n + 1) / (n + 1) - (3 / (n + 1))))
           by XCMPLX_1:90
@@ -414,7 +399,7 @@ A12:   2 * (2 - (3 / (n + 1))) = 2 * ((2 * (n + 1) / (n + 1) - (3 / (n + 1))))
        .= (2 * (2 * n - 1)) / (n + 1) by XCMPLX_1:75
        .= ((2 * n -' 1) * 2 * n) / (n * (n + 1)) by A1,A6,XCMPLX_1:92
        .= ((2 * n -' 1) * (2 * n)) / (n * (n + 1));
-       Catalan (n + 1) = (2*n)! / (n! * ((n+1)!)) by A2,Th14
+       Catalan (n + 1) = (2*n)! / (n! * ((n+1)!)) by Th14
         .= ((2*n -' 1)! * (2*n)) / (n! * ((n+1)!)) by A8,NEWTON:21
         .= ((2*n -' 2)! * (2 * n -' 1) * (2*n)) / (n! * ((n+1)!))
              by A7,NEWTON:21
@@ -427,7 +412,6 @@ A12:   2 * (2 - (3 / (n + 1))) = 2 * ((2 * (n + 1) / (n + 1) - (3 / (n + 1))))
         .= (Catalan n) *
            (((2 * n -' 1) * (2*n)) / (n * (n+1))) by A11,XCMPLX_1:77;
       hence thesis by A12;
-    end;
   end;
 
 registration let n be natural number;

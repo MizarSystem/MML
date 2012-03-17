@@ -15,17 +15,17 @@ environ
       SUBSET_1, PSCOMP_1, LATTICES, JGRAPH_1, ARYTM;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0,
       XREAL_0, COMPLEX1, REAL_1, RELAT_1, FUNCT_1, RELSET_1, PARTFUN1, FUNCT_2,
-      BINOP_1, FINSEQ_1, FINSET_1, CARD_1, NAT_1, NAT_D, GRAPH_1, STRUCT_0,
-      BINARITH, GRAPH_2, FINSEQ_4, GRAPH_4, TOPREAL1, GOBOARD5, PRE_TOPC,
-      GOBOARD1, GOBOARD4, TOPMETR, PCOMPS_1, COMPTS_1, WEIERSTR, TOPS_2,
-      METRIC_1, TBSP_1, RCOMP_1, SQUARE_1, PSCOMP_1, RVSUM_1, EUCLID, FUNCT_3,
-      XXREAL_0;
+      BINOP_1, FINSEQ_1, FINSET_1, CARD_1, NAT_1, NAT_D, SEQ_1, GRAPH_1,
+      STRUCT_0, BINARITH, GRAPH_2, FINSEQ_4, GRAPH_4, TOPREAL1, GOBOARD5,
+      PRE_TOPC, GOBOARD1, GOBOARD4, TOPMETR, PCOMPS_1, COMPTS_1, WEIERSTR,
+      TOPS_2, METRIC_1, TBSP_1, RCOMP_1, SQUARE_1, PSCOMP_1, RVSUM_1, EUCLID,
+      FUNCT_3, XXREAL_0;
  constructors FUNCT_3, REAL_1, SQUARE_1, NAT_1, NAT_D, COMPLEX1, RCOMP_1,
       FINSEQ_4, BINARITH, TOPS_2, COMPTS_1, TBSP_1, MONOID_0, GOBOARD1,
       GOBOARD4, GOBOARD5, PSCOMP_1, GRAPH_2, WEIERSTR, GRAPH_4;
  registrations XBOOLE_0, RELAT_1, FUNCT_1, NUMBERS, XXREAL_0, XREAL_0, NAT_1,
       MEMBERED, FINSEQ_1, STRUCT_0, PRE_TOPC, METRIC_1, BORSUK_1, MONOID_0,
-      EUCLID, GRAPH_2, GRAPH_4, FINSET_1;
+      EUCLID, GRAPH_2, GRAPH_4, FINSET_1, SEQ_1;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, XBOOLE_0, FUNCT_1, EUCLID, SQUARE_1, BINOP_1;
  theorems TARSKI, FUNCT_1, FINSEQ_1, NAT_1, ZFMISC_1, REAL_1, REAL_2, SPPOL_1,
@@ -518,8 +518,9 @@ theorem Th17:for f being FinSequence of TOP-REAL 2 st f is s.c.c. &
  LSeg(f,1) misses LSeg(f,len f -'1) holds f is s.n.c.
 proof let f be FinSequence of TOP-REAL 2;
   assume A1:f is s.c.c. & LSeg(f,1) misses LSeg(f,len f -'1);
-        for i,j st i+1 < j holds LSeg(f,i) misses LSeg(f,j)
-    proof let i,j;assume A2:i+1 < j;
+  for i,j be Nat st i+1 < j holds LSeg(f,i) misses LSeg(f,j)
+    proof let i,j be Nat;assume A2:i+1 < j;
+A9: i in NAT & j in NAT by ORDINAL1:def 13;
       per cases;
       suppose len f<>0; then len f>0;
 then A3:      len f>=0+1 by NAT_1:13;
@@ -534,7 +535,8 @@ then A3:      len f>=0+1 by NAT_1:13;
           end;
           case not(i=1 & j+1=len f);
            then i>1 or j+1<len f by A4,REAL_1:def 5;
-           then LSeg(f,i) misses LSeg(f,j) by A1,A2,A5,GOBOARD5:def 4;
+           then LSeg(f,i) misses LSeg(f,j)
+           by A9,A1,A2,A5,GOBOARD5:def 4;
            hence LSeg(f,i) /\ LSeg(f,j) = {} by XBOOLE_0:def 7;
           end;
           end;
@@ -740,8 +742,8 @@ then A17:     LSeg(f/.1,f/.(1+1))=LSeg(f/.(len f-'1),f/.((len f-'1)+1))
    hence thesis by A2,Th17;
   end;
   suppose A22:len f-'1<=2;
-           for i,j st i+1 < j holds LSeg(f,i) misses LSeg(f,j)
-      proof let i,j;assume A23:i+1 < j;
+    for i,j be Nat st i+1 < j holds LSeg(f,i) misses LSeg(f,j)
+      proof let i,j be Nat;assume A23:i+1 < j;
         per cases;
         suppose A24:1<=i & j+1<=len f;
                i+1+1<j+1 by A23,XREAL_1:8;
@@ -864,9 +866,9 @@ proof let f be FinSequence of TOP-REAL 2;
   assume A1: f is s.n.c. &
    LSeg(f,1) /\ LSeg(f,1+1) c= {f/.(1+1)} &
    LSeg(f,len f-'2) /\ LSeg(f,len f-'1) c= {f/.(len f-'1)};
-        for i st 1 <= i & i + 2 <= len f
+   for i be Nat st 1 <= i & i + 2 <= len f
     holds LSeg(f,i) /\ LSeg(f,i+1) = {f/.(i+1)}
-    proof let i;assume A2:1 <= i & i + 2 <= len f;
+    proof let i be Nat;assume A2:1 <= i & i + 2 <= len f;
       A3:i+1+1=i+2;
       A4: 1<i+1 by A2,NAT_1:13;
       A5:i+1<len f by A2,A3,NAT_1:13;
@@ -1113,9 +1115,9 @@ then A27:len f-'2+1=len f-(1+1-1);
  hence thesis by A2,A21,Th21;
  end;
  suppose A48:len f<=2;
-       for i st 1 <= i & i + 2 <= len f
+   for i be Nat st 1 <= i & i + 2 <= len f
        holds LSeg(f,i) /\ LSeg(f,i+1) = {f/.(i+1)}
-  proof let i;assume A49:1 <= i & i + 2 <= len f;
+  proof let i be Nat;assume A49:1 <= i & i + 2 <= len f;
     then i+2<=2 by A48,XXREAL_0:2;
     then i<=2-2 by XREAL_1:21;
    hence thesis by A49,XXREAL_0:2;
@@ -1234,15 +1236,16 @@ theorem Th28: for f,g being FinSequence of TOP-REAL 2 st f is special
  & g is_Shortcut_of f holds g is special
 proof let f,g be FinSequence of TOP-REAL 2;assume
   A1:f is special & g is_Shortcut_of f;
-       for i st 1 <= i & i+1 <= len g holds
+  for i be Nat st 1 <= i & i+1 <= len g holds
     (g/.i)`1 = (g/.(i+1))`1 or (g/.i)`2 = (g/.(i+1))`2
-   proof let i;assume
+   proof let i be Nat;assume
      A2:1 <= i & i+1 <= len g;
      then A3:i<=len g by NAT_1:13;
+A22: i in NAT by ORDINAL1:def 13;
      A4:1<=i+1 by A2,NAT_1:13;
      A5: rng PairF(g) c= rng PairF(f) by A1,Th14;
      A6:i<len g by A2,NAT_1:13;
-     then A7:(PairF(g)).i=[g.i,g.(i+1)] by A2,Def2;
+     then A7:(PairF(g)).i=[g.i,g.(i+1)] by A22,A2,Def2;
      A8:len PairF(g)=len g -'1 by Def2;
      A9:i<=len g-1 by A2,XREAL_1:21;
      then 1<=len g-1 by A2,XXREAL_0:2;
@@ -1264,7 +1267,8 @@ proof let f,g be FinSequence of TOP-REAL 2;assume
      then (PairF(f)).k=[f.k,f.(k+1)] by A12,Def2;
      then A17:g.i=f.k & g.(i+1)=f.(k+1) by A10,ZFMISC_1:33;
      A18:1<k+1 by A12,NAT_1:13;
-     A19:g/.i=g.i by A2,A3,FINSEQ_4:24;
+     i in NAT by ORDINAL1:def 13;
+     then A19:g/.i=g.i by A2,A3,FINSEQ_4:24;
      A20:g/.(i+1)=g.(i+1) by A2,A4,FINSEQ_4:24;
      A21:f/.k=f.k by A12,A16,FINSEQ_4:24;
           f/.(k+1)=f.(k+1) by A15,A18,FINSEQ_4:24;
@@ -1725,9 +1729,7 @@ A3:   k in Seg (2*(len f)-'1);
         (k =2*j implies |[(f/.i)`1,(f/.(i+1))`2]|
              =|[(f/.j)`1,(f/.(j+1))`2]|)
           &(k =2*j-'1 implies |[(f/.i)`1,(f/.(i+1))`2]|=f/.j)
-       proof let j;assume A7:k=2*j or k=2*j -'1;
-         per cases by A7;
-         suppose k=2*j;
+       proof let j;assume k=2*j or k=2*j -'1;
                now assume
             A8:k=2*j-'1;
              then A9:k=2*(j-1)+(1+1)-1 by A4,BINARITH:57
@@ -1740,17 +1742,6 @@ A3:   k in Seg (2*(len f)-'1);
             hence contradiction by A5,NAT_D:def 2;
            end;
           hence thesis by A5,A6;
-         end;
-         suppose A11:k=2*j-'1;
-          then A12:k=2*(j-1)+(1+1)-1 by A4,BINARITH:57
-          .=2*(j-1)+1;
-               now assume A13:j=0;
-                 0-1<0; then 0-'1=0 by BINARITH:def 3;
-           hence contradiction by A3,A11,A13,FINSEQ_1:3;
-          end; then j>0; then j>=0+1 by NAT_1:13;
-          then k= 2*(j-'1)+1 & 1<=2 by A12,BINARITH:50;
-          hence thesis by A5,NAT_D:def 2;
-       end;
        end;
        hence thesis;
       end;
@@ -1850,14 +1841,14 @@ A3:   k in Seg (2*(len f)-'1);
     end;
     end;
    then reconsider g1=p as FinSequence of TOP-REAL 2 by FINSEQ_1:def 4;
-        for i st 1 <= i & i+1 <= len g1 holds
+   for i be Nat st 1 <= i & i+1 <= len g1 holds
     (g1/.i)`1 = (g1/.(i+1))`1 or (g1/.i)`2 = (g1/.(i+1))`2
-    proof let i;assume A37:1 <= i & i+1 <= len g1;
+    proof let i be Nat;assume A37:1 <= i & i+1 <= len g1;
       then A38:i<len g1 by NAT_1:13;
       A39:1<i+1 by A37,NAT_1:13;
       then A40:i+1 in Seg len g1 by A37,FINSEQ_1:3;
 A41:    i in Seg (2*(len f)-'1) by A29,A37,A38,FINSEQ_1:3;
-      A42:g1.i=g1/.i by A37,A38,FINSEQ_4:24;
+      then A42:g1.i=g1/.i by A37,A38,FINSEQ_4:24;
       A43:g1.(i+1)=g1/.(i+1) by A37,A39,FINSEQ_4:24;
       per cases by NAT_D:12;
       suppose A44:i mod 2=0;
@@ -2163,9 +2154,7 @@ A2: for k be Nat st k in Seg (2*(len f)-'1) ex x st P[k,x]
         (k =2*j implies |[(f/.i)`1,(f/.(i+1))`2]|
            =|[(f/.j)`1,(f/.(j+1))`2]|)
           &(k =2*j-'1 implies |[(f/.i)`1,(f/.(i+1))`2]|=f/.j)
-       proof let j;assume A7:k=2*j or k=2*j -'1;
-         per cases by A7;
-         suppose k=2*j;
+       proof let j;assume k=2*j or k=2*j -'1;
                now assume
             A8:k=2*j-'1;
              then A9:k=2*(j-1)+(1+1)-1 by A4,BINARITH:57
@@ -2178,18 +2167,6 @@ A2: for k be Nat st k in Seg (2*(len f)-'1) ex x st P[k,x]
             hence contradiction by A5,NAT_D:def 2;
            end;
           hence thesis by A5,A6;
-         end;
-         suppose A11:
-          k=2*j-'1;
-          then A12:k=2*(j-1)+(1+1)-1 by A4,BINARITH:57
-          .=2*(j-1)+1;
-               now assume A13:j=0;
-                 0-1<0; then 0-'1=0 by BINARITH:def 3;
-           hence contradiction by A3,A11,A13,FINSEQ_1:3;
-          end; then j>0; then j>=0+1 by NAT_1:13;
-          then j-'1=j-1 by BINARITH:50;
-          hence thesis by A5,A12,NAT_D:def 2;
-       end;
        end;
        hence thesis;
       end;
@@ -2289,14 +2266,14 @@ A2: for k be Nat st k in Seg (2*(len f)-'1) ex x st P[k,x]
     end;
     end;
    then reconsider g1=p as FinSequence of TOP-REAL 2 by FINSEQ_1:def 4;
-        for i st 1 <= i & i+1 <= len g1 holds
+   for i be Nat st 1 <= i & i+1 <= len g1 holds
     (g1/.i)`1 = (g1/.(i+1))`1 or (g1/.i)`2 = (g1/.(i+1))`2
-    proof let i;assume A37:1 <= i & i+1 <= len g1;
+    proof let i be Nat;assume A37:1 <= i & i+1 <= len g1;
       then A38:i<len g1 by NAT_1:13;
       A39:1<i+1 by A37,NAT_1:13;
       then A40:i+1 in Seg len g1 by A37,FINSEQ_1:3;
 A41:  i in Seg (2*(len f)-'1) by A29,A37,A38,FINSEQ_1:3;
-      A42:g1.i=g1/.i by A37,A38,FINSEQ_4:24;
+      then A42:g1.i=g1/.i by A37,A38,FINSEQ_4:24;
       A43:g1/.(i+1)=g1.(i+1) by A37,A39,FINSEQ_4:24;
       per cases by NAT_D:12;
       suppose A44:i mod 2=0;

@@ -8,14 +8,15 @@ environ
 
  vocabularies PRE_TOPC, EUCLID, FINSEQ_1, ABSVALUE, ARYTM_1, FINSEQ_4, FUNCT_1,
       RELAT_1, BOOLE, MATRIX_2, ORDINAL2, SEQM_3, MCART_1, TOPREAL1, MATRIX_1,
-      TREES_1, INCSP_1, GOBOARD1;
+      TREES_1, INCSP_1, GOBOARD1, SEQ_1, ARYTM;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1, PARTFUN1,
       REAL_1, NUMBERS, XCMPLX_0, XXREAL_0, COMPLEX1, NAT_1, FINSEQ_1, FINSEQ_3,
-      FINSEQ_4, STRUCT_0, PRE_TOPC, EUCLID, TOPREAL1, MATRIX_1, MATRIX_2;
+      FINSEQ_4, SEQ_1, STRUCT_0, PRE_TOPC, EUCLID, TOPREAL1, MATRIX_1,
+      MATRIX_2;
  constructors PARTFUN1, XXREAL_0, NAT_1, COMPLEX1, FINSEQ_4, MATRIX_2,
       TOPREAL1;
  registrations XBOOLE_0, RELAT_1, ORDINAL1, NUMBERS, XXREAL_0, XREAL_0, REAL_1,
-      NAT_1, INT_1, FINSEQ_1, STRUCT_0, EUCLID;
+      NAT_1, INT_1, FINSEQ_1, STRUCT_0, EUCLID, SEQ_1, MEMBERED;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, XBOOLE_0, FUNCT_1;
  theorems TARSKI, REAL_1, NAT_1, ZFMISC_1, FUNCT_1, FINSEQ_1, ABSVALUE,
@@ -166,22 +167,7 @@ Del(f,n).k = f.k or Del(f,n).k = f.(k+1)
 
 canceled 2;
 
-definition let f be FinSequence of REAL, k be Element of NAT;
- redefine func f.k -> Real;
- coherence
-  proof
-   per cases;
-   suppose k in dom f;
-    then f.k = f/.k by PARTFUN1:def 8;
-   hence thesis;
-   end;
-   suppose not k in dom f;
-   hence thesis by CARD_1:51,FUNCT_1:def 4;
-  end;
-  end;
-end;
-
-definition let IT be FinSequence of REAL;
+definition let IT be real-yielding Function;
  attr IT is increasing means :Def1:
   for n,m st n in dom IT & m in dom IT & n<m holds IT.n < IT.m;
 end;
@@ -429,12 +415,14 @@ then A6:  1<=1 & 0+1<=len v & len v<=len v by NAT_1:13;
       then 0+1<=i & i<=i+1 & i+1<=n by A11,FINSEQ_1:3,NAT_1:13;
 then A13:      1<=i & i<=n by XXREAL_0:2;
       then A14: i in Seg n by FINSEQ_1:3;
-      defpred R[Element of NAT] means $1 in dom v & v.$1 = i;
-      A15: ex k st R[k] by A10,A13,FINSEQ_1:3;
-      A16: for k holds R[k] implies k<=len v by FINSEQ_3:27;
-      consider m such that
-      A17: R[m] & for k st R[k] holds k<=m
+      defpred R[set] means $1 in dom v & v.$1 = i;
+      A15: ex k be Nat st R[k] by A10,A13,FINSEQ_1:3;
+      A16: for k be Nat holds R[k] implies k<=len v by FINSEQ_3:27;
+      consider m be Nat such that
+      A18: R[m] & for k be Nat st R[k] holds k<=m
          from NAT_1:sch 6(A16,A15);
+A17:     R[m] & for k st R[k] holds k<=m by A18;
+         reconsider m as Element of NAT by ORDINAL1:def 13;
       take k = m+1;
       thus k in dom v & v.k = i+1 by A1,A2,A4,A5,A11,A14,A17,Th14;
      end;
@@ -1671,7 +1659,7 @@ A18: len v = len f by A16,FINSEQ_1:def 3;
   A22: rng v c= dom G
     proof let x; assume x in rng v;
      then ex y be Nat st y in dom v & v.y=x by FINSEQ_2:11;
-     then ex y be Element of NAT st y in dom v & v.y=x by ORDINAL1:def 13;
+     then ex y be Element of NAT st y in dom v & v.y=x;
      hence x in dom G by A16,A17;
     end;
   A23: v.(len v) = len G
@@ -1769,14 +1757,15 @@ for i,j,k,m st 1<=i & i<=len G & 1<=j & j<=len G & k in dom f & m in dom f &
       end;
       suppose k<>0; then 0<k & k<=k+1 by NAT_1:11;
        then A11: 0+1<=k & k<=len G by A8,NAT_1:13;
-       defpred R[Element of NAT] means $1 in dom f & f/.$1 in rng Line(G,k);
-       A12: ex i st R[i] by A7,A11;
-       A13: for i holds R[i] implies i<=len f by FINSEQ_3:27;
+       defpred R[Nat] means $1 in dom f & f/.$1 in rng Line(G,k);
+       A12: ex i be Nat st R[i] by A7,A11;
+       A13: for i be Nat holds R[i] implies i<=len f by FINSEQ_3:27;
        A14: k in dom G by A11,FINSEQ_3:27;
-       consider m such that
-       A15: R[m] & for i st R[i] holds i<= m from NAT_1:sch 6(A13,A12);
+       consider m be Nat such that
+       A15: R[m] & for i be Nat st R[i] holds i<= m from NAT_1:sch 6(A13,A12);
        take n = m+1;
-       thus n in dom f &
+       for i st R[i] holds i<= m by A15;
+       hence n in dom f &
 f/.n in rng Line(G,k+1) by A1,A2,A3,A9,A14,A15,Th44;
     end;
     end;
@@ -1974,7 +1963,7 @@ A18: len v = len f by A16,FINSEQ_1:def 3;
   A22: rng v c= Seg width G
     proof let x; assume x in rng v;
       then ex y be Nat st y in dom v & v.y=x by FINSEQ_2:11;
-      then ex y be Element of NAT st y in dom v & v.y=x by ORDINAL1:def 13;
+      then ex y be Element of NAT st y in dom v & v.y=x;
      hence x in Seg width G by A16,A17;
     end;
   A23: v.(len v) = width G
@@ -2075,14 +2064,15 @@ f/.i in rng Col(G,k);
       end;
       suppose k<>0; then 0<k & k<=k+1 by NAT_1:11;
        then A11: 0+1<=k & k<=width G by A8,NAT_1:13;
-       defpred R[Element of NAT] means $1 in dom f & f/.$1 in rng Col(G,k);
-       A12: ex i st R[i] by A7,A11;
-       A13: for i holds R[i] implies i<=len f by FINSEQ_3:27;
+       defpred R[Nat] means $1 in dom f & f/.$1 in rng Col(G,k);
+       A12: ex i be Nat st R[i] by A7,A11;
+       A13: for i be Nat holds R[i] implies i<=len f by FINSEQ_3:27;
        A14: k in Seg width G by A11,FINSEQ_1:3;
-       consider m such that
-       A15: R[m] & for i st R[i] holds i<=m from NAT_1:sch 6(A13,A12);
+       consider m be Nat such that
+       A15: R[m] & for i be Nat st R[i] holds i<=m from NAT_1:sch 6(A13,A12);
        take n = m+1;
-       thus n in dom f & f/.n in rng Col(G,k+1) by A1,A2,A3,A9,A14,A15,Th48;
+       for i st R[i] holds i<=m by A15;
+       hence n in dom f & f/.n in rng Col(G,k+1) by A1,A2,A3,A9,A14,A15,Th48;
     end;
     end;
   thus
@@ -2273,14 +2263,17 @@ ex g st g/.1 in rng Col(DelCol(G,width G),1) &
   A6: Indices G = [:dom G,Seg width G:] by MATRIX_1:def 5;
 A7: dom G = Seg len G & dom D = Seg len D & dom f = Seg len f
       by FINSEQ_1:def 3;
-  defpred P[Element of NAT] means $1 in dom f & f/.$1 in rng Col(G,k);
-  A8: ex m st P[m]
+  defpred P[Nat] means $1 in dom f & f/.$1 in rng Col(G,k);
+  ex m st P[m]
    proof
-        k<=k+1 by NAT_1:11;
+     k<=k+1 by NAT_1:11;
     hence thesis by A1,A2,A3,Th49;
-   end;
-  consider m such that
-  A9: P[m] & for i st P[i] holds m<=i from NAT_1:sch 5(A8);
+   end; then
+A8: ex m be Nat st P[m];
+  consider m be Nat such that
+  A9: P[m] & for i be Nat st P[i] holds m<=i from NAT_1:sch 5(A8);
+A30: for i st P[i] holds m<=i by A9;
+  reconsider m as Element of NAT by ORDINAL1:def 13;
   take t = f|m;
   A10: t = f|Seg m by FINSEQ_1:def 15;
   A11: width D = k by A2,A4,Th26;
@@ -2307,7 +2300,7 @@ A7: dom G = Seg len G & dom D = Seg len D & dom f = Seg len f
 ,FUNCT_1:def 5;
         k<=k+1 by NAT_1:11;
     then k in Seg width G by A2,A3,FINSEQ_1:3;
-    then j<=k by A1,A9,A18,A20,A21,Th50;
+    then j<=k by A1,A9,A18,A20,A21,Th50,A30;
     then A22: j in Seg k by A21,FINSEQ_1:3;
     hence [i,j] in Indices D by A5,A7,A11,A15,A20,ZFMISC_1:106;
     thus t/.n = G*(i,j) by A9,A14,A17,A19,FINSEQ_4:86
@@ -2583,12 +2576,12 @@ k<=$1 & $1<=len G implies ex j st j in dom f & n<=j &
 then k<=i & i<=i+1 & k<=i+1 by NAT_1:13;
        then 1<=i & i<=len G & 1<=i+1 & k<=i by A6,A11,XXREAL_0:2;
       then A14: i in dom G & i+1 in dom G by A11,FINSEQ_3:27;
-      defpred P[Element of NAT] means
+      defpred P[Nat] means
        $1 in dom f & n<=$1 & f/.$1 in rng Line(G,i);
-A15: ex j st P[j] by A10,A11,A13,NAT_1:13;
-      A16: for j st P[j] holds j<=len f by FINSEQ_3:27;
-      consider ma be Element of NAT such that
-      A17: P[ma] & for j st P[j] holds j<=ma from NAT_1:sch 6(A16,A15);
+A15: ex j be Nat st P[j] by A10,A11,A13,NAT_1:13;
+      A16: for j be Nat st P[j] holds j<=len f by FINSEQ_3:27;
+      consider ma be Nat such that
+      A17: P[ma] & for j be Nat st P[j] holds j<=ma from NAT_1:sch 6(A16,A15);
       A18: 1<=len f by A7,XXREAL_0:2;
 A19:       now let j such that
         A20: j in dom f & f/.j in rng Line(G,i);

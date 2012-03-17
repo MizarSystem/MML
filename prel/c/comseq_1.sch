@@ -44,7 +44,7 @@
 <Func kind="K" nr="83"/>
 </Typ>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="92">
+<Func kind="K" nr="93">
 <Var nr="1"/>
 <Var nr="2"/>
 </Func>

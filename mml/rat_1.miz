@@ -8,17 +8,19 @@ environ
 
  vocabularies ARYTM, INT_1, ARYTM_3, ARYTM_1, RELAT_1, RAT_1, ORDINAL2, BOOLE,
       COMPLEX1, OPPCAT_1, ARYTM_2, QUOFIELD;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, ARYTM_3, ARYTM_2,
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, ORDINAL2, ORDINAL3,
+      ARYTM_3, ARYTM_2,
       NUMBERS, ARYTM_0, XCMPLX_0, XREAL_0, REAL_1, NAT_1, INT_1, ARYTM_1,
       XXREAL_0;
- constructors FUNCT_4, ARYTM_1, ARYTM_0, XXREAL_0, REAL_1, NAT_1, INT_1;
+ constructors FUNCT_4, ARYTM_1, ARYTM_0, XXREAL_0, REAL_1, NAT_1, INT_1,
+      ORDINAL3;
  registrations ORDINAL1, ARYTM_3, ARYTM_2, NUMBERS, XXREAL_0, XREAL_0, REAL_1,
-      NAT_1, INT_1;
+      NAT_1, INT_1, ORDINAL3, XBOOLE_0;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions XREAL_0, TARSKI, XBOOLE_0, XCMPLX_0, ARYTM_3;
  theorems REAL_1, INT_1, NAT_1, TARSKI, XREAL_0, XCMPLX_0, XCMPLX_1, XBOOLE_0,
       NUMBERS, ARYTM_3, ARYTM_0, ARYTM_2, ZFMISC_1, ARYTM_1, XREAL_1, XXREAL_0,
-      XBOOLE_1;
+      XBOOLE_1, ORDINAL1;
  schemes NAT_1;
 
 begin
@@ -567,16 +569,18 @@ theorem Th24:
 theorem Th25:
   ex m,k st k<>0 & p=m/k & for n,l st l<>0 & p=n/l holds k<=l
   proof
-   defpred P[Element of NAT] means ($1<>0 & ex m1 st p=m1/$1);
+   defpred P[Nat] means ($1<>0 & ex m1 st p=m1/$1);
    consider m,k such that A1:k<>0 & p=m/k by Th24;
-   A2:ex l st P[l] by A1;
-           ex k1 st P[k1]
-  & for l1 st P[l1] holds k1<=l1 from NAT_1:sch 5(A2);
-    then consider k1 such that A3: (k1<>0 & ex m1 st p=m1/k1)
-                      & for l1 st (l1<>0 & ex n1 st p=n1/l1) holds k1<=l1;
-    consider m1 such that A4:p=m1/k1
-        & for l1 st (l1<>0 & ex n1 st p=n1/l1) holds k1<=l1 by A3;
-    take m1; take k1;
+   A2:ex l be Nat st P[l] by A1;
+   ex k1 be Nat st P[k1]
+  & for l1 be Nat st P[l1] holds k1<=l1 from NAT_1:sch 5(A2);
+    then consider k1 be Nat such that A3: (k1<>0 & ex m1 st p=m1/k1)
+    & for l1 be Nat st (l1<>0 & ex n1 st p=n1/l1) holds k1<=l1;
+    reconsider k1 as Element of NAT by ORDINAL1:def 13;
+    consider m1 such that
+A4: p=m1/k1
+    & for l1 be Nat st (l1<>0 & ex n1 st p=n1/l1) holds k1<=l1 by A3;
+    take m1, k1;
     thus k1<>0 by A3;
     thus m1/k1=p by A4;
     thus for n,l st l<> 0 & p=n/l holds k1 <= l by A4;
@@ -794,10 +798,10 @@ theorem Th60:
   proof
    assume A1:k<>0 & p=m/k;
 A2:  denominator(p)<>0 by Def3;
-     defpred P[Element of NAT] means $1*denominator(p)<=k;
-A3:  for l st P[l] holds l<=k
+     defpred P[Nat] means $1*denominator(p)<=k;
+A3:  for l be Nat st P[l] holds l<=k
      proof
-      let l such that A4:l*denominator(p)<=k;
+      let l be Nat  such that A4:l*denominator(p)<=k;
       assume A5: not thesis;
        0<denominator(p) by A2;
       then 0+1<=denominator(p) by NAT_1:13;
@@ -807,9 +811,10 @@ A3:  for l st P[l] holds l<=k
       hence contradiction by A4,A6,XXREAL_0:2;
      end;
      A7:1*denominator(p)<=k by A1,Def3;
-     then A8:ex l1 st P[l1];
-     consider l such that A9:P[l] and
-A10: for l1 st P[l1] holds l1<=l from NAT_1:sch 6(A3,A8);
+     then A8:ex l1 be Nat st P[l1];
+     consider l be Nat such that A9:P[l] and
+A10: for l1 be Nat st P[l1] holds l1<=l from NAT_1:sch 6(A3,A8);
+     reconsider l as Element of NAT by ORDINAL1:def 13;
      take l;
      A11:0<>l by A7,A10;
      then A12:l*denominator(p)<>0 by A2,XCMPLX_1:6;

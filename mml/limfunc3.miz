@@ -22,7 +22,7 @@ environ
  theorems TARSKI, REAL_1, NAT_1, FUNCT_1, FUNCT_2, ABSVALUE, SEQ_1, SEQ_2,
       SEQM_3, SEQ_4, RFUNCT_1, RCOMP_1, RFUNCT_2, LIMFUNC1, LIMFUNC2, RELSET_1,
       XREAL_0, XBOOLE_0, XBOOLE_1, XCMPLX_0, XCMPLX_1, XREAL_1, COMPLEX1,
-      XXREAL_0;
+      XXREAL_0, ORDINAL1;
  schemes NAT_1, RECDEF_1, RCOMP_1;
 
 begin
@@ -514,10 +514,10 @@ Def2;
 then not s.n in {x0} by A10,XBOOLE_0:def 4;
      then s.n<>x0 by TARSKI:def 1; hence s.n<x0 by A26,REAL_1:def 5;
     end; then consider m1 be Element of NAT such that A27: 0<=m1 & s.m1<x0;
-    defpred X[Element of NAT] means s.$1<x0;
-    A28: ex m st X[m] by A27;
-    consider M be Element of NAT such that
-    A29: X[M] & for n st X[n] holds M <= n from NAT_1:sch 5(A28);
+    defpred X[Nat] means s.$1<x0;
+    A28: ex m be Nat st X[m] by A27;
+    consider M be Nat such that
+    A29: X[M] & for n be Nat st X[n] holds M <= n from NAT_1:sch 5(A28);
     A30: now let n; consider m such that A31: n+1<=m & s.m<x0 by A25;
      take m; thus n<m & s.m<x0 by A31,NAT_1:13;
     end;
@@ -526,12 +526,14 @@ then not s.n in {x0} by A10,XBOOLE_0:def 4;
     defpred X[Element of NAT,set,set] means P[$2,$3];
     A32: for n for x be Element of NAT ex y be Element of NAT st X[n,x,y]
     proof let n; let x be Element of NAT;
-    defpred X[Element of NAT] means x<$1 & s.$1<x0;
-    A33: ex m st X[m] by A30;
-     consider l be Element of NAT such that A34: X[l] &
-     for k st X[k] holds l <= k from NAT_1:sch 5(A33);
-     take l; thus thesis by A34;
-    end; reconsider M'=M as Element of NAT qua non empty set;
+    defpred X[Nat] means x<$1 & s.$1<x0;
+    ex m st X[m] by A30;
+    then
+    A33: ex m be Nat st X[m] by A30;
+     consider l be Nat such that A34: X[l] &
+     for k be Nat st X[k] holds l <= k from NAT_1:sch 5(A33);
+     take l; l in NAT by ORDINAL1:def 13; hence thesis by A34;
+    end; reconsider M'=M as Element of NAT by ORDINAL1:def 13;
     consider F be Function of NAT,NAT such that
     A35: F.0=M' & for n holds X[n,F.n,F.(n+1)] from RECDEF_1:sch 2(A32);
     A36: dom F=NAT & rng F c=NAT by FUNCT_2:def 1,RELSET_1:12;
@@ -546,20 +548,21 @@ then not s.n in {x0} by A10,XBOOLE_0:def 4;
     then reconsider F as increasing Seq_of_Nat by A36,SEQM_3:def 8,def 11;
     A38: for n st s.n<x0 ex m st F.m=n
     proof
-    defpred X[Element of NAT] means s.$1<x0 & for m holds F.m<>$1;
-     assume A39: ex n st X[n];
-     consider M1 be Element of NAT such that A40: X[M1] &
-     for n st X[n] holds M1<=n from NAT_1:sch 5(A39);
-     defpred X[Element of NAT] means $1<M1 & s.$1<x0 & ex m st F.m=$1;
-     A41: ex n st X[n]
+    defpred X[Nat] means s.$1<x0 & for m holds F.m<>$1;
+     assume ex n st X[n];
+     then A39: ex n be Nat st X[n];
+     consider M1 be Nat such that A40: X[M1] &
+     for n be Nat st X[n] holds M1<=n from NAT_1:sch 5(A39);
+     defpred X[Nat] means $1<M1 & s.$1<x0 & ex m st F.m=$1;
+     A41: ex n be Nat st X[n]
      proof take M; A42: M<=M1 by A29,A40;
            M <> M1 by A35,A40;
       hence M<M1 by A42,REAL_1:def 5;
       thus s.M<x0 by A29; take 0; thus thesis by A35;
      end;
-     A43: for n st X[n] holds n<=M1;
-     consider MX be Element of NAT such that A44: X[MX] &
-     for n st X[n] holds n<=MX from NAT_1:sch 6(A43,A41);
+     A43: for n be Nat st X[n] holds n<=M1;
+     consider MX be Nat such that A44: X[MX] &
+     for n be Nat st X[n] holds n<=MX from NAT_1:sch 6(A43,A41);
      A45: for k st MX<k & k<M1 holds s.k>=x0
      proof given k such that A46: MX<k & k<M1 & s.k<x0;
           now per cases;
@@ -572,6 +575,7 @@ then not s.n in {x0} by A10,XBOOLE_0:def 4;
      consider m such that A47: F.m=MX by A44;
      A48: MX<F.(m+1) & s.(F.(m+1))<x0 &
       for k st MX<k & s.k<x0 holds F.(m+1)<=k by A35,A47;
+      M1 in NAT by ORDINAL1:def 13; then
      A49: F.(m+1)<=M1 by A35,A40,A44,A47;
          now assume F.(m+1)<>M1; then F.(m+1)<M1 by A49,REAL_1:def 5;
 hence contradiction by A45,A48;
@@ -599,14 +603,14 @@ hence contradiction by A45,A48;
          x in dom f by A56,A57,XBOOLE_0:def 4;
      hence thesis by A59,XBOOLE_0:def 3;
     end; then A60: f*(s*F) is divergent_to+infty by A7,A54,A55,LIMFUNC2:def 2;
-    defpred X[Element of NAT] means s.$1>x0;
+    defpred X[Nat] means s.$1>x0;
     A61: now let k; consider n such that A62: k<=n & s.n>=x0 by A17;
      take n; thus k<=n by A62;   s.n in rng s by RFUNCT_2:10;
 then not s.n in {x0} by A10,XBOOLE_0:def 4;
      then s.n<>x0 by TARSKI:def 1; hence s.n>x0 by A62,REAL_1:def 5;
     end; then ex mn be Element of NAT st 0<=mn & s.mn>x0;
-    then A63: ex m st X[m]; consider N be Element of NAT such that
-    A64: X[N] & for n st X[n] holds N<=n from NAT_1:sch 5(A63);
+    then A63: ex m be Nat st X[m]; consider N be Nat such that
+    A64: X[N] & for n be Nat st X[n] holds N<=n from NAT_1:sch 5(A63);
     A65: now let n; consider m such that A66: n+1<=m & s.m>x0 by A61;
      take m; thus n<m & s.m>x0 by A66,NAT_1:13;
     end;
@@ -615,13 +619,15 @@ then not s.n in {x0} by A10,XBOOLE_0:def 4;
     defpred X[Element of NAT,set,set] means P[$2,$3];
     A67: for n for x be Element of NAT ex y be Element of NAT st X[n,x,y]
     proof let n; let x be Element of NAT;
-    defpred X[Element of NAT] means x<$1 & s.$1>x0;
-    A68: ex m st X[m] by A65;
-     consider l be Element of NAT such that A69: X[l] &
-     for k st X[k] holds l<= k from NAT_1:sch 5(A68);
+    defpred X[Nat] means x<$1 & s.$1>x0;
+    ex m st X[m] by A65; then
+    A68: ex m be Nat st X[m] by A65;
+     consider l be Nat such that A69: X[l] &
+     for k be Nat st X[k] holds l<= k from NAT_1:sch 5(A68);
+     reconsider l as Element of NAT by ORDINAL1:def 13;
      take l; thus P[x,l] by A69;
     end;
-    reconsider N'=N as Element of NAT qua non empty set;
+    reconsider N'=N as Element of NAT by ORDINAL1:def 13;
     consider G be Function of NAT,NAT such that
     A70: G.0=N' & for n holds X[n,G.n,G.(n+1)] from RECDEF_1:sch 2(A67);
     A71: dom G=NAT & rng G c=NAT by FUNCT_2:def 1,RELSET_1:12;
@@ -634,21 +640,22 @@ then not s.n in {x0} by A10,XBOOLE_0:def 4;
      hence G.n<G.(n+1) by A70;
     end;
     then reconsider G as increasing Seq_of_Nat by A71,SEQM_3:def 8,def 11;
-    defpred X[Element of NAT] means s.$1>x0 & for m holds G.m<>$1;
+    defpred X[Nat] means s.$1>x0 & for m holds G.m<>$1;
     A73: for n st s.n>x0 ex m st G.m=n
-    proof assume A74: ex n st X[n];
-     consider N1 be Element of NAT such that A75: X[N1] &
-     for n st X[n] holds N1<=n from NAT_1:sch 5(A74);
-     defpred X[Element of NAT] means $1<N1 & s.$1>x0 & ex m st G.m=$1;
-     A76: ex n st X[n]
+    proof assume ex n st X[n];
+      then A74:ex n be Nat st X[n];
+     consider N1 be Nat such that A75: X[N1] &
+     for n be Nat st X[n] holds N1<=n from NAT_1:sch 5(A74);
+     defpred X[Nat] means $1<N1 & s.$1>x0 & ex m st G.m=$1;
+     A76: ex n be Nat st X[n]
      proof take N; A77: N<=N1 by A64,A75;
            N <> N1 by A70,A75;
       hence N<N1 by A77,REAL_1:def 5; thus s.N>x0 by A64; take 0;
       thus thesis by A70;
      end;
-     A78: for n st X[n] holds n<=N1;
-     consider NX be Element of NAT such that A79: X[NX] &
-     for n st X[n] holds n<=NX from NAT_1:sch 6(A78,A76);
+     A78: for n be Nat st X[n] holds n<=N1;
+     consider NX be Nat such that A79: X[NX] &
+     for n be Nat st X[n] holds n<=NX from NAT_1:sch 6(A78,A76);
      A80: for k st NX<k & k<N1 holds s.k<=x0
      proof given k such that A81: NX<k & k<N1 & s.k>x0;
           now per cases;
@@ -661,6 +668,7 @@ then not s.n in {x0} by A10,XBOOLE_0:def 4;
      consider m such that A82: G.m=NX by A79;
      A83: NX<G.(m+1) & s.(G.(m+1))>x0 &
       for k st NX<k & s.k>x0 holds G.(m+1)<=k by A70,A82;
+      N1 in NAT by ORDINAL1:def 13; then
      A84: G.(m+1)<=N1 by A70,A75,A79,A82;
          now assume G.(m+1)<>N1; then G.(m+1)<N1 by A84,REAL_1:def 5;
 hence contradiction by A80,A83;
@@ -802,9 +810,9 @@ Def3;
 then not s.n in {x0} by A12,XBOOLE_0:def 4;
      then s.n<>x0 by TARSKI:def 1; hence s.n<x0 by A28,REAL_1:def 5;
     end; then consider m1 be Element of NAT such that A29: 0<=m1 & s.m1<x0;
-    defpred X[Element of NAT] means s.$1<x0;
-    A30: ex m st X[m]by A29; consider M be Element of NAT such that
-    A31: X[M] & for n st X[n] holds M<=n from NAT_1:sch 5(A30);
+    defpred X[Nat] means s.$1<x0;
+    A30: ex m be Nat st X[m]by A29; consider M be Nat such that
+    A31: X[M] & for n be Nat st X[n] holds M<=n from NAT_1:sch 5(A30);
     A32: now let n; consider m such that A33: n+1<=m & s.m<x0 by A27;
      take m; thus n<m & s.m<x0 by A33,NAT_1:13;
     end;
@@ -813,12 +821,13 @@ then not s.n in {x0} by A12,XBOOLE_0:def 4;
     defpred X[Element of NAT,set,set] means P[$2,$3];
     A34: for n for x be Element of NAT ex y be Element of NAT st X[n,x,y]
     proof let n; let x be Element of NAT;
-    defpred X[Element of NAT] means x<$1 & s.$1<x0;
-    A35: ex m st X[m] by A32;
-     consider l be Element of NAT such that A36: X[l] &
-     for k st X[k] holds l<=k from NAT_1:sch 5
-(A35); take l; thus thesis by A36;
-    end; reconsider M'=M as Element of NAT qua non empty set;
+    defpred X[Nat] means x<$1 & s.$1<x0;
+    ex m st X[m] by A32; then
+    A35: ex m be Nat st X[m] by A32;
+     consider l be Nat such that A36: X[l] &
+     for k be Nat st X[k] holds l<=k from NAT_1:sch 5
+(A35); take l; l in NAT by ORDINAL1:def 13; hence thesis by A36;
+    end; reconsider M'=M as Element of NAT by ORDINAL1:def 13;
     consider F be Function of NAT,NAT such that
     A37: F.0=M' & for n holds X[n,F.n,F.(n+1)] from RECDEF_1:sch 2(A34);
     A38: dom F=NAT & rng F c=NAT by FUNCT_2:def 1,RELSET_1:12;
@@ -831,21 +840,22 @@ then not s.n in {x0} by A12,XBOOLE_0:def 4;
      hence F.n<F.(n+1) by A37;
     end;
     then reconsider F as increasing Seq_of_Nat by A38,SEQM_3:def 8,def 11;
-    defpred X[Element of NAT] means s.$1<x0 & for m holds F.m<>$1;
+    defpred X[Nat] means s.$1<x0 & for m holds F.m<>$1;
     A40: for n st s.n<x0 ex m st F.m=n
     proof assume A41: ex n st X[n];
-     consider M1 be Element of NAT such that A42: X[M1] &
-     for n st X[n] holds M1<=n from NAT_1:sch 5(A41);
-     defpred X[Element of NAT] means $1<M1 & s.$1<x0 & ex m st F.m=$1;
-     A43: ex n st X[n]
+      then  A41: ex n be Nat st X[n];
+     consider M1 be Nat such that A42: X[M1] &
+     for n be Nat st X[n] holds M1<=n from NAT_1:sch 5(A41);
+     defpred X[Nat] means $1<M1 & s.$1<x0 & ex m st F.m=$1;
+     A43: ex n be Nat st X[n]
      proof take M; A44: M<=M1 by A31,A42;
            M <> M1 by A37,A42;
       hence M<M1 by A44,REAL_1:def 5;
       thus s.M<x0 by A31; take 0; thus thesis by A37;
      end;
-     A45: for n st X[n] holds n<=M1;
-     consider MX be Element of NAT such that A46: X[MX] &
-     for n st X[n] holds n<=MX from NAT_1:sch 6(A45,A43);
+     A45: for n be Nat st X[n] holds n<=M1;
+     consider MX be Nat such that A46: X[MX] &
+     for n be Nat st X[n] holds n<=MX from NAT_1:sch 6(A45,A43);
      A47: for k st MX<k & k<M1 holds s.k>=x0
      proof given k such that A48: MX<k & k<M1 & s.k<x0;
           now per cases;
@@ -858,6 +868,7 @@ then not s.n in {x0} by A12,XBOOLE_0:def 4;
      consider m such that A49: F.m=MX by A46;
      A50: MX<F.(m+1) & s.(F.(m+1))<x0 &
       for k st MX<k & s.k<x0 holds F.(m+1)<=k by A37,A49;
+      M1 in NAT by ORDINAL1:def 13; then
      A51: F.(m+1)<=M1 by A37,A42,A46,A49;
          now assume F.(m+1)<>M1; then F.(m+1)<M1 by A51,REAL_1:def 5;
 hence contradiction by A47,A50;
@@ -885,14 +896,14 @@ hence contradiction by A47,A50;
          x in dom f by A58,A59,XBOOLE_0:def 4;
      hence thesis by A61,XBOOLE_0:def 3;
     end; then A62: f*(s*F) is divergent_to-infty by A7,A56,A57,LIMFUNC2:def 3;
-    defpred X[Element of NAT] means s.$1>x0;
+    defpred X[Nat] means s.$1>x0;
     A63: now let k; consider n such that A64: k<=n & s.n>=x0 by A19;
      take n; thus k<=n by A64;   s.n in rng s by RFUNCT_2:10;
 then not s.n in {x0} by A12,XBOOLE_0:def 4;
      then s.n<>x0 by TARSKI:def 1; hence s.n>x0 by A64,REAL_1:def 5;
     end; then ex mn be Element of NAT st 0<=mn & s.mn>x0;
-    then A65: ex m st X[m]; consider N be Element of NAT such that
-    A66: X[N] & for n st X[n] holds N<=n from NAT_1:sch 5(A65);
+    then A65: ex m be Nat st X[m]; consider N be Nat such that
+    A66: X[N] & for n be Nat st X[n] holds N<=n from NAT_1:sch 5(A65);
     A67: now let n; consider m such that A68: n+1<=m & s.m>x0 by A63;
      take m; thus n<m & s.m>x0 by A68,NAT_1:13;
     end;
@@ -901,13 +912,14 @@ then not s.n in {x0} by A12,XBOOLE_0:def 4;
     defpred X[Element of NAT,set,set] means P[$2,$3];
     A69: for n for x be Element of NAT ex y be Element of NAT st X[n,x,y]
     proof let n; let x be Element of NAT;
-    defpred X[Element of NAT] means x<$1 & s.$1>x0;
-    A70: ex m st X[m] by A67;
-     consider l be Element of NAT such that A71: X[l] &
-     for k st X[k] holds l<=k from NAT_1:sch 5
-(A70); take l; thus thesis by A71;
+    defpred X[Nat] means x<$1 & s.$1>x0;
+    ex m st X[m] by A67; then
+    A70: ex m be Nat st X[m] by A67;
+     consider l be Nat such that A71: X[l] &
+     for k be Nat st X[k] holds l<=k from NAT_1:sch 5
+(A70); take l; l in NAT by ORDINAL1:def 13; hence thesis by A71;
     end;
-    reconsider N'=N as Element of NAT qua non empty set;
+    reconsider N'=N as Element of NAT by ORDINAL1:def 13;
     consider G be Function of NAT,NAT such that
     A72: G.0=N' & for n holds X[n,G.n,G.(n+1)] from RECDEF_1:sch 2(A69);
     A73: dom G=NAT & rng G c=NAT by FUNCT_2:def 1,RELSET_1:12;
@@ -920,21 +932,22 @@ then not s.n in {x0} by A12,XBOOLE_0:def 4;
      hence G.n<G.(n+1) by A72;
     end;
     then reconsider G as increasing Seq_of_Nat by A73,SEQM_3:def 8,def 11;
-    defpred X[Element of NAT] means s.$1>x0 & for m holds G.m<>$1;
+    defpred X[Nat] means s.$1>x0 & for m holds G.m<>$1;
     A75: for n st s.n>x0 ex m st G.m=n
-    proof assume A76: ex n st X[n];
-     consider N1 be Element of NAT such that A77: X[N1] &
-     for n st X[n] holds N1<=n from NAT_1:sch 5(A76);
-     defpred X[Element of NAT] means $1<N1 & s.$1>x0 & ex m st G.m=$1;
-     A78: ex n st X[n]
+    proof assume ex n st X[n];
+    then  A76: ex n be Nat st X[n];
+     consider N1 be Nat such that A77: X[N1] &
+     for n be Nat st X[n] holds N1<=n from NAT_1:sch 5(A76);
+     defpred X[Nat] means $1<N1 & s.$1>x0 & ex m st G.m=$1;
+     A78: ex n be Nat st X[n]
      proof take N; A79: N<=N1 by A66,A77;
            N <> N1 by A72,A77;
       hence N<N1 by A79,REAL_1:def 5; thus s.N>x0 by A66; take 0;
       thus thesis by A72;
      end;
-     A80: for n st X[n] holds n<=N1;
-     consider NX be Element of NAT such that A81: X[NX] &
-     for n st X[n] holds n<=NX from NAT_1:sch 6(A80,A78);
+     A80: for n be Nat st X[n] holds n<=N1;
+     consider NX be Nat such that A81: X[NX] &
+     for n be Nat st X[n] holds n<=NX from NAT_1:sch 6(A80,A78);
      A82: for k st NX<k & k<N1 holds s.k<=x0
      proof given k such that A83: NX<k & k<N1 & s.k>x0;
           now per cases;
@@ -947,6 +960,7 @@ then not s.n in {x0} by A12,XBOOLE_0:def 4;
      consider m such that A84: G.m=NX by A81;
      A85: NX<G.(m+1) & s.(G.(m+1))>x0 &
       for k st NX<k & s.k>x0 holds G.(m+1)<=k by A72,A84;
+      N1 in NAT by ORDINAL1:def 13; then
      A86: G.(m+1)<=N1 by A72,A77,A81,A84;
          now assume G.(m+1)<>N1; then G.(m+1)<N1 by A86,REAL_1:def 5;
 hence contradiction by A82,A85;
@@ -1682,9 +1696,9 @@ proof assume A1: f is_left_convergent_in x0 & f is_right_convergent_in x0 &
 then not s.n in {x0} by A7,XBOOLE_0:def 4;
      then s.n<>x0 by TARSKI:def 1; hence s.n<x0 by A25,REAL_1:def 5;
     end; then consider m1 be Element of NAT such that A26: 0<=m1 & s.m1<x0;
-    defpred X[Element of NAT] means s.$1<x0;
-    A27: ex m st X[m] by A26; consider M be Element of NAT such that
-    A28: X[M] & for n st X[n] holds M<=n from NAT_1:sch 5(A27);
+    defpred X[Nat] means s.$1<x0;
+    A27: ex m be Nat st X[m] by A26; consider M be Nat such that
+    A28: X[M] & for n be Nat st X[n] holds M<=n from NAT_1:sch 5(A27);
     A29: now let n; consider m such that A30: n+1<=m & s.m<x0 by A24;
      take m; thus n<m & s.m<x0 by A30,NAT_1:13;
     end;
@@ -1693,12 +1707,13 @@ then not s.n in {x0} by A7,XBOOLE_0:def 4;
     defpred X[Element of NAT,set,set] means P[$2,$3];
     A31: for n for x be Element of NAT ex y be Element of NAT st X[n,x,y]
     proof let n; let x be Element of NAT;
-    defpred X[Element of NAT] means x<$1 & s.$1<x0;
-    A32: ex m st X[m] by A29;
-     consider l be Element of NAT such that A33: X[l] &
-     for k st X[k] holds l<=k from NAT_1:sch 5
-(A32); take l; thus thesis by A33;
-    end; reconsider M'=M as Element of NAT qua non empty set;
+    defpred X[Nat] means x<$1 & s.$1<x0;
+    ex m st X[m] by A29; then
+    A32: ex m be Nat st X[m] by A29;
+     consider l be Nat such that A33: X[l] &
+     for k be Nat st X[k] holds l<=k from NAT_1:sch 5
+(A32); take l; l in NAT by ORDINAL1:def 13; hence thesis by A33;
+    end; reconsider M'=M as Element of NAT by ORDINAL1:def 13;
     consider F be Function of NAT,NAT such that
     A34: F.0=M' & for n holds X[n,F.n,F.(n+1)] from RECDEF_1:sch 2(A31);
     A35: dom F=NAT & rng F c=NAT by FUNCT_2:def 1,RELSET_1:12;
@@ -1711,21 +1726,22 @@ then not s.n in {x0} by A7,XBOOLE_0:def 4;
      hence F.n<F.(n+1) by A34;
     end;
     then reconsider F as increasing Seq_of_Nat by A35,SEQM_3:def 8,def 11;
-    defpred X[Element of NAT] means s.$1<x0 & for m holds F.m<>$1;
+    defpred X[Nat] means s.$1<x0 & for m holds F.m<>$1;
     A37: for n st s.n<x0 ex m st F.m=n
-    proof assume A38: ex n st X[n];
-     consider M1 be Element of NAT such that A39: X[M1] &
-     for n st X[n] holds M1<=n from NAT_1:sch 5(A38);
-     defpred X[Element of NAT] means $1<M1 & s.$1<x0 & ex m st F.m=$1;
-     A40: ex n st X[n]
+    proof assume ex n st X[n];
+      then A38: ex n be Nat st X[n];
+     consider M1 be Nat such that A39: X[M1] &
+     for n be Nat st X[n] holds M1<=n from NAT_1:sch 5(A38);
+     defpred X[Nat] means $1<M1 & s.$1<x0 & ex m st F.m=$1;
+     A40: ex n be Nat st X[n]
      proof take M; A41: M<=M1 by A28,A39;
            M <> M1 by A34,A39;
       hence M<M1 by A41,REAL_1:def 5;
       thus s.M<x0 by A28; take 0; thus thesis by A34;
      end;
-     A42: for n st X[n] holds n<=M1;
-     consider MX be Element of NAT such that A43: X[MX] &
-     for n st X[n] holds n<=MX from NAT_1:sch 6(A42,A40);
+     A42: for n be Nat st X[n] holds n<=M1;
+     consider MX be Nat such that A43: X[MX] &
+     for n be Nat st X[n] holds n<=MX from NAT_1:sch 6(A42,A40);
      A44: for k st MX<k & k<M1 holds s.k>=x0
      proof given k such that A45: MX<k & k<M1 & s.k<x0;
           now per cases;
@@ -1737,6 +1753,7 @@ then not s.n in {x0} by A7,XBOOLE_0:def 4;
      end; consider m such that A46: F.m=MX by A43;
      A47: MX<F.(m+1) & s.(F.(m+1))<x0 &
       for k st MX<k & s.k<x0 holds F.(m+1)<=k by A34,A46;
+      M1 in NAT by ORDINAL1:def 13; then
      A48: F.(m+1)<=M1 by A34,A39,A43,A46;
          now assume F.(m+1)<>M1; then F.(m+1)<M1 by A48,REAL_1:def 5;
 hence contradiction by A44,A47;
@@ -1766,14 +1783,14 @@ hence contradiction by A44,A47;
      hence thesis by A58,XBOOLE_0:def 3;
     end; then A59: f*(s*F) is convergent & lim(f*(s*F))=lim_left(f,x0)
      by A1,A53,A54,LIMFUNC2:def 7;
-    defpred X[Element of NAT] means s.$1>x0;
+    defpred X[Nat] means s.$1>x0;
     A60: now let k; consider n such that A61: k<=n & s.n>=x0 by A15;
      take n; thus k<=n by A61;   s.n in rng s by RFUNCT_2:10;
 then not s.n in {x0} by A7,XBOOLE_0:def 4;
      then s.n<>x0 by TARSKI:def 1; hence s.n>x0 by A61,REAL_1:def 5;
     end; then ex mn be Element of NAT st 0<=mn & s.mn>x0;
-    then A62: ex m st X[m]; consider N be Element of NAT such that
-    A63: X[N] & for n st X[n] holds N<=n from NAT_1:sch 5(A62);
+    then A62: ex m be Nat st X[m]; consider N be Nat such that
+    A63: X[N] & for n be Nat st X[n] holds N<=n from NAT_1:sch 5(A62);
     A64: now let n; consider m such that A65: n+1<=m & s.m>x0 by A60;
      take m; thus n<m & s.m>x0 by A65,NAT_1:13;
     end;
@@ -1782,13 +1799,14 @@ then not s.n in {x0} by A7,XBOOLE_0:def 4;
     defpred X[Element of NAT,set,set] means P[$2,$3];
     A66: for n for x be Element of NAT ex y be Element of NAT st X[n,x,y]
     proof let n; let x be Element of NAT;
-    defpred X[Element of NAT] means x<$1 & s.$1>x0;
-    A67: ex m st X[m] by A64;
-     consider l be Element of NAT such that A68: X[l] &
-     for k st X[k] holds l<=k from NAT_1:sch 5
-(A67); take l; thus thesis by A68;
+    defpred X[Nat] means x<$1 & s.$1>x0;
+    ex m st X[m] by A64; then
+    A67: ex m be Nat st X[m] by A64;
+     consider l be Nat such that A68: X[l] &
+     for k be Nat st X[k] holds l<=k from NAT_1:sch 5
+(A67); take l; l in NAT by ORDINAL1:def 13; hence thesis by A68;
     end;
-    reconsider N'=N as Element of NAT qua non empty set;
+    reconsider N'=N as Element of NAT by ORDINAL1:def 13;
     consider G be Function of NAT,NAT such that
     A69: G.0=N' & for n holds X[n,G.n,G.(n+1)] from RECDEF_1:sch 2(A66);
     A70: dom G=NAT & rng G c=NAT by FUNCT_2:def 1,RELSET_1:12;
@@ -1801,21 +1819,22 @@ then not s.n in {x0} by A7,XBOOLE_0:def 4;
      hence G.n<G.(n+1) by A69;
     end;
     then reconsider G as increasing Seq_of_Nat by A70,SEQM_3:def 8,def 11;
-    defpred X[Element of NAT] means s.$1>x0 & for m holds G.m<>$1;
+    defpred X[Nat] means s.$1>x0 & for m holds G.m<>$1;
     A72: for n st s.n>x0 ex m st G.m=n
-    proof assume A73: ex n st X[n];
-     consider N1 be Element of NAT such that A74: X[N1] &
-     for n st X[n] holds N1<=n from NAT_1:sch 5(A73);
-     defpred X[Element of NAT] means $1<N1 & s.$1>x0 & ex m st G.m=$1;
-     A75: ex n st X[n]
+    proof assume ex n st X[n];
+   then A73: ex n be Nat st X[n];
+     consider N1 be Nat such that A74: X[N1] &
+     for n be Nat st X[n] holds N1<=n from NAT_1:sch 5(A73);
+     defpred X[Nat] means $1<N1 & s.$1>x0 & ex m st G.m=$1;
+     A75: ex n be Nat st X[n]
      proof take N; A76: N<=N1 by A63,A74;
            N <> N1 by A69,A74;
       hence N<N1 by A76,REAL_1:def 5; thus s.N>x0 by A63; take 0;
       thus thesis by A69;
      end;
-     A77: for n st X[n] holds n<=N1;
-     consider NX be Element of NAT such that A78: X[NX] &
-     for n st X[n] holds n<=NX from NAT_1:sch 6(A77,A75);
+     A77: for n be Nat st X[n] holds n<=N1;
+     consider NX be Nat such that A78: X[NX] &
+     for n be Nat st X[n] holds n<=NX from NAT_1:sch 6(A77,A75);
      A79: for k st NX<k & k<N1 holds s.k<=x0
      proof given k such that A80: NX<k & k<N1 & s.k>x0;
           now per cases;
@@ -1828,6 +1847,7 @@ then not s.n in {x0} by A7,XBOOLE_0:def 4;
      consider m such that A81: G.m=NX by A78;
      A82: NX<G.(m+1) & s.(G.(m+1))>x0 &
       for k st NX<k & s.k>x0 holds G.(m+1)<=k by A69,A81;
+      N1 in NAT by ORDINAL1:def 13; then
      A83: G.(m+1)<=N1 by A69,A74,A78,A81;
          now assume G.(m+1)<>N1; then G.(m+1)<N1 by A83,REAL_1:def 5;
      hence contradiction by A79,A82;

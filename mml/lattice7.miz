@@ -8,7 +8,7 @@ environ
 
  vocabularies WAYBEL_0, ORDERS_1, LATTICES, FINSET_1, TREES_1, CARD_1, BOOLE,
       RELAT_2, LATTICE3, SQUARE_1, ORDINAL2, YELLOW_0, YELLOW_1, CAT_1,
-      FUNCT_1, PBOOLE, RELAT_1, WELLORD1, COHSP_1, LATTICE7;
+      FUNCT_1, PBOOLE, RELAT_1, WELLORD1, COHSP_1, LATTICE7, ARYTM;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1, RELSET_1,
       FUNCT_2, DOMAIN_1, NUMBERS, STRUCT_0, ORDERS_1, PBOOLE, ORDERS_2,
       LATTICE3, YELLOW_0, YELLOW_1, YELLOW_4, WAYBEL_1, WAYBEL_0, CARD_1,
@@ -16,13 +16,13 @@ environ
  constructors DOMAIN_1, XXREAL_0, NAT_1, NAT_D, MEMBERED, COHSP_1, WAYBEL_1,
       YELLOW_4;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, MEMBERED, STRUCT_0, ORDERS_2,
-      LATTICE3, YELLOW_0, YELLOW_1, WAYBEL_2, WAYBEL11, YELLOW11;
+      LATTICE3, YELLOW_0, YELLOW_1, WAYBEL_2, WAYBEL11, YELLOW11, XXREAL_0;
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
  definitions TARSKI, WAYBEL_0, WAYBEL_1, LATTICE3, RELAT_2, COHSP_1, XBOOLE_0;
  theorems WAYBEL_0, WAYBEL_1, WAYBEL_2, YELLOW_0, YELLOW_1, YELLOW_4, LATTICE3,
       TARSKI, FUNCT_1, FUNCT_2, ORDERS_2, WAYBEL_4, CARD_1, CARD_2, NAT_1,
       YELLOW_5, REAL_1, PBOOLE, COHSP_1, WAYBEL13, WAYBEL_6, RELSET_1,
-      XBOOLE_0, XBOOLE_1, XXREAL_0;
+      XBOOLE_0, XBOOLE_1, XXREAL_0, ORDINAL1;
  schemes NAT_1, PBOOLE;
 
 begin :: Induction in a finite lattice
@@ -127,24 +127,27 @@ existence
 proof
 
  defpred
-  P[Element of NAT] means ex A be Chain of Bottom L,x st $1=card A;
+  P[Nat] means ex A be Chain of Bottom L,x st $1=card A;
 
        Bottom L <= x by YELLOW_0:44;
  then A1: {Bottom L,x} is Chain of Bottom L,x by Th1;
-       ex k st P[k] & for n st P[n] holds n <= k
+ ex k st P[k] & for n st P[n] holds n <= k
    proof
-    A2: for k st P[k] holds k <= card the carrier of L by CARD_1:80;
-    A3: ex k st P[k]
+    A2: for k be Nat st P[k] holds k <= card the carrier of L by CARD_1:80;
+A3: ex k be Nat st P[k]
      proof
-            P[card{Bottom L,x}] by A1;
+       P[card{Bottom L,x}] by A1;
       hence thesis;
      end;
-    thus thesis from NAT_1:sch 6 (A2,A3);
+     consider k being Nat such that
+A4:  P[k] & for n being Nat st P[n] holds n <= k
+     from NAT_1:sch 6 (A2,A3);
+     reconsider k as Element of NAT by ORDINAL1:def 13;
+     take k;
+     thus thesis by A4;
    end;
  then consider k such that A4: P[k] & for n st P[n] holds n <= k;
  take k;
- thus P[k] by A4;
- let A be Chain of Bottom L,x;
  thus thesis by A4;
 end;
 
@@ -586,24 +589,24 @@ theorem Th8:
 for L be finite LATTICE
  for X be non empty Subset of L holds
   ex x be Element of L st x in X & for y be Element of L st y in X
-     holds not (x < y)
+     holds not x < y
 
 proof
 let L be finite LATTICE;
 let X be non empty Subset of L;
   defpred
-   P[Element of NAT] means ex x be Element of L st x in X & $1=height(x);
-      ex k st P[k] & for n st P[n] holds n <= k
+   P[Nat] means ex x be Element of L st x in X & $1=height(x);
+   ex k st P[k] & for n st P[n] holds n <= k
    proof
-    A1: for k st P[k] holds k <= card the carrier of L
+    A1: for k be Nat st P[k] holds k <= card the carrier of L
      proof
-        let k;
+        let k be Nat;
         assume P[k];
         then consider x be Element of L such that A2: x in X & k=height(x);
         consider B be Chain of Bottom L,x such that A3: k=card B by A2,Def3;
         thus thesis by A3,CARD_1:80;
      end;
-    A4: ex k st P[k]
+    A4: ex k be Nat st P[k]
      proof
       consider x be set such that A5: x in X by XBOOLE_0:def 1;
       reconsider x as Element of L by A5;
@@ -613,7 +616,12 @@ let X be non empty Subset of L;
          for B be Chain of Bottom L,x holds card B <= height(x);
       thus thesis by A5,A6;
      end;
-    thus thesis from NAT_1:sch 6 (A1,A4);
+     consider k being Nat such that
+A5:  P[k] and
+A6:  for n being Nat st P[n] holds n <= k
+     from NAT_1:sch 6 (A1,A4);
+     for n being Element of NAT st P[n] holds n <= k by A6;
+     hence thesis by A5;
    end;
 
   then consider k such that A7: P[k] & for n st P[n] holds n <= k;
@@ -638,35 +646,38 @@ func max(A) -> Element of L means :Def5:
 existence
  proof
   defpred
-   P[Element of NAT] means ex x be Element of L st x in A & $1=height(x);
+   P[Nat] means ex x be Element of L st x in A & $1=height(x);
       ex k st P[k] & for n st P[n] holds n <= k
    proof
-    A1: for k st P[k] holds k <= card the carrier of L
+    A1: for k be Nat st P[k] holds k <= card the carrier of L
      proof
-        let k;
+        let k be Nat;
         assume P[k];
         then consider x be Element of L such that A2: x in A & k=height(x);
         consider B be Chain of Bottom L,x such that A3: k=card B by A2,Def3;
         thus thesis by A3,CARD_1:80;
      end;
-    A4: ex k st P[k]
+    A4: ex k be Nat st P[k]
      proof
       consider x be set such that A5: x in A by XBOOLE_0:def 1;
       reconsider x as Element of L by A5;
             (ex B be Chain of Bottom L,x st height(x)= card B) &
          for B be Chain of Bottom L,x holds card B <= height(x) by Def3;
-      then consider B be Chain of Bottom L,x such that A6: height(x)= card B &
+      then ex B be Chain of Bottom L,x st height(x)= card B &
          for B be Chain of Bottom L,x holds card B <= height(x);
-      thus thesis by A5,A6;
+      hence thesis by A5;
      end;
-    thus thesis from NAT_1:sch 6 (A1,A4);
+     consider k being Nat such that
+A5:  P[k] and
+A6:  for n being Nat st P[n] holds n <= k from NAT_1:sch 6 (A1,A4);
+     for n being Element of NAT st P[n] holds n <= k by A6;
+     hence thesis by A5;
    end;
 
   then consider k such that A7: P[k] & for n st P[n] holds n <= k;
   consider x be Element of L such that A8: x in A & k=height(x) and
      A9: for n st ex z be Element of L st z in
- A & n=height(z) holds n<=k by A7
-;
+ A & n=height(z) holds n<=k by A7;
   take x;
   thus for w be Element of L st w in A holds w <= x
     proof

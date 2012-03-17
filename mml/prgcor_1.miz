@@ -7,13 +7,13 @@
 environ
 
  vocabularies RELAT_1, FUNCT_1, FINSEQ_1, ARYTM_1, ARYTM_3, INT_1, NAT_1,
-      PARTFUN1, GROUP_1, PRGCOR_1, FUNCOP_1;
+      PARTFUN1, GROUP_1, PRGCOR_1, FUNCOP_1, ARYTM;
  notations TARSKI, SUBSET_1, NUMBERS, XCMPLX_0, XXREAL_0, RELAT_1, FUNCT_1,
       FINSEQ_1, INT_1, BINARITH, RELSET_1, FUNCOP_1, PARTFUN1, NAT_1, NAT_D,
       NEWTON;
  constructors XXREAL_0, REAL_1, NAT_1, NAT_D, NEWTON, BINARITH;
  registrations XBOOLE_0, ORDINAL1, RELSET_1, FUNCOP_1, XXREAL_0, XREAL_0,
-      NAT_1, INT_1;
+      NAT_1, INT_1, NEWTON;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions TARSKI;
  theorems FINSEQ_1, REAL_1, NAT_1, FUNCT_1, XCMPLX_1, PRE_FF, INT_1, NEWTON,
@@ -212,16 +212,15 @@ then A3: n+1-'1=n by BINARITH:def 3;
        m>=0+1 by A1,NAT_1:13;
   then m*n>=1*n by XREAL_1:66;
   then A4: m*(2|^(n+1-'1))> n by A2,A3,XXREAL_0:2;
-  defpred P[Element of NAT] means
-      m*(2|^($1))> n;
-  A5: ex k being Element of NAT st P[k] by A4;
-       ex k being Element of NAT st P[k] & for j being Element of NAT st P[j]
-       holds k<=j
-                   from NAT_1:sch 5(A5);
-  then consider k being Element of NAT such that
-  A6: P[k] & for j being Element of NAT st P[j] holds k<=j;
-       for k2 being Element of NAT st k2<k holds m*(2|^(k2))<=n by A6;
- hence thesis by A6;
+  defpred P[Nat] means m*(2|^$1)> n;
+  A5: ex k being Nat st P[k] by A4;
+       ex k being Nat st P[k] & for j being Nat st P[j]
+       holds k<=j from NAT_1:sch 5(A5);
+  then consider k being Nat such that
+  A6: P[k] & for j being Nat st P[j] holds k<=j;
+A7: k in NAT by ORDINAL1:def 13;
+  for k2 being Element of NAT st k2<k holds m*(2|^(k2))<=n by A6;
+ hence thesis by A6,A7;
 end;
 
 theorem Th7: for i being Integer,f being FinSequence st 1<=i & i<=len f

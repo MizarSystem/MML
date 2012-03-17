@@ -38,7 +38,7 @@
 <Pred kind="R" nr="1">
 <Func kind="K" nr="35">
 <Var nr="1"/>
-<Num nr="0"/>
+<Func kind="K" nr="47"/>
 </Func>
 <Func kind="F" nr="1"/>
 </Pred>
@@ -55,7 +55,7 @@
 </Func>
 <Func kind="K" nr="35">
 <Var nr="1"/>
-<Func kind="K" nr="56">
+<Func kind="K" nr="57">
 <Var nr="2"/>
 <Num nr="1"/>
 </Func>

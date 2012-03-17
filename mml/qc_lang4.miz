@@ -8,7 +8,7 @@ environ
 
  vocabularies FINSEQ_1, RELAT_1, TREES_1, ZFMISC_1, FUNCT_1, TREES_2, FINSET_1,
       TREES_4, BOOLE, TREES_9, ORDINAL1, CARD_1, MCART_1, ORDERS_1, TARSKI,
-      QC_LANG1, ZF_LANG, QC_LANG4;
+      QC_LANG1, ZF_LANG, QC_LANG4, ARYTM;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, XCMPLX_0, NAT_1,
       RELAT_1, FUNCT_1, FUNCT_2, BINOP_1, FINSET_1, FINSEQ_1, FINSEQ_4, CARD_1,
       TREES_1, TREES_2, TREES_4, TREES_9, QC_LANG1, QC_LANG2, MCART_1,
@@ -899,8 +899,8 @@ A10:            fk <= fm by A7,A9;
           for k holds P[k] from NAT_1:sch 1(A4,A6);
       hence f.k qua Element of NAT <= f.m qua Element of NAT by A3;
     end;
-  defpred P[Element of NAT] means $1 in rng f;
-  A11: ex k st P[k]
+  defpred P[set] means $1 in rng f;
+  A11: ex k be Nat st P[k]
     proof
       consider y such that A12: y = f.0;
       A13: dom f = NAT by FUNCT_2:def 1;
@@ -908,8 +908,10 @@ A10:            fk <= fm by A7,A9;
       take k;
       thus thesis by A12,A13,FUNCT_1:def 5;
     end;
-      ex k st P[k] & for n st P[n] holds k <= n from NAT_1:sch 5(A11);
-  then consider l such that A14: l in rng f & for n st n in rng f holds l <= n;
+    ex k be Nat st P[k] &
+    for n be Nat st P[n] holds k <= n from NAT_1:sch 5(A11);
+  then consider l be Nat such that
+A14: l in rng f & for n be Nat st n in rng f holds l <= n;
   consider x such that A15: x in dom f & l = f.x by A14,FUNCT_1:def 5;
 A16:dom f = NAT by FUNCT_2:def 1;
   reconsider m = x as Element of NAT by A15,FUNCT_2:def 1;
@@ -1405,9 +1407,9 @@ A2:  1 <= n & len L = n & L.1 = H & L.n = G &
     for k st 1 <= k & k < n
       ex H1,G1 being Element of QC-WFF st L.k = H1 & L.(k+1) = G1 &
         H1 is_immediate_constituent_of G1 by QC_LANG2:def 21;
-    defpred P[Element of NAT] means ex H' st H' = L.($1+1) &
+    defpred P[Nat] means ex H' st H' = L.($1+1) &
       ($1+1) in dom L & H' in rng tree_of_subformulae(F);
-  A3: ex k st P[k]
+  A3: ex k being Nat st P[k]
     proof
       A4: 0 <> n by A2;
       then consider k being Nat such that A5: k+1 = n by NAT_1:6;
@@ -1417,27 +1419,28 @@ A7:   Seg n = dom L by A2,FINSEQ_1:def 3;
           n in Seg n by A4,FINSEQ_1:5;
       hence thesis by A1,A2,A6,A7;
     end;
-  A8: for k st k <> 0 & P[k] ex m st m < k & P[m]
+  A8: for k being Nat st k <> 0 & P[k] ex m being Nat st m < k & P[m]
     proof
-      let k; assume A9: k <> 0 & P[k];
+      let k be Nat; assume A9: k <> 0 & P[k];
 then A10:    0 < k & ex G' st G' = L.(k+1) & k+1 in dom L &
         G' in rng tree_of_subformulae(F) by NAT_1:3;
       consider G' such that A11: G' = L.(k+1) & k+1 in dom L &
         G' in rng tree_of_subformulae(F) by A9;
       consider m being Nat such that A12: m+1 = k by A9,NAT_1:6;
-      reconsider m as Element of NAT by ORDINAL1:def 13;
 A13:    m < k by A12,NAT_1:13;
 A14:   0+1 <= k by A10,NAT_1:13;
       A15: Seg len L = dom L by FINSEQ_1:def 3; A16: Seg n = dom L by A2,
 FINSEQ_1:def 3;
+A100:    k in NAT by ORDINAL1:def 13;
       A17: 1 <= k+1 & k+1 <= n by A2,A9,A15,FINSEQ_1:3;
 then 1 <= k & k < n by A14,NAT_1:13;
       then consider H1,G1 being Element of QC-WFF such that
-A18:      L.k = H1 & L.(k+1) = G1 & H1 is_immediate_constituent_of G1 by A2;
+A18:      L.k = H1 & L.(k+1) = G1 & H1 is_immediate_constituent_of G1
+          by A2,A100;
           1 <= k & k <= n by A14,A17,NAT_1:13;
 then A19:   k in dom L by A16,FINSEQ_1:3;
           H1 in rng tree_of_subformulae(F) by A11,A18,Th37;
-      hence ex m st m < k & P[m] by A12,A13,A18,A19;
+      hence thesis by A12,A13,A18,A19;
     end;
       P[0] from NAT_1:sch 7(A3,A8);
   then consider H' such that A20: H' = L.1 & H' in rng tree_of_subformulae(F);

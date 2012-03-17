@@ -9,16 +9,16 @@ environ
  vocabularies FUNCT_1, BOOLE, FINSEQ_1, FINSET_1, RELAT_1, ORDINAL2, CARD_1,
       TARSKI, ALGSEQ_1, ARYTM_1, AFINSQ_1, FUNCT_2, HENMODEL, INT_1, STIRL2_1,
       SGRAPH1, SQUARE_1, BINOP_1, RLVECT_1, MONOID_0, SETWISEO, FINSOP_1,
-      ARYTM_3, GROUP_1, NEWTON, QC_LANG1, FUNCOP_1;
+      ARYTM_3, GROUP_1, NEWTON, QC_LANG1, FUNCOP_1, ARYTM;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, RELAT_1, FUNCT_1,
       RELSET_1, ORDINAL1, SEQ_4, PARTFUN1, FINSET_1, CARD_1, AFINSQ_1,
       XCMPLX_0, XXREAL_0, FUNCT_2, NAT_1, INT_1, WELLORD2, BINOP_1, BINOP_2,
       NEWTON, SETWISEO, DOMAIN_1, FUNCOP_1;
  constructors PARTFUN1, WELLORD2, BINOP_1, DOMAIN_1, SETWISEO, REAL_1,
-      SQUARE_1, NAT_1, BINOP_2, SEQ_4, NEWTON, AFINSQ_1;
+      SQUARE_1, NAT_1, SEQM_3, BINOP_2, SEQ_4, NEWTON, AFINSQ_1;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1, FUNCT_2,
       FINSET_1, XXREAL_0, XREAL_0, NAT_1, INT_1, BINOP_2, MEMBERED, SEQ_4,
-      AFINSQ_1, CARD_1;
+      AFINSQ_1, CARD_1, SEQM_3;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions TARSKI, XBOOLE_0, FUNCT_1;
  theorems AFINSQ_1, TARSKI, FINSEQ_1, FUNCT_1, XBOOLE_0, ZFMISC_1, RELAT_1,
@@ -293,7 +293,7 @@ end;
 end;
 
 definition
-  let n,k;let f be Function of n,k;
+  let n,k be Nat;let f be Function of n,k;
   attr f is "increasing means :Def1:
    (n = 0 iff k = 0) &
    for l,m st l in rng f & m in rng f & l < m holds min* f"{l} < min* f"{m};
@@ -344,11 +344,6 @@ theorem Th18:
     for m st m < k holds m <= min* f"{m}
 proof
   assume that A1:f is onto "increasing;
-   now per cases;
-    suppose k=0;
-      hence thesis;
-    end;
-    suppose k>0;
       defpred M[Element of NAT] means
         $1<k implies $1<=min* f"{$1};
       A2:M[0];
@@ -367,9 +362,6 @@ proof
        for m holds M[m] from NAT_1:sch 1(A2,A3);
       hence thesis;
     end;
-  end;
-  hence thesis;
-end;
 
 theorem Th19:
   f is onto "increasing implies
@@ -579,9 +571,9 @@ proof
               hence thesis by TARSKI:def 1;
             end;
             suppose A15:m=k1;
-               for l st l in f"{m} holds m <= l
+               for l be Nat st l in f"{m} holds m <= l
               proof
-                let l such that A16:l in f"{m};
+                let l be Nat such that A16:l in f"{m};
                  l in dom f & dom f =n & f.l in {m}
                   by A16,FUNCT_1:def 13,FUNCT_2:def 1;
                 then f.l=min(l,m) & f.l=m by A5,A15,TARSKI:def 1;
@@ -603,7 +595,7 @@ proof
   hence thesis;
 end;
 
-scheme Sch1{n,k() -> Element of NAT,P[set]}:
+scheme Sch1{n,k() -> Nat,P[set]}:
   {f where f is Function of n(),k():P[f]} is finite
 proof
   set F= {f where f is Function of n(),k():P[f]};
@@ -635,21 +627,21 @@ proof
 end;
 
 theorem Th24:
-  for n,k holds
+  for n,k be Nat holds
     {f where f is Function of n,k:f is onto "increasing} is finite
 proof
-  let n,k;
+  let n,k be Nat;
   defpred P[Function of n,k] means $1 is onto "increasing;
    {f where f is Function of n,k:P[f]} is finite from Sch1;
   hence thesis;
 end;
 
 theorem Th25:
-  for n,k holds
+  for n,k being Nat holds
      Card {f where f is Function of n,k:f is onto "increasing}
       is Element of NAT
 proof
-  let n,k;
+  let n,k be Nat;
   set F= {f where f is Function of n,k:f is onto "increasing};
    F is finite by Th24;
   then consider m being Nat such that
@@ -661,7 +653,7 @@ end;
 
 :: Stirling Numbers of the second kind
 
-definition let n,k;
+definition let n,k be Nat;
   func n block k -> Element of NAT equals
      Card {f where f is Function of n,k:f is onto "increasing};
   coherence by Th25;
@@ -1220,7 +1212,7 @@ theorem Th36:
            by A6,EULER_1:1;
          then min* g"{k1} in n & f.(min* g"{k1}) in {k1} by A2,FUNCT_1:68;
          then A8:min* g"{k1} in f"{k1} by A6,FUNCT_1:def 13;
-          now let n1 be Element of NAT such that A9:n1 in f"{k1};
+          now let n1 be Nat such that A9:n1 in f"{k1};
             n1 in n by A6,A9,FUNCT_1:def 13;
            then n1 in dom f & n1 in dom g & f.n1 in {k1}
              by A6,A9,FUNCT_1:def 13;
@@ -1492,7 +1484,7 @@ proof
        by FUNCT_1:def 13,XXREAL_0:2;
     then min* f"{k1} in n & g.(min* f"{k1}) in {k1} by A3,EULER_1:1;
     then A23:min* f"{k1} in g"{k1} by A21,FUNCT_1:def 13;
-     now let n1 be Element of NAT such that A24:n1 in g"{k1};
+     now let n1 be Nat such that A24:n1 in g"{k1};
        n1 in n+1 by A21,A24,FUNCT_1:def 13;
       then n1<n+1 by EULER_1:1;
       then A25:n1<=n by NAT_1:13;
@@ -1500,7 +1492,7 @@ proof
         suppose n1<n;
            then n1<n & n1 in dom f & g.n1 in {k1}
              by A21,A24,EULER_1:1,FUNCT_1:def 13;
-           then f.n1 in {k1} & n1 in dom f by A3;
+           then f.n1 in {k1} & n1 in dom f by A3,A24;
            then n1 in f"{k1} by FUNCT_1:def 13;
            hence min* f"{k1}<=n1 by NAT_1:def 1;
          end;
@@ -2397,7 +2389,7 @@ proof
     A4:f.0 = Fn.0 and
     A5:for n st n+1 < len Fn holds f.(n + 1) = addnat.(f.n,Fn.(n + 1))and
     A6:addnat "**" Fn= f.(len Fn-1) by A1,Def3;
-  defpred P[Element of NAT] means
+  defpred P[Nat] means
     x <= $1 & $1 < len Fn implies f.$1 >= k;
   A7:P[x]
     proof
@@ -2418,17 +2410,18 @@ proof
       end;
       hence thesis;
     end;
-  A9:for m st m>=x & P[m] holds P[m+1]
+  A9:for m be Nat st m>=x & P[m] holds P[m+1]
     proof
-      let m such that A10:m>=x & P[m];
+      let m be Nat such that A10:m>=x & P[m];
+      reconsider m1 = m as Element of NAT by ORDINAL1:def 13;
       assume x <= m+1 & m+1 < len Fn;
-      then f.(m + 1) = addnat.(f.m,Fn.(m + 1)) & m <len Fn by A5,NAT_1:13;
-      then f.(m+1)=f.m+Fn.(m+1) & f.m >=k & Fn.(m+1)>=0
+      then f.(m1 + 1) = addnat.(f.m1,Fn.(m1 + 1)) & m1 <len Fn by A5,NAT_1:13;
+      then f.(m1+1)=f.m1+Fn.(m1+1) & f.m1 >=k & Fn.(m1+1)>=0
         by A10,BINOP_2:def 23;
       then f.(m+1) >= k+0 by XREAL_1:9;
       hence thesis;
     end;
-  A11:for m st m>=x holds P[m] from NAT_1:sch 8(A7,A9);
+  A11:for m be Nat st m>=x holds P[m] from NAT_1:sch 8(A7,A9);
    x < dom Fn & dom Fn=lenFn1+1 by A3,AFINSQ_1:def 1,EULER_1:1;
   then x<=lenFn1 & lenFn1 < lenFn1+1 by NAT_1:13;
   hence thesis by A6,A11;
@@ -2786,9 +2779,11 @@ proof
 end;
 
 theorem Th55:
+  for n,k being Nat holds
   k * (n block k)=
   Card{f where f is Function of n+1,k: f is onto "increasing & f"{f.n}<>{n}}
 proof
+  let n,k be Nat;
    now per cases;
     suppose A1:k=0;
       set F={f where f is Function of n+1,k:
@@ -2823,11 +2818,12 @@ proof
         A11:for i st i in dom F holds
               F.i = Card{g where g is Function of n+1,k:P[g] & g.n=f.i}
               from Sch8(A6,A7,A8);
+A200:      n in NAT & k in NAT by ORDINAL1:def 13;
        for i st i in dom F holds F.i = n block k
         proof
           let i such that A12:i in dom F;
           A13:f.i in rng f & rng f=k & k is Subset of NAT
-            by A5,A9,A12,Th8,FUNCT_1:def 5;
+            by A200,A5,A9,A12,Th8,FUNCT_1:def 5;
           then reconsider fi=f.i as Element of NAT;
           set F={g where g is Function of n+1,k:g is onto "increasing &
                                                 g"{g.n}<>{n} & g.n=fi};
@@ -2848,7 +2844,7 @@ proof
               hence thesis;
             end;
           then F=F1 & fi<k by A13,A14,EULER_1:1,XBOOLE_0:def 10;
-          then Card F1=Card F2 & Card F2= n block k by Th43;
+          then Card F1=Card F2 & Card F2= n block k by Th43,A200;
           hence thesis by A11,A12;
         end;
         then (for i st i in dom F holds F.i <= n block k)&
@@ -2882,8 +2878,10 @@ proof
 :: Recursive dependence
 
 theorem Th56:
+  for n,k being Nat holds
   (n+1) block (k+1) = (k+1)*(n block (k+1)) + (n block k)
 proof
+  let n,k be Nat;
   set F={f where f is Function of n+1,k+1:f is onto "increasing};
   set F1={f where f is Function of n+1,k+1:f is onto "increasing&f"{f.n}={n}};
   set F2={f where f is Function of n+1,k+1:f is onto "increasing&f"{f.n}<>{n}};
@@ -2934,37 +2932,41 @@ A7: x in F1/\F2 by XBOOLE_0:4;
   end;
    Funcs(n+1,k+1) is finite by FRAENKEL:16;
   then reconsider F1,F2 as finite set by A8,A10,FINSET_1:13;
+A20: n in NAT & k in NAT by ORDINAL1:def 13;
    card F1= n block k & card F2= (k+1) * (n block (k+1)) &
-    Card F =(n+1) block (k+1) by Th42,Th55;
+    Card F =(n+1) block (k+1) by Th42,Th55,A20;
   hence thesis by A5,A6,CARD_2:53;
 end;
 
 theorem Th57:
+  for n being Nat holds
   n>=1 implies n block 2 = 1/2 * (2 |^ n - 2)
 proof
-  defpred P[Element of NAT] means ($1) block 2 = 1/2 * (2 |^ $1-2);
+  let n be Nat;
+  defpred P[Nat] means $1 block 2 = 1/2 * (2 |^ $1-2);
   A1:P[1]
     proof
        2 |^1= 2 by NEWTON:10;
       hence thesis by Th29;
     end;
-  A2:for k st k>=1 & P[k] holds P[k + 1]
+  A2:for k be Nat st k>=1 & P[k] holds P[k + 1]
     proof
-      let k such that A3:k >=1 & P[k];
+      let k be Nat such that A3:k >=1 & P[k];
+A20:  k in NAT by ORDINAL1:def 13;
        (k+1) block 2 = 2*( k block (1+1)) + (k block 1) by Th56
-      .=2 * (1/2 * (2 |^ k - 2)) + 1 by A3,Th32
+      .=2 * (1/2 * (2 |^ k - 2)) + 1 by A3,Th32,A20
       .=1/2* (2* 2 |^ k - 2)
       .=1/2* (2 |^ (k+1)-2) by NEWTON:11;
       hence thesis;
     end;
-   for k st k>=1 holds P[k] from NAT_1:sch 8(A1,A2);
+    for k be Nat st k>=1 holds P[k] from NAT_1:sch 8(A1,A2);
   hence thesis;
 end;
 
 theorem Th58:
   n >= 2 implies n block 3 = 1/6 * ( 3 |^ n - 3 * 2 |^ n + 3 )
 proof
-  defpred P[Element of NAT] means $1 block 3=1/6*(3|^$1-3*2|^$1+3);
+  defpred P[Nat] means $1 block 3=1/6*(3|^$1-3*2|^$1+3);
   A1:P[2]
     proof
        1/6*(3|^2-3*2|^2+3)=1/6*(3*3-3*2|^2+3) by WSIERP_1:2
@@ -2972,9 +2974,9 @@ proof
       .=2 block 3 by Th29;
       hence thesis;
     end;
-  A2:for k st k>=2 & P[k] holds P[k+1]
+  A2:for k be Nat st k>=2 & P[k] holds P[k+1]
     proof
-      let k such that A3:k>=2 & P[k];
+      let k be Nat such that A3:k>=2 & P[k];
        k>=1 by A3,XXREAL_0:2;
       then k block 2 = 1/2 * (2 |^ k - 2) by Th57;
       hence (k+1) block 3 = 3*(k block (2+1)) +(1/2*(2|^k-2)) by Th56
@@ -2982,7 +2984,7 @@ proof
       .=1/6*(3|^(k+1)-3*(2*2|^k) +3) by NEWTON:11
       .=1/6*(3|^(k+1)-3*2|^(k+1) +3) by NEWTON:11;
     end;
-   for k st k>=2 holds P[k] from NAT_1:sch 8(A1,A2);
+   for k be Nat st k>=2 holds P[k] from NAT_1:sch 8(A1,A2);
   hence thesis;
 end;
 
@@ -2996,7 +2998,7 @@ end;
 theorem
    n >= 3 implies n block 4 = 1/24 * ( 4 |^ n - 4 * 3 |^ n + 6* 2|^ n - 4 )
 proof
-  defpred P[Element of NAT] means $1 block 4=
+  defpred P[Nat] means $1 block 4=
     1/24 * ( 4 |^ $1 - 4 * 3 |^ $1 + 6* 2|^ $1 - 4 );
   A1:P[3]
     proof
@@ -3007,18 +3009,19 @@ proof
       .=3 block 4 by Th29;
       hence thesis;
     end;
-  A2:for k st k>=3 & P[k] holds P[k+1]
+  A2:for k be Nat st k>=3 & P[k] holds P[k+1]
     proof
-      let k such that A3:k>=3 & P[k];
+      let k be Nat such that A3:k>=3 & P[k];
+A20:  k in NAT by ORDINAL1:def 13;
        k>=2 by A3,XXREAL_0:2;
-      then k block 3 = 1/6 * (3|^k-3*2|^k+3) by Th58;
+      then k block 3 = 1/6 * (3|^k-3*2|^k+3) by Th58,A20;
       hence (k+1) block 4 = 4*(k block (3+1)) +(1/6*(3|^k-3*2|^k+3)) by Th56
       .=1/24*((4*4|^k)- 4*(3*3|^k)+ 6*(2*2|^k) - 4) by A3
       .=1/24*(4|^(k+1)- 4*(3*3|^k)+ 6*(2*2|^k) - 4) by NEWTON:11
       .=1/24*(4|^(k+1)- 4*3|^(k+1)+ 6*(2*2|^k) - 4) by NEWTON:11
       .=1/24*(4|^(k+1)- 4*(3|^(k+1))+ 6*2|^(k+1) - 4) by NEWTON:11;
     end;
-   for k st k>=3 holds P[k] from NAT_1:sch 8(A1,A2);
+   for k be Nat st k>=3 holds P[k] from NAT_1:sch 8(A1,A2);
   hence thesis;
 end;
 
@@ -3383,15 +3386,17 @@ proof
   proof
     let k such that A4:P[k];
     let N be finite Subset of NAT such that A5:card N =k+1;
-    defpred M[Element of NAT] means $1 in N;
+    defpred M[set] means $1 in N;
     consider m' be Element of NAT such that
       A6:for n st n in N holds n<=m' by Th66;
-    A7:for n st M[n] holds n<=m' by A6;
+    A7:for n be Nat st M[n] holds n<=m' by A6;
     consider x such that
       A8:x in N by A5,CARD_1:47,XBOOLE_0:def 1;
-    A9:ex n st M[n] by A8;
-    consider m such that
-      A10:M[m] & for n st M[n] holds n <= m from NAT_1:sch 6(A7,A9);
+    ex n be Element of NAT st M[n] by A8;
+    then
+A9: ex n be Nat st M[n];
+    consider m be Nat such that
+      A10:M[m] & for n be Nat st M[n] holds n <= m from NAT_1:sch 6(A7,A9);
     set Nm=N\{m};
      card Nm=k by A5,A10,Th65;
     then consider F be Function of Nm,card Nm such that

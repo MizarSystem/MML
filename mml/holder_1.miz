@@ -24,7 +24,7 @@ environ
       XCMPLX_1, RCOMP_1, SEQ_1, SEQ_2, SEQM_3, SERIES_1, FUNCT_1, RFUNCT_2,
       NAT_1, POWER, LIMFUNC1, FCONT_1, FCONT_3, FDIFF_1, ROLLE, SEQ_4,
       PREPOWER, RELSET_1, FUNCT_2, TAYLOR_1, XREAL_1, COMPLEX1, XXREAL_0,
-      PARTFUN1;
+      PARTFUN1, ORDINAL1;
  schemes SEQ_1, RECDEF_1, NAT_1, PARTFUN2;
 
 begin :: H\"older 's inequality
@@ -1328,27 +1328,30 @@ let a,ap be Real_Sequence such that
     case A11: for n be Element of NAT ex m  be Element of NAT st n<=m & a.m<>0;
         then consider m1 be Element of NAT such that
         A12: 0<=m1 & a.m1 <>0;
-        defpred P[Element of NAT] means a.$1 <> 0;
-        A13: ex m be Element of NAT st P[m] by A12;
-        consider M be Element of NAT such that
-        A14: P[M] & for n be Element of NAT st P[n] holds M<=n
+        defpred P[set] means a.$1 <> 0;
+        A13: ex m be Nat st P[m] by A12;
+        consider M be Nat such that
+        A14: P[M] & for n be Nat st P[n] holds M<=n
         from NAT_1:sch 5(A13);
+        reconsider M as Element of NAT by ORDINAL1:def 13;
         A15: now let n be Element of NAT;
              consider m be Element of NAT such that
              A16: n+1<=m & a.m <>0 by A11;
            take m; thus n<m & a.m <>0 by A16,NAT_1:13;
        end;
-       defpred P[Element of NAT,set,set] means
+       defpred P[set,set,set] means
         for n,m be Element of NAT st $2=n & $3=m holds
           n<m & a.m <>0 & for k be Element of NAT st n<k & a.k <>0 holds m<=k;
       A17: for n be Element of NAT for x be Element of NAT
       ex y be Element of NAT st P[n,x,y]
          proof let n be Element of NAT; let x be Element of NAT;
-            defpred P[Element of NAT] means x<$1 & a.$1 <>0;
-            A18: ex m be Element of NAT st P[m] by A15;
-            consider l be Element of NAT such that A19: P[l] &
-            for k be Element of NAT st P[k] holds l<=k from NAT_1:sch 5(A18);
-            take l; thus thesis by A19;
+            defpred P[Nat] means x<$1 & a.$1 <>0;
+            ex m be Element of NAT st P[m] by A15;
+            then
+            A18: ex m be Nat st P[m] by A15;
+            consider l be Nat such that A19: P[l] &
+            for k be Nat st P[k] holds l<=k from NAT_1:sch 5(A18);
+            take l; l in NAT by ORDINAL1:def 13; hence thesis by A19;
         end;
         consider F be Function of NAT,NAT such that
         A20: F.0=M & for n be Element of NAT holds P[n,F.n,F.(n+1)]
@@ -1368,15 +1371,15 @@ let a,ap be Real_Sequence such that
         by A21,SEQM_3:def 8,def 11;
        A23: for n be Element of NAT st a.n <> 0 ex m be Element of NAT st F.m=n
          proof
-            defpred P[Element of NAT] means a.$1 <>0 &
+            defpred P[set] means a.$1 <>0 &
              for m be Element of NAT holds F.m<>$1;
-            assume
-            A24: ex n be Element of NAT st P[n];
-            consider M1 be Element of NAT such that A25: P[M1] &
-            for n be Element of NAT st P[n] holds M1<=n from NAT_1:sch 5(A24);
-            defpred P[Element of NAT] means $1<M1 & a.$1 <> 0
+            assume ex n be Element of NAT st P[n];
+            then A24: ex n be Nat st P[n];
+            consider M1 be Nat such that A25: P[M1] &
+            for n be Nat st P[n] holds M1<=n from NAT_1:sch 5(A24);
+            defpred P[Nat] means $1<M1 & a.$1 <> 0
             & ex m be Element of NAT st F.m=$1;
-             A26: ex n be Element of NAT st P[n]
+             A26: ex n be Nat st P[n]
               proof
                 take M;
                  A27: M<=M1 by A14,A25;
@@ -1385,9 +1388,9 @@ let a,ap be Real_Sequence such that
                 thus a.M <>0 by A14;
                 take 0; thus thesis by A20;
               end;
-            A28: for n be Element of NAT st P[n] holds n<=M1;
-            consider MX be Element of NAT such that A29: P[MX] &
-           for n be Element of NAT st P[n] holds n<=MX
+            A28: for n be Nat st P[n] holds n<=M1;
+            consider MX be Nat such that A29: P[MX] &
+           for n be Nat st P[n] holds n<=MX
             from NAT_1:sch 6(A28,A26);
            A30: for k be Element of NAT st MX<k & k<M1 holds a.k=0
               proof
@@ -1406,6 +1409,7 @@ let a,ap be Real_Sequence such that
            A33: MX<F.(m+1) & a.(F.(m+1))<>0 &
               for k be Element of NAT st MX<k & a.k<>0 holds F.(m+1)<=k
                by A20,A32;
+               M1 in NAT by ORDINAL1:def 13; then
            A34: F.(m+1)<=M1 by A20,A25,A29,A32;
             now assume F.(m+1)<>M1; then F.(m+1)<M1 by A34,REAL_1:def 5;
                hence contradiction by A30,A33;

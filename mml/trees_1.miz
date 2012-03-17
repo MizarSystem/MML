@@ -7,7 +7,7 @@
 environ
 
  vocabularies FUNCT_1, FINSEQ_1, RELAT_1, BOOLE, ARYTM_1, FINSET_1, CARD_1,
-      ZFMISC_1, TARSKI, ORDINAL2, TREES_1;
+      ZFMISC_1, TARSKI, ORDINAL2, TREES_1, ARYTM;
  notations TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, XCMPLX_0, NAT_1, NUMBERS,
       ORDINAL1, RELAT_1, FUNCT_1, FINSEQ_1, FINSET_1, CARD_1, XXREAL_0;
  constructors ENUMSET1, WELLORD2, XXREAL_0, XREAL_0, NAT_1, FINSEQ_1;
@@ -1558,7 +1558,7 @@ definition let T be finite Tree;
     consider n be Nat such that
 A1:   T,Seg n are_equipotent by FINSEQ_1:77;
     defpred X[Nat] means for p st p in T holds len p <= $1;
-    A2:  ex n st X[n]
+    A2:  ex n be Nat st X[n]
      proof
     now given p such that
 A3:     p in T & not len p <= n;
@@ -1579,10 +1579,11 @@ A6:  X[n];
      take n;
      thus thesis by A6;
    end;
-    consider n such that
+    consider n being Nat such that
 A7:   X[n] and
-A8:   for m st X[m] holds n <= m from NAT_1:sch 5(A2);
+A8:   for m be Nat st X[m] holds n <= m from NAT_1:sch 5(A2);
     consider x being Element of T;
+    reconsider n as Element of NAT by ORDINAL1:def 13;
     take n;
     thus ex p st p in T & len p = n
       proof assume
@@ -1623,15 +1624,15 @@ A13:  p2 in T & len p2 = l2;
         for Y being AntiChain_of_Prefixes of T holds card Y <= card X;
   existence
    proof
-     defpred X[Element of NAT] means
+     defpred X[Nat] means
       ex X being finite set st $1 = card X & X c= T &
        (for p,q st p in X & q in X & p <> q holds not p,q are_c=-comparable);
          0 = card {} & {} c= T &
      for p,q st p in {} & q in {} & p <> q holds not p,q are_c=-comparable
        by CARD_1:78,XBOOLE_1:2;
-then A14:  ex n st X[n];
-A15:  for n st X[n] holds n <= card T
-      proof let n; given X being finite set such that
+then A14:  ex n be Nat st X[n];
+A15:  for n be Nat st X[n] holds n <= card T
+      proof let n be Nat; given X being finite set such that
 A16:     n = card X & X c= T and
             for p,q st p in X & q in X & p <> q holds not p,q are_c=-comparable
 ;
@@ -1639,9 +1640,9 @@ A17:     Card X <=` Card T by A16,CARD_1:27;
             Card X = Card n & Card T = Card card T by A16;
        hence thesis by A17,CARD_1:72;
       end;
-    consider n such that
+    consider n being Nat such that
 A18:  X[n] and
-A19:  for m st X[m] holds m <= n from NAT_1:sch 6(A15,A14);
+A19:  for m be Nat st X[m] holds m <= n from NAT_1:sch 6(A15,A14);
     consider X being finite set such that
 A20:  n = card X & X c= T &
       for p,q st p in X & q in X & p <> q holds
@@ -1661,6 +1662,7 @@ A21:     p1 in X & p2 in X;
       end;
     then reconsider X as AntiChain_of_Prefixes;
     reconsider X as AntiChain_of_Prefixes of T by A20,Def14;
+    reconsider n as Element of NAT by ORDINAL1:def 13;
     take n,X;
     thus n = card X by A20;
     let Y be AntiChain_of_Prefixes of T;
@@ -1905,9 +1907,9 @@ scheme TreeInd { P[Tree] }:
 A1: for fT st for n st <*n*> in fT holds P[fT|<*n*>] holds P[fT]
 proof
     defpred X[set] means for fT holds height fT = $1 implies P[fT];
-A2:  for n st for k st k < n holds X[k] holds X[n]
-     proof let n such that
-A3:    for k st k < n for fT st height fT = k holds P[fT];
+A2:  for n being Nat st for k being Nat st k < n holds X[k] holds X[n]
+     proof let n be Nat such that
+A3:    for k being Nat st k < n for fT st height fT = k holds P[fT];
       let fT such that
 A4:    height fT = n;
            now let k; assume <*k*> in fT;
@@ -1917,7 +1919,7 @@ A4:    height fT = n;
        end;
       hence thesis by A1;
      end;
-A5:  X[n] from NAT_1:sch 4(A2);
+A5:  for n be Nat holds X[n] from NAT_1:sch 4(A2);
    let fT;   height fT = height fT;
    hence thesis by A5;
   end;

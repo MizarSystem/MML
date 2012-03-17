@@ -13,7 +13,7 @@ environ
  constructors SETFAM_1, ORDINAL2;
  registrations XBOOLE_0, ORDINAL1, ORDINAL2;
  requirements SUBSET, BOOLE, NUMERALS;
- definitions TARSKI, XBOOLE_0, ORDINAL2;
+ definitions ORDINAL2, ORDINAL1, TARSKI, XBOOLE_0;
  theorems TARSKI, XBOOLE_0, FUNCT_1, ORDINAL1, SETFAM_1, ORDINAL2, XBOOLE_1,
       ZFMISC_1;
  schemes ORDINAL1, ORDINAL2, XBOOLE_0;
@@ -26,14 +26,11 @@ begin
          x,y for set;
 
 theorem
- Th1: X c= succ X
-  proof succ X = X \/ {X} by ORDINAL1:def 1;
-   hence thesis by XBOOLE_1:7;
-  end;
+ Th1: X c= succ X by XBOOLE_1:7;
 
 theorem
       succ X c= Y implies X c= Y
-  proof X c= succ X by Th1;
+  proof X c= succ X by XBOOLE_1:7;
    hence thesis by XBOOLE_1:1;
   end;
 
@@ -75,8 +72,7 @@ A3: x in X iff P[x] by A1,ORDINAL1:23;
 theorem
  Th9: On {A} = {A}
   proof
-        succ A = A \/ {A} by ORDINAL1:def 1;
-    then {A} c= succ A by XBOOLE_1:7;
+    {A} c= succ A by XBOOLE_1:7;
    hence thesis by Th8;
   end;
 
@@ -140,7 +136,7 @@ theorem
    hence thesis by XBOOLE_1:28;
   end;
 
-Lm1: 1 = succ 0;
+Lm1: 1 = succ {};
 
 theorem
  Th17: A in 1 implies A = {}
@@ -1386,11 +1382,115 @@ A2:     u in 1 & e = psi.u by A1,FUNCT_1:def 5;
          B in C & C in dom psi;
       hence thesis by A1,Th17;
      end;
-        dom psi = {{}} & {} in 1 by A1,Lm1,Th18,ORDINAL1:10;
+        dom psi = {{}} & {} in 1 by A1,Lm1,ORDINAL1:10;
     then rng psi = {psi.{}} & psi.{} = A & sup psi = sup rng psi
      by A1,FUNCT_1:14;
    hence thesis by ORDINAL2:31;
   end;
+
+:: from ARYTM_3, 2007.10.23, A.T.
+
+theorem Th1:
+ for a,b being Ordinal st a+^b is natural holds a in omega & b in omega
+  proof let x,y be Ordinal such that
+A1:  x+^y in omega;
+         x c= x+^y & y c= x+^y by Th27;
+   hence x in omega & y in omega by A1,ORDINAL1:22;
+  end;
+
+registration
+ let a, b be natural Ordinal;
+ cluster a -^ b -> natural;
+ coherence
+  proof not b c= a or b c= a;
+    then a -^ b = {} or a = b+^(a-^b) by Def6;
+   hence a-^b in omega by Th1,ORDINAL1:def 12;
+  end;
+ cluster a *^ b -> natural;
+ coherence
+  proof defpred P[natural Ordinal] means $1*^b is natural;
+A1:  P[{}] by ORDINAL2:52;
+A2:  now let a be natural Ordinal; assume P[a];
+     then reconsider c = a*^b as natural Ordinal;    (succ a)*^b = c+^b by
+ORDINAL2:53;
+     hence P[succ a];
+    end;
+    P[a] from ORDINAL2:sch 17(A1,A2);
+   hence thesis;
+  end;
+end;
+
+theorem
+ for a,b being Ordinal st a*^b is natural non empty
+  holds a in omega & b in omega
+  proof let x,y be Ordinal such that
+A1:  x*^y in omega;
+   assume x*^y is non empty;
+    then x <> {} & y <> {} by ORDINAL2:52,55;
+    then x c= x*^y & y c= x*^y by Th39;
+   hence x in omega & y in omega by A1,ORDINAL1:22;
+  end;
+
+definition let a,b be natural Ordinal;
+  redefine func a+^b;
+  commutativity
+   proof let a,b be natural Ordinal;
+     defpred R[natural Ordinal] means a+^$1 = $1+^a;
+       a+^{} = a by ORDINAL2:44 .= {}+^a by ORDINAL2:47;
+then A1: R[{}];
+A2:  now let b be natural Ordinal; assume
+A3:    R[b];
+      defpred P[natural Ordinal] means (succ b)+^$1 = succ (b+^$1);
+      (succ b)+^{} = succ b by ORDINAL2:44 .= succ (b+^{}) by ORDINAL2:44;
+then A4:  P[{}];
+A5:   now let a be natural Ordinal; assume
+A6:    P[a];
+           (succ b)+^succ a
+          = succ ((succ b)+^a) by ORDINAL2:45
+         .= succ (b+^succ a) by A6,ORDINAL2:45;
+       hence P[succ a];
+      end;
+A7:   P[a] from ORDINAL2:sch 17(A4,A5);
+         a+^succ b = succ (b+^a) by A3,ORDINAL2:45 .= (succ b)+^a by A7;
+     hence R[succ b];
+    end;
+    thus R[b] from ORDINAL2:sch 17(A1,A2);
+   end;
+end;
+
+definition let a,b be natural Ordinal;
+  redefine func a*^b;
+  commutativity
+   proof let a,b be natural Ordinal;
+     defpred R[natural Ordinal] means a*^$1 = $1*^a;
+        a*^{} = {} by ORDINAL2:55 .= {}*^a by ORDINAL2:52;
+then A1: R[{}];
+A2:  now let b be natural Ordinal;
+      defpred P[natural Ordinal] means $1*^succ b = $1*^b+^$1;
+     assume
+A3:   R[b];
+       {}*^succ b = {} by ORDINAL2:52 .= {}+^{} by ORDINAL2:44
+               .= {}*^b+^{} by ORDINAL2:52;
+then A4:  P[{}];
+A5:   now let a be natural Ordinal; assume
+A6:    P[a];
+           (succ a)*^succ b
+          = a*^(succ b)+^succ b by ORDINAL2:53
+         .= a*^b+^(a+^succ b) by A6,Th33
+         .= a*^b+^succ (a+^b) by ORDINAL2:45
+         .= succ (a*^b+^(a+^b)) by ORDINAL2:45
+         .= succ (a*^b+^b+^a) by Th33
+         .= succ ((succ a)*^b+^a) by ORDINAL2:53
+         .= (succ a)*^b+^succ a by ORDINAL2:45;
+       hence P[succ a];
+      end;
+      P[a] from ORDINAL2:sch 17(A4,A5);
+      then a*^succ b = b*^a+^a by A3 .= (succ b)*^a by ORDINAL2:53;
+     hence R[succ b];
+    end;
+    thus R[b] from ORDINAL2:sch 17(A1,A2);
+   end;
+end;
 
 
 

@@ -10,12 +10,12 @@ environ
       FINSEQ_1, COMPLEX1, FUNCT_4, POLYNOM3, RELAT_1, RLVECT_1, NORMSP_1,
       BOOLE, VECTSP_1, BINOP_1, ALGSEQ_1, FUNCOP_1, LATTICES, FINSEQ_4,
       POLYNOM5, NAT_1, XCMPLX_0, SQUARE_1, SGRAPH1, INT_1, VECTSP_2, ALGSTR_2,
-      HURWITZ;
+      HURWITZ, ARYTM;
  notations TARSKI, XBOOLE_0, SUBSET_1, RELAT_1, NUMBERS, XCMPLX_0, VECTSP_2,
-      FUNCT_1, PARTFUN1, FUNCT_2, NAT_1, XXREAL_0, GROUP_1, INT_1, FUNCOP_1,
-      RLVECT_1, POLYNOM1, COMPLEX1, COMPLFLD, FINSEQ_1, BINOP_1, BINARITH,
-      NORMSP_1, BHSP_1, ALGSEQ_1, FUNCT_4, POLYNOM3, POLYNOM4, RELSET_1,
-      POLYNOM5, STRUCT_0, VECTSP_1, SQUARE_1;
+      FUNCT_1, PARTFUN1, FUNCT_2, NAT_1, XXREAL_0, SEQ_1, GROUP_1, INT_1,
+      FUNCOP_1, RLVECT_1, POLYNOM1, COMPLEX1, COMPLFLD, FINSEQ_1, BINOP_1,
+      BINARITH, NORMSP_1, BHSP_1, ALGSEQ_1, FUNCT_4, POLYNOM3, POLYNOM4,
+      RELSET_1, POLYNOM5, STRUCT_0, VECTSP_1, SQUARE_1;
  constructors BINOP_1, REAL_1, SQUARE_1, FINSOP_1, BINARITH, VECTSP_2,
       ALGSTR_1, BHSP_1, POLYNOM1, POLYNOM4, POLYNOM5;
  registrations XBOOLE_0, ORDINAL1, RELSET_1, FUNCOP_1, XCMPLX_0, XXREAL_0,
@@ -383,9 +383,10 @@ for p being Polynomial of L holds -(-p) = p
 proof let L be add-associative right_zeroed right_complementable
      (non empty LoopStr); let p be Polynomial of L;
 A1: len p = len(-p) by POLYNOM4:11 .= len(-(-p)) by POLYNOM4:11;
- now let x be Element of NAT; assume x < len p;
-  thus (-(-p)).x = -((-p)).x by BHSP_1:def 10
-   .= -(-(p.x)) by BHSP_1:def 10 .= p.x by RLVECT_1:30; end;
+ now let x be Nat; assume x < len p;
+A2:   x in NAT by ORDINAL1:def 13;
+  hence (-(-p)).x = -((-p)).x by BHSP_1:def 10
+   .= -(-(p.x)) by A2,BHSP_1:def 10 .= p.x by RLVECT_1:30; end;
 hence thesis by A1,ALGSEQ_1:28; end;
 
 theorem Th9:
@@ -395,7 +396,7 @@ proof
 let L be add-associative right_zeroed right_complementable
 (non empty LoopStr); set e = 0_.(L), f = - 0_.(L);
 A1: len f = len e by POLYNOM4:11;
- for x being Element of NAT st x < len e holds e.x = f.x by POLYNOM4:6;
+ for x being Nat st x < len e holds e.x = f.x by POLYNOM4:6;
 hence thesis by A1,ALGSEQ_1:28;
 end;
 
@@ -758,7 +759,7 @@ assume len(s) > 0; then len(s) >= 0 + 1 by NAT_1:13;
 then len(s) - 1 >= 1 - 1 by XREAL_1:11;
 then reconsider l = len(s) - 1 as Element of NAT by INT_1:16;
 assume A1: s.(len(s)-1) = 0.L;
- now let i be Element of NAT; assume A2: i >= l;
+ now let i be Nat; assume A2: i >= l;
   per cases by A2,REAL_1:def 5;
   suppose i = l; hence s.i = 0.L by A1; end;
   suppose i > l; then i >= l + 1 by NAT_1:13;
@@ -845,14 +846,15 @@ suppose A3: p2 = 0_.(L);
 suppose p1 <> 0_.(L) & p2 <> 0_.(L);
   then deg(p1) is Element of NAT & deg(p2) is Element of NAT by Lm9;
   then reconsider m = max(deg(p1),deg(p2)) as Element of NAT by XXREAL_0:16;
-   for k being Element of NAT st k >= m+1 holds (p1+p2).k = 0.L
+   for k being Nat st k >= m+1 holds (p1+p2).k = 0.L
     proof
-    let k be Element of NAT; assume A5: k >= m + 1;
+    let k be Nat; assume A5: k >= m + 1;
+A10: k in NAT by ORDINAL1:def 13;
      deg(p1) <= m & deg(p2) <= m by XXREAL_0:25;
     then deg(p1) + 1 <= m + 1 & deg(p2) + 1 <= m + 1 by XREAL_1:8;
     then k >= deg(p1) + 1 & k >= deg(p2) + 1 by A5,XXREAL_0:2;
     then p1.k = 0.L & p2.k = 0.L by ALGSEQ_1:22;
-    hence (p1+p2).k = 0.L + 0.L by NORMSP_1:def 5 .= 0.L by RLVECT_1:def 7;
+    hence (p1+p2).k = 0.L + 0.L by A10,NORMSP_1:def 5 .= 0.L by RLVECT_1:def 7;
     end;
   then m+1 is_at_least_length_of (p1+p2) by ALGSEQ_1:def 3;
   then len(p1+p2)<=m+1 by ALGSEQ_1:def 4; then len(p1+p2)-1<=m+1-1 by
@@ -925,10 +927,11 @@ end;
 
 Lm12:
 for L being unital (non empty doubleLoopStr)
-for z being Element of L, k,i being Element of NAT st i <> 0 & i <> k
+for z being Element of L, k be Element of NAT,i being Nat st i <> 0 & i <> k
 holds (0_.(L) +* (0,k)-->(-power(L).(z,k),1_L)).i = 0.L
 proof let L be unital (non empty doubleLoopStr);
-let z be Element of L, k,i be Element of NAT; assume A1: i <> 0 & i <> k;
+let z be Element of L, k be Element of NAT,i be Nat;
+assume A1: i <> 0 & i <> k;
 set t = 0_.(L) +* (0,k)-->(-power(L).(z,k),1_L),
     f = (0,k)-->(-power(L).(z,k),1_L);
 A2: dom f = {0,k} by FUNCT_4:65; A3: dom(0_.(L)) = NAT by FUNCT_2:def 1;
@@ -936,8 +939,9 @@ A2: dom f = {0,k} by FUNCT_4:65; A3: dom(0_.(L)) = NAT by FUNCT_2:def 1;
   then u = 0 or u = k by TARSKI:def 2; hence u in NAT; end;
 then {0,k} c= NAT by TARSKI:def 3;
 then A4: dom(0_.(L)) \/ dom(f) = NAT by A2,A3,XBOOLE_1:12;
+A5: i in NAT by ORDINAL1:def 13;
  not(i in dom f) by A1,TARSKI:def 2;
-hence t.i = (0_.(L)).i by A4,FUNCT_4:def 1 .= 0.L by FUNCOP_1:13;
+hence t.i = (0_.(L)).i by A4,A5,FUNCT_4:def 1 .= 0.L by FUNCOP_1:13,A5;
 end;
 
 :: the polynomials x^k - z^k
@@ -976,7 +980,7 @@ then A5: dom p = NAT by FUNCT_4:def 1;
   end;
 then reconsider p as Function of NAT,the carrier of L by A5,FUNCT_2:5;
 reconsider p as sequence of L;
- now let i be Element of NAT; assume i >= k + 1;
+ now let i be Nat; assume i >= k + 1;
   then i <> 0 & i <> k by NAT_1:13; hence p.i = 0.L by Lm12; end;
 then reconsider p as AlgSequence of L by ALGSEQ_1:def 2;  p is Polynomial of L;
 hence thesis;
@@ -1005,12 +1009,14 @@ let z be Element of L; let k be Element of NAT; set t = rpoly(k,z);
 set f = (0,k)-->(-power(L).(z,k),1_L); set a = -power(L).(z,k);
 per cases;
 suppose A1: k = 0;
- now let i be Element of NAT; assume i >= 1;
+ now let i be Nat;
+A2: i in NAT by ORDINAL1:def 13;
+   assume i >= 1;
   then not(i in dom f) by A1,TARSKI:def 2;
-  hence t.i = (0_.(L)).i by FUNCT_4:12 .= 0.L by FUNCOP_1:13;
+  hence t.i = (0_.(L)).i by FUNCT_4:12 .= 0.L by FUNCOP_1:13,A2;
   end;
 then A2: 1 is_at_least_length_of t by ALGSEQ_1:def 3;
- now let m be Element of NAT; assume A3: m is_at_least_length_of t;
+ now let m be Nat; assume A3: m is_at_least_length_of t;
    now assume m < 1; then A4: m = 0 by NAT_1:14;
     A5: k in {k} by TARSKI:def 1; then A6: k in dom({k}-->1_L) by FUNCOP_1:19;
      dom f = {0,k} by FUNCT_4:65; then 0 in dom f by TARSKI:def 2;
@@ -1023,10 +1029,10 @@ then A2: 1 is_at_least_length_of t by ALGSEQ_1:def 3;
   end;
 then len rpoly(k,z) = 1 by A2,ALGSEQ_1:def 4; hence thesis by A1; end;
 suppose A7: k <> 0;
- now let i be Element of NAT; assume i >= k+1; then i > k by NAT_1:13;
+ now let i be Nat; assume i >= k+1; then i > k by NAT_1:13;
   hence t.i = 0.L by Lm12; end;
 then A8: (k+1) is_at_least_length_of t by ALGSEQ_1:def 3;
- now let m be Element of NAT; assume A9: m is_at_least_length_of t;
+ now let m be Nat; assume A9: m is_at_least_length_of t;
    now assume m < k + 1; then A10: m <= k by NAT_1:13;  t.k = 1_L by A7,Lm11;
     then t.k <> 0.L by VECTSP_1:def 21;
     hence contradiction by A9,A10,ALGSEQ_1:def 3; end;
@@ -1055,7 +1061,7 @@ A1:now given x,z being Element of L such that A2: x <> 0.L & p = x * rpoly(1,z)
   A5: x <> 0.L by A4,ALGSEQ_1:25;
   then A6: len f = deg(rpoly(1,z)) + 1 by POLYNOM5:26 .= 1+1 by Th27
                .= len p by A3;
-   now let k be Element of NAT; assume k < len p;
+   now let k be Nat; assume k < len p;
     then k < 1+1 by A3; then A7: k <= 1 by NAT_1:13;
     per cases by A7,REAL_1:def 5;
     suppose A8: k = 1;
@@ -1162,12 +1168,12 @@ A5: for i being Nat st i >= k holds f.i = 0.L
                (n >= k implies f.i = 0.L) by A4;
    thus thesis by A6,A7;
    end;
- ex n being Element of NAT st
-for i being Element of NAT st i >= n holds f.i = 0.L
+ ex n being Nat st
+for i being Nat st i >= n holds f.i = 0.L
     proof
       reconsider k as Element of NAT by ORDINAL1:def 13;
     take n = k+1;
-    let i be Element of NAT;
+    let i be Nat;
     assume i >= n; then i > k by NAT_1:13; hence f.i = 0.L by A5;
     end;
 then reconsider p = f as AlgSequence of L by ALGSEQ_1:def 2;
@@ -1212,12 +1218,12 @@ let z be Element of L; let k be Element of NAT;
 assume k >= 1; then k - 1 >= 1 - 1 by XREAL_1:11;
 then reconsider k' = k - 1 as Element of NAT by INT_1:16;
 set p = qpoly(k,z);
- for i being Element of NAT st i >= k holds p.i = 0.L by Def4;
+ for i being Nat st i >= k holds p.i = 0.L by Def4;
 then A1: k is_at_least_length_of p by ALGSEQ_1:def 3;
 A2: k - k' - 1 = 0;  k - 1 < k - 0 by XREAL_1:12;
 then p.(k-1) = power(L).(z,0) by A2,Def4 .= 1_L by GROUP_1:def 8;
 then A3: p.(k-1) <> 0.L by VECTSP_1:def 21;
- now let m be Element of NAT;
+ now let m be Nat;
   assume A4: m is_at_least_length_of p;
    now assume k > m; then k' + 1 > m;
     then k' >= m by NAT_1:13; hence contradiction by A3,A4,ALGSEQ_1:def 3;
@@ -1639,10 +1645,9 @@ existence
   p = p + 0_.(L) by POLYNOM3:29 .= p + -0_.(L) by Th9
   .= p - ((0_.(L)) *' s) by POLYNOM4:5;
  then p in M; then ex t being Polynomial of L st t in M & len t = len p;
- then A2: ex k being Element of NAT st P[k];
- consider k being Element of NAT such that
- A3: P[k] & for n being Element of NAT st P[n] holds k <= n from NAT_1:sch 5(A2
-);
+ then A2: ex k being Nat st P[k];
+ consider k being Nat such that
+ A3: P[k] & for n being Nat st P[n] holds k <= n from NAT_1:sch 5(A2);
  consider f being Polynomial of L such that
  A4: f in M & len f = k by A3;
  consider g being Polynomial of L such that
@@ -1700,23 +1705,26 @@ existence
      then degn in dom({degn} --> al) by FUNCOP_1:19;
      then A21: g1.degn = ({degn} --> al).degn by FUNCT_4:14
                      .= al by A20,FUNCOP_1:13;
-     A22: for j being Element of NAT st j <> degn holds g1.j = 0.L
+     A22: for j being Nat st j <> degn holds g1.j = 0.L
          proof
-         let j be Element of NAT; assume A23: j <> degn;
+         let j be Nat;
+A24:     j in NAT by ORDINAL1:def 13;
+         assume A23: j <> degn;
           dom({degn} --> al) = {degn} by FUNCOP_1:19;
          then not(j in dom({degn} --> al)) by A23,TARSKI:def 1;
-         hence g1.j = (0_.(L)).j by FUNCT_4:12 .= 0.L by FUNCOP_1:13; end;
-      ex l being Element of NAT st
-     for i being Element of NAT st i>=l holds g1.i = 0.L
+         hence g1.j = (0_.(L)).j by FUNCT_4:12 .= 0.L by FUNCOP_1:13,A24; end;
+      ex l being Nat st
+     for i being Nat st i>=l holds g1.i = 0.L
        proof
        take l = degn + 1;
-        now let i be Element of NAT; assume i >= l;
+        now let i be Nat; assume i >= l;
          then i <> degn by NAT_1:13; hence g1.i = 0.L by A22;
          end;
        hence thesis; end;
      then reconsider g1 as Polynomial of L by ALGSEQ_1:def 2;
      set s1 = p - (g + g1) *' s; A24: s1 in M;
-      now let i be Element of NAT;
+      now let i be Nat;
+A100:   i in NAT by ORDINAL1:def 13;
        assume A25: i >= k';
        A26: s1 - f = (p + -(g + g1) *' s) + (-p + -(-(g *' s))) by A5,Th11
               .= ((p + -(g + g1) *' s) + -p) + -(-(g *' s)) by POLYNOM3:26
@@ -1737,18 +1745,18 @@ existence
          .= (s1 + -f) + f by POLYNOM3:26
          .= f - g1 *' s by A26;
        A28: dom f = NAT & dom(g1 *' s) = NAT by FUNCT_2:def 1;
-       A29: s1.i = f.i + (-(g1 *' s)).i by A27,NORMSP_1:def 5
-           .= f.i + -(g1 *' s).i by BHSP_1:def 10
-           .= f/.i + -(g1 *' s).i by A28,PARTFUN1:def 8
-           .= f/.i + -(g1 *' s)/.i by A28,PARTFUN1:def 8;
+       A29: s1.i = f.i + (-(g1 *' s)).i by A27,NORMSP_1:def 5,A100
+           .= f.i + -(g1 *' s).i by BHSP_1:def 10,A100
+           .= f/.i + -(g1 *' s).i by A28,PARTFUN1:def 8,A100
+           .= f/.i + -(g1 *' s)/.i by A28,PARTFUN1:def 8,A100;
        consider sf being FinSequence of L such that
-       A30: len sf = i+1 & (g1 *' s).i = Sum sf &
-           for m being Element of NAT st m in dom sf
-           holds sf.m = g1.(m-'1) * s.(i+1-'m) by POLYNOM3:def 11;
+A30:   len sf = i+1 & (g1 *' s).i = Sum sf &
+       for m being Element of NAT st m in dom sf
+       holds sf.m = g1.(m-'1) * s.(i+1-'m) by POLYNOM3:def 11,A100;
        A31: dom sf = Seg(len sf) by FINSEQ_1:def 3;
         degn + 1 = k - deg(s) by A4;
        then A32: degn + 1 <= k by A9,XREAL_1:45;
-       A33: now let m be Element of NAT;
+       A33: now let m be Nat;
            assume A34: m in dom sf & m <> degn + 1;
            then 1 <= m & m <= len sf by A31,FINSEQ_1:3;
            then m - 1 >= 1 - 1 by XREAL_1:11;
@@ -1764,9 +1772,10 @@ existence
         i + 1 >= k by A14,A25,XREAL_1:8;
        then A37: i + 1 >= degn + 1 by A32,XXREAL_0:2;
        then A38: i + 1 - (degn + 1) is Element of NAT by INT_1:18;
+A100:  i in NAT by ORDINAL1:def 13;
         1 <= degn + 1 by NAT_1:11;
        then A39: degn + 1 in dom sf by A30,A31,A37;
-       then A40: Sum sf = sf/.(degn + 1) by A35,POLYNOM2:5
+       then A40: Sum sf = sf/.(degn + 1) by A35,POLYNOM2:5,A100
                   .= sf.(degn+1) by A39,PARTFUN1:def 8
                   .= g1.(degn+1-'1) * s.(i+1-'(degn+1)) by A30,A39
                   .= al * s.(i+1-'(degn+1)) by A21,BINARITH:39;
@@ -1775,7 +1784,7 @@ existence
          then i + 1 > k' + 1 by XREAL_1:8;
          then i >= len f by NAT_1:13;
          then f.i = 0.L by ALGSEQ_1:22;
-         then A42: f/.i = 0.L by A28,PARTFUN1:def 8;
+         then A42: f/.i = 0.L by A28,PARTFUN1:def 8,A100;
          A43: i+1-'(degn+1) = i - k' + (len(s)-1) by A38,BINARITH:def 3;
          reconsider e = i - k' as Element of NAT by A41,INT_1:18;
           i - k' > k' - k' by A41,XREAL_1:11;
@@ -1785,7 +1794,7 @@ existence
          then (i - k' - 1) + len(s) >= 0 + len(s) by XREAL_1:8;
          then s.(i+1-'(degn+1)) = 0.L by A43,ALGSEQ_1:22;
          then Sum sf = 0.L by A40,VECTSP_1:36;
-         hence s1.i = 0.L + -(0.L) by A28,A29,A30,A42,PARTFUN1:def 8
+         hence s1.i = 0.L + -(0.L) by A28,A29,A30,A42,PARTFUN1:def 8,A100
                    .= 0.L + 0.L by RLVECT_1:25 .= 0.L by RLVECT_1:def 7; end;
        suppose A44: i = k';
           (i+1)-'(degn+1) = i + 1 - (degn + 1) by A38,BINARITH:def 3
@@ -2083,15 +2092,16 @@ A1: for x being set st x in NAT
 consider g being Function of NAT,the carrier of F_Complex such that
 A2: for x being set st x in NAT holds P[x,g.x] from FUNCT_2:sch 1(A1);
 reconsider g as sequence of F_Complex;
- ex n being Element of NAT st
-for i being Element of NAT st i >= n holds g.i = 0.F_Complex
+ ex n being Nat st
+for i being Nat st i >= n holds g.i = 0.F_Complex
     proof
     take n = len f;
-     now let i be Element of NAT;
+     now let i be Nat;
+       reconsider i1=i as Element of NAT by ORDINAL1:def 13;
       assume A3: i >= n;
       consider m being Element of NAT such that
-      A4: m = i & g.i = power(F_Complex).(-1_F_Complex,m) * (f.m)*' by A2;
-      thus g.i = power(F_Complex).(-1_F_Complex,i) * (0.F_Complex)*'
+      A4: m = i1 & g.i1 = power(F_Complex).(-1_F_Complex,m) * (f.m)*' by A2;
+      thus g.i = power(F_Complex).(-1_F_Complex,i1) * (0.F_Complex)*'
                  by A3,A4,ALGSEQ_1:22
               .= 0.F_Complex by COMPLFLD:83,VECTSP_1:36; end;
     hence thesis; end;
@@ -2123,20 +2133,22 @@ theorem Th42:
 for f being Polynomial of F_Complex holds deg(f*') = deg(f)
 proof
 let f be Polynomial of F_Complex;
-A1: for k being Element of NAT holds
+A1: for k being Nat holds
    f.k = 0.F_Complex iff (f*').k = 0.F_Complex
-   proof let k be Element of NAT;
-    hereby assume f.k = 0.F_Complex;
-      hence (f*').k = power(F_Complex).(-1_F_Complex,k) * 0.F_Complex by Def9,
+   proof let k be Nat;
+      reconsider k1 = k as Element of NAT by ORDINAL1:def 13;
+    hereby
+      assume f.k = 0.F_Complex;
+      hence (f*').k = power(F_Complex).(-1_F_Complex,k1) * 0.F_Complex by Def9,
 COMPLFLD:83
              .= 0.F_Complex by VECTSP_1:36; end;
    assume (f*').k = 0.F_Complex; then A2:
-     0.F_Complex = power(F_Complex).(-1_F_Complex,k) * ((f.k)*') by Def9;
-      power(F_Complex).(-1_F_Complex,k) <> 0.F_Complex by Th2;
+     0.F_Complex = power(F_Complex).(-1_F_Complex,k1) * ((f.k)*') by Def9;
+      power(F_Complex).(-1_F_Complex,k1) <> 0.F_Complex by Th2;
      then (f.k)*' = 0.F_Complex by A2,VECTSP_1:44;
      hence f.k = 0.F_Complex by COMPLEX1:113,COMPLFLD:9;
    end;
- now let i be Element of NAT; assume i >= len f;
+ now let i be Nat; assume i >= len f;
   then f.i = 0.F_Complex by ALGSEQ_1:22; hence (f*').i = 0.F_Complex by A1;
 end;
 then len f is_at_least_length_of (f*') by ALGSEQ_1:def 3;

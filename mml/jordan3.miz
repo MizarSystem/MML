@@ -8,10 +8,10 @@ environ
 
  vocabularies ARYTM_1, FINSEQ_1, FUNCT_1, RELAT_1, FINSEQ_5, RFINSEQ, BOOLE,
       EUCLID, TOPREAL1, TARSKI, PRE_TOPC, MCART_1, SPPOL_2, GROUP_2, SQUARE_1,
-      ARYTM_3, JORDAN3, FINSEQ_4, ORDINAL2, ARYTM;
- notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, REAL_1,
-      NAT_1, RFINSEQ, BINARITH, RELAT_1, FUNCT_1, PARTFUN1, FINSEQ_1, FINSEQ_4,
-      FINSEQ_5, SEQ_4, STRUCT_0, TOPREAL1, PRE_TOPC, EUCLID, SPPOL_2, XXREAL_0;
+      ARYTM_3, JORDAN3, FINSEQ_4, ARYTM;
+ notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XXREAL_0,
+      REAL_1, NAT_1, RFINSEQ, BINARITH, RELAT_1, FUNCT_1, PARTFUN1, FINSEQ_1,
+      FINSEQ_4, FINSEQ_5, SEQ_4, STRUCT_0, TOPREAL1, PRE_TOPC, EUCLID, SPPOL_2;
  constructors PARTFUN1, XXREAL_0, REAL_1, NAT_1, SEQ_4, FINSEQ_4, REALSET1,
       RFINSEQ, BINARITH, FINSEQ_5, TOPREAL1;
  registrations XBOOLE_0, SUBSET_1, FUNCT_1, ORDINAL1, RELSET_1, XXREAL_0,
@@ -29,7 +29,7 @@ begin
 ::              Preliminaries                :
 ::-------------------------------------------:
 
-reserve i,k,i1,i2,n for natural number;
+reserve k for Nat;
 reserve r,r1,r2 for Real;
 reserve n,i,i1,i2,j,j1,j2 for Element of NAT;
 reserve D for non empty set;
@@ -37,10 +37,10 @@ reserve f for FinSequence of D;
 
 canceled 14;
 
-theorem Th15:for p,q being FinSequence st len p<i
+theorem Th15:for i be Nat for p,q being FinSequence st len p<i
  & (i<=len p +len q or i<=len (p^q)) holds
   (p^q).i=q.(i-len p)
-proof let p,q be FinSequence;assume A1:len p<i &
+proof let i be Nat; let p,q be FinSequence;assume A1:len p<i &
  (i<=len p +len q or i<=len (p^q));
  then len p +1<=i by NAT_1:13; then A2: len p +1-len p<=i-len p by XREAL_1:11;
  then A3:i-len p=i-'len p by BINARITH:def 3;
@@ -893,11 +893,11 @@ A3: g.len g=p2;
 end;
 
 theorem Th49: for f,g being FinSequence of TOP-REAL 2,
- p being Point of TOP-REAL 2,j st p in L~f
+ p being Point of TOP-REAL 2,j be Nat st p in L~f
  & g=<*p*>^mid(f,Index(p,f)+1,len f) & 1<=j & j+1<=len g
  holds LSeg(g,j) c= LSeg(f,Index(p,f)+j-'1)
 proof let f,g be FinSequence of TOP-REAL 2,
- p be Point of TOP-REAL 2,j;
+ p be Point of TOP-REAL 2,j be Nat;
  assume that
 A1: p in L~f and
 A2: g=<*p*>^mid(f,Index(p,f)+1,len f) and
@@ -1171,9 +1171,9 @@ A51:     n2>1;
        hence x1=x2;
       end;
      A69: len g -1+1>=1+1 by A10,A17,XREAL_1:8;
-     A70: for j st 1 <= j & j + 2 <= len g
+     A70: for j be Nat st 1 <= j & j + 2 <= len g
        holds LSeg(g,j) /\ LSeg(g,j+1) = {g/.(j+1)}
-       proof let j;assume A71:1 <= j & j + 2 <= len g;
+       proof let j be Nat;assume A71:1 <= j & j + 2 <= len g;
         A72:j+2=j+1+1;
         then A73:j+1<=len g by A71,NAT_1:13;
         A74:1<j+1 by A71,NAT_1:13;
@@ -1237,8 +1237,8 @@ XREAL_1:8;
            by A77,A86,A91,A92,XBOOLE_0:def 10;
        end;
       A95: f is s.n.c. by A1,TOPREAL1:def 10;
-      A96: for j1,j2 st j1+1 < j2 holds LSeg(g,j1) misses LSeg(g,j2)
-      proof let j1,j2;assume A97:j1+1 < j2;
+      A96: for j1,j2 be Nat st j1+1 < j2 holds LSeg(g,j1) misses LSeg(g,j2)
+      proof let j1,j2 be Nat;assume A97:j1+1 < j2;
             j1>=0;
 then A98:  j1=0 or j1>=0+1 by NAT_1:13;
             now per cases by A98,REAL_1:def 5;
@@ -1282,9 +1282,9 @@ TOPREAL1:def 9;
        hence LSeg(g,j1) misses LSeg(g,j2);
       end;
      A106: f is special by A1,TOPREAL1:def 10;
-          for j st 1 <= j & j+1 <= len g holds
+     for j be Nat st 1 <= j & j+1 <= len g holds
      (g/.j)`1 = (g/.(j+1))`1 or (g/.j)`2 = (g/.(j+1))`2
-     proof let j;assume A107: 1 <= j & j+1 <= len g;
+     proof let j be Nat;assume A107: 1 <= j & j+1 <= len g;
        then A108:LSeg(g,j) c= LSeg(f,Index(p,f)+j-'1) by A2,A4,Th49;
        A109:LSeg(g,j) = LSeg(g/.j,g/.(j+1)) by A107,TOPREAL1:def 5;
               1<=Index(p,f) by A2,Th41;
@@ -1315,17 +1315,18 @@ XREAL_1:8;
  end;
 
 theorem Th51: for f,g being FinSequence of TOP-REAL 2,
- p being Point of TOP-REAL 2,j
+ p being Point of TOP-REAL 2,j be Nat
  st p in L~f & 1<=j & j+1<=len g
  & g=mid(f,1,Index(p,f))^<*p*>
  holds LSeg(g,j) c= LSeg(f,j)
 proof let f,g be FinSequence of TOP-REAL 2,
- p be Point of TOP-REAL 2,j;
+ p be Point of TOP-REAL 2,j be Nat;
  assume that
 A1: p in L~f and
 A2: 1<=j and
 A3: j+1<=len g and
 A4: g=mid(f,1,Index(p,f))^<*p*>;
+A100: j in NAT by ORDINAL1:def 13;
   A5:1<=Index(p,f) by A1,Th41;
   A6:Index(p,f) < len f by A1,Th41;
   then A7:1<=1 & 1<=len f & 1<=Index(p,f) & Index(p,f)<=len f by A5,XXREAL_0:2;
@@ -1346,7 +1347,7 @@ A13: len mid(f,1,Index(p,f))=Index(p,f)-'1+1 by A7,Th27
    then A14:j in dom mid(f,1,Index(p,f)) by A2,A12,FINSEQ_3:27;
    A15:g/.j=g.j by A2,A8,FINSEQ_4:24
     .=mid(f,1,Index(p,f)).j by A4,A14,FINSEQ_1:def 7
-   .=f.(j+1-'1) by A2,A7,A12,A13,Th27
+   .=f.(j+1-'1) by A100,A2,A7,A12,A13,Th27
    .=f.j by BINARITH:39
    .=f/.j by A2,A11,FINSEQ_4:24;
          now per cases;
@@ -1486,9 +1487,9 @@ A34:       n2 <> len g;
      end;
 
 A40: f is unfolded by A1,TOPREAL1:def 10;
-  A41: for j st 1 <= j & j + 2 <= len g
+  A41: for j be Nat st 1 <= j & j + 2 <= len g
        holds LSeg(g,j) /\ LSeg(g,j+1) = {g/.(j+1)}
-  proof let j;assume A42: 1 <= j & j + 2 <= len g;
+  proof let j be Nat;assume A42: 1 <= j & j + 2 <= len g;
    then j+1<=len g by BINARITH:65;
    then A43:LSeg(g,j) c= LSeg(f,j) by A2,A4,A42,Th51;
    A44:j+1+1<=len g by A42;
@@ -1532,8 +1533,8 @@ XBOOLE_1:27;
    hence LSeg(g,j) /\ LSeg(g,j+1) = {g/.(j+1)};
   end;
       A59: f is s.n.c. by A1,TOPREAL1:def 10;
-      A60: for j1,j2 st j1+1 < j2 holds LSeg(g,j1) misses LSeg(g,j2)
-      proof let j1,j2;assume A61:j1+1 < j2;
+      A60: for j1,j2 be Nat st j1+1 < j2 holds LSeg(g,j1) misses LSeg(g,j2)
+      proof let j1,j2 be Nat;assume A61:j1+1 < j2;
             j1>=0;
 then A62:  j1=0 or j1>=0+1 by NAT_1:13;
             now per cases by A62,REAL_1:def 5;
@@ -1566,10 +1567,10 @@ A64:    j2+1<=len g;
        end;
      hence LSeg(g,j1) misses LSeg(g,j2);
      end;
-     A67: f is special by A1,TOPREAL1:def 10;
-          for j st 1 <= j & j+1 <= len g holds
+A67: f is special by A1,TOPREAL1:def 10;
+     for j be Nat st 1 <= j & j+1 <= len g holds
      (g/.j)`1 = (g/.(j+1))`1 or (g/.j)`2 = (g/.(j+1))`2
-     proof let j;assume A68: 1 <= j & j+1 <= len g;
+     proof let j be Nat; assume A68: 1 <= j & j+1 <= len g;
        A69: now
               j+1<=Index(p,f)+1 by A4,A10,A68,FINSEQ_2:19;
          then A70:j<=Index(p,f) by XREAL_1:8;
@@ -2810,10 +2811,10 @@ A43:     len f + (n1-'len f)=len f+(n1-len f) by A33,BINARITH:50
      end;
     hence x1=x2;
    end;
-   A53: for i st 1 <= i & i + 2 <= len (f^mid(g,2,len g))
+   A53: for i be Nat st 1 <= i & i + 2 <= len (f^mid(g,2,len g))
        holds LSeg(f^mid(g,2,len g),i) /\ LSeg(f^mid(g,2,len g),i+1)
        = {(f^mid(g,2,len g))/.(i+1)}
-    proof let i be Element of NAT;
+    proof let i be Nat;
      assume A54:1 <= i & i + 2 <= len (f^mid(g,2,len g));
             then A55:1<=i+1 by BINARITH:66;
              A56:1<=i+1+1 by A54,BINARITH:66;
@@ -2823,8 +2824,7 @@ A43:     len f + (n1-'len f)=len f+(n1-len f) by A33,BINARITH:50
              then i+1+1<=len f + (len g -'2+1) by A3,A5,Th27;
              then i+1+1<=len f + (len g -(1+1)+1) by A3,BINARITH:50;
              then A59: i+1+1-len f<=len f + (len g -(1+1)+1)-len f by
-XREAL_1:11
-;
+XREAL_1:11;
              then A60: i+1-len f+1+1<=len g -1+1 by XREAL_1:8;
              then A61:i-len f+1+1+1<=len g;
            now per cases;
@@ -3047,9 +3047,9 @@ XBOOLE_0:def 10;
      hence LSeg(f^mid(g,2,len g),i) /\ LSeg(f^mid(g,2,len g),i+1)
        = {(f^mid(g,2,len g))/.(i+1)};
     end;
-    A145: for i,j st i+1 < j holds
+    A145: for i,j be Nat st i+1 < j holds
     LSeg(f^mid(g,2,len g),i) misses LSeg(f^mid(g,2,len g),j)
-     proof let i,j;assume A146: i+1 < j;
+     proof let i,j be Nat;assume A146: i+1 < j;
             now per cases;
        case A147:j<len f & j+1<=len (f^mid(g,2,len g));
          then A148:j<=len (f^mid(g,2,len g)) by BINARITH:64;
@@ -3526,10 +3526,10 @@ TOPREAL1:def 5;
       hence LSeg(f^mid(g,2,len g),i) misses LSeg(f^mid(g,2,len g),j)
         by XBOOLE_0:def 7;
      end;
-        for i st 1 <= i & i+1 <= len (f^mid(g,2,len g)) holds
+        for i be Nat st 1 <= i & i+1 <= len (f^mid(g,2,len g)) holds
     ((f^mid(g,2,len g))/.i)`1 = ((f^mid(g,2,len g))/.(i+1))`1
     or ((f^mid(g,2,len g))/.i)`2 = ((f^mid(g,2,len g))/.(i+1))`2
-    proof let i;assume A315: 1 <= i & i+1 <= len (f^mid(g,2,len g));
+    proof let i be Nat;assume A315: 1 <= i & i+1 <= len (f^mid(g,2,len g));
           now per cases;
      case A316:i<len f;
            A317:1<=i+1 by A315,BINARITH:66;
@@ -3614,8 +3614,7 @@ BINARITH:def 3,NAT_1:11;
     end;
    then f^mid(g,2,len g) is one-to-one & len (f^mid(g,2,len g)) >= 2
    & f^mid(g,2,len g) is unfolded s.n.c. special
-       by A2,A7,A9,A53,A145,FUNCT_1:def 8,TOPREAL1:def 7,def 8,def 9,XXREAL_0:2
-;
+   by A2,A7,A9,A53,A145,FUNCT_1:def 8,TOPREAL1:def 7,def 8,def 9,XXREAL_0:2;
  hence f^mid(g,2,len g) is_S-Seq by TOPREAL1:def 10;
 end;
 

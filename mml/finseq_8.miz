@@ -8,11 +8,12 @@
 environ
 
  vocabularies FINSEQ_8, ARYTM_1, RELAT_1, FINSEQ_1, FUNCT_1, FINSEQ_5, BOOLE,
-      RFINSEQ, JORDAN3, SQUARE_1;
+      RFINSEQ, JORDAN3, SQUARE_1, ARYTM;
  notations TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, XCMPLX_0, XXREAL_0, NAT_1,
       BINARITH, RELAT_1, RFINSEQ, FINSEQ_1, FUNCT_1, JORDAN3, FINSEQ_5;
  constructors SQUARE_1, NAT_1, RFINSEQ, BINARITH, FINSEQ_5, JORDAN3;
- registrations RELSET_1, XXREAL_0, XREAL_0, NAT_1, FINSEQ_1, ORDINAL1;
+ registrations RELSET_1, XXREAL_0, XREAL_0, NAT_1, FINSEQ_1, ORDINAL1,
+   XBOOLE_0;
  requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
  definitions FINSEQ_1;
  theorems REAL_1, REAL_2, NAT_1, NAT_2, JORDAN3, FINSEQ_1, FINSEQ_3, FINSEQ_5,
@@ -77,7 +78,7 @@ proof let D be non empty set,k1,k2 be Element of NAT;
   end;
 end;
 
-definition let D be set,f be FinSequence of D,k1,k2 be Element of NAT;
+definition let D be set,f be FinSequence of D,k1,k2 be Nat;
 func smid(f,k1,k2) -> FinSequence of D equals
   (f/^(k1-'1))|(k2+1-'k1);
 correctness;
@@ -154,22 +155,22 @@ definition let D be non empty set,f,g be FinSequence of D;
 func ovlpart(f,g) -> FinSequence of D means
 :Def2: len it <=len g &
  it=smid(g,1,len it) & it=smid(f,len f-'len it+1,len f)
-& for j being Element of NAT st j<=len g & smid(g,1,j)=smid(f,len f-'j+1,len f)
+& for j being Nat st j<=len g & smid(g,1,j)=smid(f,len f-'j+1,len f)
  holds j<=len it;
 existence
 proof
-  defpred P[Element of NAT] means $1 <=len g &
+  defpred P[Nat] means $1 <=len g &
    smid(g,1,$1)=smid(f,len f-'$1+1,len f);
   A1: smid(g,1,0)={} by Th7;
   A2: len f<len f+1 by XREAL_1:31;
    len f-'0+1=len f-0+1 by BINARITH:50 .=len f+1;
   then smid(f,len f-'0+1,len f)={} by A2,Th7;
-  then A3: ex m being Element of NAT st P[m] by A1;
-  A4: for n being Element of NAT st P[n] holds n<=len g;
-    ex k being Element of NAT st P[k] & for n being Element of NAT
-        st P[n] holds n <= k from NAT_1:sch 6(A4,A3);
-  then consider k being Element of NAT such that
-  A5: P[k] & for n being Element of NAT st P[n] holds n <= k;
+  then A3: ex m being Nat st P[m] by A1;
+  A4: for n being Nat st P[n] holds n<=len g;
+   consider k being Nat such that
+A5: P[k] & for n being Nat
+    st P[n] holds n <= k from NAT_1:sch 6(A4,A3);
+  reconsider k as Element of NAT by ORDINAL1:def 13;
   set b = smid(g,1,k);
     now per cases;
   case A6: k>0;
@@ -193,21 +194,17 @@ proof
    hence len b=k by A10,FINSEQ_1:25;
   end;
   end;
- hence ex a being FinSequence of D st
- (len a<=len g & a=smid(g,1,len a) & a=smid(f,len f-'len a+1,len f)
-  & for j being Element of NAT
-   st j<=len g & smid(g,1,j)=smid(f,len f-'j+1,len f)
-   holds j<=len a) by A5;
+ hence thesis by A5;
 end;
 uniqueness
 proof let a,b be FinSequence of D;
  assume
 A11:(len a<=len g & a=smid(g,1,len a) & a=smid(f,len f-'len a+1,len f)
-  & for j being Element of NAT
+  & for j being Nat
    st j<=len g & smid(g,1,j)=smid(f,len f-'j+1,len f)
  holds j<=len a)&
   (len b<=len g & b=smid(g,1,len b) & b=smid(f,len f-'len b+1,len f)
-  & for j being Element of NAT
+  & for j being Nat
   st j<=len g & smid(g,1,j)=smid(f,len f-'j+1,len f)
  holds j<=len b);
   then A12: len a<=len b;
@@ -983,16 +980,17 @@ proof
     A5: 0+1<=len g by A3,NAT_1:13;
       now per cases;
     case A6: n>0;
-    defpred P[Element of NAT] means n <= $1 &
+    defpred P[Nat] means n <= $1 &
      $1 <=len f & mid(f,$1,($1-'1)+len g)=g;
-    A7: ex i being Element of NAT st P[i] by A4;
-           ex k being Element of NAT st P[k] &
-         for m being Element of NAT st P[m]
+    A7: ex i being Nat st P[i] by A4;
+           ex k being Nat st P[k] &
+         for m being Nat st P[m]
          holds m >= k from NAT_1:sch 5(A7);
-    then consider k0 being Element of NAT such that
+    then consider k0 being Nat such that
     A8: n <= k0 & k0<=len f & mid(f,k0,(k0-'1)+len g)=g &
-      for m being Element of NAT st n <= m & m<=len f & mid(f,m,(m-'1)+len g)=g
+      for m being Nat st n <= m & m<=len f & mid(f,m,(m-'1)+len g)=g
          holds m >= k0;
+         reconsider k0 as Element of NAT by ORDINAL1:def 13;
      0+1<=k0 by A6,A8,NAT_1:13;
     then k0-1>=0 by XREAL_1:50;
     then A9: k0-'1=k0-1 by BINARITH:def 3;
@@ -1055,17 +1053,18 @@ proof
       reconsider n2=1 as Element of NAT;
     consider i2 being Element of NAT such that
     A26: n2<=i2 & i2 <=len f & mid(f,i2,(i2-'1)+len g)=g by A3,A25,Def7;
-    defpred P[Element of NAT] means n2 <= $1 &
+    defpred P[Nat] means n2 <= $1 &
      $1 <=len f & mid(f,$1,($1-'1)+len g)=g;
-    A27: ex i being Element of NAT st P[i] by A26;
-           ex k being Element of NAT st P[k] &
-         for m being Element of NAT st P[m]
+    A27: ex i being Nat st P[i] by A26;
+           ex k being Nat st P[k] &
+         for m being Nat st P[m]
          holds m >= k from NAT_1:sch 5(A27);
-    then consider k0 being Element of NAT such that
+    then consider k0 being Nat such that
     A28: n2 <= k0 & k0<=len f & mid(f,k0,(k0-'1)+len g)=g &
-      for m being Element of NAT
+      for m being Nat
       st n2 <= m & m<=len f & mid(f,m,(m-'1)+len g)=g
          holds m >= k0;
+         reconsider k0 as Element of NAT by ORDINAL1:def 13;
       k0-1>=0 by A28,XREAL_1:50;
     then A29: k0-'1=k0-1 by BINARITH:def 3;
       k0<k0+1 by XREAL_1:31;

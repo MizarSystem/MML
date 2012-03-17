@@ -11,7 +11,7 @@ environ
       COMPLFLD, GROUP_1, REALSET1, INT_1, NAT_1, TARSKI, CARD_1, GROUP_2,
       POLYNOM2, FUNCT_4, VECTSP_2, FUNCOP_1, SEQ_1, FUNCT_2, ABSVALUE,
       UNIROOTS, PREPOWER, FINSET_1, CAT_1, RLSUB_1, GROUP_5, RLVECT_2,
-      VECTSP_9, RLVECT_3, MATRLIN, SUBSET_1, EQREL_1, GROUP_3;
+      VECTSP_9, RLVECT_3, MATRLIN, SUBSET_1, EQREL_1, GROUP_3, ARYTM;
  notations TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, XCMPLX_0, ZFMISC_1, XXREAL_0,
       REAL_1, INT_1, INT_2, NAT_1, NAT_D, FINSET_1, BINOP_1, RELAT_1, REALSET1,
       FUNCT_1, RELSET_1, PARTFUN1, FUNCT_2, FINSEQ_1, FINSEQ_2, BINARITH,
@@ -56,9 +56,9 @@ then (q #Z a) = q by PREPOWER:45;
 end;
 
 theorem Th2:
-for a, k, r being Element of NAT, x being Real
+for a, k, r being Nat, x being Real
  st 1 < x & 0 < k holds x |^ (a*k + r) = (x |^ a)*(x |^ (a*(k-'1)+r))
-proof let a,k,r be Element of NAT, x be Real such that
+proof let a,k,r be Nat, x be Real such that
 A1: 1 < x and
 A2: 0 < k;
     set xNak = x |^ (a*k + r);
@@ -77,12 +77,12 @@ A1: 0 < a and
 A2: 1 < q and
 A3: (q |^ a)-'1 divides (q |^ b)-'1;
      set r = b mod a; set qNa = q |^ a; set qNr = q |^ r;
-     defpred P[Element of NAT] means qNa-'1 divides (q |^ (a*$1 + r))-'1;
+     defpred P[Nat] means qNa-'1 divides (q |^ (a*$1 + r))-'1;
 A4:  b = a*(b div a) + r by A1,NAT_D:2;
-then A5:  ex k being Element of NAT st P[k] by A3;
-     consider k being Element of NAT such that
+then A5:  ex k being Nat st P[k] by A3;
+     consider k being Nat such that
 A6: P[k] and
-A7: for n being Element of NAT st P[n] holds k <= n from NAT_1:sch 5(A5);
+A7: for n being Nat st P[n] holds k <= n from NAT_1:sch 5(A5);
         now per cases;
         suppose A8: k = 0;
         A9: now assume A10: 0 <> qNr-'1;
@@ -492,8 +492,7 @@ A7: for k being Element of NAT st P[k] holds P[k+1]
     A15: Z <> {} by A9,GRAPH_5:5;
         reconsider Z as non empty set by A9,GRAPH_5:5;
         reconsider f as FinSequence of Z;
-    A16: X <> {} by A15,EQREL_1:def 6; reconsider X as non empty finite set by
-A15,EQREL_1:def 6;
+    reconsider X as non empty finite set by A15,EQREL_1:41;
         reconsider fk = f|(Seg k) as FinSequence of Z by FINSEQ_1:23;
     A17: len fk = k by A14,FINSEQ_3:59;
     A18: f = fk ^ <*f.(k+1)*> by A14,FINSEQ_3:61;
@@ -506,30 +505,27 @@ A15,EQREL_1:def 6;
         reconsider Xk = union Zk as finite set by A19,FINSET_1:13;
         A22: now per cases;
             suppose A23: Zk = {}; consider B being a_partition of Xk;
-                    B = {} by A23,EQREL_1:def 6,ZFMISC_1:2;
+                    B = {} by A23,EQREL_1:41,ZFMISC_1:2;
             hence Zk is a_partition of Xk by A23;
             end;
             suppose Zk <> {};
                 then consider x being set such that A24: x in Zk by
 XBOOLE_0:def 1;
-                    x in Z by A24; then x <> {} by A16,EQREL_1:def 6;
-                then consider y being set such that A25: y in x by
-XBOOLE_0:def 1;
+                    x in Z by A24; then x <> {} by EQREL_1:def 6;
             A26: for a being Subset of Xk st a in Zk
                 holds a<>{} & for b being Subset of Xk st b in Zk
                    holds a=b or (a misses b)
                 proof let a be Subset of Xk such that A27: a in Zk;
                     A28: a in Z by A27;
-                      for b being Subset of Xk st b in Zk holds a=b or (a
-misses b
-)
+                    for b being Subset of Xk st b in Zk holds a=b or
+                    a misses b
                     proof let b be Subset of Xk such that A29: b in Zk;
                             a in Z & b in Z by A27,A29;
-                        hence thesis by A16,EQREL_1:def 6;
-                    end; hence thesis by A16,A28,EQREL_1:def 6;
+                        hence thesis by EQREL_1:def 6;
+                    end; hence thesis by A28,EQREL_1:def 6;
                 end;
                     Zk c= bool union Zk by ZFMISC_1:100;
-            hence Zk is a_partition of Xk by A24,A25,A26,EQREL_1:def 6;
+            hence Zk is a_partition of Xk by A26,EQREL_1:def 6;
         end;
         end;
         reconsider ck = c|(Seg k) as FinSequence of NAT by FINSEQ_1:23;
@@ -1104,7 +1100,7 @@ A15: for x being Element of ntocF ex y being Element of cLinB st P[x,y]
             A19: union (Vbf"{x}) = i by A18,ZFMISC_1:31;
                     i in Vbf"{x} by A18,TARSKI:def 1;
                 then i in dom Vbf & Vbf.i in {x} by FUNCT_1:def 13;
-                 then i in dom f by A13,A14,FINSEQ_2:144;
+                 then i in dom f by A13,FINSEQ_2:144;
             then f.i in rng f by FUNCT_1:12;
               hence thesis by A19;
             end;
@@ -1134,7 +1130,7 @@ A15: for x being Element of ntocF ex y being Element of cLinB st P[x,y]
 
         A27: for i being set st i in dom f holds ll.(Vbf.i) = f.i
            proof let i be set such that A28: i in dom f;
-            A29: i in dom Vbf by A13,A14,A28,FINSEQ_2:144;
+            A29: i in dom Vbf by A13,A28,FINSEQ_2:144;
                 then Vbf.i in B by A11,FUNCT_1:12;
                 then consider y being Element of B such that
             A30: y = Vbf.i;
@@ -1204,7 +1200,7 @@ A41: for L being Linear_Combination of B holds
    A46: dom f = Seg n by FUNCT_2:def 1;
    A47: rng f c= the carrier of F;
 A48: n is Element of NAT by ORDINAL1:def 13;
-   then f is FinSequence-like by A46,FINSEQ_1:def 2;
+     f is FinSequence-like by A46,FINSEQ_1:def 2;
         then reconsider ff=f as FinSequence of the carrier of F
         by A47,FINSEQ_1:def 4;
             len ff = n by A46,A48,FINSEQ_1:def 3;
@@ -1232,7 +1228,7 @@ A48: n is Element of NAT by ORDINAL1:def 13;
                     then consider x being set such that
                 A55: [x,v] in Vbf by RELAT_1:def 5;
                 A56: x in dom Vbf & Vbf.x = v by A55,FUNCT_1:8;
-                then A57: x in dom t by A13,A14,FINSEQ_2:144;
+                then A57: x in dom t by A13,FINSEQ_2:144;
                     then l.(Vbf.x) = t.x by A52;
                 hence thesis by A53,A56,A57;
 
@@ -1290,7 +1286,7 @@ A71: n is Element of NAT by ORDINAL1:def 13;
             hence thesis by VECTSP_1:84;
         end;
     then A72: L1 = L2 by VECTSP_6:def 10;
-    A73: dom t1 = Seg n & dom t2 = Seg n by A71,FINSEQ_2:144;
+    A73: dom t1 = Seg n & dom t2 = Seg n by FINSEQ_2:144;
      for k being Nat st k in dom t1 holds t1.k = t2.k
         proof let k be Nat such that A74: k in dom t1;
                t1.k = L1.(Vbf.k) by A66,A74;
@@ -1302,9 +1298,9 @@ A71: n is Element of NAT by ORDINAL1:def 13;
    then ntocF, G.:(ntocF) are_equipotent by A40,CARD_1:60;
    then A75: ntocF, cLinB are_equipotent by A40,A62,RELAT_1:146;
 A76: Card (Seg n) = Card n & Card q = Card the carrier of F
-     by A3,A14,CARD_1:66,FINSEQ_1:76;
+     by A3,FINSEQ_1:76;
        Card (ntocF)
-   = Card Funcs (Seg n, the carrier of F) by A14,FINSEQ_2:111
+   = Card Funcs (Seg n, the carrier of F) by FINSEQ_2:111
   .= Card Funcs (n, q) by A76,FUNCT_5:68
   .= q |^ n by A8,Th4;
  hence thesis by A6,A75,CARD_1:21;

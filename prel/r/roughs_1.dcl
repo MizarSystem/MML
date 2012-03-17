@@ -173,7 +173,7 @@
 </ArgTypes>
 <Func kind="G" nr="5">
 <LocusVar nr="1"/>
-<Func kind="K" nr="64">
+<Func kind="K" nr="65">
 <LocusVar nr="1"/>
 </Func>
 </Func>
@@ -192,7 +192,7 @@
 </ArgTypes>
 <Func kind="G" nr="5">
 <LocusVar nr="1"/>
-<Func kind="K" nr="66">
+<Func kind="K" nr="67">
 <LocusVar nr="1"/>
 </Func>
 </Func>
@@ -231,7 +231,7 @@
 </ArgTypes>
 <Func kind="G" nr="5">
 <LocusVar nr="1"/>
-<Func kind="K" nr="64">
+<Func kind="K" nr="65">
 <LocusVar nr="1"/>
 </Func>
 </Func>
@@ -298,7 +298,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="333">
+<Func kind="K" nr="334">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -325,7 +325,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="334">
+<Func kind="K" nr="335">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -351,8 +351,8 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="104">
-<Func kind="K" nr="71">
+<Func kind="K" nr="105">
+<Func kind="K" nr="72">
 <Func kind="U" nr="1">
 <LocusVar nr="1"/>
 </Func>

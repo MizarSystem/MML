@@ -139,8 +139,8 @@ A7:  a <= b & a=inf divset(D,j) & b=sup divset(D,j) by INTEGRA1:4;
     hence thesis by A3;
     end;
     suppose A8:not x in rng D;
-    defpred MIN[Element of NAT] means x < sup divset(D,$1) & $1 in dom D;
-    defpred MAX[Element of NAT] means x >= inf divset(D,$1) & $1 in dom D;
+    defpred MIN[Nat] means x < sup divset(D,$1) & $1 in dom D;
+    defpred MAX[Nat] means x >= inf divset(D,$1) & $1 in dom D;
 A9:len D in dom D by FINSEQ_5:6;
         sup divset(D,len D)=D.(len D)
      proof
@@ -163,14 +163,14 @@ then A10: sup divset(D,len D) = sup A by INTEGRA1:def 2;
      end;
      hence thesis by A1,A10,REAL_1:def 5;
     end;
-then A11: ex k st MIN[k] by A9;
-    consider k such that
-A12:MIN[k] & for n st MIN[n] holds k <= n from NAT_1:sch 5(A11);
+then A11: ex k be Nat st MIN[k] by A9;
+    consider k be Nat such that
+A12:MIN[k] & for n be Nat st MIN[n] holds k <= n from NAT_1:sch 5(A11);
         inf divset(D,1)=inf A by A2,INTEGRA1:def 5;
-then A13: ex k st MAX[k] by A1,A2;
-A14: for k holds MAX[k] implies k <= len D by FINSEQ_3:27;
-    consider j such that
-A15:MAX[j] & for n st MAX[n] holds n <= j from NAT_1:sch 6(A14,A13);
+then A13: ex k be Nat st MAX[k] by A1,A2;
+A14: for k be Nat holds MAX[k] implies k <= len D by FINSEQ_3:27;
+    consider j be Nat such that
+A15:MAX[j] & for n be Nat st MAX[n] holds n <= j from NAT_1:sch 6(A14,A13);
      k=j
     proof
      assume A16:k<>j;
@@ -4650,33 +4650,34 @@ A487: y in rng lower_sum_set(f) & lower_integral(f)-e/2<y
      consider D being Element of divs A such that
 A488: D in dom lower_sum_set(f) & y=(lower_sum_set(f)).D & D.1>inf A
      by A3,A487,Lm8;
-       A489: y=lower_sum(f,D) by A488,INTEGRA1:def 12;
+     A489: y=lower_sum(f,D) by A488,INTEGRA1:def 12;
      set p=len D;
      set H=sup rng f;
      set h=inf rng f;
      deffunc F(Nat)=vol(divset(D,$1));
      consider v being FinSequence of REAL such that
 A490:len v = len D & for j be Nat st j in Seg len D holds v.j=F(j)
-     from FINSEQ_2:sch 1;
+       from FINSEQ_2:sch 1;
      consider v1 being non-decreasing FinSequence of REAL such that
 A491: v,v1 are_fiberwise_equipotent by INTEGRA2:3;
-     defpred P[Element of NAT] means $1 in dom v1 & v1.$1>0;
-A492:ex k st P[k]
+     defpred P[Nat] means $1 in dom v1 & v1.$1>0;
+A492:ex k be Nat st P[k]
      proof
        consider H being Function such that
 A493:  dom H = dom v & rng H = dom v1 & H is one-to-one & v=v1*H
        by A491,RFINSEQ:3;
        consider k such that
 A494:  k in dom D & vol(divset(D,k)) > 0 by A3,Th1;
-           dom D = Seg len v by A490,FINSEQ_1:def 3;
+       dom D = Seg len v by A490,FINSEQ_1:def 3;
        then k in dom v & v.k > 0 by A490,A494,FINSEQ_1:def 3;
-       then H.k in dom v1 & v1.(H.k) > 0 by A493,FUNCT_1:21,22;
+       then Z:H.k in dom v1 & v1.(H.k) > 0 by A493,FUNCT_1:21,22; then
+       reconsider Hk = H.k as Nat by ORDINAL1:def 13;
+       P[Hk] by Z;
        hence thesis;
      end;
-     consider k such that
-A495: P[k] & for n st P[n] holds k<=n
-      from NAT_1:sch 5(A492);
-         p <> 0 by FINSEQ_1:25;
+     consider k be Nat such that
+A495: P[k] & for n be Nat st P[n] holds k<=n from NAT_1:sch 5(A492);
+      p <> 0 by FINSEQ_1:25;
 then p > 0;
 then A496: 2*p >0 by REAL_2:122;
          H >= h by A1,Lm4;
@@ -6834,21 +6835,23 @@ A546: len v = len D & for j be Nat st j in Seg len D holds v.j=F(j)
      from FINSEQ_2:sch 1;
      consider v1 being non-decreasing FinSequence of REAL such that
 A547: v,v1 are_fiberwise_equipotent by INTEGRA2:3;
-defpred P[Element of NAT] means $1 in dom v1 & v1.$1 > 0;
-A548: ex k st P[k]
+     defpred P[Nat] means $1 in dom v1 & v1.$1 > 0;
+A548: ex k be Nat st P[k]
      proof
        consider H being Function such that
-A549:   dom H = dom v & rng H = dom v1 & H is one-to-one & v=v1*H
+A549:  dom H = dom v & rng H = dom v1 & H is one-to-one & v=v1*H
         by A547,RFINSEQ:3;
        consider k such that
 A550:  k in dom D & vol(divset(D,k)) > 0 by A3,Th1;
-           dom D = Seg len D by FINSEQ_1:def 3;
+       dom D = Seg len D by FINSEQ_1:def 3;
        then k in dom v & v.k > 0 by A546,A550,FINSEQ_1:def 3;
-       then H.k in dom v1 & v1.(H.k) > 0 by A549,FUNCT_1:21,22;
+       then Z1: H.k in dom v1 & v1.(H.k) > 0 by A549,FUNCT_1:21,22; then
+       reconsider Hk = H.k as Element of NAT by ORDINAL1:def 13;
+       P[Hk] by Z1;
        hence thesis;
      end;
-     consider k such that
-A551: P[k] & for n st P[n] holds k<=n
+     consider k be Nat such that
+A551: P[k] & for n be Nat st P[n] holds k<=n
       from NAT_1:sch 5(A548);
          p <> 0 by FINSEQ_1:25;
 then p > 0;

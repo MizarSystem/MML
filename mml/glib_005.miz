@@ -197,7 +197,8 @@ registration
     set F = NAT --> G;
 A1: dom F = NAT by FUNCOP_1:19;
     reconsider F as ManySortedSet of NAT;
-     now let x be Element of NAT;
+     now let x be Nat;
+       x in NAT by ORDINAL1:def 13; then
          F.x in rng F by A1,FUNCT_1:12;
         then F.x in {G} by FUNCOP_1:14;
         hence F.x is _Graph by TARSKI:def 1;
@@ -592,18 +593,19 @@ A3: dom IT = NAT & IT.0 = G.set(VLabelSelector, source.-->1) &
     for n being Element of NAT holds P[n,IT.n,IT.(n+1)]
       from RECDEF_1:sch 1(A1,A2);
     reconsider IT as ManySortedSet of NAT by A3,PBOOLE:def 3;
-    defpred P2[Element of NAT] means IT.$1
+    defpred P2[Nat] means IT.$1
     is real-weighted real-elabeled WEVGraph;
 A4: P2[0] by A3;
-A5: now let n be Element of NAT; assume
-      P2[n];
+A5: now let n be Nat;
+A10:  n in NAT by ORDINAL1:def 13;
+      assume P2[n];
         then consider Gn,Gn1 being real-weighted real-elabeled WEVGraph such
 that
-    A6: IT.n = Gn & IT.(n+1) = Gn1 & Gn1 = AP:Step(Gn) by A3;
+    A6: IT.n = Gn & IT.(n+1) = Gn1 & Gn1 = AP:Step(Gn) by A3,A10;
         thus P2[n+1] by A6;
     end;
-A7: for n being Element of NAT holds P2[n] from NAT_1:sch 1(A4,A5);
-    then for n being Element of NAT holds IT.n is _Graph;
+A7: for n being Nat holds P2[n] from NAT_1:sch 2(A4,A5);
+    then for n being Nat holds IT.n is _Graph;
     then reconsider IT as GraphSeq by GLIB_000:def 55;
      for n being Nat holds
       IT.n is [Weighted] & IT.n is [ELabeled] & IT.n is [VLabeled]
@@ -965,9 +967,6 @@ then A3: P[0];
     A5: Gn1 = AP:Step(Gn) by Def15;
     A6: Gn == G & the_ELabel_of Gn = the_ELabel_of G &
           the_Weight_of Gn = the_Weight_of G by Th5;
-         source in {source} by TARSKI:def 1;
-    then A7: source in (CS.0).labeledV() by Th3;
-    A8: (CS.0).labeledV() c= Gn.labeledV() by Th4;
          now per cases;
           suppose Next = {};
              then Gn1 = Gn by A5,Def14;
@@ -1003,93 +1002,7 @@ then A3: P[0];
                   suppose
                 A17: v in {(the_Source_of Gn).e};
                 then A18: v = (the_Source_of Gn).e by TARSKI:def 1;
-                     now per cases;
-                      suppose
-                    A19: source = (the_Target_of Gn).e;
-                        set W2 = G.walkOf(source,e,(the_Source_of Gn).e);
-                         e Joins source,(the_Source_of Gn).e,Gn
-                          by A11,A19,GLIB_000:def 15;
-                    then A20: e Joins source,(the_Source_of Gn).e,G
-                          by A6,GLIB_000:91;
-                    then A21: W2 = <* source, e, (the_Source_of Gn).e *>
-                          by GLIB_001:def 5;
-                    then A22: len W2 = 3 & W2.1 = source & W2.2 = e &
-                          W2.3 = (the_Source_of Gn).e by FINSEQ_1:62;
-                         now let n be odd Element of NAT; assume n < len W2;
-                        then n < 2+1 by A21,FINSEQ_1:62;
-                            then n <= 2*1 by NAT_1:13;
-                            then n < 1+1 by REAL_1:def 5;
-                            then 1 <= n & n <= 1 by HEYTING3:1,NAT_1:13;
-                        then A23: n = 1 by XXREAL_0:1;
-                            hereby assume W2.(n+1) DJoins W2.n,W2.(n+2),G;
-                                then e DJoins source,(the_Source_of Gn).e,Gn
-                                  by A6,A22,A23,GLIB_000:91;
-                                hence (the_ELabel_of G).(W2.(n+1)) <
-                                  (the_Weight_of G).(W2.(n+1))
-                                  by A9,A12,GLIB_000:def 16;
-                            end;
-                            assume not W2.(n+1) DJoins W2.n,W2.(n+2),G;
-                            thus 0 < (the_ELabel_of G).(W2.(n+1))
-                              by A6,A12,A21,A23,FINSEQ_1:62;
-                        end;
-                        then reconsider W2 as augmenting Path of G by Def12;
-                    A24: now let m be odd Element of NAT; assume
-                        A25: m <= len W2;
-                        A26: 1 <= m by HEYTING3:1;
-                             now assume m <> 1;
-                                then 2*0+1 < m by A26,REAL_1:def 5;
-                                then 1+2 <= m by GLIB_001:1;
-                                hence m = 3 by A22,A25,XXREAL_0:1;
-                            end;
-                            hence m = 1 or m = 3;
-                        end;
-                         now let m,n be odd Element of NAT; assume
-                        A27: m <= len W2 & n <= len W2 & W2.m = W2.n;
-                            then (m = 1 or m = 3) & (n = 1 or n = 3) by A24;
-                            hence m = n by A7,A8,A9,A22,A27;
-                        end;
-                        then reconsider W2 as vertex-distinct augmenting Path
-of G
-                          by GLIB_001:def 29;
-                        take W2;
-                        thus W2 is_Walk_from source,v by A18,A20,GLIB_001:16;
-                    A28: W2.vertices() = {source,v} by A18,A20,GLIB_001:92;
-                         now let x be set; assume
-                        A29: x in W2.vertices();
-                             now per cases by A28,A29,TARSKI:def 2;
-                              suppose x = source;
-                                then x in {source} by TARSKI:def 1;
-                            then A30: x in (CS.0).labeledV() by Th3;
-                                 (CS.0).labeledV() c= Gn1.labeledV()
-                                  by Th4;
-                                hence x in Gn1.labeledV() by A30;
-                              end;
-                              suppose x = v;
-                                hence x in Gn1.labeledV()
-                                  by A14,A17,XBOOLE_0:def 2;
-                              end;
-                           end;
-                           hence x in Gn1.labeledV();
-                        end;
-                        hence W2.vertices() c= Gn1.labeledV() by TARSKI:def 3;
-                        let n be even Element of NAT; assume
-                         n in dom W2;
-                        then 1 <= n & n <= 3 by A22,FINSEQ_3:27;
-                        then 2*0+1 < n & n < 2*1+1 by REAL_1:def 5;
-                        then 1+1 <= n & n <= 2*1 by NAT_1:13;
-                        then n = 2 by XXREAL_0:1;
-                    then A31: W2.n = e & W2.(n+1) = (the_Source_of Gn).e
-                          by A21,FINSEQ_1:62;
-                        then W2.(n+1) in {(the_Source_of Gn).e}
-                          by TARSKI:def 1;
-                    then A32: W2.(n+1) in Gn1.labeledV() by A14,XBOOLE_0:def 2;
-                         (the_VLabel_of Gn1).(W2.(n+1)) = e
-                          by A10,A13,A31,GLIB_003:46;
-                        hence W2.n = (the_VLabel_of FAP).(W2.(n+1))
-                          by A31,A32,Th7;
-                      end;
-                      suppose source <> (the_Target_of Gn).e;
-                        consider W being vertex-distinct
+                     now               consider W being vertex-distinct
                                          augmenting Path of G such that
                     A33: W is_Walk_from source, (the_Target_of Gn).e &
                         W.vertices() c= Gn.labeledV() &
@@ -1169,7 +1082,6 @@ GLIB_001:66;
                         end;
                         hence W2.n = (the_VLabel_of FAP).(W2.(n+1));
                       end;
-                    end;
                     hence ex P being vertex-distinct augmenting Path of G st
                       P is_Walk_from source,v & P.vertices() c=Gn1.labeledV() &
                       for n being even Element of NAT st n in dom P holds
@@ -1215,95 +1127,8 @@ GLIB_001:66;
                   suppose
                 A57: v in {(the_Target_of Gn).e};
                 then A58: v = (the_Target_of Gn).e by TARSKI:def 1;
-                     now per cases;
-                      suppose
-                    A59: source = (the_Source_of Gn).e;
-                        set W2 = G.walkOf(source,e,(the_Target_of Gn).e);
-                         e Joins source,(the_Target_of Gn).e,Gn
-                          by A50,A59,GLIB_000:def 15;
-                    then A60: e Joins source,(the_Target_of Gn).e,G
-                          by A6,GLIB_000:91;
-                    then A61: W2 = <* source, e, (the_Target_of Gn).e *>
-                          by GLIB_001:def 5;
-                    then A62: len W2 = 3 & W2.1 = source & W2.2 = e &
-                          W2.3 = (the_Target_of Gn).e by FINSEQ_1:62;
-                        then e DJoins W2.1,W2.(1+2),Gn by A50,A59,
-GLIB_000:def 16;
-then A63: e DJoins W2.1,W2.(1+2),G by A6,GLIB_000:91;
-                         now let n be odd Element of NAT; assume n < len W2;
-                        then n < 2+1 by A61,FINSEQ_1:62;
-                            then n <= 2*1 by NAT_1:13;
-                            then n < 1+1 by REAL_1:def 5;
-                            then 1 <= n & n <= 1 by HEYTING3:1,NAT_1:13;
-                        then A64: n = 1 by XXREAL_0:1;
-                            hence W2.(n+1) DJoins W2.n,W2.(n+2),G implies
-                              (the_ELabel_of G).(W2.(n+1)) <
-                              (the_Weight_of G).(W2.(n+1))
-                              by A6,A48,A51,A62,Def10,Def11;
-                            assume not W2.(n+1) DJoins W2.n,W2.(n+2),G;
-                            hence 0 < (the_ELabel_of G).(W2.(n+1))
-                              by A61,A63,A64,FINSEQ_1:62;
-                        end;
-                        then reconsider W2 as augmenting Path of G by Def12;
-                    A65: now let m be odd Element of NAT; assume
-                        A66: m <= len W2;
-                        A67: 1 <= m by HEYTING3:1;
-                             now assume m <> 1;
-                                then 2*0+1 < m by A67,REAL_1:def 5;
-                                then 1+2 <= m by GLIB_001:1;
-                                hence m = 3 by A62,A66,XXREAL_0:1;
-                            end;
-                            hence m = 1 or m = 3;
-                        end;
-                         now let m,n be odd Element of NAT; assume
-                        A68: m <= len W2 & n <= len W2 & W2.m = W2.n;
-                            then (m = 1 or m = 3) & (n = 1 or n = 3) by A65;
-                            hence m = n
-                              by A7,A8,A48,A51,A62,A68,Def10,Def11;
-                        end;
-                        then reconsider W2 as vertex-distinct augmenting Path
-of G
-                          by GLIB_001:def 29;
-                        take W2;
-                        thus W2 is_Walk_from source,v by A58,A60,GLIB_001:16;
-                    A69: W2.vertices() = {source,v} by A58,A60,GLIB_001:92;
-                         now let x be set; assume
-                        A70: x in W2.vertices();
-                             now per cases by A69,A70,TARSKI:def 2;
-                              suppose x = source;
-                                then x in {source} by TARSKI:def 1;
-                            then A71: x in (CS.0).labeledV() by Th3;
-                                 (CS.0).labeledV() c= Gn1.labeledV()
-                                  by Th4;
-                                hence x in Gn1.labeledV() by A71;
-                              end;
-                              suppose x = v;
-                                hence x in Gn1.labeledV()
-                                  by A54,A57,XBOOLE_0:def 2;
-                              end;
-                           end;
-                           hence x in Gn1.labeledV();
-                        end;
-                        hence W2.vertices() c= Gn1.labeledV() by TARSKI:def 3;
-                        let n be even Element of NAT; assume
-                         n in dom W2;
-                        then 1 <= n & n <= 3 by A62,FINSEQ_3:27;
-                        then 2*0+1 < n & n < 2*1+1 by REAL_1:def 5;
-                        then 1+1 <= n & n <= 2*1 by NAT_1:13;
-                        then n = 2 by XXREAL_0:1;
-                    then A72: W2.n = e & W2.(n+1) = (the_Target_of Gn).e
-                          by A61,FINSEQ_1:62;
-                        then W2.(n+1) in {(the_Target_of Gn).e}
-                          by TARSKI:def 1;
-                    then A73: W2.(n+1) in Gn1.labeledV() by A54,XBOOLE_0:def 2;
-                         (the_VLabel_of Gn1).(W2.(n+1)) = e
-                          by A49,A53,A72,GLIB_003:46;
-                        hence W2.n = (the_VLabel_of FAP).(W2.(n+1))
-                          by A72,A73,Th7;
-                      end;
-                      suppose source <> (the_Source_of Gn).e;
-                        consider W being vertex-distinct
-                                         augmenting Path of G such that
+                     now consider W being vertex-distinct
+                                  augmenting Path of G such that
                     A74: W is_Walk_from source, (the_Source_of Gn).e &
                         W.vertices() c= Gn.labeledV() &
                         for n being even Element of NAT st n in dom W holds
@@ -1383,7 +1208,6 @@ GLIB_001:66;
                         end;
                         hence W2.n = (the_VLabel_of FAP).(W2.(n+1));
                       end;
-                    end;
                     hence ex P being vertex-distinct augmenting Path of G st
                       P is_Walk_from source,v & P.vertices() c=Gn1.labeledV() &
                       for n being even Element of NAT st n in dom P holds
@@ -2025,19 +1849,19 @@ theorem Th9: ::tAPFAP02
 A2: P is augmenting & P is_Walk_from source,v;
      now assume
     A3: not v in AP:FindAugPath(G,source).labeledV();
-        defpred P[Element of NAT] means
+        defpred P[Nat] means
           $1 is odd & $1 <= len P & not P.$1 in V;
          P.(len P) = v by A2,GLIB_001:18;
-    then A4: ex n being Element of NAT st P[n] by A3;
-        consider n being Element of NAT such that
-    A5: P[n] & for k being Element of NAT st P[k] holds n <= k
-    from NAT_1:sch 5(A4);
+    then A4: ex n being Nat st P[n] by A3;
+        consider n being Nat such that
+    A5: P[n] & for k being Nat st P[k] holds n <= k
+           from NAT_1:sch 5(A4);
          P.(2*0+1) = source by A2,GLIB_001:18;
         then P.(2*0+1) in {source} by TARSKI:def 1;
     then A6: P.(2*0+1) in (CS.0).labeledV() by Th3;
          (CS.0).labeledV() c= V by Th4;
     then A7: n <> 1 by A5,A6;
-        reconsider n'=n as odd Element of NAT by A5;
+        reconsider n'=n as odd Element of NAT by A5,ORDINAL1:def 13;
          1 <= n by A5,HEYTING3:1;
         then 1 < n by A7,REAL_1:def 5;
         then 1+1 <= n by NAT_1:13;
@@ -2735,12 +2559,13 @@ A4: dom IT = NAT & IT.0 = G.set(ELabelSelector, the_Edges_of G --> 0) &
     set G0 = G.set(ELabelSelector, E0);
      G0 == G by GLIB_003:8;
 then A5: P2[0] by A4;
-A6: now let n be Element of NAT; assume P2[n];
+A6: now let n be Nat; assume P2[n];
         then consider Gn being finite real-weighted real-elabeled
           complete-elabeled WEGraph such that
     A7: IT.n = Gn & Gn == G;
         reconsider source'=source, sink'=sink as Vertex of Gn
           by A7,GLIB_000:def 36;
+          n in NAT by ORDINAL1:def 13; then
     A8: P[n,Gn,IT.(n+1)] by A4,A7;
         set P = AP:GetAugPath(Gn,source',sink');
          now per cases;
@@ -2756,8 +2581,8 @@ A6: now let n be Element of NAT; assume P2[n];
         then FF:Step(Gn,source',sink') == G by A7,GLIB_000:88;
         hence P2[n+1] by A8;
     end;
-A9: for n being Element of NAT holds P2[n] from NAT_1:sch 1(A5,A6);
-     now let n be Element of NAT;
+A9: for n being Nat holds P2[n] from NAT_1:sch 2(A5,A6);
+     now let n be Nat;
         consider Gn being finite real-weighted real-elabeled
                           complete-elabeled WEGraph such that
     A10: IT.n = Gn & Gn == G by A9;
@@ -4949,7 +4774,7 @@ A1: source <> sink;
             end;
         then A11: Sum E2 = Sum B2 by GLIB_004:6
                   .= 0 by UPROOTS:13;
-            hence G0.flow(source,sink) = 0 - 0 by A3,A9,Def8;
+            hence G0.flow(source,sink) = 0 qua Nat - 0 by A3,A9,Def8;
             thus G0.flow(source,sink) is Element of NAT by A4,A9,A11;
         end;
     then A12: P[0];

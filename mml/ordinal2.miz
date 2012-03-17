@@ -7,7 +7,7 @@
 environ
 
  vocabularies ORDINAL1, FUNCT_1, BOOLE, SETFAM_1, TARSKI, RELAT_1, ORDINAL2,
-      FUNCOP_1, ZFREFLE1;
+      FUNCOP_1, ZFREFLE1, ARYTM;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1,
       SETFAM_1, FUNCOP_1;
  constructors SETFAM_1, ORDINAL1, FUNCOP_1;
@@ -1597,7 +1597,7 @@ A9:      x in A;
    hence thesis;
   end;
 
-Lm1: 1 = succ 0;
+Lm1: 1 = succ {};
 
 theorem
        A+^1 = succ A
@@ -2154,4 +2154,51 @@ A1:  dom psi = {} & rng psi c= A & psi is increasing & A = sup psi;
    thus A = sup {} by A1,RELAT_1:65
          .= {} by Th26;
   end;
+
+:: from ARYTM_3, 2007.10.23, A.T.
+
+scheme OmegaInd {a()-> natural number, P[set]}:
+ P[a()]
+provided
+A1:   P[{}] and
+A2:   for a being natural number st P[a] holds P[succ a]
+proof
+     defpred P[Ordinal] means $1 is natural implies P[$1];
+A3:  P[{}] by A1;
+A4:  now let A; assume
+A5:   P[A];
+         now assume succ A is natural;
+       then succ A in omega & A in succ A by ORDINAL1:10,def 13;
+       then A is Element of omega by ORDINAL1:19;
+       hence P[succ A] by A2,A5;
+      end; hence P[succ A];
+    end;
+A6:  now let A;
+A7:   {} c= A by XBOOLE_1:2;
+     assume A <> {};
+     then {} c< A by A7,XBOOLE_0:def 8;
+then A8:   {} in A by ORDINAL1:21;
+     assume A is_limit_ordinal;
+      then omega c= A & not A in A by A8,ORDINAL1:def 12;
+      then not A in omega;
+     hence (for B st B in A holds P[B]) implies P[A] by ORDINAL1:def 13;
+    end;
+     for A holds P[A] from OrdinalInd(A3,A4,A6);
+   hence thesis;
+  end;
+
+registration
+ let a, b be natural number;
+ cluster a +^ b -> natural;
+ coherence
+  proof defpred P[natural number] means a+^$1 is natural;
+A1:  P[{}] by Th44;
+A2:  now let b be natural number; assume P[b];
+     then reconsider c = a+^b as natural number;
+      a+^succ b = succ c by Th45;
+     hence P[succ b];
+    end;
+   thus P[b] from OmegaInd(A1,A2);
+  end;
+end;
 

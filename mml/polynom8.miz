@@ -10,9 +10,9 @@ environ
       ALGSEQ_1, GROUP_1, SQUARE_1, FINSEQ_4, POLYNOM2, VECTSP_2, ALGSTR_1,
       CAT_3, MATRIX_1, INCSP_1, TREES_1, RVSUM_1, POLYNOM1, FINSEQ_1, ARYTM_1,
       ARYTM_3, RELAT_1, FUNCT_1, ABSVALUE, MCART_1, FINSEQ_2, POLYNOM3,
-      POLYNOM8;
+      POLYNOM8, ARYTM;
  notations TARSKI, SUBSET_1, RELAT_1, FUNCT_1, FUNCT_2, NUMBERS, XCMPLX_0,
-      XXREAL_0, VECTSP_2, BINOP_1, BINOM, ALGSTR_1, PARTFUN1, RLVECT_1,
+      XXREAL_0, SEQ_1, VECTSP_2, BINOP_1, BINOM, ALGSTR_1, PARTFUN1, RLVECT_1,
       FINSEQ_1, FINSEQ_2, STRUCT_0, GROUP_1, VECTSP_1, FVSUM_1, ALGSEQ_1,
       POLYNOM5, POLYNOM3, MATRIX_1, MATRIX_3, INT_1, NAT_1, BINARITH, POLYNOM4,
       MCART_1, INT_2;
@@ -592,7 +592,7 @@ then len s >= 0 + 1 by NAT_1:13;
 then len s - 1 >= 1 - 1 by XREAL_1:11;
 then reconsider l = len(s) - 1 as Element of NAT by INT_1:16;
 assume A1: s.(len(s)-1) = 0.L;
- now let i be Element of NAT;
+ now let i be Nat;
   assume A2: i >= l;
   per cases by A2,REAL_1:def 5;
   suppose i = l;
@@ -653,7 +653,7 @@ definition
   let L be non empty doubleLoopStr;
   let m1,m2 be sequence of L;
   func m1 * m2 -> sequence of L means :Def2:
-    for i being Element of NAT holds it.i = m1.i * m2.i;
+    for i being Nat holds it.i = m1.i * m2.i;
   existence
 proof
 defpred P[set,set] means $2 = m1/.$1 * m2/.$1;
@@ -663,18 +663,19 @@ consider f being Function of NAT,the carrier of L such that
 A2: for x being set st x in NAT holds P[x,f.x] from FUNCT_2:sch 1(A1);
 reconsider f as sequence of L;
 take f;
- now let i be Element of NAT;
+ now let i be Nat;
+A3: i in NAT by ORDINAL1:def 13;
    dom m1 = NAT & dom m2 = NAT by FUNCT_2:def 1;
-  then m1/.i = m1.i & m2/.i = m2.i by PARTFUN1:def 8;
-  hence f.i = m1.i * m2.i by A2;
+  then m1/.i = m1.i & m2/.i = m2.i by A3,PARTFUN1:def 8;
+  hence f.i = m1.i * m2.i by A2,A3;
   end;
 hence thesis;
 end;
   uniqueness
  proof
  let z1,z2 be sequence of L;
- assume A3: for i being Element of NAT holds z1.i = (m1.i) * (m2.i);
- assume A4: for i being Element of NAT holds z2.i = (m1.i) * (m2.i);
+ assume A3: for i being Nat holds z1.i = (m1.i) * (m2.i);
+ assume A4: for i being Nat holds z2.i = (m1.i) * (m2.i);
  A5: dom z1 = NAT by FUNCT_2:def 1 .= dom z2 by FUNCT_2:def 1;
   now let x be set;
    assume x in dom z1;
@@ -692,11 +693,11 @@ registration
   cluster m1 * m2 -> finite-Support;
 coherence
  proof set f = m1*m2;
-  ex n being Element of NAT st
- for i being Element of NAT st i >= n holds f.i = 0.L
+  ex n being Nat st
+  for i being Nat st i >= n holds f.i = 0.L
     proof
     take (len m1) + 1;
-     now let i be Element of NAT;
+     now let i be Nat;
       assume i >= (len m1) + 1;
       then i > len m1 by NAT_1:13;
       then m1.i = 0.L by ALGSEQ_1:22;
@@ -719,7 +720,7 @@ let L be add-associative right_zeroed right_complementable
     m1,m2 be AlgSequence of L;
 set p = m1 * m2, k = min(len m1, len m2);
 reconsider k as Element of NAT by XXREAL_0:15;
- now let i be Element of NAT;
+ now let i be Nat;
   assume A1: i >= k;
   per cases by XXREAL_0:15;
   suppose k = len m1;
@@ -1733,13 +1734,13 @@ A1: for x being set st x in NAT
 consider f being Function of NAT,the carrier of L such that
 A4: for x being set st x in NAT holds P[x,f.x] from FUNCT_2:sch 1(A1);
 reconsider f as sequence of L;
- ex n being Element of NAT st for i being Element of NAT st
-  i >= n holds f.i = 0.L
+ ex n being Nat st for i being Nat st i >= n holds f.i = 0.L
     proof
     take len M;
-     now let i be Element of NAT;
+     now let i be Nat;
       assume A5: i >= len M;
-      consider k being Element of NAT such that
+      i in NAT by ORDINAL1:def 13;
+      then consider k being Element of NAT such that
 A6:    k = i &
       ((k < len M & f.i = M*(k+1,1)) or (len M <= k & f.i = 0.L)) by A4;
       thus f.i = 0.L by A5,A6;
@@ -1808,18 +1809,19 @@ proof
 let L be well-unital add-associative right_zeroed right_complementable
          right-distributive non degenerated (non empty doubleLoopStr),
     n be Element of NAT;
-defpred P[Element of NAT] means (0.L)|^$1 = 0.L;
+defpred P[Nat] means (0.L)|^$1 = 0.L;
 A1: P[1] by BINOM:8;
-A2: for j being Element of NAT st 1 <= j holds P[j] implies P[j+1]
+A2: for j being Nat st 1 <= j holds P[j] implies P[j+1]
    proof
-   let j be Element of NAT;
+   let j be Nat;
    assume 1 <= j;
    assume P[j];
-    (0.L)|^(j+1) = ((0.L)|^j) * 0.L by GROUP_1:def 8
+   j in NAT by ORDINAL1:def 13;
+   then (0.L)|^(j+1) = ((0.L)|^j) * 0.L by GROUP_1:def 8
                .= 0.L by VECTSP_1:36;
    hence P[j+1];
    end;
-A3: for m being Element of NAT st 1 <= m holds P[m] from NAT_1:sch 8(A1,A2);
+A3: for m being Nat st 1 <= m holds P[m] from NAT_1:sch 8(A1,A2);
 assume A4: 0.L is_primitive_root_of_degree n;
 then n <> 0 by Def6;
 then 0 < n;
@@ -1907,8 +1909,8 @@ definition
       p be Polynomial of L,
       x be Element of L;
   func DFT(p,x,m) -> AlgSequence of L means :Def7:
-    (for i being Element of NAT st i < m holds it.i = eval(p,x |^ i)) &
-    (for i being Element of NAT st i >= m holds it.i = 0.L);
+    (for i being Nat st i < m holds it.i = eval(p,x |^ i)) &
+    (for i being Nat st i >= m holds it.i = 0.L);
 existence
 proof
 defpred P[set,set] means
@@ -1930,13 +1932,14 @@ A1: for x being set st x in NAT
 consider f being Function of NAT,the carrier of L such that
 A4: for x being set st x in NAT holds P[x,f.x] from FUNCT_2:sch 1(A1);
 reconsider f as sequence of L;
- ex n being Element of NAT st
-  for i being Element of NAT st i >= n holds f.i = 0.L
+ ex n being Nat st
+  for i being Nat st i >= n holds f.i = 0.L
     proof
     reconsider m as Element of NAT by ORDINAL1:def 13; take m;
-     now let i be Element of NAT;
+     now let i be Nat;
       assume A5: i >= m;
-      consider k being Element of NAT such that
+      i in NAT by ORDINAL1:def 13;
+      then consider k being Element of NAT such that
    A6: k = i &
       ((k < m & f.i = eval(p,x |^ k)) or (m <= k & f.i = 0.L)) by A4;
       thus f.i = 0.L by A5,A6;
@@ -1945,16 +1948,18 @@ reconsider f as sequence of L;
     end;
 then reconsider q = f as AlgSequence of L by ALGSEQ_1:def 2;
 take q;
-A7: now let i be Element of NAT;
+A7: now let i be Nat;
    assume A8: i < m;
-   consider k being Element of NAT such that
+   i in NAT by ORDINAL1:def 13;
+   then consider k being Element of NAT such that
    A9: k = i &
        ((k < m & q.i = eval(p,x |^ k)) or (m <= k & q.i = 0.L)) by A4;
    thus q.i = eval(p,x |^ i) by A8,A9;
    end;
- now let i be Element of NAT;
+ now let i be Nat;
   assume A10: i >= m;
-   consider k being Element of NAT such that
+  i in NAT by ORDINAL1:def 13;
+  then consider k being Element of NAT such that
    A11: k = i &
        ((k < m & q.i = eval(p,x |^ k)) or (m <= k & q.i = 0.L)) by A4;
    thus q.i = 0.L by A10,A11;
@@ -1964,12 +1969,12 @@ end;
 uniqueness
  proof
  let z1,z2 be AlgSequence of L;
- assume A12: (for i being Element of NAT st
+ assume A12: (for i being Nat st
              i < m holds z1.i = eval(p,x |^ i)) &
-            (for i being Element of NAT st i >= m holds z1.i = 0.L);
- assume A13: (for i being Element of NAT st
+            (for i being Nat st i >= m holds z1.i = 0.L);
+ assume A13: (for i being Nat st
              i < m holds z2.i = eval(p,x |^ i)) &
-            (for i being Element of NAT st i >= m holds z2.i = 0.L);
+            (for i being Nat st i >= m holds z2.i = 0.L);
  A14: dom z1 = NAT by FUNCT_2:def 1 .= dom z2 by FUNCT_2:def 1;
   now let u be set;
    assume u in dom z1;
@@ -2954,7 +2959,7 @@ A12: len mConv(p*'q,2*m) = 2*m by A10,Th28 .= width v1 by MATRIX_1:25;
 A13: v2 * v1 = v1 * v2 by A2,A10,Th40 .= emb(2*m,L) * 1.(L,2*m) by A2,A10,Th39;
 A14: len DFT(p*'q, x, 2*m) <= 2*m
     proof
-   for i being Element of NAT st
+   for i being Nat st
       i >= 2*m holds DFT(p*'q,x,2*m).i = 0.L by Def7;
       then 2*m is_at_least_length_of DFT(p*'q, x, 2*m) by ALGSEQ_1:def 3;
       hence thesis by ALGSEQ_1:def 4;

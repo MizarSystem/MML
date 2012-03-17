@@ -8,7 +8,7 @@ environ
 
  vocabularies PARTFUN1, SEQ_1, FUNCT_1, RELAT_1, BOOLE, FINSEQ_1, FINSET_1,
       CARD_1, ARYTM_1, TARSKI, SQUARE_1, RFINSEQ, RFUNCT_3, RLVECT_1, TDGROUP,
-      FINSEQ_2, FUNCT_3, PROB_1, REARRAN1, MEMBERED;
+      FINSEQ_2, FUNCT_3, PROB_1, REARRAN1, MEMBERED, ARYTM;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, MEMBERED, FUNCT_1,
       RELSET_1, CARD_1, FINSET_1, NUMBERS, XXREAL_0, XCMPLX_0, REAL_1, NAT_1,
       PARTFUN1, FINSEQ_1, SEQ_1, RFUNCT_1, FINSEQOP, RVSUM_1, RFINSEQ,
@@ -59,10 +59,10 @@ A2: rng f /\ {x} <> {};
 
 definition let IT be FinSequence;
 attr IT is terms've_same_card_as_number means :Def1:
-for n st 1<=n & n<=len IT
+for n be Nat st 1<=n & n<=len IT
  for B being finite set st B = IT.n holds card B = n;
 attr IT is ascending means :Def2:
-for n st 1<=n & n<=len IT - 1 holds IT.n c= IT.(n+1);
+for n be Nat st 1<=n & n<=len IT - 1 holds IT.n c= IT.(n+1);
 end;
 
 Lm2:
@@ -130,12 +130,12 @@ for D be non empty finite set holds
       take f;
       thus card D = len f by A4,A6,FINSEQ_1:57;
       thus f is ascending
-       proof let m;
+       proof let m be Nat;
         assume 1<=m & m<=len f - 1;
         hence thesis by A7,XXREAL_0:2;
        end;
       thus f is terms've_same_card_as_number
-       proof let m;
+       proof let m be Nat;
         assume 1<=m & m<=len f;
 then A8:     m = 1 by A7,XXREAL_0:1;
         let B be finite set;
@@ -161,7 +161,7 @@ then A8:     m = 1 by A7,XXREAL_0:1;
       A13: len g = len f + 1 by A11,FINSEQ_1:35;
       thus len g = card D by A4,A5,A9,A11,FINSEQ_1:35;
       thus g is ascending
-       proof let m; assume
+       proof let m be Nat; assume
         A14: 1 <= m & m <= len g - 1;
         then m in dom f by A13,FINSEQ_3:27;
         then A15: g.m = f.m by FINSEQ_1:def 7;
@@ -181,7 +181,7 @@ then A8:     m = 1 by A7,XXREAL_0:1;
        end;
        end;
       thus g is terms've_same_card_as_number
-       proof let m such that
+       proof let m be Nat such that
         A19: 1<=m & m<=len g;
         let B be finite set such that
 A20:     B = g.m;
@@ -291,7 +291,7 @@ a is ascending iff for n,m st n<=m & n in dom a & m in dom a holds a.n c= a.m
     hence thesis by A10;
    end; assume
   A11: for n,m st n<=m & n in dom A & m in dom A holds A.n c= A.m;
-  let n; assume
+  let n be Nat; assume
   A12: 1<=n & n<=len A - 1;
   then A13: n<=n+1 & n+1<=len A by NAT_1:11,XREAL_1:21;
   then 1<=n+1 & n<=len A by A12,XXREAL_0:2;
@@ -463,8 +463,8 @@ A5:    m in Seg len f by A4,FINSEQ_1:def 3;
     set C = f^<*y*>;
     A6: len C = len f + len <*y*> by FINSEQ_1:35
      .= len f + 1 by FINSEQ_1:56;
-    A7: for m st 1 <= m & m <= len C - 1 holds C.m c= C.(m+1)
-     proof let m; assume
+    A7: for m be Nat st 1 <= m & m <= len C - 1 holds C.m c= C.(m+1)
+     proof let m be Nat; assume
       A8: 1 <= m & m <= len C - 1;
       then A9: m in dom f by A6,FINSEQ_3:27;
 then A10:      m in Seg len f by FINSEQ_1:def 3;
@@ -495,7 +495,7 @@ then A18:       m+1 in Seg len f by FINSEQ_1:def 3;
       hence thesis;
      end;
         C is terms've_same_card_as_number
-     proof let m; assume
+     proof let m be Nat; assume
       A19: 1 <= m & m <= len C;
       then max(0,len C -m) = len C -m by FINSEQ_2:4;
       then reconsider l = len C - m as Element of NAT by FINSEQ_2:5;
@@ -887,15 +887,15 @@ for F be PartFunc of D,REAL, A be RearrangmentGen of C
    proof let x; assume x in rng p;
     then consider c be Element of C such that
     A8: c in dom p & p.c = x by PARTFUN1:26;
-    defpred P[Element of NAT] means $1 in dom B & c in B.$1;
-    A9: ex n st P[n]
+    defpred P[set] means $1 in dom B & c in B.$1;
+    A9: ex n be Nat st P[n]
      proof
       take n = len B;
           B.n = C by Th3;
       hence n in dom B & c in B.n by A2,A6,FINSEQ_3:27;
      end;
-    consider mi be Element of NAT such that
-    A10: P[mi] & for n st P[n] holds mi<=n from NAT_1:sch 5(A9);
+    consider mi be Nat such that
+    A10: P[mi] & for n be Nat st P[n] holds mi<=n from NAT_1:sch 5(A9);
     A11: 1<=mi & mi<=len B by A10,FINSEQ_3:27;
     then max(0,mi-1)=mi-1 by FINSEQ_2:4;
     then reconsider m1 = mi -1 as Element of NAT by FINSEQ_2:5;
@@ -923,10 +923,9 @@ for F be PartFunc of D,REAL, A be RearrangmentGen of C
   let x; assume
   A15: x in rng fd;
   defpred P[Nat] means $1 in dom fd & fd.$1 = x;
-  ex n be Nat st P[n] by A15,FINSEQ_2:11; then
-  A16: ex n st P[n] by ORDINAL1:def 13;
-  consider mi be Element of NAT such that
-  A17: P[mi] & for n st P[n] holds mi<=n from NAT_1:sch 5(A16);
+A16: ex n be Nat st P[n] by A15,FINSEQ_2:11;
+  consider mi be Nat such that
+  A17: P[mi] & for n be Nat st P[n] holds mi<=n from NAT_1:sch 5(A16);
   A18: 1<=mi & mi<=len fd by A17,FINSEQ_3:27;
   then max(0,mi-1)=mi-1 by FINSEQ_2:4;
   then reconsider m1 = mi -1 as Element of NAT by FINSEQ_2:5;
@@ -985,14 +984,14 @@ for F be PartFunc of D,REAL, A be RearrangmentGen of C
      end;
      case A6: x in rng fd;
       defpred P[Nat] means $1 in dom fd & fd.$1 = x;
-      ex n be Nat st P[n] by A6,FINSEQ_2:11;
+A100: ex n be Nat st P[n] by A6,FINSEQ_2:11;
       then
-      A7: ex n st P[n] by A6,FINSEQ_2:11;
-      A8: for n st P[n] holds n<=len fd by FINSEQ_3:27;
-      consider mi be Element of NAT such that
-      A9: P[mi] & for n st P[n] holds mi<=n from NAT_1:sch 5(A7);
-      consider ma be Element of NAT such that
-      A10: P[ma] & for n st P[n] holds n<=ma from NAT_1:sch 6(A8,A7);
+      A7: ex n be Nat st P[n] by A6,FINSEQ_2:11;
+      A8: for n be Nat st P[n] holds n<=len fd by FINSEQ_3:27;
+      consider mi be Nat such that
+      A9: P[mi] & for n be Nat st P[n] holds mi<=n from NAT_1:sch 5(A7);
+      consider ma be Nat such that
+A10:  P[ma] & for n being Nat st P[n] holds n<=ma from NAT_1:sch 6(A8,A100);
       A11: mi<=ma by A9,A10;
       A12: 1<=mi & mi<=len fd & 1<=ma & ma<=len fd by A9,A10,FINSEQ_3:27;
       then max(0,mi-1)=mi-1 by FINSEQ_2:4;
@@ -1131,8 +1130,8 @@ A39:           ma in dom B by A3,A10,FINSEQ_3:31;
           A41: not y in B.ma;
               cy in dom p & p.cy in {x} by A40,FUNCT_1:def 13;
           then A42: p.cy = x by TARSKI:def 1;
-          defpred Q[Element of NAT] means $1 in dom B & ma<$1 & cy in B.$1;
-          A43: ex n st Q[n]
+          defpred Q[Nat] means $1 in dom B & ma<$1 & cy in B.$1;
+          A43: ex n be Nat st Q[n]
            proof
             take n=len B;
             A44: B.n= C by Th3;
@@ -1147,8 +1146,8 @@ A39:           ma in dom B by A3,A10,FINSEQ_3:31;
              end;
             hence thesis by A44;
            end;
-          consider mm be Element of NAT such that
-          A45: Q[mm] & for n st Q[n] holds mm<=n from NAT_1:sch 5(A43);
+          consider mm be Nat such that
+          A45: Q[mm] & for n be Nat st Q[n] holds mm<=n from NAT_1:sch 5(A43);
               1<=mm by A45,FINSEQ_3:27;
           then max(0,mm-1)=mm-1 by FINSEQ_2:4;
           then reconsider 1m = mm - 1 as Element of NAT by FINSEQ_2:5;
@@ -1268,8 +1267,8 @@ A69:           ma in dom B by A3,A10,FINSEQ_3:31;
           A72: not y in B.ma \ B.m1;
                now per cases by A72,XBOOLE_0:def 4;
            case A73: not y in B.ma;
-            defpred Q[Element of NAT] means $1 in dom B & ma<$1 & cy in B.$1;
-            A74: ex n st Q[n]
+            defpred Q[Nat] means $1 in dom B & ma<$1 & cy in B.$1;
+            A74: ex n be Nat st Q[n]
              proof
               take n=len B;
               A75: B.n= C by Th3;
@@ -1284,8 +1283,8 @@ A69:           ma in dom B by A3,A10,FINSEQ_3:31;
                end;
               hence thesis by A75;
              end;
-            consider mm be Element of NAT such that
-            A76: Q[mm] & for n st Q[n] holds mm<=n from NAT_1:sch 5(A74);
+            consider mm be Nat such that
+A76:        Q[mm] & for n be Nat st Q[n] holds mm<=n from NAT_1:sch 5(A74);
                 1<=mm by A76,FINSEQ_3:27;
             then max(0,mm-1)=mm-1 by FINSEQ_2:4;
             then reconsider 1m = mm - 1 as Element of NAT by FINSEQ_2:5;
@@ -1316,10 +1315,10 @@ A80:           mm in dom fd by A3,A76,FINSEQ_3:31;
             hence contradiction;
            end;
            case A82: y in B.m1;
-            defpred Q[Element of NAT] means $1 in dom B & $1<=m1 & cy in B.$1;
-            A83: ex n st Q[n] by A53,A82;
-            consider mm be Element of NAT such that
-            A84: Q[mm] & for n st Q[n] holds mm<=n from NAT_1:sch 5(A83);
+            defpred Q[Nat] means $1 in dom B & $1<=m1 & cy in B.$1;
+            A83: ex n be Nat st Q[n] by A53,A82;
+            consider mm be Nat such that
+A84:        Q[mm] & for n be Nat st Q[n] holds mm<=n from NAT_1:sch 5(A83);
             A85: 1<=mm & mm<=len B by A84,FINSEQ_3:27;
             then max(0,mm-1)=mm-1 by FINSEQ_2:4;
             then reconsider 1m=mm-1 as Element of NAT by FINSEQ_2:5;
@@ -1487,15 +1486,15 @@ for F be PartFunc of D,REAL, A be RearrangmentGen of C
    proof let x; assume x in rng p;
     then consider c be Element of C such that
     A8: c in dom p & p.c = x by PARTFUN1:26;
-    defpred P[Element of NAT] means $1 in dom b & c in b.$1;
-    A9: ex n st P[n]
+    defpred P[set] means $1 in dom b & c in b.$1;
+    A9: ex n be Nat st P[n]
      proof
       take n = len b;
           b.n = C by Th3;
       hence n in dom b & c in b.n by A2,A6,FINSEQ_3:27;
      end;
-    consider mi be Element of NAT such that
-    A10: P[mi] & for n st P[n] holds mi<=n from NAT_1:sch 5(A9);
+    consider mi be Nat such that
+    A10: P[mi] & for n be Nat st P[n] holds mi<=n from NAT_1:sch 5(A9);
     A11: 1<=mi & mi<=len b by A10,FINSEQ_3:27;
     then max(0,mi-1)=mi-1 by FINSEQ_2:4;
     then reconsider m1 = mi -1 as Element of NAT by FINSEQ_2:5;
@@ -1525,9 +1524,9 @@ for F be PartFunc of D,REAL, A be RearrangmentGen of C
   defpred P[Nat] means $1 in dom fd & fd.$1 = x;
   ex n be Nat st P[n] by A15,FINSEQ_2:11;
   then
-  A16: ex n be Element of NAT st P[n];
-  consider mi be Element of NAT such that
-  A17: P[mi] & for n st P[n] holds mi<=n from NAT_1:sch 5(A16);
+  A16: ex n be Nat st P[n];
+  consider mi be Nat such that
+  A17: P[mi] & for n be Nat st P[n] holds mi<=n from NAT_1:sch 5(A16);
   A18: 1<=mi & mi<=len fd by A17,FINSEQ_3:27;
   then max(0,mi-1)=mi-1 by FINSEQ_2:4;
   then reconsider m1 = mi -1 as Element of NAT by FINSEQ_2:5;
@@ -1584,14 +1583,12 @@ for F be PartFunc of D,REAL, A be RearrangmentGen of C
      end;
      case A6: x in rng fd;
       defpred P[Nat] means $1 in dom fd & fd.$1 = x;
-      ex n be Nat st P[n] by A6,FINSEQ_2:11;
-      then
-      A7: ex n st P[n] by A6,FINSEQ_2:11;
-      A8: for n st P[n] holds n<=len fd by FINSEQ_3:27;
-      consider mi be Element of NAT such that
-      A9: P[mi] & for n st P[n] holds mi<=n from NAT_1:sch 5(A7);
-      consider ma be Element of NAT such that
-      A10: P[ma] & for n st P[n] holds n<=ma from NAT_1:sch 6(A8,A7);
+A100: ex n be Nat st P[n] by A6,FINSEQ_2:11;
+      A8: for n be Nat st P[n] holds n<=len fd by FINSEQ_3:27;
+      consider mi be Nat such that
+      A9: P[mi] & for n be Nat st P[n] holds mi<=n from NAT_1:sch 5(A100);
+      consider ma be Nat such that
+      A10: P[ma] & for n be Nat st P[n] holds n<=ma from NAT_1:sch 6(A8,A100);
       A11: mi<=ma by A9,A10;
       A12: 1<=mi & mi<=len fd & 1<=ma & ma<=len fd by A9,A10,FINSEQ_3:27;
       then max(0,mi-1)=mi-1 by FINSEQ_2:4;
@@ -1730,8 +1727,8 @@ A39:           ma in dom b by A3,A10,FINSEQ_3:31;
           A41: not y in b.ma;
               cy in dom p & p.cy in {x} by A40,FUNCT_1:def 13;
           then A42: p.cy = x by TARSKI:def 1;
-          defpred Q[Element of NAT] means $1 in dom b & ma<$1 & cy in b.$1;
-          A43: ex n st Q[n]
+          defpred Q[Nat] means $1 in dom b & ma<$1 & cy in b.$1;
+          A43: ex n be Nat st Q[n]
            proof
             take n=len b;
             A44: b.n= C by Th3;
@@ -1746,8 +1743,8 @@ A39:           ma in dom b by A3,A10,FINSEQ_3:31;
              end;
             hence thesis by A44;
            end;
-          consider mm be Element of NAT such that
-          A45: Q[mm] & for n st Q[n] holds mm<=n from NAT_1:sch 5(A43);
+          consider mm be Nat such that
+          A45: Q[mm] & for n be Nat st Q[n] holds mm<=n from NAT_1:sch 5(A43);
               1<=mm by A45,FINSEQ_3:27;
           then max(0,mm-1)=mm-1 by FINSEQ_2:4;
           then reconsider 1m = mm - 1 as Element of NAT by FINSEQ_2:5;
@@ -1867,8 +1864,8 @@ A69:           ma in dom b by A3,A10,FINSEQ_3:31;
           A72: not y in b.ma \ b.m1;
                now per cases by A72,XBOOLE_0:def 4;
            case A73: not y in b.ma;
-            defpred Q[Element of NAT] means $1 in dom b & ma<$1 & cy in b.$1;
-            A74: ex n st Q[n]
+            defpred Q[Nat] means $1 in dom b & ma<$1 & cy in b.$1;
+            A74: ex n be Nat st Q[n]
              proof
               take n=len b;
               A75: b.n= C by Th3;
@@ -1883,8 +1880,8 @@ A69:           ma in dom b by A3,A10,FINSEQ_3:31;
                end;
               hence thesis by A75;
              end;
-            consider mm be Element of NAT such that
-            A76: Q[mm] & for n st Q[n] holds mm<=n from NAT_1:sch 5(A74);
+            consider mm be Nat such that
+A76:        Q[mm] & for n be Nat st Q[n] holds mm<=n from NAT_1:sch 5(A74);
                 1<=mm by A76,FINSEQ_3:27;
             then max(0,mm-1)=mm-1 by FINSEQ_2:4;
             then reconsider 1m = mm - 1 as Element of NAT by FINSEQ_2:5;
@@ -1915,10 +1912,10 @@ A80:           mm in dom fd by A3,A76,FINSEQ_3:31;
             hence contradiction;
            end;
            case A82: y in b.m1;
-            defpred Q[Element of NAT] means $1 in dom b & $1<=m1 & cy in b.$1;
-            A83: ex n st Q[n] by A53,A82;
-            consider mm be Element of NAT such that
-            A84: Q[mm] & for n st Q[n] holds mm<=n from NAT_1:sch 5(A83);
+            defpred Q[Nat] means $1 in dom b & $1<=m1 & cy in b.$1;
+            A83: ex n be Nat st Q[n] by A53,A82;
+            consider mm be Nat such that
+A84:        Q[mm] & for n be Nat st Q[n] holds mm<=n from NAT_1:sch 5(A83);
             A85: 1<=mm & mm<=len b by A84,FINSEQ_3:27;
             then max(0,mm-1)=mm-1 by FINSEQ_2:4;
             then reconsider 1m=mm-1 as Element of NAT by FINSEQ_2:5;
@@ -2189,15 +2186,15 @@ theorem
       len(card D |-> r) = card D by A2,A3,A7,FINSEQ_2:69,RFUNCT_3:70;
   A10: len B = card C by Th1;
        now let c be Element of C; assume c in dom Rland(F-r,B);
-    defpred P[Element of NAT] means $1 in dom B & c in B.$1;
+    defpred P[set] means $1 in dom B & c in B.$1;
         len B <> 0 by Th4;
     then 0<len B;
     then A11: 0+1<=len B by NAT_1:13;
     then A12: len B in dom B & 1 in dom B by FINSEQ_3:27;
         C = B.(len B) by Th3;
-    then A13: ex n st P[n] by A12;
-    consider mi be Element of NAT such that
-    A14: P[mi] & for n st P[n] holds mi<=n from NAT_1:sch 5(A13);
+    then A13: ex n be Nat st P[n] by A12;
+    consider mi be Nat such that
+    A14: P[mi] & for n be Nat st P[n] holds mi<=n from NAT_1:sch 5(A13);
     A15: 1<=mi & mi<=len B by A14,FINSEQ_3:27;
     then max(0,mi-1)=mi-1 by FINSEQ_2:4;
     then reconsider m1 = mi - 1 as Element of NAT by FINSEQ_2:5;
@@ -2404,15 +2401,15 @@ theorem
       len(card D |-> r) = card D by A2,A3,A7,FINSEQ_2:69,RFUNCT_3:70;
   A10: len B = card C & len b = card C by Th1;
        now let c be Element of C; assume c in dom Rlor(F-r,B);
-    defpred P[Element of NAT] means $1 in dom b & c in b.$1;
+    defpred P[set] means $1 in dom b & c in b.$1;
         len b <> 0 by Th4;
     then 0<len b;
     then A11: 0+1<=len b by NAT_1:13;
     then A12: len b in dom b & 1 in dom b by FINSEQ_3:27;
         C = b.(len b) by Th3;
-    then A13: ex n st P[n] by A12;
-    consider mi be Element of NAT such that
-    A14: P[mi] & for n st P[n] holds mi<=n from NAT_1:sch 5(A13);
+    then A13: ex n be Nat st P[n] by A12;
+    consider mi be Nat such that
+    A14: P[mi] & for n be Nat st P[n] holds mi<=n from NAT_1:sch 5(A13);
     A15: 1<=mi & mi<=len b by A14,FINSEQ_3:27;
     then max(0,mi-1)=mi-1 by FINSEQ_2:4;
     then reconsider m1 = mi - 1 as Element of NAT by FINSEQ_2:5;

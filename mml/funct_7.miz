@@ -9,7 +9,7 @@ environ
  vocabularies FUNCT_1, RELAT_1, BOOLE, CAT_1, FUNCOP_1, FINSET_1, PBOOLE,
       CAT_4, FUNCT_4, INT_1, FINSEQ_1, CARD_1, SETFAM_1, SUBSET_1, PRALG_1,
       ZF_REFLE, FINSEQ_2, MCART_1, TARSKI, FINSEQ_4, REWRITE1, FUNCT_5,
-      FUNCT_2, FUNCT_7, PARTFUN1, ARYTM_1, RFINSEQ, FINSEQ_7, SGRAPH1;
+      FUNCT_2, FUNCT_7, PARTFUN1, ARYTM_1, RFINSEQ, FINSEQ_7, SGRAPH1, ARYTM;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, XCMPLX_0, XXREAL_0,
       NAT_1, SETFAM_1, PBOOLE, DOMAIN_1, CARD_1, RELAT_1, FUNCT_1, RELSET_1,
       BINOP_1, FINSET_1, PARTFUN1, FUNCOP_1, FUNCT_2, FINSEQ_1, FINSEQ_2,
@@ -355,7 +355,7 @@ A1: A* c= B*;
 end;
 
 theorem
-       for A being Subset of NAT st
+  for A being Subset of NAT st
   for n,m st n in A & m < n holds m in A
  holds A is Cardinal
 proof let A be Subset of NAT such that
@@ -366,14 +366,16 @@ A1: for n,m st n in A & m < n holds m in A;
  end;
  suppose that
 A2: A <> {} and
-A3: ex m st for n st n in A holds n <= m;
-  defpred P[Element of NAT] means $1 in A;
-A4: ex m st P[m] by A2,SUBSET_1:10;
-  consider M being Element of NAT such that
-A5: for n st P[n] holds n <= M by A3;
-  consider m such that
+A3: ex m being Nat st for n being Nat st n in A holds n <= m;
+  defpred P[set] means $1 in A;
+  ex m being Element of NAT st P[m] by A2,SUBSET_1:10;
+  then
+A4: ex m being Nat st P[m];
+  consider M being Nat such that
+A5: for n being Nat st P[n] holds n <= M by A3;
+  consider m being Nat such that
 A6: P[m] and
-A7: for n st P[n] holds n <= m from NAT_1:sch 6(A5,A4);
+A7: for n being Nat st P[n] holds n <= m from NAT_1:sch 6(A5,A4);
          A = { l : l < m+1 }
     proof
      thus A c= { l : l < m+1 }
@@ -397,14 +399,13 @@ A10:    l < m+1;
   hence thesis by AXIOMS:30;
  end;
  suppose
-A11: for m ex n st n in A & n > m;
-        NAT c= A
+A11: for m being Nat ex n being Nat st n in A & n > m;
+     NAT c= A
    proof let x be set;
      assume x in NAT;
       then reconsider m = x as Element of NAT;
-      consider n such that
-A12:    n in A & n > m by A11;
-    thus thesis by A1,A12;
+      ex n being Nat st n in A & n > m by A11;
+      hence thesis by A1;
    end;
  hence thesis by CARD_1:83,XBOOLE_0:def 10;
 end;
@@ -2796,8 +2797,6 @@ A1: rng(x.-->y) = {y} by FUNCOP_1:14;
 theorem Th103:
  rng F c= rng(F+*(x,y)) \/ {F.x}
  proof
-  per cases;
-  suppose x in dom F;
    let z;
    assume z in rng F;
     then consider e such that
@@ -2814,11 +2813,6 @@ A3:  dom F = dom(F+*(x,y)) by Th32;
     then z in rng(F+*(x,y)) by A1,A2,A3,FUNCT_1:12;
    hence z in rng(F+*(x,y)) \/ {F.x} by XBOOLE_0:def 2;
    end;
-  end;
-  suppose not x in dom F;
-    then F+*(x,y) = F by Def3;
-   hence thesis by XBOOLE_1:7;
-  end;
  end;
 
 theorem Th104:

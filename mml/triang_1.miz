@@ -9,7 +9,7 @@ environ
  vocabularies FINSEQ_1, ORDERS_2, BOOLE, WELLORD1, FINSUB_1, AMI_1, RELAT_1,
       RELAT_2, FINSET_1, SETFAM_1, CARD_1, FUNCT_3, FUNCT_1, ORDERS_1,
       FINSEQ_4, SUBSET_1, ARYTM_1, TARSKI, PROB_1, PBOOLE, FUNCT_2, QC_LANG1,
-      ORDINAL2, FINSEQ_2, PRALG_1, CQC_LANG, TRIANG_1, FUNCOP_1;
+      ORDINAL2, FINSEQ_2, PRALG_1, CQC_LANG, TRIANG_1, FUNCOP_1, ARYTM;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, XCMPLX_0, RELAT_1,
       RELAT_2, SETFAM_1, ORDERS_1, DOMAIN_1, NAT_1, FUNCT_1, PARTFUN1, FUNCT_2,
       FUNCT_3, FRAENKEL, FINSET_1, FINSEQ_1, FINSEQ_2, FINSEQ_4, FINSUB_1,
@@ -19,7 +19,7 @@ environ
       XXREAL_0, NAT_1, TOLER_1, FINSEQOP, FINSEQ_4, PBOOLE, ORDERS_2, GOBOARD1;
  registrations XBOOLE_0, SUBSET_1, SETFAM_1, RELAT_1, ORDINAL1, FUNCOP_1,
       FINSET_1, FINSUB_1, NUMBERS, XXREAL_0, XREAL_0, NAT_1, FINSEQ_1,
-      STRUCT_0, ORDERS_2;
+      STRUCT_0, ORDERS_2, MEMBERED, SEQ_1;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions RELAT_2, TARSKI, SETFAM_1, FUNCT_1, GOBOARD1, WELLORD1, ORDERS_2,
       FINSEQ_2, SUBSET_1;
@@ -42,21 +42,23 @@ scheme Regr1 { n() -> Nat, P[set] }:
   A1: P[n()] and
   A2: for k st k < n() & P[k+1] holds P[k]
 proof
- defpred X[Element of NAT] means $1 <= n() & not P[$1];
- assume A3: ex k st X[k];
+ defpred X[Nat] means $1 <= n() & not P[$1];
+ assume A3: not thesis;
+ then A10: ex k be Nat st X[k];
  reconsider n'=n() as Element of NAT by ORDINAL1:def 13;
- A4: for l be Element of NAT st X[l] holds l <= n';
- consider l being Element of NAT such that
+ A4: for l be Nat st X[l] holds l <= n';
+ consider l being Nat such that
  A5: X[l] and
- A6: for n being Element of NAT st X[n] holds n <= l
-   from NAT_1:sch 6(A4,A3);
+ A6: for n being Nat st X[n] holds n <= l
+   from NAT_1:sch 6(A4,A10);
  A7: l < n() by A1,A5,REAL_1:def 5;
  then A8: l + 1 <= n() by NAT_1:13;
-  now assume not P[l+1];
-  then l + 1 <= l by A6,A8;
-  hence contradiction by XREAL_1:31;
+A11: l in NAT by ORDINAL1:def 13;
+ now assume not P[l+1];
+   then l + 1 <= l by A6,A8;
+   hence contradiction by XREAL_1:31;
  end;
- hence contradiction by A2,A5,A7;
+ hence contradiction by A2,A5,A7,A11;
 end;
 
 registration let n be Nat;

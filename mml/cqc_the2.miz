@@ -7,7 +7,7 @@
 environ
 
  vocabularies CQC_LANG, QC_LANG1, FINSEQ_1, CQC_THE1, QMAX_1, ZF_LANG, BOOLE,
-      PRE_TOPC, FUNCT_1, MCART_1;
+      PRE_TOPC, FUNCT_1, MCART_1, ARYTM;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, NAT_1, FINSEQ_1,
       FUNCT_1, MCART_1, DOMAIN_1, QC_LANG1, QC_LANG2, CQC_LANG, CQC_THE1,
       XXREAL_0;
@@ -16,7 +16,7 @@ environ
  requirements NUMERALS, SUBSET, BOOLE;
  definitions CQC_THE1;
  theorems TARSKI, ZFMISC_1, LUKASI_1, CQC_LANG, CQC_THE1, ENUMSET1, QC_LANG1,
-      QC_LANG2, QC_LANG3, PROCAL_1, XBOOLE_0, XBOOLE_1, XXREAL_0;
+      QC_LANG2, QC_LANG3, PROCAL_1, XBOOLE_0, XBOOLE_1, XXREAL_0, ORDINAL1;
  schemes NAT_1;
 
 begin
@@ -1220,12 +1220,14 @@ theorem
                              A4: Effect f = G by CQC_THE1:70;
     defpred P[Nat] means
       1 <= $1 & $1 <= len f implies for H st H = (f.$1)`1 holds X|- F => H;
-A5: for n st for k st k < n holds P[k] holds P[n]
+A5: for n being Nat st for k being Nat st k < n holds P[k] holds P[n]
     proof
-     let n such that A6: for k st k < n holds
+     let n be Nat such that A6: for k being Nat st k < n holds
       1 <= k & k <= len f implies for H st H = (f.k)`1 holds X|- F => H;
      assume A7: 1 <= n & n <= len f;
       let H such that A8: H = (f.n)`1;
+      n in NAT by ORDINAL1:def 13;
+      then
 A9:    f,n is_a_correct_step_wrt (X \/ {F}) by A3,A7,CQC_THE1:def 5;
            now per cases by A7,CQC_THE1:45;
         suppose (f.n)`2 = 0;
@@ -1328,7 +1330,7 @@ A9:    f,n is_a_correct_step_wrt (X \/ {F}) by A3,A7,CQC_THE1:def 5;
        end;
       hence thesis;
     end;
-A26: P[n] from NAT_1:sch 4(A5);
+A26: for n be Nat holds P[n] from NAT_1:sch 4(A5);
 A27: 1 <= len f & len f <= len f by A3,CQC_THE1:58;
        f <> {} by A3,CQC_THE1:def 5;
    then G = (f.len f)`1 by A4,CQC_THE1:def 6;

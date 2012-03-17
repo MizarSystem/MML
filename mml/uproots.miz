@@ -138,12 +138,12 @@ provided
  A2: for i being Element of NAT st 1 <= i & i < len F()
       holds P[i, F().i] implies P[i+1, F().(i+1)]
 proof
-defpred Q[Element of NAT] means 1 <= $1 & $1 <= len F() & not(P[$1, F().($1)]);
+defpred Q[Nat] means 1 <= $1 & $1 <= len F() & not(P[$1, F().($1)]);
 assume not(for i being Element of NAT st 1 <= i & i <= len F()
  holds P[i, F().i]);
-then A3: ex k being Element of NAT st Q[k];
-consider k being Element of NAT such that
-A4: Q[k] & for k' being Element of NAT st Q[k'] holds k <= k'
+then A3: ex k being Nat st Q[k];
+consider k being Nat such that
+A4: Q[k] & for k' being Nat st Q[k'] holds k <= k'
  from NAT_1:sch 5(A3);
  per cases;
  suppose k = 1;
@@ -1859,7 +1859,7 @@ for L being add-associative right_zeroed right_complementable
             left-distributive (non empty doubleLoopStr),
     a, b being Element of L, p being Polynomial of L
  holds (<%a, b%>*'p).0 = a*p.0 &
-       for i being Element of NAT holds (<%a, b%>*'p).(i+1) = a*p.(i+1)+b*p.i
+       for i being Nat holds (<%a, b%>*'p).(i+1) = a*p.(i+1)+b*p.i
 proof let L be add-associative right_zeroed right_complementable
             left-distributive (non empty doubleLoopStr),
           a, b be Element of L, q be Polynomial of L;    set p = <%a, b%>;
@@ -1874,7 +1874,7 @@ A4:  1 in dom r by A1,FINSEQ_3:27;
     then Sum r = r1 by RLVECT_1:61 .= p.(1-'1) * q.(0+1-'1) by A3,A4
  .= p.0 * q.(0+1-'1) by BINARITH:51 .= p.0 * q.0 by BINARITH:39;
  hence (<%a, b%>*'q).0 = a*q.0 by A2,POLYNOM5:39;
- let i be Element of NAT;
+ let i be Nat;
     consider r being FinSequence of L such that
 A5:  len r = (i+1)+1 and
 A6:  p*'q.(i+1) = Sum r and
@@ -1972,7 +1972,8 @@ then A1: P[0];
 A2: for i being Element of NAT st P[i] holds P[i+1]
 proof let i be Element of NAT such that
     A3: P[i];
-            0 <= i & len q > 0 by Th19; then i+len q > 0+0 by XREAL_1:10;
+    0 <= i & len q > 0 by Th19; then i+len q > 0 qua Nat+0
+    by XREAL_1:10;
         then A4: (r`^i)*'q is non-zero by A3,Th19;
      thus len ((r`^(i+1))*'q) = len ((r`^1)*'(r`^i)*'q) by Th32
        .= len (r*'(r`^i)*'q) by POLYNOM5:17
@@ -2016,16 +2017,16 @@ end;
 begin :: Little Bezout theorem
 
 definition
-  let L be non empty ZeroStr, p be Polynomial of L; let n be Element of NAT;
+  let L be non empty ZeroStr, p be Polynomial of L; let n be Nat;
   func poly_shift(p,n) -> Polynomial of L means                    :Def6:
-    for i being Element of NAT holds it.i = p.(n + i);
+    for i being Nat holds it.i = p.(n + i);
   existence proof
-     deffunc F(Element of NAT) = p.(n+$1);
+     deffunc F(Nat) = p.(n+$1);
      consider ps being AlgSequence of L such that
   A1: len ps <= len p and
-  A2: for k being Element of NAT st k < len p holds ps.k = F(k)
+  A2: for k being Nat st k < len p holds ps.k = F(k)
   from ALGSEQ_1:sch 1;
-     take ps; let i be Element of NAT;
+     take ps; let i be Nat;
      per cases;
      suppose i < len p; hence ps.i = p.(n + i) by A2;
      end;
@@ -2036,8 +2037,8 @@ definition
   end;
   end;
   uniqueness proof let it1, it2 be Polynomial of L such that
-  A6:     for i being Element of NAT holds it1.i = p.(n + i) and
-  A7:     for i being Element of NAT holds it2.i = p.(n + i);
+  A6:     for i being Nat holds it1.i = p.(n + i) and
+  A7:     for i being Nat holds it2.i = p.(n + i);
        now let x be set; assume x in NAT;
      then reconsider i = x as Element of NAT;
     thus it1.x = p.(n+i) by A6 .= it2.x by A7;
@@ -2082,12 +2083,12 @@ A1: n <= len p;
    set ps = poly_shift(p,n), lpn = len p - n;
        n-n <= lpn by A1,XREAL_1:11;
    then reconsider lpn as Element of NAT by INT_1:16;
-       now let i be Element of NAT; assume i >= lpn;
+       now let i be Nat; assume i >= lpn;
    then A2: i+n >= len p by XREAL_1:22;
     thus ps.i = p.(n+i) by Def6 .= 0.L by A2,ALGSEQ_1:22;
    end;
 then A3: lpn is_at_least_length_of ps by ALGSEQ_1:def 3;
-       now let m be Element of NAT such that
+       now let m be Nat such that
    A4: m is_at_least_length_of ps and
    A5: lpn > m;           lpn >= m+1 by A5,NAT_1:13;
        then A6: lpn -1 >= m +1-1 by XREAL_1:11;
@@ -2193,7 +2194,7 @@ definition
   such that A1: r is_a_root_of p;
   func poly_quotient(p,r) -> Polynomial of L means                      :Def7:
      len it + 1 = len p &
-     for i being Element of NAT holds it.i = eval(poly_shift(p, i+1),r)
+     for i being Nat holds it.i = eval(poly_shift(p, i+1),r)
       if len p > 0
   otherwise it = 0_. L;
   existence proof
@@ -2207,7 +2208,7 @@ then len p <> 1 by Th48;
       reconsider lq1 as Element of NAT by ORDINAL1:def 13;
   A7: lq1 = lq -'1 by A6,BINARITH:39;
   A8: lq < len p by A3,A4,NAT_1:13;
-     deffunc F(Element of NAT) = eval(poly_shift(p, $1+1),r);
+     deffunc F(Nat) = eval(poly_shift(p, $1+1),r);
      consider q being sequence of L such that
   A9: for k being Element of NAT holds q.k = F(k) from FUNCT_2:sch 4;
      reconsider q as sequence of L;
@@ -2216,16 +2217,17 @@ then len p <> 1 by Th48;
             .= r*eval(0_. L,r) + p.lq by Th45 .= r*0.L + p.lq by POLYNOM4:20
             .= 0.L + p.lq by VECTSP_1:36 .= p.lq by RLVECT_1:10;
   then A10: q.lq1 <> 0.L by A3,A4,ALGSEQ_1:25;
-  A11: now let i be Element of NAT such that
+  A11: now let i be Nat such that
       A12: i >= lq;
               i >= p1 by A3,A12,BINARITH:39;
       then A13: i+1 >= len p by A3,XREAL_1:8;
-          thus q.i = eval(poly_shift(p, i+1),r) by A9
+      i in NAT by ORDINAL1:def 13;
+      hence  q.i = eval(poly_shift(p, i+1),r) by A9
            .= eval(0_.L,r) by A13,Th45 .= 0.L by POLYNOM4:20;
       end; then reconsider q as AlgSequence of L by ALGSEQ_1:def 2;
      take q;
   A14: lq is_at_least_length_of q by A11,ALGSEQ_1:def 3;
-        now let m be Element of NAT; assume A15: m is_at_least_length_of q;
+        now let m be Nat; assume A15: m is_at_least_length_of q;
        assume
      A16: lq > m;then consider lq1 being Nat such that
      A17: lq = lq1 + 1 by NAT_1:6;
@@ -2235,17 +2237,19 @@ then len p <> 1 by Th48;
      end;
    hence len q + 1 =p1+1-'1+1 by A3,A14,ALGSEQ_1:def 4 .=len p by A3,
 BINARITH:39;
-   thus for k being Element of NAT holds q.k = F(k) by A9;
+    let k be Nat;
+    k in NAT by ORDINAL1:def 13;
+    hence q.k = F(k) by A9;
    end;
    thus thesis;
   end;
   uniqueness proof let it1, it2 be Polynomial of L;
    hereby assume len p > 0; assume that
   A18: len it1 + 1 = len p &
-     for i being Element of NAT holds it1.i = eval(poly_shift(p, i+1),r) and
+     for i being Nat holds it1.i = eval(poly_shift(p, i+1),r) and
   A19: len it2 + 1 = len p &
-     for i being Element of NAT holds it2.i = eval(poly_shift(p, i+1),r);
-         now let k be Element of NAT such that k < len it1;
+     for i being Nat holds it2.i = eval(poly_shift(p, i+1),r);
+         now let k be Nat such that k < len it1;
       thus it1.k = eval(poly_shift(p, k+1),r) by A18 .= it2.k by A19;
      end;
     hence it1 = it2 by A18,A19,ALGSEQ_1:28;
@@ -2331,8 +2335,8 @@ by A2,VECTSP_1:def 19;
       now len (r *' pq) = len r + len pq - 1 by A5,A6,POLYNOM4:13
    .= len pq +(1+1)-1 by A4,POLYNOM5:41 .= len pq +1 .= len p by A1,A3,Def7;
    hence len p = len (r *' pq);
-   let k be Element of NAT; assume k < len p;
-   defpred P[Element of NAT] means p.$1 = (r*'pq).$1;
+   let k be Nat; assume k < len p;
+   defpred P[Nat] means p.$1 = (r*'pq).$1;
 A7: (r*'pq).0 = (-x)*pq.0 by Th39
             .= (-x)*eval(poly_shift(p, 0+1),x) by A1,A3,Def7;
 A8: 0.L = eval(p,x) by A1,POLYNOM5:def 6 .= eval(poly_shift(p,0),x) by Th44
@@ -2344,8 +2348,8 @@ A8: 0.L = eval(p,x) by A1,POLYNOM5:def 6 .= eval(poly_shift(p,0),x) by Th44
     .= -x*eval(poly_shift(p, 0+1),x) + x*eval(poly_shift(p,1),x) + p.0
        by VECTSP_1:41    .= 0.L +p.0 by RLVECT_1:16 .= p.0 by RLVECT_1:10;
   then A9: P[0] by A7;
-  A10: for k being Element of NAT st P[k] holds P[k+1] proof
-       let k be Element of NAT; assume P[k];
+  A10: for k being Nat st P[k] holds P[k+1] proof
+       let k be Nat; assume P[k];
       A11: pq.(k+1) = eval(poly_shift(p, k+1+1),x) by A1,A3,Def7;
       A12: pq.k = eval(poly_shift(p, k+1),x) by A1,A3,Def7;
       per cases;
@@ -2369,9 +2373,8 @@ A8: 0.L = eval(p,x) by A1,POLYNOM5:def 6 .= eval(poly_shift(p,0),x) by Th44
       .= -x*pq.(k+1)+pq.k by VECTSP_1:41;
        hence P[k+1] by A16,RLVECT_1:10;
       end;
-      end;        for k being Element of NAT holds P[k] from NAT_1:sch 1(A9,A10
-)
-;
+      end;
+      for k being Nat holds P[k] from NAT_1:sch 2(A9,A10);
    hence p.k = (r*'pq).k;
   end;
  hence p = r*'pq by ALGSEQ_1:28;
@@ -2400,7 +2403,7 @@ Lm1: now let L be domRing, p be non-zero Polynomial of L;
        p <> 0_. L by Def5; then len p <> 0 by POLYNOM4:8;
    then len p > 0;
 then A1: len p >= 0+1 by NAT_1:13;
-  defpred P[Element of NAT] means
+  defpred P[Nat] means
   for p being Polynomial of L st len p = $1 holds
   Roots p is finite &
   ex n being Element of NAT st n = Card Roots p & n < len p;
@@ -2410,8 +2413,8 @@ A2: P[1] proof let p be Polynomial of L; assume
      take 0; thus 0 = Card Roots p by A3,Th48,CARD_1:78; thus 0 < len p by A3
 ;
     end;
-A4: for n being Element of NAT st n>=1 & P[n] holds P[n+1] proof
-     let n be Element of NAT such that
+A4: for n being Nat st n>=1 & P[n] holds P[n+1] proof
+     let n be Nat such that
      n >= 1 and
     A5: P[n];     let p be Polynomial of L; assume
     A6: len p = n+1;
@@ -2450,7 +2453,7 @@ A4: for n being Element of NAT st n>=1 & P[n] holds P[n+1] proof
      thus 0 < len p by A6;
     end;
     end;
-      for n being Element of NAT st n >= 1 holds P[n] from NAT_1:sch 8(A2,A4);
+      for n being Nat st n >= 1 holds P[n] from NAT_1:sch 8(A2,A4);
   hence Roots p is finite &
         ex n being Element of NAT st n = Card Roots p & n < len p by A1;
 end;
@@ -2780,13 +2783,13 @@ theorem
  holds degree BRoots p = len p -' 1
 proof let L be algebraic-closed domRing, p be non-zero Polynomial of L;
 A1: len p > 0 by Th19;
-    defpred P[Element of NAT] means
+    defpred P[Nat] means
     for p being non-zero Polynomial of L st len p = $1 & $1 > 0
      holds degree BRoots p = len p -' 1;
-A2: for k being Element of NAT st for n being Element of NAT st n < k
+A2: for k being Nat st for n being Nat st n < k
 holds P[n] holds P[k]
-   proof let k be Element of NAT; assume
-   A3: for n being Element of NAT st n < k holds P[n];
+   proof let k be Nat; assume
+   A3: for n being Nat st n < k holds P[n];
     let p be non-zero Polynomial of L; assume that
    A4: len p = k and
    A5: k > 0;
@@ -2848,7 +2851,7 @@ holds P[n] holds P[k]
   end;
   end; end;
        end; end;
-     for n being Element of NAT holds P[n] from NAT_1:sch 4(A2);
+     for n being Nat holds P[n] from NAT_1:sch 4(A2);
  hence degree BRoots p = len p -' 1 by A1;
 end;
 
@@ -3353,7 +3356,7 @@ proof let L be algebraic-closed domRing, p be non-zero (Polynomial of L);assume
 A1: p.(len p-'1) = 1.L;
        len p > 0 by Th19;
 then A2: len p >= 0+1 by NAT_1:13;
-   defpred P[Element of NAT] means
+   defpred P[Nat] means
     for p being non-zero Polynomial of L
      st len p = $1 & $1 >= 1 & p.(len p -'1) = 1.L
       holds p = poly_with_roots(BRoots(p));
@@ -3366,8 +3369,8 @@ A3: P[1] proof let p be non-zero Polynomial of L such that
      hence p = <%1.L%> by A4,A5,ALGSEQ_1:def 6
            .= poly_with_roots(BRoots(p)) by A6,Th62;
     end;
-A7: for n being Element of NAT st n >= 1 & P[n] holds P[n+1] proof
-     let n be Element of NAT such that
+A7: for n being Nat st n >= 1 & P[n] holds P[n+1] proof
+     let n be Nat such that
     A8: n >= 1 and
     A9: P[n];
      let p being non-zero Polynomial of L such that
@@ -3393,7 +3396,7 @@ A7: for n being Element of NAT st n >= 1 & P[n] holds P[n+1] proof
             poly_with_roots(({x},1)-bag) = <%-x,1.L%> by Th63;
      hence p = poly_with_roots(BRoots(p)) by A13,A14,A17,Th66;
     end;
-       for n  being Element of NAT st n >= 1 holds P[n] from NAT_1:sch 8(A3,A7)
+       for n  being Nat st n >= 1 holds P[n] from NAT_1:sch 8(A3,A7)
 ;
  hence p = poly_with_roots(BRoots(p)) by A1,A2;
 end;

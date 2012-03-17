@@ -27,7 +27,7 @@ environ
       ABSVALUE, SQUARE_1, PARTFUN1, PARTFUN2, RCOMP_1, RFUNCT_1, RFUNCT_2,
       FCONT_1, FDIFF_1, SCHEME1, ROLLE, LIMFUNC1, FCONT_3, FUNCT_3, RELAT_1,
       RELSET_1, XREAL_0, XBOOLE_0, XBOOLE_1, XCMPLX_0, XCMPLX_1, COMPLEX1,
-      FUNCOP_1, XREAL_1, XXREAL_0;
+      FUNCOP_1, XREAL_1, XXREAL_0, ORDINAL1;
  schemes NAT_1, RECDEF_1, SEQ_1, SCHEME1, RCOMP_1;
 
 begin
@@ -373,9 +373,9 @@ proof
   consider m1 be Element of NAT such that
   A2: 0 <= m1 & P[s().m1] by A1;
   defpred R[Nat] means P[s().$1];
-  A3: ex m st R[m] by A2;
-  consider M be Element of NAT such that
-  A4: R[M] & for n st R[n] holds M <= n from NAT_1:sch 5(A3);
+  A3: ex m be Nat st R[m] by A2;
+  consider M be Nat such that
+  A4: R[M] & for n be Nat st R[n] holds M <= n from NAT_1:sch 5(A3);
   A5: now let n; consider m such that
        A6: n + 1 <= m & P[s().m] by A1;
        take m;
@@ -385,14 +385,17 @@ proof
    n < m & P[s().m] & for k st n < k & P[s().k] holds m <= k;
   A7: for n for x be Element of NAT ex y be Element of NAT st P[n,x,y]
        proof let n; let x be Element of NAT;
-        defpred R[Element of NAT] means x < $1 & P[s().$1];
-        A8: ex m st R[m] by A5;
-        consider l be Element of NAT such that
-        A9: R[l] & for k st R[k] holds l <= k from NAT_1:sch 5(A8);
+        defpred R[Nat] means x < $1 & P[s().$1];
+        ex m st R[m] by A5;
+        then
+A8:     ex m be Nat st R[m] by A5;
+        consider l be Nat such that
+        A9: R[l] & for k be Nat st R[k] holds l <= k from NAT_1:sch 5(A8);
         take l;
-        thus thesis by A9;
+        l in NAT by ORDINAL1:def 13; 
+        hence thesis by A9;
        end;
-  reconsider M' = M as Element of NAT;
+  reconsider M' = M as Element of NAT by ORDINAL1:def 13;
   consider F be Function of NAT,NAT such that
   A10: F.0 = M' &
       for n be Element of NAT holds P[n,F.n,F.(n+1)] from RECDEF_1:sch 2(A7);
@@ -400,8 +403,7 @@ proof
      rng F c= REAL by XBOOLE_1:1;
   then reconsider F as Real_Sequence by A11,FUNCT_2:def 1,RELSET_1:11;
   A12: now let n;
-           F.n in rng F by A11,FUNCT_1:def 5;hence F.n is Element of NAT by A11
-;
+  F.n in rng F by A11,FUNCT_1:def 5;hence F.n is Element of NAT by A11;
       end;
       now let n;
         F.n is Element of NAT & F.(n+1) is Element of NAT by A12;
@@ -420,12 +422,13 @@ proof
   thus for n holds S[n] from NAT_1:sch 1(A13,A14);
   A15: for n st P[s().n] ex m st F.m = n
        proof
-        defpred R[Element of NAT] means P[s().$1] & for m holds F.m <> $1;
-        assume A16: ex n st R[n];
-        consider M1 be Element of NAT such that
-        A17: R[M1] & for n st R[n] holds M1 <= n from NAT_1:sch 5(A16);
-        defpred H[Element of NAT] means $1 < M1 & P[s().$1] & ex m st F.m = $1;
-        A18: ex n st H[n]
+        defpred R[Nat] means P[s().$1] & for m holds F.m <> $1;
+        assume ex n st R[n];
+        then A16: ex n be Nat st R[n];
+        consider M1 be Nat such that
+        A17: R[M1] & for n be Nat st R[n] holds M1 <= n from NAT_1:sch 5(A16);
+        defpred H[Nat] means $1 < M1 & P[s().$1] & ex m st F.m = $1;
+        A18: ex n being Nat st H[n]
              proof
               take M;
               A19: M <= M1 by A4,A17;
@@ -435,9 +438,10 @@ proof
               take 0;
               thus thesis by A10;
              end;
-        A20: for n st H[n] holds n <= M1;
-        consider X be Element of NAT such that
-        A21: H[X] & for n st H[n] holds n <= X from NAT_1:sch 6(A20,A18);
+        A20: for n being Nat st H[n] holds n <= M1;
+        consider X be Nat such that
+        A21: H[X] & for n being Nat st H[n] holds n <= X
+        from NAT_1:sch 6(A20,A18);
         A22: for k st X < k & k < M1 holds not P[s().k]
              proof given k such that
               A23: X < k & k < M1 & P[s().k];
@@ -455,6 +459,7 @@ proof
         A24: F.m = X by A21;
         A25: X < F.(m+1) & P[s().(F.(m+1))] &
             for k st X < k & P[s().k] holds F.(m+1) <= k by A10,A24;
+            M1 in NAT by ORDINAL1:def 13; then
         A26: F.(m+1) <= M1 by A10,A17,A21,A24;
              now
           assume F.(m+1) <> M1; then F.(m+1) < M1 by A26,REAL_1:def 5;

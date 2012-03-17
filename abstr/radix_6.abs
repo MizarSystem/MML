@@ -7,25 +7,26 @@
 environ
 
  vocabularies ARYTM_1, NAT_1, INT_1, RADIX_1, FINSEQ_1, MIDSP_3, FINSEQ_4,
-      GROUP_1, RELAT_1, RLVECT_1, FUNCT_1, RADIX_5, RADIX_6;
+      GROUP_1, RELAT_1, RLVECT_1, FUNCT_1, RADIX_5, RADIX_6, ARYTM;
  notations TARSKI, SUBSET_1, NUMBERS, XCMPLX_0, XXREAL_0, INT_1, NAT_1, NAT_D,
       NEWTON, BINARITH, RADIX_1, FINSEQ_4, FINSEQ_1, FUNCT_1, RELSET_1,
       PARTFUN1, GR_CY_1, RADIX_5;
  constructors REAL_1, NAT_1, NAT_D, PARTFUN1, FINSEQ_4, NEWTON, BINARITH,
       GR_CY_1, RADIX_5;
- registrations RELSET_1, XXREAL_0, XREAL_0, NAT_1, INT_1, ORDINAL1, NEWTON;
+ registrations RELSET_1, XXREAL_0, XREAL_0, NAT_1, INT_1, ORDINAL1, NEWTON,
+      XBOOLE_0;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
 
 
 begin
 
 theorem :: RADIX_6:1
-  for n be Element of NAT st n >= 1 holds
-    for m,k be Element of NAT st m >= 1 & k >= 2 holds
+  for n be Nat st n >= 1 holds
+    for m,k be Nat st m >= 1 & k >= 2 holds
       SDDec(Fmin(m+n,m,k)) = SDDec(Fmin(m,m,k));
 
 theorem :: RADIX_6:2
-      for m,k be Element of NAT st m >= 1 & k >= 2 holds
+  for m,k be Nat st m >= 1 & k >= 2 holds
     SDDec(Fmin(m,m,k)) > 0;
 
 begin :: Definitions of Upper 3 Digits of Radix-$2^k$ SD number and its property
@@ -88,12 +89,12 @@ definition let m,k be Nat, r be Tuple of (m+2),(k-SD);
 end;
 
 theorem :: RADIX_6:3
-  for m,k be Element of NAT st m >= 1 & k >= 2 holds
+  for m,k be Nat st m >= 1 & k >= 2 holds
     for r be Tuple of (m+2),k-SD holds
       SDDec(Mmax(r)) >= SDDec(r);
 
 theorem :: RADIX_6:4
-  for m,k be Element of NAT st m >= 1 & k >= 2 holds
+  for m,k be Nat st m >= 1 & k >= 2 holds
     for r be Tuple of (m+2),k-SD holds
       SDDec(r) >= SDDec(Mmin(r));
 
@@ -107,16 +108,16 @@ definition let n,k be Nat, x be Integer;
 end;
 
 theorem :: RADIX_6:5
-  for x,n,k,i be Element of NAT st i in Seg n holds
+  for x,n,k,i be Nat st i in Seg n holds
     DigA(DecSD(x,n,k),i) >= 0;
 
 theorem :: RADIX_6:6
-  for n,k,x be Element of NAT st
+  for n,k,x be Nat st
    n >= 1 & k >= 2 & x needs_digits_of n,k holds
      DigA(DecSD(x,n,k),n) > 0;
 
 theorem :: RADIX_6:7
-  for f,m,k be Element of NAT st
+  for f,m,k be Nat st
    m >= 1 & k >= 2 & f needs_digits_of m,k holds
      f >= SDDec(Fmin(m+2,m,k));
 
@@ -127,46 +128,46 @@ theorem :: RADIX_6:8
     ex s be Integer st -f < mlow - s * f & mhigh - s * f < f;
 
 theorem :: RADIX_6:9
-  for m,k be Element of NAT st m >= 1 & k >= 2 holds
+  for m,k be Nat st m >= 1 & k >= 2 holds
     for r be Tuple of (m+2),k-SD holds
       SDDec(Mmax(r)) + SDDec(DecSD(0,m+2,k))
           = SDDec(M0(r)) + SDDec(SDMax(m+2,m,k));
 
 theorem :: RADIX_6:10
-  for m,k be Element of NAT st m >= 1 & k >= 2 holds
+  for m,k be Nat st m >= 1 & k >= 2 holds
     for r be Tuple of (m+2),k-SD holds
       SDDec(Mmax(r)) < SDDec(M0(r)) + SDDec(Fmin(m+2,m,k));
 
 theorem :: RADIX_6:11
-  for m,k be Element of NAT st m >= 1 & k >= 2 holds
+  for m,k be Nat st m >= 1 & k >= 2 holds
     for r be Tuple of (m+2),k-SD holds
       SDDec(Mmin(r)) + SDDec(DecSD(0,m+2,k))
           = SDDec(M0(r)) + SDDec(SDMin(m+2,m,k));
 
 theorem :: RADIX_6:12
-  for m,k be Element of NAT, r be Tuple of (m+2),k-SD st m >= 1 & k >= 2 holds
+  for m,k be Nat, r be Tuple of (m+2),k-SD st m >= 1 & k >= 2 holds
     SDDec(M0(r)) + SDDec(DecSD(0,m+2,k))
       = SDDec(Mmin(r)) + SDDec(SDMax(m+2,m,k));
 
 theorem :: RADIX_6:13
-  for m,k be Element of NAT st m >= 1 & k >= 2 holds
+  for m,k be Nat st m >= 1 & k >= 2 holds
     for r be Tuple of (m+2),k-SD holds
        SDDec(M0(r)) < SDDec(Mmin(r)) + SDDec(Fmin(m+2,m,k));
 
 theorem :: RADIX_6:14
-      for m,k,f be Element of NAT, r be Tuple of (m+2),k-SD
+      for m,k,f be Nat, r be Tuple of (m+2),k-SD
     st m >= 1 & k >= 2 & f needs_digits_of m,k holds
       ex s be Integer st
         (- f < (SDDec(M0(r)) - s*f)) &  ( SDDec(Mmax(r)) - s*f < f );
 
 theorem :: RADIX_6:15
-      for m,k,f be Element of NAT, r be Tuple of (m+2),k-SD
+      for m,k,f be Nat, r be Tuple of (m+2),k-SD
     st m >= 1 & k >= 2 & f needs_digits_of m,k holds
       ex s be Integer st
         (- f < (SDDec(Mmin(r)) - s*f)) &  ( SDDec(M0(r)) - s*f < f );
 
 theorem :: RADIX_6:16
-      for m,k be Element of NAT, r be Tuple of (m+2),k-SD st m >= 1 & k >= 2
+      for m,k be Nat, r be Tuple of (m+2),k-SD st m >= 1 & k >= 2
      holds
        SDDec(M0(r)) <= SDDec(r) & SDDec(r) <= SDDec(Mmax(r))
      or
@@ -195,11 +196,11 @@ definition
 end;
 
 theorem :: RADIX_6:17
-  for m,k be Element of NAT, r be Tuple of (m+2),k-SD st m >= 1 & k >= 2 holds
+  for m,k be Nat, r be Tuple of (m+2),k-SD st m >= 1 & k >= 2 holds
     SDDec(M0(r)) + SDDec(Mmask(r)) = SDDec(r) + SDDec(DecSD(0,m+2,k));
 
 theorem :: RADIX_6:18
-      for m,k be Element of NAT, r be Tuple of (m+2),k-SD st m >= 1 & k >= 2
+      for m,k be Nat, r be Tuple of (m+2),k-SD st m >= 1 & k >= 2
      holds
     SDDec(Mmask(r)) > 0 implies SDDec(r) > SDDec(M0(r));
 
@@ -223,8 +224,8 @@ definition let n,m,k be Nat;
 end;
 
 theorem :: RADIX_6:19
-  for n be Element of NAT st n >= 1 holds
-    for m,k be Element of NAT st m in Seg n & k >= 2 holds
+  for n be Nat st n >= 1 holds
+    for m,k be Nat st m in Seg n & k >= 2 holds
       SDDec(FSDMin(n,m,k)) = 1;
 
 definition let n,m,k be Nat, r be Tuple of m+2,k-SD;
@@ -235,8 +236,8 @@ definition let n,m,k be Nat, r be Tuple of m+2,k-SD;
 end;
 
 theorem :: RADIX_6:20
-      for m be Element of NAT st m >= 1 holds
-    for n,k be Element of NAT, r be Tuple of m+2,k-SD st
+      for m be Nat st m >= 1 holds
+    for n,k be Nat, r be Tuple of m+2,k-SD st
       k >= 2 & n in Seg (m+2) &
         Mmask(r) is_Zero_over n & DigA(Mmask(r),n) > 0 holds
           SDDec(Mmask(r)) > 0;

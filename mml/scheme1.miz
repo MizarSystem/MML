@@ -7,7 +7,7 @@
 environ
 
  vocabularies NAT_1, SEQ_1, SEQM_3, FUNCT_1, RELAT_1, ORDINAL2, ARYTM_3,
-      ARYTM_1, PARTFUN1, FRECHET2;
+      ARYTM_1, PARTFUN1, FRECHET2, ARYTM;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, XCMPLX_0, REAL_1,
       NAT_1, NAT_D, RELAT_1, FUNCT_1, RELSET_1, PARTFUN1, FUNCT_2, SEQ_1,
       SEQM_3, XXREAL_0;
@@ -17,7 +17,7 @@ environ
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
  definitions TARSKI, XBOOLE_0;
  theorems ZFMISC_1, REAL_1, NAT_1, FUNCT_1, FUNCT_2, SEQM_3, PARTFUN1,
-      RELSET_1, XBOOLE_1, NAT_D;
+      RELSET_1, XBOOLE_1, NAT_D, ORDINAL1;
  schemes NAT_1, FUNCT_2, RECDEF_1, SUBSET_1, CLASSES1, XBOOLE_0;
 
 begin
@@ -146,9 +146,9 @@ A1: for n ex m st n <= m & P[s().m]
 proof defpred X[set] means P[s().$1];
  consider m1 be Element of NAT such that
  A2: 0 <= m1 & P[s().m1] by A1;
- A3: ex m st X[m] by A2;
- consider M be Element of NAT such that
- A4: X[M] & for n st X[n] holds M <= n from NAT_1:sch 5(A3);
+ A3: ex m be Nat st X[m] by A2;
+ consider M be Nat such that
+ A4: X[M] & for n be Nat st X[n] holds M <= n from NAT_1:sch 5(A3);
  A5: now let n; consider m such that
   A6: n + 1 <= m & P[s().m] by A1;
   take m; thus n < m & P[s().m] by A6,NAT_1:13;
@@ -158,12 +158,16 @@ proof defpred X[set] means P[s().$1];
   defpred X[set,set,set] means P[$2,$3];
  A7: for n for x be Element of NAT ex y be Element of NAT st X[n,x,y]
   proof let n; let x be Element of NAT;
-    defpred X[Element of NAT] means x < $1 & P[s().$1];
-   A8: ex m st X[m] by A5; consider l be Element of NAT such that
-   A9: X[l] & for k st X[k] holds l <= k from NAT_1:sch 5(A8);
+    defpred X[Nat] means x < $1 & P[s().$1];
+    ex m be Element of NAT st X[m] by A5;
+   then
+   A8: ex m be Nat st X[m] by A5;
+   consider l be Nat such that
+   A9: X[l] & for k be Nat st X[k] holds l <= k from NAT_1:sch 5(A8);
+   reconsider l as Element of NAT by ORDINAL1:def 13;
    take l; thus thesis by A9;
   end;
- reconsider M' = M as Element of NAT qua non empty set;
+ reconsider M' = M as Element of NAT by ORDINAL1:def 13;
  consider F be Function of NAT,NAT such that
  A10: F.0 = M' &
      for n be Element of NAT holds X[n,F.n,F.(n+1)] from RECDEF_1:sch 2(A7);
@@ -189,20 +193,21 @@ proof defpred X[set] means P[s().$1];
  thus for n holds X[n] from NAT_1:sch 1(A13,A14);
  A15: for n st P[s().n] ex m st F.m = n
   proof defpred X[set] means P[s().$1] & for m holds F.m <> $1;
-   assume A16: ex n st X[n];
-   consider M1 be Element of NAT such that
-   A17: X[M1] & for n st X[n] holds M1 <= n
+   assume ex n st X[n];
+   then A16: ex n be Nat st X[n];
+   consider M1 be Nat such that
+   A17: X[M1] & for n be Nat st X[n] holds M1 <= n
        from NAT_1:sch 5(A16);
-    defpred X[Element of NAT] means $1 < M1 & P[s().$1] & ex m st F.m = $1;
-   A18: ex n st X[n]
+    defpred X[Nat] means $1 < M1 & P[s().$1] & ex m st F.m = $1;
+   A18: ex n be Nat st X[n]
     proof take M; A19: M <= M1 by A4,A17;
           M <> M1 by A10,A17;
      hence M < M1 by A19,REAL_1:def 5; thus P[s().M] by A4; take 0;
      thus thesis by A10;
     end;
-   A20: for n st X[n] holds n <= M1;
-   consider X be Element of NAT such that
- A21: X[X] & for n st X[n] holds n <= X from NAT_1:sch 6(A20,A18);
+   A20: for n be Nat st X[n] holds n <= M1;
+   consider X be Nat such that
+ A21: X[X] & for n be Nat st X[n] holds n <= X from NAT_1:sch 6(A20,A18);
    A22: for k st X < k & k < M1 holds not P[s().k]
     proof given k such that A23: X < k & k < M1 & P[s().k];
          now per cases;
@@ -218,6 +223,8 @@ proof defpred X[set] means P[s().$1];
    A24: F.m = X by A21;
    A25: X < F.(m+1) & P[s().(F.(m+1))] &
    for k st X < k & P[s().k] holds F.(m+1) <= k by A10,A24;
+   M1 in NAT by ORDINAL1:def 13;
+   then
    A26: F.(m+1) <= M1 by A10,A17,A21,A24;
        now assume F.(m+1) <> M1; then F.(m+1) < M1 by A26,REAL_1:def 5;
 hence contradiction by A22,A25;

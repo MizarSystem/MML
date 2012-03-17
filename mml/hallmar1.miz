@@ -7,7 +7,7 @@
 environ
 
  vocabularies FUNCT_1, BOOLE, RELAT_1, FINSET_1, TARSKI, CARD_1, ARYTM_1,
-      FINSEQ_1, HALLMAR1, REALSET1, FUNCT_4, ZF_REFLE, NEWTON;
+      FINSEQ_1, HALLMAR1, REALSET1, FUNCT_4, ZF_REFLE, NEWTON, ARYTM;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1, NUMBERS,
       XCMPLX_0, XXREAL_0, NAT_1, REALSET1, FINSET_1, CARD_1, FINSEQ_1, FUNCT_2,
       FUNCT_7;
@@ -19,7 +19,7 @@ environ
  theorems CARD_2, SPPOL_1, EULER_1, XBOOLE_1, ZFMISC_1, FUNCT_1, PARTFUN1,
       FINSET_1, PENCIL_1, CARD_1, TARSKI, REAL_1, NAT_1, XBOOLE_0, FINSEQ_1,
       FUNCT_7, FINSEQ_3, FINSEQ_5, TAXONOM1, RELAT_1, FUNCT_2, RELSET_1,
-      ENUMSET1, FINSEQ_2, REALSET1, XREAL_1, XXREAL_0;
+      ENUMSET1, FINSEQ_2, REALSET1, XREAL_1, XXREAL_0, ORDINAL1;
  schemes NAT_1, FUNCT_2, XBOOLE_0;
 
 begin :: Preliminaries
@@ -39,21 +39,23 @@ scheme Regr11 { n() -> Element of NAT, P[set] }:
 A1:  P[n()] & n() >= 2 and
 A2:  for k be Element of NAT st 1 <= k & k < n() & P[k+1] holds P[k]
   proof
-    defpred X[Element of NAT] means 1 <= $1 & $1 <= n() & not P[$1];
-    assume
-A3: ex k be Element of NAT st X[k];
-A4: for l be Element of NAT st X[l] holds l <= n();
-    consider l be Element of NAT such that
+    defpred X[Nat] means 1 <= $1 & $1 <= n() & not P[$1];
+    assume ex k be Element of NAT st X[k];
+    then
+A3: ex k be Nat st X[k];
+A4: for l be Nat st X[l] holds l <= n();
+    consider l be Nat such that
 A5: X[l] and
-A6: for n be Element of NAT st X[n] holds n <= l from NAT_1:sch 6(A4,A3);
+A6: for n be Nat st X[n] holds n <= l from NAT_1:sch 6(A4,A3);
 A7: l < n() by A1,A5,REAL_1:def 5;
 then A8: l + 1 <= n() by NAT_1:13;
 A9: l + 1 >= 1 by NAT_1:12;
+A10: l in NAT by ORDINAL1:def 13;
      now assume not P[l+1];
       then l + 1 <= l by A6,A8,A9;
       hence contradiction by XREAL_1:31;
     end;
-    hence contradiction by A2,A5,A7;
+    hence contradiction by A2,A5,A7,A10;
   end;
 
 scheme Regr2 { P[set] } :

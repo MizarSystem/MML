@@ -90,7 +90,7 @@
 </RCluster>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="296"/>
+<Func kind="K" nr="297"/>
 <Cluster>
 <Adjective nr="82"/>
 </Cluster>
@@ -119,7 +119,7 @@
 <Cluster/>
 <Func kind="K" nr="23">
 <Func kind="U" nr="1">
-<Func kind="K" nr="229">
+<Func kind="K" nr="230">
 <Num nr="2"/>
 </Func>
 </Func>

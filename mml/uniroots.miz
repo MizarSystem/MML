@@ -70,26 +70,26 @@ proof let k be Element of NAT;
   hence thesis;
 end;
 
-scheme CompIndNE { P[non empty Element of NAT] } :
+scheme CompIndNE { P[non empty Nat] } :
  for k being non empty Element of NAT holds P[k]
 provided
 A1: for k being non empty Element of NAT
     st for n being non empty Element of NAT st n < k holds P[n]
      holds P[k]
 proof
- defpred R[Element of NAT] means ex m being non empty Element of NAT
+ defpred R[Nat] means ex m being non empty Element of NAT
  st m = $1 & P[m];
-A2: now let k being Element of NAT such that
+A2: now let k be Nat such that
    A3: k>=1 and
-   A4: for n being Element of NAT st n>=1 & n<k holds R[n];
-       reconsider m = k as non empty Element of NAT by A3;
+   A4: for n being Nat st n>=1 & n<k holds R[n];
+       reconsider m = k as non empty Element of NAT by A3,ORDINAL1:def 13;
             now let n be non empty Element of NAT such that
        A5: n < m;                n >= 1 by Lm1; then R[n] by A4,A5;
         hence P[n];
        end; then P[m] by A1;
     hence R[k];
    end;
-A6: for k being Element of NAT st k>=1 holds R[k] from NAT_1:sch 9(A2);
+A6: for k being Nat st k>=1 holds R[k] from NAT_1:sch 9(A2);
    let k be non empty Element of NAT;
      k >= 1 by Lm1;
     then ex m being non empty Element of NAT st m = k & P[m] by A6;
@@ -1413,20 +1413,21 @@ end;
 
 begin :: The unital polynomial x^n -1
 
-definition let n be non empty Element of NAT,
+definition let n be non empty Nat,
 L be left_unital (non empty doubleLoopStr);
  func unital_poly(L,n) -> Polynomial of L equals
    0_.(L)+*(0,-(1_L))+*(n,1_L);
   coherence proof set p = 0_.(L)+*(0,-(1_L))+*(n,1_L);
-  A1: for i being Element of NAT st i <> 0 & i <> n holds p.i = 0.L
-      proof let i be Element of NAT such that A2: i <> 0 & i <> n;
+  A1: for i being Nat st i <> 0 & i <> n holds p.i = 0.L
+      proof let i be Nat such that A2: i <> 0 & i <> n;
+A3:     i in NAT by ORDINAL1:def 13;
          set q = 0_.(L)+*(0,-(1_L));
         q+*(n,1_L).i = q.i by A2,FUNCT_7:34 .= (0_.(L)).i by A2,FUNCT_7:34
-           .= 0.L by FUNCOP_1:13;
+           .= 0.L by FUNCOP_1:13,A3;
         hence thesis;
       end;
-           for i being Element of NAT st i >= n+1 holds p.i = 0.L
-      proof let i be Element of NAT such that A3: i >= n+1;
+      for i being Nat st i >= n+1 holds p.i = 0.L
+      proof let i be Nat such that A3: i >= n+1;
                now assume A4: i = n;
                   n + 0 < n + 1 by XREAL_1:10;
             hence contradiction by A3,A4;
@@ -1460,14 +1461,15 @@ end;
 
 theorem Th43:
 for L being left_unital (non empty doubleLoopStr)
-for n being non empty Element of NAT, i being Element of NAT st i <> 0 & i <> n
+for n being non empty Nat, i being Nat st i <> 0 & i <> n
   holds unital_poly(L,n).i = 0.L
 proof let L be left_unital (non empty doubleLoopStr),
-n be non empty Element of NAT;
-    let i be Element of NAT such that A1: i <> 0 & i <> n;
+n be non empty Nat;
+    let i be Nat such that A1: i <> 0 & i <> n;
+A2: i in NAT by ORDINAL1:def 13;
     set p = 0_.(L)+*(0,-(1_L));
          p+*(n,1_L).i = p.i by A1,FUNCT_7:34
-       .= (0_.(L)).i by A1,FUNCT_7:34     .= 0.L by FUNCOP_1:13;
+       .= (0_.(L)).i by A1,FUNCT_7:34     .= 0.L by FUNCOP_1:13,A2;
   hence thesis;
 end;
 
@@ -1477,17 +1479,17 @@ for L being non degenerated well-unital (non empty doubleLoopStr),
  holds len unital_poly(L,n) = n+1
 proof let L be non degenerated well-unital (non empty doubleLoopStr);
     let n be non empty Element of NAT;
-         for i being Element of NAT st i >= n+1 holds unital_poly(L,n).i=0.L
-    proof let i be Element of NAT such that A1: i >= n+1;
-             now assume A2: i = n;       n + 0 < n + 1 by XREAL_1:10;
-          hence contradiction by A1,A2;
-        end;
+    for i being Nat st i >= n+1 holds unital_poly(L,n).i=0.L
+    proof let i be Nat such that A1: i >= n+1;
+      now assume A2: i = n;       n + 0 < n + 1 by XREAL_1:10;
+        hence contradiction by A1,A2;
+      end;
       hence unital_poly(L,n).i = 0.L by A1,Th43;
     end;
 then A3: n+1 is_at_least_length_of unital_poly(L,n) by ALGSEQ_1:def 3;
-         for m being Element of NAT st m is_at_least_length_of unital_poly(L,n)
+         for m being Nat st m is_at_least_length_of unital_poly(L,n)
       holds n+1 <= m
-    proof let m be Element of NAT such that
+    proof let m be Nat such that
     A4: m is_at_least_length_of unital_poly(L,n);
              now assume m < n+1;
         then m <= n by NAT_1:13;
@@ -2443,14 +2445,15 @@ ex x being set st G[l,x] by ORDINAL1:def 13;
           hence thesis by COMPLFLD:10,RLVECT_1:31;
         end;
         end;
-        defpred C[Element of NAT] means cp(k).$1 is integer;
-     A63: now let m be Element of NAT; assume
-       A64: for n being Element of NAT st n < m holds C[n];
+        defpred C[Nat] means cp(k).$1 is integer;
+     A63: now let m be Nat; assume
+       A64: for n being Nat st n < m holds C[n];
+       reconsider m1 = m as Element of NAT by ORDINAL1:def 13;
            consider r be FinSequence of cFC such that
        A65: len r = m+1 and
        A66: unital_poly(F_Complex,k).m = Sum r and
        A67: for l be Element of NAT st l in dom r
-       holds r.l = p.(l-'1) * (cp(k).(m+1-'l))
+       holds r.l = p.(l-'1) * (cp(k).(m1+1-'l))
                by A10,POLYNOM3:def 11;
        A68: 1 <= len r by A65,NAT_1:11;
        then A69: (1,1)-cut r ^ (1+1,len r)-cut r = r by GRAPH_2:9;
@@ -2463,13 +2466,13 @@ ex x being set st G[l,x] by ORDINAL1:def 13;
            reconsider Src = Sum r as Element of COMPLEX by COMPLFLD:def 1;
             now
             per cases;
-            suppose m = 0;
+            suppose m1 = 0;
              hence Src is integer by A1,A66,Th42;
             end;
-            suppose m = k;
+            suppose m1 = k;
              hence Src is integer by A66,Th42,COMPLFLD:10;
             end;
-            suppose m <> 0 & m <> k;
+            suppose m1 <> 0 & m1 <> k;
              hence Src is integer by A66,Th43,COMPLFLD:9;
            end;
            end;
@@ -2518,23 +2521,23 @@ ex x being set st G[l,x] by ORDINAL1:def 13;
            then reconsider Ss = Ssc as Integer by Th5;  r1c = Sr -Ss by A72;
            then reconsider r1i = r1 as Integer;
        A80: r1i = p.(1-'1) * cp(k).(m+1-'1) by A67,A70
-              .= p.0 * cp(k).m by A59,BINARITH:39;
+              .= p.0 * cp(k).m1 by A59,BINARITH:39;
          per cases by A7,A11,A53,A54,FINSEQ_3:55;
          suppose p.0 = 1;
           hence C[m] by A80;
          end;
          suppose p.0 = -1;
-             then r1 = (-1_F_Complex) * cp(k).m by A80,COMPLFLD:4,10
-          .= -1_F_Complex * cp(k).m by VECTSP_1:41
-          .= - cp(k).m by VECTSP_1:def 19;
-           then 0.F_Complex = - cp(k).m + - r1 by RLVECT_1:def 10
-            .= -r1 - cp(k).m;
+             then r1 = (-1_F_Complex) * cp(k).m1 by A80,COMPLFLD:4,10
+          .= -1_F_Complex * cp(k).m1 by VECTSP_1:41
+          .= - cp(k).m1 by VECTSP_1:def 19;
+           then 0.F_Complex = - cp(k).m1 + - r1 by RLVECT_1:def 10
+            .= -r1 - cp(k).m1;
           then - r1 = cp(k).m by VECTSP_1:66; then - r1i = cp(k).m by
 COMPLFLD:4;
           hence C[m];
          end;
          end;
-             for i being Element of NAT holds C[i] from NAT_1:sch 4(A63);
+         for i being Nat holds C[i] from NAT_1:sch 4(A63);
      hence P[k] by A62;
    end;
    end;

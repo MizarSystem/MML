@@ -9,20 +9,19 @@
 <ArticleID name="RELAT_1"/>
 <ArticleID name="FUNCT_1"/>
 <ArticleID name="ORDINAL1"/>
-<ArticleID name="ORDINAL2"/>
 <ArticleID name="ARYTM_3"/>
 <ArticleID name="ARYTM_2"/>
 </Signature>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="68"/>
+<Func kind="K" nr="54"/>
 <Cluster>
 <Adjective nr="1" value="false"/>
 </Cluster>
 </FCluster>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="69"/>
+<Func kind="K" nr="55"/>
 <Cluster>
 <Adjective nr="1" value="false"/>
 </Cluster>

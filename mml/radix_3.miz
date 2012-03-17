@@ -7,14 +7,14 @@
 environ
 
  vocabularies INT_1, NAT_1, ARYTM_1, ARYTM_3, POWER, MIDSP_3, FINSEQ_1,
-      FUNCT_1, RELAT_1, RLVECT_1, RADIX_1, FINSEQ_4, RADIX_3, GROUP_1;
+      FUNCT_1, RELAT_1, RLVECT_1, RADIX_1, FINSEQ_4, RADIX_3, GROUP_1, ARYTM;
  notations TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, XCMPLX_0, XXREAL_0, INT_1,
       NAT_1, NAT_D, FUNCT_1, PARTFUN1, NEWTON, POWER, FINSEQ_1, FINSEQ_4,
       BINARITH, GR_CY_1, RADIX_1;
  constructors PARTFUN1, REAL_1, NAT_1, NAT_D, FINSEQ_4, NEWTON, POWER,
       BINARITH, GR_CY_1, RADIX_1;
  registrations RELSET_1, FINSET_1, NUMBERS, XXREAL_0, XREAL_0, NAT_1, INT_1,
-      MEMBERED, SEQ_1, NEWTON;
+      MEMBERED, SEQ_1, NEWTON, XBOOLE_0;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions TARSKI, RADIX_1;
  theorems REAL_1, REAL_2, RADIX_1, POWER, NAT_1, NAT_2, INT_1, BINARITH,
@@ -62,12 +62,12 @@ proof
 assume
 A1: 1 <= k;
   reconsider k as Element of NAT by ORDINAL1:def 13;
-  defpred P[Element of NAT] means 2<= Radix($1);
+  defpred P[Nat] means 2<= Radix($1);
 A2:     P[1] by POWER:30;
-A3: for kk be Element of NAT st
+A3: for kk be Nat st
       kk >= 1 & P[kk] holds P[(kk+1)]
       proof
-        let kk be Element of NAT;
+        let kk be Nat;
         assume
 A4:       1 <= kk & 2 <= Radix(kk);
 A5:     Radix(kk + 1) = 2 to_power (1) * 2 to_power (kk) by POWER:32
@@ -75,7 +75,7 @@ A5:     Radix(kk + 1) = 2 to_power (1) * 2 to_power (kk) by POWER:32
             Radix(kk) > 1 by A4,XXREAL_0:2;
         hence thesis by A5,REAL_2:144;
         end;
-        for k be Element of NAT holds  1 <= k implies P[k]
+        for k be Nat holds  1 <= k implies P[k]
         from NAT_1:sch 8(A2,A3);
         then P[k] by A1;
       hence thesis;
@@ -372,10 +372,10 @@ A8:        Radix(k-'1) <= i1;
 end;
 
 theorem Th15:
-  for x be Integer, k be Element of NAT st 2 <= k holds
+  for x be Integer, k be Nat st 2 <= k holds
     SDSub_Add_Carry(x,k) in k-SD_Sub_S
 proof
-  let x be Integer, k be Element of NAT;
+  let x be Integer, k be Nat;
   assume
 A1:   k >= 2;
       then k > 1 by XXREAL_0:2;
@@ -756,8 +756,7 @@ theorem
 proof
   let n; assume
 A1: n >= 1;
-    reconsider n as Element of NAT by ORDINAL1:def 13;
-  defpred P[Element of NAT] means
+  defpred P[Nat] means
     for k,x be Nat st
       k >= 2 & x is_represented_by $1,k holds
         x = SDSub2IntOut( SD2SDSub(DecSD(x,$1,k)) );
@@ -808,9 +807,9 @@ A10:  len(SDSub2INT(SD2SDSub(X))) = 1 + 1 by FINSEQ_2:109;
      hence thesis;
   end;
 
-A12: for n be Element of NAT st n >= 1 & P[n] holds P[n+1]
+A12: for n be Nat st n >= 1 & P[n] holds P[n+1]
   proof
-    let n be Element of NAT;
+    let n be Nat;
     assume
 A13:  n >= 1 & P[n];
 then A14:  n in Seg n by FINSEQ_1:5;
@@ -1020,7 +1019,7 @@ A56: Sum SDSub2INT(X)
       then (Radix(k) |^ n) > 0 by PREPOWER:13;
       hence thesis by A56,NAT_D:2;
   end;
-      for n be Element of NAT st n >= 1 holds P[n] from NAT_1:sch 8(A2,A12);
-      then P[n] by A1;
+  for n be Nat st n >= 1 holds P[n] from NAT_1:sch 8(A2,A12);
+  then P[n] by A1;
   hence thesis;
 end;

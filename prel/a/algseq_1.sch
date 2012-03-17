@@ -59,16 +59,17 @@
 <Not>
 <And>
 <Pred kind="R" nr="19">
-<Func kind="K" nr="94">
+<Func kind="K" nr="95">
 <Func kind="F" nr="1"/>
 <Var nr="1"/>
 </Func>
 <Func kind="F" nr="2"/>
 </Pred>
 <For>
-<Typ kind="M" nr="2">
-<Cluster/>
-<Func kind="K" nr="87"/>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="20"/>
+</Cluster>
 </Typ>
 <Not>
 <And>
@@ -80,11 +81,7 @@
 </Not>
 <Not>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="70">
-<Func kind="K" nr="87"/>
-<Func kind="U" nr="1">
-<Func kind="F" nr="1"/>
-</Func>
+<Func kind="K" nr="12">
 <Var nr="1"/>
 <Var nr="2"/>
 </Func>

@@ -8,7 +8,7 @@ environ
 
  vocabularies RELAT_1, SETFAM_1, ARYTM_1, BOOLE, RELAT_2, LATTICES, FINSEQ_1,
       FUNCT_1, TARSKI, EQREL_1, PARTFUN1, TOLER_1, AMI_1, T_1TOPSP, PUA2MSS1,
-      PROB_1, COMPLEX1;
+      PROB_1, COMPLEX1, ARYTM;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, XCMPLX_0, XXREAL_0, RELAT_1,
       RELAT_2, RELSET_1, SETFAM_1, FINSEQ_1, FUNCT_1, NUMBERS, NAT_1, PARTFUN1;
  constructors SETFAM_1, RELAT_2, PARTFUN1, XXREAL_0, XREAL_0, NAT_1, FINSEQ_1;
@@ -914,13 +914,9 @@ end;
 definition let X;
   mode a_partition of X -> Subset-Family of X means :Def6:
   union it = X & for A st A in it holds A<>{} &
-  for B st B in it holds A = B or A misses B if X <> {} otherwise it = {};
+  for B st B in it holds A = B or A misses B;
 existence
 proof
- thus X <> {} implies
- ex F being Subset-Family of X st union F = X &
- for A st A in F holds A<>{} & for B st B in F holds A = B or A misses B
- proof assume X <> {};
   defpred P[set] means ex x st x in X & $1 = {x};
   consider F being Subset-Family of X such that
   A1: for A being Subset of X holds A in F iff P[A] from SUBSET_1:sch 3;
@@ -954,22 +950,25 @@ A2:  now let y;
   take F;
   thus thesis by A2,A5,TARSKI:def 4;
  end;
- assume X = {};
-     {} c= bool X by XBOOLE_1:2;
- hence thesis;
-end;
-consistency;
 end;
 
-canceled;
+theorem Th41:
+  for P being a_partition of {} holds P = {}
+  proof
+    let P be a_partition of {};
+    assume not thesis;
+    then consider Z being set such that
+A1: Z in P by XBOOLE_0:def 1;
+    Z <> {} by A1,Def6;
+    then ex x being set st x in Z by XBOOLE_0:def 1;
+    hence thesis by A1;
+  end;
 
 theorem Th42:
   Class EqR is a_partition of X
 proof
- A1: X <> {} implies Class EqR is a_partition of X
- proof assume A2: X <> {};
-      now let x;
-       now assume A3: x in X;
+  now let x;
+    now assume A3: x in X;
     consider Z such that A4: Z = Class(EqR,x);
     A5: x in Z by A3,A4,Th28;
         Z in Class EqR by A3,A4,Def5;
@@ -977,31 +976,20 @@ proof
    end;
    hence x in X iff ex Z st x in Z & Z in Class EqR;
   end;
-  then A6: union(Class EqR) = X by TARSKI:def 4;
-      for A st A in Class EqR holds
-  A<>{} & for B st B in Class EqR holds A = B or A misses B
-  proof let A; assume A in Class EqR;
-   then consider x such that A7: x in X & A = Class(EqR,x) by Def5;
-   thus A <> {} by A7,Th28;
-   let B; assume B in Class EqR;
-   then ex y st y in X & B = Class(EqR,y) by Def5;
-   hence thesis by A7,Th32;
-  end;
-  hence thesis by A2,A6,Def6;
- end;
-     X = {} implies Class EqR is a_partition of X
- proof assume A8: X = {};
-  then Class EqR = {} by Th40;
-  hence thesis by A8,Def6;
- end;
- hence thesis by A1;
+  hence union(Class EqR) = X by TARSKI:def 4;
+  let A; assume A in Class EqR;
+  then consider x such that A7: x in X & A = Class(EqR,x) by Def5;
+  thus A <> {} by A7,Th28;
+  let B; assume B in Class EqR;
+  then ex y st y in X & B = Class(EqR,y) by Def5;
+  hence thesis by A7,Th32;
 end;
 
 theorem Th43:
   for P being a_partition of X holds ex EqR st P = Class EqR
 proof let P be a_partition of X;
  A1: X <> {} implies ex EqR st P = Class EqR
- proof assume A2: X <> {}; then A3: union P = X by Def6;
+ proof assume X <> {}; A3: union P = X by Def6;
   defpred P[set,set] means ex A st A in P & $1 in A & $2 in A;
   A4: for x st x in X holds P[x,x]
   proof let x; assume x in X;
@@ -1026,7 +1014,7 @@ proof let P be a_partition of X;
   proof
        now let A;
     A11: now assume A12: A in P;
-    then A13: A <> {} by A2,Def6;
+    then A13: A <> {} by Def6;
      consider x being Element of A;
      A14: x in X by A13,TARSKI:def 3;
          now let y;
@@ -1078,7 +1066,7 @@ proof let P be a_partition of X;
   X = {} implies ex EqR st P = Class EqR
  proof
   assume A21: X = {};
-  then A22: P = {} by Def6;
+  then A22: P = {} by Th41;
   consider EqR1;
   take EqR1;
   thus P = Class EqR1 by A21,A22,Th40;
@@ -1120,10 +1108,8 @@ end;
 registration let X be set;
   cluster -> with_non-empty_elements a_partition of X;
   coherence
-  proof let P be a_partition of X; assume
-A1:  {} in P;
-    then X <> {} by Def6;
-   hence contradiction by A1,Def6;
+  proof let P be a_partition of X; assume {} in P;
+    hence contradiction by Def6;
   end;
 end;
 
@@ -1452,8 +1438,6 @@ A8:      f = EqClass(x,S) & S in F by A7;
      then reconsider G as Subset-Family of X;
       G is a_partition of X
       proof
-       per cases;
-       case X <> {};
        thus union G = X
         proof
          thus union G c= X;
@@ -1621,14 +1605,10 @@ A33:           T in F & A = EqClass(y,T) by Lm4;
          end;
          hence thesis;
         end;
-       end;
-       case X = {};
-       hence G = {};
-      end;
       end;
      then reconsider G as non empty a_partition of X;
      take G;
-          for x being Element of X holds EqClass(x,G)
+     for x being Element of X holds EqClass(x,G)
          = meet{EqClass(x,S) where S is a_partition of X : S in F}
       proof
        let x be Element of X;
@@ -1726,3 +1706,16 @@ A1:     A in S;
                            .= X \ A by ZFMISC_1:31;
       end;
 
+:: Added 2007.10.17, AK
+
+theorem
+  {} is a_partition of {}
+  proof
+    reconsider A = {} as Subset-Family of {} by XBOOLE_1:2;
+    A is a_partition of {}
+    proof
+      thus union A = {} by ZFMISC_1:2;
+      thus thesis;
+    end;
+    hence thesis;
+end;

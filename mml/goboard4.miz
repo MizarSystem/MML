@@ -8,9 +8,9 @@ environ
 
  vocabularies PRE_TOPC, EUCLID, FINSEQ_1, GOBOARD1, FINSEQ_4, RELAT_1, INCSP_1,
       MATRIX_1, TREES_1, BOOLE, FUNCT_1, ARYTM_1, ABSVALUE, MATRIX_2, TOPREAL1,
-      GOBOARD2, MCART_1, TOPREAL4, GOBOARD4, RCOMP_1;
+      GOBOARD2, MCART_1, TOPREAL4, GOBOARD4, RCOMP_1, ARYTM;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, XCMPLX_0, REAL_1,
-      COMPLEX1, NAT_1, RELAT_1, FUNCT_1, PARTFUN1, FINSEQ_1, STRUCT_0,
+      COMPLEX1, NAT_1, RELAT_1, FUNCT_1, PARTFUN1, FINSEQ_1, SEQ_1, STRUCT_0,
       PRE_TOPC, FINSEQ_4, MATRIX_1, EUCLID, TOPREAL1, TOPREAL4, GOBOARD1,
       GOBOARD2, XXREAL_0, XXREAL_1;
  constructors PARTFUN1, NAT_1, XXREAL_1, COMPLEX1, FINSEQ_3, FINSEQ_4,
@@ -61,16 +61,17 @@ for G,f1,f2 st 1<=len f1 & 1<=len f2 &
       g1/.1 in rng Line(G1,1) & g1/.len g1 in rng Line(G1,len G1) &
       g2/.1 in rng Col(G1,1) & g2/.len g2 in rng Col(G1,width G1);
     A6: dom g1 = Seg len g1 & dom g2 = Seg len g2 by FINSEQ_1:def 3;
-    defpred P[Element of NAT] means
+    defpred P[Nat] means
      $1 in dom g2 & g2/.$1 in rng Col(G1,width G1);
-    A7: ex m st P[m]
+    A7: ex m be Nat st P[m]
      proof
       take n=len g2;
       thus n in dom g2 by A5,FINSEQ_3:27;
       thus thesis by A5;
      end;
-    consider m such that
-    A8: P[m] & for i st P[i] holds m<=i from NAT_1:sch 5(A7);
+    consider m be Nat such that
+    A8: P[m] & for i be Nat st P[i] holds m<=i from NAT_1:sch 5(A7);
+    reconsider m as Element of NAT by ORDINAL1:def 13;
     set g = g2|m;
     A9: 1<=len g by A8,GOBOARD1:38;
     A10: g is_sequence_on G1 by A5,GOBOARD1:38;
@@ -86,9 +87,9 @@ then A13:    0+1<=width G1 & 0+1<=len G1 by NAT_1:14;
     A19: dom g = Seg len g by FINSEQ_1:def 3;
     reconsider L1 = Line(G1,1), Ll = Line(G1,len G1)
      as FinSequence of TOP-REAL 2;
-    defpred P[Element of NAT] means
+    defpred P[Nat] means
      $1 in dom G1 & rng g /\ rng Line(G1,$1) <> {};
-    A20: ex n st P[n]
+    A20: ex n be Nat st P[n]
      proof
       consider i being Nat such that
       A21: i in dom Col(G1,1) & g/.1=Col(G1,1).i
@@ -106,18 +107,24 @@ then A23: dom Line(G1,i) = Seg width G1 by FINSEQ_1:def 3;
        by A14,A18,A23,FUNCT_1:def 5,PARTFUN2:4;
       hence rng g /\ rng Line(G1,i) <> {} by XBOOLE_0:def 3;
      end;
-    A24: for n st P[n] holds n<=len G1 by FINSEQ_3:27;
-    consider mi be Element of NAT such that
-    A25: P[mi] & for n st P[n] holds mi<=n from NAT_1:sch 5(A20);
+     then
+A100: ex n be Nat st P[n];
+    A24: for n be Nat st P[n] holds n<=len G1 by FINSEQ_3:27;
+    consider mi be Nat such that
+    A25: P[mi] & for n be Nat st P[n] holds mi<=n from NAT_1:sch 5(A20);
 A26:  dom G1 = Seg len G1 by FINSEQ_1:def 3;
-    consider ma be Element of NAT such that
-    A27: P[ma] & for n st P[n] holds n<=ma from NAT_1:sch 6(A24,A20);
-    defpred P[Element of NAT] means $1 in dom g1 & g1/.$1 in rng Line(G1,mi);
+    consider ma be Nat such that
+    A27: P[ma] & for n be Nat st P[n] holds n<=ma from NAT_1:sch 6(A24,A100);
+    reconsider mi,ma as Element of NAT by ORDINAL1:def 13;
+    defpred P[Nat] means $1 in dom g1 & g1/.$1 in rng Line(G1,mi);
     A28: 1<=mi & mi<=len G1 & ma<=len G1 by A25,A27,FINSEQ_3:27;
-    then A29: ex n st P[n] by A5,GOBOARD1:45;
-    A30: for n st P[n] holds n<=len g1 by FINSEQ_3:27;
-    consider ma1 be Element of NAT such that
-    A31: P[ma1] & for n st P[n] holds n<= ma1 from NAT_1:sch 6(A30,A29);
+    then ex n st P[n] by A5,GOBOARD1:45;
+    then A29: ex n be Nat st P[n];
+    A30: for n be Nat st P[n] holds n<=len g1 by FINSEQ_3:27;
+    consider ma1 be Nat such that
+    A31: P[ma1] & for n be Nat st P[n] holds n<= ma1 from NAT_1:sch 6(A30,A29);
+    A3000: for n st P[n] holds n<= ma1 by A31;
+    reconsider ma1 as Element of NAT by ORDINAL1:def 13;
     A32: 1<=m & m<=len g2 by A8,FINSEQ_3:27;
     then A33: len g = m by FINSEQ_1:80;
     A34: rng g c= rng g2
@@ -209,13 +216,14 @@ A64:   g1/.m in rng g1 by A59,PARTFUN2:4;
        suppose mi=ma; hence thesis by A36;
        end;
        suppose A67: mi<>ma;
-        defpred P[Element of NAT] means
+        defpred P[Nat] means
           $1 in dom g1 & ma1<$1 & g1/.$1 in rng Line(G1,ma);
         A68: mi<=ma by A25,A27;
         then A69: mi<ma by A67,REAL_1:def 5;
-        then A70: ex n st P[n] by A5,A25,A28,A31,GOBOARD1:53;
-        consider mi1 be Element of NAT such that
-        A71: P[mi1] & for n st P[n] holds mi1<=n from NAT_1:sch 5(A70);
+        then ex n st P[n] by A5,A25,A28,A31,GOBOARD1:53;
+        then A70: ex n be Nat st P[n] by A5,A25,A28,A31,GOBOARD1:53;
+        consider mi1 be Nat such that
+        A71: P[mi1] & for n be Nat st P[n] holds mi1<=n from NAT_1:sch 5(A70);
         set f1=g1|mi1;
              ma1<=mi1 & mi1<=mi1+1 by A71,NAT_1:11;
         then ma1<=mi1+1 by XXREAL_0:2;
@@ -599,15 +607,17 @@ A196:   dom DelCol(G1,1) = Seg len G1 by A194,FINSEQ_1:def 3
   suppose rng f /\ rng Col(G1,1)={};
    then rng ff /\ rng Col(G1,1)={} by A14,A147;
    then A197: rng ff misses rng Col(G1,1) by XBOOLE_0:def 7;
-   defpred P[Element of NAT] means $1 in dom g & g/.$1 in rng Col(G1,1);
-   A198: for m st P[m] holds m<=len g by FINSEQ_3:27;
-   A199: ex m st P[m]
+   defpred P[Nat] means $1 in dom g & g/.$1 in rng Col(G1,1);
+   A198: for m be Nat st P[m] holds m<=len g by FINSEQ_3:27;
+   A199: ex m be Nat st P[m]
     proof
      take 1;
      thus thesis by A5,A8,A9,FINSEQ_3:27,GOBOARD1:22;
     end;
-   consider m such that
-   A200: P[m] & for k st P[k] holds k<=m from NAT_1:sch 6(A198,A199);
+   consider m be Nat such that
+   A200: P[m] & for k be Nat st P[k] holds k<=m from NAT_1:sch 6(A198,A199);
+   A300: for k st P[k] holds k<=m by A200;
+   reconsider m as Element of NAT by ORDINAL1:def 13;
    reconsider p=g/.m as Point of TOP-REAL 2;
 A201:    now assume A202: m>=len g;
          m<=len g by A200,FINSEQ_3:27;
@@ -652,7 +662,7 @@ A204: Seg len t = dom t by FINSEQ_1:def 3;
        Col(D,1)=Col(G1,1+1) & 1+1 in Seg width G1
     by A5,A14,A66,A209,A210,GOBOARD1:30;
    then A213: t/.1 in rng Col(D,1)
-    by A9,A10,A12,A14,A200,A212,GOBOARD1:48;
+    by A9,A10,A12,A14,A200,A212,A300,GOBOARD1:48;
        len t in Seg ll by A203,A211,FINSEQ_1:3;
     then t/.len t = g/.(m+ll) by A203,A204
     .= g/.len g;
@@ -754,27 +764,30 @@ then A239:  rng ff /\ rng t <> {} by A4,A66,A133,A134,A237,A238;
 A243: tt/.1 in rng Col(D,1) &
       tt/.len tt in rng Col(D,width D) & 1<=len tt &
          tt is_sequence_on D & rng tt c= rng t by A5,A235,A242,GOBOARD1:51;
-     defpred P[Element of NAT] means $1 in dom g & g/.$1 in rng Line(G1,mi);
+     defpred P[Nat] means $1 in dom g & g/.$1 in rng Line(G1,mi);
      A244: now
        consider x being Element of rng g /\ rng Line(G1,mi);
             x in rng g & x in rng Line(G1,mi) by A25,XBOOLE_0:def 3;
        then consider n such that
        A245: n in dom g & x=g/.n by PARTFUN2:4;
+       reconsider n as Nat by ORDINAL1:def 13;
        take n;
        thus P[n] by A25,A245,XBOOLE_0:def 3;
       end;
-     defpred R[Element of NAT] means $1 in dom g & g/.$1 in rng Line(G1,ma);
+     defpred R[Nat] means $1 in dom g & g/.$1 in rng Line(G1,ma);
      A246: now consider x being Element of rng g /\ rng Line(G1,ma);
             x in rng g & x in rng Line(G1,ma) by A27,XBOOLE_0:def 3;
        then consider n such that
        A247: n in dom g & x=g/.n by PARTFUN2:4;
+       reconsider n as Nat by ORDINAL1:def 13;
        take n;
        thus R[n] by A27,A247,XBOOLE_0:def 3;
       end;
-     consider pf be Element of NAT such that
-     A248: P[pf] & for n st P[n] holds pf<=n from NAT_1:sch 5(A244);
-     consider pl be Element of NAT such that
-     A249: R[pl] & for n st R[n] holds pl<=n from NAT_1:sch 5(A246);
+     consider pf be Nat such that
+     A248: P[pf] & for n be Nat st P[n] holds pf<=n from NAT_1:sch 5(A244);
+     consider pl be Nat such that
+     A249: R[pl] & for n be Nat st R[n] holds pl<=n from NAT_1:sch 5(A246);
+     reconsider pf,pl as Element of NAT by ORDINAL1:def 13;
 A250:  pl <> pf by A25,A27,A67,A248,A249,GOBOARD1:19;
      A251: 1<=pf & pf<=len g & 1<=pl & pl<=len g
       by A248,A249,FINSEQ_3:27;
@@ -1032,7 +1045,7 @@ A335:        f/.(k+1)=f1/.(w+(k+1)) & f1/.(w+(k+1))=g1/.(w+(k+1)) &
            then 1<=mi+1 & mi+1<=len G1 by A28,XXREAL_0:2;
            then A336: mi+1 in dom G1 by FINSEQ_3:27;
            then f/.(k+1) in rng Line(G1,mi+1)
-           by A5,A25,A31,A334,A335,GOBOARD1:44;
+           by A5,A25,A31,A3000,A334,A335,GOBOARD1:44;
            then m=mi+1 & mi<=mi+1 by A314,A336,GOBOARD1:19,NAT_1:11;
            hence thesis;
           end;

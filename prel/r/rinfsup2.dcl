@@ -22,21 +22,21 @@
 <Adjective nr="4"/>
 <Adjective nr="15">
 <Func kind="K" nr="46"/>
-<Func kind="K" nr="47"/>
+<Func kind="K" nr="48"/>
 </Adjective>
 </Cluster>
 <Func kind="K" nr="46"/>
-<Func kind="K" nr="47"/>
+<Func kind="K" nr="48"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="88">
+<Func kind="K" nr="89">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
 <Adjective nr="4"/>
 <Adjective nr="15">
 <Func kind="K" nr="46"/>
-<Func kind="K" nr="47"/>
+<Func kind="K" nr="48"/>
 </Adjective>
 <Adjective nr="24"/>
 </Cluster>
@@ -48,21 +48,21 @@
 <Adjective nr="4"/>
 <Adjective nr="15">
 <Func kind="K" nr="46"/>
-<Func kind="K" nr="47"/>
+<Func kind="K" nr="48"/>
 </Adjective>
 </Cluster>
 <Func kind="K" nr="46"/>
-<Func kind="K" nr="47"/>
+<Func kind="K" nr="48"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="87">
+<Func kind="K" nr="88">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
 <Adjective nr="4"/>
 <Adjective nr="15">
 <Func kind="K" nr="46"/>
-<Func kind="K" nr="47"/>
+<Func kind="K" nr="48"/>
 </Adjective>
 <Adjective nr="23"/>
 </Cluster>

@@ -723,17 +723,17 @@ definition let A,X;
   func chi(A,X) -> Function means
 :Def3: dom it = X &
    for x st x in X
-     holds (x in A implies it.x = 1) & (not x in A implies it.x = 0);
+     holds (x in A implies it.x = 1) & (not x in A implies it.x = {});
  existence
   proof
    defpred P[set,set] means
-     ($1 in A implies $2 = 1) & (not $1 in A implies $2 = 0);
+     ($1 in A implies $2 = 1) & (not $1 in A implies $2 = {});
 A1: for x,y1,y2 st x in X & P[x,y1] & P[x,y2] holds y1 = y2;
 A2: for x st x in X ex y st P[x,y]
       proof let x;
         assume x in X;
-            not x in A implies ex y st y = 0 &
-         (x in A implies y = 1) & (not x in A implies y = 0);
+            not x in A implies ex y st y = {} &
+         (x in A implies y = 1) & (not x in A implies y = {});
        hence thesis;
       end;
      ex f being Function st
@@ -744,15 +744,15 @@ A2: for x st x in X ex y st P[x,y]
   proof let f1,f2 be Function such that
 A3:  dom f1 = X and
 A4:  for x st x in X
-      holds (x in A implies f1.x = 1) & (not x in A implies f1.x = 0) and
+      holds (x in A implies f1.x = 1) & (not x in A implies f1.x = {}) and
 A5:  dom f2 = X and
 A6:  for x st x in X
-      holds (x in A implies f2.x = 1) & (not x in A implies f2.x = 0);
+      holds (x in A implies f2.x = 1) & (not x in A implies f2.x = {});
         for x st x in X holds f1.x=f2.x
      proof let x;
       assume x in X;
       then (x in A implies f1.x = 1 & f2.x = 1) &
-           (not x in A implies f1.x = 0 & f2.x = 0) by A4,A6;
+           (not x in A implies f1.x = {} & f2.x = {}) by A4,A6;
       hence thesis;
      end;
     hence thesis by A3,A5,FUNCT_1:9;
@@ -776,7 +776,7 @@ A1:  chi(A,X).x = 1;
   end;
 
 theorem
-       x in X \ A implies chi(A,X).x = 0
+  x in X \ A implies chi(A,X).x = {}
  proof assume x in X\A;
   then x in X & not x in A by XBOOLE_0:def 4;
   hence thesis by Def3;
@@ -805,20 +805,20 @@ A3:  chi(A,X) = chi(B,X);
  end;
 
 theorem Th48:
-   rng chi(A,X) c= {0,1}
+   rng chi(A,X) c= {{},1}
  proof let y;
     assume y in rng chi(A,X);
     then consider x such that
 A1:   x in dom chi(A,X) and
 A2:   y = chi(A,X).x by FUNCT_1:def 5;
         x in X & (x in A or not x in A) by A1,Def3;
-    then y = 0 or y = 1 by A2,Def3;
+    then y = {} or y = 1 by A2,Def3;
     hence thesis by TARSKI:def 2;
  end;
 
 theorem
-       for f being Function of X,{0,1} holds f = chi(f"{1},X)
- proof let f be Function of X,{0,1};
+       for f being Function of X,{{},1} holds f = chi(f"{1},X)
+ proof let f be Function of X,{{},1};
       now
    thus
 A1:   dom f = X by FUNCT_2:def 1;
@@ -830,18 +830,18 @@ A2:   x in X;
       hence thesis by TARSKI:def 1;
      end;
     assume not x in f"{1};
-    then not f.x in {1} & f.x in rng f & rng f c= {0,1}
+    then not f.x in {1} & f.x in rng f & rng f c= {{},1}
       by A1,A2,FUNCT_1:def 5,def 13,RELSET_1:12;
-    then f.x <> 1 & f.x in {0,1} by TARSKI:def 1;
-    hence f.x = 0 by TARSKI:def 2;
+    then f.x <> 1 & f.x in {{},1} by TARSKI:def 1;
+    hence f.x = {} by TARSKI:def 2;
   end;
   hence thesis by Def3;
  end;
 
 definition let A,X;
- redefine func chi(A,X) -> Function of X,{0,1};
+ redefine func chi(A,X) -> Function of X,{{},1};
   coherence
-   proof {0,1} <> {} & dom chi(A,X) = X & rng chi(A,X) c= {0,1}
+   proof {{},1} <> {} & dom chi(A,X) = X & rng chi(A,X) c= {{},1}
       by Def3,Th48;
     hence thesis by FUNCT_2:def 1,RELSET_1:11;
    end;
@@ -852,8 +852,7 @@ notation let Y; let A be Subset of Y;
 end;
 
 definition let Y; let A be Subset of Y;
- redefine
-  func incl A -> Function of A,Y;
+ redefine func incl A -> Function of A,Y;
  coherence
   proof A c= Y & rng id A = A by RELAT_1:71;
    then (Y = {} implies A = {}) & dom id A = A & rng id A c= Y

@@ -161,7 +161,7 @@
 <Not>
 <Pred kind="R" nr="16">
 <Func kind="F" nr="1"/>
-<Num nr="0"/>
+<Func kind="K" nr="47"/>
 </Pred>
 </Not>
 </Scheme>

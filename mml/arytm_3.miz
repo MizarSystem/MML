@@ -9,7 +9,7 @@ environ
  vocabularies ORDINAL1, ORDINAL2, BOOLE, ORDINAL3, ARYTM_3, QUOFIELD;
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, ORDINAL2, ORDINAL3;
  constructors SUBSET_1, ORDINAL3;
- registrations XBOOLE_0, SUBSET_1, ORDINAL1;
+ registrations XBOOLE_0, SUBSET_1, ORDINAL1, ORDINAL2, ORDINAL3;
  requirements BOOLE, SUBSET, NUMERALS;
  definitions TARSKI, ORDINAL1;
  theorems TARSKI, XBOOLE_0, ZFMISC_1, ORDINAL1, ORDINAL2, ORDINAL3, XBOOLE_1;
@@ -19,176 +19,12 @@ begin :: Natural ordinals
 
 reserve A,B,C for Ordinal;
 
-Lm1: 0 in omega;
+Lm1: {} in omega by ORDINAL1:def 12;
 Lm2: 1 in omega;
 
 definition
  func one equals  1;
  correctness;
-end;
-
-registration let a be natural Ordinal;
- cluster succ a -> natural;
- coherence
-  proof
-A1:omega is_limit_ordinal by ORDINAL1:def 12;
-    a in omega by ORDINAL1:def 13;
-   hence succ a in omega by A1,ORDINAL1:41;
-  end;
-end;
-
-scheme OmegaInd {P[set]}:
- for a being natural Ordinal holds P[a]
-provided
-A1:   P[{}] and
-A2:   for a being natural Ordinal st P[a] holds P[succ a]
-proof
-     defpred P[Ordinal] means $1 is natural implies P[$1];
-A3:  P[{}] by A1;
-A4:  now let A; assume
-A5:   P[A];
-         now assume succ A is natural;
-       then succ A in omega & A in succ A by ORDINAL1:10,def 13;
-       then A is Element of omega by ORDINAL1:19;
-       hence P[succ A] by A2,A5;
-      end; hence P[succ A];
-    end;
-A6:  now let A;
-A7:   {} c= A by XBOOLE_1:2;
-     assume A <> {};
-     then {} c< A by A7,XBOOLE_0:def 8;
-then A8:   {} in A by ORDINAL1:21;
-     assume A is_limit_ordinal;
-      then omega c= A & not A in A by A8,ORDINAL1:def 12;
-      then not A in omega;
-     hence (for B st B in A holds P[B]) implies P[A] by ORDINAL1:def 13;
-    end;
-     for A holds P[A] from ORDINAL2:sch 1(A3,A4,A6);
-   hence thesis;
-  end;
-
-registration
- let a, b be natural Ordinal;
- cluster a +^ b -> natural;
- coherence
-  proof defpred P[natural Ordinal] means a+^$1 is natural;
-A1:  P[{}] by ORDINAL2:44;
-A2:  now let b be natural Ordinal; assume P[b];
-     then reconsider c = a+^b as natural Ordinal;
-      a+^succ b = succ c by ORDINAL2:45;
-     hence P[succ b];
-    end;
-     for b being natural Ordinal holds P[b] from OmegaInd(A1,A2);
-   hence thesis;
-  end;
-end;
-
-theorem Th1:
- for a,b being Ordinal st a+^b is natural holds a in omega & b in omega
-  proof let x,y be Ordinal such that
-A1:  x+^y in omega;
-         x c= x+^y & y c= x+^y by ORDINAL3:27;
-   hence x in omega & y in omega by A1,ORDINAL1:22;
-  end;
-
-registration
- let a, b be natural Ordinal;
- cluster a -^ b -> natural;
- coherence
-  proof not b c= a or b c= a;
-    then a -^ b = {} or a = b+^(a-^b) by ORDINAL3:def 6;
-   hence a-^b in omega by Th1,ORDINAL1:def 12;
-  end;
- cluster a *^ b -> natural;
- coherence
-  proof defpred P[natural Ordinal] means $1*^b is natural;
-A1:  P[{}] by ORDINAL2:52;
-A2:  now let a be natural Ordinal; assume P[a];
-     then reconsider c = a*^b as natural Ordinal;    (succ a)*^b = c+^b by
-ORDINAL2:53;
-     hence P[succ a];
-    end;
-         for a being natural Ordinal holds P[a] from OmegaInd(A1,A2);
-   hence thesis;
-  end;
-end;
-
-theorem Th2:
- for a,b being Ordinal st a*^b is natural non empty
-  holds a in omega & b in omega
-  proof let x,y be Ordinal such that
-A1:  x*^y in omega;
-   assume x*^y is non empty;
-    then x <> {} & y <> {} by ORDINAL2:52,55;
-    then x c= x*^y & y c= x*^y by ORDINAL3:39;
-   hence x in omega & y in omega by A1,ORDINAL1:22;
-  end;
-
-theorem Th3:
- for a,b being natural Ordinal holds a+^b = b+^a
-  proof let a be natural Ordinal;
-     defpred R[natural Ordinal] means a+^$1 = $1+^a;
-       a+^{} = a by ORDINAL2:44 .= {}+^a by ORDINAL2:47;
-then A1: R[{}];
-A2:  now let b be natural Ordinal; assume
-A3:    R[b];
-      defpred P[natural Ordinal] means (succ b)+^$1 = succ (b+^$1);
-      (succ b)+^{} = succ b by ORDINAL2:44 .= succ (b+^{}) by ORDINAL2:44;
-then A4:  P[{}];
-A5:   now let a be natural Ordinal; assume
-A6:    P[a];
-           (succ b)+^succ a
-          = succ ((succ b)+^a) by ORDINAL2:45
-         .= succ (b+^succ a) by A6,ORDINAL2:45;
-       hence P[succ a];
-      end;
-A7:  for a being natural Ordinal holds P[a] from OmegaInd(A4,A5);
-         a+^succ b = succ (b+^a) by A3,ORDINAL2:45 .= (succ b)+^a by A7;
-     hence R[succ b];
-    end;
-       for b being natural Ordinal holds R[b] from OmegaInd(A1,A2);
-   hence thesis;
-  end;
-
-theorem Th4:
- for a,b being natural Ordinal holds a*^b = b*^a
-  proof let a be natural Ordinal;
-     defpred R[natural Ordinal] means a*^$1 = $1*^a;
-        a*^{} = {} by ORDINAL2:55 .= {}*^a by ORDINAL2:52;
-then A1: R[{}];
-A2:  now let b be natural Ordinal;
-      defpred P[natural Ordinal] means $1*^succ b = $1*^b+^$1;
-     assume
-A3:   R[b];
-       {}*^succ b = {} by ORDINAL2:52 .= {}+^{} by ORDINAL2:44
-               .= {}*^b+^{} by ORDINAL2:52;
-then A4:  P[{}];
-A5:   now let a be natural Ordinal; assume
-A6:    P[a];
-           (succ a)*^succ b
-          = a*^(succ b)+^succ b by ORDINAL2:53
-         .= a*^b+^(a+^succ b) by A6,ORDINAL3:33
-         .= a*^b+^succ (a+^b) by ORDINAL2:45
-         .= succ (a*^b+^(a+^b)) by ORDINAL2:45
-         .= succ (a*^b+^(b+^a)) by Th3
-         .= succ (a*^b+^b+^a) by ORDINAL3:33
-         .= succ ((succ a)*^b+^a) by ORDINAL2:53
-         .= (succ a)*^b+^succ a by ORDINAL2:45;
-       hence P[succ a];
-      end;
-      for a being natural Ordinal holds P[a] from OmegaInd(A4,A5);
-     then a*^succ b = b*^a+^a by A3 .= (succ b)*^a by ORDINAL2:53;
-     hence R[succ b];
-    end;
-     for b being natural Ordinal holds R[b] from OmegaInd(A1,A2);
-   hence thesis;
-  end;
-
-definition let a,b be natural Ordinal;
-  redefine func a+^b;
-  commutativity by Th3;
-  redefine func a*^b;
-  commutativity by Th4;
 end;
 
 begin :: Relative prime numbers and divisibility
@@ -198,6 +34,8 @@ definition let a,b be Ordinal;
     for c,d1,d2 being Ordinal st a = c *^ d1 & b = c *^ d2 holds c = 1;
   symmetry;
 end;
+
+canceled 4;
 
 theorem Th5:
   not {},{} are_relative_prime
@@ -325,7 +163,7 @@ A1:    b = a*^c;
       hence ex c st b = a*^c;
      end;
      suppose b <> {};
-       then c is Element of omega by A1,Th2;
+       then c is Element of omega by A1,ORDINAL3:88;
       hence ex c st b = a*^c by A1;
     end;
     end;
@@ -403,7 +241,7 @@ A3:  not n divides l;
    hence thesis by A3,Def3;
   end;
 
-Lm3: 1 = succ 0;
+Lm3: 1 = succ {};
 
 definition let k,n be natural Ordinal;
  func k lcm n -> Element of omega means:
@@ -650,7 +488,7 @@ then A4:  a = ab*^(a div^ ab) & b = ab*^(b div^ ab) by Th11;
    let c,d1,d2 be Ordinal such that
 A5:  a div^ (a hcf b) = c *^ d1 & b div^ (a hcf b) = c *^ d2;
          a div^ ab <> {} & b div^ ab <> {} by A3,A4,ORDINAL2:52;
-   then reconsider c,d1,d2 as Element of omega by A5,Th2;
+   then reconsider c,d1,d2 as Element of omega by A5,ORDINAL3:88;
          a = ab*^c*^d1 & b = ab*^c*^d2 by A4,A5,ORDINAL3:58;
     then ab*^c divides a & ab*^c divides b by Def3;
     then ab*^c divides ab by Def5;
@@ -674,7 +512,7 @@ A1:  a hcf b = 1;
    let c,d1,d2 be Ordinal such that
 A2:  a = c*^d1 & b = c*^d2;
          a <> {} or b <> {} by A1,Th19;
-   then reconsider c as Element of omega by A2,Th2;
+   then reconsider c as Element of omega by A2,ORDINAL3:88;
          c divides a & c divides b by A2,Def3;
     then c divides 1 by A1,Def5;
     then ex d st 1 = c*^d by Th9;

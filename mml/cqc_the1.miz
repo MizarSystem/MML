@@ -18,7 +18,7 @@ environ
  requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, XBOOLE_0;
  theorems TARSKI, ZFMISC_1, FINSET_1, FINSEQ_1, MCART_1, FUNCT_1, NAT_1,
-      XBOOLE_0, XBOOLE_1, XREAL_1, XXREAL_0;
+      XBOOLE_0, XBOOLE_1, XREAL_1, XXREAL_0, ORDINAL1;
  schemes NAT_1, FRAENKEL, XBOOLE_0;
 
 begin
@@ -26,7 +26,6 @@ begin
 :: --------- Auxiliary theorems
 
 reserve n for natural number;
-
 reserve i,j,n,k,l for Element of NAT;
 reserve a for set;
 
@@ -403,11 +402,12 @@ theorem   Proof_Step_Kinds is finite by Th12;
 reserve f,g for FinSequence of [:CQC-WFF,Proof_Step_Kinds:];
 
 theorem Th45:
+  for n being Nat holds
   1 <= n & n <= len f implies
  (f.n)`2 = 0 or (f.n)`2 = 1 or (f.n)`2 = 2 or (f.n)`2 = 3 or (f.n)`2 = 4
   or (f.n)`2 = 5 or (f.n)`2 = 6 or (f.n)`2 = 7 or (f.n)`2 = 8 or
    (f.n)`2 = 9
-  proof
+  proof let n be Nat;
    assume A1: 1 <= n & n <= len f;
 A2: dom f = Seg len f & rng f c= [:CQC-WFF,Proof_Step_Kinds:]
     by FINSEQ_1:def 3,def 4;
@@ -418,7 +418,7 @@ A2: dom f = Seg len f & rng f c= [:CQC-WFF,Proof_Step_Kinds:]
    hence thesis by NAT_1:34;
   end;
 
-definition let PR be (FinSequence of [:CQC-WFF,Proof_Step_Kinds:]),n,X;
+definition let PR be (FinSequence of [:CQC-WFF,Proof_Step_Kinds:]),n be Nat,X;
  pred PR,n is_a_correct_step_wrt X means
  :Def4:
  (PR.n)`1 in X if (PR.n)`2 = 0,
@@ -759,15 +759,16 @@ theorem Th64: f is_a_proof_wrt X & 1 <= l & l <= len f implies (f.l)`1 in Cn(X)
   assume that A1: f is_a_proof_wrt X and A2: 1 <= l & l <= len f;
      for n holds 1 <= n & n <= len f implies (f.n)`1 in Cn(X)
  proof
-   defpred P[Element of NAT] means
+   defpred P[Nat] means
     1 <= $1 & $1 <= len f implies (f.$1)`1 in Cn(X);
-A3: for n st for k st k < n holds P[k] holds P[n]
+A3: for n being Nat st for k being Nat st k < n holds P[k] holds P[n]
   proof
-   let n; assume
-A4:  for k st k < n holds P[k];
+   let n be Nat; assume
+A4:  for k being Nat st k < n holds P[k];
+A100: n in NAT by ORDINAL1:def 13;
    assume
 A5:  1 <= n & n <= len f;
-then A6: f,n is_a_correct_step_wrt X by A1,Def5;
+then A6: f,n is_a_correct_step_wrt X by A1,Def5,A100;
         now per cases by A5,Th45;
      suppose (f.n)`2 = 0;
       then (f.n)`1 in X & X c= Cn(X) by A6,Def4,Th38;
@@ -831,7 +832,8 @@ then A6: f,n is_a_correct_step_wrt X by A1,Def5;
    end;
   hence thesis;
   end;
-  thus for n holds P[n] from NAT_1:sch 4(A3);
+  for n being Nat holds P[n] from NAT_1:sch 4(A3);
+  hence for n holds P[n];
  end;
   hence thesis by A2;
  end;

@@ -26,13 +26,12 @@ environ
       FUNCT_2, HEINE, METRIC_1, NAT_1, PCOMPS_1, PRE_TOPC, RCOMP_1, REAL_1,
       REAL_2, TARSKI, TOPMETR, TOPMETR2, TOPS_1, TOPS_2, ZFMISC_1, FINSEQ_3,
       FINSEQ_4, TBSP_1, PARTFUN2, RELSET_1, RELAT_1, INT_1, XBOOLE_0, XBOOLE_1,
-      XREAL_0, XCMPLX_1, XREAL_1, COMPLEX1, XXREAL_0, FINSEQ_2;
+      XREAL_0, XCMPLX_1, XREAL_1, COMPLEX1, XXREAL_0, FINSEQ_2, ORDINAL1;
  schemes NAT_1, CLASSES1, XBOOLE_0;
 
 begin
 
- reserve r,y1,y2,lambda for Real, i,j,n for Element of NAT;
- reserve a for natural number;
+ reserve r,y1,y2,lambda for Real, a,i,j,n for Nat;
 
 Lm1: |[0,0]| = 0.REAL 2 by FINSEQ_2:75;
 
@@ -133,7 +132,7 @@ A6:  h is_homeomorphism & h.0 = f1.0 & h.1 = f2.1 by A3,A4,A5,TOPMETR2:6;
    thus thesis by A4,A5,A6;
  end;
 
-definition let n be Element of NAT; let p1,p2 be Point of TOP-REAL n;
+definition let n be Nat; let p1,p2 be Point of TOP-REAL n;
    func LSeg(p1,p2) -> Subset of TOP-REAL n equals
 :Def3: { (1-lambda)*p1 + lambda*p2 : 0 <= lambda & lambda <= 1 };
   coherence
@@ -196,9 +195,9 @@ theorem Th7:
  end;
 
 theorem Th8:
-  for n being Element of NAT
+  for n being Nat
   for p1,p2 being Point of TOP-REAL n holds LSeg(p1,p2) = LSeg(p2,p1)
- proof let n be Element of NAT;let p1,p2 be Point of TOP-REAL n;
+ proof let n be Nat;let p1,p2 be Point of TOP-REAL n;
         for a being set holds a in LSeg(p1,p2) iff a in LSeg(p2,p1)
     proof let a be set;
      thus a in LSeg(p1,p2) implies a in LSeg(p2,p1)
@@ -226,7 +225,7 @@ p2 &
    hence thesis by TARSKI:2;
  end;
 
-definition let n be Element of NAT; let p1,p2 be Point of TOP-REAL n;
+definition let n be Nat; let p1,p2 be Point of TOP-REAL n;
   redefine func LSeg(p1,p2);
   commutativity by Th8;
 end;
@@ -1118,51 +1117,52 @@ theorem Th27:
 
 definition let n; let f be FinSequence of TOP-REAL n;
   func L~f -> Subset of TOP-REAL n equals
-    union { LSeg(f,i) : 1 <= i & i+1 <= len f };
+  union { LSeg(f,i) where i is Element of NAT : 1 <= i & i+1 <= len f };
  coherence
   proof
-   set F = { LSeg(f,i) : 1 <= i & i+1 <= len f };
+   set F = { LSeg(f,i) where i is Element of NAT : 1 <= i & i+1 <= len f };
         F c= bool the carrier of TOP-REAL n
     proof let a be set; assume a in F;
-     then ex i st a = LSeg(f,i) & 1 <= i & i+1 <= len f;
+     then ex i be Element of NAT st a = LSeg(f,i) & 1 <= i & i+1 <= len f;
      hence a in bool the carrier of TOP-REAL n;
     end;
     then reconsider F as Subset-Family of TOP-REAL n;
-         union F is Subset of TOP-REAL n;
+    union F is Subset of TOP-REAL n;
    hence thesis;
   end;
 end;
 
 theorem Th28:
   for f being FinSequence of TOP-REAL n holds
-    (len f = 0 or len f = 1) iff L~f = {}
+  len f = 0 or len f = 1 iff L~f = {}
  proof let f be FinSequence of TOP-REAL n;
  thus (len f = 0 or len f = 1) implies L~f = {}
   proof
-  set L = { LSeg(f,i) : 1 <= i & i+1 <= len f };
+  set L = { LSeg(f,i) where i is Element of NAT : 1 <= i & i+1 <= len f };
   assume A1: len f = 0 or len f = 1;
    consider x being Element of L;
        now per cases by A1;
    suppose A2: len f = 0;
     now assume L <> {};
     then x in L;
-    then consider i such that x = LSeg(f,i) and A3: 1 <= i & i+1 <= len f;
-    thus contradiction by A2,A3;
+    then ex i being Element of NAT st
+    x = LSeg(f,i) & 1 <= i & i+1 <= len f;
+    hence contradiction by A2;
    end;
    hence L~f = {} by ZFMISC_1:2;
    end;
    suppose A4: len f = 0+1;
     now assume L <> {};
     then x in L;
-    then consider i such that x = LSeg(f,i) and A5: 1 <= i & i+1 <= len f;
-    thus contradiction by A4,A5,XREAL_1:8;
+    then ex i being Element of NAT st x = LSeg(f,i) & 1 <= i & i+1 <= len f;
+    hence contradiction by A4,XREAL_1:8;
    end;
    hence L~f = {} by ZFMISC_1:2;
    end;
    end;
    hence thesis;
    end;
-  set L = { LSeg(f,i) : 1 <= i & i+1 <= len f };
+  set L = { LSeg(f,i) where i is Element of NAT : 1 <= i & i+1 <= len f };
   assume A6: L~f = {};
   assume A7: len f <> 0 & len f <> 1;
    now assume len f <= 1;
@@ -1303,17 +1303,25 @@ A17:   L~f1 = union {LSeg(p0,p01),LSeg(p01,p1)}
       by A4,FINSEQ_1:3;
      then 1+1 <= len f1 & LSeg(p0,p01) = LSeg(f1,1)
       by A5,Def5;
-     then A18: LSeg(p0,p01) in {LSeg(f1,i): 1 <= i & i+1 <= len f1};
+     then A18: LSeg(p0,p01) in
+     {LSeg(f1,i) where i is Element of NAT: 1 <= i & i+1 <= len f1};
       2+1 <= len f1 & LSeg(p01,p1) = LSeg(f1,2)
       by A4,A5,Def5;
-     then LSeg(p01,p1) in {LSeg(f1,i): 1 <= i & i+1 <= len f1};
-     then A19: {LSeg(p0,p01),LSeg(p01,p1)} c= {LSeg(f1,i):1<=i & i+1<=len f1}
+     then LSeg(p01,p1) in
+     {LSeg(f1,i) where i is Element of NAT: 1 <= i & i+1 <= len f1};
+     then
+A19: {LSeg(p0,p01),LSeg(p01,p1)} c=
+     {LSeg(f1,i) where i is Element of NAT:1<=i & i+1<=len f1}
       by A18,ZFMISC_1:38;
-          {LSeg(f1,i): 1 <= i & i+1 <= len f1} c= {LSeg(p0,p01),LSeg(p01,p1)}
+      {LSeg(f1,i) where i is Element of NAT: 1 <= i & i+1 <= len f1} c=
+      {LSeg(p0,p01),LSeg(p01,p1)}
       proof
-       let a be set; assume a in {LSeg(f1,i): 1 <= i & i+1 <= len f1};
-       then consider i such that A20: a = LSeg(f1,i) & 1<=i & i+1<=len f1;
-            i+1 <= 2 + 1 by A20,FINSEQ_1:62; then i <= 1 + 1 by XREAL_1:8;
+       let a be set;
+       assume a in {LSeg(f1,i) where i is Element of NAT:
+       1 <= i & i+1 <= len f1};
+       then consider i being Element of NAT such that
+A20:   a = LSeg(f1,i) & 1<=i & i+1<=len f1;
+       i+1 <= 2 + 1 by A20,FINSEQ_1:62; then i <= 1 + 1 by XREAL_1:8;
        then i = 1 or i = 2 by A20,NAT_1:9;
        then a = LSeg(p0,p01) or a = LSeg(p01,p1) by A5,A20,Def5;
        hence a in {LSeg(p0,p01),LSeg(p01,p1)} by TARSKI:def 2;
@@ -1395,15 +1403,22 @@ A35:   L~f2 = union {LSeg(p0,p10),LSeg(p10,p1)}
     proof
       len f2 = 2+1 & 1+1 in Seg len f2 by A22,FINSEQ_1:3;
      then 1+1 <= len f2 & LSeg(p0,p10) = LSeg(f2,1) by A23,Def5;
-     then A36: LSeg(p0,p10) in {LSeg(f2,i): 1 <= i & i+1 <= len f2};
-      2+1 <= len f2 & LSeg(p10,p1) = LSeg(f2,2) by A22,A23,Def5;
-     then LSeg(p10,p1) in {LSeg(f2,i): 1 <= i & i+1 <= len f2};
-     then A37: {LSeg(p0,p10),LSeg(p10,p1)} c= {LSeg(f2,i):1<=i & i+1<=len f2}
+     then A36: LSeg(p0,p10) in
+     {LSeg(f2,i) where i is Element of NAT: 1 <= i & i+1 <= len f2};
+     2+1 <= len f2 & LSeg(p10,p1) = LSeg(f2,2) by A22,A23,Def5;
+     then LSeg(p10,p1) in
+     {LSeg(f2,i) where i is Element of NAT: 1 <= i & i+1 <= len f2};
+     then A37: {LSeg(p0,p10),LSeg(p10,p1)} c=
+     {LSeg(f2,i) where i is Element of NAT:1<=i & i+1<=len f2}
       by A36,ZFMISC_1:38;
-       {LSeg(f2,i): 1 <= i & i+1 <= len f2} c= {LSeg(p0,p10),LSeg(p10,p1)}
+      {LSeg(f2,i) where i is Element of NAT: 1 <= i & i+1 <= len f2} c=
+      {LSeg(p0,p10),LSeg(p10,p1)}
       proof
-       let a be set; assume a in {LSeg(f2,i): 1 <= i & i+1 <= len f2};
-       then consider i such that A38: a = LSeg(f2,i) & 1<=i & i+1<=len f2;
+       let a be set;
+       assume a in {LSeg(f2,i) where i is Element of NAT:
+       1 <= i & i+1 <= len f2};
+       then consider i being Element of NAT such that
+A38:   a = LSeg(f2,i) & 1<=i & i+1<=len f2;
         i+1 <= 2 + 1 by A38,FINSEQ_1:62; then i <= 1 + 1 by XREAL_1:8;
        then i = 1 or i = 2 by A38,NAT_1:9;
        then a = LSeg(p0,p10) or a = LSeg(p10,p1) by A23,A38,Def5;
@@ -1439,8 +1454,8 @@ theorem Th31:
  set p1 = h/.1;
  A2: h is one-to-one by A1,Def10;
  A3: len h >= 1+1 by A1,Def10;
-  deffunc Q(Element of NAT) = L~(h|($1+2));
-  defpred ARC[Element of NAT] means
+  deffunc Q(Nat) = L~(h|($1+2));
+  defpred ARC[Nat] means
    1 <= $1 + 2 & $1 + 2 <= len h implies
    ex NE be non empty Subset of TOP-REAL 2 st NE = Q($1) &
     ex f being Function of I[01], (TOP-REAL 2)|NE st
@@ -1455,13 +1470,15 @@ then A6: dom (h|2) = dom h /\ Seg 2 by RELAT_1:90
              .= Seg 2 by A3,FINSEQ_1:9;
 then A7: len(h|2) = 1+1 by FINSEQ_1:def 3;
 then A8: 1 in Seg len (h|2) & 2 in Seg len (h|2) by FINSEQ_1:3;
-     {LSeg(h|2,i) : 1 <= i & i+1 <= len(h|2) } = {LSeg(h,1)}
+     {LSeg(h|2,i) where i is Element of NAT: 1 <= i & i+1 <= len(h|2) } =
+     {LSeg(h,1)}
     proof
       now let x be set;
-     thus x in {LSeg(h|2,i) : 1 <= i & i+1 <= len(h|2) } implies
-      x = LSeg(h,1)
+     thus x in {LSeg(h|2,i) where i is Element of NAT:
+     1 <= i & i+1 <= len(h|2) } implies x = LSeg(h,1)
       proof
-       assume x in {LSeg(h|2,i) : 1 <= i & i+1 <= len(h|2) };
+       assume x in {LSeg(h|2,i) where i is Element of NAT: 1 <= i &
+       i+1 <= len(h|2) };
        then consider i being Element of NAT such that
       A9: x = LSeg(h|2,i) and
       A10: 1 <= i & i+1 <= len(h|2);
@@ -1476,7 +1493,8 @@ then A8: 1 in Seg len (h|2) & 2 in Seg len (h|2) by FINSEQ_1:3;
       then A12: x = LSeg(p1,p2) by A3,Def5;
        p1 = (h|2)/.1 & p2 = (h|2)/.2 by A6,A7,A8,FINSEQ_4:85;
       then x = LSeg(h|2,1) by A7,A12,Def5;
-     hence x in {LSeg(h|2,i) : 1 <= i & i+1 <= len(h|2)} by A7;
+     hence x in {LSeg(h|2,i) where i is Element of NAT:
+     1 <= i & i+1 <= len(h|2)} by A7;
     end;
     hence thesis by TARSKI:def 1;
     end;
@@ -1521,8 +1539,8 @@ A23:    n + 1 +1 <> n + 2 + 1;
       now let x be set; assume x in Q(n+1);
       then consider X being set such that
      A26: x in X and
-     A27: X in {LSeg(h|(n+1+2),i) : 1 <= i & i+1 <= len(h|(n+1+2))}
-      by TARSKI:def 4;
+     A27: X in {LSeg(h|(n+1+2),i) where i is Element of NAT:
+     1 <= i & i+1 <= len(h|(n+1+2))} by TARSKI:def 4;
       consider i being Element of NAT such that
      A28: X = LSeg(h|(n+1+2),i) and
      A29: 1 <= i & i+1 <= len(h|(n+1+2)) by A27;
@@ -1550,8 +1568,8 @@ NAT_1:11;
        A39: len(h|(n+2)) = n + (1 + 1) by A19,FINSEQ_1:80;
              i+1 <= n+1+1 by A38,XREAL_1:8;
         then i+1 <= len(h|(n+2)) by A19,FINSEQ_1:80;
-        then A40: LSeg(h|(n+2),i) in {LSeg(h|(n+2),j) : 1 <= j &
-          j+1 <= len(h|(n+2))} by A29;
+        then A40: LSeg(h|(n+2),i) in {LSeg(h|(n+2),j)
+        where j is Element of NAT: 1 <= j & j+1 <= len(h|(n+2))} by A29;
         A41: 1 <= 1+i & n+1 <= n+1+1 & n+1+1 = n+(1+1) & i+1 <= n+1+1
          by A38,NAT_1:11,XREAL_1:9;
         then A42: 1 <= i+1 & i <= n+2 & i+1 <= n+2 by A38,XXREAL_0:2;
@@ -1573,7 +1591,8 @@ FINSEQ_1:3;
              .= p2' by A44,FINSEQ_4:85;
              LSeg(h|(n+2),i) = LSeg(p1',p2') by A29,A39,A41,Def5
                .= LSeg(h|(n+1+2),i) by A29,A46,A47,Def5;
-        then x in union {LSeg(h|(n+2),j) : 1 <= j & j+1 <= len(h|(n+2))}
+        then x in union {LSeg(h|(n+2),j) where j is Element of NAT:
+        1 <= j & j+1 <= len(h|(n+2))}
           by A26,A28,A40,TARSKI:def 4;
         hence x in Q(n) \/ LSeg(h,n+2) by XBOOLE_0:def 2;
       end;
@@ -1585,7 +1604,8 @@ FINSEQ_1:3;
        suppose x in Q(n);
         then consider X being set such that
        A50: x in X and
-       A51: X in {LSeg(h|(n+2),i) : 1 <= i & i+1 <= len(h|(n+2))}
+       A51: X in {LSeg(h|(n+2),i) where i is Element of NAT:
+       1 <= i & i+1 <= len(h|(n+2))}
             by TARSKI:def 4;
         consider i being Element of NAT such that
        A52: X = LSeg(h|(n+2),i) and
@@ -1619,7 +1639,8 @@ then A63:    i <= n+1+2 & i+1 <= n+1+2 by A60,XXREAL_0:2;
              .= p2' by A62,FINSEQ_4:85;
          X = LSeg(p1',p2') by A52,A53,Def5
          .= LSeg(h|(n+1+2),i) by A53,A63,A64,A66,A67,Def5;
-        then X in {LSeg(h|(n+1+2),j): 1 <= j & j+1 <= len(h|(n+1+2))} by A57;
+        then X in {LSeg(h|(n+1+2),j) where j is Element of NAT:
+        1 <= j & j+1 <= len(h|(n+1+2))} by A57;
         hence x in Q(n+1) by A50,TARSKI:def 4;
        end;
        suppose A68: x in LSeg(h,n+2);
@@ -1635,8 +1656,8 @@ then A71:    1 <= n+2 & n+2+1 <= len(h|(n+1+2)) by FINSEQ_3:27;
         A73: pn1 = (h|(n+1+2))/.(n+2+1) by A70,FINSEQ_4:85;
              LSeg(h,n+2) = LSeg(pn,pn1) by A17,A69,Def5
                    .= LSeg(h|(n+1+2),n+2) by A69,A72,A73,Def5;
-        then LSeg(h,n+2) in {LSeg(h|(n+1+2),i) : 1 <= i &
-         i+1 <= len(h|(n+1+2))} by A71;
+        then LSeg(h,n+2) in {LSeg(h|(n+1+2),i) where i is Element of NAT:
+        1 <= i & i+1 <= len(h|(n+1+2))} by A71;
         hence x in Q(n+1) by A68,TARSKI:def 4;
       end;
       end;
@@ -1653,9 +1674,10 @@ then A71:    1 <= n+2 & n+2+1 <= len(h|(n+1+2)) by FINSEQ_3:27;
            then A74: x in LSeg(pn,pn1) & x in Q(n) by XBOOLE_0:def 3;
            then consider X being set such that
           A75: x in X and
-          A76: X in {LSeg(h|(n+2),i) : 1 <= i & i+1 <= len(h|(n+2))}
+          A76: X in {LSeg(h|(n+2),i) where i is Element of NAT:
+          1 <= i & i+1 <= len(h|(n+2))}
              by TARSKI:def 4;
-           consider i such that
+           consider i being Element of NAT such that
           A77: X = LSeg(h|(n+2),i) and
           A78: 1 <= i & i+1 <= len(h|(n+2)) by A76;
          A79: len(h|(n+2)) = n+(1+1) by A19,FINSEQ_1:80;
@@ -1714,9 +1736,10 @@ A94:         n+1 <= n+1+1 & n+1+1 = n+(1+1) & 1 <= 1+n & 1 <= 1+(n+1)
                 1 <= 1 + n & n + 1 + 1 <= n + (1 + 1) & n+2 <= len h
               by A18,NAT_1:11,XXREAL_0:2;
             then 1 <= n+1 & n+1+1 <= len(h|(n+2)) by FINSEQ_1:80;
-            then LSeg(h|(n+2),n+1) in {LSeg(h|(n+2),i): 1 <= i & i+1 <=
- len(h|(n+2))};
-          then x in union {LSeg(h|(n+2),i) : 1 <= i & i+1 <= len(h|(n+2))}
+            then LSeg(h|(n+2),n+1) in {LSeg(h|(n+2),i) where
+            i is Element of NAT: 1 <= i & i+1 <= len(h|(n+2))};
+          then x in union {LSeg(h|(n+2),i) where i is Element of NAT:
+          1 <= i & i+1 <= len(h|(n+2))}
            by A104,TARSKI:def 4;
          hence x in Q(n) /\ LSeg(pn,pn1) by A101,XBOOLE_0:def 3;
         end;
@@ -1732,8 +1755,9 @@ A106:     hh is_homeomorphism & hh.0 = f.0 & hh.1 = f1.1
      thus hh is_homeomorphism & hh.0 = p1 & hh.1 = h/.(n+1+2)
        by A22,A24,A106;
    end;
-A107: for n holds ARC[n] from NAT_1:sch 1(A14,A15);
-  reconsider h1 = len h - 2 as Element of NAT by A3,INT_1:18;
+A107: for n holds ARC[n] from NAT_1:sch 2(A14,A15);
+   len h - 2 in NAT by A3,INT_1:18;
+   then reconsider h1 = len h - 2 as Nat by ORDINAL1:def 13;
   1 <= h1 + 2 by NAT_1:12;
    then consider NE being non empty Subset of TOP-REAL 2 such that
 A108:  NE = Q(h1) &
@@ -1812,7 +1836,7 @@ end;
 
 :: Moved from JORDAN1A, AK, 23.02.2006
 
-scheme TRSubsetEx { n() -> Element of NAT, P[set] } :
+scheme TRSubsetEx { n() -> Nat, P[set] } :
  ex A being Subset of TOP-REAL n() st
   for p being Point of TOP-REAL n() holds p in A iff P[p]
 proof
@@ -1830,7 +1854,7 @@ A1:  for x being set holds x in A iff x in the carrier of TOP-REAL n() & P[x]
     thus thesis by A1;
   end;
 
-scheme TRSubsetUniq { n() -> Element of NAT, P[set] } :
+scheme TRSubsetUniq { n() -> Nat, P[set] } :
  for A, B being Subset of TOP-REAL n() st
   (for p being Point of TOP-REAL n() holds p in A iff P[p]) &
   (for p being Point of TOP-REAL n() holds p in B iff P[p])

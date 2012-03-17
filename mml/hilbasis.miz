@@ -11,7 +11,7 @@ environ
       TRIANG_1, ORDERS_2, ALGSEQ_1, GROUP_1, REALSET1, VECTSP_1, POLYNOM2,
       RLVECT_1, LATTICES, NORMSP_1, POLYNOM3, SQUARE_1, FILTER_2, QUOFIELD,
       GRCAT_1, IDEAL_1, COHSP_1, PRELAMB, MCART_1, ENDALG, SUBSET_1, BINOP_1,
-      CARD_1, TARSKI, DTCONSTR, FUNCT_2, GR_CY_1, HILBASIS, VECTSP_2;
+      CARD_1, TARSKI, DTCONSTR, FUNCT_2, GR_CY_1, HILBASIS, VECTSP_2, ARYTM;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, SEQ_4, SEQM_3, PBOOLE,
       FUNCOP_1, RELAT_1, FINSET_1, FUNCT_1, PARTFUN1, VECTSP_1, DTCONSTR,
       NORMSP_1, NUMBERS, XCMPLX_0, XXREAL_0, NAT_1, RELSET_1, RLVECT_1,
@@ -176,7 +176,7 @@ A8: dom (b1' + b2') = i by PBOOLE:def 3 .= j /\ i by A1,A3,PBOOLE:def 3;
 end;
 
 definition
-let n,k be Element of NAT, b be bag of n;
+let n,k be Nat, b be bag of n;
 func b bag_extend k -> Element of Bags (n+1) means :Def1:
      it|n = b & it.n = k;
 existence proof set b1 = b +* (n .--> k);
@@ -188,7 +188,7 @@ A2: x in dom b \/ dom (n .--> k) by A1,FUNCT_4:def 1;
 A3: x in dom (n .--> k);
     then x in {n} by FUNCOP_1:19; then x=n by TARSKI:def 1;
     then y = (n .--> k).n by A1,A2,A3,FUNCT_4:def 1 .= k by FUNCOP_1:87;
- hence y in NAT; end;
+ hence y in NAT by ORDINAL1:def 13; end;
                  suppose
      not x in dom (n .--> k); then y = b.x by A1,A2,FUNCT_4:def 1;
  hence y in NAT;
@@ -517,38 +517,46 @@ end;
 definition
 let L be right_zeroed add-associative right_complementable
          well-unital distributive (non empty doubleLoopStr),
-    n be Element of NAT, a be Element of L;
+    n be Nat, a be Element of L;
 func monomial(a,n) -> Polynomial of L means :Def5:
-for x being Element of NAT
+for x being Nat
  holds (x = n implies it.x = a) & (x <> n implies it.x = 0.L);
-  existence proof
-      reconsider x = 0_.(L)+*(n,a) as sequence of L;
-           now let i be Element of NAT; assume i >= n+1;
-         then i > n by NAT_1:13;
-         hence x.i = (NAT --> 0.L).i by FUNCT_7:34 .= 0.L by FUNCOP_1:13;
-      end; then reconsider x as Polynomial of L by ALGSEQ_1:def 2;
-           now let i be Element of NAT;
-         thus i = n implies x.i = a proof assume
-         A1: i = n;    dom 0_.(L) = NAT by FUNCT_2:def 1;
-            hence x.i = a by A1,FUNCT_7:33;
-         end;
-         thus i <> n implies x.i = 0.L proof assume i <> n;
-            hence x.i = (NAT --> 0.L).i by FUNCT_7:34 .= 0.L by FUNCOP_1:13;
-         end;
-      end;
-      hence thesis;
-  end;
-  uniqueness proof let u,v be Polynomial of L such that
-  A2: for x being Element of NAT
+ existence
+ proof
+   reconsider x = 0_.(L)+*(n,a) as sequence of L;
+   now let i be Nat;
+A1:  i in NAT by ORDINAL1:def 13;
+     assume i >= n+1;
+     then i > n by NAT_1:13;
+     hence x.i = (NAT --> 0.L).i by FUNCT_7:34 .= 0.L by FUNCOP_1:13,A1;
+   end; then reconsider x as Polynomial of L by ALGSEQ_1:def 2;
+   now let i be Nat;
+A2:  i in NAT by ORDINAL1:def 13;
+     thus i = n implies x.i = a
+     proof assume
+A1:    i = n;    dom 0_.(L) = NAT by FUNCT_2:def 1;
+       hence x.i = a by A1,FUNCT_7:33,A2;
+     end;
+     thus i <> n implies x.i = 0.L proof assume i <> n;
+     hence x.i = (NAT --> 0.L).i by FUNCT_7:34 .= 0.L by FUNCOP_1:13,A2;
+   end;
+ end;
+ hence thesis;
+end;
+uniqueness proof let u,v be Polynomial of L such that
+  A2: for x being Nat
    holds (x=n implies u.x=a) & (x<>n implies u.x = 0.L) and
-  A3: for x being Element of NAT
+  A3: for x being Nat
    holds (x=n implies v.x=a) & (x<>n implies v.x = 0.L);
   A4: dom u = NAT by FUNCT_2:def 1; A5: dom v = NAT by FUNCT_2:def 1;
           now let x be set; assume A6: x in NAT;
+            then
+A10:         x is Nat by ORDINAL1:def 13;
         per cases;
         suppose A7: x = n; hence u.x = a by A2 .= v.x by A3,A7;
         end;
-        suppose A8: x <> n; hence u.x = 0.L by A2,A6 .= v.x by A3,A6,A8;
+        suppose A8: x <> n; hence u.x = 0.L by A2,A6,A10
+          .= v.x by A3,A6,A8,A10;
      end;
      end;
      hence u = v by A4,A5,FUNCT_1:9;
@@ -567,7 +575,7 @@ proof let L be right_zeroed add-associative right_complementable
 A1: now assume a <> 0.L; then monomial(a,n).n <> 0.L by Def5;
       then len monomial(a,n) > n by ALGSEQ_1:22;
    then A2: len monomial(a,n) >= n+1 by NAT_1:13;
-           now let i be Element of NAT; assume i >= n+1; then i > n by NAT_1:13
+           now let i be Nat; assume i >= n+1; then i > n by NAT_1:13
 ;
          hence monomial(a,n).i = 0.L by Def5;
       end; then n+1 is_at_least_length_of monomial(a,n) by ALGSEQ_1:def 3;
@@ -576,7 +584,7 @@ A1: now assume a <> 0.L; then monomial(a,n).n <> 0.L by Def5;
    end;
      now assume
    A3:    a = 0.L;
-           now let i be Element of NAT; assume i >= 0;
+           now let i be Nat; assume i >= 0;
          per cases;
          suppose i = n; hence monomial(a,n).i = 0.L by A3,Def5;
          end;
@@ -706,7 +714,8 @@ for L be right_zeroed add-associative right_complementable
   holds len (p*'q) <= (len p)+(len q)-'1
 proof let L be right_zeroed add-associative right_complementable
     well-unital distributive (non empty doubleLoopStr), p,q be Polynomial of L;
-         now let i be Element of NAT;
+         now let i be Nat;
+           i in NAT by ORDINAL1:def 13; then
          consider r be FinSequence of the carrier of L such
 that
       A1: len r = i+1 and
@@ -1944,8 +1953,9 @@ Supportp1
           reconsider p3 as sequence of PNR;
                now
                per cases; suppose A16: Support p1 = {};
-                    now let i being Element of NAT; assume i >= 0;
-                reconsider p2 = p3.i as Polynomial of n, R by POLYNOM1:def 27;
+                    now let i be Nat; assume i >= 0;
+                      reconsider i1=i as Element of NAT by ORDINAL1:def 13;
+                reconsider p2 = p3.i1 as Polynomial of n, R by POLYNOM1:def 27;
                A17: dom ((Bags n) --> 0.R) = Bags n by FUNCOP_1:19;
                A18: dom (p2) = Bags n by FUNCT_2:def 1;
                          now let x be set; assume
@@ -1970,9 +1980,10 @@ Subset of
 FUNCT_2:sch 4;
                reconsider j = max (f .: Supportp1) as Element of NAT
                 by ORDINAL1:def 13;
-                    now let i being Element of NAT; assume
+                    now let i being Nat; assume
                A20: i >= j+1;
-                 reconsider p2 = p3.i as Polynomial of n, R by POLYNOM1:def 27;
+               reconsider i1 = i as Element of NAT by ORDINAL1:def 13;
+               reconsider p2 = p3.i1 as Polynomial of n, R by POLYNOM1:def 27;
                A21: dom ((Bags n) --> 0.R) = Bags n by FUNCOP_1:19;
                A22: dom (p2) = Bags n by FUNCT_2:def 1;
                          now let x be set; assume
