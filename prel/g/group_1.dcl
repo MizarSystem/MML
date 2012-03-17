@@ -21,7 +21,7 @@
 <ArticleID name="ALGSTR_0"/>
 <ArticleID name="GROUP_1"/>
 </Signature>
-<RCluster>
+<RCluster aid="GROUP_1" nr="1">
 <ArgTypes/>
 <Typ kind="G" nr="7">
 <Cluster/>
@@ -33,7 +33,7 @@
 <Adjective nr="71"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="GROUP_1" nr="2">
 <ArgTypes/>
 <Typ kind="G" nr="7">
 <Cluster/>
@@ -47,7 +47,7 @@
 <Adjective nr="73"/>
 </Cluster>
 </RCluster>
-<CCluster>
+<CCluster aid="GROUP_1" nr="1">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="25" value="false"/>

@@ -33,7 +33,7 @@
 <ArticleID name="TEX_3"/>
 <ArticleID name="TSP_2"/>
 </Signature>
-<RCluster>
+<RCluster aid="TSP_2" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
@@ -55,7 +55,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<CCluster>
+<CCluster aid="TSP_2" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
@@ -78,7 +78,7 @@
 <Adjective nr="70"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="TSP_2" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
@@ -101,7 +101,7 @@
 </Adjective>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="TSP_2" nr="3">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
@@ -125,7 +125,7 @@
 </Adjective>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="TSP_2" nr="4">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
@@ -149,7 +149,7 @@
 </Adjective>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="TSP_2" nr="5">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
@@ -176,7 +176,7 @@
 </Adjective>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="TSP_2" nr="6">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
@@ -203,7 +203,7 @@
 </Adjective>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="TSP_2" nr="7">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
@@ -230,7 +230,7 @@
 </Adjective>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="TSP_2" nr="8">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
@@ -257,7 +257,7 @@
 </Adjective>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="TSP_2" nr="9">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
@@ -284,7 +284,7 @@
 </Adjective>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="TSP_2" nr="10">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>

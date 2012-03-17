@@ -21,7 +21,7 @@
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="TOPGEN_3"/>
 </Signature>
-<FCluster>
+<FCluster aid="TOPGEN_3" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -39,7 +39,7 @@
 <Adjective nr="21"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="TOPGEN_3" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -56,7 +56,7 @@
 <Adjective nr="33"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="TOPGEN_3" nr="3">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -77,7 +77,7 @@
 <Adjective nr="33"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="TOPGEN_3" nr="4">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>

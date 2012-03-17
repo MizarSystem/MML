@@ -11,7 +11,8 @@ environ
       SFMASTR1, SCMFSA_9, CARD_3, ARYTM_1, SCMFSA9A, ABSVALUE, PRE_FF,
       SFMASTR2, ARYTM;
  notations TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, XCMPLX_0, CARD_3, NAT_1,
-      RELAT_1, FUNCT_1, FUNCT_2, FUNCT_4, PRE_FF, AMI_1, SCMFSA_2, SCMFSA6A,
+      RELAT_1, FUNCT_1, FUNCT_2, FUNCT_4, PRE_FF, AMI_1,
+      SCMNORM, SCMFSA_2, SCMFSA6A,
       SCMFSA6B, SF_MASTR, SCMFSA6C, SCMFSA7B, SCMFSA_9, SFMASTR1, SCMFSA9A,
       INT_2, XXREAL_0;
  constructors XXREAL_0, NAT_1, INT_2, PRE_FF, SCMFSA6A, SCMFSA6B, SCMFSA6C,
@@ -20,7 +21,7 @@ environ
       NUMBERS, XXREAL_0, XREAL_0, NAT_1, INT_1, CARD_3, SCMFSA_2, SF_MASTR,
       SCMFSA6B, SCMFSA6C, SCMFSA7B, SCMFSA8A, SCMFSA_9, SFMASTR1, XBOOLE_0;
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
- definitions SCMFSA9A, SUBSET_1;
+ definitions SCMFSA9A, SUBSET_1, SCMFSA6A;
  theorems TARSKI, ZFMISC_1, REAL_1, ABSVALUE, NAT_1, INT_1, FUNCT_4, PRE_FF,
       SCMFSA_2, SCMFSA6A, SCMFSA6B, SF_MASTR, SCMFSA6C, SCMFSA7B, SCMFSA8A,
       SCMFSA8B, SCMFSA8C, SCMFSA_9, SFMASTR1, SCMFSA9A, XBOOLE_0, XBOOLE_1,
@@ -33,8 +34,8 @@ reserve s, s1, s2 for State of SCM+FSA,
   a, b for Int-Location,
   d for read-write Int-Location,
   f for FinSeq-Location,
-  I for Macro-Instruction,
-  J for good Macro-Instruction,
+  I for Program of SCM+FSA,
+  J for good Program of SCM+FSA,
   k, m for Element of NAT;
 set D = Int-Locations \/ FinSeq-Locations;
 set SAt = Start-At insloc 0;
@@ -119,7 +120,7 @@ A3: not a in UsedIntLoc I;
 A4: a = intloc 0 or a is read-write by SF_MASTR:def 5;
   now
     assume I is parahalting;
-    then reconsider I' = I as parahalting Macro-Instruction;
+    then reconsider I' = I as parahalting Program of SCM+FSA;
     I' is paraclosed;
     hence I is paraclosed;
   end;
@@ -218,8 +219,8 @@ end;
 begin :: Another times macro instruction
 
 definition
-  let a be Int-Location, I be Macro-Instruction;
-  func times(a, I) -> Macro-Instruction equals
+  let a be Int-Location, I be Program of SCM+FSA;
+  func times(a, I) -> Program of SCM+FSA equals
   (1-stRWNotIn ({a} \/ UsedIntLoc I)) := a ';'
   while>0 ( 1-stRWNotIn ({a} \/ UsedIntLoc I), I ';'
   SubFrom(1-stRWNotIn ({a} \/ UsedIntLoc I), intloc 0) );
@@ -227,7 +228,7 @@ definition
 end;
 
 notation
-  let a be Int-Location, I be Macro-Instruction;
+  let a be Int-Location, I be Program of SCM+FSA;
   synonym a times I for times(a, I);
 end;
 
@@ -276,13 +277,13 @@ proof
 end;
 
 registration
-  let I be good Macro-Instruction, a be Int-Location;
+  let I be good Program of SCM+FSA, a be Int-Location;
   cluster times(a, I) -> good;
   coherence;
 end;
 
 definition
-  let s be State of SCM+FSA, I be Macro-Instruction, a be Int-Location;
+  let s be State of SCM+FSA, I be Program of SCM+FSA, a be Int-Location;
 
 func StepTimes(a, I, s) -> Function of NAT, product the Object-Kind of SCM+FSA
   equals
@@ -340,16 +341,14 @@ A3: I is_halting_on StepTimes(a, I, s).k;
   Exec(au := a, Initialize s));
 A4: I is_closed_on Initialize ST.k by A1,A2,Th4;
 A5: I is_halting_on Initialize ST.k by A1,A2,A3,Th5;
-A6: I ';' SubFrom(au, intloc 0) = I ';' Macro SubFrom(au, intloc 0)
-  by SCMFSA6A:def 6;
 A7: Macro SubFrom(au, intloc 0) is_closed_on IExec(I, ST.k) by SCMFSA7B:24;
   then
 A8: I ';' SubFrom(au,intloc 0) is_closed_on Initialize ST.k by A4,A5
-  ,A6,SFMASTR1:3;
+  ,SFMASTR1:3;
   Macro SubFrom(au, intloc 0) is_halting_on IExec(I, ST.k) by SCMFSA7B:25;
   then
 A9: I ';' SubFrom(au, intloc 0) is_halting_on Initialize ST.k
-  by A4,A5,A6,A7,SFMASTR1:4;
+  by A4,A5,A7,SFMASTR1:4;
   hereby
     per cases;
     suppose SW.k.au <= 0;
@@ -412,7 +411,7 @@ proof
 end;
 
 definition
-  let s be State of SCM+FSA, a be Int-Location, I be Macro-Instruction;
+  let s be State of SCM+FSA, a be Int-Location, I be Program of SCM+FSA;
   pred ProperTimesBody a, I, s means
   :Def3:
   for k being Element of NAT st k < s.a
@@ -427,7 +426,7 @@ proof
 A1: I is parahalting;
   let k be Element of NAT;
   assume k < s.a;
-  reconsider I' = I as parahalting Macro-Instruction by A1;
+  reconsider I' = I as parahalting Program of SCM+FSA by A1;
   I' is paraclosed;
   hence I is_closed_on StepTimes(a,I,s).k by SCMFSA7B:24;
   thus I is_halting_on StepTimes(a,I,s).k by A1,SCMFSA7B:25;
@@ -501,16 +500,14 @@ A10: I is_closed_on ST.k by A2,A8,Def3;
 A11: I is_halting_on ST.k by A2,A8,Def3;
 A12: I is_closed_on Initialize ST.k by A9,A10,Th4;
 A13: I is_halting_on Initialize ST.k by A9,A10,A11,Th5;
-A14: I ';' SubFrom(au, intloc 0) = I ';' Macro SubFrom(au, intloc 0)
-    by SCMFSA6A:def 6;
 A15: Macro SubFrom(au, intloc 0) is_closed_on IExec(I, ST.k) by SCMFSA7B:24;
     then
 A16: I ';' SubFrom(au,intloc 0) is_closed_on Initialize ST.k
-    by A12,A13,A14,SFMASTR1:3;
+    by A12,A13,SFMASTR1:3;
     Macro SubFrom(au, intloc 0) is_halting_on IExec(I, ST.k) by SCMFSA7B:25;
     then
 A17: I ';' SubFrom(au, intloc 0) is_halting_on Initialize ST.k
-    by A12,A13,A14,A15,SFMASTR1:4;
+    by A12,A13,A15,SFMASTR1:4;
     not au in {a} \/ UsedIntLoc I by SFMASTR1:21;
     then
 A18: not au in UsedIntLoc I by XBOOLE_0:def 2;
@@ -636,15 +633,13 @@ A1: ST.k.intloc 0 = 1 and
 A2: I is_halting_on Initialize ST.k and
 A3: I is_closed_on Initialize ST.k and
 A4: ST.k.au > 0;
-A5: I ';' SubFrom(au, intloc 0) = I ';' Macro SubFrom(au, intloc 0)
-  by SCMFSA6A:def 6;
 A6: Macro SubFrom(au, intloc 0) is_closed_on IExec(I, ST.k) by SCMFSA7B:24;
   then
 A7: I ';' SubFrom(au,intloc 0) is_closed_on Initialize ST.k
-  by A2,A3,A5,SFMASTR1:3;
+  by A2,A3,SFMASTR1:3;
   Macro SubFrom(au, intloc 0) is_halting_on IExec(I, ST.k) by SCMFSA7B:25;
   then I ';' SubFrom(au, intloc 0) is_halting_on Initialize ST.k
-  by A2,A3,A5,A6,SFMASTR1:4;
+  by A2,A3,A6,SFMASTR1:4;
   then
 A8: SW.(k+1) | D = IExec(I ';' SubFrom(au, intloc 0), ST.k) | D
   by A1,A4,A7,SCMFSA9A:38;
@@ -791,13 +786,12 @@ A11: ST.k.intloc 0 = 1 by A2,A8,Th15,Th16;
 A12: ST.k | D = (Initialize (ST.k)) | D by SCMFSA8C:27;
 A13: I is_closed_on Initialize ST.k by A9,A11,Th4;
 A14: I is_halting_on Initialize ST.k by A9,A10,A11,Th5;
-A15: ISu = I ';' Macro SubFrom(au, intloc 0) by SCMFSA6A:def 6;
 A16: Macro SubFrom(au, intloc 0) is_closed_on IExec(I, ST.k) by SCMFSA7B:24;
     then
-A17: ISu is_closed_on Initialize ST.k by A13,A14,A15,SFMASTR1:3;
+A17: ISu is_closed_on Initialize ST.k by A13,A14,SFMASTR1:3;
     Macro SubFrom(au, intloc 0) is_halting_on IExec(I, ST.k) by SCMFSA7B:25;
     then
-A18: ISu is_halting_on Initialize ST.k by A13,A14,A15,A16,SFMASTR1:4;
+A18: ISu is_halting_on Initialize ST.k by A13,A14,A16,SFMASTR1:4;
     thus ISu is_closed_on SW.k by A12,A17,SCMFSA8B:6;
     thus ISu is_halting_on SW.k by A12,A17,A18,SCMFSA8B:8;
   end;
@@ -921,7 +915,6 @@ A5: Is1 | D = s1 | D by SCMFSA8C:27;
 A6: s1 = IExec(Macro (au := a), s) by SCMFSA6C:6;
 A7: Macro(au := a) is_closed_on Initialize s by SCMFSA7B:24;
 A8: Macro(au := a) is_halting_on Initialize s by SCMFSA7B:25;
-A9: taI = Macro(au := a) ';' WH by SCMFSA6A:def 5;
   per cases;
   suppose
 A10: s.a < 0;
@@ -931,9 +924,9 @@ A12: s1.au = (Initialize s).a by SCMFSA_2:89
     then
 A13: WH is_closed_on s1 by A10,SCMFSA_9:43;
 A14: WH is_halting_on s1 by A10,A12,SCMFSA_9:43;
-A15: taI is_closed_on Initialize s by A6,A7,A8,A9,A13,SFMASTR1:3;
+A15: taI is_closed_on Initialize s by A6,A7,A8,A13,SFMASTR1:3;
     hence times(a, I) is_closed_on s by A1,Th4;
-    taI is_halting_on Initialize s by A6,A7,A8,A9,A13,A14,SFMASTR1:4;
+    taI is_halting_on Initialize s by A6,A7,A8,A13,A14,SFMASTR1:4;
     hence times(a, I) is_halting_on s by A1,A15,Th5;
   end;
   suppose
@@ -952,13 +945,12 @@ A21:  ST.k.intloc 0 = 1 by A2,A18,Th15,Th16;
 A22:  ST.k | D = (Initialize (ST.k)) | D by SCMFSA8C:27;
 A23:  I is_closed_on Initialize ST.k by A19,A21,Th4;
 A24:  I is_halting_on Initialize ST.k by A19,A20,A21,Th5;
-A25:  ISu = I ';' Macro SubFrom(au, intloc 0) by SCMFSA6A:def 6;
 A26:  Macro SubFrom(au, intloc 0) is_closed_on IExec(I, ST.k) by SCMFSA7B:24;
       then
-A27:  ISu is_closed_on Initialize ST.k by A23,A24,A25,SFMASTR1:3;
+A27:  ISu is_closed_on Initialize ST.k by A23,A24,SFMASTR1:3;
       Macro SubFrom(au, intloc 0) is_halting_on IExec(I, ST.k) by SCMFSA7B:25;
       then
-A28:  ISu is_halting_on Initialize ST.k by A23,A24,A25,A26,SFMASTR1: 4;
+A28:  ISu is_halting_on Initialize ST.k by A23,A24,A26,SFMASTR1: 4;
       thus ISu is_closed_on SW.k by A22,A27,SCMFSA8B:6;
       thus ISu is_halting_on SW.k by A22,A27,A28,SCMFSA8B:8;
     end;
@@ -1021,11 +1013,9 @@ A46: WH is_closed_on s1 by A5,SCMFSA8B:6;
     WH is_halting_on Is1 by A29,A33,SCMFSA9A:33;
     then
 A47: WH is_halting_on s1 by A5,A45,SCMFSA8B:8;
-A48: taI = Macro(au := a) ';' WH by SCMFSA6A:def 5;
-    then
 A49: taI is_closed_on Initialize s by A6,A7,A8,A46,SFMASTR1:3;
     hence times(a, I) is_closed_on s by A1,Th4;
-    taI is_halting_on Initialize s by A6,A7,A8,A46,A47,A48,SFMASTR1:4;
+    taI is_halting_on Initialize s by A6,A7,A8,A46,A47,SFMASTR1:4;
     hence times(a, I) is_halting_on s by A1,A49,Th5;
   end;
 end;
@@ -1034,7 +1024,7 @@ begin :: A trivial example
 
 definition
   let d be read-write Int-Location;
-  func triv-times(d) -> Macro-Instruction equals
+  func triv-times(d) -> Program of SCM+FSA equals
   times( d, while=0(d, Macro(d := d)) ';' SubFrom(d, intloc 0) );
   correctness;
 end;
@@ -1079,7 +1069,6 @@ A1: 0 <= s.a;
   set i2 = SubFrom(a, intloc 0);
   set I = I1 ';' i2;
   set au = 1-stRWNotIn ({a} \/ UsedIntLoc I);
-A2: I = I1 ';' Macro i2 by SCMFSA6A:def 6;
   a in {a, intloc 0} by TARSKI:def 2;
   then a in UsedIntLoc SubFrom(a, intloc 0) by SF_MASTR:18;
   then a in (UsedIntLoc while=0(a, Macro(a := a)))
@@ -1105,8 +1094,8 @@ A9:   I1 is_closed_on Initialize ST.0 by A6,A7,Th4;
 A10:  Macro i2 is_halting_on IExec(I1, ST.0) by SCMFSA7B:25;
 A11:  Macro i2 is_closed_on IExec(I1, ST.0) by SCMFSA7B:24;
       then
-A12:  I is_closed_on Initialize ST.0 by A2,A8,A9,SFMASTR1:3;
-A13:  I is_halting_on Initialize ST.0 by A2,A8,A9,A10,A11,SFMASTR1:4;
+A12:  I is_closed_on Initialize ST.0 by A8,A9,SFMASTR1:3;
+A13:  I is_halting_on Initialize ST.0 by A8,A9,A10,A11,SFMASTR1:4;
       thus I is_closed_on ST.0 by A6,A12,Th4;
       thus I is_halting_on ST.0 by A6,A12,A13,Th5;
       thus ST.0.intloc 0 = 1 by Th10;
@@ -1165,8 +1154,8 @@ A33:  I1 is_closed_on Initialize ST.(k+1) by A30,A31,Th4;
 A34:  Macro i2 is_halting_on IExec(I1, ST.(k+1)) by SCMFSA7B:25;
 A35:  Macro i2 is_closed_on IExec(I1, ST.(k+1)) by SCMFSA7B:24;
       then
-A36:  I is_closed_on Initialize ST.(k+1) by A2,A32,A33,SFMASTR1:3;
-A37:  I is_halting_on Initialize ST.(k+1) by A2,A32,A33,A34,A35,SFMASTR1:4;
+A36:  I is_closed_on Initialize ST.(k+1) by A32,A33,SFMASTR1:3;
+A37:  I is_halting_on Initialize ST.(k+1) by A32,A33,A34,A35,SFMASTR1:4;
       thus I is_closed_on ST.(k+1) by A30,A36,Th4;
       thus I is_halting_on ST.(k+1) by A30,A36,A37,Th5;
       thus ST.(k+1).intloc 0 =1 by A16,A29,Th12;
@@ -1200,7 +1189,7 @@ definition
 ::      for saving and restoring N
 :: - requires: N <> result
 :: - does not change N
-  func Fib-macro (N, result) -> Macro-Instruction equals
+  func Fib-macro (N, result) -> Program of SCM+FSA equals
   (1-stNotUsed times(N, AddTo(result, (1-stRWNotIn {N, result}))';'
   swap(result, 1-stRWNotIn {N, result}))) := N ';'
   (SubFrom(result, result)) ';' ((1-stRWNotIn {N, result}) := intloc 0) ';'
@@ -1335,7 +1324,7 @@ A30: I3 is_closed_on s1 & I3 is_halting_on s1 by A14,Th24;
 A31: I3 is_closed_on Initialize s1 &
   I3 is_halting_on Initialize s1 by A14,Th5;
 A32: i02 is_closed_on Initialize s by SCMFSA7B:24;
-  reconsider i02 as good Macro-Instruction;
+  reconsider i02 as good Program of SCM+FSA;
 A33: i02 ';' I3 is_halting_on Initialize s by A29,A30,A32,SFMASTR1:4;
 A34: i02 ';' I3 is_closed_on Initialize s by A29,A30,A32,SFMASTR1:3;
   hence IExec(Fib-macro(N, result), s).result

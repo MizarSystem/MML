@@ -25,7 +25,7 @@
 <ArticleID name="HILBERT1"/>
 <ArticleID name="HILBERT3"/>
 </Signature>
-<RCluster>
+<RCluster aid="HILBERT3" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="11">
 <Cluster>
@@ -102,7 +102,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="HILBERT3" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="11">
 <Cluster>
@@ -142,7 +142,7 @@
 <Adjective nr="22"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="HILBERT3" nr="3">
 <ArgTypes/>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -155,14 +155,14 @@
 <Adjective nr="35"/>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="HILBERT3" nr="1">
 <ArgTypes/>
 <Func kind="K" nr="18"/>
 <Cluster>
 <Adjective nr="22"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="HILBERT3" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -189,7 +189,7 @@
 <Adjective nr="5"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="HILBERT3" nr="3">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -262,7 +262,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="HILBERT3" nr="4">
 <ArgTypes>
 <Typ kind="M" nr="11">
 <Cluster>
@@ -283,7 +283,7 @@
 <Adjective nr="7" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="HILBERT3" nr="5">
 <ArgTypes>
 <Typ kind="M" nr="11">
 <Cluster>
@@ -311,7 +311,7 @@
 <Adjective nr="28"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="HILBERT3" nr="6">
 <ArgTypes>
 <Typ kind="M" nr="11">
 <Cluster>
@@ -357,14 +357,14 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="HILBERT3" nr="7">
 <ArgTypes/>
 <Func kind="K" nr="168"/>
 <Cluster>
 <Adjective nr="35"/>
 </Cluster>
 </FCluster>
-<CCluster>
+<CCluster aid="HILBERT3" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -406,7 +406,7 @@
 <Adjective nr="22"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="HILBERT3" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -438,7 +438,7 @@
 <Adjective nr="22"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="HILBERT3" nr="3">
 <ArgTypes>
 <Typ kind="M" nr="11">
 <Cluster>
@@ -477,7 +477,7 @@
 <Adjective nr="22"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="HILBERT3" nr="4">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="35"/>

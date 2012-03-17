@@ -23,7 +23,7 @@
 <ArticleID name="DIRAF"/>
 <ArticleID name="ANALMETR"/>
 </Signature>
-<RCluster>
+<RCluster aid="ANALMETR" nr="1">
 <ArgTypes/>
 <Typ kind="G" nr="13">
 <Cluster/>
@@ -32,7 +32,7 @@
 <Adjective nr="81"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="ANALMETR" nr="2">
 <ArgTypes/>
 <Typ kind="G" nr="13">
 <Cluster/>
@@ -41,7 +41,7 @@
 <Adjective nr="25" value="false"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="ANALMETR" nr="3">
 <ArgTypes/>
 <Typ kind="G" nr="13">
 <Cluster/>
@@ -52,7 +52,7 @@
 <Adjective nr="82"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="ANALMETR" nr="4">
 <ArgTypes/>
 <Typ kind="G" nr="13">
 <Cluster/>
@@ -63,7 +63,7 @@
 <Adjective nr="83"/>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="ANALMETR" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="11">
 <Cluster>
@@ -98,7 +98,7 @@
 <Adjective nr="81"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="ANALMETR" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="13">
 <Cluster>
@@ -114,7 +114,7 @@
 <Adjective nr="76"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="ANALMETR" nr="3">
 <ArgTypes>
 <Typ kind="G" nr="13">
 <Cluster>
@@ -132,7 +132,7 @@
 <Adjective nr="79"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="ANALMETR" nr="4">
 <ArgTypes>
 <Typ kind="G" nr="13">
 <Cluster>
@@ -151,7 +151,7 @@
 <Adjective nr="80"/>
 </Cluster>
 </FCluster>
-<CCluster>
+<CCluster aid="ANALMETR" nr="1">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="25" value="false"/>

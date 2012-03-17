@@ -26,7 +26,7 @@
 <ArticleID name="ANALOAF"/>
 <ArticleID name="TDGROUP"/>
 </Signature>
-<RCluster>
+<RCluster aid="TDGROUP" nr="1">
 <ArgTypes/>
 <Typ kind="G" nr="6">
 <Cluster/>
@@ -42,7 +42,7 @@
 <Adjective nr="96"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="TDGROUP" nr="2">
 <ArgTypes/>
 <Typ kind="G" nr="13">
 <Cluster/>
@@ -54,7 +54,7 @@
 <Adjective nr="97"/>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="TDGROUP" nr="1">
 <ArgTypes/>
 <Func kind="K" nr="149"/>
 <Cluster>
@@ -63,7 +63,7 @@
 <Adjective nr="96"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="TDGROUP" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>

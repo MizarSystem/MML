@@ -17,7 +17,7 @@
 <ArticleID name="CARD_1"/>
 <ArticleID name="CARD_3"/>
 </Signature>
-<FCluster>
+<FCluster aid="GENEALG1" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>

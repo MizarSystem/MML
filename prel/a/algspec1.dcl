@@ -37,7 +37,7 @@
 <ArticleID name="INSTALG1"/>
 <ArticleID name="ALGSPEC1"/>
 </Signature>
-<RCluster>
+<RCluster aid="ALGSPEC1" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
@@ -56,7 +56,7 @@
 <Adjective nr="75"/>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="ALGSPEC1" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -104,7 +104,7 @@
 <Adjective nr="50" value="false"/>
 </Cluster>
 </FCluster>
-<CCluster>
+<CCluster aid="ALGSPEC1" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
@@ -122,7 +122,7 @@
 <Adjective nr="32" value="false"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="ALGSPEC1" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>

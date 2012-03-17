@@ -39,7 +39,7 @@
 <ArticleID name="POLYNOM3"/>
 <ArticleID name="POLYNOM5"/>
 </Signature>
-<RCluster>
+<RCluster aid="POLYNOM5" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="10">
 <Cluster>
@@ -79,7 +79,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="POLYNOM5" nr="2">
 <ArgTypes/>
 <Typ kind="G" nr="10">
 <Cluster/>
@@ -102,7 +102,7 @@
 <Adjective nr="113"/>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="POLYNOM5" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="10">
 <Cluster>
@@ -139,7 +139,7 @@
 <Func kind="K" nr="57"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="253">
+<Func kind="K" nr="254">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
@@ -157,7 +157,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="POLYNOM5" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="10">
 <Cluster>
@@ -193,7 +193,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="254">
+<Func kind="K" nr="255">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
@@ -211,7 +211,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="POLYNOM5" nr="3">
 <ArgTypes>
 <Typ kind="G" nr="2">
 <Cluster>
@@ -231,7 +231,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="255">
+<Func kind="K" nr="256">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
@@ -249,7 +249,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="POLYNOM5" nr="4">
 <ArgTypes>
 <Typ kind="G" nr="10">
 <Cluster>
@@ -258,7 +258,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="247">
+<Func kind="K" nr="248">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -274,7 +274,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="POLYNOM5" nr="5">
 <ArgTypes>
 <Typ kind="G" nr="10">
 <Cluster>
@@ -308,7 +308,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="258">
+<Func kind="K" nr="259">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -325,7 +325,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="POLYNOM5" nr="6">
 <ArgTypes/>
 <Func kind="K" nr="201"/>
 <Cluster>

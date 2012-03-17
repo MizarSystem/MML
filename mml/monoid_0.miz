@@ -13,7 +13,7 @@ environ
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, REAL_1, MCART_1,
       DOMAIN_1, BINOP_2, REALSET1, STRUCT_0, RELAT_1, FINSEQOP, FUNCT_1,
       FINSEQ_1, PARTFUN1, FUNCT_2, BINOP_1, FINSEQ_2, INT_1, FRAENKEL, GROUP_1,
-      VECTSP_1, SETWISEO, FUNCOP_1, FUNCT_4, GR_CY_1, ALGSTR_0;
+      VECTSP_1, SETWISEO, FUNCOP_1, GR_CY_1, ALGSTR_0;
  constructors RELAT_2, PARTFUN1, BINOP_1, SETWISEO, FRAENKEL, BINOP_2,
       FINSEQOP, REALSET1, VECTSP_2, GR_CY_1;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1, PARTFUN1,
@@ -21,7 +21,7 @@ environ
       GROUP_1, ALGSTR_0;
  requirements NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, BINOP_1, SETWISEO, FINSEQOP, GROUP_1, STRUCT_0, XBOOLE_0,
-      REALSET1, VECTSP_1, ALGSTR_0;
+      REALSET1, VECTSP_1, ALGSTR_0, FUNCOP_1;
  theorems TARSKI, NAT_1, INT_1, FINSEQ_1, BINOP_1, GROUP_1, FINSEQOP, SETWISEO,
       VECTSP_1, MCART_1, ZFMISC_1, FUNCT_1, FUNCT_2, FUNCT_4, FUNCOP_1,
       PARTFUN1, GR_CY_1, GRFUNC_1, RELAT_1, RELSET_1, XBOOLE_1, XCMPLX_1,
@@ -184,13 +184,13 @@ A3: for a,b,c being Element of D st f.(b,a) = f.(c,a) holds b = c;
 end;
 
 theorem Th3:
-  for f being BinOp of {x} holds f = {[x,x]} --> x &
+  for f being BinOp of {x} holds f = (x,x) .--> x &
   f has_a_unity & f is commutative & f is associative & f is idempotent &
   f is invertible cancelable uniquely-decomposable
 proof
   let f be BinOp of {x};
   reconsider a = x as Element of {x} by TARSKI:def 1;
-A1: dom f = [:{x},{x}:] & dom ({[x,x]} --> x) = {[x,x]} & [:{x},{x}:] = {[x,x]}
+A1: dom f = [:{x},{x}:] & dom ((x,x) .--> x) = {[x,x]} & [:{x},{x}:] = {[x,x]}
   by FUNCT_2:def 1,ZFMISC_1:35;
   now
     let y;
@@ -199,9 +199,9 @@ A2: y in {[x,x]};
     then reconsider b = y as Element of [:{x},{x}:] by ZFMISC_1:35;
     thus f.y = f.b
       .= x by TARSKI:def 1
-      .= ({[x,x]} --> x).y by A2,FUNCOP_1:13;
+      .= ((x,x) .--> x).y by A2,FUNCOP_1:13;
   end;
-  hence f = {[x,x]} --> x by A1,FUNCT_1:9;
+  hence f = (x,x) .--> x by A1,FUNCT_1:9;
 A3: now
     let a,b be Element of {x};
     a = x & b = x by TARSKI:def 1;
@@ -1019,7 +1019,7 @@ definition
   let G be multMagma;
   mode SubStr of G -> multMagma means
     :Def23:
-    the multF of it <= the multF of G;
+    the multF of it c= the multF of G;
   existence;
 end;
 
@@ -1052,10 +1052,12 @@ registration
 A1: for b being Element of G holds a*b = b & b*a = b by Th6;
     consider f being BinOp of {a};
     set H = multMagma(#{a},f#);
-    f = {[a,a]} --> a & a = a*a & a*a = op(G).(a,a) &
+X:  f = (a,a) .--> a by Th3
+     .= [a,a] .--> a;
+Y:  a = a*a & a*a = op(G).(a,a) by A1;
     op(G).(a,a) = op(G).[a,a] & dom op(G) = [:carr(G),carr(G):]
-    by A1,Th3,FUNCT_2:def 1;
-    then op(H) <= op(G) by FUNCT_4:8;
+     by FUNCT_2:def 1;
+    then op(H) c= op(G) by FUNCT_4:8,X,Y;
     then reconsider H as non empty SubStr of G by Def23;
     take H;
     thus op(H) has_a_unity & op(H) is associative & op(H) is commutative &
@@ -1069,7 +1071,7 @@ definition
   let G be multMagma;
   mode MonoidalSubStr of G -> multLoopStr means
     :Def24:
-    the multF of it <= the multF of G &
+    the multF of it c= the multF of G &
     for M being multLoopStr st G = M holds 1.it = 1.M;
   existence
   proof consider M being MonoidalExtension of G;
@@ -1077,7 +1079,7 @@ A1: the multMagma of M = the multMagma of G by Def22;
 A2: now
       given M being multLoopStr such that
 A3:   G = M;
-      take M; thus op(M) <= op(G) by A3;
+      take M; thus op(M) c= op(G) by A3;
       thus for N being multLoopStr st G = N holds un(M) = un(N) by A3;
     end;
     (ex M being multLoopStr st G = M) or for N being multLoopStr st G = N
@@ -1091,7 +1093,7 @@ registration
   cluster strict MonoidalSubStr of G;
   existence
   proof consider N being MonoidalSubStr of G;
-A1: op(the multLoopStr of N) <= op(G) by Def24;
+A1: op(the multLoopStr of N) c= op(G) by Def24;
     un(the multLoopStr of N) = un(N);
     then for M being multLoopStr st G = M
     holds un(the multLoopStr of N) = un(M) by Def24;
@@ -1132,18 +1134,18 @@ definition
   let M be multLoopStr;
   redefine mode MonoidalSubStr of M means
     :Def25:
-    the multF of it <= the multF of M & 1.it = 1.M;
+    the multF of it c= the multF of M & 1.it = 1.M;
   compatibility
   proof
     let N be multLoopStr;
-    thus N is MonoidalSubStr of M implies op(N) <= op(M) & un(N) = un(M)
+    thus N is MonoidalSubStr of M implies op(N) c= op(M) & un(N) = un(M)
     proof
       assume
-      op(N) <= op(M) & for K being multLoopStr st M = K holds un(N) = un(K);
+      op(N) c= op(M) & for K being multLoopStr st M = K holds un(N) = un(K);
       hence thesis;
     end;
-    assume op(N) <= op(M) & un(N) = un(M);
-    hence op(N) <=
+    assume op(N) c= op(M) & un(N) = un(M);
+    hence op(N) c=
     op(M) & for K being multLoopStr st M = K holds un(N) = un(K);
   end;
 end;
@@ -1159,9 +1161,10 @@ registration
     consider f being BinOp of {a};
     set H = multLoopStr(#{a},f,e#);
 A1: 1.H = 1.G;
-    f = {[a,a]} --> a & a = a*a & a*a = op(G).(a,a) &
+X:  [a,a] .--> a = {[a,a]} --> a;
+    f = (a,a) .--> a & a = a*a & a*a = op(G).(a,a) &
     dom op(G) = [:carr(G),carr(G):] by Th3,Th18,FUNCT_2:def 1;
-    then op(H) <= op(G) by FUNCT_4:8;
+    then op(H) c= op(G) by FUNCT_4:8,X;
     then reconsider H as non empty MonoidalSubStr of G by A1,Def25;
     take H;
     now
@@ -1181,7 +1184,7 @@ theorem Th23:
   for G being multMagma, M being MonoidalSubStr of G holds M is SubStr of G
 proof
   let G be multMagma, M be MonoidalSubStr of G;
-  thus op(M) <= op(G) by Def24;
+  thus op(M) c= op(G) by Def24;
 end;
 
 definition
@@ -1191,7 +1194,7 @@ definition
   proof
     let N be SubStr of M;
     the multMagma of M = the multMagma of G by Def22;
-    hence op(N) <= op(G) by Def23;
+    hence op(N) c= op(G) by Def23;
   end;
 end;
 
@@ -1201,8 +1204,8 @@ definition
   coherence
   proof
     let G be SubStr of G2;
-    op(G) <= op(G2) & op(G2) <= op(G1) by Def23;
-    hence op(G) <= op(G1) by XBOOLE_1:1;
+    op(G) c= op(G2) & op(G2) c= op(G1) by Def23;
+    hence op(G) c= op(G1) by XBOOLE_1:1;
   end;
 end;
 
@@ -1224,9 +1227,9 @@ definition
   coherence
   proof
     let M' be MonoidalSubStr of M;
-    op(M') <= op(M) & op(M) <= op(G) & un(M') = un(M) &
+    op(M') c= op(M) & op(M) c= op(G) & un(M') = un(M) &
     for N being multLoopStr st G = N holds un(M) = un(N) by Def24;
-    hence op(M') <= op(G) & for N being multLoopStr st G = N holds un(M') = un(
+    hence op(M') c= op(G) & for N being multLoopStr st G = N holds un(M') = un(
     N) by XBOOLE_1:1;
   end;
 end;
@@ -1234,8 +1237,8 @@ end;
 theorem
   G is SubStr of G & M is MonoidalSubStr of M
 proof
-  thus op(G) <= op(G);
-  thus op(M) <= op(M);
+  thus op(G) c= op(G);
+  thus op(M) c= op(M);
   thus thesis;
 end;
 
@@ -1244,7 +1247,7 @@ reserve H for non empty SubStr of G,
 
 theorem Th25:
   the carrier of H c= the carrier of G & the carrier of N c= the carrier of G
-proof op(H) <= op(G) & op(N) <= op(G) by Def23,Def24;
+proof op(H) c= op(G) & op(N) c= op(G) by Def23,Def24;
   then
 A1: dom op(H) c= dom op(G) & dom op(H) = [:carr(H), carr(H):] &
   dom op(N) c= dom op(G) & dom op(N) = [:carr(N), carr(N):] &
@@ -1267,7 +1270,7 @@ theorem Th26:
   holds the multF of H = (the multF of G)||the carrier of H
 proof
   let G be non empty multMagma, H be non empty SubStr of G;
-  op(H) <= op(G) & dom op(H) = [:carr(H),carr(H):] by Def23,FUNCT_2:def 1;
+  op(H) c= op(G) & dom op(H) = [:carr(H),carr(H):] by Def23,FUNCT_2:def 1;
   hence thesis by GRFUNC_1:64;
 end;
 
@@ -1277,7 +1280,7 @@ theorem Th27:
 proof
   let a,b be Element of H, a',b' be Element of G such that
 A1: a = a' & b = b';
-A2: dom op(H) = [:carr(H), carr(H):] & op(H) <= op(G) by Def23,FUNCT_2:def 1;
+A2: dom op(H) = [:carr(H), carr(H):] & op(H) c= op(G) by Def23,FUNCT_2:def 1;
   thus a*b = op(H).[a,b]
     .= a'*b' by A1,A2,GRFUNC_1:8;
 end;
@@ -1290,7 +1293,7 @@ proof
   let H1,H2 be non empty SubStr of G;
   assume
 A1: carr(H1) = carr(H2);
-  then op(H1) <= op(G) & op(H2) <= op(G) &
+  then op(H1) c= op(G) & op(H2) c= op(G) &
   dom op(H1) = [:carr(H1), carr(H1):] &
   dom op(H2) = [:carr(H1), carr(H1):] by Def23,FUNCT_2:def 1;
   then the multMagma of H1 = multMagma(#carr(H1), op(H1)#) &
@@ -1318,14 +1321,14 @@ theorem Th30:
 proof
   let H1,H2 be non empty SubStr of G;
   assume carr(H1) c= carr(H2);
-  then op(H1) <= op(G) & op(H2) <= op(G) &
+  then op(H1) c= op(G) & op(H2) c= op(G) &
   dom op(H1) = [:carr(H1), carr(H1):] &
   [:carr(H1), carr(H1):] c= [:carr(H2), carr(H2):] &
   dom op(H2) = [:carr(H2), carr(H2):] by Def23,FUNCT_2:def 1,ZFMISC_1:119;
   then op(G)||carr(H2)||carr(H1) =
   op(G)||carr(H1) & op(H1) = op(G)||carr(H1) &
   op(H2) = op(G)||carr(H2) by FUNCT_1:82,GRFUNC_1:64;
-  hence op(H1) <= op(H2) by RELAT_1:88;
+  hence op(H1) c= op(H2) by RELAT_1:88;
 end;
 
 theorem
@@ -1336,7 +1339,7 @@ proof
 A1: carr(H1) c= carr(H2);
   H1 is SubStr of M & H2 is SubStr of M by Th23;
   then H1 is SubStr of H2 by A1,Th30;
-  hence op(H1) <= op(H2) by Def23;
+  hence op(H1) c= op(H2) by Def23;
   un(H1) = un(M) & un(H2) = un(M) by Def25;
   hence thesis;
 end;
@@ -1624,7 +1627,7 @@ A4: y in dom (op||D()) & x = (op||D()).y by FUNCT_1:def 5;
     hence thesis by A1;
   end;
   then reconsider f = op||D() as BinOp of D() by A3,FUNCT_2:def 1,RELSET_1:11;
-  f <= op by RELAT_1:88;
+  f c= op by RELAT_1:88;
   then reconsider H = multMagma(#D(),f#) as strict non empty SubStr of G() by
   Def23;
   take H; thus thesis;
@@ -1675,7 +1678,7 @@ A4: the carrier of H = D from SubStrEx1(A3);
   set N = multLoopStr(#the carrier of H, the multF of H, e#);
   N is MonoidalSubStr of G()
   proof
-    thus op(N) <= op(G()) by Def23;
+    thus op(N) c= op(G()) by Def23;
     thus thesis;
   end;
   then reconsider N as strict non empty MonoidalSubStr of G();
@@ -1699,7 +1702,7 @@ A5: for x being Element of G holds x in the carrier of H
   reconsider e = 1.G() as Element of H by A2,A5;
   set M = multLoopStr(#carr(H), op(H), e#);
 A6: 1.G() = 1.M;
-  the multF of H <= the multF of G() by Def23;
+  the multF of H c= the multF of G() by Def23;
   then reconsider M as strict non empty MonoidalSubStr of G() by A6,Def25;
   take M; thus thesis by A5;
 end;
@@ -1804,7 +1807,7 @@ A4:   x`1 in INT & x`2 in INT & x = [x`1,x`2] by MCART_1:10,23;
 A5: addint = addreal||INT by A1,A2,FUNCT_1:9;
     INT.Group is SubStr of <REAL,+>
     proof
-      thus op(INT.Group) <= op(<REAL,+>) by A5,GR_CY_1:def 4,RELAT_1:88;
+      thus op(INT.Group) c= op(<REAL,+>) by A5,GR_CY_1:def 4,RELAT_1:88;
     end;
     hence thesis;
   end;
@@ -1848,7 +1851,7 @@ A2:   y in dom f & x = f.y by FUNCT_1:def 5;
       hence thesis;
     end;
     then reconsider f as BinOp of NAT by A1,FUNCT_2:def 1,RELSET_1:11;
-    f <= op(INT.Group) by GR_CY_1:def 4,RELAT_1:88;
+    f c= op(INT.Group) by GR_CY_1:def 4,RELAT_1:88;
     then reconsider N = multMagma(#NAT,f#)
     as strict non empty SubStr of INT.Group by Def23;
     reconsider a = 0 as Element of N;
@@ -2049,7 +2052,7 @@ A2:   y in dom f & x = f.y by FUNCT_1:def 5;
       hence thesis;
     end;
     then reconsider f as BinOp of NAT by A1,FUNCT_2:def 1,RELSET_1:11;
-    f <= op(<REAL,*>) by RELAT_1:88;
+    f c= op(<REAL,*>) by RELAT_1:88;
     then reconsider N = multMagma(#NAT,f#)
     as strict (non empty SubStr of <REAL,*> ) by Def23;
     reconsider a = 1 as Element of N;
@@ -2376,7 +2379,7 @@ A5: x`1 in A* & x`2 in A* by MCART_1:10;
       .= y1[*]y2 by Def34
       .= op(B*+^).x by A4,MCART_1:23;
   end;
-  hence op(A*+^) <= op(B*+^) by A2,A3,GRFUNC_1:8;
+  hence op(A*+^) c= op(B*+^) by A2,A3,GRFUNC_1:8;
 end;
 
 theorem
@@ -2563,7 +2566,7 @@ A5: x`1 in PFuncs(Y,Y) & x`2 in PFuncs(Y,Y) by MCART_1:10;
       .= y1[*]y2 by Def37
       .= op(GPFuncs X).x by A4,MCART_1:23;
   end;
-  hence op(GPFuncs Y) <= op(GPFuncs X) by A2,A3,GRFUNC_1:8;
+  hence op(GPFuncs Y) c= op(GPFuncs X) by A2,A3,GRFUNC_1:8;
 end;
 
 Lm6: x in Funcs(X,X) implies x is Function of X,X
@@ -2621,7 +2624,7 @@ end;
 
 theorem Th83:
   the multF of GFuncs X = (X-composition)||Funcs(X,X)
-proof op(GFuncs X) <= op(GPFuncs X) & X-composition = op(GPFuncs X) &
+proof op(GFuncs X) c= op(GPFuncs X) & X-composition = op(GPFuncs X) &
   dom op(GFuncs X) = [:carr(GFuncs X), carr(GFuncs X):] &
   carr(GFuncs X) = Funcs(X,X) by Def23,Def40,FUNCT_2:def 1;
   hence thesis by GRFUNC_1:64;

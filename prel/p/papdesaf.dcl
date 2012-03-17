@@ -25,7 +25,7 @@
 <ArticleID name="TRANSLAC"/>
 <ArticleID name="PAPDESAF"/>
 </Signature>
-<RCluster>
+<RCluster aid="PAPDESAF" nr="1">
 <ArgTypes/>
 <Typ kind="G" nr="12">
 <Cluster/>
@@ -40,7 +40,7 @@
 <Adjective nr="99"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="PAPDESAF" nr="2">
 <ArgTypes/>
 <Typ kind="G" nr="12">
 <Cluster/>
@@ -58,7 +58,7 @@
 <Adjective nr="95"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="PAPDESAF" nr="3">
 <ArgTypes/>
 <Typ kind="G" nr="12">
 <Cluster/>
@@ -75,7 +75,7 @@
 <Adjective nr="95"/>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="PAPDESAF" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="12">
 <Cluster>
@@ -94,7 +94,7 @@
 <Adjective nr="79"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="PAPDESAF" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="12">
 <Cluster>
@@ -113,7 +113,7 @@
 <Adjective nr="80"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="PAPDESAF" nr="3">
 <ArgTypes>
 <Typ kind="G" nr="12">
 <Cluster>
@@ -131,7 +131,7 @@
 <Adjective nr="95"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="PAPDESAF" nr="4">
 <ArgTypes>
 <Typ kind="G" nr="12">
 <Cluster>
@@ -150,7 +150,7 @@
 <Adjective nr="82"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="PAPDESAF" nr="5">
 <ArgTypes>
 <Typ kind="G" nr="12">
 <Cluster>
@@ -169,7 +169,7 @@
 <Adjective nr="84"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="PAPDESAF" nr="6">
 <ArgTypes>
 <Typ kind="G" nr="12">
 <Cluster>
@@ -188,7 +188,7 @@
 <Adjective nr="87"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="PAPDESAF" nr="7">
 <ArgTypes>
 <Typ kind="G" nr="12">
 <Cluster>

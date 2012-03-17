@@ -13,10 +13,10 @@
 <ArticleID name="XCMPLX_0"/>
 <ArticleID name="XREAL_0"/>
 <ArticleID name="XXREAL_0"/>
-<ArticleID name="INT_1"/>
 <ArticleID name="RELSET_1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
+<ArticleID name="INT_1"/>
 <ArticleID name="FUNCOP_1"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
@@ -42,7 +42,7 @@
 <ArticleID name="MEASURE1"/>
 <ArticleID name="MESFUNC5"/>
 </Signature>
-<CCluster>
+<CCluster aid="MESFUNC5" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -64,7 +64,7 @@
 <Adjective nr="81"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="MESFUNC5" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>

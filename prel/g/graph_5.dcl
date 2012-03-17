@@ -20,14 +20,14 @@
 <ArticleID name="GRAPH_1"/>
 <ArticleID name="GRAPH_5"/>
 </Signature>
-<FCluster>
+<FCluster aid="GRAPH_5" nr="1">
 <ArgTypes/>
 <Func kind="K" nr="128"/>
 <Cluster>
 <Adjective nr="7" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="GRAPH_5" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="1">
 <Cluster>
@@ -43,7 +43,7 @@
 <Adjective nr="18"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="GRAPH_5" nr="3">
 <ArgTypes>
 <Typ kind="G" nr="1">
 <Cluster>
@@ -68,7 +68,7 @@
 <Adjective nr="18"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="GRAPH_5" nr="4">
 <ArgTypes>
 <Typ kind="G" nr="1">
 <Cluster>
@@ -98,7 +98,7 @@
 <Adjective nr="18"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="GRAPH_5" nr="5">
 <ArgTypes>
 <Typ kind="G" nr="1">
 <Cluster>

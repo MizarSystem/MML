@@ -15,7 +15,7 @@
 <ArticleID name="SETFAM_1"/>
 <ArticleID name="SUPINF_1"/>
 </Signature>
-<RCluster>
+<RCluster aid="SUPINF_1" nr="1">
 <ArgTypes/>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -24,7 +24,7 @@
 <Adjective nr="26"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="SUPINF_1" nr="2">
 <ArgTypes/>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -33,7 +33,7 @@
 <Adjective nr="27"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="SUPINF_1" nr="3">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -54,7 +54,7 @@
 <Adjective nr="24"/>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="SUPINF_1" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -70,7 +70,7 @@
 <Adjective nr="19"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="SUPINF_1" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -86,7 +86,7 @@
 <Adjective nr="19"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="SUPINF_1" nr="3">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster>
@@ -108,7 +108,7 @@
 <Adjective nr="19"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="SUPINF_1" nr="4">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster>

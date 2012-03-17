@@ -30,7 +30,7 @@
 <ArticleID name="MATRIX_1"/>
 <ArticleID name="MATRLIN"/>
 </Signature>
-<RCluster>
+<RCluster aid="MATRLIN" nr="1">
 <ArgTypes/>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -41,7 +41,7 @@
 <Adjective nr="97"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="MATRLIN" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="10">
 <Cluster>
@@ -80,7 +80,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<CCluster>
+<CCluster aid="MATRLIN" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>

@@ -42,7 +42,7 @@
 <ArticleID name="LOPBAN_1"/>
 <ArticleID name="REAL_NS1"/>
 </Signature>
-<FCluster>
+<FCluster aid="REAL_NS1" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -79,7 +79,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="REAL_NS1" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster>
@@ -97,7 +97,7 @@
 <Adjective nr="92"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="REAL_NS1" nr="3">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -118,7 +118,7 @@
 <Adjective nr="93"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="REAL_NS1" nr="4">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -134,7 +134,7 @@
 <Adjective nr="129"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="REAL_NS1" nr="5">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster>
@@ -152,7 +152,7 @@
 <Adjective nr="96"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="REAL_NS1" nr="6">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -173,7 +173,7 @@
 <Adjective nr="97"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="REAL_NS1" nr="7">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>

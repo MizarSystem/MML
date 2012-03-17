@@ -15,7 +15,7 @@
 <ArticleID name="XREAL_0"/>
 <ArticleID name="SQUARE_1"/>
 </Signature>
-<FCluster>
+<FCluster aid="PEPIN" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>

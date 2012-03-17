@@ -32,7 +32,7 @@
 <ArticleID name="FUNCTOR0"/>
 <ArticleID name="YELLOW20"/>
 </Signature>
-<RCluster>
+<RCluster aid="CARD_FIN" nr="1">
 <ArgTypes/>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -44,7 +44,7 @@
 <Adjective nr="19"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="CARD_FIN" nr="2">
 <ArgTypes/>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -56,7 +56,7 @@
 <Adjective nr="19"/>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="CARD_FIN" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -77,7 +77,7 @@
 <Adjective nr="18"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="CARD_FIN" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -99,7 +99,7 @@
 <Adjective nr="19"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="CARD_FIN" nr="3">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -124,7 +124,7 @@
 <Adjective nr="19"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="CARD_FIN" nr="4">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -140,7 +140,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="233">
+<Func kind="K" nr="234">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>

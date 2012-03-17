@@ -14,7 +14,7 @@
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="E_SIEC"/>
 </Signature>
-<RCluster>
+<RCluster aid="E_SIEC" nr="1">
 <ArgTypes/>
 <Typ kind="G" nr="5">
 <Cluster/>
@@ -23,7 +23,7 @@
 <Adjective nr="20"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="E_SIEC" nr="2">
 <ArgTypes/>
 <Typ kind="G" nr="5">
 <Cluster/>
@@ -32,7 +32,7 @@
 <Adjective nr="21"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="E_SIEC" nr="3">
 <ArgTypes/>
 <Typ kind="G" nr="5">
 <Cluster/>
@@ -41,7 +41,7 @@
 <Adjective nr="22"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="E_SIEC" nr="4">
 <ArgTypes/>
 <Typ kind="G" nr="5">
 <Cluster/>

@@ -42,7 +42,7 @@
 <ArticleID name="MSUALG_6"/>
 <ArticleID name="EQUATION"/>
 </Signature>
-<RCluster>
+<RCluster aid="EQUATION" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="9">
 <Cluster>
@@ -67,7 +67,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="EQUATION" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="9">
 <Cluster>
@@ -101,7 +101,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="EQUATION" nr="3">
 <ArgTypes>
 <Typ kind="G" nr="9">
 <Cluster>
@@ -129,7 +129,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="EQUATION" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="9">
 <Cluster>
@@ -156,7 +156,7 @@
 <Adjective nr="7" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="EQUATION" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="9">
 <Cluster>
@@ -200,7 +200,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="EQUATION" nr="3">
 <ArgTypes>
 <Typ kind="G" nr="9">
 <Cluster>
@@ -224,7 +224,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="EQUATION" nr="4">
 <ArgTypes>
 <Typ kind="G" nr="9">
 <Cluster>

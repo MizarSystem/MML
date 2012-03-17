@@ -37,7 +37,7 @@
 <ArticleID name="IDEAL_1"/>
 <ArticleID name="C0SP1"/>
 </Signature>
-<RCluster>
+<RCluster aid="C0SP1" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
@@ -63,7 +63,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="C0SP1" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="10">
 <Cluster>
@@ -102,7 +102,7 @@
 <Adjective nr="105"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="C0SP1" nr="3">
 <ArgTypes>
 <Typ kind="G" nr="13">
 <Cluster>
@@ -145,7 +145,7 @@
 <Adjective nr="105"/>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="C0SP1" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
@@ -165,7 +165,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="C0SP1" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -189,7 +189,7 @@
 <Adjective nr="102"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="C0SP1" nr="3">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -214,7 +214,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="C0SP1" nr="4">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -229,7 +229,7 @@
 <Adjective nr="28" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="C0SP1" nr="5">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -244,7 +244,7 @@
 <Adjective nr="94"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="C0SP1" nr="6">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -264,7 +264,7 @@
 <Adjective nr="80"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="C0SP1" nr="7">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -279,7 +279,7 @@
 <Adjective nr="93"/>
 </Cluster>
 </FCluster>
-<CCluster>
+<CCluster aid="C0SP1" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="10">
 <Cluster>
@@ -309,7 +309,7 @@
 </Adjective>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="C0SP1" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="10">
 <Cluster>
@@ -339,7 +339,7 @@
 </Adjective>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="C0SP1" nr="3">
 <ArgTypes>
 <Typ kind="G" nr="13">
 <Cluster>

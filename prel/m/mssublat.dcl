@@ -27,7 +27,7 @@
 <ArticleID name="MSUALG_1"/>
 <ArticleID name="MSUALG_2"/>
 </Signature>
-<FCluster>
+<FCluster aid="MSSUBLAT" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="8">
 <Cluster>
@@ -50,7 +50,7 @@
 <Adjective nr="71"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="MSSUBLAT" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="8">
 <Cluster>
@@ -71,7 +71,7 @@
 <Adjective nr="58"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="MSSUBLAT" nr="3">
 <ArgTypes>
 <Typ kind="G" nr="8">
 <Cluster>
@@ -92,7 +92,7 @@
 <Adjective nr="57"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="MSSUBLAT" nr="4">
 <ArgTypes>
 <Typ kind="G" nr="8">
 <Cluster>
@@ -113,7 +113,7 @@
 <Adjective nr="59"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="MSSUBLAT" nr="5">
 <ArgTypes>
 <Typ kind="G" nr="8">
 <Cluster>

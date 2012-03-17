@@ -43,7 +43,7 @@
 <ArticleID name="WELLFND1"/>
 <ArticleID name="LATTICE6"/>
 </Signature>
-<RCluster>
+<RCluster aid="LATTICE6" nr="1">
 <ArgTypes/>
 <Typ kind="G" nr="7">
 <Cluster/>
@@ -60,7 +60,7 @@
 <Adjective nr="45"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="LATTICE6" nr="2">
 <ArgTypes/>
 <Typ kind="G" nr="7">
 <Cluster/>
@@ -80,7 +80,7 @@
 <Adjective nr="106"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="LATTICE6" nr="3">
 <ArgTypes/>
 <Typ kind="G" nr="7">
 <Cluster/>
@@ -100,7 +100,7 @@
 <Adjective nr="107"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="LATTICE6" nr="4">
 <ArgTypes/>
 <Typ kind="G" nr="7">
 <Cluster/>
@@ -118,7 +118,7 @@
 <Adjective nr="45"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="LATTICE6" nr="5">
 <ArgTypes/>
 <Typ kind="G" nr="7">
 <Cluster/>
@@ -136,7 +136,7 @@
 <Adjective nr="112"/>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="LATTICE6" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="7">
 <Cluster>
@@ -146,7 +146,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="204">
+<Func kind="K" nr="205">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -157,7 +157,7 @@
 <Adjective nr="103"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="LATTICE6" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="7">
 <Cluster>
@@ -168,7 +168,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="339">
+<Func kind="K" nr="340">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -177,7 +177,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="LATTICE6" nr="3">
 <ArgTypes>
 <Typ kind="G" nr="7">
 <Cluster>
@@ -188,7 +188,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="340">
+<Func kind="K" nr="341">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -197,7 +197,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<CCluster>
+<CCluster aid="LATTICE6" nr="1">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="27" value="false"/>
@@ -213,7 +213,7 @@
 <Adjective nr="79"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="LATTICE6" nr="2">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="27" value="false"/>
@@ -229,7 +229,7 @@
 <Adjective nr="106"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="LATTICE6" nr="3">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="27" value="false"/>

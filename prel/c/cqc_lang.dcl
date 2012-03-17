@@ -21,7 +21,7 @@
 <ArticleID name="QC_LANG2"/>
 <ArticleID name="CQC_LANG"/>
 </Signature>
-<RCluster>
+<RCluster aid="CQC_LANG" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -41,7 +41,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="CQC_LANG" nr="1">
 <ArgTypes/>
 <Func kind="K" nr="168"/>
 <Cluster>

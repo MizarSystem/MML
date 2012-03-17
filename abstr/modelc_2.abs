@@ -1,0 +1,1107 @@
+:: Model Checking, Part II
+::  by Kazuhisa Ishida
+:: 
+:: Received April 21, 2008
+:: Copyright (c) 2008 Association of Mizar Users
+
+environ
+
+ vocabularies MODELC_1, MODELC_2, BOOLE, BINOP_1, FUNCT_1, FUNCT_2, ARYTM_1,
+      RELAT_1, FINSEQ_1, FUNCOP_1, ZF_LANG, ZF_MODEL, MARGREL1, NORMSP_1,
+      RELOC, ARYTM;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, XCMPLX_0, XXREAL_0,
+      RELAT_1, FUNCT_1, BINOP_1, FUNCT_2, NAT_1, FINSEQ_1, FUNCOP_1, MARGREL1,
+      MODELC_1;
+ constructors BINOP_1, FUNCT_3, XXREAL_0, NAT_1, MARGREL1, ABIAN, KNASTER,
+      FINSEQ_1, SERIES_1, FINSEQ_4, FUNCOP_1, REAL_1, SEQ_2, SEQM_3, NEWTON,
+      PREPOWER, POWER, ORDINAL3, ARYTM_1, ARYTM_0, FUNCT_4, XCMPLX_0, XREAL_0,
+      PARTFUN1, SEQ_1, VALUED_1, ZF_LANG, MODELC_1, NUMBERS;
+ registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1, PARTFUN1,
+      FUNCT_2, FUNCOP_1, ARYTM_3, XXREAL_0, XREAL_0, NAT_1, INT_1, ORDERS_1,
+      XBOOLEAN, MARGREL1, KNASTER, FINSET_1, CARD_5, FINSEQ_1, FINSEQ_4,
+      RELSET_1, NUMBERS, MEMBERED, SEQM_3, NEWTON, CARD_1, ARYTM_2, XCMPLX_0,
+      REAL_1, VALUED_1;
+ requirements REAL, NUMERALS, ARITHM, SUBSET, BOOLE;
+
+
+begin
+
+definition
+  let x be set;
+  func CastNat(x) -> Nat equals
+:: MODELC_2:def 1
+
+  x if x is Nat otherwise 0;
+end;
+
+::************
+:: definition of LTL(Linear Temporal Logic) language.
+::    refer to (reuse) construction & proof of ZF_LANG
+::************
+
+definition let Word be set;
+  mode sequence of Word is Function of NAT, Word;
+end;
+
+ reserve k,n,m for Nat,
+         a,x,X,Y for set,
+         D,D1,D2,S for non empty set,
+         p,q for FinSequence of NAT;
+
+:: The operations to make LTL-formulae
+
+definition let n;
+  func atom.n -> FinSequence of NAT equals
+:: MODELC_2:def 2
+    <* (6 + n) *>;
+end;
+
+definition let p;
+  func 'not' p -> FinSequence of NAT equals
+:: MODELC_2:def 3
+   <*0*>^p;
+  let q;
+  func p '&' q -> FinSequence of NAT equals
+:: MODELC_2:def 4
+   <*1*>^p^q;
+  func p 'or' q -> FinSequence of NAT equals
+:: MODELC_2:def 5
+   <*2*>^p^q;
+end;
+
+definition let p;
+  func 'X' p -> FinSequence of NAT equals
+:: MODELC_2:def 6
+   <*3*>^p;
+  let q;
+  func p 'U' q -> FinSequence of NAT equals
+:: MODELC_2:def 7
+   <*4*>^p^q;
+  func p 'R' q -> FinSequence of NAT equals
+:: MODELC_2:def 8
+   <*5*>^p^q;
+end;
+
+:: The set of all well formed formulae of LTL-language
+
+definition
+  func LTL_WFF -> non empty set means
+:: MODELC_2:def 9
+     (for a st a in it holds a is FinSequence of NAT ) &
+        (for n holds atom.n in it ) &
+        (for p st p in it holds 'not' p in it ) &
+        (for p,q st p in it & q in it holds p '&' q in it ) &
+        (for p,q st p in it & q in it holds p 'or' q in it ) &
+        (for p st p in it holds 'X' p in it ) &
+        (for p,q st p in it & q in it holds p 'U' q in it ) &
+        (for p,q st p in it & q in it holds p 'R' q in it ) &
+   for D st
+     (for a st a in D holds a is FinSequence of NAT ) &
+        (for n holds atom.n in D ) &
+        (for p st p in D holds 'not' p in D ) &
+        (for p,q st p in D & q in D holds p '&' q in D ) &
+        (for p,q st p in D & q in D holds p 'or' q in D ) &
+        (for p st p in D holds 'X' p in D ) &
+        (for p,q st p in D & q in D holds p 'U' q in D ) &
+        (for p,q st p in D & q in D holds p 'R' q in D )
+               holds it c= D;
+ end;
+
+definition let IT be FinSequence of NAT;
+  attr IT is LTL-formula-like means
+:: MODELC_2:def 10
+  IT is Element of LTL_WFF;
+end;
+
+registration
+  cluster LTL-formula-like FinSequence of NAT;
+end;
+
+definition
+  mode LTL-formula is LTL-formula-like FinSequence of NAT;
+end;
+
+theorem :: MODELC_2:1
+  a is LTL-formula iff a in LTL_WFF;
+
+ reserve F,F1,G,G1,H,H1,H2 for LTL-formula;
+
+registration let n;
+  cluster atom.n -> LTL-formula-like;
+end;
+
+registration let H;
+  cluster 'not' H -> LTL-formula-like;
+  cluster 'X' H -> LTL-formula-like;
+ let G;
+  cluster H '&' G -> LTL-formula-like;
+  cluster H 'or' G -> LTL-formula-like;
+  cluster H 'U' G -> LTL-formula-like;
+  cluster H 'R' G -> LTL-formula-like;
+end;
+
+definition let H;
+  attr H is atomic means
+:: MODELC_2:def 11
+  ex n st H = atom.n;
+  attr H is negative means
+:: MODELC_2:def 12
+  ex H1 st H = 'not' H1;
+  attr H is conjunctive means
+:: MODELC_2:def 13
+  ex F,G st H = F '&' G;
+  attr H is disjunctive means
+:: MODELC_2:def 14
+  ex F,G st H = F 'or' G;
+  attr H is next means
+:: MODELC_2:def 15
+  ex H1 st H = 'X' H1;
+  attr H is Until means
+:: MODELC_2:def 16
+  ex F,G st H = F 'U' G;
+  attr H is Release means
+:: MODELC_2:def 17
+  ex F,G st H = F 'R' G;
+end;
+
+theorem :: MODELC_2:2
+  H is atomic or H is negative or H is conjunctive or
+  H is disjunctive or H is next or H is Until or H is Release;
+
+theorem :: MODELC_2:3
+  1<= len H;
+
+reserve sq,sq' for FinSequence;
+
+definition let H;
+  assume
+   H is negative or H is next;
+  func the_argument_of H -> LTL-formula means
+:: MODELC_2:def 18
+  'not' it = H if H is negative
+          otherwise 'X' it = H;
+end;
+
+definition let H;
+  assume
+ H is conjunctive or H is disjunctive or H is Until
+    or H is Release;
+  func the_left_argument_of H -> LTL-formula means
+:: MODELC_2:def 19
+ ex H1 st it '&' H1 = H if H is conjunctive,
+        ex H1 st it 'or' H1 = H if H is disjunctive,
+        ex H1 st it 'U' H1 = H if H is Until
+    otherwise ex H1 st it 'R' H1 = H;
+
+  func the_right_argument_of H -> LTL-formula means
+:: MODELC_2:def 20
+ ex H1 st H1 '&' it = H if H is conjunctive,
+        ex H1 st H1 'or' it = H if H is disjunctive,
+        ex H1 st H1 'U' it = H if H is Until
+    otherwise ex H1 st H1 'R' it = H;
+end;
+
+theorem :: MODELC_2:4
+  H is negative implies H = 'not' the_argument_of H;
+
+theorem :: MODELC_2:5
+H is next implies H = 'X' the_argument_of H;
+
+theorem :: MODELC_2:6
+H is conjunctive implies
+       H =(the_left_argument_of H) '&' (the_right_argument_of H);
+
+theorem :: MODELC_2:7
+    H is disjunctive implies
+       H =(the_left_argument_of H) 'or' (the_right_argument_of H);
+
+theorem :: MODELC_2:8
+H is Until implies
+          H = (the_left_argument_of H) 'U' (the_right_argument_of H);
+
+theorem :: MODELC_2:9
+H is Release implies
+          H = (the_left_argument_of H) 'R' (the_right_argument_of H);
+
+theorem :: MODELC_2:10
+   H is negative or H is next implies
+   len(H) = 1+len(the_argument_of H) &
+   len(the_argument_of H) < len(H);
+
+theorem :: MODELC_2:11
+   H is conjunctive or H is disjunctive or H is Until or
+   H is Release implies
+   len(H) =1+ len(the_left_argument_of H)+len(the_right_argument_of H) &
+   len(the_left_argument_of H) < len(H) &
+   len(the_right_argument_of H) < len(H);
+
+::
+::         The Immediate Constituents of LTL-formulae
+::
+
+definition let H,F;
+  pred H is_immediate_constituent_of F means
+:: MODELC_2:def 21
+  F = 'not' H or F = 'X' H or
+             ( ex H1 st F = H '&' H1 or F = H1 '&' H  or
+                        F = H 'or' H1 or F = H1 'or' H  or
+                        F = H 'U' H1 or F = H1 'U' H  or
+                        F = H 'R' H1 or F = H1 'R' H );
+end;
+
+theorem :: MODELC_2:12
+  for F,G holds ('not' F).1 = 0 & (F '&' G).1 = 1 &
+                      (F 'or' G).1 = 2 & ('X' F).1 = 3 &
+                      (F 'U' G).1 = 4 & (F 'R' G).1 = 5;
+
+theorem :: MODELC_2:13
+  H is_immediate_constituent_of 'not' F iff H = F;
+
+theorem :: MODELC_2:14
+  H is_immediate_constituent_of 'X' F iff H = F;
+
+theorem :: MODELC_2:15
+  H is_immediate_constituent_of F '&' G iff H = F or H =G;
+
+theorem :: MODELC_2:16
+  H is_immediate_constituent_of F 'or' G iff H = F or H =G;
+
+theorem :: MODELC_2:17
+  H is_immediate_constituent_of F 'U' G iff H = F or H =G;
+
+theorem :: MODELC_2:18
+  H is_immediate_constituent_of F 'R' G iff H = F or H =G;
+
+theorem :: MODELC_2:19
+  F is atomic implies not (H is_immediate_constituent_of F);
+
+theorem :: MODELC_2:20
+  F is negative implies
+   (H is_immediate_constituent_of F iff H = the_argument_of F);
+
+theorem :: MODELC_2:21
+  F is next implies
+   (H is_immediate_constituent_of F iff H = the_argument_of F);
+
+theorem :: MODELC_2:22
+  F is conjunctive implies
+   (H is_immediate_constituent_of F iff
+     H = the_left_argument_of F or H = the_right_argument_of F);
+
+theorem :: MODELC_2:23
+  F is disjunctive implies
+   (H is_immediate_constituent_of F iff
+     H = the_left_argument_of F or H = the_right_argument_of F);
+
+theorem :: MODELC_2:24
+  F is Until implies
+   (H is_immediate_constituent_of F iff
+     H = the_left_argument_of F or H = the_right_argument_of F);
+
+theorem :: MODELC_2:25
+  F is Release implies
+   (H is_immediate_constituent_of F iff
+     H = the_left_argument_of F or H = the_right_argument_of F);
+
+theorem :: MODELC_2:26
+ H is_immediate_constituent_of F implies
+                    F is negative or F is next or
+                    F is conjunctive or F is disjunctive or
+                    F is Until or F is Release;
+
+::
+::    The Subformulae and The Proper Subformulae of LTL-formulae
+::
+
+reserve L,L' for FinSequence;
+
+ definition let H,F;
+  pred H is_subformula_of F means
+:: MODELC_2:def 22
+  ex n,L st 1 <= n & len L = n & L.1 = H & L.n = F &
+        for k st 1 <= k & k < n
+         ex H1,F1 st L.k = H1 & L.(k + 1) = F1 &
+          H1 is_immediate_constituent_of F1;
+ end;
+
+theorem :: MODELC_2:27
+  H is_subformula_of H;
+
+ definition let H,F;
+  pred H is_proper_subformula_of F means
+:: MODELC_2:def 23
+  H is_subformula_of F & H <> F;
+ end;
+
+theorem :: MODELC_2:28
+  H is_immediate_constituent_of F implies len H < len F;
+
+theorem :: MODELC_2:29
+  H is_immediate_constituent_of F implies H is_proper_subformula_of F;
+
+theorem :: MODELC_2:30
+(G is negative or G is next)
+            implies the_argument_of G is_subformula_of G;
+
+theorem :: MODELC_2:31
+(G is conjunctive or G is disjunctive or
+          G is Until or G is Release )
+            implies (the_left_argument_of G is_subformula_of G) &
+                    (the_right_argument_of G is_subformula_of G);
+
+theorem :: MODELC_2:32
+  H is_proper_subformula_of F implies len H < len F;
+
+theorem :: MODELC_2:33
+ H is_proper_subformula_of F implies
+   ex G st G is_immediate_constituent_of F;
+
+reserve j for Nat;
+reserve j1 for Element of NAT;
+
+theorem :: MODELC_2:34
+  F is_proper_subformula_of G & G is_proper_subformula_of H implies
+   F is_proper_subformula_of H;
+
+theorem :: MODELC_2:35
+  F is_subformula_of G & G is_subformula_of H implies
+   F is_subformula_of H;
+
+theorem :: MODELC_2:36
+  G is_subformula_of H & H is_subformula_of G implies G = H;
+
+theorem :: MODELC_2:37
+  (G is negative or G is next) & F is_proper_subformula_of G
+            implies F is_subformula_of (the_argument_of G);
+
+theorem :: MODELC_2:38
+  (G is conjunctive or G is disjunctive or
+          G is Until or G is Release ) &
+          F is_proper_subformula_of G
+             implies
+               F is_subformula_of (the_left_argument_of G) or
+               F is_subformula_of (the_right_argument_of G);
+
+theorem :: MODELC_2:39
+ F is_proper_subformula_of 'not' H implies F is_subformula_of H;
+
+theorem :: MODELC_2:40
+ F is_proper_subformula_of 'X' H implies F is_subformula_of H;
+
+theorem :: MODELC_2:41
+ F is_proper_subformula_of G '&' H implies
+   F is_subformula_of G or F is_subformula_of H;
+
+theorem :: MODELC_2:42
+ F is_proper_subformula_of G 'or' H implies
+   F is_subformula_of G or F is_subformula_of H;
+
+theorem :: MODELC_2:43
+ F is_proper_subformula_of G 'U' H implies
+   F is_subformula_of G or F is_subformula_of H;
+
+theorem :: MODELC_2:44
+ F is_proper_subformula_of G 'R' H implies
+   F is_subformula_of G or F is_subformula_of H;
+::
+::           The Set of Subformulae of LTL-formulae
+::
+
+ definition let H;
+  func Subformulae H -> set means
+:: MODELC_2:def 24
+  a in it iff ex F st F = a & F is_subformula_of H;
+ end;
+
+theorem :: MODELC_2:45
+  G in Subformulae H iff G is_subformula_of H;
+
+registration let H;
+  cluster Subformulae H -> non empty;
+end;
+
+theorem :: MODELC_2:46
+  F is_subformula_of H implies Subformulae F c= Subformulae H;
+
+theorem :: MODELC_2:47
+  (a is Subset of Subformulae H) implies (a is Subset of LTL_WFF);
+
+scheme :: MODELC_2:sch 1
+ LTLInd { P[LTL-formula] } :
+  for H holds P[H]
+    provided
+ for H st H is atomic holds P[H] and
+ for H st (H is negative or H is next) & P[the_argument_of H] holds P[H] and
+ for H st (H is conjunctive or H is disjunctive or
+              H is Until or H is Release )&
+    P[the_left_argument_of H] & P[the_right_argument_of H] holds P[H];
+
+scheme :: MODELC_2:sch 2
+ LTLCompInd { P[LTL-formula] } :
+  for H holds P[H]
+    provided
+ for H st for F st F is_proper_subformula_of H holds P[F] holds P[H];
+
+::***************************************************
+::**
+::** definition of LTL model structure.
+::**
+::****************************************************
+definition let x be set;
+  func CastLTL(x) -> LTL-formula equals
+:: MODELC_2:def 25
+    x if x in LTL_WFF
+      otherwise atom.0;
+end;
+
+definition
+  struct LTLModelStr (#
+  Assignations -> non empty set,
+  BasicAssign -> non empty Subset of the Assignations,
+  And -> BinOp of the Assignations,
+  Or -> BinOp of the Assignations,
+  Not -> UnOp of the Assignations,
+  NEXT-> UnOp of the Assignations,
+  UNTIL -> BinOp of the Assignations,
+  RELEASE -> BinOp of the Assignations
+  #);
+end;
+
+definition let V be LTLModelStr;
+  mode Assign of V is Element of the Assignations of V;
+end;
+
+::  Preparation to define semantics for LTL-language
+::  definition of evaluate function of LTL
+
+definition
+  func atomic_LTL -> Subset of LTL_WFF equals
+:: MODELC_2:def 26
+    {x where x is LTL-formula:x is atomic};
+end;
+
+definition
+  let V be LTLModelStr;
+  let Kai be Function of atomic_LTL,the BasicAssign of V;
+  let f be Function of LTL_WFF,the Assignations of V;
+  pred f is-Evaluation-for Kai means
+:: MODELC_2:def 27
+     for H being LTL-formula holds
+     (H is atomic implies f.H = Kai.H) &
+     (H is negative implies
+       f.H = (the Not of V).(f.(the_argument_of H))) &
+     (H is conjunctive implies
+       f.H = (the And of V).(f.(the_left_argument_of H),
+                              f.(the_right_argument_of H))) &
+     (H is disjunctive implies
+       f.H = (the Or of V).(f.(the_left_argument_of H),
+                              f.(the_right_argument_of H))) &
+      (H is next implies
+       f.H = (the NEXT of V).(f.(the_argument_of H))) &
+     (H is Until implies
+       f.H = (the UNTIL of V).(f.(the_left_argument_of H),
+                             f.(the_right_argument_of H))) &
+     (H is Release implies
+       f.H = (the RELEASE of V).(f.(the_left_argument_of H),
+                                 f.(the_right_argument_of H)));
+ end;
+
+definition
+  let V be LTLModelStr;
+  let Kai be Function of atomic_LTL,the BasicAssign of V;
+  let f be Function of LTL_WFF,the Assignations of V;
+  let n be Nat;
+  pred f is-PreEvaluation-for n,Kai means
+:: MODELC_2:def 28
+     for H being LTL-formula st len(H) <= n holds
+     (H is atomic implies f.H = Kai.H) &
+     (H is negative implies
+       f.H = (the Not of V).(f.(the_argument_of H))) &
+     (H is conjunctive implies
+       f.H = (the And of V).(f.(the_left_argument_of H),
+                              f.(the_right_argument_of H))) &
+     (H is disjunctive implies
+       f.H = (the Or of V).(f.(the_left_argument_of H),
+                              f.(the_right_argument_of H))) &
+      (H is next implies
+       f.H = (the NEXT of V).(f.(the_argument_of H))) &
+     (H is Until implies
+       f.H = (the UNTIL of V).(f.(the_left_argument_of H),
+                             f.(the_right_argument_of H))) &
+     (H is Release implies
+       f.H = (the RELEASE of V).(f.(the_left_argument_of H),
+                                 f.(the_right_argument_of H))); end;
+
+definition
+   let V be LTLModelStr;
+   let Kai be Function of atomic_LTL,the BasicAssign of V;
+   let f,h be Function of LTL_WFF,the Assignations of V;
+   let n be Nat;
+   let H be LTL-formula;
+   func GraftEval(V,Kai,f,h,n,H) -> set equals
+:: MODELC_2:def 29
+        f.H if len(H) > n+1,
+        Kai.H if len(H)=n+1 & H is atomic,
+        (the Not of V).(h.(the_argument_of H))
+            if (len(H)=n+1) & H is negative,
+        (the And of V).(h.(the_left_argument_of H),
+                        h.(the_right_argument_of H))
+            if (len(H)=n+1) & H is conjunctive,
+        (the Or of V).(h.(the_left_argument_of H),
+                        h.(the_right_argument_of H))
+            if (len(H)=n+1) & H is disjunctive,
+        (the NEXT of V).(h.(the_argument_of H))
+            if (len(H)=n+1) & (H is next),
+        (the UNTIL of V).(h.(the_left_argument_of H),
+                            h.(the_right_argument_of H))
+            if (len(H)=n+1) & H is Until,
+
+        (the RELEASE of V).(h.(the_left_argument_of H),
+                        h.(the_right_argument_of H))
+            if (len(H)=n+1) & H is Release,
+
+        h.H if (len(H)<n+1)
+        otherwise {};
+  end;
+
+reserve V for LTLModelStr;
+reserve Kai for Function of atomic_LTL,the BasicAssign of V;
+reserve f,f1,f2 for Function of LTL_WFF,the Assignations of V;
+
+definition
+  let V be LTLModelStr;
+  let Kai be Function of atomic_LTL,the BasicAssign of V;
+  let n be Nat;
+  func EvalSet(V,Kai,n) ->non empty set equals
+:: MODELC_2:def 30
+        {h where h is Function of LTL_WFF,the Assignations of V
+                        : h is-PreEvaluation-for n,Kai};
+  end;
+
+definition
+  let V be LTLModelStr;
+  let v0 be Element of the Assignations of V;
+  let x be set;
+  func CastEval(V,x,v0) ->Function of LTL_WFF,the Assignations of V
+     equals
+:: MODELC_2:def 31
+        x if x in Funcs(LTL_WFF,the Assignations of V)
+        otherwise LTL_WFF --> v0;
+  end;
+
+definition
+   let V be LTLModelStr;
+   let Kai be Function of atomic_LTL,the BasicAssign of V;
+   func EvalFamily(V,Kai) -> non empty set means
+:: MODELC_2:def 32
+        for p being set holds p in it
+           iff p in bool Funcs(LTL_WFF,the Assignations of V) &
+               ex n being Nat st p=EvalSet(V,Kai,n);
+ end;
+
+theorem :: MODELC_2:48
+  ex f st f is-Evaluation-for Kai;
+
+theorem :: MODELC_2:49
+  f1 is-Evaluation-for Kai & f2 is-Evaluation-for Kai implies f1 = f2;
+
+definition
+   let V be LTLModelStr;
+   let Kai be Function of atomic_LTL,the BasicAssign of V;
+   let H be LTL-formula;
+   func Evaluate(H,Kai) -> Assign of V means
+:: MODELC_2:def 33
+        ex f being Function of LTL_WFF,the Assignations of V
+           st f is-Evaluation-for Kai & it = f.H;
+end;
+
+definition
+  let V be LTLModelStr;
+  let f be Assign of V;
+  func 'not' f -> Assign of V equals
+:: MODELC_2:def 34
+  (the Not of V).f;
+end;
+
+definition
+  let V be LTLModelStr;
+  let f,g be Assign of V;
+  func f '&' g -> Assign of V equals
+:: MODELC_2:def 35
+  (the And of V).(f,g);
+  func f 'or' g -> Assign of V equals
+:: MODELC_2:def 36
+    (the Or of V).(f,g);
+end;
+
+definition
+  let V be LTLModelStr;
+  let f be Assign of V;
+  func 'X' f -> Assign of V equals
+:: MODELC_2:def 37
+  (the NEXT of V).f;
+end;
+
+definition
+  let V be LTLModelStr;
+  let f,g be Assign of V;
+  func f 'U' g -> Assign of V equals
+:: MODELC_2:def 38
+  (the UNTIL of V).(f,g);
+  func f 'R' g -> Assign of V equals
+:: MODELC_2:def 39
+  (the RELEASE of V).(f,g);
+end;
+
+::Some properties of evaluate function of LTL
+
+theorem :: MODELC_2:50
+  Evaluate('not' H,Kai) = 'not' Evaluate(H,Kai);
+
+theorem :: MODELC_2:51
+  Evaluate(H1 '&' H2,Kai) = Evaluate(H1,Kai) '&' Evaluate(H2,Kai);
+
+theorem :: MODELC_2:52
+  Evaluate(H1 'or' H2,Kai) = Evaluate(H1,Kai) 'or' Evaluate(H2,Kai);
+
+theorem :: MODELC_2:53
+  Evaluate('X' H,Kai) = 'X' Evaluate(H,Kai);
+
+theorem :: MODELC_2:54
+  Evaluate(H1 'U' H2,Kai) = Evaluate(H1,Kai) 'U' Evaluate(H2,Kai);
+
+theorem :: MODELC_2:55
+  Evaluate(H1 'R' H2,Kai) = Evaluate(H1,Kai) 'R' Evaluate(H2,Kai);
+
+::definition of concrete object of LTL model
+
+definition
+  let S be non empty set;
+  func Inf_seq(S) -> non empty set equals
+:: MODELC_2:def 40
+    Funcs(NAT,S);
+end;
+
+definition
+  let S be non empty set;
+  let t be sequence of S;
+  func CastSeq(t) -> Element of Inf_seq(S) equals
+:: MODELC_2:def 41
+      t;
+end;
+
+definition
+  let S be non empty set;
+  let t be set;
+  assume t is Element of Inf_seq(S);
+  func CastSeq(t,S) -> sequence of S equals
+:: MODELC_2:def 42
+   t;
+end;
+
+definition
+   let S be non empty set;
+   let t be sequence of S;
+   let k be Nat;
+   func Shift(t,k) -> sequence of S means
+:: MODELC_2:def 43
+     for n being Nat holds it.n = t.(n+k);
+end;
+
+definition
+   let S be non empty set;
+   let t be set;
+   let k be Nat;
+   func Shift(t,k,S) -> Element of Inf_seq(S) equals
+:: MODELC_2:def 44
+      CastSeq(Shift(CastSeq(t,S),k));
+end;
+
+definition
+   let S be non empty set;
+   let t be Element of Inf_seq(S);
+   let k be Nat;
+   func Shift(t,k) -> Element of Inf_seq(S) equals
+:: MODELC_2:def 45
+       Shift(t,k,S);
+end;
+
+:: definition of Not_ unary operation of Model Space.
+
+definition
+  let S be non empty set;
+  let f be set;
+  func Not_0(f,S) -> Element of ModelSP(Inf_seq(S)) means
+:: MODELC_2:def 46
+     for t being set st t in Inf_seq(S) holds
+       'not' (Castboolean (Fid(f,Inf_seq(S))).t) = TRUE
+                          iff (Fid(it,Inf_seq(S))).t = TRUE;
+end;
+
+definition
+  let S be non empty set;
+  func Not_(S) -> UnOp of ModelSP(Inf_seq(S)) means
+:: MODELC_2:def 47
+  for f being set st f in ModelSP(Inf_seq(S)) holds
+      it.f = Not_0(f,S);
+end;
+
+:: definition of next_  unary operation of Model Space.
+
+definition
+let S be non empty set;
+let f be Function of Inf_seq(S),BOOLEAN;
+let t be set;
+func Next_univ(t,f) -> Element of BOOLEAN equals
+:: MODELC_2:def 48
+           TRUE if  t is Element of Inf_seq(S) &
+              f.Shift(t,1,S) =TRUE
+           otherwise FALSE;
+end;
+
+definition
+let S be non empty set;
+let f be set;
+func Next_0(f,S) -> Element of ModelSP(Inf_seq(S)) means
+:: MODELC_2:def 49
+     for t being set st t in Inf_seq(S) holds
+        Next_univ(t,Fid(f,Inf_seq(S)))=TRUE iff
+                         (Fid(it,Inf_seq(S))).t=TRUE;
+end;
+
+definition
+let S be non empty set;
+func Next_(S) -> UnOp of ModelSP(Inf_seq(S)) means
+:: MODELC_2:def 50
+  for f being set st f in ModelSP(Inf_seq(S)) holds
+      it.f = Next_0(f,S);
+end;
+
+:: definition of And_ Binary Operation of Model Space.
+
+definition
+  let S be non empty set;
+  let f,g be set;
+  func And_0(f,g,S) -> Element of ModelSP(Inf_seq(S)) means
+:: MODELC_2:def 51
+     for t being set st t in Inf_seq(S) holds
+       (Castboolean (Fid(f,Inf_seq(S))).t ) '&'
+                      (Castboolean (Fid(g,Inf_seq(S))).t ) =TRUE
+                         iff (Fid(it,Inf_seq(S))).t=TRUE;
+end;
+
+definition
+let S be non empty set;
+func And_(S) -> BinOp of ModelSP(Inf_seq(S)) means
+:: MODELC_2:def 52
+  for f,g being set st (f in ModelSP(Inf_seq(S))) &
+                       (g in ModelSP(Inf_seq(S))) holds
+      it.(f,g) = And_0(f,g,S);
+end;
+
+:: definition of Until_  Binary Operation of Model Space.
+
+definition
+let S be non empty set;
+let f,g be Function of Inf_seq(S),BOOLEAN;
+let t be set;
+func Until_univ(t,f,g,S) -> Element of BOOLEAN equals
+:: MODELC_2:def 53
+   TRUE if t is Element of Inf_seq(S) &
+            ex m being Nat
+             st (for j being Nat st j<m holds
+                   f.Shift(t,j,S) =TRUE ) &
+                (g.Shift(t,m,S) = TRUE  )
+           otherwise FALSE;
+end;
+
+definition
+let S be non empty set;
+let f,g be set;
+func Until_0(f,g,S) -> Element of ModelSP(Inf_seq(S)) means
+:: MODELC_2:def 54
+     for t being set st t in Inf_seq(S) holds
+        Until_univ(t,Fid(f,Inf_seq(S)),Fid(g,Inf_seq(S)),S)=TRUE
+                    iff  (Fid(it,Inf_seq(S))).t=TRUE;
+end;
+
+definition
+let S be non empty set;
+func Until_(S) -> BinOp of ModelSP(Inf_seq(S)) means
+:: MODELC_2:def 55
+  for f,g being set st f in ModelSP(Inf_seq(S)) &
+                       g in ModelSP(Inf_seq(S)) holds
+      it.(f,g) = Until_0(f,g,S);
+end;
+
+definition
+let S be non empty set;
+func Or_(S) -> BinOp of ModelSP(Inf_seq(S)) means
+:: MODELC_2:def 56
+  for f,g being set st f in ModelSP(Inf_seq(S)) &
+                       g in ModelSP(Inf_seq(S)) holds
+      it.(f,g) = (Not_(S)).((And_(S)).((Not_(S)).f,(Not_(S)).g));
+
+func Release_(S) -> BinOp of ModelSP(Inf_seq(S)) means
+:: MODELC_2:def 57
+  for f,g being set st f in ModelSP(Inf_seq(S)) &
+                       g in ModelSP(Inf_seq(S)) holds
+      it.(f,g) = (Not_(S)).((Until_(S)).((Not_(S)).f,(Not_(S)).g));
+end;
+
+::  definition of concrete object of LTL model by ModelSP
+
+definition
+  let S be non empty set;
+  let BASSIGN be non empty Subset of ModelSP(Inf_seq(S));
+  func LTLModel(S,BASSIGN) -> LTLModelStr equals
+:: MODELC_2:def 58
+        LTLModelStr(#
+                ModelSP(Inf_seq(S)),
+                BASSIGN,
+                And_(S),
+                Or_(S),
+                Not_(S),
+                Next_(S),
+                Until_(S),
+                Release_(S) #);
+end;
+
+reserve BASSIGN for non empty Subset of ModelSP(Inf_seq(S));
+reserve t for  Element of Inf_seq(S);
+reserve f,g for Assign of LTLModel(S,BASSIGN);
+
+:: definition of correctness of Assign of LTLModel(S,BASSIGN)
+
+definition
+  let S be non empty set;
+  let BASSIGN be non empty Subset of ModelSP(Inf_seq(S));
+  let t be Element of Inf_seq(S);
+  let f be Assign of LTLModel(S,BASSIGN);
+  pred t |= f means
+:: MODELC_2:def 59
+     (Fid(f,Inf_seq(S))).t=TRUE;
+end;
+
+notation
+  let S be non empty set;
+  let BASSIGN be non empty Subset of ModelSP(Inf_seq(S));
+  let t be Element of Inf_seq(S);
+  let f be Assign of LTLModel(S,BASSIGN);
+  antonym t |/= f for t |= f;
+end;
+
+theorem :: MODELC_2:56
+  f 'or' g = 'not' (('not' f) '&' ('not' g))  &
+      f 'R' g = 'not' (('not' f) 'U' ('not' g));
+
+theorem :: MODELC_2:57
+  t |= 'not' f iff t |/= f;
+
+theorem :: MODELC_2:58
+   t |= f '&' g iff t|=f & t|=g;
+
+theorem :: MODELC_2:59
+    t |= 'X' f iff Shift(t,1) |=f;
+
+theorem :: MODELC_2:60
+      t |= f 'U' g iff
+             ex m being Nat
+               st (for j being Nat st j<m
+                                   holds Shift(t,j) |= f) &
+                  (Shift(t,m) |= g );
+
+theorem :: MODELC_2:61
+  t |= f 'or' g iff (t|= f or t|= g);
+
+theorem :: MODELC_2:62
+    t |= f 'R' g iff
+          for m being Nat
+             holds ((for j being Nat st j<m
+                           holds Shift(t,j) |= 'not'(f))
+                      implies Shift(t,m) |= g);
+
+:: definition of correctness of LTL-formula & its basic properties.
+
+definition
+  func AtomicFamily -> non empty set equals
+:: MODELC_2:def 60
+    bool atomic_LTL;
+end;
+
+definition
+ let a, t be set;
+ func AtomicFunc(a,t) -> Element of BOOLEAN equals
+:: MODELC_2:def 61
+   TRUE if (t in Inf_seq(AtomicFamily)) &
+                  (a in (CastSeq(t,AtomicFamily)).0)
+       otherwise FALSE;
+end;
+
+definition
+ let a be set;
+ func AtomicAsgn(a) ->  Element of ModelSP(Inf_seq(AtomicFamily)) means
+:: MODELC_2:def 62
+  for t being set st t in Inf_seq(AtomicFamily) holds
+          Fid(it,Inf_seq(AtomicFamily)).t = AtomicFunc(a,t);
+ end;
+
+definition
+  func AtomicBasicAsgn -> non empty Subset of ModelSP(Inf_seq(AtomicFamily))
+     equals
+:: MODELC_2:def 63
+    {x where x is Element of ModelSP(Inf_seq(AtomicFamily)):
+               ex a being set st x = AtomicAsgn(a) };
+end;
+
+definition
+  func AtomicKai -> Function of
+      atomic_LTL,the BasicAssign of LTLModel(AtomicFamily,AtomicBasicAsgn)
+     means
+:: MODELC_2:def 64
+     for a being set st a in atomic_LTL holds it.a = AtomicAsgn(a);
+ end;
+
+definition
+  let r be Element of Inf_seq(AtomicFamily);
+  let H be LTL-formula;
+  pred r|= H means
+:: MODELC_2:def 65
+     r|= Evaluate(H,AtomicKai);
+end;
+
+notation
+  let r be Element of Inf_seq(AtomicFamily);
+  let H be LTL-formula;
+  antonym r|/= H for r|= H;
+end;
+
+definition
+  let r be Element of Inf_seq(AtomicFamily);
+  let W be Subset of LTL_WFF;
+  pred r|= W means
+:: MODELC_2:def 66
+     for H be LTL-formula st H in W holds r|= H;
+end;
+
+notation
+  let r be Element of Inf_seq(AtomicFamily);
+  let W be Subset of LTL_WFF;
+  antonym r|/= W for r|= W;
+end;
+
+definition
+  let W be Subset of LTL_WFF;
+  func 'X' W -> Subset of LTL_WFF equals
+:: MODELC_2:def 67
+    {x where x is LTL-formula:ex u being LTL-formula st u in W & x='X' u};
+end;
+
+reserve r for Element of Inf_seq(AtomicFamily);
+theorem :: MODELC_2:63
+  H is atomic implies
+               (r |= H iff H in (CastSeq(r,AtomicFamily)).0);
+
+theorem :: MODELC_2:64
+  r|= 'not' H iff r|/= H;
+
+theorem :: MODELC_2:65
+  r|= H1 '&' H2 iff r|= H1 & r|= H2;
+
+theorem :: MODELC_2:66
+   r|= H1 'or' H2 iff r|= H1  or r|= H2;
+
+theorem :: MODELC_2:67
+   r|= 'X' H iff Shift(r,1)|=H;
+
+theorem :: MODELC_2:68
+   r|= H1 'U' H2  iff
+     ex m being Nat
+               st (for j being Nat st j<m
+                                   holds Shift(r,j) |= H1) &
+                  (Shift(r,m) |= H2 );
+
+theorem :: MODELC_2:69
+   r|= H1 'R' H2 iff
+     for m being Nat
+             holds ((for j being Nat st j<m
+                           holds Shift(r,j) |= 'not' H1)
+                      implies Shift(r,m) |= H2);
+
+theorem :: MODELC_2:70
+   r|= 'not' (H1 'or' H2)  iff
+     r |=  ('not' H1) '&' ('not' H2);
+
+theorem :: MODELC_2:71
+   r|= 'not' (H1 '&' H2)  iff
+     r |=  ('not' H1) 'or' ('not' H2);
+
+theorem :: MODELC_2:72
+   r|= H1 'R' H2  iff
+     r |= 'not' ( ('not' H1) 'U' ('not' H2));
+
+theorem :: MODELC_2:73
+   r |/= 'not' H iff r |= H;
+
+theorem :: MODELC_2:74
+   r |= 'X'('not' H)  iff r |='not' ('X' H);
+
+theorem :: MODELC_2:75
+   r|= H1 'U' H2  iff r|=H2 'or' (H1 '&' ('X' (H1 'U' H2)));
+
+theorem :: MODELC_2:76
+   r|= H1 'R' H2  iff r|=(H1 '&' H2) 'or' (H2 '&' ('X' (H1 'R' H2)));
+
+reserve W for Subset of LTL_WFF;
+
+theorem :: MODELC_2:77
+  r |= 'X' W iff Shift(r,1) |=W;
+
+:: theorems for external articles
+
+theorem :: MODELC_2:78
+  (H is atomic implies
+    (not H is negative) & (not H is conjunctive) & (not H is disjunctive) &
+    (not H is next) & (not H is Until) & (not H is Release))
+  &
+ (H is negative implies
+    (not H is atomic) & (not H is conjunctive) & (not H is disjunctive) &
+    (not H is next) & (not H is Until) & (not H is Release))
+  &
+ (H is conjunctive implies
+    (not H is atomic) & (not H is negative) & (not H is disjunctive) &
+    (not H is next) & (not H is Until) & (not H is Release))
+  &
+ (H is disjunctive implies
+    (not H is atomic) & (not H is negative) & (not H is conjunctive) &
+    (not H is next) & (not H is Until) & (not H is Release))
+  &
+ (H is next implies
+    (not H is atomic) & (not H is negative) & (not H is conjunctive) &
+    (not H is disjunctive) & (not H is Until) & (not H is Release))
+  &
+ (H is Until implies
+    (not H is atomic) & (not H is negative) & (not H is conjunctive) &
+    (not H is disjunctive) & (not H is next) & (not H is Release))
+  &
+ (H is Release implies
+    (not H is atomic) & (not H is negative) & (not H is conjunctive) &
+    (not H is disjunctive) & (not H is next) & (not H is Until));
+
+theorem :: MODELC_2:79
+for t being Element of Inf_seq(S) holds Shift(t,0)=t;
+
+theorem :: MODELC_2:80
+  for seq being Element of Inf_seq(S) holds
+      Shift(Shift(seq,k),n) = Shift(seq,n+k);
+
+theorem :: MODELC_2:81
+  for seq being sequence of S
+        holds CastSeq(CastSeq(seq),S) = seq;
+
+theorem :: MODELC_2:82
+  for seq being Element of Inf_seq(S)
+        holds CastSeq(CastSeq(seq,S)) = seq;
+
+theorem :: MODELC_2:83
+  (H in W & 'not' H in W) implies r |/=W;

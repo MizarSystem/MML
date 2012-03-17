@@ -42,7 +42,7 @@
 <ArticleID name="VECTSP_2"/>
 <ArticleID name="QUOFIELD"/>
 </Signature>
-<RCluster>
+<RCluster aid="QUOFIELD" nr="1">
 <ArgTypes/>
 <Typ kind="G" nr="10">
 <Cluster/>
@@ -61,7 +61,7 @@
 <Adjective nr="135"/>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="QUOFIELD" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="9">
 <Cluster>
@@ -70,14 +70,14 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="353">
+<Func kind="K" nr="354">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
 <Adjective nr="7" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="QUOFIELD" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="9">
 <Cluster>
@@ -88,12 +88,12 @@
 </Typ>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="353">
+<Func kind="K" nr="354">
 <LocusVar nr="1"/>
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="360">
+<Func kind="K" nr="361">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -101,7 +101,7 @@
 <Adjective nr="7" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="QUOFIELD" nr="3">
 <ArgTypes>
 <Typ kind="G" nr="9">
 <Cluster>
@@ -110,14 +110,14 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="361">
+<Func kind="K" nr="362">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
 <Adjective nr="7" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="QUOFIELD" nr="4">
 <ArgTypes>
 <Typ kind="G" nr="10">
 <Cluster>
@@ -135,7 +135,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="373">
+<Func kind="K" nr="374">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -143,7 +143,7 @@
 <Adjective nr="69"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="QUOFIELD" nr="5">
 <ArgTypes>
 <Typ kind="G" nr="10">
 <Cluster>
@@ -161,7 +161,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="373">
+<Func kind="K" nr="374">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -171,7 +171,7 @@
 <Adjective nr="75"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="QUOFIELD" nr="6">
 <ArgTypes>
 <Typ kind="G" nr="10">
 <Cluster>
@@ -189,7 +189,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="373">
+<Func kind="K" nr="374">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -197,7 +197,7 @@
 <Adjective nr="123"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="QUOFIELD" nr="7">
 <ArgTypes>
 <Typ kind="G" nr="10">
 <Cluster>
@@ -215,7 +215,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="373">
+<Func kind="K" nr="374">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -223,7 +223,7 @@
 <Adjective nr="133"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="QUOFIELD" nr="8">
 <ArgTypes>
 <Typ kind="G" nr="10">
 <Cluster>
@@ -241,7 +241,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="373">
+<Func kind="K" nr="374">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -253,7 +253,7 @@
 <Adjective nr="134"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="QUOFIELD" nr="9">
 <ArgTypes>
 <Typ kind="G" nr="10">
 <Cluster>
@@ -280,7 +280,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="QUOFIELD" nr="10">
 <ArgTypes>
 <Typ kind="G" nr="10">
 <Cluster>
@@ -298,7 +298,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="373">
+<Func kind="K" nr="374">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -308,7 +308,7 @@
 <Adjective nr="139"/>
 </Cluster>
 </FCluster>
-<CCluster>
+<CCluster aid="QUOFIELD" nr="1">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="12" value="false"/>
@@ -338,7 +338,7 @@
 <Adjective nr="139"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="QUOFIELD" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="10">
 <Cluster>
@@ -399,7 +399,7 @@
 </Adjective>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="QUOFIELD" nr="3">
 <ArgTypes>
 <Typ kind="G" nr="10">
 <Cluster>
@@ -460,7 +460,7 @@
 </Adjective>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="QUOFIELD" nr="4">
 <ArgTypes>
 <Typ kind="G" nr="10">
 <Cluster>
@@ -517,7 +517,7 @@
 </Adjective>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="QUOFIELD" nr="5">
 <ArgTypes>
 <Typ kind="G" nr="10">
 <Cluster>

@@ -32,7 +32,7 @@
 <ArticleID name="LATTICE3"/>
 <ArticleID name="QUANTAL1"/>
 </Signature>
-<RCluster>
+<RCluster aid="QUANTAL1" nr="1">
 <ArgTypes/>
 <Typ kind="G" nr="15">
 <Cluster/>
@@ -41,7 +41,7 @@
 <Adjective nr="121"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="QUANTAL1" nr="2">
 <ArgTypes/>
 <Typ kind="G" nr="15">
 <Cluster/>
@@ -50,7 +50,7 @@
 <Adjective nr="23" value="false"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="QUANTAL1" nr="3">
 <ArgTypes/>
 <Typ kind="G" nr="16">
 <Cluster/>
@@ -59,7 +59,7 @@
 <Adjective nr="122"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="QUANTAL1" nr="4">
 <ArgTypes/>
 <Typ kind="G" nr="16">
 <Cluster/>
@@ -68,7 +68,7 @@
 <Adjective nr="23" value="false"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="QUANTAL1" nr="5">
 <ArgTypes/>
 <Typ kind="G" nr="7">
 <Cluster/>
@@ -78,7 +78,7 @@
 <Adjective nr="125"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="QUANTAL1" nr="6">
 <ArgTypes/>
 <Typ kind="G" nr="15">
 <Cluster/>
@@ -95,7 +95,7 @@
 <Adjective nr="127"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="QUANTAL1" nr="7">
 <ArgTypes/>
 <Typ kind="G" nr="16">
 <Cluster/>
@@ -106,7 +106,7 @@
 <Adjective nr="117"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="QUANTAL1" nr="8">
 <ArgTypes/>
 <Typ kind="G" nr="16">
 <Cluster/>
@@ -124,7 +124,7 @@
 <Adjective nr="127"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="QUANTAL1" nr="9">
 <ArgTypes>
 <Typ kind="G" nr="14">
 <Cluster>
@@ -173,7 +173,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="QUANTAL1" nr="10">
 <ArgTypes/>
 <Typ kind="G" nr="17">
 <Cluster/>
@@ -182,7 +182,7 @@
 <Adjective nr="138"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="QUANTAL1" nr="11">
 <ArgTypes/>
 <Typ kind="G" nr="17">
 <Cluster/>
@@ -191,7 +191,7 @@
 <Adjective nr="23" value="false"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="QUANTAL1" nr="12">
 <ArgTypes/>
 <Typ kind="G" nr="17">
 <Cluster/>
@@ -210,7 +210,7 @@
 <Adjective nr="140"/>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="QUANTAL1" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -280,7 +280,7 @@
 <Adjective nr="121"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="QUANTAL1" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -355,7 +355,7 @@
 <Adjective nr="122"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="QUANTAL1" nr="3">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -435,7 +435,7 @@
 <Adjective nr="138"/>
 </Cluster>
 </FCluster>
-<CCluster>
+<CCluster aid="QUANTAL1" nr="1">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="23" value="false"/>
@@ -450,7 +450,7 @@
 <Adjective nr="124"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="QUANTAL1" nr="2">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="23" value="false"/>
@@ -465,7 +465,7 @@
 <Adjective nr="125"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="QUANTAL1" nr="3">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="23" value="false"/>

@@ -26,7 +26,7 @@
 <ArticleID name="CSSPACE"/>
 <ArticleID name="CLVECT_2"/>
 </Signature>
-<FCluster>
+<FCluster aid="CSSPACE2" nr="1">
 <ArgTypes/>
 <Func kind="K" nr="171"/>
 <Cluster>
@@ -34,7 +34,7 @@
 <Adjective nr="98"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="CSSPACE2" nr="2">
 <ArgTypes/>
 <Func kind="K" nr="171"/>
 <Cluster>

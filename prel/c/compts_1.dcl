@@ -16,7 +16,7 @@
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="COMPTS_1"/>
 </Signature>
-<RCluster>
+<RCluster aid="COMPTS_1" nr="1">
 <ArgTypes/>
 <Typ kind="G" nr="5">
 <Cluster/>
@@ -27,7 +27,7 @@
 <Adjective nr="29"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="COMPTS_1" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="1">
 <Cluster/>
@@ -45,7 +45,7 @@
 <Adjective nr="11"/>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="COMPTS_1" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -59,7 +59,7 @@
 <Adjective nr="23"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="COMPTS_1" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -74,7 +74,7 @@
 <Adjective nr="14" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="COMPTS_1" nr="3">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -89,7 +89,7 @@
 <Adjective nr="29"/>
 </Cluster>
 </FCluster>
-<CCluster>
+<CCluster aid="COMPTS_1" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
@@ -118,7 +118,7 @@
 </Adjective>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="COMPTS_1" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>

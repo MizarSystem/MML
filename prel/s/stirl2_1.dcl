@@ -14,7 +14,7 @@
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="NUMBERS"/>
 </Signature>
-<FCluster>
+<FCluster aid="STIRL2_1" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -48,7 +48,7 @@
 <Adjective nr="14"/>
 </Cluster>
 </FCluster>
-<CCluster>
+<CCluster aid="STIRL2_1" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>

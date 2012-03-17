@@ -23,7 +23,7 @@
 <ArticleID name="BHSP_1"/>
 <ArticleID name="RUSUB_1"/>
 </Signature>
-<RCluster>
+<RCluster aid="RUSUB_1" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="13">
 <Cluster>

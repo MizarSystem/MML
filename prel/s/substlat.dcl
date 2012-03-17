@@ -19,7 +19,7 @@
 <ArticleID name="LATTICES"/>
 <ArticleID name="SUBSTLAT"/>
 </Signature>
-<RCluster>
+<RCluster aid="SUBSTLAT" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -39,7 +39,7 @@
 <Adjective nr="7" value="false"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="SUBSTLAT" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -61,7 +61,7 @@
 <Adjective nr="12"/>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="SUBSTLAT" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -78,7 +78,7 @@
 <Adjective nr="7" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="SUBSTLAT" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -96,7 +96,7 @@
 <Adjective nr="30"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="SUBSTLAT" nr="3">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -114,7 +114,7 @@
 <Adjective nr="37"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="SUBSTLAT" nr="4">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -133,7 +133,7 @@
 <Adjective nr="42"/>
 </Cluster>
 </FCluster>
-<CCluster>
+<CCluster aid="SUBSTLAT" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -154,7 +154,7 @@
 <Adjective nr="12"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="SUBSTLAT" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>

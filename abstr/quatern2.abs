@@ -1,0 +1,391 @@
+:: Inner Products, Group, Ring of Quaternion Numbers
+::  by Fuguo Ge
+:: 
+:: Received March 18, 2008
+:: Copyright (c) 2008 Association of Mizar Users
+
+environ
+
+ vocabularies ARYTM, RELAT_1, COMPLEX1, FUNCT_1, QUATERNI, ARYTM_1, ARYTM_3,
+      XCMPLX_0, SQUARE_1, VECTSP_1, RLVECT_1, BINOP_1, LATTICES, GROUP_1,
+      VECTSP_2, QUATERN2, PROB_2, ALGSTR_0;
+ notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, FUNCT_1, COMPLEX1,
+      ARYTM_0, XCMPLX_0, XREAL_0, REAL_1, SQUARE_1, XXREAL_0, QUATERNI,
+      BINOP_1, STRUCT_0, ALGSTR_0, GROUP_1, RLVECT_1, VECTSP_1, FUNCSDOM;
+ constructors SQUARE_1, FUNCT_4, ARYTM_0, REAL_1, ORDINAL3, QUATERNI, COMPTRIG,
+      SIN_COS, FUNCSDOM, GROUP_1, ALGSTR_0, VECTSP_1;
+ registrations XREAL_0, SQUARE_1, XXREAL_0, RELAT_1, QUATERNI, VECTSP_1,
+      STRUCT_0, REAL_1, INT_1, XBOOLE_0, NUMBERS, ALGSTR_0, RLVECT_1, BINOM;
+ requirements NUMERALS, SUBSET, BOOLE, REAL, ARITHM;
+
+
+begin
+
+reserve q,r,c,c1,c2,c3 for quaternion number;
+reserve x1,x2,x3,x4,y1,y2,y3,y4 for Element of REAL;
+
+definition
+  redefine func 0q -> Element of QUATERNION;
+end;
+
+definition
+  redefine func 1q -> Element of QUATERNION;
+end;
+
+theorem :: QUATERN2:1
+  for x,y,z,w being Real holds
+    [*x,y,z,w*] = x + y*<i> + z*<j> + w*<k>;
+
+theorem :: QUATERN2:2
+  c1 + c2 + c3 = c1 + (c2 + c3);
+
+theorem :: QUATERN2:3
+  c + 0q = c;
+
+theorem :: QUATERN2:4
+  - [*x1,x2,x3,x4*] = [*-x1,-x2,-x3,-x4*];
+
+theorem :: QUATERN2:5
+  [*x1,x2,x3,x4*] - [*y1,y2,y3,y4*] = [*x1-y1,x2-y2,x3-y3,x4-y4*];
+
+theorem :: QUATERN2:6
+  c1 - c2 + c3 = c1 + c3 - c2;
+
+theorem :: QUATERN2:7
+  c1 = c1 + c2 - c2;
+
+theorem :: QUATERN2:8
+  c1 = c1 - c2 + c2;
+
+theorem :: QUATERN2:9
+  (-x1)*c = -(x1*c);
+
+definition let q;
+  redefine func |.q.| -> Element of REAL;
+end;
+
+definition
+  redefine func <i> -> Element of QUATERNION;
+end;
+
+theorem :: QUATERN2:10
+  r <> 0 implies |.r.| > 0;
+
+theorem :: QUATERN2:11
+ 0q = [*0,0,0,0*];
+
+theorem :: QUATERN2:12
+ for r being quaternion number holds 0q*r = 0;
+
+theorem :: QUATERN2:13
+ for r being quaternion number holds r*0q = 0;
+
+theorem :: QUATERN2:14
+  c * 1q = c;
+
+theorem :: QUATERN2:15
+  1q * c = c;
+
+theorem :: QUATERN2:16
+  c1 * c2 * c3 = c1 * (c2 * c3);
+
+theorem :: QUATERN2:17
+  c1 * (c2 + c3) = c1*c2 + c1*c3;
+
+theorem :: QUATERN2:18
+  (c1 + c2) * c3 = c1*c3 + c2*c3;
+
+theorem :: QUATERN2:19
+  -c = (-1q) * c;
+
+theorem :: QUATERN2:20
+  (-c1) * c2 = -(c1*c2);
+
+theorem :: QUATERN2:21
+  c1 * (-c2) = -(c1*c2);
+
+theorem :: QUATERN2:22
+  (-c1) * (-c2) = c1*c2;
+
+theorem :: QUATERN2:23
+  (c1 - c2) * c3 = c1 * c3 - c2 * c3;
+
+theorem :: QUATERN2:24
+  c1 * (c2 - c3) = c1 * c2 - c1 * c3;
+
+theorem :: QUATERN2:25
+  [*x1,x2,x3,x4*] *' = [*x1,-x2,-x3,-x4*];
+
+theorem :: QUATERN2:26
+  c*'*' =c;
+
+definition let q,r;
+ func q / r means
+:: QUATERN2:def 1
+    ex q0,q1,q2,q3,r0,r1,r2,r3 being Element of REAL st
+    q = [*q0,q1,q2,q3*] & r = [*r0,r1,r2,r3*] &
+    it = [* (r0*q0+r1*q1+r2*q2+r3*q3)/(|.r.|^2),
+            (r0*q1-r1*q0-r2*q3+r3*q2)/(|.r.|^2),
+            (r0*q2+r1*q3-r2*q0-r3*q1)/(|.r.|^2),
+            (r0*q3-r1*q2+r2*q1-r3*q0)/(|.r.|^2) *];
+end;
+
+registration let q,r;
+  cluster q / r -> quaternion;
+end;
+
+definition let q,r;
+  redefine func q / r -> Element of QUATERNION equals
+:: QUATERN2:def 2
+(Rea r * Rea q + Im1 q * Im1 r +Im2 r * Im2 q + Im3 r * Im3 q) / (|.r.|^2)+
+(Rea r * Im1 q - Im1 r * Rea q -Im2 r * Im3 q + Im3 r * Im2 q) / (|.r.|^2)*<i>+
+(Rea r * Im2 q + Im1 r * Im3 q -Im2 r * Rea q - Im3 r * Im1 q) / (|.r.|^2)*<j>+
+(Rea r * Im3 q - Im1 r * Im2 q +Im2 r * Im1 q - Im3 r * Rea q) / (|.r.|^2)*<k>;
+end;
+
+definition let c;
+  func c" -> quaternion number equals
+:: QUATERN2:def 3
+   1q/c;
+end;
+
+definition let r;
+  redefine func r" -> Element of QUATERNION equals
+:: QUATERN2:def 4
+  Rea r / (|.r.|^2) - Im1 r / (|.r.|^2)*<i> -
+  Im2 r / (|.r.|^2)*<j> - (Im3 r) / (|.r.|^2)*<k>;
+end;
+
+theorem :: QUATERN2:27
+  Rea r" = (Rea r) / (|.r.|^2) &
+  Im1 r" = - (Im1 r) / (|.r.|^2) &
+  Im2 r" = - (Im2 r) / (|.r.|^2) &
+  Im3 r" = - (Im3 r) / (|.r.|^2);
+
+theorem :: QUATERN2:28
+  Rea (q/r) =
+(Rea r * Rea q + Im1 q * Im1 r +Im2 r * Im2 q + Im3 r * Im3 q) / (|.r.|^2)&
+  Im1 (q/r) =
+(Rea r * Im1 q - Im1 r * Rea q -Im2 r * Im3 q + Im3 r * Im2 q) / (|.r.|^2)&
+  Im2 (q/r) =
+(Rea r * Im2 q + Im1 r * Im3 q -Im2 r * Rea q - Im3 r * Im1 q) / (|.r.|^2)&
+  Im3 (q/r) =
+(Rea r * Im3 q - Im1 r * Im2 q +Im2 r * Im1 q - Im3 r * Rea q) / (|.r.|^2);
+
+theorem :: QUATERN2:29
+  r <> 0 implies r * r" = 1;
+
+theorem :: QUATERN2:30
+  r <> 0 implies r" * r = 1;
+
+theorem :: QUATERN2:31
+  c <> 0q implies c/c = 1q;
+
+theorem :: QUATERN2:32
+  (-c)" = -(c");
+
+definition
+  func compquaternion -> UnOp of QUATERNION means
+:: QUATERN2:def 5
+  for c being Element of QUATERNION holds it.c = -c;
+  func addquaternion -> BinOp of QUATERNION means
+:: QUATERN2:def 6
+   for c1,c2 being Element of QUATERNION holds it.(c1,c2) = c1 + c2;
+  func diffquaternion -> BinOp of QUATERNION means
+:: QUATERN2:def 7
+  for c1,c2 being Element of QUATERNION holds it.(c1,c2) = c1 - c2;
+  func multquaternion -> BinOp of QUATERNION means
+:: QUATERN2:def 8
+   for c1,c2 being Element of QUATERNION holds it.(c1,c2) = c1 * c2;
+  func divquaternion -> BinOp of QUATERNION means
+:: QUATERN2:def 9
+  for c1,c2 being Element of QUATERNION holds it.(c1,c2) = c1 / c2;
+  func invquaternion -> UnOp of QUATERNION means
+:: QUATERN2:def 10
+  for c being Element of QUATERNION holds it.c = c";
+end;
+
+definition
+ func G_Quaternion -> strict addLoopStr means
+:: QUATERN2:def 11
+  the carrier of it = QUATERNION &
+  the addF of it = addquaternion &
+  0.it = 0q;
+end;
+
+registration
+ cluster G_Quaternion -> non empty;
+end;
+
+registration
+  cluster -> quaternion Element of G_Quaternion;
+end;
+
+registration
+  let x,y be Element of G_Quaternion;
+  let a,b be quaternion number;
+  identify x+y with a+b when x=a, y=b;
+end;
+
+theorem :: QUATERN2:33
+  0.G_Quaternion = 0q;
+
+registration
+ cluster G_Quaternion -> Abelian add-associative right_zeroed
+    right_complementable;
+end;
+
+registration let x be Element of G_Quaternion, a be quaternion number;
+ identify -x with -a when x = a;
+end;
+
+registration
+  let x,y be Element of G_Quaternion;
+  let a,b be quaternion number;
+  identify x-y with a-b when x=a, y=b;
+end;
+
+theorem :: QUATERN2:34
+  for x,y,z being Element of G_Quaternion holds
+  x+y = y+x &
+  (x+y)+z = x+(y+z) &
+  x+(0.G_Quaternion) = x;
+
+definition
+ func R_Quaternion -> strict doubleLoopStr means
+:: QUATERN2:def 12
+  the carrier of it = QUATERNION &
+  the addF of it = addquaternion &
+  the multF of it = multquaternion &
+  1.it = 1q &
+  0.it = 0q;
+end;
+
+registration
+ cluster R_Quaternion -> non empty;
+end;
+
+registration
+  cluster -> quaternion Element of R_Quaternion;
+end;
+
+registration let a,b be quaternion number;
+ let x,y be Element of R_Quaternion;
+ identify x+y with a+b when x=a, y=b;
+ identify x*y with a*b when x=a, y=b;
+end;
+
+registration
+ cluster R_Quaternion -> well-unital;
+end;
+
+theorem :: QUATERN2:35
+  1.R_Quaternion = 1q;
+
+theorem :: QUATERN2:36
+  1_R_Quaternion = 1q;
+
+theorem :: QUATERN2:37
+  0.R_Quaternion = 0q;
+
+registration
+ cluster R_Quaternion -> add-associative right_zeroed right_complementable
+      Abelian associative left_unital right_unital distributive
+      almost_right_invertible non degenerated;
+end;
+
+registration let x be Element of R_Quaternion, a be quaternion number;
+ identify -x with -a when x = a;
+end;
+
+registration
+  let x,y be Element of R_Quaternion;
+  let a,b be quaternion number;
+  identify x-y with a-b when x=a, y=b;
+end;
+
+definition
+   let z be Element of R_Quaternion;
+   redefine func z *' -> Element of R_Quaternion;
+end;
+
+reserve z,z1,z2,z3,z4 for Element of R_Quaternion;
+
+theorem :: QUATERN2:38
+  -z = (-1_R_Quaternion) * z;
+
+theorem :: QUATERN2:39
+  (0.R_Quaternion)*' = 0.R_Quaternion;
+
+theorem :: QUATERN2:40
+  z*' = 0.R_Quaternion implies z = 0.R_Quaternion;
+
+theorem :: QUATERN2:41
+  (1.R_Quaternion)*' = 1.R_Quaternion;
+
+theorem :: QUATERN2:42
+  |.0.R_Quaternion.| = 0;
+
+theorem :: QUATERN2:43
+  |.z.| = 0 implies z = 0.R_Quaternion;
+
+theorem :: QUATERN2:44
+  |.1.R_Quaternion.| = 1;
+
+theorem :: QUATERN2:45
+  (1.R_Quaternion)" = 1.R_Quaternion;
+
+definition :: Inner product of quternion numbers
+  let x, y be quaternion number;
+  func x .|. y -> Element of QUATERNION equals
+:: QUATERN2:def 13
+  x*(y*');
+end;
+
+theorem :: QUATERN2:46
+  c1 .|. c2 =
+[*(Rea c1)*(Rea c2)+(Im1 c1)*(Im1 c2)+(Im2 c1)*(Im2 c2)+(Im3 c1)*(Im3 c2),
+  (Rea c1)*(-(Im1 c2))+(Im1 c1)*(Rea c2)-(Im2 c1)*(Im3 c2)+(Im3 c1)*(Im2 c2),
+  (Rea c1)*(-(Im2 c2))+(Rea c2)*(Im2 c1)-(Im1 c2)*(Im3 c1)+(Im3 c2)*(Im1 c1),
+  (Rea c1)*(-(Im3 c2))+(Im3 c1)*(Rea c2)-(Im1 c1)*(Im2 c2)+(Im2 c1)*(Im1 c2) *]
+;
+
+theorem :: QUATERN2:47
+  c .|. c = |.c.|^2;
+
+theorem :: QUATERN2:48
+  Rea (c .|. c) = |.c.|^2 & Im1 (c .|. c) = 0 &
+  Im2 (c .|. c) = 0 & Im2 (c .|. c) = 0;
+
+theorem :: QUATERN2:49
+  |. c1.|.c2 .| = |.c1.|*|.c2.|;
+
+theorem :: QUATERN2:50
+  c.|.c = 0 implies c = 0;
+
+theorem :: QUATERN2:51
+  (c1+c2).|.c3 = c1.|.c3 + c2.|.c3;
+
+theorem :: QUATERN2:52
+  c1.|.(c2+c3) = c1.|.c2 + c1.|.c3;
+
+theorem :: QUATERN2:53
+  (-c1).|.c2 = - c1.|.c2;
+
+theorem :: QUATERN2:54
+  - c1.|.c2 = c1.|.(-c2);
+
+theorem :: QUATERN2:55
+  (-c1).|.(-c2) = c1.|.c2;
+
+theorem :: QUATERN2:56
+  (c1 - c2).|.c3 = c1.|.c3 - c2.|.c3;
+
+theorem :: QUATERN2:57
+  c1.|.(c2 - c3) = c1.|.c2 - c1.|.c3;
+
+theorem :: QUATERN2:58
+  (c1 + c2).|.(c1 + c2) = c1.|.c1 + c1.|.c2 + c2.|.c1 + c2.|.c2;
+
+theorem :: QUATERN2:59
+  (c1 - c2).|.(c1 - c2) = c1.|.c1 - c1.|.c2 - c2.|.c1 + c2.|.c2;

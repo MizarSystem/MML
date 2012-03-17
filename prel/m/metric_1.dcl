@@ -20,7 +20,7 @@
 <ArticleID name="FUNCT_5"/>
 <ArticleID name="METRIC_1"/>
 </Signature>
-<RCluster>
+<RCluster aid="METRIC_1" nr="1">
 <ArgTypes/>
 <Typ kind="G" nr="5">
 <Cluster/>
@@ -29,7 +29,7 @@
 <Adjective nr="37"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="METRIC_1" nr="2">
 <ArgTypes/>
 <Typ kind="G" nr="5">
 <Cluster/>
@@ -39,7 +39,7 @@
 <Adjective nr="37"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="METRIC_1" nr="3">
 <ArgTypes/>
 <Typ kind="G" nr="5">
 <Cluster/>
@@ -53,7 +53,7 @@
 <Adjective nr="45"/>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="METRIC_1" nr="1">
 <ArgTypes/>
 <Func kind="K" nr="100"/>
 <Cluster>
@@ -68,7 +68,7 @@
 </Cluster>
 </Typ>
 </FCluster>
-<FCluster>
+<FCluster aid="METRIC_1" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -93,7 +93,7 @@
 <Adjective nr="20"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="METRIC_1" nr="3">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -109,7 +109,7 @@
 <Adjective nr="37"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="METRIC_1" nr="4">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -126,7 +126,7 @@
 <Adjective nr="45"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="METRIC_1" nr="5">
 <ArgTypes/>
 <Func kind="K" nr="110"/>
 <Cluster>
@@ -134,7 +134,7 @@
 <Adjective nr="37"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="METRIC_1" nr="6">
 <ArgTypes/>
 <Func kind="K" nr="110"/>
 <Cluster>

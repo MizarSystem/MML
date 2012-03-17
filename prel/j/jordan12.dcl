@@ -38,7 +38,7 @@
 <ArticleID name="TOPREAL1"/>
 <ArticleID name="GOBOARD5"/>
 </Signature>
-<CCluster>
+<CCluster aid="JORDAN12" nr="1">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="114"/>

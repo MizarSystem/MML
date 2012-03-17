@@ -12,12 +12,12 @@
 <ArticleID name="MCART_1"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
+<ArticleID name="FUNCT_2"/>
 <ArticleID name="XREAL_0"/>
 <ArticleID name="INT_1"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
-<ArticleID name="FUNCT_2"/>
 <ArticleID name="FUNCT_4"/>
 <ArticleID name="FRAENKEL"/>
 <ArticleID name="FUNCOP_1"/>
@@ -35,46 +35,46 @@
 <ArticleID name="SCMFSA_1"/>
 <ArticleID name="SCMFSA_2"/>
 </Signature>
-<RCluster>
+<RCluster aid="SCMFSA_3" nr="1">
 <ArgTypes/>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="171">
+<Func kind="K" nr="172">
 <Func kind="U" nr="10">
-<Func kind="K" nr="266"/>
+<Func kind="K" nr="268"/>
 <Func kind="K" nr="15">
 <Func kind="K" nr="76"/>
-<Func kind="K" nr="260">
+<Func kind="K" nr="262">
 <Func kind="K" nr="76"/>
 </Func>
 </Func>
-<Func kind="K" nr="282"/>
+<Func kind="K" nr="284"/>
 </Func>
 </Func>
 </Typ>
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4"/>
-<Adjective nr="17"/>
+<Adjective nr="20"/>
 <Adjective nr="70">
-<Func kind="K" nr="266"/>
+<Func kind="K" nr="268"/>
 <Func kind="K" nr="15">
 <Func kind="K" nr="76"/>
-<Func kind="K" nr="260">
+<Func kind="K" nr="262">
 <Func kind="K" nr="76"/>
 </Func>
 </Func>
-<Func kind="K" nr="282"/>
+<Func kind="K" nr="284"/>
 </Adjective>
 <Adjective nr="75" value="false">
-<Func kind="K" nr="266"/>
+<Func kind="K" nr="268"/>
 <Func kind="K" nr="15">
 <Func kind="K" nr="76"/>
-<Func kind="K" nr="260">
+<Func kind="K" nr="262">
 <Func kind="K" nr="76"/>
 </Func>
 </Func>
-<Func kind="K" nr="282"/>
+<Func kind="K" nr="284"/>
 </Adjective>
 </Cluster>
 </RCluster>

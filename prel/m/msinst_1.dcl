@@ -33,7 +33,7 @@
 <ArticleID name="MSUALG_6"/>
 <ArticleID name="MSINST_1"/>
 </Signature>
-<RCluster>
+<RCluster aid="MSINST_1" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
@@ -55,7 +55,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="MSINST_1" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -74,7 +74,7 @@
 <Adjective nr="66"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="MSINST_1" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
@@ -96,7 +96,7 @@
 <Adjective nr="1" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="MSINST_1" nr="3">
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>

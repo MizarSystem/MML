@@ -19,7 +19,7 @@
 <ArticleID name="FUNCT_5"/>
 <ArticleID name="METRIC_1"/>
 </Signature>
-<FCluster>
+<FCluster aid="METRIC_3" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>

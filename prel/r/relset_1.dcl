@@ -9,7 +9,7 @@
 <ArticleID name="RELAT_1"/>
 <ArticleID name="RELSET_1"/>
 </Signature>
-<FCluster>
+<FCluster aid="RELSET_1" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -25,7 +25,7 @@
 <Adjective nr="2"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="RELSET_1" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -52,7 +52,7 @@
 <Adjective nr="2"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="RELSET_1" nr="3">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -79,7 +79,7 @@
 <Adjective nr="2"/>
 </Cluster>
 </FCluster>
-<CCluster>
+<CCluster aid="RELSET_1" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -100,6 +100,48 @@
 </Typ>
 <Cluster>
 <Adjective nr="2"/>
+</Cluster>
+</CCluster>
+<CCluster aid="RELSET_1" nr="2">
+<ArgTypes>
+<Typ kind="M" nr="1">
+<Cluster/>
+</Typ>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="1"/>
+</Cluster>
+</Typ>
+</ArgTypes>
+<Cluster/>
+<Typ kind="M" nr="4">
+<Cluster/>
+<LocusVar nr="1"/>
+<LocusVar nr="2"/>
+</Typ>
+<Cluster>
+<Adjective nr="1"/>
+</Cluster>
+</CCluster>
+<CCluster aid="RELSET_1" nr="3">
+<ArgTypes>
+<Typ kind="M" nr="1">
+<Cluster/>
+</Typ>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="1"/>
+</Cluster>
+</Typ>
+</ArgTypes>
+<Cluster/>
+<Typ kind="M" nr="4">
+<Cluster/>
+<LocusVar nr="2"/>
+<LocusVar nr="1"/>
+</Typ>
+<Cluster>
+<Adjective nr="1"/>
 </Cluster>
 </CCluster>
 </Registrations>

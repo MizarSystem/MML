@@ -18,7 +18,7 @@
 <ArticleID name="VALUED_0"/>
 <ArticleID name="DIFF_1"/>
 </Signature>
-<RCluster>
+<RCluster aid="DIFF_1" nr="1">
 <ArgTypes/>
 <Typ kind="M" nr="7">
 <Cluster/>

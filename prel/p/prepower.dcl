@@ -22,7 +22,7 @@
 <ArticleID name="RAT_1"/>
 <ArticleID name="PREPOWER"/>
 </Signature>
-<RCluster>
+<RCluster aid="PREPOWER" nr="1">
 <ArgTypes/>
 <Typ kind="M" nr="4">
 <Cluster/>
@@ -47,7 +47,7 @@
 <Adjective nr="29"/>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="PREPOWER" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -63,7 +63,7 @@
 <Adjective nr="18"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="PREPOWER" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -84,7 +84,7 @@
 <Adjective nr="19"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="PREPOWER" nr="3">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>

@@ -33,7 +33,7 @@
 <ArticleID name="EUCLID"/>
 <ArticleID name="EUCLIDLP"/>
 </Signature>
-<FCluster>
+<FCluster aid="EUCLIDLP" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -47,7 +47,7 @@
 <Adjective nr="7" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="EUCLIDLP" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -82,7 +82,7 @@
 <Adjective nr="7" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="EUCLIDLP" nr="3">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>

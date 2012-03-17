@@ -19,18 +19,18 @@ environ
  definitions REALSET1;
  theorems AXIOMS, REAL_1, REAL_2, INT_1, NAT_1, ABIAN, POWER, FINSEQ_1,
       FINSEQ_4, BINARITH, XREAL_1, REALSET1, TARSKI, XCMPLX_1, ORDINAL1, NAT_D;
- schemes BINARITH, RECDEF_1;
+ schemes NAT_1, RECDEF_1;
 
 begin :: Preliminaries
 
 reserve i, j, k, l, m, n, t for Nat;
 
 scheme NonUniqPiFinRecExD{D() -> non empty set, A() -> Element of D(),
-  N() -> Element of NAT, P[set,set,set]}:
+  N() -> Nat, P[set,set,set]}:
   ex p be FinSequence of D() st len p = N() & (p/.1 = A() or N() = 0) &
-  for n be Element of NAT st 1 <= n & n < N() holds P[n,p/.n,p/.(n+1)]
+  for n be Nat st 1 <= n & n < N() holds P[n,p/.n,p/.(n+1)]
 provided
-A1: for n be Element of NAT st 1 <= n & n < N() for x be Element of D()
+A1: for n be Nat st 1 <= n & n < N() for x be Element of D()
 ex y be Element of D() st P[n,x,y]
 proof
 A2: for n be Element of NAT st 1 <= n & n < N() holds for x be Element of D()
@@ -49,13 +49,14 @@ A5: for n be Element of NAT st 1 <= n & n < N() holds P[n,p.n,p.(n+1)]
     hence p/.1 = A() by A3,A4,FINSEQ_4:24;
   end;
   hence p/.1 = A() or N() = 0;
-  let n be Element of NAT;
+  let n be Nat;
   assume that
 A6: 1 <= n and
 A7: n < N();
+X: n in NAT by ORDINAL1:def 13;
   n + 1 <= N() by A7,NAT_1:13;
   then p.n = p/.n & p.(n+1) = p/.(n+1) by A3,A6,A7,FINSEQ_4:24,NAT_1:11;
-  hence P[n,p/.n,p/.(n+1)] by A5,A6,A7;
+  hence P[n,p/.n,p/.(n+1)] by A5,A6,A7,X;
 end;
 
 canceled;
@@ -535,7 +536,7 @@ A1:   n is trivial;
 A2:   n <> 0 & n <> 1;
       then
 A3:   n > 1+0 by NAT_1:26;
-      reconsider n as Element of NAT by ORDINAL1:def 13;
+      reconsider n as Nat;
       n = { k where k is Element of NAT : k < n } by AXIOMS:30;
       then
 A4:   0 in n & 1 in n by A3;
@@ -574,7 +575,7 @@ A8:   for x being set holds x in { k where k is Element of NAT : k < 1 }
 end;
 
 registration
-  cluster non trivial Element of NAT;
+  cluster non trivial Nat;
   existence
   proof
     take 2;
@@ -601,16 +602,16 @@ proof
   hence thesis;
 end;
 
-scheme Indfrom2 { P[set] } : for k be non trivial Element of NAT holds P[k]
+scheme Indfrom2 { P[set] } : for k be non trivial Nat holds P[k]
 provided
 A1: P[2]
 and
-A2: for k be non trivial Element of NAT st P[k] holds P[k + 1]
+A2: for k be non trivial Nat st P[k] holds P[k + 1]
 proof
-  defpred P[non empty Element of NAT] means $1 is non trivial implies P[$1];
+  defpred P[non empty Nat] means $1 is non trivial implies P[$1];
 A3: P[1] by Def1;
 A4: now
-    let k be non empty Element of NAT;
+    let k be non empty Nat;
     assume
 A5: P[k];
     now
@@ -626,7 +627,7 @@ A5: P[k];
     end;
     hence P[k+1];
   end;
-  for k be non empty Element of NAT holds P[k] from BINARITH:sch 1(A3,A4);
+  for k be non empty Nat holds P[k] from NAT_1:sch 10(A3,A4);
   hence thesis;
 end;
 

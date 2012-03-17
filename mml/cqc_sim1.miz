@@ -9,7 +9,7 @@ environ
  vocabularies FUNCT_1, FUNCT_4, FUNCOP_1, RELAT_1, BOOLE, CQC_LANG, QC_LANG1,
       ZF_LANG, FINSEQ_1, FUNCT_2, FINSUB_1, SQUARE_1, FINSET_1, QC_LANG3,
       GROUP_2, PRE_TOPC, PARTFUN1, SETWISEO, SETFAM_1, SUBSET_1, CQC_SIM1,
-      COMPLEX1, ARYTM;
+      COMPLEX1, ARYTM, CAT_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, DOMAIN_1, MCART_1,
       SETFAM_1, RELAT_1, FUNCT_1, FUNCT_2, BINOP_1, PARTFUN1, XXREAL_0,
       FUNCOP_1, FINSEQ_1, FINSET_1, FINSUB_1, FRAENKEL, NAT_1, SETWISEO,
@@ -18,9 +18,9 @@ environ
       FRAENKEL, XXREAL_0, NAT_1, RECDEF_1, SEQ_4, QC_LANG3, CQC_LANG;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1, FUNCT_2,
       FINSUB_1, FRAENKEL, XXREAL_0, NAT_1, MEMBERED, FINSEQ_1, SEQ_4, QC_LANG1,
-      CQC_LANG, VALUED_0, FINSET_1;
+      CQC_LANG, VALUED_0, FINSET_1, FUNCOP_1;
  requirements NUMERALS, REAL, BOOLE, SUBSET;
- definitions TARSKI, XBOOLE_0, BINOP_1, QC_LANG3, SUBSET_1, RELAT_1;
+ definitions TARSKI, XBOOLE_0, BINOP_1, QC_LANG3, SUBSET_1, RELAT_1, FUNCOP_1;
  theorems ZFMISC_1, DOMAIN_1, FINSEQ_1, CQC_LANG, QC_LANG1, PARTFUN1, QC_LANG3,
       MCART_1, FUNCT_1, FUNCT_2, NAT_1, TARSKI, FUNCOP_1, FUNCT_4, FINSEQ_2,
       FINSET_1, SETFAM_1, QC_LANG2, RELAT_1, RELSET_1, FINSEQ_3, XBOOLE_0,
@@ -31,27 +31,27 @@ environ
 begin
 
 theorem Th1:
-  for x,y being set, f being Function holds Im(f+*({x} --> y),x) = {y}
+  for x,y being set, f being Function holds Im(f+*(x .--> y),x) = {y}
 proof
   let x,y be set, f be Function;
   now
     let u be set;
-    thus u in (f+*({x} --> y)).:{x} implies u = y
+    thus u in (f+*(x .--> y)).:{x} implies u = y
     proof
-      assume u in (f+*({x} --> y)).:{x};
+      assume u in (f+*(x .--> y)).:{x};
       then consider z being set such that
-A1:   z in dom(f+*({x} --> y)) & z in {x} & u = (f+*({x} --> y)).z
+A1:   z in dom(f+*(x .--> y)) & z in {x} & u = (f+*(x .--> y)).z
       by FUNCT_1:def 12;
-      z in dom({x} --> y) by A1,FUNCOP_1:19;
-      then u = ({x} --> y).z by A1,FUNCT_4:14;
+      z in dom(x .--> y) by A1,FUNCOP_1:19;
+      then u = (x .--> y).z by A1,FUNCT_4:14;
       hence u = y by A1,FUNCOP_1:13;
     end;
 A2: x in {x} by TARSKI:def 1;
-    then x in dom({x} --> y) & ({x} --> y).x = y by FUNCOP_1:13,19;
-    then x in dom(f+*({x} --> y)) & y = (f+*({x} --> y)).x by FUNCT_4:13,14;
-    hence u = y implies u in (f+*({x} --> y)).:{x} by A2,FUNCT_1:def 12;
+    then x in dom(x .--> y) & (x .--> y).x = y by FUNCOP_1:13,19;
+    then x in dom(f+*(x .--> y)) & y = (f+*(x .--> y)).x by FUNCT_4:13,14;
+    hence u = y implies u in (f+*(x .--> y)).:{x} by A2,FUNCT_1:def 12;
   end;
-  hence Im(f+*({x} --> y),x) = {y} by TARSKI:def 1;
+  hence Im(f+*(x .--> y),x) = {y} by TARSKI:def 1;
 end;
 
 theorem Th2:
@@ -80,17 +80,17 @@ end;
 
 theorem Th3:
   for x,y being set, g being Function, A being set
-  holds (g +* ({x} --> y)).:(A \ {x}) = g.:(A \ {x})
+  holds (g +* (x .--> y)).:(A \ {x}) = g.:(A \ {x})
 proof
   let x,y be set, g be Function, A be set;
-  thus (g +* ({x} --> y)).:(A \ {x}) c= g.:(A \ {x})
+  thus (g +* (x .--> y)).:(A \ {x}) c= g.:(A \ {x})
   proof
     let u be set;
-    assume u in (g +* ({x} --> y)).:(A \ {x});
+    assume u in (g +* (x .--> y)).:(A \ {x});
     then consider z being set such that
-A1: z in dom(g +* ({x} --> y)) & z in A \ {x} & u = (g +* ({x} --> y)).z
+A1: z in dom(g +* (x .--> y)) & z in A \ {x} & u = (g +* (x .--> y)).z
     by FUNCT_1:def 12;
-    not z in {x} & dom({x} --> y) = {x} by A1,FUNCOP_1:19,XBOOLE_0:def 4;
+    not z in {x} & dom(x .--> y) = {x} by A1,FUNCOP_1:19,XBOOLE_0:def 4;
     then u = g.z & z in dom g by A1,FUNCT_4:12,13;
     hence u in g.:(A \ {x}) by A1,FUNCT_1:def 12;
   end;
@@ -98,54 +98,54 @@ A1: z in dom(g +* ({x} --> y)) & z in A \ {x} & u = (g +* ({x} --> y)).z
   assume u in g.:(A \ {x});
   then consider z being set such that
 A2: z in dom g & z in A \ {x} & u = g.z by FUNCT_1:def 12;
-A3: z in dom(g +* ({x} --> y)) by A2,FUNCT_4:13;
+A3: z in dom(g +* (x .--> y)) by A2,FUNCT_4:13;
   not z in {x} by A2,XBOOLE_0:def 4;
-  then not z in dom({x} --> y) by FUNCOP_1:19;
-  then u = (g +* ({x} --> y)).z by A2,FUNCT_4:12;
-  hence u in (g +* ({x} --> y)).:(A \ {x}) by A2,A3,FUNCT_1:def 12;
+  then not z in dom(x .--> y) by FUNCOP_1:19;
+  then u = (g +* (x .--> y)).z by A2,FUNCT_4:12;
+  hence u in (g +* (x .--> y)).:(A \ {x}) by A2,A3,FUNCT_1:def 12;
 end;
 
 theorem Th4:
   for x,y being set for g being Function
   for A being set st not y in g.:(A \ {x}) holds
-  (g +* ({x} --> y)).:(A \ {x}) = (g +* ({x} --> y)).:A \ {y}
+  (g +* (x .--> y)).:(A \ {x}) = (g +* (x .--> y)).:A \ {y}
 proof
   let x,y be set, g be Function, A be set;
   assume
 A1: not y in g.:(A \ {x});
-  thus (g +* ({x} --> y)).:(A \ {x}) c= (g +* ({x} --> y)).:A \ {y}
+  thus (g +* (x .--> y)).:(A \ {x}) c= (g +* (x .--> y)).:A \ {y}
   proof
     let u be set;
     assume
-A2: u in (g +* ({x} --> y)).:(A \ {x});
+A2: u in (g +* (x .--> y)).:(A \ {x});
     then consider z being set such that
-A3: z in dom(g +* ({x} --> y)) & z in A \ {x} & u = (g +* ({x} --> y)).z
+A3: z in dom(g +* (x .--> y)) & z in A \ {x} & u = (g +* (x .--> y)).z
     by FUNCT_1:def 12;
-    not z in {x} & dom({x} --> y) = {x} by A3,FUNCOP_1:19,XBOOLE_0:def 4;
+    not z in {x} & dom(x .--> y) = {x} by A3,FUNCOP_1:19,XBOOLE_0:def 4;
     then u = g.z & z in dom g by A3,FUNCT_4:12,13;
     then u <> y by A1,A3,FUNCT_1:def 12;
     then
 A4: not u in {y} by TARSKI:def 1;
-    (g +* ({x} --> y)).:(A \ {x}) c= (g +* ({x} --> y)).: A by RELAT_1:156;
-    hence u in (g +* ({x} --> y)).:A \ {y} by A2,A4,XBOOLE_0:def 4;
+    (g +* (x .--> y)).:(A \ {x}) c= (g +* (x .--> y)).: A by RELAT_1:156;
+    hence u in (g +* (x .--> y)).:A \ {y} by A2,A4,XBOOLE_0:def 4;
   end;
   let u be set;
   assume
-A5: u in (g +* ({x} --> y)).:A \ {y};
+A5: u in (g +* (x .--> y)).:A \ {y};
   then consider z being set such that
-A6: z in dom(g +* ({x} --> y)) & z in A & u = (g +* ({x} --> y)).z
+A6: z in dom(g +* (x .--> y)) & z in A & u = (g +* (x .--> y)).z
   by FUNCT_1:def 12;
   now
     assume
 A7: z in {x};
-    then z in dom({x} --> y) by FUNCOP_1:19;
-    then u = ({x} --> y).z by A6,FUNCT_4:14;
+    then z in dom(x .--> y) by FUNCOP_1:19;
+    then u = (x .--> y).z by A6,FUNCT_4:14;
     then u = y by A7,FUNCOP_1:13;
     then u in {y} by TARSKI:def 1;
     hence contradiction by A5,XBOOLE_0:def 4;
   end;
   then z in A \ {x} by A6,XBOOLE_0:def 4;
-  hence u in (g +* ({x} --> y)).:(A \ {x}) by A6,FUNCT_1:def 12;
+  hence u in (g +* (x .--> y)).:(A \ {x}) by A6,FUNCT_1:def 12;
 end;
 
 reserve p,q,r,s for Element of CQC-WFF,
@@ -835,16 +835,17 @@ A5:     a=[k,h] by DOMAIN_1:9;
   end;
 end;
 
-Lm1: h+*({x} --> x.k) is Function of bound_QC-variables,bound_QC-variables
+Lm1: h+*(x .--> x.k) is Function of bound_QC-variables,bound_QC-variables
 proof
-A1: dom (h+*({x} --> x.k)) = dom h \/ dom({x}-->x.k) by FUNCT_4:def 1
+A1: dom (h+*(x .--> x.k)) = dom h \/ dom({x}-->x.k) by FUNCT_4:def 1
     .= dom h \/ {x} by FUNCOP_1:19
     .= bound_QC-variables \/ {x} by FUNCT_2:67
     .= bound_QC-variables by ZFMISC_1:46;
-A2: rng (h+*({x} --> x.k)) c= rng h \/ rng({x} --> x.k) by FUNCT_4:18;
-  rng h c= bound_QC-variables & rng({x} --> x.k) c= bound_QC-variables
+A2: rng (h+*(x .--> x.k)) c= rng h \/ rng(x .--> x.k) by FUNCT_4:18;
+  x .--> x.k = {x} --> x.k;
+  then rng h c= bound_QC-variables & rng(x .--> x.k) c= bound_QC-variables
   by RELSET_1:12;
-  then rng h \/ rng({x} --> x.k) c= bound_QC-variables by XBOOLE_1:8;
+  then rng h \/ rng(x .--> x.k) c= bound_QC-variables by XBOOLE_1:8;
   hence thesis by A1,A2,FUNCT_2:4,XBOOLE_1:1;
 end;
 
@@ -855,7 +856,7 @@ definition
   func UNIVERSAL(x,f) -> Element of
   Funcs([:NAT,Funcs(bound_QC-variables,bound_QC-variables):],CQC-WFF) means
   :Def3:
-  for k,h,p st p = f.(k+1,h +* ({x} --> x.k)) holds it.(k,h) = All(x.k,p);
+  for k,h,p st p = f.(k+1,h +* (x .--> x.k)) holds it.(k,h) = All(x.k,p);
   existence
   proof
     defpred P[Element of NAT,
@@ -864,7 +865,7 @@ definition
 A1: for k,h ex u being Element of CQC-WFF st P[k,h,u]
     proof
       let k,h;
-      reconsider h2=h+*({x} --> x.k) as Function of
+      reconsider h2=h+*(x .--> x.k) as Function of
       bound_QC-variables,bound_QC-variables by Lm1;
       reconsider h2 as Element of
       Funcs(bound_QC-variables,bound_QC-variables) by FUNCT_2:11;
@@ -880,7 +881,7 @@ A2: for k,h holds P[k,h,F.(k,h)] from BINOP_1:sch 3(A1);
     by FUNCT_2:11;
     take F;
     let k,h,p;
-    assume p=f.(k+1,h+*({x} --> x.k));
+    assume p=f.(k+1,h+*(x .--> x.k));
     hence F.(k,h)=All(x.k,p) by A2;
   end;
   uniqueness
@@ -888,9 +889,9 @@ A2: for k,h holds P[k,h,F.(k,h)] from BINOP_1:sch 3(A1);
     let F,G be Element of
     Funcs([:NAT,Funcs(bound_QC-variables,bound_QC-variables):],CQC-WFF);
     assume
-A3: for k,h,p st p = f.(k+1,h +* ({x} --> x.k)) holds F.(k,h) = All(x.k,p);
+A3: for k,h,p st p = f.(k+1,h +* (x .--> x.k)) holds F.(k,h) = All(x.k,p);
     assume
-A4: for k,h,p st p = f.(k+1,h +* ({x} --> x.k)) holds G.(k,h) = All(x.k,p);
+A4: for k,h,p st p = f.(k+1,h +* (x .--> x.k)) holds G.(k,h) = All(x.k,p);
     thus F=G
     proof
       for a being Element of
@@ -902,7 +903,7 @@ A4: for k,h,p st p = f.(k+1,h +* ({x} --> x.k)) holds G.(k,h) = All(x.k,p);
         h being Element of Funcs(bound_QC-variables,bound_QC-variables)
         such that
 A5:     a=[k,h] by DOMAIN_1:9;
-        reconsider h2=h+*({x} --> x.k) as Function of
+        reconsider h2=h+*(x .--> x.k) as Function of
         bound_QC-variables,bound_QC-variables by Lm1;
         reconsider h2 as Element of
         Funcs(bound_QC-variables,bound_QC-variables) by FUNCT_2:11;
@@ -1563,7 +1564,7 @@ definition
   (for q,r,k,K,f holds [q '&' r,k,K,f] in X implies
   [q,k,K,f] in X & [r,k+QuantNbr(q),K,f] in X) &
   for q,x,k,K,f st [All(x,q),k,K,f] in X
-  holds [q,k+1,K \/ {x}, f+*({x} --> x.k)] in X;
+  holds [q,k+1,K \/ {x}, f+*(x .--> x.k)] in X;
 end;
 
 definition
@@ -1599,23 +1600,23 @@ definition
       thus for q,r,k,K,f holds [q '&' r,k,K,f] in B implies
       [q,k,K,f] in B & [r,k+QuantNbr(q),K,f] in B by MCART_1:84;
       let q,x,k,K,f such that [All(x,q),k,K,f] in B;
-A1:   dom(f+*({x} --> x.k)) = dom f \/ dom ({x} --> x.k) by FUNCT_4:def 1
-        .= bound_QC-variables \/ dom({x} --> x.k) by FUNCT_2:def 1
+A1:   dom(f+*(x .--> x.k)) = dom f \/ dom (x .--> x.k) by FUNCT_4:def 1
+        .= bound_QC-variables \/ dom(x .--> x.k) by FUNCT_2:def 1
         .= bound_QC-variables \/ {x} by FUNCOP_1:19
         .= bound_QC-variables by ZFMISC_1:46;
-A2:   rng (f+*({x} --> x.k)) c= rng f \/ rng ({x} --> x.k) by FUNCT_4:18;
+A2:   rng (f+*(x .--> x.k)) c= rng f \/ rng (x .--> x.k) by FUNCT_4:18;
 A3:   rng f c= bound_QC-variables by RELSET_1:12;
-A4:   rng ({x} --> x.k) = {x.k} by FUNCOP_1:14;
+A4:   rng (x .--> x.k) = {x.k} by FUNCOP_1:14;
       bound_QC-variables \/ {x.k} = bound_QC-variables by ZFMISC_1:46;
-      then rng f \/ rng({x} --> x.k) c= bound_QC-variables by A3,A4,XBOOLE_1:9;
-      then dom(f+*({x} --> x.k)) = bound_QC-variables &
-      rng (f+*({x} --> x.k)) c= bound_QC-variables by A1,A2,XBOOLE_1:1;
-      then f+*({x} --> x.k) is Function of
+      then rng f \/ rng(x .--> x.k) c= bound_QC-variables by A3,A4,XBOOLE_1:9;
+      then dom(f+*(x .--> x.k)) = bound_QC-variables &
+      rng (f+*(x .--> x.k)) c= bound_QC-variables by A1,A2,XBOOLE_1:1;
+      then f+*(x .--> x.k) is Function of
       bound_QC-variables,bound_QC-variables by FUNCT_2:def 1,RELSET_1:11;
-      then reconsider ff = f+*({x} --> x.k) as Element of
+      then reconsider ff = f+*(x .--> x.k) as Element of
       Funcs(bound_QC-variables,bound_QC-variables) by FUNCT_2:11;
       [q,k+1,K \/ {.x .}, ff] in B by MCART_1:84;
-      hence [q,k+1,K \/ {x},f+*({x} --> x.k)] in B;
+      hence [q,k+1,K \/ {x},f+*(x .--> x.k)] in B;
     end;
     then
 A5: B in A;
@@ -1675,11 +1676,11 @@ A13:    ex X being Subset of S st X = Y & X is_Sep-closed_on p;
       hence [r,k+QuantNbr(q),K,f] in X by A5,SETFAM_1:def 1;
     end;
     thus for q,x,k,K,f st [All(x,q),k,K,f] in X
-    holds [q,k+1,K \/ {x}, f+*({x} --> x.k)] in X
+    holds [q,k+1,K \/ {x}, f+*(x .--> x.k)] in X
     proof
       let q,x,k,K,f such that
 A14:  [All(x,q),k,K,f] in X;
-      for Y being set st Y in A holds [q,k+1,K \/ {x},f+*({x} --> x.k)] in Y
+      for Y being set st Y in A holds [q,k+1,K \/ {x},f+*(x .--> x.k)] in Y
       proof
         let Y be set;
         assume
@@ -1687,9 +1688,9 @@ A15:    Y in A;
         then
 A16:    ex X being Subset of S st X = Y & X is_Sep-closed_on p;
         [All(x,q),k,K,f] in Y by A14,A15,SETFAM_1:def 1;
-        hence [q,k+1,K \/ {x},f+*({x} --> x.k)]in Y by A16,Def12;
+        hence [q,k+1,K \/ {x},f+*(x .--> x.k)]in Y by A16,Def12;
       end;
-      hence [q,k+1,K \/ {x},f+*({x} --> x.k)] in X by A5,SETFAM_1:def 1;
+      hence [q,k+1,K \/ {x},f+*(x .--> x.k)] in X by A5,SETFAM_1:def 1;
     end;
     let D be Subset of S;
     assume D is_Sep-closed_on p;
@@ -1738,7 +1739,7 @@ end;
 
 theorem Th34:
   for q,x,k,K,f st [All(x,q),k,K,f] in SepQuadruples p
-  holds [q,k+1,K \/ {x}, f+*({x} --> x.k)] in SepQuadruples p
+  holds [q,k+1,K \/ {x}, f+*(x .--> x.k)] in SepQuadruples p
 proof
   SepQuadruples(p) is_Sep-closed_on p by Def13;
   hence thesis by Def12;
@@ -1803,14 +1804,14 @@ A11:  [s,l,L,h] in SepQuadruples p &
       hence [r,l+QuantNbr(s),L,h] in Y by A11,ZFMISC_1:64;
     end;
     thus for q,x,k,K,f st [All(x,q),k,K,f] in Y
-    holds [q,k+1,K \/ {x}, f+*({x} --> x.k)] in Y
+    holds [q,k+1,K \/ {x}, f+*(x .--> x.k)] in Y
     proof
       let s,x,l,L,h;
       assume
 A12:  [All(x,s),l,L,h] in Y;
       then [All(x,s),l,L,h] in SepQuadruples p by XBOOLE_0:def 4;
       then
-A13:  [s,l+1,L \/ {x}, h+*({x} --> x.l)] in SepQuadruples p by A7,Def12;
+A13:  [s,l+1,L \/ {x}, h+*(x .--> x.l)] in SepQuadruples p by A7,Def12;
       now
         assume not([All(x,q),l,K,h] in SepQuadruples p or
         [All(x,q),l,K\{x},h] in SepQuadruples p);
@@ -1826,8 +1827,8 @@ A17:    K \ {x} = L \ {x} by XBOOLE_1:40;
         hence contradiction by A14,A15,A16,A17,ZFMISC_1:46,65;
       end;
       then s<>q or l+1<>k or L \/ {x} <> K or f <> h+*({x} --> x.l) by A6;
-      then [s,l+1,L \/ {x}, h+*({x} --> x.l)] <> [q,k,K,f] by MCART_1:33;
-      hence [s,l+1,L \/ {x}, h+*({x} --> x.l)] in Y by A13,ZFMISC_1:64;
+      then [s,l+1,L \/ {x}, h+*(x .--> x.l)] <> [q,k,K,f] by MCART_1:33;
+      hence [s,l+1,L \/ {x}, h+*(x .--> x.l)] in Y by A13,ZFMISC_1:64;
     end;
   end;
   then SepQuadruples p c= Y & Y c= SepQuadruples p by Def13,XBOOLE_1:36;
@@ -1848,7 +1849,7 @@ st [q '&' r, k, K,f] in SepQuadruples p() & P[q '&' r, k, K,f]
 holds P[q,k,K,f] & P[r,k+QuantNbr(q),K,f]
 and
 A4: for q,x,k,K,f st [All(x,q),k,K,f] in SepQuadruples p() & P[All(x,q),k,K,f]
-holds P[q,k+1,K \/ {x},f+*({x} --> x.k)]
+holds P[q,k+1,K \/ {x},f+*(x .--> x.k)]
 proof
 A5: SepQuadruples p() is_Sep-closed_on p() by Def13;
   set Y = { [p,k,K,f] : P[p,k,K,f] };
@@ -1907,16 +1908,16 @@ A17: [All(x,q),k,K,f] in SepQuadruples p() by XBOOLE_0:def 3;
     then consider p,i,h,L such that
 A18: [All(x,q),k,K,f] = [p,i,L,h] and
 A19: P[p,i,L,h];
-    f+*({x} --> x.k) is Function of bound_QC-variables, bound_QC-variables
+    f+*(x .--> x.k) is Function of bound_QC-variables, bound_QC-variables
     by Lm1;
-    then reconsider g = f+*({x} --> x.k) as
+    then reconsider g = f+*(x .--> x.k) as
     Element of Funcs(bound_QC-variables,bound_QC-variables) by FUNCT_2:11;
     All(x,q) = p & k = i & K = L & f = h by A18,MCART_1:33;
     then P[q,k+1,K \/ {x},g] by A4,A17,A19;
     then
-A20: [q,k+1,K \/ {.x .},f+*({x} --> x.k)] in Y;
-    [q,k+1,K \/ {x},f+*({x} --> x.k)] in SepQuadruples p() by A5,A17,Def12;
-    hence [q,k+1,K \/ {x}, f+*({x} --> x.k)] in X by A20,XBOOLE_0:def 3;
+A20: [q,k+1,K \/ {.x .},f+*(x .--> x.k)] in Y;
+    [q,k+1,K \/ {x},f+*(x .--> x.k)] in SepQuadruples p() by A5,A17,Def12;
+    hence [q,k+1,K \/ {x}, f+*(x .--> x.k)] in X by A20,XBOOLE_0:def 3;
   end;
   then
 A21: SepQuadruples p() c= X by Def13;
@@ -1949,7 +1950,7 @@ A3: now
 A4: now
     let q,x,k,K,f such that [All(x,q),k,K,f] in SepQuadruples p;
     q is_subformula_of All(x,q) by Th12;
-    hence P[All(x,q),k,K,f] implies P[q,k+1,K \/ {x},f+*({x} --> x.k)]
+    hence P[All(x,q),k,K,f] implies P[q,k+1,K \/ {x},f+*(x .--> x.k)]
     by QC_LANG2:77;
   end;
   thus for q,k,K,f st [q,k,K,f] in SepQuadruples p holds P[q,k,K,f]
@@ -2089,7 +2090,7 @@ A6: P[All(x,q),k,K,f];
     still_not-bound_in All(x,q) = still_not-bound_in q \ {x} by QC_LANG3:16;
     then still_not-bound_in q c= still_not-bound_in p \/ K \/ {x}
     by A6,XBOOLE_1:44;
-    hence P[q,k+1,K \/ {x},f+*({x} --> x.k)] by XBOOLE_1:4;
+    hence P[q,k+1,K \/ {x},f+*(x .--> x.k)] by XBOOLE_1:4;
   end;
   thus for q,k,K,f st [q,k,K,f] in SepQuadruples p holds P[q,k,K,f]
   from Sepregression(A1,A2,A3,A5);
@@ -2122,16 +2123,16 @@ A5: now
     let q,x,k,K,f such that [All(x,q),k,K,f] in SepQuadruples p;
     assume
 A6: P[All(x,q),k,K,f];
-    thus P[q,k+1,K \/ {.x .},f+*({x} --> x.k)]
+    thus P[q,k+1,K \/ {.x .},f+*(x .--> x.k)]
     proof
       let i;
-      assume x.i in (f+*({x} --> x.k)).:(K \/ {x});
-      then x.i in (f+*({x} --> x.k)).:K \/ (f+*({x} --> x.k)).:
+      assume x.i in (f+*(x .--> x.k)).:(K \/ {x});
+      then x.i in (f+*(x .--> x.k)).:K \/ (f+*(x .--> x.k)).:
       {x} by RELAT_1:153;
       then
-A7:   x.i in (f+*({x} --> x.k)).:K or x.i in Im(f+*({x} --> x.k),x)
+A7:   x.i in (f+*(x .--> x.k)).:K or x.i in Im(f+*(x .--> x.k),x)
       by XBOOLE_0:def 2;
-      (f+*({x} --> x.k)).:K c= f.:K \/ {x.k} by Th2;
+      (f+*(x .--> x.k)).:K c= f.:K \/ {x.k} by Th2;
       then x.i in f.:K or x.i in {x.k} by A7,Th1,XBOOLE_0:def 2;
       then i < k or x.i = x.k by A6,TARSKI:def 1;
       then i <= k by ZFMISC_1:33;
@@ -2180,12 +2181,12 @@ A6: now
     let q,x,k,K,f such that [All(x,q),k,K,f] in SepQuadruples p;
     assume
 A7: P[All(x,q),k,K,f];
-    thus P[q,k+1,K \/ {.x .},f+*({x} --> x.k)]
+    thus P[q,k+1,K \/ {.x .},f+*(x .--> x.k)]
     proof
       let i;
-A8:   (f+*({x} --> x.k)).:still_not-bound_in p
+A8:   (f+*(x .--> x.k)).:still_not-bound_in p
       c= f.:(still_not-bound_in p) \/ {x.k} by Th2;
-      assume x.i in (f+*({x} --> x.k)).:still_not-bound_in p;
+      assume x.i in (f+*(x .--> x.k)).:still_not-bound_in p;
       then x.i in f.:still_not-bound_in p or x.i in {x.k} by A8,XBOOLE_0:def 2;
       then i < k or x.i = x.k by A7,TARSKI:def 1;
       then i <= k by ZFMISC_1:33;
@@ -2361,9 +2362,9 @@ A26: P[r];
       [:NAT,Funcs(bound_QC-variables,bound_QC-variables):], CQC-WFF;
       let m,K,f such that
 A27:  [All(x,r),m,K,f] in SepQuadruples p;
-      f+*({x} --> x.m) is Function of bound_QC-variables, bound_QC-variables
+      f+*(x .--> x.m) is Function of bound_QC-variables, bound_QC-variables
       by Lm1;
-      then reconsider fm = f +* ({x} --> x.m) as
+      then reconsider fm = f +* (x .--> x.m) as
       Element of Funcs(bound_QC-variables,bound_QC-variables) by FUNCT_2:11;
       reconsider r'' = g.(m+1,fm) as Element of CQC-WFF;
 A28:  still_not-bound_in All(x, r) = still_not-bound_in r \ {x}
@@ -2371,7 +2372,7 @@ A28:  still_not-bound_in All(x, r) = still_not-bound_in r \ {x}
       then
 A29:  not x.m in f.:(still_not-bound_in r \ {x}) by A27,Th43;
 A30:  UNIVERSAL(x,g).(m,f) = All(x.m,r'') by Def3;
-A31:  [r,m+1,K \/ {.x .}, f+*({x} --> x.m)] in SepQuadruples p by A27,Th34;
+A31:  [r,m+1,K \/ {.x .}, f+*(x .--> x.m)] in SepQuadruples p by A27,Th34;
       thus f.:(still_not-bound_in All(x, r))
       = fm.:(still_not-bound_in r \ {x}) by A28,Th3
         .= fm.:(still_not-bound_in r) \ {x.m} by A29,Th4

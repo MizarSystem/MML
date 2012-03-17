@@ -22,7 +22,7 @@
 <ArticleID name="PROB_2"/>
 <ArticleID name="DYNKIN"/>
 </Signature>
-<FCluster>
+<FCluster aid="DYNKIN" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -36,7 +36,7 @@
 <Adjective nr="20"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="DYNKIN" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -58,7 +58,7 @@
 <Adjective nr="5"/>
 </Cluster>
 </FCluster>
-<CCluster>
+<CCluster aid="DYNKIN" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>

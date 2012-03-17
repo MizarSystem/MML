@@ -68,7 +68,7 @@
 <ArticleID name="BROUWER"/>
 <ArticleID name="JORDAN"/>
 </Signature>
-<RCluster>
+<RCluster aid="JORDAN" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster>
@@ -106,7 +106,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="JORDAN" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -138,7 +138,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="JORDAN" nr="3">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -170,7 +170,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="JORDAN" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
@@ -201,7 +201,7 @@
 <Adjective nr="21" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="JORDAN" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -233,7 +233,7 @@
 <Adjective nr="21" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="JORDAN" nr="3">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -259,7 +259,7 @@
 <Adjective nr="111"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="JORDAN" nr="4">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -285,7 +285,7 @@
 <Adjective nr="112"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="JORDAN" nr="5">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -311,7 +311,7 @@
 <Adjective nr="112"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="JORDAN" nr="6">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -337,7 +337,7 @@
 <Adjective nr="111"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="JORDAN" nr="7">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -363,7 +363,7 @@
 <Adjective nr="112"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="JORDAN" nr="8">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -389,7 +389,7 @@
 <Adjective nr="112"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="JORDAN" nr="9">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -439,7 +439,7 @@
 <Adjective nr="1" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="JORDAN" nr="10">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -472,7 +472,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="JORDAN" nr="11">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -505,7 +505,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="JORDAN" nr="12">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -534,7 +534,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="JORDAN" nr="13">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -559,7 +559,7 @@
 <Adjective nr="59"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="JORDAN" nr="14">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -596,7 +596,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="JORDAN" nr="15">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -637,7 +637,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="JORDAN" nr="16">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -678,7 +678,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="JORDAN" nr="17">
 <ArgTypes/>
 <Func kind="K" nr="495"/>
 <Cluster>
@@ -708,7 +708,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="JORDAN" nr="18">
 <ArgTypes/>
 <Func kind="K" nr="496"/>
 <Cluster>
@@ -738,7 +738,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="JORDAN" nr="19">
 <ArgTypes/>
 <Func kind="K" nr="497"/>
 <Cluster>
@@ -768,7 +768,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="JORDAN" nr="20">
 <ArgTypes/>
 <Func kind="K" nr="498"/>
 <Cluster>
@@ -798,7 +798,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="JORDAN" nr="21">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster>
@@ -821,7 +821,7 @@
 <Adjective nr="1" value="false"/>
 </Cluster>
 </FCluster>
-<CCluster>
+<CCluster aid="JORDAN" nr="1">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="1" value="false"/>
@@ -846,7 +846,7 @@
 <Adjective nr="118"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="JORDAN" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -872,7 +872,7 @@
 </Adjective>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="JORDAN" nr="3">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -898,7 +898,7 @@
 <Adjective nr="1" value="false"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="JORDAN" nr="4">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster>
@@ -934,7 +934,7 @@
 </Adjective>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="JORDAN" nr="5">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>

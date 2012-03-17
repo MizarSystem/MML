@@ -18,7 +18,7 @@
 <ArticleID name="WAYBEL_0"/>
 <ArticleID name="ORDERS_4"/>
 </Signature>
-<RCluster>
+<RCluster aid="ORDERS_4" nr="1">
 <ArgTypes/>
 <Typ kind="M" nr="10">
 <Cluster/>
@@ -30,7 +30,7 @@
 <Adjective nr="27"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="ORDERS_4" nr="2">
 <ArgTypes/>
 <Typ kind="M" nr="10">
 <Cluster/>
@@ -43,7 +43,7 @@
 <Adjective nr="27"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="ORDERS_4" nr="3">
 <ArgTypes/>
 <Typ kind="M" nr="10">
 <Cluster/>
@@ -55,7 +55,7 @@
 <Adjective nr="62"/>
 </Cluster>
 </RCluster>
-<CCluster>
+<CCluster aid="ORDERS_4" nr="1">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="15"/>
@@ -69,7 +69,7 @@
 <Adjective nr="27"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="ORDERS_4" nr="2">
 <ArgTypes/>
 <Cluster/>
 <Typ kind="M" nr="10">
@@ -81,7 +81,7 @@
 <Adjective nr="27"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="ORDERS_4" nr="3">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="15" value="false"/>
@@ -94,7 +94,7 @@
 <Adjective nr="52"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="ORDERS_4" nr="4">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
@@ -118,7 +118,7 @@
 <Adjective nr="52"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="ORDERS_4" nr="5">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>

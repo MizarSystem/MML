@@ -9,7 +9,7 @@ environ
  vocabularies MSUALG_1, FUNCT_1, FUNCOP_1, PRALG_1, RELAT_1, CARD_3, FINSEQ_1,
       FINSEQ_2, AMI_1, ZF_REFLE, FUNCT_4, BOOLE, PBOOLE, PARTFUN1, TDGROUP,
       MSAFREE2, FINSET_1, QC_LANG1, PRE_CIRC, CIRCUIT1, CLASSES1, MCART_1,
-      MARGREL1, LATTICES, CIRCCOMB;
+      MARGREL1, LATTICES, CIRCCOMB, CAT_1;
  notations TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, NAT_1, MCART_1, RELAT_1,
       FUNCT_1, FINSEQ_1, FINSEQ_2, FINSET_1, FUNCT_2, FUNCOP_1, PARTFUN1,
       FUNCT_4, CARD_3, CLASSES1, MARGREL1, PBOOLE, STRUCT_0, MSUALG_1,
@@ -17,7 +17,7 @@ environ
  constructors CLASSES1, MARGREL1, CIRCUIT1, CIRCUIT2;
  registrations XBOOLE_0, RELAT_1, FUNCT_1, ORDINAL1, FUNCOP_1, FINSET_1,
       FRAENKEL, MARGREL1, FINSEQ_2, CARD_3, PBOOLE, STRUCT_0, MSUALG_1,
-      MSUALG_2, MSAFREE2;
+      MSUALG_2, MSAFREE2, FUNCT_7;
  requirements NUMERALS, BOOLE, SUBSET;
  definitions TARSKI, PARTFUN1, MSUALG_1, PRE_CIRC, MSAFREE2, STRUCT_0, RELAT_1,
       XBOOLE_0, FUNCOP_1, PBOOLE;
@@ -98,6 +98,22 @@ definition
     then dom (f+*g) = A \/ B by FUNCT_4:def 1;
     hence thesis by PBOOLE:def 3;
   end;
+end;
+
+definition
+  let A,B be set;
+ redefine func A .--> B -> ManySortedSet of {A};
+ coherence
+  proof
+    A.-->B = {A} --> B;
+   hence A .--> B is ManySortedSet of {A};
+  end;
+end;
+
+registration
+  let A be set, B be non empty set;
+ cluster A .--> B -> non-empty;
+ coherence;
 end;
 
 canceled;
@@ -1395,8 +1411,8 @@ end;
 
 theorem Th43:
   for f,x being set, p being FinSequence holds
-  the Arity of 1GateCircStr(p,f,x) = {[p,f]} --> p &
-  the ResultSort of 1GateCircStr(p,f,x) = {[p,f]} --> x
+  the Arity of 1GateCircStr(p,f,x) = (p,f) .--> p &
+  the ResultSort of 1GateCircStr(p,f,x) = (p,f) .--> x
 proof
   let f,x be set, p be FinSequence;
   set S = 1GateCircStr(p,f,x);
@@ -1407,7 +1423,7 @@ A2: dom the Arity of S = {[p,f]} & dom the ResultSort of S = {[p,f]}
   by FUNCT_2:def 1;
   for x being set st x in {[p,f]} holds (the Arity of S).x = p
   by A1,TARSKI:def 1;
-  hence the Arity of S = {[p,f]} --> p by A2,FUNCOP_1:17;
+  hence the Arity of S = (p,f) .--> p by A2,FUNCOP_1:17;
   for y being set st y in {[p,f]} holds (the ResultSort of S).y = x
   by A1,TARSKI:def 1;
   hence thesis by A2,FUNCOP_1:17;
@@ -1435,7 +1451,7 @@ proof
   let f,x be set;
   let p be FinSequence;
   the OperSymbols of 1GateCircStr(p,f,x) is non empty &
-  the ResultSort of 1GateCircStr(p,f,x) = {[p,f]} --> x
+  the ResultSort of 1GateCircStr(p,f,x) = (p,f) .--> x
   by Th43,MSUALG_1:def 5;
   then
 A1: rng the ResultSort of 1GateCircStr(p,f,x) = {x} by FUNCOP_1:14;
@@ -1490,8 +1506,8 @@ end;
 
 theorem Th47:
   for f being set, p being FinSequence holds
-  the Arity of 1GateCircStr(p,f) = {[p,f]} --> p &
-  the ResultSort of 1GateCircStr(p,f) = {[p,f]} --> [p,f]
+  the Arity of 1GateCircStr(p,f) = (p,f) .--> p &
+  the ResultSort of 1GateCircStr(p,f) = (p,f) .--> [p,f]
 proof
   let f be set, p be FinSequence;
   set S = 1GateCircStr(p,f);
@@ -1502,7 +1518,7 @@ A2: dom the Arity of S = {[p,f]} & dom the ResultSort of S = {[p,f]}
   by FUNCT_2:def 1;
   for x being set st x in {[p,f]} holds (the Arity of S).x = p
   by A1,TARSKI:def 1;
-  hence the Arity of 1GateCircStr(p,f) = {[p,f]} --> p by A2,FUNCOP_1:17;
+  hence the Arity of 1GateCircStr(p,f) = (p,f) .--> p by A2,FUNCOP_1:17;
   for x being set st x in {[p,f]} holds (the ResultSort of S).x = [p,f]
   by A1,TARSKI:def 1;
   hence thesis by A2,FUNCOP_1:17;
@@ -1530,7 +1546,7 @@ proof
   let f be set;
   let p be FinSequence;
 A1: the OperSymbols of 1GateCircStr(p,f) is non empty &
-  the ResultSort of 1GateCircStr(p,f) = {[p,f]} --> [p,f]
+  the ResultSort of 1GateCircStr(p,f) = (p,f) .--> [p,f]
   by Th47,MSUALG_1:def 5;
   then
 A2: rng the ResultSort of 1GateCircStr(p,f) = {[p,f]} by FUNCOP_1:14;
@@ -1585,9 +1601,9 @@ theorem Th51:
 proof
   let f be set, p,q be FinSequence;
   set S1 = 1GateCircStr(p,f), S2 = 1GateCircStr(q,f);
-A1: the Arity of S1 = {[p,f]} --> p & the Arity of S2 = {[q,f]} --> q by Th47;
-A2: the ResultSort of S1 = {[p,f]} --> [p,f] &
-  the ResultSort of S2 = {[q,f]} --> [q,f] by Th47;
+A1: the Arity of S1 = (p,f) .--> p & the Arity of S2 = (q,f) .--> q by Th47;
+A2: the ResultSort of S1 = (p,f) .--> [p,f] &
+  the ResultSort of S2 = (q,f) .--> [q,f] by Th47;
 A3: [p,f] <> [q,f] implies {[p,f]} misses {[q,f]} by ZFMISC_1:17;
   hence the Arity of S1 tolerates the Arity of S2 by A1,Th4,ZFMISC_1:33;
   thus thesis by A2,A3,Th4;
@@ -1983,20 +1999,20 @@ definition
 A1: x in rng p implies X = Y;
   func 1GateCircuit(p,f,x) ->
   strict non-empty MSAlgebra over 1GateCircStr(p,f,x) means
-  the Sorts of it = ((rng p) --> X) +* ({x} --> Y) &
+  the Sorts of it = ((rng p) --> X) +* (x .--> Y) &
   (the Charact of it).[p,f] = f;
   existence
   proof
     set S = 1GateCircStr(p,f,x);
-    set g1 = (rng p) --> X, g2 = {x} --> Y;
+    set g1 = (rng p) --> X, g2 = x .--> Y;
     set SORTS = g1 +* g2;
     set CHARACT = (the OperSymbols of S) --> f;
 A2: the carrier of S = (rng p) \/ {x} & the OperSymbols of S = {[p,f]} &
     (the Arity of S).[p,f] = p & (the ResultSort of S).[p,f] = x by Def5;
-A3: x in {x} & dom ({x} --> Y) = {x} & dom ((rng p) --> X) = rng p
+A3: x in {x} & dom (x .--> Y) = {x} & dom ((rng p) --> X) = rng p
     by FUNCOP_1:19,TARSKI:def 1;
     then
-A4: SORTS.x = ({x} --> Y).x by FUNCT_4:14
+A4: SORTS.x = (x .--> Y).x by FUNCT_4:14
       .= Y by A3,FUNCOP_1:13;
     reconsider SORTS as non-empty ManySortedSet of the carrier of S by Def5;
 A5: dom the Arity of S = {[p,f]} & dom the ResultSort of S = {[p,f]}
@@ -2192,7 +2208,7 @@ end;
 theorem Th62:
   for n being Nat, X being non empty set, f being Function of n-tuples_on X, X
   for p being FinSeqLen of n holds
-  the Charact of 1GateCircuit(p,f) = {[p,f]} --> f &
+  the Charact of 1GateCircuit(p,f) = (p,f) .--> f &
   for v being Vertex of 1GateCircStr(p,f) holds
   (the Sorts of 1GateCircuit(p,f)).v = X
 proof
@@ -2205,7 +2221,7 @@ A1: dom the Charact of A = {[p,f]} by PBOOLE:def 3;
   (the Charact of A).[p,f] = f by Def14;
   then for x being set st x in {[p,f]} holds (the Charact of A).x = f
   by TARSKI:def 1;
-  hence the Charact of A = {[p,f]} --> f by A1,FUNCOP_1:17;
+  hence the Charact of A = (p,f) .--> f by A1,FUNCOP_1:17;
   let v be Vertex of S;
   the Sorts of A = (the carrier of S) --> X by Def14;
   hence thesis by FUNCOP_1:13;
@@ -2239,7 +2255,7 @@ proof
   the Sorts of A1 = (the carrier of S1) --> X &
   the Sorts of A2 = (the carrier of S2) --> X by Def14;
   hence the Sorts of A1 tolerates the Sorts of A2 by Th4;
-  the Charact of A1 = {[p,f]} --> f & the Charact of A2 = {[q,f]} --> f
+  the Charact of A1 = (p,f) .--> f & the Charact of A2 = (q,f) .--> f
   by Th62;
   hence thesis by Th4;
 end;

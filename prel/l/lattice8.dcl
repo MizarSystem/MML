@@ -44,7 +44,7 @@
 <ArticleID name="YELLOW11"/>
 <ArticleID name="LATTICE8"/>
 </Signature>
-<RCluster>
+<RCluster aid="LATTICE8" nr="1">
 <ArgTypes/>
 <Typ kind="G" nr="5">
 <Cluster/>
@@ -61,7 +61,7 @@
 <Adjective nr="125"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="LATTICE8" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -71,7 +71,7 @@
 </ArgTypes>
 <Typ kind="M" nr="21">
 <Cluster/>
-<Func kind="K" nr="292">
+<Func kind="K" nr="293">
 <LocusVar nr="1"/>
 </Func>
 </Typ>
@@ -79,37 +79,37 @@
 <Adjective nr="35" value="false"/>
 <Adjective nr="40" value="false"/>
 <Adjective nr="61">
-<Func kind="K" nr="292">
+<Func kind="K" nr="293">
 <LocusVar nr="1"/>
 </Func>
 </Adjective>
 <Adjective nr="62">
-<Func kind="K" nr="292">
+<Func kind="K" nr="293">
 <LocusVar nr="1"/>
 </Func>
 </Adjective>
 <Adjective nr="63">
-<Func kind="K" nr="292">
+<Func kind="K" nr="293">
 <LocusVar nr="1"/>
 </Func>
 </Adjective>
 <Adjective nr="135"/>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="LATTICE8" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="312">
+<Func kind="K" nr="313">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
 <Adjective nr="14" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="LATTICE8" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -122,7 +122,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="314">
+<Func kind="K" nr="315">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -130,7 +130,7 @@
 <Adjective nr="14" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="LATTICE8" nr="3">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -169,7 +169,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="318">
+<Func kind="K" nr="319">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>

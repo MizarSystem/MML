@@ -13,9 +13,9 @@
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XCMPLX_0"/>
 <ArticleID name="XREAL_0"/>
-<ArticleID name="MEMBERED"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
+<ArticleID name="MEMBERED"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
@@ -37,7 +37,7 @@
 <ArticleID name="GOBOARD1"/>
 <ArticleID name="GOBOARD2"/>
 </Signature>
-<FCluster>
+<FCluster aid="GOBOARD2" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="7">
 <Cluster>
@@ -57,7 +57,7 @@
 <Adjective nr="7" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="GOBOARD2" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="7">
 <Cluster>
@@ -77,7 +77,7 @@
 <Adjective nr="7" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="GOBOARD2" nr="3">
 <ArgTypes>
 <Typ kind="M" nr="7">
 <Cluster>
@@ -103,7 +103,7 @@
 <Adjective nr="114"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="GOBOARD2" nr="4">
 <ArgTypes>
 <Typ kind="M" nr="7">
 <Cluster>
@@ -130,7 +130,7 @@
 <Adjective nr="116"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="GOBOARD2" nr="5">
 <ArgTypes>
 <Typ kind="M" nr="7">
 <Cluster>
@@ -147,7 +147,7 @@
 <Adjective nr="111"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="GOBOARD2" nr="6">
 <ArgTypes>
 <Typ kind="M" nr="7">
 <Cluster>

@@ -33,7 +33,7 @@
 <ArticleID name="MATRIXR1"/>
 <ArticleID name="MATRPROB"/>
 </Signature>
-<RCluster>
+<RCluster aid="MATRPROB" nr="1">
 <ArgTypes/>
 <Typ kind="M" nr="7">
 <Cluster/>
@@ -51,7 +51,7 @@
 <Adjective nr="105"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="MATRPROB" nr="2">
 <ArgTypes/>
 <Typ kind="M" nr="7">
 <Cluster/>
@@ -70,7 +70,7 @@
 <Adjective nr="108"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="MATRPROB" nr="3">
 <ArgTypes/>
 <Typ kind="M" nr="7">
 <Cluster/>
@@ -89,7 +89,7 @@
 <Adjective nr="110"/>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="MATRPROB" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -134,7 +134,7 @@
 <LocusVar nr="2"/>
 </Typ>
 </FCluster>
-<FCluster>
+<FCluster aid="MATRPROB" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -172,7 +172,7 @@
 <LocusVar nr="1"/>
 </Typ>
 </FCluster>
-<FCluster>
+<FCluster aid="MATRPROB" nr="3">
 <ArgTypes>
 <Typ kind="M" nr="7">
 <Cluster>
@@ -193,7 +193,7 @@
 <Adjective nr="105"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="MATRPROB" nr="4">
 <ArgTypes>
 <Typ kind="M" nr="7">
 <Cluster>
@@ -214,7 +214,7 @@
 <Adjective nr="105"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="MATRPROB" nr="5">
 <ArgTypes>
 <Typ kind="M" nr="7">
 <Cluster>
@@ -235,7 +235,7 @@
 <Adjective nr="85"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="MATRPROB" nr="6">
 <ArgTypes>
 <Typ kind="M" nr="7">
 <Cluster>
@@ -257,7 +257,7 @@
 <Adjective nr="108"/>
 </Cluster>
 </FCluster>
-<CCluster>
+<CCluster aid="MATRPROB" nr="1">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="85"/>
@@ -275,7 +275,7 @@
 <Adjective nr="107"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="MATRPROB" nr="2">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="85"/>
@@ -293,7 +293,7 @@
 <Adjective nr="108"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="MATRPROB" nr="3">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="85"/>
@@ -311,7 +311,7 @@
 <Adjective nr="109"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="MATRPROB" nr="4">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="85"/>

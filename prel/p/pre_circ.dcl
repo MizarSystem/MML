@@ -30,7 +30,7 @@
 <ArticleID name="TREES_4"/>
 <ArticleID name="INT_1"/>
 </Signature>
-<RCluster>
+<RCluster aid="PRE_CIRC" nr="1">
 <ArgTypes/>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -41,7 +41,7 @@
 <Adjective nr="28"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="PRE_CIRC" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -58,7 +58,7 @@
 <Adjective nr="19"/>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="PRE_CIRC" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -76,7 +76,7 @@
 <Adjective nr="22"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="PRE_CIRC" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -98,7 +98,7 @@
 <Adjective nr="2"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="PRE_CIRC" nr="3">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -126,7 +126,7 @@
 <Adjective nr="41"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="PRE_CIRC" nr="4">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -163,7 +163,7 @@
 <Adjective nr="41"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="PRE_CIRC" nr="5">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -179,7 +179,7 @@
 <Adjective nr="41"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="PRE_CIRC" nr="6">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -197,7 +197,7 @@
 <Adjective nr="48"/>
 </Cluster>
 </FCluster>
-<CCluster>
+<CCluster aid="PRE_CIRC" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>

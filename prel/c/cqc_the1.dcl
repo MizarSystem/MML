@@ -22,7 +22,7 @@
 <ArticleID name="CQC_LANG"/>
 <ArticleID name="CQC_THE1"/>
 </Signature>
-<FCluster>
+<FCluster aid="CQC_THE1" nr="1">
 <ArgTypes/>
 <Func kind="K" nr="180"/>
 <Cluster>

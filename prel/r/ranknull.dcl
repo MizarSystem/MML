@@ -36,7 +36,7 @@
 <ArticleID name="MATRIX_1"/>
 <ArticleID name="MATRLIN"/>
 </Signature>
-<RCluster>
+<RCluster aid="RANKNULL" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="10">
 <Cluster>
@@ -79,7 +79,7 @@
 <Adjective nr="19"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="RANKNULL" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="10">
 <Cluster>
@@ -159,7 +159,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="RANKNULL" nr="3">
 <ArgTypes>
 <Typ kind="G" nr="10">
 <Cluster>
@@ -205,7 +205,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="RANKNULL" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="10">
 <Cluster>

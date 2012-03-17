@@ -33,7 +33,7 @@
 <ArticleID name="COMSEQ_3"/>
 <ArticleID name="SIN_COS"/>
 </Signature>
-<FCluster>
+<FCluster aid="SIN_COS" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -52,7 +52,7 @@
 <Adjective nr="19"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="SIN_COS" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -71,7 +71,7 @@
 <Adjective nr="49"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="SIN_COS" nr="3">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -86,7 +86,7 @@
 <Adjective nr="19"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="SIN_COS" nr="4">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -101,7 +101,7 @@
 <Adjective nr="19"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="SIN_COS" nr="5">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>

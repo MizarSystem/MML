@@ -15,7 +15,7 @@
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="CONNSP_3"/>
 </Signature>
-<RCluster>
+<RCluster aid="CONNSP_3" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>

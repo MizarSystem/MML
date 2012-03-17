@@ -43,7 +43,7 @@
 <ArticleID name="WAYBEL_3"/>
 <ArticleID name="WAYBEL_6"/>
 </Signature>
-<RCluster>
+<RCluster aid="WAYBEL_6" nr="1">
 <ArgTypes/>
 <Typ kind="G" nr="6">
 <Cluster/>
@@ -62,7 +62,7 @@
 <Adjective nr="138"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="WAYBEL_6" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
@@ -111,7 +111,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="WAYBEL_6" nr="3">
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
@@ -146,7 +146,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="WAYBEL_6" nr="4">
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
@@ -169,7 +169,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="WAYBEL_6" nr="5">
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
@@ -191,7 +191,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<CCluster>
+<CCluster aid="WAYBEL_6" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>

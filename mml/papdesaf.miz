@@ -504,10 +504,16 @@ proof
   let o,u,v,u1,v1 be VECTOR of V, r be Real such that
 A1: o-u=r*(u1-o) & r<>0 and
 A2: o,v '||' o,v1 and
-A3: not o,u '||' o,v and u,v '||' u1,v1;
+A3: not o,u '||' o,v and
+X: u,v '||' u1,v1;
   set w = u1 + (-r)"*(v-u);
 A4: -r <> 0 by A1;
-  1*(v-u) = (-r)*(w-u1)
+B6: 1*(u-o) = (-r)*(u1-o) proof 1*(u-o) = (-1)*(-(u-o)) by RLVECT_1:40
+ .= (-1)*(r*(u1-o)) by A1,RLVECT_1:47
+ .= ((-1)*r)*(u1-o) by RLVECT_1:def 9 .= (-r)*(u1-o); hence thesis; end;
+B7: o,u '||' o,u1 proof o,u // o,u1 or o,u // u1,o by B6,ANALMETR:18;
+ hence thesis by GEOMTRAP:def 1; end;
+B8: 1*(v-u) = (-r)*(w-u1)
   proof (-r)*(w-u1) = (-r)*((-r)"*(v-u)) by RLSUB_2:78
       .= ((-r)*(-r)")*(v-u) by RLVECT_1:def 9
       .= 1*(v-u) by A4,XCMPLX_0:def 7;
@@ -515,6 +521,8 @@ A4: -r <> 0 by A1;
   end;
   then
 A5: v-u = (-r)*(w-u1) by RLVECT_1:def 9;
+B10: u,v '||' u1,w proof u,v // u1,w or u,v // w,u1 by B8,ANALMETR:18;
+ hence thesis by GEOMTRAP:def 1; end;
 A6: 1*(o-v) = (-r)*(o-w)
   proof (-r)*(o-w) = (-r)*o - (-r)*w by RLVECT_1:48
       .=
@@ -564,8 +572,14 @@ A11: r1<>0 or -r2<>0;
   end;
   then reconsider X = OASpace(V) as OAffinSpace by ANALOAF:38;
   reconsider p=o,a=u,a1=u1,b=v,b1=v1,q=w as Element of X by Th4;
+D12: o,v '||' o,v1 by A2;
+E12: o,v '||' o,w by A9;
+B12: u,v '||' u1,v1 by X;
+C12: u,v '||' u1,w by X,B7,B10,A9,Th5;
+     o,u '||' o,u1 by X,B7,B10,A9,Th5;
+  then
 A12: p,a '||' p,a1 & a,b '||' a1,b1 &
-  a,b '||' a1,q & p,b '||' p,b1 & p,b '||' p,q by A2,A9,Th5;
+  a,b '||' a1,q & p,b '||' p,b1 & p,b '||' p,q by E12,B12,C12,D12,Th5;
 A13: not LIN p,b,a
   proof
     assume LIN p,b,a;

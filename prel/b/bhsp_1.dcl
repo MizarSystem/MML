@@ -22,7 +22,7 @@
 <ArticleID name="NORMSP_1"/>
 <ArticleID name="BHSP_1"/>
 </Signature>
-<RCluster>
+<RCluster aid="BHSP_1" nr="1">
 <ArgTypes/>
 <Typ kind="G" nr="13">
 <Cluster/>
@@ -31,7 +31,7 @@
 <Adjective nr="80"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="BHSP_1" nr="2">
 <ArgTypes/>
 <Typ kind="G" nr="13">
 <Cluster/>
@@ -41,7 +41,7 @@
 <Adjective nr="80"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="BHSP_1" nr="3">
 <ArgTypes/>
 <Typ kind="G" nr="13">
 <Cluster/>
@@ -57,7 +57,7 @@
 <Adjective nr="81"/>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="BHSP_1" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>

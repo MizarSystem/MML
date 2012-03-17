@@ -36,7 +36,7 @@
 <ArticleID name="MATRIX_1"/>
 <ArticleID name="GOBOARD1"/>
 </Signature>
-<CCluster>
+<CCluster aid="JORDAN7" nr="1">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="111"/>

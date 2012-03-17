@@ -28,7 +28,7 @@
 <ArticleID name="CLOSURE2"/>
 <ArticleID name="CLOSURE3"/>
 </Signature>
-<RCluster>
+<RCluster aid="CLOSURE3" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -93,7 +93,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="CLOSURE3" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="1">
 <Cluster>
@@ -111,7 +111,7 @@
 <Adjective nr="28" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="CLOSURE3" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -141,7 +141,7 @@
 <Adjective nr="4"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="CLOSURE3" nr="3">
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
@@ -182,7 +182,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="CLOSURE3" nr="4">
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>

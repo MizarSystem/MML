@@ -30,7 +30,7 @@
 <ArticleID name="VALUED_1"/>
 <ArticleID name="RLVECT_2"/>
 </Signature>
-<RCluster>
+<RCluster aid="RLVECT_2" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="1">
 <Cluster/>
@@ -49,7 +49,7 @@
 <Adjective nr="21"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="RLVECT_2" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="1">
 <Cluster>
@@ -70,7 +70,7 @@
 <Adjective nr="21"/>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="RLVECT_2" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="11">
 <Cluster>
@@ -90,7 +90,7 @@
 <Adjective nr="7" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="RLVECT_2" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="11">
 <Cluster>
@@ -111,7 +111,7 @@
 <Adjective nr="72"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="RLVECT_2" nr="3">
 <ArgTypes>
 <Typ kind="G" nr="11">
 <Cluster>

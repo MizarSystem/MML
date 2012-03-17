@@ -15,7 +15,7 @@
 <ArticleID name="XREAL_0"/>
 <ArticleID name="SQUARE_1"/>
 </Signature>
-<FCluster>
+<FCluster aid="SQUARE_1" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -30,7 +30,7 @@
 <Adjective nr="15"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="SQUARE_1" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>

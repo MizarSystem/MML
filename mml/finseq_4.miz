@@ -21,14 +21,14 @@ environ
       FUNCT_2, INT_1, NAT_1, PARTFUN1, REAL_1, TARSKI, WELLORD2, ZFMISC_1,
       RELAT_1, RELSET_1, XBOOLE_0, XBOOLE_1, XREAL_1, XXREAL_0, ORDINAL1,
       GRFUNC_1;
- schemes FINSEQ_1, FINSET_1, NAT_1, WELLORD2;
+ schemes FINSEQ_1, FINSET_1, NAT_1, WELLORD2, FINSEQ_2;
 
 begin
 
 reserve f for Function;
 reserve p,q for FinSequence;
 reserve A,B,C,x,x1,x2,y,z for set;
-reserve i,k,l,m,n for Element of NAT;
+reserve i,k,l,m,n for Nat;
 reserve a for Nat;
 
 definition
@@ -572,7 +572,13 @@ proof
 A1: x in rng p and
 A2: for k st k in dom p & k <> x..p holds p.k <> x;
 A3: p.(x..p) = x & x..p in dom p by A1,Th29,Th30;
-  for z st z in dom p & z <> x..p holds p.z <> x by A2;
+  for z st z in dom p & z <> x..p holds p.z <> x
+   proof let z;
+    assume
+Z:     z in dom p;
+     then z is Nat by ORDINAL1:def 13;
+    hence thesis by Z,A2;
+   end;
   hence thesis by A3,Th9;
 end;
 
@@ -642,6 +648,8 @@ A2: len(p - {x}) = len p - card(p " {x}) by FINSEQ_3:66;
   hence thesis by Def2;
 end;
 
+reserve L,M for Element of NAT;
+
 theorem Th41:
   p just_once_values x implies for k st k in dom(p - {x}) holds
   (k < x..p implies (p - {x}).k = p.k) &
@@ -655,9 +663,9 @@ A2: x in rng p by Th7;
   assume
 A3: k in dom(p - {x});
 A4: dom(p - {x}) c= dom p by FINSEQ_3:70;
-  set A = {l : l in dom p & l <= k & p.l in {x}};
+  set A = {L : L in dom p & L <= k & p.L in {x}};
   set q = p - {x};
-  set B = {m : m in dom p & m <= k + 1 & p.m in {x}};
+  set B = {M : M in dom p & M <= k + 1 & p.M in {x}};
   thus k < x..p implies (p - {x}).k = p.k
   proof
     assume
@@ -668,11 +676,11 @@ A6: A = {}
       proof
         let y;
         assume y in A;
-        then consider l such that y = l and
-A7:     l in dom p and
-A8:     l <= k and
-A9:     p.l in {x};
-        p.l <> x & p.l = x by A1,A5,A7,A8,A9,Th36,TARSKI:def 1;
+        then consider L such that y = L and
+A7:     L in dom p and
+A8:     L <= k and
+A9:     p.L in {x};
+        p.L <> x & p.L = x by A1,A5,A7,A8,A9,Th36,TARSKI:def 1;
         hence thesis;
       end;
       thus {} c= A by XBOOLE_1:2;
@@ -690,12 +698,12 @@ A11: B = {x..p}
     proof
       let y;
       assume y in B;
-      then consider m such that
-A12:  m = y and
-A13:  m in dom p and m <= k + 1 and
-A14:  p.m in {x};
-      p.m = x by A14,TARSKI:def 1;
-      then m = x..p by A1,A13,Th36;
+      then consider M such that
+A12:  M = y and
+A13:  M in dom p and M <= k + 1 and
+A14:  p.M in {x};
+      p.M = x by A14,TARSKI:def 1;
+      then M = x..p by A1,A13,Th36;
       hence thesis by A12,TARSKI:def 1;
     end;
     let y;
@@ -1155,7 +1163,7 @@ A2: len p = len p - x..p + x..p
     .= len q1 + len<* x *> + len q2 by FINSEQ_1:57
     .= len r + len q2 by FINSEQ_1:35;
 A3: now
-    let k;
+    let k be Element of NAT;
     assume
 A4: k in dom r;
     now per cases by A4,FINSEQ_1:38;
@@ -1180,7 +1188,7 @@ A8:     n = 1 by TARSKI:def 1;
     hence p.k = r.k;
   end;
   now
-    let k;
+    let k be Element of NAT;
     assume k in dom q2;
     then q2.k = p.(x..p - 1 + 1 + k) by A1,Def7
       .= p.(len q1 + 1 + k) by A1,Th46
@@ -1472,11 +1480,7 @@ proof
   assume
 A1: A is finite;
   defpred P[set] means ex p st rng p = $1 & p is one-to-one;
-  now reconsider p = {} as FinSequence;
-    take p;
-    thus rng p = {} by RELAT_1:60;
-    thus p is one-to-one;
-  end;
+  rng {} = {};
   then
 A2: P[{}];
   now
@@ -1563,7 +1567,7 @@ end;
 theorem Th74:
   rng p c= dom p & p is one-to-one implies rng p = dom p
 proof
-  defpred P[Element of NAT] means
+  defpred P[Nat] means
   for q st len q = $1 & rng q c= dom q & q is one-to-one holds rng q = dom q;
   now
     let q;
@@ -1571,8 +1575,7 @@ proof
 A1: len q = 0;
     assume rng q c= dom q & q is one-to-one;
     q = {} by A1,CARD_2:59;
-    then dom q = {} & rng q = {} by RELAT_1:60;
-    hence rng q = dom q;
+    hence rng q = dom q by RELAT_1:60;
   end;
   then
 A2: P[0];
@@ -1651,7 +1654,7 @@ A24:    r.x = q.x by A17,A21,FUNCT_1:72;
   end;
   then
 A25: for k st P[k] holds P[k+1];
-A26: for k holds P[k] from NAT_1:sch 1(A2,A25);
+A26: for k holds P[k] from NAT_1:sch 2(A2,A25);
   len p = len p;
   hence thesis by A26;
 end;
@@ -1659,7 +1662,7 @@ end;
 theorem Th75:
   rng p = dom p implies p is one-to-one
 proof
-  defpred P[Element of NAT] means for p st len p = $1 & rng p = dom p
+  defpred P[Nat] means for p st len p = $1 & rng p = dom p
   holds p is one-to-one;
 A1: P[0] by CARD_2:59;
 A2: now
@@ -1702,9 +1705,7 @@ A12:    len q <= k - 1 & dom q = Seg(len q) by FINSEQ_1:def 3, XREAL_1:21;
           .= Seg k by FINSEQ_1:12;
         then
 A13:    card(rng q) = k by FINSEQ_1:78;
-A14:    Card(rng q) <=` Card(dom q) by CARD_1:28;
-
-:::          reconsider B = dom q as finite set;
+A14:    Card(rng q) c= Card(dom q) by CARD_1:28;
         Card(len q) = Card(dom q) & Card k = Card(rng q)
         by A12,A13,FINSEQ_1:78;
         then k <= len q by A14,NAT_1:41;
@@ -1724,7 +1725,7 @@ A17:  q = (p -| (k + 1)) ^ (p |-- (k + 1)) by A15,Th69;
       hence p is one-to-one by A3,A7,A16,A17,Th71;
     end;
   end;
-A18: for k holds P[k] from NAT_1:sch 1(A1,A2);
+A18: for k holds P[k] from NAT_1:sch 2(A1,A2);
   len p = len p;
   hence thesis by A18;
 end;
@@ -1927,11 +1928,11 @@ theorem
   st card A = card B & rng f = B holds f is one-to-one by Lm1;
 
 theorem
-  Card B <` Card A & B <> {} implies
+  Card B in Card A & B <> {} implies
   ex x,y st x in A & y in A & x <> y & f.x = f.y
 proof
   assume that
-A1: Card B <` Card A and
+A1: Card B in Card A and
 A2: B <> {} and
 A3: for x,y st x in A & y in A & x <> y holds f.x <> f.y;
 A4: dom f = A by A2,FUNCT_2:def 1;
@@ -1940,15 +1941,15 @@ A4: dom f = A by A2,FUNCT_2:def 1;
   then dom f,f .: (dom f) are_equipotent by CARD_1:60;
   then dom f,rng f are_equipotent by RELAT_1:146;
   then Card A = Card(rng f) & rng f c= B by A4,CARD_1:21,RELSET_1:12;
-  then Card A <=` Card B by CARD_1:27;
+  then Card A c= Card B by CARD_1:27;
   hence contradiction by A1,CARD_1:14;
 end;
 
 theorem
-  Card A <` Card B implies ex x st x in B & for y st y in A holds f.y <> x
+  Card A in Card B implies ex x st x in B & for y st y in A holds f.y <> x
 proof
   assume that
-A1: Card A <` Card B and
+A1: Card A in Card B and
 A2: for x st x in B ex y st y in A & f.y = x;
 A3: dom f = A by A1,CARD_1:47,FUNCT_2:def 1;
   rng f = B
@@ -1959,7 +1960,7 @@ A3: dom f = A by A1,CARD_1:47,FUNCT_2:def 1;
     then ex y st y in A & f.y = x by A2;
     hence thesis by A3,FUNCT_1:def 5;
   end;
-  then Card B <=` Card A by A3,CARD_1:28;
+  then Card B c= Card A by A3,CARD_1:28;
   hence thesis by A1,CARD_1:14;
 end;
 
@@ -2010,9 +2011,10 @@ end;
 :: from TOPREAL1
 
 theorem
+  for m being Nat
   for D being set, p being FinSequence of D st a in dom(p|m)
   holds (p|m qua FinSequence of D)/.a = p/.a
-proof
+proof let m be Nat;
   let D be set, p being FinSequence of D;
   assume
 A1: a in dom(p|m);
@@ -2346,7 +2348,7 @@ end;
 
 :: form GOBOARD1, 2007.07.22, A.T.
 
-scheme Sch1{D()->non empty set, N()->Element of NAT, P[set,set]}:
+scheme Sch1{D()->non empty set, N()->Nat, P[set,set]}:
   ex f being FinSequence of D() st
   len f = N() & for n st n in Seg N() holds P[n,f/.n]
 provided
@@ -2370,8 +2372,9 @@ A5: dom f = Seg N() & rng f c= X &
   for x be set st x in Seg N() holds P1[x,f.x] from WELLORD2:sch 1(A2);
   reconsider f as FinSequence by A5,FINSEQ_1:def 2;
   reconsider f as FinSequence of D() by A5,FINSEQ_1:def 4;
-  take f; thus
-  len f = N() by A5,FINSEQ_1:def 3;
+  take f;
+   N() in NAT by ORDINAL1:def 13;
+  hence len f = N() by A5,FINSEQ_1:def 3;
   let n;
   assume
 A6: n in Seg N();
@@ -2388,18 +2391,18 @@ proof
   let D be non empty set, p,q be FinSequence of D;
   assume
 A1: p c= q;
-  defpred P[Element of NAT,set] means q/.(len p + $1) = $2;
+  defpred P[Nat,set] means q/.(len p + $1) = $2;
 A2: dom p = Seg len p by FINSEQ_1:def 3;
   dom q = Seg len q by FINSEQ_1:def 3;
   then Seg len p c= Seg len q by A1,A2,GRFUNC_1:8;
   then len p <= len q by FINSEQ_1:7;
   then reconsider N = len q - len p as Element of NAT by INT_1:16,XREAL_1:50;
-A3: for n being Element of NAT st n in Seg N ex d being Element of D st P[n,d];
+A3: for n being Nat st n in Seg N ex d being Element of D st P[n,d];
   ex f being FinSequence of D st len f = N &
-  for n being Element of NAT st n in Seg N holds P[n,f/.n] from Sch1(A3);
-  then consider f being FinSequence of D such that
+  for n being Nat st n in Seg N holds P[n,f/.n] from Sch1(A3);
+  consider f being FinSequence of D such that
 A4: len f = N and
-A5: for n being Element of NAT st n in Seg N holds P[n,f/.n];
+A5: for n being Nat st n in Seg N holds P[n,f/.n] from Sch1(A3);
   take f;
 A6: len (p ^ f) = len p + N by A4,FINSEQ_1:35
     .= len q;
@@ -2451,4 +2454,24 @@ A1: p ^ p' = q by Th97;
   assume 1 <= i & i <= len p;
   hence thesis by A1,FINSEQ_1:85;
 end;
+
+:: form GOBOARD2, 2008.03.08, A.T.
+
+scheme PiLambdaD{D()-> non empty set, l()->Nat,
+  F(set)-> Element of D()}: ex g being FinSequence of D() st
+  len g=l() & for n being Nat st n in dom g holds g/.n=F(n)
+proof
+  consider g being FinSequence of D() such that
+A1: len g=l() &
+  for n be Nat st n in dom g holds g.n=F(n) from FINSEQ_2:sch 1;
+  take g;
+  thus len g=l() by A1;
+  let n be Nat;
+  assume
+A3: n in dom g;
+  then g.n = F(n) by A1;
+  hence thesis by A3,PARTFUN1:def 8;
+end;
+
+
 

@@ -13,11 +13,11 @@
 <ArticleID name="XCMPLX_0"/>
 <ArticleID name="XREAL_0"/>
 <ArticleID name="RELSET_1"/>
+<ArticleID name="MCART_1"/>
+<ArticleID name="FUNCT_2"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
-<ArticleID name="MCART_1"/>
-<ArticleID name="FUNCT_2"/>
 <ArticleID name="ENUMSET1"/>
 <ArticleID name="DOMAIN_1"/>
 <ArticleID name="REALSET1"/>
@@ -47,7 +47,7 @@
 <ArticleID name="SPRECT_1"/>
 <ArticleID name="SPRECT_2"/>
 </Signature>
-<RCluster>
+<RCluster aid="SPRECT_3" nr="1">
 <ArgTypes/>
 <Typ kind="M" nr="7">
 <Cluster/>
@@ -61,8 +61,8 @@
 <Adjective nr="1"/>
 <Adjective nr="4"/>
 <Adjective nr="7" value="false"/>
-<Adjective nr="17"/>
-<Adjective nr="21"/>
+<Adjective nr="20"/>
+<Adjective nr="24"/>
 <Adjective nr="117">
 <Func kind="U" nr="1">
 <Func kind="K" nr="320">
@@ -76,7 +76,7 @@
 <Adjective nr="125"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="SPRECT_3" nr="2">
 <ArgTypes/>
 <Typ kind="M" nr="7">
 <Cluster/>
@@ -91,8 +91,8 @@
 <Adjective nr="4"/>
 <Adjective nr="6" value="false"/>
 <Adjective nr="7" value="false"/>
-<Adjective nr="17"/>
-<Adjective nr="21"/>
+<Adjective nr="20"/>
+<Adjective nr="24"/>
 <Adjective nr="26" value="false"/>
 <Adjective nr="117">
 <Func kind="U" nr="1">
@@ -109,7 +109,7 @@
 <Adjective nr="126"/>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="SPRECT_3" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="7">
 <Cluster>
@@ -143,7 +143,7 @@
 <Adjective nr="115" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="SPRECT_3" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="7">
 <Cluster>
@@ -179,7 +179,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="SPRECT_3" nr="3">
 <ArgTypes>
 <Typ kind="M" nr="7">
 <Cluster>
@@ -215,7 +215,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<CCluster>
+<CCluster aid="SPRECT_3" nr="1">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="7" value="false"/>

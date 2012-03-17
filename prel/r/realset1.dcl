@@ -17,7 +17,7 @@
 <ArticleID name="FINSET_1"/>
 <ArticleID name="REALSET1"/>
 </Signature>
-<RCluster>
+<RCluster aid="REALSET1" nr="1">
 <ArgTypes/>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -27,7 +27,7 @@
 <Adjective nr="14"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="REALSET1" nr="2">
 <ArgTypes/>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -37,7 +37,7 @@
 <Adjective nr="14" value="false"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="REALSET1" nr="3">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -56,7 +56,7 @@
 <Adjective nr="14"/>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="REALSET1" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -75,7 +75,7 @@
 <Adjective nr="1"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="REALSET1" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -95,7 +95,7 @@
 <Adjective nr="4"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="REALSET1" nr="3">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -108,7 +108,7 @@
 <Adjective nr="14"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="REALSET1" nr="4">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -133,7 +133,7 @@
 <Adjective nr="7" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="REALSET1" nr="5">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -150,7 +150,7 @@
 <Adjective nr="14"/>
 </Cluster>
 </FCluster>
-<CCluster>
+<CCluster aid="REALSET1" nr="1">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="14" value="false"/>
@@ -162,7 +162,7 @@
 <Adjective nr="7" value="false"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="REALSET1" nr="2">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="7"/>
@@ -174,7 +174,7 @@
 <Adjective nr="14"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="REALSET1" nr="3">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="14"/>
@@ -186,7 +186,7 @@
 <Adjective nr="12"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="REALSET1" nr="4">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="12" value="false"/>

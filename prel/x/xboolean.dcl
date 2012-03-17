@@ -8,7 +8,7 @@
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="XBOOLEAN"/>
 </Signature>
-<RCluster>
+<RCluster aid="XBOOLEAN" nr="1">
 <ArgTypes/>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -17,21 +17,21 @@
 <Adjective nr="14"/>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="XBOOLEAN" nr="1">
 <ArgTypes/>
 <Func kind="K" nr="23"/>
 <Cluster>
 <Adjective nr="14"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="XBOOLEAN" nr="2">
 <ArgTypes/>
 <Func kind="K" nr="24"/>
 <Cluster>
 <Adjective nr="14"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="XBOOLEAN" nr="3">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -52,7 +52,7 @@
 <Adjective nr="14"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="XBOOLEAN" nr="4">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -73,7 +73,7 @@
 <Adjective nr="14"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="XBOOLEAN" nr="5">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -94,7 +94,7 @@
 <Adjective nr="14"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="XBOOLEAN" nr="6">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -115,7 +115,7 @@
 <Adjective nr="14"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="XBOOLEAN" nr="7">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -136,7 +136,7 @@
 <Adjective nr="14"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="XBOOLEAN" nr="8">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -157,7 +157,7 @@
 <Adjective nr="14"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="XBOOLEAN" nr="9">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -178,7 +178,7 @@
 <Adjective nr="14"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="XBOOLEAN" nr="10">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -199,7 +199,7 @@
 <Adjective nr="14"/>
 </Cluster>
 </FCluster>
-<CCluster>
+<CCluster aid="XBOOLEAN" nr="1">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="14"/>

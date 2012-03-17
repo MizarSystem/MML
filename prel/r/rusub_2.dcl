@@ -25,7 +25,7 @@
 <ArticleID name="RUSUB_1"/>
 <ArticleID name="RUSUB_2"/>
 </Signature>
-<RCluster>
+<RCluster aid="RUSUB_2" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="16">
 <Cluster>
@@ -59,7 +59,7 @@
 <Adjective nr="98"/>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="RUSUB_2" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="16">
 <Cluster>
@@ -80,7 +80,7 @@
 <Adjective nr="7" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="RUSUB_2" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="16">
 <Cluster>
@@ -110,7 +110,7 @@
 <Adjective nr="36"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="RUSUB_2" nr="3">
 <ArgTypes>
 <Typ kind="G" nr="16">
 <Cluster>

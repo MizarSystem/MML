@@ -24,7 +24,7 @@
 <ArticleID name="UNIALG_1"/>
 <ArticleID name="MSUALG_1"/>
 </Signature>
-<RCluster>
+<RCluster aid="MSUALG_1" nr="1">
 <ArgTypes/>
 <Typ kind="G" nr="6">
 <Cluster/>
@@ -33,7 +33,7 @@
 <Adjective nr="45"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="MSUALG_1" nr="2">
 <ArgTypes/>
 <Typ kind="G" nr="6">
 <Cluster/>
@@ -44,7 +44,7 @@
 <Adjective nr="46"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="MSUALG_1" nr="3">
 <ArgTypes/>
 <Typ kind="G" nr="6">
 <Cluster/>
@@ -55,7 +55,7 @@
 <Adjective nr="46" value="false"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="MSUALG_1" nr="4">
 <ArgTypes>
 <Typ kind="G" nr="1">
 <Cluster/>
@@ -71,7 +71,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="MSUALG_1" nr="5">
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
@@ -89,7 +89,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="MSUALG_1" nr="6">
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
@@ -110,7 +110,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="MSUALG_1" nr="7">
 <ArgTypes>
 <Typ kind="G" nr="1">
 <Cluster/>
@@ -129,7 +129,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="MSUALG_1" nr="8">
 <ArgTypes/>
 <Typ kind="G" nr="6">
 <Cluster/>
@@ -142,7 +142,7 @@
 <Adjective nr="50"/>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="MSUALG_1" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="1">
 <Cluster/>
@@ -164,7 +164,7 @@
 <Adjective nr="3"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="MSUALG_1" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
@@ -186,7 +186,7 @@
 <Adjective nr="50"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="MSUALG_1" nr="3">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
@@ -213,7 +213,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="MSUALG_1" nr="4">
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
@@ -238,7 +238,7 @@
 <Adjective nr="1" value="false"/>
 </Cluster>
 </FCluster>
-<CCluster>
+<CCluster aid="MSUALG_1" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
@@ -268,7 +268,7 @@
 <Adjective nr="1" value="false"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="MSUALG_1" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>

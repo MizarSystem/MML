@@ -21,7 +21,7 @@
 <ArticleID name="PBOOLE"/>
 <ArticleID name="MBOOLEAN"/>
 </Signature>
-<FCluster>
+<FCluster aid="MBOOLEAN" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -39,7 +39,7 @@
 <Adjective nr="2"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="MBOOLEAN" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>

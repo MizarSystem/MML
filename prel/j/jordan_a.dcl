@@ -47,7 +47,7 @@
 <ArticleID name="BORSUK_1"/>
 <ArticleID name="JORDAN_A"/>
 </Signature>
-<FCluster>
+<FCluster aid="JORDAN_A" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -84,7 +84,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="JORDAN_A" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster>
@@ -98,7 +98,7 @@
 </Func>
 </Func>
 </Typ>
-<Typ kind="M" nr="20">
+<Typ kind="M" nr="19">
 <Cluster/>
 <LocusVar nr="1"/>
 </Typ>
@@ -121,7 +121,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<CCluster>
+<CCluster aid="JORDAN_A" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster>
@@ -137,7 +137,7 @@
 </Typ>
 </ArgTypes>
 <Cluster/>
-<Typ kind="M" nr="20">
+<Typ kind="M" nr="19">
 <Cluster/>
 <LocusVar nr="1"/>
 </Typ>

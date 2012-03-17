@@ -19,7 +19,7 @@ environ
       FUNCT_2, CARD_3, DOMAIN_1, FINSEQ_1, GR_CY_1, PRE_FF, SCPISORT, XXREAL_0;
  constructors DOMAIN_1, REAL_1, NAT_1, NAT_D, RECDEF_1, PRE_FF, MESFUNC1,
       GR_CY_1, SCM_1, SCMPDS_4, SCMPDS_5, SCMPDS_6, SCMP_GCD, SCMPDS_8,
-      SCPISORT, SCMNORM;
+      SCPISORT, SCMNORM, SCMPDS_3;
  registrations SETFAM_1, FUNCT_1, ORDINAL1, RELSET_1, FRAENKEL, NUMBERS,
       XREAL_0, NAT_1, INT_1, CARD_3, WSIERP_1, STRUCT_0, SCMPDS_2, SCMPDS_4,
       SCMPDS_5, SCMPDS_6, SCMPDS_8, XBOOLE_0, SCMNORM;
@@ -30,7 +30,7 @@ begin :: Preliminaries
 
 reserve m,n for Element of NAT,
   i,j for Instruction of SCMPDS,
-  I for Program-block,
+  I for Program of SCMPDS,
   a for Int_position;
 
 canceled 4;
@@ -54,7 +54,7 @@ begin :: Computing directly the result of "while<0" program by loop-invariant
 
 scheme :: SCPINVAR:sch 1
  WhileLEnd { F(State of SCMPDS)-> Element of NAT,
-  s() -> State of SCMPDS,I() -> No-StopCode shiftable Program-block,
+  s() -> State of SCMPDS,I() -> No-StopCode shiftable Program of SCMPDS,
   a() -> Int_position,i() -> Integer,P[set]}:
   F(Dstate IExec(while<0(a(),i(),I()),s()))=0 &
   P[Dstate IExec(while<0(a(),i(),I()),s())]
@@ -78,7 +78,7 @@ begin :: An Example : Summing directly n integers by loop-invariant
 
 definition
   let n, p0 be Element of NAT;
-  func sum(n,p0) -> Program-block equals
+  func sum(n,p0) -> Program of SCMPDS equals
 :: SCPINVAR:def 1
 
   (GBP:=0) ';' (intpos 1:=0) ';'
@@ -88,7 +88,7 @@ definition
 end;
 
 theorem :: SCPINVAR:8         :: SCMPDS_7:73
-  for s being State of SCMPDS,I being No-StopCode shiftable Program-block,
+  for s being State of SCMPDS,I being No-StopCode shiftable Program of SCMPDS,
   a,b,c being Int_position,n,i,p0 be Element of NAT,f be FinSequence of INT
   st card I >0 & f is_FinSequence_on s,p0 & len f=n & s.b=0 & s.a=0 &
   s.intpos i=-n & s.c = p0+1 & (for t be State of SCMPDS st
@@ -113,7 +113,7 @@ begin :: Computing directly the result of "while>0" program by loop-invariant
 
 scheme :: SCPINVAR:sch 2
  WhileGEnd { F(State of SCMPDS)-> Element of NAT,
-  s() -> State of SCMPDS,I() -> No-StopCode shiftable Program-block,
+  s() -> State of SCMPDS,I() -> No-StopCode shiftable Program of SCMPDS,
   a() -> Int_position,i() -> Integer,P[set]}:
   F(Dstate IExec(while>0(a(),i(),I()),s()))=0 &
   P[Dstate IExec(while>0(a(),i(),I()),s())]
@@ -135,7 +135,7 @@ begin :: An Example : Computing directly Fibonacci sequence by loop-invariant
 
 definition
   let n be Element of NAT;
-  func Fib-macro(n) -> Program-block equals
+  func Fib-macro(n) -> Program of SCMPDS equals
 :: SCPINVAR:def 2
 
   (GBP:=0) ';' (intpos 1:=0) ';'
@@ -145,7 +145,7 @@ definition
 end;
 
 theorem :: SCPINVAR:10
-  for s being State of SCMPDS,I being No-StopCode shiftable Program-block,
+  for s being State of SCMPDS,I being No-StopCode shiftable Program of SCMPDS,
   a,f0,f1 being Int_position,n,i be Element of NAT
   st card I >0 & s.a=0 & s.f0=0 & s.f1=1 & s.intpos i=n &
   (for t be State of SCMPDS,k be Element of NAT st
@@ -167,8 +167,8 @@ begin :: The construction of while<>0 loop program
 
 definition
   let a be Int_position, i be Integer;
-  let I be Program-block;
-  func while<>0(a,i,I) -> Program-block equals
+  let I be Program of SCMPDS;
+  func while<>0(a,i,I) -> Program of SCMPDS equals
 :: SCPINVAR:def 3
   (a,i)<>0_goto 2 ';' goto (card I+2) ';' I ';' goto -(card I+2);
 end;
@@ -176,50 +176,50 @@ end;
 begin :: The basic property of "while<>0" program
 
 theorem :: SCPINVAR:12
-  for a be Int_position,i be Integer,I be Program-block holds
+  for a be Int_position,i be Integer,I be Program of SCMPDS holds
   card while<>0(a,i,I)= card I +3;
 
 theorem :: SCPINVAR:13
-  for a be Int_position,i be Integer,m be Element of NAT,I be Program-block
+  for a be Int_position,i be Integer,m be Element of NAT,I be Program of SCMPDS
   holds m < card I+3 iff inspos m in dom while<>0(a,i,I);
 
 theorem :: SCPINVAR:14
-  for a be Int_position,i be Integer,I be Program-block holds
+  for a be Int_position,i be Integer,I be Program of SCMPDS holds
   inspos 0 in dom while<>0(a,i,I) & inspos 1 in dom while<>0(a,i,I);
 
 theorem :: SCPINVAR:15
-  for a be Int_position,i be Integer,I be Program-block holds
+  for a be Int_position,i be Integer,I be Program of SCMPDS holds
   while<>0(a,i,I).inspos 0=(a,i)<>0_goto 2 &
   while<>0(a,i,I).inspos 1= goto (card I +2) &
   while<>0(a,i,I).inspos (card I+2)=goto -(card I+2);
 
 theorem :: SCPINVAR:16
-  for s being State of SCMPDS,I being Program-block,a being Int_position,
+  for s being State of SCMPDS,I being Program of SCMPDS,a being Int_position,
   i being Integer st s.DataLoc(s.a,i) = 0 holds
   while<>0(a,i,I) is_closed_on s & while<>0(a,i,I) is_halting_on s;
 
 theorem :: SCPINVAR:17
-  for s being State of SCMPDS,I being Program-block,a,c being Int_position,
+  for s being State of SCMPDS,I being Program of SCMPDS,a,c being Int_position,
   i being Integer st s.DataLoc(s.a,i) = 0 holds
   IExec(while<>0(a,i,I),s) = s +* Start-At inspos (card I + 3);
 
 theorem :: SCPINVAR:18
-  for s being State of SCMPDS,I being Program-block,a being Int_position,
+  for s being State of SCMPDS,I being Program of SCMPDS,a being Int_position,
   i being Integer st s.DataLoc(s.a,i) = 0
   holds IC IExec(while<>0(a,i,I),s) = inspos (card I + 3);
 
 theorem :: SCPINVAR:19
-  for s being State of SCMPDS,I being Program-block,a,b being Int_position,
+  for s being State of SCMPDS,I being Program of SCMPDS,a,b being Int_position,
   i being Integer st s.DataLoc(s.a,i) = 0
   holds IExec(while<>0(a,i,I),s).b = s.b;
 
 registration
-  let I be shiftable Program-block, a be Int_position,i be Integer;
+  let I be shiftable Program of SCMPDS, a be Int_position,i be Integer;
   cluster while<>0(a,i,I) -> shiftable;
 end;
 
 registration
-  let I be No-StopCode Program-block, a be Int_position,i be Integer;
+  let I be No-StopCode Program of SCMPDS, a be Int_position,i be Integer;
   cluster while<>0(a,i,I) -> No-StopCode;
 end;
 
@@ -227,7 +227,7 @@ begin :: Computing directly the result of "while<>0" program by loop-invariant
 
 scheme :: SCPINVAR:sch 3
  WhileNHalt { F(State of SCMPDS)-> Element of NAT,
-  s() -> State of SCMPDS,I() -> No-StopCode shiftable Program-block,
+  s() -> State of SCMPDS,I() -> No-StopCode shiftable Program of SCMPDS,
   a() -> Int_position,i() -> Integer,P[set]}:
   while<>0(a(),i(),I()) is_closed_on s() &
   while<>0(a(),i(),I()) is_halting_on s()
@@ -247,7 +247,7 @@ P[Dstate(IExec(I(),t))];
 
 scheme :: SCPINVAR:sch 4
  WhileNExec { F(State of SCMPDS)-> Element of NAT,
-  s() -> State of SCMPDS,I() -> No-StopCode shiftable Program-block,
+  s() -> State of SCMPDS,I() -> No-StopCode shiftable Program of SCMPDS,
   a() -> Int_position,i() -> Integer,P[set]}:
   IExec(while<>0(a(),i(),I()),s()) =
   IExec(while<>0(a(),i(),I()),IExec(I(),s()))
@@ -269,7 +269,7 @@ P[Dstate(IExec(I(),t))];
 
 scheme :: SCPINVAR:sch 5
  WhileNEnd { F(State of SCMPDS)-> Element of NAT,
-  s() -> State of SCMPDS,I() -> No-StopCode shiftable Program-block,
+  s() -> State of SCMPDS,I() -> No-StopCode shiftable Program of SCMPDS,
   a() -> Int_position,i() -> Integer,P[set]}:
   F(Dstate IExec(while<>0(a(),i(),I()),s()))=0 &
   P[Dstate IExec(while<>0(a(),i(),I()),s())]
@@ -288,7 +288,7 @@ I() is_halting_on t & F(Dstate IExec(I(),t)) < F(Dstate t) &
 P[Dstate(IExec(I(),t))];
 
 theorem :: SCPINVAR:20
-  for s being State of SCMPDS,I being No-StopCode shiftable Program-block,
+  for s being State of SCMPDS,I being No-StopCode shiftable Program of SCMPDS,
   a,b,c be Int_position,i,d be Integer st
   card I > 0 & s.a=d & s.b > 0 & s.c > 0 & s.DataLoc(d,i)=s.b-s.c &
   (for t be State of SCMPDS st
@@ -309,7 +309,7 @@ begin :: An example: computing Greatest Common Divisor(Euclide algorithm)
 :: if x>y then x=x-y else y=y-x
 
 definition
-  func GCD-Algorithm -> Program-block equals
+  func GCD-Algorithm -> Program of SCMPDS equals
 :: SCPINVAR:def 4
 
   (GBP:=0) ';' (GBP,3):=(GBP,1) ';'
@@ -319,7 +319,7 @@ definition
 end;
 
 theorem :: SCPINVAR:21
-  for s being State of SCMPDS,I being No-StopCode shiftable Program-block,
+  for s being State of SCMPDS,I being No-StopCode shiftable Program of SCMPDS,
   a,b,c be Int_position,i,d be Integer st
   card I > 0 & s.a=d & s.b > 0 & s.c > 0 & s.DataLoc(d,i)=s.b-s.c &
   (for t be State of SCMPDS st

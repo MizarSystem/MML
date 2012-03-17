@@ -23,7 +23,7 @@
 <ArticleID name="UNIALG_1"/>
 <ArticleID name="UNIALG_2"/>
 </Signature>
-<RCluster>
+<RCluster aid="UNIALG_2" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="8">
 <Cluster>
@@ -46,7 +46,7 @@
 <Adjective nr="58"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="UNIALG_2" nr="2">
 <ArgTypes/>
 <Typ kind="G" nr="8">
 <Cluster/>
@@ -60,7 +60,7 @@
 <Adjective nr="60"/>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="UNIALG_2" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="8">
 <Cluster>
@@ -79,7 +79,7 @@
 <Adjective nr="1" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="UNIALG_2" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="8">
 <Cluster>

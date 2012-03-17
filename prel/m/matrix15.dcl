@@ -45,7 +45,7 @@
 <ArticleID name="MATRIX13"/>
 <ArticleID name="MATRIX15"/>
 </Signature>
-<FCluster>
+<FCluster aid="MATRIX15" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="10">
 <Cluster>
@@ -77,7 +77,7 @@
 <Func kind="K" nr="87"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="338">
+<Func kind="K" nr="339">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <Func kind="K" nr="230">
@@ -93,7 +93,7 @@
 <Cluster>
 <Adjective nr="99">
 <LocusVar nr="1"/>
-<Func kind="K" nr="333">
+<Func kind="K" nr="334">
 <LocusVar nr="1"/>
 <Func kind="K" nr="200">
 <LocusVar nr="2"/>
@@ -105,7 +105,7 @@
 <Cluster/>
 <Func kind="K" nr="23">
 <Func kind="U" nr="1">
-<Func kind="K" nr="333">
+<Func kind="K" nr="334">
 <LocusVar nr="1"/>
 <Func kind="K" nr="200">
 <LocusVar nr="2"/>

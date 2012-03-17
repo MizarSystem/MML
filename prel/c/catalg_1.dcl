@@ -11,11 +11,11 @@
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
 <ArticleID name="RELSET_1"/>
+<ArticleID name="MCART_1"/>
+<ArticleID name="FUNCT_2"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
-<ArticleID name="MCART_1"/>
-<ArticleID name="FUNCT_2"/>
 <ArticleID name="FUNCOP_1"/>
 <ArticleID name="FUNCT_6"/>
 <ArticleID name="FINSEQ_2"/>
@@ -46,7 +46,7 @@
 <ArticleID name="INSTALG1"/>
 <ArticleID name="CATALG_1"/>
 </Signature>
-<RCluster>
+<RCluster aid="CATALG_1" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="8">
 <Cluster>
@@ -71,7 +71,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="CATALG_1" nr="2">
 <ArgTypes/>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -82,7 +82,7 @@
 <Adjective nr="4"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="CATALG_1" nr="3">
 <ArgTypes/>
 <Typ kind="G" nr="8">
 <Cluster/>
@@ -94,7 +94,7 @@
 <Adjective nr="122"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="CATALG_1" nr="4">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -110,7 +110,7 @@
 <Adjective nr="122"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="CATALG_1" nr="5">
 <ArgTypes/>
 <Typ kind="G" nr="8">
 <Cluster/>
@@ -123,7 +123,7 @@
 <Adjective nr="123"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="CATALG_1" nr="6">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -140,7 +140,7 @@
 <Adjective nr="123"/>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="CATALG_1" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="8">
 <Cluster>
@@ -167,7 +167,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="CATALG_1" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="8">
 <Cluster>
@@ -192,7 +192,7 @@
 <Adjective nr="3" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="CATALG_1" nr="3">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -206,7 +206,7 @@
 <Adjective nr="120"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="CATALG_1" nr="4">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -223,7 +223,7 @@
 <Adjective nr="67" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="CATALG_1" nr="5">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -237,7 +237,7 @@
 <Adjective nr="123"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="CATALG_1" nr="6">
 <ArgTypes>
 <Typ kind="G" nr="8">
 <Cluster>
@@ -253,7 +253,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="86">
+<Func kind="K" nr="61">
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
@@ -261,7 +261,7 @@
 <Adjective nr="4"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="CATALG_1" nr="7">
 <ArgTypes>
 <Typ kind="G" nr="8">
 <Cluster>
@@ -276,7 +276,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="86">
+<Func kind="K" nr="61">
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
@@ -284,7 +284,7 @@
 <Adjective nr="4"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="CATALG_1" nr="8">
 <ArgTypes>
 <Typ kind="G" nr="8">
 <Cluster>
@@ -299,7 +299,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="86">
+<Func kind="K" nr="61">
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
@@ -307,7 +307,7 @@
 <Adjective nr="4"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="CATALG_1" nr="9">
 <ArgTypes>
 <Typ kind="G" nr="8">
 <Cluster>
@@ -323,14 +323,14 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="86">
+<Func kind="K" nr="61">
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="19"/>
+<Adjective nr="22"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="CATALG_1" nr="10">
 <ArgTypes>
 <Typ kind="G" nr="8">
 <Cluster>
@@ -345,14 +345,14 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="86">
+<Func kind="K" nr="61">
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="19"/>
+<Adjective nr="22"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="CATALG_1" nr="11">
 <ArgTypes>
 <Typ kind="G" nr="8">
 <Cluster>
@@ -367,14 +367,14 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="86">
+<Func kind="K" nr="61">
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="19"/>
+<Adjective nr="22"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="CATALG_1" nr="12">
 <ArgTypes>
 <Typ kind="G" nr="2">
 <Cluster>
@@ -410,7 +410,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<CCluster>
+<CCluster aid="CATALG_1" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="8">
 <Cluster>
@@ -433,7 +433,7 @@
 </Adjective>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="CATALG_1" nr="2">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="49" value="false"/>
@@ -449,7 +449,7 @@
 <Adjective nr="120"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="CATALG_1" nr="3">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -464,7 +464,7 @@
 <Adjective nr="122"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="CATALG_1" nr="4">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>

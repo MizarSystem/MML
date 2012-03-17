@@ -38,7 +38,7 @@
 <ArticleID name="SCMRING1"/>
 <ArticleID name="SCMRING2"/>
 </Signature>
-<RCluster>
+<RCluster aid="SCMRING4" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="10">
 <Cluster>
@@ -50,21 +50,21 @@
 <Adjective nr="80"/>
 <Adjective nr="87"/>
 <Adjective nr="88"/>
-<Adjective nr="136"/>
+<Adjective nr="137"/>
 </Cluster>
 </Typ>
 </ArgTypes>
 <Typ kind="M" nr="3">
 <Cluster/>
-<Func kind="K" nr="209">
+<Func kind="K" nr="210">
 <Func kind="U" nr="14">
-<Func kind="K" nr="278"/>
+<Func kind="K" nr="280"/>
 <Func kind="K" nr="12">
 <Func kind="U" nr="1">
 <LocusVar nr="1"/>
 </Func>
 </Func>
-<Func kind="K" nr="307">
+<Func kind="K" nr="309">
 <LocusVar nr="1"/>
 </Func>
 </Func>
@@ -75,24 +75,24 @@
 <Adjective nr="4"/>
 <Adjective nr="18"/>
 <Adjective nr="128">
-<Func kind="K" nr="278"/>
+<Func kind="K" nr="280"/>
 <Func kind="K" nr="12">
 <Func kind="U" nr="1">
 <LocusVar nr="1"/>
 </Func>
 </Func>
-<Func kind="K" nr="307">
+<Func kind="K" nr="309">
 <LocusVar nr="1"/>
 </Func>
 </Adjective>
 <Adjective nr="133" value="false">
-<Func kind="K" nr="278"/>
+<Func kind="K" nr="280"/>
 <Func kind="K" nr="12">
 <Func kind="U" nr="1">
 <LocusVar nr="1"/>
 </Func>
 </Func>
-<Func kind="K" nr="307">
+<Func kind="K" nr="309">
 <LocusVar nr="1"/>
 </Func>
 </Adjective>

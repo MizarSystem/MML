@@ -8,7 +8,7 @@ environ
 
  vocabularies AMI_1, AMI_3, BOOLE, RELAT_1, FUNCT_1, FUNCT_4, SCMFSA_2,
       ARYTM_1, CAT_1, RELOC, AMI_5, AMI_2, NAT_1, ABSVALUE, FINSEQ_1, FINSEQ_2,
-      SCMFSA_4, CARD_3, FINSEQ_4, ARYTM;
+      SCMFSA_4, CARD_3, FINSEQ_4, ARYTM, AMISTD_2, SCMNORM;
  notations TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, NUMBERS, CARD_3, XCMPLX_0,
       NAT_1, INT_1, INT_2, RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2, FUNCT_4,
       FUNCOP_1, FUNCT_7, FINSEQ_1, FINSEQ_2, STRUCT_0, AMI_1, SCMNORM, AMI_3,
@@ -19,58 +19,19 @@ environ
       FUNCOP_1, FRAENKEL, NUMBERS, XREAL_0, INT_1, CARD_3, AMI_1, SCMFSA_2,
       SCMNORM, FINSET_1;
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
- definitions TARSKI, AMI_1, SCMFSA_2, FUNCOP_1;
+ definitions TARSKI, AMI_1, SCMFSA_2, FUNCOP_1, SCMNORM;
  theorems SCMFSA_2, BINARITH, ZFMISC_1, RELOC, ENUMSET1, NAT_1, FUNCOP_1,
       RELAT_1, FUNCT_1, TARSKI, FUNCT_4, FUNCT_2, AMI_1, FINSET_1, SCMFSA_3,
-      RELSET_1, XBOOLE_0, XBOOLE_1, CARD_3, ORDINAL1, VALUED_1;
+      RELSET_1, XBOOLE_0, XBOOLE_1, CARD_3, ORDINAL1, VALUED_1, SCMNORM;
  schemes CLASSES1;
 
-begin  :: Incrementing and decrementing the instruction locations
+begin :: Incrementing addresses
 
 reserve j, k, l, m, n, p, q for Element of NAT;
-
-canceled 5;
 
 reserve L for Instruction-Location of SCM,
   A for Data-Location,
   I for Instruction of SCM;
-
-theorem
-  for l1,l2 being Instruction-Location of SCM+FSA , k being Element of NAT
-  holds Start-At(l1 + k) = Start-At(l2 +k) iff Start-At l1 = Start-At l2
-proof
-  let l1,l2 be Instruction-Location of SCM+FSA, k be Element of NAT;
-  hereby
-    assume
-A1: Start-At(l1 + k) = Start-At(l2 + k);
-A2: Start-At(l1 + k) = IC SCM+FSA .--> (l1 + k) &
-    Start-At(l2 + k) = IC SCM+FSA .--> (l2 + k);
-    {[IC SCM+FSA, l1 + k]} = IC SCM+FSA .--> (l2 + k) by A1,AMI_1:96;
-    then {[IC SCM+FSA, l1 + k]} = {[IC SCM+FSA, l2 + k]} by A2,AMI_1:96;
-    then [IC SCM+FSA, l1 + k] = [IC SCM+FSA, l2 + k] by ZFMISC_1:6;
-    then l1 + k = l2 + k by ZFMISC_1:33;
-    hence Start-At l1 = Start-At l2;
-  end;
-  assume Start-At l1 = Start-At l2;
-  then {[IC SCM+FSA, l1]} = Start-At l2 by AMI_1:96;
-  then {[IC SCM+FSA, l1]} = {[IC SCM+FSA, l2]} by AMI_1:96;
-  then [IC SCM+FSA, l1] = [IC SCM+FSA, l2] by ZFMISC_1:6;
-  hence Start-At(l1 + k) = Start-At(l2 + k) by ZFMISC_1:33;
-end;
-
-theorem
-  for l1,l2 being Instruction-Location of SCM+FSA , k being Element of NAT
-  st Start-At l1 = Start-At l2 holds Start-At(l1 -' k) = Start-At(l2 -' k)
-proof
-  let l1,l2 be Instruction-Location of SCM+FSA, k be Element of NAT;
-  assume Start-At l1 = Start-At l2;
-  then {[IC SCM+FSA, l1]} = Start-At l2 by AMI_1:96;
-  then {[IC SCM+FSA, l1]} = {[IC SCM+FSA, l2]} by AMI_1:96;
-  then [IC SCM+FSA, l1] = [IC SCM+FSA, l2] by ZFMISC_1:6;
-  hence Start-At(l1 -' k) = Start-At(l2 -' k) by ZFMISC_1:33;
-end;
-
-begin :: Incrementing addresses
 
 definition
   canceled 2;
@@ -93,6 +54,8 @@ definition
   end;
   correctness;
 end;
+
+canceled 7;
 
 theorem Th8:
   for k being Element of NAT holds IncAddr(halt SCM+FSA,k) = halt SCM+FSA
@@ -289,44 +252,6 @@ A3: InsCode I <= 9+1 implies InsCode I <= 8+1 or InsCode I = 10 by NAT_1:8;
   end;
 end;
 
-definition
-  let IT be FinPartState of SCM+FSA;
-  attr IT is initial means
-  for m,n st n in dom IT & m < n holds m in dom IT;
-end;
-
-definition
-  func SCM+FSA-Stop -> FinPartState of SCM+FSA equals
-  (insloc 0).--> halt SCM+FSA;
-  correctness;
-end;
-
-registration
-  cluster SCM+FSA-Stop -> non empty initial programmed;
-  coherence
-  proof
-    thus SCM+FSA-Stop is non empty;
-A1: dom SCM+FSA-Stop = {insloc 0} by FUNCOP_1:19;
-    thus SCM+FSA-Stop is initial
-    proof
-      let m,n such that
-A2:    n in dom SCM+FSA-Stop and
-A3:   m < n;
-      insloc n = insloc 0 by A1,A2,TARSKI:def 1;
-      hence  m in dom SCM+FSA-Stop by A3,NAT_1:2;
-    end;
-    thus dom SCM+FSA-Stop c= NAT by A1,ZFMISC_1:37;
-  end;
-end;
-
-registration
-  cluster initial programmed non empty FinPartState of SCM+FSA;
-  existence
-  proof
-    take SCM+FSA-Stop; thus thesis;
-  end;
-end;
-
 reserve i for Instruction of SCM+FSA;
 
 theorem Th23:
@@ -372,8 +297,9 @@ end;
 begin :: Incrementing Addresses in a finite partial state
 
 definition
-  let p be programmed FinPartState of SCM+FSA, k be Element of NAT;
-  func IncAddr(p,k) -> programmed FinPartState of SCM+FSA means
+ canceled 2;
+  let p be preProgram of SCM+FSA, k be Element of NAT;
+  func IncAddr(p,k) -> preProgram of SCM+FSA means
   :Def6:
   dom it = dom p &
   for m st insloc m in dom p holds it.insloc m = IncAddr(pi(p,m),k);
@@ -420,7 +346,7 @@ A9:   f.x = IncAddr(pi(p,m),k) by A4,A5;
       assume x in dom f;
       hence x in NAT by A4,A6;
     end;
-    then reconsider IT = f as programmed FinPartState of SCM+FSA;
+    then reconsider IT = f as preProgram of SCM+FSA;
     take IT;
     thus dom IT = dom p by A4;
     let m;
@@ -432,7 +358,7 @@ A11: f.insloc m = IncAddr(pi(p,j),k) by A5;
   end;
   uniqueness
   proof
-    let IT1,IT2 be programmed FinPartState of SCM+FSA such that
+    let IT1,IT2 be preProgram of SCM+FSA such that
 A12: dom IT1 = dom p and
 A13: for m st insloc m in
     dom p holds IT1.insloc m = IncAddr(pi(p,m) ,k) and
@@ -457,11 +383,11 @@ A17:  l = insloc m;
 end;
 
 theorem Th24:
-  for p being programmed FinPartState of SCM+FSA , k being Element of NAT
+  for p being preProgram of SCM+FSA , k being Element of NAT
   for l being Element of NAT st l in dom p
   holds IncAddr (p,k).l = IncAddr(pi(p,l),k)
 proof
-  let p be programmed FinPartState of SCM+FSA , k be Element of NAT;
+  let p be preProgram of SCM+FSA , k be Element of NAT;
   let l be Element of NAT such that
 A1: l in dom p;
   reconsider m = l as Element of NAT;
@@ -470,10 +396,10 @@ A2: l = insloc m;
 end;
 
 theorem
-  for I,J being programmed FinPartState of SCM+FSA holds
+  for I,J being preProgram of SCM+FSA holds
   IncAddr(I +* J, n) = IncAddr(I,n) +* IncAddr(J,n)
 proof
-  let I,J be programmed FinPartState of SCM+FSA;
+  let I,J be preProgram of SCM+FSA;
 A1: dom IncAddr(J,n) = dom J by Def6;
   dom IncAddr(I,n) = dom I by Def6;
   then
@@ -512,7 +438,7 @@ theorem
   for f being Function of the Instructions of SCM+FSA,
   the Instructions of SCM+FSA
   st f = (id the Instructions of SCM+FSA) +* (halt SCM+FSA .--> i)
-  for s being programmed FinPartState of SCM+FSA holds IncAddr(f*s,n) =
+  for s being preProgram of SCM+FSA holds IncAddr(f*s,n) =
   ((id the Instructions of SCM+FSA) +* (halt SCM+FSA .--> IncAddr(i,n)))*
   IncAddr(s,n)
 proof
@@ -537,7 +463,7 @@ A8: rng((id the Instructions of SCM+FSA) +* (halt SCM+FSA .--> IncAddr(i,n)))
   (halt SCM+FSA .--> IncAddr(i,n)) as
   Function of the Instructions of SCM+FSA,the Instructions of SCM+FSA
   by A6,A8,FUNCT_2:def 1,RELSET_1:11;
-  let s be programmed FinPartState of SCM+FSA;
+  let s be preProgram of SCM+FSA;
 A9: dom(g*IncAddr(s,n)) = dom IncAddr(s,n) by AMI_1:119;
 A10: dom IncAddr(s,n) = dom s by Def6
     .= dom(f*s) by AMI_1:119;
@@ -593,10 +519,10 @@ A22:  pi(f*s,m) = (f*s).insloc m by A11,AMI_1:def 47
 end;
 
 theorem
-  for I being programmed FinPartState of SCM+FSA
+  for I being preProgram of SCM+FSA
   holds IncAddr(IncAddr(I,m),n) = IncAddr(I,m+n)
 proof
-  let I be programmed FinPartState of SCM+FSA;
+  let I be preProgram of SCM+FSA;
 A1: dom IncAddr(IncAddr(I,m),n) = dom IncAddr(I,m) by Def6;
 A2: dom IncAddr(I,m) = dom I by Def6;
   now
@@ -1993,10 +1919,10 @@ begin :: Shifting the finite partial state
 canceled 5;
 
 theorem
-  for i,j being Element of NAT, p being programmed FinPartState of SCM+FSA
+  for i,j being Element of NAT, p being preProgram of SCM+FSA
   holds Shift(IncAddr(p,i),j) = IncAddr(Shift(p,j),i)
 proof
-  let i,j be Element of NAT, p be programmed FinPartState of SCM+FSA;
+  let i,j be Element of NAT, p be preProgram of SCM+FSA;
 A1: dom(IncAddr(Shift(p,j),i)) = dom (Shift(p,j)) by Def6;
   dom(IncAddr(p,i)) = dom p by Def6;
   then

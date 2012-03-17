@@ -5,7 +5,7 @@
 <ArticleID name="TARSKI"/>
 <ArticleID name="XBOOLE_0"/>
 </Signature>
-<RCluster>
+<RCluster aid="XBOOLE_0" nr="1">
 <ArgTypes/>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -14,7 +14,7 @@
 <Adjective nr="1"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="XBOOLE_0" nr="2">
 <ArgTypes/>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -23,14 +23,14 @@
 <Adjective nr="1" value="false"/>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="XBOOLE_0" nr="1">
 <ArgTypes/>
 <Func kind="K" nr="5"/>
 <Cluster>
 <Adjective nr="1"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="XBOOLE_0" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -43,7 +43,7 @@
 <Adjective nr="1" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="XBOOLE_0" nr="3">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -60,7 +60,7 @@
 <Adjective nr="1" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="XBOOLE_0" nr="4">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -79,7 +79,7 @@
 <Adjective nr="1" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="XBOOLE_0" nr="5">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>

@@ -33,7 +33,7 @@
 <ArticleID name="EUCLID"/>
 <ArticleID name="EUCLID_4"/>
 </Signature>
-<FCluster>
+<FCluster aid="EUCLID_4" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -61,7 +61,7 @@
 <Adjective nr="7" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="EUCLID_4" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>

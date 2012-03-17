@@ -22,7 +22,7 @@
 <ArticleID name="ANALOAF"/>
 <ArticleID name="DIRAF"/>
 </Signature>
-<RCluster>
+<RCluster aid="DIRAF" nr="1">
 <ArgTypes/>
 <Typ kind="G" nr="12">
 <Cluster/>
@@ -34,7 +34,7 @@
 <Adjective nr="79"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="DIRAF" nr="2">
 <ArgTypes/>
 <Typ kind="G" nr="12">
 <Cluster/>
@@ -47,7 +47,7 @@
 <Adjective nr="80"/>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="DIRAF" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="12">
 <Cluster>

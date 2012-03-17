@@ -28,7 +28,7 @@
 <ArticleID name="INCPROJ"/>
 <ArticleID name="AFPROJ"/>
 </Signature>
-<RCluster>
+<RCluster aid="AFPROJ" nr="1">
 <ArgTypes/>
 <Typ kind="G" nr="13">
 <Cluster/>
@@ -43,7 +43,7 @@
 <Adjective nr="113"/>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="AFPROJ" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="12">
 <Cluster>
@@ -65,7 +65,7 @@
 <Adjective nr="112"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="AFPROJ" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="12">
 <Cluster>

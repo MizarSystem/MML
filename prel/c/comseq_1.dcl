@@ -17,7 +17,7 @@
 <ArticleID name="VALUED_0"/>
 <ArticleID name="COMSEQ_1"/>
 </Signature>
-<RCluster>
+<RCluster aid="COMSEQ_1" nr="1">
 <ArgTypes/>
 <Typ kind="M" nr="4">
 <Cluster/>

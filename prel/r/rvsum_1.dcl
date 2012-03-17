@@ -26,7 +26,7 @@
 <ArticleID name="FINSEQ_2"/>
 <ArticleID name="RVSUM_1"/>
 </Signature>
-<RCluster>
+<RCluster aid="RVSUM_1" nr="1">
 <ArgTypes/>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -39,7 +39,7 @@
 <Adjective nr="38"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="RVSUM_1" nr="2">
 <ArgTypes/>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -53,7 +53,7 @@
 <Adjective nr="38"/>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="RVSUM_1" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -89,7 +89,7 @@
 <Adjective nr="38"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="RVSUM_1" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -104,7 +104,7 @@
 <Adjective nr="24"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="RVSUM_1" nr="3">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -125,7 +125,7 @@
 <Adjective nr="24"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="RVSUM_1" nr="4">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -152,7 +152,7 @@
 <Adjective nr="24"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="RVSUM_1" nr="5">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -176,7 +176,7 @@
 <Adjective nr="38"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="RVSUM_1" nr="6">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -206,7 +206,7 @@
 <Adjective nr="38"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="RVSUM_1" nr="7">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -225,7 +225,7 @@
 <Adjective nr="19"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="RVSUM_1" nr="8">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -244,7 +244,7 @@
 <Adjective nr="19"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="RVSUM_1" nr="9">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -259,7 +259,7 @@
 <Adjective nr="22"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="RVSUM_1" nr="10">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -280,7 +280,7 @@
 <Adjective nr="22"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="RVSUM_1" nr="11">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -307,7 +307,7 @@
 <Adjective nr="22"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="RVSUM_1" nr="12">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -337,7 +337,7 @@
 <Adjective nr="38"/>
 </Cluster>
 </FCluster>
-<CCluster>
+<CCluster aid="RVSUM_1" nr="1">
 <ArgTypes/>
 <Cluster/>
 <Typ kind="M" nr="7">

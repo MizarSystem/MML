@@ -79,47 +79,6 @@
 <Adjective nr="13"/>
 </Cluster>
 </Typ>
-<For>
-<Typ kind="M" nr="1">
-<Cluster/>
-</Typ>
-<For>
-<Typ kind="M" nr="1">
-<Cluster/>
-</Typ>
-<Not>
-<And>
-<Pred kind="R" nr="2">
-<Var nr="1"/>
-<Func kind="K" nr="73">
-<Func kind="F" nr="1"/>
-</Func>
-</Pred>
-<Pred kind="P" nr="1">
-<Var nr="1"/>
-<Var nr="2"/>
-</Pred>
-<Pred kind="P" nr="1">
-<Var nr="1"/>
-<Var nr="3"/>
-</Pred>
-<Not>
-<Pred kind="R" nr="1">
-<Var nr="2"/>
-<Var nr="3"/>
-</Pred>
-</Not>
-</And>
-</Not>
-</For>
-</For>
-</For>
-<For>
-<Typ kind="M" nr="1">
-<Cluster>
-<Adjective nr="13"/>
-</Cluster>
-</Typ>
 <Not>
 <And>
 <Pred kind="R" nr="2">

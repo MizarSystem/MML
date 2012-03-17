@@ -23,7 +23,7 @@
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="UNIALG_1"/>
 </Signature>
-<RCluster>
+<RCluster aid="UNIALG_1" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -48,7 +48,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="UNIALG_1" nr="2">
 <ArgTypes/>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -60,7 +60,7 @@
 <Adjective nr="36"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="UNIALG_1" nr="3">
 <ArgTypes/>
 <Typ kind="G" nr="5">
 <Cluster/>
@@ -69,7 +69,7 @@
 <Adjective nr="38"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="UNIALG_1" nr="4">
 <ArgTypes/>
 <Typ kind="G" nr="5">
 <Cluster/>
@@ -79,7 +79,7 @@
 <Adjective nr="38"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="UNIALG_1" nr="5">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -110,7 +110,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="UNIALG_1" nr="6">
 <ArgTypes/>
 <Typ kind="G" nr="5">
 <Cluster/>
@@ -123,7 +123,7 @@
 <Adjective nr="43"/>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="UNIALG_1" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -148,7 +148,7 @@
 <Adjective nr="36"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="UNIALG_1" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -174,7 +174,7 @@
 <Adjective nr="38"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="UNIALG_1" nr="3">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -206,7 +206,7 @@
 <Adjective nr="36"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="UNIALG_1" nr="4">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
@@ -225,7 +225,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="UNIALG_1" nr="5">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
@@ -244,7 +244,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="UNIALG_1" nr="6">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
@@ -260,7 +260,7 @@
 <Adjective nr="7" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="UNIALG_1" nr="7">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
@@ -278,7 +278,7 @@
 <Adjective nr="12"/>
 </Cluster>
 </FCluster>
-<CCluster>
+<CCluster aid="UNIALG_1" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -302,7 +302,7 @@
 <Adjective nr="12"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="UNIALG_1" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>

@@ -60,7 +60,7 @@
 <ArticleID name="TOPREALB"/>
 <ArticleID name="RCOMP_3"/>
 </Signature>
-<RCluster>
+<RCluster aid="RCOMP_3" nr="1">
 <ArgTypes/>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -75,7 +75,7 @@
 <Adjective nr="58"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="RCOMP_3" nr="2">
 <ArgTypes/>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -93,7 +93,7 @@
 <Adjective nr="114"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="RCOMP_3" nr="3">
 <ArgTypes/>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -112,7 +112,7 @@
 <Adjective nr="114"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="RCOMP_3" nr="4">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
@@ -140,7 +140,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="RCOMP_3" nr="5">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
@@ -171,7 +171,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="RCOMP_3" nr="6">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
@@ -202,7 +202,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="RCOMP_3" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -217,7 +217,7 @@
 <Adjective nr="1" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="RCOMP_3" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -244,7 +244,7 @@
 </Func>
 </Typ>
 </FCluster>
-<FCluster>
+<FCluster aid="RCOMP_3" nr="3">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -271,7 +271,7 @@
 </Func>
 </Typ>
 </FCluster>
-<FCluster>
+<FCluster aid="RCOMP_3" nr="4">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -298,7 +298,7 @@
 </Func>
 </Typ>
 </FCluster>
-<FCluster>
+<FCluster aid="RCOMP_3" nr="5">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -325,7 +325,7 @@
 </Func>
 </Typ>
 </FCluster>
-<FCluster>
+<FCluster aid="RCOMP_3" nr="6">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -352,7 +352,7 @@
 </Func>
 </Typ>
 </FCluster>
-<FCluster>
+<FCluster aid="RCOMP_3" nr="7">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -379,7 +379,7 @@
 </Func>
 </Typ>
 </FCluster>
-<FCluster>
+<FCluster aid="RCOMP_3" nr="8">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -406,7 +406,7 @@
 </Func>
 </Typ>
 </FCluster>
-<FCluster>
+<FCluster aid="RCOMP_3" nr="9">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -423,7 +423,7 @@
 <Adjective nr="93"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="RCOMP_3" nr="10">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -440,7 +440,7 @@
 <Adjective nr="93"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="RCOMP_3" nr="11">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -457,7 +457,7 @@
 <Adjective nr="93"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="RCOMP_3" nr="12">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -474,7 +474,7 @@
 <Adjective nr="93"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="RCOMP_3" nr="13">
 <ArgTypes/>
 <Func kind="K" nr="15">
 <Func kind="K" nr="42"/>
@@ -485,7 +485,7 @@
 <Adjective nr="93"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="RCOMP_3" nr="14">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster>
@@ -507,7 +507,7 @@
 <Adjective nr="121"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="RCOMP_3" nr="15">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster>
@@ -525,7 +525,7 @@
 <Adjective nr="120"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="RCOMP_3" nr="16">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -543,10 +543,10 @@
 <Adjective nr="69"/>
 </Cluster>
 </FCluster>
-<CCluster>
+<CCluster aid="RCOMP_3" nr="1">
 <ArgTypes/>
 <Cluster/>
-<Typ kind="M" nr="22">
+<Typ kind="M" nr="21">
 <Cluster/>
 <Func kind="K" nr="225"/>
 </Typ>

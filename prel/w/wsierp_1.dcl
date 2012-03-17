@@ -12,12 +12,12 @@
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XCMPLX_0"/>
 <ArticleID name="XREAL_0"/>
-<ArticleID name="COMPLEX1"/>
-<ArticleID name="INT_1"/>
-<ArticleID name="INT_2"/>
 <ArticleID name="RELSET_1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
+<ArticleID name="COMPLEX1"/>
+<ArticleID name="INT_1"/>
+<ArticleID name="INT_2"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
@@ -29,16 +29,17 @@
 <ArticleID name="RVSUM_1"/>
 <ArticleID name="NEWTON"/>
 </Signature>
-<FCluster>
+<FCluster aid="WSIERP_1" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="17"/>
+<Adjective nr="20"/>
 </Cluster>
 </Typ>
-<Typ kind="M" nr="2">
-<Cluster/>
-<Func kind="K" nr="46"/>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="14"/>
+</Cluster>
 </Typ>
 </ArgTypes>
 <Func kind="K" nr="234">
@@ -46,10 +47,10 @@
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="17"/>
+<Adjective nr="20"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="WSIERP_1" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="7">
 <Cluster/>
@@ -64,10 +65,10 @@
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="17"/>
+<Adjective nr="20"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="WSIERP_1" nr="3">
 <ArgTypes>
 <Typ kind="M" nr="7">
 <Cluster/>
@@ -79,10 +80,10 @@
 </Func>
 <Cluster>
 <Adjective nr="15"/>
-<Adjective nr="17"/>
+<Adjective nr="20"/>
 </Cluster>
 </FCluster>
-<CCluster>
+<CCluster aid="WSIERP_1" nr="1">
 <ArgTypes/>
 <Cluster/>
 <Typ kind="M" nr="7">
@@ -93,7 +94,7 @@
 <Adjective nr="31"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="WSIERP_1" nr="2">
 <ArgTypes/>
 <Cluster/>
 <Typ kind="M" nr="7">

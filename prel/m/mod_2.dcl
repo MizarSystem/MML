@@ -26,7 +26,7 @@
 <ArticleID name="RLVECT_1"/>
 <ArticleID name="MOD_2"/>
 </Signature>
-<RCluster>
+<RCluster aid="MOD_2" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="10">
 <Cluster>
@@ -51,7 +51,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="MOD_2" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="10">
 <Cluster>
@@ -79,7 +79,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="MOD_2" nr="3">
 <ArgTypes>
 <Typ kind="G" nr="10">
 <Cluster>
@@ -135,7 +135,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="MOD_2" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="10">
 <Cluster>
@@ -190,7 +190,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="MOD_2" nr="2">
 <ArgTypes/>
 <Func kind="K" nr="179"/>
 <Cluster>
@@ -198,7 +198,7 @@
 <Adjective nr="66"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="MOD_2" nr="3">
 <ArgTypes/>
 <Func kind="K" nr="179"/>
 <Cluster>
@@ -206,7 +206,7 @@
 <Adjective nr="78"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="MOD_2" nr="4">
 <ArgTypes/>
 <Func kind="K" nr="179"/>
 <Cluster>
@@ -216,7 +216,7 @@
 <Adjective nr="89"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="MOD_2" nr="5">
 <ArgTypes/>
 <Func kind="K" nr="179"/>
 <Cluster>

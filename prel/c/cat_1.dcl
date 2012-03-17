@@ -20,7 +20,7 @@
 <ArticleID name="GRAPH_1"/>
 <ArticleID name="CAT_1"/>
 </Signature>
-<RCluster>
+<RCluster aid="CAT_1" nr="1">
 <ArgTypes/>
 <Typ kind="G" nr="2">
 <Cluster/>
@@ -29,7 +29,7 @@
 <Adjective nr="35"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="CAT_1" nr="2">
 <ArgTypes/>
 <Typ kind="G" nr="2">
 <Cluster/>
@@ -38,7 +38,7 @@
 <Adjective nr="36" value="false"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="CAT_1" nr="3">
 <ArgTypes/>
 <Typ kind="G" nr="2">
 <Cluster/>
@@ -48,7 +48,7 @@
 <Adjective nr="37"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="CAT_1" nr="4">
 <ArgTypes/>
 <Typ kind="G" nr="2">
 <Cluster/>
@@ -59,7 +59,7 @@
 <Adjective nr="37"/>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="CAT_1" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="2">
 <Cluster>
@@ -74,7 +74,7 @@
 <Adjective nr="7" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="CAT_1" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="2">
 <Cluster>

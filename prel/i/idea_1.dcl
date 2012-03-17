@@ -27,21 +27,21 @@
 <ArticleID name="MATRIX_1"/>
 <ArticleID name="IDEA_1"/>
 </Signature>
-<FCluster>
+<FCluster aid="IDEA_1" nr="1">
 <ArgTypes/>
 <Func kind="K" nr="211"/>
 <Cluster>
 <Adjective nr="7" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="IDEA_1" nr="2">
 <ArgTypes/>
 <Func kind="K" nr="211"/>
 <Cluster>
 <Adjective nr="19"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="IDEA_1" nr="3">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -77,7 +77,7 @@
 <Adjective nr="27"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="IDEA_1" nr="4">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -113,7 +113,7 @@
 <Adjective nr="27"/>
 </Cluster>
 </FCluster>
-<CCluster>
+<CCluster aid="IDEA_1" nr="1">
 <ArgTypes/>
 <Cluster/>
 <Typ kind="M" nr="2">

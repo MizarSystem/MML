@@ -23,7 +23,7 @@
 <ArticleID name="CLVECT_1"/>
 <ArticleID name="CSSPACE"/>
 </Signature>
-<RCluster>
+<RCluster aid="CSSPACE" nr="1">
 <ArgTypes/>
 <Typ kind="G" nr="15">
 <Cluster/>
@@ -32,7 +32,7 @@
 <Adjective nr="86"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="CSSPACE" nr="2">
 <ArgTypes/>
 <Typ kind="G" nr="15">
 <Cluster/>
@@ -42,7 +42,7 @@
 <Adjective nr="86"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="CSSPACE" nr="3">
 <ArgTypes/>
 <Typ kind="G" nr="15">
 <Cluster/>
@@ -58,7 +58,7 @@
 <Adjective nr="87"/>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="CSSPACE" nr="1">
 <ArgTypes/>
 <Func kind="G" nr="13">
 <Func kind="K" nr="151"/>
@@ -71,7 +71,7 @@
 <Adjective nr="80"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="CSSPACE" nr="2">
 <ArgTypes/>
 <Func kind="K" nr="157"/>
 <Cluster>
@@ -84,7 +84,7 @@
 <Adjective nr="81"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="CSSPACE" nr="3">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -159,7 +159,7 @@
 <Adjective nr="86"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="CSSPACE" nr="4">
 <ArgTypes/>
 <Func kind="G" nr="15">
 <Func kind="K" nr="161"/>
@@ -182,7 +182,7 @@
 <Adjective nr="86"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="CSSPACE" nr="5">
 <ArgTypes/>
 <Func kind="K" nr="168"/>
 <Cluster>

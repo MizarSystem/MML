@@ -4,7 +4,7 @@
 <ArticleID name="HIDDEN"/>
 <ArticleID name="XBOOLEAN"/>
 </Signature>
-<FCluster>
+<FCluster aid="BINARITH" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>

@@ -17,7 +17,7 @@
 <ArticleID name="YELLOW_0"/>
 <ArticleID name="WAYBEL_0"/>
 </Signature>
-<RCluster>
+<RCluster aid="WAYBEL13" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
@@ -48,7 +48,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<CCluster>
+<CCluster aid="WAYBEL13" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>

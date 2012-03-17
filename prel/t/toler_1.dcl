@@ -14,7 +14,7 @@
 <ArticleID name="PARTFUN1"/>
 <ArticleID name="TOLER_1"/>
 </Signature>
-<RCluster>
+<RCluster aid="TOLER_1" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -44,7 +44,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="TOLER_1" nr="1">
 <ArgTypes/>
 <Func kind="K" nr="21"/>
 <Cluster>

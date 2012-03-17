@@ -27,7 +27,7 @@
 <ArticleID name="INT_1"/>
 <ArticleID name="TURING_1"/>
 </Signature>
-<RCluster>
+<RCluster aid="TURING_1" nr="1">
 <ArgTypes/>
 <Typ kind="G" nr="1">
 <Cluster/>
@@ -36,7 +36,7 @@
 <Adjective nr="29"/>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="TURING_1" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -44,7 +44,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="183">
+<Func kind="K" nr="184">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>

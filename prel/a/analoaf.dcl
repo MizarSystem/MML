@@ -21,7 +21,7 @@
 <ArticleID name="RLVECT_1"/>
 <ArticleID name="ANALOAF"/>
 </Signature>
-<RCluster>
+<RCluster aid="ANALOAF" nr="1">
 <ArgTypes/>
 <Typ kind="G" nr="12">
 <Cluster/>
@@ -30,7 +30,7 @@
 <Adjective nr="76"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="ANALOAF" nr="2">
 <ArgTypes/>
 <Typ kind="G" nr="12">
 <Cluster/>
@@ -40,7 +40,7 @@
 <Adjective nr="76"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="ANALOAF" nr="3">
 <ArgTypes/>
 <Typ kind="G" nr="12">
 <Cluster/>
@@ -52,7 +52,7 @@
 <Adjective nr="77"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="ANALOAF" nr="4">
 <ArgTypes/>
 <Typ kind="G" nr="12">
 <Cluster/>
@@ -65,7 +65,7 @@
 <Adjective nr="78"/>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="ANALOAF" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="11">
 <Cluster>

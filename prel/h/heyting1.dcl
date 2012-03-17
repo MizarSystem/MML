@@ -20,7 +20,7 @@
 <ArticleID name="BINOP_1"/>
 <ArticleID name="NORMFORM"/>
 </Signature>
-<RCluster>
+<RCluster aid="HEYTING1" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -36,7 +36,7 @@
 <Adjective nr="1" value="false"/>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="HEYTING1" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>

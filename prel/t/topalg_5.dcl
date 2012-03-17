@@ -60,7 +60,7 @@
 <ArticleID name="TOPREALB"/>
 <ArticleID name="TOPALG_5"/>
 </Signature>
-<FCluster>
+<FCluster aid="TOPALG_5" nr="1">
 <ArgTypes/>
 <Func kind="K" nr="313"/>
 <Cluster>
@@ -71,7 +71,7 @@
 <Adjective nr="93"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="TOPALG_5" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
@@ -102,14 +102,14 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="TOPALG_5" nr="3">
 <ArgTypes/>
 <Func kind="K" nr="387"/>
 <Cluster>
 <Adjective nr="126"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="TOPALG_5" nr="4">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster>
@@ -134,7 +134,7 @@
 <Adjective nr="126"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="TOPALG_5" nr="5">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -161,7 +161,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="TOPALG_5" nr="6">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
@@ -243,7 +243,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="TOPALG_5" nr="7">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
@@ -325,7 +325,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="TOPALG_5" nr="8">
 <ArgTypes/>
 <Func kind="K" nr="492"/>
 <Cluster>
@@ -359,7 +359,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="TOPALG_5" nr="9">
 <ArgTypes>
 <Typ kind="M" nr="11">
 <Cluster>

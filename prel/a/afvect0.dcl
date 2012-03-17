@@ -27,7 +27,7 @@
 <ArticleID name="TDGROUP"/>
 <ArticleID name="AFVECT0"/>
 </Signature>
-<RCluster>
+<RCluster aid="AFVECT0" nr="1">
 <ArgTypes/>
 <Typ kind="G" nr="13">
 <Cluster/>
@@ -39,7 +39,7 @@
 <Adjective nr="98"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="AFVECT0" nr="2">
 <ArgTypes/>
 <Typ kind="G" nr="6">
 <Cluster/>
@@ -56,7 +56,7 @@
 <Adjective nr="96"/>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="AFVECT0" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="13">
 <Cluster>
@@ -81,7 +81,7 @@
 <Adjective nr="40"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="AFVECT0" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="13">
 <Cluster>
@@ -109,7 +109,7 @@
 <Adjective nr="72"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="AFVECT0" nr="3">
 <ArgTypes>
 <Typ kind="G" nr="13">
 <Cluster>
@@ -134,7 +134,7 @@
 <Adjective nr="96"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="AFVECT0" nr="4">
 <ArgTypes>
 <Typ kind="G" nr="13">
 <Cluster>
@@ -159,7 +159,7 @@
 <Adjective nr="92"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="AFVECT0" nr="5">
 <ArgTypes>
 <Typ kind="G" nr="13">
 <Cluster>
@@ -184,7 +184,7 @@
 <Adjective nr="40"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="AFVECT0" nr="6">
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
@@ -208,7 +208,7 @@
 <Adjective nr="97"/>
 </Cluster>
 </FCluster>
-<CCluster>
+<CCluster aid="AFVECT0" nr="1">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="25" value="false"/>

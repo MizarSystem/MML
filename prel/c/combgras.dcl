@@ -17,7 +17,7 @@
 <ArticleID name="INCSP_1"/>
 <ArticleID name="COMBGRAS"/>
 </Signature>
-<RCluster>
+<RCluster aid="COMBGRAS" nr="1">
 <ArgTypes/>
 <Typ kind="G" nr="1">
 <Cluster/>
@@ -29,7 +29,7 @@
 <Adjective nr="26"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="COMBGRAS" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="1">
 <Cluster/>

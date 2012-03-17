@@ -32,7 +32,7 @@
 <ArticleID name="MOD_2"/>
 <ArticleID name="MODCAT_1"/>
 </Signature>
-<RCluster>
+<RCluster aid="MODCAT_1" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="10">
 <Cluster>
@@ -46,7 +46,7 @@
 <Adjective nr="113"/>
 </Cluster>
 </Typ>
-<Typ kind="M" nr="15">
+<Typ kind="M" nr="16">
 <Cluster/>
 <LocusVar nr="1"/>
 </Typ>
@@ -69,7 +69,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="MODCAT_1" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="10">
 <Cluster>
@@ -83,7 +83,7 @@
 <Adjective nr="113"/>
 </Cluster>
 </Typ>
-<Typ kind="M" nr="17">
+<Typ kind="M" nr="18">
 <Cluster/>
 <LocusVar nr="1"/>
 </Typ>
@@ -101,7 +101,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="MODCAT_1" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -130,7 +130,7 @@
 <Adjective nr="7" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="MODCAT_1" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -160,7 +160,7 @@
 <Adjective nr="91" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="MODCAT_1" nr="3">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>

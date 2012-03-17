@@ -33,7 +33,7 @@
 <ArticleID name="CLOPBAN3"/>
 <ArticleID name="CLOPBAN4"/>
 </Signature>
-<FCluster>
+<FCluster aid="CLOPBAN4" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="16">
 <Cluster>

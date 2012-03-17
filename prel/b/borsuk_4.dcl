@@ -44,7 +44,7 @@
 <ArticleID name="TOPMETR"/>
 <ArticleID name="BORSUK_4"/>
 </Signature>
-<RCluster>
+<RCluster aid="BORSUK_4" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="1">
 <Cluster>
@@ -64,7 +64,7 @@
 <Adjective nr="39" value="false"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="BORSUK_4" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -82,7 +82,7 @@
 <Adjective nr="39" value="false"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="BORSUK_4" nr="3">
 <ArgTypes/>
 <Typ kind="G" nr="1">
 <Cluster/>
@@ -91,14 +91,14 @@
 <Adjective nr="88"/>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="BORSUK_4" nr="1">
 <ArgTypes/>
 <Func kind="K" nr="338"/>
 <Cluster>
 <Adjective nr="88"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="BORSUK_4" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="1">
 <Cluster>
@@ -113,7 +113,7 @@
 <Adjective nr="63"/>
 </Cluster>
 </FCluster>
-<CCluster>
+<CCluster aid="BORSUK_4" nr="1">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="67"/>

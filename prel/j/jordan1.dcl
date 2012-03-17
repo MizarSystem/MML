@@ -35,7 +35,7 @@
 <ArticleID name="TOPREAL1"/>
 <ArticleID name="JORDAN1"/>
 </Signature>
-<FCluster>
+<FCluster aid="JORDAN1" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -55,7 +55,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="JORDAN1" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -75,7 +75,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="JORDAN1" nr="3">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -95,7 +95,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="JORDAN1" nr="4">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -115,7 +115,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<CCluster>
+<CCluster aid="JORDAN1" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>

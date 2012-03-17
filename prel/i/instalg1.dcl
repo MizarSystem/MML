@@ -11,11 +11,11 @@
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
 <ArticleID name="RELSET_1"/>
+<ArticleID name="MCART_1"/>
+<ArticleID name="FUNCT_2"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
-<ArticleID name="MCART_1"/>
-<ArticleID name="FUNCT_2"/>
 <ArticleID name="FUNCOP_1"/>
 <ArticleID name="FINSEQ_2"/>
 <ArticleID name="PBOOLE"/>
@@ -36,7 +36,7 @@
 <ArticleID name="MSAFREE"/>
 <ArticleID name="INSTALG1"/>
 </Signature>
-<RCluster>
+<RCluster aid="INSTALG1" nr="1">
 <ArgTypes/>
 <Typ kind="G" nr="6">
 <Cluster/>
@@ -46,7 +46,7 @@
 <Adjective nr="50" value="false"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="INSTALG1" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
@@ -63,7 +63,7 @@
 <Adjective nr="75"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="INSTALG1" nr="3">
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
@@ -81,7 +81,7 @@
 <Adjective nr="75"/>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="INSTALG1" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
@@ -118,7 +118,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="INSTALG1" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
@@ -154,7 +154,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="INSTALG1" nr="3">
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
@@ -179,7 +179,7 @@
 <Adjective nr="2"/>
 </Cluster>
 </FCluster>
-<CCluster>
+<CCluster aid="INSTALG1" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
@@ -218,7 +218,7 @@
 <Adjective nr="65"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="INSTALG1" nr="2">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="32" value="false"/>
@@ -230,7 +230,7 @@
 <Adjective nr="75"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="INSTALG1" nr="3">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="50"/>
@@ -242,7 +242,7 @@
 <Adjective nr="75"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="INSTALG1" nr="4">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="32"/>
@@ -255,7 +255,7 @@
 <Adjective nr="50"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="INSTALG1" nr="5">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="50" value="false"/>
@@ -268,7 +268,7 @@
 <Adjective nr="32" value="false"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="INSTALG1" nr="6">
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>

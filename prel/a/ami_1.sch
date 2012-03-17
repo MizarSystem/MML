@@ -59,7 +59,7 @@
 </ArgTypes>
 <Pred kind="V" nr="21">
 <Fraenkel>
-<Typ kind="M" nr="25">
+<Typ kind="M" nr="26">
 <Cluster/>
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
@@ -105,7 +105,7 @@
 <Typ kind="M" nr="1">
 <Cluster/>
 </Typ>
-<Typ kind="M" nr="25">
+<Typ kind="M" nr="26">
 <Cluster/>
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
@@ -123,7 +123,7 @@
 </Func>
 <Not>
 <For>
-<Typ kind="M" nr="25">
+<Typ kind="M" nr="26">
 <Cluster/>
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>

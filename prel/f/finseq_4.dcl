@@ -16,7 +16,7 @@
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="FINSEQ_4"/>
 </Signature>
-<FCluster>
+<FCluster aid="FINSEQ_4" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -42,7 +42,7 @@
 <Adjective nr="4"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="FINSEQ_4" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -72,7 +72,7 @@
 <Adjective nr="4"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="FINSEQ_4" nr="3">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -97,7 +97,7 @@
 <Adjective nr="19"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="FINSEQ_4" nr="4">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>

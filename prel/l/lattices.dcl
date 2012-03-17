@@ -14,7 +14,7 @@
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="LATTICES"/>
 </Signature>
-<RCluster>
+<RCluster aid="LATTICES" nr="1">
 <ArgTypes/>
 <Typ kind="G" nr="5">
 <Cluster/>
@@ -23,7 +23,7 @@
 <Adjective nr="20"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="LATTICES" nr="2">
 <ArgTypes/>
 <Typ kind="G" nr="6">
 <Cluster/>
@@ -32,7 +32,7 @@
 <Adjective nr="21"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="LATTICES" nr="3">
 <ArgTypes/>
 <Typ kind="G" nr="7">
 <Cluster/>
@@ -41,7 +41,7 @@
 <Adjective nr="22"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="LATTICES" nr="4">
 <ArgTypes/>
 <Typ kind="G" nr="6">
 <Cluster/>
@@ -51,7 +51,7 @@
 <Adjective nr="21"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="LATTICES" nr="5">
 <ArgTypes/>
 <Typ kind="G" nr="5">
 <Cluster/>
@@ -61,7 +61,7 @@
 <Adjective nr="20"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="LATTICES" nr="6">
 <ArgTypes/>
 <Typ kind="G" nr="7">
 <Cluster/>
@@ -71,7 +71,7 @@
 <Adjective nr="22"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="LATTICES" nr="7">
 <ArgTypes/>
 <Typ kind="G" nr="6">
 <Cluster/>
@@ -83,7 +83,7 @@
 <Adjective nr="24"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="LATTICES" nr="8">
 <ArgTypes/>
 <Typ kind="G" nr="5">
 <Cluster/>
@@ -95,7 +95,7 @@
 <Adjective nr="26"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="LATTICES" nr="9">
 <ArgTypes/>
 <Typ kind="G" nr="7">
 <Cluster/>
@@ -106,7 +106,7 @@
 <Adjective nr="29"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="LATTICES" nr="10">
 <ArgTypes/>
 <Typ kind="G" nr="7">
 <Cluster/>
@@ -127,7 +127,7 @@
 <Adjective nr="33"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="LATTICES" nr="11">
 <ArgTypes/>
 <Typ kind="G" nr="7">
 <Cluster/>
@@ -145,7 +145,7 @@
 <Adjective nr="34"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="LATTICES" nr="12">
 <ArgTypes/>
 <Typ kind="G" nr="7">
 <Cluster/>
@@ -164,7 +164,7 @@
 <Adjective nr="35"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="LATTICES" nr="13">
 <ArgTypes/>
 <Typ kind="G" nr="7">
 <Cluster/>
@@ -182,7 +182,7 @@
 <Adjective nr="36"/>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="LATTICES" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -216,7 +216,7 @@
 <Adjective nr="21"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="LATTICES" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -250,7 +250,7 @@
 <Adjective nr="20"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="LATTICES" nr="3">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -302,7 +302,7 @@
 <Adjective nr="22"/>
 </Cluster>
 </FCluster>
-<CCluster>
+<CCluster aid="LATTICES" nr="1">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="12" value="false"/>
@@ -321,7 +321,7 @@
 <Adjective nr="28"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="LATTICES" nr="2">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="12" value="false"/>
@@ -340,7 +340,7 @@
 <Adjective nr="29"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="LATTICES" nr="3">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="12" value="false"/>
@@ -355,7 +355,7 @@
 <Adjective nr="34"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="LATTICES" nr="4">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="12" value="false"/>
@@ -370,7 +370,7 @@
 <Adjective nr="33"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="LATTICES" nr="5">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="12" value="false"/>
@@ -386,7 +386,7 @@
 <Adjective nr="35"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="LATTICES" nr="6">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="12" value="false"/>
@@ -402,7 +402,7 @@
 <Adjective nr="36"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="LATTICES" nr="7">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="12" value="false"/>

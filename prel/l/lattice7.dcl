@@ -38,7 +38,7 @@
 <ArticleID name="LATTICE3"/>
 <ArticleID name="LATTICE7"/>
 </Signature>
-<RCluster>
+<RCluster aid="LATTICE7" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
@@ -65,7 +65,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="LATTICE7" nr="2">
 <ArgTypes/>
 <Typ kind="G" nr="5">
 <Cluster/>
@@ -82,18 +82,18 @@
 <Adjective nr="121"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="LATTICE7" nr="3">
 <ArgTypes/>
-<Typ kind="M" nr="26">
+<Typ kind="M" nr="25">
 <Cluster/>
 </Typ>
 <Cluster>
 <Adjective nr="1" value="false"/>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="LATTICE7" nr="1">
 <ArgTypes>
-<Typ kind="M" nr="26">
+<Typ kind="M" nr="25">
 <Cluster>
 <Adjective nr="1" value="false"/>
 </Cluster>

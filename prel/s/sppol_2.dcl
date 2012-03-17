@@ -12,11 +12,11 @@
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XCMPLX_0"/>
 <ArticleID name="RELSET_1"/>
+<ArticleID name="MCART_1"/>
+<ArticleID name="FUNCT_2"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
-<ArticleID name="MCART_1"/>
-<ArticleID name="FUNCT_2"/>
 <ArticleID name="ENUMSET1"/>
 <ArticleID name="DOMAIN_1"/>
 <ArticleID name="REALSET1"/>
@@ -41,7 +41,7 @@
 <ArticleID name="TOPREAL4"/>
 <ArticleID name="SPPOL_2"/>
 </Signature>
-<RCluster>
+<RCluster aid="SPPOL_2" nr="1">
 <ArgTypes/>
 <Typ kind="M" nr="7">
 <Cluster/>
@@ -54,12 +54,12 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4"/>
-<Adjective nr="16"/>
-<Adjective nr="20"/>
+<Adjective nr="19"/>
+<Adjective nr="23"/>
 <Adjective nr="76"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="SPPOL_2" nr="2">
 <ArgTypes/>
 <Typ kind="M" nr="7">
 <Cluster/>
@@ -73,15 +73,15 @@
 <Adjective nr="1"/>
 <Adjective nr="4"/>
 <Adjective nr="5"/>
-<Adjective nr="16"/>
-<Adjective nr="20"/>
+<Adjective nr="19"/>
+<Adjective nr="23"/>
 <Adjective nr="25" value="false"/>
 <Adjective nr="73"/>
 <Adjective nr="74"/>
 <Adjective nr="75"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="SPPOL_2" nr="3">
 <ArgTypes/>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -97,7 +97,7 @@
 <Adjective nr="77"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="SPPOL_2" nr="4">
 <ArgTypes/>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -113,7 +113,7 @@
 <Adjective nr="78"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="SPPOL_2" nr="5">
 <ArgTypes/>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -129,7 +129,7 @@
 <Adjective nr="78"/>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="SPPOL_2" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="7">
 <Cluster>
@@ -146,7 +146,7 @@
 <Func kind="K" nr="46"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="89">
+<Func kind="K" nr="114">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -162,7 +162,7 @@
 </Func>
 </Typ>
 </FCluster>
-<FCluster>
+<FCluster aid="SPPOL_2" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="7">
 <Cluster>
@@ -195,7 +195,7 @@
 </Func>
 </Typ>
 </FCluster>
-<FCluster>
+<FCluster aid="SPPOL_2" nr="3">
 <ArgTypes>
 <Typ kind="M" nr="7">
 <Cluster>
@@ -229,7 +229,7 @@
 <Adjective nr="74"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="SPPOL_2" nr="4">
 <ArgTypes>
 <Typ kind="M" nr="7">
 <Cluster>
@@ -246,7 +246,7 @@
 <Func kind="K" nr="46"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="89">
+<Func kind="K" nr="114">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -262,7 +262,7 @@
 </Func>
 </Typ>
 </FCluster>
-<FCluster>
+<FCluster aid="SPPOL_2" nr="5">
 <ArgTypes>
 <Typ kind="M" nr="7">
 <Cluster>
@@ -295,7 +295,7 @@
 </Func>
 </Typ>
 </FCluster>
-<FCluster>
+<FCluster aid="SPPOL_2" nr="6">
 <ArgTypes>
 <Typ kind="M" nr="7">
 <Cluster>
@@ -329,9 +329,9 @@
 <Adjective nr="75"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="SPPOL_2" nr="7">
 <ArgTypes/>
-<Func kind="K" nr="79">
+<Func kind="K" nr="104">
 <Func kind="U" nr="1">
 <Func kind="K" nr="295">
 <Num nr="2"/>
@@ -342,7 +342,7 @@
 <Adjective nr="73"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="SPPOL_2" nr="8">
 <ArgTypes>
 <Typ kind="M" nr="7">
 <Cluster>
@@ -359,7 +359,7 @@
 <Func kind="K" nr="46"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="89">
+<Func kind="K" nr="114">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -375,7 +375,7 @@
 </Func>
 </Typ>
 </FCluster>
-<FCluster>
+<FCluster aid="SPPOL_2" nr="9">
 <ArgTypes>
 <Typ kind="M" nr="7">
 <Cluster>
@@ -408,7 +408,7 @@
 </Func>
 </Typ>
 </FCluster>
-<FCluster>
+<FCluster aid="SPPOL_2" nr="10">
 <ArgTypes>
 <Typ kind="M" nr="7">
 <Cluster>
@@ -442,7 +442,7 @@
 <Adjective nr="73"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="SPPOL_2" nr="11">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -478,7 +478,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="SPPOL_2" nr="12">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -516,7 +516,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<CCluster>
+<CCluster aid="SPPOL_2" nr="1">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="76"/>
@@ -537,7 +537,7 @@
 <Adjective nr="75"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="SPPOL_2" nr="2">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="5"/>
@@ -558,7 +558,7 @@
 <Adjective nr="76"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="SPPOL_2" nr="3">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="76"/>
@@ -575,7 +575,7 @@
 <Adjective nr="7" value="false"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="SPPOL_2" nr="4">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="78"/>
@@ -594,7 +594,7 @@
 <Adjective nr="7" value="false"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="SPPOL_2" nr="5">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="78"/>

@@ -29,7 +29,7 @@
 <ArticleID name="ROBBINS1"/>
 <ArticleID name="QMAX_1"/>
 </Signature>
-<RCluster>
+<RCluster aid="QMAX_1" nr="1">
 <ArgTypes/>
 <Typ kind="G" nr="12">
 <Cluster/>
@@ -38,7 +38,7 @@
 <Adjective nr="85"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="QMAX_1" nr="2">
 <ArgTypes/>
 <Typ kind="G" nr="12">
 <Cluster/>
@@ -48,7 +48,7 @@
 <Adjective nr="86"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="QMAX_1" nr="3">
 <ArgTypes/>
 <Typ kind="G" nr="13">
 <Cluster/>
@@ -57,7 +57,7 @@
 <Adjective nr="87"/>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="QMAX_1" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -89,7 +89,7 @@
 <Adjective nr="1" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="QMAX_1" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="12">
 <Cluster/>
@@ -102,7 +102,7 @@
 <Adjective nr="1" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="QMAX_1" nr="3">
 <ArgTypes>
 <Typ kind="G" nr="12">
 <Cluster/>
@@ -115,7 +115,7 @@
 <Adjective nr="1" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="QMAX_1" nr="4">
 <ArgTypes>
 <Typ kind="G" nr="12">
 <Cluster>

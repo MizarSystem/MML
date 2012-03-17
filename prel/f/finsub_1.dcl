@@ -9,7 +9,7 @@
 <ArticleID name="FINSET_1"/>
 <ArticleID name="FINSUB_1"/>
 </Signature>
-<RCluster>
+<RCluster aid="FINSUB_1" nr="1">
 <ArgTypes/>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -21,7 +21,7 @@
 <Adjective nr="9"/>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="FINSUB_1" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -34,7 +34,7 @@
 <Adjective nr="10"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="FINSUB_1" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -48,7 +48,7 @@
 <Adjective nr="10"/>
 </Cluster>
 </FCluster>
-<CCluster>
+<CCluster aid="FINSUB_1" nr="1">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="10"/>
@@ -61,7 +61,7 @@
 <Adjective nr="9"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="FINSUB_1" nr="2">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="7"/>
@@ -74,7 +74,7 @@
 <Adjective nr="10"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="FINSUB_1" nr="3">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>

@@ -12,7 +12,7 @@
 <ArticleID name="MCART_1"/>
 <ArticleID name="PETRI"/>
 </Signature>
-<RCluster>
+<RCluster aid="PETRI" nr="1">
 <ArgTypes/>
 <Typ kind="G" nr="1">
 <Cluster/>
@@ -21,7 +21,7 @@
 <Adjective nr="8"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="PETRI" nr="2">
 <ArgTypes/>
 <Typ kind="G" nr="1">
 <Cluster/>
@@ -30,7 +30,7 @@
 <Adjective nr="10"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="PETRI" nr="3">
 <ArgTypes/>
 <Typ kind="G" nr="1">
 <Cluster/>

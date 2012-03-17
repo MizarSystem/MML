@@ -11,11 +11,11 @@
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
 <ArticleID name="RELSET_1"/>
+<ArticleID name="MCART_1"/>
+<ArticleID name="FUNCT_2"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
-<ArticleID name="MCART_1"/>
-<ArticleID name="FUNCT_2"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="ALGSTR_0"/>
 <ArticleID name="RLVECT_1"/>
@@ -25,7 +25,7 @@
 <ArticleID name="RUSUB_1"/>
 <ArticleID name="RUSUB_4"/>
 </Signature>
-<RCluster>
+<RCluster aid="RUSUB_4" nr="1">
 <ArgTypes/>
 <Typ kind="G" nr="13">
 <Cluster/>
@@ -44,7 +44,7 @@
 <Adjective nr="83"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="RUSUB_4" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="13">
 <Cluster>
@@ -76,7 +76,7 @@
 <Adjective nr="83"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="RUSUB_4" nr="3">
 <ArgTypes>
 <Typ kind="G" nr="13">
 <Cluster>
@@ -109,7 +109,7 @@
 <Adjective nr="83"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="RUSUB_4" nr="4">
 <ArgTypes>
 <Typ kind="G" nr="11">
 <Cluster>
@@ -132,7 +132,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="RUSUB_4" nr="5">
 <ArgTypes>
 <Typ kind="G" nr="11">
 <Cluster>
@@ -155,7 +155,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<CCluster>
+<CCluster aid="RUSUB_4" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="13">
 <Cluster>

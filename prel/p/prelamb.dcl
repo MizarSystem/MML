@@ -23,7 +23,7 @@
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="PRELAMB"/>
 </Signature>
-<RCluster>
+<RCluster aid="PRELAMB" nr="1">
 <ArgTypes/>
 <Typ kind="G" nr="5">
 <Cluster/>
@@ -32,7 +32,7 @@
 <Adjective nr="39"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="PRELAMB" nr="2">
 <ArgTypes/>
 <Typ kind="G" nr="5">
 <Cluster/>
@@ -42,7 +42,7 @@
 <Adjective nr="39"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="PRELAMB" nr="3">
 <ArgTypes/>
 <Typ kind="G" nr="6">
 <Cluster/>
@@ -51,7 +51,7 @@
 <Adjective nr="47"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="PRELAMB" nr="4">
 <ArgTypes/>
 <Typ kind="G" nr="6">
 <Cluster/>
@@ -61,7 +61,7 @@
 <Adjective nr="47"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="PRELAMB" nr="5">
 <ArgTypes/>
 <Typ kind="G" nr="6">
 <Cluster/>

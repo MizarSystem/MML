@@ -28,7 +28,7 @@
 <ArticleID name="VECTSP_1"/>
 <ArticleID name="REALSET2"/>
 </Signature>
-<RCluster>
+<RCluster aid="REALSET2" nr="1">
 <ArgTypes/>
 <Typ kind="G" nr="10">
 <Cluster/>
@@ -40,7 +40,7 @@
 <Adjective nr="71"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="REALSET2" nr="2">
 <ArgTypes/>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -56,7 +56,7 @@
 <Adjective nr="17"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="REALSET2" nr="3">
 <ArgTypes/>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -72,7 +72,7 @@
 <Adjective nr="17"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="REALSET2" nr="4">
 <ArgTypes/>
 <Typ kind="G" nr="10">
 <Cluster/>
@@ -90,7 +90,7 @@
 <Adjective nr="94"/>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="REALSET2" nr="1">
 <ArgTypes/>
 <Func kind="K" nr="185"/>
 <Cluster>
@@ -99,7 +99,7 @@
 <Adjective nr="68"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="REALSET2" nr="2">
 <ArgTypes/>
 <Func kind="K" nr="185"/>
 <Cluster>
@@ -107,7 +107,7 @@
 <Adjective nr="89"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="REALSET2" nr="3">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -169,7 +169,7 @@
 <Adjective nr="68"/>
 </Cluster>
 </FCluster>
-<CCluster>
+<CCluster aid="REALSET2" nr="1">
 <ArgTypes/>
 <Cluster/>
 <Typ kind="M" nr="2">
@@ -182,7 +182,7 @@
 <Adjective nr="17"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="REALSET2" nr="2">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="30" value="false"/>
@@ -194,7 +194,7 @@
 <Adjective nr="25" value="false"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="REALSET2" nr="3">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="29" value="false"/>
@@ -216,7 +216,7 @@
 <Adjective nr="94"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="REALSET2" nr="4">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="29" value="false"/>

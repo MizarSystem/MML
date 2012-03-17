@@ -16,7 +16,7 @@
 <ArticleID name="MEMBERED"/>
 <ArticleID name="RCOMP_1"/>
 </Signature>
-<RCluster>
+<RCluster aid="RCOMP_1" nr="1">
 <ArgTypes/>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -31,7 +31,7 @@
 <Adjective nr="27"/>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="RCOMP_1" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -58,7 +58,7 @@
 </Func>
 </Typ>
 </FCluster>
-<FCluster>
+<FCluster aid="RCOMP_1" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -85,7 +85,7 @@
 </Func>
 </Typ>
 </FCluster>
-<CCluster>
+<CCluster aid="RCOMP_1" nr="1">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="25"/>
@@ -100,7 +100,7 @@
 <Adjective nr="26"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="RCOMP_1" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>

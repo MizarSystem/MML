@@ -31,7 +31,7 @@
 <ArticleID name="RLVECT_1"/>
 <ArticleID name="PRVECT_1"/>
 </Signature>
-<RCluster>
+<RCluster aid="PRVECT_1" nr="1">
 <ArgTypes/>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -45,7 +45,7 @@
 <Adjective nr="101"/>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="PRVECT_1" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
@@ -75,7 +75,7 @@
 <Adjective nr="97"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="PRVECT_1" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="10">
 <Cluster>
@@ -109,7 +109,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="PRVECT_1" nr="3">
 <ArgTypes>
 <Typ kind="G" nr="10">
 <Cluster>
@@ -145,7 +145,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<CCluster>
+<CCluster aid="PRVECT_1" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -166,7 +166,7 @@
 <Adjective nr="30"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="PRVECT_1" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>

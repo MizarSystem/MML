@@ -13,7 +13,7 @@
 <ArticleID name="XREAL_0"/>
 <ArticleID name="POWER"/>
 </Signature>
-<FCluster>
+<FCluster aid="SERIES_1" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>

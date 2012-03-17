@@ -14,7 +14,7 @@
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="PRE_TOPC"/>
 </Signature>
-<RCluster>
+<RCluster aid="PRE_TOPC" nr="1">
 <ArgTypes/>
 <Typ kind="G" nr="5">
 <Cluster/>
@@ -23,7 +23,7 @@
 <Adjective nr="20"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="PRE_TOPC" nr="2">
 <ArgTypes/>
 <Typ kind="G" nr="5">
 <Cluster/>
@@ -34,7 +34,7 @@
 <Adjective nr="21"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="PRE_TOPC" nr="3">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster/>
@@ -48,7 +48,7 @@
 <Adjective nr="20"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="PRE_TOPC" nr="4">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
@@ -65,7 +65,7 @@
 <Adjective nr="20"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="PRE_TOPC" nr="5">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
@@ -82,7 +82,7 @@
 <Adjective nr="21"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="PRE_TOPC" nr="6">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
@@ -104,7 +104,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="PRE_TOPC" nr="7">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
@@ -128,7 +128,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="PRE_TOPC" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
@@ -143,7 +143,7 @@
 <Adjective nr="1" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="PRE_TOPC" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
@@ -170,7 +170,7 @@
 <Adjective nr="20"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="PRE_TOPC" nr="3">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
@@ -195,7 +195,7 @@
 <Adjective nr="21"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="PRE_TOPC" nr="4">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
@@ -212,7 +212,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<CCluster>
+<CCluster aid="PRE_TOPC" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>

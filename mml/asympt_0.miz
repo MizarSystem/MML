@@ -15,7 +15,8 @@ environ
  constructors FRAENKEL, REAL_1, NAT_1, SEQ_2, LIMFUNC1, NEWTON, POWER,
       PRE_CIRC, SEQ_1, VALUED_1, PARTFUN1;
  registrations XBOOLE_0, ORDINAL1, RELSET_1, FINSET_1, FRAENKEL, NUMBERS,
-      XXREAL_0, XREAL_0, NAT_1, INT_1, MEMBERED, VALUED_0, VALUED_1, FUNCT_2;
+      XXREAL_0, XREAL_0, NAT_1, INT_1, MEMBERED, VALUED_0, VALUED_1, FUNCT_2,
+      POWER;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions TARSKI, FRAENKEL, VALUED_1;
  theorems TARSKI, FUNCT_2, FRAENKEL, INT_1, NAT_1, PRE_CIRC, REAL_1, SEQ_1,
@@ -2437,7 +2438,7 @@ A13: b <> 1 by A1;
 A14: log(b,a) > 0 by A1,A13,POWER:59;
 A15: [/log(b,a)\] >= log(b,a) by INT_1:def 5;
     then reconsider i as Element of NAT by A14,INT_1:16;
-    c|^i = c to_power i by A6,POWER:48;
+    c|^i = c to_power i;
     then
 A16: c|^i > 0 by A6,POWER:39;
     reconsider i1 = b|^i as Element of NAT;
@@ -2449,9 +2450,8 @@ A17:  n >= N;
 A18:  n >= N2 & n >= N3 by A9,XXREAL_0:2;
       a <= b|^i
       proof
-A19:    a = b to_power log(b,a) by A1,A10,A13,POWER:def 3;
         b to_power log(b,a) <= b to_power i by A12,A15,PRE_FF:10;
-        hence thesis by A1,A19,POWER:48;
+        hence thesis by A1,A13,POWER:def 3;
       end;
       then
 A20:  a*n <= i1*n by XREAL_1:66;
@@ -2466,11 +2466,11 @@ A22:  (f taken_every a).n <= (f taken_every i1).n by Def18;
       defpred P[Element of NAT] means f.(b|^$1*n) <= c|^$1*f.n;
 A23:  P[0]
       proof
-        f.(b|^0*n) = f.((b to_power 0)*n) by A1,POWER:48
+        f.(b|^0*n) = f.((b to_power 0)*n)
           .= f.(1*n) by POWER:29
           .= 1*f.n
           .= (c to_power 0)*f.n by POWER:29;
-        hence thesis by A6,POWER:48;
+        hence thesis;
       end;
 A24:  for k st P[k] holds P[k+1]
       proof
@@ -2478,24 +2478,22 @@ A24:  for k st P[k] holds P[k+1]
         set m = b|^k*n;
         assume
 A25:    f.m <= c|^k*f.n;
-A26:    f.(b|^(k+1)*n) = f.((b to_power (k+1))*n) by A1,POWER:48
+A26:    f.(b|^(k+1)*n) = f.((b to_power (k+1))*n)
           .= f.((b to_power 1)*(b to_power k)*n) by A1,POWER:32
-          .= f.(b*(b to_power k)*n) by POWER:30
-          .= f.(b*b|^k*n) by A1,POWER:48
+          .= f.(b*b|^k*n) by POWER:30
           .= f.(b*(b|^k*n));
         reconsider m as Element of NAT;
         m >= N2
         proof
           per cases;
           suppose k = 0;
-            then b|^k*n = (b to_power 0)*n by A1,POWER:48
+            then b|^k*n = (b to_power 0)*n
               .= 1*n by POWER:29
               .= n;
             hence thesis by A9,A17,XXREAL_0:2;
           end;
           suppose k > 0;
             then b to_power k > 1 by A12,POWER:40;
-            then b|^k > 1 by A1,POWER:48;
             then b|^k*n >= 1*n by XREAL_1:66;
             hence thesis by A18,XXREAL_0:2;
           end;
@@ -2505,10 +2503,8 @@ A26:    f.(b|^(k+1)*n) = f.((b to_power (k+1))*n) by A1,POWER:48
 A27:    f.(b*m) <= c*f.m by Def18;
         c*f.m <= c*(c|^k*f.n) by A6,A25,XREAL_1:66;
         then c*f.m <= c*c|^k*f.n;
-        then c*f.m <= c*(c to_power k)*f.n by A6,POWER:48;
         then c*f.m <= (c to_power 1)*(c to_power k)*f.n by POWER:30;
         then c*f.m <= (c to_power (k+1))*f.n by A6,POWER:32;
-        then c*f.m <= c|^(k+1)*f.n by A6,POWER:48;
         hence thesis by A26,A27,XXREAL_0:2;
       end;
       for k holds P[k] from NAT_1:sch 1( A23, A24 );
@@ -2609,7 +2605,7 @@ A27:    [\log(b,n)/] <= -1 by INT_1:21;
       hence thesis;
     end;
     then reconsider i = [\log(b,n)/] as Element of NAT by INT_1:16;
-    n1 = b|^i by A2,POWER:48;
+    n1 = b|^i by POWER:46;
     then reconsider n1 as Element of NAT;
     set n2 = b*n1;
 A28: n = b to_power log(b,n) by A17,A19,A23,POWER:def 3;
@@ -2628,7 +2624,7 @@ A31: n <= n2 by A19,A28,A30,PRE_FF:10;
 A32: n/b <= n1 by XCMPLX_0:def 9;
     [\log(b,n)/] + 1 >= 0+0 by A26,XREAL_1:9;
     then reconsider n3 = [\log(b,n)/] + 1 as Element of NAT by INT_1:16;
-    n2 = b|^n3 by A2,A30,POWER:48;
+    n2 = b|^n3 by A30,POWER:46;
     then
 A33: n2 in X;
 A34: n2 >= N4 by A24,A31,XXREAL_0:2;
@@ -2741,7 +2737,7 @@ A27:  [\log(b,n)/] <= -1 by INT_1:21;
       hence contradiction by A19,A26,POWER:59;
     end;
     then reconsider i = [\log(b,n)/] as Element of NAT by INT_1:16;
-A28: n1 = b|^i by A2,POWER:48;
+A28: n1 = b|^i by POWER:46;
     then reconsider n1 as Element of NAT;
     set n2 = b*n1;
 A29: n = b to_power log(b,n) by A17,A19,A24,POWER:def 3;

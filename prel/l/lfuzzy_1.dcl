@@ -21,7 +21,7 @@
 <ArticleID name="FUZZY_4"/>
 <ArticleID name="LFUZZY_1"/>
 </Signature>
-<RCluster>
+<RCluster aid="LFUZZY_1" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -56,7 +56,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="LFUZZY_1" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -64,7 +64,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="121">
+<Func kind="K" nr="122">
 <LocusVar nr="1"/>
 <LocusVar nr="1"/>
 </Func>
@@ -83,7 +83,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="LFUZZY_1" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -127,7 +127,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="LFUZZY_1" nr="3">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -171,7 +171,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="LFUZZY_1" nr="4">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -215,7 +215,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="LFUZZY_1" nr="5">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -230,7 +230,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="126">
+<Func kind="K" nr="127">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -240,7 +240,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<CCluster>
+<CCluster aid="LFUZZY_1" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>

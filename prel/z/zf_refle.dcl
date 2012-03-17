@@ -22,7 +22,7 @@
 <ArticleID name="ORDINAL4"/>
 <ArticleID name="ZF_REFLE"/>
 </Signature>
-<RCluster>
+<RCluster aid="ZF_REFLE" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -39,7 +39,7 @@
 <Adjective nr="14" value="false"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="ZF_REFLE" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>

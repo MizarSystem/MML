@@ -12,10 +12,10 @@
 <ArticleID name="MCART_1"/>
 <ArticleID name="NUMBERS"/>
 <ArticleID name="RELSET_1"/>
+<ArticleID name="FUNCT_2"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
-<ArticleID name="FUNCT_2"/>
 <ArticleID name="FRAENKEL"/>
 <ArticleID name="QC_LANG1"/>
 <ArticleID name="FUNCOP_1"/>
@@ -26,7 +26,7 @@
 <ArticleID name="VALUAT_1"/>
 <ArticleID name="HENMODEL"/>
 </Signature>
-<RCluster>
+<RCluster aid="HENMODEL" nr="1">
 <ArgTypes/>
 <Typ kind="M" nr="2">
 <Cluster/>

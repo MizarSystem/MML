@@ -11,15 +11,15 @@
 <ArticleID name="RELSET_1"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
+<ArticleID name="MCART_1"/>
+<ArticleID name="FUNCT_2"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
-<ArticleID name="MCART_1"/>
-<ArticleID name="FUNCT_2"/>
 <ArticleID name="GRAPH_1"/>
 <ArticleID name="GRAPH_2"/>
 </Signature>
-<RCluster>
+<RCluster aid="GRAPH_2" nr="1">
 <ArgTypes/>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -27,13 +27,13 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4"/>
-<Adjective nr="15"/>
-<Adjective nr="19"/>
+<Adjective nr="18"/>
+<Adjective nr="22"/>
 <Adjective nr="34"/>
 <Adjective nr="35"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="GRAPH_2" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="1">
 <Cluster>
@@ -49,11 +49,11 @@
 <Adjective nr="1"/>
 <Adjective nr="4"/>
 <Adjective nr="7"/>
-<Adjective nr="15"/>
-<Adjective nr="19"/>
+<Adjective nr="18"/>
+<Adjective nr="22"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="GRAPH_2" nr="3">
 <ArgTypes>
 <Typ kind="G" nr="1">
 <Cluster>
@@ -68,14 +68,14 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4"/>
-<Adjective nr="15"/>
-<Adjective nr="19"/>
+<Adjective nr="18"/>
+<Adjective nr="22"/>
 <Adjective nr="36">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="GRAPH_2" nr="4">
 <ArgTypes>
 <Typ kind="G" nr="1">
 <Cluster>
@@ -91,14 +91,14 @@
 <Adjective nr="1"/>
 <Adjective nr="4"/>
 <Adjective nr="5"/>
-<Adjective nr="15"/>
-<Adjective nr="19"/>
+<Adjective nr="18"/>
+<Adjective nr="22"/>
 <Adjective nr="36">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="GRAPH_2" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="1">
 <Cluster>
@@ -113,7 +113,7 @@
 <Adjective nr="7" value="false"/>
 </Cluster>
 </FCluster>
-<CCluster>
+<CCluster aid="GRAPH_2" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -131,10 +131,10 @@
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="20"/>
+<Adjective nr="23"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="GRAPH_2" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="1">
 <Cluster>
@@ -153,7 +153,7 @@
 <Adjective nr="5"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="GRAPH_2" nr="3">
 <ArgTypes>
 <Typ kind="G" nr="1">
 <Cluster>

@@ -54,7 +54,7 @@
 <ArticleID name="TOPALG_1"/>
 <ArticleID name="TOPALG_4"/>
 </Signature>
-<FCluster>
+<FCluster aid="TOPALG_4" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="11">
 <Cluster>
@@ -81,7 +81,7 @@
 <Adjective nr="140"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="TOPALG_4" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="11">
 <Cluster>

@@ -28,7 +28,7 @@ environ
       ORDINAL1, MCART_1, GRFUNC_1, FINSEQ_3, BINARITH, INT_1, SETFAM_1,
       REVROT_1, PRE_CIRC, INTEGRA2, FUNCT_7, RELSET_1, XBOOLE_0, XBOOLE_1,
       MEMBERED, XREAL_1, XXREAL_0, FINSEQ_6, PARTFUN1, FINSET_1;
- schemes NAT_1, FUNCT_7, FINSEQ_2, AMI_1, DOMAIN_1, FUNCT_2;
+ schemes NAT_1, FUNCT_7, FINSEQ_2, AMI_1, DOMAIN_1, FUNCT_2, FINSEQ_4;
 
 begin :: Ami-Struct
 
@@ -1598,7 +1598,7 @@ A1: f + z = g + z;
   hence f = g by Th27;
 end;
 
-theorem
+theorem Th33:
   for f being Instruction-Location of T
   holds locnum f + z = locnum (f + z) by Def13;
 
@@ -2364,5 +2364,225 @@ proof
   the Instructions of Trivial-AMI(IL,N) = {[0,{}]} by AMI_1:def 2;
   then i = [0,{}] by TARSKI:def 1;
   hence thesis by MCART_1:def 1;
+end;
+
+begin :: Addenda
+
+:: from SCMPDS_9, 2008.03.10, A.T.
+
+theorem
+  for IL being non empty set for N being with_non-empty_elements set,
+  S being IC-Ins-separated definite
+  (non empty stored-program AMI-Struct over IL,N), i being Instruction of S,
+  l being Instruction-Location of S holds JUMP(i) c= NIC(i,l)
+proof
+  let IL be non empty set;
+  let N be with_non-empty_elements set, S be IC-Ins-separated definite
+  (non empty stored-program AMI-Struct over IL,N), i be Instruction of S,
+  l be Instruction-Location of S;
+  set X = { NIC(i,k) where k is Instruction-Location of S:
+  not contradiction };
+  let x be set;
+  assume
+A1: x in JUMP(i);
+  NIC(i,l) in X;
+  hence thesis by A1,SETFAM_1:def 1;
+end;
+
+theorem
+  for IL being non empty set for N being with_non-empty_elements set,
+  S being IC-Ins-separated definite
+  (non empty stored-program AMI-Struct over IL,N),
+  l1, l2 being Instruction-Location of S st SUCC(l1) = IL holds l1 <= l2
+proof
+  let IL be non empty set;
+  let N be with_non-empty_elements set, S be IC-Ins-separated definite
+  (non empty stored-program AMI-Struct over IL,N),
+  l1, l2 be Instruction-Location of S such that
+A1: SUCC(l1) = IL;
+  defpred P[set,set] means
+  ($1 = 1 implies $2 = l1) & ($1 = 2 implies $2 = l2);
+A2: for n being Nat st n in Seg 2
+  ex d being Element of IL st P[n,d]
+  proof
+    let n be Nat;
+    assume
+A3: n in Seg 2;
+    per cases by A3,FINSEQ_1:4,TARSKI:def 2;
+    suppose
+A4:   n = 1;
+      reconsider l1 as Element of IL by AMI_1:def 4;
+      take l1;
+      thus P[n,l1] by A4;
+    end;
+    suppose
+A5:   n = 2;
+      reconsider l2 as Element of IL by AMI_1:def 4;
+      take l2;
+      thus P[n,l2] by A5;
+    end;
+  end;
+  consider f being FinSequence of IL such that
+A6: len f = 2 and
+A7: for n being Nat st n in Seg 2 holds P[n,f/.n]
+  from FINSEQ_4:sch 1(A2);
+A8: 1 in Seg 2 & 2 in Seg 2 by FINSEQ_1:4,TARSKI:def 2;
+  then
+A9: f/.1 = l1 & f/.len f = l2 by A6,A7;
+  dom f = Seg 2 by A6,FINSEQ_1:def 3;
+  then ex y being set st [1,y] in f by A8,RELAT_1:def 4;
+  then reconsider f as non empty IL-FinSequence of S by AMI_1:def 34;
+  take f;
+  thus f/.1 = l1 & f/.len f = l2 by A9;
+  let n be Element of NAT;
+  assume
+A10: 1 <= n;
+  assume n < len f;
+  then n < 1+1 by A6;
+  then n <= 1 by NAT_1:13;
+  then n = 1 by A10,XXREAL_0:1;
+  hence f/.(n+1) in SUCC f/.n by A1,A9;
+end;
+
+:: from SCMRING4, 2008.03.13, A.T.
+
+reserve i, j, k for natural number,
+  n for Element of NAT,
+  IL for non empty set,
+  N for with_non-empty_elements set,
+  S for standard (IC-Ins-separated definite
+  (non empty stored-program AMI-Struct over NAT,N)),
+  l for Instruction-Location of S,
+  f for FinPartState of S;
+
+definition
+  let N be with_non-empty_elements set,
+  S be standard (IC-Ins-separated definite
+  (non empty stored-program AMI-Struct over NAT,N)),
+  loc be Instruction-Location of S, k be natural number;
+  func loc -' k -> Instruction-Location of S equals
+
+  il.(S, (locnum loc) -' k);
+  coherence;
+end;
+
+theorem
+  l -' 0 = l
+proof
+  thus l -' 0 = il.(S,locnum l) by BINARITH:58
+    .= l by Def13;
+end;
+
+theorem Th5:
+  l + k -' k = l
+proof
+  thus l + k -' k = il.(S,locnum l + k -' k) by Th33
+    .= il.(S,locnum l) by BINARITH:39
+    .= l by Def13;
+end;
+
+Lm3: now
+  let L,C,I be set;
+  set B = C \ (L \/ I);
+  thus I misses B
+  proof
+    assume I meets B;
+    then consider o being set such that
+A1: o in I and
+A2: o in B by XBOOLE_0:3;
+    not o in L \/ I by A2,XBOOLE_0:def 4;
+    hence thesis by A1,XBOOLE_0:def 2;
+  end;
+end;
+
+Lm2: for a,b,c being set holds not c in a \ ({c} \/ b)
+proof
+  let a,b,c be set;
+  assume c in a \ ({c} \/ b);
+  then not c in {c} \/ b by XBOOLE_0:def 4;
+  then not c in {c} by XBOOLE_0:def 2;
+  hence thesis by TARSKI:def 1;
+end;
+
+Lm4: for
+a,b,c being set st a c= c & b c= c \ a holds c = a \/ (c \ (a\/b)) \/ b
+proof
+  let a,b,c be set such that
+A1: a c= c and
+A2: b c= c \ a;
+  thus a \/ (c \ (a\/b)) \/ b = a \/ (c \ a \ b) \/ b by XBOOLE_1:41
+    .= a \/ ((c \ a \ b) \/ b) by XBOOLE_1:4
+    .= a \/ ((c \ a) \/ b) by XBOOLE_1:39
+    .= a \/ (c \ a) by A2,XBOOLE_1:12
+    .= a \/ c by XBOOLE_1:39
+    .= c by A1,XBOOLE_1:12;
+end;
+
+theorem
+  for S being IC-Ins-separated definite realistic
+  (non empty stored-program AMI-Struct over IL,N),
+  p being FinPartState of S holds p is data-only iff
+  dom p c= (the carrier of S) \ ({IC S} \/ IL)
+proof
+  let S be IC-Ins-separated definite realistic
+  (non empty stored-program AMI-Struct over IL,N), p be FinPartState of S;
+  set C = the carrier of S;
+  set I = IL;
+  set B = C \ ({IC S} \/ I);
+A1: B misses I by Lm3;
+  I c= C \ {IC S}
+  proof
+    let i be set;
+A2: IL c= the carrier of S by AMI_1:def 3;
+    assume
+A3: i in I;
+    then i is Instruction-Location of S by AMI_1:def 4;
+    then i <> IC S by AMI_1:48;
+    then not i in {IC S} by TARSKI:def 1;
+    hence thesis by A2,A3,XBOOLE_0:def 4;
+  end;
+  then
+A4: C = {IC S} \/ B \/ I by Lm4;
+  dom p c= C by AMI_1:80;
+  then
+A5: dom p c= {IC S} \/ I \/ B by A4,XBOOLE_1:4;
+  B misses {IC S} by Lm2,ZFMISC_1:56;
+  then B misses {IC S} \/ I by A1,XBOOLE_1:70;
+  then dom p misses {IC S} \/ I iff dom p c= B by A5,XBOOLE_1:63,73;
+  hence thesis by AMI_1:def 50;
+end;
+
+theorem
+  for l1, l2 being Instruction-Location of S holds
+  Start-At(l1+k) = Start-At(l2+k) iff Start-At l1 = Start-At l2
+proof
+  let l1,l2 be Instruction-Location of S;
+  hereby
+    assume
+A1: Start-At(l1 + k) = Start-At(l2 + k);
+    {[IC S, l1 + k]} = IC S .--> (l2 + k) by A1,FUNCT_4:87;
+    then {[IC S, l1 + k]} = {[IC S, l2 + k]} by FUNCT_4:87;
+    then [IC S, l1 + k] = [IC S, l2 + k] by ZFMISC_1:6;
+    then l1 + k = l2 + k by ZFMISC_1:33;
+    then l1 = l2 + k -' k by Th5;
+    hence Start-At l1 = Start-At l2 by Th5;
+  end;
+  assume Start-At l1 = Start-At l2;
+  then {[IC S, l1]} = Start-At l2 by FUNCT_4:87;
+  then {[IC S, l1]} = {[IC S, l2]} by FUNCT_4:87;
+  then [IC S, l1] = [IC S, l2] by ZFMISC_1:6;
+  hence Start-At(l1 + k) = Start-At(l2 + k) by ZFMISC_1:33;
+end;
+
+theorem
+  for l1, l2 being Instruction-Location of S
+  st Start-At l1 = Start-At l2 holds Start-At(l1 -' k) = Start-At(l2 -' k)
+proof
+  let l1, l2 be Instruction-Location of S;
+  assume Start-At l1 = Start-At l2;
+  then {[IC S, l1]} = Start-At l2 by FUNCT_4:87
+    .= {[IC S, l2]} by FUNCT_4:87;
+  then [IC S, l1] = [IC S, l2] by ZFMISC_1:6;
+  hence Start-At(l1 -' k) = Start-At(l2 -' k) by ZFMISC_1:33;
 end;
 

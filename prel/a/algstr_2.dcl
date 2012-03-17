@@ -25,7 +25,7 @@
 <ArticleID name="GROUP_1"/>
 <ArticleID name="VECTSP_1"/>
 </Signature>
-<RCluster>
+<RCluster aid="ALGSTR_2" nr="1">
 <ArgTypes/>
 <Typ kind="G" nr="10">
 <Cluster/>
@@ -46,7 +46,7 @@
 <Adjective nr="95"/>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="ALGSTR_2" nr="1">
 <ArgTypes/>
 <Func kind="K" nr="154"/>
 <Cluster>

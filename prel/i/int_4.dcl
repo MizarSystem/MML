@@ -49,7 +49,7 @@
 <ArticleID name="INTEGRA2"/>
 <ArticleID name="INT_4"/>
 </Signature>
-<FCluster>
+<FCluster aid="INT_4" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -71,7 +71,7 @@
 <Adjective nr="29"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="INT_4" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -93,7 +93,7 @@
 <Adjective nr="29"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="INT_4" nr="3">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -108,7 +108,7 @@
 <Adjective nr="14"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="INT_4" nr="4">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -126,7 +126,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="INT_4" nr="5">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>

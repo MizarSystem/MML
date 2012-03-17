@@ -43,14 +43,14 @@
 <ArticleID name="WAYBEL23"/>
 <ArticleID name="YELLOW15"/>
 </Signature>
-<FCluster>
+<FCluster aid="YELLOW15" nr="1">
 <ArgTypes/>
 <Func kind="K" nr="144"/>
 <Cluster>
 <Adjective nr="15"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="YELLOW15" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -66,7 +66,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="298">
+<Func kind="K" nr="299">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -74,7 +74,7 @@
 <Adjective nr="15"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="YELLOW15" nr="3">
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
@@ -100,7 +100,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<CCluster>
+<CCluster aid="YELLOW15" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -121,7 +121,7 @@
 <Adjective nr="15"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="YELLOW15" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="1">
 <Cluster>
@@ -144,7 +144,7 @@
 <Adjective nr="15"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="YELLOW15" nr="3">
 <ArgTypes/>
 <Cluster/>
 <Typ kind="M" nr="7">

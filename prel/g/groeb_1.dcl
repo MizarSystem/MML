@@ -48,7 +48,7 @@
 <ArticleID name="POLYNOM1"/>
 <ArticleID name="GROEB_1"/>
 </Signature>
-<FCluster>
+<FCluster aid="GROEB_1" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="3">
 <Cluster/>

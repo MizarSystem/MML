@@ -28,7 +28,7 @@ environ
  requirements NUMERALS, BOOLE, SUBSET, ARITHM, REAL;
  definitions FUNCT_1, TOPS_2, BORSUK_4, COMPTS_1, PRE_TOPC, RELAT_2, ORDERS_1,
       SEQ_4, TARSKI, XBOOLE_0, JCT_MISC, SEQM_3, CONNSP_1, TOPALG_2, SUBSET_1,
-      WELLORD1, STRUCT_0, LIMFUNC1, PROB_1;
+      WELLORD1, STRUCT_0, LIMFUNC1, PROB_1, SETFAM_1;
  theorems PRE_TOPC, XREAL_0, FUNCT_2, INT_1, TOPS_2, FUNCT_1, TOPMETR,
       BORSUK_4, RELAT_1, TOPALG_2, TARSKI, ZFMISC_1, JORDAN5A, FINSEQ_1,
       XBOOLE_1, COMPTS_1, SETFAM_1, XBOOLE_0, REAL_1, FINSEQ_3, NAT_1, RCOMP_1,
@@ -2041,40 +2041,26 @@ defpred P[set,set] means $1 c= $2;
 
 theorem Th58:
   for T being 1-sorted, F being Subset-Family of T holds
-  F is_a_cover_of T iff F is_a_cover_of [#]T
-proof
-  let T be 1-sorted, F be Subset-Family of T;
-  thus F is_a_cover_of T implies F is_a_cover_of [#]T
-  proof
-    assume F is_a_cover_of T;
-    hence [#]T c= union F by PRE_TOPC:def 8;
-    thus thesis;
-  end;
-  assume F is_a_cover_of [#]T;
-  hence [#]T c= union F by COMPTS_1:def 1;
-  let a be set;
-  assume a in union F;
-  hence a in [#]T;
-end;
+  F is Cover of T iff F is Cover of [#]T;
 
 theorem Th59:
   for T being 1-sorted, F being finite Subset-Family of T
-  for F1 being Subset-Family of T st F is_a_cover_of T &
+  for F1 being Subset-Family of T st F is Cover of T &
   F1 = F \ {X where X is Subset of T:
   X in F & ex Y being Subset of T st Y in F & X c< Y}
-  holds F1 is_a_cover_of T
+  holds F1 is Cover of T
 proof
   let T be 1-sorted, F be finite Subset-Family of T,
   F1 be Subset-Family of T such that
-A1: [#]T = union F and
+A1: the carrier of T c= union F and
 A2: F1 = F \ {X where X is Subset of T:
   X in F & ex Y being Subset of T st Y in F & X c< Y};
   set ZAW = {X where X is Subset of T:
   X in F & ex Y being Subset of T st Y in F & X c< Y};
-  thus [#]T c= union F1
+  thus the carrier of T c= union F1
   proof
     let t be set;
-    assume t in [#]T;
+    assume t in the carrier of T;
     then consider Z being set such that
 A3: t in Z and
 A4: Z in F by A1,TARSKI:def 4;
@@ -2241,12 +2227,13 @@ end;
 
 theorem Th60:
   for S being trivial non empty 1-sorted, s being Point of S,
-  F being Subset-Family of S st F is_a_cover_of S holds {s} in F
+  F being Subset-Family of S st F is Cover of S holds {s} in F
 proof
   let S be trivial non empty 1-sorted, s be Point of S,
   F be Subset-Family of S such that
-A1: [#]S = union F;
-  consider Z being set such that
+A1: the carrier of S c= union F;
+  s in the carrier of S;
+  then consider Z being set such that
 A2: s in Z and
 A3: Z in F by A1,TARSKI:def 4;
   consider d being Element of S such that
@@ -2341,26 +2328,26 @@ end;
 
 theorem Th61:
   for L being TopSpace, G, G1 being Subset-Family of L st
-  G is_a_cover_of L & G is finite for ALL being set st
+  G is Cover of L & G is finite for ALL being set st
   G1 = G \ {X where X is Subset of L: X in G & ex Y being Subset of L st
   Y in G & X c< Y} &
-  ALL = {C where C is Subset-Family of L: C is_a_cover_of L & C c= G1}
+  ALL = {C where C is Subset-Family of L: C is Cover of L & C c= G1}
   holds ALL has_lower_Zorn_property_wrt RelIncl ALL
 proof
   let L be TopSpace;
   let G, G1 be Subset-Family of L;
   assume that
-A1: G is_a_cover_of L and
+A1: G is Cover of L and
 A2: G is finite;
   set ZAW = {X where X is Subset of L: X in G & ex Y being Subset of L st
   Y in G & X c< Y};
   let ALL be set;
   assume that
 A3: G1 = G \ ZAW and
-A4: ALL = {C where C is Subset-Family of L: C is_a_cover_of L & C c= G1};
+A4: ALL = {C where C is Subset-Family of L: C is Cover of L & C c= G1};
   set R = RelIncl ALL;
 A5: G1 is finite by A2,A3,FINSET_1:13,XBOOLE_1:36;
-A6: G1 is_a_cover_of L by A1,A2,A3,Th59;
+A6: G1 is Cover of L by A1,A2,A3,Th59;
 A7: field R = ALL by WELLORD2:def 1;
   let Y be set such that
 A8: Y c= ALL and
@@ -2373,7 +2360,7 @@ A10: Y is non empty;
 A11: y in Y by A10,XBOOLE_0:def 1;
     y in ALL by A8,A11;
     then consider C being Subset-Family of L such that
-A12: y = C and C is_a_cover_of L and
+A12: y = C and C is Cover of L and
 A13: C c= G1 by A4;
     reconsider X = x as Subset-Family of L by A11,A12,SETFAM_1:8;
 A14: x c= G1 by A11,A12,A13,SETFAM_1:8;
@@ -2384,7 +2371,7 @@ A16: E is finite from FRAENKEL:sch 21(A15);
     proof
       let a be set;
       assume a in ALL;
-      then ex C being Subset-Family of L st a = C & C is_a_cover_of L &
+      then ex C being Subset-Family of L st a = C & C is Cover of L &
       C c= G1 by A4;
       hence thesis;
     end;
@@ -2419,24 +2406,18 @@ then [x,meet B] in R or [meet B,x] in R or x = meet B by XBOOLE_0:def 3;
       end;
     end;
 A25: A[Y] from FINSET_1:sch 2(A17,A18,A19);
-    X is_a_cover_of L
+    X is Cover of L
     proof
-      thus [#]L c= union X
-      proof
         let a be set;
         assume
-A26:    a in [#]L;
+A26:    a in the carrier of L;
         meet Y in ALL by A8,A10,A25;
-        then ex C being Subset-Family of L st
-        meet Y = C & C is_a_cover_of L & C c= G1 by A4;
-        hence thesis by A26,PRE_TOPC:def 8;
-      end;
-      let a be set;
-      assume a in union X;
-      then consider Z being set such that
-A27:  a in Z and
-A28:  Z in X by TARSKI:def 4;
-      thus thesis by A27,A28;
+        then consider C being Subset-Family of L such that
+X:       meet Y = C & C is Cover of L & C c= G1 by A4;
+        the carrier of L c= union C by X,SETFAM_1:def 12;
+        then a in union C by A26;
+        then a in union X by X;
+        hence thesis;
     end;
     hence
 A29: x in ALL by A4,A14;
@@ -2455,7 +2436,7 @@ end;
 
 theorem Th62:
   for L being TopSpace, G, ALL being set st
-  ALL = {C where C is Subset-Family of L: C is_a_cover_of L & C c= G}
+  ALL = {C where C is Subset-Family of L: C is Cover of L & C c= G}
   for M being set st M is_minimal_in RelIncl ALL & M in field RelIncl ALL
   for A1 being Subset of L st A1 in M holds not ex A2, A3 being Subset of L st
   A2 in M & A3 in M & A1 c= A2 \/ A3 & A1 <> A2 & A1 <> A3
@@ -2463,7 +2444,7 @@ proof
   let L be TopSpace;
   let G be set;
   let ALL be set such that
-A1: ALL = {C where C is Subset-Family of L: C is_a_cover_of L & C c= G};
+A1: ALL = {C where C is Subset-Family of L: C is Cover of L & C c= G};
 A2: [#]L = the carrier of L;
   set R = RelIncl ALL;
 A3: field R = ALL by WELLORD2:def 1;
@@ -2472,9 +2453,9 @@ A4: M is_minimal_in RelIncl ALL and
 A5: M in field RelIncl ALL;
   consider C being Subset-Family of L such that
 A6: M = C and
-A7: C is_a_cover_of L and
+A7: C is Cover of L and
 A8: C c= G by A1,A3,A5;
-A9: union C = [#]L by A7,PRE_TOPC:def 8;
+A9: union C = [#]L by A7,SETFAM_1:60;
   let A1 be Subset of L such that
 A10: A1 in M;
   given A2, A3 being Subset of L such that
@@ -2515,7 +2496,7 @@ A22:  Z in C by A9,A16,TARSKI:def 4;
     end;
   end;
   then
-A23: Y is_a_cover_of L by A2,PRE_TOPC:def 8;
+A23: Y is Cover of L by SETFAM_1:def 12;
 A24: Y <> M by A10,ZFMISC_1:64;
 A25: Y c= M by A6,XBOOLE_1:36;
   then Y c= G by A6,A8,XBOOLE_1:1;
@@ -2528,7 +2509,7 @@ end;
 definition
   let r, s be real number;
   let F be Subset-Family of Closed-Interval-TSpace(r,s) such that
-A1: F is_a_cover_of Closed-Interval-TSpace(r,s) and
+A1: F is Cover of Closed-Interval-TSpace(r,s) and
 A2: F is open and
 A3: F is connected and
 A4: r <= s;
@@ -2571,16 +2552,16 @@ A9:   s in [.r,s.] by A4,RCOMP_1:48;
 A10:  the carrier of L = [.r,s.] by A4,TOPMETR:25;
 A11:  [#]L = the carrier of L;
       reconsider T = L as non empty connected TopSpace by A4,TREAL_1:23;
-A12:  F is_a_cover_of [#]L by A1,Th58;
+A12:  F is Cover of [#]L by A1;
       L is compact by A4,HEINE:11;
       then [#]L is compact by COMPTS_1:10;
       then consider G being Subset-Family of L such that
 A13:  G c= F and
-A14:  G is_a_cover_of [#]L and
+A14:  G is Cover of [#]L and
 A15:  G is finite by A2,A12,COMPTS_1:def 7;
-A16:  G is_a_cover_of L by A14,Th58;
+A16:  G is Cover of L by A14;
       then
-A17:  union G = [#]L by PRE_TOPC:def 8;
+A17:  union G = [#]L by SETFAM_1:60;
 A18:  now
         let A be Subset of L;
         A is Subset of REAL by A10,XBOOLE_1:1;
@@ -2630,7 +2611,7 @@ A28:  for X being set st X in G1 holds X is connected Subset of REAL
 A29:  G1 c= bool REAL by A27,XBOOLE_1:1;
 
 :: konstrukcja pokrycia minimalnego
-      set ALL = {C where C is Subset-Family of L: C is_a_cover_of L & C c= G1};
+      set ALL = {C where C is Subset-Family of L: C is Cover of L & C c= G1};
       set R = RelIncl ALL;
 A30:  R partially_orders ALL
       proof
@@ -2644,9 +2625,9 @@ A32:  M is_minimal_in R by A30,A31,ORDERS_1:174;
 A33:  M in field R by A32,ORDERS_1:def 12;
       then consider C being Subset-Family of L such that
 A34:  M = C and
-A35:  C is_a_cover_of L and
+A35:  C is Cover of L and
 A36:  C c= G1 by A31;
-A37:  union C = [#]L by A35,PRE_TOPC:def 8;
+A37:  union C = [#]L by A35,SETFAM_1:60;
       then consider R1 being set such that
 A38:  r in R1 and
 A39:  R1 in C by A8,A10,TARSKI:def 4;
@@ -3226,7 +3207,7 @@ A207:                 l = s by A68,A196,A206,XXREAL_0:1;
                       hence thesis by A66,A67,A163,A196,A207,TARSKI:def 4;
                     end;
                   end;
-                  then FI is_a_cover_of L by A11,PRE_TOPC:def 8;
+                  then FI is Cover of L by SETFAM_1:def 12;
                   then
 A208:             FI in ALL by A201;
                   then [FI,M] in R by A31,A33,A34,A200,WELLORD2:def 1;
@@ -3594,11 +3575,11 @@ A319: IT/.n = ].a,b.[ by A237,A315;
 end;
 
 theorem
-  F is_a_cover_of Closed-Interval-TSpace(r,s) & F is open connected & r <= s &
+  F is Cover of Closed-Interval-TSpace(r,s) & F is open connected & r <= s &
   [.r,s.] in F implies <*[.r,s.]*> is IntervalCover of F
 proof
   assume that
-A1: F is_a_cover_of Closed-Interval-TSpace(r,s) and
+A1: F is Cover of Closed-Interval-TSpace(r,s) and
 A2: F is open and
 A3: F is connected and
 A4: r <= s and
@@ -3618,13 +3599,13 @@ reserve C for IntervalCover of F;
 theorem Th64:
   for F being Subset-Family of Closed-Interval-TSpace(r,r),
   C being IntervalCover of F holds
-  F is_a_cover_of Closed-Interval-TSpace(r,r) & F is open connected
+  F is Cover of Closed-Interval-TSpace(r,r) & F is open connected
   implies C = <*[.r,r.]*>
 proof
   set L = Closed-Interval-TSpace(r,r);
   let F be Subset-Family of L, C be IntervalCover of F;
   assume that
-A1: F is_a_cover_of L and
+A1: F is Cover of L and
 A2: F is open and
 A3: F is connected;
 A4: [.r,r.] = {r} by RCOMP_1:14;
@@ -3635,11 +3616,11 @@ A4: [.r,r.] = {r} by RCOMP_1:14;
 end;
 
 theorem Th65:
-  F is_a_cover_of Closed-Interval-TSpace(r,s) & F is open connected &
+  F is Cover of Closed-Interval-TSpace(r,s) & F is open connected &
   r <= s implies 1 <= len C
 proof
   assume that
-A1: F is_a_cover_of Closed-Interval-TSpace(r,s) and
+A1: F is Cover of Closed-Interval-TSpace(r,s) and
 A2: F is open and
 A3: F is connected and
 A4: r <= s;
@@ -3653,11 +3634,11 @@ A5: union rng C = [.r,s.] by A1,A2,A3,A4,Def2;
 end;
 
 theorem Th66:
-  F is_a_cover_of Closed-Interval-TSpace(r,s) & F is open connected &
+  F is Cover of Closed-Interval-TSpace(r,s) & F is open connected &
   r <= s & len C = 1 implies C = <*[.r,s.]*>
 proof
   assume that
-A1: F is_a_cover_of Closed-Interval-TSpace(r,s) and
+A1: F is Cover of Closed-Interval-TSpace(r,s) and
 A2: F is open and
 A3: F is connected and
 A4: r <= s and
@@ -3684,11 +3665,11 @@ A10: ex x being set st x in dom C & C.x = Z by A9,FUNCT_1:def 5;
 end;
 
 theorem
-  F is_a_cover_of Closed-Interval-TSpace(r,s) & F is open connected & r <= s &
+  F is Cover of Closed-Interval-TSpace(r,s) & F is open connected & r <= s &
   n in dom C & m in dom C & n < m implies inf(C/.n) <= inf(C/.m)
 proof
   assume that
-A1: F is_a_cover_of Closed-Interval-TSpace(r,s) and
+A1: F is Cover of Closed-Interval-TSpace(r,s) and
 A2: F is open and
 A3: F is connected and
 A4: r <= s and
@@ -3724,11 +3705,11 @@ A15:  1 <= k by A13,FINSEQ_3:27;
 end;
 
 theorem
-  F is_a_cover_of Closed-Interval-TSpace(r,s) & F is open connected & r <= s &
+  F is Cover of Closed-Interval-TSpace(r,s) & F is open connected & r <= s &
   n in dom C & m in dom C & n < m implies sup(C/.n) <= sup(C/.m)
 proof
   assume that
-A1: F is_a_cover_of Closed-Interval-TSpace(r,s) and
+A1: F is Cover of Closed-Interval-TSpace(r,s) and
 A2: F is open and
 A3: F is connected and
 A4: r <= s and
@@ -3764,11 +3745,11 @@ A15:  1 <= k by A13,FINSEQ_3:27;
 end;
 
 theorem Th69:
-  F is_a_cover_of Closed-Interval-TSpace(r,s) & F is open connected & r <= s &
+  F is Cover of Closed-Interval-TSpace(r,s) & F is open connected & r <= s &
   1 <= n & n+1 <= len C implies ].inf(C/.(n+1)),sup(C/.n).[ is non empty
 proof
   assume that
-A1: F is_a_cover_of Closed-Interval-TSpace(r,s) and
+A1: F is Cover of Closed-Interval-TSpace(r,s) and
 A2: F is open and
 A3: F is connected and
 A4: r <= s and
@@ -3779,11 +3760,11 @@ A6: n+1 <= len C;
 end;
 
 theorem
-  F is_a_cover_of Closed-Interval-TSpace(r,s) & F is open connected & r <= s
+  F is Cover of Closed-Interval-TSpace(r,s) & F is open connected & r <= s
   implies inf(C/.1) = r
 proof
   assume that
-A1: F is_a_cover_of Closed-Interval-TSpace(r,s) and
+A1: F is Cover of Closed-Interval-TSpace(r,s) and
 A2: F is open and
 A3: F is connected and
 A4: r <= s;
@@ -3804,11 +3785,11 @@ A5: C.1 = C/.1 by FINSEQ_4:24;
 end;
 
 theorem Th71:
-  F is_a_cover_of Closed-Interval-TSpace(r,s) & F is open connected & r <= s
+  F is Cover of Closed-Interval-TSpace(r,s) & F is open connected & r <= s
   implies r in C/.1
 proof
   assume that
-A1: F is_a_cover_of Closed-Interval-TSpace(r,s) and
+A1: F is Cover of Closed-Interval-TSpace(r,s) and
 A2: F is open and
 A3: F is connected and
 A4: r <= s;
@@ -3829,11 +3810,11 @@ A5: C.1 = C/.1 by FINSEQ_4:24;
 end;
 
 theorem
-  F is_a_cover_of Closed-Interval-TSpace(r,s) & F is open connected & r <= s
+  F is Cover of Closed-Interval-TSpace(r,s) & F is open connected & r <= s
   implies sup(C/.len C) = s
 proof
   assume that
-A1: F is_a_cover_of Closed-Interval-TSpace(r,s) and
+A1: F is Cover of Closed-Interval-TSpace(r,s) and
 A2: F is open and
 A3: F is connected and
 A4: r <= s;
@@ -3857,11 +3838,11 @@ A7: C/.1 = [.r,s.] by FINSEQ_4:25;
 end;
 
 theorem Th73:
-  F is_a_cover_of Closed-Interval-TSpace(r,s) & F is open connected & r <= s
+  F is Cover of Closed-Interval-TSpace(r,s) & F is open connected & r <= s
   implies s in C/.len C
 proof
   assume that
-A1: F is_a_cover_of Closed-Interval-TSpace(r,s) and
+A1: F is Cover of Closed-Interval-TSpace(r,s) and
 A2: F is open and
 A3: F is connected and
 A4: r <= s;
@@ -3888,7 +3869,7 @@ definition
   let r, s be real number;
   let F be Subset-Family of Closed-Interval-TSpace(r,s),
   C be IntervalCover of F such that
-A1: F is_a_cover_of Closed-Interval-TSpace(r,s) and
+A1: F is Cover of Closed-Interval-TSpace(r,s) and
 A2: F is open and
 A3: F is connected and
 A4: r <= s;
@@ -3971,11 +3952,11 @@ end;
 reserve G for IntervalCoverPts of C;
 
 theorem Th74:
-  F is_a_cover_of Closed-Interval-TSpace(r,s) & F is open connected & r <= s
+  F is Cover of Closed-Interval-TSpace(r,s) & F is open connected & r <= s
   implies 2 <= len G
 proof
   assume that
-A1: F is_a_cover_of Closed-Interval-TSpace(r,s) and
+A1: F is Cover of Closed-Interval-TSpace(r,s) and
 A2: F is open and
 A3: F is connected and
 A4: r <= s;
@@ -3985,11 +3966,11 @@ A4: r <= s;
 end;
 
 theorem Th75:
-  F is_a_cover_of Closed-Interval-TSpace(r,s) & F is open connected & r <= s &
+  F is Cover of Closed-Interval-TSpace(r,s) & F is open connected & r <= s &
   len C = 1 implies G = <*r,s*>
 proof
   assume that
-A1: F is_a_cover_of Closed-Interval-TSpace(r,s) and
+A1: F is Cover of Closed-Interval-TSpace(r,s) and
 A2: F is open and
 A3: F is connected and
 A4: r <= s and
@@ -4000,11 +3981,11 @@ A6: len G = len C + 1 by A1,A2,A3,A4,Def3;
 end;
 
 theorem Th76:
-  F is_a_cover_of Closed-Interval-TSpace(r,s) & F is open connected & r <= s &
+  F is Cover of Closed-Interval-TSpace(r,s) & F is open connected & r <= s &
   1 <= n & n+1 < len G implies G.(n+1) < sup(C/.n)
 proof
   assume that
-A1: F is_a_cover_of Closed-Interval-TSpace(r,s) and
+A1: F is Cover of Closed-Interval-TSpace(r,s) and
 A2: F is open and
 A3: F is connected and
 A4: r <= s and
@@ -4015,11 +3996,11 @@ A6: n+1 < len G;
 end;
 
 theorem Th77:
-  F is_a_cover_of Closed-Interval-TSpace(r,s) & F is open connected & r <= s &
+  F is Cover of Closed-Interval-TSpace(r,s) & F is open connected & r <= s &
   1 < n & n <= len C implies inf(C/.n) < G.n
 proof
   assume that
-A1: F is_a_cover_of Closed-Interval-TSpace(r,s) and
+A1: F is Cover of Closed-Interval-TSpace(r,s) and
 A2: F is open and
 A3: F is connected and
 A4: r <= s;
@@ -4040,11 +4021,11 @@ A9: 1 <= w by A5,NAT_1:13;
 end;
 
 theorem Th78:
-  F is_a_cover_of Closed-Interval-TSpace(r,s) & F is open connected & r <= s &
+  F is Cover of Closed-Interval-TSpace(r,s) & F is open connected & r <= s &
   1 <= n & n < len C implies G.n <= inf(C/.(n+1))
 proof
   assume that
-A1: F is_a_cover_of Closed-Interval-TSpace(r,s) and
+A1: F is Cover of Closed-Interval-TSpace(r,s) and
 A2: F is open and
 A3: F is connected and
 A4: r <= s;
@@ -4096,11 +4077,11 @@ A18: G.(w+1) < sup(C/.w) by A1,A2,A3,A4,A16,Th76;
 end;
 
 theorem Th79:
-  F is_a_cover_of Closed-Interval-TSpace(r,s) & F is open connected & r < s
+  F is Cover of Closed-Interval-TSpace(r,s) & F is open connected & r < s
   implies G is increasing
 proof
   assume that
-A1: F is_a_cover_of Closed-Interval-TSpace(r,s) and
+A1: F is Cover of Closed-Interval-TSpace(r,s) and
 A2: F is open and
 A3: F is connected and
 A4: r < s;
@@ -4205,12 +4186,12 @@ A40:    C/.z is non empty by A1,A2,A3,A4,A33,A37,Def2;
 end;
 
 theorem
-  F is_a_cover_of Closed-Interval-TSpace(r,s) & F is open connected & r <= s &
+  F is Cover of Closed-Interval-TSpace(r,s) & F is open connected & r <= s &
   1 <= n & n < len G implies [.G.n,G.(n+1).] c= C.n
 proof
   set L = Closed-Interval-TSpace(r,s);
   assume that
-A1: F is_a_cover_of L and
+A1: F is Cover of L and
 A2: F is open and
 A3: F is connected and
 A4: r <= s and

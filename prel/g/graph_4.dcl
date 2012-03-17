@@ -20,7 +20,7 @@
 <ArticleID name="GRAPH_2"/>
 <ArticleID name="GRAPH_4"/>
 </Signature>
-<RCluster>
+<RCluster aid="GRAPH_4" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="1">
 <Cluster>
@@ -43,7 +43,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="GRAPH_4" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="1">
 <Cluster>
@@ -68,7 +68,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="GRAPH_4" nr="3">
 <ArgTypes>
 <Typ kind="G" nr="1">
 <Cluster>
@@ -93,7 +93,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<CCluster>
+<CCluster aid="GRAPH_4" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="1">
 <Cluster>

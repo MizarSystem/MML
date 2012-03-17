@@ -21,7 +21,7 @@
 <ArticleID name="RLVECT_1"/>
 <ArticleID name="NORMSP_1"/>
 </Signature>
-<RCluster>
+<RCluster aid="NORMSP_1" nr="1">
 <ArgTypes/>
 <Typ kind="G" nr="12">
 <Cluster/>
@@ -30,7 +30,7 @@
 <Adjective nr="76"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="NORMSP_1" nr="2">
 <ArgTypes/>
 <Typ kind="G" nr="12">
 <Cluster/>
@@ -40,7 +40,7 @@
 <Adjective nr="76"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="NORMSP_1" nr="3">
 <ArgTypes/>
 <Typ kind="G" nr="12">
 <Cluster/>
@@ -56,7 +56,7 @@
 <Adjective nr="77"/>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="NORMSP_1" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="12">
 <Cluster>

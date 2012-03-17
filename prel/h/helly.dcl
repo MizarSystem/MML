@@ -28,7 +28,7 @@
 <ArticleID name="GLIB_002"/>
 <ArticleID name="HELLY"/>
 </Signature>
-<FCluster>
+<FCluster aid="HELLY" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="15">
 <Cluster>
@@ -57,7 +57,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="HELLY" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="15">
 <Cluster>
@@ -86,7 +86,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<CCluster>
+<CCluster aid="HELLY" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="15">
 <Cluster>
@@ -103,7 +103,7 @@
 <Adjective nr="1" value="false"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="HELLY" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="15">
 <Cluster>
@@ -127,7 +127,7 @@
 </Adjective>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="HELLY" nr="3">
 <ArgTypes>
 <Typ kind="M" nr="15">
 <Cluster>

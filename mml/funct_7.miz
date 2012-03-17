@@ -17,9 +17,11 @@ environ
  constructors SETFAM_1, PARTFUN1, WELLORD2, BINOP_1, DOMAIN_1, FUNCT_4,
       XXREAL_0, NAT_1, INT_1, PBOOLE, RFINSEQ, BINARITH, REWRITE1, RELAT_2;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1, PARTFUN1,
-      FUNCOP_1, FUNCT_4, XREAL_0, NAT_1, INT_1, CARD_1, FINSEQ_1, FUNCT_2;
+      FUNCOP_1, FUNCT_4, XREAL_0, NAT_1, INT_1, CARD_1, FINSEQ_1, FUNCT_2,
+      RELSET_1;
  requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
- definitions TARSKI, FUNCT_1, XBOOLE_0, FUNCOP_1, BINOP_1, FINSEQ_2, FUNCT_2;
+ definitions TARSKI, FUNCT_1, XBOOLE_0, FUNCOP_1, BINOP_1, FINSEQ_2, FUNCT_2,
+      FUNCT_4;
  theorems FINSEQ_1, RELAT_1, CARD_5, TARSKI, AXIOMS, ZFMISC_1, INT_1, FUNCT_1,
       FINSEQ_2, FUNCT_4, SUBSET_1, FINSET_1, CARD_1, NAT_1, FUNCT_2, FUNCOP_1,
       PBOOLE, SETFAM_1, MCART_1, FINSEQ_3, REAL_1, ENUMSET1, REWRITE1, TREES_1,
@@ -129,10 +131,7 @@ end;
 registration
   let x,y,a,b be set;
   cluster (x,y) --> (a,b) -> non empty;
-  coherence
-  proof dom((x,y) --> (a,b)) = {x,y} by FUNCT_4:65;
-    hence thesis by RELAT_1:60;
-  end;
+  coherence;
 end;
 
 theorem Th7:
@@ -162,15 +161,98 @@ end;
 
 canceled;
 
-theorem
-  for f,g,h being Function st rng g c= dom f & rng h c= dom f
+theorem Th10:
+  for f,g,h being Function st rng h c= dom f
   holds f*(g +* h) = (f*g) +* (f*h)
 proof
   let f,g,h be Function such that
-A1: rng g c= dom f and
-A2: rng h c= dom f;
-  thus f*(g +* h) = (f+*f)*(g+*h)
-    .= (f*g)+*(f*h) by A1,A2,FUNCT_4:73;
+ZZ: rng h c= dom f;
+M:    dom g c= dom(g+*h) by FUNCT_4:11;
+U:    dom h c= dom(g+*h) by FUNCT_4:11;
+A1: dom(f*(g +* h)) = dom(f*g) \/ dom(f*h)
+    proof
+     thus dom(f*(g +* h)) c= dom(f*g) \/ dom(f*h)
+      proof let x;
+       assume
+Z:      x in dom(f*(g +* h));
+        then x in dom(g +* h) by FUNCT_1:21;
+        then
+B:        x in dom g \/ dom h by FUNCT_4:def 1;
+A:      (g +* h).x in dom f by Z,FUNCT_1:21;
+       per cases;
+       suppose
+S:       x in dom h;
+        then h.x in dom f by A,FUNCT_4:14;
+        then x in dom(f*h) by S,FUNCT_1:21;
+       hence thesis by XBOOLE_0:def 2;
+       end;
+       suppose
+S:      not x in dom h;
+        then
+T:       g.x in dom f by A,FUNCT_4:12;
+         x in dom g by S,B,XBOOLE_0:def 2;
+        then x in dom(f*g) by T,FUNCT_1:21;
+       hence thesis by XBOOLE_0:def 2;
+       end;
+      end;
+     let x;
+     assume
+Z:    x in dom(f*g) \/ dom(f*h);
+     per cases;
+     suppose
+S:    x in dom(f*h);
+      then
+T:     x in dom h by FUNCT_1:21;
+      then
+X:     (g +* h).x = h.x by FUNCT_4:14;
+      h.x in dom f by S,FUNCT_1:21;
+     hence x in dom(f*(g +* h)) by X,FUNCT_1:21,U,T;
+     end;
+     suppose
+S:     not x in dom(f*h);
+      x in dom h implies h.x in dom f
+       proof assume x in dom h;
+        then h.x in rng h by FUNCT_1:12;
+        hence thesis by ZZ;
+       end;
+      then not x in dom h by S,FUNCT_1:21;
+      then
+V:     (g +* h).x = g.x by FUNCT_4:12;
+K:    x in dom(f*g) by S,Z,XBOOLE_0:def 2;
+      then
+L:     g.x in dom f by FUNCT_1:21;
+      x in dom g by K,FUNCT_1:21;
+     hence x in dom(f*(g +* h)) by FUNCT_1:21,V,L,M;
+     end;
+    end;
+   now let x be set;
+    assume
+Z1:  x in dom(f*g) \/ dom(f*h);
+    thus x in dom(f*h) implies (f*(g +* h)).x = (f*h).x
+     proof assume x in dom(f*h);
+       then
+A:      x in dom h by FUNCT_1:21;
+      hence (f*(g +* h)).x = f.((g +* h).x) by FUNCT_1:23,U
+           .= f.(h.x) by A,FUNCT_4:14
+           .= (f*h).x by A,FUNCT_1:23;
+     end;
+    assume
+S:   not x in dom(f*h);
+      x in dom h implies h.x in dom f
+       proof assume x in dom h;
+        then h.x in rng h by FUNCT_1:12;
+        hence thesis by ZZ;
+       end;
+      then
+X:     not x in dom h by S,FUNCT_1:21;
+     x in dom(f*g) by S,Z1,XBOOLE_0:def 2;
+     then
+V:    x in dom g by FUNCT_1:21;
+    hence (f*(g +* h)).x = f.((g +* h).x) by FUNCT_1:23,M
+          .= f.(g.x) by X,FUNCT_4:12
+          .= (f*g).x by V,FUNCT_1:23;
+   end;
+  hence f*(g +* h) = (f*g) +* (f*h) by A1,FUNCT_4:def 1;
 end;
 
 theorem Th11:
@@ -352,11 +434,8 @@ proof
     then reconsider f = x as FinSequence of {} by FINSEQ_1:def 11;
     now
       assume x <> {};
-      then dom f <> {} by RELAT_1:64;
-      then consider x such that
-A1:   x in dom f by XBOOLE_0:def 1;
-      f.x in rng f by A1,FUNCT_1:def 5;
-      hence contradiction;
+      then ex x st x in dom f;
+     hence contradiction;
     end;
     hence x in {{}} by ZFMISC_1:37;
   end;
@@ -1589,7 +1668,6 @@ proof
   defpred P[Function-yielding FinSequence] means apply(p^$1,x).(len (p^$1)+1)
   = apply($1,apply(p,x).(len p+1)).(len $1+1);
   apply({},apply(p,x).(len p+1)) = <*apply(p,x).(len p+1)*> &
-:::  len {} = 0 &
   p^{} = p by Th42,FINSEQ_1:47;
   then
 A1: P[{}] by FINSEQ_1:57;
@@ -1994,11 +2072,9 @@ A7: p <> {};
     then len p >= 0+1 by NAT_1:13;
     then 1 in dom p by FINSEQ_3:27;
     then p.1 in Funcs(q.1, q.(1+1)) by A3;
-    then consider g being Function such that
-A8: p.1 = g & dom g = q.1 & rng g c= q.2 by FUNCT_2:def 2;
-    firstdom p = proj1 g by A7,A8,Def6
-      .= q.1 by A8;
-    hence rng f c= q.1 by A1;
+    then ex g being Function st
+     p.1 = g & dom g = q.1 & rng g c= q.2 by FUNCT_2:def 2;
+    hence rng f c= q.1 by A1,A7,Def6;
   end;
   <*f*>^p is FuncSeq-like
   proof
@@ -2066,8 +2142,7 @@ A8: len p in dom p;
     then p.len p in Funcs(q.len p, q.(len p+1)) by A3;
     then consider g being Function such that
 A9: p.len p = g & dom g = q.len p & rng g c= q.(len p+1) by FUNCT_2:def 2;
-    lastrng p = proj2 g by A9,Def7,A8,RELAT_1:60
-      .= rng g;
+    lastrng p = rng g by A9,Def7,A8,RELAT_1:60;
     hence p.len p in Funcs(q.len p,dom f) by A1,A9,FUNCT_2:def 2;
   end;
   p^<*f*> is FuncSeq-like
@@ -2274,11 +2349,10 @@ A3: len p+1 = len q by Def10;
   p.1 in Funcs(q.1,q.(1+1)) by A2,Def10;
   then consider f being Function such that
 A4: p.1 = f & dom f = q.1 & rng f c= q.2 by FUNCT_2:def 2;
+  thus firstdom p = q.1 by A1,A4,Def6;
   p.len p in Funcs(q.len p,q.(len p+1)) by A2,Def10;
   then consider g being Function such that
 A5: p.len p = g & dom g = q.len p & rng g c= q.(len p+1) by FUNCT_2:def 2;
-  thus firstdom p = proj1 f by A1,A4,Def6
-    .= q.1 by A4;
   thus lastrng p c= q.len q by A1,A3,A5,Def7;
 end;
 
@@ -3734,18 +3808,23 @@ end;
 :: comp TOPALG_3:1, 2008.01.18, A.T.
 
 theorem
-  for A, B, a, b being set, f being Function of A,B st a in A & b in B holds
+  for A, B, a, b being set, f being Function of A,B st b in B holds
   f +* (a,b) is Function of A,B
 proof
   let A, B, a, b be set, f be Function of A,B such that
-A1: a in A and
 A2: b in B;
+X: dom f = A by A2,FUNCT_2:def 1;
+  per cases;
+  suppose not a in A;
+   hence thesis by X, Def3;
+  end;
+  suppose
+A1: a in A;
   set g = a .--> b;
   set f1 = f +* g;
 A3: a in dom f by A1,A2,FUNCT_2:def 1;
 A4: {a} c= A by A1,ZFMISC_1:37;
-A5: dom f1 = dom f \/ dom g by FUNCT_4:def 1
-    .= A \/ dom g by A2,FUNCT_2:def 1
+A5: dom f1 = A \/ dom g by X,FUNCT_4:def 1
     .= A \/ {a} by FUNCOP_1:19
     .= A by A4,XBOOLE_1:12;
 A6: rng f1 c= rng f \/ rng g by FUNCT_4:18;
@@ -3754,5 +3833,43 @@ A6: rng f1 c= rng f \/ rng g by FUNCT_4:18;
   then rng f \/ rng g c= B \/ B by XBOOLE_1:13;
   then f +* g is Function of A,B by A5,A6,FUNCT_2:4,XBOOLE_1:1;
   hence thesis by A3,Def3;
+  end;
 end;
 
+:: missing, 2008.03.23, A.T.
+
+theorem Th118:
+ rng f c= A implies f+~(x,y) = (id A+*(x,y))*f
+proof assume
+Z: rng f c= A;
+ per cases;
+ suppose x in A;
+  then
+S: x in dom id A by RELAT_1:71;
+ thus f+~(x,y) = (id A)*f+*((x.-->y)*f) by Z,RELAT_1:79
+     .= (id A+*(x.-->y))*f by Th11
+     .= (id A+*(x,y))*f by S,Def3;
+ end;
+ suppose
+S: not x in A;
+  then
+T: not x in dom id A;
+  not x in rng f by S,Z;
+ hence f+~(x,y) = f by FUNCT_4:109
+     .= (id A)*f by Z,RELAT_1:79
+     .= (id A+*(x,y))*f by T,Def3;
+ end;
+end;
+
+theorem
+  (f+*g)+~(x,y) = f+~(x,y)+*(g+~(x,y))
+ proof
+  set A = rng f \/ rng g;
+C: g+~(x,y) =(id A+*(x,y))*g by Th118,XBOOLE_1:7;
+B: dom(id A+*(x,y)) = dom id A by Th32
+        .= A by RELAT_1:71;
+  rng(f+*g) c= A by FUNCT_4:18;
+ hence (f+*g)+~(x,y) = (id A+*(x,y))*(f+*g) by Th118
+     .= (id A+*(x,y))*f+*((id A+*(x,y))*g) by B,Th10,XBOOLE_1:7
+     .= f+~(x,y)+*(g+~(x,y)) by Th118,XBOOLE_1:7,C;
+end;

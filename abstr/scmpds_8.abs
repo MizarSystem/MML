@@ -15,7 +15,7 @@ environ
       SCMNORM, AMI_2, AMI_3, SCMPDS_2, SCMPDS_3, SCMPDS_4, SCMPDS_5, SCMPDS_6,
       SCMP_GCD, CARD_3, DOMAIN_1, XXREAL_0;
  constructors DOMAIN_1, XXREAL_0, REAL_1, NAT_1, RECDEF_1, SCM_1, SCMPDS_4,
-      SCMPDS_5, SCMPDS_6, SCMP_GCD, SCMNORM;
+      SCMPDS_5, SCMPDS_6, SCMP_GCD, SCMNORM, SCMPDS_3;
  registrations SETFAM_1, FUNCT_1, ORDINAL1, RELSET_1, FRAENKEL, NUMBERS,
       XXREAL_0, XREAL_0, NAT_1, INT_1, CARD_3, SCMPDS_2, SCMPDS_4, SCMPDS_5,
       SCMPDS_6, XBOOLE_0, VALUED_0, MEMBERED, SCMNORM;
@@ -62,58 +62,59 @@ begin :: The construction and several basic properties of while<0 program
 :: while (a,i)<0 do I
 
 definition
-  let a be Int_position, i be Integer,I be Program-block;
-  func while<0(a,i,I) -> Program-block equals
+  let a be Int_position, i be Integer,I be Program of SCMPDS;
+  func while<0(a,i,I) -> Program of SCMPDS equals
 :: SCMPDS_8:def 2
   (a,i)>=0_goto (card I +2) ';' I ';' goto -(card I+1);
 end;
 
 registration
-  let I be shiftable Program-block,a be Int_position,i be Integer;
+  let I be shiftable Program of SCMPDS,a be Int_position,i be Integer;
   cluster while<0(a,i,I) -> shiftable;
 end;
 
 registration
-  let I be No-StopCode Program-block, a be Int_position,i be Integer;
+  let I be No-StopCode Program of SCMPDS, a be Int_position,i be Integer;
   cluster while<0(a,i,I) -> No-StopCode;
 end;
 
 theorem :: SCMPDS_8:6
-  for a be Int_position,i be Integer,I be Program-block holds
+  for a be Int_position,i be Integer,I be Program of SCMPDS holds
   card while<0(a,i,I)= card I +2;
 
 theorem :: SCMPDS_8:7
-  for a be Int_position,i be Integer,m be Element of NAT,I be Program-block
+  for a be Int_position,i be Integer,m be Element of NAT,I be Program of SCMPDS
   holds m < card I+2 iff inspos m in dom while<0(a,i,I);
 
 theorem :: SCMPDS_8:8
-  for a be Int_position,i be Integer,I be Program-block holds
+  for a be Int_position,i be Integer,I be Program of SCMPDS holds
   while<0(a,i,I).inspos 0=(a,i)>=0_goto (card I +2) &
   while<0(a,i,I).inspos (card I+1)=goto -(card I+1);
 
 theorem :: SCMPDS_8:9
-  for s being State of SCMPDS,I being Program-block,a being Int_position,
+  for s being State of SCMPDS,I being Program of SCMPDS,a being Int_position,
   i being Integer st s.DataLoc(s.a,i) >= 0 holds
   while<0(a,i,I) is_closed_on s & while<0(a,i,I) is_halting_on s;
 
 theorem :: SCMPDS_8:10
-  for s being State of SCMPDS,I being Program-block,a,c being Int_position,
+  for s being State of SCMPDS,I being Program of SCMPDS,a,c being Int_position,
   i being Integer st s.DataLoc(s.a,i) >= 0 holds
   IExec(while<0(a,i,I),s) = s +* Start-At inspos (card I + 2);
 
 theorem :: SCMPDS_8:11
-  for s being State of SCMPDS,I being Program-block,a being Int_position,
+  for s being State of SCMPDS,I being Program of SCMPDS,a being Int_position,
   i being Integer st s.DataLoc(s.a,i) >= 0 holds
   IC IExec(while<0(a,i,I),s) = inspos (card I + 2);
 
 theorem :: SCMPDS_8:12
-  for s being State of SCMPDS,I being Program-block,a,b being Int_position ,
+  for s being State of SCMPDS,I being Program of SCMPDS,
+  a,b being Int_position ,
   i being Integer st s.DataLoc(s.a,i) >= 0 holds
   IExec(while<0(a,i,I),s).b = s.b;
 
 scheme :: SCMPDS_8:sch 1
  WhileLHalt { F(State of SCMPDS)-> Element of NAT,
-  s() -> State of SCMPDS,I() -> No-StopCode shiftable Program-block,
+  s() -> State of SCMPDS,I() -> No-StopCode shiftable Program of SCMPDS,
   a() -> Int_position,i() -> Integer,P[State of SCMPDS]}:
   (F(s())=F(s()) or P[s()]) & while<0(a(),i(),I()) is_closed_on s() &
   while<0(a(),i(),I()) is_halting_on s()
@@ -133,7 +134,7 @@ P[Dstate(IExec(I(),t))];
 
 scheme :: SCMPDS_8:sch 2
  WhileLExec { F(State of SCMPDS)-> Element of NAT,
-  s() -> State of SCMPDS,I() -> No-StopCode shiftable Program-block,
+  s() -> State of SCMPDS,I() -> No-StopCode shiftable Program of SCMPDS,
   a() -> Int_position,i() -> Integer,P[State of SCMPDS]}:
   (F(s())=F(s()) or P[s()]) & IExec(while<0(a(),i(),I()),s()) =
   IExec(while<0(a(),i(),I()),IExec(I(),s()))
@@ -154,7 +155,7 @@ I() is_halting_on t & F(Dstate IExec(I(),t)) < F(Dstate t) &
 P[Dstate(IExec(I(),t))];
 
 theorem :: SCMPDS_8:13
-  for s being State of SCMPDS,I being No-StopCode shiftable Program-block ,
+  for s being State of SCMPDS,I being No-StopCode shiftable Program of SCMPDS ,
   a be Int_position, i be Integer,X be set, f being Function of
   product the Object-Kind of SCMPDS,NAT st card I > 0 &
   ( for t be State of SCMPDS st f.Dstate(t)=0 holds t.DataLoc(s.a,i) >= 0 ) &
@@ -167,7 +168,7 @@ theorem :: SCMPDS_8:13
   while<0(a,i,I) is_closed_on s & while<0(a,i,I) is_halting_on s;
 
 theorem :: SCMPDS_8:14
-  for s being State of SCMPDS,I being No-StopCode shiftable Program-block,
+  for s being State of SCMPDS,I being No-StopCode shiftable Program of SCMPDS,
   a be Int_position, i be Integer,X be set,f being Function of product the
   Object-Kind of SCMPDS,NAT st card I > 0 & s.DataLoc(s.a,i) < 0 &
   (for t be State of SCMPDS st f.Dstate(t)=0 holds t.DataLoc(s.a,i) >= 0 ) &
@@ -180,7 +181,7 @@ theorem :: SCMPDS_8:14
   IExec(while<0(a,i,I),s) =IExec(while<0(a,i,I),IExec(I,s));
 
 theorem :: SCMPDS_8:15
-  for s being State of SCMPDS,I being No-StopCode shiftable Program-block,
+  for s being State of SCMPDS,I being No-StopCode shiftable Program of SCMPDS,
   a be Int_position, i be Integer,X be set st card I > 0 &
   (for t be State of SCMPDS st
   (for x be Int_position st x in X holds t.x=s.x) &
@@ -191,7 +192,7 @@ theorem :: SCMPDS_8:15
   while<0(a,i,I) is_closed_on s & while<0(a,i,I) is_halting_on s;
 
 theorem :: SCMPDS_8:16
-  for s being State of SCMPDS,I being No-StopCode shiftable Program-block ,
+  for s being State of SCMPDS,I being No-StopCode shiftable Program of SCMPDS ,
   a be Int_position,i be Integer,X be set st
   s.DataLoc(s.a,i) < 0 & card I > 0 & (for t be State of SCMPDS st
   (for x be Int_position st x in X holds t.x=s.x) &
@@ -206,58 +207,59 @@ begin :: The construction and basic properties of while>0 program
 :: while (a,i)>0 do I
 
 definition
-  let a be Int_position, i be Integer,I be Program-block;
-  func while>0(a,i,I) -> Program-block equals
+  let a be Int_position, i be Integer,I be Program of SCMPDS;
+  func while>0(a,i,I) -> Program of SCMPDS equals
 :: SCMPDS_8:def 3
   (a,i)<=0_goto (card I +2) ';' I ';' goto -(card I+1);
 end;
 
 registration
-  let I be shiftable Program-block,a be Int_position,i be Integer;
+  let I be shiftable Program of SCMPDS,a be Int_position,i be Integer;
   cluster while>0(a,i,I) -> shiftable;
 end;
 
 registration
-  let I be No-StopCode Program-block,a be Int_position,i be Integer;
+  let I be No-StopCode Program of SCMPDS,a be Int_position,i be Integer;
   cluster while>0(a,i,I) -> No-StopCode;
 end;
 
 theorem :: SCMPDS_8:17
-  for a be Int_position,i be Integer,I be Program-block holds
+  for a be Int_position,i be Integer,I be Program of SCMPDS holds
   card while>0(a,i,I)= card I +2;
 
 theorem :: SCMPDS_8:18
-  for a be Int_position,i be Integer,m be Element of NAT,I be Program-block
+  for a be Int_position,i be Integer,m be Element of NAT,I be Program of SCMPDS
   holds m < card I+2 iff inspos m in dom while>0(a,i,I);
 
 theorem :: SCMPDS_8:19
-  for a be Int_position,i be Integer,I be Program-block holds
+  for a be Int_position,i be Integer,I be Program of SCMPDS holds
   while>0(a,i,I).inspos 0=(a,i)<=0_goto (card I +2) &
   while>0(a,i,I).inspos (card I+1)=goto -(card I+1);
 
 theorem :: SCMPDS_8:20
-  for s being State of SCMPDS,I being Program-block,a being Int_position,
+  for s being State of SCMPDS,I being Program of SCMPDS,a being Int_position,
   i being Integer st s.DataLoc(s.a,i) <= 0 holds
   while>0(a,i,I) is_closed_on s & while>0(a,i,I) is_halting_on s;
 
 theorem :: SCMPDS_8:21
-  for s being State of SCMPDS,I being Program-block,a,c being Int_position,
+  for s being State of SCMPDS,I being Program of SCMPDS,a,c being Int_position,
   i being Integer st s.DataLoc(s.a,i) <= 0 holds
   IExec(while>0(a,i,I),s) = s +* Start-At inspos (card I + 2);
 
 theorem :: SCMPDS_8:22
-  for s being State of SCMPDS,I being Program-block,a being Int_position,
+  for s being State of SCMPDS,I being Program of SCMPDS,a being Int_position,
   i being Integer st s.DataLoc(s.a,i) <= 0 holds
   IC IExec(while>0(a,i,I),s) = inspos (card I + 2);
 
 theorem :: SCMPDS_8:23
-  for s being State of SCMPDS,I being Program-block,a,b being Int_position ,
+  for s being State of SCMPDS,I being Program of SCMPDS,
+  a,b being Int_position ,
   i being Integer st s.DataLoc(s.a,i) <= 0 holds
   IExec(while>0(a,i,I),s).b = s.b;
 
 scheme :: SCMPDS_8:sch 3
  WhileGHalt { F(State of SCMPDS)-> Element of NAT,
-  s() -> State of SCMPDS,I() -> No-StopCode shiftable Program-block,
+  s() -> State of SCMPDS,I() -> No-StopCode shiftable Program of SCMPDS,
   a() -> Int_position,i() -> Integer,P[State of SCMPDS]}:
   (F(s())=F(s()) or P[s()]) & while>0(a(),i(),I()) is_closed_on s() &
   while>0(a(),i(),I()) is_halting_on s()
@@ -277,7 +279,7 @@ P[Dstate(IExec(I(),t))];
 
 scheme :: SCMPDS_8:sch 4
  WhileGExec { F(State of SCMPDS)-> Element of NAT,
-  s() -> State of SCMPDS,I() -> No-StopCode shiftable Program-block,
+  s() -> State of SCMPDS,I() -> No-StopCode shiftable Program of SCMPDS,
   a() -> Int_position,i() -> Integer,P[State of SCMPDS]}:
   (F(s())=F(s()) or P[s()]) & IExec(while>0(a(),i(),I()),s()) =
   IExec(while>0(a(),i(),I()),IExec(I(),s()))
@@ -298,7 +300,7 @@ I() is_halting_on t & F(Dstate IExec(I(),t)) < F(Dstate t) &
 P[Dstate(IExec(I(),t))];
 
 theorem :: SCMPDS_8:24
-  for s being State of SCMPDS,I being No-StopCode shiftable Program-block,
+  for s being State of SCMPDS,I being No-StopCode shiftable Program of SCMPDS,
   a be Int_position,i,c be Integer,X,Y be set, f being Function of
   product the Object-Kind of SCMPDS,NAT st card I > 0 &
   ( for t be State of SCMPDS st f.Dstate(t)=0 holds t.DataLoc(s.a,i) <= 0 ) &
@@ -313,7 +315,7 @@ theorem :: SCMPDS_8:24
   while>0(a,i,I) is_closed_on s & while>0(a,i,I) is_halting_on s;
 
 theorem :: SCMPDS_8:25
-  for s being State of SCMPDS,I being No-StopCode shiftable Program-block,
+  for s being State of SCMPDS,I being No-StopCode shiftable Program of SCMPDS,
   a be Int_position, i,c be Integer,X,Y be set,f being Function of product
   the Object-Kind of SCMPDS,NAT st s.DataLoc(s.a,i) > 0 & card I > 0 &
   ( for t be State of SCMPDS st f.Dstate(t)=0 holds t.DataLoc(s.a,i) <= 0 ) &
@@ -328,7 +330,7 @@ theorem :: SCMPDS_8:25
   IExec(while>0(a,i,I),s) =IExec(while>0(a,i,I),IExec(I,s));
 
 theorem :: SCMPDS_8:26
-  for s being State of SCMPDS,I being No-StopCode shiftable Program-block ,
+  for s being State of SCMPDS,I being No-StopCode shiftable Program of SCMPDS ,
   a be Int_position, i be Integer,X be set, f being Function of
   product the Object-Kind of SCMPDS,NAT st card I > 0 &
   (for t be State of SCMPDS st f.Dstate(t)=0 holds t.DataLoc(s.a,i) <= 0 ) &
@@ -341,7 +343,7 @@ theorem :: SCMPDS_8:26
   IExec(while>0(a,i,I),s) =IExec(while>0(a,i,I),IExec(I,s)));
 
 theorem :: SCMPDS_8:27
-  for s being State of SCMPDS,I being No-StopCode shiftable Program-block,
+  for s being State of SCMPDS,I being No-StopCode shiftable Program of SCMPDS,
   a be Int_position, i,c be Integer,X,Y be set st
   card I > 0 & (for x st x in X holds s.x >= c+s.DataLoc(s.a,i)) &
   (for t be State of SCMPDS st
@@ -356,7 +358,7 @@ theorem :: SCMPDS_8:27
   IExec(while>0(a,i,I),s) =IExec(while>0(a,i,I),IExec(I,s)));
 
 theorem :: SCMPDS_8:28
-  for s being State of SCMPDS,I being No-StopCode shiftable Program-block ,
+  for s being State of SCMPDS,I being No-StopCode shiftable Program of SCMPDS ,
   a be Int_position, i be Integer,X be set st card I > 0 &
   (for t be State of SCMPDS st
   (for x st x in X holds t.x=s.x) & t.a=s.a & t.DataLoc(s.a,i) > 0
@@ -368,7 +370,7 @@ theorem :: SCMPDS_8:28
   IExec(while>0(a,i,I),s) =IExec(while>0(a,i,I),IExec(I,s)));
 
 theorem :: SCMPDS_8:29
-  for s being State of SCMPDS,I being No-StopCode shiftable Program-block ,
+  for s being State of SCMPDS,I being No-StopCode shiftable Program of SCMPDS ,
   a be Int_position, i,c be Integer,X be set st card I > 0 &
   (for x st x in X holds s.x >= c+s.DataLoc(s.a,i)) &
   (for t be State of SCMPDS st

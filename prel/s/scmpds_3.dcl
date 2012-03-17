@@ -11,13 +11,13 @@
 <ArticleID name="MCART_1"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
+<ArticleID name="RELSET_1"/>
+<ArticleID name="FUNCT_2"/>
 <ArticleID name="XREAL_0"/>
 <ArticleID name="INT_1"/>
-<ArticleID name="RELSET_1"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
-<ArticleID name="FUNCT_2"/>
 <ArticleID name="FUNCT_4"/>
 <ArticleID name="FRAENKEL"/>
 <ArticleID name="FUNCOP_1"/>
@@ -32,85 +32,39 @@
 <ArticleID name="AMI_1"/>
 <ArticleID name="AMI_2"/>
 <ArticleID name="SCMPDS_2"/>
-<ArticleID name="SCMPDS_3"/>
 </Signature>
-<RCluster>
+<RCluster aid="SCMPDS_3" nr="1">
 <ArgTypes/>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="171">
+<Func kind="K" nr="172">
 <Func kind="U" nr="10">
-<Func kind="K" nr="245"/>
+<Func kind="K" nr="247"/>
 <Func kind="K" nr="1">
 <Func kind="K" nr="65"/>
 </Func>
-<Func kind="K" nr="258"/>
+<Func kind="K" nr="260"/>
 </Func>
 </Func>
 </Typ>
 <Cluster>
 <Adjective nr="2"/>
 <Adjective nr="5"/>
-<Adjective nr="17"/>
+<Adjective nr="20"/>
 <Adjective nr="70">
-<Func kind="K" nr="245"/>
+<Func kind="K" nr="247"/>
 <Func kind="K" nr="1">
 <Func kind="K" nr="65"/>
 </Func>
-<Func kind="K" nr="258"/>
+<Func kind="K" nr="260"/>
 </Adjective>
 <Adjective nr="75" value="false">
-<Func kind="K" nr="245"/>
+<Func kind="K" nr="247"/>
 <Func kind="K" nr="1">
 <Func kind="K" nr="65"/>
 </Func>
-<Func kind="K" nr="258"/>
+<Func kind="K" nr="260"/>
 </Adjective>
 </Cluster>
 </RCluster>
-<RCluster>
-<ArgTypes/>
-<Typ kind="M" nr="2">
-<Cluster/>
-<Func kind="K" nr="171">
-<Func kind="U" nr="10">
-<Func kind="K" nr="245"/>
-<Func kind="K" nr="1">
-<Func kind="K" nr="65"/>
-</Func>
-<Func kind="K" nr="258"/>
-</Func>
-</Func>
-</Typ>
-<Cluster>
-<Adjective nr="1" value="false"/>
-<Adjective nr="2"/>
-<Adjective nr="5"/>
-<Adjective nr="17"/>
-<Adjective nr="75">
-<Func kind="K" nr="245"/>
-<Func kind="K" nr="1">
-<Func kind="K" nr="65"/>
-</Func>
-<Func kind="K" nr="258"/>
-</Adjective>
-<Adjective nr="78"/>
-</Cluster>
-</RCluster>
-<FCluster>
-<ArgTypes/>
-<Func kind="K" nr="278"/>
-<Cluster>
-<Adjective nr="1" value="false"/>
-<Adjective nr="17"/>
-<Adjective nr="75">
-<Func kind="K" nr="245"/>
-<Func kind="K" nr="1">
-<Func kind="K" nr="65"/>
-</Func>
-<Func kind="K" nr="258"/>
-</Adjective>
-<Adjective nr="78"/>
-</Cluster>
-</FCluster>
 </Registrations>

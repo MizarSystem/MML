@@ -9,18 +9,18 @@ environ
  vocabularies AMI_3, AMI_1, SCMFSA_2, FINSEQ_1, RELAT_1, SCMFSA_7, ARYTM_1,
       FUNCT_1, CAT_1, SCMFSA6A, CARD_1, FUNCT_4, INT_1, FINSEQ_2, AMI_2,
       SCMFSA6B, SF_MASTR, BOOLE, DTCONSTR, ABSVALUE, AMI_5, UNIALG_2, SCMFSA_4,
-      FUNCOP_1, SCMFSA7B, FINSEQ_4, ARYTM;
+      FUNCOP_1, SCMFSA7B, FINSEQ_4, ARYTM, AMISTD_2, SCMNORM;
  notations TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, CARD_1, NUMBERS, XCMPLX_0,
       SETFAM_1, NAT_1, INT_1, RELAT_1, FUNCT_1, PARTFUN1, FUNCT_4, FUNCT_7,
       FINSEQ_1, FINSEQ_2, FINSEQ_4, BINARITH, FINSOP_1, FUNCOP_1, DTCONSTR,
-      AMI_1, SCMNORM, SCMFSA_2, SCMFSA_4, SCMFSA_7, SCMFSA6A, SF_MASTR,
-      SCMFSA6B, INT_2, XXREAL_0;
+      AMI_1, SCMNORM, SCMFSA_2, SCMFSA_7, SCMFSA6A, SF_MASTR, SCMFSA6B, INT_2,
+      XXREAL_0;
  constructors ENUMSET1, XXREAL_0, REAL_1, NAT_1, INT_2, FINSEQ_4, FINSOP_1,
       PARTFUN1, DTCONSTR, AMI_5, SCMFSA_7, SCMFSA6A, SF_MASTR, SCMFSA6B,
-      SCMNORM;
+      SCMNORM, SCMFSA_4, AFINSQ_1;
  registrations XBOOLE_0, SETFAM_1, RELAT_1, FUNCT_1, FUNCOP_1, FRAENKEL,
       NUMBERS, XXREAL_0, XREAL_0, NAT_1, INT_1, FINSEQ_1, CARD_3, FUNCT_7,
-      AMI_1, SCMFSA_2, SCMFSA_4, SF_MASTR, SCMFSA6B, ORDINAL1, SCMNORM;
+      AMI_1, SCMFSA_2, SF_MASTR, SCMFSA6B, ORDINAL1, SCMNORM;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
 
 
@@ -112,7 +112,7 @@ definition
 end;
 
 definition
-  let I be programmed FinPartState of SCM+FSA;
+  let I be preProgram of SCM+FSA;
   let a be Int-Location;
   pred I does_not_refer a means
 :: SCMFSA7B:def 2
@@ -149,19 +149,8 @@ definition
   I does_not_destroy intloc 0;
 end;
 
-definition :: move to AMI_1
-  let IL be non empty set;
-  let N be with_non-empty_elements set;
-  let S be halting (AMI-Struct over IL,N);
-  let I be FinPartState of S;
-  attr I is halt-free means
-:: SCMFSA7B:def 6
-   ::D8
-  not halt S in rng I;
-end;
-
 registration
-  cluster halt-free good Macro-Instruction;
+  cluster halt-free good Program of SCM+FSA;
 end;
 
 theorem :: SCMFSA7B:11  ::R0''
@@ -215,6 +204,7 @@ theorem :: SCMFSA7B:23  ::R12''
   f :=<0,...,0> b does_not_destroy a;
 
 definition
+ canceled;
   let I be FinPartState of SCM+FSA;
   let s be State of SCM+FSA;
   pred I is_closed_on s means
@@ -229,11 +219,11 @@ definition
 end;
 
 theorem :: SCMFSA7B:24  ::TQ6
-  for I being Macro-Instruction holds
+  for I being Program of SCM+FSA holds
   I is paraclosed iff for s being State of SCM+FSA holds I is_closed_on s;
 
 theorem :: SCMFSA7B:25 ::*TQ6'
-  for I being Macro-Instruction holds
+  for I being Program of SCM+FSA holds
   I is parahalting iff for s being State of SCM+FSA holds I is_halting_on s;
 
 theorem :: SCMFSA7B:26  ::TA10
@@ -242,24 +232,25 @@ theorem :: SCMFSA7B:26  ::TA10
   i does_not_destroy a implies Exec(i,s).a = s.a;
 
 theorem :: SCMFSA7B:27  ::TQ9''
-  for s being State of SCM+FSA, I being Macro-Instruction, a being Int-Location
+  for s being State of SCM+FSA, I being Program of SCM+FSA,
+      a being Int-Location
   st I does_not_destroy a & I is_closed_on s holds
   for k being Element of NAT holds
   Computation (s +* (I +* Start-At insloc 0),k).a = s.a;
 
 theorem :: SCMFSA7B:28  ::TQ7
-  SCM+FSA-Stop does_not_destroy intloc 0;
+  Stop SCM+FSA does_not_destroy intloc 0;
 
 registration
-  cluster parahalting good Macro-Instruction;
+  cluster parahalting good Program of SCM+FSA;
 end;
 
 registration
-  cluster SCM+FSA-Stop -> parahalting good;
+  cluster Stop SCM+FSA -> parahalting good;
 end;
 
 registration
-  cluster paraclosed good -> keeping_0 Macro-Instruction;
+  cluster paraclosed good -> keeping_0 Program of SCM+FSA;
 end;
 
 theorem :: SCMFSA7B:29  ::TS3

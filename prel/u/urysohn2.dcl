@@ -44,7 +44,7 @@
 <ArticleID name="INTEGRA1"/>
 <ArticleID name="INTEGRA2"/>
 </Signature>
-<FCluster>
+<FCluster aid="URYSOHN2" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster>

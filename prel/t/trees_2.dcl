@@ -20,7 +20,7 @@
 <ArticleID name="TREES_1"/>
 <ArticleID name="TREES_2"/>
 </Signature>
-<RCluster>
+<RCluster aid="TREES_2" nr="1">
 <ArgTypes/>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -31,7 +31,7 @@
 <Adjective nr="27"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="TREES_2" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -48,7 +48,7 @@
 <Adjective nr="14" value="false"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="TREES_2" nr="3">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -67,7 +67,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="TREES_2" nr="4">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -84,7 +84,7 @@
 <Adjective nr="19"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="TREES_2" nr="5">
 <ArgTypes/>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -95,7 +95,7 @@
 <Adjective nr="29"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="TREES_2" nr="6">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -113,7 +113,7 @@
 <Adjective nr="29"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="TREES_2" nr="7">
 <ArgTypes/>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -125,7 +125,7 @@
 <Adjective nr="29"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="TREES_2" nr="8">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -144,7 +144,7 @@
 <Adjective nr="29"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="TREES_2" nr="9">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -167,7 +167,7 @@
 <Adjective nr="14" value="false"/>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="TREES_2" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -189,7 +189,7 @@
 <Adjective nr="19"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="TREES_2" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -207,7 +207,7 @@
 <Adjective nr="25"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="TREES_2" nr="3">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -227,7 +227,7 @@
 <Adjective nr="29"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="TREES_2" nr="4">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -249,7 +249,7 @@
 <Adjective nr="19"/>
 </Cluster>
 </FCluster>
-<CCluster>
+<CCluster aid="TREES_2" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>

@@ -9,16 +9,17 @@ environ
  vocabularies AMI_3, AMI_1, SCMFSA_2, BOOLE, FUNCT_1, RELAT_1, FUNCT_4, SCM_1,
       FUNCT_7, SCMFSA6A, SCMFSA6B, SCMFSA6C, CAT_1, SF_MASTR, SCMFSA_4, CARD_1,
       SCMFSA7B, AMI_5, RELOC, SCMFSA_7, FINSEQ_1, UNIALG_2, SCMFSA8A, CARD_3,
-      ARYTM;
+      ARYTM, AMISTD_2, SCMNORM;
  notations TARSKI, XBOOLE_0, SUBSET_1, CARD_1, NUMBERS, NAT_1, FUNCOP_1,
-      RELAT_1, FUNCT_1, FUNCT_4, FUNCT_7, FINSEQ_1, STRUCT_0, AMI_1, SCMNORM,
-      SCMFSA_2, SCMFSA_4, SCMFSA_5, SCMFSA_7, SCMFSA6A, SF_MASTR, SCMFSA6B,
-      SCMFSA6C, SCMFSA7B, XXREAL_0;
+      RELAT_1, FUNCT_1, FUNCT_4, FUNCT_7, CARD_3, FINSEQ_1, STRUCT_0, AMI_1,
+      SCMNORM, SCMFSA_2, SCMFSA_4, SCMFSA_5, SCMFSA_7, SCMFSA6A, SF_MASTR,
+      SCMFSA6B, SCMFSA6C, SCMFSA7B, XXREAL_0;
  constructors PARTFUN1, DOMAIN_1, XXREAL_0, NAT_1, SCMFSA_5, SCMFSA_7,
-      SCMFSA6A, SF_MASTR, SCMFSA6B, SCMFSA6C, SCMFSA7B, SCMNORM;
+      SCMFSA6A, SF_MASTR, SCMFSA6B, SCMFSA6C, SCMFSA7B, SCMNORM, SCMFSA_4,
+      AFINSQ_1;
  registrations XBOOLE_0, SETFAM_1, FUNCT_1, RELSET_1, FUNCOP_1, FRAENKEL,
-      NUMBERS, XXREAL_0, MEMBERED, CARD_3, AMI_1, SCMFSA_2, SCMFSA_4, SCMFSA6A,
-      SF_MASTR, SCMFSA7B, FINSET_1, SCMNORM, ORDINAL1, FINSEQ_1;
+      NUMBERS, XXREAL_0, MEMBERED, CARD_3, AMI_1, SCMFSA_2, SCMFSA6A, SF_MASTR,
+      SCMFSA7B, FINSET_1, SCMNORM, ORDINAL1, FINSEQ_1, FUNCT_4;
  requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
 
 
@@ -47,15 +48,15 @@ theorem :: SCMFSA8A:6  ::T51(@BBB8)
   s2 | (Int-Locations \/ FinSeq-Locations);
 
 theorem :: SCMFSA8A:7  ::T27'
-  for s being State of SCM+FSA, I being Macro-Instruction holds
+  for s being State of SCM+FSA, I being Program of SCM+FSA holds
   IC IExec(I,s) = IC Result (s +* Initialized I);
 
 theorem :: SCMFSA8A:8  ::TI8
-  for s being State of SCM+FSA, I being Macro-Instruction holds
+  for s being State of SCM+FSA, I being Program of SCM+FSA holds
   Initialize s +* Initialized I = s +* Initialized I;
 
 theorem :: SCMFSA8A:9  ::TG13
-  for I being Macro-Instruction, l being Instruction-Location of SCM+FSA holds
+  for I being Program of SCM+FSA, l being Instruction-Location of SCM+FSA holds
   I c= I +* Start-At l;
 
 theorem :: SCMFSA8A:10  ::T52(@BBB8)
@@ -64,7 +65,7 @@ theorem :: SCMFSA8A:10  ::T52(@BBB8)
   (s +* Start-At l) | (Int-Locations \/ FinSeq-Locations);
 
 theorem :: SCMFSA8A:11  ::T52'
-  for s being State of SCM+FSA, I being Macro-Instruction,
+  for s being State of SCM+FSA, I being Program of SCM+FSA,
   l being Instruction-Location of SCM+FSA holds
   s | (Int-Locations \/ FinSeq-Locations) =
   (s +* (I +* Start-At l)) | (Int-Locations \/ FinSeq-Locations);
@@ -74,57 +75,27 @@ theorem :: SCMFSA8A:12  ::T53(@BBB8)
   dom (s | NAT) misses dom Start-At l;
 
 theorem :: SCMFSA8A:13  ::TI2
-  for s being State of SCM+FSA, I being Macro-Instruction holds
+  for s being State of SCM+FSA, I being Program of SCM+FSA holds
   s +* Initialized I = Initialize s +* (I +* Start-At insloc 0);
 
 theorem :: SCMFSA8A:14  ::TG14 <> T23
-  for s being State of SCM+FSA, I1,I2 being Macro-Instruction,
+  for s being State of SCM+FSA, I1,I2 being Program of SCM+FSA,
   l being Instruction-Location of SCM+FSA holds
   s +* (I1 +* Start-At l), s +* (I2 +* Start-At l) equal_outside NAT;
 
-theorem :: SCMFSA8A:15  ::T40(@BBB8)
-  dom SCM+FSA-Stop = {insloc 0};
+theorem :: SCMFSA8A:15
+  0 in dom Stop SCM+FSA;
 
-theorem :: SCMFSA8A:16  ::T41(@BBB8)
-  insloc 0 in dom SCM+FSA-Stop & SCM+FSA-Stop.insloc 0 = halt SCM+FSA;
+theorem :: SCMFSA8A:16
+ (Stop SCM+FSA).0 = halt SCM+FSA;
 
-theorem :: SCMFSA8A:17  ::T20(@BBB8)
-  card SCM+FSA-Stop = 1;
+theorem :: SCMFSA8A:17
+  card Stop SCM+FSA = 1;
 
-definition
-  let P be programmed FinPartState of SCM+FSA;
-  let l be Instruction-Location of SCM+FSA;
-  func Directed(P,l) -> programmed FinPartState of SCM+FSA equals
-:: SCMFSA8A:def 1
+canceled 3;
 
-::D7
-  ((id the Instructions of SCM+FSA) +* (halt SCM+FSA .--> goto l)) * P;
-end;
-
-registration
-  let P be programmed FinPartState of SCM+FSA;
-  let l be Instruction-Location of SCM+FSA;
-  cluster Directed(P,l) -> halt-free;
-end;
-
-registration
-  let P be programmed FinPartState of SCM+FSA;
-  cluster Directed P -> halt-free;
-end;
-
-canceled;
-
-theorem :: SCMFSA8A:19  ::T21
-  for P being programmed FinPartState of SCM+FSA,
-  l being Instruction-Location of SCM+FSA holds dom Directed(P,l) = dom P;
-
-theorem :: SCMFSA8A:20  ::T72'
-  for P being programmed FinPartState of SCM+FSA,
-  l being Instruction-Location of SCM+FSA holds
-  Directed(P,l) = P +* ((halt SCM+FSA .--> goto l) * P);
-
-theorem :: SCMFSA8A:21  ::T39'
-  for P being programmed FinPartState of SCM+FSA,
+theorem :: SCMFSA8A:21
+  for P being preProgram of SCM+FSA,
   l being Instruction-Location of SCM+FSA, x being set st x in dom P holds
   (P.x = halt SCM+FSA implies Directed(P,l).x = goto l) &
   (P.x <> halt SCM+FSA implies Directed(P,l).x = P.x);
@@ -135,51 +106,52 @@ theorem :: SCMFSA8A:22  ::TQ60 <> T4
   i does_not_destroy a implies IncAddr(i,n) does_not_destroy a;
 
 theorem :: SCMFSA8A:23  ::TQ59'
-  for P being programmed FinPartState of SCM+FSA, n being Element of NAT,
+  for P being preProgram of SCM+FSA, n being Element of NAT,
   a being Int-Location holds
-  P does_not_destroy a implies ProgramPart Relocated(P,n) does_not_destroy a;
+  P does_not_destroy a implies [ProgramPart Relocated(P,n)] does_not_destroy a;
 
 theorem :: SCMFSA8A:24  ::TQ59 <> T7
-  for P being good programmed FinPartState of SCM+FSA,
-  n being Element of NAT holds ProgramPart Relocated(P,n) is good;
+  for P being good preProgram of SCM+FSA,
+  n being Element of NAT holds [ProgramPart Relocated(P,n)] is good;
 
 theorem :: SCMFSA8A:25  ::TQ58'
-  for I,J being programmed FinPartState of SCM+FSA, a being Int-Location holds
+  for I,J being preProgram of SCM+FSA, a being Int-Location holds
   I does_not_destroy a & J does_not_destroy a implies
   I +* J does_not_destroy a;
 
 theorem :: SCMFSA8A:26  ::TQ58
-  for I,J being good programmed FinPartState of SCM+FSA holds I +* J is good;
+  for I,J being good preProgram of SCM+FSA holds I +* J is good;
 
 theorem :: SCMFSA8A:27  ::TG8
-  for I being programmed FinPartState of SCM+FSA,
+  for I being preProgram of SCM+FSA,
   l being Instruction-Location of SCM+FSA, a being Int-Location holds
   I does_not_destroy a implies Directed(I,l) does_not_destroy a;
 
 registration
-  let I be good programmed FinPartState of SCM+FSA;
+  let I be good preProgram of SCM+FSA;
   let l be Instruction-Location of SCM+FSA;
   cluster Directed(I,l) -> good;
 end;
 
 registration
-  let I be good Macro-Instruction;
+  let I be good Program of SCM+FSA;
   cluster Directed I -> good;
 end;
 
 registration
-  let I be Macro-Instruction, l be Instruction-Location of SCM+FSA;
+  let I be Program of SCM+FSA, l be Instruction-Location of SCM+FSA;
   cluster Directed(I,l) -> initial;
 end;
 
 registration
-  let I,J be good Macro-Instruction;
+  let I,J be good Program of SCM+FSA;
   cluster I ';' J -> good;
 end;
 
 definition
+ canceled;
   let l be Instruction-Location of SCM+FSA;
-  func Goto l -> halt-free good Macro-Instruction equals
+  func Goto l -> halt-free good Program of SCM+FSA equals
 :: SCMFSA8A:def 2
 
 ::D1
@@ -207,7 +179,7 @@ definition
 end;
 
 registration
-  cluster pseudo-paraclosed Macro-Instruction;
+  cluster pseudo-paraclosed Program of SCM+FSA;
 end;
 
 definition
@@ -223,14 +195,14 @@ definition
 end;
 
 theorem :: SCMFSA8A:28  ::TQ51
-  for I,J being Macro-Instruction, x being set holds
+  for I,J being Program of SCM+FSA, x being set holds
   x in dom I implies (I ';' J).x = (Directed I).x;
 
 theorem :: SCMFSA8A:29  ::T31(@BBB8)
   for l being Instruction-Location of SCM+FSA holds card Goto l = 1;
 
-theorem :: SCMFSA8A:30  ::T39
-  for P being programmed FinPartState of SCM+FSA, x being set
+theorem :: SCMFSA8A:30
+  for P being preProgram of SCM+FSA, x being set
   st x in dom P holds
   (P.x = halt SCM+FSA implies (Directed P).x = goto insloc card P) &
   (P.x <> halt SCM+FSA implies (Directed P).x = P.x);
@@ -243,21 +215,21 @@ theorem :: SCMFSA8A:31  ::TQ3
   CurInstr ( Computation( (s +* (P +* Start-At insloc 0)),n)) <> halt SCM+FSA;
 
 theorem :: SCMFSA8A:32  ::BBBB'54'
-  for s being State of SCM+FSA, I,J being Macro-Instruction
+  for s being State of SCM+FSA, I,J being Program of SCM+FSA
   st I is_pseudo-closed_on s
   for k being Element of NAT st k <= pseudo-LifeSpan(s,I) holds
    Computation( (s +* (I +* Start-At insloc 0)),k),
    Computation( (s +* ((I ';' J) +* Start-At insloc 0)),k) equal_outside NAT;
 
 theorem :: SCMFSA8A:33  ::TT4
-  for I being programmed FinPartState of SCM+FSA,
+  for I being preProgram of SCM+FSA,
   l being Instruction-Location of SCM+FSA holds card Directed(I,l) = card I;
 
-theorem :: SCMFSA8A:34  ::TQ1
-  for I being Macro-Instruction holds card Directed I = card I;
+theorem :: SCMFSA8A:34
+  for I being Program of SCM+FSA holds card Directed I = card I;
 
 theorem :: SCMFSA8A:35  ::TQ21'
-  for s being State of SCM+FSA, I being Macro-Instruction
+  for s being State of SCM+FSA, I being Program of SCM+FSA
   st I is_closed_on s & I is_halting_on s holds for k being Element of NAT
   st k <= LifeSpan (s +* (I +* Start-At insloc 0)) holds
   ( Computation( (s +* (I +* Start-At insloc 0)),k),
@@ -266,7 +238,7 @@ theorem :: SCMFSA8A:35  ::TQ21'
   halt SCM+FSA);
 
 theorem :: SCMFSA8A:36  ::TQ4''(Lemma0)''
-  for s being State of SCM+FSA, I being Macro-Instruction
+  for s being State of SCM+FSA, I being Program of SCM+FSA
   st I is_closed_on s & I is_halting_on s holds
   IC  Computation( (s +* (Directed I +* Start-At insloc 0)),
   (LifeSpan (s +* (I +* Start-At insloc 0)) + 1)) = insloc card I &
@@ -278,28 +250,22 @@ theorem :: SCMFSA8A:36  ::TQ4''(Lemma0)''
   (Int-Locations \/ FinSeq-Locations);
 
 theorem :: SCMFSA8A:37  ::TQ18
-  for s being State of SCM+FSA, I being Macro-Instruction holds
+  for s being State of SCM+FSA, I being Program of SCM+FSA holds
   I is_closed_on s & I is_halting_on s implies
   Directed I is_pseudo-closed_on s;
 
 theorem :: SCMFSA8A:38  ::TQ18'
-  for s being State of SCM+FSA, I being Macro-Instruction holds
+  for s being State of SCM+FSA, I being Program of SCM+FSA holds
   I is_closed_on s & I is_halting_on s implies pseudo-LifeSpan(s,Directed I) =
   LifeSpan (s +* (I +* Start-At insloc 0)) + 1;
 
-theorem :: SCMFSA8A:39  ::T35'
-  for I being programmed FinPartState of SCM+FSA,
-  l being Instruction-Location of SCM+FSA holds
-  I is halt-free implies Directed(I,l) = I;
-
-theorem :: SCMFSA8A:40  ::T35
-  for I being Macro-Instruction holds I is halt-free implies Directed I = I;
+canceled 2;
 
 theorem :: SCMFSA8A:41  ::TT8'
-  for I,J being Macro-Instruction holds Directed I ';' J = I ';' J;
+  for I,J being Program of SCM+FSA holds Directed I ';' J = I ';' J;
 
 theorem :: SCMFSA8A:42  ::TR1'
-  for s being State of SCM+FSA, I,J being Macro-Instruction
+  for s being State of SCM+FSA, I,J being Program of SCM+FSA
   st I is_closed_on s & I is_halting_on s holds
   (for k being Element of NAT st k <= LifeSpan (s +* (I +* Start-At insloc 0))
   holds IC  Computation( (s +* (Directed I +* Start-At insloc 0)),k) =
@@ -318,7 +284,7 @@ theorem :: SCMFSA8A:42  ::TR1'
   (LifeSpan (s +* (I +* Start-At insloc 0)) + 1));
 
 theorem :: SCMFSA8A:43  ::TR1
-  for s being State of SCM+FSA, I,J being Macro-Instruction
+  for s being State of SCM+FSA, I,J being Program of SCM+FSA
   st I is_closed_on Initialize s & I is_halting_on Initialize s holds
   (for k being Element of NAT st k <= LifeSpan (s +* Initialized I) holds
   IC  Computation( (s +* Initialized Directed I),k) =
@@ -335,7 +301,7 @@ theorem :: SCMFSA8A:43  ::TR1
   (LifeSpan (s +* Initialized I) + 1));
 
 theorem :: SCMFSA8A:44  ::TQ21
-  for s being State of SCM+FSA, I being Macro-Instruction
+  for s being State of SCM+FSA, I being Program of SCM+FSA
   st I is_closed_on Initialize s & I is_halting_on Initialize s holds
   for k being Element of NAT st k <= LifeSpan (s +* Initialized I) holds
   ( Computation( (s +* Initialized I),k),
@@ -343,7 +309,7 @@ theorem :: SCMFSA8A:44  ::TQ21
   CurInstr  Computation( (s +* Initialized Directed I),k) <> halt SCM+FSA);
 
 theorem :: SCMFSA8A:45  ::TQ4'(Lemma0)'
-  for s being State of SCM+FSA, I being Macro-Instruction
+  for s being State of SCM+FSA, I being Program of SCM+FSA
   st I is_closed_on Initialize s & I is_halting_on Initialize s holds
   IC  Computation( (s +* Initialized Directed I),
   (LifeSpan (s +* Initialized I) + 1)) = insloc card I &
@@ -353,93 +319,75 @@ theorem :: SCMFSA8A:45  ::TQ4'(Lemma0)'
   (LifeSpan (s +* Initialized I) + 1))| (Int-Locations \/ FinSeq-Locations);
 
 theorem :: SCMFSA8A:46  ::TI9' <> _T22''
-  for I being Macro-Instruction, s being State of SCM+FSA
+  for I being Program of SCM+FSA, s being State of SCM+FSA
   st I is_closed_on s & I is_halting_on s holds
-  I ';' SCM+FSA-Stop is_closed_on s &
-  I ';' SCM+FSA-Stop is_halting_on s;
+  I ';' Stop SCM+FSA is_closed_on s &
+  I ';' Stop SCM+FSA is_halting_on s;
 
 theorem :: SCMFSA8A:47  ::TB61'(TB61'@BBB8)
   for l being Instruction-Location of SCM+FSA holds
   insloc 0 in dom Goto l & (Goto l).insloc 0 = goto l;
 
-canceled;
-
-theorem :: SCMFSA8A:49  ::T71
-  for I being programmed FinPartState of SCM+FSA, x being set,
-  k being Element of NAT holds x in dom ProgramPart Relocated(I,k) implies
-  (ProgramPart Relocated(I,k)).x = Relocated(I,k).x;
-
-theorem :: SCMFSA8A:50  ::T12
-  for I being programmed FinPartState of SCM+FSA, k being Element of NAT holds
-  ProgramPart Relocated(Directed I,k) =
-  Directed(ProgramPart Relocated(I,k),insloc (card I + k));
-
-theorem :: SCMFSA8A:51  ::T37
-  for I,J being programmed FinPartState of SCM+FSA,
-  l being Instruction-Location of SCM+FSA holds
-  Directed(I +* J,l) = Directed(I,l) +* Directed(J,l);
-
-theorem :: SCMFSA8A:52  ::TQ52
-  for I,J being Macro-Instruction holds Directed (I ';' J) = I ';' Directed J;
+canceled 5;
 
 theorem :: SCMFSA8A:53
-  for I being Macro-Instruction, s being State of SCM+FSA
+  for I being Program of SCM+FSA, s being State of SCM+FSA
   st I is_closed_on Initialize s & I is_halting_on Initialize s holds
-  IC  Computation( (s +* Initialized (I ';' SCM+FSA-Stop)),
+  IC  Computation( (s +* Initialized (I ';' Stop SCM+FSA)),
   (LifeSpan (s +* Initialized I) + 1)) = insloc card I;
 
 theorem :: SCMFSA8A:54
-  for I being Macro-Instruction, s being State of SCM+FSA
+  for I being Program of SCM+FSA, s being State of SCM+FSA
   st I is_closed_on Initialize s & I is_halting_on Initialize s holds
    Computation( (s +* Initialized I),LifeSpan (s +* Initialized I)) |
   (Int-Locations \/ FinSeq-Locations) =
-   Computation( (s +* Initialized (I ';' SCM+FSA-Stop)),
+   Computation( (s +* Initialized (I ';' Stop SCM+FSA)),
   (LifeSpan (s +* Initialized I) + 1)) |
   (Int-Locations \/ FinSeq-Locations);
 
 theorem :: SCMFSA8A:55  ::TI9 <> _T22'
-  for I being Macro-Instruction, s being State of SCM+FSA
+  for I being Program of SCM+FSA, s being State of SCM+FSA
   st I is_closed_on Initialize s & I is_halting_on Initialize s holds
-  s +* Initialized (I ';' SCM+FSA-Stop) is halting;
+  s +* Initialized (I ';' Stop SCM+FSA) is halting;
 
 theorem :: SCMFSA8A:56
-  for I being Macro-Instruction, s being State of SCM+FSA
+  for I being Program of SCM+FSA, s being State of SCM+FSA
   st I is_closed_on Initialize s & I is_halting_on Initialize s holds
-  LifeSpan (s +* Initialized (I ';' SCM+FSA-Stop)) =
+  LifeSpan (s +* Initialized (I ';' Stop SCM+FSA)) =
   LifeSpan (s +* Initialized I) + 1;
 
 theorem :: SCMFSA8A:57  ::TA24'(@BBB8)
-  for s being State of SCM+FSA, I being Macro-Instruction
+  for s being State of SCM+FSA, I being Program of SCM+FSA
   st I is_closed_on Initialize s & I is_halting_on Initialize s
-  holds IExec(I ';' SCM+FSA-Stop,s) = IExec(I,s) +* Start-At insloc card I;
+  holds IExec(I ';' Stop SCM+FSA,s) = IExec(I,s) +* Start-At insloc card I;
 
 theorem :: SCMFSA8A:58  ::TI10 <> T62''(@BBB8)
-  for I,J being Macro-Instruction,s being State of SCM+FSA
+  for I,J being Program of SCM+FSA,s being State of SCM+FSA
   st I is_closed_on s & I is_halting_on s holds
-  I ';' Goto insloc (card J + 1) ';' J ';' SCM+FSA-Stop is_closed_on s &
-  I ';' Goto insloc (card J + 1) ';' J ';' SCM+FSA-Stop is_halting_on s;
+  I ';' Goto insloc (card J + 1) ';' J ';' Stop SCM+FSA is_closed_on s &
+  I ';' Goto insloc (card J + 1) ';' J ';' Stop SCM+FSA is_halting_on s;
 
 theorem :: SCMFSA8A:59
-  for I,J being Macro-Instruction, s being State of SCM+FSA st
+  for I,J being Program of SCM+FSA, s being State of SCM+FSA st
   I is_closed_on s & I is_halting_on s holds
-  s +* (I ';' Goto insloc (card J + 1) ';' J ';' SCM+FSA-Stop +*
+  s +* (I ';' Goto insloc (card J + 1) ';' J ';' Stop SCM+FSA +*
   Start-At insloc 0) is halting;
 
 theorem :: SCMFSA8A:60
-  for I,J being Macro-Instruction, s being State of SCM+FSA
+  for I,J being Program of SCM+FSA, s being State of SCM+FSA
   st I is_closed_on Initialize s & I is_halting_on Initialize s holds
-  s +* Initialized (I ';' Goto insloc (card J + 1) ';' J ';' SCM+FSA-Stop)
+  s +* Initialized (I ';' Goto insloc (card J + 1) ';' J ';' Stop SCM+FSA)
   is halting;
 
 theorem :: SCMFSA8A:61  ::T63'(@BBB8)
-  for I,J being Macro-Instruction, s being State of SCM+FSA
+  for I,J being Program of SCM+FSA, s being State of SCM+FSA
   st I is_closed_on Initialize s & I is_halting_on Initialize s holds
-  IC IExec(I ';' Goto insloc (card J + 1) ';' J ';' SCM+FSA-Stop,s) =
+  IC IExec(I ';' Goto insloc (card J + 1) ';' J ';' Stop SCM+FSA,s) =
   insloc (card I + card J + 1);
 
 theorem :: SCMFSA8A:62  ::T64'(@BBB8)
-  for I,J being Macro-Instruction, s being State of SCM+FSA
+  for I,J being Program of SCM+FSA, s being State of SCM+FSA
   st I is_closed_on Initialize s & I is_halting_on Initialize s holds
-  IExec(I ';' Goto insloc (card J + 1) ';' J ';' SCM+FSA-Stop,s) =
+  IExec(I ';' Goto insloc (card J + 1) ';' J ';' Stop SCM+FSA,s) =
   IExec(I,s) +* Start-At insloc (card I + card J + 1);
 

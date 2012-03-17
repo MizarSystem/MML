@@ -35,7 +35,7 @@
 <ArticleID name="MSUALG_1"/>
 <ArticleID name="MSAFREE"/>
 </Signature>
-<RCluster>
+<RCluster aid="MSAFREE" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="8">
 <Cluster>
@@ -60,7 +60,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="MSAFREE" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="8">
 <Cluster>
@@ -91,7 +91,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="MSAFREE" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -114,7 +114,7 @@
 <Adjective nr="4"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="MSAFREE" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -135,7 +135,7 @@
 <Adjective nr="7" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="MSAFREE" nr="3">
 <ArgTypes>
 <Typ kind="G" nr="8">
 <Cluster>
@@ -150,7 +150,7 @@
 <Adjective nr="7" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="MSAFREE" nr="4">
 <ArgTypes>
 <Typ kind="G" nr="8">
 <Cluster>
@@ -174,7 +174,7 @@
 <Adjective nr="49"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="MSAFREE" nr="5">
 <ArgTypes>
 <Typ kind="G" nr="8">
 <Cluster>
@@ -201,7 +201,7 @@
 <Adjective nr="55"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="MSAFREE" nr="6">
 <ArgTypes>
 <Typ kind="G" nr="8">
 <Cluster>
@@ -233,7 +233,7 @@
 <Adjective nr="7" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="MSAFREE" nr="7">
 <ArgTypes>
 <Typ kind="G" nr="8">
 <Cluster>
@@ -258,7 +258,7 @@
 <Adjective nr="2"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="MSAFREE" nr="8">
 <ArgTypes>
 <Typ kind="G" nr="8">
 <Cluster>
@@ -288,7 +288,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="MSAFREE" nr="9">
 <ArgTypes>
 <Typ kind="G" nr="8">
 <Cluster>

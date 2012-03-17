@@ -43,7 +43,7 @@
 <ArticleID name="WAYBEL_6"/>
 <ArticleID name="WAYBEL12"/>
 </Signature>
-<RCluster>
+<RCluster aid="WAYBEL12" nr="1">
 <ArgTypes/>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -53,7 +53,7 @@
 <Adjective nr="42"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="WAYBEL12" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="1">
 <Cluster/>
@@ -71,7 +71,7 @@
 <Adjective nr="1"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="WAYBEL12" nr="3">
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
@@ -92,7 +92,7 @@
 <Adjective nr="42"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="WAYBEL12" nr="4">
 <ArgTypes/>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -102,7 +102,7 @@
 <Adjective nr="42" value="false"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="WAYBEL12" nr="5">
 <ArgTypes>
 <Typ kind="G" nr="1">
 <Cluster/>
@@ -122,7 +122,7 @@
 <Adjective nr="1"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="WAYBEL12" nr="6">
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
@@ -149,7 +149,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Typ kind="M" nr="29">
+<Typ kind="M" nr="28">
 <Cluster/>
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
@@ -158,7 +158,7 @@
 <Adjective nr="1" value="false"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="WAYBEL12" nr="7">
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
@@ -182,7 +182,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="WAYBEL12" nr="8">
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
@@ -211,7 +211,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="WAYBEL12" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
@@ -244,7 +244,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="WAYBEL12" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
@@ -265,7 +265,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<CCluster>
+<CCluster aid="WAYBEL12" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="1">
 <Cluster>
@@ -286,7 +286,7 @@
 <Adjective nr="1"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="WAYBEL12" nr="2">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="42"/>
@@ -298,7 +298,7 @@
 <Adjective nr="18"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="WAYBEL12" nr="3">
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
@@ -331,7 +331,7 @@
 </Adjective>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="WAYBEL12" nr="4">
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>

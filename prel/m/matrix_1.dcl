@@ -22,7 +22,7 @@
 <ArticleID name="RLVECT_1"/>
 <ArticleID name="MATRIX_1"/>
 </Signature>
-<RCluster>
+<RCluster aid="MATRIX_1" nr="1">
 <ArgTypes/>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -35,7 +35,7 @@
 <Adjective nr="76"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="MATRIX_1" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -55,7 +55,7 @@
 <Adjective nr="76"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="MATRIX_1" nr="3">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -78,7 +78,7 @@
 <Adjective nr="76"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="MATRIX_1" nr="4">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -110,7 +110,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="MATRIX_1" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="10">
 <Cluster>

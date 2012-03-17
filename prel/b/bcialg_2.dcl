@@ -20,7 +20,7 @@
 <ArticleID name="EQREL_1"/>
 <ArticleID name="BCIALG_2"/>
 </Signature>
-<RCluster>
+<RCluster aid="BCIALG_2" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
@@ -44,7 +44,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="BCIALG_2" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
@@ -68,7 +68,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="BCIALG_2" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
@@ -89,7 +89,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="BCIALG_2" nr="3">
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
@@ -100,7 +100,7 @@
 <Adjective nr="26"/>
 </Cluster>
 </Typ>
-<Typ kind="M" nr="11">
+<Typ kind="M" nr="10">
 <Cluster/>
 <LocusVar nr="1"/>
 </Typ>
@@ -115,7 +115,7 @@
 <Adjective nr="7" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="BCIALG_2" nr="4">
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
@@ -126,7 +126,7 @@
 <Adjective nr="26"/>
 </Cluster>
 </Typ>
-<Typ kind="M" nr="11">
+<Typ kind="M" nr="10">
 <Cluster/>
 <LocusVar nr="1"/>
 </Typ>
@@ -139,7 +139,7 @@
 <Adjective nr="12" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="BCIALG_2" nr="5">
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
@@ -154,7 +154,7 @@
 <Cluster/>
 <LocusVar nr="1"/>
 </Typ>
-<Typ kind="M" nr="14">
+<Typ kind="M" nr="13">
 <Cluster/>
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
@@ -172,7 +172,7 @@
 <Adjective nr="26"/>
 </Cluster>
 </FCluster>
-<CCluster>
+<CCluster aid="BCIALG_2" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
@@ -189,7 +189,7 @@
 </Typ>
 </ArgTypes>
 <Cluster/>
-<Typ kind="M" nr="14">
+<Typ kind="M" nr="13">
 <Cluster/>
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>

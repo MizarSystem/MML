@@ -12,11 +12,11 @@
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XCMPLX_0"/>
+<ArticleID name="MCART_1"/>
+<ArticleID name="FUNCT_2"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
-<ArticleID name="MCART_1"/>
-<ArticleID name="FUNCT_2"/>
 <ArticleID name="FINSEQ_2"/>
 <ArticleID name="FINSEQ_6"/>
 <ArticleID name="XREAL_0"/>
@@ -38,7 +38,7 @@
 <ArticleID name="TOPREAL1"/>
 <ArticleID name="GOBOARD5"/>
 </Signature>
-<RCluster>
+<RCluster aid="GOBOARD5" nr="1">
 <ArgTypes/>
 <Typ kind="M" nr="7">
 <Cluster/>
@@ -53,8 +53,8 @@
 <Adjective nr="4"/>
 <Adjective nr="6" value="false"/>
 <Adjective nr="7" value="false"/>
-<Adjective nr="16"/>
-<Adjective nr="20"/>
+<Adjective nr="19"/>
+<Adjective nr="23"/>
 <Adjective nr="25">
 <Func kind="U" nr="1">
 <Func kind="K" nr="292">

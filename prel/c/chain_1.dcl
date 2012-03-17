@@ -20,7 +20,7 @@
 <ArticleID name="REALSET1"/>
 <ArticleID name="FINSEQ_1"/>
 </Signature>
-<RCluster>
+<RCluster aid="CHAIN_1" nr="1">
 <ArgTypes/>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -30,7 +30,7 @@
 <Adjective nr="22" value="false"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="CHAIN_1" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -49,7 +49,7 @@
 <Adjective nr="22" value="false"/>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="CHAIN_1" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster>
@@ -65,7 +65,7 @@
 <Adjective nr="7" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="CHAIN_1" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -84,7 +84,7 @@
 <Adjective nr="22" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="CHAIN_1" nr="3">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -103,7 +103,7 @@
 <Adjective nr="22" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="CHAIN_1" nr="4">
 <ArgTypes/>
 <Func kind="K" nr="42"/>
 <Cluster>

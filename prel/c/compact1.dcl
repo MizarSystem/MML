@@ -35,7 +35,7 @@
 <ArticleID name="WAYBEL_3"/>
 <ArticleID name="COMPACT1"/>
 </Signature>
-<RCluster>
+<RCluster aid="COMPACT1" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
@@ -57,7 +57,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="COMPACT1" nr="2">
 <ArgTypes/>
 <Typ kind="G" nr="5">
 <Cluster/>
@@ -68,7 +68,7 @@
 <Adjective nr="64"/>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="COMPACT1" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
@@ -85,7 +85,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="COMPACT1" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
@@ -115,7 +115,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="COMPACT1" nr="3">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
@@ -147,7 +147,7 @@
 <Adjective nr="93"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="COMPACT1" nr="4">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
@@ -180,7 +180,7 @@
 <Adjective nr="93"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="COMPACT1" nr="5">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster/>
@@ -194,7 +194,7 @@
 <Adjective nr="33"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="COMPACT1" nr="6">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
@@ -210,7 +210,7 @@
 <Adjective nr="34"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="COMPACT1" nr="7">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
@@ -226,7 +226,7 @@
 <Adjective nr="59"/>
 </Cluster>
 </FCluster>
-<CCluster>
+<CCluster aid="COMPACT1" nr="1">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="25" value="false"/>
@@ -242,7 +242,7 @@
 <Adjective nr="93"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="COMPACT1" nr="2">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="25" value="false"/>
@@ -260,7 +260,7 @@
 <Adjective nr="88"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="COMPACT1" nr="3">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="25" value="false"/>
@@ -276,7 +276,7 @@
 <Adjective nr="92"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="COMPACT1" nr="4">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="25" value="false"/>
@@ -292,7 +292,7 @@
 <Adjective nr="91"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="COMPACT1" nr="5">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="25" value="false"/>
@@ -308,7 +308,7 @@
 <Adjective nr="93"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="COMPACT1" nr="6">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="25" value="false"/>
@@ -326,7 +326,7 @@
 <Adjective nr="91"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="COMPACT1" nr="7">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="25" value="false"/>
@@ -342,7 +342,7 @@
 <Adjective nr="93"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="COMPACT1" nr="8">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="25" value="false"/>
@@ -358,7 +358,7 @@
 <Adjective nr="93"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="COMPACT1" nr="9">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>

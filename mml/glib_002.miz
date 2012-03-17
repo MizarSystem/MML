@@ -22,7 +22,7 @@ environ
       GLIB_000, GLIB_001, HEYTING3, INT_1, JORDAN12, NAT_1, ORDINAL1, PBOOLE,
       PENCIL_1, REAL_1, RELAT_1, TARSKI, XBOOLE_0, XBOOLE_1, XCMPLX_1,
       ZFMISC_1, XREAL_1, XXREAL_0;
- schemes BINARITH, NAT_1, SUBSET_1, GLIB_000;
+ schemes NAT_1, SUBSET_1, GLIB_000;
 
 begin :: Preliminary
 
@@ -711,7 +711,7 @@ definition
   attr v is cut-vertex means
   :Def10: ::dCUTV1
   for G2 being removeVertex of G,v holds
-  G.numComponents() <` G2.numComponents();
+  G.numComponents() in G2.numComponents();
 end;
 
 definition
@@ -726,7 +726,7 @@ definition
       assume
 A1:   v is cut-vertex;
       let G2 be removeVertex of G,v;
-      Card G.numComponents() <` Card G2.numComponents() by A1,Def10;
+      Card G.numComponents() in Card G2.numComponents() by A1,Def10;
       hence G.numComponents() < G2.numComponents() by NAT_1:42;
     end;
     assume
@@ -735,8 +735,8 @@ A2: for G2 being removeVertex of G,v holds
     now
       let G2 be removeVertex of G,v;
       G.numComponents() < G2.numComponents() by A2;
-      then Card G.numComponents() <` Card G2.numComponents() by NAT_1:42;
-      hence G.numComponents() <` G2.numComponents();
+      then Card G.numComponents() in Card G2.numComponents() by NAT_1:42;
+      hence G.numComponents() in G2.numComponents();
     end;
     hence v is cut-vertex by Def10;
   end;
@@ -1181,27 +1181,27 @@ end;
 
 Lm19: for G being connected _Graph, v being Vertex of G holds
 v is non cut-vertex iff for G2 being removeVertex of G,v holds
-G2.numComponents() <=` G.numComponents()
+G2.numComponents() c= G.numComponents()
 proof
   let G be connected _Graph, v be Vertex of G;
   hereby
     assume v is non cut-vertex;
     then consider G3 being removeVertex of G,v such that
-A1: not G.numComponents() <` G3.numComponents() by Def10;
-A2: G3.numComponents() <=` G.numComponents() by A1,CARD_1:14;
+A1: not G.numComponents() in G3.numComponents() by Def10;
+A2: G3.numComponents() c= G.numComponents() by A1,CARD_1:14;
     let G2 be removeVertex of G,v;
-    thus G2.numComponents() <=` G.numComponents() by A2,Lm12,GLIB_000:96;
+    thus G2.numComponents() c= G.numComponents() by A2,Lm12,GLIB_000:96;
   end;
   assume
 A3: for G2 being removeVertex of G,v holds
-  G2.numComponents() <=` G.numComponents();
+  G2.numComponents() c= G.numComponents();
   now
     assume
 A4: for G3 being removeVertex of G,v holds
-    G.numComponents() <` G3.numComponents();
+    G.numComponents() in G3.numComponents();
     consider X being removeVertex of G,v;
-A5: X.numComponents() <=` G.numComponents() by A3;
-    G.numComponents() <` X.numComponents() by A4;
+A5: X.numComponents() c= G.numComponents() by A3;
+    G.numComponents() in X.numComponents() by A4;
     hence contradiction by A5,CARD_1:14;
   end;
   hence v is non cut-vertex by Def10;
@@ -2787,7 +2787,7 @@ theorem  ::tGCOMP05
 theorem  ::tCUTV01
   for G being connected _Graph, v being Vertex of G holds
   v is non cut-vertex iff for G2 being removeVertex of G,v holds
-  G2.numComponents() <=` G.numComponents() by Lm19;
+  G2.numComponents() c= G.numComponents() by Lm19;
 
 theorem  ::tCUTV02
   for G being connected _Graph, v being Vertex of G,
@@ -2810,7 +2810,7 @@ A1: v is cut-vertex;
 A2: G'.numComponents() = 1 by Lm18;
     consider G2 being removeVertex of G',v;
     G2.numComponents() = 1 by Lm18;
-    then 1 <` 1 by A1,A2,Def10;
+    then 1 in 1 by A1,A2,Def10;
     hence contradiction;
   end;
   hence thesis;
@@ -2826,7 +2826,7 @@ A1: G1 == G2 & v1 = v2 & v1 is cut-vertex;
   then
 A2: G1.numComponents() = G2.numComponents() by Lm12;
   consider G1A being removeVertex of G1,v1;
-A3: G2.numComponents() <` G1A.numComponents() by A1,A2,Def10;
+A3: G2.numComponents() in G1A.numComponents() by A1,A2,Def10;
 A4: G1 is non trivial by A1,Th38;
   then
 A5: the_Vertices_of G1A = the_Vertices_of G1 \ {v2} by A1,GLIB_000:50
@@ -2844,7 +2844,7 @@ A8: the_Vertices_of G2A = the_Vertices_of G1A by A5,GLIB_000:50;
 A9: the_Edges_of G2A = the_Edges_of G1A by A6,A7,GLIB_000:50;
   G2 is Subgraph of G1 by A1,GLIB_000:90;
   then G2A is Subgraph of G1 by GLIB_000:46;
-  hence G2.numComponents() <` G2A.numComponents()
+  hence G2.numComponents() in G2A.numComponents()
   by A3,A8,A9,Lm12,GLIB_000:89;
 end;
 
@@ -2855,7 +2855,7 @@ proof
   $1 is connected implies $1.order() <= $1.size() + 1;
 A1: for G being finite _Graph st G.order() = 1 holds P[G] by NAT_1:12;
 A2: now
-    let k be non empty Element of NAT;
+    let k be non empty Nat;
     assume
 A3: for Gk being finite _Graph st Gk.order() = k holds P[Gk];
     let Gk1 be finite _Graph;
@@ -2932,7 +2932,7 @@ proof
     assume
 A1: G is Tree-like;
     hence G is acyclic by Def3;
-    defpred P[Element of NAT] means for T being finite Tree-like _Graph st
+    defpred P[Nat] means for T being finite Tree-like _Graph st
     T.order() = $1 holds $1 = T.size() + 1;
     now
       let T be finite Tree-like _Graph;
@@ -2961,7 +2961,7 @@ A3:     e in ET;
     then
 A4: P[1];
     now
-      let k be non empty Element of NAT;
+      let k be non empty Nat;
       assume
 A5:   for T being finite Tree-like _Graph st T.order() = k
       holds k = T.size() + 1;
@@ -2981,14 +2981,14 @@ A7:   k = T2.size() + 1 by A5;
       hence k+1 = T.size() + 1 by A7,GLIB_000:51;
     end;
     then
-A8: for k being non empty Element of NAT st P[k] holds P[k+1];
-    for k being non empty Element of NAT holds P[k]
-    from BINARITH:sch 1(A4,A8);
+A8: for k being non empty Nat st P[k] holds P[k+1];
+    for k being non empty Nat holds P[k]
+    from NAT_1:sch 10(A4,A8);
     hence G.order() = G.size() + 1 by A1;
   end;
   assume
 A9: G is acyclic & G.order() = G.size() + 1;
-  defpred P[Element of NAT] means
+  defpred P[Nat] means
   for G being finite acyclic _Graph st G.order() = $1 &
   G.order() = G.size() + 1 holds G is connected;
   now
@@ -3037,9 +3037,9 @@ A17: v.edgesInOut() = {e} & not e Joins v,v,G by A14,GLIB_000:def 53;
     hence G is connected by A16,A17,Th3;
   end;
   then
-A18: for k being non empty Element of NAT st P[k] holds P[k+1];
-  for k being non empty Element of NAT holds P[k]
-  from BINARITH:sch 1(A11,A18);
+A18: for k being non empty Nat st P[k] holds P[k+1];
+  for k being non empty Nat holds P[k]
+  from NAT_1:sch 10(A11,A18);
   then G is connected by A9;
   hence G is Tree-like by A9,Def3;
 end;

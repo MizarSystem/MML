@@ -13,7 +13,7 @@
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="BINOP_1"/>
 </Signature>
-<CCluster>
+<CCluster aid="BINOP_1" nr="1">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="4"/>

@@ -19,10 +19,10 @@ environ
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions TARSKI, FUNCT_1, WELLORD2, ORDINAL1, XBOOLE_0, FUNCOP_1;
  theorems TARSKI, AXIOMS, FUNCT_1, REAL_1, NAT_1, ZFMISC_1, RELAT_1, RELSET_1,
-      PARTFUN1, ORDINAL1, CARD_1, FINSEQ_1, EULER_1, CARD_5, FUNCT_7, ORDINAL4,
+      ORDINAL1, CARD_1, FINSEQ_1, EULER_1, CARD_5, FUNCT_7, ORDINAL4,
       CARD_2, FUNCT_4, ORDINAL3, XBOOLE_0, XBOOLE_1, FINSET_1, FUNCOP_1,
       XREAL_1, VALUED_0;
- schemes FUNCT_1, REAL_1, NAT_1, XBOOLE_0;
+ schemes FUNCT_1, REAL_1, NAT_1, XBOOLE_0, CLASSES1;
 
 begin
 
@@ -56,8 +56,8 @@ theorem
   k = k /\ n implies k <= n by Th2;
 
 theorem Th4:  :: ORDINAL1:def 1, NAT_1:39
-  n \/ { n } = n+1
-proof
+  for n being Nat holds n \/ { n } = n+1
+proof let n be Nat;
   n+1 = succ n by NAT_1:39;
   hence thesis;
 end;
@@ -248,20 +248,8 @@ end;
 scheme XSeqEx{A()->Nat,P[set,set]}:
   ex p st dom p = A() & for k st k in A() holds P[k,p.k]
 provided
-A1: for k,y1,y2 st k in A() & P[k,y1] & P[k,y2] holds y1=y2
-and
 A2: for k st k in A() ex x st P[k,x]
 proof
-A3: for x,y1,y2 st x in A() & P[x,y1] & P[x,y2] holds y1=y2
-  proof
-    let x,y1,y2;
-    assume
-A4: x in A() & P[x,y1] & P[x,y2];
-    A()={i where i is Element of NAT: i<A()} by AXIOMS:30;
-    then consider i being Element of NAT such that
-A5: i=x & i<A() by A4;
-    thus y1=y2 by A1,A4,A5;
-  end;
 A6: for x st x in A() ex y st P[x,y]
   proof
     let x;
@@ -274,7 +262,7 @@ A8: i=x & i<A() by A7;
   end;
   consider f being Function such that
 A9: dom f = A() &
-  (for x st x in A() holds P[x,f.x]) from FUNCT_1:sch 2(A3,A6);
+  (for x st x in A() holds P[x,f.x]) from CLASSES1:sch 1(A6);
   A() in NAT by ORDINAL1:def 13;
   then reconsider p=f as XFinSequence by A9,Th7;
   take p;
@@ -400,7 +388,7 @@ registration
   let D be set;
   cluster finite T-Sequence-like PartFunc of NAT,D;
   existence
-  proof {} is PartFunc of NAT,D by PARTFUN1:56;
+  proof {} is PartFunc of NAT,D by RELSET_1:25;
     hence thesis;
   end;
 end;
@@ -443,7 +431,7 @@ registration
   existence by ORDINAL1:45;
 end;
 
-theorem Th18:
+theorem
   len p = 0 iff p = {} by CARD_1:47,CARD_2:59;
 
 theorem Th19:
@@ -468,7 +456,7 @@ definition
   let x;
   func <%x%> -> set equals
 
-  { [0,x] };
+  0 .--> x;
   coherence;
 end;
 
@@ -818,10 +806,10 @@ theorem
   p^q = {} implies p={} & q={}
 proof
   assume p^q={};
-  then 0 = len (p^q) by Th18
+  then 0 = len (p^q) by CARD_1:47
     .= len p + len q by Th20;
   then len p = 0 & len q = 0 by NAT_1:7;
-  hence thesis by Th18;
+  hence thesis by CARD_2:59;
 end;
 
 definition
@@ -854,13 +842,7 @@ definition
   compatibility
   proof
     let f be Function;
-    hereby
-      assume
-A1:   f = <%x%>;
-      hence dom f = 1 by CARD_5:1,RELAT_1:23;
-      [0,x] in f by A1,TARSKI:def 1;
-      hence f.0 = x by FUNCT_1:8;
-    end;
+    thus f = <%x%> implies dom f = 1 & f.0 = x by FUNCOP_1:19,87, CARD_1:87;
     assume
 A2: dom f = 1 & f.0 = x;
     reconsider g = { [0,f.0] } as Function;
@@ -881,7 +863,7 @@ A2: dom f = 1 & f.0 = x;
       end;
       hence thesis by RELAT_1:def 2;
     end;
-    hence thesis by A2;
+    hence thesis by A2,FUNCT_4:87;
   end;
 end;
 
@@ -949,7 +931,7 @@ registration
 end;
 
 theorem
-  <%x%> = { [0,x] };
+  <%x%> = { [0,x] } by FUNCT_4:87;
 
 theorem Th36:
   p=<%x%> iff dom p = 1 & rng p = {x}
@@ -1115,7 +1097,7 @@ theorem Th44:
   p <> {} implies ex q,x st p=q^<%x%>
 proof
   assume p <> {};
-  then len p <> 0 by Th18;
+  then len p <> 0 by CARD_2:59;
   then consider n being Nat such that
 A1: len p = n+1 by NAT_1:6;
   reconsider n as Element of NAT by ORDINAL1:def 13;
@@ -1206,7 +1188,7 @@ A3: for x being Real holds x in X iff P1[x] from REAL_1:sch 1;
     defpred R[Element of NAT] means $1 in X;
 A4: R[0]
     proof
-      for q st len q = 0 holds P[q] by A1,Th18;
+      for q st len q = 0 holds P[q] by A1,CARD_2:59;
       hence 0 in X by A3;
     end;
     now
@@ -1216,9 +1198,8 @@ A5:   n in X;
         let q;
         assume
 A6:     len q = n+1;
-        then q <> {} by Th18;
         then consider r,x such that
-A7:     q=r^<%x%> by Th44;
+A7:     q=r^<%x%> by Th44,CARD_1:47;
         len q = len r + len <%x%> by A7,Th20
           .= len r + 1 by Th37;
         then P[r] by A3,A5,A6;
@@ -1244,12 +1225,11 @@ A1: P[{}]
   proof
     let p,q,s;
     assume p^q={}^s & len p <= len {};
-    then len p <= 0;
     then
 A2: len p = 0;
     take {};
     thus p^{} = p by Th32
-      .= {} by A2,Th18;
+      .= {} by A2,CARD_2:59;
   end;
 A3: for r,x st P[r] holds P[r^<%x%>]
   proof

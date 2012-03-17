@@ -24,7 +24,7 @@
 <ArticleID name="UNIALG_2"/>
 <ArticleID name="UNIALG_3"/>
 </Signature>
-<RCluster>
+<RCluster aid="UNIALG_3" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="8">
 <Cluster>
@@ -43,7 +43,7 @@
 <Adjective nr="1" value="false"/>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="UNIALG_3" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="8">
 <Cluster>
@@ -66,7 +66,7 @@
 <Adjective nr="34"/>
 </Cluster>
 </FCluster>
-<CCluster>
+<CCluster aid="UNIALG_3" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="8">
 <Cluster>

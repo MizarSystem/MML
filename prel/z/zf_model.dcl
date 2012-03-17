@@ -19,7 +19,7 @@
 <ArticleID name="ZF_LANG"/>
 <ArticleID name="ZF_MODEL"/>
 </Signature>
-<FCluster>
+<FCluster aid="ZF_MODEL" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>

@@ -53,7 +53,7 @@
 <ArticleID name="POLYNOM5"/>
 <ArticleID name="UPROOTS"/>
 </Signature>
-<RCluster>
+<RCluster aid="UPROOTS" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="2">
 <Cluster>
@@ -86,7 +86,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="UPROOTS" nr="2">
 <ArgTypes/>
 <Typ kind="G" nr="10">
 <Cluster/>
@@ -106,7 +106,7 @@
 <Adjective nr="145"/>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="UPROOTS" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="9">
 <Cluster>
@@ -121,7 +121,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="421">
+<Func kind="K" nr="422">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <Func kind="K" nr="231">
@@ -141,7 +141,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="UPROOTS" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="10">
 <Cluster>
@@ -154,7 +154,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="395">
+<Func kind="K" nr="396">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -163,7 +163,7 @@
 <Adjective nr="115"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="UPROOTS" nr="3">
 <ArgTypes>
 <Typ kind="G" nr="10">
 <Cluster>
@@ -223,7 +223,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="393">
+<Func kind="K" nr="394">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
@@ -241,7 +241,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="UPROOTS" nr="4">
 <ArgTypes>
 <Typ kind="G" nr="10">
 <Cluster>
@@ -268,9 +268,9 @@
 <Func kind="K" nr="87"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="419">
+<Func kind="K" nr="420">
 <LocusVar nr="1"/>
-<Func kind="K" nr="421">
+<Func kind="K" nr="422">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <Func kind="K" nr="231">
@@ -292,7 +292,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="UPROOTS" nr="5">
 <ArgTypes>
 <Typ kind="G" nr="10">
 <Cluster>
@@ -331,7 +331,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="423">
+<Func kind="K" nr="424">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>

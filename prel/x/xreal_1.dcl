@@ -12,7 +12,7 @@
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XXREAL_0"/>
 </Signature>
-<CCluster>
+<CCluster aid="XREAL_1" nr="1">
 <ArgTypes/>
 <Cluster/>
 <Typ kind="M" nr="2">

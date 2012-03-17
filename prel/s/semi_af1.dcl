@@ -22,7 +22,7 @@
 <ArticleID name="ANALOAF"/>
 <ArticleID name="SEMI_AF1"/>
 </Signature>
-<RCluster>
+<RCluster aid="SEMI_AF1" nr="1">
 <ArgTypes/>
 <Typ kind="G" nr="12">
 <Cluster/>

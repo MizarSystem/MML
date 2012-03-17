@@ -36,7 +36,7 @@
 <ArticleID name="EUCLID"/>
 <ArticleID name="GOBOARD1"/>
 </Signature>
-<RCluster>
+<RCluster aid="GOBOARD1" nr="1">
 <ArgTypes/>
 <Typ kind="M" nr="7">
 <Cluster/>
@@ -54,7 +54,7 @@
 <Adjective nr="111"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="GOBOARD1" nr="2">
 <ArgTypes/>
 <Typ kind="M" nr="7">
 <Cluster/>
@@ -71,7 +71,7 @@
 <Adjective nr="83"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="GOBOARD1" nr="3">
 <ArgTypes/>
 <Typ kind="M" nr="7">
 <Cluster/>

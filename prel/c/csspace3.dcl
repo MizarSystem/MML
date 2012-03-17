@@ -24,14 +24,14 @@
 <ArticleID name="CSSPACE"/>
 <ArticleID name="CSSPACE3"/>
 </Signature>
-<FCluster>
+<FCluster aid="CSSPACE3" nr="1">
 <ArgTypes/>
 <Func kind="K" nr="169"/>
 <Cluster>
 <Adjective nr="7" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="CSSPACE3" nr="2">
 <ArgTypes/>
 <Func kind="K" nr="169"/>
 <Cluster>
@@ -40,7 +40,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="CSSPACE3" nr="3">
 <ArgTypes/>
 <Func kind="G" nr="13">
 <Func kind="K" nr="169"/>
@@ -66,7 +66,7 @@
 <Adjective nr="81"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="CSSPACE3" nr="4">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -135,7 +135,7 @@
 <Adjective nr="83"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="CSSPACE3" nr="5">
 <ArgTypes/>
 <Func kind="K" nr="171"/>
 <Cluster>

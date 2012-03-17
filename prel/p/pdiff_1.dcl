@@ -41,7 +41,7 @@
 <ArticleID name="REAL_NS1"/>
 <ArticleID name="PDIFF_1"/>
 </Signature>
-<FCluster>
+<FCluster aid="PDIFF_1" nr="1">
 <ArgTypes/>
 <Func kind="K" nr="343">
 <Num nr="1"/>

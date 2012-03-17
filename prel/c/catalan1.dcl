@@ -12,7 +12,7 @@
 <ArticleID name="NUMBERS"/>
 <ArticleID name="CATALAN1"/>
 </Signature>
-<FCluster>
+<FCluster aid="CATALAN1" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -27,7 +27,7 @@
 <Adjective nr="14"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="CATALAN1" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>

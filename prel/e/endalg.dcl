@@ -35,7 +35,7 @@
 <ArticleID name="AUTALG_1"/>
 <ArticleID name="ENDALG"/>
 </Signature>
-<RCluster>
+<RCluster aid="ENDALG" nr="1">
 <ArgTypes/>
 <Typ kind="G" nr="8">
 <Cluster/>
@@ -45,7 +45,7 @@
 <Adjective nr="86"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="ENDALG" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="8">
 <Cluster>
@@ -99,7 +99,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="ENDALG" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="12">
 <Cluster>
@@ -118,7 +118,7 @@
 <Adjective nr="59"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="ENDALG" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="12">
 <Cluster>
@@ -138,7 +138,7 @@
 <Adjective nr="84"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="ENDALG" nr="3">
 <ArgTypes>
 <Typ kind="G" nr="13">
 <Cluster>
@@ -164,7 +164,7 @@
 <Adjective nr="59"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="ENDALG" nr="4">
 <ArgTypes>
 <Typ kind="G" nr="13">
 <Cluster>

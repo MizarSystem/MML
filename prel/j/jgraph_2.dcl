@@ -35,7 +35,7 @@
 <ArticleID name="EUCLID"/>
 <ArticleID name="JGRAPH_2"/>
 </Signature>
-<FCluster>
+<FCluster aid="JGRAPH_2" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>

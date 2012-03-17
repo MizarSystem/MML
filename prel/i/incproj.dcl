@@ -24,7 +24,7 @@
 <ArticleID name="ANPROJ_2"/>
 <ArticleID name="INCPROJ"/>
 </Signature>
-<RCluster>
+<RCluster aid="INCPROJ" nr="1">
 <ArgTypes/>
 <Typ kind="G" nr="1">
 <Cluster/>
@@ -38,7 +38,7 @@
 <Adjective nr="106"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="INCPROJ" nr="2">
 <ArgTypes/>
 <Typ kind="G" nr="1">
 <Cluster/>
@@ -55,7 +55,7 @@
 <Adjective nr="111"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="INCPROJ" nr="3">
 <ArgTypes/>
 <Typ kind="G" nr="1">
 <Cluster/>
@@ -72,7 +72,7 @@
 <Adjective nr="112"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="INCPROJ" nr="4">
 <ArgTypes/>
 <Typ kind="G" nr="1">
 <Cluster/>
@@ -88,7 +88,7 @@
 <Adjective nr="111"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="INCPROJ" nr="5">
 <ArgTypes/>
 <Typ kind="G" nr="1">
 <Cluster/>
@@ -104,7 +104,7 @@
 <Adjective nr="112"/>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="INCPROJ" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="14">
 <Cluster>
@@ -122,7 +122,7 @@
 <Adjective nr="1" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="INCPROJ" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="14">
 <Cluster>
@@ -140,7 +140,7 @@
 <Adjective nr="8"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="INCPROJ" nr="3">
 <ArgTypes>
 <Typ kind="G" nr="14">
 <Cluster>
@@ -164,7 +164,7 @@
 <Adjective nr="106"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="INCPROJ" nr="4">
 <ArgTypes>
 <Typ kind="G" nr="14">
 <Cluster>

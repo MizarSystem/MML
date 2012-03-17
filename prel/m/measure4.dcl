@@ -31,12 +31,12 @@
 <ArticleID name="MEASURE2"/>
 <ArticleID name="MEASURE4"/>
 </Signature>
-<FCluster>
+<FCluster aid="MEASURE4" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
 </Typ>
-<Typ kind="M" nr="21">
+<Typ kind="M" nr="22">
 <Cluster/>
 <LocusVar nr="1"/>
 </Typ>

@@ -54,7 +54,7 @@
 <ArticleID name="NAT_3"/>
 <ArticleID name="INT_7"/>
 </Signature>
-<FCluster>
+<FCluster aid="INT_7" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -70,7 +70,7 @@
 <Adjective nr="146"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="INT_7" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>

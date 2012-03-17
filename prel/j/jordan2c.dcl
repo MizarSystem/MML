@@ -38,7 +38,7 @@
 <ArticleID name="TOPREAL1"/>
 <ArticleID name="JORDAN2C"/>
 </Signature>
-<RCluster>
+<RCluster aid="JORDAN2C" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
@@ -60,7 +60,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="JORDAN2C" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -80,7 +80,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="JORDAN2C" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -112,7 +112,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="JORDAN2C" nr="3">
 <ArgTypes>
 <Typ kind="M" nr="7">
 <Cluster/>
@@ -135,7 +135,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="JORDAN2C" nr="4">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster>
@@ -166,7 +166,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="JORDAN2C" nr="5">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster>
@@ -197,7 +197,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="JORDAN2C" nr="6">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster>
@@ -228,7 +228,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="JORDAN2C" nr="7">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster>
@@ -255,7 +255,7 @@
 <Adjective nr="1" value="false"/>
 </Cluster>
 </FCluster>
-<CCluster>
+<CCluster aid="JORDAN2C" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>

@@ -27,7 +27,7 @@
 <ArticleID name="RMOD_2"/>
 <ArticleID name="RMOD_3"/>
 </Signature>
-<FCluster>
+<FCluster aid="RMOD_3" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="10">
 <Cluster>

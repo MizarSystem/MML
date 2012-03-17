@@ -27,7 +27,7 @@
 <ArticleID name="VECTSP_5"/>
 <ArticleID name="LMOD_6"/>
 </Signature>
-<FCluster>
+<FCluster aid="LMOD_6" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="10">
 <Cluster>

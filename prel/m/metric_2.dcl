@@ -20,7 +20,7 @@
 <ArticleID name="METRIC_1"/>
 <ArticleID name="METRIC_2"/>
 </Signature>
-<FCluster>
+<FCluster aid="METRIC_2" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
@@ -35,7 +35,7 @@
 <Adjective nr="1" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="METRIC_2" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
@@ -58,7 +58,7 @@
 <Adjective nr="39"/>
 </Cluster>
 </FCluster>
-<CCluster>
+<CCluster aid="METRIC_2" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>

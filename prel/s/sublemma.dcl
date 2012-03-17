@@ -28,13 +28,13 @@
 <ArticleID name="SUBSTUT1"/>
 <ArticleID name="SUBLEMMA"/>
 </Signature>
-<RCluster>
+<RCluster aid="SUBLEMMA" nr="1">
 <ArgTypes/>
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="K" nr="11">
-<Func kind="K" nr="235"/>
-<Func kind="K" nr="116"/>
+<Func kind="K" nr="236"/>
+<Func kind="K" nr="117"/>
 </Func>
 </Typ>
 <Cluster>

@@ -10,7 +10,7 @@ environ
       SCMFSA_2, SCM_1, SF_MASTR, CAT_1, FINSUB_1, PROB_1, TARSKI, FUNCOP_1,
       SCMFSA_4, BOOLE, SCMFSA8A, SCMFSA6A, SCMFSA7B, SCMFSA8B, CARD_1, FUNCT_4,
       AMI_5, RELOC, SCMFSA_9, UNIALG_2, CARD_3, SCMFSA6B, AMI_2, SCMFSA6C,
-      SFMASTR1, PRE_FF, ABSVALUE, SCMFSA9A, ARYTM;
+      SFMASTR1, PRE_FF, ABSVALUE, SCMFSA9A, ARYTM, AMISTD_2;
  notations TARSKI, XBOOLE_0, SUBSET_1, CARD_1, NUMBERS, XCMPLX_0, FINSUB_1,
       FUNCOP_1, CARD_3, INT_1, NAT_1, ABIAN, RELAT_1, FUNCT_1, FUNCT_2,
       FUNCT_4, PRE_FF, AMI_1, SCMNORM, SCMFSA_2, SCMFSA_4, SCMFSA_5, SCMFSA6A,
@@ -18,15 +18,15 @@ environ
       SCMFSA_9, SFMASTR1, INT_2, XXREAL_0;
  constructors XXREAL_0, NAT_1, NAT_D, SEQ_1, PRE_FF, ABIAN, SCMFSA_5, SCMFSA_7,
       SCMFSA6A, SCMFSA6B, SCMFSA6C, SCMFSA8A, SCMFSA8B, SCMFSA_9, SFMASTR1,
-      SCMNORM;
+      SCMNORM, SCMFSA_4, AFINSQ_1;
  registrations XBOOLE_0, SETFAM_1, FUNCT_1, ORDINAL1, RELSET_1, FINSET_1,
       FINSUB_1, FRAENKEL, NUMBERS, XXREAL_0, XREAL_0, NAT_1, INT_1, CARD_3,
-      ABIAN, SCMFSA_2, SCMFSA_4, SF_MASTR, SCMFSA6B, SCMFSA6C, SCMFSA7B,
-      SCMFSA8A, SCMFSA8B, SCMFSA_9, SFMASTR1, SCMNORM;
+      ABIAN, SCMFSA_2, SF_MASTR, SCMFSA6B, SCMFSA6C, SCMFSA7B,
+      SCMFSA8A, SCMFSA8B, SCMFSA_9, SFMASTR1, SCMNORM, AMI_1;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
- definitions FUNCOP_1, SCMFSA_2;
+ definitions FUNCOP_1, SCMFSA_2, SCMFSA6A, AFINSQ_1, SCMNORM;
  theorems TARSKI, ZFMISC_1, REAL_1, ABSVALUE, NAT_1, INT_1, NAT_2, FUNCT_1,
-      FUNCT_2, CQC_LANG, GRFUNC_1, FUNCOP_1, FUNCT_4, PRE_FF, ABIAN, FSM_1,
+      FUNCT_2, GRFUNC_1, FUNCOP_1, FUNCT_4, PRE_FF, ABIAN, FSM_1,
       AMI_1, SCMFSA_2, SCMFSA_4, SCMFSA_5, SCMFSA6A, SCMFSA6B, SF_MASTR,
       SCMFSA6C, SCMFSA7B, SCMFSA8A, SCMFSA8B, SCMFSA8C, SCMFSA_9, SFMASTR1,
       RELAT_1, XBOOLE_0, XBOOLE_1, CARD_3, XREAL_1, XXREAL_0, ORDINAL1, NAT_D,
@@ -76,13 +76,18 @@ A3: dom UIL = the Instructions of SCM+FSA by FUNCT_2:def 1;
 end;
 
 theorem Th9: :: StopUsed:
-  UsedIntLoc SCM+FSA-Stop = {} by Th7,SCMFSA_4:def 5,SF_MASTR:17;
+  UsedIntLoc Stop SCM+FSA = {}
+  proof
+     Stop SCM+FSA = insloc 0 .--> halt SCM+FSA;
+  hence thesis by Th7,SF_MASTR:17;
+  end;
 
 theorem Th10: :: StopUsedF:
-  UsedInt*Loc SCM+FSA-Stop = {}
+  UsedInt*Loc Stop SCM+FSA = {}
 proof
-  thus UsedInt*Loc SCM+FSA-Stop
-  = UsedInt*Loc halt SCM+FSA by Th8,SCMFSA_4:def 5
+  thus UsedInt*Loc Stop SCM+FSA
+  = UsedInt*Loc(insloc 0 .--> halt SCM+FSA)
+ .= UsedInt*Loc halt SCM+FSA by Th8
     .= {} by SF_MASTR:36;
 end;
 
@@ -105,8 +110,8 @@ end;
 reserve s, s1, s2 for State of SCM+FSA,
   a for read-write Int-Location,
   b for Int-Location,
-  I, J for Macro-Instruction,
-  Ig for good Macro-Instruction,
+  I, J for Program of SCM+FSA,
+  Ig for good Program of SCM+FSA,
   i, j, k, m, n for Element of NAT;
 set D = Int-Locations \/ FinSeq-Locations;
 set SAt = Start-At insloc 0;
@@ -122,7 +127,7 @@ proof
   set a = b;
   set I1 = a =0_goto insloc (card J + 3);
   set I3 = Goto insloc (card I + 1);
-  set I5 = SCM+FSA-Stop;
+  set I5 = Stop SCM+FSA;
   thus UsedIntLoc if=0(a, I, J)
   = UsedIntLoc (I1 ';' J ';' I3 ';' I ';' I5) by SCMFSA8B:def 1
     .= (UsedIntLoc (I1 ';' J ';' I3 ';' I)) \/ {} by Th9,SF_MASTR:31
@@ -141,7 +146,7 @@ proof
   let a be Int-Location;
   set I1 = a =0_goto insloc (card J + 3);
   set I3 = Goto insloc (card I + 1);
-  set I5 = SCM+FSA-Stop;
+  set I5 = Stop SCM+FSA;
   thus UsedInt*Loc if=0(a, I, J)
   = UsedInt*Loc (I1 ';' J ';' I3 ';' I ';' I5) by SCMFSA8B:def 1
     .= (UsedInt*Loc (I1 ';' J ';' I3 ';' I)) \/ {} by Th10,SF_MASTR:47
@@ -160,7 +165,7 @@ proof
   set a = b;
   set I1 = a >0_goto insloc (card J + 3);
   set I3 = Goto insloc (card I + 1);
-  set I5 = SCM+FSA-Stop;
+  set I5 = Stop SCM+FSA;
   thus UsedIntLoc if>0(a, I, J)
   = UsedIntLoc (I1 ';' J ';' I3 ';' I ';' I5) by SCMFSA8B:def 2
     .= (UsedIntLoc (I1 ';' J ';' I3 ';' I)) \/ {} by Th9,SF_MASTR:31
@@ -178,7 +183,7 @@ proof
   set a = b;
   set I1 = a >0_goto insloc (card J + 3);
   set I3 = Goto insloc (card I + 1);
-  set I5 = SCM+FSA-Stop;
+  set I5 = Stop SCM+FSA;
   thus UsedInt*Loc if>0(a, I, J)
   = UsedInt*Loc (I1 ';' J ';' I3 ';' I ';' I5) by SCMFSA8B:def 2
     .= (UsedInt*Loc (I1 ';' J ';' I3 ';' I)) \/ {} by Th10,SF_MASTR:47
@@ -193,16 +198,16 @@ end;
 
 begin :: while=0, general
 
-Lm1: for a being Int-Location, I being Macro-Instruction holds
-card I +4 in dom if=0(a,I ';' Goto insloc 0,SCM+FSA-Stop) &
-if=0(a,I ';' Goto insloc 0,SCM+FSA-Stop).(card I +4)
+Lm1: for a being Int-Location, I being Program of SCM+FSA holds
+card I +4 in dom if=0(a,I ';' Goto insloc 0,Stop SCM+FSA) &
+if=0(a,I ';' Goto insloc 0,Stop SCM+FSA).(card I +4)
 = goto ((insloc 0)+(card I +4))
 proof
   let a be Int-Location;
-  let I be Macro-Instruction;
+  let I be Program of SCM+FSA;
   set G = Goto insloc 0;
   set I1= I ';' G;
-  set J = SCM+FSA-Stop;
+  set J = Stop SCM+FSA;
   set i = a =0_goto insloc (card J + 3);
   set c4 = card I + 4;
   set Lc4 = c4;
@@ -218,10 +223,8 @@ A2: card (G ';' J) = card G + card J by SCMFSA6A:61
     .= 2;
 A3: if=0(a, I1, J) = i ';' J ';' Goto insloc (card I1 + 1) ';' (I ';' G) ';' J
   by SCMFSA8B:def 1
-    .= i ';' J ';' Goto insloc (card I1 + 1) ';' I ';' G ';' J
-  by SCMFSA6A:62
-    .= Mi ';' G ';' J by SCMFSA6A:def 5
-    .= Mi ';' (G ';' J) by SCMFSA6A:62;
+    .= Mi ';' G ';' J by SCMFSA6A:67
+    .= Mi ';' (G ';' J) by SCMFSA6A:67;
   then card if=0(a, I1,J) = card Mi + card (G ';' J) by SCMFSA6A:61;
   then
 A4: card Mi = card if=0(a,I1,J)-card (G ';' J)
@@ -230,20 +233,17 @@ A4: card Mi = card if=0(a,I1,J)-card (G ';' J)
   then
 A5: not Lc4 in dom Mi by SCMFSA6A:15;
   set GJ = G ';' J;
-A6: if=0(a, I1, J) = Directed Mi +* ProgramPart Relocated(GJ, c4) by A3,A4,
-  SCMFSA6A:def 4;
-  then
 A7: dom if=0(a,I1,J) = dom Directed Mi \/ dom ProgramPart Relocated(GJ, c4 )
-  by FUNCT_4:def 1;
+  by FUNCT_4:def 1,A3,A4;
   then dom if=0(a,I1,J)
-  = dom Mi \/ dom ProgramPart Relocated(GJ, c4) by SCMFSA6A:14;
+  = dom Mi \/ dom ProgramPart Relocated(GJ, c4) by FUNCT_4:105;
   then
 A8: Lc4 in dom ProgramPart Relocated(GJ, c4) by A1,A5,XBOOLE_0:def 2;
 A10: G = insloc 0 .--> goto insloc 0 by SCMFSA8A:def 2;
-  then dom G = {insloc 0} by CQC_LANG:5;
+  then dom G = {insloc 0} by FUNCOP_1:19;
   then
 A11: insloc 0 in dom G by TARSKI:def 1;
-A12: G.insloc 0 = goto insloc 0 by A10,CQC_LANG:6;
+A12: G.insloc 0 = goto insloc 0 by A10,FUNCOP_1:87;
 A13: InsCode goto insloc 0 = 6 & InsCode halt SCM+FSA = 0 by SCMFSA_2:47,124;
 A14: dom G c= dom GJ by SCMFSA6A:56;
   then insloc 0 + c4 in { il+c4 where il is Element of NAT:
@@ -255,22 +255,22 @@ A16: pi(Shift(GJ,c4),Lc4) = Shift(GJ,c4).(insloc 0 +c4) by AMI_1:def 47
     .= GJ.insloc 0 by A11,A14,VALUED_1:def 12
     .= goto insloc 0 by A11,A12,A13,SCMFSA6A:54;
   thus if=0(a,I1,J).Lc4
-  = (ProgramPart Relocated(GJ,c4)).Lc4 by A1,A6,A7,A8,FUNCT_4:def 1
-    .= IncAddr(Shift(ProgramPart(GJ),c4),c4).Lc4 by SCMFSA_5:2
+  = (ProgramPart Relocated(GJ,c4)).Lc4 by A1,A3,A4,A7,A8,FUNCT_4:def 1
+    .= IncAddr([Shift(ProgramPart(GJ),c4)],c4).Lc4 by SCMFSA_5:2
     .= IncAddr(Shift(GJ,c4),c4).Lc4 by AMI_1:105
     .= IncAddr( goto insloc 0, c4 ) by A15,A16,SCMFSA_4:24
     .= goto ((insloc 0)+c4) by SCMFSA_4:14;
 end;
 
-Lm2: for a being Int-Location, I being Macro-Instruction
-holds UsedIntLoc if=0(a,I ';' Goto insloc 0,SCM+FSA-Stop)
-= UsedIntLoc (if=0(a,I ';' Goto insloc 0,SCM+FSA-Stop) +*
+Lm2: for a being Int-Location, I being Program of SCM+FSA
+holds UsedIntLoc if=0(a,I ';' Goto insloc 0,Stop SCM+FSA)
+= UsedIntLoc (if=0(a,I ';' Goto insloc 0,Stop SCM+FSA) +*
 ( insloc (card I +4) .--> goto insloc 0 ))
 proof
   let a be Int-Location;
-  let I be Macro-Instruction;
+  let I be Program of SCM+FSA;
   set Lc4 = insloc (card I + 4);
-  set if0 = if=0(a,I ';' Goto insloc 0,SCM+FSA-Stop);
+  set if0 = if=0(a,I ';' Goto insloc 0,Stop SCM+FSA);
   set ic4 = insloc (card I +4) .--> goto insloc 0;
   consider UIL1 being Function of the Instructions of SCM+FSA,
   Fin Int-Locations such that
@@ -295,7 +295,7 @@ A6: dom UIL1 = the Instructions of SCM+FSA by FUNCT_2:def 1;
 A7: rng if0 c= dom UIL1 by A6,AMI_1:118;
 A8: rng (if0+*ic4) c= dom UIL1 by A6,AMI_1:118;
 A9: dom (if0+*ic4) = dom if0 \/ dom ic4 by FUNCT_4:def 1;
-A10: dom ic4 = {insloc (card I +4)} by CQC_LANG:5;
+A10: dom ic4 = {insloc (card I +4)} by FUNCOP_1:19;
     insloc (card I +4) in dom if0 by Lm1;
     then dom ic4 c= dom if0 by A10,ZFMISC_1:37;
     then
@@ -322,7 +322,7 @@ A16:  x = Lc4;
         .= {} by SF_MASTR:19
         .= UsedIntLoc goto insloc 0 by SF_MASTR:19
         .= UIL1.(goto insloc 0) by A1
-        .= UIL1.(ic4.x) by A16,CQC_LANG:6
+        .= UIL1.(ic4.x) by A16,FUNCOP_1:87
         .= UIL1.((if0+*ic4).x) by A14,A16,FUNCT_4:14
         .= (UIL1*(if0+*ic4)).x by A12,A13,FUNCT_1:22;
     end;
@@ -330,15 +330,15 @@ A16:  x = Lc4;
   hence thesis by A2,A4,A5,FUNCT_1:9;
 end;
 
-Lm3: for a being Int-Location, I being Macro-Instruction
-holds UsedInt*Loc if=0(a,I ';' Goto insloc 0,SCM+FSA-Stop)
-= UsedInt*Loc (if=0(a,I ';' Goto insloc 0,SCM+FSA-Stop) +*
+Lm3: for a being Int-Location, I being Program of SCM+FSA
+holds UsedInt*Loc if=0(a,I ';' Goto insloc 0,Stop SCM+FSA)
+= UsedInt*Loc (if=0(a,I ';' Goto insloc 0,Stop SCM+FSA) +*
 ( insloc (card I +4) .--> goto insloc 0 ))
 proof
   let a be Int-Location;
-  let I be Macro-Instruction;
+  let I be Program of SCM+FSA;
   set Lc4 = insloc (card I + 4);
-  set if0 = if=0(a,I ';' Goto insloc 0,SCM+FSA-Stop);
+  set if0 = if=0(a,I ';' Goto insloc 0,Stop SCM+FSA);
   set ic4 = insloc (card I +4) .--> goto insloc 0;
   consider UIL1 being Function of the Instructions of SCM+FSA,
   Fin FinSeq-Locations such that
@@ -363,7 +363,7 @@ A6: dom UIL1 = the Instructions of SCM+FSA by FUNCT_2:def 1;
 A7: rng if0 c= dom UIL1 by A6,AMI_1:118;
 A8: rng (if0+*ic4) c= dom UIL1 by A6,AMI_1:118;
 A9: dom (if0+*ic4) = dom if0 \/ dom ic4 by FUNCT_4:def 1;
-A10: dom ic4 = {insloc (card I +4)} by CQC_LANG:5;
+A10: dom ic4 = {insloc (card I +4)} by FUNCOP_1:19;
     insloc (card I +4) in dom if0 by Lm1;
     then dom ic4 c= dom if0 by A10,ZFMISC_1:37;
     then
@@ -390,7 +390,7 @@ A16:  x = Lc4;
         .= {} by SF_MASTR:36
         .= UsedInt*Loc goto insloc 0 by SF_MASTR:36
         .= UIL1.(goto insloc 0) by A1
-        .= UIL1.(ic4.x) by A16,CQC_LANG:6
+        .= UIL1.(ic4.x) by A16,FUNCOP_1:87
         .= UIL1.((if0+*ic4).x) by A14,A16,FUNCT_4:14
         .= (UIL1*(if0+*ic4)).x by A12,A13,FUNCT_1:22;
     end;
@@ -402,7 +402,7 @@ theorem  :: ewhileUsed:
   UsedIntLoc while=0(b, I) = {b} \/ UsedIntLoc I
 proof
   set a = b;
-  set J = SCM+FSA-Stop;
+  set J = Stop SCM+FSA;
   set IG = I ';' Goto insloc 0;
   while=0(a, I) = if=0(a, IG, J) +*
   ( insloc (card I +4) .--> goto insloc 0 ) by SCMFSA_9:def 1;
@@ -418,7 +418,7 @@ theorem  :: ewhileUsedF:
   UsedInt*Loc while=0(b, I) = UsedInt*Loc I
 proof
   set a = b;
-  set J = SCM+FSA-Stop;
+  set J = Stop SCM+FSA;
   set IG = I ';' Goto insloc 0;
   while=0(a, I) = if=0(a, IG, J) +*
   ( insloc (card I +4) .--> goto insloc 0 ) by SCMFSA_9:def 1;
@@ -432,7 +432,7 @@ end;
 
 definition
   let s be State of SCM+FSA, a be read-write Int-Location,
-  I be Macro-Instruction;
+  I be Program of SCM+FSA;
   pred ProperBodyWhile=0 a, I, s means
   :Def1:
   for k being Element of NAT st StepWhile=0(a,I,s).k.a = 0
@@ -447,9 +447,9 @@ definition
 end;
 
 theorem Th19: :: eParaProper:
-  for I being parahalting Macro-Instruction holds ProperBodyWhile=0 a, I, s
+  for I being parahalting Program of SCM+FSA holds ProperBodyWhile=0 a, I, s
 proof
-  let I be parahalting Macro-Instruction;
+  let I be parahalting Program of SCM+FSA;
   let k be Element of NAT such that StepWhile=0(a,I,s).k.a = 0;
   thus I is_closed_on StepWhile=0(a,I,s).k by SCMFSA7B:24;
   thus I is_halting_on StepWhile=0(a,I,s).k by SCMFSA7B:25;
@@ -541,7 +541,7 @@ A24:  IC sm1 = sm1.IC SCM+FSA by AMI_1:def 15
         .= IC sm by A23,SF_MASTR:66;
 A25:  sm1 | D = sm | D by SCMFSA8A:11;
       sm | IL =s1 | IL by A20,AMI_1:123;
-      then sm1 | IL = sm | IL by SCMFSA_9:27;
+      then sm1 | IL = sm | IL by FUNCT_4:100;
       then
 A26:  sm1=sm by A24,A25,SCMFSA_9:29;
       while=0(a,I) is_halting_on sm by A4,SCMFSA_9:18;
@@ -651,10 +651,10 @@ A53:          Dt.a = 0 by A5,A40;
 end;
 
 theorem Th21:   :: SCMFSA_9:25, corrected
-  for I being parahalting Macro-Instruction st WithVariantWhile=0 a, I, s
+  for I being parahalting Program of SCM+FSA st WithVariantWhile=0 a, I, s
   holds while=0(a,I) is_halting_on s & while=0(a,I) is_closed_on s
 proof
-  let I be parahalting Macro-Instruction such that
+  let I be parahalting Program of SCM+FSA such that
 A1: WithVariantWhile=0 a, I, s;
   ProperBodyWhile=0 a, I, s
   proof
@@ -679,7 +679,6 @@ A2: s.a <> 0;
   set s3 = Computation(s1,2);
   set s4 = Computation(s1,3);
   set s5 = Computation(s1,4);
-:::  set C1 = Computation s1;
   set i = a =0_goto insloc 4;
 A3: s = s1 by A1,FUNCT_4:79;
 A4: insloc 0 in dom while=0(a,I) by SCMFSA_9:10;
@@ -872,7 +871,6 @@ A14: IC SCM+FSA in dom (I +* Start-At insloc 0) by SF_MASTR:65;
       .= sI.IC SCM+FSA by AMI_1:def 15
       .= (I +* Start-At insloc 0).IC SCM+FSA by A14,FUNCT_4:14
       .= insloc 0 by SF_MASTR:66;
-    then IC Computation(sI,0) + 4 = insloc (0+ 4);
     hence IC Computation(s1,1+0) = IC Computation(sI,0) + 4 &
     Computation(s1,1+0) | D = Computation(sI,0) | D by A11,A12,
     AMI_1:13;
@@ -976,7 +974,7 @@ A9: SW.(k+1) = Computation((SW.k +* WHS),LifeSpan (SWkIS) + 3)
 A10: ISWk | D = SW.k | D by A3,SCMFSA8C:27;
   now
     assume I is parahalting;
-    then reconsider I' = I as parahalting Macro-Instruction;
+    then reconsider I' = I as parahalting Program of SCM+FSA;
     I' is paraclosed;
     hence I is paraclosed;
   end;
@@ -1103,7 +1101,7 @@ end;
 
 definition
   let s be State of SCM+FSA, a be read-write Int-Location,
-  I be Macro-Instruction;
+  I be Program of SCM+FSA;
   assume that
 A1: ProperBodyWhile=0 a, I, s or I is parahalting and
 A2: WithVariantWhile=0 a, I, s;
@@ -1203,7 +1201,7 @@ A28:  IC sm1 = sm1.IC SCM+FSA by AMI_1:def 15
         .= IC sm by A27,SF_MASTR:66;
 A29:  sm1 | D = sm | D by SCMFSA8A:11;
       sm | IL = S | IL by A24,AMI_1:123;
-      then sm1 | IL = sm | IL by SCMFSA_9:27;
+      then sm1 | IL = sm | IL by FUNCT_4:100;
       then
 A30:  sm1 = sm by A28,A29,SCMFSA_9:29;
       while=0(a,I) is_halting_on sm by A5,SCMFSA_9:18;
@@ -1312,16 +1310,16 @@ end;
 
 begin :: while>0, general
 
-Lm4: for a being Int-Location, I being Macro-Instruction holds
-card I +4 in dom if>0(a,I ';' Goto insloc 0,SCM+FSA-Stop) &
-if>0(a,I ';' Goto insloc 0,SCM+FSA-Stop).(card I +4)
+Lm4: for a being Int-Location, I being Program of SCM+FSA holds
+card I +4 in dom if>0(a,I ';' Goto insloc 0,Stop SCM+FSA) &
+if>0(a,I ';' Goto insloc 0,Stop SCM+FSA).(card I +4)
 = goto ((insloc 0)+(card I +4))
 proof
   let a be Int-Location;
-  let I be Macro-Instruction;
+  let I be Program of SCM+FSA;
   set G = Goto insloc 0;
   set I1= I ';' G;
-  set J = SCM+FSA-Stop;
+  set J = Stop SCM+FSA;
   set i = a >0_goto insloc (card J + 3);
   set c4 = card I + 4;
   set Lc4 = c4;
@@ -1337,10 +1335,8 @@ A2: card (G ';' J) = card G + card J by SCMFSA6A:61
     .= 2;
 A3: if>0(a, I1, J) = i ';' J ';' Goto insloc (card I1 + 1) ';' (I ';' G) ';' J
   by SCMFSA8B:def 2
-    .= i ';' J ';' Goto insloc (card I1 + 1) ';' I ';' G ';' J
-  by SCMFSA6A:62
-    .= Mi ';' G ';' J by SCMFSA6A:def 5
-    .= Mi ';' (G ';' J) by SCMFSA6A:62;
+    .= Mi ';' G ';' J by SCMFSA6A:67
+    .= Mi ';' (G ';' J) by SCMFSA6A:67;
   then card if>0(a, I1,J) = card Mi + card (G ';' J) by SCMFSA6A:61;
   then
 A4: card Mi = card if>0(a,I1,J)-card (G ';' J)
@@ -1349,20 +1345,17 @@ A4: card Mi = card if>0(a,I1,J)-card (G ';' J)
   then
 A5: not Lc4 in dom Mi by SCMFSA6A:15;
   set GJ = G ';' J;
-A6: if>0(a, I1, J) = Directed Mi +* ProgramPart Relocated(GJ, c4) by A3,A4,
-  SCMFSA6A:def 4;
-  then
 A7: dom if>0(a,I1,J) = dom Directed Mi \/ dom ProgramPart Relocated(GJ, c4 )
-  by FUNCT_4:def 1;
+  by FUNCT_4:def 1,A3,A4;
   then dom if>0(a,I1,J)
-  = dom Mi \/ dom ProgramPart Relocated(GJ, c4) by SCMFSA6A:14;
+  = dom Mi \/ dom ProgramPart Relocated(GJ, c4) by FUNCT_4:105;
   then
 A8: Lc4 in dom ProgramPart Relocated(GJ, c4) by A1,A5,XBOOLE_0:def 2;
 A10: G = insloc 0 .--> goto insloc 0 by SCMFSA8A:def 2;
-  then dom G = {insloc 0} by CQC_LANG:5;
+  then dom G = {insloc 0} by FUNCOP_1:19;
   then
 A11: insloc 0 in dom G by TARSKI:def 1;
-A12: G.insloc 0 = goto insloc 0 by A10,CQC_LANG:6;
+A12: G.insloc 0 = goto insloc 0 by A10,FUNCOP_1:87;
 A13: InsCode goto insloc 0 = 6 & InsCode halt SCM+FSA = 0 by SCMFSA_2:47,124;
 A14: dom G c= dom GJ by SCMFSA6A:56;
   then insloc 0 + c4 in { il+c4 where il is Element of NAT:
@@ -1374,22 +1367,22 @@ A16: pi(Shift(GJ,c4),Lc4) = Shift(GJ,c4).(insloc 0 +c4) by AMI_1:def 47
     .= GJ.insloc 0 by A11,A14,VALUED_1:def 12
     .= goto insloc 0 by A11,A12,A13,SCMFSA6A:54;
   thus if>0(a,I1,J).Lc4
-  = (ProgramPart Relocated(GJ,c4)).Lc4 by A1,A6,A7,A8,FUNCT_4:def 1
-    .= IncAddr(Shift(ProgramPart(GJ),c4),c4).Lc4 by SCMFSA_5:2
+  = (ProgramPart Relocated(GJ,c4)).Lc4 by A1,A3,A4,A7,A8,FUNCT_4:def 1
+    .= IncAddr([Shift(ProgramPart(GJ),c4)],c4).Lc4 by SCMFSA_5:2
     .= IncAddr(Shift(GJ,c4),c4).Lc4 by AMI_1:105
     .= IncAddr( goto insloc 0, c4 ) by A15,A16,SCMFSA_4:24
     .= goto ((insloc 0)+c4) by SCMFSA_4:14;
 end;
 
-Lm5: for a being Int-Location, I being Macro-Instruction
-holds UsedIntLoc if>0(a,I ';' Goto insloc 0,SCM+FSA-Stop)
-= UsedIntLoc (if>0(a,I ';' Goto insloc 0,SCM+FSA-Stop) +*
+Lm5: for a being Int-Location, I being Program of SCM+FSA
+holds UsedIntLoc if>0(a,I ';' Goto insloc 0,Stop SCM+FSA)
+= UsedIntLoc (if>0(a,I ';' Goto insloc 0,Stop SCM+FSA) +*
 ( insloc (card I +4) .--> goto insloc 0 ))
 proof
   let a be Int-Location;
-  let I be Macro-Instruction;
+  let I be Program of SCM+FSA;
   set Lc4 = insloc (card I + 4);
-  set if0 = if>0(a,I ';' Goto insloc 0,SCM+FSA-Stop);
+  set if0 = if>0(a,I ';' Goto insloc 0,Stop SCM+FSA);
   set ic4 = insloc (card I +4) .--> goto insloc 0;
   consider UIL1 being Function of the Instructions of SCM+FSA,
   Fin Int-Locations such that
@@ -1414,7 +1407,7 @@ A6: dom UIL1 = the Instructions of SCM+FSA by FUNCT_2:def 1;
 A7: rng if0 c= dom UIL1 by A6,AMI_1:118;
 A8: rng (if0+*ic4) c= dom UIL1 by A6,AMI_1:118;
 A9: dom (if0+*ic4) = dom if0 \/ dom ic4 by FUNCT_4:def 1;
-A10: dom ic4 = {insloc (card I +4)} by CQC_LANG:5;
+A10: dom ic4 = {insloc (card I +4)} by FUNCOP_1:19;
     insloc (card I +4) in dom if0 by Lm4;
     then dom ic4 c= dom if0 by A10,ZFMISC_1:37;
     then
@@ -1441,7 +1434,7 @@ A16:  x = Lc4;
         .= {} by SF_MASTR:19
         .= UsedIntLoc goto insloc 0 by SF_MASTR:19
         .= UIL1.(goto insloc 0) by A1
-        .= UIL1.(ic4.x) by A16,CQC_LANG:6
+        .= UIL1.(ic4.x) by A16,FUNCOP_1:87
         .= UIL1.((if0+*ic4).x) by A14,A16,FUNCT_4:14
         .= (UIL1*(if0+*ic4)).x by A12,A13,FUNCT_1:22;
     end;
@@ -1449,15 +1442,15 @@ A16:  x = Lc4;
   hence thesis by A2,A4,A5,FUNCT_1:9;
 end;
 
-Lm6: for a being Int-Location, I being Macro-Instruction
-holds UsedInt*Loc if>0(a,I ';' Goto insloc 0,SCM+FSA-Stop)
-= UsedInt*Loc (if>0(a,I ';' Goto insloc 0,SCM+FSA-Stop) +*
+Lm6: for a being Int-Location, I being Program of SCM+FSA
+holds UsedInt*Loc if>0(a,I ';' Goto insloc 0,Stop SCM+FSA)
+= UsedInt*Loc (if>0(a,I ';' Goto insloc 0,Stop SCM+FSA) +*
 ( insloc (card I +4) .--> goto insloc 0 ))
 proof
   let a be Int-Location;
-  let I be Macro-Instruction;
+  let I be Program of SCM+FSA;
   set Lc4 = insloc (card I + 4);
-  set if0 = if>0(a,I ';' Goto insloc 0,SCM+FSA-Stop);
+  set if0 = if>0(a,I ';' Goto insloc 0,Stop SCM+FSA);
   set ic4 = insloc (card I +4) .--> goto insloc 0;
   consider UIL1 being Function of the Instructions of SCM+FSA,
   Fin FinSeq-Locations such that
@@ -1482,7 +1475,7 @@ A6: dom UIL1 = the Instructions of SCM+FSA by FUNCT_2:def 1;
 A7: rng if0 c= dom UIL1 by A6,AMI_1:118;
 A8: rng (if0+*ic4) c= dom UIL1 by A6,AMI_1:118;
 A9: dom (if0+*ic4) = dom if0 \/ dom ic4 by FUNCT_4:def 1;
-A10: dom ic4 = {insloc (card I +4)} by CQC_LANG:5;
+A10: dom ic4 = {insloc (card I +4)} by FUNCOP_1:19;
     insloc (card I +4) in dom if0 by Lm4;
     then dom ic4 c= dom if0 by A10,ZFMISC_1:37;
     then
@@ -1509,7 +1502,7 @@ A16:  x = Lc4;
         .= {} by SF_MASTR:36
         .= UsedInt*Loc goto insloc 0 by SF_MASTR:36
         .= UIL1.(goto insloc 0) by A1
-        .= UIL1.(ic4.x) by A16,CQC_LANG:6
+        .= UIL1.(ic4.x) by A16,FUNCOP_1:87
         .= UIL1.((if0+*ic4).x) by A14,A16,FUNCT_4:14
         .= (UIL1*(if0+*ic4)).x by A12,A13,FUNCT_1:22;
     end;
@@ -1521,7 +1514,7 @@ theorem  :: whileUsed:
   UsedIntLoc while>0(b, I) = {b} \/ UsedIntLoc I
 proof
   set a = b;
-  set J = SCM+FSA-Stop;
+  set J = Stop SCM+FSA;
   set IG = I ';' Goto insloc 0;
   while>0(a, I) = if>0(a, IG, J) +*
   ( insloc (card I +4) .--> goto insloc 0 ) by SCMFSA_9:def 2;
@@ -1537,7 +1530,7 @@ theorem  :: whileUsedF:
   UsedInt*Loc while>0(b, I) = UsedInt*Loc I
 proof
   set a = b;
-  set J = SCM+FSA-Stop;
+  set J = Stop SCM+FSA;
   set IG = I ';' Goto insloc 0;
   while>0(a, I) = if>0(a, IG, J) +*
   ( insloc (card I +4) .--> goto insloc 0 ) by SCMFSA_9:def 2;
@@ -1551,7 +1544,7 @@ end;
 
 definition
   let s be State of SCM+FSA, a be read-write Int-Location,
-  I be Macro-Instruction;
+  I be Program of SCM+FSA;
   pred ProperBodyWhile>0 a, I, s means
   :Def4:
   for k being Element of NAT st StepWhile>0(a,I,s).k.a > 0
@@ -1566,9 +1559,9 @@ definition
 end;
 
 theorem Th32: :: ParaProper:
-  for I being parahalting Macro-Instruction holds ProperBodyWhile>0 a, I, s
+  for I being parahalting Program of SCM+FSA holds ProperBodyWhile>0 a, I, s
 proof
-  let I be parahalting Macro-Instruction;
+  let I be parahalting Program of SCM+FSA;
   let k be Element of NAT such that StepWhile>0(a,I,s).k.a > 0;
   thus I is_closed_on StepWhile>0(a,I,s).k by SCMFSA7B:24;
   thus I is_halting_on StepWhile>0(a,I,s).k by SCMFSA7B:25;
@@ -1660,7 +1653,7 @@ A24:  IC sm1 = sm1.IC SCM+FSA by AMI_1:def 15
         .= IC sm by A23,SF_MASTR:66;
 A25:  sm1 | D = sm | D by SCMFSA8A:11;
       sm | IL =s1 | IL by A20,AMI_1:123;
-      then sm1 | IL = sm | IL by SCMFSA_9:27;
+      then sm1 | IL = sm | IL by FUNCT_4:100;
       then
 A26:  sm1=sm by A24,A25,SCMFSA_9:29;
       while>0(a,I) is_halting_on sm by A4,SCMFSA_9:43;
@@ -1769,10 +1762,10 @@ A53:          Dt.a > 0 by A5,A40;
 end;
 
 theorem Th34:   :: SCMFSA_9:43, corrected
-  for I being parahalting Macro-Instruction st WithVariantWhile>0 a, I, s
+  for I being parahalting Program of SCM+FSA st WithVariantWhile>0 a, I, s
   holds while>0(a,I) is_halting_on s & while>0(a,I) is_closed_on s
 proof
-  let I be parahalting Macro-Instruction such that
+  let I be parahalting Program of SCM+FSA such that
 A1: WithVariantWhile>0 a, I, s;
   ProperBodyWhile>0 a, I, s
   proof
@@ -1797,7 +1790,6 @@ A2: s.a <= 0;
   set s3 = Computation(s1,2);
   set s4 = Computation(s1,3);
   set s5 = Computation(s1,4);
-:::  set C1 = Computation s1;
   set i = a >0_goto insloc 4;
 A3: s = s1 by A1,FUNCT_4:79;
 A4: insloc 0 in dom while>0(a,I) by SCMFSA_9:10;
@@ -1990,7 +1982,6 @@ A14: IC SCM+FSA in dom (I +* Start-At insloc 0) by SF_MASTR:65;
       .= sI.IC SCM+FSA by AMI_1:def 15
       .= (I +* Start-At insloc 0).IC SCM+FSA by A14,FUNCT_4:14
       .= insloc 0 by SF_MASTR:66;
-    then IC Computation(sI,0) + 4 = insloc (0+ 4);
     hence IC Computation(s1,1+0) = IC Computation(sI,0) + 4 &
     Computation(s1,1+0) | D = Computation(sI,0) | D by A11,A12,
     AMI_1:13;
@@ -2094,7 +2085,7 @@ A9: SW.(k+1) = Computation((SW.k +* WHS),LifeSpan (SWkIS) + 3)
 A10: ISWk | D = SW.k | D by A3,SCMFSA8C:27;
   now
     assume I is parahalting;
-    then reconsider I' = I as parahalting Macro-Instruction;
+    then reconsider I' = I as parahalting Program of SCM+FSA;
     I' is paraclosed;
     hence I is paraclosed;
   end;
@@ -2220,7 +2211,7 @@ end;
 
 definition
   let s be State of SCM+FSA, a be read-write Int-Location,
-  I be Macro-Instruction;
+  I be Program of SCM+FSA;
   assume that
 A1: ProperBodyWhile>0 a, I, s or I is parahalting and
 A2: WithVariantWhile>0 a, I, s;
@@ -2319,7 +2310,7 @@ A28:  IC sm1 = sm1.IC SCM+FSA by AMI_1:def 15
         .= IC sm by A27,SF_MASTR:66;
 A29:  sm1 | D = sm | D by SCMFSA8A:11;
       sm | IL = S | IL by A24,AMI_1:123;
-      then sm1 | IL = sm | IL by SCMFSA_9:27;
+      then sm1 | IL = sm | IL by FUNCT_4:100;
       then
 A30:  sm1 = sm by A28,A29,SCMFSA_9:29;
       while>0(a,I) is_halting_on sm by A5,SCMFSA_9:43;
@@ -2744,7 +2735,7 @@ definition
 :: set aux  = 2-ndRWNotIn {N, result};
 :: set rem2 = 3-rdRWNotIn {N, result};
 :: while and if do not allocate memory, no need to save anything
-  func Fusc_macro ( N, result ) -> Macro-Instruction equals
+  func Fusc_macro ( N, result ) -> Program of SCM+FSA equals
   SubFrom(result, result) ';' ((1-stRWNotIn {N, result}) := intloc 0) ';'
   ((2-ndRWNotIn {N, result}) := N) ';' while>0 ( 2-ndRWNotIn {N, result},
   (3-rdRWNotIn {N, result}) := 2 ';'

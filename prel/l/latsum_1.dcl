@@ -16,7 +16,7 @@
 <ArticleID name="ORDERS_2"/>
 <ArticleID name="LATSUM_1"/>
 </Signature>
-<FCluster>
+<FCluster aid="LATSUM_1" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster/>
@@ -36,7 +36,7 @@
 <Adjective nr="23"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="LATSUM_1" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>

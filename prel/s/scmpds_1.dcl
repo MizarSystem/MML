@@ -11,31 +11,31 @@
 <ArticleID name="RELSET_1"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
+<ArticleID name="MCART_1"/>
+<ArticleID name="FUNCT_2"/>
 <ArticleID name="XREAL_0"/>
 <ArticleID name="INT_1"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
-<ArticleID name="MCART_1"/>
-<ArticleID name="FUNCT_2"/>
 <ArticleID name="FRAENKEL"/>
 <ArticleID name="CARD_3"/>
 <ArticleID name="AMI_2"/>
 <ArticleID name="SCMPDS_1"/>
 </Signature>
-<FCluster>
+<FCluster aid="SCMPDS_1" nr="1">
 <ArgTypes/>
 <Func kind="K" nr="144"/>
 <Cluster>
 <Adjective nr="7" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="SCMPDS_1" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="4">
 <Cluster>
 <Adjective nr="4"/>
-<Adjective nr="23">
+<Adjective nr="15">
 <Func kind="K" nr="144"/>
 <Func kind="K" nr="116">
 <Func kind="K" nr="120">

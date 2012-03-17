@@ -29,7 +29,7 @@
 <ArticleID name="ORDERS_2"/>
 <ArticleID name="TAXONOM2"/>
 </Signature>
-<RCluster>
+<RCluster aid="TAXONOM2" nr="1">
 <ArgTypes/>
 <Typ kind="G" nr="5">
 <Cluster/>
@@ -44,7 +44,7 @@
 <Adjective nr="57"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="TAXONOM2" nr="2">
 <ArgTypes/>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -54,7 +54,7 @@
 <Adjective nr="58"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="TAXONOM2" nr="3">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -72,7 +72,7 @@
 <Adjective nr="59"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="TAXONOM2" nr="4">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -95,7 +95,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<CCluster>
+<CCluster aid="TAXONOM2" nr="1">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="11"/>

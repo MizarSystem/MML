@@ -16,7 +16,7 @@
 <ArticleID name="ROBBINS1"/>
 <ArticleID name="ROBBINS2"/>
 </Signature>
-<RCluster>
+<RCluster aid="ROBBINS2" nr="1">
 <ArgTypes/>
 <Typ kind="G" nr="9">
 <Cluster/>
@@ -28,7 +28,7 @@
 <Adjective nr="46"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="ROBBINS2" nr="2">
 <ArgTypes/>
 <Typ kind="G" nr="10">
 <Cluster/>
@@ -46,7 +46,7 @@
 <Adjective nr="46"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="ROBBINS2" nr="3">
 <ArgTypes/>
 <Typ kind="G" nr="10">
 <Cluster/>
@@ -66,7 +66,7 @@
 <Adjective nr="48"/>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="ROBBINS2" nr="1">
 <ArgTypes/>
 <Func kind="K" nr="85"/>
 <Cluster>
@@ -74,7 +74,7 @@
 <Adjective nr="46"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="ROBBINS2" nr="2">
 <ArgTypes/>
 <Func kind="K" nr="86"/>
 <Cluster>
@@ -82,7 +82,7 @@
 <Adjective nr="46"/>
 </Cluster>
 </FCluster>
-<CCluster>
+<CCluster aid="ROBBINS2" nr="1">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="12" value="false"/>
@@ -96,7 +96,7 @@
 <Adjective nr="23"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="ROBBINS2" nr="2">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="12" value="false"/>
@@ -110,7 +110,7 @@
 <Adjective nr="24"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="ROBBINS2" nr="3">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="12" value="false"/>
@@ -124,7 +124,7 @@
 <Adjective nr="40"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="ROBBINS2" nr="4">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="12" value="false"/>
@@ -140,7 +140,7 @@
 <Adjective nr="46"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="ROBBINS2" nr="5">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="12" value="false"/>
@@ -157,7 +157,7 @@
 <Adjective nr="36"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="ROBBINS2" nr="6">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="12" value="false"/>
@@ -175,7 +175,7 @@
 <Adjective nr="46"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="ROBBINS2" nr="7">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="12" value="false"/>
@@ -192,7 +192,7 @@
 <Adjective nr="41"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="ROBBINS2" nr="8">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="12" value="false"/>
@@ -209,7 +209,7 @@
 <Adjective nr="48"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="ROBBINS2" nr="9">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="12" value="false"/>
@@ -227,7 +227,7 @@
 <Adjective nr="36"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="ROBBINS2" nr="10">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="12" value="false"/>

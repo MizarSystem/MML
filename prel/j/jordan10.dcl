@@ -13,13 +13,13 @@
 <ArticleID name="XCMPLX_0"/>
 <ArticleID name="XREAL_0"/>
 <ArticleID name="RELSET_1"/>
+<ArticleID name="MCART_1"/>
+<ArticleID name="FUNCT_2"/>
 <ArticleID name="INT_1"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="FINSEQ_2"/>
-<ArticleID name="MCART_1"/>
-<ArticleID name="FUNCT_2"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="CONNSP_1"/>
@@ -46,7 +46,7 @@
 <ArticleID name="JORDAN9"/>
 <ArticleID name="JORDAN10"/>
 </Signature>
-<RCluster>
+<RCluster aid="JORDAN10" nr="1">
 <ArgTypes/>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -73,7 +73,7 @@
 <Adjective nr="128" value="false"/>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="JORDAN10" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster>
@@ -122,7 +122,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="JORDAN10" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster>
@@ -150,7 +150,7 @@
 <Adjective nr="1" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="JORDAN10" nr="3">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster>

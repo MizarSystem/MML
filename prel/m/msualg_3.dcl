@@ -28,7 +28,7 @@
 <ArticleID name="MSUALG_2"/>
 <ArticleID name="MSUALG_3"/>
 </Signature>
-<RCluster>
+<RCluster aid="MSUALG_3" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -45,7 +45,7 @@
 <Adjective nr="72"/>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="MSUALG_3" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="9">
 <Cluster>

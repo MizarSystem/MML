@@ -30,7 +30,7 @@
 <ArticleID name="YELLOW_6"/>
 <ArticleID name="WAYBEL28"/>
 </Signature>
-<RCluster>
+<RCluster aid="WAYBEL28" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
@@ -73,7 +73,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="WAYBEL28" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
@@ -116,7 +116,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="WAYBEL28" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="1">
 <Cluster>
@@ -169,7 +169,7 @@
 <Adjective nr="60"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="WAYBEL28" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="1">
 <Cluster>

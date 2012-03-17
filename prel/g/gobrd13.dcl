@@ -11,11 +11,11 @@
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XCMPLX_0"/>
-<ArticleID name="FINSET_1"/>
-<ArticleID name="CARD_1"/>
 <ArticleID name="RELSET_1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
+<ArticleID name="FINSET_1"/>
+<ArticleID name="CARD_1"/>
 <ArticleID name="FUNCOP_1"/>
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="FINSEQ_2"/>
@@ -43,7 +43,7 @@
 <ArticleID name="MATRLIN"/>
 <ArticleID name="GOBRD13"/>
 </Signature>
-<FCluster>
+<FCluster aid="GOBRD13" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -61,10 +61,10 @@
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="16"/>
+<Adjective nr="19"/>
 </Cluster>
 </FCluster>
-<CCluster>
+<CCluster aid="GOBRD13" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -81,7 +81,7 @@
 <Adjective nr="134"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="GOBRD13" nr="2">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="1"/>

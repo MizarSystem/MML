@@ -39,7 +39,7 @@
 <ArticleID name="TOPREAL1"/>
 <ArticleID name="GOBOARD5"/>
 </Signature>
-<FCluster>
+<FCluster aid="GOBRD14" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="7">
 <Cluster>

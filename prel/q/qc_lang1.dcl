@@ -17,42 +17,42 @@
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="QC_LANG1"/>
 </Signature>
-<FCluster>
+<FCluster aid="QC_LANG1" nr="1">
 <ArgTypes/>
 <Func kind="K" nr="105"/>
 <Cluster>
 <Adjective nr="7" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="QC_LANG1" nr="2">
 <ArgTypes/>
 <Func kind="K" nr="106"/>
 <Cluster>
 <Adjective nr="7" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="QC_LANG1" nr="3">
 <ArgTypes/>
 <Func kind="K" nr="107"/>
 <Cluster>
 <Adjective nr="7" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="QC_LANG1" nr="4">
 <ArgTypes/>
 <Func kind="K" nr="108"/>
 <Cluster>
 <Adjective nr="7" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="QC_LANG1" nr="5">
 <ArgTypes/>
 <Func kind="K" nr="109"/>
 <Cluster>
 <Adjective nr="7" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="QC_LANG1" nr="6">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>

@@ -26,7 +26,7 @@
 <ArticleID name="ANALMETR"/>
 <ArticleID name="EUCLMETR"/>
 </Signature>
-<RCluster>
+<RCluster aid="EUCLMETR" nr="1">
 <ArgTypes/>
 <Typ kind="G" nr="13">
 <Cluster/>
@@ -44,7 +44,7 @@
 <Adjective nr="106"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="EUCLMETR" nr="2">
 <ArgTypes/>
 <Typ kind="G" nr="13">
 <Cluster/>
@@ -61,7 +61,7 @@
 <Adjective nr="106"/>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="EUCLMETR" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="13">
 <Cluster>
@@ -79,7 +79,7 @@
 <Adjective nr="82"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="EUCLMETR" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="13">
 <Cluster>
@@ -97,7 +97,7 @@
 <Adjective nr="84"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="EUCLMETR" nr="3">
 <ArgTypes>
 <Typ kind="G" nr="13">
 <Cluster>
@@ -115,7 +115,7 @@
 <Adjective nr="87"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="EUCLMETR" nr="4">
 <ArgTypes>
 <Typ kind="G" nr="13">
 <Cluster>
@@ -133,7 +133,7 @@
 <Adjective nr="91"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="EUCLMETR" nr="5">
 <ArgTypes>
 <Typ kind="G" nr="13">
 <Cluster>
@@ -151,7 +151,7 @@
 <Adjective nr="95"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="EUCLMETR" nr="6">
 <ArgTypes>
 <Typ kind="G" nr="13">
 <Cluster>
@@ -169,7 +169,7 @@
 <Adjective nr="84"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="EUCLMETR" nr="7">
 <ArgTypes>
 <Typ kind="G" nr="13">
 <Cluster>
@@ -188,7 +188,7 @@
 <Adjective nr="82"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="EUCLMETR" nr="8">
 <ArgTypes>
 <Typ kind="G" nr="13">
 <Cluster>
@@ -206,7 +206,7 @@
 <Adjective nr="82"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="EUCLMETR" nr="9">
 <ArgTypes>
 <Typ kind="G" nr="13">
 <Cluster>
@@ -224,7 +224,7 @@
 <Adjective nr="84"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="EUCLMETR" nr="10">
 <ArgTypes>
 <Typ kind="G" nr="13">
 <Cluster>
@@ -242,7 +242,7 @@
 <Adjective nr="87"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="EUCLMETR" nr="11">
 <ArgTypes>
 <Typ kind="G" nr="13">
 <Cluster>
@@ -260,7 +260,7 @@
 <Adjective nr="91"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="EUCLMETR" nr="12">
 <ArgTypes>
 <Typ kind="G" nr="13">
 <Cluster>

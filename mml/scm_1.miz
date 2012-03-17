@@ -7,16 +7,20 @@
 environ
 
  vocabularies AMI_3, INT_1, FINSEQ_1, AMI_1, AMI_2, FUNCT_1, RELAT_1, ARYTM_1,
-      NAT_1, MCART_1, SCM_1, ARYTM;
- notations TARSKI, SUBSET_1, NUMBERS, XCMPLX_0, NAT_1, INT_1, MCART_1, RELAT_1,
-      FUNCT_1, FUNCT_2, FINSEQ_1, AMI_1, SCMNORM, AMI_2, AMI_3, XXREAL_0;
- constructors XXREAL_0, NAT_1, AMI_3;
+      NAT_1, MCART_1, SCM_1, ARYTM, FINSET_1, PARTFUN1, CARD_3, SCMNORM;
+ notations TARSKI, XBOOLE_0,
+      SUBSET_1, NUMBERS, XCMPLX_0, NAT_1, INT_1, MCART_1, RELAT_1,
+      SETFAM_1, CARD_3,
+      FUNCT_1, PARTFUN1, FUNCT_2, FINSET_1, FINSEQ_1, XXREAL_0,
+      STRUCT_0, AMI_2, AMI_1, AMI_3, SCMNORM;
+ constructors XXREAL_0, NAT_1, AMI_3, SCMNORM;
  registrations XBOOLE_0, SETFAM_1, ORDINAL1, RELSET_1, FRAENKEL, NUMBERS,
-      XXREAL_0, XREAL_0, NAT_1, INT_1, CARD_3, AMI_3, AMI_2;
+      XXREAL_0, XREAL_0, NAT_1, INT_1, CARD_3,
+      STRUCT_0, AMI_3, AMI_2, RFUNCT_3, AMI_1;
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
  definitions AMI_1, NAT_1, AMI_3;
  theorems NAT_1, INT_1, MCART_1, FUNCT_1, FUNCT_2, FINSEQ_1, CARD_3, AMI_1,
-      AMI_2, AMI_3, FINSEQ_3, RELSET_1, ORDINAL1;
+      AMI_2, AMI_3, FINSEQ_3, RELSET_1, ORDINAL1, SCMNORM;
  schemes PARTFUN1, WELLORD2;
 
 begin
@@ -35,14 +39,31 @@ end;
 canceled;
 
 theorem
-  for s being State of SCM, k being Element of NAT
-  holds CurInstr  Computation(s,k) = s.(IC  Computation(s,k)) &
-  CurInstr  Computation(s,k) = s.( Computation(s,k).NAT) by AMI_1:54,AMI_3:4;
+  for s being State of SCM, k being Nat
+  for p being finite PartFunc of NAT, the Instructions of SCM
+   st IC Comput(p,s,k) in dom p
+  holds CurInstr(p,Comput(p,s,k)) = p.IC Comput(p,s,k) &
+  CurInstr(p,Comput(p,s,k)) = p.(Comput(p,s,k).NAT) by SCMNORM:def 4,AMI_3:4;
+
+registration
+  cluster SCM -> stored-program;
+  coherence;
+end;
+
+registration
+  cluster SCM -> definite;
+  coherence
+  proof
+  let l be Instruction-Location of SCM;
+  l in NAT by AMI_1:def 4;
+  hence ObjectKind l = the Instructions of SCM by AMI_2:11;
+  end;
+end;
 
 theorem Th3:
   for s being State of SCM
   st ex k being Element of NAT st s.(IC  Computation(s,k)) = halt SCM
-  holds s is halting
+  holds s is halting :: p halts_on s ??
 proof
   let s be State of SCM;
   given k being Element of NAT such that
@@ -233,9 +254,10 @@ A15:    s3.x = D1.n & x in SCM-Data-Loc by A14,AMI_3:def 2;
       .= il.il by A10,AMI_2:30;
     hereby
       let k be Element of NAT;
-      assume k<len I;
-      then consider k' being Element of NAT such that
-A16:  il.(ps+k) = il.(ps+k') & k' < len I & I1.il.(ps+k) = I.(k'+1) by A4;
+      assume
+Z:     k<len I;
+      consider k' being Element of NAT such that
+A16:  il.(ps+k) = il.(ps+k') & k' < len I & I1.il.(ps+k) = I.(k'+1) by A4,Z;
       for n being Element of NAT holds il.(ps+k) <> dl.n by AMI_3:56;
       hence s3.il.(ps+k) = s2.il.(ps+k) by A14
         .= I.(k+1) by A11,A16;
@@ -910,8 +932,6 @@ A1: IC s = il.0 & s.il.0 = dl.0 =0_goto il.1 & s.il.1 = halt SCM &
 A2: s =  Computation(s,0) by AMI_1:13;
 
 :: Step 1
-  s.dl.0 = 0 or s.dl.0 <> 0;
-  then
 A3: IC s1 = il.(0+1) by A1,A2,Th24;
   hence s is halting by A1,Th3;
   thus LifeSpan s = 1 by A1,A2,A3,Th17;
@@ -941,8 +961,6 @@ A1: IC s = il.0 & s.il.0 = dl.0 >0_goto il.1 & s.il.1 = halt SCM &
 A2: s =  Computation(s,0) by AMI_1:13;
 
 :: Step 1
-  s.dl.0 <= 0 or s.dl.0 > 0;
-  then
 A3: IC s1 = il.(0+1) by A1,A2,Th25;
   hence s is halting by A1,Th3;
   thus LifeSpan s = 1 by A1,A2,A3,Th17;

@@ -28,7 +28,7 @@
 <ArticleID name="CONNSP_2"/>
 <ArticleID name="BORSUK_1"/>
 </Signature>
-<FCluster>
+<FCluster aid="NAGATA_2" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>

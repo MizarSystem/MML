@@ -28,7 +28,7 @@
 <ArticleID name="CARD_3"/>
 <ArticleID name="TOPGEN_2"/>
 </Signature>
-<RCluster>
+<RCluster aid="TOPGEN_2" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
@@ -53,7 +53,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="TOPGEN_2" nr="2">
 <ArgTypes/>
 <Typ kind="G" nr="5">
 <Cluster/>
@@ -64,7 +64,7 @@
 <Adjective nr="32"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="TOPGEN_2" nr="3">
 <ArgTypes/>
 <Typ kind="G" nr="5">
 <Cluster/>
@@ -74,7 +74,7 @@
 <Adjective nr="51" value="false"/>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="TOPGEN_2" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -92,7 +92,7 @@
 <Adjective nr="32"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="TOPGEN_2" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -112,7 +112,7 @@
 <Adjective nr="31"/>
 </Cluster>
 </FCluster>
-<CCluster>
+<CCluster aid="TOPGEN_2" nr="1">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="29"/>
@@ -124,7 +124,7 @@
 <Adjective nr="51"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="TOPGEN_2" nr="2">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="51" value="false"/>

@@ -19,7 +19,7 @@
 <ArticleID name="MEMBERED"/>
 <ArticleID name="SEQ_4"/>
 </Signature>
-<CCluster>
+<CCluster aid="SEQ_4" nr="1">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="4"/>
@@ -43,7 +43,7 @@
 <Adjective nr="28"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="SEQ_4" nr="2">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="34"/>

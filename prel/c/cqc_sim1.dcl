@@ -24,7 +24,7 @@
 <ArticleID name="CQC_LANG"/>
 <ArticleID name="CQC_SIM1"/>
 </Signature>
-<FCluster>
+<FCluster aid="CQC_SIM1" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>

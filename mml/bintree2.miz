@@ -16,7 +16,7 @@ environ
       FINSEQ_5, BINARITH, BINARI_3, TREES_1, TREES_2, TREES_4, BINTREE1,
       EUCLID, XXREAL_0;
  constructors WELLORD2, DOMAIN_1, XXREAL_0, NAT_1, NAT_D, FINSEQOP, SERIES_1,
-      BINARITH, FINSEQ_5, TREES_9, ABIAN, EUCLID, BINTREE1, BINARI_3;
+      BINARITH, FINSEQ_5, TREES_9, ABIAN, EUCLID, BINTREE1, BINARI_3, ORDINAL1;
  registrations XBOOLE_0, SUBSET_1, ORDINAL1, RELSET_1, FINSET_1, NUMBERS,
       XXREAL_0, XREAL_0, NAT_1, FINSEQ_1, MARGREL1, TREES_2, TREES_9, BINTREE1;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
@@ -25,7 +25,7 @@ environ
       FUNCT_2, CARD_1, CARD_2, FINSET_1, POWER, FUNCOP_1, FINSEQ_1, FINSEQ_2,
       FINSEQ_4, FINSEQ_5, FINSEQ_6, BINARITH, BINARI_3, TREES_1, TREES_2,
       BINTREE1, QC_LANG4, XBOOLE_0, XBOOLE_1, XREAL_1, NAT_D, PARTFUN1,
-      RELAT_1;
+      RELAT_1, ORDINAL1;
  schemes FUNCT_2, NAT_1, FINSEQ_2, TREES_2, WELLORD2;
 
 begin :: Trees and Binary Trees
@@ -520,7 +520,7 @@ Rev f is FinSequence of D;
 
 definition
   let T be binary Tree;
-  let n be non empty Element of NAT;
+  let n be non empty Nat;
   func NumberOnLevel(n,T) -> Function of T-level n,NAT means
   :Def1:
   for t be Element of T st t in T-level n
@@ -691,12 +691,12 @@ A12:    k = 1;
 end;
 
 theorem Th10:
-  for T be Tree st T = {0,1}* for n be Element of NAT holds 0*n in T-level n
+  for T be Tree st T = {0,1}* for n be Nat holds 0*n in T-level n
 proof
   let T be Tree;
   assume
 A1: T = {0,1}*;
-  let n be Element of NAT;
+  let n be Nat;
 A2: len (0*n) = n by FINSEQ_2:109;
   0*n in T by A1,BINARI_3:5;
   then 0*n in { w where w is Element of T : len w = n } by A2;
@@ -747,11 +747,11 @@ registration
 end;
 
 theorem Th12:
-  for T be full Tree for n be non empty Element of NAT holds
+  for T be full Tree for n be non empty Nat holds
   Seg (2 to_power n) c= rng NumberOnLevel(n,T)
 proof
   let T be full Tree;
-  let n be non empty Element of NAT;
+  let n be non empty Nat;
   let y be set;
   assume y in Seg (2 to_power n);
   then y in { k where k is Element of NAT : 1 <= k & k <= 2 to_power n }
@@ -788,7 +788,7 @@ end;
 
 definition
   let T be full Tree;
-  let n be non empty Element of NAT;
+  let n be non empty Nat;
   func FinSeqLevel(n,T) -> FinSequence of T-level n equals
   NumberOnLevel(n,T)";
   coherence
@@ -796,25 +796,26 @@ definition
     T = {0,1}* by Def2;
     then
 A1: T-level n is non empty by Th10;
-A2: rng (NumberOnLevel(n,T)") = dom NumberOnLevel(n,T) by FUNCT_1:55
+    reconsider k=n as non empty Element of NAT by ORDINAL1:def 13;
+A2: rng (NumberOnLevel(k,T)") = dom NumberOnLevel(k,T) by FUNCT_1:55
       .= T-level n by FUNCT_2:def 1;
     for y be set holds y in Seg (2 to_power n) iff
-    ex x be set st x in dom NumberOnLevel(n,T) & y = NumberOnLevel(n,T).x
+    ex x be set st x in dom NumberOnLevel(k,T) & y = NumberOnLevel(k,T).x
     proof
       let y be set;
       thus y in Seg (2 to_power n) implies
-      ex x be set st x in dom NumberOnLevel(n,T) & y = NumberOnLevel(n,T).x
+      ex x be set st x in dom NumberOnLevel(k,T) & y = NumberOnLevel(k,T).x
       proof
         assume
 A3:     y in Seg (2 to_power n);
         take x = (NumberOnLevel(n,T)").y;
         Seg (2 to_power n) c= rng NumberOnLevel(n,T) by Th12;
-        hence x in dom NumberOnLevel(n,T) & y = NumberOnLevel(n,T).x
+        hence x in dom NumberOnLevel(k,T) & y = NumberOnLevel(k,T).x
         by A3,FUNCT_1:54;
       end;
       given x be set such that
-A4:   x in dom NumberOnLevel(n,T) and
-A5:   y = NumberOnLevel(n,T).x;
+A4:   x in dom NumberOnLevel(k,T) and
+A5:   y = NumberOnLevel(k,T).x;
 A6:   x in T-level n by A4,FUNCT_2:def 1;
       then x in { t where t is Element of T : len t = n } by TREES_2:def 6;
       then consider t be Element of T such that
@@ -829,7 +830,7 @@ A10:  1 <= (Absval F) + 1 by NAT_1:11;
       hence y in Seg (2 to_power n) by A9,A10,FINSEQ_1:3;
     end;
     then rng NumberOnLevel(n,T) = Seg (2 to_power n) by FUNCT_1:def 5;
-    then dom (NumberOnLevel(n,T)") = Seg (2 to_power n) by FUNCT_1:55;
+    then dom (NumberOnLevel(k,T)") = Seg (2 to_power n) by FUNCT_1:55;
     then NumberOnLevel(n,T)" is Function of Seg (2 to_power n), T-level n
     by A2,FUNCT_2:4;
     hence NumberOnLevel(n,T)" is FinSequence of T-level n by A1,FINSEQ_2:28;

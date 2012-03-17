@@ -30,7 +30,7 @@ environ
       FINSEQ_5, NAT_1, EQREL_1, MSUALG_6, MSUALG_5, CARD_1, REAL_1, GRAPH_5,
       NAT_2, FUNCT_4, FUNCT_3, WAYBEL_1, YELLOW_6, REALSET1, XREAL_1, XXREAL_0,
       ORDINAL1;
- schemes BINARITH, NAT_1;
+ schemes NAT_1;
 
 begin :: Preliminaries
 
@@ -3311,9 +3311,9 @@ A5: len p > 0 &
 A6: len p in dom p by FINSEQ_3:27;
   defpred P[Nat] means $1 in dom p implies [p.1,p.$1] in IR;
 A7: P[1] by A2,A4,RELAT_2:def 1;
-A8: for k be non empty Element of NAT st P[k] holds P[k+1]
+A8: for k be non empty Nat st P[k] holds P[k+1]
   proof
-    let k be non empty Element of NAT such that
+    let k be non empty Nat such that
 A9: P[k];
     assume
 A10: k+1 in dom p;
@@ -3328,7 +3328,7 @@ A13: 1 <= k & k <= len p by A11,A12,XXREAL_0:2;
     [p.k,p.(k+1)] in IR by A9,A13,FINSEQ_3:27,ZFMISC_1:106;
     hence thesis by A3,RELAT_2:def 8;
   end;
-  for k be non empty Element of NAT holds P[k] from BINARITH:sch 1(A7,A8);
+  for k be non empty Nat holds P[k] from NAT_1:sch 10(A7,A8);
   hence thesis by A4,A5,A6;
 end;
 
@@ -3947,7 +3947,7 @@ A54:  [w,v] in EqCl ICR by EQREL_1:12;
 end;
 
 Lm1: for X being non empty finite set, A,B being non empty set
-st X = A \/ B & A misses B holds Card A <` Card X & Card B <` Card X
+st X = A \/ B & A misses B holds Card A in Card X
 proof
   let X be non empty finite set;
   let A,B be non empty set;
@@ -3955,7 +3955,7 @@ proof
   assume
 A1: X = A \/ B & A misses B;
   then
-A2: Card A <=` n & Card B <=` n by CARD_1:27,XBOOLE_1:7;
+A2: Card A c= n & Card B c= n by CARD_1:27,XBOOLE_1:7;
   then reconsider A as finite set by CARD_2:68;
   reconsider B as finite set by A2,CARD_2:68;
 A3: n = card A + card B by A1,CARD_2:53;
@@ -3968,13 +3968,7 @@ A5: card A < n
     then card A + card B >= n+1 by A4,XREAL_1:9;
     hence thesis by A3,NAT_1:13;
   end;
-  card B < n
-  proof
-    assume not thesis;
-    then card A + card B >= n+1 by A4,XREAL_1:9;
-    hence thesis by A3,NAT_1:13;
-  end;
-  hence thesis by A5,CARD_2:58;
+  thus thesis by A5,CARD_2:58;
 end;
 
 theorem
@@ -4009,12 +4003,12 @@ A6:   (the carrier of G1) misses the carrier of G2 &
 A7:   G = union_of(G1,G2) or G = sum_of(G1,G2);
 A8:   G1 is non empty finite by A6,NECKLA_2:4;
       then the carrier of G1 is non empty finite by STRUCT_0:def 1,def 11;
-      then consider n1 being Element of NAT such that
+      then consider n1 being Nat such that
 A9:   Card the carrier of G1 = card n1 by CARD_4:4;
 A10:  Card the carrier of G1 = n1 by A9,CARD_1:66;
 A11:  G2 is non empty finite by A6,NECKLA_2:4;
       then the carrier of G2 is non empty finite by STRUCT_0:def 1,def 11;
-      then consider n2 being Element of NAT such that
+      then consider n2 being Nat such that
 A12:  Card the carrier of G2 = card n2 by CARD_4:4;
 A13:  Card the carrier of G2 = n2 by A12,CARD_1:66;
       thus thesis
@@ -4107,7 +4101,7 @@ A29:      ComplRelStr G = union_of(ComplRelStr G1,ComplRelStr G2)
 A30: for k being Nat holds P[k] from NAT_1:sch 4(A2);
   G is finite by A1,NECKLA_2:4;
   then the carrier of G is finite by STRUCT_0:def 11;
-  then consider n being Element of NAT such that
+  then consider n being Nat such that
 A31: Card the carrier of G = card n by CARD_4:4;
   thus thesis by A1,A30,A31;
 end;
@@ -4286,7 +4280,7 @@ A8:         a in the carrier of X & b in the carrier of X &
 A9: not X is trivial;
     defpred P[Nat] means
     for X be non empty RelStr st not X is trivial & X in fin_RelStr_sp holds
-    Card (the carrier of X) <=` $1 implies X is symmetric;
+    Card (the carrier of X) c= $1 implies X is symmetric;
 A10: P[0]
     proof
       let X be non empty RelStr such that
@@ -4296,7 +4290,7 @@ A12:  X = R & the carrier of R in FinSETS by A11,NECKLA_2:def 4;
       set cX = the carrier of X;
       reconsider cX as finite set by A12,NECKLA_2:3;
       assume
-A13:  Card (the carrier of X) <=` 0;
+A13:  Card (the carrier of X) c= 0;
       assume not thesis;
       per cases by A13,CARD_2:19,57;
       suppose card cX < 0;
@@ -4330,8 +4324,8 @@ A21:  H1 = R1 & the carrier of R1 in FinSETS by A18,NECKLA_2:def 4;
 A22:  H2 = R2 & the carrier of R2 in FinSETS by A18,NECKLA_2:def 4;
       reconsider cH2 as finite set by A22,NECKLA_2:3;
 A23:  card cY = card cH1 + card cH2 by A18,A20,CARD_2:53;
-      assume Card (the carrier of Y) <=` k+1;
-      then Card cY <=` Card (k1+1) by CARD_1:66;
+      assume Card (the carrier of Y) c= k+1;
+      then Card cY c= Card (k1+1) by CARD_1:66;
       then card cY <= card (k1+1) by CARD_2:57;
       then
 A24:  card cY <= k+1 by CARD_1:66;
@@ -4343,8 +4337,8 @@ A25:  card cH1 >= 1 & card cH2 >= 1 by NAT_1:14;
       per cases by A23,A24,A25,NAT_1:8,REAL_1:def 5;
       suppose card cY <= k;
         then card cY <= card k1 by CARD_1:66;
-        then Card (the carrier of Y) <=` Card k by CARD_2:57;
-        then Card (the carrier of Y) <=` k1 by CARD_1:66;
+        then Card (the carrier of Y) c= Card k by CARD_2:57;
+        then Card (the carrier of Y) c= k1 by CARD_1:66;
         hence thesis by A15,A16;
       end;
       suppose
@@ -4407,9 +4401,9 @@ A36:    card cH1 + card cH2 = k+1 & k > 0 & card cH1 > 1 & card cH2 > 1;
         end;
         then card cH1 <= k by NAT_1:13;
         then card cH1 <= card k1 by CARD_1:66;
-        then Card cH1 <=` Card k by CARD_2:57;
+        then Card cH1 c= Card k by CARD_2:57;
         then
-A37:    Card cH1 <=` k1 by CARD_1:66;
+A37:    Card cH1 c= k1 by CARD_1:66;
         card cH1 is non trivial by A36,NAT_2:30;
         then card cH1 >= 2 by NAT_2:31;
         then cH1 is non empty non trivial by REALSET1:13;
@@ -4423,9 +4417,9 @@ A37:    Card cH1 <=` k1 by CARD_1:66;
         end;
         then card cH2 <= k by NAT_1:13;
         then card cH2 <= card k1 by CARD_1:66;
-        then Card cH2 <=` Card k by CARD_2:57;
+        then Card cH2 c= Card k by CARD_2:57;
         then
-A38:    Card cH2 <=` k1 by CARD_1:66;
+A38:    Card cH2 c= k1 by CARD_1:66;
         card cH2 is non trivial by A36,NAT_2:30;
         then card cH2 >= 2 by NAT_2:31;
         then cH2 is non empty non trivial by REALSET1:13;
@@ -4440,7 +4434,7 @@ A39: for k being Nat holds P[k] from NAT_1:sch 2(A10,A14);
 A40: X = R & the carrier of R in FinSETS by A1,NECKLA_2:def 4;
     reconsider X as non empty RelStr by A1,NECKLA_2:4;
     the carrier of X is finite by A40,NECKLA_2:3;
-    then consider n be Element of NAT such that
+    then consider n be Nat such that
 A41: Card (the carrier of X) = Card n by CARD_4:4;
     thus thesis by A1,A9,A39,A41;
   end;
@@ -4546,15 +4540,7 @@ A9: for i being Element of NAT st i in dom p & i+1 in dom p
   for k being Nat st k > $1 holds k in dom p implies p.k in the carrier of R1;
 A10: ex k being Nat st P[k]
   proof
-    P[len p]
-    proof
-      len p in dom p
-      proof
-        p <> {} by A8,CARD_1:47;
-        hence thesis by FINSEQ_5:6;
-      end;
-      hence thesis by A8,FINSEQ_3:27;
-    end;
+    P[len p] by A8,CARD_1:47,FINSEQ_5:6,FINSEQ_3:27;
     hence thesis;
   end;
   ex n0 being Nat st P[n0] &
@@ -4892,7 +4878,7 @@ A37: rng f = the carrier of H
   then reconsider f as Function of N4,H by A31,FUNCT_2:def 1,RELSET_1:11;
 A38: g is one-to-one
   proof
-A39: g = ({0} --> a) +* ({1} -->b) by FUNCT_4:def 4;
+A39: g = (0 .--> a) +* (1 .-->b) by FUNCT_4:def 4;
     rng (0 .--> a) misses rng (1 .--> b)
     proof
       assume rng (0 .--> a) meets rng (1 .--> b);
@@ -4907,7 +4893,7 @@ A42:  rng (1 .--> b) = {b} by FUNCOP_1:14;
   end;
 A43: h is one-to-one
   proof
-A44: h = ({2} --> c) +* ({3} --> d) by FUNCT_4:def 4;
+A44: h = (2 .--> c) +* (3 .--> d) by FUNCT_4:def 4;
     rng (2 .--> c) misses rng (3 .--> d)
     proof
       assume rng (2 .--> c) meets rng (3 .--> d);
@@ -5443,11 +5429,7 @@ A59:    ex k being Nat st P[k]
         proof
           P[len p]
           proof
-A60:        len p in dom p
-            proof
-              p <> {} by A57,CARD_1:47;
-              hence thesis by FINSEQ_5:6;
-            end;
+A60:        len p in dom p by A57,CARD_1:47,FINSEQ_5:6;
             for k being Nat st k > len p holds k in dom p implies p.k in Y1
             proof
               let k be Nat such that
@@ -5831,11 +5813,7 @@ A139:   ex k being Nat st P[k]
         proof
           P[len p]
           proof
-A140:       len p in dom p
-            proof
-              p <> {} by A137,CARD_1:47;
-              hence thesis by FINSEQ_5:6;
-            end;
+A140:       len p in dom p by A137,CARD_1:47,FINSEQ_5:6;
             for k being Nat st k > len p holds k in dom p implies p.k in Y2
             proof
               let k be Nat such that
@@ -6210,7 +6188,7 @@ A5:   the RelStr of G = union_of(G1,G2) by Th31;
       R = the RelStr of G, cR = the carrier of R;
 A6:   cR = cG1 \/ cG2 by A5,NECKLA_2:def 2;
       then
-A7:   Card cG1 <` Card cR by A4,Lm1;
+A7:   Card cG1 in Card cR by A4,Lm1;
       then
 A8:   cG1 is finite by CARD_2:68;
       reconsider cG1 as finite set by A7,CARD_2:68;
@@ -6225,7 +6203,7 @@ A10:  G1 is N-free by A3,Th23;
       by A3,A6,CLASSES1:6,CLASSES2:def 2,XBOOLE_1:7;
       then
 A11:  G1 in fin_RelStr_sp by A2,A3,A9,A10;
-A12:  Card cG2 <` Card cR by A4,A6,Lm1;
+A12:  Card cG2 in Card cR by A4,A6,Lm1;
       then
 A13:  cG2 is finite by CARD_2:68;
       reconsider cG2 as finite set by A12,CARD_2:68;
@@ -6249,7 +6227,7 @@ A17:  (the RelStr of G) = sum_of(G1,G2) by Th32;
       R = the RelStr of G, cR = the carrier of R;
 A18:  cR = cG1 \/ cG2 by A17,NECKLA_2:def 3;
       then
-A19:  Card cG1 <` Card cR by A16,Lm1;
+A19:  Card cG1 in Card cR by A16,Lm1;
       then
 A20:  cG1 is finite by CARD_2:68;
       reconsider cG1 as finite set by A19,CARD_2:68;
@@ -6264,7 +6242,7 @@ A22:  G1 is N-free by A3,Th23;
       by A3,A18,CLASSES1:6,CLASSES2:def 2,XBOOLE_1:7;
       then
 A23:  G1 in fin_RelStr_sp by A2,A3,A21,A22;
-A24:  Card cG2 <` Card cR by A16,A18,Lm1;
+A24:  Card cG2 in Card cR by A16,A18,Lm1;
       then
 A25:  cG2 is finite by CARD_2:68;
       reconsider cG2 as finite set by A24,CARD_2:68;
@@ -6420,7 +6398,7 @@ A51: for k be Nat holds P[k] from NAT_1:sch 4(A1);
   let R be non empty strict finite irreflexive symmetric RelStr;
   assume
 A52: R is N-free;
-  ex n being Element of NAT st Card (the carrier of R) = Card n by CARD_4:4;
+  ex n being Nat st Card (the carrier of R) = Card n by CARD_4:4;
   hence thesis by A51,A52;
 end;
 

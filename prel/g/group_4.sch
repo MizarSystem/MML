@@ -36,7 +36,7 @@
 </ArgTypes>
 <Not>
 <For>
-<Typ kind="M" nr="7">
+<Typ kind="M" nr="8">
 <Cluster>
 <Adjective nr="49"/>
 </Cluster>
@@ -60,7 +60,7 @@
 <Var nr="2"/>
 <Not>
 <For>
-<Typ kind="M" nr="7">
+<Typ kind="M" nr="8">
 <Cluster>
 <Adjective nr="49"/>
 </Cluster>
@@ -89,7 +89,7 @@
 </Not>
 <Not>
 <For>
-<Typ kind="M" nr="7">
+<Typ kind="M" nr="8">
 <Cluster>
 <Adjective nr="49"/>
 </Cluster>
@@ -127,7 +127,7 @@
 </Func>
 </Pred>
 <For>
-<Typ kind="M" nr="7">
+<Typ kind="M" nr="8">
 <Cluster>
 <Adjective nr="49"/>
 </Cluster>

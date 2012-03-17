@@ -21,7 +21,7 @@
 <ArticleID name="TBSP_1"/>
 <ArticleID name="METRIC_6"/>
 </Signature>
-<RCluster>
+<RCluster aid="METRIC_6" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
@@ -61,7 +61,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<CCluster>
+<CCluster aid="METRIC_6" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
@@ -103,7 +103,7 @@
 </Adjective>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="METRIC_6" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>

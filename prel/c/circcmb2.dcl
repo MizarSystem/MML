@@ -29,7 +29,7 @@
 <ArticleID name="MARGREL1"/>
 <ArticleID name="CIRCCOMB"/>
 </Signature>
-<FCluster>
+<FCluster aid="CIRCCMB2" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -42,43 +42,43 @@
 <Adjective nr="8">
 <Func kind="K" nr="130">
 <LocusVar nr="1"/>
-<Func kind="K" nr="213"/>
+<Func kind="K" nr="215"/>
 </Func>
-<Func kind="K" nr="213"/>
+<Func kind="K" nr="215"/>
 </Adjective>
 </Cluster>
 <Func kind="K" nr="130">
 <LocusVar nr="1"/>
-<Func kind="K" nr="213"/>
+<Func kind="K" nr="215"/>
 </Func>
-<Func kind="K" nr="213"/>
+<Func kind="K" nr="215"/>
 </Typ>
 <Typ kind="M" nr="20">
 <Cluster/>
 <LocusVar nr="1"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="212">
+<Func kind="K" nr="214">
 <LocusVar nr="1"/>
-<Func kind="K" nr="213"/>
+<Func kind="K" nr="215"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
 </Func>
 <Cluster>
 <Adjective nr="48">
-<Func kind="K" nr="210">
+<Func kind="K" nr="212">
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
 </Func>
 </Adjective>
 <Adjective nr="49">
-<Func kind="K" nr="210">
+<Func kind="K" nr="212">
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
 </Func>
 </Adjective>
 <Adjective nr="60">
-<Func kind="K" nr="210">
+<Func kind="K" nr="212">
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
 </Func>

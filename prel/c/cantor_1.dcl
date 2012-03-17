@@ -16,7 +16,7 @@
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="CANTOR_1"/>
 </Signature>
-<FCluster>
+<FCluster aid="CANTOR_1" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -35,7 +35,7 @@
 <Adjective nr="3"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="CANTOR_1" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
@@ -51,7 +51,7 @@
 <Adjective nr="1" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="CANTOR_1" nr="3">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>

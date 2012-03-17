@@ -39,7 +39,7 @@
 <ArticleID name="RELAT_2"/>
 <ArticleID name="ARMSTRNG"/>
 </Signature>
-<RCluster>
+<RCluster aid="ARMSTRNG" nr="1">
 <ArgTypes/>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -52,7 +52,7 @@
 <Adjective nr="120"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="ARMSTRNG" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -73,7 +73,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="ARMSTRNG" nr="3">
 <ArgTypes/>
 <Typ kind="G" nr="13">
 <Cluster/>
@@ -82,7 +82,7 @@
 <Adjective nr="122"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="ARMSTRNG" nr="4">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -103,7 +103,7 @@
 <Adjective nr="24"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="ARMSTRNG" nr="5">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -133,7 +133,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="ARMSTRNG" nr="6">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -155,7 +155,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="ARMSTRNG" nr="7">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -180,7 +180,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="ARMSTRNG" nr="8">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -207,7 +207,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="ARMSTRNG" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -228,7 +228,7 @@
 <Adjective nr="32"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="ARMSTRNG" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -241,7 +241,7 @@
 <Adjective nr="1" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="ARMSTRNG" nr="3">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -254,7 +254,7 @@
 <Adjective nr="1" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="ARMSTRNG" nr="4">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -277,7 +277,7 @@
 <Adjective nr="120"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="ARMSTRNG" nr="5">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -307,7 +307,7 @@
 <Adjective nr="1" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="ARMSTRNG" nr="6">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -332,7 +332,7 @@
 <Adjective nr="24"/>
 </Cluster>
 </FCluster>
-<CCluster>
+<CCluster aid="ARMSTRNG" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -379,7 +379,7 @@
 <Adjective nr="111"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="ARMSTRNG" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -401,7 +401,7 @@
 <Adjective nr="24"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="ARMSTRNG" nr="3">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -434,7 +434,7 @@
 </Adjective>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="ARMSTRNG" nr="4">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -467,7 +467,7 @@
 </Adjective>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="ARMSTRNG" nr="5">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -496,7 +496,7 @@
 </Adjective>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="ARMSTRNG" nr="6">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -526,7 +526,7 @@
 </Adjective>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="ARMSTRNG" nr="7">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>

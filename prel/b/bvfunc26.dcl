@@ -23,7 +23,7 @@
 <ArticleID name="BVFUNC_1"/>
 <ArticleID name="BVFUNC26"/>
 </Signature>
-<FCluster>
+<FCluster aid="BVFUNC26" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -50,7 +50,7 @@
 <Adjective nr="32"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="BVFUNC26" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>

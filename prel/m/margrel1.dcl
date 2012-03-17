@@ -18,7 +18,7 @@
 <ArticleID name="XBOOLEAN"/>
 <ArticleID name="MARGREL1"/>
 </Signature>
-<RCluster>
+<RCluster aid="MARGREL1" nr="1">
 <ArgTypes/>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -27,7 +27,7 @@
 <Adjective nr="21"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="MARGREL1" nr="2">
 <ArgTypes/>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -38,14 +38,14 @@
 <Adjective nr="22"/>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="MARGREL1" nr="1">
 <ArgTypes/>
 <Func kind="K" nr="18"/>
 <Cluster>
 <Adjective nr="21"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="MARGREL1" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -60,14 +60,14 @@
 <Adjective nr="7" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="MARGREL1" nr="3">
 <ArgTypes/>
 <Func kind="K" nr="119"/>
 <Cluster>
 <Adjective nr="7" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="MARGREL1" nr="4">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -80,7 +80,7 @@
 <Adjective nr="20"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="MARGREL1" nr="5">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -101,7 +101,7 @@
 <Adjective nr="20"/>
 </Cluster>
 </FCluster>
-<CCluster>
+<CCluster aid="MARGREL1" nr="1">
 <ArgTypes/>
 <Cluster/>
 <Typ kind="M" nr="2">
@@ -112,7 +112,7 @@
 <Adjective nr="20"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="MARGREL1" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>

@@ -12,7 +12,7 @@
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XCMPLX_0"/>
 </Signature>
-<RCluster>
+<RCluster aid="XCMPLX_0" nr="1">
 <ArgTypes/>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -21,7 +21,7 @@
 <Adjective nr="15"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="XCMPLX_0" nr="2">
 <ArgTypes/>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -31,14 +31,14 @@
 <Adjective nr="15"/>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="XCMPLX_0" nr="1">
 <ArgTypes/>
 <Func kind="K" nr="49"/>
 <Cluster>
 <Adjective nr="15"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="XCMPLX_0" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -59,7 +59,7 @@
 <Adjective nr="15"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="XCMPLX_0" nr="3">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -80,7 +80,7 @@
 <Adjective nr="15"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="XCMPLX_0" nr="4">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -101,7 +101,7 @@
 <Adjective nr="15"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="XCMPLX_0" nr="5">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -122,7 +122,7 @@
 <Adjective nr="15"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="XCMPLX_0" nr="6">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -139,7 +139,7 @@
 <Adjective nr="15"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="XCMPLX_0" nr="7">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -156,7 +156,7 @@
 <Adjective nr="15"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="XCMPLX_0" nr="8">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -179,7 +179,7 @@
 <Adjective nr="7" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="XCMPLX_0" nr="9">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -202,7 +202,7 @@
 <Adjective nr="7" value="false"/>
 </Cluster>
 </FCluster>
-<CCluster>
+<CCluster aid="XCMPLX_0" nr="1">
 <ArgTypes/>
 <Cluster/>
 <Typ kind="M" nr="2">
@@ -213,7 +213,7 @@
 <Adjective nr="15"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="XCMPLX_0" nr="2">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="14"/>
@@ -225,7 +225,7 @@
 <Adjective nr="15"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="XCMPLX_0" nr="3">
 <ArgTypes/>
 <Cluster/>
 <Typ kind="M" nr="2">

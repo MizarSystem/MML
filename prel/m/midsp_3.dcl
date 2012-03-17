@@ -28,7 +28,7 @@
 <ArticleID name="MIDSP_2"/>
 <ArticleID name="MIDSP_3"/>
 </Signature>
-<RCluster>
+<RCluster aid="MIDSP_3" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -45,7 +45,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="MIDSP_3" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -60,7 +60,7 @@
 <Adjective nr="28" value="false"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="MIDSP_3" nr="3">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -79,7 +79,7 @@
 <Adjective nr="73"/>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="MIDSP_3" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -111,14 +111,14 @@
 <Cluster>
 <Adjective nr="4"/>
 <Adjective nr="8">
-<Func kind="K" nr="125">
+<Func kind="K" nr="126">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <LocusVar nr="2"/>
 </Adjective>
 </Cluster>
-<Func kind="K" nr="125">
+<Func kind="K" nr="126">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>

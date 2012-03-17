@@ -34,7 +34,7 @@
 <ArticleID name="MATRIX_4"/>
 <ArticleID name="MATRIX_6"/>
 </Signature>
-<FCluster>
+<FCluster aid="MATRIX_6" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>

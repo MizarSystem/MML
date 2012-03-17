@@ -13,11 +13,11 @@
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XCMPLX_0"/>
 <ArticleID name="XREAL_0"/>
+<ArticleID name="MCART_1"/>
+<ArticleID name="FUNCT_2"/>
 <ArticleID name="XXREAL_0"/>
 <ArticleID name="XXREAL_1"/>
 <ArticleID name="RCOMP_1"/>
-<ArticleID name="MCART_1"/>
-<ArticleID name="FUNCT_2"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
@@ -41,7 +41,7 @@
 <ArticleID name="SEQ_4"/>
 <ArticleID name="INTEGRA1"/>
 </Signature>
-<RCluster>
+<RCluster aid="INTEGRA1" nr="1">
 <ArgTypes/>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -56,7 +56,7 @@
 <Adjective nr="126"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="INTEGRA1" nr="2">
 <ArgTypes/>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -71,12 +71,12 @@
 <Adjective nr="126"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="INTEGRA1" nr="3">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster>
 <Adjective nr="7" value="false"/>
-<Adjective nr="20"/>
+<Adjective nr="23"/>
 </Cluster>
 <Func kind="K" nr="23">
 <Func kind="K" nr="53"/>
@@ -91,12 +91,12 @@
 <Adjective nr="7" value="false"/>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="INTEGRA1" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster>
 <Adjective nr="7" value="false"/>
-<Adjective nr="20"/>
+<Adjective nr="23"/>
 </Cluster>
 <Func kind="K" nr="23">
 <Func kind="K" nr="53"/>
@@ -110,7 +110,7 @@
 <Adjective nr="7" value="false"/>
 </Cluster>
 </FCluster>
-<CCluster>
+<CCluster aid="INTEGRA1" nr="1">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="126"/>
@@ -123,10 +123,10 @@
 </Typ>
 <Cluster>
 <Adjective nr="7" value="false"/>
-<Adjective nr="20"/>
+<Adjective nr="23"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="INTEGRA1" nr="2">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="126"/>

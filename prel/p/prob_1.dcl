@@ -21,7 +21,7 @@
 <ArticleID name="CARD_3"/>
 <ArticleID name="PROB_1"/>
 </Signature>
-<RCluster>
+<RCluster aid="PROB_1" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -43,7 +43,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="PROB_1" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -67,7 +67,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="PROB_1" nr="3">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -98,7 +98,7 @@
 <Adjective nr="1"/>
 </Cluster>
 </RCluster>
-<CCluster>
+<CCluster aid="PROB_1" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>

@@ -22,7 +22,7 @@
 <ArticleID name="METRIC_1"/>
 <ArticleID name="TBSP_1"/>
 </Signature>
-<RCluster>
+<RCluster aid="TAXONOM1" nr="1">
 <ArgTypes/>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -34,7 +34,7 @@
 <Adjective nr="22"/>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="TAXONOM1" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>

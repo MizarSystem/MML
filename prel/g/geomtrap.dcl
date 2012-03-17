@@ -24,7 +24,7 @@
 <ArticleID name="DIRAF"/>
 <ArticleID name="GEOMTRAP"/>
 </Signature>
-<RCluster>
+<RCluster aid="GEOMTRAP" nr="1">
 <ArgTypes/>
 <Typ kind="G" nr="14">
 <Cluster/>
@@ -33,7 +33,7 @@
 <Adjective nr="83"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="GEOMTRAP" nr="2">
 <ArgTypes/>
 <Typ kind="G" nr="14">
 <Cluster/>
@@ -43,7 +43,7 @@
 <Adjective nr="83"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="GEOMTRAP" nr="3">
 <ArgTypes/>
 <Typ kind="G" nr="14">
 <Cluster/>
@@ -54,7 +54,7 @@
 <Adjective nr="84"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="GEOMTRAP" nr="4">
 <ArgTypes/>
 <Typ kind="G" nr="13">
 <Cluster/>
@@ -65,7 +65,7 @@
 <Adjective nr="85"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="GEOMTRAP" nr="5">
 <ArgTypes/>
 <Typ kind="G" nr="13">
 <Cluster/>
@@ -76,7 +76,7 @@
 <Adjective nr="86"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="GEOMTRAP" nr="6">
 <ArgTypes/>
 <Typ kind="G" nr="13">
 <Cluster/>
@@ -88,7 +88,7 @@
 <Adjective nr="87"/>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="GEOMTRAP" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="12">
 <Cluster>
@@ -123,7 +123,7 @@
 <Adjective nr="83"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="GEOMTRAP" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="14">
 <Cluster>
@@ -139,7 +139,7 @@
 <Adjective nr="78"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="GEOMTRAP" nr="3">
 <ArgTypes>
 <Typ kind="G" nr="14">
 <Cluster>
@@ -156,7 +156,7 @@
 <Adjective nr="85"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="GEOMTRAP" nr="4">
 <ArgTypes>
 <Typ kind="G" nr="13">
 <Cluster>
@@ -173,7 +173,7 @@
 <Adjective nr="86"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="GEOMTRAP" nr="5">
 <ArgTypes>
 <Typ kind="G" nr="14">
 <Cluster>

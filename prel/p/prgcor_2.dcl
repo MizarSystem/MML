@@ -9,7 +9,7 @@
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="FINSET_1"/>
 </Signature>
-<RCluster>
+<RCluster aid="PRGCOR_2" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>

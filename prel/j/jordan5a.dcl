@@ -44,7 +44,7 @@
 <ArticleID name="FUNCT_3"/>
 <ArticleID name="BORSUK_2"/>
 </Signature>
-<RCluster>
+<RCluster aid="JORDAN5A" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -64,7 +64,7 @@
 <Adjective nr="41"/>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="JORDAN5A" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>

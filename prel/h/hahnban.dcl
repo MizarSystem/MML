@@ -26,7 +26,7 @@
 <ArticleID name="RLVECT_1"/>
 <ArticleID name="HAHNBAN"/>
 </Signature>
-<RCluster>
+<RCluster aid="HAHNBAN" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -45,7 +45,7 @@
 <Adjective nr="16"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="HAHNBAN" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="11">
 <Cluster>
@@ -92,7 +92,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<CCluster>
+<CCluster aid="HAHNBAN" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="11">
 <Cluster>
@@ -137,7 +137,7 @@
 </Adjective>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="HAHNBAN" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="11">
 <Cluster>
@@ -182,7 +182,7 @@
 </Adjective>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="HAHNBAN" nr="3">
 <ArgTypes>
 <Typ kind="G" nr="11">
 <Cluster>
@@ -227,7 +227,7 @@
 </Adjective>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="HAHNBAN" nr="4">
 <ArgTypes>
 <Typ kind="G" nr="11">
 <Cluster>
@@ -272,7 +272,7 @@
 </Adjective>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="HAHNBAN" nr="5">
 <ArgTypes>
 <Typ kind="G" nr="11">
 <Cluster>
@@ -317,7 +317,7 @@
 </Adjective>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="HAHNBAN" nr="6">
 <ArgTypes>
 <Typ kind="G" nr="11">
 <Cluster>

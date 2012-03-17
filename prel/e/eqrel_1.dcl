@@ -14,15 +14,21 @@
 <ArticleID name="PARTFUN1"/>
 <ArticleID name="EQREL_1"/>
 </Signature>
-<RCluster>
+<RCluster aid="EQREL_1" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Typ kind="M" nr="7">
+<Typ kind="M" nr="2">
 <Cluster/>
+<Func kind="K" nr="10">
+<Func kind="K" nr="10">
+<Func kind="K" nr="10">
 <LocusVar nr="1"/>
+</Func>
+</Func>
+</Func>
 </Typ>
 <Cluster>
 <Adjective nr="19">
@@ -30,7 +36,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="EQREL_1" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -38,7 +44,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Typ kind="M" nr="6">
+<Typ kind="M" nr="7">
 <Cluster/>
 <LocusVar nr="1"/>
 </Typ>
@@ -47,15 +53,21 @@
 <Adjective nr="2"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="EQREL_1" nr="3">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Typ kind="M" nr="7">
+<Typ kind="M" nr="2">
 <Cluster/>
+<Func kind="K" nr="10">
+<Func kind="K" nr="10">
+<Func kind="K" nr="10">
 <LocusVar nr="1"/>
+</Func>
+</Func>
+</Func>
 </Typ>
 <Cluster>
 <Adjective nr="1" value="false"/>
@@ -64,7 +76,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="EQREL_1" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -81,7 +93,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="EQREL_1" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -99,14 +111,14 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="EQREL_1" nr="3">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
 <Adjective nr="1" value="false"/>
 </Cluster>
 </Typ>
-<Typ kind="M" nr="4">
+<Typ kind="M" nr="5">
 <Cluster>
 <Adjective nr="9"/>
 <Adjective nr="14"/>
@@ -127,14 +139,14 @@
 <Adjective nr="1" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="EQREL_1" nr="4">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
 <Adjective nr="1" value="false"/>
 </Cluster>
 </Typ>
-<Typ kind="M" nr="4">
+<Typ kind="M" nr="5">
 <Cluster>
 <Adjective nr="9"/>
 <Adjective nr="14"/>
@@ -155,7 +167,7 @@
 <Adjective nr="2"/>
 </Cluster>
 </FCluster>
-<CCluster>
+<CCluster aid="EQREL_1" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -164,7 +176,7 @@
 </Typ>
 </ArgTypes>
 <Cluster/>
-<Typ kind="M" nr="6">
+<Typ kind="M" nr="7">
 <Cluster/>
 <LocusVar nr="1"/>
 </Typ>
@@ -172,14 +184,14 @@
 <Adjective nr="1" value="false"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="EQREL_1" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
 </Typ>
 </ArgTypes>
 <Cluster/>
-<Typ kind="M" nr="6">
+<Typ kind="M" nr="7">
 <Cluster/>
 <LocusVar nr="1"/>
 </Typ>

@@ -988,3 +988,91 @@ theorem :: AMISTD_2:63
 theorem :: AMISTD_2:64
   for T being InsType of Trivial-AMI(IL,N) holds AddressParts T = {0};
 
+begin :: Addenda
+
+:: from SCMRING4, 2008.03.13, A.T.
+
+reserve i, j, k for natural number,
+  n for Element of NAT,
+  IL for non empty set,
+  N for with_non-empty_elements set,
+  S for standard (IC-Ins-separated definite
+  (non empty stored-program AMI-Struct over NAT,N)),
+  l for Instruction-Location of S,
+  f for FinPartState of S;
+
+theorem :: AMISTD_2:65
+  l in dom f implies Shift(f,k).(l + k) = f.l;
+
+theorem :: AMISTD_2:66
+  dom Shift(f,k) = { il+k where il is Instruction-Location of S: il in dom f};
+
+theorem :: AMISTD_2:67
+  for S being Exec-preserving IC-Ins-separated definite realistic
+  steady-programmed (non empty stored-program AMI-Struct over NAT,N),
+  s being State of S, i being Instruction of S,
+  p being programmed FinPartState of S
+  holds Exec (i, s +* p) = Exec (i,s) +* p;
+
+definition
+  let N be with_non-empty_elements set,
+  S be regular standard (IC-Ins-separated definite
+  (standard-ins non empty stored-program AMI-Struct over NAT,N)),
+  k be natural number, p be FinPartState of S;
+  func Relocated (p,k) -> FinPartState of S equals
+:: AMISTD_2:def 23
+  Start-At ((IC p)+k) +* IncAddr(Shift(ProgramPart(p),k),k) +* DataPart p;
+end;
+
+reserve S for regular standard (IC-Ins-separated definite
+  (standard-ins non empty stored-program AMI-Struct over NAT,N)),
+  g for FinPartState of S,
+  il for Instruction-Location of S;
+
+theorem :: AMISTD_2:68
+  DataPart(Relocated(g,k)) = DataPart(g);
+
+theorem :: AMISTD_2:69
+  S is realistic implies
+  ProgramPart(Relocated(g,k)) = IncAddr(Shift(ProgramPart(g),k),k);
+
+theorem :: AMISTD_2:70
+  S is realistic implies dom ProgramPart(Relocated(g,k))
+  = { il.(S,j+k) where j is Element of NAT : il.(S,j) in dom ProgramPart(g) };
+
+theorem :: AMISTD_2:71
+  S is realistic implies (il in dom g iff il+k in dom Relocated(g,k));
+
+theorem :: AMISTD_2:72
+  IC S in dom Relocated (g,k);
+
+theorem :: AMISTD_2:73
+  S is realistic implies IC Relocated (g,k) = (IC g) + k;
+
+theorem :: AMISTD_2:74
+  for p being programmed FinPartState of S,
+  l being Element of NAT st l in dom p holds
+  IncAddr(p,k).l = IncAddr(pi(p,l),k);
+
+registration let N be set, S be AMI-Struct over NAT,N;
+ cluster -> natural Instruction-Location of S;
+end;
+
+theorem :: AMISTD_2:75
+  for p being programmed FinPartState of S holds
+  Shift(IncAddr(p,i),i) = IncAddr(Shift(p,i),i);
+
+theorem :: AMISTD_2:76
+  S is realistic implies
+   for I being Instruction of S holds
+  il in dom ProgramPart g & I = g.il implies
+  IncAddr(I, k) = (Relocated (g, k)).(il + k);
+
+theorem :: AMISTD_2:77
+  S is realistic implies Start-At (IC g + k) c= Relocated (g,k);
+
+theorem :: AMISTD_2:78
+  S is realistic implies
+  for q being data-only FinPartState of S st IC S in dom g holds
+  Relocated((g +* q), k) = Relocated (g,k) +* q;
+

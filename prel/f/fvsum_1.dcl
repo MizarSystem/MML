@@ -25,7 +25,7 @@
 <ArticleID name="GROUP_1"/>
 <ArticleID name="RLVECT_1"/>
 </Signature>
-<FCluster>
+<FCluster aid="FVSUM_1" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
@@ -59,7 +59,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="FVSUM_1" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
@@ -93,7 +93,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="FVSUM_1" nr="3">
 <ArgTypes>
 <Typ kind="G" nr="7">
 <Cluster>
@@ -127,7 +127,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<CCluster>
+<CCluster aid="FVSUM_1" nr="1">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="29" value="false"/>

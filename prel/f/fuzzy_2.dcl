@@ -16,7 +16,7 @@
 <ArticleID name="VALUED_0"/>
 <ArticleID name="FUZZY_1"/>
 </Signature>
-<CCluster>
+<CCluster aid="FUZZY_2" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>

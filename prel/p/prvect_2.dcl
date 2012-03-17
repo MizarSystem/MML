@@ -43,7 +43,7 @@
 <ArticleID name="EUCLID"/>
 <ArticleID name="PRVECT_2"/>
 </Signature>
-<RCluster>
+<RCluster aid="PRVECT_2" nr="1">
 <ArgTypes/>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -57,7 +57,7 @@
 <Adjective nr="134"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="PRVECT_2" nr="2">
 <ArgTypes/>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -71,7 +71,7 @@
 <Adjective nr="135"/>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="PRVECT_2" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -96,7 +96,7 @@
 <Adjective nr="105"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="PRVECT_2" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -122,7 +122,7 @@
 <Adjective nr="110"/>
 </Cluster>
 </FCluster>
-<CCluster>
+<CCluster aid="PRVECT_2" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -147,7 +147,7 @@
 <Adjective nr="23"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="PRVECT_2" nr="2">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="1"/>

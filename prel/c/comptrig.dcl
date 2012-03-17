@@ -26,7 +26,7 @@
 <ArticleID name="NEWTON"/>
 <ArticleID name="SIN_COS"/>
 </Signature>
-<FCluster>
+<FCluster aid="COMPTRIG" nr="1">
 <ArgTypes/>
 <Func kind="K" nr="202"/>
 <Cluster>

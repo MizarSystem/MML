@@ -28,7 +28,7 @@
 <ArticleID name="MATRIXR1"/>
 <ArticleID name="MATRIXR2"/>
 </Signature>
-<FCluster>
+<FCluster aid="MATRIXR2" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>

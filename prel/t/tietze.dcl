@@ -32,7 +32,7 @@
 <ArticleID name="BORSUK_1"/>
 <ArticleID name="SEQ_2"/>
 </Signature>
-<RCluster>
+<RCluster aid="TIETZE" nr="1">
 <ArgTypes/>
 <Typ kind="M" nr="5">
 <Cluster/>
@@ -59,7 +59,7 @@
 <Adjective nr="74"/>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="TIETZE" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster/>
@@ -106,7 +106,7 @@
 <Adjective nr="7"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="TIETZE" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>

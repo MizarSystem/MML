@@ -25,7 +25,7 @@
 <ArticleID name="PARTFUN1"/>
 <ArticleID name="ASYMPT_0"/>
 </Signature>
-<RCluster>
+<RCluster aid="ASYMPT_0" nr="1">
 <ArgTypes/>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -38,7 +38,7 @@
 <Adjective nr="28"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="ASYMPT_0" nr="2">
 <ArgTypes/>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -51,7 +51,7 @@
 <Adjective nr="29"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="ASYMPT_0" nr="3">
 <ArgTypes/>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -64,7 +64,7 @@
 <Adjective nr="39"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="ASYMPT_0" nr="4">
 <ArgTypes/>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -77,7 +77,7 @@
 <Adjective nr="29" value="false"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="ASYMPT_0" nr="5">
 <ArgTypes/>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -90,7 +90,7 @@
 <Adjective nr="28" value="false"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="ASYMPT_0" nr="6">
 <ArgTypes/>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -103,7 +103,7 @@
 <Adjective nr="39" value="false"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="ASYMPT_0" nr="7">
 <ArgTypes/>
 <Typ kind="M" nr="4">
 <Cluster/>
@@ -132,7 +132,7 @@
 <Adjective nr="44"/>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="ASYMPT_0" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="4">
 <Cluster>
@@ -171,7 +171,7 @@
 <Adjective nr="40"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="ASYMPT_0" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="4">
 <Cluster>
@@ -210,7 +210,7 @@
 <Adjective nr="42"/>
 </Cluster>
 </FCluster>
-<CCluster>
+<CCluster aid="ASYMPT_0" nr="1">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="4"/>
@@ -234,7 +234,7 @@
 <Adjective nr="42"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="ASYMPT_0" nr="2">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="4"/>
@@ -259,7 +259,7 @@
 <Adjective nr="43"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="ASYMPT_0" nr="3">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="4"/>

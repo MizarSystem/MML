@@ -20,7 +20,7 @@
 <ArticleID name="FINSEQ_2"/>
 <ArticleID name="PBOOLE"/>
 </Signature>
-<RCluster>
+<RCluster aid="PBOOLE" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -36,7 +36,7 @@
 <Adjective nr="5"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="PBOOLE" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -52,7 +52,7 @@
 <Adjective nr="5"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="PBOOLE" nr="3">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -68,7 +68,7 @@
 <Adjective nr="11"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="PBOOLE" nr="4">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -91,7 +91,7 @@
 <Adjective nr="5"/>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="PBOOLE" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -111,7 +111,7 @@
 <Adjective nr="3"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="PBOOLE" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -137,7 +137,7 @@
 <Adjective nr="1" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="PBOOLE" nr="3">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -150,7 +150,7 @@
 <Adjective nr="4"/>
 </Cluster>
 </FCluster>
-<CCluster>
+<CCluster aid="PBOOLE" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -169,7 +169,7 @@
 <Adjective nr="4" value="false"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="PBOOLE" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -188,7 +188,7 @@
 <Adjective nr="3" value="false"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="PBOOLE" nr="3">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>

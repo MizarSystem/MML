@@ -9,12 +9,12 @@ environ
  vocabularies ARYTM_1, INT_1, RELAT_1, SCM_1, RLVECT_1, AMI_3, GRAPHSP,
       FUNCT_1, BOOLE, FINSET_1, ORDERS_1, FINSEQ_1, CARD_1, FUNCT_2, GRAPH_1,
       FINSEQ_4, GRAPH_5, GRAPH_4, MSAFREE2, FUNCT_4, ARYTM;
- notations XCMPLX_0, XXREAL_0, REAL_1, NAT_1, INT_1, TARSKI, XBOOLE_0,
+ notations XCMPLX_0, XXREAL_0, REAL_1, INT_1, TARSKI, XBOOLE_0,
       SUBSET_1, RELAT_1, FUNCT_1, FINSEQ_1, SEQ_1, FINSEQ_2, FINSEQ_4, CARD_1,
       FINSET_1, GRAPH_1, PARTFUN1, FUNCT_2, CQC_SIM1, GRAPH_4, GRAPH_3,
-      GRAPH_5, BINARITH, DOMAIN_1, RVSUM_1, NUMBERS, FUNCT_7;
+      GRAPH_5, BINARITH, DOMAIN_1, RVSUM_1, NUMBERS, FUNCT_7, NAT_1;
  constructors PARTFUN1, DOMAIN_1, XXREAL_0, REAL_1, NAT_1, FINSEQ_4, FINSOP_1,
-      BINARITH, FUNCT_7, CQC_SIM1, GOBOARD1, GRAPH_4, GRAPH_5, SEQ_1;
+      BINARITH, FUNCT_7, CQC_SIM1, GOBOARD1, GRAPH_4, GRAPH_5, SEQ_1, BINOP_2;
  registrations XBOOLE_0, ORDINAL1, RELSET_1, FUNCT_2, FINSET_1, FRAENKEL,
       NUMBERS, XXREAL_0, XREAL_0, NAT_1, INT_1, MEMBERED, FINSEQ_1, GRAPH_1,
       GRAPH_4, GRAPH_5, VALUED_0;
@@ -24,7 +24,7 @@ environ
       TARSKI, REAL_1, FINSEQ_3, XBOOLE_0, XBOOLE_1, SUBSET_1, GRAPH_1,
       FINSEQ_4, CARD_1, CARD_2, INT_1, GRAPH_5, GRAPH_4, FINSEQ_2, ENUMSET1,
       BINARITH, FUNCT_7, XREAL_1, XXREAL_0, FINSOP_1, ORDINAL1, POLYNOM1;
- schemes FUNCT_1, NAT_1, GRAPH_5;
+ schemes NAT_1, GRAPH_5, CLASSES1;
 
 begin  :: Preliminaries
 
@@ -1007,15 +1007,6 @@ definition
 A1: f = ff & dom ff = X & rng ff c= X by FUNCT_2:def 2;
     defpred P[set,set] means for h being Element of X st $1=h holds
     $2=(repeat f).LifeSpan(f,h,n).h;
-A2: now
-      let xx,y1,y2 be set;
-      assume
-A3:   xx in dom f & P[xx,y1] & P[xx,y2];
-      then reconsider xx as Element of X by A1;
-      y1=(repeat f).LifeSpan(f,xx,n).xx &
-      y2=(repeat f).LifeSpan(f,xx,n).xx by A3;
-      hence y1=y2;
-    end;
 A4: now
       let xx be set;
       assume xx in dom f;
@@ -1030,7 +1021,7 @@ A4: now
     end;
     consider f' being Function such that
 A5: dom f'=dom f & for xx being set st xx in dom f holds P[xx, f'.xx]
-    from FUNCT_1:sch 2(A2,A4);
+    from CLASSES1:sch 1(A4);
     rng f' c= X
     proof
       let y;
@@ -1356,14 +1347,6 @@ definition
     set X=REAL*, mi=n*n+3*n+1;
     defpred P[set,set] means for f be Element of REAL* st $1=f holds
     $2= (f,mi):=(Argmin(OuterVx(f,n),f,n),-1);
-A1: now
-      let xx,y1,y2 be set;
-      assume
-A2:   xx in X & P[xx,y1] & P[xx,y2];
-      then reconsider h=xx as Element of REAL*;
-      thus y1= (h,mi):=(Argmin(OuterVx(h,n),h,n),-1) by A2
-        .=y2 by A2;
-    end;
 A3: now
       let xx be set;
       assume xx in X;
@@ -1373,7 +1356,7 @@ A3: now
       thus P[xx,y];
     end;
     consider F being Function such that
-A4: dom F=X & for x st x in X holds P[x,F.x] from FUNCT_1:sch 2(A1,A3);
+A4: dom F=X & for x st x in X holds P[x,F.x] from CLASSES1:sch 1(A3);
     rng F c= X
     proof
       let y;
@@ -1545,50 +1528,6 @@ A1: X=Seg len f by FINSEQ_1:def 3;
     (not P1[k] implies $2=f.k)) &
     (2*n <k & k <=3*n implies (P2[k] implies $2=newpathcost(f,n,k-'2*n))&
     (not P2[k] implies $2=f.k)) & (k<=n or k > 3*n implies $2=f.k);
-A2: now
-      let xx,y1,y2 be set;
-      assume
-A3:   xx in X & P[xx,y1] & P[xx,y2];
-      then reconsider k=xx as Element of NAT;
-      per cases;
-      suppose
-A4:     n<k & k <= 2*n;
-        hereby
-          per cases;
-          suppose
-A5:         P1[k];
-            hence y1 = f/.(n*n+3*n+1) by A3,A4
-              .=y2 by A3,A4,A5;
-          end;
-          suppose
-A6:         not P1[k];
-            hence y1 = f.k by A3,A4
-              .=y2 by A3,A4,A6;
-          end;
-        end;
-      end;
-      suppose
-A7:     2*n<k & k <= 3*n;
-        hereby
-          per cases;
-          suppose
-A8:         P2[k];
-            hence y1 = newpathcost(f,n,k-'2*n) by A3,A7
-              .=y2 by A3,A7,A8;
-          end;
-          suppose
-A9:         not P2[k];
-            hence y1 = f.k by A3,A7
-              .=y2 by A3,A7,A9;
-          end;
-        end;
-      end;
-      suppose
-A10:    k <=n or k > 3*n;
-        hence y1=f.k by A3
-          .=y2 by A3,A10;
-      end;
-    end;
 A11: now
       let xx be set;
       assume xx in X;
@@ -1638,7 +1577,7 @@ A18:    k <=n or k > 3*n;
       end;
     end;
     consider F being Function such that
-A19: dom F=X & for x st x in X holds P[x,F.x] from FUNCT_1:sch 2(A2,A11);
+A19: dom F=X & for x st x in X holds P[x,F.x] from CLASSES1:sch 1(A11);
 A20: rng F c= REAL
     proof
       let y1 be set;
@@ -1772,14 +1711,6 @@ definition
     set X=REAL*;
     defpred P[set,set] means for f be Element of REAL* st $1=f holds
     $2=Relax(f,n);
-A1: now
-      let xx,y1,y2 be set;
-      assume
-A2:   xx in X & P[xx,y1] & P[xx,y2];
-      then reconsider h=xx as Element of REAL*;
-      thus y1 = Relax(h,n) by A2
-        .=y2 by A2;
-    end;
 A3: now
       let xx be set;
       assume xx in X;
@@ -1791,7 +1722,7 @@ A3: now
       end;
     end;
     consider F being Function such that
-A4: dom F=X & for x st x in X holds P[x,F.x] from FUNCT_1:sch 2(A1,A3);
+A4: dom F=X & for x st x in X holds P[x,F.x] from CLASSES1:sch 1(A3);
     now
       let y1 be set;
       assume y1 in rng F;

@@ -16,7 +16,7 @@
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="ALGSEQ_1"/>
 </Signature>
-<RCluster>
+<RCluster aid="ALGSEQ_1" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="2">
 <Cluster>

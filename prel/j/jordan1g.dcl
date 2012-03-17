@@ -13,13 +13,13 @@
 <ArticleID name="XCMPLX_0"/>
 <ArticleID name="XREAL_0"/>
 <ArticleID name="RELSET_1"/>
+<ArticleID name="MCART_1"/>
+<ArticleID name="FUNCT_2"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="INT_1"/>
 <ArticleID name="FINSEQ_2"/>
-<ArticleID name="MCART_1"/>
-<ArticleID name="FUNCT_2"/>
 <ArticleID name="FINSEQ_5"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="PRE_TOPC"/>
@@ -46,7 +46,7 @@
 <ArticleID name="GOBOARD5"/>
 <ArticleID name="JORDAN1E"/>
 </Signature>
-<RCluster>
+<RCluster aid="JORDAN1G" nr="1">
 <ArgTypes/>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -54,18 +54,18 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4"/>
-<Adjective nr="17"/>
-<Adjective nr="21"/>
+<Adjective nr="20"/>
+<Adjective nr="24"/>
 <Adjective nr="86"/>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="JORDAN1G" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4"/>
-<Adjective nr="21"/>
+<Adjective nr="24"/>
 <Adjective nr="86" value="false"/>
 </Cluster>
 </Typ>
@@ -76,11 +76,11 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4"/>
-<Adjective nr="21"/>
+<Adjective nr="24"/>
 <Adjective nr="86" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="JORDAN1G" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster>
@@ -118,7 +118,7 @@
 <Adjective nr="130"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="JORDAN1G" nr="3">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster>

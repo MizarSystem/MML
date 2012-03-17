@@ -15,7 +15,7 @@
 <ArticleID name="FUNCOP_1"/>
 <ArticleID name="ORDINAL2"/>
 </Signature>
-<RCluster>
+<RCluster aid="ORDINAL2" nr="1">
 <ArgTypes/>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -27,7 +27,7 @@
 <Adjective nr="11"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="ORDINAL2" nr="2">
 <ArgTypes/>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -39,7 +39,7 @@
 <Adjective nr="19"/>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="ORDINAL2" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -64,7 +64,7 @@
 <Adjective nr="19"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="ORDINAL2" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -88,7 +88,7 @@
 <Adjective nr="10"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="ORDINAL2" nr="3">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -107,7 +107,7 @@
 <Adjective nr="19"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="ORDINAL2" nr="4">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -129,7 +129,7 @@
 <Adjective nr="14"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="ORDINAL2" nr="5">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -158,7 +158,7 @@
 <Adjective nr="14"/>
 </Cluster>
 </FCluster>
-<CCluster>
+<CCluster aid="ORDINAL2" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -175,7 +175,7 @@
 <Adjective nr="19"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="ORDINAL2" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>

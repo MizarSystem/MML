@@ -8,6 +8,7 @@
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="RELAT_1"/>
 <ArticleID name="FUNCT_1"/>
+<ArticleID name="MCART_1"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XXREAL_0"/>
@@ -15,30 +16,30 @@
 <ArticleID name="FIB_NUM"/>
 <ArticleID name="FIB_NUM3"/>
 </Signature>
-<FCluster>
+<FCluster aid="FIB_NUM3" nr="1">
 <ArgTypes/>
-<Func kind="K" nr="54"/>
+<Func kind="K" nr="74"/>
 <Cluster>
 <Adjective nr="16"/>
 <Adjective nr="18"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="FIB_NUM3" nr="2">
 <ArgTypes/>
-<Func kind="K" nr="55"/>
+<Func kind="K" nr="75"/>
 <Cluster>
 <Adjective nr="17"/>
 <Adjective nr="18"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="FIB_NUM3" nr="3">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="46"/>
+<Func kind="K" nr="66"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="56">
+<Func kind="K" nr="76">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>

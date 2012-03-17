@@ -25,7 +25,7 @@
 <ArticleID name="GROUP_3"/>
 <ArticleID name="GROUP_5"/>
 </Signature>
-<FCluster>
+<FCluster aid="GR_CY_2" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="7">
 <Cluster>

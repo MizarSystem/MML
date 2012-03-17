@@ -49,7 +49,7 @@
 <ArticleID name="GLIB_003"/>
 <ArticleID name="GLIB_004"/>
 </Signature>
-<RCluster>
+<RCluster aid="GLIB_004" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="22">
 <Cluster>
@@ -83,7 +83,7 @@
 <Adjective nr="179"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="GLIB_004" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="22">
 <Cluster>
@@ -127,7 +127,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="GLIB_004" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="22">
 <Cluster>
@@ -152,7 +152,7 @@
 <Adjective nr="183"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="GLIB_004" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="22">
 <Cluster>
@@ -177,7 +177,7 @@
 <Adjective nr="183"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="GLIB_004" nr="3">
 <ArgTypes>
 <Typ kind="M" nr="13">
 <Cluster>
@@ -215,7 +215,7 @@
 </Cluster>
 </Typ>
 </FCluster>
-<FCluster>
+<FCluster aid="GLIB_004" nr="4">
 <ArgTypes>
 <Typ kind="M" nr="22">
 <Cluster>
@@ -245,7 +245,7 @@
 <Adjective nr="191"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="GLIB_004" nr="5">
 <ArgTypes>
 <Typ kind="M" nr="22">
 <Cluster>
@@ -274,7 +274,7 @@
 <Adjective nr="191"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="GLIB_004" nr="6">
 <ArgTypes>
 <Typ kind="M" nr="22">
 <Cluster>
@@ -304,7 +304,7 @@
 <Adjective nr="183"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="GLIB_004" nr="7">
 <ArgTypes>
 <Typ kind="M" nr="13">
 <Cluster>
@@ -342,7 +342,7 @@
 </Cluster>
 </Typ>
 </FCluster>
-<FCluster>
+<FCluster aid="GLIB_004" nr="8">
 <ArgTypes>
 <Typ kind="M" nr="22">
 <Cluster>
@@ -372,7 +372,7 @@
 <Adjective nr="191"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="GLIB_004" nr="9">
 <ArgTypes>
 <Typ kind="M" nr="22">
 <Cluster>
@@ -390,7 +390,7 @@
 <Adjective nr="173"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="GLIB_004" nr="10">
 <ArgTypes>
 <Typ kind="M" nr="22">
 <Cluster>
@@ -408,7 +408,7 @@
 <Adjective nr="24"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="GLIB_004" nr="11">
 <ArgTypes>
 <Typ kind="M" nr="22">
 <Cluster>
@@ -431,7 +431,7 @@
 <Adjective nr="191"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="GLIB_004" nr="12">
 <ArgTypes>
 <Typ kind="M" nr="22">
 <Cluster>
@@ -454,7 +454,7 @@
 <Adjective nr="183"/>
 </Cluster>
 </FCluster>
-<CCluster>
+<CCluster aid="GLIB_004" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="22">
 <Cluster>
@@ -497,7 +497,7 @@
 <Adjective nr="155"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="GLIB_004" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="22">
 <Cluster>

@@ -18,7 +18,7 @@
 <ArticleID name="LATTICES"/>
 <ArticleID name="NAT_LAT"/>
 </Signature>
-<RCluster>
+<RCluster aid="NAT_LAT" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="7">
 <Cluster>
@@ -43,7 +43,7 @@
 <Adjective nr="37"/>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="NAT_LAT" nr="1">
 <ArgTypes/>
 <Func kind="K" nr="99"/>
 <Cluster>
@@ -52,7 +52,7 @@
 <Adjective nr="37"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="NAT_LAT" nr="2">
 <ArgTypes/>
 <Func kind="K" nr="99"/>
 <Cluster>
@@ -60,7 +60,7 @@
 <Adjective nr="30"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="NAT_LAT" nr="3">
 <ArgTypes/>
 <Func kind="K" nr="99"/>
 <Cluster>
@@ -69,14 +69,14 @@
 <Adjective nr="40"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="NAT_LAT" nr="4">
 <ArgTypes/>
 <Func kind="K" nr="102"/>
 <Cluster>
 <Adjective nr="7" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="NAT_LAT" nr="5">
 <ArgTypes/>
 <Func kind="K" nr="107"/>
 <Cluster>
@@ -84,7 +84,7 @@
 <Adjective nr="30"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="NAT_LAT" nr="6">
 <ArgTypes/>
 <Func kind="K" nr="107"/>
 <Cluster>
@@ -97,7 +97,7 @@
 <Adjective nr="36"/>
 </Cluster>
 </FCluster>
-<CCluster>
+<CCluster aid="NAT_LAT" nr="1">
 <ArgTypes/>
 <Cluster/>
 <Typ kind="M" nr="2">
@@ -110,7 +110,7 @@
 <Adjective nr="17"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="NAT_LAT" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -128,7 +128,7 @@
 <Adjective nr="18"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="NAT_LAT" nr="3">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -146,7 +146,7 @@
 <Adjective nr="18"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="NAT_LAT" nr="4">
 <ArgTypes/>
 <Cluster/>
 <Typ kind="M" nr="2">
@@ -158,7 +158,7 @@
 <Adjective nr="17"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="NAT_LAT" nr="5">
 <ArgTypes/>
 <Cluster/>
 <Typ kind="M" nr="2">

@@ -8,13 +8,16 @@ environ
 
  vocabularies AMI_3, INT_1, POWER, ARYTM_1, FINSEQ_1, AMI_1, SCM_1, FUNCT_1,
       PRE_FF, GROUP_1, NAT_1, FIB_FUSC, ARYTM;
- notations XCMPLX_0, SUBSET_1, NUMBERS, INT_1, NAT_1, NEWTON, POWER, FINSEQ_1,
-      AMI_1, SCM_1, AMI_3, PRE_FF, XXREAL_0;
+ notations TARSKI, XCMPLX_0, SUBSET_1, FUNCT_1,
+      NUMBERS, INT_1, NAT_1, NEWTON, POWER, FINSEQ_1,
+      STRUCT_0, AMI_1, SCM_1, AMI_3, PRE_FF, XXREAL_0;
  constructors XXREAL_0, REAL_1, NAT_1, NEWTON, POWER, PRE_FF, SCM_1;
- registrations SETFAM_1, NUMBERS, XREAL_0, INT_1, AMI_3, XBOOLE_0, ORDINAL1;
+ registrations SETFAM_1, NUMBERS, XREAL_0, INT_1, AMI_3, XBOOLE_0, ORDINAL1,
+  AMI_1, CARD_3;
  requirements REAL, NUMERALS, SUBSET, ARITHM, BOOLE;
+ definitions AMI_1;
  theorems REAL_1, NAT_1, INT_1, POWER, NEWTON, SCM_1, PRE_FF, AMI_3, AMI_1,
-      XREAL_1, XXREAL_0, ORDINAL1;
+      XREAL_1, XXREAL_0, ORDINAL1, AMI_2;
  schemes NAT_1;
 
 begin
@@ -97,6 +100,26 @@ definition
   <* SubFrom(dl.1, dl.0) *>^ <* dl.1 =0_goto il.1 *>^ <* dl.4 := dl.2 *>^
   <* dl.2 := dl.3 *>^ <* AddTo(dl.3, dl.4) *>^ <* goto il.3 *>;
   coherence;
+end;
+
+registration
+  cluster SCM -> stored-program;
+  coherence
+   proof
+    thus NAT c= the carrier of SCM by AMI_3:def 1;
+   end;
+end;
+
+registration
+  cluster SCM -> definite;
+  coherence
+  proof
+X: NAT c= the carrier of SCM by AMI_3:def 1;
+  let l be Instruction-Location of SCM;
+Y:l in NAT by AMI_1:def 4;
+  hence ObjectKind l
+     = the Instructions of SCM by AMI_2:11,AMI_3:def 1;
+  end;
 end;
 
 theorem
@@ -327,7 +350,7 @@ A20: IC t0 = L0 & t0.c2 = 2 & t0.n = N qua Integer div (2 |^ k) & t0.n
     then 2 to_power k <= 2 to_power log(2, N) by PRE_FF:10;
     then 2 to_power k <= N by A1,POWER:def 3;
     then
-A21: 2 |^ k <= N & (2 |^ k) > 0 by NEWTON:102,POWER:48;
+A21: 2 |^ k <= N & (2 |^ k) > 0 by NEWTON:102,POWER:46;
     then
 A22: t0.n <> 0 by A20,PRE_FF:3;
     set t1 = Computation(s,t+1);
@@ -441,7 +464,7 @@ A64: IC u = L0 & u.n = N qua Integer div (2 |^ (k+1)) &
   Fusc N = u.a*Fusc' u.n + u.b*Fusc' (u.n+1) by A61;
   2 to_power (k+1) > 2 to_power log(2, N) by A63,POWER:44;
   then 2 to_power (k+1) > N by A1,POWER:def 3;
-  then 2 |^ (k+1) > N by POWER:48;
+  then 2 |^ (k+1) > N by POWER:46;
   then
 A65: u.n = 0 by A64,NAT_1:2,PRE_FF:4;
   then

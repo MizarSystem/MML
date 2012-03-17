@@ -25,7 +25,7 @@
 <ArticleID name="CAT_1"/>
 <ArticleID name="COH_SP"/>
 </Signature>
-<RCluster>
+<RCluster aid="COH_SP" nr="1">
 <ArgTypes/>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -36,7 +36,7 @@
 <Adjective nr="58"/>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="COH_SP" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -49,7 +49,7 @@
 <Adjective nr="7" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="COH_SP" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -63,7 +63,7 @@
 <Adjective nr="11"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="COH_SP" nr="3">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -76,7 +76,7 @@
 <Adjective nr="7" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="COH_SP" nr="4">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -96,7 +96,7 @@
 <Adjective nr="4"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="COH_SP" nr="5">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -109,7 +109,7 @@
 <Adjective nr="7" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="COH_SP" nr="6">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -122,7 +122,7 @@
 <Adjective nr="7" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="COH_SP" nr="7">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -135,7 +135,7 @@
 <Adjective nr="7" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="COH_SP" nr="8">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -149,7 +149,7 @@
 <Adjective nr="11"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="COH_SP" nr="9">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -162,7 +162,7 @@
 <Adjective nr="7" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="COH_SP" nr="10">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -182,7 +182,7 @@
 <Adjective nr="4"/>
 </Cluster>
 </FCluster>
-<CCluster>
+<CCluster aid="COH_SP" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>

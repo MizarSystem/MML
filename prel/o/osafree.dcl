@@ -43,7 +43,7 @@
 <ArticleID name="OSALG_4"/>
 <ArticleID name="OSAFREE"/>
 </Signature>
-<RCluster>
+<RCluster aid="OSAFREE" nr="1">
 <ArgTypes/>
 <Typ kind="G" nr="14">
 <Cluster/>
@@ -61,7 +61,7 @@
 <Adjective nr="111"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="OSAFREE" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="14">
 <Cluster>
@@ -95,7 +95,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="OSAFREE" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="14">
 <Cluster>
@@ -121,7 +121,7 @@
 <Adjective nr="66"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="OSAFREE" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="14">
 <Cluster>
@@ -150,7 +150,7 @@
 <Adjective nr="72"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="OSAFREE" nr="3">
 <ArgTypes>
 <Typ kind="G" nr="14">
 <Cluster>
@@ -184,7 +184,7 @@
 <Adjective nr="7" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="OSAFREE" nr="4">
 <ArgTypes>
 <Typ kind="G" nr="14">
 <Cluster>
@@ -214,7 +214,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="OSAFREE" nr="5">
 <ArgTypes>
 <Typ kind="G" nr="14">
 <Cluster>
@@ -249,7 +249,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="OSAFREE" nr="6">
 <ArgTypes>
 <Typ kind="G" nr="14">
 <Cluster>
@@ -286,7 +286,7 @@
 <Adjective nr="7" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="OSAFREE" nr="7">
 <ArgTypes>
 <Typ kind="G" nr="14">
 <Cluster>
@@ -327,7 +327,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="OSAFREE" nr="8">
 <ArgTypes>
 <Typ kind="G" nr="14">
 <Cluster>
@@ -362,7 +362,7 @@
 <Adjective nr="7" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="OSAFREE" nr="9">
 <ArgTypes>
 <Typ kind="G" nr="14">
 <Cluster>
@@ -397,7 +397,7 @@
 <Adjective nr="7" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="OSAFREE" nr="10">
 <ArgTypes>
 <Typ kind="G" nr="14">
 <Cluster>

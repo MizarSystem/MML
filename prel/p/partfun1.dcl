@@ -12,7 +12,7 @@
 <ArticleID name="RELSET_1"/>
 <ArticleID name="PARTFUN1"/>
 </Signature>
-<RCluster>
+<RCluster aid="PARTFUN1" nr="1">
 <ArgTypes/>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -23,7 +23,7 @@
 <Adjective nr="15"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="PARTFUN1" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -42,7 +42,7 @@
 <Adjective nr="4"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="PARTFUN1" nr="3">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -65,7 +65,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="PARTFUN1" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -82,7 +82,7 @@
 <Adjective nr="15" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="PARTFUN1" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -98,7 +98,7 @@
 <Adjective nr="14"/>
 </Cluster>
 </FCluster>
-<CCluster>
+<CCluster aid="PARTFUN1" nr="1">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="1"/>

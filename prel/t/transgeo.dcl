@@ -23,7 +23,7 @@
 <ArticleID name="DIRAF"/>
 <ArticleID name="TRANSGEO"/>
 </Signature>
-<RCluster>
+<RCluster aid="TRANSGEO" nr="1">
 <ArgTypes/>
 <Typ kind="G" nr="12">
 <Cluster/>

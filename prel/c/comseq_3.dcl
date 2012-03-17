@@ -35,7 +35,7 @@
 <ArticleID name="SERIES_1"/>
 <ArticleID name="COMSEQ_3"/>
 </Signature>
-<RCluster>
+<RCluster aid="COMSEQ_3" nr="1">
 <ArgTypes/>
 <Typ kind="M" nr="4">
 <Cluster/>
@@ -60,7 +60,7 @@
 <Adjective nr="54"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="COMSEQ_3" nr="2">
 <ArgTypes/>
 <Typ kind="M" nr="4">
 <Cluster/>
@@ -83,7 +83,7 @@
 <Adjective nr="55"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="COMSEQ_3" nr="3">
 <ArgTypes/>
 <Typ kind="M" nr="4">
 <Cluster/>
@@ -106,7 +106,7 @@
 <Adjective nr="56"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="COMSEQ_3" nr="4">
 <ArgTypes/>
 <Typ kind="M" nr="4">
 <Cluster/>
@@ -129,7 +129,7 @@
 <Adjective nr="56"/>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="COMSEQ_3" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="4">
 <Cluster>
@@ -159,7 +159,7 @@
 <Adjective nr="29"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="COMSEQ_3" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="4">
 <Cluster>
@@ -186,7 +186,7 @@
 <Adjective nr="35"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="COMSEQ_3" nr="3">
 <ArgTypes>
 <Typ kind="M" nr="4">
 <Cluster>
@@ -213,7 +213,7 @@
 <Adjective nr="35"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="COMSEQ_3" nr="4">
 <ArgTypes>
 <Typ kind="M" nr="4">
 <Cluster>
@@ -240,7 +240,7 @@
 <Adjective nr="45"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="COMSEQ_3" nr="5">
 <ArgTypes>
 <Typ kind="M" nr="4">
 <Cluster>
@@ -278,7 +278,7 @@
 <Func kind="K" nr="85"/>
 </Typ>
 </FCluster>
-<FCluster>
+<FCluster aid="COMSEQ_3" nr="6">
 <ArgTypes>
 <Typ kind="M" nr="4">
 <Cluster>
@@ -305,7 +305,7 @@
 <Adjective nr="53"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="COMSEQ_3" nr="7">
 <ArgTypes>
 <Typ kind="M" nr="4">
 <Cluster>
@@ -332,7 +332,7 @@
 <Adjective nr="53"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="COMSEQ_3" nr="8">
 <ArgTypes>
 <Typ kind="M" nr="4">
 <Cluster>
@@ -383,7 +383,7 @@
 <Func kind="K" nr="86"/>
 </Typ>
 </FCluster>
-<FCluster>
+<FCluster aid="COMSEQ_3" nr="9">
 <ArgTypes>
 <Typ kind="M" nr="4">
 <Cluster>
@@ -434,7 +434,7 @@
 <Func kind="K" nr="86"/>
 </Typ>
 </FCluster>
-<FCluster>
+<FCluster aid="COMSEQ_3" nr="10">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -477,7 +477,7 @@
 <Func kind="K" nr="86"/>
 </Typ>
 </FCluster>
-<FCluster>
+<FCluster aid="COMSEQ_3" nr="11">
 <ArgTypes>
 <Typ kind="M" nr="4">
 <Cluster>
@@ -509,7 +509,7 @@
 <Adjective nr="55"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="COMSEQ_3" nr="12">
 <ArgTypes>
 <Typ kind="M" nr="4">
 <Cluster>
@@ -538,7 +538,7 @@
 <Adjective nr="32"/>
 </Cluster>
 </FCluster>
-<CCluster>
+<CCluster aid="COMSEQ_3" nr="1">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="4"/>
@@ -562,7 +562,7 @@
 <Adjective nr="35"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="COMSEQ_3" nr="2">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="4"/>
@@ -586,7 +586,7 @@
 <Adjective nr="53"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="COMSEQ_3" nr="3">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="4"/>
@@ -610,7 +610,7 @@
 <Adjective nr="45"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="COMSEQ_3" nr="4">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="4"/>

@@ -27,7 +27,7 @@
 <ArticleID name="VECTSP_1"/>
 <ArticleID name="CFUNCDOM"/>
 </Signature>
-<RCluster>
+<RCluster aid="CFUNCDOM" nr="1">
 <ArgTypes/>
 <Typ kind="G" nr="15">
 <Cluster/>
@@ -36,7 +36,7 @@
 <Adjective nr="100"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="CFUNCDOM" nr="2">
 <ArgTypes/>
 <Typ kind="G" nr="15">
 <Cluster/>
@@ -45,7 +45,7 @@
 <Adjective nr="24" value="false"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="CFUNCDOM" nr="3">
 <ArgTypes/>
 <Typ kind="G" nr="15">
 <Cluster/>
@@ -64,7 +64,7 @@
 <Adjective nr="101"/>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="CFUNCDOM" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -80,7 +80,7 @@
 <Adjective nr="67"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="CFUNCDOM" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -96,7 +96,7 @@
 <Adjective nr="85"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="CFUNCDOM" nr="3">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -112,7 +112,7 @@
 <Adjective nr="100"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="CFUNCDOM" nr="4">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>

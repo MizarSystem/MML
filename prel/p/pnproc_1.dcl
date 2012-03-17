@@ -26,7 +26,7 @@
 <ArticleID name="VALUED_1"/>
 <ArticleID name="PNPROC_1"/>
 </Signature>
-<FCluster>
+<FCluster aid="PNPROC_1" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -66,7 +66,7 @@
 <Adjective nr="7" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="PNPROC_1" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -106,7 +106,7 @@
 <Adjective nr="7" value="false"/>
 </Cluster>
 </FCluster>
-<CCluster>
+<CCluster aid="PNPROC_1" nr="1">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="1"/>
@@ -123,7 +123,7 @@
 <Adjective nr="25"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="PNPROC_1" nr="2">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="1"/>

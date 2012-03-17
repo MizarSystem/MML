@@ -14,7 +14,7 @@
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="COLLSP"/>
 </Signature>
-<RCluster>
+<RCluster aid="COLLSP" nr="1">
 <ArgTypes/>
 <Typ kind="G" nr="5">
 <Cluster/>
@@ -23,7 +23,7 @@
 <Adjective nr="20"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="COLLSP" nr="2">
 <ArgTypes/>
 <Typ kind="G" nr="5">
 <Cluster/>
@@ -33,7 +33,7 @@
 <Adjective nr="20"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="COLLSP" nr="3">
 <ArgTypes/>
 <Typ kind="G" nr="5">
 <Cluster/>
@@ -45,7 +45,7 @@
 <Adjective nr="22"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="COLLSP" nr="4">
 <ArgTypes/>
 <Typ kind="G" nr="5">
 <Cluster/>

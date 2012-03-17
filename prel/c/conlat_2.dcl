@@ -40,7 +40,7 @@
 <ArticleID name="FILTER_1"/>
 <ArticleID name="LATTICE3"/>
 </Signature>
-<FCluster>
+<FCluster aid="CONLAT_2" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="11">
 <Cluster>
@@ -57,7 +57,7 @@
 <Adjective nr="38"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="CONLAT_2" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="7">
 <Cluster>

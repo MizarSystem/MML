@@ -17,7 +17,7 @@
 <ArticleID name="LATTICES"/>
 <ArticleID name="NORMFORM"/>
 </Signature>
-<FCluster>
+<FCluster aid="NORMFORM" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -88,7 +88,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="NORMFORM" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -101,7 +101,7 @@
 <Adjective nr="7" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="NORMFORM" nr="3">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -114,7 +114,7 @@
 <Adjective nr="7" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="NORMFORM" nr="4">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -128,7 +128,7 @@
 <Adjective nr="29"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="NORMFORM" nr="5">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -142,7 +142,7 @@
 <Adjective nr="36"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="NORMFORM" nr="6">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>

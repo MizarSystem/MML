@@ -41,13 +41,13 @@
 <ArticleID name="WAYBEL_8"/>
 <ArticleID name="WAYBEL15"/>
 </Signature>
-<FCluster>
+<FCluster aid="WAYBEL15" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="242">
+<Func kind="K" nr="243">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -55,7 +55,7 @@
 <Adjective nr="135"/>
 </Cluster>
 </FCluster>
-<CCluster>
+<CCluster aid="WAYBEL15" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>

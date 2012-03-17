@@ -12,63 +12,63 @@
 <ArticleID name="FINSET_1"/>
 <ArticleID name="NUMBERS"/>
 </Signature>
-<FCluster>
+<FCluster aid="NUMBERS" nr="1">
 <ArgTypes/>
 <Func kind="K" nr="42"/>
 <Cluster>
 <Adjective nr="7" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="NUMBERS" nr="2">
 <ArgTypes/>
 <Func kind="K" nr="43"/>
 <Cluster>
 <Adjective nr="7" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="NUMBERS" nr="3">
 <ArgTypes/>
 <Func kind="K" nr="44"/>
 <Cluster>
 <Adjective nr="7" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="NUMBERS" nr="4">
 <ArgTypes/>
 <Func kind="K" nr="45"/>
 <Cluster>
 <Adjective nr="7" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="NUMBERS" nr="5">
 <ArgTypes/>
 <Func kind="K" nr="48"/>
 <Cluster>
 <Adjective nr="7" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="NUMBERS" nr="6">
 <ArgTypes/>
 <Func kind="K" nr="45"/>
 <Cluster>
 <Adjective nr="15" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="NUMBERS" nr="7">
 <ArgTypes/>
 <Func kind="K" nr="44"/>
 <Cluster>
 <Adjective nr="15" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="NUMBERS" nr="8">
 <ArgTypes/>
 <Func kind="K" nr="42"/>
 <Cluster>
 <Adjective nr="15" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="NUMBERS" nr="9">
 <ArgTypes/>
 <Func kind="K" nr="43"/>
 <Cluster>

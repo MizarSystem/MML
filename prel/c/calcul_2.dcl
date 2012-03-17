@@ -11,19 +11,19 @@
 <ArticleID name="RELSET_1"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
+<ArticleID name="MCART_1"/>
+<ArticleID name="FUNCT_2"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="FINSEQ_2"/>
-<ArticleID name="MCART_1"/>
-<ArticleID name="FUNCT_2"/>
 <ArticleID name="FUNCOP_1"/>
 <ArticleID name="QC_LANG1"/>
 <ArticleID name="QC_LANG2"/>
 <ArticleID name="CQC_LANG"/>
 <ArticleID name="CALCUL_2"/>
 </Signature>
-<FCluster>
+<FCluster aid="CALCUL_2" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -39,22 +39,22 @@
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="15"/>
+<Adjective nr="18"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="CALCUL_2" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="7">
 <Cluster/>
 <Func kind="K" nr="172"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="60">
+<Func kind="K" nr="85">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="15"/>
-<Adjective nr="17"/>
+<Adjective nr="18"/>
+<Adjective nr="20"/>
 </Cluster>
 </FCluster>
 </Registrations>

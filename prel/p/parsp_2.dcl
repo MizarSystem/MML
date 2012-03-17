@@ -26,7 +26,7 @@
 <ArticleID name="PARSP_1"/>
 <ArticleID name="PARSP_2"/>
 </Signature>
-<RCluster>
+<RCluster aid="PARSP_2" nr="1">
 <ArgTypes/>
 <Typ kind="G" nr="13">
 <Cluster/>

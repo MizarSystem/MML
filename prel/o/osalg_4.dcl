@@ -10,15 +10,15 @@
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
-<ArticleID name="RELAT_2"/>
 <ArticleID name="RELSET_1"/>
+<ArticleID name="MCART_1"/>
+<ArticleID name="FUNCT_2"/>
+<ArticleID name="RELAT_2"/>
 <ArticleID name="PARTFUN1"/>
 <ArticleID name="EQREL_1"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
-<ArticleID name="MCART_1"/>
-<ArticleID name="FUNCT_2"/>
 <ArticleID name="FUNCOP_1"/>
 <ArticleID name="FINSEQ_2"/>
 <ArticleID name="PBOOLE"/>
@@ -46,7 +46,7 @@
 <ArticleID name="OSALG_1"/>
 <ArticleID name="OSALG_4"/>
 </Signature>
-<RCluster>
+<RCluster aid="OSALG_4" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="9">
 <Cluster>
@@ -57,7 +57,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Typ kind="M" nr="13">
+<Typ kind="M" nr="12">
 <Cluster/>
 <Func kind="U" nr="1">
 <LocusVar nr="1"/>
@@ -72,7 +72,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="OSALG_4" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="9">
 <Cluster>
@@ -82,20 +82,20 @@
 <Adjective nr="75"/>
 </Cluster>
 </Typ>
-<Typ kind="M" nr="13">
+<Typ kind="M" nr="12">
 <Cluster/>
 <Func kind="U" nr="1">
 <LocusVar nr="1"/>
 </Func>
 </Typ>
-<Typ kind="M" nr="13">
+<Typ kind="M" nr="12">
 <Cluster/>
 <Func kind="U" nr="1">
 <LocusVar nr="1"/>
 </Func>
 </Typ>
 </ArgTypes>
-<Typ kind="M" nr="19">
+<Typ kind="M" nr="18">
 <Cluster/>
 <Func kind="U" nr="1">
 <LocusVar nr="1"/>
@@ -114,7 +114,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="OSALG_4" nr="3">
 <ArgTypes>
 <Typ kind="G" nr="17">
 <Cluster>
@@ -133,7 +133,7 @@
 <LocusVar nr="1"/>
 </Typ>
 </ArgTypes>
-<Typ kind="M" nr="35">
+<Typ kind="M" nr="34">
 <Cluster/>
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
@@ -148,7 +148,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="OSALG_4" nr="4">
 <ArgTypes>
 <Typ kind="G" nr="17">
 <Cluster>
@@ -170,7 +170,7 @@
 <LocusVar nr="1"/>
 </Typ>
 </ArgTypes>
-<Typ kind="M" nr="35">
+<Typ kind="M" nr="34">
 <Cluster/>
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
@@ -189,7 +189,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="OSALG_4" nr="5">
 <ArgTypes/>
 <Typ kind="G" nr="9">
 <Cluster/>
@@ -202,7 +202,7 @@
 <Adjective nr="171"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="OSALG_4" nr="6">
 <ArgTypes/>
 <Typ kind="G" nr="17">
 <Cluster/>
@@ -218,7 +218,7 @@
 <Adjective nr="171"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="OSALG_4" nr="7">
 <ArgTypes>
 <Typ kind="G" nr="17">
 <Cluster>
@@ -240,7 +240,7 @@
 <LocusVar nr="1"/>
 </Typ>
 </ArgTypes>
-<Typ kind="M" nr="35">
+<Typ kind="M" nr="34">
 <Cluster/>
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
@@ -263,7 +263,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="OSALG_4" nr="8">
 <ArgTypes>
 <Typ kind="G" nr="17">
 <Cluster>
@@ -285,7 +285,7 @@
 <LocusVar nr="1"/>
 </Typ>
 </ArgTypes>
-<Typ kind="M" nr="35">
+<Typ kind="M" nr="34">
 <Cluster/>
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
@@ -304,7 +304,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="OSALG_4" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="17">
 <Cluster>
@@ -326,7 +326,7 @@
 </Cluster>
 <LocusVar nr="1"/>
 </Typ>
-<Typ kind="M" nr="35">
+<Typ kind="M" nr="34">
 <Cluster>
 <Adjective nr="66">
 <LocusVar nr="1"/>
@@ -343,7 +343,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="370">
+<Func kind="K" nr="371">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
@@ -353,7 +353,7 @@
 <Adjective nr="7" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="OSALG_4" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="17">
 <Cluster>
@@ -375,7 +375,7 @@
 </Cluster>
 <LocusVar nr="1"/>
 </Typ>
-<Typ kind="M" nr="35">
+<Typ kind="M" nr="34">
 <Cluster>
 <Adjective nr="66">
 <LocusVar nr="1"/>
@@ -386,7 +386,7 @@
 <LocusVar nr="2"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="371">
+<Func kind="K" nr="372">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
@@ -398,7 +398,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="OSALG_4" nr="3">
 <ArgTypes>
 <Typ kind="G" nr="17">
 <Cluster>
@@ -420,7 +420,7 @@
 </Cluster>
 <LocusVar nr="1"/>
 </Typ>
-<Typ kind="M" nr="35">
+<Typ kind="M" nr="34">
 <Cluster>
 <Adjective nr="66">
 <LocusVar nr="1"/>
@@ -435,7 +435,7 @@
 <LocusVar nr="2"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="380">
+<Func kind="K" nr="381">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
@@ -452,7 +452,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="OSALG_4" nr="4">
 <ArgTypes>
 <Typ kind="G" nr="17">
 <Cluster>
@@ -474,7 +474,7 @@
 </Cluster>
 <LocusVar nr="1"/>
 </Typ>
-<Typ kind="M" nr="35">
+<Typ kind="M" nr="34">
 <Cluster>
 <Adjective nr="66">
 <LocusVar nr="1"/>
@@ -493,7 +493,7 @@
 <LocusVar nr="2"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="380">
+<Func kind="K" nr="381">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
@@ -507,7 +507,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<CCluster>
+<CCluster aid="OSALG_4" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="9">
 <Cluster>
@@ -517,13 +517,13 @@
 <Adjective nr="75"/>
 </Cluster>
 </Typ>
-<Typ kind="M" nr="13">
+<Typ kind="M" nr="12">
 <Cluster/>
 <Func kind="U" nr="1">
 <LocusVar nr="1"/>
 </Func>
 </Typ>
-<Typ kind="M" nr="13">
+<Typ kind="M" nr="12">
 <Cluster/>
 <Func kind="U" nr="1">
 <LocusVar nr="1"/>
@@ -537,7 +537,7 @@
 <LocusVar nr="3"/>
 </Adjective>
 </Cluster>
-<Typ kind="M" nr="19">
+<Typ kind="M" nr="18">
 <Cluster/>
 <Func kind="U" nr="1">
 <LocusVar nr="1"/>
@@ -551,7 +551,7 @@
 </Adjective>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="OSALG_4" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="9">
 <Cluster>
@@ -565,7 +565,7 @@
 <Cluster/>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="366">
+<Func kind="K" nr="367">
 <LocusVar nr="1"/>
 </Func>
 </Typ>
@@ -573,7 +573,7 @@
 <Adjective nr="7" value="false"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="OSALG_4" nr="3">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="38" value="false"/>
@@ -593,7 +593,7 @@
 <Adjective nr="171"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="OSALG_4" nr="4">
 <ArgTypes>
 <Typ kind="G" nr="9">
 <Cluster>
@@ -608,7 +608,7 @@
 <Cluster/>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="366">
+<Func kind="K" nr="367">
 <LocusVar nr="1"/>
 </Func>
 </Typ>
@@ -618,7 +618,7 @@
 </Adjective>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="OSALG_4" nr="5">
 <ArgTypes>
 <Typ kind="G" nr="17">
 <Cluster>
@@ -650,7 +650,7 @@
 <LocusVar nr="2"/>
 </Adjective>
 </Cluster>
-<Typ kind="M" nr="35">
+<Typ kind="M" nr="34">
 <Cluster/>
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
@@ -666,7 +666,7 @@
 </Adjective>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="OSALG_4" nr="6">
 <ArgTypes>
 <Typ kind="G" nr="17">
 <Cluster>
@@ -701,7 +701,7 @@
 <LocusVar nr="2"/>
 </Adjective>
 </Cluster>
-<Typ kind="M" nr="35">
+<Typ kind="M" nr="34">
 <Cluster/>
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>

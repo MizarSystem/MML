@@ -11,9 +11,9 @@ environ
       SFMASTR1, SCMFSA_9, CARD_3, ARYTM_1, SCMFSA9A, ABSVALUE, PRE_FF,
       SFMASTR2, ARYTM;
  notations TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, XCMPLX_0, CARD_3, NAT_1,
-      RELAT_1, FUNCT_1, FUNCT_2, FUNCT_4, PRE_FF, AMI_1, SCMFSA_2, SCMFSA6A,
-      SCMFSA6B, SF_MASTR, SCMFSA6C, SCMFSA7B, SCMFSA_9, SFMASTR1, SCMFSA9A,
-      INT_2, XXREAL_0;
+      RELAT_1, FUNCT_1, FUNCT_2, FUNCT_4, PRE_FF, AMI_1, SCMNORM, SCMFSA_2,
+      SCMFSA6A, SCMFSA6B, SF_MASTR, SCMFSA6C, SCMFSA7B, SCMFSA_9, SFMASTR1,
+      SCMFSA9A, INT_2, XXREAL_0;
  constructors XXREAL_0, NAT_1, INT_2, PRE_FF, SCMFSA6A, SCMFSA6B, SCMFSA6C,
       SCMFSA7B, SCMFSA_9, SFMASTR1, SCMFSA9A, SEQ_1, SCMNORM;
  registrations SETFAM_1, FUNCT_1, ORDINAL1, RELSET_1, FINSET_1, FRAENKEL,
@@ -28,8 +28,8 @@ reserve s, s1, s2 for State of SCM+FSA,
   a, b for Int-Location,
   d for read-write Int-Location,
   f for FinSeq-Location,
-  I for Macro-Instruction,
-  J for good Macro-Instruction,
+  I for Program of SCM+FSA,
+  J for good Program of SCM+FSA,
   k, m for Element of NAT;
 
 :: set D = Int-Locations U FinSeq-Locations;
@@ -72,8 +72,8 @@ theorem :: SFMASTR2:7  :: Restr1:
 begin :: Another times macro instruction
 
 definition
-  let a be Int-Location, I be Macro-Instruction;
-  func times(a, I) -> Macro-Instruction equals
+  let a be Int-Location, I be Program of SCM+FSA;
+  func times(a, I) -> Program of SCM+FSA equals
 :: SFMASTR2:def 1
   (1-stRWNotIn ({a} \/ UsedIntLoc I)) := a ';'
   while>0 ( 1-stRWNotIn ({a} \/ UsedIntLoc I), I ';'
@@ -81,7 +81,7 @@ definition
 end;
 
 notation
-  let a be Int-Location, I be Macro-Instruction;
+  let a be Int-Location, I be Program of SCM+FSA;
   synonym a times I for times(a, I);
 end;
 
@@ -92,12 +92,12 @@ theorem :: SFMASTR2:9  :: timesUsedF:
   UsedInt*Loc times(b, I) = UsedInt*Loc I;
 
 registration
-  let I be good Macro-Instruction, a be Int-Location;
+  let I be good Program of SCM+FSA, a be Int-Location;
   cluster times(a, I) -> good;
 end;
 
 definition
-  let s be State of SCM+FSA, I be Macro-Instruction, a be Int-Location;
+  let s be State of SCM+FSA, I be Program of SCM+FSA, a be Int-Location;
 
 func StepTimes(a, I, s) -> Function of NAT, product the Object-Kind of SCM+FSA
   equals
@@ -130,7 +130,7 @@ theorem :: SFMASTR2:14  :: STf0:
   StepTimes(a, I, s).0.f = s.f;
 
 definition
-  let s be State of SCM+FSA, a be Int-Location, I be Macro-Instruction;
+  let s be State of SCM+FSA, a be Int-Location, I be Program of SCM+FSA;
   pred ProperTimesBody a, I, s means
 :: SFMASTR2:def 3
 
@@ -195,7 +195,7 @@ begin :: A trivial example
 
 definition
   let d be read-write Int-Location;
-  func triv-times(d) -> Macro-Instruction equals
+  func triv-times(d) -> Program of SCM+FSA equals
 :: SFMASTR2:def 4
   times( d, while=0(d, Macro(d := d)) ';' SubFrom(d, intloc 0) );
 end;
@@ -217,7 +217,7 @@ definition
 ::      for saving and restoring N
 :: - requires: N <> result
 :: - does not change N
-  func Fib-macro (N, result) -> Macro-Instruction equals
+  func Fib-macro (N, result) -> Program of SCM+FSA equals
 :: SFMASTR2:def 5
   (1-stNotUsed times(N, AddTo(result, (1-stRWNotIn {N, result}))';'
   swap(result, 1-stRWNotIn {N, result}))) := N ';'

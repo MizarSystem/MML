@@ -13,9 +13,9 @@
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XCMPLX_0"/>
 <ArticleID name="XREAL_0"/>
-<ArticleID name="INT_1"/>
 <ArticleID name="RELSET_1"/>
 <ArticleID name="FUNCT_2"/>
+<ArticleID name="INT_1"/>
 <ArticleID name="XXREAL_0"/>
 <ArticleID name="RELAT_2"/>
 <ArticleID name="PARTFUN1"/>
@@ -28,7 +28,7 @@
 <ArticleID name="SQUARE_1"/>
 <ArticleID name="PYTHTRIP"/>
 </Signature>
-<RCluster>
+<RCluster aid="PYTHTRIP" nr="1">
 <ArgTypes/>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -41,14 +41,14 @@
 <Adjective nr="14"/>
 <Adjective nr="15"/>
 <Adjective nr="16"/>
-<Adjective nr="17"/>
+<Adjective nr="20"/>
 <Adjective nr="21"/>
 <Adjective nr="23" value="false"/>
 <Adjective nr="41"/>
 <Adjective nr="43"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="PYTHTRIP" nr="2">
 <ArgTypes/>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -61,14 +61,14 @@
 <Adjective nr="14"/>
 <Adjective nr="15"/>
 <Adjective nr="16"/>
-<Adjective nr="17"/>
+<Adjective nr="20"/>
 <Adjective nr="21"/>
 <Adjective nr="23" value="false"/>
 <Adjective nr="41" value="false"/>
 <Adjective nr="43"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="PYTHTRIP" nr="3">
 <ArgTypes/>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -78,7 +78,7 @@
 <Adjective nr="43"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="PYTHTRIP" nr="4">
 <ArgTypes/>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -88,7 +88,7 @@
 <Adjective nr="43"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="PYTHTRIP" nr="5">
 <ArgTypes/>
 <Typ kind="M" nr="11">
 <Cluster/>
@@ -99,7 +99,7 @@
 <Adjective nr="45"/>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="PYTHTRIP" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -114,7 +114,7 @@
 <Adjective nr="43"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="PYTHTRIP" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -135,11 +135,11 @@
 <Adjective nr="43"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="PYTHTRIP" nr="3">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="17"/>
+<Adjective nr="20"/>
 <Adjective nr="41"/>
 </Cluster>
 </Typ>
@@ -151,11 +151,11 @@
 <Adjective nr="41"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="PYTHTRIP" nr="4">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="17"/>
+<Adjective nr="20"/>
 <Adjective nr="41" value="false"/>
 </Cluster>
 </Typ>
@@ -167,7 +167,7 @@
 <Adjective nr="41" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="PYTHTRIP" nr="5">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -190,7 +190,7 @@
 <Adjective nr="43" value="false"/>
 </Cluster>
 </FCluster>
-<CCluster>
+<CCluster aid="PYTHTRIP" nr="1">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="43"/>
@@ -202,7 +202,7 @@
 <Adjective nr="14"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="PYTHTRIP" nr="2">
 <ArgTypes/>
 <Cluster/>
 <Typ kind="M" nr="11">

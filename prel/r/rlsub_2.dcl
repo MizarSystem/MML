@@ -23,7 +23,7 @@
 <ArticleID name="RLSUB_1"/>
 <ArticleID name="RLSUB_2"/>
 </Signature>
-<RCluster>
+<RCluster aid="RLSUB_2" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="14">
 <Cluster>
@@ -57,7 +57,7 @@
 <Adjective nr="92"/>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="RLSUB_2" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="14">
 <Cluster>
@@ -77,7 +77,7 @@
 <Adjective nr="7" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="RLSUB_2" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="14">
 <Cluster>
@@ -106,7 +106,7 @@
 <Adjective nr="36"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="RLSUB_2" nr="3">
 <ArgTypes>
 <Typ kind="G" nr="14">
 <Cluster>

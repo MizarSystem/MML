@@ -44,7 +44,7 @@
 <ArticleID name="MATRLIN"/>
 <ArticleID name="POLYNOM1"/>
 </Signature>
-<FCluster>
+<FCluster aid="POLYNOM6" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -67,7 +67,7 @@
 <Adjective nr="17" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="POLYNOM6" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -90,7 +90,7 @@
 <Adjective nr="17" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="POLYNOM6" nr="3">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>

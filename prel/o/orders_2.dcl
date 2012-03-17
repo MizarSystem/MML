@@ -17,7 +17,7 @@
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="ORDERS_2"/>
 </Signature>
-<RCluster>
+<RCluster aid="ORDERS_2" nr="1">
 <ArgTypes/>
 <Typ kind="G" nr="5">
 <Cluster/>
@@ -26,7 +26,7 @@
 <Adjective nr="32"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="ORDERS_2" nr="2">
 <ArgTypes/>
 <Typ kind="G" nr="5">
 <Cluster/>
@@ -40,7 +40,7 @@
 <Adjective nr="36"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="ORDERS_2" nr="3">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster/>
@@ -60,7 +60,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="ORDERS_2" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -82,7 +82,7 @@
 <Adjective nr="32"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="ORDERS_2" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
@@ -104,7 +104,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="ORDERS_2" nr="3">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
@@ -119,7 +119,7 @@
 <Adjective nr="4"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="ORDERS_2" nr="4">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
@@ -135,7 +135,7 @@
 <Adjective nr="7"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="ORDERS_2" nr="5">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
@@ -151,7 +151,7 @@
 <Adjective nr="11"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="ORDERS_2" nr="6">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -177,7 +177,7 @@
 <Adjective nr="34"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="ORDERS_2" nr="7">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -203,7 +203,7 @@
 <Adjective nr="35"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="ORDERS_2" nr="8">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -229,7 +229,7 @@
 <Adjective nr="36"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="ORDERS_2" nr="9">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster/>
@@ -244,7 +244,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="ORDERS_2" nr="10">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
@@ -271,7 +271,7 @@
 <Adjective nr="15" value="false"/>
 </Cluster>
 </FCluster>
-<CCluster>
+<CCluster aid="ORDERS_2" nr="1">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="34"/>

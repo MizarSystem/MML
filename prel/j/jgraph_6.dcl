@@ -35,7 +35,7 @@
 <ArticleID name="EUCLID"/>
 <ArticleID name="JGRAPH_6"/>
 </Signature>
-<FCluster>
+<FCluster aid="JGRAPH_6" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -66,7 +66,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="JGRAPH_6" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>

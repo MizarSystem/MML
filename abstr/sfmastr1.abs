@@ -9,7 +9,7 @@ environ
  vocabularies AMI_3, AMI_1, SCMFSA_2, SCMFSA7B, SCMFSA6A, SF_MASTR, SCMFSA6B,
       SCMFSA6C, SCMFSA8C, SCMFSA8B, SCMFSA8A, SCMFSA_4, RELAT_1, AMI_5, BOOLE,
       FUNCT_4, UNIALG_2, FUNCT_1, SCM_1, CARD_1, RELOC, FUNCT_7, FINSET_1,
-      SCMFSA_1, SQUARE_1, PRE_FF, ARYTM_1, SFMASTR1, ARYTM;
+      SCMFSA_1, SQUARE_1, PRE_FF, ARYTM_1, SFMASTR1, ARYTM, AMISTD_2, SCMNORM;
  notations TARSKI, XBOOLE_0, ENUMSET1, ZFMISC_1, SUBSET_1, CARD_1, NUMBERS,
       XCMPLX_0, FINSET_1, NAT_1, RELAT_1, FUNCT_1, FUNCT_2, FUNCT_4, FUNCT_7,
       PRE_FF, STRUCT_0, AMI_1, SCMNORM, SCMFSA_1, SCMFSA_2, SCMFSA_4, SCMFSA_5,
@@ -17,11 +17,11 @@ environ
       SCMFSA8C, XXREAL_0, SEQ_4;
  constructors DOMAIN_1, SETWISEO, XXREAL_0, NAT_1, SEQ_4, PRE_FF, SCM_1,
       SCMFSA_5, SCMFSA6A, SF_MASTR, SCMFSA6B, SCMFSA6C, SCMFSA8A, SCMFSA8B,
-      SCMFSA8C, SCMNORM;
+      SCMFSA8C, SCMNORM, SCMFSA_4;
  registrations XBOOLE_0, SUBSET_1, SETFAM_1, FUNCT_1, ORDINAL1, RELSET_1,
       FINSET_1, FRAENKEL, NUMBERS, XREAL_0, NAT_1, INT_1, MEMBERED, CARD_3,
-      SEQ_4, AMI_5, SCMFSA_2, SCMFSA_4, SF_MASTR, SCMFSA6B, SCMFSA6C, SCMFSA7B,
-      SCMFSA8A, SCMFSA8C, SCMFSA_9;
+      SEQ_4, AMI_5, SCMFSA_2, SF_MASTR, SCMFSA6B, SCMFSA6C, SCMFSA7B, SCMFSA8A,
+      SCMFSA8C, SCMFSA_9, AMI_1;
  requirements NUMERALS, SUBSET, BOOLE, ARITHM;
 
 
@@ -95,7 +95,7 @@ registration
 end;
 
 registration
-  let i be good Instruction of SCM+FSA, I be good Macro-Instruction;
+  let i be good Instruction of SCM+FSA, I be good Program of SCM+FSA;
   cluster i ';' I -> good;
   cluster I ';' i -> good;
 end;
@@ -106,19 +106,19 @@ registration
 end;
 
 registration
-  let I be good Macro-Instruction, a be read-write Int-Location;
+  let I be good Program of SCM+FSA, a be read-write Int-Location;
   cluster Times(a, I) -> good;
 end;
 
 theorem :: SFMASTR1:1
-  for a being Int-Location, I being Macro-Instruction st not a in UsedIntLoc I
+  for a being Int-Location, I being Program of SCM+FSA st not a in UsedIntLoc I
   holds I does_not_destroy a;
 
 begin :: Composition of non parahalting macro instructions
 
 reserve s, S for State of SCM+FSA,
-  I, J for Macro-Instruction,
-  Ig for good Macro-Instruction,
+  I, J for Program of SCM+FSA,
+  Ig for good Program of SCM+FSA,
   i for good parahalting Instruction of SCM+FSA,
   j for parahalting Instruction of SCM+FSA,
   a, b for Int-Location,
@@ -287,7 +287,7 @@ theorem :: SFMASTR1:22
   n <> m implies n-thRWNotIn L <> m-thRWNotIn L;
 
 definition
-  let n be Element of NAT, p be programmed FinPartState of SCM+FSA;
+  let n be Element of NAT, p be preProgram of SCM+FSA;
   func n-thNotUsed p -> Int-Location equals
 :: SFMASTR1:def 4
 
@@ -295,13 +295,13 @@ definition
 end;
 
 notation
-  let n be Element of NAT, p be programmed FinPartState of SCM+FSA;
+  let n be Element of NAT, p be preProgram of SCM+FSA;
   synonym n-stNotUsed p for n-thNotUsed p; synonym n-ndNotUsed p for
   n-thNotUsed p; synonym n-rdNotUsed p for n-thNotUsed p;
 end;
 
 registration
-  let n be Element of NAT, p be programmed FinPartState of SCM+FSA;
+  let n be Element of NAT, p be preProgram of SCM+FSA;
   cluster n-thNotUsed p -> read-write;
 end;
 
@@ -322,7 +322,7 @@ definition
 :: - requires: N <> result
 :: - does not change N
 :: - note: Times allocates no memory
-  func Fib_macro (N, result) -> Macro-Instruction equals
+  func Fib_macro (N, result) -> Program of SCM+FSA equals
 :: SFMASTR1:def 5
   2-ndRWNotIn UsedIntLoc swap(result, 1-stRWNotIn {N, result}) := N ';'
   (SubFrom(result, result)) ';' (1-stRWNotIn {N, result} := intloc 0) ';'

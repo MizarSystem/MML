@@ -22,7 +22,7 @@
 <ArticleID name="TREES_2"/>
 <ArticleID name="TREES_3"/>
 </Signature>
-<CCluster>
+<CCluster aid="TREES_4" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>

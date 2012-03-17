@@ -36,7 +36,7 @@
 <ArticleID name="POLYNOM3"/>
 <ArticleID name="POLYALG1"/>
 </Signature>
-<RCluster>
+<RCluster aid="POLYALG1" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="1">
 <Cluster/>
@@ -52,7 +52,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="POLYALG1" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="10">
 <Cluster>
@@ -71,7 +71,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="POLYALG1" nr="3">
 <ArgTypes>
 <Typ kind="G" nr="10">
 <Cluster>
@@ -95,7 +95,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="POLYALG1" nr="4">
 <ArgTypes/>
 <Typ kind="G" nr="10">
 <Cluster/>
@@ -111,7 +111,7 @@
 <Adjective nr="97"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="POLYALG1" nr="5">
 <ArgTypes>
 <Typ kind="G" nr="1">
 <Cluster>
@@ -130,7 +130,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="POLYALG1" nr="6">
 <ArgTypes>
 <Typ kind="G" nr="1">
 <Cluster/>
@@ -151,7 +151,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="POLYALG1" nr="7">
 <ArgTypes>
 <Typ kind="G" nr="1">
 <Cluster>
@@ -177,7 +177,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="POLYALG1" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="10">
 <Cluster>
@@ -186,7 +186,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="231">
+<Func kind="K" nr="232">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -197,7 +197,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="POLYALG1" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="10">
 <Cluster>
@@ -206,7 +206,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="231">
+<Func kind="K" nr="232">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -217,7 +217,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="POLYALG1" nr="3">
 <ArgTypes>
 <Typ kind="G" nr="10">
 <Cluster>
@@ -226,7 +226,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="231">
+<Func kind="K" nr="232">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -237,7 +237,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="POLYALG1" nr="4">
 <ArgTypes>
 <Typ kind="G" nr="10">
 <Cluster>
@@ -248,7 +248,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="231">
+<Func kind="K" nr="232">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -259,7 +259,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="POLYALG1" nr="5">
 <ArgTypes>
 <Typ kind="G" nr="10">
 <Cluster>
@@ -271,7 +271,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="231">
+<Func kind="K" nr="232">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -282,7 +282,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="POLYALG1" nr="6">
 <ArgTypes>
 <Typ kind="G" nr="10">
 <Cluster>
@@ -297,7 +297,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="231">
+<Func kind="K" nr="232">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -308,7 +308,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="POLYALG1" nr="7">
 <ArgTypes>
 <Typ kind="G" nr="10">
 <Cluster>
@@ -321,7 +321,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="231">
+<Func kind="K" nr="232">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -332,7 +332,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="POLYALG1" nr="8">
 <ArgTypes>
 <Typ kind="G" nr="10">
 <Cluster>
@@ -345,7 +345,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="231">
+<Func kind="K" nr="232">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -356,7 +356,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="POLYALG1" nr="9">
 <ArgTypes>
 <Typ kind="G" nr="10">
 <Cluster>
@@ -369,7 +369,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="231">
+<Func kind="K" nr="232">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -380,7 +380,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="POLYALG1" nr="10">
 <ArgTypes>
 <Typ kind="G" nr="10">
 <Cluster>
@@ -395,7 +395,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="231">
+<Func kind="K" nr="232">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -408,7 +408,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="POLYALG1" nr="11">
 <ArgTypes>
 <Typ kind="G" nr="10">
 <Cluster>
@@ -423,7 +423,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="231">
+<Func kind="K" nr="232">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -436,7 +436,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="POLYALG1" nr="12">
 <ArgTypes>
 <Typ kind="G" nr="10">
 <Cluster>
@@ -448,7 +448,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="230">
+<Func kind="K" nr="231">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>

@@ -43,7 +43,7 @@
 <ArticleID name="WAYBEL_0"/>
 <ArticleID name="WELLFND1"/>
 </Signature>
-<RCluster>
+<RCluster aid="WELLFND1" nr="1">
 <ArgTypes/>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -59,7 +59,7 @@
 <Adjective nr="28"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="WELLFND1" nr="2">
 <ArgTypes/>
 <Typ kind="G" nr="5">
 <Cluster/>
@@ -69,7 +69,7 @@
 <Adjective nr="107"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="WELLFND1" nr="3">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster/>
@@ -89,7 +89,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="WELLFND1" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -103,7 +103,7 @@
 <Adjective nr="21"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="WELLFND1" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster/>

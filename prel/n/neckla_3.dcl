@@ -25,7 +25,7 @@
 <ArticleID name="NECKLA_2"/>
 <ArticleID name="NECKLA_3"/>
 </Signature>
-<RCluster>
+<RCluster aid="NECKLA_3" nr="1">
 <ArgTypes/>
 <Typ kind="G" nr="5">
 <Cluster/>
@@ -38,7 +38,7 @@
 <Adjective nr="80"/>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="NECKLA_3" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
@@ -58,7 +58,7 @@
 <Adjective nr="39"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="NECKLA_3" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
@@ -78,7 +78,7 @@
 <Adjective nr="39"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="NECKLA_3" nr="3">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster/>
@@ -98,7 +98,7 @@
 <Adjective nr="39"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="NECKLA_3" nr="4">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster/>
@@ -118,7 +118,7 @@
 <Adjective nr="39"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="NECKLA_3" nr="5">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
@@ -140,7 +140,7 @@
 <Adjective nr="39"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="NECKLA_3" nr="6">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
@@ -162,7 +162,7 @@
 <Adjective nr="39"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="NECKLA_3" nr="7">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
@@ -184,7 +184,7 @@
 <Adjective nr="78"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="NECKLA_3" nr="8">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
@@ -206,7 +206,7 @@
 <Adjective nr="78"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="NECKLA_3" nr="9">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
@@ -228,7 +228,7 @@
 <Adjective nr="80"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="NECKLA_3" nr="10">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster/>
@@ -242,7 +242,7 @@
 <Adjective nr="80"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="NECKLA_3" nr="11">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
@@ -258,7 +258,7 @@
 <Adjective nr="78"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="NECKLA_3" nr="12">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
@@ -280,7 +280,7 @@
 <Adjective nr="7" value="false"/>
 </Cluster>
 </FCluster>
-<CCluster>
+<CCluster aid="NECKLA_3" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -303,7 +303,7 @@
 <Adjective nr="35"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="NECKLA_3" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -325,7 +325,7 @@
 <Adjective nr="35"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="NECKLA_3" nr="3">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
@@ -349,7 +349,7 @@
 <Adjective nr="80"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="NECKLA_3" nr="4">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
@@ -373,7 +373,7 @@
 <Adjective nr="78"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="NECKLA_3" nr="5">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="27" value="false"/>
@@ -388,7 +388,7 @@
 <Adjective nr="81"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="NECKLA_3" nr="6">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="27"/>
@@ -400,7 +400,7 @@
 <Adjective nr="82"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="NECKLA_3" nr="7">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="27" value="false"/>
@@ -414,7 +414,7 @@
 <Adjective nr="82"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="NECKLA_3" nr="8">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="27" value="false"/>

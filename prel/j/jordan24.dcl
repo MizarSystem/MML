@@ -36,7 +36,7 @@
 <ArticleID name="PCOMPS_1"/>
 <ArticleID name="JORDAN24"/>
 </Signature>
-<RCluster>
+<RCluster aid="JORDAN24" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
@@ -90,7 +90,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<CCluster>
+<CCluster aid="JORDAN24" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
@@ -157,7 +157,7 @@
 </Adjective>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="JORDAN24" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>

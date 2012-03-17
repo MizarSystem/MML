@@ -26,7 +26,7 @@ environ
  theorems ABSVALUE, BINOP_1, BORSUK_1, COMPTS_1, CONNSP_2, FINSET_1, FUNCT_1,
       FUNCT_2, METRIC_1, PCOMPS_1, PRE_TOPC, RCOMP_1, REAL_2, TARSKI, TOPS_1,
       TOPS_2, ZFMISC_1, TBSP_1, RELAT_1, RELSET_1, XREAL_0, XBOOLE_0, XBOOLE_1,
-      PARTFUN1, XCMPLX_1, XREAL_1, COMPLEX1, XXREAL_0;
+      PARTFUN1, XCMPLX_1, XREAL_1, COMPLEX1, XXREAL_0, SETFAM_1;
  schemes FUNCT_2;
 
 begin
@@ -41,19 +41,7 @@ reserve T for non empty TopSpace;
 
 theorem Th1:
   for T being TopStruct, F being Subset-Family of T holds
-  F is_a_cover_of T iff the carrier of T c= union F
-proof
-  let T be TopStruct, F be Subset-Family of T;
-  thus F is_a_cover_of T implies the carrier of T c= union F
-  proof
-    assume F is_a_cover_of T;
-    then [#]T = union F by PRE_TOPC:def 8;
-    hence the carrier of T c= union F;
-  end;
-  assume the carrier of T c= union F;
-  then [#] T = union F by XBOOLE_0:def 10;
-  hence F is_a_cover_of T by PRE_TOPC:def 8;
-end;
+  F is Cover of T iff the carrier of T c= union F by SETFAM_1:def 12;
 
 reserve A for non empty SubSpace of T;
 
@@ -556,9 +544,6 @@ definition
   :Def4:
   for P being set holds P in F implies
   ex p being Point of M, r st P = Ball(p,r);
-  pred F is_a_cover_of M means
-  :Def5:
-  the carrier of M c= union F;
 end;
 
 notation
@@ -757,6 +742,7 @@ A4: r>0 & Ball(p,r) c= P by A3;
 end;
 
 definition
+ canceled;
   let M be MetrStruct;
   attr M is compact means
   :Def6:
@@ -764,11 +750,11 @@ definition
 end;
 
 theorem
-  M is compact iff for F st F is_ball-family & F is_a_cover_of M
-  ex G st G c= F & G is_a_cover_of M & G is finite
+  M is compact iff for F st F is_ball-family & F is Cover of M
+  ex G st G c= F & G is Cover of M & G is finite
 proof
-  thus M is compact implies for F st F is_ball-family & F is_a_cover_of M
-  ex G st G c= F & G is_a_cover_of M & G is finite
+  thus M is compact implies for F st F is_ball-family & F is Cover of M
+  ex G st G c= F & G is Cover of M & G is finite
   proof
     assume M is compact;
     then
@@ -776,13 +762,13 @@ A1: TopSpaceMetr(M) is compact by Def6;
     let F;
     assume that
 A2: F is_ball-family and
-A3: F is_a_cover_of M;
+A3: F is Cover of M;
     set TM = TopSpaceMetr(M);
     reconsider TF = F as Subset-Family of TM by Th16;
-    the carrier of M c= union F by A3,Def5;
+    the carrier of M c= union F by A3,SETFAM_1:def 12;
     then the carrier of TM c= union TF by Th16;
     then
-A4: TF is_a_cover_of TM by Th1;
+A4: TF is Cover of TM by Th1;
     TF is open
     proof
       let P be Subset of TM;
@@ -793,24 +779,24 @@ A5:   P in TF;
       hence P is open by Th21;
     end;
     then consider TG being Subset-Family of TM such that
-A6: TG c= TF & TG is_a_cover_of TM & TG is finite by A1,A4,COMPTS_1:def 3;
+A6: TG c= TF & TG is Cover of TM & TG is finite by A1,A4,COMPTS_1:def 3;
     reconsider G = TG as Subset-Family of M by Th16;
     take G;
     the carrier of TM c= union TG by A6,Th1;
     then the carrier of M c= union G by Th16;
-    hence G c= F & G is_a_cover_of M & G is finite by A6,Def5;
+    hence G c= F & G is Cover of M & G is finite by A6,SETFAM_1:def 12;
   end;
-  thus (for F st F is_ball-family & F is_a_cover_of M
-  ex G st G c= F & G is_a_cover_of M & G is finite) implies M is compact
+  thus (for F st F is_ball-family & F is Cover of M
+  ex G st G c= F & G is Cover of M & G is finite) implies M is compact
   proof
     assume
-A7: for F st F is_ball-family & F is_a_cover_of M
-    ex G st G c= F & G is_a_cover_of M & G is finite;
+A7: for F st F is_ball-family & F is Cover of M
+    ex G st G c= F & G is Cover of M & G is finite;
     set TM = TopSpaceMetr(M);
     now
       let F be Subset-Family of TM;
       assume that
-A8:   F is_a_cover_of TM and
+A8:   F is Cover of TM and
 A9:   F is open;
       set Z = { Ball(p,r) where p is Point of M, r is Real:
       ex P being Subset of TM st P in F & Ball(p,r) c= P};
@@ -851,10 +837,10 @@ A14:    a in Ball(p,r) by A13,TBSP_1:16;
         Ball(p,r') in Z by A12,A13;
         hence a in union Z by A14,TARSKI:def 4;
       end;
-      then Z is_a_cover_of M by Def5;
+      then Z is Cover of M by SETFAM_1:def 12;
       then consider G being Subset-Family of M such that
 A15:  G c= Z and
-A16:  G is_a_cover_of M and
+A16:  G is Cover of M and
 A17:  G is finite by A7,A10;
       reconsider F' = F as non empty Subset-Family of TM by A8,TOPS_2:5;
       defpred X[set,set] means $1 c= $2;
@@ -880,14 +866,14 @@ A22:  for a being set st a in G holds X[a,f.a] from FUNCT_2:sch 1(A18);
         let a be set such that
 A23:    a in the carrier of TM;
         the carrier of TM = the carrier of M & the carrier of M c= union G
-        by A16,Def5,Th16;
+        by A16,SETFAM_1:def 12,Th16;
         then consider P being set such that
 A24:    a in P & P in G by A23,TARSKI:def 4;
         dom f = G by FUNCT_2:def 1;
         then f.P in GG & P c= f.P by A22,A24,FUNCT_1:def 5;
         hence a in union GG by A24,TARSKI:def 4;
       end;
-      hence GG is_a_cover_of TM by Th1;
+      hence GG is Cover of TM by Th1;
       dom f = G by FUNCT_2:def 1;
       hence GG is finite by A17,FINSET_1:26;
     end;

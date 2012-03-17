@@ -8,21 +8,22 @@ environ
 
  vocabularies FUNCT_1, COMPLEX1, RELAT_1, BOOLE, PARTFUN1, SEQ_1, ARYTM_1,
       XCMPLX_0, ARYTM, VALUED_0, MEMBERED, RAT_1, INT_1, ORDINAL2, SQUARE_1,
-      ARYTM_3, ABSVALUE, FINSEQ_1, RELOC, FUNCT_4;
- notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, XCMPLX_0, NUMBERS, COMPLEX1,
+      ARYTM_3, ABSVALUE, FINSEQ_1, RELOC, FUNCT_4, FINSET_1;
+ notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, FINSET_1,
+      XCMPLX_0, NUMBERS, COMPLEX1,
       XXREAL_0, XREAL_0, RAT_1, INT_1, INT_2, SQUARE_1, RELAT_1, FUNCT_1,
       RELSET_1, PARTFUN1, FUNCT_2, FUNCT_4, FINSEQ_1, MEMBERED, VALUED_0,
       NAT_1;
  constructors PARTFUN1, RAT_1, VALUED_0, SQUARE_1, MEMBERED, INT_2, FINSEQ_1,
       NAT_1, FUNCT_4;
  registrations XBOOLE_0, ORDINAL1, RELSET_1, FUNCT_2, NUMBERS, XREAL_0,
-      MEMBERED, VALUED_0, RAT_1, INT_1, NAT_1, FUNCT_1;
+      MEMBERED, VALUED_0, RAT_1, INT_1, NAT_1, FUNCT_1, FINSET_1;
  requirements NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions TARSKI, XBOOLE_0, XCMPLX_0, SQUARE_1, FUNCT_1, FUNCT_2, FINSEQ_1,
       VALUED_0;
  theorems FUNCT_1, FUNCT_2, RELSET_1, PARTFUN1, VALUED_0, XCMPLX_1, COMPLEX1,
-      FINSEQ_1, XBOOLE_0, TARSKI, GRFUNC_1, RELAT_1, FUNCT_4;
- schemes FUNCT_1, CLASSES1;
+      FINSEQ_1, XBOOLE_0, TARSKI, GRFUNC_1, RELAT_1, FUNCT_4, FINSET_1;
+ schemes FUNCT_1, CLASSES1, FRAENKEL;
 
 begin :: f1 + f2
 
@@ -2521,7 +2522,7 @@ reserve m,j,p,q,n,l for Element of NAT;
 definition
   let p be Function, k be Element of NAT;
   func Shift(p,k) -> Function means
-  :Def4:
+:Def12:
   dom it = { m+k:m in dom p } &
   for m st m in dom p holds it.(m+k) = p.m;
   existence
@@ -2576,7 +2577,7 @@ theorem  :: RELOC:17
   holds dom Shift(p,k) c= NAT
 proof
   let p be Function, k be Element of NAT;
-A1: dom Shift(p,k) = { m+k:m in dom p } by Def4;
+A1: dom Shift(p,k) = { m+k:m in dom p } by Def12;
   let e be set;
   assume e in dom Shift(p,k);
   then consider m such that
@@ -2594,8 +2595,8 @@ proof
 A1: P c= Q;
   then
 A2: dom P c= dom Q by GRFUNC_1:8;
-A3: dom Shift(P,k) = {m + k: m in dom P} by Def4;
-A4: dom Shift(Q,k) = {m + k: m in dom Q} by Def4;
+A3: dom Shift(P,k) = {m + k: m in dom P} by Def12;
+A4: dom Shift(Q,k) = {m + k: m in dom Q} by Def12;
   now
     let x be set;
     assume x in dom Shift(P,k);
@@ -2611,9 +2612,9 @@ A6: dom Shift(P,k) c= dom Shift(Q,k) by TARSKI:def 3;
     then consider m1 being Element of NAT such that
 A7: x = m1 + k & m1 in dom P by A3;
     thus Shift(P,k).x = Shift(P,k).(m1 + k) by A7
-      .= P.m1 by A7,Def4
+      .= P.m1 by A7,Def12
       .= Q.m1 by A1,A7,GRFUNC_1:8
-      .= Shift(Q,k).(m1 + k) by A2,A7,Def4
+      .= Shift(Q,k).(m1 + k) by A2,A7,Def12
       .= Shift(Q,k).x by A7;
   end;
   hence Shift(P,k) c= Shift(Q,k) by A6,GRFUNC_1:8;
@@ -2624,7 +2625,7 @@ theorem :: SCMFSA_4:32
 proof
   let I be Function;
   set A = {l+m:l in dom I };
-A1: dom Shift(I,m) = A by Def4;
+A1: dom Shift(I,m) = A by Def12;
   {p+n: p in A } = { q+(m+n): q in dom I}
   proof
     thus {p+n: p in A } c= { q+(m+n): q in dom I}
@@ -2650,7 +2651,7 @@ A8: x = (q+m)+n by A6;
     hence x in {p+n: p in A } by A8;
   end;
   then
-A9: dom Shift(Shift(I,m),n) = { l+(m+n): l in dom I} by A1,Def4;
+A9: dom Shift(Shift(I,m),n) = { l+(m+n): l in dom I} by A1,Def12;
   now
     let l;
     assume
@@ -2659,10 +2660,10 @@ A10: l in dom I;
 A11: l+m in dom Shift(I,m) by A1;
     thus Shift(Shift(I,m),n).(l+(m+n))
     = Shift(Shift(I,m),n).(l+m+n)
-      .= Shift(I,m).(l+m) by A11,Def4
-      .= I.l by A10,Def4;
+      .= Shift(I,m).(l+m) by A11,Def12
+      .= I.l by A10,Def12;
   end;
-  hence Shift(Shift(I,m),n) = Shift(I,m+n) by A9,Def4;
+  hence Shift(Shift(I,m),n) = Shift(I,m+n) by A9,Def12;
 end;
 
 theorem :: SCMFSA_4:33
@@ -2671,7 +2672,7 @@ theorem :: SCMFSA_4:33
 proof
   let s,f be Function;
   let n;
-A3: dom Shift(s,n)= { m+n: m in dom s } by Def4;
+A3: dom Shift(s,n)= { m+n: m in dom s } by Def12;
 X2: dom(f*s) c= dom s by RELAT_1:44;
      now let e be set;
       thus e in { m+n: m in dom(f*s) }
@@ -2681,9 +2682,8 @@ X2: dom(f*s) c= dom s by RELAT_1:44;
           then consider m such that
 W1:        e = m+n and
 W2:        m in dom(f*s);
-X3:      m in dom s by W2,X2;
-        hence e in dom Shift(s,n) by W1,A3;
-          Shift(s,n).e = s.m by W1,X3,Def4;
+        thus e in dom Shift(s,n) by W1,A3,W2,X2;
+          Shift(s,n).e = s.m by W1,W2,X2,Def12;
         hence Shift(s,n).e in dom f by W2,FUNCT_1:21;
        end;
       assume e in dom Shift(s,n);
@@ -2691,7 +2691,7 @@ X3:      m in dom s by W2,X2;
 W1:     e = m0+n and
 W2:     m0 in dom s by A3;
       assume Shift(s,n).e in dom f;
-       then s.m0 in dom f by W1,Def4,W2;
+       then s.m0 in dom f by W1,Def12,W2;
        then m0 in dom(f*s) by W2,FUNCT_1:21;
       hence  e in { m+n: m in dom(f*s) } by W1;
      end;
@@ -2702,14 +2702,12 @@ X1: dom(f*Shift(s,n)) = { m+n: m in dom(f*s) } by RELAT_1:182;
     let m;
     assume
 A4:  m in dom(f*s);
-    then
-A5:  m in dom s by X2;
-     then m+n in dom Shift(s,n) by A3;
+     then m+n in dom Shift(s,n) by A3,X2;
     hence (f*Shift(s,n)).(m+n) = f.(Shift(s,n).(m+n)) by FUNCT_1:23
-      .= f.(s.m) by Def4,A5
+      .= f.(s.m) by Def12,X2,A4
       .= (f*s).m by A4,FUNCT_1:22;
   end;
-  hence Shift(f*s,n) = f*Shift(s,n) by X1,Def4;
+  hence Shift(f*s,n) = f*Shift(s,n) by X1,Def12;
 end;
 
 theorem :: SCMFSA_4:34
@@ -2718,8 +2716,8 @@ theorem :: SCMFSA_4:34
 proof
   let I,J be Function;
 A1: dom(I +* J) = dom I \/ dom J by FUNCT_4:def 1;
-A2: dom Shift(J,n) = { m+n: m in dom J } by Def4;
-A3: dom Shift(I,n) = { m+n: m in dom I } by Def4;
+A2: dom Shift(J,n) = { m+n: m in dom J } by Def12;
+A3: dom Shift(I,n) = { m+n: m in dom I } by Def12;
   dom Shift(I,n) \/ dom Shift(J,n) = { m+n: m in dom I \/ dom J
   }
   proof
@@ -2754,7 +2752,7 @@ A9:   m in dom J;
       then m+n in dom Shift(J,n) by A2;
       hence (Shift(I,n) +* Shift(J,n)).(m+n)
       = Shift(J,n).(m+n) by FUNCT_4:14
-        .= J.m by A9,Def4
+        .= J.m by A9,Def12
         .= (I +* J).m by A9,FUNCT_4:14;
     end;
     suppose
@@ -2767,10 +2765,73 @@ A11:  not m+n in dom Shift(J,n) by A2;
 A12:  m in dom I by A10,XBOOLE_0:def 2;
       thus (Shift(I,n) +* Shift(J,n)).(m+n)
       = Shift(I,n).(m+n) by A11,FUNCT_4:12
-        .= I.m by A12,Def4
+        .= I.m by A12,Def12
         .= (I +* J).m by A10,FUNCT_4:12;
     end;
   end;
-  hence Shift(I +* J, n) = Shift(I,n) +* Shift(J,n) by A7,Def4;
+  hence Shift(I +* J, n) = Shift(I,n) +* Shift(J,n) by A7,Def12;
 end;
 
+:: from SCMPDS_4, 2008.03.16, A.T.
+
+theorem TW2:
+  for p being Function,k,il being Element of NAT st il in dom p holds
+   il+k in dom Shift(p,k)
+proof
+  let p be Function,k be Element of NAT;
+  dom Shift(p,k) = { loc+k where loc is Element of NAT : loc in dom p}
+   by Def12;
+  hence thesis;
+end;
+
+:: missing, 2008.03.16, A.T.
+
+theorem TW1:
+  for p being Function, k being Element of NAT
+   holds rng Shift(p,k) c= rng p
+ proof let p be Function, k being Element of NAT;
+  let y be set;
+  assume y in rng Shift(p,k);
+   then consider x being set such that
+W1: x in dom Shift(p,k) and
+W2: y = Shift(p,k).x by FUNCT_1:def 5;
+   x in { m+k:m in dom p } by W1,Def12;
+   then consider m such that
+W4: x = m+k and
+W3: m in dom p;
+   p.m = Shift(p,k).x by W3,W4,Def12;
+  hence y in rng p by W3,W2,FUNCT_1:def 5;
+ end;
+
+theorem
+  for p being Function st dom p c= NAT
+  for k being Element of NAT
+   holds rng Shift(p,k) = rng p
+ proof
+  let p be Function such that
+Z:  dom p c= NAT;
+  let k be Element of NAT;
+  thus rng Shift(p,k) c= rng p by TW1;
+  let y be set;
+  assume y in rng p;
+   then consider x being set such that
+W1: x in dom p and
+W2: y = p.x by FUNCT_1:def 5;
+   reconsider x as Element of NAT by W1,Z;
+A: x+k in dom Shift(p,k) by TW2,W1;
+   Shift(p,k).(x+k) = y by W1,W2, Def12;
+  hence thesis by A,FUNCT_1:def 5;
+ end;
+
+registration let p be finite Function, k be Element of NAT;
+ cluster Shift(p,k) -> finite;
+ coherence
+  proof
+A: dom p is finite;
+    deffunc F(Element of NAT) = $1+k;
+   { F(w) where w is Element of NAT: w in dom p } is finite
+    from FRAENKEL:sch 21(A);
+    then dom Shift(p,k) is finite by Def12;
+   hence thesis by FINSET_1:29;
+  end;
+end;

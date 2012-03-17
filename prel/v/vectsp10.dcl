@@ -41,7 +41,7 @@
 <ArticleID name="PARTFUN1"/>
 <ArticleID name="VECTSP10"/>
 </Signature>
-<RCluster>
+<RCluster aid="VECTSP10" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="10">
 <Cluster>
@@ -59,7 +59,7 @@
 <Adjective nr="30" value="false"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="VECTSP10" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="10">
 <Cluster>
@@ -84,7 +84,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="VECTSP10" nr="3">
 <ArgTypes>
 <Typ kind="G" nr="10">
 <Cluster>
@@ -115,7 +115,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="VECTSP10" nr="4">
 <ArgTypes>
 <Typ kind="G" nr="10">
 <Cluster>
@@ -150,7 +150,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="VECTSP10" nr="5">
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
@@ -204,7 +204,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="VECTSP10" nr="6">
 <ArgTypes>
 <Typ kind="G" nr="2">
 <Cluster>
@@ -250,7 +250,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="VECTSP10" nr="7">
 <ArgTypes>
 <Typ kind="G" nr="10">
 <Cluster>
@@ -308,7 +308,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="VECTSP10" nr="8">
 <ArgTypes>
 <Typ kind="G" nr="10">
 <Cluster>
@@ -381,7 +381,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="VECTSP10" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="10">
 <Cluster>
@@ -399,7 +399,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="VECTSP10" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="10">
 <Cluster>
@@ -418,7 +418,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="VECTSP10" nr="3">
 <ArgTypes>
 <Typ kind="G" nr="10">
 <Cluster>
@@ -437,7 +437,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="VECTSP10" nr="4">
 <ArgTypes>
 <Typ kind="G" nr="10">
 <Cluster>
@@ -456,7 +456,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="VECTSP10" nr="5">
 <ArgTypes>
 <Typ kind="G" nr="10">
 <Cluster>
@@ -475,7 +475,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="VECTSP10" nr="6">
 <ArgTypes>
 <Typ kind="G" nr="10">
 <Cluster>
@@ -498,7 +498,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="VECTSP10" nr="7">
 <ArgTypes>
 <Typ kind="G" nr="10">
 <Cluster>
@@ -517,7 +517,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="VECTSP10" nr="8">
 <ArgTypes>
 <Typ kind="G" nr="2">
 <Cluster>
@@ -548,7 +548,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="VECTSP10" nr="9">
 <ArgTypes>
 <Typ kind="G" nr="10">
 <Cluster>
@@ -592,7 +592,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="VECTSP10" nr="10">
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
@@ -639,7 +639,7 @@
 <Adjective nr="7" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="VECTSP10" nr="11">
 <ArgTypes>
 <Typ kind="G" nr="10">
 <Cluster>
@@ -749,7 +749,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="VECTSP10" nr="12">
 <ArgTypes>
 <Typ kind="G" nr="10">
 <Cluster>
@@ -865,7 +865,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<CCluster>
+<CCluster aid="VECTSP10" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="10">
 <Cluster>
@@ -923,7 +923,7 @@
 </Adjective>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="VECTSP10" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="10">
 <Cluster>
@@ -989,7 +989,7 @@
 </Adjective>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="VECTSP10" nr="3">
 <ArgTypes>
 <Typ kind="G" nr="1">
 <Cluster>
@@ -1037,7 +1037,7 @@
 <Adjective nr="76" value="false"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="VECTSP10" nr="4">
 <ArgTypes>
 <Typ kind="G" nr="10">
 <Cluster>
@@ -1103,7 +1103,7 @@
 </Adjective>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="VECTSP10" nr="5">
 <ArgTypes>
 <Typ kind="G" nr="10">
 <Cluster>

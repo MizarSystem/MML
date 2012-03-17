@@ -21,7 +21,7 @@
 <ArticleID name="FILTER_0"/>
 <ArticleID name="SUBSTLAT"/>
 </Signature>
-<RCluster>
+<RCluster aid="HEYTING2" nr="1">
 <ArgTypes/>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -32,7 +32,7 @@
 <Adjective nr="16"/>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="HEYTING2" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>

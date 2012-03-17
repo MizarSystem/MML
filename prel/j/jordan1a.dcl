@@ -12,14 +12,14 @@
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XCMPLX_0"/>
 <ArticleID name="XREAL_0"/>
-<ArticleID name="INT_1"/>
 <ArticleID name="RELSET_1"/>
+<ArticleID name="MCART_1"/>
+<ArticleID name="FUNCT_2"/>
+<ArticleID name="INT_1"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="FINSEQ_2"/>
-<ArticleID name="MCART_1"/>
-<ArticleID name="FUNCT_2"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="RAT_1"/>
@@ -35,7 +35,7 @@
 <ArticleID name="COMPTS_1"/>
 <ArticleID name="SPPOL_1"/>
 </Signature>
-<RCluster>
+<RCluster aid="JORDAN1A" nr="1">
 <ArgTypes/>
 <Typ kind="M" nr="2">
 <Cluster/>

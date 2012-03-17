@@ -11,10 +11,10 @@
 <ArticleID name="FUNCT_1"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
-<ArticleID name="XREAL_0"/>
 <ArticleID name="RELSET_1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
+<ArticleID name="XREAL_0"/>
 <ArticleID name="FRAENKEL"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
@@ -38,7 +38,7 @@
 <ArticleID name="BORSUK_5"/>
 <ArticleID name="KURATO_1"/>
 </Signature>
-<RCluster>
+<RCluster aid="KURATO_1" nr="1">
 <ArgTypes/>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -57,7 +57,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="KURATO_1" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
@@ -86,7 +86,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="KURATO_1" nr="3">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
@@ -117,7 +117,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="KURATO_1" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
@@ -142,7 +142,7 @@
 <Adjective nr="22"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="KURATO_1" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
@@ -167,7 +167,7 @@
 <Adjective nr="22"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="KURATO_1" nr="3">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
@@ -192,7 +192,7 @@
 <Adjective nr="22"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="KURATO_1" nr="4">
 <ArgTypes/>
 <Func kind="K" nr="241"/>
 <Cluster>
@@ -204,7 +204,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="KURATO_1" nr="5">
 <ArgTypes/>
 <Func kind="K" nr="238">
 <Func kind="K" nr="230"/>
@@ -216,7 +216,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="KURATO_1" nr="6">
 <ArgTypes/>
 <Func kind="K" nr="239">
 <Func kind="K" nr="230"/>
@@ -228,7 +228,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="KURATO_1" nr="7">
 <ArgTypes/>
 <Func kind="K" nr="237">
 <Func kind="K" nr="230"/>
@@ -240,7 +240,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="KURATO_1" nr="8">
 <ArgTypes/>
 <Func kind="K" nr="237">
 <Func kind="K" nr="230"/>
@@ -250,7 +250,7 @@
 <Adjective nr="2"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="KURATO_1" nr="9">
 <ArgTypes/>
 <Func kind="K" nr="238">
 <Func kind="K" nr="230"/>
@@ -260,7 +260,7 @@
 <Adjective nr="2"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="KURATO_1" nr="10">
 <ArgTypes/>
 <Func kind="K" nr="239">
 <Func kind="K" nr="230"/>
@@ -270,7 +270,7 @@
 <Adjective nr="2"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="KURATO_1" nr="11">
 <ArgTypes/>
 <Func kind="K" nr="238">
 <Func kind="K" nr="230"/>
@@ -282,7 +282,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="KURATO_1" nr="12">
 <ArgTypes/>
 <Func kind="K" nr="239">
 <Func kind="K" nr="230"/>
@@ -294,7 +294,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="KURATO_1" nr="13">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
@@ -319,7 +319,7 @@
 <Adjective nr="22"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="KURATO_1" nr="14">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
@@ -344,14 +344,14 @@
 <Adjective nr="22"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="KURATO_1" nr="15">
 <ArgTypes/>
 <Func kind="K" nr="241"/>
 <Cluster>
 <Adjective nr="1" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="KURATO_1" nr="16">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
@@ -376,7 +376,7 @@
 <Adjective nr="1" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="KURATO_1" nr="17">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
@@ -403,7 +403,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="KURATO_1" nr="18">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
@@ -432,7 +432,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="KURATO_1" nr="19">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
@@ -457,7 +457,7 @@
 <Adjective nr="1" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="KURATO_1" nr="20">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
@@ -484,7 +484,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="KURATO_1" nr="21">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>

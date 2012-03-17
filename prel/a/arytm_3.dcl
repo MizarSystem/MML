@@ -13,7 +13,7 @@
 <ArticleID name="ORDINAL3"/>
 <ArticleID name="ARYTM_3"/>
 </Signature>
-<RCluster>
+<RCluster aid="ARYTM_3" nr="1">
 <ArgTypes/>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -24,7 +24,7 @@
 <Adjective nr="10"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="ARYTM_3" nr="2">
 <ArgTypes/>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -34,7 +34,7 @@
 <Adjective nr="1"/>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="ARYTM_3" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -58,7 +58,7 @@
 <Adjective nr="14"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="ARYTM_3" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -82,14 +82,14 @@
 <Adjective nr="14"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="ARYTM_3" nr="3">
 <ArgTypes/>
 <Func kind="K" nr="67"/>
 <Cluster>
 <Adjective nr="1" value="false"/>
 </Cluster>
 </FCluster>
-<CCluster>
+<CCluster aid="ARYTM_3" nr="1">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="10"/>

@@ -1,0 +1,1891 @@
+:: Towards the construction of a model of Mizar concepts
+::  by Grzegorz Bancerek
+:: 
+:: Received April 21, 2008
+:: Copyright (c) 2008 Association of Mizar Users
+
+environ
+
+ vocabularies TARSKI, QC_LANG3, PBOOLE, MSUALG_1, CATALG_1, FINSEQ_1, BINOP_1,
+      BOOLE, CQC_LANG, FINSET_1, FUNCOP_1, CAT_4, UNIALG_2, DTCONSTR, TDGROUP,
+      FUNCT_1, MATRIX_1, TREES_4, TREES_2, SETFAM_1, SQUARE_1, ORDINAL2,
+      COMPLEX1, LATTICES, CLASSES1, RELAT_1, AMI_1, MCART_1, MSUALG_2,
+      MSUALG_3, MATRIX_7, FREEALG, MSAFREE, ZF_REFLE, MSATERM, PROB_1,
+      ORDERS_1, QUANTAL1, FINSEQ_4, ORDINAL1, WAYBEL_0, ASYMPT_0, ZF_MODEL,
+      OPPCAT_1, LATTICE3, CARD_5, AOFA_000, FINSEQ_2, CARD_1, PARTFUN1,
+      FUNCT_4, QC_LANG1, FUNCT_2, ZF_LANG, LANG1, ARYTM, CAT_3, TREES_3,
+      FACIRC_1, YELLOW_0, YELLOW_1, ABCMIZ_0, ABCMIZ_1, FUNCT_7;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, DOMAIN_1, SETFAM_1, RELAT_1,
+      FUNCT_1, RELSET_1, BINOP_1, FINSUB_1, PARTFUN1, PROB_2, FACIRC_1,
+      ENUMSET1, FUNCT_2, FUNCT_4, CAT_3, FUNCOP_1, ARYTM_0, XCMPLX_0, XXREAL_0,
+      ORDINAL2, NAT_1, MEMBERED, MCART_1, FINSET_1, CARD_1, NUMBERS, CARD_3,
+      FINSEQ_1, FINSEQ_2, FINSOP_1, FINSEQ_4, TREES_1, TREES_2, TREES_3,
+      TREES_4, FUNCT_7, PROB_1, PBOOLE, MATRIX_7, STRUCT_0, LANG1, ORDINAL1,
+      CLASSES1, CLASSES2, ORDERS_2, LATTICE3, YELLOW_0, WAYBEL_0, YELLOW_1,
+      YELLOW_7, DTCONSTR, MSUALG_1, MSUALG_2, PRE_CIRC, MSAFREE, EQUATION,
+      MSATERM, CATALG_1, MSAFREE3, AOFA_000;
+ constructors XBOOLE_0, SUBSET_1, ARYTM_0, XREAL_0, REAL_1, XXREAL_0, CARD_1,
+      RELAT_1, FUNCT_1, NAT_1, DOMAIN_1, WELLORD2, MATRIX_7, STRUCT_0,
+      MSUALG_1, ZF_REFLE, MATRIX_2, PBOOLE, MSAFREE, MSAFREE1, CAT_3, FINSET_1,
+      PROB_1, MCART_1, COMMACAT, FINSEQOP, FINSOP_1, FUNCT_6, FUNCT_7, LANG1,
+      TREES_9, PRE_CIRC, EQUATION, YELLOW_1, FINSEQ_2, FINSEQ_4, ENUMSET1,
+      MSUALG_2, MSUALG_3, MSUALG_4, RECDEF_1, DTCONSTR, MSATERM, MSUALG_6,
+      CATALG_1, LATTICE3, WAYBEL_0, WELLORD1, FACIRC_1, CLASSES1, MSAFREE3,
+      ZFMISC_1, TREES_3;
+ registrations XBOOLE_0, SUBSET_1, XREAL_0, ORDINAL1, ORDINAL2, RELSET_1,
+      FUNCT_1, FINSET_1, STRUCT_0, PBOOLE, MSUALG_1, MSUALG_2, MSUALG_3,
+      FINSEQ_1, TREES_9, CLASSES2, PARTFUN2, FILTER_0, FINSEQ_5, PRALG_1,
+      NAT_1, CARD_1, MSAFREE, CANTOR_1, TREES_3, MSAFREE1, PARTFUN1, MSATERM,
+      ORDERS_2, TREES_2, DTCONSTR, WAYBEL_0, YELLOW_0, YELLOW_1, LATTICE3,
+      MEMBERED, RELAT_1, INDEX_1, PUA2MSS1, INSTALG1, CATALG_1, MSAFREE3,
+      FACIRC_1, EQUATION, MSUALG_6, MSUALG_9, PRE_CIRC, WAYBEL_8;
+ requirements BOOLE, SUBSET, NUMERALS, ARITHM, REAL;
+
+
+begin :: Variables
+
+reserve i for Nat, j for Element of NAT, X,Y,x,y,z for set;
+
+theorem :: ABCMIZ_1:1
+ for f being Function holds f.x c= Union f;
+
+theorem :: ABCMIZ_1:2
+ for f being Function st Union f = {} holds f.x = {};
+
+theorem :: ABCMIZ_1:3
+ for f being Function
+ for x,y being set st f = [x,y]
+  holds x = y;
+
+theorem :: ABCMIZ_1:4
+  (id X).:Y c= Y;
+
+theorem :: ABCMIZ_1:5
+ for S being non void Signature
+ for X being non-empty ManySortedSet of the carrier of S
+ for t being Term of S, X
+  holds t is non pair;
+
+registration
+ let S be non void Signature;
+ let X be non empty-yielding ManySortedSet of the carrier of S;
+ cluster -> non pair Element of Free(S,X);
+end;
+
+theorem :: ABCMIZ_1:6
+ for x,y,z being set st x in {z}* & y in {z}* & Card x = Card y
+  holds x = y;
+
+registration
+ cluster {} -> DTree-yielding;
+end;
+
+definition
+  let S be non void Signature;
+  let A be MSAlgebra over S;
+  mode Subset of A is Subset of Union the Sorts of A;
+  mode FinSequence of A is FinSequence of Union the Sorts of A;
+end;
+
+registration
+  let S be non void Signature;
+  let X be non empty-yielding ManySortedSet of S;
+  cluster -> DTree-yielding FinSequence of Free(S,X);
+end;
+
+theorem :: ABCMIZ_1:7
+ for S being non void Signature
+ for X being non empty-yielding ManySortedSet of the carrier of S
+ for t being Element of Free(S,X) holds
+(ex s being SortSymbol of S, v being set st
+    t = root-tree [v,s] & v in X.s) or
+   ex o being OperSymbol of S,
+      p being FinSequence of Free(S,X) st
+    t = [o,the carrier of S]-tree p & len p = len the_arity_of o &
+    p is DTree-yielding &
+    p is ArgumentSeq of Sym(o, X\/((the carrier of S)-->{0}));
+
+definition
+ let A be set;
+ func varcl A means
+:: ABCMIZ_1:def 1
+
+  A c= it &
+  (for x,y st [x,y] in it holds x c= it) &
+  for B being set st A c= B & for x,y st [x,y] in B holds x c= B
+   holds it c= B;
+  projectivity;
+end;
+
+theorem :: ABCMIZ_1:8
+ varcl {} = {};
+
+theorem :: ABCMIZ_1:9
+ for A,B being set st A c= B holds varcl A c= varcl B;
+
+theorem :: ABCMIZ_1:10
+ for A being set holds
+  varcl union A = union {varcl a where a is Element of A: not contradiction};
+
+scheme :: ABCMIZ_1:sch 1
+ Sch14{A() -> set, F(set) -> set, P[set]}:
+  varcl union {F(z) where z is Element of A(): P[z]}
+  = union {varcl F(z) where z is Element of A(): P[z]};
+
+theorem :: ABCMIZ_1:11
+ varcl (X \/ Y) = (varcl X) \/ (varcl Y);
+
+theorem :: ABCMIZ_1:12
+ for A being non empty set
+  st for a being Element of A holds varcl a = a
+  holds  varcl meet A = meet A;
+
+theorem :: ABCMIZ_1:13
+ varcl ((varcl X) /\ (varcl Y)) = (varcl X) /\ (varcl Y);
+
+registration
+ let A be empty set;
+ cluster varcl A -> empty;
+end;
+
+definition
+ func Vars means
+:: ABCMIZ_1:def 2
+
+  ex V being ManySortedSet of NAT st
+   it = Union V &
+   V.0 = {[{}, i] where i is Element of NAT: not contradiction} &
+   for n being Nat holds V.(n+1) =
+     {[varcl A, j] where A is Subset of V.n, j is Element of NAT: A is finite};
+end;
+
+theorem :: ABCMIZ_1:14
+ for V being ManySortedSet of NAT st
+   V.0 = {[{}, i] where i is Element of NAT: not contradiction} &
+   for n being Nat holds
+     V.(n+1) = {[varcl A, j] where A is Subset of V.n, j is Element of NAT:
+     A is finite}
+ for i,j being Element of NAT st i <= j holds V.i c= V.j;
+
+theorem :: ABCMIZ_1:15
+ for V being ManySortedSet of NAT st
+   V.0 = {[{}, i] where i is Element of NAT: not contradiction} &
+   for n being Nat holds
+     V.(n+1) = {[varcl A, j] where A is Subset of V.n, j is Element of NAT:
+                A is finite}
+  for A being finite Subset of Vars
+  ex i being Element of NAT st A c= V.i;
+
+theorem :: ABCMIZ_1:16
+ {[{}, i] where i is Element of NAT: not contradiction} c= Vars;
+
+theorem :: ABCMIZ_1:17
+ for A being finite Subset of Vars, i being Nat holds [varcl A, i] in Vars;
+
+theorem :: ABCMIZ_1:18
+ Vars = {[varcl A, j] where A is Subset of Vars, j is Element of NAT:
+         A is finite};
+
+theorem :: ABCMIZ_1:19
+ varcl Vars = Vars;
+
+theorem :: ABCMIZ_1:20
+ for X st the_rank_of X is finite holds X is finite;
+
+theorem :: ABCMIZ_1:21
+ the_rank_of varcl X = the_rank_of X;
+
+theorem :: ABCMIZ_1:22
+ for X being finite Subset of Rank omega holds X in Rank omega;
+
+theorem :: ABCMIZ_1:23
+ Vars c= Rank omega;
+
+theorem :: ABCMIZ_1:24
+ for A being finite Subset of Vars holds
+   varcl A is finite Subset of Vars;
+
+registration
+ cluster Vars -> non empty;
+end;
+
+definition
+  mode variable is Element of Vars;
+end;
+
+registration
+ let x be variable;
+ cluster x`1 -> finite;
+end;
+
+notation
+  let x be variable;
+ synonym vars x for x`1;
+end;
+
+definition
+  let x be variable;
+ redefine func vars x -> Subset of Vars;
+end;
+
+theorem :: ABCMIZ_1:25
+ [{}, i] in Vars;
+
+theorem :: ABCMIZ_1:26
+ for A being Subset of Vars holds
+   varcl {[varcl A, j]} = (varcl A) \/ {[varcl A, j]};
+
+theorem :: ABCMIZ_1:27
+ for x being variable holds varcl {x} = (vars x) \/ {x};
+
+theorem :: ABCMIZ_1:28
+ for x being variable holds [(vars x) \/ {x}, i] in Vars;
+
+begin :: Quasi loci
+
+notation
+  let R be Relation, A be set;
+  synonym R dom A for R|A;
+end;
+
+definition
+ func QuasiLoci -> FinSequenceSet of Vars means
+:: ABCMIZ_1:def 3
+
+  for p being FinSequence of Vars holds
+   p in it iff p is one-to-one &
+      for i st i in dom p holds (p.i)`1 c= rng (p dom i);
+end;
+
+theorem :: ABCMIZ_1:29
+  <*>Vars in QuasiLoci;
+
+registration
+  cluster QuasiLoci -> non empty;
+end;
+
+definition
+  mode quasi-loci is Element of QuasiLoci;
+end;
+
+registration
+  cluster -> one-to-one quasi-loci;
+end;
+
+theorem :: ABCMIZ_1:30
+ for l being one-to-one FinSequence of Vars holds
+   l is quasi-loci iff
+     for i being Nat, x being variable st i in dom l & x = l.i
+     for y being variable st y in vars x
+      ex j being Nat st j in dom l & j < i & y = l.j;
+
+theorem :: ABCMIZ_1:31
+ for l being quasi-loci, x being variable holds
+   l^<*x*> is quasi-loci iff not x in rng l & vars x c= rng l;
+
+theorem :: ABCMIZ_1:32
+ for p,q being FinSequence st p^q is quasi-loci
+  holds p is quasi-loci & q is FinSequence of Vars;
+
+theorem :: ABCMIZ_1:33
+ for l being quasi-loci holds varcl rng l = rng l;
+
+theorem :: ABCMIZ_1:34
+ for x being variable holds
+   <*x*> is quasi-loci iff vars x = {};
+
+theorem :: ABCMIZ_1:35
+ for x,y being variable holds
+   <*x,y*> is quasi-loci iff vars x = {} & x <> y & vars y c= {x};
+
+theorem :: ABCMIZ_1:36
+ for x,y,z being variable holds
+   <*x,y,z*> is quasi-loci iff vars x = {} & x <> y & vars y c= {x} &
+        x <> z & y <> z & vars z c= {x,y};
+
+definition
+ let l be quasi-loci;
+ redefine func l" -> PartFunc of Vars, NAT;
+end;
+
+begin :: Mizar Constructor Signature
+
+definition
+ func a_Type equals
+:: ABCMIZ_1:def 4
+0;
+
+ func an_Adj equals
+:: ABCMIZ_1:def 5
+1;
+
+ func a_Term equals
+:: ABCMIZ_1:def 6
+2;
+
+ func *      equals
+:: ABCMIZ_1:def 7
+0;
+
+ func non_op equals
+:: ABCMIZ_1:def 8
+1;
+
+:: func an_ExReg  equals 3; coherence;
+:: func a_CondReg equals 4; coherence;
+:: func a_FuncReg equals 5; coherence;
+end;
+
+definition
+ let C be Signature;
+ attr C is constructor means
+:: ABCMIZ_1:def 9
+
+  the carrier of C = {a_Type, an_Adj, a_Term} &
+  {*, non_op} c= the OperSymbols of C &
+  (the Arity of C).* = <*an_Adj, a_Type*> &
+  (the Arity of C).non_op = <*an_Adj*> &
+  (the ResultSort of C).* = a_Type &
+  (the ResultSort of C).non_op = an_Adj &
+  for o being Element of the OperSymbols of C st o <> * & o <> non_op
+   holds (the Arity of C).o in {a_Term}*;
+end;
+
+registration
+ cluster constructor -> non empty non void Signature;
+end;
+
+definition
+ func MinConstrSign -> strict Signature means
+:: ABCMIZ_1:def 10
+
+  it is constructor & the OperSymbols of it = {*, non_op};
+end;
+
+registration
+ cluster MinConstrSign -> constructor;
+end;
+
+registration
+ cluster constructor strict Signature;
+end;
+
+definition
+ mode ConstructorSignature is constructor Signature;
+end;
+
+:: theorem ::?
+::  for C being ConstructorSignature holds the carrier of C = 3
+::   by CONSTRSIGN,YELLOW11:1;
+
+definition
+  let C be ConstructorSignature;
+  let o be OperSymbol of C;
+  attr o is constructor means
+:: ABCMIZ_1:def 11
+
+  o <> * & o <> non_op;
+end;
+
+theorem :: ABCMIZ_1:37
+ for S being ConstructorSignature
+ for o being OperSymbol of S st o is constructor
+  holds the_arity_of o = (len the_arity_of o) |-> a_Term;
+
+definition
+ let C be non empty non void Signature;
+ attr C is initialized means
+:: ABCMIZ_1:def 12
+
+  ex m, a being OperSymbol of C st
+   the_result_sort_of m = a_Type & the_arity_of m = {} &  :: set
+   the_result_sort_of a = an_Adj & the_arity_of a = {};   :: empty
+end;
+
+definition
+ let C be ConstructorSignature;
+ func a_Type C -> SortSymbol of C equals
+:: ABCMIZ_1:def 13
+a_Type;
+ func an_Adj C -> SortSymbol of C equals
+:: ABCMIZ_1:def 14
+an_Adj;
+ func a_Term C -> SortSymbol of C equals
+:: ABCMIZ_1:def 15
+a_Term;
+ func non_op C -> OperSymbol of C equals
+:: ABCMIZ_1:def 16
+non_op;
+ func ast C -> OperSymbol of C equals
+:: ABCMIZ_1:def 17
+*;
+end;
+
+theorem :: ABCMIZ_1:38 ::?
+ for C being ConstructorSignature holds
+   the_arity_of non_op C = <*an_Adj C*> &
+   the_result_sort_of non_op C = an_Adj C &
+   the_arity_of ast C = <*an_Adj C, a_Type C*> &
+   the_result_sort_of ast C = a_Type C;
+
+definition
+ func Modes equals
+:: ABCMIZ_1:def 18
+[:{a_Type},[:QuasiLoci,NAT:]:];
+
+ func Attrs equals
+:: ABCMIZ_1:def 19
+[:{an_Adj},[:QuasiLoci,NAT:]:];
+
+ func Funcs equals
+:: ABCMIZ_1:def 20
+[:{a_Term},[:QuasiLoci,NAT:]:];
+
+end;
+
+registration
+ cluster Modes -> non empty;
+
+ cluster Attrs -> non empty;
+
+ cluster Funcs -> non empty;
+
+end;
+
+definition
+ func Constructors -> non empty set equals
+:: ABCMIZ_1:def 21
+   Modes \/ Attrs \/ Funcs;
+end;
+
+theorem :: ABCMIZ_1:39
+ {*, non_op} misses Constructors;
+
+definition
+ let x be Element of [:QuasiLoci, NAT:];
+ redefine
+  func x`1 -> quasi-loci;
+
+  func x`2 -> Element of NAT;
+
+end;
+
+notation
+  let c be Element of Constructors;
+  synonym kind_of c for c`1;
+end;
+
+definition
+ let c be Element of Constructors;
+ redefine
+  func kind_of c -> Element of {a_Type, an_Adj, a_Term};
+  func c`2 -> Element of [:QuasiLoci, NAT:];
+end;
+
+definition
+ let c be Element of Constructors;
+ func loci_of c -> quasi-loci equals
+:: ABCMIZ_1:def 22
+c`2`1;
+
+ func index_of c -> Nat equals
+:: ABCMIZ_1:def 23
+c`2`2;
+
+end;
+
+theorem :: ABCMIZ_1:40
+  for c being Element of Constructors holds
+  (kind_of c = a_Type iff c in Modes) &
+  (kind_of c = an_Adj iff c in Attrs) &
+  (kind_of c = a_Term iff c in Funcs);
+
+definition
+ func MaxConstrSign -> strict ConstructorSignature means
+:: ABCMIZ_1:def 24
+
+  the OperSymbols of it = {*, non_op} \/ Constructors &
+  for o being OperSymbol of it st o is constructor
+   holds (the ResultSort of it).o = o`1 &
+     Card ((the Arity of it).o) = Card o`2`1;
+end;
+
+registration
+ cluster MinConstrSign -> non initialized;
+ cluster MaxConstrSign -> initialized;
+end;
+
+registration
+ cluster initialized strict ConstructorSignature;
+end;
+
+registration
+  let C be initialized ConstructorSignature;
+  cluster constructor OperSymbol of C;
+end;
+
+begin :: Mizar Expressions
+
+definition
+ let C be ConstructorSignature;
+ func MSVars C -> ManySortedSet of the carrier of C means
+:: ABCMIZ_1:def 25
+
+  it.a_Type = {} &
+  it.an_Adj  = {} &
+  it.a_Term = Vars;
+end;
+
+:: theorem ::?
+::  for C being ConstructorSignature
+::  for x being variable holds
+::    (C variables_in root-tree [x, a_Term]).a_Term C = {x} by MSAFREE3:11;
+
+registration
+ let C be ConstructorSignature;
+ cluster MSVars C -> non empty-yielding;
+end;
+
+registration
+ let C be initialized ConstructorSignature;
+ cluster Free(C, MSVars C) -> non-empty;
+end;
+
+definition
+ let S be non void Signature;
+ let X be non empty-yielding ManySortedSet of the carrier of S;
+ let t be Element of Free(S,X);
+ attr t is ground means
+:: ABCMIZ_1:def 26
+  Union (S variables_in t) = {};
+ attr t is compound means
+:: ABCMIZ_1:def 27
+
+  t.{} in [:the OperSymbols of S, {the carrier of S}:];
+end;
+
+reserve C for initialized ConstructorSignature,
+  s for SortSymbol of C,
+  o for OperSymbol of C,
+  c for constructor OperSymbol of C;
+
+definition
+ let C; mode expression of C is Element of Free(C, MSVars C);
+end;
+
+definition
+ let C, s;
+ mode expression of C, s -> expression of C means
+:: ABCMIZ_1:def 28
+
+  it in (the Sorts of Free(C, MSVars C)).s;
+end;
+
+theorem :: ABCMIZ_1:41
+ z is expression of C, s iff z in (the Sorts of Free(C, MSVars C)).s;
+
+definition
+  let C;
+  let c such that
+ len the_arity_of c = 0;
+  func c term -> expression of C equals
+:: ABCMIZ_1:def 29
+  [c, the carrier of C]-tree {};
+end;
+
+theorem :: ABCMIZ_1:42
+ for o st len the_arity_of o = 1
+ for a being expression of C st
+   ex s st s = (the_arity_of o).1 & a is expression of C, s
+  holds
+   [o, the carrier of C]-tree <*a*> is expression of C, the_result_sort_of o;
+
+definition
+  let C,o such that
+ len the_arity_of o = 1;
+  let e be expression of C such that
+ ex s being SortSymbol of C st
+   s = (the_arity_of o).1 & e is expression of C, s;
+  func o term e -> expression of C equals
+:: ABCMIZ_1:def 30
+
+  [o, the carrier of C]-tree<*e*>;
+end;
+
+reserve a,b for expression of C, an_Adj C;
+
+theorem :: ABCMIZ_1:43
+ (non_op C)term a is expression of C, an_Adj C &
+ (non_op C)term a = [non_op, the carrier of C]-tree <*a*>;
+
+theorem :: ABCMIZ_1:44
+(non_op C)term a = (non_op C)term b implies a = b;
+
+registration
+  let C,a;
+  cluster (non_op C)term a -> compound;
+end;
+
+registration
+  let C;
+  cluster compound expression of C;
+end;
+
+theorem :: ABCMIZ_1:45
+ for o st len the_arity_of o = 2
+ for a,b being expression of C st
+   ex s1,s2 being SortSymbol of C st
+    s1 = (the_arity_of o).1 & s2 = (the_arity_of o).2 &
+    a is expression of C, s1 & b is expression of C, s2
+  holds
+   [o, the carrier of C]-tree <*a,b*> is expression of C, the_result_sort_of o;
+
+definition
+  let C,o such that
+ len the_arity_of o = 2;
+  let e1,e2 be expression of C such that
+ ex s1,s2 being SortSymbol of C st
+   s1 = (the_arity_of o).1 & s2 = (the_arity_of o).2 &
+   e1 is expression of C, s1 & e2 is expression of C, s2;
+  func o term(e1,e2) -> expression of C equals
+:: ABCMIZ_1:def 31
+
+  [o, the carrier of C]-tree<*e1,e2*>;
+end;
+
+reserve t, t1,t2 for expression of C, a_Type C;
+
+theorem :: ABCMIZ_1:46
+ (ast C)term(a,t) is expression of C, a_Type C &
+ (ast C)term(a,t) = [ *, the carrier of C]-tree <*a,t*>;
+
+theorem :: ABCMIZ_1:47
+(ast C)term(a,t1) = (ast C)term(b,t2) implies a = b & t1 = t2;
+
+registration
+  let C,a,t;
+  cluster (ast C)term(a,t) -> compound;
+end;
+
+definition
+ let S be non void Signature;
+ let s be SortSymbol of S such that
+     ex o being OperSymbol of S st the_result_sort_of o = s;
+ mode OperSymbol of s -> OperSymbol of S means
+:: ABCMIZ_1:def 32
+  the_result_sort_of it = s;
+end;
+
+definition
+ let C be ConstructorSignature;
+ redefine
+  func non_op C -> OperSymbol of an_Adj C;
+  func ast C -> OperSymbol of a_Type C;
+end;
+
+theorem :: ABCMIZ_1:48
+ for s1,s2 being SortSymbol of C st s1 <> s2
+ for t1 being expression of C, s1
+ for t2 being expression of C, s2
+  holds t1 <> t2;
+
+begin :: Quasi-terms
+
+definition
+ let C;
+ func QuasiTerms C -> Subset of Free(C, MSVars C) equals
+:: ABCMIZ_1:def 33
+  (the Sorts of Free(C, MSVars C)).a_Term C;
+end;
+
+registration
+ let C;
+ cluster QuasiTerms C -> non empty constituted-DTrees;
+end;
+
+definition
+ let C;
+ mode quasi-term of C is expression of C, a_Term C;
+end;
+
+theorem :: ABCMIZ_1:49 ::?
+ z is quasi-term of C iff z in QuasiTerms C;
+
+definition
+ let x be variable;
+ let C;
+ func x-term C -> quasi-term of C equals
+:: ABCMIZ_1:def 34
+  root-tree [x, a_Term];
+end;
+
+theorem :: ABCMIZ_1:50
+  for x1,x2 being variable
+  for C1,C2 being initialized ConstructorSignature
+   st x1-term C1 = x2-term C2
+   holds x1 = x2;
+
+registration
+ let x be variable;
+ let C;
+ cluster x-term C -> non compound;
+end;
+
+theorem :: ABCMIZ_1:51
+ for p being DTree-yielding FinSequence holds
+ [c, the carrier of C]-tree p is expression of C
+ iff len p = len the_arity_of c & p in (QuasiTerms C)*;
+
+reserve p for FinSequence of QuasiTerms C;
+
+definition
+  let C,c;
+  let p such that
+ len p = len the_arity_of c;
+  func c-trm p -> compound expression of C equals
+:: ABCMIZ_1:def 35
+
+  [c, the carrier of C]-tree p;
+end;
+
+theorem :: ABCMIZ_1:52
+ len p = len the_arity_of c implies
+   c-trm p is expression of C, the_result_sort_of c;
+
+theorem :: ABCMIZ_1:53
+  for e being expression of C holds
+  (ex x being variable st e = x-term C) or
+  (ex c being constructor OperSymbol of C st
+   ex p being FinSequence of QuasiTerms C st
+   len p = len the_arity_of c & e = c-trm p) or
+  (ex a being expression of C, an_Adj C st e = (non_op C)term a) or
+  (ex a being expression of C, an_Adj C st
+   ex t being expression of C, a_Type C st e = (ast C)term(a,t));
+
+theorem :: ABCMIZ_1:54
+ len p = len the_arity_of c implies c-trm p <> (non_op C)term a;
+
+theorem :: ABCMIZ_1:55
+ len p = len the_arity_of c implies c-trm p <> (ast C)term(a,t);
+
+theorem :: ABCMIZ_1:56
+ (non_op C)term a <> (ast C)term(b,t);
+
+reserve e for expression of C;
+
+theorem :: ABCMIZ_1:57
+ e.{} = [non_op, the carrier of C] implies ex a st e = (non_op C)term a;
+
+theorem :: ABCMIZ_1:58
+ e.{} = [ *, the carrier of C] implies ex a, t st e = (ast C)term(a,t);
+
+begin :: Quasi-adjectives
+
+reserve a,a' for expression of C, an_Adj C;
+
+definition
+ let C,a;
+ func Non a -> expression of C, an_Adj C equals
+:: ABCMIZ_1:def 36
+
+  a|<* 0 *> if ex a' st a = (non_op C)term a'
+  otherwise (non_op C)term a;
+end;
+
+definition
+ let C,a;
+ attr a is positive means
+:: ABCMIZ_1:def 37
+
+  not ex a' st a = (non_op C)term a';
+end;
+
+registration
+ let C;
+ cluster positive expression of C, an_Adj C;
+end;
+
+theorem :: ABCMIZ_1:59
+ for a being positive expression of C, an_Adj C
+  holds Non a = (non_op C)term a;
+
+definition
+ let C,a;
+ attr a is negative means
+:: ABCMIZ_1:def 38
+
+  ex a' st a' is positive & a = (non_op C)term a';
+end;
+
+registration
+ let C;
+ let a be positive expression of C, an_Adj C;
+ cluster Non a -> negative non positive;
+end;
+
+registration
+ let C;
+ cluster negative non positive expression of C, an_Adj C;
+end;
+
+theorem :: ABCMIZ_1:60
+ for a being non positive expression of C, an_Adj C
+ ex a' being expression of C, an_Adj C
+  st a = (non_op C)term a' & Non a = a';
+
+theorem :: ABCMIZ_1:61
+ for a being negative expression of C, an_Adj C
+ ex a' being positive expression of C, an_Adj C
+  st a = (non_op C)term a' & Non a = a';
+
+theorem :: ABCMIZ_1:62
+ for a being non positive expression of C, an_Adj C
+  holds (non_op C)term (Non a) = a;
+
+registration
+ let C;
+ let a be negative expression of C, an_Adj C;
+ cluster Non a -> positive;
+end;
+
+definition
+  let C,a;
+  attr a is regular means
+:: ABCMIZ_1:def 39
+
+  a is positive or a is negative;
+end;
+
+registration
+ let C;
+ cluster positive -> regular non negative expression of C, an_Adj C;
+ cluster negative -> regular non positive expression of C, an_Adj C;
+end;
+
+registration
+ let C;
+ cluster regular expression of C, an_Adj C;
+end;
+
+definition
+ let C;
+ func QuasiAdjs C -> Subset of Free(C, MSVars C) equals
+:: ABCMIZ_1:def 40
+{a: a is regular};
+end;
+
+registration
+ let C;
+ cluster QuasiAdjs C -> non empty constituted-DTrees;
+end;
+
+definition
+ let C; mode quasi-adjective of C is regular expression of C, an_Adj C;
+end;
+
+theorem :: ABCMIZ_1:63
+   z is quasi-adjective of C iff z in QuasiAdjs C;
+
+theorem :: ABCMIZ_1:64 ::?
+   z is quasi-adjective of C iff
+      z is positive expression of C, an_Adj C or
+      z is negative expression of C, an_Adj C;
+
+registration
+ let C;
+ cluster non positive -> negative quasi-adjective of C;
+ cluster non negative -> positive quasi-adjective of C;
+end;
+
+registration
+ let C;
+ cluster positive quasi-adjective of C;
+ cluster negative quasi-adjective of C;
+end;
+
+theorem :: ABCMIZ_1:65
+ for a being positive quasi-adjective of C
+ ex v being constructor OperSymbol of C st the_result_sort_of v = an_Adj C &
+ ex p st len p = len the_arity_of v & a = v-trm p;
+
+theorem :: ABCMIZ_1:66
+ for v being constructor OperSymbol of C
+  st the_result_sort_of v = an_Adj C & len p = len the_arity_of v
+  holds v-trm p is positive quasi-adjective of C;
+
+registration
+ let C;
+ let a be quasi-adjective of C;
+ cluster Non a -> regular;
+end;
+
+theorem :: ABCMIZ_1:67
+ for a being quasi-adjective of C
+  holds  Non Non a = a;
+
+theorem :: ABCMIZ_1:68
+ for a1,a2 being quasi-adjective of C
+  st Non a1 = Non a2 holds a1 = a2;
+
+theorem :: ABCMIZ_1:69
+ for a being quasi-adjective of C
+  holds Non a <> a;
+
+begin :: Quasi-types
+
+definition
+ let C;
+ let q be expression of C, a_Type C;
+ attr q is pure means
+:: ABCMIZ_1:def 41
+
+  not ex a, t st q = (ast C)term(a,t);
+end;
+
+theorem :: ABCMIZ_1:70
+  for m being OperSymbol of C
+  st the_result_sort_of m = a_Type & the_arity_of m = {}
+  ex t st t = root-tree [m, the carrier of C] & t is pure;
+
+theorem :: ABCMIZ_1:71
+  for v being OperSymbol of C
+  st the_result_sort_of v = an_Adj & the_arity_of v = {}
+  ex a st a = root-tree [v, the carrier of C] & a is positive;
+
+registration
+ let C;
+ cluster pure expression of C, a_Type C;
+end;
+
+reserve q for pure expression of C, a_Type C,
+  A for finite Subset of QuasiAdjs C;
+
+definition
+ let C;
+ func QuasiTypes C equals
+:: ABCMIZ_1:def 42
+{[A,t]: t is pure};
+end;
+
+registration
+ let C;
+ cluster QuasiTypes C -> non empty;
+end;
+
+definition
+ let C;
+ mode quasi-type of C means
+:: ABCMIZ_1:def 43
+
+  it in QuasiTypes C;
+end;
+
+theorem :: ABCMIZ_1:72
+   z is quasi-type of C iff ex A,q st z = [A,q];
+
+theorem :: ABCMIZ_1:73
+   [x,y] is quasi-type of C iff
+     x is finite Subset of QuasiAdjs C & y is pure expression of C, a_Type C;
+
+reserve T for quasi-type of C;
+
+registration
+ let C;
+ cluster -> pair quasi-type of C;
+end;
+
+theorem :: ABCMIZ_1:74
+ ex m being constructor OperSymbol of C st the_result_sort_of m = a_Type C &
+ ex p st len p = len the_arity_of m & q = m-trm p;
+
+theorem :: ABCMIZ_1:75
+ for m being constructor OperSymbol of C
+  st the_result_sort_of m = a_Type C & len p = len the_arity_of m
+  holds m-trm p is pure expression of C, a_Type C;
+
+theorem :: ABCMIZ_1:76
+   QuasiTerms C misses QuasiAdjs C &
+   QuasiTerms C misses QuasiTypes C &
+   QuasiTypes C misses QuasiAdjs C;
+
+theorem :: ABCMIZ_1:77 ::?
+ for e being set holds
+   (e is quasi-term of C implies e is not quasi-adjective of C) &
+   (e is quasi-term of C implies e is not quasi-type of C) &
+   (e is quasi-type of C implies e is not quasi-adjective of C);
+
+notation
+  let C,A,q;
+  synonym A ast q for [A,q];
+end;
+
+definition
+  let C,A,q;
+  redefine func A ast q -> quasi-type of C;
+end;
+
+registration
+  let C,T;
+  cluster T`1 -> finite;
+end;
+
+notation
+  let C,T;
+  synonym adjs T for T`1;
+  synonym the_base_of T for T`2;
+end;
+
+definition
+  let C,T;
+  redefine func adjs T -> Subset of QuasiAdjs C;
+
+  func the_base_of T -> pure expression of C, a_Type C;
+end;
+
+theorem :: ABCMIZ_1:78 ::?
+ adjs (A ast q) = A & the_base_of (A ast q) = q;
+
+theorem :: ABCMIZ_1:79 ::?
+ for A1,A2 being finite Subset of QuasiAdjs C
+ for q1,q2 being pure expression of C, a_Type C
+  st A1 ast q1 = A2 ast q2
+  holds  A1 = A2 & q1 = q2;
+
+theorem :: ABCMIZ_1:80
+ T = (adjs T) ast the_base_of T;
+
+theorem :: ABCMIZ_1:81
+ for T1,T2 being quasi-type of C
+  st adjs T1 = adjs T2 & the_base_of T1 = the_base_of T2
+  holds  T1 = T2;
+
+definition
+ let C,T;
+ let a be quasi-adjective of C;
+ func a ast T -> quasi-type of C equals
+:: ABCMIZ_1:def 44
+  [{a} \/ adjs T, the_base_of T];
+end;
+
+theorem :: ABCMIZ_1:82 ::?
+ for a being quasi-adjective of C
+  holds adjs (a ast T) = {a} \/ adjs T & the_base_of (a ast T) = the_base_of T;
+
+theorem :: ABCMIZ_1:83
+ for a being quasi-adjective of C
+  holds a ast (a ast T) = a ast T;
+
+theorem :: ABCMIZ_1:84
+ for a,b being quasi-adjective of C
+  holds a ast (b ast T) = b ast (a ast T);
+
+begin :: Variables in quasi-types
+
+registration
+ let S be non void Signature;
+ let s be SortSymbol of S;
+ let X be non-empty ManySortedSet of the carrier of S;
+ let t be Term of S,X;
+ cluster (variables_in t).s -> finite;
+end;
+
+registration
+ let S be non void Signature;
+ let s be SortSymbol of S;
+ let X be non empty-yielding ManySortedSet of the carrier of S;
+ let t be Element of Free(S,X);
+ cluster (S variables_in t).s -> finite;
+end;
+
+definition
+ let S be non void Signature;
+ let X be non empty-yielding ManySortedSet of the carrier of S;
+ let s be SortSymbol of S;
+ func (X,s) variables_in ->
+   Function of Union the Sorts of Free(S,X), bool (X.s) means
+:: ABCMIZ_1:def 45
+
+  for t being Element of Free(S,X) holds it.t = (S variables_in t).s;
+end;
+
+definition
+ let C be initialized ConstructorSignature;
+ let e be expression of C;
+ func variables_in e -> Subset of Vars equals
+:: ABCMIZ_1:def 46
+  (C variables_in e).a_Term C;
+end;
+
+registration
+ let C,e;
+ cluster variables_in e -> finite;
+end;
+
+definition
+ let C,e;
+ func vars e -> finite Subset of Vars equals
+:: ABCMIZ_1:def 47
+  varcl variables_in e;
+end;
+
+theorem :: ABCMIZ_1:85 ::?
+ varcl vars e = vars e;
+
+theorem :: ABCMIZ_1:86 ::?
+ for x being variable
+  holds variables_in (x-term C) = {x};
+
+theorem :: ABCMIZ_1:87
+ for x being variable
+  holds vars (x-term C) = {x} \/ vars x;
+
+theorem :: ABCMIZ_1:88
+ for p being DTree-yielding FinSequence
+  st e = [c, the carrier of C]-tree p
+  holds variables_in e =
+  union {variables_in t where t is quasi-term of C: t in rng p};
+
+theorem :: ABCMIZ_1:89
+ for p being DTree-yielding FinSequence
+  st e = [c, the carrier of C]-tree p
+  holds vars e = union {vars t where t is quasi-term of C: t in rng p};
+
+theorem :: ABCMIZ_1:90
+ len p = len the_arity_of c implies
+   variables_in (c-trm p) =
+    union {variables_in t where t is quasi-term of C: t in rng p};
+
+theorem :: ABCMIZ_1:91
+ len p = len the_arity_of c implies
+   vars (c-trm p) = union {vars t where t is quasi-term of C: t in rng p};
+
+theorem :: ABCMIZ_1:92
+ for S being ManySortedSign, o being set
+  holds
+   S variables_in ([o, the carrier of S]-tree {}) = [0] the carrier of S;
+
+theorem :: ABCMIZ_1:93
+ for S being ManySortedSign, o being set, t being DecoratedTree
+  holds
+   S variables_in ([o, the carrier of S]-tree <*t*>) = S variables_in t;
+
+theorem :: ABCMIZ_1:94
+ variables_in ((non_op C)term a) = variables_in a;
+
+theorem :: ABCMIZ_1:95 ::?
+ vars ((non_op C)term a) = vars a;
+
+theorem :: ABCMIZ_1:96
+ for S being ManySortedSign, o being set, t1,t2 being DecoratedTree
+  holds
+   S variables_in ([o, the carrier of S]-tree <*t1,t2*>)
+    = (S variables_in t1) \/ (S variables_in t2);
+
+theorem :: ABCMIZ_1:97
+ variables_in ((ast C)term(a,t)) = (variables_in a)\/(variables_in t);
+
+theorem :: ABCMIZ_1:98
+ vars ((ast C)term(a,t)) = (vars a)\/(vars t);
+
+theorem :: ABCMIZ_1:99
+ variables_in Non a = variables_in a;
+
+theorem :: ABCMIZ_1:100 ::?
+ vars Non a = vars a;
+
+definition
+ let C;
+ let T be quasi-type of C;
+ func variables_in T -> Subset of Vars equals
+:: ABCMIZ_1:def 48
+  (union (((MSVars C, a_Term C) variables_in).:adjs T)) \/
+  variables_in the_base_of T;
+end;
+
+registration
+ let C;
+ let T be quasi-type of C;
+ cluster variables_in T -> finite;
+end;
+
+definition
+ let C;
+ let T be quasi-type of C;
+ func vars T -> finite Subset of Vars equals
+:: ABCMIZ_1:def 49
+  varcl variables_in T;
+end;
+
+theorem :: ABCMIZ_1:101 ::?
+ for T being quasi-type of C
+  holds varcl vars T = vars T;
+
+theorem :: ABCMIZ_1:102
+ for T being quasi-type of C
+ for a being quasi-adjective of C
+  holds
+   variables_in (a ast T) = (variables_in a) \/ (variables_in T);
+
+theorem :: ABCMIZ_1:103
+ for T being quasi-type of C
+ for a being quasi-adjective of C
+  holds
+   vars (a ast T) = (vars a) \/ (vars T);
+
+theorem :: ABCMIZ_1:104
+ variables_in (A ast q) =
+   (union {variables_in a where a is quasi-adjective of C: a in A}) \/
+   (variables_in q);
+
+theorem :: ABCMIZ_1:105
+ vars (A ast q) =
+   (union {vars a where a is quasi-adjective of C: a in A}) \/ (vars q);
+
+theorem :: ABCMIZ_1:106
+ variables_in (({}QuasiAdjs C) ast q) = variables_in q;
+
+theorem :: ABCMIZ_1:107
+ e is ground iff variables_in e = {};
+
+definition
+  let C;
+  let T be quasi-type of C;
+  attr T is ground means
+:: ABCMIZ_1:def 50
+
+  variables_in T = {};
+end;
+
+registration
+  let C;
+  cluster ground pure expression of C, a_Type C;
+  cluster ground quasi-adjective of C;
+end;
+
+theorem :: ABCMIZ_1:108
+  for t being ground pure expression of C, a_Type C
+  holds ({} QuasiAdjs C) ast t is ground;
+
+registration
+  let C;
+  let t be ground pure expression of C, a_Type C;
+  cluster ({} QuasiAdjs C) ast t -> ground quasi-type of C;
+end;
+
+registration
+  let C;
+  cluster ground quasi-type of C;
+end;
+
+registration
+  let C;
+  let T be ground quasi-type of C;
+  let a be ground quasi-adjective of C;
+  cluster a ast T -> ground;
+end;
+
+begin :: Smooth Type Widening
+
+:: Type widening is smooth iff
+::  vars-function is sup-semilattice homomorphism from widening sup-semilattice
+::   into VarPoset
+
+definition
+ func VarPoset -> strict non empty Poset equals
+:: ABCMIZ_1:def 51
+  (InclPoset {varcl A where A is finite Subset of Vars: not contradiction})opp;
+end;
+
+theorem :: ABCMIZ_1:109
+ for x, y being Element of VarPoset holds x <= y iff y c= x;
+
+:: registration
+::   let V1,V2 be Element of VarPoset;
+::   identify V1 <= V2 with V2 c= V1;
+::   compatibility by Th22;
+:: end;
+
+theorem :: ABCMIZ_1:110
+ for x holds
+    x is Element of VarPoset iff x is finite Subset of Vars & varcl x = x;
+
+registration
+ cluster VarPoset -> with_infima with_suprema;
+end;
+
+theorem :: ABCMIZ_1:111
+ for V1, V2 being Element of VarPoset holds
+   V1 "\/" V2 = V1 /\ V2 & V1 "/\" V2 = V1 \/ V2;
+
+registration
+  let V1,V2 be Element of VarPoset;
+  identify V1 "\/" V2 with V1 /\ V2;
+  identify V1 "/\" V2 with V1 \/ V2;
+end;
+
+theorem :: ABCMIZ_1:112
+ for X being non empty Subset of VarPoset holds
+   ex_sup_of X, VarPoset & sup X = meet X;
+
+registration
+ cluster VarPoset -> up-complete;
+end;
+
+theorem :: ABCMIZ_1:113
+  Top VarPoset = {};
+
+definition
+ let C;
+ func vars-function C -> Function of QuasiTypes C, the carrier of VarPoset
+ means
+:: ABCMIZ_1:def 52
+  for T being quasi-type of C holds it.T = vars T;
+end;
+
+definition
+ let L be non empty Poset;
+ attr L is smooth means
+:: ABCMIZ_1:def 53
+  ex C being initialized ConstructorSignature,
+     f being Function of L, VarPoset st
+   the carrier of L c= QuasiTypes C &
+   f = (vars-function C)|the carrier of L &
+   for x,y being Element of L holds f preserves_sup_of {x,y};
+end;
+
+registration
+  let C be initialized ConstructorSignature;
+  let T be ground quasi-type of C;
+  cluster RelStr(#{T}, id {T}#) -> smooth;
+end;
+
+begin :: Structural induction
+
+scheme :: ABCMIZ_1:sch 2
+ StructInd
+  {C() -> initialized ConstructorSignature, P[set], t() -> expression of C()}:
+  P[t()]
+  provided
+ for x being variable holds P[x-term C()] and
+ for c being constructor OperSymbol of C()
+    for p being FinSequence of QuasiTerms C()
+    st len p = len the_arity_of c &
+     for t being quasi-term of C() st t in rng p holds P[t]
+    holds P[c-trm p] and
+ for a being expression of C(), an_Adj C() st P[a]
+    holds P[(non_op C())term a] and
+ for a being expression of C(), an_Adj C() st P[a]
+    for t being expression of C(), a_Type C() st P[t]
+    holds P[(ast C())term(a,t)];
+
+definition
+  let S be ManySortedSign;
+  attr S is with_an_operation_for_each_sort means
+:: ABCMIZ_1:def 54
+
+  the carrier of S c= rng the ResultSort of S;
+  let X be ManySortedSet of the carrier of S;
+  attr X is with_missing_variables means
+:: ABCMIZ_1:def 55
+
+  X"{{}} c= rng the ResultSort of S;
+end;
+
+theorem :: ABCMIZ_1:114
+  for S being non void Signature
+  for X being ManySortedSet of the carrier of S
+  holds X is with_missing_variables iff
+  for s being SortSymbol of S st X.s = {}
+  ex o being OperSymbol of S st the_result_sort_of o = s;
+
+registration
+  cluster MaxConstrSign -> with_an_operation_for_each_sort;
+
+  let C be ConstructorSignature;
+  cluster MSVars C -> with_missing_variables;
+end;
+
+registration
+  let S be ManySortedSign;
+  cluster non-empty -> with_missing_variables
+  ManySortedSet of the carrier of S;
+end;
+
+registration
+  let S be ManySortedSign;
+  cluster with_missing_variables ManySortedSet of the carrier of S;
+end;
+
+registration
+  cluster initialized with_an_operation_for_each_sort
+  strict ConstructorSignature;
+end;
+
+registration
+  let C be with_an_operation_for_each_sort ManySortedSign;
+  cluster -> with_missing_variables ManySortedSet of the carrier of C;
+end;
+
+definition
+  let G be non empty DTConstrStr;
+  redefine
+  func Terminals G -> Subset of G;
+  func NonTerminals G -> Subset of G;
+end;
+
+theorem :: ABCMIZ_1:115
+  for D1,D2 being non empty DTConstrStr
+  st the Rules of D1 c= the Rules of D2
+  holds NonTerminals D1 c= NonTerminals D2 &
+  (the carrier of D1) /\ Terminals D2 c= Terminals D1 &
+  (Terminals D1 c= Terminals D2 implies the carrier of D1 c= the carrier of D2)
+;
+
+theorem :: ABCMIZ_1:116
+  for D1,D2 being non empty DTConstrStr
+  st Terminals D1 c= Terminals D2 &
+     the Rules of D1 c= the Rules of D2
+  holds TS D1 c= TS D2;
+
+theorem :: ABCMIZ_1:117
+  for S being ManySortedSign
+  for X,Y being ManySortedSet of the carrier of S st X c= Y
+  holds X is with_missing_variables implies Y is with_missing_variables;
+
+theorem :: ABCMIZ_1:118
+  for S being set
+  for X,Y being ManySortedSet of S st X c= Y
+  holds Union coprod X c= Union coprod Y;
+
+theorem :: ABCMIZ_1:119
+  for S being non void Signature
+  for X,Y being ManySortedSet of the carrier of S st X c= Y
+  holds the carrier of DTConMSA X c= the carrier of DTConMSA Y;
+
+theorem :: ABCMIZ_1:120
+  for S being non void Signature
+  for X being ManySortedSet of the carrier of S
+  st X is with_missing_variables
+  holds
+  NonTerminals DTConMSA X = [:the OperSymbols of S,{the carrier of S}:] &
+  Terminals DTConMSA X = Union coprod X;
+
+theorem :: ABCMIZ_1:121
+  for S being non void Signature
+  for X,Y being ManySortedSet of the carrier of S
+  st X c= Y & X is with_missing_variables
+  holds
+  Terminals DTConMSA X c= Terminals DTConMSA Y &
+  the Rules of DTConMSA X c= the Rules of DTConMSA Y &
+  TS DTConMSA X c= TS DTConMSA Y;
+
+theorem :: ABCMIZ_1:122
+ for t being set holds
+  t in Terminals DTConMSA MSVars C iff
+  ex  x being variable st t = [x,a_Term C];
+
+theorem :: ABCMIZ_1:123
+  for t being set holds
+  t in NonTerminals DTConMSA MSVars C iff
+  t = [ast C, the carrier of C] or
+  t = [non_op C, the carrier of C] or
+  ex c being constructor OperSymbol of C st t = [c, the carrier of C];
+
+theorem :: ABCMIZ_1:124
+  for S being non void Signature
+  for X being with_missing_variables ManySortedSet of the carrier of S
+  for t being set st t in Union the Sorts of Free(S,X)
+  holds t is Term of S, X \/ ((the carrier of S)-->{0});
+
+theorem :: ABCMIZ_1:125
+  for S being non void Signature
+  for X being with_missing_variables ManySortedSet of the carrier of S
+  for t being Term of S, X \/ ((the carrier of S)-->{0})
+  st t in Union the Sorts of Free(S,X)
+  holds t in (the Sorts of Free(S,X)).the_sort_of t;
+
+theorem :: ABCMIZ_1:126
+  for G being non empty DTConstrStr
+  for s being Element of G
+  for p being FinSequence st s ==> p
+  holds p is FinSequence of the carrier of G;
+
+theorem :: ABCMIZ_1:127
+  for S being non void Signature
+  for X,Y being ManySortedSet of the carrier of S
+  for g1 being Symbol of DTConMSA X
+  for g2 being Symbol of DTConMSA Y
+  for p1 being FinSequence of the carrier of DTConMSA X
+  for p2 being FinSequence of the carrier of DTConMSA Y
+  st g1 = g2 & p1 = p2 & g1 ==> p1
+  holds g2 ==> p2;
+
+theorem :: ABCMIZ_1:128
+  for S being non void Signature
+  for X being with_missing_variables ManySortedSet of the carrier of S holds
+  Union the Sorts of Free(S, X) = TS DTConMSA X;
+
+definition
+  let S be non void Signature;
+  let X be ManySortedSet of the carrier of S;
+  mode term-transformation of S,X -> UnOp of Union the Sorts of Free(S,X) means
+:: ABCMIZ_1:def 56
+
+  for s being SortSymbol of S holds
+  it.:((the Sorts of Free(S,X)).s) c= (the Sorts of Free(S,X)).s;
+end;
+
+theorem :: ABCMIZ_1:129
+  for S being non void Signature
+  for X being non empty ManySortedSet of the carrier of S
+  for f being UnOp of Union the Sorts of Free(S,X)
+  holds f is term-transformation of S,X iff
+  for s being SortSymbol of S
+  for a being set st a in (the Sorts of Free(S,X)).s
+  holds f.a in (the Sorts of Free(S,X)).s;
+
+theorem :: ABCMIZ_1:130
+  for S being non void Signature
+  for X being non empty ManySortedSet of the carrier of S
+  for f being term-transformation of S,X
+  for s being SortSymbol of S
+  for p being FinSequence of (the Sorts of Free(S,X)).s
+  holds f*p is FinSequence of (the Sorts of Free(S,X)).s &
+   Card (f*p qua set) = len p;
+
+definition
+  let S be non void Signature;
+  let X be ManySortedSet of the carrier of S;
+  let t be term-transformation of S,X;
+  attr t is substitution means
+:: ABCMIZ_1:def 57
+  for o being OperSymbol of S
+  for p,q being FinSequence of Free(S,X)
+  st [o, the carrier of S]-tree p in Union the Sorts of Free(S,X) & q = t*p
+  holds t.([o, the carrier of S]-tree p) = [o, the carrier of S]-tree q;
+end;
+
+scheme :: ABCMIZ_1:sch 3
+ StructDef
+  {C() -> initialized ConstructorSignature,
+   V,N(set) -> (expression of C()),
+   F,A(set,set) -> (expression of C())}:
+  ex f being term-transformation of C(), MSVars C() st
+    (for x being variable holds f.(x-term C()) = V(x)) &
+    (for c being constructor OperSymbol of C()
+     for p,q being FinSequence of QuasiTerms C()
+      st len p = len the_arity_of c & q = f*p
+     holds f.(c-trm p) = F(c, q)) &
+    (for a being expression of C(), an_Adj C()
+     holds f.((non_op C())term a) = N(f.a)) &
+    (for a being expression of C(), an_Adj C()
+     for t being expression of C(), a_Type C()
+     holds f.((ast C())term(a,t)) = A(f.a, f.t))
+  provided
+ for x being variable holds V(x) is quasi-term of C() and
+ for c being constructor OperSymbol of C()
+    for p being FinSequence of QuasiTerms C()
+      st len p = len the_arity_of c
+    holds F(c, p) is expression of C(), the_result_sort_of c and
+ for a being expression of C(), an_Adj C()
+    holds N(a) is expression of C(), an_Adj C() and
+ for a being expression of C(), an_Adj C()
+    for t being expression of C(), a_Type C()
+    holds A(a,t) is expression of C(), a_Type C();
+
+begin :: Substitution
+
+definition
+  let A be set;
+  let x,y be set;
+  let a,b be Element of A;
+  redefine func IFIN(x,y,a,b) -> Element of A;
+end;
+
+definition
+  let C be initialized ConstructorSignature;
+  mode valuation of C is PartFunc of Vars, QuasiTerms C;
+end;
+
+definition
+  let C be initialized ConstructorSignature;
+  let f be valuation of C;
+  attr f is irrelevant means
+:: ABCMIZ_1:def 58
+
+  for x being variable st x in dom f
+  ex y being variable st f.x = y-term C;
+end;
+
+notation
+  let C be initialized ConstructorSignature;
+  let f be valuation of C;
+  antonym f is relevant for f is irrelevant;
+end;
+
+registration
+  let X,Y be set;
+  cluster empty PartFunc of X,Y;
+end;
+
+registration
+  let C be initialized ConstructorSignature;
+  cluster empty -> irrelevant valuation of C;
+end;
+
+registration
+  let C be initialized ConstructorSignature;
+  cluster empty irrelevant one-to-one valuation of C;
+end;
+
+definition
+  let C be initialized ConstructorSignature;
+  let X be Subset of Vars;
+  func C idval X -> valuation of C equals
+:: ABCMIZ_1:def 59
+  {[x, x-term C] where x is variable: x in X};
+end;
+
+theorem :: ABCMIZ_1:131
+ for X being Subset of Vars
+  holds dom (C idval X) = X &
+   for x being variable st x in X holds (C idval X).x = x-term C;
+
+registration
+  let C be initialized ConstructorSignature;
+  let X be Subset of Vars;
+  cluster C idval X -> irrelevant one-to-one;
+end;
+
+registration
+  let C be initialized ConstructorSignature;
+  let X be empty Subset of Vars;
+  cluster C idval X -> empty;
+end;
+
+definition
+  let C;
+  let f be valuation of C;
+  func f# -> term-transformation of C, MSVars C means
+:: ABCMIZ_1:def 60
+
+    (for x being variable holds
+      (x in dom f implies it.(x-term C) = f.x) &
+      (not x in dom f implies it.(x-term C) = x-term C)) &
+    (for c being constructor OperSymbol of C
+     for p,q being FinSequence of QuasiTerms C
+      st len p = len the_arity_of c & q = it*p
+     holds it.(c-trm p) = c-trm q) &
+    (for a being expression of C, an_Adj C
+     holds it.((non_op C)term a) = (non_op C)term (it.a)) &
+    (for a being expression of C, an_Adj C
+     for t being expression of C, a_Type C
+     holds it.((ast C)term(a,t)) = (ast C)term(it.a, it.t));
+end;
+
+registration
+  let C;
+  let f be valuation of C;
+  cluster f# -> substitution;
+end;
+
+reserve f for valuation of C;
+
+definition
+  let C,f,e;
+  func e at f -> expression of C equals
+:: ABCMIZ_1:def 61
+f#.e;
+end;
+
+definition
+  let C,f;
+  let p be FinSequence such that
+ rng p c= Union the Sorts of Free(C, MSVars C);
+  func p at f -> FinSequence equals
+:: ABCMIZ_1:def 62
+ f# * p;
+end;
+
+definition
+  let C,f;
+  let p be FinSequence of QuasiTerms C;
+  redefine func p at f -> FinSequence of QuasiTerms C equals
+:: ABCMIZ_1:def 63
+f# * p;
+end;
+
+reserve x for variable;
+
+theorem :: ABCMIZ_1:132 ::?
+  not x in dom f implies (x-term C)at f = x-term C;
+
+theorem :: ABCMIZ_1:133 ::?
+  x in dom f implies (x-term C)at f = f.x;
+
+theorem :: ABCMIZ_1:134  ::?
+ len p = len the_arity_of c implies (c-trm p)at f = c-trm p at f;
+
+theorem :: ABCMIZ_1:135 ::?
+ ((non_op C)term a)at f = (non_op C)term(a at f);
+
+theorem :: ABCMIZ_1:136 ::?
+ ((ast C)term(a,t))at f = (ast C)term(a at f,t at f);
+
+theorem :: ABCMIZ_1:137
+ for X being Subset of Vars
+  holds e at (C idval X) = e;
+
+theorem :: ABCMIZ_1:138
+ for X being Subset of Vars
+  holds (C idval X)# = id Union the Sorts of Free(C, MSVars C);
+
+theorem :: ABCMIZ_1:139
+ for f being empty valuation of C
+  holds e at f = e;
+
+theorem :: ABCMIZ_1:140
+ for f being empty valuation of C
+  holds f# = id Union the Sorts of Free(C, MSVars C);
+
+:: theorem ::?
+::  for t being expression of C
+::  for f1,f2 being valuation of C
+::   holds (t at f1) at f2 = ((f2# )*(f1# )).t by FUNCT_2:21;
+
+definition
+  let C,f;
+  let t be quasi-term of C;
+  redefine func t at f -> quasi-term of C;
+end;
+
+definition
+  let C,f;
+  let a be expression of C, an_Adj C;
+  redefine func a at f -> expression of C, an_Adj C;
+end;
+
+registration
+  let C,f;
+  let a be positive expression of C, an_Adj C;
+  cluster a at f -> positive expression of C, an_Adj C;
+end;
+
+registration
+  let C,f;
+  let a be negative expression of C, an_Adj C;
+  cluster a at f -> negative expression of C, an_Adj C;
+end;
+
+definition
+  let C,f;
+  let a be quasi-adjective of C;
+  redefine func a at f -> quasi-adjective of C;
+end;
+
+theorem :: ABCMIZ_1:141
+ (Non a) at f = Non (a at f);
+
+definition
+  let C,f;
+  let t be expression of C, a_Type C;
+  redefine func t at f -> expression of C, a_Type C;
+end;
+
+registration
+  let C,f;
+  let t be pure expression of C, a_Type C;
+  cluster t at f -> pure expression of C, a_Type C;
+end;
+
+theorem :: ABCMIZ_1:142
+ for f being irrelevant one-to-one valuation of C
+ ex g being irrelevant one-to-one valuation of C
+  st for x,y being variable holds
+     x in dom f & f.x = y-term C iff y in dom g & g.y = x-term C;
+
+theorem :: ABCMIZ_1:143
+ for f,g being irrelevant one-to-one valuation of C
+  st for x,y being variable holds
+     x in dom f & f.x = y-term C implies y in dom g & g.y = x-term C
+ for e st variables_in e c= dom f
+  holds e at f at g = e;
+
+definition
+  let C,f;
+  let A be Subset of QuasiAdjs C;
+  func A at f -> Subset of QuasiAdjs C equals
+:: ABCMIZ_1:def 64
+  {a at f where a is quasi-adjective of C: a in A};
+end;
+
+theorem :: ABCMIZ_1:144
+  for A being Subset of QuasiAdjs C
+  for a being quasi-adjective of C st A = {a}
+   holds A at f = {a at f};
+
+theorem :: ABCMIZ_1:145
+ for A,B being Subset of QuasiAdjs C
+  holds (A \/ B) at f = (A at f) \/ (B at f);
+
+theorem :: ABCMIZ_1:146
+ for A,B being Subset of QuasiAdjs C st A c= B
+  holds A at f c= B at f;
+
+registration
+  let C be initialized ConstructorSignature;
+  let f be valuation of C;
+  let A be finite Subset of QuasiAdjs C;
+  cluster A at f -> finite;
+end;
+
+definition
+  let C be initialized ConstructorSignature;
+  let f be valuation of C;
+  let T be quasi-type of C;
+  func T at f -> quasi-type of C equals
+:: ABCMIZ_1:def 65
+  ((adjs T) at f)ast((the_base_of T) at f);
+end;
+
+theorem :: ABCMIZ_1:147 ::?
+ for T being quasi-type of C
+  holds adjs(T at f) = (adjs T) at f &
+   the_base_of (T at f) = (the_base_of T) at f;
+
+theorem :: ABCMIZ_1:148
+ for T being quasi-type of C
+ for a being quasi-adjective of C
+  holds (a ast T) at f = (a at f) ast (T at f);
+
+definition
+  let C be initialized ConstructorSignature;
+  let f,g be valuation of C;
+  func f at g -> valuation of C means
+:: ABCMIZ_1:def 66
+
+  dom it = (dom f) \/ dom g &
+  for x being variable st x in dom it
+  holds it.x = ((x-term C) at f) at g;
+end;
+
+registration
+  let C be initialized ConstructorSignature;
+  let f,g be irrelevant valuation of C;
+  cluster f at g -> irrelevant;
+end;
+
+theorem :: ABCMIZ_1:149
+ for f1,f2 being valuation of C
+  holds (e at f1) at f2 = e at (f1 at f2);
+
+theorem :: ABCMIZ_1:150
+ for A being Subset of QuasiAdjs C
+ for f1,f2 being valuation of C
+  holds (A at f1) at f2 = A at (f1 at f2);
+
+theorem :: ABCMIZ_1:151
+ for T being quasi-type of C
+ for f1,f2 being valuation of C
+  holds (T at f1) at f2 = T at (f1 at f2);
+

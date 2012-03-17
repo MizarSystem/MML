@@ -10,7 +10,7 @@
 <ArticleID name="RELSET_1"/>
 <ArticleID name="INCSP_1"/>
 </Signature>
-<RCluster>
+<RCluster aid="INCSP_1" nr="1">
 <ArgTypes/>
 <Typ kind="G" nr="1">
 <Cluster/>
@@ -19,7 +19,7 @@
 <Adjective nr="5"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="INCSP_1" nr="2">
 <ArgTypes/>
 <Typ kind="G" nr="2">
 <Cluster/>
@@ -28,7 +28,7 @@
 <Adjective nr="6"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="INCSP_1" nr="3">
 <ArgTypes/>
 <Typ kind="G" nr="2">
 <Cluster/>
@@ -38,7 +38,7 @@
 <Adjective nr="19"/>
 </Cluster>
 </RCluster>
-<CCluster>
+<CCluster aid="INCSP_1" nr="1">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="19"/>

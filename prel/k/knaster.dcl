@@ -41,7 +41,7 @@
 <ArticleID name="COHSP_1"/>
 <ArticleID name="KNASTER"/>
 </Signature>
-<RCluster>
+<RCluster aid="KNASTER" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -67,7 +67,7 @@
 <Adjective nr="177"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="KNASTER" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="7">
 <Cluster>
@@ -94,7 +94,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<CCluster>
+<CCluster aid="KNASTER" nr="1">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="35" value="false"/>

@@ -41,7 +41,7 @@
 <ArticleID name="YELLOW_6"/>
 <ArticleID name="YELLOW19"/>
 </Signature>
-<RCluster>
+<RCluster aid="YELLOW19" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="1">
 <Cluster>
@@ -56,7 +56,7 @@
 <LocusVar nr="1"/>
 </Typ>
 </ArgTypes>
-<Typ kind="M" nr="25">
+<Typ kind="M" nr="24">
 <Cluster/>
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
@@ -73,7 +73,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="YELLOW19" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
@@ -88,7 +88,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="265">
+<Func kind="K" nr="266">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -121,7 +121,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="YELLOW19" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="1">
 <Cluster>
@@ -135,7 +135,7 @@
 <LocusVar nr="1"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="266">
+<Func kind="K" nr="267">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -150,7 +150,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="YELLOW19" nr="3">
 <ArgTypes>
 <Typ kind="G" nr="1">
 <Cluster>
@@ -166,7 +166,7 @@
 <LocusVar nr="1"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="266">
+<Func kind="K" nr="267">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -191,7 +191,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="YELLOW19" nr="4">
 <ArgTypes>
 <Typ kind="G" nr="1">
 <Cluster>
@@ -231,7 +231,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="267">
+<Func kind="K" nr="268">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
@@ -245,7 +245,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="YELLOW19" nr="5">
 <ArgTypes>
 <Typ kind="G" nr="1">
 <Cluster>
@@ -294,7 +294,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="267">
+<Func kind="K" nr="268">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
@@ -307,7 +307,7 @@
 <Adjective nr="78"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="YELLOW19" nr="6">
 <ArgTypes>
 <Typ kind="G" nr="1">
 <Cluster>
@@ -350,7 +350,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="267">
+<Func kind="K" nr="268">
 <LocusVar nr="1"/>
 <Func kind="K" nr="86">
 <LocusVar nr="1"/>
@@ -367,7 +367,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<CCluster>
+<CCluster aid="YELLOW19" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="1">
 <Cluster>
@@ -383,7 +383,7 @@
 </Typ>
 </ArgTypes>
 <Cluster/>
-<Typ kind="M" nr="29">
+<Typ kind="M" nr="28">
 <Cluster/>
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
@@ -392,7 +392,7 @@
 <Adjective nr="1" value="false"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="YELLOW19" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="1">
 <Cluster>
@@ -412,7 +412,7 @@
 <LocusVar nr="2"/>
 </Adjective>
 </Cluster>
-<Typ kind="M" nr="25">
+<Typ kind="M" nr="24">
 <Cluster/>
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>

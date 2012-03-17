@@ -41,7 +41,7 @@
 <ArticleID name="FRECHET"/>
 <ArticleID name="KURATO_2"/>
 </Signature>
-<RCluster>
+<RCluster aid="KURATO_2" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -75,7 +75,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="KURATO_2" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -107,7 +107,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="KURATO_2" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="10">
 <Cluster/>
@@ -130,7 +130,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="KURATO_2" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
@@ -149,7 +149,7 @@
 <Adjective nr="80"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="KURATO_2" nr="3">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -165,7 +165,7 @@
 <Adjective nr="80"/>
 </Cluster>
 </FCluster>
-<CCluster>
+<CCluster aid="KURATO_2" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -198,7 +198,7 @@
 </Adjective>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="KURATO_2" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -240,7 +240,7 @@
 </Adjective>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="KURATO_2" nr="3">
 <ArgTypes>
 <Typ kind="G" nr="1">
 <Cluster>

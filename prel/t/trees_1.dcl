@@ -16,7 +16,7 @@
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="TREES_1"/>
 </Signature>
-<RCluster>
+<RCluster aid="TREES_1" nr="1">
 <ArgTypes/>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -26,7 +26,7 @@
 <Adjective nr="21"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="TREES_1" nr="2">
 <ArgTypes/>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -37,7 +37,7 @@
 <Adjective nr="21"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="TREES_1" nr="3">
 <ArgTypes/>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -46,7 +46,7 @@
 <Adjective nr="22"/>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="TREES_1" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -70,7 +70,7 @@
 <Adjective nr="21"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="TREES_1" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -102,7 +102,7 @@
 <Adjective nr="21"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="TREES_1" nr="3">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -119,7 +119,7 @@
 <Adjective nr="15"/>
 </Cluster>
 </FCluster>
-<CCluster>
+<CCluster aid="TREES_1" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>

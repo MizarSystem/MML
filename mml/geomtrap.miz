@@ -409,18 +409,24 @@ A2: p+p = u1+u2 & p+p = v1+v2 by A1,Def2;
   hence thesis by RLVECT_1:19;
 end;
 
-Lm4: Gen w,y & u,v,u1,v1 are_Ort_wrt w,y implies
-(u1,v1,u,v are_Ort_wrt w,y & u,v,v1,u1 are_Ort_wrt w,y)
+Lm4: Gen w,y & u,v,u1,v1 are_Ort_wrt w,y implies u,v,v1,u1 are_Ort_wrt w,y
+proof
+  assume that Gen w,y and
+A1: u,v,u1,v1 are_Ort_wrt w,y;
+A2: v-u,v1-u1 are_Ort_wrt w,y by A1,ANALMETR:def 3;
+A3: v-u,(-1)*(v1-u1) are_Ort_wrt w,y by A2,ANALMETR:11;
+  (-1)*(v1-u1) = -(v1-u1) by RLVECT_1:29
+    .= u1-v1 by RLVECT_1:47;
+  hence u,v,v1,u1 are_Ort_wrt w,y by A3,ANALMETR:def 3;
+end;
+
+Lm4A: Gen w,y & u,v,u1,v1 are_Ort_wrt w,y implies u1,v1,u,v are_Ort_wrt w,y
 proof
   assume that Gen w,y and
 A1: u,v,u1,v1 are_Ort_wrt w,y;
 A2: v-u,v1-u1 are_Ort_wrt w,y by A1,ANALMETR:def 3;
   then v1-u1,v-u are_Ort_wrt w,y by ANALMETR:8;
   hence u1,v1,u,v are_Ort_wrt w,y by ANALMETR:def 3;
-A3: v-u,(-1)*(v1-u1) are_Ort_wrt w,y by A2,ANALMETR:11;
-  (-1)*(v1-u1) = -(v1-u1) by RLVECT_1:29
-    .= u1-v1 by RLVECT_1:47;
-  hence u,v,v1,u1 are_Ort_wrt w,y by A3,ANALMETR:def 3;
 end;
 
 Lm5: Gen w,y implies u,v,u1,u1 are_Ort_wrt w,y
@@ -465,7 +471,7 @@ A1: Gen w,y;
   u1-u1 = 0.V by RLVECT_1:28;
   then v-u,u1-u1 are_Ort_wrt w,y by A1,ANALMETR:9;
   hence u,v,u1,u1 are_Ort_wrt w,y by ANALMETR:def 3;
-  hence u1,u1,u,v are_Ort_wrt w,y by A1,Lm4;
+  hence u1,u1,u,v are_Ort_wrt w,y by A1,Lm4A;
 end;
 
 Lm9: Gen w,y & (u1,v1 '||' u,v or u,v '||' u1,v1) &
@@ -503,7 +509,7 @@ proof
 A1: Gen w,y;
 A2: u,u // v,v by ANALOAF:18;
   u#u,v#v,u,u are_Ort_wrt w,y & u#u,v#v,v,v are_Ort_wrt w,y by A1,Lm5;
-  then u,u,u#u,v#v are_Ort_wrt w,y & v,v,u#u,v#v are_Ort_wrt w,y by A1,Lm4;
+  then u,u,u#u,v#v are_Ort_wrt w,y & v,v,u#u,v#v are_Ort_wrt w,y by A1,Lm4A;
   hence thesis by A2,Def3;
 end;
 
@@ -587,16 +593,18 @@ proof
 A1: Gen w,y and
 A2: u,v,u1,v1 are_DTr_wrt w,y & u,v,u2,v2 are_DTr_wrt w,y and
 A3: u<>v;
-A4: u,v // u1,v1 & u,v,u#v,u1#v1 are_Ort_wrt w,y &
-  u1,v1,u#v,u1#v1 are_Ort_wrt w,y by A2,Def3;
+C4: u,v // u1,v1 by A2,Def3;
+A4: u,v,u#v,u1#v1 are_Ort_wrt w,y by A2,Def3;
+B4: u1,v1,u#v,u1#v1 are_Ort_wrt w,y by A2,Def3;
 A5: u,v // u2,v2 & u,v,u#v,u2#v2 are_Ort_wrt w,y &
   u2,v2,u#v,u2#v2 are_Ort_wrt w,y by A2,Def3;
-  then
-A6: u,v '||' u2,v2 & u,v '||' u1,v1 by A4,Def1;
-A7: u1,v1 // u2,v2 by A3,A4,A5,ANALOAF:20;
+B6: u,v '||' u2,v2 by Def1,A5;
+A6: u,v '||' u1,v1 by A4,B4,Def1,C4;
+A7: u1,v1 // u2,v2 by A3,A4,A5,ANALOAF:20,C4;
   set a=u1#v1, b=u2#v2;
   u,v,a,b are_Ort_wrt w,y by A1,A4,A5,Lm6;
-  then u1,v1,a,b are_Ort_wrt w,y & u2,v2,a,b are_Ort_wrt w,y by A1,A3,A6,Lm9;
+  then u1,v1,a,b are_Ort_wrt w,y & u2,v2,a,b are_Ort_wrt w,y
+   by A1,A3,A6,B6,Lm9;
   hence thesis by A7,Def3;
 end;
 
@@ -613,7 +621,7 @@ A3: u=v;
     u,u // u1,u1 & u#u,u1#u1,u,u are_Ort_wrt w,y &
     u#u,u1#u1,u1,u1 are_Ort_wrt w,y by A1,Lm5,ANALOAF:18;
     then u,u // u1,u1 &
-    u,u,u#u,u1#u1 are_Ort_wrt w,y & u1,u1,u#u,u1#u1 are_Ort_wrt w,y by A1,Lm4;
+    u,u,u#u,u1#u1 are_Ort_wrt w,y & u1,u1,u#u,u1#u1 are_Ort_wrt w,y by A1,Lm4A;
     then u,u,u1,u1 are_DTr_wrt w,y by Def3;
     hence thesis by A3;
   end;
@@ -647,7 +655,7 @@ A10: b-a,u-a are_Ort_wrt w,y by A5,A8,RLVECT_1:41;
     then a,b,v,u are_Ort_wrt w,y by ANALMETR:def 3;
     then a,b,u,v are_Ort_wrt w,y by A1,Lm4;
     then
-A11: u,v,u#v,u1#t are_Ort_wrt w,y by A1,A7,Lm4;
+A11: u,v,u#v,u1#t are_Ort_wrt w,y by A1,A7,Lm4A;
     u1-b = (u1-u1)+r*(u-a) by RLVECT_1:43
       .= 0.V + r*(u-a) by RLVECT_1:28
       .= r*(u-a) by RLVECT_1:10;
@@ -671,7 +679,7 @@ A16:  b=u1 & t=u1
       u,v // u1,t & u1,t,u#v,u1#t are_Ort_wrt w,y
       proof thus u,v // u1,t by A16,ANALOAF:18;
         a,b,u1,t are_Ort_wrt w,y by A1,A16,Lm5;
-        hence thesis by A1,A7,Lm4;
+        hence thesis by A1,A7,Lm4A;
       end;
       then u,v,u1,t are_DTr_wrt w,y by A11,Def3;
       hence thesis;
@@ -683,8 +691,8 @@ A16:  b=u1 & t=u1
 A17:  a,b,t,u1 are_Ort_wrt w,y by ANALMETR:def 3;
       then a,b,u1,t are_Ort_wrt w,y by A1,Lm4;
       then
-A18:  u1,t,u#v,u1#t are_Ort_wrt w,y by A1,A7,Lm4;
-A19:  t,u1,u#v,t#u1 are_Ort_wrt w,y by A1,A7,A17,Lm4;
+A18:  u1,t,u#v,u1#t are_Ort_wrt w,y by A1,A7,Lm4A;
+A19:  t,u1,u#v,t#u1 are_Ort_wrt w,y by A1,A7,A17,Lm4A;
       r*(u-v) = 1*(u1-t) by A13,RLVECT_1:def 9;
       then v,u // t,u1 or v,u // u1,t by ANALMETR:18;
       then u,v // u1,t or u,v // t,u1 by ANALOAF:21;
@@ -702,11 +710,13 @@ proof
   assume that
 A1: Gen w,y and
 A2: u,v,u1,v1 are_DTr_wrt w,y;
-  u,v // u1,v1 & u,v,u#v,u1#v1 are_Ort_wrt w,y &
+X:u,v // u1,v1 & u,v,u#v,u1#v1 are_Ort_wrt w,y &
   u1,v1,u#v,u1#v1 are_Ort_wrt w,y by A2,Def3;
-  then u1,v1 // u,v & u1,v1,u1#v1,u#v are_Ort_wrt w,y &
-  u,v,u1#v1,u#v are_Ort_wrt w,y by A1,Lm4;
-  hence thesis by Def3;
+  then
+Y:  u1,v1 // u,v by A1,A2,Lm4A,Lm4,X,ANALOAF:21;
+  u1,v1,u1#v1,u#v are_Ort_wrt w,y &
+  u,v,u1#v1,u#v are_Ort_wrt w,y by A1,A2,Lm4A,Lm4,X;
+  hence thesis by Def3,Y;
 end;
 
 theorem Th24:
@@ -720,9 +730,9 @@ A3: u,v // u1,v1 & u,v,u#v,u1#v1 are_Ort_wrt w,y &
   now
     let u,u',v,v' be VECTOR of V;
     assume u,u',v,v' are_Ort_wrt w,y;
-    then v,v',u,u' are_Ort_wrt w,y by A1,Lm4;
+    then v,v',u,u' are_Ort_wrt w,y by A1,Lm4A;
     then v,v',u',u are_Ort_wrt w,y by A1,Lm4;
-    hence u',u,v,v' are_Ort_wrt w,y by A1,Lm4;
+    hence u',u,v,v' are_Ort_wrt w,y by A1,Lm4A;
   end;
   then v,u // v1,u1 &
   v,u,v#u,v1#u1 are_Ort_wrt w,y & v1,u1,v#u,v1#u1 are_Ort_wrt w,y
@@ -899,14 +909,19 @@ A11:  u,v,r,(p#q) are_Ort_wrt w,y & u,v,r,(q#p) are_Ort_wrt w,y by A1,A4,Lm8;
       hence u,v,p,q are_DTr_wrt w,y or u,v,q,p are_DTr_wrt w,y by A7,A11,Def3;
     end;
     now
-      assume r<>s;
+      assume
+Z:     r<>s;
       then
 A12:  u,v,r,(p#q) are_Ort_wrt w,y by A1,A3,A5,Lm9;
-      then r,(p#q),p,q are_Ort_wrt w,y by A1,A6,A8,Lm9;
-      then r,(p#q),q,p are_Ort_wrt w,y by A1,Lm4;
-      then p,q,r,(p#q) are_Ort_wrt w,y & q,p,r,(q#p) are_Ort_wrt w,y
-      by A1,Lm4;
-      hence u,v,p,q are_DTr_wrt w,y or u,v,q,p are_DTr_wrt w,y by A7,A12,Def3;
+      then
+U:     r,(p#q),p,q are_Ort_wrt w,y by A1,A6,A8,Lm9;
+      then
+X:     r,(p#q),q,p are_Ort_wrt w,y by A1,Lm4;
+      then
+Y:     q,p,r,(q#p) are_Ort_wrt w,y by A1,Lm4A,Lm4;
+      then p,q,r,(p#q) are_Ort_wrt w,y by A1,Lm4A,Lm4,X,Z,U;
+      hence u,v,p,q are_DTr_wrt w,y or u,v,q,p are_DTr_wrt w,y
+            by A7,A12,Def3,Y;
     end;
     hence thesis by A9;
   end;
@@ -1240,75 +1255,76 @@ A2: u<>v;
   hence contradiction by A2,RLVECT_1:35;
 end;
 
-theorem Th38:
-  Gen w,y implies for p,q,u,v,v' being VECTOR of V, A being Real st
+theorem Th38: Gen w,y implies for p,q,u,v,v' being VECTOR of V, A being Real st
   p,q,u,v are_DTr_wrt w,y & p<>q &
   A = (PProJ(w,y,p-q,p+q) - 2*PProJ(w,y,p-q,u))*(PProJ(w,y,p-q,p-q))" &
   v'=u+A*(p-q) holds v=v'
-proof
-  assume
-A1: Gen w,y;
-  let p,q,u,v,v' be VECTOR of V,A be Real;
-  assume that
-A2: p,q,u,v are_DTr_wrt w,y and
-A3: p<>q and
-A4: A = (PProJ(w,y,p-q,p+q) - 2*PProJ(w,y,p-q,u))*(PProJ(w,y,p-q,p-q))" and
-A5: v'=u+A*(p-q);
-  set s=p#q;
-A6: PProJ(w,y,p-q,p-q) <> 0 by A1,A3,Th37;
-A7: p,q // u,v' or p,q // v',u
-  proof 1*(v'-u) = (u+A*(p-q))-u by A5,RLVECT_1:def 9
-      .= A*(p-q)
-    by RLSUB_2:78;
-    then q,p // u,v' or q,p // v',u by ANALMETR:18;
-    hence thesis by ANALOAF:21;
-  end;
-  (p,q,s,u#v' are_Ort_wrt w,y & u,v',s,u#v' are_Ort_wrt w,y) &
-  (p,q,s,v'#u are_Ort_wrt w,y & v',u,s,v'#u are_Ort_wrt w,y)
-  proof
-    set Y = PProJ(w,y,v'-u,(v'#u)-s);
-A8: 2*Y = 2*(PProJ(w,y,v'-u,v'#u)-PProJ(w,y,v'-u,p#q)) by A1,Th32
-      .= 2*PProJ(w,y,v'-u,v'#u)-2*PProJ(w,y,v'-u,p#q)
-      .=
-    (PProJ(w,y,v'-u,v')+PProJ(w,y,v'-u,u))-2*PProJ(w,y,v'-u,p#q) by A1,Th36
-      .=
-    (PProJ(w,y,v'-u,v')+PProJ(w,y,v'-u,u))-(PProJ(w,y,v'-u,p)+PProJ
-    (w,y,v'-u,q)) by A1,Th36
-      .=
-    (PProJ(w,y,v'-u,u+A*(p-q)) + PProJ(w,y,v'-u,u)) - PProJ
-    (w,y,v'-u,p+q) by A1,A5,Th32
-      .=
-    ((PProJ(w,y,v'-u,u) + PProJ(w,y,v'-u,A*(p-q))) + PProJ(w,y,v'-u,u)) - PProJ
-    (w,y,v'-u,p+q) by A1,Th32;
-A9: v'-u = A*(p-q) by A5,RLSUB_2:78;
-    PProJ(w,y,A*(p-q),A*(p-q)) = A*PProJ(w,y,p-q,A*(p-q)) by A1,Th33
-      .= A*(((PProJ(w,y,p-q,p+q) - 2*PProJ(w,y,p-q,u))*(PProJ(w,y,p-q,p-q))")*
-    PProJ(w,y,p-q,p-q)) by A1,A4,Th33
-      .= A*((PProJ(w,y,p-q,p+q) - 2*PProJ(w,y,p-q,u))*((PProJ(w,y,p-q,p-q))"*
-    PProJ(w,y,p-q,p-q)))
-      .= A*((PProJ(w,y,p-q,p+q) - 2*PProJ(w,y,p-q,u))*1) by A6,XCMPLX_0:def 7
-      .= A*(PProJ(w,y,p-q,p+q) - 2*PProJ(w,y,p-q,u));
-    then
-    2*Y =
-    ((PProJ(w,y,A*(p-q),u) + (A*PProJ(w,y,p-q,p+q) - A*(2*PProJ(w,y,p-q,u)))) +
-    PProJ(w,y,A*(p-q),u)) - PProJ(w,y,A*(p-q),p+q) by A8,A9
-      .=
-
+ proof assume A1: Gen w,y;
+ let p,q,u,v,v' be VECTOR of V,A be Real;
+ assume that A2: p,q,u,v are_DTr_wrt w,y and A3: p<>q and
+ A4: A = (PProJ(w,y,p-q,p+q) - 2*PProJ(w,y,p-q,u))*(PProJ(w,y,p-q,p-q))" and
+ A5: v'=u+A*(p-q); set s=p#q;
+ A6: PProJ(w,y,p-q,p-q) <> 0 by A1,A3,Th37;
+ A7: p,q // u,v' or p,q // v',u proof 1*(v'-u) = (u+A*(p-q))-u by A5,
+RLVECT_1:def 9 .= A*(p-q)
+  by RLSUB_2:78; then q,p // u,v' or q,p // v',u by ANALMETR:18;
+  hence thesis by ANALOAF:21; end;
+      (p,q,s,u#v' are_Ort_wrt w,y & u,v',s,u#v' are_Ort_wrt w,y) &
+   (p,q,s,v'#u are_Ort_wrt w,y & v',u,s,v'#u are_Ort_wrt w,y)
+ proof set X=PProJ(w,y,p-q,(v'#u)-s); A8: 2*X =
+  2*(PProJ(w,y,p-q,v'#u)-PProJ(w,y,p-q,p#q)) by A1,Th32
+  .= 2*PProJ(w,y,p-q,v'#u)-2*PProJ(w,y,p-q,p#q) .=
+  (PProJ(w,y,p-q,v')+PProJ(w,y,p-q,u))-2*PProJ(w,y,p-q,p#q) by A1,Th36 .=
+  (PProJ(w,y,p-q,v')+PProJ(w,y,p-q,u))-(PProJ(w,y,p-q,p)+PProJ
+(w,y,p-q,q)) by A1,Th36 .=
+(PProJ(w,y,p-q,u+A*(p-q)) + PProJ(w,y,p-q,u)) - PProJ
+(w,y,p-q,p+q) by A1,A5,Th32 .=
+  ((PProJ(w,y,p-q,u) + PProJ(w,y,p-q,A*(p-q))) + PProJ(w,y,p-q,u)) -
+   PProJ(w,y,p-q,p+q) by A1,Th32;
+       PProJ(w,y,p-q,A*(p-q)) =
+((PProJ(w,y,p-q,p+q) - 2*PProJ(w,y,p-q,u))*(PProJ(w,y,p-q,p-q))")*PProJ
+(w,y,p-q,p-q) by A1,A4,Th33.=
+  (PProJ(w,y,p-q,p+q) - 2*PProJ(w,y,p-q,u))*((PProJ(w,y,p-q,p-q))"*PProJ
+(w,y,p-q,p-q))
+  .= (PProJ(w,y,p-q,p+q) - 2*PProJ(w,y,p-q,u))*1 by A6,XCMPLX_0:def 7 .=
+  PProJ(w,y,p-q,p+q) - 2*PProJ(w,y,p-q,u);
+  then q,p,p#q,v'#u are_Ort_wrt w,y by A1,A8,Th35;
+  then s,v'#u,q,p are_Ort_wrt w,y by A1,Lm4,Lm4A;
+  then A9: s,v'#u,p,q are_Ort_wrt w,y by A1,Lm4;
+ set Y = PProJ(w,y,v'-u,(v'#u)-s); A10: 2*Y =
+  2*(PProJ(w,y,v'-u,v'#u)-PProJ(w,y,v'-u,p#q)) by A1,Th32
+  .= 2*PProJ(w,y,v'-u,v'#u)-2*PProJ(w,y,v'-u,p#q) .=
+  (PProJ(w,y,v'-u,v')+PProJ(w,y,v'-u,u))-2*PProJ(w,y,v'-u,p#q) by A1,Th36 .=
+  (PProJ(w,y,v'-u,v')+PProJ(w,y,v'-u,u))-(PProJ(w,y,v'-u,p)+PProJ
+(w,y,v'-u,q)) by A1,Th36 .=
+(PProJ(w,y,v'-u,u+A*(p-q)) + PProJ(w,y,v'-u,u)) - PProJ
+(w,y,v'-u,p+q) by A1,A5,Th32.=
+  ((PProJ(w,y,v'-u,u) + PProJ(w,y,v'-u,A*(p-q))) + PProJ(w,y,v'-u,u)) - PProJ
+(w,y,v'-u,p+q)
+  by A1,Th32;
+A11:  v'-u = A*(p-q) by A5,RLSUB_2:78;
+      PProJ(w,y,A*(p-q),A*(p-q)) = A*PProJ(w,y,p-q,A*(p-q)) by A1,Th33
+  .= A*(((PProJ(w,y,p-q,p+q) - 2*PProJ(w,y,p-q,u))*(PProJ(w,y,p-q,p-q))")*
+   PProJ(w,y,p-q,p-q)) by A1,A4,Th33
+  .= A*((PProJ(w,y,p-q,p+q) - 2*PProJ(w,y,p-q,u))*((PProJ(w,y,p-q,p-q))"*
+   PProJ(w,y,p-q,p-q)))
+  .= A*((PProJ(w,y,p-q,p+q) - 2*PProJ(w,y,p-q,u))*1) by A6,XCMPLX_0:def 7 .=
+  A*(PProJ(w,y,p-q,p+q) - 2*PProJ(w,y,p-q,u)); then A12: 2*Y =
+((PProJ(w,y,A*(p-q),u) + (A*PProJ(w,y,p-q,p+q) - A*(2*PProJ(w,y,p-q,u)))) +
+    PProJ(w,y,A*(p-q),u)) - PProJ(w,y,A*(p-q),p+q) by A10,A11 .=
 ((PProJ(w,y,A*(p-q),u) + (PProJ(w,y,A*(p-q),p+q) - 2*(A*PProJ(w,y,p-q,u)))) +
+    PProJ(w,y,A*(p-q),u)) - PProJ(w,y,A*(p-q),p+q) by A1,Th33 .=
+   ((PProJ(w,y,A*(p-q),u) + (PProJ(w,y,A*(p-q),p+q) - 2*PProJ
+(w,y,A*(p-q),u))) +
     PProJ(w,y,A*(p-q),u)) - PProJ(w,y,A*(p-q),p+q) by A1,Th33
-      .=
-    ((PProJ(w,y,A*(p-q),u) + (PProJ(w,y,A*(p-q),p+q) - 2*PProJ
-    (w,y,A*(p-q),u))) +
-    PProJ(w,y,A*(p-q),u)) - PProJ(w,y,A*(p-q),p+q) by A1,Th33
-      .= 0;
-    then u,v',s,v'#u are_Ort_wrt w,y by A1,Th35;
-    then s,v'#u,u,v' are_Ort_wrt w,y by A1,Lm4;
-    then s,v'#u,v',u are_Ort_wrt w,y by A1,Lm4;
-    hence thesis by A1,Lm4;
-  end;
+    .= 0;
+   then u,v',s,v'#u are_Ort_wrt w,y by A1,Th35
+; then s,v'#u,u,v' are_Ort_wrt w,y
+   by A1,Lm4,Lm4A; then s,v'#u,v',u are_Ort_wrt w,y by A1,Lm4,Lm4A;
+ hence thesis by A1,A9,A12,Lm4,Lm4A,Th35;
+ end;
   then p,q,u,v' are_DTr_wrt w,y or p,q,v',u are_DTr_wrt w,y by A7,Def3;
-  hence v = v' by A1,A2,A3,Th27;
-end;
+ hence v = v' by A1,A2,A3,Th27; end;
 
 Lm20: Gen w,y implies for u,u',u1,u2,t1,t2 being VECTOR of V, A1,A2 being Real
 st u<>u' & A1 = (PProJ(w,y,u-u',u+u') - 2*PProJ(w,y,u-u',u1))*((PProJ
@@ -1482,7 +1498,7 @@ A9: u1=t1 & u2=t2;
 A10: u,u' // u1#u2,t1#t2 by ANALOAF:18;
     u#u',(u1#u2)#(t1#t2),u1#u2,t1#t2 are_Ort_wrt w,y by A1,A9,Lm5;
     then
-A11: u1#u2,t1#t2,u#u',(u1#u2)#(t1#t2) are_Ort_wrt w,y by A1,Lm4;
+A11: u1#u2,t1#t2,u#u',(u1#u2)#(t1#t2) are_Ort_wrt w,y by A1,Lm4A;
     u,u',u#u',u1#u2 are_Ort_wrt w,y
     proof
       set uu'=u#u';
@@ -1934,15 +1950,16 @@ Lm34: Gen w,y & p<>q & p,q // a,a1 & p,q // b,b1 & p,q // c,c1 & p,q // d,d1 &
 a,b // c,d implies a1,b1 // c1,d1
 proof
   assume that
-A1: Gen w,y and p<>q and
-  p,q // a,a1 & p,q // b,b1 & p,q // c,c1 & p,q // d,d1 and
+A1: Gen w,y and
+Y: p<>q and
+X:  p,q // a,a1 & p,q // b,b1 & p,q // c,c1 & p,q // d,d1 and
 A2: a,b // c,d;
   reconsider u=p,u'=q,u1=a,u2=b,v1=c,v2=d,t1=a1,t2=b1,w1=c1,w2=d1 as VECTOR
   of V;
-  u<>u' & u,u',u1,t1 are_DTr_wrt w,y & u,u',u2,t2 are_DTr_wrt w,y
+  u,u',u1,t1 are_DTr_wrt w,y & u,u',u2,t2 are_DTr_wrt w,y
   & u,u',v1,w1 are_DTr_wrt w,y & u,u',v2,w2 are_DTr_wrt w,y
-  & u1,u2,v1,v2 are_DTr_wrt w,y by A1,A2,Th47;
-  then t1,t2,w1,w2 are_DTr_wrt w,y by A1,Th43;
+  & u1,u2,v1,v2 are_DTr_wrt w,y by A1,A2,Th47,X;
+  then t1,t2,w1,w2 are_DTr_wrt w,y by A1,Th43,Y;
   hence thesis by A1,Th47;
 end;
 

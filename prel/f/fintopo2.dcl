@@ -23,7 +23,7 @@
 <ArticleID name="ORDERS_2"/>
 <ArticleID name="FINTOPO2"/>
 </Signature>
-<RCluster>
+<RCluster aid="FINTOPO2" nr="1">
 <ArgTypes/>
 <Typ kind="G" nr="7">
 <Cluster/>
@@ -32,7 +32,7 @@
 <Adjective nr="46"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="FINTOPO2" nr="2">
 <ArgTypes/>
 <Typ kind="G" nr="7">
 <Cluster/>

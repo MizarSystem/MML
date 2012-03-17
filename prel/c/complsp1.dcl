@@ -28,7 +28,7 @@
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="COMPLSP1"/>
 </Signature>
-<FCluster>
+<FCluster aid="COMPLSP1" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -42,7 +42,7 @@
 <Adjective nr="1" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="COMPLSP1" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -67,7 +67,7 @@
 <Adjective nr="49"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="COMPLSP1" nr="3">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>

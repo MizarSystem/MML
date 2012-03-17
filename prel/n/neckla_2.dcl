@@ -21,7 +21,7 @@
 <ArticleID name="ORDERS_2"/>
 <ArticleID name="NECKLA_2"/>
 </Signature>
-<RCluster>
+<RCluster aid="NECKLA_2" nr="1">
 <ArgTypes/>
 <Typ kind="G" nr="5">
 <Cluster/>
@@ -33,21 +33,21 @@
 <Adjective nr="43"/>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="NECKLA_2" nr="1">
 <ArgTypes/>
 <Func kind="K" nr="120"/>
 <Cluster>
 <Adjective nr="7" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="NECKLA_2" nr="2">
 <ArgTypes/>
 <Func kind="K" nr="121"/>
 <Cluster>
 <Adjective nr="7" value="false"/>
 </Cluster>
 </FCluster>
-<CCluster>
+<CCluster aid="NECKLA_2" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -66,7 +66,7 @@
 <Adjective nr="18"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="NECKLA_2" nr="2">
 <ArgTypes/>
 <Cluster/>
 <Typ kind="M" nr="2">
@@ -77,7 +77,7 @@
 <Adjective nr="18"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="NECKLA_2" nr="3">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="10"/>

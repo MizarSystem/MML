@@ -36,7 +36,7 @@
 <ArticleID name="ALTCAT_1"/>
 <ArticleID name="ORDERS_3"/>
 </Signature>
-<RCluster>
+<RCluster aid="ORDERS_3" nr="1">
 <ArgTypes/>
 <Typ kind="G" nr="5">
 <Cluster/>
@@ -51,7 +51,7 @@
 <Adjective nr="89"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="ORDERS_3" nr="2">
 <ArgTypes/>
 <Typ kind="G" nr="5">
 <Cluster/>
@@ -66,7 +66,7 @@
 <Adjective nr="89"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="ORDERS_3" nr="3">
 <ArgTypes/>
 <Typ kind="G" nr="5">
 <Cluster/>
@@ -81,7 +81,7 @@
 <Adjective nr="91" value="false"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="ORDERS_3" nr="4">
 <ArgTypes/>
 <Typ kind="G" nr="5">
 <Cluster/>
@@ -97,7 +97,7 @@
 <Adjective nr="91"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="ORDERS_3" nr="5">
 <ArgTypes/>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -107,7 +107,7 @@
 <Adjective nr="92"/>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="ORDERS_3" nr="1">
 <ArgTypes/>
 <Func kind="G" nr="5">
 <Func kind="K" nr="18"/>
@@ -120,7 +120,7 @@
 <Adjective nr="24"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="ORDERS_3" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
@@ -135,7 +135,7 @@
 <Adjective nr="7"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="ORDERS_3" nr="3">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
@@ -143,7 +143,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="274">
+<Func kind="K" nr="275">
 <LocusVar nr="1"/>
 <LocusVar nr="1"/>
 </Func>
@@ -151,7 +151,7 @@
 <Adjective nr="7" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="ORDERS_3" nr="4">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -160,14 +160,14 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="275">
+<Func kind="K" nr="276">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
 <Adjective nr="7" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="ORDERS_3" nr="5">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
@@ -186,7 +186,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="274">
+<Func kind="K" nr="275">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -194,7 +194,7 @@
 <Adjective nr="40"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="ORDERS_3" nr="6">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -203,7 +203,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="277">
+<Func kind="K" nr="278">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -212,7 +212,7 @@
 <Adjective nr="80"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="ORDERS_3" nr="7">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -221,7 +221,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="277">
+<Func kind="K" nr="278">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -230,7 +230,7 @@
 <Adjective nr="86"/>
 </Cluster>
 </FCluster>
-<CCluster>
+<CCluster aid="ORDERS_3" nr="1">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="16"/>

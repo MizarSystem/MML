@@ -32,7 +32,7 @@
 <ArticleID name="BINTREE1"/>
 <ArticleID name="BINTREE2"/>
 </Signature>
-<RCluster>
+<RCluster aid="BINTREE2" nr="1">
 <ArgTypes/>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -43,7 +43,7 @@
 <Adjective nr="56"/>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="BINTREE2" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -75,7 +75,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="BINTREE2" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -97,7 +97,7 @@
 <Adjective nr="19"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="BINTREE2" nr="3">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -121,7 +121,7 @@
 <Adjective nr="5"/>
 </Cluster>
 </FCluster>
-<CCluster>
+<CCluster aid="BINTREE2" nr="1">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="14" value="false"/>

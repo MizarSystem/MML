@@ -44,7 +44,7 @@
 <ArticleID name="TOPMETR"/>
 <ArticleID name="JORDAN6"/>
 </Signature>
-<FCluster>
+<FCluster aid="JORDAN6" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster>
@@ -72,7 +72,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="JORDAN6" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster>
@@ -100,7 +100,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<CCluster>
+<CCluster aid="JORDAN6" nr="1">
 <ArgTypes/>
 <Cluster/>
 <Typ kind="M" nr="2">

@@ -32,7 +32,7 @@
 <ArticleID name="T_0TOPSP"/>
 <ArticleID name="TOPGRP_1"/>
 </Signature>
-<RCluster>
+<RCluster aid="TOPGRP_1" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -57,7 +57,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="TOPGRP_1" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
@@ -72,7 +72,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Typ kind="M" nr="11">
+<Typ kind="M" nr="10">
 <Cluster/>
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
@@ -84,7 +84,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="TOPGRP_1" nr="3">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
@@ -108,7 +108,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="TOPGRP_1" nr="4">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster/>
@@ -140,7 +140,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="TOPGRP_1" nr="5">
 <ArgTypes/>
 <Typ kind="G" nr="5">
 <Cluster/>
@@ -152,7 +152,7 @@
 <Adjective nr="21"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="TOPGRP_1" nr="6">
 <ArgTypes/>
 <Typ kind="G" nr="12">
 <Cluster/>
@@ -161,7 +161,7 @@
 <Adjective nr="110"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="TOPGRP_1" nr="7">
 <ArgTypes/>
 <Typ kind="G" nr="12">
 <Cluster/>
@@ -171,7 +171,7 @@
 <Adjective nr="110"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="TOPGRP_1" nr="8">
 <ArgTypes/>
 <Typ kind="G" nr="12">
 <Cluster/>
@@ -183,7 +183,7 @@
 <Adjective nr="110"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="TOPGRP_1" nr="9">
 <ArgTypes/>
 <Typ kind="G" nr="12">
 <Cluster/>
@@ -201,7 +201,7 @@
 <Adjective nr="112"/>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="TOPGRP_1" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="1">
 <Cluster/>
@@ -231,7 +231,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="TOPGRP_1" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="8">
 <Cluster>
@@ -265,7 +265,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="TOPGRP_1" nr="3">
 <ArgTypes>
 <Typ kind="G" nr="8">
 <Cluster>
@@ -306,7 +306,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="TOPGRP_1" nr="4">
 <ArgTypes>
 <Typ kind="G" nr="8">
 <Cluster>
@@ -347,7 +347,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="TOPGRP_1" nr="5">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster/>
@@ -380,7 +380,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="TOPGRP_1" nr="6">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster/>
@@ -434,7 +434,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="TOPGRP_1" nr="7">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster/>
@@ -448,7 +448,7 @@
 <Adjective nr="67"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="TOPGRP_1" nr="8">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster/>
@@ -463,7 +463,7 @@
 <Adjective nr="91"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="TOPGRP_1" nr="9">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -506,7 +506,7 @@
 <Adjective nr="110"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="TOPGRP_1" nr="10">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -563,7 +563,7 @@
 <Adjective nr="110"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="TOPGRP_1" nr="11">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -578,7 +578,7 @@
 <Adjective nr="17"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="TOPGRP_1" nr="12">
 <ArgTypes>
 <Typ kind="G" nr="12">
 <Cluster>
@@ -614,7 +614,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="TOPGRP_1" nr="13">
 <ArgTypes>
 <Typ kind="G" nr="12">
 <Cluster>
@@ -650,7 +650,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="TOPGRP_1" nr="14">
 <ArgTypes>
 <Typ kind="G" nr="12">
 <Cluster>
@@ -691,7 +691,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="TOPGRP_1" nr="15">
 <ArgTypes>
 <Typ kind="G" nr="12">
 <Cluster>
@@ -732,7 +732,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="TOPGRP_1" nr="16">
 <ArgTypes>
 <Typ kind="G" nr="12">
 <Cluster>
@@ -766,7 +766,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="TOPGRP_1" nr="17">
 <ArgTypes>
 <Typ kind="G" nr="12">
 <Cluster>
@@ -807,7 +807,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="TOPGRP_1" nr="18">
 <ArgTypes>
 <Typ kind="G" nr="12">
 <Cluster>
@@ -848,7 +848,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="TOPGRP_1" nr="19">
 <ArgTypes>
 <Typ kind="G" nr="12">
 <Cluster>
@@ -882,7 +882,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="TOPGRP_1" nr="20">
 <ArgTypes>
 <Typ kind="G" nr="12">
 <Cluster>
@@ -925,7 +925,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="TOPGRP_1" nr="21">
 <ArgTypes>
 <Typ kind="G" nr="12">
 <Cluster>
@@ -968,7 +968,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="TOPGRP_1" nr="22">
 <ArgTypes>
 <Typ kind="G" nr="12">
 <Cluster>
@@ -1002,7 +1002,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="TOPGRP_1" nr="23">
 <ArgTypes>
 <Typ kind="G" nr="12">
 <Cluster>
@@ -1043,7 +1043,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="TOPGRP_1" nr="24">
 <ArgTypes>
 <Typ kind="G" nr="12">
 <Cluster>
@@ -1084,7 +1084,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<CCluster>
+<CCluster aid="TOPGRP_1" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
@@ -1100,7 +1100,7 @@
 </Typ>
 </ArgTypes>
 <Cluster/>
-<Typ kind="M" nr="11">
+<Typ kind="M" nr="10">
 <Cluster/>
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
@@ -1109,7 +1109,7 @@
 <Adjective nr="1" value="false"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="TOPGRP_1" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster/>
@@ -1167,7 +1167,7 @@
 </Adjective>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="TOPGRP_1" nr="3">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
@@ -1220,14 +1220,14 @@
 </Adjective>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="TOPGRP_1" nr="4">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster/>
 </Typ>
 </ArgTypes>
 <Cluster/>
-<Typ kind="M" nr="14">
+<Typ kind="M" nr="13">
 <Cluster/>
 <LocusVar nr="1"/>
 </Typ>
@@ -1238,7 +1238,7 @@
 </Adjective>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="TOPGRP_1" nr="5">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="12" value="false"/>
@@ -1252,7 +1252,7 @@
 <Adjective nr="109"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="TOPGRP_1" nr="6">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="12" value="false"/>
@@ -1268,7 +1268,7 @@
 <Adjective nr="93"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="TOPGRP_1" nr="7">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="12" value="false"/>
@@ -1288,7 +1288,7 @@
 <Adjective nr="109"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="TOPGRP_1" nr="8">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="12" value="false"/>

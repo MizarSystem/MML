@@ -15,7 +15,7 @@
 <ArticleID name="XREAL_0"/>
 <ArticleID name="INT_1"/>
 </Signature>
-<RCluster>
+<RCluster aid="INT_1" nr="1">
 <ArgTypes/>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -28,7 +28,7 @@
 <Adjective nr="20"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="INT_1" nr="2">
 <ArgTypes/>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -37,7 +37,7 @@
 <Adjective nr="20"/>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="INT_1" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -58,7 +58,7 @@
 <Adjective nr="20"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="INT_1" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -79,7 +79,7 @@
 <Adjective nr="20"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="INT_1" nr="3">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -95,7 +95,7 @@
 <Adjective nr="20"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="INT_1" nr="4">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -116,7 +116,7 @@
 <Adjective nr="20"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="INT_1" nr="5">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -131,7 +131,7 @@
 <Adjective nr="20"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="INT_1" nr="6">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -151,7 +151,7 @@
 <Adjective nr="20"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="INT_1" nr="7">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -171,7 +171,7 @@
 <Adjective nr="20"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="INT_1" nr="8">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -191,7 +191,7 @@
 <Adjective nr="20"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="INT_1" nr="9">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -210,7 +210,7 @@
 <Adjective nr="20"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="INT_1" nr="10">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -225,7 +225,7 @@
 <Adjective nr="19"/>
 </Cluster>
 </FCluster>
-<CCluster>
+<CCluster aid="INT_1" nr="1">
 <ArgTypes/>
 <Cluster/>
 <Typ kind="M" nr="2">
@@ -236,7 +236,7 @@
 <Adjective nr="20"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="INT_1" nr="2">
 <ArgTypes/>
 <Cluster/>
 <Typ kind="M" nr="2">
@@ -247,7 +247,7 @@
 <Adjective nr="20"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="INT_1" nr="3">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="14"/>
@@ -259,7 +259,7 @@
 <Adjective nr="20"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="INT_1" nr="4">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="20"/>

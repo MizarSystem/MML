@@ -31,7 +31,7 @@
 <ArticleID name="AMI_2"/>
 <ArticleID name="SCMRING1"/>
 </Signature>
-<RCluster>
+<RCluster aid="SCMRING1" nr="1">
 <ArgTypes/>
 <Typ kind="G" nr="1">
 <Cluster/>
@@ -41,7 +41,7 @@
 <Adjective nr="30"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="SCMRING1" nr="2">
 <ArgTypes/>
 <Typ kind="G" nr="10">
 <Cluster/>
@@ -52,7 +52,7 @@
 <Adjective nr="68"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="SCMRING1" nr="3">
 <ArgTypes/>
 <Typ kind="G" nr="10">
 <Cluster/>
@@ -75,21 +75,21 @@
 <Adjective nr="90"/>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="SCMRING1" nr="1">
 <ArgTypes/>
 <Func kind="K" nr="199"/>
 <Cluster>
 <Adjective nr="76" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="SCMRING1" nr="2">
 <ArgTypes/>
 <Func kind="K" nr="52"/>
 <Cluster>
 <Adjective nr="15" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="SCMRING1" nr="3">
 <ArgTypes>
 <Typ kind="G" nr="1">
 <Cluster>
@@ -104,7 +104,7 @@
 <Adjective nr="76" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="SCMRING1" nr="4">
 <ArgTypes>
 <Typ kind="G" nr="1">
 <Cluster>
@@ -164,7 +164,7 @@
 <Adjective nr="4"/>
 </Cluster>
 </FCluster>
-<CCluster>
+<CCluster aid="SCMRING1" nr="1">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="25" value="false"/>
@@ -181,7 +181,7 @@
 <Adjective nr="72"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="SCMRING1" nr="2">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="25" value="false"/>
@@ -196,7 +196,7 @@
 <Adjective nr="88"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="SCMRING1" nr="3">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="25" value="false"/>

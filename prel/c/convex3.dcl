@@ -21,7 +21,7 @@
 <ArticleID name="RLVECT_1"/>
 <ArticleID name="CONVEX3"/>
 </Signature>
-<RCluster>
+<RCluster aid="CONVEX3" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="11">
 <Cluster>
@@ -43,7 +43,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="CONVEX3" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="11">
 <Cluster>
@@ -66,7 +66,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="CONVEX3" nr="3">
 <ArgTypes>
 <Typ kind="G" nr="11">
 <Cluster>

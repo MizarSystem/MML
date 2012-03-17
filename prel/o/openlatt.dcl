@@ -22,7 +22,7 @@
 <ArticleID name="LATTICE4"/>
 <ArticleID name="OPENLATT"/>
 </Signature>
-<RCluster>
+<RCluster aid="OPENLATT" nr="1">
 <ArgTypes/>
 <Typ kind="G" nr="8">
 <Cluster/>
@@ -46,7 +46,7 @@
 <Adjective nr="58"/>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="OPENLATT" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
@@ -61,7 +61,7 @@
 <Adjective nr="1" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="OPENLATT" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
@@ -79,7 +79,7 @@
 <Adjective nr="46"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="OPENLATT" nr="3">
 <ArgTypes>
 <Typ kind="G" nr="8">
 <Cluster>
@@ -96,7 +96,7 @@
 <Adjective nr="1" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="OPENLATT" nr="4">
 <ArgTypes>
 <Typ kind="G" nr="8">
 <Cluster>
@@ -120,7 +120,7 @@
 <Adjective nr="1" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="OPENLATT" nr="5">
 <ArgTypes>
 <Typ kind="G" nr="8">
 <Cluster>
@@ -138,7 +138,7 @@
 <Adjective nr="1" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="OPENLATT" nr="6">
 <ArgTypes>
 <Typ kind="G" nr="8">
 <Cluster>
@@ -158,7 +158,7 @@
 <Adjective nr="21"/>
 </Cluster>
 </FCluster>
-<CCluster>
+<CCluster aid="OPENLATT" nr="1">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="12" value="false"/>
@@ -176,7 +176,7 @@
 <Adjective nr="58"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="OPENLATT" nr="2">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="12" value="false"/>

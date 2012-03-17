@@ -44,7 +44,7 @@
 <ArticleID name="PARTFUN3"/>
 <ArticleID name="ENTROPY1"/>
 </Signature>
-<RCluster>
+<RCluster aid="ENTROPY1" nr="1">
 <ArgTypes/>
 <Typ kind="M" nr="7">
 <Cluster/>
@@ -61,7 +61,7 @@
 <Adjective nr="140"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="ENTROPY1" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -86,7 +86,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<CCluster>
+<CCluster aid="ENTROPY1" nr="1">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="111"/>
@@ -100,7 +100,7 @@
 <Adjective nr="140"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="ENTROPY1" nr="2">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="79"/>
@@ -117,7 +117,7 @@
 <Adjective nr="79"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="ENTROPY1" nr="3">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="79"/>

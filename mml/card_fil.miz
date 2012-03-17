@@ -28,12 +28,12 @@ environ
 begin
 
 theorem Th1:
-  for x being set for X being infinite set holds Card {x} <` Card X
+  for x being set for X being infinite set holds Card {x} in Card X
 proof
   let x be set;
   let X be infinite set;
   Card X is infinite by CARD_4:1;
-  hence Card { x } <` Card X by CARD_4:13;
+  hence Card { x } in Card X by CARD_4:13;
 end;
 
 registration
@@ -299,7 +299,7 @@ definition
   pred S is_multiplicative_with N means
   :Def3:
   for S1 being non empty set st
-  (S1 c= S & Card S1 <` N) holds meet S1 in S;
+  (S1 c= S & Card S1 in N) holds meet S1 in S;
 end;
 
 definition
@@ -307,7 +307,7 @@ definition
   pred S is_additive_with N means
   :Def4:
   for S1 being non empty set st
-  (S1 c= S & Card S1 <` N) holds union S1 in S;
+  (S1 c= S & Card S1 in N) holds union S1 in S;
 end;
 
 notation
@@ -327,14 +327,14 @@ proof
 A1: S is_multiplicative_with N;
   let S1 be non empty set such that
 A2: S1 c= dual S and
-A3: Card S1 <` N;
+A3: Card S1 in N;
   reconsider S2=S1 as non empty Subset-Family of X by A2,XBOOLE_1:1;
   set S3 = dual S2;
 A4: S3 c= S by A2,SETFAM_1:52;
 A5: {Y`: Y in S2} = S3 by Th9;
   deffunc F(Subset of X) = $1`;
-  Card {F(Y): Y in S2} <=` Card S2 from TREES_2:sch 2;
-  then Card S3 <` N by A3,A5,ORDINAL1:22;
+  Card {F(Y): Y in S2} c= Card S2 from TREES_2:sch 2;
+  then Card S3 in N by A3,A5,ORDINAL1:22;
   then
 A6: (meet S3)`` in S by A1,A4,Def3;
   (union S2)` = [#]X \ union S2
@@ -693,20 +693,20 @@ definition
   let X;
   func Frechet_Filter(X) -> Filter of X equals
 
-  { Y :  Card (X \ Y) <` Card X};
+  { Y :  Card (X \ Y) in Card X};
   coherence
   proof
-    defpred P[set] means Card (X \ $1) <` Card X;
+    defpred P[set] means Card (X \ $1) in Card X;
     set IT = { Y : P[Y] };
 A1: IT is Subset-Family of X from DOMAIN_1:sch 7;
     Card (X \ X) = Card ({} qua set) by XBOOLE_1:37
       .= 0;
     then
-A2: Card (X \ X) <` Card X by ORDINAL3:10;
+A2: Card (X \ X) in Card X by ORDINAL3:10;
     X c= X;
     then X in IT by A2;
     then reconsider IT as non empty Subset-Family of X by A1;
-A3: for Y1 st Y1 in IT holds Card (X \ Y1) <` Card X
+A3: for Y1 st Y1 in IT holds Card (X \ Y1) in Card X
     proof
       let Y1;
       assume Y1 in IT;
@@ -719,7 +719,7 @@ A4:   Y1 in { Y : P[Y] };
       thus not {} in IT
       proof
         assume {} in IT;
-        then Card (X \ {}) <` Card X by A3;
+        then Card (X \ {}) in Card X by A3;
         hence contradiction;
       end;
       let Y1,Y2;
@@ -728,14 +728,14 @@ A4:   Y1 in { Y : P[Y] };
         assume
 A5:     Y1 in IT & Y2 in IT;
         then
-A6:     Card (X \ Y1) <` Card X by A3;
-        Card (X \ Y2) <` Card X by A3,A5;
-        then Card (X \ Y1) +` Card (X \ Y2) <` Card X +` Card X
+A6:     Card (X \ Y1) in Card X by A3;
+        Card (X \ Y2) in Card X by A3,A5;
+        then Card (X \ Y1) +` Card (X \ Y2) in Card X +` Card X
         by A6,CARD_4:74;
         then
-A7:     Card (X \ Y1) +` Card (X \ Y2) <` Card X by CARD_4:33;
+A7:     Card (X \ Y1) +` Card (X \ Y2) in Card X by CARD_4:33;
         Card (X \ (Y1 /\ Y2)) = Card ( (X \ Y1) \/ (X \ Y2)) by XBOOLE_1:54;
-        then Card (X \ (Y1 /\ Y2)) <` Card X by A7,CARD_2:47,ORDINAL1:22;
+        then Card (X \ (Y1 /\ Y2)) in Card X by A7,CARD_2:47,ORDINAL1:22;
         hence (Y1 /\ Y2) in IT;
       end;
       thus (Y1 in IT & Y1 c= Y2) implies Y2 in IT
@@ -743,9 +743,9 @@ A7:     Card (X \ Y1) +` Card (X \ Y2) <` Card X by CARD_4:33;
         assume
 A8:     Y1 in IT & Y1 c= Y2;
         then
-A9:     Card (X \ Y1) <` Card X by A3;
+A9:     Card (X \ Y1) in Card X by A3;
         X \ Y2 c= X \ Y1 by A8,XBOOLE_1:34;
-        then Card (X \ Y2) <` Card X by A9,CARD_1:27,ORDINAL1:22;
+        then Card (X \ Y2) in Card X by A9,CARD_1:27,ORDINAL1:22;
         hence Y2 in IT;
       end;
     end;
@@ -762,25 +762,25 @@ definition
 end;
 
 theorem Th18:
-  Y in Frechet_Filter(X) iff Card (X \ Y) <` Card X
+  Y in Frechet_Filter(X) iff Card (X \ Y) in Card X
 proof
-  thus Y in Frechet_Filter(X) implies Card (X \ Y) <` Card X
+  thus Y in Frechet_Filter(X) implies Card (X \ Y) in Card X
   proof
-    defpred P[set] means Card (X \ $1) <` Card X;
+    defpred P[set] means Card (X \ $1) in Card X;
     assume Y in Frechet_Filter(X);
     then
 A1: Y in {Y1: P[Y1]};
     thus P[Y] from ElemProp(A1);
   end;
-  thus Card (X \ Y) <` Card X implies Y in Frechet_Filter(X);
+  thus Card (X \ Y) in Card X implies Y in Frechet_Filter(X);
 end;
 
 theorem Th19:
-  Y in Frechet_Ideal(X) iff Card Y <` Card X
+  Y in Frechet_Ideal(X) iff Card Y in Card X
 proof
   Y in Frechet_Ideal(X) iff Y` in Frechet_Filter(X) by SETFAM_1:def 8;
-  then Y in Frechet_Ideal(X) iff Card Y`` <` Card X by Th18;
-  hence Y in Frechet_Ideal(X) iff Card Y <` Card X;
+  then Y in Frechet_Ideal(X) iff Card Y`` in Card X by Th18;
+  hence Y in Frechet_Ideal(X) iff Card Y in Card X;
 end;
 
 theorem Th20:
@@ -792,12 +792,12 @@ A1: Frechet_Filter(X) c= F;
   assume Y in F;
   then not X \ Y in Frechet_Filter(X) by A1,Th6;
   then
-A2: not Card (X \ (X \ Y)) <` Card X;
+A2: not Card (X \ (X \ Y)) in Card X;
   X \ (X \ Y) = X /\ Y by XBOOLE_1:48
     .= Y by XBOOLE_1:28;
   then
-A3: Card X <=` Card Y by A2,CARD_1:14;
-  Card Y <=` Card X by CARD_1:27;
+A3: Card X c= Card Y by A2,CARD_1:14;
+  Card Y c= Card X by CARD_1:27;
   hence Card Y = Card X by A3,XBOOLE_0:def 10;
 end;
 
@@ -811,7 +811,7 @@ A1: Uf is uniform being_ultrafilter;
     let Y be set;
     assume
 A2: Y in Frechet_Filter(X);
-    then Card (X \ Y) <` Card X by Th18;
+    then Card (X \ Y) in Card X by Th18;
     then Card (X \ Y) <> Card X;
     then not (X \ Y) in Uf by A1,Def5;
     hence Y in Uf by A1,A2,Def7;
@@ -889,7 +889,7 @@ A4:   for Z holds Z in F implies x in Z
         then Y c= Z by A2;
         hence thesis by A3;
       end;
-      Card { x } <` Card X by Th1;
+      Card { x } in Card X by Th1;
       then
 A5:   not { x } in F by A1,Def5;
       { x } is Subset of X by A3,SUBSET_1:55;
@@ -985,10 +985,10 @@ A19: x in Y by A17;
     thus thesis by A11,A18,A19,FUNCT_1:def 12;
   end;
   then
-A20: Card {h.x : x in Y} <=` Card Y by CARD_2:2;
-  Card Y <=` Card X by CARD_1:27;
-  then Card Y <` Card X by A3,CARD_1:13;
-  then Card {h.x : x in Y} <` Card X by A20,ORDINAL1:22;
+A20: Card {h.x : x in Y} c= Card Y by CARD_2:2;
+  Card Y c= Card X by CARD_1:27;
+  then Card Y in Card X by A3,CARD_1:13;
+  then Card {h.x : x in Y} in Card X by A20,ORDINAL1:22;
   then
 A21: meet {h.x : x in Y} in F by A2,A13,A16,Def3;
   for y being set holds not y in (Y /\ meet {h.x : x in Y})
@@ -1015,10 +1015,10 @@ begin
 :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 theorem Th24:
-  nextcard N <=` exp(2,N)
+  nextcard N c= exp(2,N)
 proof
   Card N = N by CARD_1:def 5;
-  then Card N <` exp(2,N) by CARD_5:23;
+  then Card N in exp(2,N) by CARD_5:23;
   hence thesis by CARD_1:def 6;
 end;
 
@@ -1056,7 +1056,7 @@ definition
   let IT be Aleph;
   attr IT is strong_limit means
   :Def14:
-  for N st N <` IT holds exp(2,N) <` IT;
+  for N st N in IT holds exp(2,N) in IT;
 end;
 
 notation
@@ -1068,7 +1068,7 @@ theorem Th26:
   alef 0 is strong_limit
 proof
   let N;
-  assume N <` alef 0;
+  assume N in alef 0;
   then N is finite by CARD_4:9;
   then
 A1: bool N is finite by FINSET_1:24;
@@ -1076,7 +1076,7 @@ A1: bool N is finite by FINSET_1:24;
   then Card bool N is finite by A1,CARD_1:68;
   then exp(2,Card N) is finite by CARD_2:44;
   then exp(2,N) is finite by CARD_1:def 5;
-  hence exp(2,N) <` alef 0 by CARD_4:9;
+  hence exp(2,N) in alef 0 by CARD_4:9;
 end;
 
 theorem Th27:
@@ -1087,9 +1087,9 @@ A1: M is strong_limit;
   assume not M is limit;
   then consider N such that
 A2: M = nextcard N by CARD_1:def 7;
-A3: N <` M by A2,CARD_1:32;
-  M <=` exp(2,N) by A2,Th24;
-  then not exp(2,N) <` M by CARD_1:14;
+A3: N in M by A2,CARD_1:32;
+  M c= exp(2,N) by A2,Th24;
+  then not exp(2,N) in M by CARD_1:14;
   hence contradiction by A1,A3,Def14;
 end;
 
@@ -1107,7 +1107,7 @@ A1: GCH;
 A2: M is limit;
   assume not M is strong_limit;
   then consider N being Cardinal such that
-A3: N <` M & not exp(2,N) <` M by Def14;
+A3: N in M & not exp(2,N) in M by Def14;
 A4: N is infinite
   proof
     assume N is finite;
@@ -1116,10 +1116,10 @@ A4: N is infinite
     then exp(2,N) is finite by CARD_2:def 3;
     hence thesis by A3,CARD_4:13;
   end;
-  M <=` exp(2,N) by A3,CARD_1:14;
+  M c= exp(2,N) by A3,CARD_1:14;
   then
-A5: M <=` nextcard N by A1,A4,Def12;
-  nextcard N <=` M by A3,CARD_4:22;
+A5: M c= nextcard N by A1,A4,Def12;
+  nextcard N c= M by A3,CARD_4:22;
   then nextcard N = M by A5,XBOOLE_0:def 10;
   hence contradiction by A2,CARD_1:def 7;
 end;
@@ -1220,9 +1220,9 @@ A2: Uf is non principal being_ultrafilter by Def16;
   then
 A3: Uf is uniform by A2,Th23;
   assume not M is regular;
-  then cf M <> M & cf M <=` M by CARD_5:def 2,def 4;
+  then cf M <> M & cf M c= M by CARD_5:def 2,def 4;
   then
-A4: cf M <` M by CARD_1:13;
+A4: cf M in M by CARD_1:13;
   then consider xi being Ordinal-Sequence such that
 A5: dom xi = cf M and
 A6: rng xi c= M and xi is increasing and
@@ -1231,15 +1231,15 @@ A8: M = sup rng xi by A7,ORDINAL2:def 9;
   M is_limit_ordinal by CARD_4:32;
   then
 A9: M = union rng xi by A6,A8,Th32;
-  Card rng xi <=` Card dom xi by CARD_2:80;
-  then Card rng xi <=` cf M by A5,CARD_1:def 5;
+  Card rng xi c= Card dom xi by CARD_2:80;
+  then Card rng xi c= cf M by A5,CARD_1:def 5;
   then
-A10: Card rng xi <` M by A4,ORDINAL1:22;
+A10: Card rng xi in M by A4,ORDINAL1:22;
 A11: rng xi c= dual Uf
   proof
     let X be set such that
 A12: X in rng xi;
-A13: Card X <` M by A6,A12,CARD_1:25;
+A13: Card X in M by A6,A12,CARD_1:25;
     reconsider X1=X as Subset of M by A6,A12,ORDINAL1:def 2;
     not X1 in Uf
     proof
@@ -1282,8 +1282,8 @@ registration
     let M such that
 A1: M is non limit;
     assume not M is regular;
-    then cf M <> M & cf M <=` M by CARD_5:def 2,def 4;
-    then cf M <` M by CARD_1:13;
+    then cf M <> M & cf M c= M by CARD_5:def 2,def 4;
+    then cf M in M by CARD_1:13;
     hence contradiction by A1,CARD_5:40;
   end;
 end;
@@ -1328,8 +1328,8 @@ definition   :: Ulam matrix on nextcard N;
   :Def18:
   (for N1,K1,K2 holds K1<>K2 implies T.(N1,K1) /\ T.(N1,K2) is empty ) &
   (for K1,N1,N2 holds N1<>N2 implies T.(N1,K1) /\ T.(N2,K1) is empty ) &
-  (for N1 holds Card (M \ union {T.(N1,K1): K1 in M}) <=` predecessor M ) &
-  (for K1 holds Card (M \ union {T.(N1,K1): N1 in predecessor M}) <=`
+  (for N1 holds Card (M \ union {T.(N1,K1): K1 in M}) c= predecessor M ) &
+  (for K1 holds Card (M \ union {T.(N1,K1): N1 in predecessor M}) c=
   predecessor M );
 end;
 
@@ -1351,11 +1351,11 @@ A1: for K1 being set st K1 in GT ex x being set st
 A2: K1 in (nextcard N) \ N;
 A3: K1 in nextcard N & not K1 in N by A2,XBOOLE_0:def 4;
     reconsider K2=K1 as Element of nextcard N by A2;
-    Card N <=` Card K2 by A3,CARD_1:27,ORDINAL1:26;
+    Card N c= Card K2 by A3,CARD_1:27,ORDINAL1:26;
     then
-A4: N <=` Card K2 by CARD_1:def 5;
-    Card K2 <` nextcard N by CARD_1:25;
-    then Card K2 <=` N by CARD_4:23;
+A4: N c= Card K2 by CARD_1:def 5;
+    Card K2 in nextcard N by CARD_1:25;
+    then Card K2 c= N by CARD_4:23;
     then Card K2 = N by A4,XBOOLE_0:def 10
       .= Card N by CARD_1:def 5;
     then K2,N are_equipotent by CARD_1:21;
@@ -1458,7 +1458,7 @@ A25: h1.K4 = f & f is one-to-one & dom f = N & rng f = K4 by A7;
   end;
 
 :: third  condition from def.
-  thus for N1 holds Card (M \ union {T.(N1,K1): K1 in M}) <=` N
+  thus for N1 holds Card (M \ union {T.(N1,K1): K1 in M}) c= N
   proof
     let N1;
     union {T.(N1,K1):K1 in M} = GT1
@@ -1493,12 +1493,12 @@ A31:  K5 in T.(N1,g(N1,K5)) by A14,A29,A30;
     end;
     then union {T.(N1,K1):K1 in M} = M \ N by Def17;
     then M \ union {T.(N1,K1):K1 in M} = M /\ N by XBOOLE_1:48;
-    hence Card (M \ union {T.(N1,K1): K1 in M}) <=` N by CARD_1:23,XBOOLE_1:
+    hence Card (M \ union {T.(N1,K1): K1 in M}) c= N by CARD_1:23,XBOOLE_1:
     17;
   end;
 
 :: fourth condition from def.
-  thus for K1 holds Card (M \ union {T.(N1,K1): N1 in N}) <=` N
+  thus for K1 holds Card (M \ union {T.(N1,K1): N1 in N}) c= N
   proof
     let K1;
 A32: {K5 where K5 is Element of GT1 : K1 in K5} c= union {T.(N1,K1): N1 in N}
@@ -1521,15 +1521,15 @@ A37:  K5 in T.(N3,K1) by A14;
 A38: N c= K1 implies Card K1 = N
     proof
       assume N c= K1;
-      then Card N <=` Card K1 by CARD_1:27;
+      then Card N c= Card K1 by CARD_1:27;
       then
-A39:  N <=` Card K1 by CARD_1:def 5;
-      Card K1 <` M by CARD_1:25;
-      then Card K1 <` nextcard N by Def17;
-      then Card K1 <=` N by CARD_4:23;
+A39:  N c= Card K1 by CARD_1:def 5;
+      Card K1 in M by CARD_1:25;
+      then Card K1 in nextcard N by Def17;
+      then Card K1 c= N by CARD_4:23;
       hence Card K1 = N by A39,XBOOLE_0:def 10;
     end;
-A40: Card (M \ {K5 where K5 is Element of GT1: K1 in K5}) <=` N
+A40: Card (M \ {K5 where K5 is Element of GT1: K1 in K5}) c= N
     proof
       per cases by ORDINAL1:26;
       suppose
@@ -1590,9 +1590,9 @@ A51:      N c= K7 by A50,ORDINAL1:26;
     end;
     M \ union {T.(N1,K1): N1 in N} c=
     M \ {K5 where K5 is Element of GT1: K1 in K5} by A32,XBOOLE_1:34;
-    then Card (M \ union {T.(N1,K1): N1 in N}) <=`
+    then Card (M \ union {T.(N1,K1): N1 in N}) c=
     Card (M \ {K5 where K5 is Element of GT1: K1 in K5}) by CARD_1:27;
-    hence Card (M \ union {T.(N1,K1): N1 in N}) <=` N by A40,XBOOLE_1:1;
+    hence Card (M \ union {T.(N1,K1): N1 in N}) c= N by A40,XBOOLE_1:1;
   end;
 end;
 
@@ -1624,11 +1624,11 @@ A5: for K1 holds union {T.(N1,K1): N1 in N} in dual I
 A6: {F(N1,K2): P[N1,K2]} is Subset-Family of M from DOMAIN_1:sch 9;
     {F(N1,K2): K2=K1 & R[N1,K2]} = {F(N2,K1): R[N2,K1] } from FRAENKEL:sch 20;
     then reconsider C={T.(N1,K1): N1 in N} as Subset-Family of M by A6;
-A7: Card (M \ union {T.(N1,K1): N1 in N}) <=` N by A4,Def18;
+A7: Card (M \ union {T.(N1,K1): N1 in N}) c= N by A4,Def18;
     assume not union {T.(N1,K1): N1 in N} in dual I;
     then not (union C)` in Frechet_Ideal(M) by A3,SETFAM_1:def 8;
-    then not Card (M \ union {T.(N1,K1): N1 in N}) <` Card M by Th19;
-    then not Card (M \ union {T.(N1,K1): N1 in N}) <` nextcard N
+    then not Card (M \ union {T.(N1,K1): N1 in N}) in Card M by Th19;
+    then not Card (M \ union {T.(N1,K1): N1 in N}) in nextcard N
     by A1,CARD_1:def 5;
     hence contradiction by A7,CARD_4:23;
   end;
@@ -1651,9 +1651,9 @@ A13: {T.(N1,K1): N1 in N} is non empty
       T.(N2,K1) in {T.(N1,K1): N1 in N};
       hence thesis;
     end;
-A14: N <` M by A1,CARD_1:32;
+A14: N in M by A1,CARD_1:32;
     deffunc F(set) = T.$1;
-A15: Card {F(X) where X is Element of [:N,M:]: X in [:N,{K1}:] } <=`
+A15: Card {F(X) where X is Element of [:N,M:]: X in [:N,{K1}:] } c=
     Card [:N,{K1}:] from TREES_2:sch 2;
     {T.(N1,K1) : N1 in N } c=
     {T.X where X is Element of [:N,M:]: X in [:N,{K1}:] }
@@ -1667,11 +1667,11 @@ A17:  Y=T.(N1,K1) & N1 in N by A16;
       hence Y in {T.X where X is Element of [:N,M:]: X in [:N,{K1}:] } by A17;
     end;
     then
-A18: Card {T.(N1,K1) : N1 in N} <=`
+A18: Card {T.(N1,K1) : N1 in N} c=
     Card {T.X where X is Element of [:N,M:]: X in [:N,{K1}:]} by CARD_1:27;
     Card [:N,{K1}:] = Card N by CARD_2:13;
     then Card [:N,{K1}:] = N by CARD_1:def 5;
-    then Card {T.(N1,K1): N1 in N} <` M by A14,A15,A18,ORDINAL1:22,XBOOLE_1:
+    then Card {T.(N1,K1): N1 in N} in M by A14,A15,A18,ORDINAL1:22,XBOOLE_1:
     1;
     then
 A19: union {T.(N1,K1): N1 in N} in I by A2,A10,A13,Def4;
@@ -1690,17 +1690,17 @@ A22: {sup (h"{N2}): N2 in N} c= M
 A23:  x in {sup (h"{N2}): N2 in N};
       consider N2 such that
 A24:  x=sup (h"{N2}) & N2 in N by A23;
-      Card (h"{N2}) <=` M & Card (h"{N2}) <> M by A21,CARD_1:23;
-      then Card (h"{N2}) <` M by CARD_1:13;
-      then Card (h"{N2}) <` cf M by CARD_5:def 4;
+      Card (h"{N2}) c= M & Card (h"{N2}) <> M by A21,CARD_1:23;
+      then Card (h"{N2}) in M by CARD_1:13;
+      then Card (h"{N2}) in cf M by CARD_5:def 4;
       hence x in M by A24,CARD_5:38;
     end;
     deffunc F(set) = sup (h"{$1});
-    Card {F(N2): N2 in N} <=` Card N from TREES_2:sch 2;
-    then Card {sup (h"{N2}): N2 in N} <=` N by CARD_1:def 5;
-    then Card {sup (h"{N2}): N2 in N} <` M by A1,CARD_4:23;
+    Card {F(N2): N2 in N} c= Card N from TREES_2:sch 2;
+    then Card {sup (h"{N2}): N2 in N} c= N by CARD_1:def 5;
+    then Card {sup (h"{N2}): N2 in N} in M by A1,CARD_4:23;
     then
-A25: Card {sup (h"{N2}): N2 in N} <` cf M by CARD_5:def 4;
+A25: Card {sup (h"{N2}): N2 in N} in cf M by CARD_5:def 4;
 A26: for N2 holds sup (h"{N2}) in sup {sup (h"{N3}): N3 in N}
     proof
       let N2;
@@ -1826,12 +1826,12 @@ A59: T.(N2,K2) = X2 and h.K2=N2 by A57;
 end;
 
 theorem Th36:
-  for X for N being Cardinal st N <=` Card X
+  for X for N being Cardinal st N c= Card X
   ex Y being set st Y c= X & Card Y = N
 proof
   let X;
   let N be Cardinal such that
-A1: N <=` Card X;
+A1: N c= Card X;
   X,Card X are_equipotent by CARD_1:def 5;
   then consider f being Function such that
 A2: f is one-to-one and
@@ -1858,7 +1858,7 @@ A2: dual F is_complete_with M by A1,Th12;
     let X be set such that
 A3: X in Frechet_Ideal(M);
     reconsider X1=X as Subset of M by A3;
-A4: Card X1 <` Card M by A3,Th19;
+A4: Card X1 in Card M by A3,Th19;
     assume not X in dual F;
     then X1 in F by A1,Th22;
     then Card X1 = Card M by A1,Def5;
@@ -1937,10 +1937,10 @@ A3: F is uniform by A2,Th23;
 :: then we take Funcs(N,2)
   assume not M is strong_limit;
   then consider N being Cardinal such that
-A4: N <` M and
-A5: not exp(2,N) <` M by Def14;
-A6: M <=` exp(2,N) by A5,CARD_1:14;
-  then M <=` Card Funcs(N,2) by CARD_2:def 3;
+A4: N in M and
+A5: not exp(2,N) in M by Def14;
+A6: M c= exp(2,N) by A5,CARD_1:14;
+  then M c= Card Funcs(N,2) by CARD_2:def 3;
   then consider Y being set such that
 A7: Y c= Funcs(N,2) and
 A8: Card Y = M by Th36;
@@ -1950,8 +1950,8 @@ A8: Card Y = M by Th36;
     then bool N is finite by FINSET_1:24;
     then
 A9: Card bool N is finite by CARD_4:1;
-    M <=` exp(2,Card N) by A6,CARD_1:def 5;
-    then M <=` Card bool N by CARD_2:44;
+    M c= exp(2,Card N) by A6,CARD_1:def 5;
+    then M c= Card bool N by CARD_2:44;
     hence contradiction by A9,FINSET_1:13;
   end;
   then reconsider N1 = N as Aleph;
@@ -2045,10 +2045,10 @@ A32: for A being Element of N1 holds P[A,g.A] from FUNCT_2:sch 3(A14);
   deffunc T(Element of N1) =
   f"{h where h is Function of N1,{{},1}: h in Y & h.$1 = g.$1};
   Card {T(A) where A is Element of N1 : A in
-  N1} <=` Card N1 from TREES_2:sch 2;
-  then Card {T(A) where A is Element of N1 : A in N1} <=` N1 by CARD_1:def 5;
+  N1} c= Card N1 from TREES_2:sch 2;
+  then Card {T(A) where A is Element of N1 : A in N1} c= N1 by CARD_1:def 5;
   then
-A33: Card {T(A) where A is Element of N1: A in N1} <` M by A4,ORDINAL1: 22;
+A33: Card {T(A) where A is Element of N1: A in N1} in M by A4,ORDINAL1: 22;
 A34: {T(A) where A is Element of N1: A in N1} c= F
   proof
     let X be set such that
@@ -2106,7 +2106,7 @@ A51: X = f.x by A49,FUNCT_1:def 12;
   end;
   f|MEET is one-to-one by A11,FUNCT_1:84;
   then
-A52: Card MEET <=` Card {g} by A46,A47,A48,CARD_1:26;
+A52: Card MEET c= Card {g} by A46,A47,A48,CARD_1:26;
   reconsider MEET as Subset of M by A37;
   Card MEET = Card M by A3,A37,Def5;
   hence contradiction by A52,FINSET_1:13;

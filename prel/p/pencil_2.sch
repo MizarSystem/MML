@@ -12,8 +12,10 @@
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XCMPLX_0"/>
-<ArticleID name="NAT_1"/>
 <ArticleID name="RELSET_1"/>
+<ArticleID name="MCART_1"/>
+<ArticleID name="FUNCT_2"/>
+<ArticleID name="NAT_1"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
@@ -55,18 +57,18 @@
 <Func kind="F" nr="2"/>
 <Func kind="K" nr="17">
 <Var nr="1"/>
-<Func kind="K" nr="86">
+<Func kind="K" nr="112">
 <Var nr="1"/>
 </Func>
 </Func>
 </Pred>
 <Pred kind="R" nr="4">
-<Func kind="K" nr="70">
+<Func kind="K" nr="65">
 <Func kind="K" nr="51"/>
 <Func kind="F" nr="3"/>
 <Var nr="1"/>
 </Func>
-<Func kind="K" nr="70">
+<Func kind="K" nr="65">
 <Func kind="K" nr="51"/>
 <Func kind="F" nr="3"/>
 <Func kind="F" nr="4"/>
@@ -85,7 +87,7 @@
 </Pred>
 <Not>
 <Pred kind="R" nr="3">
-<Func kind="K" nr="86">
+<Func kind="K" nr="112">
 <Var nr="1"/>
 </Func>
 <Var nr="2"/>
@@ -99,7 +101,7 @@
 </Func>
 <Func kind="K" nr="17">
 <Var nr="1"/>
-<Func kind="K" nr="62">
+<Func kind="K" nr="98">
 <Var nr="2"/>
 <Num nr="1"/>
 </Func>
@@ -125,7 +127,7 @@
 <Func kind="F" nr="2"/>
 <Func kind="K" nr="17">
 <Func kind="F" nr="4"/>
-<Func kind="K" nr="86">
+<Func kind="K" nr="112">
 <Func kind="F" nr="4"/>
 </Func>
 </Func>
@@ -152,7 +154,7 @@
 </Pred>
 <Not>
 <Pred kind="R" nr="3">
-<Func kind="K" nr="86">
+<Func kind="K" nr="112">
 <Func kind="F" nr="4"/>
 </Func>
 <Var nr="1"/>
@@ -169,7 +171,7 @@
 <Var nr="3"/>
 <Func kind="K" nr="17">
 <Func kind="F" nr="4"/>
-<Func kind="K" nr="62">
+<Func kind="K" nr="98">
 <Var nr="1"/>
 <Num nr="1"/>
 </Func>

@@ -36,7 +36,7 @@
 <ArticleID name="VECTSP_6"/>
 <ArticleID name="BSPACE"/>
 </Signature>
-<FCluster>
+<FCluster aid="BSPACE" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -56,7 +56,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="BSPACE" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -71,7 +71,7 @@
 <Adjective nr="7" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="BSPACE" nr="3">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -86,7 +86,7 @@
 <Adjective nr="19"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="BSPACE" nr="4">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -104,7 +104,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<CCluster>
+<CCluster aid="BSPACE" nr="1">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="101"/>
@@ -117,7 +117,7 @@
 <Adjective nr="99"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="BSPACE" nr="2">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="7" value="false"/>

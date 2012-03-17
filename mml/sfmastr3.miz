@@ -10,26 +10,27 @@ environ
       ARYTM_1, RFUNCT_2, AMI_1, SCMFSA_2, SF_MASTR, SCMFSA6A, SCMFSA7B, AMI_3,
       UNIALG_2, SCMFSA6C, SCMFSA6B, SCMFSA_4, CAT_1, AMI_5, ABSVALUE, SCMFSA8B,
       SCMFSA_9, CARD_1, SCMFSA8A, SFMASTR1, CARD_3, SCMFSA9A, SCM_1, FINSEQ_2,
-      SFMASTR3, ARYTM;
+      SFMASTR3, ARYTM, AMISTD_2;
  notations TARSKI, XBOOLE_0, SUBSET_1, CARD_1, NUMBERS, XCMPLX_0, CARD_3,
       NAT_1, INT_2, RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2, FUNCT_7, GRAPH_2,
-      FINSEQ_1, FINSEQ_2, AMI_1, SCMFSA_2, SCMFSA_4, SCMFSA6A, SCMFSA6B,
+      FINSEQ_1, FINSEQ_2, AMI_1,
+      SCMNORM, SCMFSA_2, SCMFSA6A, SCMFSA6B,
       SF_MASTR, SCMFSA6C, SCMFSA7B, SCMFSA8A, SCMFSA8B, SCMFSA_9, SFMASTR1,
       SCMFSA9A, XXREAL_0;
  constructors PARTFUN1, SETWISEO, REAL_1, NAT_1, INT_2, SEQ_1, MESFUNC1,
       SCMFSA6A, SCMFSA6B, SCMFSA6C, SCMFSA8A, SCMFSA8B, SCMFSA_9, SFMASTR1,
-      SCMFSA9A, SCMNORM;
+      SCMFSA9A, SCMNORM, SCMFSA_4, AFINSQ_1;
  registrations SUBSET_1, SETFAM_1, FUNCT_1, ORDINAL1, RELSET_1, FUNCT_2,
       FINSET_1, FRAENKEL, NUMBERS, XXREAL_0, XREAL_0, NAT_1, INT_1, CARD_3,
-      WSIERP_1, SCMFSA_2, SCMFSA_4, SF_MASTR, SCMFSA6B, SCMFSA6C, SCMFSA7B,
+      WSIERP_1, SCMFSA_2, SF_MASTR, SCMFSA6B, SCMFSA6C, SCMFSA7B,
       SCMFSA8A, SCMFSA8B, SCMFSA_9, SFMASTR1, XBOOLE_0;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
- definitions TARSKI, SCMFSA7B, SCMFSA9A, GRAPH_2;
+ definitions TARSKI, SCMFSA7B, SCMFSA9A, GRAPH_2, SCMFSA6A, SCMNORM;
  theorems TARSKI, ZFMISC_1, ENUMSET1, REAL_1, ABSVALUE, NAT_1, INT_1, RELAT_1,
-      FUNCT_7, CQC_LANG, FINSEQ_1, FINSEQ_2, FINSEQ_3, FINSEQ_4, GRAPH_2,
-      AMI_1, SCMFSA_2, SCMFSA_4, SCMFSA6A, SCMFSA6B, SF_MASTR, SCMFSA6C,
+      FUNCT_7, FINSEQ_1, FINSEQ_2, FINSEQ_3, FINSEQ_4, GRAPH_2,
+      AMI_1, SCMFSA_2, SCMFSA6A, SCMFSA6B, SF_MASTR, SCMFSA6C,
       SCMFSA7B, SCMFSA8A, SCMFSA8B, SCMFSA8C, SCMFSA_9, SFMASTR1, SCMFSA9A,
-      SFMASTR2, XBOOLE_0, XBOOLE_1, XREAL_1, XXREAL_0, PARTFUN1;
+      SFMASTR2, XBOOLE_0, XBOOLE_1, XREAL_1, XXREAL_0, PARTFUN1, AFINSQ_1;
  schemes FUNCT_2, NAT_1;
 
 begin :: SCM+FSA preliminaries
@@ -38,8 +39,8 @@ reserve s for State of SCM+FSA,
   a, c for read-write Int-Location,
   aa, bb, cc, dd, x for Int-Location,
   f for FinSeq-Location,
-  I, J for Macro-Instruction,
-  Ig for good Macro-Instruction,
+  I, J for Program of SCM+FSA,
+  Ig for good Program of SCM+FSA,
   i, k for Element of NAT;
 
 canceled 6;
@@ -64,24 +65,24 @@ end;
 
 theorem Th8:
   s.intloc 0 = 1 implies
-  IExec(SCM+FSA-Stop, s) | (Int-Locations \/ FinSeq-Locations) =
+  IExec(Stop SCM+FSA, s) | (Int-Locations \/ FinSeq-Locations) =
   s | (Int-Locations \/ FinSeq-Locations)
 proof
   set D = Int-Locations \/ FinSeq-Locations;
   assume
 A1: s.intloc 0 = 1;
-  thus IExec(SCM+FSA-Stop, s) | D
+  thus IExec(Stop SCM+FSA, s) | D
   = (Initialize s +* Start-At insloc 0) | D by SCMFSA8C:38
     .= (Initialize s) | D by SCMFSA8A:10
     .= s | D by A1,SCMFSA8C:27;
 end;
 
 theorem Th9:
-  SCM+FSA-Stop does_not_refer aa
+  Stop SCM+FSA does_not_refer aa
 proof
   let i be Instruction of SCM+FSA such that
-A1: i in rng SCM+FSA-Stop;
-  rng SCM+FSA-Stop = {halt SCM+FSA} by CQC_LANG:5,SCMFSA_4:def 5;
+A1: i in rng Stop SCM+FSA;
+  rng Stop SCM+FSA = {halt SCM+FSA} by AFINSQ_1:36;
   then i = halt SCM+FSA by A1,TARSKI:def 1;
   hence i does_not_refer aa by SCMFSA8C:78;
 end;
@@ -130,7 +131,7 @@ end;
 
 registration
   let a be read-write Int-Location, b be Int-Location,
-  I, J be good Macro-Instruction;
+  I, J be good Program of SCM+FSA;
   cluster if>0(a, b, I, J) -> good;
   coherence
   proof
@@ -160,12 +161,12 @@ proof
   assume
 A1: I does_not_destroy aa;
   set J=insloc (card I +4) .--> goto insloc 0;
-  set F=if>0(bb, I ';' Goto insloc 0, SCM+FSA-Stop);
+  set F=if>0(bb, I ';' Goto insloc 0, Stop SCM+FSA);
 A2: J does_not_destroy aa by SCMFSA_9:35;
   Goto insloc 0 does_not_destroy aa by SCMFSA8C:86;
   then
 A3: I ';' Goto insloc 0 does_not_destroy aa by A1,SCMFSA8C:81;
-  SCM+FSA-Stop does_not_destroy aa by SCMFSA8C:85;
+  Stop SCM+FSA does_not_destroy aa by SCMFSA8C:85;
   then
 A4: F does_not_destroy aa by A3,SCMFSA8C:121;
   while>0(bb,I) = F+*J by SCMFSA_9:def 2;
@@ -189,7 +190,7 @@ end;
 begin :: The for-up macro instruction
 
 definition
-  let a, b, c be Int-Location, I be Macro-Instruction, s be State of SCM+FSA;
+  let a, b, c be Int-Location, I be Program of SCM+FSA, s be State of SCM+FSA;
   canceled 5;
   func StepForUp(a, b, c, I, s) -> Function of NAT,
   product the Object-Kind of SCM+FSA equals
@@ -379,7 +380,7 @@ A15:    s1.x = Exec(i3, IExec(i0 ';' i1 ';' i2, s)).x by SCMFSA6C:7
 end;
 
 definition
-  let a, b, c be Int-Location, I be Macro-Instruction, s be State of SCM+FSA;
+  let a, b, c be Int-Location, I be Program of SCM+FSA, s be State of SCM+FSA;
   pred ProperForUpBody a, b, c, I, s means
   :Def7:
   for i being Element of NAT st i < s.c-s.b+1
@@ -388,10 +389,10 @@ definition
 end;
 
 theorem Th23:
-  for I being parahalting Macro-Instruction
+  for I being parahalting Program of SCM+FSA
   holds ProperForUpBody aa, bb, cc, I, s
 proof
-  let I be parahalting Macro-Instruction;
+  let I be parahalting Program of SCM+FSA;
   let i be Element of NAT such that i < s.cc-s.bb+1;
   thus I is_closed_on StepForUp(aa, bb, cc, I, s).i by SCMFSA7B:24;
   thus I is_halting_on StepForUp(aa, bb, cc, I, s).i by SCMFSA7B:25;
@@ -412,7 +413,7 @@ A3: I is_halting_on StepForUp(a, bb, cc, I, s).k;
   set aux = 1-stRWNotIn ({a, bb, cc} \/ UsedIntLoc I);
   set IB = I ';' AddTo(a, intloc 0) ';' SubFrom(aux, intloc 0);
   set SW2 = StepWhile>0(aux,IB,s+*(aux, s.cc-s.bb+1)+*(a, s.bb));
-A4: IB = I ';'(AddTo(a, intloc 0) ';' SubFrom(aux, intloc 0)) by SCMFSA6A:65;
+A4: IB = I ';'(AddTo(a, intloc 0) ';' SubFrom(aux, intloc 0)) by SCMFSA6A:70;
   per cases;
   suppose SW2.k.aux <= 0;
     then SW2.(k+1) | D = SW2.k | D by SCMFSA9A:37;
@@ -464,7 +465,7 @@ A2: ProperForUpBody a, bb, cc, I, s;
   set s2 = s+*(aux, s.cc-s.bb+1)+*(a, s.bb);
   set SW2 = StepWhile>0(aux,IB,s2);
   set scb1 = s.cc-s.bb+1;
-A3: IB = I ';'(AddTo(a, intloc 0) ';' SubFrom(aux, intloc 0)) by SCMFSA6A:65;
+A3: IB = I ';'(AddTo(a, intloc 0) ';' SubFrom(aux, intloc 0)) by SCMFSA6A:70;
   defpred P[Element of NAT] means $1 <= scb1 implies SF.$1.intloc 0 = 1 &
   (I does_not_destroy a implies SF.$1.a = $1+s.bb & SF.$1.a <= s.cc+1) &
   SF.$1.aux + $1 = scb1;
@@ -653,7 +654,7 @@ A3: k < s.cc-s.bb+1;
   set scb1 = s.cc-s.bb+1;
   set Iloc = {a, bb, cc} \/ UsedIntLoc I;
 A4: SF = SW2;
-A5: IB = I ';'(AddTo(a, intloc 0) ';' SubFrom(aux, intloc 0)) by SCMFSA6A:65;
+A5: IB = I ';'(AddTo(a, intloc 0) ';' SubFrom(aux, intloc 0)) by SCMFSA6A:70;
 A6: SF.k.aux+k = scb1 by A1,A2,A3,Th25;
 A7: I is_closed_on SF.k by A2,A3,Def7;
 A8: I is_halting_on SF.k by A2,A3,Def7;
@@ -677,11 +678,10 @@ A16: SW2.(k+1) | D = IExec(IB, SW2.k) | D by A9,A10,A15,SCMFSA9A:38;
   set IB1 = I ';' AddTo(a, intloc 0);
   set S1 = IExec(IB1, SW2.k);
   set S2 = IExec(IB, SW2.k);
-A17: IB1 = I ';' Macro AddTo(a, intloc 0) by SCMFSA6A:def 6;
 A18: Macro AddTo(a, intloc 0) is_closed_on IExec(I, SW2.k) by SCMFSA7B:24;
 A19: Macro AddTo(a, intloc 0) is_halting_on IExec(I, SW2.k) by SCMFSA7B:25;
-A20: IB1 is_closed_on Initialize SW2.k by A11,A12,A17,A18,SFMASTR1:3;
-A21: IB1 is_halting_on Initialize SW2.k by A11,A12,A17,A18,A19,SFMASTR1:4;
+A20: IB1 is_closed_on Initialize SW2.k by A11,A12,A18,SFMASTR1:3;
+A21: IB1 is_halting_on Initialize SW2.k by A11,A12,A18,A19,SFMASTR1:4;
   now
     hereby
       let x be Int-Location;
@@ -704,8 +704,8 @@ A22:  x <> aux by SFMASTR1:21;
 end;
 
 definition
-  let a, b, c be Int-Location, I be Macro-Instruction;
-  func for-up(a, b, c, I) -> Macro-Instruction equals
+  let a, b, c be Int-Location, I be Program of SCM+FSA;
+  func for-up(a, b, c, I) -> Program of SCM+FSA equals
   (1-stRWNotIn ({a, b, c} \/ UsedIntLoc I)) := c ';'
   SubFrom(1-stRWNotIn ({a, b, c} \/ UsedIntLoc I), b) ';'
   AddTo(1-stRWNotIn ({a, b, c} \/ UsedIntLoc I), intloc 0) ';' (a := b) ';'
@@ -781,7 +781,7 @@ end;
 
 registration
   let a be read-write Int-Location, b, c be Int-Location,
-  I be good Macro-Instruction;
+  I be good Program of SCM+FSA;
   cluster for-up(a, b, c, I) -> good;
   coherence;
 end;
@@ -911,7 +911,7 @@ end;
 Lm1: now
   let s, a, bb, cc;
   set D = Int-Locations \/ FinSeq-Locations;
-  let I be good Macro-Instruction such that
+  let I be good Program of SCM+FSA such that
 A1: s.intloc 0 = 1 and
 A2: ProperForUpBody a, bb, cc, I, s or I is parahalting;
 A3: ProperForUpBody a, bb, cc, I, s by A2,Th23;
@@ -929,7 +929,7 @@ A4: s1 | D = s2 | D by A1,Th22;
   set SW2 = StepWhile>0(aux,IB,s2);
   set SF = StepForUp(a, bb, cc, I, s);
   set scb1 = s.cc-s.bb+1;
-A5: IB = I ';' (AddTo(a, intloc 0) ';' SubFrom(aux, intloc 0)) by SCMFSA6A:65;
+A5: IB = I ';' (AddTo(a, intloc 0) ';' SubFrom(aux, intloc 0)) by SCMFSA6A:70;
 A6: SF = SW2;
 A7: ProperBodyWhile>0 aux, IB, s2
   proof
@@ -1117,7 +1117,7 @@ A2: ProperForUpBody a, bb, cc, I, s or I is parahalting;
   set I03 = i0 ';' i1 ';' i2 ';' i3;
   set MI = for-up(a, bb, cc, I);
   set s1 = IExec(I03, s);
-  reconsider I03 as parahalting Macro-Instruction;
+  reconsider I03 as parahalting Program of SCM+FSA;
 A3: I03 is_closed_on Initialize s by SCMFSA7B:24;
 A4: I03 is_halting_on Initialize s by SCMFSA7B:25;
 A5: ProperBodyWhile>0 aux, IB, s1 by A1,A2,Lm1;
@@ -1139,7 +1139,7 @@ definition
 ::  set aux1 = 1-stRWNotIn {start, finish, min_pos};
 ::  set aux2 = 2-ndRWNotIn {start, finish, min_pos};
 ::  set cv =   3-rdRWNotIn {start, finish, min_pos};
-  func FinSeqMin(f, start, finish, minpos) -> Macro-Instruction equals
+  func FinSeqMin(f, start, finish, minpos) -> Program of SCM+FSA equals
   minpos := start ';'
   for-up ( 3-rdRWNotIn {start, finish, minpos}, start, finish,
   (1-stRWNotIn {start, finish, minpos}) :=
@@ -1147,7 +1147,7 @@ definition
   ((2-ndRWNotIn {start, finish, minpos}) := (f, minpos)) ';'
   if>0((2-ndRWNotIn {start, finish, minpos}),
   (1-stRWNotIn {start, finish, minpos}), Macro (minpos :=
-  (3-rdRWNotIn {start, finish, minpos})), SCM+FSA-Stop) );
+  (3-rdRWNotIn {start, finish, minpos})), Stop SCM+FSA) );
   coherence;
 end;
 
@@ -1169,7 +1169,7 @@ A1: c <> aa;
   set cv = 3-rdRWNotIn {a, b, c};
   set i10 = aux1 := (f, cv);
   set i11 = aux2 := (f, c);
-  set I12 = if>0(aux2, aux1, Macro (c := cv), SCM+FSA-Stop);
+  set I12 = if>0(aux2, aux1, Macro (c := cv), Stop SCM+FSA);
   set I1B = i10 ';' i11 ';' I12;
   set I1 = for-up ( cv, a, b, I1B);
 A2: a in {a, b, c} by ENUMSET1:def 1;
@@ -1181,7 +1181,7 @@ A4: aux2 <> a by A2,SFMASTR1:21;
   then
 A5: i10 ';' i11 does_not_destroy a by A3,SCMFSA8C:84;
 A6: Macro (c := cv) does_not_destroy a by A1,SCMFSA7B:12,SCMFSA8C:77;
-  SCM+FSA-Stop does_not_destroy a by SCMFSA8C:85;
+  Stop SCM+FSA does_not_destroy a by SCMFSA8C:85;
   then I12 does_not_destroy a by A4,A6,Th15;
   then
 A7: I1B does_not_destroy a by A5,SCMFSA8C:81;
@@ -1204,7 +1204,7 @@ proof
   set i0 = c := a;
   set i10 = aux1 := (f, cv);
   set i11 = aux2 := (f, c);
-  set I12 = if>0(aux2, aux1, Macro (c := cv), SCM+FSA-Stop);
+  set I12 = if>0(aux2, aux1, Macro (c := cv), Stop SCM+FSA);
   set I1B = i10 ';' i11 ';' I12;
   set I1 = for-up ( cv, a, b, I1B);
 A1: UsedIntLoc (i0 ';' I1) = (UsedIntLoc i0) \/ UsedIntLoc I1 by SF_MASTR:33;
@@ -1242,10 +1242,9 @@ A1: s.intloc 0 = 1;
   set i0 = c := a;
   set i10 = aux1 := (f, cv);
   set i11 = aux2 := (f, c);
-  set I12 = if>0(aux2, aux1, Macro (c := cv), SCM+FSA-Stop);
+  set I12 = if>0(aux2, aux1, Macro (c := cv), Stop SCM+FSA);
   set I1B = i10 ';' i11 ';' I12;
   set I1 = for-up ( cv, a, b, I1B);
-A2: FinSeqMin(f, a, b, c) = Macro i0 ';' I1 by SCMFSA6A:def 5;
   set s1 = IExec(Macro i0, s);
   s1.intloc 0 = Exec(i0, Initialize s).intloc 0 by SCMFSA6C:6
     .= (Initialize s). intloc 0 by SCMFSA_2:89
@@ -1255,10 +1254,10 @@ A3: I1 is_closed_on s1 & I1 is_halting_on s1 by Th32;
 A4: Macro i0 is_closed_on Initialize s by SCMFSA7B:24;
 A5: Macro i0 is_halting_on Initialize s by SCMFSA7B:25;
   then
-A6: FinSeqMin(f, aa, bb, c) is_closed_on Initialize s by A2,A3,A4, SFMASTR1:3;
+A6: FinSeqMin(f, aa, bb, c) is_closed_on Initialize s by A3,A4, SFMASTR1:3;
   hence FinSeqMin(f, aa, bb, c) is_closed_on s by A1,SFMASTR2:4;
   FinSeqMin(f, aa, bb, c) is_halting_on Initialize s
-  by A2,A3,A4,A5,SFMASTR1:4;
+  by A3,A4,A5,SFMASTR1:4;
   hence FinSeqMin(f, aa, bb, c) is_halting_on s by A1,A6,SFMASTR2:5;
 end;
 
@@ -1280,7 +1279,7 @@ A3: s.intloc 0 = 1;
   set i0 = c := a;
   set i10 = aux1 := (f, cv);
   set i11 = aux2 := (f, c);
-  set I12 = if>0(aux2, aux1, Macro (c := cv), SCM+FSA-Stop);
+  set I12 = if>0(aux2, aux1, Macro (c := cv), Stop SCM+FSA);
   set I1B = i10 ';' i11 ';' I12;
   set I1 = for-up ( cv, a, b, I1B);
   c in {a, b, c} by ENUMSET1:def 1;
@@ -1385,13 +1384,13 @@ A40:  SF.(n+1) | (({cv, a, b} \/ UsedIntLoc I1B) \/ FinSeq-Locations)
       set S2 = Exec(i11, Exec(i10, S0));
       set ss = IExec(i10 ';' i11, SF.n);
 A41:  Macro (c := cv) does_not_refer aux2 by A5,Th10,SCMFSA8C:80;
-A42:  SCM+FSA-Stop does_not_refer aux2 by Th9;
+A42:  Stop SCM+FSA does_not_refer aux2 by Th9;
 A43:  IExec(i10 ';' i11, SF.n).intloc 0 = S2.intloc 0 by SCMFSA6C:9
         .= S1.intloc 0 by SCMFSA_2:98
         .= S0.intloc 0 by SCMFSA_2:98
         .= 1 by SCMFSA6C:3;
       then
-A44:  IExec(SCM+FSA-Stop, IExec(i10 ';' i11, SF.n)) | D
+A44:  IExec(Stop SCM+FSA, IExec(i10 ';' i11, SF.n)) | D
       = IExec(i10 ';' i11, SF.n) | D by Th8;
 A45:  SF.(n+1).cv
       = IExec(I1B ';' AddTo(cv, intloc 0), SF.n).cv by A15,A40,SFMASTR2:7
@@ -1446,19 +1445,19 @@ A57:      S0.b = SF.0.b by A21,A37,A53,SCMFSA6C:3
             suppose
 A58:          ss.aux2 <= ss.aux1;
               hence SF.(n+1).cv
-              = IExec(SCM+FSA-Stop, IExec(i10 ';' i11, SF.n)).cv+1
+              = IExec(Stop SCM+FSA, IExec(i10 ';' i11, SF.n)).cv+1
               by A5,A41,A42,A45,SCMFSA8B:43
                 .= (n+1)+s1.a by A20,A44,A46,A53,A55,SCMFSA6A:38;
               thus SF.(n+1).f
-              = IExec(SCM+FSA-Stop, IExec(i10 ';' i11, SF.n)).f
+              = IExec(Stop SCM+FSA, IExec(i10 ';' i11, SF.n)).f
               by A41,A42,A51,A58,SCMFSA8B:43
                 .= s1.f by A23,A44,A52,A54,SCMFSA6A:38;
               thus SF.(n+1).a
-              = IExec(SCM+FSA-Stop, IExec(i10 ';' i11, SF.n)).a
+              = IExec(Stop SCM+FSA, IExec(i10 ';' i11, SF.n)).a
               by A9,A41,A42,A47,A58,SCMFSA8B:43
                 .= s1.a by A44,A48,A56,SCMFSA6A:38;
               thus SF.(n+1).b
-              = IExec(SCM+FSA-Stop, IExec(i10 ';' i11, SF.n)).b
+              = IExec(Stop SCM+FSA, IExec(i10 ';' i11, SF.n)).b
               by A13,A41,A42,A49,A58,SCMFSA8B:43
                 .= s1.b by A44,A50,A57,SCMFSA6A:38;
             end;
@@ -1511,20 +1510,20 @@ A64:      S0.b = s1.b by A21,A34,A35,A60,NAT_1:13,SCMFSA6C:3;
             suppose
 A65:          ss.aux2 <= ss.aux1;
               hence SF.(n+1).cv
-              = IExec(SCM+FSA-Stop, IExec(i10 ';' i11, SF.n)).cv+1
+              = IExec(Stop SCM+FSA, IExec(i10 ';' i11, SF.n)).cv+1
               by A5,A41,A42,A45,SCMFSA8B:43
                 .= IExec(i10 ';' i11, SF.n).cv+1 by A44,SCMFSA6A:38
                 .= (n+1)+s1.a by A37,A46,A62;
               thus SF.(n+1).f
-              = IExec(SCM+FSA-Stop, IExec(i10 ';' i11, SF.n)).f
+              = IExec(Stop SCM+FSA, IExec(i10 ';' i11, SF.n)).f
               by A41,A42,A51,A65,SCMFSA8B:43
                 .= s1.f by A23,A44,A52,A61,SCMFSA6A:38;
               thus SF.(n+1).a
-              = IExec(SCM+FSA-Stop, IExec(i10 ';' i11, SF.n)).a
+              = IExec(Stop SCM+FSA, IExec(i10 ';' i11, SF.n)).a
               by A9,A41,A42,A47,A65,SCMFSA8B:43
                 .= s1.a by A44,A48,A63,SCMFSA6A:38;
               thus SF.(n+1).b
-              = IExec(SCM+FSA-Stop, IExec(i10 ';' i11, SF.n)).b
+              = IExec(Stop SCM+FSA, IExec(i10 ';' i11, SF.n)).b
               by A13,A41,A42,A49,A65,SCMFSA8B:43
                 .= s1.b by A44,A50,A64,SCMFSA6A:38;
             end;
@@ -1614,7 +1613,7 @@ A16: aux1 <> cv by SFMASTR1:22;
   set i0 = c := a;
   set i10 = aux1 := (f, cv);
   set i11 = aux2 := (f, c);
-  set I12 = if>0(aux2, aux1, Macro (c := cv), SCM+FSA-Stop);
+  set I12 = if>0(aux2, aux1, Macro (c := cv), Stop SCM+FSA);
   set I1B = i10 ';' i11 ';' I12;
   set I1 = for-up ( cv, a, b, I1B);
   c in {c, cv} by TARSKI:def 2;
@@ -1622,7 +1621,7 @@ A16: aux1 <> cv by SFMASTR1:22;
   then c in UsedIntLoc Macro (c := cv) by SF_MASTR:32;
   then c in {aux2, aux1} \/ (UsedIntLoc Macro (c := cv)) by XBOOLE_0:def 2;
   then c in {aux2, aux1} \/ (UsedIntLoc Macro (c := cv)) \/ UsedIntLoc
-  SCM+FSA-Stop by XBOOLE_0:def 2;
+  Stop SCM+FSA by XBOOLE_0:def 2;
   then c in UsedIntLoc I12 by Th13;
   then c in (UsedIntLoc (i10 ';' i11)) \/ UsedIntLoc I12 by XBOOLE_0:def 2;
   then
@@ -1688,13 +1687,13 @@ A36: SF.(n+1) | ({cv, a, b} \/ (UsedIntLoc I1B) \/ FinSeq-Locations)
     set S1 = Exec(i10, S0);
     set S2 = Exec(i11, Exec(i10, S0));
 A37: Macro (c := cv) does_not_refer aux2 by A15,Th10,SCMFSA8C:80;
-A38: SCM+FSA-Stop does_not_refer aux2 by Th9;
+A38: Stop SCM+FSA does_not_refer aux2 by Th9;
     IExec(i10 ';' i11, SF.n).intloc 0 = S2.intloc 0 by SCMFSA6C:9
       .= S1.intloc 0 by SCMFSA_2:98
       .= S0.intloc 0 by SCMFSA_2:98
       .= 1 by SCMFSA6C:3;
     then
-A39: IExec(SCM+FSA-Stop, IExec(i10 ';' i11, SF.n)) | D
+A39: IExec(Stop SCM+FSA, IExec(i10 ';' i11, SF.n)) | D
     = IExec(i10 ';' i11, SF.n) | D by Th8;
 A40: SF.(n+1).c
     = IExec(I1B ';' AddTo(cv, intloc 0), SF.n).c by A18,A36,SFMASTR2:7
@@ -1743,13 +1742,13 @@ A53:    IExec(i10 ';' i11, SF.n).aux2 = S2.aux2 by SCMFSA6C:9
           .= (S1.f)/.abs(S1.c) by Th11
           .= s.f.S0cv by A8,A9,A48,A49,A51,PARTFUN1:def 8;
         thus SF.(n+1).intloc 0 = 1 by A20,A22,A24,A27,A31,Th25;
-        thus SF.(n+1).cv = IExec(SCM+FSA-Stop, IExec(i10 ';' i11, SF.n)).cv+1
+        thus SF.(n+1).cv = IExec(Stop SCM+FSA, IExec(i10 ';' i11, SF.n)).cv+1
         by A15,A37,A38,A42,A52,A53,SCMFSA8B:43
           .= (n+1)+s1.a by A22,A39,A43,A46,A48,SCMFSA6A:38;
-        thus SF.(n+1).f = IExec(SCM+FSA-Stop, IExec(i10 ';' i11, SF.n)).f
+        thus SF.(n+1).f = IExec(Stop SCM+FSA, IExec(i10 ';' i11, SF.n)).f
         by A37,A38,A44,A52,A53,SCMFSA8B:43
           .= s1.f by A26,A39,A45,A47,SCMFSA6A:38;
-A54:    SF.(n+1).c = IExec(SCM+FSA-Stop, IExec(i10 ';' i11, SF.n)).c
+A54:    SF.(n+1).c = IExec(Stop SCM+FSA, IExec(i10 ';' i11, SF.n)).c
         by A13,A37,A38,A40,A52,A53,SCMFSA8B:43
           .= s.a by A25,A39,A41,A46,A50,SCMFSA6A:38;
         reconsider sa1 = (n+1)+sa-1 as Element of NAT by A46;
@@ -1870,15 +1869,15 @@ A78:        s.f.SFnc <= s.f.S0cv;
             thus thesis
             proof
               thus SF.(n+1).cv
-              = IExec(SCM+FSA-Stop, IExec(i10 ';' i11, SF.n)).cv+1
+              = IExec(Stop SCM+FSA, IExec(i10 ';' i11, SF.n)).cv+1
               by A15,A37,A38,A42,A61,A68,A78,SCMFSA8B:43
                 .= IExec(i10 ';' i11, SF.n).cv+1 by A39,SCMFSA6A:38
                 .= (n+1)+s1.a by A33,A43,A57;
               thus SF.(n+1).f
-              = IExec(SCM+FSA-Stop, IExec(i10 ';' i11, SF.n)).f
+              = IExec(Stop SCM+FSA, IExec(i10 ';' i11, SF.n)).f
               by A37,A38,A44,A61,A68,A78,SCMFSA8B:43
                 .= s1.f by A26,A39,A45,A56,SCMFSA6A:38;
-A79:          SF.(n+1).c = IExec(SCM+FSA-Stop, IExec(i10 ';' i11, SF.n)).c
+A79:          SF.(n+1).c = IExec(Stop SCM+FSA, IExec(i10 ';' i11, SF.n)).c
               by A13,A37,A38,A40,A61,A68,A78,SCMFSA8B:43
                 .= SF.n.c by A39,A41,SCMFSA6A:38;
               n+s.a-1 <= n+s.a-1+1 by XREAL_1:31;
@@ -1927,7 +1926,7 @@ definition
 
 ::  set aux1 = 1-stRWNotIn {a, b};
 ::  set aux2 = 2-ndRWNotIn {a, b};
-  func swap(f, a, b) -> Macro-Instruction equals
+  func swap(f, a, b) -> Program of SCM+FSA equals
   1-stRWNotIn {a, b} := (f,a) ';'
   (2-ndRWNotIn {a, b} := (f,b)) ';' ((f,a) := (2-ndRWNotIn {a, b})) ';'
   ((f,b) := (1-stRWNotIn {a, b}));
@@ -2109,7 +2108,7 @@ begin :: Selection sort
 
 definition
   let f be FinSeq-Location;
-  func Selection-sort f -> Macro-Instruction equals
+  func Selection-sort f -> Program of SCM+FSA equals
   (1-stNotUsed swap(f, 1-stRWNotIn {} Int-Locations,
   2-ndRWNotIn {} Int-Locations)) :=len f ';'
   for-up ( 1-stRWNotIn {} Int-Locations, intloc 0,

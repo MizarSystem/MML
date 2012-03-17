@@ -28,7 +28,7 @@
 <ArticleID name="LATTICES"/>
 <ArticleID name="VECTSP_8"/>
 </Signature>
-<RCluster>
+<RCluster aid="VECTSP_8" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="10">
 <Cluster>

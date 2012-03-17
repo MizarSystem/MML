@@ -1,0 +1,4985 @@
+:: Model Checking, Part II
+::  by Kazuhisa Ishida
+:: 
+:: Received April 21, 2008
+:: Copyright (c) 2008 Association of Mizar Users
+
+environ
+
+ vocabularies MODELC_1, MODELC_2, BOOLE, BINOP_1, FUNCT_1, FUNCT_2, ARYTM_1,
+      RELAT_1, FINSEQ_1, FUNCOP_1, ZF_LANG, ZF_MODEL, MARGREL1, NORMSP_1,
+      RELOC, ARYTM;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, XCMPLX_0, XXREAL_0,
+      RELAT_1, FUNCT_1, BINOP_1, FUNCT_2, NAT_1, FINSEQ_1, FUNCOP_1, MARGREL1,
+      MODELC_1;
+ constructors BINOP_1, FUNCT_3, XXREAL_0, NAT_1, MARGREL1, ABIAN, KNASTER,
+      FINSEQ_1, SERIES_1, FINSEQ_4, FUNCOP_1, REAL_1, SEQ_2, SEQM_3, NEWTON,
+      PREPOWER, POWER, ORDINAL3, ARYTM_1, ARYTM_0, FUNCT_4, XCMPLX_0, XREAL_0,
+      PARTFUN1, SEQ_1, VALUED_1, ZF_LANG, MODELC_1, NUMBERS;
+ registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1, PARTFUN1,
+      FUNCT_2, FUNCOP_1, ARYTM_3, XXREAL_0, XREAL_0, NAT_1, INT_1, ORDERS_1,
+      XBOOLEAN, MARGREL1, KNASTER, FINSET_1, CARD_5, FINSEQ_1, FINSEQ_4,
+      RELSET_1, NUMBERS, MEMBERED, SEQM_3, NEWTON, CARD_1, ARYTM_2, XCMPLX_0,
+      REAL_1, VALUED_1;
+ requirements REAL, NUMERALS, ARITHM, SUBSET, BOOLE;
+ definitions RELAT_1, TARSKI, BINOP_1, MARGREL1, XBOOLEAN, SERIES_1, FINSEQ_4,
+      NAT_1;
+ theorems XBOOLE_0, ZFMISC_1, XBOOLE_1, TARSKI, FUNCT_1, FUNCT_2, WELLORD2,
+      NAT_1, XREAL_1, FINSEQ_1, FUNCOP_1, XXREAL_0, REAL_1, CARD_2, FINSEQ_5,
+      XBOOLEAN, MODELC_1, ORDINAL1;
+ schemes NAT_1, FUNCT_2, XBOOLE_0, BINOP_1, BINOP_2, MODELC_1;
+
+begin
+
+definition
+  let x be set;
+  func CastNat(x) -> Nat equals
+  :DefCastNat:
+  x if x is Nat otherwise 0;
+  correctness;
+end;
+
+::************
+:: definition of LTL(Linear Temporal Logic) language.
+::    refer to (reuse) construction & proof of ZF_LANG
+::************
+
+definition let Word be set;
+  mode sequence of Word is Function of NAT, Word;
+end;
+
+Lm1:
+  for m,n,k be Nat st m < n & n <= k+1 holds m <= k
+  proof
+   let m,n,k be Nat;
+   assume that
+   A1:m < n and A2:n <= k+1;
+   m+1 <= n by A1,NAT_1:13;
+   then m+1<=k+1 by A2,XXREAL_0:2;
+   hence thesis by XREAL_1:8;
+  end;
+
+ reserve k,n,m for Nat,
+         a,x,X,Y for set,
+         D,D1,D2,S for non empty set,
+         p,q for FinSequence of NAT;
+
+:: The operations to make LTL-formulae
+
+definition let n;
+  func atom.n -> FinSequence of NAT equals
+    <* (6 + n) *>;
+  coherence;
+end;
+
+definition let p;
+  func 'not' p -> FinSequence of NAT equals
+   <*0*>^p;
+  coherence;
+  let q;
+  func p '&' q -> FinSequence of NAT equals
+   <*1*>^p^q;
+  coherence;
+  func p 'or' q -> FinSequence of NAT equals
+   <*2*>^p^q;
+  coherence;
+end;
+
+definition let p;
+  func 'X' p -> FinSequence of NAT equals
+   <*3*>^p;
+  coherence;
+  let q;
+  func p 'U' q -> FinSequence of NAT equals
+   <*4*>^p^q;
+  coherence;
+  func p 'R' q -> FinSequence of NAT equals
+   <*5*>^p^q;
+  coherence;
+end;
+
+Lm2:len(<*n*>^p^q) = 1+len(p)+len(q)
+  proof
+    len(p^q) = len(p)+len(q) by FINSEQ_1:35;
+    then A1:len(<*n*>)+len(p^q) = len(<*n*>)+len(p)+len(q);
+    len(<*n*>^p^q) = len(<*n*>^(p^q)) by FINSEQ_1:45
+                  .= len(<*n*>)+len(p^q) by FINSEQ_1:35;
+    hence thesis by FINSEQ_1:57,A1;
+  end;
+
+:: The set of all well formed formulae of LTL-language
+
+definition
+  func LTL_WFF -> non empty set means :Def12:
+     (for a st a in it holds a is FinSequence of NAT ) &
+        (for n holds atom.n in it ) &
+        (for p st p in it holds 'not' p in it ) &
+        (for p,q st p in it & q in it holds p '&' q in it ) &
+        (for p,q st p in it & q in it holds p 'or' q in it ) &
+        (for p st p in it holds 'X' p in it ) &
+        (for p,q st p in it & q in it holds p 'U' q in it ) &
+        (for p,q st p in it & q in it holds p 'R' q in it ) &
+   for D st
+     (for a st a in D holds a is FinSequence of NAT ) &
+        (for n holds atom.n in D ) &
+        (for p st p in D holds 'not' p in D ) &
+        (for p,q st p in D & q in D holds p '&' q in D ) &
+        (for p,q st p in D & q in D holds p 'or' q in D ) &
+        (for p st p in D holds 'X' p in D ) &
+        (for p,q st p in D & q in D holds p 'U' q in D ) &
+        (for p,q st p in D & q in D holds p 'R' q in D )
+               holds it c= D;
+   existence
+    proof
+     defpred P[set] means
+     (for a st a in $1 holds a is FinSequence of NAT ) &
+        (for n holds atom.n in $1 ) &
+        (for p st p in $1 holds 'not' p in $1 ) &
+        (for p,q st p in $1 & q in $1 holds p '&' q in $1 ) &
+        (for p,q st p in $1 & q in $1 holds p 'or' q in $1 ) &
+        (for p st p in $1 holds 'X' p in $1 ) &
+        (for p,q st p in $1 & q in $1 holds p 'U' q in $1 ) &
+        (for p,q st p in $1 & q in $1 holds p 'R' q in $1 );
+     defpred Q[set] means for D st P[D] holds $1 in D;
+     consider Y such that
+        A1: a in Y iff a in NAT* & Q[a] from XBOOLE_0:sch 1;
+         now set a = atom.0;
+       A2: a in NAT* by FINSEQ_1:def 11;
+       A3: for D st P[D] holds a in D;
+       take b = a;
+       thus b in Y by A1,A2,A3;
+      end;
+     then reconsider Y as non empty set;
+     take Y;
+     thus a in Y implies a is FinSequence of NAT
+       proof
+       assume a in Y;
+       then a in NAT* by A1;
+       hence thesis by FINSEQ_1:def 11;
+       end;
+     thus atom.n in Y
+       proof
+     B1: atom.n in NAT* by FINSEQ_1:def 11;
+         for D st P[D] holds atom.n in D;
+         hence thesis by A1,B1;
+       end;
+     thus p in Y implies 'not' p in Y
+       proof
+       assume B1: p in Y;
+     B2: 'not' p in NAT* by FINSEQ_1:def 11;
+            for D st P[D] holds 'not' p in D
+          proof
+            let D;
+            assume B3: P[D];
+            then p in D by A1,B1;
+           hence 'not' p in D by B3;
+          end;
+        hence thesis by A1,B2;
+       end;
+     thus q in Y & p in Y implies q '&' p in Y
+       proof
+       assume B1: q in Y & p in Y;
+       B2: q '&' p in NAT* by FINSEQ_1:def 11;
+       for D st P[D] holds q '&' p in D
+          proof
+          let D;
+          assume B3: P[D];
+          then p in D & q in D by A1,B1;
+          hence q '&' p in D by B3;
+          end;
+        hence thesis by A1,B2;
+       end;
+     thus q in Y & p in Y implies q 'or' p in Y
+       proof
+       assume B1: q in Y & p in Y;
+       B2: q 'or' p in NAT* by FINSEQ_1:def 11;
+       for D st P[D] holds q 'or' p in D
+          proof
+          let D;
+          assume B3: P[D];
+          then p in D & q in D by A1,B1;
+          hence q 'or' p in D by B3;
+          end;
+        hence thesis by A1,B2;
+       end;
+     thus p in Y implies 'X' p in Y
+       proof
+       assume B1: p in Y;
+     B2: 'X' p in NAT* by FINSEQ_1:def 11;
+            for D st P[D] holds 'X' p in D
+          proof
+            let D;
+            assume B3: P[D];
+            then p in D by A1,B1;
+           hence 'X' p in D by B3;
+          end;
+        hence thesis by A1,B2;
+       end;
+     thus q in Y & p in Y implies q 'U' p in Y
+       proof
+       assume B1: q in Y & p in Y;
+       B2: q 'U' p in NAT* by FINSEQ_1:def 11;
+       for D st P[D] holds q 'U' p in D
+          proof
+          let D;
+          assume B3: P[D];
+          then p in D & q in D by A1,B1;
+          hence q 'U' p in D by B3;
+          end;
+        hence thesis by A1,B2;
+       end;
+     thus q in Y & p in Y implies q 'R' p in Y
+       proof
+       assume B1: q in Y & p in Y;
+       B2: q 'R' p in NAT* by FINSEQ_1:def 11;
+       for D st P[D] holds q 'R' p in D
+          proof
+          let D;
+          assume B3: P[D];
+          then p in D & q in D by A1,B1;
+          hence q 'R' p in D by B3;
+          end;
+        hence thesis by A1,B2;
+       end;
+     let D such that A20:P[D];
+     let a;
+     assume a in Y;
+     hence a in D by A1,A20;
+     end;
+   uniqueness
+    proof
+    let D1,D2 such that
+      A21:(for a st a in D1 holds a is FinSequence of NAT ) &
+          (for n holds atom.n in D1 ) &
+          (for p st p in D1 holds 'not' p in D1 ) &
+          (for p,q st p in D1 & q in D1 holds p '&' q in D1 ) &
+          (for p,q st p in D1 & q in D1 holds p 'or' q in D1 ) &
+          (for p st p in D1 holds 'X' p in D1 ) &
+          (for p,q st p in D1 & q in D1 holds p 'U' q in D1 ) &
+          (for p,q st p in D1 & q in D1 holds p 'R' q in D1 )&
+   for D
+     st (for a st a in D holds a is FinSequence of NAT ) &
+        (for n holds atom.n in D ) &
+        (for p st p in D holds 'not' p in D ) &
+        (for p,q st p in D & q in D holds p '&' q in D ) &
+        (for p,q st p in D & q in D holds p 'or' q in D ) &
+        (for p st p in D holds 'X' p in D ) &
+        (for p,q st p in D & q in D holds p 'U' q in D ) &
+        (for p,q st p in D & q in D holds p 'R' q in D )
+                   holds D1 c= D and
+     A22:(for a st a in D2 holds a is FinSequence of NAT ) &
+        (for n holds atom.n in D2 ) &
+        (for p st p in D2 holds 'not' p in D2 ) &
+        (for p,q st p in D2 & q in D2 holds p '&' q in D2 ) &
+        (for p,q st p in D2 & q in D2 holds p 'or' q in D2 ) &
+        (for p st p in D2 holds 'X' p in D2 ) &
+        (for p,q st p in D2 & q in D2 holds p 'U' q in D2 ) &
+        (for p,q st p in D2 & q in D2 holds p 'R' q in D2 ) &
+   for D
+     st (for a st a in D holds a is FinSequence of NAT ) &
+        (for n holds atom.n in D ) &
+        (for p st p in D holds 'not' p in D ) &
+        (for p,q st p in D & q in D holds p '&' q in D ) &
+        (for p,q st p in D & q in D holds p 'or' q in D ) &
+        (for p st p in D holds 'X' p in D ) &
+        (for p,q st p in D & q in D holds p 'U' q in D ) &
+        (for p,q st p in D & q in D holds p 'R' q in D )
+               holds D2 c= D;
+         D1 c= D2 & D2 c= D1 by A21,A22;
+    hence thesis by XBOOLE_0:def 10;
+    end;
+ end;
+
+definition let IT be FinSequence of NAT;
+  attr IT is LTL-formula-like means :Def13:
+  IT is Element of LTL_WFF;
+end;
+
+registration
+  cluster LTL-formula-like FinSequence of NAT;
+  existence
+  proof
+    consider x being Element of LTL_WFF;
+    reconsider x as FinSequence of NAT by Def12;
+    take x;
+    thus x is Element of LTL_WFF;
+  end;
+end;
+
+definition
+  mode LTL-formula is LTL-formula-like FinSequence of NAT;
+end;
+
+theorem Th1:
+  a is LTL-formula iff a in LTL_WFF
+  proof
+   thus a is LTL-formula implies a in LTL_WFF
+     proof
+       assume a is LTL-formula;
+       then a is Element of LTL_WFF by Def13;
+      hence a in LTL_WFF;
+     end;
+   assume a in LTL_WFF;
+   hence thesis by Def12,Def13;
+  end;
+
+ reserve F,F1,G,G1,H,H1,H2 for LTL-formula;
+
+registration let n;
+  cluster atom.n -> LTL-formula-like;
+  coherence
+  proof
+    atom.n is LTL-formula-like
+    proof
+      thus atom.n is Element of LTL_WFF by Def12;
+    end;
+    hence thesis;
+  end;
+end;
+
+registration let H;
+  cluster 'not' H -> LTL-formula-like;
+   coherence
+    proof
+      'not' H is LTL-formula-like
+       proof H is Element of LTL_WFF by Def13;
+        hence 'not' H is Element of LTL_WFF by Def12;
+       end;
+     hence thesis;
+    end;
+  cluster 'X' H -> LTL-formula-like;
+   coherence
+    proof
+      'X' H is LTL-formula-like
+      proof H is Element of LTL_WFF by Def13;
+        hence 'X' H is Element of LTL_WFF by Def12;
+      end;
+     hence thesis;
+    end;
+ let G;
+  cluster H '&' G -> LTL-formula-like;
+   coherence
+    proof
+     H '&' G is LTL-formula-like
+     proof
+       H is Element of LTL_WFF & G is Element of LTL_WFF by Def13;
+       hence H '&' G is Element of LTL_WFF by Def12;
+     end;
+     hence thesis;
+    end;
+  cluster H 'or' G -> LTL-formula-like;
+   coherence
+    proof
+     H 'or' G is LTL-formula-like
+     proof
+       H is Element of LTL_WFF & G is Element of LTL_WFF by Def13;
+       hence H 'or' G is Element of LTL_WFF by Def12;
+     end;
+     hence thesis;
+    end;
+  cluster H 'U' G -> LTL-formula-like;
+   coherence
+    proof
+     H 'U' G is LTL-formula-like
+     proof
+       H is Element of LTL_WFF & G is Element of LTL_WFF by Def13;
+       hence H 'U' G is Element of LTL_WFF by Def12;
+     end;
+     hence thesis;
+    end;
+  cluster H 'R' G -> LTL-formula-like;
+   coherence
+    proof
+     H 'R' G is LTL-formula-like
+     proof
+       H is Element of LTL_WFF & G is Element of LTL_WFF by Def13;
+       hence H 'R' G is Element of LTL_WFF by Def12;
+     end;
+     hence thesis;
+    end;
+end;
+
+definition let H;
+  attr H is atomic means
+:Def14:  ex n st H = atom.n;
+  attr H is negative means
+:Def15:  ex H1 st H = 'not' H1;
+  attr H is conjunctive means
+:Def16:  ex F,G st H = F '&' G;
+  attr H is disjunctive means
+:Def17:  ex F,G st H = F 'or' G;
+  attr H is next means
+:Def18:  ex H1 st H = 'X' H1;
+  attr H is Until means
+:Def19:  ex F,G st H = F 'U' G;
+  attr H is Release means
+:Def1901:  ex F,G st H = F 'R' G;
+end;
+
+theorem Th2:
+  H is atomic or H is negative or H is conjunctive or
+  H is disjunctive or H is next or H is Until or H is Release
+  proof
+  A1:H is Element of LTL_WFF by Def13;
+  assume A2:not thesis;
+  A3:LTL_WFF \ { H } is non empty
+     proof
+     A4: atom.0 in LTL_WFF by Def12;
+     atom.0 <> H by A2,Def14;
+     then not atom.0 in { H } by TARSKI:def 1;
+     hence thesis by A4,XBOOLE_0:def 4;
+     end;
+   A5:for a st a in LTL_WFF \ { H } holds
+          a is FinSequence of NAT by Def12;
+  A6:now let n;
+  A7:atom.n in LTL_WFF by Def12;
+     atom.n <> H by A2,Def14;
+     then not atom.n in { H } by TARSKI:def 1;
+     hence atom.n in LTL_WFF \ { H } by A7,XBOOLE_0:def 4;
+     end;
+  A8:now let p;
+     assume A9:p in LTL_WFF \ { H };
+     then A10: 'not' p in LTL_WFF by Def12;
+     reconsider H1 = p as LTL-formula by A9,Def13;
+      'not' H1 <> H by A2,Def15;
+      then not 'not' p in { H } by TARSKI:def 1;
+     hence 'not' p in LTL_WFF \ { H } by A10,XBOOLE_0:def 4;
+     end;
+  A11:now let p,q;
+     assume A12:p in LTL_WFF \ { H } & q in LTL_WFF \ { H };
+     then A13: p '&' q in LTL_WFF by Def12;
+     reconsider F = p, G = q as LTL-formula by A12,Def13;
+     F '&' G <> H by A2,Def16;
+     then not p '&' q in { H } by TARSKI:def 1;
+     hence p '&' q in LTL_WFF \ { H } by A13,XBOOLE_0:def 4;
+     end;
+  A14:now let p,q;
+     assume A15:p in LTL_WFF \ { H } & q in LTL_WFF \ { H };
+     then A16: p 'or' q in LTL_WFF by Def12;
+     reconsider F = p, G = q as LTL-formula by A15,Def13;
+     F 'or' G <> H by A2,Def17;
+     then not p 'or' q in { H } by TARSKI:def 1;
+     hence p 'or' q in LTL_WFF \ { H } by A16,XBOOLE_0:def 4;
+     end;
+   A17:now let p;
+     assume A18:p in LTL_WFF \ { H };
+     then A19: 'X' p in LTL_WFF by Def12;
+     reconsider H1 = p as LTL-formula by A18,Def13;
+     'X' H1 <> H by A2,Def18;
+     then not 'X' p in { H } by TARSKI:def 1;
+     hence 'X' p in LTL_WFF \ { H } by A19,XBOOLE_0:def 4;
+     end;
+   A20:now let p,q;
+     assume A21:p in LTL_WFF \ { H } & q in LTL_WFF \ { H };
+     then A22: p 'U' q in LTL_WFF by Def12;
+     reconsider F = p, G = q as LTL-formula by A21,Def13;
+     F 'U' G <> H by A2,Def19;
+     then not p 'U' q in { H } by TARSKI:def 1;
+     hence p 'U' q in LTL_WFF \ { H } by A22,XBOOLE_0:def 4;
+    end;
+    now let p,q;
+     assume A23:p in LTL_WFF \ { H } & q in LTL_WFF \ { H };
+     then A24: p 'R' q in LTL_WFF by Def12;
+     reconsider F = p, G = q as LTL-formula by A23,Def13;
+     F 'R' G <> H by A2,Def1901;
+     then not p 'R' q in { H } by TARSKI:def 1;
+     hence p 'R' q in LTL_WFF \ { H } by A24,XBOOLE_0:def 4;
+    end;
+    then LTL_WFF c= LTL_WFF \ { H } by A3,A5,A6,A8,A11,A14,A17,A20,Def12;
+    then H in LTL_WFF \ { H } by A1,TARSKI:def 3;
+    then not H in { H } & H in { H } by TARSKI:def 1,XBOOLE_0:def 4;
+   hence contradiction;
+  end;
+
+Lm3:
+  H is negative implies H.1 = 0
+  proof assume H is negative;
+   then consider H1 such that
+A1:H = 'not' H1 by Def15;
+   thus H.1 = 0 by A1,FINSEQ_1:58;
+  end;
+
+Lm4:
+  H is conjunctive implies H.1 = 1
+  proof assume H is conjunctive;
+   then consider F,G such that
+A1:H = F '&' G by Def16;
+   H = <*1*>^F^G & <*1*>^F^G = <*1*>^(F^G) by A1,FINSEQ_1:45;
+   hence H.1 = 1 by FINSEQ_1:58;
+  end;
+
+Lm5:
+  H is disjunctive implies H.1 = 2
+  proof assume H is disjunctive;
+   then consider F,G such that
+   A1:H = F 'or' G by Def17;
+   H = <*2*>^F^G & <*2*>^F^G = <*2*>^(F^G) by A1,FINSEQ_1:45;
+
+   hence H.1 = 2 by FINSEQ_1:58;
+  end;
+
+Lm6:
+  H is next implies H.1 = 3
+  proof assume H is next;
+   then consider H1 such that
+A1:H = 'X' H1 by Def18;
+   thus H.1 = 3 by A1,FINSEQ_1:58;
+  end;
+
+Lm7:
+  H is Until implies H.1 = 4
+  proof assume H is Until;
+   then consider F,G such that
+A1:H = F 'U' G by Def19;
+   H = <*4*>^F^G & <*4*>^F^G = <*4*>^(F^G) by A1,FINSEQ_1:45;
+   hence H.1 = 4 by FINSEQ_1:58;
+  end;
+
+Lm701:
+  H is Release implies H.1 = 5
+  proof assume H is Release;
+   then consider F,G such that
+A1:H = F 'R' G by Def1901;
+   H = <*5*>^F^G & <*5*>^F^G = <*5*>^(F^G) by A1,FINSEQ_1:45;
+   hence H.1 = 5 by FINSEQ_1:58;
+  end;
+
+
+Lm8: H is atomic implies not H.1 = 0 & not H.1 = 1 &
+                             not H.1 = 2 & not H.1 = 3 &
+                             not H.1 = 4 & not H.1 = 5
+   proof assume H is atomic;
+    then consider n such that
+    A1: H = atom.n by Def14;
+    A3:1+0<1+(5+n) by XREAL_1:10;
+    A4:2+0<2+(4+n) by XREAL_1:10;
+    A5:3+0<3+(3+n) by XREAL_1:10;
+    A6:4+0<4+(2+n) by XREAL_1:10;
+    5+0<5+(1+n) by XREAL_1:10;
+    hence thesis by A1,A3,A4,A5,A6,FINSEQ_1:57;
+   end;
+
+Lm9:
+   H is atomic & (H.1 <> 0 & H.1 <> 1 &
+                  H.1 <> 2 & H.1 <> 3 &
+                  H.1 <> 4 & H.1 <> 5  ) or
+   H is negative & H.1 = 0 or H is conjunctive & H.1 = 1 or
+   H is disjunctive & H.1 = 2 or H is next & H.1 = 3 or
+   H is Until & H.1 = 4 or H is Release & H.1 = 5
+proof
+   per cases by Th2;
+    case H is atomic;hence (H.1 <> 0 & H.1 <> 1 &
+                              H.1 <> 2 & H.1 <> 3 &
+                              H.1 <> 4 & H.1 <> 5 ) by Lm8;
+    end;
+    case H is negative; hence H.1 = 0 by Lm3;
+    end;
+    case H is conjunctive; hence H.1 = 1 by Lm4;
+    end;
+    case H is disjunctive; hence H.1 = 2 by Lm5;
+    end;
+    case H is next; hence H.1 = 3 by Lm6;
+    end;
+    case H is Until; hence H.1 = 4 by Lm7;
+    end;
+    case H is Release; hence H.1 = 5 by Lm701;
+    end;
+  end;
+
+theorem Thlen01:
+  1<= len H
+ proof
+   per cases by Th2;
+    suppose H is atomic;
+      then consider n such that A1: H = atom.n by Def14;
+      thus thesis by A1,FINSEQ_1:57;
+    end;
+    suppose H is negative;
+      then consider H1 such that A2: H = 'not' H1 by Def15;
+      len(H) = 1+len(H1) by A2,FINSEQ_5:8;
+      hence thesis by NAT_1:11;
+    end;
+    suppose H is conjunctive;
+      then consider F,G such that A3: H = F '&' G by Def16;
+      A4:len(H) = 1+len(F)+len(G) by A3,Lm2;
+      1 <= 1+len(F) & 1+len(F) <= 1+len(F)+len(G) by NAT_1:11;
+      hence thesis by A4,XXREAL_0:2;
+    end;
+    suppose H is disjunctive;
+      then consider F,G such that A5: H = F 'or' G by Def17;
+      A6:len(H) = 1+len(F)+len(G) by A5,Lm2;
+      1 <= 1+len(F) & 1+len(F) <= 1+len(F)+len(G) by NAT_1:11;
+      hence thesis by A6,XXREAL_0:2;
+    end;
+    suppose H is next;
+      then consider H1 such that A7: H = 'X' H1 by Def18;
+      len(H) = 1+len(H1) by A7,FINSEQ_5:8;
+      hence thesis by NAT_1:11;
+    end;
+    suppose H is Until;
+      then consider F,G such that A8: H = F 'U' G by Def19;
+      A9:len(H) = 1+len(F)+len(G) by A8,Lm2;
+      1 <= 1+len(F) & 1+len(F) <= 1+len(F)+len(G) by NAT_1:11;
+      hence thesis by A9,XXREAL_0:2;
+    end;
+    suppose H is Release;
+      then consider F,G such that A10: H = F 'R' G by Def1901;
+      A11:len(H) = 1+len(F)+len(G) by A10,Lm2;
+      1 <= 1+len(F) & 1+len(F) <= 1+len(F)+len(G) by NAT_1:11;
+      hence thesis by A11,XXREAL_0:2;
+    end;
+  end;
+
+reserve sq,sq' for FinSequence;
+
+Lm11:
+  H = F^sq implies H = F
+  proof::from ZF_LANG:46
+  A1:for n being Nat st
+      (for k being Nat
+             st k < n for H,F,sq st len H = k & H = F^sq holds H = F)
+     for H,F,sq st (len H = n & H = F^sq)
+             holds H = F
+      proof
+      let n being Nat such that
+      A2:for k being Nat
+            st k < n for H,F,sq st len H = k & H = F^sq holds H = F;
+      let H,F,sq such that
+      A3:len H = n & H = F^sq;
+      A4:len F + len sq = len(F^sq) by FINSEQ_1:35;
+      A5:dom F = Seg len F by FINSEQ_1:def 3;
+       1 <= 1 & 1 <= len F by Thlen01;
+       then A6: 1 in dom F by A5,FINSEQ_1:3;
+       A7:now assume H is atomic;
+         then consider k such that A8: H = atom.k by Def14;
+       A9:len(H) = 1 by A8,FINSEQ_1:57;
+         then len F <= 1 & 1 <= len F by A3,A4,Thlen01,NAT_1:11;
+         then 1 + len sq = 1 + 0 by A3,A4,A9,XXREAL_0:1;
+         then sq = {} by CARD_2:59;
+        hence H = F by A3,FINSEQ_1:47;
+       end;
+      A10:now assume
+      A11:H is negative;
+        then consider H1 such that
+      A12:H = 'not' H1 by Def15;
+         (F^sq).1 = 0 by A3,A11,Lm3;
+         then F.1 = 0 by A6,FINSEQ_1:def 7;
+         then F is negative by Lm9;
+        then consider F1 such that
+      A13:F = 'not' F1 by Def15;
+            'not' H1 = <*0*>^H1 & 'not' F1 = <*0*>^F1 &
+             <*0*>^F1^sq = <*0*>^(F1^sq) by FINSEQ_1:45;
+       then A14:H1 = F1^sq by A3,A12,A13,FINSEQ_1:46;
+        len <*0*> + len H1 = len H & len H1 + 1 = 1 + len H1 & len <*0*>= 1
+          by A12,FINSEQ_1:35,57;
+         then len H1 < len H by NAT_1:13;
+        hence H = F by A2,A3,A12,A13,A14;
+       end;
+       A15:now assume A16:H is conjunctive;
+        then consider G1,G such that
+       A17:H = G1 '&' G by Def16;
+            (F^sq).1 = 1 by A3,A16,Lm4;
+         then F.1 = 1 by A6,FINSEQ_1:def 7;
+         then F is conjunctive by Lm9;
+         then consider F1,H1 such that
+       A18:F = F1 '&' H1 by Def16;
+       G1 '&' G = <*1*>^G1^G & F1 '&' H1 = <*1*>^F1^H1 &
+           <*1*>^G1^G = <*1*>^(G1^G) & <*1*>^F1^H1 = <*1*>^(F1^H1) &
+           <*1*>^(F1^H1)^sq = <*1*>^(F1^H1^sq) & F1^H1^sq = F1^(H1^sq)
+            by FINSEQ_1:45;
+        then A19:G1^G = F1^(H1^sq) by A3,A17,A18,FINSEQ_1:46;
+        then A20:(len G1 <= len F1 or len F1 <= len G1) &
+          (len F1 <= len G1 implies ex sq' st G1 = F1^sq') &
+           (len G1 <= len F1 implies ex sq' st F1 = G1^sq') by FINSEQ_1:64;
+         A21:now given sq' such that
+              A22:G1 = F1^sq';
+            len(<*1*>^G1) + len G = len H &
+            len(<*1*>^G1) = len <*1*> + len G1 &
+            len <*1*> = 1 & 1 + len G1 = len G1 + 1 by A17,FINSEQ_1:35,57;
+           then len G1 + 1 <= len H by NAT_1:11;
+           then len G1 < len H by NAT_1:13;
+          hence G1 = F1 by A2,A3,A22;
+         end;
+        A23:now given sq' such that
+              A24:F1 = G1^sq';
+              len(F^sq) = len F + len sq & len <*1*> = 1 &
+            len(<*1*>^F1) = len <*1*> + len F1 & 1 + len F1 = len F1 + 1 &
+             len F = len(<*1*>^F1) + len H1 & len <*1*> = 1 &
+              len F1 + 1 + len H1 + len sq = len F1 + 1 + (len H1 + len sq)
+               by A18,FINSEQ_1:35,57;
+           then len F1 + 1 <= len H by A3,NAT_1:11;
+           then len F1 < len H by NAT_1:13;
+          hence F1 = G1 by A2,A3,A24;
+         end;
+         then A25:G = H1^sq by A19,A20,A21,FINSEQ_1:46;
+            len(<*1*>^G1) + len G = len H &
+            len(<*1*>^G1) = len <*1*> + len G1 &
+            len <*1*> = 1 & 1 + len G1 + len G = len G + (1 + len G1) &
+           len G + (1 + len G1) = len G + 1 + len G1
+            by A17,FINSEQ_1:35,57;
+         then len G + 1 <= len H by NAT_1:11;
+         then len G < len H by NAT_1:13;
+        hence F = H by A2,A3,A17,A18,A20,A21,A23,A25;
+       end;
+       A1501:now assume A1601:H is disjunctive;
+        then consider G1,G such that
+       A1701:H = G1 'or' G by Def17;
+            (F^sq).1 = 2 by A3,A1601,Lm5;
+         then F.1 = 2 by A6,FINSEQ_1:def 7;
+         then F is disjunctive by Lm9;
+         then consider F1,H1 such that
+       A1801:F = F1 'or' H1 by Def17;
+       G1 'or' G = <*2*>^G1^G & F1 'or' H1 = <*2*>^F1^H1 &
+           <*2*>^G1^G = <*2*>^(G1^G) & <*2*>^F1^H1 = <*2*>^(F1^H1) &
+           <*2*>^(F1^H1)^sq = <*2*>^(F1^H1^sq) & F1^H1^sq = F1^(H1^sq)
+            by FINSEQ_1:45;
+        then A1901:G1^G = F1^(H1^sq) by A3,A1701,A1801,FINSEQ_1:46;
+        then A2001:(len G1 <= len F1 or len F1 <= len G1) &
+          (len F1 <= len G1 implies ex sq' st G1 = F1^sq') &
+           (len G1 <= len F1 implies ex sq' st F1 = G1^sq') by FINSEQ_1:64;
+         A2101:now given sq' such that
+              A2201:G1 = F1^sq';
+            len(<*2*>^G1) + len G = len H &
+            len(<*2*>^G1) = len <*2*> + len G1 &
+            len <*2*> = 1 & 1 + len G1 = len G1 + 1 by A1701,FINSEQ_1:35,57;
+           then len G1 + 1 <= len H by NAT_1:11;
+           then len G1 < len H by NAT_1:13;
+          hence G1 = F1 by A2,A3,A2201;
+         end;
+        A2301:now given sq' such that
+              A2401:F1 = G1^sq';
+              len(F^sq) = len F + len sq & len <*2*> = 1 &
+            len(<*2*>^F1) = len <*2*> + len F1 & 1 + len F1 = len F1 + 1 &
+             len F = len(<*2*>^F1) + len H1 & len <*2*> = 1 &
+              len F1 + 1 + len H1 + len sq = len F1 + 1 + (len H1 + len sq)
+               by A1801,FINSEQ_1:35,57;
+           then len F1 + 1 <= len H by A3,NAT_1:11;
+           then len F1 < len H by NAT_1:13;
+          hence F1 = G1 by A2,A3,A2401;
+         end;
+         then A2501:G = H1^sq by A1901,A2001,A2101,FINSEQ_1:46;
+            len(<*2*>^G1) + len G = len H &
+            len(<*2*>^G1) = len <*2*> + len G1 &
+            len <*2*> = 1 & 1 + len G1 + len G = len G + (1 + len G1) &
+           len G + (1 + len G1) = len G + 1 + len G1
+            by A1701,FINSEQ_1:35,57;
+         then len G + 1 <= len H by NAT_1:11;
+         then len G < len H by NAT_1:13;
+        hence F = H by A2,A3,A1701,A1801,A2001,A2101,A2301,A2501;
+       end;
+       A31:now assume A32:H is next;
+        then consider H1 such that
+       A33:H = 'X' H1 by Def18;
+            (F^sq).1 = 3 by A3,A32,Lm6;
+         then F.1 = 3 by A6,FINSEQ_1:def 7;
+         then F is next by Lm9;
+        then consider F1 such that
+       A34:F = 'X' F1 by Def18;
+            'X' H1 = <*3*>^H1 & 'X' F1 = <*3*>^F1 &
+            <*3*>^F1^sq = <*3*>^(F1^sq) by FINSEQ_1:45;
+        then A35:H1 = F1^sq by A3,A33,A34,FINSEQ_1:46;
+        len <*3*> + len H1 = len H & len H1 + 1 = 1 + len H1 & len <*3*>= 1
+          by A33,FINSEQ_1:35,57;
+         then len H1 < len H by NAT_1:13;
+        hence H = F by A2,A3,A33,A34,A35;
+       end;
+       A1036: now assume A36:H is Until;
+        then consider G1,G such that
+             A37:H = G1 'U' G by Def19;
+            (F^sq).1 = 4 by A3,A36,Lm7;
+         then F.1 = 4 by A6,FINSEQ_1:def 7;
+         then F is Until by Lm9;
+         then consider F1,H1 such that
+       A38:F = F1 'U' H1 by Def19;
+      G1 'U' G = <*4*>^G1^G & F1 'U' H1 = <*4*>^F1^H1 &
+           <*4*>^G1^G = <*4*>^(G1^G) & <*4*>^F1^H1 = <*4*>^(F1^H1) &
+           <*4*>^(F1^H1)^sq = <*4*>^(F1^H1^sq) & F1^H1^sq = F1^(H1^sq)
+            by FINSEQ_1:45;
+      then A39:G1^G = F1^(H1^sq) by A3,A37,A38,FINSEQ_1:46;
+      then A40:(len G1 <= len F1 or len F1 <= len G1) &
+          (len F1 <= len G1 implies ex sq' st G1 = F1^sq') &
+           (len G1 <= len F1 implies ex sq' st F1 = G1^sq')
+            by FINSEQ_1:64;
+      A41:now given sq' such that
+      A42:G1 = F1^sq';
+            len(<*4*>^G1) + len G = len H &
+            len(<*4*>^G1) = len <*4*> + len G1 &
+            len <*4*> = 1 & 1 + len G1 = len G1 + 1
+             by A37,FINSEQ_1:35,57;
+           then len G1 + 1 <= len H by NAT_1:11;
+           then len G1 < len H by NAT_1:13;
+          hence G1 = F1 by A2,A3,A42;
+         end;
+      A43:now given sq' such that
+      A44:F1 = G1^sq';
+              len(F^sq) = len F + len sq & len <*4*> = 1 &
+            len(<*4*>^F1) = len <*4*> + len F1 & 1 + len F1 = len F1 + 1 &
+             len F = len(<*4*>^F1) + len H1 & len <*4*> = 1 &
+              len F1 + 1 + len H1 + len sq = len F1 + 1 + (len H1 + len sq)
+               by A38,FINSEQ_1:35,57;
+           then len F1 + 1 <= len H by A3,NAT_1:11;
+           then len F1 < len H by NAT_1:13;
+          hence F1 = G1 by A2,A3,A44;
+         end;
+       then A45:G = H1^sq by A39,A40,A41,FINSEQ_1:46;
+            len(<*4*>^G1) + len G = len H &
+            len(<*4*>^G1) = len <*4*> + len G1 &
+            len <*4*> = 1 & 1 + len G1 + len G = len G + (1 + len G1) &
+           len G + (1 + len G1) = len G + 1 + len G1
+            by A37,FINSEQ_1:35,57;
+         then len G + 1 <= len H by NAT_1:11;
+         then len G < len H by NAT_1:13;
+        hence F = H by A2,A3,A37,A38,A40,A41,A43,A45;
+       end;
+       now assume A3601:H is Release;
+        then consider G1,G such that
+             A3701:H = G1 'R' G by Def1901;
+            (F^sq).1 = 5 by A3,A3601,Lm701;
+         then F.1 = 5 by A6,FINSEQ_1:def 7;
+         then F is Release by Lm9;
+         then consider F1,H1 such that
+       A3801:F = F1 'R' H1 by Def1901;
+      G1 'R' G = <*5*>^G1^G & F1 'R' H1 = <*5*>^F1^H1 &
+           <*5*>^G1^G = <*5*>^(G1^G) & <*5*>^F1^H1 = <*5*>^(F1^H1) &
+           <*5*>^(F1^H1)^sq = <*5*>^(F1^H1^sq) & F1^H1^sq = F1^(H1^sq)
+            by FINSEQ_1:45;
+      then A3901:G1^G = F1^(H1^sq) by A3,A3701,A3801,FINSEQ_1:46;
+      then A4001:(len G1 <= len F1 or len F1 <= len G1) &
+          (len F1 <= len G1 implies ex sq' st G1 = F1^sq') &
+           (len G1 <= len F1 implies ex sq' st F1 = G1^sq')
+            by FINSEQ_1:64;
+      A4101:now given sq' such that
+      A4201:G1 = F1^sq';
+            len(<*5*>^G1) + len G = len H &
+            len(<*5*>^G1) = len <*5*> + len G1 &
+            len <*5*> = 1 & 1 + len G1 = len G1 + 1
+             by A3701,FINSEQ_1:35,57;
+           then len G1 + 1 <= len H by NAT_1:11;
+           then len G1 < len H by NAT_1:13;
+          hence G1 = F1 by A2,A3,A4201;
+         end;
+      A4301:now given sq' such that
+      A4401:F1 = G1^sq';
+              len(F^sq) = len F + len sq & len <*5*> = 1 &
+            len(<*5*>^F1) = len <*5*> + len F1 & 1 + len F1 = len F1 + 1 &
+             len F = len(<*5*>^F1) + len H1 & len <*5*> = 1 &
+              len F1 + 1 + len H1 + len sq = len F1 + 1 + (len H1 + len sq)
+               by A3801,FINSEQ_1:35,57;
+           then len F1 + 1 <= len H by A3,NAT_1:11;
+           then len F1 < len H by NAT_1:13;
+          hence F1 = G1 by A2,A3,A4401;
+         end;
+       then A4501:G = H1^sq by A3901,A4001,A4101,FINSEQ_1:46;
+            len(<*5*>^G1) + len G = len H &
+            len(<*5*>^G1) = len <*5*> + len G1 &
+            len <*5*> = 1 & 1 + len G1 + len G = len G + (1 + len G1) &
+           len G + (1 + len G1) = len G + 1 + len G1
+            by A3701,FINSEQ_1:35,57;
+         then len G + 1 <= len H by NAT_1:11;
+         then len G < len H by NAT_1:13;
+        hence F = H by A2,A3,A3701,A3801,A4001,A4101,A4301,A4501;
+       end;
+      hence thesis by A7,A10,A15,A1501,A31,A1036,Th2;
+     end;
+     defpred P[Nat] means
+      for H,F,sq st len H = $1 & H = F^sq holds H = F;
+     A46:for k being Nat st
+           for n being Nat st n < k holds P[n] holds P[k] by A1;
+     A47:for n being Nat holds P[n] from NAT_1:sch 4(A46);
+       len H = len H;
+   hence thesis by A47;
+  end;
+
+Lm12:
+  H '&' G = H1 '&' G1 implies H = H1 & G = G1
+  proof
+  assume A1:H '&' G = H1 '&' G1;
+    H '&' G = <*1*>^H^G & H1 '&' G1 = <*1*>^H1^G1 &
+     <*1*>^H^G = <*1*>^(H^G) & <*1*>^H1^G1 = <*1*>^(H1^G1)
+      by FINSEQ_1:45;
+  then H^G = H1^G1 by A1,FINSEQ_1:46;
+  then A2:  (len H <= len H1 or len H1 <= len H) &
+     (len H1 <= len H implies ex sq st H = H1^sq) &
+      (len H <= len H1 implies ex sq st H1 = H^sq) by FINSEQ_1:64;
+   A3:(ex sq st H1 = H^sq) implies H1 = H by Lm11;
+   thus H = H1 by A2,Lm11;
+   thus G = G1 by A1,A2,A3,Lm11,FINSEQ_1:46;
+  end;
+
+Lm1201:
+  H 'or' G = H1 'or' G1 implies H = H1 & G = G1
+  proof
+  assume A1:H 'or' G = H1 'or' G1;
+    H 'or' G = <*2*>^H^G & H1 'or' G1 = <*2*>^H1^G1 &
+     <*2*>^H^G = <*2*>^(H^G) & <*2*>^H1^G1 = <*2*>^(H1^G1)
+      by FINSEQ_1:45;
+  then H^G = H1^G1 by A1,FINSEQ_1:46;
+  then A2:  (len H <= len H1 or len H1 <= len H) &
+     (len H1 <= len H implies ex sq st H = H1^sq) &
+      (len H <= len H1 implies ex sq st H1 = H^sq) by FINSEQ_1:64;
+   A3:(ex sq st H1 = H^sq) implies H1 = H by Lm11;
+   thus H = H1 by A2,Lm11;
+   thus G = G1 by A1,A2,A3,Lm11,FINSEQ_1:46;
+  end;
+
+Lm13:
+  H 'U' G = H1 'U' G1 implies H = H1 & G = G1
+  proof assume A1:H 'U' G = H1 'U' G1;
+    H 'U' G = <*4*>^H^G & H1 'U' G1 = <*4*>^H1^G1 &
+     <*4*>^H^G = <*4*>^(H^G) & <*4*>^H1^G1 = <*4*>^(H1^G1)
+      by FINSEQ_1:45;
+  then H^G = H1^G1 by A1,FINSEQ_1:46;
+  then A2:  (len H <= len H1 or len H1 <= len H) &
+     (len H1 <= len H implies ex sq st H = H1^sq) &
+      (len H <= len H1 implies ex sq st H1 = H^sq) by FINSEQ_1:64;
+  A3:(ex sq st H1 = H^sq) implies H1 = H by Lm11;
+   thus H = H1 by A2,Lm11;
+   thus G = G1 by A1,A2,A3,Lm11,FINSEQ_1:46;
+  end;
+
+Lm1301:
+  H 'R' G = H1 'R' G1 implies H = H1 & G = G1
+  proof assume A1:H 'R' G = H1 'R' G1;
+    H 'R' G = <*5*>^H^G & H1 'R' G1 = <*5*>^H1^G1 &
+     <*5*>^H^G = <*5*>^(H^G) & <*5*>^H1^G1 = <*5*>^(H1^G1)
+      by FINSEQ_1:45;
+  then H^G = H1^G1 by A1,FINSEQ_1:46;
+  then A2:  (len H <= len H1 or len H1 <= len H) &
+     (len H1 <= len H implies ex sq st H = H1^sq) &
+      (len H <= len H1 implies ex sq st H1 = H^sq) by FINSEQ_1:64;
+  A3:(ex sq st H1 = H^sq) implies H1 = H by Lm11;
+   thus H = H1 by A2,Lm11;
+   thus G = G1 by A1,A2,A3,Lm11,FINSEQ_1:46;
+  end;
+
+Lm15:
+  H is negative implies
+    (not H is atomic) & (not H is conjunctive) & (not H is disjunctive) &
+    (not H is next) & (not H is Until) & (not H is Release)
+  proof
+  assume H is negative;
+  then H.1=0 by Lm3;
+  hence thesis by Lm8,Lm4,Lm5,Lm6,Lm7,Lm701;
+  end;
+
+Lm16:
+  H is conjunctive implies
+    (not H is atomic) & (not H is negative) & (not H is disjunctive) &
+    (not H is next) & (not H is Until) & (not H is Release)
+   proof
+   assume H is conjunctive;
+   then H.1=1 by Lm4;
+   hence thesis by Lm8,Lm3,Lm5,Lm6,Lm7,Lm701;
+   end;
+
+Lm1601:
+  H is disjunctive implies
+    (not H is atomic) & (not H is negative) & (not H is conjunctive) &
+    (not H is next) & (not H is Until) & (not H is Release)
+   proof
+   assume H is disjunctive;
+   then H.1=2 by Lm5;
+   hence thesis by Lm8,Lm3,Lm4,Lm6,Lm7,Lm701;
+   end;
+
+Lm17:
+  H is next implies
+    (not H is atomic) & (not H is negative) & (not H is conjunctive) &
+    (not H is disjunctive) & (not H is Until) & (not H is Release)
+   proof
+   assume H is next;
+   then H.1=3 by Lm6;
+   hence thesis by Lm8,Lm3,Lm4,Lm5,Lm7,Lm701;
+   end;
+
+Lm18:
+  H is Until implies
+    (not H is atomic) & (not H is negative) & (not H is conjunctive) &
+    (not H is disjunctive) & (not H is next) & (not H is Release)
+   proof
+   assume H is Until;
+   then H.1=4 by Lm7;
+   hence thesis by Lm8,Lm3,Lm4,Lm5,Lm6,Lm701;
+   end;
+
+Lm1801:
+  H is Release implies
+    (not H is atomic) & (not H is negative) & (not H is conjunctive) &
+    (not H is disjunctive) & (not H is next) & (not H is Until)
+   proof
+   assume H is Release;
+   then H.1=5 by Lm701;
+   hence thesis by Lm8,Lm3,Lm4,Lm5,Lm6,Lm7;
+   end;
+
+definition let H;
+  assume
+  A1: H is negative or H is next;
+  func the_argument_of H -> LTL-formula means
+:Def21:  'not' it = H if H is negative
+          otherwise 'X' it = H;
+   existence by A1,Def15,Def18;
+   uniqueness by FINSEQ_1:46;
+   consistency;
+end;
+
+definition let H;
+  assume
+A1: H is conjunctive or H is disjunctive or H is Until
+    or H is Release;
+  func the_left_argument_of H -> LTL-formula means
+:Def22: ex H1 st it '&' H1 = H if H is conjunctive,
+        ex H1 st it 'or' H1 = H if H is disjunctive,
+        ex H1 st it 'U' H1 = H if H is Until
+    otherwise ex H1 st it 'R' H1 = H;
+   existence by A1,Def16,Def17,Def19,Def1901;
+   uniqueness by Lm12,Lm1201,Lm13,Lm1301;
+   consistency by Lm16,Lm1601;
+
+  func the_right_argument_of H -> LTL-formula means
+:Def23: ex H1 st H1 '&' it = H if H is conjunctive,
+        ex H1 st H1 'or' it = H if H is disjunctive,
+        ex H1 st H1 'U' it = H if H is Until
+    otherwise ex H1 st H1 'R' it = H;
+    existence
+      proof
+      B1:H is conjunctive implies ex G st (ex H1 st H1 '&' G = H)
+         proof
+         assume H is conjunctive;
+         then consider G,F such that
+               C1:G '&' F = H by Def16;
+         take F;
+         thus thesis by C1;
+         end;
+      B2:H is disjunctive implies ex G st (ex H1 st H1 'or' G = H)
+         proof
+         assume H is disjunctive;
+         then consider G,F such that
+               C1:G 'or' F = H by Def17;
+         take F;
+         thus thesis by C1;
+         end;
+      B3:H is Until implies ex G st (ex H1 st H1 'U' G = H)
+         proof
+         assume H is Until;
+         then consider G,F such that
+               C1:G 'U' F = H by Def19;
+         take F;
+         thus thesis by C1;
+         end;
+
+         (H is not conjunctive) & (H is not disjunctive) &
+         (H is not Until) implies ex G st (ex H1 st H1 'R' G = H)
+         proof
+         assume (H is not conjunctive) & (H is not disjunctive) &
+                (H is not Until);
+         then consider G,F such that
+               C2:G 'R' F = H by Def1901,A1;
+         take F;
+         thus thesis by C2;
+         end;
+      hence thesis by B1,B2,B3;
+      end;
+   uniqueness by Lm12,Lm1201,Lm13,Lm1301;
+   consistency by Lm1601,Lm18;
+end;
+
+theorem
+  H is negative implies H = 'not' the_argument_of H by Def21;
+
+theorem
+ThArg2:H is next implies H = 'X' the_argument_of H
+   proof
+   assume A1:H is next;
+   then not (H is negative)  by Lm17;
+   hence thesis by A1,Def21;
+   end;
+
+theorem
+ThArg3:H is conjunctive implies
+       H =(the_left_argument_of H) '&' (the_right_argument_of H)
+   proof
+   assume A1:H is conjunctive;
+   then ex H1 st H = H1 '&' the_right_argument_of H by Def23;
+   hence thesis by A1,Def22;
+   end;
+
+theorem ThArg4:
+    H is disjunctive implies
+       H =(the_left_argument_of H) 'or' (the_right_argument_of H)
+   proof
+   assume A1:H is disjunctive;
+   then ex H1 st H = H1 'or' the_right_argument_of H by Def23;
+   hence thesis by A1,Def22;
+   end;
+
+theorem
+ThArg5:H is Until implies
+          H = (the_left_argument_of H) 'U' (the_right_argument_of H)
+   proof
+   assume A1:H is Until;
+   then ex H1 st H = H1 'U' the_right_argument_of H by Def23;
+   hence thesis by A1,Def22;
+   end;
+
+theorem
+ThArg6:H is Release implies
+          H = (the_left_argument_of H) 'R' (the_right_argument_of H)
+   proof
+   assume A1:H is Release;
+   then A2:not (H is conjunctive) &  not (H is disjunctive) &
+           not (H is Until) by Lm1801;
+   then ex H1 st H = H1 'R' the_right_argument_of H by A1,Def23;
+   hence thesis by A1,A2,Def22;
+   end;
+
+theorem ThArg7:
+   H is negative or H is next implies
+   len(H) = 1+len(the_argument_of H) &
+   len(the_argument_of H) < len(H)
+    proof
+    assume A1:H is negative or H is next;
+    per cases by A1;
+    suppose H is negative;
+       then H = 'not' the_argument_of H by Def21;
+       then len(H) = 1+len(the_argument_of H) by FINSEQ_5:8;
+       hence thesis by NAT_1:19;
+       end;
+    suppose H is next;
+       then H = 'X' the_argument_of H by ThArg2;
+       then len(H) = 1+len(the_argument_of H) by FINSEQ_5:8;
+       hence thesis by NAT_1:19;
+       end;
+     end;
+
+theorem ThArg8:
+   H is conjunctive or H is disjunctive or H is Until or
+   H is Release implies
+   len(H) =1+ len(the_left_argument_of H)+len(the_right_argument_of H) &
+   len(the_left_argument_of H) < len(H) &
+   len(the_right_argument_of H) < len(H)
+   proof
+    assume A1:H is conjunctive or H is disjunctive or
+              H is Until or H is Release;
+    set iL=len(the_left_argument_of H);
+    set iR=len(the_right_argument_of H);
+    set iR1=iR+1;
+    per cases by A1;
+    suppose H is conjunctive;
+       then H = (the_left_argument_of H) '&' (the_right_argument_of H)
+                by ThArg3;
+       then B1:len(H) = 1+iL+iR by Lm2;
+       1<=iR1 by NAT_1:11;
+       then B2:iL < iL +iR1 by NAT_1:19;
+       1<=1+iL by NAT_1:11;
+       hence thesis by B1,B2,NAT_1:19;
+       end;
+    suppose H is disjunctive;
+       then H = (the_left_argument_of H) 'or' (the_right_argument_of H)
+                by ThArg4;
+       then B1:len(H) = 1+iL+iR by Lm2;
+       1<=iR1 by NAT_1:11;
+       then B2:iL < iL +iR1 by NAT_1:19;
+       1<=1+iL by NAT_1:11;
+       hence thesis by B1,B2,NAT_1:19;
+       end;
+    suppose H is Until;
+       then H = the_left_argument_of H 'U' the_right_argument_of H by ThArg5;
+       then B1:len(H) = 1+iL+iR by Lm2;
+       1<=iR1 by NAT_1:11;
+       then B2:iL < iL +iR1 by NAT_1:19;
+       1<=1+iL by NAT_1:11;
+       hence thesis by B1,B2,NAT_1:19;
+       end;
+    suppose H is Release;
+       then H = the_left_argument_of H 'R' the_right_argument_of H
+               by ThArg6;
+       then B1:len(H) = 1+iL+iR by Lm2;
+       1<=iR1 by NAT_1:11;
+       then B2:iL < iL +iR1 by NAT_1:19;
+       1<=1+iL by NAT_1:11;
+       hence thesis by B1,B2,NAT_1:19;
+       end;
+    end;
+
+::
+::         The Immediate Constituents of LTL-formulae
+::
+
+definition let H,F;
+  pred H is_immediate_constituent_of F means
+:Def100:  F = 'not' H or F = 'X' H or
+             ( ex H1 st F = H '&' H1 or F = H1 '&' H  or
+                        F = H 'or' H1 or F = H1 'or' H  or
+                        F = H 'U' H1 or F = H1 'U' H  or
+                        F = H 'R' H1 or F = H1 'R' H );
+end;
+
+theorem
+ Th100: for F,G holds ('not' F).1 = 0 & (F '&' G).1 = 1 &
+                      (F 'or' G).1 = 2 & ('X' F).1 = 3 &
+                      (F 'U' G).1 = 4 & (F 'R' G).1 = 5
+  proof let F,G;
+   thus ('not' F).1 = 0 by FINSEQ_1:58;
+   thus (F '&' G).1 = (<*1*>^(F^G)).1 by FINSEQ_1:45
+                   .= 1 by FINSEQ_1:58;
+   thus (F 'or' G).1 = (<*2*>^(F^G)).1 by FINSEQ_1:45
+                    .= 2 by FINSEQ_1:58;
+   thus ('X' F).1 = 3 by FINSEQ_1:58;
+   thus (F 'U' G).1 = (<*4*>^(F^G)).1 by FINSEQ_1:45
+                   .= 4 by FINSEQ_1:58;
+   thus (F 'R' G).1 = (<*5*>^(F^G)).1 by FINSEQ_1:45
+                   .= 5 by FINSEQ_1:58;
+  end;
+
+theorem
+ Th101: H is_immediate_constituent_of 'not' F iff H = F
+  proof
+   thus H is_immediate_constituent_of 'not' F implies H = F
+     proof assume
+          H is_immediate_constituent_of 'not' F;
+     then A1:'not' F = 'not' H or 'not' F = 'X' H or
+             ( ex H1 st 'not' F = H '&' H1 or 'not' F = H1 '&' H or
+                        'not' F = H 'or' H1 or 'not' F = H1 'or' H or
+                        'not' F = H 'U' H1 or 'not' F = H1 'U' H or
+                        'not' F = H 'R' H1 or 'not' F = H1 'R' H ) by Def100;
+     A2:now assume A3:'not' F = 'X' H;
+        ('not' F).1 = 0 &  ('X' H).1=3 by Th100;
+       hence contradiction by A3;
+       end;
+     A4:now given H1 such that
+     A5: 'not' F = H '&' H1 or 'not' F = H1 '&' H  or
+         'not' F = H 'or' H1 or 'not' F = H1 'or' H  or
+         'not' F = H 'U' H1 or 'not' F = H1 'U' H  or
+         'not' F = H 'R' H1 or 'not' F = H1 'R' H;
+         ('not' F).1 = 0 &
+         (H '&' H1).1 = 1 & (H1 '&' H).1 = 1 &
+         (H 'or' H1).1 = 2 & (H1 'or' H).1 = 2 &
+         (H 'U' H1).1 = 4 & (H1 'U' H).1 = 4 &
+         (H 'R' H1).1 = 5 & (H1 'R' H).1 = 5  by Th100;
+        hence contradiction by A5;
+       end;
+      thus thesis by A1,A2,FINSEQ_1:46,A4;
+     end;
+   thus thesis by Def100;
+  end;
+
+theorem
+ Th102: H is_immediate_constituent_of 'X' F iff H = F
+  proof
+   thus H is_immediate_constituent_of 'X' F implies H = F
+     proof assume
+          H is_immediate_constituent_of 'X' F;
+     then A1:'X' F = 'not' H or 'X' F = 'X' H or
+             ( ex H1 st 'X' F = H '&' H1 or 'X' F = H1 '&' H  or
+                        'X' F = H 'or' H1 or 'X' F = H1 'or' H  or
+                        'X' F = H 'U' H1 or 'X' F = H1 'U' H  or
+                        'X' F = H 'R' H1 or 'X' F = H1 'R' H      )
+        by Def100;
+     A2:now assume A3:'X' F = 'not' H;
+        ('X' F).1 = 3 &  ('not' H).1=0 by Th100;
+       hence contradiction by A3;
+       end;
+     A4:now given H1 such that
+     A5: 'X' F = H '&' H1 or 'X' F = H1 '&' H  or
+         'X' F = H 'or' H1 or 'X' F = H1 'or' H  or
+         'X' F = H 'U' H1 or 'X' F = H1 'U' H  or
+         'X' F = H 'R' H1 or 'X' F = H1 'R' H;
+         ('X' F).1 = 3 &
+         (H '&' H1).1 = 1 & (H1 '&' H).1 = 1 &
+         (H 'or' H1).1 = 2 & (H1 'or' H).1 = 2 &
+         (H 'U' H1).1 = 4 & (H1 'U' H).1 = 4 &
+         (H 'R' H1).1 = 5 & (H1 'R' H).1 = 5  by Th100;
+        hence contradiction by A5;
+       end;
+      thus thesis by A1,A2,FINSEQ_1:46,A4;
+     end;
+   thus thesis by Def100;
+  end;
+
+theorem
+ Th103: H is_immediate_constituent_of F '&' G iff H = F or H =G
+  proof
+   thus H is_immediate_constituent_of F '&' G  implies H = F or H =G
+     proof assume
+          A0: H is_immediate_constituent_of F '&' G;
+     set Z= F '&' G;
+     A1:    Z = 'not' H or Z = 'X' H or
+             ( ex H1 st Z = H '&' H1 or Z = H1 '&' H  or
+                        Z = H 'or' H1 or Z = H1 'or' H  or
+                        Z = H 'U' H1 or Z = H1 'U' H  or
+                        Z = H 'R' H1 or Z = H1 'R' H      )  by A0,Def100;
+     A2:now assume A3:Z = 'not' H or Z = 'X' H;
+       Z.1 = 1 &  ('not' H).1=0 &  ('X' H).1=3 by Th100;
+       hence contradiction by A3;
+       end;
+     now given H1 such that
+     A5:  Z = H 'or' H1 or Z = H1 'or' H  or
+          Z = H 'U' H1 or Z = H1 'U' H  or
+          Z = H 'R' H1 or Z = H1 'R' H;
+         Z.1 = 1 &
+         (H 'or' H1).1 = 2 & (H1 'or' H).1 = 2 &
+         (H 'U' H1).1 = 4 & (H1 'U' H).1 = 4 &
+         (H 'R' H1).1 = 5 & (H1 'R' H).1 = 5  by Th100;
+        hence contradiction by A5;
+       end;
+      hence thesis by Lm12,A1,A2;
+     end;
+   thus thesis by Def100;
+  end;
+
+theorem
+ Th104: H is_immediate_constituent_of F 'or' G iff H = F or H =G
+  proof
+   thus H is_immediate_constituent_of F 'or' G  implies H = F or H =G
+     proof assume
+          A0: H is_immediate_constituent_of F 'or' G;
+     set Z= F 'or' G;
+     A1:    Z = 'not' H or Z = 'X' H or
+             ( ex H1 st Z = H '&' H1 or Z = H1 '&' H  or
+                        Z = H 'or' H1 or Z = H1 'or' H  or
+                        Z = H 'U' H1 or Z = H1 'U' H  or
+                        Z = H 'R' H1 or Z = H1 'R' H      )  by A0,Def100;
+     A2:now assume A3:Z = 'not' H or Z = 'X' H;
+       Z.1 = 2 &  ('not' H).1=0 &  ('X' H).1=3 by Th100;
+       hence contradiction by A3;
+       end;
+     now given H1 such that
+     A5:  Z = H '&' H1 or Z = H1 '&' H  or
+          Z = H 'U' H1 or Z = H1 'U' H  or
+          Z = H 'R' H1 or Z = H1 'R' H;
+         Z.1 = 2 &
+         (H '&' H1).1 = 1 & (H1 '&' H).1 = 1 &
+         (H 'U' H1).1 = 4 & (H1 'U' H).1 = 4 &
+         (H 'R' H1).1 = 5 & (H1 'R' H).1 = 5  by Th100;
+        hence contradiction by A5;
+       end;
+      hence thesis by Lm1201,A1,A2;
+     end;
+   thus thesis by Def100;
+  end;
+
+theorem
+ Th105: H is_immediate_constituent_of F 'U' G iff H = F or H =G
+  proof
+   thus H is_immediate_constituent_of F 'U' G  implies H = F or H =G
+     proof assume
+          A0: H is_immediate_constituent_of F 'U' G;
+     set Z= F 'U' G;
+     A1:    Z = 'not' H or Z = 'X' H or
+             ( ex H1 st Z = H '&' H1 or Z = H1 '&' H  or
+                        Z = H 'or' H1 or Z = H1 'or' H  or
+                        Z = H 'U' H1 or Z = H1 'U' H  or
+                        Z = H 'R' H1 or Z = H1 'R' H      )  by A0,Def100;
+     A2:now assume A3:Z = 'not' H or Z = 'X' H;
+       Z.1 = 4 &  ('not' H).1=0 &  ('X' H).1=3 by Th100;
+       hence contradiction by A3;
+       end;
+     now given H1 such that
+     A5:  Z = H '&' H1 or Z = H1 '&' H  or
+          Z = H 'or' H1 or Z = H1 'or' H  or
+          Z = H 'R' H1 or Z = H1 'R' H;
+
+         Z.1 = 4 &
+         (H '&' H1).1 = 1 & (H1 '&' H).1 = 1 &
+         (H 'or' H1).1 = 2 & (H1 'or' H).1 = 2 &
+         (H 'R' H1).1 = 5 & (H1 'R' H).1 = 5  by Th100;
+        hence contradiction by A5;
+       end;
+      hence thesis by Lm13,A1,A2;
+     end;
+   thus thesis by Def100;
+  end;
+
+theorem
+ Th106: H is_immediate_constituent_of F 'R' G iff H = F or H =G
+  proof
+   thus H is_immediate_constituent_of F 'R' G  implies H = F or H =G
+     proof assume
+          A0: H is_immediate_constituent_of F 'R' G;
+     set Z= F 'R' G;
+     A1:    Z = 'not' H or Z = 'X' H or
+             ( ex H1 st Z = H '&' H1 or Z = H1 '&' H  or
+                        Z = H 'or' H1 or Z = H1 'or' H  or
+                        Z = H 'U' H1 or Z = H1 'U' H  or
+                        Z = H 'R' H1 or Z = H1 'R' H      )  by A0,Def100;
+     A2:now assume A3:Z = 'not' H or Z = 'X' H;
+       Z.1 = 5 &  ('not' H).1=0 &  ('X' H).1=3 by Th100;
+       hence contradiction by A3;
+       end;
+     now given H1 such that
+     A5:  Z = H '&' H1 or Z = H1 '&' H  or
+          Z = H 'or' H1 or Z = H1 'or' H  or
+          Z = H 'U' H1 or Z = H1 'U' H;
+         Z.1 = 5 &
+         (H '&' H1).1 = 1 & (H1 '&' H).1 = 1 &
+         (H 'or' H1).1 = 2 & (H1 'or' H).1 = 2 &
+         (H 'U' H1).1 = 4 & (H1 'U' H).1 = 4  by Th100;
+        hence contradiction by A5;
+       end;
+      hence thesis by Lm1301,A1,A2;
+     end;
+   thus thesis by Def100;
+  end;
+
+theorem
+  Th107:F is atomic implies not (H is_immediate_constituent_of F)
+  proof
+  assume F is atomic;
+  then A1:not F.1 = 0 & not F.1 = 1 &
+          not F.1 = 2 & not F.1 = 3 &
+          not F.1 = 4 & not F.1 = 5  by Lm8;
+   now assume H is_immediate_constituent_of F;
+    then F = 'not' H or F = 'X' H or
+             ( ex H1 st F = H '&' H1 or F = H1 '&' H  or
+                        F = H 'or' H1 or F = H1 'or' H  or
+                        F = H 'U' H1 or F = H1 'U' H  or
+                        F = H 'R' H1 or F = H1 'R' H      )  by Def100;
+     hence contradiction by A1,Th100;
+    end;
+  hence thesis;
+  end;
+
+theorem
+ Th108: F is negative implies
+   (H is_immediate_constituent_of F iff H = the_argument_of F)
+  proof assume F is negative;
+    then F = 'not' the_argument_of F by Def21;
+   hence thesis by Th101;
+  end;
+
+theorem
+ Th109: F is next implies
+   (H is_immediate_constituent_of F iff H = the_argument_of F)
+  proof assume F is next;
+    then F = 'X' the_argument_of F by ThArg2;
+   hence thesis by Th102;
+  end;
+
+theorem
+ Th110: F is conjunctive implies
+   (H is_immediate_constituent_of F iff
+     H = the_left_argument_of F or H = the_right_argument_of F)
+  proof assume F is conjunctive;
+    then F = (the_left_argument_of F) '&' (the_right_argument_of F)
+                    by ThArg3;
+   hence thesis by Th103;
+  end;
+
+theorem
+ Th111: F is disjunctive implies
+   (H is_immediate_constituent_of F iff
+     H = the_left_argument_of F or H = the_right_argument_of F)
+  proof assume F is disjunctive;
+    then F = (the_left_argument_of F) 'or' (the_right_argument_of F)
+                    by ThArg4;
+   hence thesis by Th104;
+  end;
+
+theorem
+ Th112: F is Until implies
+   (H is_immediate_constituent_of F iff
+     H = the_left_argument_of F or H = the_right_argument_of F)
+  proof assume F is Until;
+    then F = (the_left_argument_of F) 'U' (the_right_argument_of F)
+                    by ThArg5;
+   hence thesis by Th105;
+  end;
+
+theorem
+ Th113: F is Release implies
+   (H is_immediate_constituent_of F iff
+     H = the_left_argument_of F or H = the_right_argument_of F)
+  proof assume F is Release;
+    then F = (the_left_argument_of F) 'R' (the_right_argument_of F)
+                    by ThArg6;
+   hence thesis by Th106;
+  end;
+
+theorem
+ H is_immediate_constituent_of F implies
+                    F is negative or F is next or
+                    F is conjunctive or F is disjunctive or
+                    F is Until or F is Release
+                   by Th107,Th2;
+
+::
+::    The Subformulae and The Proper Subformulae of LTL-formulae
+::
+
+reserve L,L' for FinSequence;
+
+ definition let H,F;
+  pred H is_subformula_of F means
+:Def101:  ex n,L st 1 <= n & len L = n & L.1 = H & L.n = F &
+        for k st 1 <= k & k < n
+         ex H1,F1 st L.k = H1 & L.(k + 1) = F1 &
+          H1 is_immediate_constituent_of F1;
+ end;
+
+theorem
+ Th115: H is_subformula_of H
+  proof
+   take 1 , <*H*>;
+   thus 1 <= 1;
+   thus len <*H*> = 1 by FINSEQ_1:57;
+   thus <*H*>.1 = H & <*H*>.1 = H by FINSEQ_1:def 8;
+   thus thesis;
+  end;
+
+ definition let H,F;
+  pred H is_proper_subformula_of F means
+:Def102:  H is_subformula_of F & H <> F;
+ end;
+
+theorem
+ Th116: H is_immediate_constituent_of F implies len H < len F
+  proof
+  assume A1:H is_immediate_constituent_of F;
+  per cases by A1,Th107,Th2;
+    suppose A3:F is negative or F is next;
+         then
+         H = the_argument_of F by A1,Th108,Th109;
+         hence thesis by A3,ThArg7;
+         end;
+    suppose A4:F is conjunctive or F is disjunctive or
+            F is Until or F is Release;
+         then
+         H = the_left_argument_of F or H = the_right_argument_of F
+                 by A1,Th110,Th111,Th112,Th113;
+         hence thesis by A4,ThArg8;
+         end;
+  end;
+
+theorem
+ Th117: H is_immediate_constituent_of F implies H is_proper_subformula_of F
+  proof assume
+A1:  H is_immediate_constituent_of F;
+   thus H is_subformula_of F
+     proof
+     take n=2 , L=<* H,F *>;
+      thus 1 <= n;
+      thus len L = n by FINSEQ_1:61;
+      thus L.1 = H & L.n = F by FINSEQ_1:61;
+      let k; assume
+A2:     1 <= k & k < n;
+       then k < 1 + 1;
+       then k <= 1 by NAT_1:13;
+then A3:     k = 1 by A2,XXREAL_0:1;
+      take H,F;
+     thus L.k = H & L.(k + 1) = F by A3,FINSEQ_1:61;
+     thus thesis by A1;
+    end;
+   assume H = F;
+    then len H = len F & len H < len F by A1,Th116;
+   hence contradiction;
+  end;
+
+theorem (G is negative or G is next)
+            implies the_argument_of G is_subformula_of G
+  proof
+  assume G is negative or G is next;
+  then the_argument_of G is_immediate_constituent_of G by Th108,Th109;
+  then the_argument_of G is_proper_subformula_of G by Th117;
+  hence thesis by Def102;
+  end;
+
+theorem (G is conjunctive or G is disjunctive or
+          G is Until or G is Release )
+            implies (the_left_argument_of G is_subformula_of G) &
+                    (the_right_argument_of G is_subformula_of G)
+  proof
+  assume A1:G is conjunctive or G is disjunctive or
+          G is Until or G is Release;
+  then the_left_argument_of G is_immediate_constituent_of G
+                                     by Th110,Th111,Th112,Th113;
+  then A2:the_left_argument_of G is_proper_subformula_of G by Th117;
+  the_right_argument_of G is_immediate_constituent_of G
+                                     by A1,Th110,Th111,Th112,Th113;
+  then the_right_argument_of G is_proper_subformula_of G by Th117;
+  hence thesis by Def102,A2;
+  end;
+
+theorem
+ Th118: H is_proper_subformula_of F implies len H < len F
+  proof assume
+       H is_subformula_of F;
+   then consider n,L such that
+A1:  1 <= n & len L = n & L.1 = H & L.n = F and
+A2:  for k st 1 <= k & k < n
+     ex H1,F1 st L.k = H1 & L.(k + 1) = F1 &
+      H1 is_immediate_constituent_of F1
+       by Def101;
+   assume H <> F;
+     then 1 < n by A1,REAL_1:def 5;
+then A3:  1 + 1 <= n by NAT_1:13;
+    defpred P[Nat] means 1 <= $1 & $1 < n implies
+      for H1 st L.($1 + 1) = H1 holds len H < len H1;
+A4:  P[0];
+A5:  for k st P[k] holds P[k + 1]
+     proof let k such that
+A6:     1 <= k & k < n implies
+        for H1 st L.(k + 1) = H1 holds len H < len H1 and
+A7:     1 <= k + 1 & k + 1 < n;
+      let H1 such that
+A8:     L.(k + 1 + 1) = H1;
+      consider F1,G such that
+A9:     L.(k + 1) = F1 & L.(k + 1 + 1) = G &
+        F1 is_immediate_constituent_of G by A2,A7;
+A10:      k = 0 implies len H < len H1 by A1,A8,A9,Th116;
+          now given m be Nat such that
+A11:      k = m + 1;
+        len H < len F1 by A6,A7,A9,A11,NAT_1:11,13;
+        hence len H < len H1 by A8,A9,Th116,XXREAL_0:2;
+       end;
+      hence len H < len H1 by A10,NAT_1:6;
+     end;
+A13:  for k holds P[k] from NAT_1:sch 2(A4,A5);
+   consider k be Nat such that
+A14:  n = 2 + k by A3,NAT_1:10;
+A15:  1 + 1 + k = (1 + k) + 1;
+  then 1 + k < n & 1 <= 1 + k by A14,NAT_1:11,13;
+   hence len H < len F by A1,A13,A14,A15;
+  end;
+
+theorem
+ H is_proper_subformula_of F implies
+   ex G st G is_immediate_constituent_of F
+  proof assume
+       H is_subformula_of F;
+   then consider n,L such that
+A1:  1 <= n & len L = n & L.1 = H & L.n = F and
+A2:  for k st 1 <= k & k < n
+     ex H1,F1 st L.k = H1 & L.(k + 1) = F1 &
+      H1 is_immediate_constituent_of F1
+       by Def101;
+   assume H <> F;
+    then 1 < n by A1,REAL_1:def 5;
+    then 1 + 1 <= n by NAT_1:13;
+   then consider k be Nat such that
+A3:  n = 2 + k by NAT_1:10;
+  1 + 1 + k = (1 + k) + 1;
+    then 1 + k < n & 1 <= 1 + k by A3,NAT_1:11,13;
+   then consider H1,F1 such that
+A4:  L.(1 + k) = H1 & L.(1 + k + 1) = F1 &
+     H1 is_immediate_constituent_of F1 by A2;
+   take H1;
+   thus thesis by A1,A3,A4;
+  end;
+
+reserve j for Nat;
+reserve j1 for Element of NAT;
+
+theorem
+ Th120: F is_proper_subformula_of G & G is_proper_subformula_of H implies
+   F is_proper_subformula_of H
+  proof assume
+A1:  F is_subformula_of G & F <> G & G is_subformula_of H & G <> H;
+   then consider n,L such that
+A2:  1 <= n & len L = n & L.1 = F & L.n = G and
+A3:  for k st 1 <= k & k < n
+     ex H1,F1 st L.k = H1 & L.(k + 1) = F1 &
+      H1 is_immediate_constituent_of F1
+       by Def101;
+       1 < n by A1,A2,REAL_1:def 5;
+then A4: 1 + 1 <= n by NAT_1:13;
+   consider m,L' such that
+A5:  1 <= m & len L' = m & L'.1 = G & L'.m = H and
+A6:  for k st 1 <= k & k < m
+     ex H1,F1 st L'.k = H1 & L'.(k + 1) = F1 &
+      H1 is_immediate_constituent_of F1
+       by A1,Def101;
+   consider k be Nat such that
+A7:  n = 2 + k by A4,NAT_1:10;
+   reconsider L1 = L|(Seg(1 + k)) as FinSequence by FINSEQ_1:19;
+   thus F is_subformula_of H
+     proof
+      take l = 1 + k + m, K = L1^L';
+      m <= m + (1 + k) & m + (1 + k) = 1 + k + m by NAT_1:11;
+      hence 1 <= l by A5,XXREAL_0:2;
+    1 + 1 + k = 1 + k + 1;
+then A8:    1 + k <= n by A7,NAT_1:11;
+then A9:     len L1 = 1 + k by A2,FINSEQ_1:21;
+      hence
+A10:     len K = l by A5,FINSEQ_1:35;
+A11:     now let j; assume
+         1 <= j & j <= 1 + k;
+then A12:      j in Seg(1 + k) by FINSEQ_1:3;
+         then j in dom L1 by A2,A8,FINSEQ_1:21;
+      then K.j = L1.j by FINSEQ_1:def 7;
+        hence K.j = L.j by A12,FUNCT_1:72;
+       end;
+          1 <= 1 + k & 1 <= 1 by NAT_1:11;
+      hence K.1 = F by A2,A11;
+          len L1 + 1 <= len L1 + m by A5,XREAL_1:9;
+       then len L1 < l & l <= l by A9,NAT_1:13;
+then A13:     K.l = L'.(l - len L1) by A10,FINSEQ_1:37;
+          1 + k + m - (1 + k) = m;
+      hence K.l = H by A2,A5,A8,A13,FINSEQ_1:21;
+      let j such that
+A14:     1 <= j & j < l;  j + 0 <= j + 1 & j + 0 = j by XREAL_1:9;
+then A15:    1 <= j + 1 by A14,XXREAL_0:2;
+A16:    now assume
+            j < 1 + k;
+then A17:      j <= 1 + k & j + 1 <= 1 + k by NAT_1:13;
+         then j + 1 <= n by A8,XXREAL_0:2;
+         then j < n by NAT_1:13;
+        then consider F1,G1 such that
+A18:      L.j = F1 & L.(j + 1) = G1 & F1 is_immediate_constituent_of G1 by A3
+,A14;
+        take F1, G1;
+        thus K.j = F1 & K.(j + 1) = G1 & F1 is_immediate_constituent_of G1
+          by A11,A14,A15,A17,A18;
+       end;
+A19:    now assume
+A20:      j = 1 + k;
+then A21:         1 + k < j + 1 & j + 1 <= l by A14,NAT_1:13;
+A22:    j + 1 = 1 + j & j + 1 - j = j + 1 + -j & 1 + j + -j = 1 + (j + -j) &
+          j + -j = 0;
+         K.j = L.j & j < 1 + k + 1 by A11,A14,A20,NAT_1:13;
+        then consider F1,G1 such that
+A23:      L.j = F1 & L.(j + 1) = G1 & F1 is_immediate_constituent_of G1
+          by A3,A7,A14;
+        take F1, G1;
+        thus K.j = F1 & K.(j + 1) = G1 & F1 is_immediate_constituent_of G1
+          by A2,A5,A7,A9,A10,A11,A14,A20,A21,A22,A23,FINSEQ_1:37;
+       end;
+       now assume
+A24:      1 + k < j;
+then A25:         1 + k < j + 1 & j <= l & j + 1 <= l
+          by A14,NAT_1:13;
+            1 + k + 1 <= j by A24,NAT_1:13;
+        then consider j1 be Nat such that
+A26:      j = 1 + k + 1 + j1 by NAT_1:10;
+A27:         1 + k + 1 + j1 = 1 + k + (1 + j1) &
+          1 + k + (1 + j1) = 1 + j1 + (1 + k) &
+           1 + j1 + (1 + k) - (1 + k) = 1 + j1 + (1 + k) + -(1 + k) &
+            1 + j1 + (1 + k) + -(1 + k) = 1 + j1 + (1 + k + -(1 + k)) &
+             1 + k + -(1 + k) = 0 & 1 + j1 + 0 = 1 + j1;
+A28:      j + 1 - len L1 = 1 + (j + -len L1)
+            .= 1 + j1 + 1 by A2,A8,A26,A27,FINSEQ_1:21;
+            1 <=
+ 1 + j1 & j - (1 + k) < l - (1 + k) by A14,NAT_1:11,XREAL_1:11;
+        then consider F1,G1 such that
+A29:      L'.(1 + j1) = F1 & L'.(1 + j1 + 1) = G1 &
+          F1 is_immediate_constituent_of G1 by A6,A26;
+        take F1, G1;
+        thus K.j = F1 & K.(j + 1) = G1 & F1 is_immediate_constituent_of G1
+          by A9,A10,A24,A25,A27,A28,A29,FINSEQ_1:37;
+       end;
+      hence thesis by A16,A19,REAL_1:def 5;
+     end;
+   assume
+A30:  F = H;
+       F is_proper_subformula_of G & G is_proper_subformula_of H by A1,Def102;
+    then len F < len G & len G < len H by Th118;
+   hence contradiction by A30;
+  end;
+
+theorem
+ Th121: F is_subformula_of G & G is_subformula_of H implies
+   F is_subformula_of H
+  proof assume
+A1:  F is_subformula_of G & G is_subformula_of H;
+       now assume F <> G;
+then A2:    F is_proper_subformula_of G by A1,Def102;
+         now assume G <> H;
+        then G is_proper_subformula_of H by A1,Def102;
+        then F is_proper_subformula_of H by A2,Th120;
+       hence thesis by Def102;
+      end;
+     hence thesis by A1;
+    end;
+   hence thesis by A1;
+  end;
+
+theorem
+  G is_subformula_of H & H is_subformula_of G implies G = H
+  proof assume
+A1:  G is_subformula_of H & H is_subformula_of G;
+   assume G <> H;
+   then G is_proper_subformula_of H & H is_proper_subformula_of G by A1,Def102;
+   then len G < len H & len H < len G by Th118;
+   hence contradiction;
+  end;
+
+theorem
+ Th123: (G is negative or G is next) & F is_proper_subformula_of G
+            implies F is_subformula_of (the_argument_of G)
+  proof assume that
+A0:(G is negative or G is next) and
+A1:  F is_subformula_of G & F <> G;
+  consider n,L such that
+A2:  1 <= n & len L = n & L.1 = F & L.n = G and
+A3:  for k st 1 <= k & k < n
+     ex H1,F1 st L.k = H1 & L.(k + 1) = F1 &
+      H1 is_immediate_constituent_of F1
+       by A1,Def101;
+       1 < n by A1,A2,REAL_1:def 5;
+    then 1 + 1 <= n by NAT_1:13;
+   then consider k be Nat such that
+A4:  n = 2 + k by NAT_1:10;
+   reconsider L1 = L|(Seg(1 + k)) as FinSequence by FINSEQ_1:19;
+   take m = 1 + k , L1;
+   thus
+A5:  1 <= m by NAT_1:11;
+       1 + k <= 1 + k + 1 by NAT_1:11;
+   hence len L1 = m by A2,A4,FINSEQ_1:21;
+A6:  now let j; assume
+      A601:1 <= j & j <= m;
+      j is Element of NAT by ORDINAL1:def 13;
+      then j in { j1 : 1 <= j1 & j1 <= 1 + k }
+                         by A601;
+   then j in Seg(1 + k) by FINSEQ_1:def 1;
+     hence L1.j = L.j by FUNCT_1:72;
+    end;
+   hence L1.1 = F by A2,A5;
+    m < m + 1 by NAT_1:13;
+   then consider F1,G1 such that
+A7:  L.m = F1 & L.(m + 1) = G1 & F1 is_immediate_constituent_of G1 by A3,A4,A5;
+     F1 = (the_argument_of G) by A0,A2,A4,A7,Th108,Th109;
+   hence L1.m = (the_argument_of G) by A5,A6,A7;
+   let j; assume
+A8:  1 <= j & j < m;
+then A9:    1 <= 1 + j & 1 + j = j + 1 & j <= m & j + 1 <= m
+     by NAT_1:13;
+       m <= m + 1 by NAT_1:11;
+    then j < n by A4,A8,XXREAL_0:2;
+   then consider F1,G1 such that
+A10:  L.j = F1 & L.(j + 1) = G1 & F1 is_immediate_constituent_of G1 by A3,A8;
+   take F1,G1;
+   thus thesis by A6,A8,A9,A10;
+  end;
+
+theorem
+ Th124: (G is conjunctive or G is disjunctive or
+          G is Until or G is Release ) &
+          F is_proper_subformula_of G
+             implies
+               F is_subformula_of (the_left_argument_of G) or
+               F is_subformula_of (the_right_argument_of G)
+  proof assume that
+A0:(G is conjunctive or G is disjunctive or
+                 G is Until or G is Release ) and
+A1:  F is_subformula_of G  & F <> G;
+   consider n,L such that
+A2:  1 <= n & len L = n & L.1 = F & L.n = G  and
+A3:  for k st 1 <= k & k < n
+     ex H1,F1 st L.k = H1 & L.(k + 1) = F1 &
+      H1 is_immediate_constituent_of F1
+       by Def101,A1;
+       1 < n by A1,A2,REAL_1:def 5;
+    then 1 + 1 <= n by NAT_1:13;
+   then consider k be Nat such that
+A4:  n = 2 + k by NAT_1:10;
+   reconsider L1 = L|(Seg(1 + k)) as FinSequence by FINSEQ_1:19;
+  1 + 1 + k = 1 + k + 1;
+    then 1 <= 1 + k & 1 + k < n by A4,NAT_1:11,13;
+   then consider H1,G1 such that
+A5: L.(1 + k) = H1 & L.(1 + k + 1) = G1 &
+                     H1 is_immediate_constituent_of G1
+     by A3;
+       F is_subformula_of H1
+     proof
+      take m = 1 + k , L1;
+      thus
+A6:     1 <= m by NAT_1:11;
+          1 + k <= 1 + k + 1 by NAT_1:11;
+      hence len L1 = m by A2,A4,FINSEQ_1:21;
+A7:     now let j; assume
+         A701:1 <= j & j <= m;
+         j is Element of NAT by ORDINAL1:def 13;
+         then j in { j1 : 1 <= j1 & j1 <= 1 + k }
+                         by A701;
+      then j in Seg(1 + k) by FINSEQ_1:def 1;
+        hence L1.j = L.j by FUNCT_1:72;
+       end;
+      hence L1.1 = F by A2,A6;
+      thus L1.m = H1 by A5,A6,A7;
+      let j; assume
+A8:     1 <= j & j < m;
+then A9:       1 <= 1 + j & 1 + j = j + 1 & j <= m & j + 1 <= m
+        by NAT_1:13;
+          m <= m + 1 by NAT_1:11;
+       then j < n by A4,A8,XXREAL_0:2;
+      then consider F1,G1 such that
+A10:     L.j = F1 & L.(j + 1) = G1 &
+                    F1 is_immediate_constituent_of G1 by A3,A8;
+      take F1,G1;
+      thus thesis by A7,A8,A9,A10;
+     end;
+   hence thesis by A0,A2,A4,A5,Th110,Th111,Th112,Th113;
+  end;
+
+theorem
+ F is_proper_subformula_of 'not' H implies F is_subformula_of H
+  proof
+  assume A1:F is_proper_subformula_of 'not' H;
+  A2:'not' H is negative by Def15;
+  then the_argument_of ('not' H) = H by Def21;
+  hence thesis by A1,A2,Th123;
+  end;
+
+theorem
+ F is_proper_subformula_of 'X' H implies F is_subformula_of H
+  proof
+  assume A1:F is_proper_subformula_of 'X' H;
+  A2:'X' H is next by Def18;
+  then not ('X' H is negative) by Lm17;
+  then the_argument_of ('X' H) = H by A2,Def21;
+  hence thesis by A1,A2,Th123;
+  end;
+
+theorem
+ F is_proper_subformula_of G '&' H implies
+   F is_subformula_of G or F is_subformula_of H
+  proof
+  assume A1:F is_proper_subformula_of G '&' H;
+  A2:G '&' H is conjunctive by Def16;
+  then the_left_argument_of (G '&' H) = G &
+       the_right_argument_of (G '&' H) =H by Def22,Def23;
+  hence thesis by A1,A2,Th124;
+  end;
+
+theorem
+ F is_proper_subformula_of G 'or' H implies
+   F is_subformula_of G or F is_subformula_of H
+  proof
+  assume A1:F is_proper_subformula_of G 'or' H;
+  A2:G 'or' H is disjunctive by Def17;
+  then the_left_argument_of (G 'or' H) = G &
+       the_right_argument_of (G 'or' H) =H by Def22,Def23;
+  hence thesis by A1,A2,Th124;
+  end;
+
+theorem
+ F is_proper_subformula_of G 'U' H implies
+   F is_subformula_of G or F is_subformula_of H
+  proof
+  assume A1:F is_proper_subformula_of G 'U' H;
+  A2:G 'U' H is Until by Def19;
+  then the_left_argument_of (G 'U' H) = G &
+       the_right_argument_of (G 'U' H) =H by Def22,Def23;
+  hence thesis by A1,A2,Th124;
+  end;
+
+theorem
+ F is_proper_subformula_of G 'R' H implies
+   F is_subformula_of G or F is_subformula_of H
+  proof
+  assume A1:F is_proper_subformula_of G 'R' H;
+  set G1 = G 'R' H;
+  A2:G1 is Release by Def1901;
+  then (not G1 is conjunctive) & (not G1 is disjunctive) &
+       (not G1 is next) & (not G1 is Until) by Lm1801;
+  then the_left_argument_of G1 = G &
+       the_right_argument_of G1 =H by A2,Def22,Def23;
+  hence thesis by A1,A2,Th124;
+  end;
+::
+::           The Set of Subformulae of LTL-formulae
+::
+
+ definition let H;
+  func Subformulae H -> set means
+:Def103:  a in it iff ex F st F = a & F is_subformula_of H;
+   existence
+    proof
+     defpred X[set] means ex F st F = $1 & F is_subformula_of H;
+     consider X such that
+A1:    a in X iff a in NAT* & X[a] from XBOOLE_0:sch 1;
+     take X;
+     let a;
+     thus a in X implies ex F st F = a & F is_subformula_of H by A1;
+     given F such that
+A2:    F = a & F is_subformula_of H;
+         F in NAT* by FINSEQ_1:def 11;
+     hence a in X by A1,A2;
+    end;
+   uniqueness
+    proof let X,Y such that
+A3:    a in X iff ex F st F = a & F is_subformula_of H and
+A4:    a in Y iff ex F st F = a & F is_subformula_of H;
+         now let a;
+       thus a in X implies a in Y
+         proof assume a in X;
+           then ex F st F = a & F is_subformula_of H by A3;
+          hence thesis by A4;
+         end;
+       assume a in Y;
+        then ex F st F = a & F is_subformula_of H by A4;
+       hence a in X by A3;
+      end;
+     hence thesis by TARSKI:2;
+    end;
+ end;
+
+theorem
+ Th131: G in Subformulae H iff G is_subformula_of H
+  proof
+  G in Subformulae H implies G is_subformula_of H
+    proof
+    assume G in Subformulae H;
+    then ex F st F = G & F is_subformula_of H by Def103;
+    hence thesis;
+    end;
+  hence thesis by Def103;
+  end;
+
+registration let H;
+  cluster Subformulae H -> non empty;
+ coherence
+  proof
+  H is_subformula_of H by Th115;
+  hence thesis by Th131;
+  end;
+end;
+
+theorem
+  F is_subformula_of H implies Subformulae F c= Subformulae H
+  proof assume
+A1:  F is_subformula_of H;
+   let a; assume
+       a in Subformulae F;
+   then consider F1 such that
+A2:  F1 = a & F1 is_subformula_of F by Def103;
+       F1 is_subformula_of H by A1,A2,Th121;
+   hence a in Subformulae H by A2,Def103;
+  end;
+
+theorem
+  (a is Subset of Subformulae H) implies (a is Subset of LTL_WFF)
+  proof
+  assume A1:a is Subset of Subformulae H;
+  x in a implies x in LTL_WFF
+    proof
+    assume x in a;
+    then consider F such that B1: F = x & F is_subformula_of H by Def103,A1;
+    thus thesis by B1,Th1;
+    end;
+  hence thesis by TARSKI:def 3;
+  end;
+
+scheme LTLInd { P[LTL-formula] } :
+  for H holds P[H]
+    provided
+A1: for H st H is atomic holds P[H] and
+A2: for H st (H is negative or H is next) & P[the_argument_of H] holds P[H] and
+A3: for H st (H is conjunctive or H is disjunctive or
+              H is Until or H is Release )&
+    P[the_left_argument_of H] & P[the_right_argument_of H] holds P[H]
+proof
+     defpred Q[Nat] means for H st len H = $1 holds P[H];
+A5:  for n being Nat st for k being Nat st k < n holds Q[k] holds Q[n]
+     proof let n being Nat such that
+A6:     for k being Nat st k < n for H st len H = k holds P[H];
+      let H such that
+A7:     len H = n;
+A9:    now assume
+A10:       H is negative or H is next;
+         then len the_argument_of H < len H by ThArg7;
+         then P[the_argument_of H] by A6,A7;
+        hence P[H] by A2,A10;
+       end;
+A11:    now assume
+A12:       H is conjunctive or H is disjunctive or
+           H is Until or H is Release;
+         then len the_left_argument_of H < len H  &
+              len the_right_argument_of H  < len H  by ThArg8;
+         then P[the_left_argument_of H] & P[the_right_argument_of H] by A6,A7;
+        hence P[H] by A3,A12;
+       end;
+      thus thesis by A1,Th2,A9,A11;
+     end;
+   let H;
+A14:  len H = len H;
+       for n being Nat holds Q[n] from NAT_1:sch 4(A5);
+   hence thesis by A14;
+  end;
+
+scheme LTLCompInd { P[LTL-formula] } :
+  for H holds P[H]
+    provided
+A1: for H st for F st F is_proper_subformula_of H holds P[F] holds P[H]
+proof
+     defpred Q[Nat] means for H st len H = $1 holds P[H];
+A2:  for n being Nat st for k being Nat st k < n holds Q[k] holds Q[n]
+     proof let n being Nat such that
+A3:     for k being Nat st k < n for H st len H = k holds P[H];
+      let H such that
+A4:     len H = n;
+          now let F; assume
+            F is_proper_subformula_of H;
+         then len F < len H by Th118;
+        hence P[F] by A3,A4;
+       end;
+      hence P[H] by A1;
+     end;
+A5:  for n being Nat holds Q[n] from NAT_1:sch 4 (A2);
+   let H;
+       len H = len H;
+   hence thesis by A5;
+  end;
+
+::***************************************************
+::**
+::** definition of LTL model structure.
+::**
+::****************************************************
+definition let x be set;
+  func CastLTL(x) -> LTL-formula equals :Def24:
+    x if x in LTL_WFF
+      otherwise atom.0;
+  correctness by Th1;
+end;
+
+definition
+  struct LTLModelStr (#
+  Assignations -> non empty set,
+  BasicAssign -> non empty Subset of the Assignations,
+  And -> BinOp of the Assignations,
+  Or -> BinOp of the Assignations,
+  Not -> UnOp of the Assignations,
+  NEXT-> UnOp of the Assignations,
+  UNTIL -> BinOp of the Assignations,
+  RELEASE -> BinOp of the Assignations
+  #);
+end;
+
+definition let V be LTLModelStr;
+  mode Assign of V is Element of the Assignations of V;
+end;
+
+::  Preparation to define semantics for LTL-language
+::  definition of evaluate function of LTL
+
+definition
+  func atomic_LTL -> Subset of LTL_WFF equals
+    {x where x is LTL-formula:x is atomic};
+  correctness
+   proof
+   set X = {x where x is LTL-formula:x is atomic};
+   X c= LTL_WFF
+   proof
+     let y be set;
+     assume y in X;
+     then ex x being LTL-formula st y=x & x is atomic;
+     hence y in LTL_WFF by Th1;
+   end;
+   hence thesis;
+   end;
+end;
+
+definition
+  let V be LTLModelStr;
+  let Kai be Function of atomic_LTL,the BasicAssign of V;
+  let f be Function of LTL_WFF,the Assignations of V;
+  pred f is-Evaluation-for Kai means :Def26:
+     for H being LTL-formula holds
+     (H is atomic implies f.H = Kai.H) &
+     (H is negative implies
+       f.H = (the Not of V).(f.(the_argument_of H))) &
+     (H is conjunctive implies
+       f.H = (the And of V).(f.(the_left_argument_of H),
+                              f.(the_right_argument_of H))) &
+     (H is disjunctive implies
+       f.H = (the Or of V).(f.(the_left_argument_of H),
+                              f.(the_right_argument_of H))) &
+      (H is next implies
+       f.H = (the NEXT of V).(f.(the_argument_of H))) &
+     (H is Until implies
+       f.H = (the UNTIL of V).(f.(the_left_argument_of H),
+                             f.(the_right_argument_of H))) &
+     (H is Release implies
+       f.H = (the RELEASE of V).(f.(the_left_argument_of H),
+                                 f.(the_right_argument_of H)));
+ end;
+
+definition
+  let V be LTLModelStr;
+  let Kai be Function of atomic_LTL,the BasicAssign of V;
+  let f be Function of LTL_WFF,the Assignations of V;
+  let n be Nat;
+  pred f is-PreEvaluation-for n,Kai means :Def27:
+     for H being LTL-formula st len(H) <= n holds
+     (H is atomic implies f.H = Kai.H) &
+     (H is negative implies
+       f.H = (the Not of V).(f.(the_argument_of H))) &
+     (H is conjunctive implies
+       f.H = (the And of V).(f.(the_left_argument_of H),
+                              f.(the_right_argument_of H))) &
+     (H is disjunctive implies
+       f.H = (the Or of V).(f.(the_left_argument_of H),
+                              f.(the_right_argument_of H))) &
+      (H is next implies
+       f.H = (the NEXT of V).(f.(the_argument_of H))) &
+     (H is Until implies
+       f.H = (the UNTIL of V).(f.(the_left_argument_of H),
+                             f.(the_right_argument_of H))) &
+     (H is Release implies
+       f.H = (the RELEASE of V).(f.(the_left_argument_of H),
+                                 f.(the_right_argument_of H))); end;
+
+definition
+   let V be LTLModelStr;
+   let Kai be Function of atomic_LTL,the BasicAssign of V;
+   let f,h be Function of LTL_WFF,the Assignations of V;
+   let n be Nat;
+   let H be LTL-formula;
+   func GraftEval(V,Kai,f,h,n,H) -> set equals :Def28:
+        f.H if len(H) > n+1,
+        Kai.H if len(H)=n+1 & H is atomic,
+        (the Not of V).(h.(the_argument_of H))
+            if (len(H)=n+1) & H is negative,
+        (the And of V).(h.(the_left_argument_of H),
+                        h.(the_right_argument_of H))
+            if (len(H)=n+1) & H is conjunctive,
+        (the Or of V).(h.(the_left_argument_of H),
+                        h.(the_right_argument_of H))
+            if (len(H)=n+1) & H is disjunctive,
+        (the NEXT of V).(h.(the_argument_of H))
+            if (len(H)=n+1) & (H is next),
+        (the UNTIL of V).(h.(the_left_argument_of H),
+                            h.(the_right_argument_of H))
+            if (len(H)=n+1) & H is Until,
+
+        (the RELEASE of V).(h.(the_left_argument_of H),
+                        h.(the_right_argument_of H))
+            if (len(H)=n+1) & H is Release,
+
+        h.H if (len(H)<n+1)
+        otherwise {};
+    coherence;
+    consistency by Lm15,Lm16,Lm1601,Lm17,Lm18,Lm1801;
+  end;
+
+reserve V for LTLModelStr;
+reserve Kai for Function of atomic_LTL,the BasicAssign of V;
+reserve f,f1,f2 for Function of LTL_WFF,the Assignations of V;
+
+Lm24:
+  f is-PreEvaluation-for 0,Kai
+   proof
+   for H being LTL-formula st len(H) <= 0 holds
+     (H is atomic implies f.H = Kai.H) &
+     (H is negative implies
+       f.H = (the Not of V).(f.(the_argument_of H))) &
+     (H is conjunctive implies
+       f.H = (the And of V).(f.(the_left_argument_of H),
+                              f.(the_right_argument_of H))) &
+     (H is disjunctive implies
+       f.H = (the Or of V).(f.(the_left_argument_of H),
+                              f.(the_right_argument_of H))) &
+      (H is next implies
+       f.H = (the NEXT of V).(f.(the_argument_of H))) &
+     (H is Until implies
+       f.H = (the UNTIL of V).(f.(the_left_argument_of H),
+                                 f.(the_right_argument_of H))) &
+     (H is Release implies
+       f.H = (the RELEASE of V).(f.(the_left_argument_of H),
+                                 f.(the_right_argument_of H))) by Thlen01;
+   hence thesis by Def27;
+   end;
+
+Lm25:
+   f is-PreEvaluation-for n+1,Kai implies f is-PreEvaluation-for n,Kai
+     proof
+     assume A1:f is-PreEvaluation-for n+1,Kai;
+     for H being LTL-formula st len(H) <= n holds
+     (H is atomic implies f.H = Kai.H) &
+     (H is negative implies
+       f.H = (the Not of V).(f.(the_argument_of H))) &
+     (H is conjunctive implies
+       f.H = (the And of V).(f.(the_left_argument_of H),
+                              f.(the_right_argument_of H))) &
+     (H is disjunctive implies
+       f.H = (the Or of V).(f.(the_left_argument_of H),
+                              f.(the_right_argument_of H))) &
+      (H is next implies
+       f.H = (the NEXT of V).(f.(the_argument_of H))) &
+     (H is Until implies
+       f.H = (the UNTIL of V).(f.(the_left_argument_of H),
+                                 f.(the_right_argument_of H))) &
+     (H is Release implies
+       f.H = (the RELEASE of V).(f.(the_left_argument_of H),
+                                 f.(the_right_argument_of H)))
+       proof
+       let H be LTL-formula such that A2: len(H) <= n;
+       len(H) < n+1 by NAT_1:13,A2;
+       hence thesis by A1,Def27;
+       end;
+      hence thesis by Def27;
+     end;
+
+Lm26:
+  f is-Evaluation-for Kai implies f is-PreEvaluation-for n,Kai
+     proof
+     assume f is-Evaluation-for Kai;
+     then for H being LTL-formula st len(H) <= n holds
+     (H is atomic implies f.H = Kai.H) &
+     (H is negative implies
+       f.H = (the Not of V).(f.(the_argument_of H))) &
+     (H is conjunctive implies
+       f.H = (the And of V).(f.(the_left_argument_of H),
+                              f.(the_right_argument_of H))) &
+     (H is disjunctive implies
+       f.H = (the Or of V).(f.(the_left_argument_of H),
+                              f.(the_right_argument_of H))) &
+      (H is next implies
+       f.H = (the NEXT of V).(f.(the_argument_of H))) &
+     (H is Until implies
+       f.H = (the UNTIL of V).(f.(the_left_argument_of H),
+                                 f.(the_right_argument_of H))) &
+     (H is Release implies
+       f.H = (the RELEASE of V).(f.(the_left_argument_of H),
+                                 f.(the_right_argument_of H))) by Def26;
+     hence thesis by Def27;
+     end;
+
+Lm27:
+  (f1 is-PreEvaluation-for n,Kai) & (f2 is-PreEvaluation-for n,Kai)
+             implies
+              (for H being LTL-formula st len(H) <= n
+                   holds f1.H = f2.H)
+   proof
+     defpred P[Nat] means
+        (f1 is-PreEvaluation-for $1,Kai) & (f2 is-PreEvaluation-for $1,Kai)
+             implies
+          (for H being LTL-formula st len(H) <= $1
+              holds f1.H = f2.H);
+     A1:P[0] by Thlen01;
+     A2:for k being Nat st P[k] holds P[k + 1]
+       proof
+       let k be Nat such that A3:P[k];
+         assume that A4:(f1 is-PreEvaluation-for k+1,Kai) and
+                     A5:(f2 is-PreEvaluation-for k+1,Kai);
+           let H be LTL-formula such that A6:len(H)<= k+1;
+           per cases by Th2;
+             suppose A7:H is atomic;
+               then f1.H = Kai.H by A6,A4,Def27;
+               hence thesis by A6,A7,A5,Def27;
+               end;
+             suppose A8:H is negative; then
+               len the_argument_of H < len(H) by ThArg7;
+               then A9:len the_argument_of H <= k by Lm1,A6;
+               f2.H = (the Not of V).(f2.(the_argument_of H))
+                           by A8,A6,A5,Def27
+                   .= (the Not of V).(f1.(the_argument_of H))
+                           by A3,A4,A5,Lm25,A9;
+               hence thesis by A8,A6,A4,Def27;
+               end;
+             suppose A10:H is next; then
+               len(the_argument_of H) < len(H) by ThArg7;
+               then A11:len(the_argument_of H) <= k by Lm1,A6;
+               f2.H = (the NEXT of V).(f2.(the_argument_of H))
+                           by A10,A6,A5,Def27
+                   .= (the NEXT of V).(f1.(the_argument_of H))
+                     by A11,A3,A4,Lm25,A5;
+                hence thesis by A10,A6,A4,Def27;
+               end;
+             suppose A14: H is conjunctive;
+               then len(the_left_argument_of H) < len(H) by ThArg8;
+               then len(the_left_argument_of H) <= k by Lm1,A6;
+               then
+           A15:f1.(the_left_argument_of H) = f2.(the_left_argument_of H)
+                             by A3,A4,Lm25,A5;
+               len(the_right_argument_of H) < len(H) by A14,ThArg8;
+               then A16:len(the_right_argument_of H) <= k by Lm1,A6;
+               f2.H = (the And of V).(f2.(the_left_argument_of H),
+                                      f2.(the_right_argument_of H))
+                                     by A14,A6,A5,Def27
+                   .= (the And of V).(f1.(the_left_argument_of H),
+                                      f1.(the_right_argument_of H))
+                        by A15,A16,A3,A4,Lm25,A5;
+               hence thesis by A14,A6,A4,Def27;
+               end;
+             suppose A1401: H is disjunctive;
+               then len(the_left_argument_of H) < len(H) by ThArg8;
+               then len(the_left_argument_of H) <= k by Lm1,A6;
+               then
+           A1501:f1.(the_left_argument_of H) = f2.(the_left_argument_of H)
+                             by A3,A4,Lm25,A5;
+               len(the_right_argument_of H) < len(H) by A1401,ThArg8;
+               then A1601:len(the_right_argument_of H) <= k by Lm1,A6;
+               f2.H = (the Or of V).(f2.(the_left_argument_of H),
+                                      f2.(the_right_argument_of H))
+                                     by A1401,A6,A5,Def27
+                   .= (the Or of V).(f1.(the_left_argument_of H),
+                                      f1.(the_right_argument_of H))
+                        by A1501,A1601,A3,A4,Lm25,A5;
+               hence thesis by A1401,A6,A4,Def27;
+               end;
+
+             suppose A17:H is Until; then
+               len(the_left_argument_of H) < len(H) by ThArg8;
+               then len(the_left_argument_of H) <= k by Lm1,A6;
+               then
+               A18:f1.(the_left_argument_of H) = f2.(the_left_argument_of H)
+                            by A3,A4,Lm25,A5;
+               len(the_right_argument_of H) < len(H) by A17,ThArg8;
+               then A19:len(the_right_argument_of H) <= k by Lm1,A6;
+               f2.H = (the UNTIL of V).(f2.(the_left_argument_of H),
+                                          f2.(the_right_argument_of H))
+                                     by A17,A6,A5,Def27
+                   .= (the UNTIL of V).(f1.(the_left_argument_of H),
+                                           f1.(the_right_argument_of H))
+                       by A18,A19,A3,A4,Lm25,A5;
+               hence thesis by A17,A6,A4,Def27;
+               end;
+             suppose A1701:H is Release; then
+               len(the_left_argument_of H) < len(H) by ThArg8;
+               then len(the_left_argument_of H) <= k by Lm1,A6;
+               then
+               A1801:f1.(the_left_argument_of H) = f2.(the_left_argument_of H)
+                            by A3,A4,Lm25,A5;
+               len(the_right_argument_of H) < len(H) by A1701,ThArg8;
+               then A1901:len(the_right_argument_of H) <= k by Lm1,A6;
+               f2.H = (the RELEASE of V).(f2.(the_left_argument_of H),
+                                          f2.(the_right_argument_of H))
+                                     by A1701,A6,A5,Def27
+                   .= (the RELEASE of V).(f1.(the_left_argument_of H),
+                                           f1.(the_right_argument_of H))
+                       by A1801,A1901,A3,A4,Lm25,A5;
+               hence thesis by A1701,A6,A4,Def27;
+               end;
+
+       end;
+     for n being Nat holds P[n] from NAT_1:sch 2(A1,A2);
+     hence thesis;
+     end;
+
+Lm28:
+   for n holds ex f st f is-PreEvaluation-for n,Kai
+       proof
+       defpred P[Nat] means
+           ex f being Function of LTL_WFF,the Assignations of V
+               st f is-PreEvaluation-for $1,Kai;
+       A1:P[0]
+         proof
+           consider v0 be set such that A2:v0 in the Assignations of V
+                                                  by XBOOLE_0:def 1;
+           A3:{v0} c= the Assignations of V by A2,ZFMISC_1:37;
+           set f = LTL_WFF --> v0;
+           dom f = LTL_WFF & rng f c= {v0} by FUNCOP_1:19;
+           then reconsider f as Function of LTL_WFF,the Assignations of V
+                     by FUNCT_2:4,A3,XBOOLE_1:1;
+           take f;
+           thus thesis by Lm24;
+         end;
+       A5:for k being Nat st P[k] holds P[k + 1]
+         proof
+         let k be Nat such that A6:P[k];
+         consider h being Function of LTL_WFF,the Assignations of V
+               such that A7: h is-PreEvaluation-for k,Kai by A6;
+         P[k+1]
+         proof
+           deffunc F(set) =GraftEval(V,Kai,h,h,k,CastLTL($1));
+           A8:for H being set st H in LTL_WFF
+                 holds F(H) in the Assignations of V
+             proof
+             let H be set such that A9:H in LTL_WFF;
+             reconsider H as LTL-formula by Th1,A9;
+             A10:F(H)=GraftEval(V,Kai,h,h,k,H) by A9,Def24;
+              per cases by XXREAL_0:1,Th2;
+               suppose len(H) > k+1;
+                 then GraftEval(V,Kai,h,h,k,H)=h.H by Def28;
+                 hence thesis by A9,FUNCT_2:7,A10;
+                 end;
+               suppose A11: (len(H)=k+1) & H is atomic;
+                 then A12: H in atomic_LTL;
+                 Kai.H in the BasicAssign of V by A12,FUNCT_2:7;
+                 then Kai.H in the Assignations of V;
+                 hence thesis by A11,Def28,A10;
+                 end;
+               suppose A13:(len(H)=k+1) & H is negative;
+                 the_argument_of H in LTL_WFF by Th1;
+                 then A14:h.(the_argument_of H) in the Assignations of V
+                              by FUNCT_2:7;
+                 GraftEval(V,Kai,h,h,k,H)
+                             = (the Not of V).(h.(the_argument_of H))
+                               by A13,Def28;
+                 hence thesis by A14,FUNCT_2:7,A10;
+                 end;
+               suppose A15:len(H)=k+1 & H is conjunctive;
+                 the_left_argument_of H in LTL_WFF by Th1;
+                 then A16:h.(the_left_argument_of H) in the Assignations of V
+                              by FUNCT_2:7;
+                 the_right_argument_of H in LTL_WFF by Th1;
+                 then h.(the_right_argument_of H) in the Assignations of V
+                              by FUNCT_2:7;
+                 then A17:
+                  [h.(the_left_argument_of H),h.(the_right_argument_of H)]
+                            in [:the Assignations of V,the Assignations of V:]
+                                  by A16,ZFMISC_1:def 2;
+                 GraftEval(V,Kai,h,h,k,H)
+                            = (the And of V).(h.(the_left_argument_of H),
+                                              h.(the_right_argument_of H))
+                            by A15,Def28;
+                 hence thesis by A17,FUNCT_2:7,A10;
+                 end;
+               suppose A1501:len(H)=k+1 & H is disjunctive;
+                 the_left_argument_of H in LTL_WFF by Th1;
+                 then A1601:h.(the_left_argument_of H) in the Assignations of V
+                              by FUNCT_2:7;
+                 the_right_argument_of H in LTL_WFF by Th1;
+                 then h.(the_right_argument_of H) in the Assignations of V
+                              by FUNCT_2:7;
+                 then A1701:
+                  [h.(the_left_argument_of H),h.(the_right_argument_of H)]
+                            in [:the Assignations of V,the Assignations of V:]
+                                  by A1601,ZFMISC_1:def 2;
+                 GraftEval(V,Kai,h,h,k,H)
+                            = (the Or of V).(h.(the_left_argument_of H),
+                                              h.(the_right_argument_of H))
+                            by A1501,Def28;
+                 hence thesis by A1701,FUNCT_2:7,A10;
+                 end;
+               suppose A18: (len(H)=k+1) & H is next;
+                 the_argument_of H in LTL_WFF by Th1;
+                 then A19:h.(the_argument_of H) in the Assignations of V
+                              by FUNCT_2:7;
+                 GraftEval(V,Kai,h,h,k,H)
+                             = (the NEXT of V).(h.(the_argument_of H))
+                               by A18,Def28;
+                 hence thesis by A19,FUNCT_2:7,A10;
+                 end;
+               suppose A22:(len(H)=k+1) & H is Until;
+                 the_left_argument_of H in LTL_WFF by Th1;
+                 then A23:h.(the_left_argument_of H) in the Assignations of V
+                              by FUNCT_2:7;
+                 the_right_argument_of H in LTL_WFF by Th1;
+                 then h.(the_right_argument_of H) in the Assignations of V
+                              by FUNCT_2:7;
+                 then A24:
+                  [h.(the_left_argument_of H),h.(the_right_argument_of H)]
+                            in [:the Assignations of V,the Assignations of V:]
+                                  by A23,ZFMISC_1:def 2;
+                 GraftEval(V,Kai,h,h,k,H)
+                            = (the UNTIL of V).(h.(the_left_argument_of H),
+                                                  h.(the_right_argument_of H))
+                            by A22,Def28;
+                 hence thesis by A24,FUNCT_2:7,A10;
+                 end;
+               suppose A2201:(len(H)=k+1) & H is Release;
+                 the_left_argument_of H in LTL_WFF by Th1;
+                 then A2301:h.(the_left_argument_of H) in the Assignations of V
+                              by FUNCT_2:7;
+                 the_right_argument_of H in LTL_WFF by Th1;
+                 then h.(the_right_argument_of H) in the Assignations of V
+                              by FUNCT_2:7;
+                 then A2401:
+                  [h.(the_left_argument_of H),h.(the_right_argument_of H)]
+                            in [:the Assignations of V,the Assignations of V:]
+                                  by A2301,ZFMISC_1:def 2;
+                 GraftEval(V,Kai,h,h,k,H)
+                            = (the RELEASE of V).(h.(the_left_argument_of H),
+                                                  h.(the_right_argument_of H))
+                            by A2201,Def28;
+                 hence thesis by A2401,FUNCT_2:7,A10;
+                 end;
+               suppose len(H) < k+1;
+                 then GraftEval(V,Kai,h,h,k,H)=h.H by Def28;
+                 hence thesis by A9,FUNCT_2:7,A10;
+                 end;
+             end;
+           consider f be Function of LTL_WFF,the Assignations of V such that
+             A25:for H being set st H in LTL_WFF
+                holds f.H =F(H) from FUNCT_2:sch 2(A8);
+           take f;
+           A26:for H being LTL-formula st len(H) <k+1
+                holds f.H =h.H
+             proof
+             let H be LTL-formula such that A27: len(H) < k+1;
+             A28:H in LTL_WFF by Th1;
+             f.H = F(H) by A28,A25
+                   .=GraftEval(V,Kai,h,h,k,H) by A28,Def24;
+             hence thesis by Def28,A27;
+             end;
+           f is-PreEvaluation-for k+1,Kai
+             proof
+             for H being LTL-formula st len(H) <= k+1 holds
+                  (H is atomic implies f.H = Kai.H) &
+                  (H is negative implies
+                   f.H = (the Not of V).(f.(the_argument_of H))) &
+                  (H is conjunctive implies
+                   f.H = (the And of V).(f.(the_left_argument_of H),
+                                          f.(the_right_argument_of H))) &
+                  (H is disjunctive implies
+                   f.H = (the Or of V).(f.(the_left_argument_of H),
+                                          f.(the_right_argument_of H))) &
+                  (H is next implies
+                   f.H = (the NEXT of V).(f.(the_argument_of H))) &
+                  (H is Until implies
+                   f.H = (the UNTIL of V).(f.(the_left_argument_of H),
+                                            f.(the_right_argument_of H))) &
+                  (H is Release implies
+                   f.H = (the RELEASE of V).(f.(the_left_argument_of H),
+                                            f.(the_right_argument_of H)))
+               proof
+               let H be LTL-formula such that A29: len(H) <= k+1;
+               A30:H in LTL_WFF by Th1;
+               A31:f.H = F(H) by A30,A25
+                     .=GraftEval(V,Kai,h,h,k,H) by A30,Def24;
+               A32:H is atomic implies f.H = Kai.H
+                 proof
+                 assume A33:H is atomic;
+                 per cases by NAT_1:8,A29;
+                   suppose A34:len(H) <= k;
+                     then len(H) < k+1 by NAT_1:13;
+                     then f.H = h.H by A26
+                             .= Kai.H by A7,A33,A34,Def27;
+                     hence thesis;
+                     end;
+                   suppose len(H) = k+1;
+                     hence thesis by A33,Def28,A31;
+                     end;
+                 end;
+               A35:H is negative implies
+                   f.H = (the Not of V).(f.(the_argument_of H))
+                 proof
+                 assume A36:H is negative;
+                 then len(the_argument_of H) < len(H) by ThArg7;
+                 then len(the_argument_of H) <=k by A29,Lm1;
+                 then A37:len(the_argument_of H) < k+1 by NAT_1:13;
+                 per cases by NAT_1:8,A29;
+                   suppose A38:len(H) <= k;
+                     then len(H) < k+1 by NAT_1:13;
+                     then f.H = h.H by A26
+                             .= (the Not of V).(h.(the_argument_of H))
+                                    by A7,A36,A38,Def27;
+                     hence thesis by A37,A26;
+                     end;
+                   suppose len(H) = k+1; then
+                     GraftEval(V,Kai,h,h,k,H)
+                             = (the Not of V).(h.(the_argument_of H))
+                               by Def28,A36
+                            .= (the Not of V).(f.(the_argument_of H))
+                               by A37,A26;
+                     hence thesis by A31;
+                     end;
+                 end;
+               A39:H is conjunctive implies
+                     f.H = (the And of V).(f.(the_left_argument_of H),
+                                            f.(the_right_argument_of H))
+                 proof
+                 assume A40:H is conjunctive;
+                 then len(the_left_argument_of H) < len(H) by ThArg8;
+                 then len(the_left_argument_of H) <=k by A29,Lm1;
+                 then len(the_left_argument_of H) < k+1 by NAT_1:13;
+                 then A41:h.(the_left_argument_of H)
+                                   =f.(the_left_argument_of H) by A26;
+                 len(the_right_argument_of H) < len(H) by A40,ThArg8;
+                 then len(the_right_argument_of H) <=k by A29,Lm1;
+                 then A42:len(the_right_argument_of H) < k+1 by NAT_1:13;
+                 per cases by NAT_1:8,A29;
+                   suppose A43:len(H) <= k;
+                     then len(H) < k+1 by NAT_1:13;
+                     then f.H = h.H by A26
+                             .= (the And of V).(h.(the_left_argument_of H),
+                                                h.(the_right_argument_of H))
+                                    by A7,A40,A43,Def27;
+                     hence thesis by A41,A42,A26;
+                     end;
+                   suppose len(H) = k+1;then
+                     GraftEval(V,Kai,h,h,k,H)
+                             = (the And of V).(h.(the_left_argument_of H),
+                                               h.(the_right_argument_of H))
+                              by Def28,A40
+                            .= (the And of V).(f.(the_left_argument_of H),
+                                               f.(the_right_argument_of H))
+                                 by A41,A42,A26;
+                     hence thesis by A31;
+                     end;
+                 end;
+               A3901:H is disjunctive implies
+                     f.H = (the Or of V).(f.(the_left_argument_of H),
+                                            f.(the_right_argument_of H))
+                 proof
+                 assume A4001:H is disjunctive;
+                 then len(the_left_argument_of H) < len(H) by ThArg8;
+                 then len(the_left_argument_of H) <=k by A29,Lm1;
+                 then len(the_left_argument_of H) < k+1 by NAT_1:13;
+                 then A4101:h.(the_left_argument_of H)
+                                   =f.(the_left_argument_of H) by A26;
+                 len(the_right_argument_of H) < len(H) by A4001,ThArg8;
+                 then len(the_right_argument_of H) <=k by A29,Lm1;
+                 then A4201:len(the_right_argument_of H) < k+1 by NAT_1:13;
+                 per cases by NAT_1:8,A29;
+                   suppose A4301:len(H) <= k;
+                     then len(H) < k+1 by NAT_1:13;
+                     then f.H = h.H by A26
+                             .= (the Or of V).(h.(the_left_argument_of H),
+                                                h.(the_right_argument_of H))
+                                    by A7,A4001,A4301,Def27;
+                     hence thesis by A4101,A4201,A26;
+                     end;
+                   suppose len(H) = k+1;then
+                     GraftEval(V,Kai,h,h,k,H)
+                             = (the Or of V).(h.(the_left_argument_of H),
+                                               h.(the_right_argument_of H))
+                              by Def28,A4001
+                            .= (the Or of V).(f.(the_left_argument_of H),
+                                               f.(the_right_argument_of H))
+                                 by A4101,A4201,A26;
+                     hence thesis by A31;
+                     end;
+                 end;
+               A44:H is next implies
+                   f.H = (the NEXT of V).(f.(the_argument_of H))
+                 proof
+                 assume A45:H is next;
+                 then len(the_argument_of H) < len(H) by ThArg7;
+                 then len(the_argument_of H) <=k by A29,Lm1;
+                 then A46:len(the_argument_of H) < k+1 by NAT_1:13;
+                 per cases by NAT_1:8,A29;
+                   suppose A47:len(H) <= k;
+                     then len(H) < k+1 by NAT_1:13;
+                     then f.H = h.H by A26
+                             .= (the NEXT of V).(h.(the_argument_of H))
+                                    by A7,A45,A47,Def27;
+                     hence thesis by A46,A26;
+                     end;
+                   suppose len(H) = k+1; then
+                     GraftEval(V,Kai,h,h,k,H)
+                             = (the NEXT of V).(h.(the_argument_of H))
+                               by Def28,A45
+                            .= (the NEXT of V).(f.(the_argument_of H))
+                               by A46,A26;
+                     hence thesis by A31;
+                     end;
+                 end;
+               A50:H is Until implies
+                     f.H = (the UNTIL of V).(f.(the_left_argument_of H),
+                                            f.(the_right_argument_of H))
+                proof
+                 assume A52:H is Until;
+                 then len(the_left_argument_of H) < len(H) by ThArg8;
+                 then len(the_left_argument_of H) <=k by A29,Lm1;
+                 then len(the_left_argument_of H) < k+1 by NAT_1:13;
+                 then A53:h.(the_left_argument_of H)
+                                   =f.(the_left_argument_of H) by A26;
+                 len(the_right_argument_of H) < len(H) by ThArg8,A52;
+                 then len(the_right_argument_of H) <=k by A29,Lm1;
+                 then A54:len(the_right_argument_of H) < k+1 by NAT_1:13;
+                 per cases by NAT_1:8,A29;
+                   suppose A55:len(H) <= k;
+                     then len(H) < k+1 by NAT_1:13;
+                     then f.H = h.H by A26
+                             .= (the UNTIL of V).(h.(the_left_argument_of H),
+                                                h.(the_right_argument_of H))
+                                    by A7,A52,A55,Def27;
+                     hence thesis by A53,A54,A26;
+                     end;
+                   suppose len(H) = k+1; then
+                     GraftEval(V,Kai,h,h,k,H)
+                             = (the UNTIL of V).(h.(the_left_argument_of H),
+                                               h.(the_right_argument_of H))
+                              by Def28,A52
+                            .= (the UNTIL of V).(f.(the_left_argument_of H),
+                                               f.(the_right_argument_of H))
+                                 by A53,A54,A26;
+                     hence thesis by A31;
+                     end;
+                 end;
+               H is Release implies
+                     f.H = (the RELEASE of V).(f.(the_left_argument_of H),
+                                            f.(the_right_argument_of H))
+                proof
+                 assume A5201:H is Release;
+                 then len(the_left_argument_of H) < len(H) by ThArg8;
+                 then len(the_left_argument_of H) <=k by A29,Lm1;
+                 then len(the_left_argument_of H) < k+1 by NAT_1:13;
+                 then A5301:h.(the_left_argument_of H)
+                                   =f.(the_left_argument_of H) by A26;
+                 len(the_right_argument_of H) < len(H) by ThArg8,A5201;
+                 then len(the_right_argument_of H) <=k by A29,Lm1;
+                 then A5401:len(the_right_argument_of H) < k+1 by NAT_1:13;
+                 per cases by NAT_1:8,A29;
+                   suppose A5501:len(H) <= k;
+                     then len(H) < k+1 by NAT_1:13;
+                     then f.H = h.H by A26
+                             .= (the RELEASE of V).(h.(the_left_argument_of H),
+                                                h.(the_right_argument_of H))
+                                    by A7,A5201,A5501,Def27;
+                     hence thesis by A5301,A5401,A26;
+                     end;
+                   suppose len(H) = k+1; then
+                     GraftEval(V,Kai,h,h,k,H)
+                             = (the RELEASE of V).(h.(the_left_argument_of H),
+                                               h.(the_right_argument_of H))
+                              by Def28,A5201
+                            .= (the RELEASE of V).(f.(the_left_argument_of H),
+                                               f.(the_right_argument_of H))
+                                 by A5301,A5401,A26;
+                     hence thesis by A31;
+                     end;
+                 end;
+               hence thesis by A32,A35,A39,A3901,A44,A50;
+               end;
+             hence thesis by Def27;
+             end;
+           hence thesis;
+           end;
+         hence thesis;
+         end;
+       for n being Nat holds P[n] from NAT_1:sch 2(A1,A5);
+       hence thesis;
+       end;
+
+Lm29:
+  (for n holds f is-PreEvaluation-for n,Kai)
+            implies f is-Evaluation-for Kai
+ proof
+   assume A1:for n holds f is-PreEvaluation-for n,Kai;
+   let H be LTL-formula;
+   set n = len(H);
+   f is-PreEvaluation-for n,Kai by A1;
+   hence thesis by Def27;
+ end;
+
+definition
+  let V be LTLModelStr;
+  let Kai be Function of atomic_LTL,the BasicAssign of V;
+  let n be Nat;
+  func EvalSet(V,Kai,n) ->non empty set equals
+        {h where h is Function of LTL_WFF,the Assignations of V
+                        : h is-PreEvaluation-for n,Kai};
+   correctness
+     proof
+     set X = {h where h is Function of LTL_WFF,the Assignations of V
+                        : h is-PreEvaluation-for n,Kai};
+     consider h being Function of LTL_WFF,the Assignations of V
+             such that A1: h is-PreEvaluation-for n,Kai by Lm28;
+     h in X by A1;
+     hence thesis;
+     end;
+  end;
+
+definition
+  let V be LTLModelStr;
+  let v0 be Element of the Assignations of V;
+  let x be set;
+  func CastEval(V,x,v0) ->Function of LTL_WFF,the Assignations of V
+     equals :Def30:
+        x if x in Funcs(LTL_WFF,the Assignations of V)
+        otherwise LTL_WFF --> v0;
+  correctness by FUNCT_2:121;
+  end;
+
+definition
+   let V be LTLModelStr;
+   let Kai be Function of atomic_LTL,the BasicAssign of V;
+   func EvalFamily(V,Kai) -> non empty set means :Def31:
+        for p being set holds p in it
+           iff p in bool Funcs(LTL_WFF,the Assignations of V) &
+               ex n being Nat st p=EvalSet(V,Kai,n);
+   existence
+   proof
+   set X = bool Funcs(LTL_WFF,the Assignations of V);
+   defpred Q[set] means ex n being Nat st $1=EvalSet(V,Kai,n);
+   consider IT be set such that
+   A1:for p being set holds
+          p in IT iff p in X & Q[p] from XBOOLE_0:sch 1;
+   IT is non empty
+     proof
+     set p = EvalSet(V,Kai,0);
+     p c= Funcs(LTL_WFF,the Assignations of V)
+       proof
+       let x be set;
+       assume x in p;
+       then consider h being Function of LTL_WFF,the Assignations of V
+           such that A2:x=h and h is-PreEvaluation-for 0,Kai;
+       thus x in Funcs(LTL_WFF,the Assignations of V) by FUNCT_2:11,A2;
+       end;
+     hence thesis by A1;
+     end;
+   then reconsider IT as non empty set;
+   take IT;
+   thus thesis by A1;
+   end;
+   uniqueness
+    proof
+    defpred P[set] means
+        $1 in bool Funcs(LTL_WFF,the Assignations of V) &
+        ex n being Nat st $1=EvalSet(V,Kai,n);
+    for X1,X2 being set st
+    (for x being set holds x in X1 iff P[x]) &
+    (for x being set holds x in X2 iff P[x]) holds X1 = X2
+            from XBOOLE_0:sch 3;
+    hence thesis;
+    end;
+ end;
+
+Lm30:
+  EvalSet(V,Kai,n) in EvalFamily(V,Kai)
+     proof
+     set p1 = EvalSet(V,Kai,n);
+       p1 c= Funcs(LTL_WFF,the Assignations of V)
+         proof
+         let x be set;
+         assume x in p1;
+         then consider h being Function of LTL_WFF,the Assignations of V
+                    such that A1:x = h and h is-PreEvaluation-for n,Kai;
+         thus x in Funcs(LTL_WFF,the Assignations of V) by FUNCT_2:11,A1;
+         end;
+        then
+         p1 in bool Funcs(LTL_WFF,the Assignations of V);
+     hence thesis by Def31;
+     end;
+
+theorem Th3:
+  ex f st f is-Evaluation-for Kai
+   proof
+   set M = EvalFamily(V,Kai);
+   for X being set st X in M holds X <> {}
+     proof
+     let X being set such that A1:X in M;
+     consider n being Nat such that
+           A2:X = EvalSet(V,Kai,n) by A1,Def31;
+     thus thesis by A2;
+     end;
+   then consider Choice being Function such that
+       dom Choice = M and
+       A3: for X being set st X in M holds Choice.X in X by WELLORD2:28;
+   deffunc F(set) = Choice.EvalSet(V,Kai,CastNat($1));
+   A4:for n being set st n in NAT holds
+           F(n) is Function of LTL_WFF,the Assignations of V
+      proof
+      let n be set such that A5:n in NAT;
+      set Y = F(n);
+      n is Element of NAT by A5;
+      then reconsider n as Nat;
+      A6:CastNat(n) = n by DefCastNat;
+      set Z = EvalSet(V,Kai,n);
+      Y in EvalSet(V,Kai,n) by A6,A3,Lm30;
+      then consider h being Function of LTL_WFF,the Assignations of V
+           such that A7:Y=h and h is-PreEvaluation-for n,Kai;
+      thus thesis by A7;
+      end;
+    A8:for n being set st n in NAT holds
+           F(n) in Funcs(LTL_WFF,the Assignations of V)
+      proof
+      let n be set such that A9: n in NAT;
+      F(n) is Function of LTL_WFF,the Assignations of V by A9,A4;
+      hence thesis by FUNCT_2:11;
+      end;
+   consider f1 being Function of NAT,Funcs(LTL_WFF,the Assignations of V)
+           such that A10: for n being set st n in NAT holds f1.n = F(n)
+              from FUNCT_2:sch 2(A8);
+   consider v0 being Element of the Assignations of V;
+   deffunc G(set) = CastEval(V,f1.len(CastLTL($1)),v0).$1;
+   A11:for H being set st H in LTL_WFF holds
+           G(H) in the Assignations of V by FUNCT_2:7;
+   consider f being Function of LTL_WFF,the Assignations of V
+           such that A12: for H being set st H in LTL_WFF holds f.H = G(H)
+              from FUNCT_2:sch 2(A11);
+   take f;
+   for n being Nat holds f is-PreEvaluation-for n,Kai
+     proof
+     defpred P[Nat] means f is-PreEvaluation-for $1,Kai;
+     A13:P[0]
+       proof
+       for H being LTL-formula st len(H) <= 0 holds
+         (H is atomic implies f.H = Kai.H) &
+         (H is negative implies
+            f.H = (the Not of V).(f.(the_argument_of H))) &
+         (H is conjunctive implies
+            f.H = (the And of V).(f.(the_left_argument_of H),
+                              f.(the_right_argument_of H))) &
+         (H is disjunctive implies
+            f.H = (the Or of V).(f.(the_left_argument_of H),
+                              f.(the_right_argument_of H))) &
+         (H is next implies
+           f.H = (the NEXT of V).(f.(the_argument_of H))) &
+         (H is Until implies
+           f.H = (the UNTIL of V).(f.(the_left_argument_of H),
+                                 f.(the_right_argument_of H))) &
+         (H is Release implies
+           f.H = (the RELEASE of V).(f.(the_left_argument_of H),
+                                 f.(the_right_argument_of H)))by Thlen01;
+       hence thesis by Def27;
+       end;
+     A14:for k being Nat st P[k] holds P[k + 1]
+       proof
+       let k be Nat such that A15:P[k];
+       for H being LTL-formula st len(H) <= k+1 holds
+         (H is atomic implies f.H = Kai.H) &
+         (H is negative implies
+            f.H = (the Not of V).(f.(the_argument_of H))) &
+         (H is conjunctive implies
+            f.H = (the And of V).(f.(the_left_argument_of H),
+                              f.(the_right_argument_of H))) &
+         (H is disjunctive implies
+            f.H = (the Or of V).(f.(the_left_argument_of H),
+                              f.(the_right_argument_of H))) &
+         (H is next implies
+           f.H = (the NEXT of V).(f.(the_argument_of H))) &
+         (H is Until implies
+           f.H = (the UNTIL of V).(f.(the_left_argument_of H),
+                                 f.(the_right_argument_of H))) &
+         (H is Release implies
+           f.H = (the RELEASE of V).(f.(the_left_argument_of H),
+                                 f.(the_right_argument_of H)))
+         proof
+         let H be LTL-formula such that A16:len(H) <= k+1;
+         now per cases by A16,NAT_1:8;
+           case len(H) <= k;
+             hence thesis by A15,Def27;
+           end;
+           case A17:len(H) = k+1;
+             A18:H in LTL_WFF by Th1;
+             A19:f1.len(CastLTL(H)) = f1.len(H) by A18,Def24
+                                       .= F(len(H)) by A10;
+             A20: CastEval(V,f1.len(CastLTL(H)),v0)
+                        = F(len H) by Def30,A19;
+             set f2 = F(len H);
+             reconsider f2 as
+                 Function of LTL_WFF,the Assignations of V by A20;
+             A21:f.H = f2.H by A12,A18,A20;
+             A22:f2 = Choice.EvalSet(V,Kai,len(H)) by DefCastNat;
+             Choice.EvalSet(V,Kai,len(H)) in EvalSet(V,Kai,len(H)) by A3,Lm30;
+             then consider h being Function of LTL_WFF,the Assignations of V
+                 such that A23:f2=h and
+                           A24:h is-PreEvaluation-for len(H),Kai by A22;
+             A25:f2 is-PreEvaluation-for k,Kai by A23,A24,A17,Lm25;
+             A26:(H is negative implies
+                      f.H = (the Not of V).(f.(the_argument_of H)))
+               proof
+               assume A27:H is negative;
+               then len(the_argument_of H) < len(H) by ThArg7;
+               then A28:len(the_argument_of H) <= k by A17,NAT_1:13;
+               f.H = (the Not of V).(f2.(the_argument_of H))
+                                       by A21,A23,A24,A27,Def27
+                  .= (the Not of V).(f.(the_argument_of H))
+                                       by A25,A15,Lm27,A28;
+               hence thesis;
+               end;
+             A29:(H is next implies
+                      f.H = (the NEXT of V).(f.(the_argument_of H)))
+               proof
+               assume A30:H is next;
+               then len(the_argument_of H) < len(H) by ThArg7;
+               then A31:len(the_argument_of H) <= k by A17,NAT_1:13;
+               f.H = (the NEXT of V).(f2.(the_argument_of H))
+                                        by A21,A23,A24,A30,Def27
+                  .= (the NEXT of V).(f.(the_argument_of H))
+                               by A25,A15,Lm27,A31;
+               hence thesis;
+               end;
+             A35: (H is conjunctive implies
+                       f.H = (the And of V).(f.(the_left_argument_of H),
+                                              f.(the_right_argument_of H)))
+               proof
+               assume A36:H is conjunctive;
+               then len(the_left_argument_of H) < len(H) by ThArg8;
+               then len(the_left_argument_of H) <= k by A17,NAT_1:13;
+               then A37:f.(the_left_argument_of H)
+                          = f2.(the_left_argument_of H)
+                              by A25,A15,Lm27;
+               len(the_right_argument_of H) < len(H) by A36,ThArg8;
+               then A38:len(the_right_argument_of H) <= k by NAT_1:13,A17;
+               f.H = (the And of V).(f2.(the_left_argument_of H),
+                                     f2.(the_right_argument_of H))
+                                   by A21,A23,A24,A36,Def27
+                  .= (the And of V).(f.(the_left_argument_of H),
+                                     f.(the_right_argument_of H))
+                                   by A37,A38,A25,A15,Lm27;
+               hence thesis;
+               end;
+             A3501: (H is disjunctive implies
+                       f.H = (the Or of V).(f.(the_left_argument_of H),
+                                              f.(the_right_argument_of H)))
+               proof
+               assume A3601:H is disjunctive;
+               then len(the_left_argument_of H) < len(H) by ThArg8;
+               then len(the_left_argument_of H) <= k by A17,NAT_1:13;
+               then A3701:f.(the_left_argument_of H)
+                          = f2.(the_left_argument_of H)
+                              by A25,A15,Lm27;
+               len(the_right_argument_of H) < len(H) by A3601,ThArg8;
+               then A3801:len(the_right_argument_of H) <= k by NAT_1:13,A17;
+               f.H = (the Or of V).(f2.(the_left_argument_of H),
+                                     f2.(the_right_argument_of H))
+                                   by A21,A23,A24,A3601,Def27
+                  .= (the Or of V).(f.(the_left_argument_of H),
+                                     f.(the_right_argument_of H))
+                                   by A3701,A3801,A25,A15,Lm27;
+               hence thesis;
+               end;
+             A3900:(H is Until implies
+                       f.H = (the UNTIL of V).(f.(the_left_argument_of H),
+                                                  f.(the_right_argument_of H)))
+               proof
+               assume A39:H is Until;
+               then len(the_left_argument_of H) < len(H) by ThArg8;
+               then len(the_left_argument_of H) <= k by NAT_1:13,A17;
+               then A40:f.(the_left_argument_of H)
+                         = f2.(the_left_argument_of H)
+                              by A25,A15,Lm27;
+               len(the_right_argument_of H) < len(H) by A39,ThArg8;
+               then A41:len(the_right_argument_of H) <= k by A17,NAT_1:13;
+               f.H = (the UNTIL of V).(f2.(the_left_argument_of H),
+                                       f2.(the_right_argument_of H))
+                                by A21,A23,A24,A39,Def27
+                  .= (the UNTIL of V).(f.(the_left_argument_of H),
+                                       f.(the_right_argument_of H))
+                                by A40,A41,A25,A15,Lm27;
+               hence thesis;
+               end;
+             (H is Release implies
+                       f.H = (the RELEASE of V).(f.(the_left_argument_of H),
+                                                  f.(the_right_argument_of H)))
+               proof
+               assume A3901:H is Release;
+               then len(the_left_argument_of H) < len(H) by ThArg8;
+               then len(the_left_argument_of H) <= k by NAT_1:13,A17;
+               then A4001:f.(the_left_argument_of H)
+                         = f2.(the_left_argument_of H)
+                              by A25,A15,Lm27;
+               len(the_right_argument_of H) < len(H) by A3901,ThArg8;
+               then A4101:len(the_right_argument_of H) <= k by A17,NAT_1:13;
+               f.H = (the RELEASE of V).(f2.(the_left_argument_of H),
+                                       f2.(the_right_argument_of H))
+                                by A21,A23,A24,A3901,Def27
+                  .= (the RELEASE of V).(f.(the_left_argument_of H),
+                                       f.(the_right_argument_of H))
+                                by A4001,A4101,A25,A15,Lm27;
+               hence thesis;
+               end;
+             hence thesis by A21,A23,A24,Def27,A26,A29,A35,A3501,A3900;
+             end;
+         end;::case
+         hence thesis;
+         end;
+       hence thesis by Def27;
+       end;
+     for n being Nat holds P[n] from NAT_1:sch 2(A13,A14);
+     hence thesis;
+     end;
+   hence thesis by Lm29;
+   end;
+
+theorem Th4:
+  f1 is-Evaluation-for Kai & f2 is-Evaluation-for Kai implies f1 = f2
+   proof
+   assume that A1:f1 is-Evaluation-for Kai and
+               A2:f2 is-Evaluation-for Kai;
+   for H being set st H in LTL_WFF holds f1.H=f2.H
+     proof
+     let H be set such that A3:H in LTL_WFF;
+     reconsider H as LTL-formula by A3,Th1;
+     set n=len(H);
+     f1 is-PreEvaluation-for n, Kai & f2 is-PreEvaluation-for n, Kai
+            by Lm26,A1,A2;
+     hence thesis by Lm27;
+     end;
+   hence thesis by FUNCT_2:18;
+   end;
+
+definition
+   let V be LTLModelStr;
+   let Kai be Function of atomic_LTL,the BasicAssign of V;
+   let H be LTL-formula;
+   func Evaluate(H,Kai) -> Assign of V means :Def32:
+        ex f being Function of LTL_WFF,the Assignations of V
+           st f is-Evaluation-for Kai & it = f.H;
+   existence
+   proof
+   consider f be Function of LTL_WFF,the Assignations of V such that
+A1:f is-Evaluation-for Kai by Th3;
+   set IT=f.H;
+   H in LTL_WFF by Th1;
+   then reconsider IT as Assign of V by FUNCT_2:7;
+   take IT;
+   thus thesis by A1;
+   end;
+   uniqueness by Th4;
+end;
+
+definition
+  let V be LTLModelStr;
+  let f be Assign of V;
+  func 'not' f -> Assign of V equals
+  (the Not of V).f;
+  correctness;
+end;
+
+definition
+  let V be LTLModelStr;
+  let f,g be Assign of V;
+  func f '&' g -> Assign of V equals
+  (the And of V).(f,g);
+  correctness;
+  func f 'or' g -> Assign of V equals
+    (the Or of V).(f,g);
+  correctness;
+end;
+
+definition
+  let V be LTLModelStr;
+  let f be Assign of V;
+  func 'X' f -> Assign of V equals
+  (the NEXT of V).f;
+  correctness;
+end;
+
+definition
+  let V be LTLModelStr;
+  let f,g be Assign of V;
+  func f 'U' g -> Assign of V equals
+  (the UNTIL of V).(f,g);
+  correctness;
+  func f 'R' g -> Assign of V equals
+  (the RELEASE of V).(f,g);
+  correctness;
+end;
+
+::Some properties of evaluate function of LTL
+
+theorem Th5:
+  Evaluate('not' H,Kai) = 'not' Evaluate(H,Kai)
+  proof
+  consider f1 be Function of LTL_WFF,the Assignations of V
+       such that A1: f1 is-Evaluation-for Kai and
+                 A2: Evaluate('not' H,Kai) = f1.('not' H) by Def32;
+  consider f2 be Function of LTL_WFF,the Assignations of V
+       such that A3: f2 is-Evaluation-for Kai and
+                 A4: Evaluate(H,Kai) = f2.H by Def32;
+A5:'not' H is negative by Def15;
+  Evaluate('not' H,Kai) = (the Not of V).(f1.(the_argument_of('not' H)) )
+                          by A2,A1,A5,Def26
+                 .= (the Not of V).(f1.H ) by A5,Def21
+                 .= 'not' Evaluate(H,Kai) by A1,A3,A4,Th4;
+   hence thesis;
+   end;
+
+theorem Th6:
+  Evaluate(H1 '&' H2,Kai) = Evaluate(H1,Kai) '&' Evaluate(H2,Kai)
+  proof
+  consider f0 be Function of LTL_WFF,the Assignations of V such that
+  A1: f0 is-Evaluation-for Kai and
+  A2: Evaluate(H1 '&' H2,Kai) = f0.(H1 '&' H2) by Def32;
+  consider f1 be Function of LTL_WFF,the Assignations of V
+       such that A3: f1 is-Evaluation-for Kai and
+                 A4: Evaluate(H1,Kai) = f1.H1 by Def32;
+  consider f2 be Function of LTL_WFF,the Assignations of V
+       such that A5: f2 is-Evaluation-for Kai and
+                 A6: Evaluate(H2,Kai) = f2.H2 by Def32;
+  A7:f0=f1 & f0=f2 by A1,A3,A5,Th4;
+  A8:H1 '&' H2 is conjunctive by Def16;
+  then the_left_argument_of(H1 '&' H2) = H1 &
+          the_right_argument_of(H1 '&' H2)= H2 by Def22,Def23;
+   hence thesis by A1,A2,A7,A8,Def26,A4,A6;
+   end;
+
+theorem Th7:
+  Evaluate(H1 'or' H2,Kai) = Evaluate(H1,Kai) 'or' Evaluate(H2,Kai)
+  proof
+  consider f0 be Function of LTL_WFF,the Assignations of V such that
+  A1: f0 is-Evaluation-for Kai and
+  A2: Evaluate(H1 'or' H2,Kai) = f0.(H1 'or' H2) by Def32;
+  consider f1 be Function of LTL_WFF,the Assignations of V
+       such that A3: f1 is-Evaluation-for Kai and
+                 A4: Evaluate(H1,Kai) = f1.H1 by Def32;
+  consider f2 be Function of LTL_WFF,the Assignations of V
+       such that A5: f2 is-Evaluation-for Kai and
+                 A6: Evaluate(H2,Kai) = f2.H2 by Def32;
+  A7:f0=f1 & f0=f2 by A1,A3,A5,Th4;
+  A8:H1 'or' H2 is disjunctive by Def17;
+  then the_left_argument_of(H1 'or' H2) = H1 &
+          the_right_argument_of(H1 'or' H2)= H2 by Def22,Def23;
+   hence thesis by A1,A2,A7,A8,Def26,A4,A6;
+   end;
+
+theorem Th8:
+  Evaluate('X' H,Kai) = 'X' Evaluate(H,Kai)
+  proof
+  consider f1 be Function of LTL_WFF,the Assignations of V such that
+  A1: f1 is-Evaluation-for Kai and
+  A2: Evaluate('X' H,Kai) = f1.('X' H) by Def32;
+  consider f2 be Function of LTL_WFF,the Assignations of V such that
+  A3: f2 is-Evaluation-for Kai and
+  A4: Evaluate(H,Kai) = f2.H by Def32;
+  A5:'X' H is next by Def18;
+  then A6:not ('X' H is negative) by Lm17;
+  Evaluate('X' H,Kai) = (the NEXT of V).(f1.(the_argument_of('X' H)) )
+                          by A2,A1,A5,Def26
+                 .= (the NEXT of V).(f1.H ) by A6,A5,Def21
+                 .= 'X' Evaluate(H,Kai) by A1,A3,A4,Th4;
+   hence thesis;
+   end;
+
+theorem Th9:
+  Evaluate(H1 'U' H2,Kai) = Evaluate(H1,Kai) 'U' Evaluate(H2,Kai)
+  proof
+  consider f0 be Function of LTL_WFF,the Assignations of V
+       such that A1: f0 is-Evaluation-for Kai and
+                 A2: Evaluate(H1 'U' H2,Kai) = f0.(H1 'U' H2) by Def32;
+  consider f1 be Function of LTL_WFF,the Assignations of V
+       such that A3: f1 is-Evaluation-for Kai and
+                 A4: Evaluate(H1,Kai) = f1.H1 by Def32;
+  consider f2 be Function of LTL_WFF,the Assignations of V
+       such that A5: f2 is-Evaluation-for Kai and
+                 A6: Evaluate(H2,Kai) = f2.H2 by Def32;
+  A7:f0=f1 & f0=f2 by A1,A3,A5,Th4;
+  A8:H1 'U' H2 is Until by Def19;
+  the_left_argument_of(H1 'U' H2) = H1 &
+          the_right_argument_of(H1 'U' H2) = H2 by A8,Def22,Def23;
+   hence thesis by A1,A2,A7,A8,Def26,A4,A6;
+   end;
+
+theorem Th10:
+  Evaluate(H1 'R' H2,Kai) = Evaluate(H1,Kai) 'R' Evaluate(H2,Kai)
+  proof
+  consider f0 be Function of LTL_WFF,the Assignations of V
+       such that A1: f0 is-Evaluation-for Kai and
+                 A2: Evaluate(H1 'R' H2,Kai) = f0.(H1 'R' H2) by Def32;
+  consider f1 be Function of LTL_WFF,the Assignations of V
+       such that A3: f1 is-Evaluation-for Kai and
+                 A4: Evaluate(H1,Kai) = f1.H1 by Def32;
+  consider f2 be Function of LTL_WFF,the Assignations of V
+       such that A5: f2 is-Evaluation-for Kai and
+                 A6: Evaluate(H2,Kai) = f2.H2 by Def32;
+  A7:f0=f1 & f0=f2 by A1,A3,A5,Th4;
+  A8:H1 'R' H2 is Release by Def1901;
+  then not (H1 'R' H2 is conjunctive) &  not (H1 'R' H2 is disjunctive) &
+       not (H1 'R' H2 is Until) by Lm1801;
+  then the_left_argument_of(H1 'R' H2) = H1 &
+          the_right_argument_of(H1 'R' H2) = H2 by A8,Def22,Def23;
+   hence thesis by A1,A2,A7,A8,Def26,A4,A6;
+   end;
+
+::definition of concrete object of LTL model
+
+definition
+  let S be non empty set;
+  func Inf_seq(S) -> non empty set equals
+    Funcs(NAT,S);
+  correctness;
+end;
+
+definition
+  let S be non empty set;
+  let t be sequence of S;
+  func CastSeq(t) -> Element of Inf_seq(S) equals
+      t;
+  correctness by FUNCT_2:11;
+end;
+
+definition
+  let S be non empty set;
+  let t be set;
+  assume A1:t is Element of Inf_seq(S);
+  func CastSeq(t,S) -> sequence of S equals
+  :DefCasetSeq2: t;
+  correctness by A1,FUNCT_2:121;
+end;
+
+definition
+   let S be non empty set;
+   let t be sequence of S;
+   let k be Nat;
+   func Shift(t,k) -> sequence of S means
+    :DefShift01: for n being Nat holds it.n = t.(n+k);
+   existence
+     proof
+     deffunc PAI1(set) = t.(CastNat($1)+k);
+     A1:for x being set st x in NAT holds PAI1(x) in S;
+     consider IT being sequence of S such that
+            A2:for n being set st n in NAT holds IT.n= PAI1(n)
+                   from FUNCT_2:sch 2(A1);
+     A3:for n being Nat holds IT.n = t.(n+k)
+       proof
+       let n be Nat;
+       B1:PAI1(n) =t.(n+k) by DefCastNat;
+       n in NAT by ORDINAL1:def 13;
+       hence thesis by B1,A2;
+       end;
+     take IT;
+     thus thesis by A3;
+     end;
+   uniqueness
+     proof
+     for t1,t2 being sequence of S st
+         (for n being Nat holds t1.n = t.(n+k)) &
+         (for n being Nat holds t2.n = t.(n+k))
+            holds t1 = t2
+       proof
+       let t1,t2 be sequence of S such that
+       A5: for n being Nat holds t1.n = t.(n+k) and
+       A6: for n being Nat holds t2.n = t.(n+k);
+       for x being set st x in NAT holds t1.x = t2.x
+         proof
+         let x be set such that A7:x in NAT;
+         reconsider x as Nat by A7, ORDINAL1:def 13;
+         t1.x = t.(x+k) by A5 .= t2.x by A6;
+         hence thesis;
+         end;
+       hence thesis by FUNCT_2:18;
+       end;
+     hence thesis;
+     end;
+end;
+
+definition
+   let S be non empty set;
+   let t be set;
+   let k be Nat;
+   func Shift(t,k,S) -> Element of Inf_seq(S) equals
+      CastSeq(Shift(CastSeq(t,S),k));
+   correctness;
+end;
+
+definition
+   let S be non empty set;
+   let t be Element of Inf_seq(S);
+   let k be Nat;
+   func Shift(t,k) -> Element of Inf_seq(S) equals
+       Shift(t,k,S);
+   correctness;
+end;
+
+LemShift03:
+  for seq being Element of Inf_seq(S) holds
+       Shift(seq,0) = seq
+  proof
+  let seq be Element of Inf_seq(S);
+  set cseq = CastSeq(seq,S);
+  A1:for x st x in NAT holds (Shift(cseq,0)).x = cseq.x
+    proof
+    let x such that B1:x in NAT;
+    reconsider x as Element of NAT by B1;
+    (Shift(cseq,0)).x = cseq.(x+0) by DefShift01;
+    hence thesis;
+    end;
+  Shift(seq,0) = CastSeq(cseq) by A1,FUNCT_2:18;
+  hence thesis by DefCasetSeq2;
+  end;
+
+LemShift04:
+  for seq being Element of Inf_seq(S) holds
+      Shift(Shift(seq,k),n) = Shift(seq,n+k)
+  proof
+  let seq be Element of Inf_seq(S);
+  set nk=n+k;
+  set t1=Shift(seq,k);
+  set t2=Shift(t1,n);
+  set t3=Shift(seq,nk);
+  set cseq = CastSeq(seq,S);
+  set ct1 = CastSeq(t1,S);
+  A4:for m holds ct1.m = cseq.(m+k)
+    proof
+    let m;
+    ct1.m = (Shift(cseq,k)).m by DefCasetSeq2;
+    hence thesis by DefShift01;
+    end;
+  A5:for m holds (Shift(ct1,n)).m = (Shift(cseq,nk)).m
+    proof
+    let m;
+    (Shift(ct1,n)).m = ct1.(m+n) by DefShift01
+                         .= cseq.(m+n+k) by A4
+                         .= cseq.(m+nk);
+    hence thesis by DefShift01;
+    end;
+  for x st x in NAT holds (Shift(ct1,n)).x =(Shift(cseq,nk)).x
+    proof
+    let x such that B1:x in NAT;
+    reconsider x as Nat by B1,ORDINAL1:def 13;
+    (Shift(ct1,n)).x = (Shift(cseq,nk)).x by A5;
+    hence thesis;
+    end;
+  hence thesis by FUNCT_2:18;
+  end;
+
+:: definition of Not_ unary operation of Model Space.
+
+definition
+  let S be non empty set;
+  let f be set;
+  func Not_0(f,S) -> Element of ModelSP(Inf_seq(S)) means :Def42:
+     for t being set st t in Inf_seq(S) holds
+       'not' (Castboolean (Fid(f,Inf_seq(S))).t) = TRUE
+                          iff (Fid(it,Inf_seq(S))).t = TRUE;
+existence
+ proof
+ set SEQ=Inf_seq(S);
+ deffunc F(set,Function of SEQ,BOOLEAN) ='not' Castboolean($2.$1);
+ consider IT being set such that
+    A1:IT in ModelSP(SEQ) and
+    A2:for t being set st t in SEQ holds
+        F(t,Fid(f,SEQ)) = TRUE iff (Fid(IT,SEQ)).t=TRUE
+ from MODELC_1:sch 2;
+ take IT;
+ thus thesis by A1,A2;
+ end;
+ uniqueness
+ proof
+ set SEQ=Inf_seq(S);
+ deffunc F(set,Function of SEQ,BOOLEAN) ='not' Castboolean($2.$1);
+ for g1,g2 being set st
+      g1 in ModelSP(SEQ) &
+      (for t being set st t in SEQ holds
+            F(t,Fid(f,SEQ)) =TRUE iff (Fid(g1,SEQ)).t=TRUE) &
+      g2 in ModelSP(SEQ) &
+      (for t being set st t in SEQ holds
+            F(t,Fid(f,SEQ)) =TRUE iff (Fid(g2,SEQ)).t=TRUE)
+ holds g1 = g2 from MODELC_1:sch 3;
+ hence thesis;
+ end;
+end;
+
+Lm36:
+  ex o being UnOp of ModelSP(Inf_seq(S))
+      st for f being set st f in ModelSP(Inf_seq(S)) holds o.(f) = Not_0(f,S)
+ proof
+ set M = ModelSP(Inf_seq(S));
+ deffunc F(set) = Not_0($1,S);
+ ex o being UnOp of M st
+    for f being set st f in M holds o.(f) = F(f) from MODELC_1:sch 4;
+ hence thesis;
+ end;
+
+Lm37:
+  for o1,o2 being UnOp of ModelSP(Inf_seq(S))
+       st (for f being set st f in ModelSP(Inf_seq(S))
+             holds o1.f = Not_0(f,S)) &
+          (for f being set st f in ModelSP(Inf_seq(S))
+             holds o2.f = Not_0(f,S))
+     holds o1=o2
+ proof
+ set M = ModelSP(Inf_seq(S));
+ deffunc F(set) = Not_0($1,S);
+ for o1,o2 being UnOp of M st
+       (for f being set st f in M holds o1.f = F(f)) &
+       (for f being set st f in M holds o2.f = F(f))
+            holds o1=o2 from MODELC_1:sch 5;
+ hence thesis;
+ end;
+
+definition
+  let S be non empty set;
+  func Not_(S) -> UnOp of ModelSP(Inf_seq(S)) means :Def43:
+  for f being set st f in ModelSP(Inf_seq(S)) holds
+      it.f = Not_0(f,S);
+existence by Lm36;
+uniqueness by Lm37;
+end;
+
+:: definition of next_  unary operation of Model Space.
+
+definition
+let S be non empty set;
+let f be Function of Inf_seq(S),BOOLEAN;
+let t be set;
+func Next_univ(t,f) -> Element of BOOLEAN equals :Def44:
+           TRUE if  t is Element of Inf_seq(S) &
+              f.Shift(t,1,S) =TRUE
+           otherwise FALSE;
+correctness;
+end;
+
+definition
+let S be non empty set;
+let f be set;
+func Next_0(f,S) -> Element of ModelSP(Inf_seq(S)) means :Def45:
+     for t being set st t in Inf_seq(S) holds
+        Next_univ(t,Fid(f,Inf_seq(S)))=TRUE iff
+                         (Fid(it,Inf_seq(S))).t=TRUE;
+existence
+ proof
+ deffunc F(set,Function of Inf_seq(S),BOOLEAN) =Next_univ($1,$2);
+ consider IT being set such that
+    A1:(IT in ModelSP(Inf_seq(S))) and
+    A2:(for t being set st t in Inf_seq(S) holds
+        F(t,Fid(f,Inf_seq(S))) =TRUE iff (Fid(IT,Inf_seq(S))).t=TRUE)
+                                          from MODELC_1:sch 2;
+ take IT;
+ thus thesis by A1,A2;
+ end;
+ uniqueness
+ proof
+ deffunc F(set,Function of Inf_seq(S),BOOLEAN) =Next_univ($1,$2);
+  for g1,g2 being set st
+      g1 in ModelSP(Inf_seq(S)) &
+      (for t being set st t in Inf_seq(S) holds
+          F(t,Fid(f,Inf_seq(S))) =TRUE
+                             iff (Fid(g1,Inf_seq(S))).t=TRUE) &
+      g2 in ModelSP(Inf_seq(S)) &
+      (for t being set st t in Inf_seq(S) holds
+          F(t,Fid(f,Inf_seq(S))) =TRUE
+                              iff (Fid(g2,Inf_seq(S))).t=TRUE)
+     holds g1 = g2 from MODELC_1:sch 3;
+ hence thesis;
+ end;
+end;
+
+Lm38:
+  ex o being UnOp of ModelSP(Inf_seq(S))
+     st for f being set st f in ModelSP(Inf_seq(S))
+                    holds o.(f) = Next_0(f,S)
+ proof
+ set M = ModelSP(Inf_seq(S));
+ deffunc F(set) = Next_0($1,S);
+ ex o being UnOp of M st
+    for f being set st f in M holds o.(f) = F(f) from MODELC_1:sch 4;
+ hence thesis;
+ end;
+
+Lm39:
+  for o1,o2 being UnOp of ModelSP(Inf_seq(S))
+     st (for f being set st f in ModelSP(Inf_seq(S))
+                       holds o1.f = Next_0(f,S)) &
+        (for f being set st f in ModelSP(Inf_seq(S))
+                       holds o2.f = Next_0(f,S))
+    holds o1=o2
+ proof
+ set M = ModelSP(Inf_seq(S));
+ deffunc F(set) = Next_0($1,S);
+ for o1,o2 being UnOp of M st
+       (for f being set st f in M holds o1.f = F(f)) &
+       (for f being set st f in M holds o2.f = F(f))
+            holds o1=o2 from MODELC_1:sch 5;
+ hence thesis;
+ end;
+
+definition
+let S be non empty set;
+func Next_(S) -> UnOp of ModelSP(Inf_seq(S)) means :Def46:
+  for f being set st f in ModelSP(Inf_seq(S)) holds
+      it.f = Next_0(f,S);
+existence by Lm38;
+uniqueness by Lm39;
+end;
+
+:: definition of And_ Binary Operation of Model Space.
+
+definition
+  let S be non empty set;
+  let f,g be set;
+  func And_0(f,g,S) -> Element of ModelSP(Inf_seq(S)) means :Def50:
+     for t being set st t in Inf_seq(S) holds
+       (Castboolean (Fid(f,Inf_seq(S))).t ) '&'
+                      (Castboolean (Fid(g,Inf_seq(S))).t ) =TRUE
+                         iff (Fid(it,Inf_seq(S))).t=TRUE;
+existence
+ proof
+ deffunc
+   F(set,Function of Inf_seq(S),BOOLEAN,Function of Inf_seq(S),BOOLEAN)
+                = (Castboolean $2.$1 ) '&' (Castboolean $3.$1 );
+ consider IT being set such that
+    A1:IT in ModelSP(Inf_seq(S)) and
+    A2:(for t being set st t in Inf_seq(S) holds
+         F(t,Fid(f,Inf_seq(S)),Fid(g,Inf_seq(S))) =TRUE
+                  iff (Fid(IT,Inf_seq(S))).t=TRUE )
+                                  from MODELC_1:sch 6;
+ take IT;
+ thus thesis by A1,A2;
+ end;
+ uniqueness
+ proof
+ deffunc
+    F(set,Function of Inf_seq(S),BOOLEAN,Function of Inf_seq(S),BOOLEAN)
+                =(Castboolean $2.$1 ) '&' (Castboolean $3.$1 );
+  for h1,h2 being set st
+      (h1 in ModelSP(Inf_seq(S))) &
+      (for t being set st t in Inf_seq(S) holds
+           F(t,Fid(f,Inf_seq(S)),Fid(g,Inf_seq(S)))
+                            =TRUE iff (Fid(h1,Inf_seq(S))).t=TRUE) &
+      (h2 in ModelSP(Inf_seq(S))) &
+      (for t being set st t in Inf_seq(S) holds
+            F(t,Fid(f,Inf_seq(S)),Fid(g,Inf_seq(S)))
+                            =TRUE iff (Fid(h2,Inf_seq(S))).t=TRUE)
+     holds h1 = h2 from MODELC_1:sch 7;
+ hence thesis;
+ end;
+end;
+
+Lm42:
+ ex o being BinOp of ModelSP(Inf_seq(S))
+      st for f,g being set st f in ModelSP(Inf_seq(S)) &
+                              g in ModelSP(Inf_seq(S))
+                    holds o.(f,g) = And_0(f,g,S)
+ proof
+ set M = ModelSP(Inf_seq(S));
+ deffunc O(Element of M,Element of M) = And_0($1,$2,S);
+ consider o being BinOp of M such that
+   A1:for f,g being Element of M holds o.(f,g) = O(f,g) from BINOP_1:sch 4;
+  for f,g being set st (f in M) & (g in M)
+        holds o.(f,g) = And_0(f,g,S) by A1;
+ hence thesis;
+ end;
+
+Lm43:
+  for o1,o2 being BinOp of ModelSP(Inf_seq(S))
+     st (for f,g being set st (f in ModelSP(Inf_seq(S))) &
+                              (g in ModelSP(Inf_seq(S)))
+                 holds o1.(f,g) = And_0(f,g,S)) &
+        (for f,g being set st (f in ModelSP(Inf_seq(S))) &
+                              (g in ModelSP(Inf_seq(S)))
+                 holds o2.(f,g) = And_0(f,g,S))
+    holds o1=o2
+  proof
+  set M = ModelSP(Inf_seq(S));
+  deffunc O(Element of M,Element of M) = And_0($1,$2,S);
+   A1:for o1,o2 being BinOp of M st
+    (for f,g being Element of M holds o1.(f,g) = O(f,g)) &
+    (for f,g being Element of M holds o2.(f,g) = O(f,g))
+      holds o1=o2 from BINOP_2:sch 2;
+   for o1,o2 being BinOp of M st
+    (for f,g being set st (f in M ) & (g in M )
+                 holds o1.(f,g) = And_0(f,g,S)) &
+    (for f,g being set st (f in M) & (g in M)
+                 holds o2.(f,g) = And_0(f,g,S))
+      holds o1=o2
+      proof
+      let o1,o2 be BinOp of M such that
+       A2:(for f,g being set st (f in M ) & (g in M )
+                         holds o1.(f,g) = And_0(f,g,S)) and
+       A3:(for f,g being set st (f in M ) & (g in M )
+                         holds o2.(f,g) = And_0(f,g,S));
+       A4:for f,g being Element of M holds o1.(f,g) = O(f,g) by A2;
+       for f,g being Element of M holds o2.(f,g) = O(f,g) by A3;
+      hence thesis by A4,A1;
+      end;
+    hence thesis;
+  end;
+
+definition
+let S be non empty set;
+func And_(S) -> BinOp of ModelSP(Inf_seq(S)) means :Def51:
+  for f,g being set st (f in ModelSP(Inf_seq(S))) &
+                       (g in ModelSP(Inf_seq(S))) holds
+      it.(f,g) = And_0(f,g,S);
+existence by Lm42;
+uniqueness by Lm43;
+end;
+
+:: definition of Until_  Binary Operation of Model Space.
+
+definition
+let S be non empty set;
+let f,g be Function of Inf_seq(S),BOOLEAN;
+let t be set;
+func Until_univ(t,f,g,S) -> Element of BOOLEAN equals :Def52:
+   TRUE if t is Element of Inf_seq(S) &
+            ex m being Nat
+             st (for j being Nat st j<m holds
+                   f.Shift(t,j,S) =TRUE ) &
+                (g.Shift(t,m,S) = TRUE  )
+           otherwise FALSE;
+correctness;
+end;
+
+definition
+let S be non empty set;
+let f,g be set;
+func Until_0(f,g,S) -> Element of ModelSP(Inf_seq(S)) means :Def53:
+     for t being set st t in Inf_seq(S) holds
+        Until_univ(t,Fid(f,Inf_seq(S)),Fid(g,Inf_seq(S)),S)=TRUE
+                    iff  (Fid(it,Inf_seq(S))).t=TRUE;
+existence
+ proof
+ deffunc F(set,Function of Inf_seq(S),BOOLEAN,
+               Function of Inf_seq(S),BOOLEAN) =Until_univ($1,$2,$3,S);
+ consider IT being set such that
+    A1:(IT in ModelSP(Inf_seq(S))) and
+    A2:(for t being set st t in Inf_seq(S) holds
+        F(t,Fid(f,Inf_seq(S)),Fid(g,Inf_seq(S))) =TRUE
+                      iff (Fid(IT,Inf_seq(S))).t=TRUE )
+                              from MODELC_1:sch 6;
+ take IT;
+ thus thesis by A1,A2;
+ end;
+ uniqueness
+ proof
+ deffunc F(set,Function of Inf_seq(S),BOOLEAN,
+               Function of Inf_seq(S),BOOLEAN) =Until_univ($1,$2,$3,S);
+  for h1,h2 being set st
+      h1 in ModelSP(Inf_seq(S)) &
+      (for t being set st t in Inf_seq(S) holds
+          F(t,Fid(f,Inf_seq(S)),Fid(g,Inf_seq(S))) = TRUE
+                        iff (Fid(h1,Inf_seq(S))).t=TRUE) &
+      h2 in ModelSP(Inf_seq(S)) &
+      (for t being set st t in Inf_seq(S) holds
+          F(t,Fid(f,Inf_seq(S)),Fid(g,Inf_seq(S))) = TRUE
+                        iff (Fid(h2,Inf_seq(S))).t=TRUE)
+     holds h1 = h2 from MODELC_1:sch 7;
+ hence thesis;
+ end;
+end;
+
+Lm44:
+ ex o being BinOp of ModelSP(Inf_seq(S))
+    st for f,g being set st (f in ModelSP(Inf_seq(S))) &
+                            (g in ModelSP(Inf_seq(S)))
+          holds o.(f,g) = Until_0(f,g,S)
+ proof
+ set M = ModelSP(Inf_seq(S));
+ deffunc O(Element of M,Element of M) = Until_0($1,$2,S);
+ consider o being BinOp of M such that
+    A1:for f,g being Element of M holds o.(f,g) = O(f,g)
+   from BINOP_1:sch 4;
+   for f,g being set st f in M & g in M
+        holds o.(f,g) = Until_0(f,g,S) by A1;
+ hence thesis;
+ end;
+
+Lm45:
+ for o1,o2 being BinOp of ModelSP(Inf_seq(S))
+    st (for f,g being set st (f in ModelSP(Inf_seq(S))) &
+                             (g in ModelSP(Inf_seq(S)))
+                  holds o1.(f,g) = Until_0(f,g,S)) &
+       (for f,g being set st (f in ModelSP(Inf_seq(S))) &
+                             (g in ModelSP(Inf_seq(S)))
+                  holds o2.(f,g) = Until_0(f,g,S))
+   holds o1=o2
+  proof
+  set M = ModelSP(Inf_seq(S));
+  deffunc O(Element of M,Element of M) = Until_0($1,$2,S);
+  A1:for o1,o2 being BinOp of M st
+    (for f,g being Element of M holds o1.(f,g) = O(f,g)) &
+    (for f,g being Element of M holds o2.(f,g) = O(f,g))
+      holds o1=o2 from BINOP_2:sch 2;
+   for o1,o2 being BinOp of M st
+    (for f,g being set st f in M & g in M
+                 holds o1.(f,g) = Until_0(f,g,S)) &
+    (for f,g being set st f in M & g in M
+                 holds o2.(f,g) = Until_0(f,g,S))
+      holds o1=o2
+      proof
+      let o1,o2 be BinOp of M such that
+       A2:(for f,g being set st f in M & g in M
+                         holds o1.(f,g) = Until_0(f,g,S)) and
+       A3:(for f,g being set st f in M & g in M
+                         holds o2.(f,g) = Until_0(f,g,S));
+       A4:for f,g being Element of M holds o1.(f,g) = O(f,g) by A2;
+       for f,g being Element of M holds o2.(f,g) = O(f,g) by A3;
+      hence thesis by A4,A1;
+      end;
+    hence thesis;
+  end;
+
+definition
+let S be non empty set;
+func Until_(S) -> BinOp of ModelSP(Inf_seq(S)) means :Def54:
+  for f,g being set st f in ModelSP(Inf_seq(S)) &
+                       g in ModelSP(Inf_seq(S)) holds
+      it.(f,g) = Until_0(f,g,S);
+existence by Lm44;
+uniqueness by Lm45;
+end;
+
+Lm4401:
+ ex o being BinOp of ModelSP(Inf_seq(S))
+    st for f,g being set st (f in ModelSP(Inf_seq(S))) &
+                            (g in ModelSP(Inf_seq(S)))
+          holds o.(f,g) = (Not_(S)).((And_(S)).((Not_(S)).f,(Not_(S)).g))
+ proof
+ set M = ModelSP(Inf_seq(S));
+ deffunc O(Element of M,Element of M)
+                = (Not_(S)).((And_(S)).((Not_(S)).$1,(Not_(S)).$2));
+ consider o being BinOp of M such that
+    A1:for f,g being Element of M holds o.(f,g) = O(f,g)
+   from BINOP_1:sch 4;
+   for f,g being set st f in M & g in M
+        holds o.(f,g)
+                 = (Not_(S)).((And_(S)).((Not_(S)).f,(Not_(S)).g)) by A1;
+ hence thesis;
+ end;
+
+Lm4501:
+ for o1,o2 being BinOp of ModelSP(Inf_seq(S))
+    st (for f,g being set st (f in ModelSP(Inf_seq(S))) &
+                             (g in ModelSP(Inf_seq(S)))
+          holds o1.(f,g)
+                 = (Not_(S)).((And_(S)).((Not_(S)).f,(Not_(S)).g))) &
+       (for f,g being set st (f in ModelSP(Inf_seq(S))) &
+                             (g in ModelSP(Inf_seq(S)))
+          holds o2.(f,g)
+                 = (Not_(S)).((And_(S)).((Not_(S)).f,(Not_(S)).g)))
+   holds o1=o2
+  proof
+  set M = ModelSP(Inf_seq(S));
+  deffunc O(Element of M,Element of M)
+               = (Not_(S)).((And_(S)).((Not_(S)).$1,(Not_(S)).$2));
+  A1:for o1,o2 being BinOp of M st
+    (for f,g being Element of M holds o1.(f,g) = O(f,g)) &
+    (for f,g being Element of M holds o2.(f,g) = O(f,g))
+      holds o1=o2 from BINOP_2:sch 2;
+   for o1,o2 being BinOp of M st
+    (for f,g being set st f in M & g in M
+            holds o1.(f,g) =
+                   (Not_(S)).((And_(S)).((Not_(S)).f,(Not_(S)).g))) &
+    (for f,g being set st f in M & g in M
+            holds o2.(f,g) =
+                   (Not_(S)).((And_(S)).((Not_(S)).f,(Not_(S)).g)))
+     holds o1=o2
+      proof
+      let o1,o2 be BinOp of M such that
+       A2:(for f,g being set st f in M & g in M
+            holds o1.(f,g) =
+                    (Not_(S)).((And_(S)).((Not_(S)).f,(Not_(S)).g))) and
+       A3:(for f,g being set st f in M & g in M
+            holds o2.(f,g) =
+                    (Not_(S)).((And_(S)).((Not_(S)).f,(Not_(S)).g)));
+       A4:for f,g being Element of M holds o1.(f,g) = O(f,g) by A2;
+       for f,g being Element of M holds o2.(f,g) = O(f,g) by A3;
+      hence thesis by A4,A1;
+      end;
+    hence thesis;
+  end;
+
+Lm4402:
+ ex o being BinOp of ModelSP(Inf_seq(S))
+    st for f,g being set st (f in ModelSP(Inf_seq(S))) &
+                            (g in ModelSP(Inf_seq(S)))
+          holds o.(f,g) =
+                (Not_(S)).((Until_(S)).((Not_(S)).f,(Not_(S)).g))
+ proof
+ set M = ModelSP(Inf_seq(S));
+ deffunc O(Element of M,Element of M)
+                = (Not_(S)).((Until_(S)).((Not_(S)).$1,(Not_(S)).$2));
+ consider o being BinOp of M such that
+    A1:for f,g being Element of M holds o.(f,g) = O(f,g)
+   from BINOP_1:sch 4;
+   for f,g being set st f in M & g in M
+        holds o.(f,g)
+                 = (Not_(S)).((Until_(S)).((Not_(S)).f,(Not_(S)).g)) by A1;
+ hence thesis;
+ end;
+
+Lm4502:
+ for o1,o2 being BinOp of ModelSP(Inf_seq(S))
+    st (for f,g being set st (f in ModelSP(Inf_seq(S))) &
+                             (g in ModelSP(Inf_seq(S)))
+          holds o1.(f,g)
+                 = (Not_(S)).((Until_(S)).((Not_(S)).f,(Not_(S)).g))) &
+       (for f,g being set st (f in ModelSP(Inf_seq(S))) &
+                             (g in ModelSP(Inf_seq(S)))
+          holds o2.(f,g)
+                 = (Not_(S)).((Until_(S)).((Not_(S)).f,(Not_(S)).g)))
+   holds o1=o2
+  proof
+  set M = ModelSP(Inf_seq(S));
+  deffunc O(Element of M,Element of M)
+               = (Not_(S)).((Until_(S)).((Not_(S)).$1,(Not_(S)).$2));
+  A1:for o1,o2 being BinOp of M st
+    (for f,g being Element of M holds o1.(f,g) = O(f,g)) &
+    (for f,g being Element of M holds o2.(f,g) = O(f,g))
+      holds o1=o2 from BINOP_2:sch 2;
+   for o1,o2 being BinOp of M st
+    (for f,g being set st f in M & g in M
+            holds o1.(f,g) =
+                   (Not_(S)).((Until_(S)).((Not_(S)).f,(Not_(S)).g))) &
+    (for f,g being set st f in M & g in M
+            holds o2.(f,g) =
+                   (Not_(S)).((Until_(S)).((Not_(S)).f,(Not_(S)).g)))
+     holds o1=o2
+      proof
+      let o1,o2 be BinOp of M such that
+       A2:(for f,g being set st f in M & g in M
+            holds o1.(f,g) =
+                    (Not_(S)).((Until_(S)).((Not_(S)).f,(Not_(S)).g))) and
+       A3:(for f,g being set st f in M & g in M
+            holds o2.(f,g) =
+                    (Not_(S)).((Until_(S)).((Not_(S)).f,(Not_(S)).g)));
+       A4:for f,g being Element of M holds o1.(f,g) = O(f,g) by A2;
+       for f,g being Element of M holds o2.(f,g) = O(f,g) by A3;
+      hence thesis by A4,A1;
+      end;
+    hence thesis;
+  end;
+
+definition
+let S be non empty set;
+func Or_(S) -> BinOp of ModelSP(Inf_seq(S)) means :Def5401:
+  for f,g being set st f in ModelSP(Inf_seq(S)) &
+                       g in ModelSP(Inf_seq(S)) holds
+      it.(f,g) = (Not_(S)).((And_(S)).((Not_(S)).f,(Not_(S)).g));
+existence by Lm4401;
+uniqueness by Lm4501;
+
+func Release_(S) -> BinOp of ModelSP(Inf_seq(S)) means :Def5402:
+  for f,g being set st f in ModelSP(Inf_seq(S)) &
+                       g in ModelSP(Inf_seq(S)) holds
+      it.(f,g) = (Not_(S)).((Until_(S)).((Not_(S)).f,(Not_(S)).g));
+existence by Lm4402;
+uniqueness by Lm4502;
+end;
+
+::  definition of concrete object of LTL model by ModelSP
+
+definition
+  let S be non empty set;
+  let BASSIGN be non empty Subset of ModelSP(Inf_seq(S));
+  func LTLModel(S,BASSIGN) -> LTLModelStr equals
+        LTLModelStr(#
+                ModelSP(Inf_seq(S)),
+                BASSIGN,
+                And_(S),
+                Or_(S),
+                Not_(S),
+                Next_(S),
+                Until_(S),
+                Release_(S) #);
+  coherence;
+end;
+
+reserve BASSIGN for non empty Subset of ModelSP(Inf_seq(S));
+reserve t for  Element of Inf_seq(S);
+reserve f,g for Assign of LTLModel(S,BASSIGN);
+
+:: definition of correctness of Assign of LTLModel(S,BASSIGN)
+
+definition
+  let S be non empty set;
+  let BASSIGN be non empty Subset of ModelSP(Inf_seq(S));
+  let t be Element of Inf_seq(S);
+  let f be Assign of LTLModel(S,BASSIGN);
+  pred t |= f means
+    :Def59: (Fid(f,Inf_seq(S))).t=TRUE;
+end;
+
+notation
+  let S be non empty set;
+  let BASSIGN be non empty Subset of ModelSP(Inf_seq(S));
+  let t be Element of Inf_seq(S);
+  let f be Assign of LTLModel(S,BASSIGN);
+  antonym t |/= f for t |= f;
+end;
+
+theorem
+  f 'or' g = 'not' (('not' f) '&' ('not' g))  &
+      f 'R' g = 'not' (('not' f) 'U' ('not' g)) by Def5401,Def5402;
+
+theorem Th12:
+  t |= 'not' f iff t |/= f
+     proof
+     set V = LTLModel(S,BASSIGN);
+     set S1 = Inf_seq(S);
+     A1:'not' f = Not_0(f,S) by Def43;
+     thus t |= 'not'(f) implies t |/= f
+       proof
+       assume t |= ('not' f);
+       then (Fid('not' f,S1)).t=TRUE by Def59;
+       then 'not' (Castboolean (Fid(f,S1)).t) = TRUE by A1,Def42;
+       then (Fid(f,S1)).t = FALSE by MODELC_1:def 4;
+       hence thesis by Def59;
+       end;
+       assume t |/= f;
+       then not ((Fid(f,S1)).t =TRUE) by Def59;
+       then not (Castboolean (Fid(f,S1)).t = TRUE) by MODELC_1:def 4;
+       then Castboolean (Fid(f,S1)).t = FALSE by XBOOLEAN:def 3;
+       then 'not' (Castboolean (Fid(f,S1)).t) =TRUE;
+       then (Fid('not'(f),S1)).t =TRUE by Def42,A1;
+       hence thesis by Def59;
+     end;
+
+theorem Th13:
+   t |= f '&' g iff t|=f & t|=g
+     proof
+     set V = LTLModel(S,BASSIGN);
+     set S1 = Inf_seq(S);
+     A1:f '&' g = And_0(f,g,S) by Def51;
+     thus t |= f '&' g implies t|= f & t|= g
+       proof
+       assume t|= f '&' g;
+       then (Fid(And_0(f,g,S),S1)).t=TRUE by A1,Def59;
+       then (Castboolean (Fid(f,S1)).t) '&'
+                    (Castboolean (Fid(g,S1)).t) =TRUE by Def50;
+       then Castboolean (Fid(f,S1)).t =TRUE &
+                    Castboolean (Fid(g,S1)).t =TRUE by XBOOLEAN:101;
+       then (Fid(f,S1)).t =TRUE & (Fid(g,S1)).t=TRUE by MODELC_1:def 4;
+       hence thesis by Def59;
+       end;
+       assume that A3:t|= f and A4: t|= g;
+       (Fid(f,S1)).t=TRUE & (Fid(g,S1)).t=TRUE by A3,A4,Def59;
+       then (Castboolean (Fid(f,S1)).t) '&'
+                   (Castboolean (Fid(g,S1)).t) =TRUE by MODELC_1:def 4;
+       then (Fid(f '&' g,S1)).t=TRUE by A1,Def50;
+       hence thesis by Def59;
+     end;
+
+theorem Th14:
+    t |= 'X' f iff Shift(t,1) |=f
+     proof
+     set V = LTLModel(S,BASSIGN);
+     set S1 = Inf_seq(S);
+     set t1 = Shift(t,1);
+     set t1p = Shift(t,1,S);
+     A1:'X' f = Next_0(f,S) by Def46;
+     thus t |= 'X' f implies t1 |=f
+       proof
+       assume t|= 'X' f;
+       then (Fid(Next_0(f,S),S1)).t=TRUE by A1,Def59;
+       then Next_univ(t,Fid(f,S1))=TRUE by Def45;
+       then Fid(f,S1).t1p =TRUE by Def44;
+       hence thesis by Def59;
+       end;
+       assume t1 |=f;
+       then Fid(f,S1).t1 = TRUE by Def59;
+       then Next_univ(t,Fid(f,S1))=TRUE by Def44;
+       then (Fid('X' f,S1)).t=TRUE by A1,Def45;
+       hence thesis by Def59;
+     end;
+
+theorem Th15:
+      t |= f 'U' g iff
+             ex m being Nat
+               st (for j being Nat st j<m
+                                   holds Shift(t,j) |= f) &
+                  (Shift(t,m) |= g )
+     proof
+     set V = LTLModel(S,BASSIGN);
+     set S1 = Inf_seq(S);
+     A1:f 'U' g = Until_0(f,g,S) by Def54;
+     A2:t |= f 'U' g implies
+          ex m being Nat
+               st (for j being Nat st j<m
+                                   holds Shift(t,j) |= f) &
+                  (Shift(t,m) |= g )
+       proof
+       assume t|= f 'U' g;
+       then (Fid(Until_0(f,g,S),S1)).t=TRUE by A1,Def59;
+       then Until_univ(t,Fid(f,S1),Fid(g,S1),S)=TRUE by Def53;
+       then consider m being Nat such that
+             B1:(for j being Nat st j<m holds
+                   Fid(f,S1).Shift(t,j,S) =TRUE ) and
+             B2: (Fid(g,S1).Shift(t,m,S) = TRUE  ) by Def52;
+        B4:for j being Nat st j<m holds
+                   Shift(t,j) |= f
+           proof
+           let j being Nat such that C1: j<m;
+           set t1 = Shift(t,j);
+           Fid(f,S1).t1 =TRUE by C1,B1;
+           hence thesis by Def59;
+           end;
+        take m;
+        thus thesis by B4,Def59,B2;
+        end;
+      (ex m being Nat
+               st (for j being Nat st j<m
+                                   holds Shift(t,j) |= f) &
+                  (Shift(t,m) |= g ))
+               implies t |= f 'U' g
+       proof
+       assume B1:ex m being Nat
+               st (for j being Nat st j<m
+                                   holds Shift(t,j) |= f) &
+                  (Shift(t,m) |= g );
+       ex m being Nat
+               st (for j being Nat st j<m
+                              holds Fid(f,S1).Shift(t,j,S)=TRUE) &
+                  (Fid(g,S1).Shift(t,m,S) = TRUE )
+          proof
+          consider m being Nat  such that
+               C1: (for j being Nat st j<m
+                                   holds Shift(t,j) |= f) and
+               C2: (Shift(t,m) |= g ) by B1;
+          take m;
+          for j being Nat st j<m
+                                   holds Fid(f,S1).Shift(t,j,S)=TRUE
+            proof
+            let j be Nat such that D1:j<m;
+            set t1 = Shift(t,j,S);
+            Shift(t,j) |= f by D1,C1;
+            hence thesis by Def59;
+            end;
+          hence thesis by C2,Def59;
+          end;
+       then Until_univ(t,Fid(f,S1),Fid(g,S1),S)=TRUE by Def52;
+       then (Fid(f 'U' g,S1)).t=TRUE by A1,Def53;
+       hence thesis by Def59;
+       end;
+     hence thesis by A2;
+     end;
+
+theorem Th16:
+  t |= f 'or' g iff (t|= f or t|= g)
+   proof
+   t |= f 'or' g iff t|= 'not' ('not'(f) '&' 'not'(g)) by Def5401;
+   then t |= f 'or' g iff not (t|= 'not'(f) '&' 'not'(g)) by Th12;
+   then t |= f 'or' g iff not (t|= 'not'(f)) or
+                            not (t|= 'not'(g)) by Th13;
+   hence thesis by Th12;
+   end;
+
+theorem Th17:
+    t |= f 'R' g iff
+          for m being Nat
+             holds ((for j being Nat st j<m
+                           holds Shift(t,j) |= 'not'(f))
+                      implies Shift(t,m) |= g)
+   proof
+A1: (for m being Nat
+             holds ((for j being Nat st j<m
+                           holds Shift(t,j) |= 'not'(f))
+                      implies Shift(t,m) |/= 'not'(g)))
+       implies
+   (for m being Nat
+             holds ((for j being Nat st j<m
+                           holds Shift(t,j) |= 'not'(f))
+                      implies Shift(t,m) |= g))
+   proof
+   assume B1: (for m being Nat
+             holds ((for j being Nat st j<m
+                           holds Shift(t,j) |= 'not'(f))
+                      implies Shift(t,m) |/= 'not'(g)));
+   for m being Nat
+             holds ((for j being Nat st j<m
+                           holds Shift(t,j) |= 'not'(f))
+                      implies Shift(t,m) |= g)
+      proof
+      let m be Nat;
+      (for j being Nat st j<m
+                           holds Shift(t,j) |= 'not'(f))
+                      implies Shift(t,m) |/= 'not'(g) by B1;
+      hence thesis by Th12;
+      end;
+    hence thesis;
+    end;
+A2:(for m being Nat
+             holds ((for j being Nat st j<m
+                           holds Shift(t,j) |= 'not'(f))
+                      implies Shift(t,m) |= g))
+       implies
+   (for m being Nat
+             holds ((for j being Nat st j<m
+                           holds Shift(t,j) |= 'not'(f))
+                      implies Shift(t,m) |/= 'not'(g)))
+      proof
+      assume B1:(for m being Nat
+             holds ((for j being Nat st j<m
+                           holds Shift(t,j) |= 'not'(f))
+                      implies Shift(t,m) |= g));
+      for m being Nat
+             holds ((for j being Nat st j<m
+                           holds Shift(t,j) |= 'not'(f))
+                      implies Shift(t,m) |/= 'not'(g))
+      proof
+      let m be Nat;
+      (for j being Nat st j<m
+                           holds Shift(t,j) |= 'not'(f))
+                      implies Shift(t,m) |= g  by B1;
+      hence thesis by Th12;
+      end;
+   hence thesis;
+   end;
+   t |= f 'R' g iff t|= 'not' ('not'(f) 'U' 'not'(g)) by Def5402;
+   then t |= f 'R' g iff not (t|= 'not'(f) 'U' 'not'(g)) by Th12;
+   hence thesis by Th15,A1,A2;
+   end;
+
+:: definition of correctness of LTL-formula & its basic properties.
+
+definition
+  func AtomicFamily -> non empty set equals
+    bool atomic_LTL;
+  correctness;
+end;
+
+definition
+ let a, t be set;
+ func AtomicFunc(a,t) -> Element of BOOLEAN equals
+ :Def61:  TRUE if (t in Inf_seq(AtomicFamily)) &
+                  (a in (CastSeq(t,AtomicFamily)).0)
+       otherwise FALSE;
+ correctness;
+end;
+
+LemFid:
+  for f1,f2 being set st (f1 in ModelSP(S)) &
+                         (f2 in ModelSP(S))
+             holds Fid(f1,S)=Fid(f2,S) implies f1=f2
+   proof
+   let f1,f2 be set such that C1:f1 in ModelSP(S) and
+                                C2:f2 in ModelSP(S);
+   assume C3:Fid(f1,S)=Fid(f2,S);
+   Fid(f1,S) = f1 by C1,MODELC_1:def 41;
+   hence thesis by C2,MODELC_1:def 41,C3;
+   end;
+
+definition
+ let a be set;
+ func AtomicAsgn(a) ->  Element of ModelSP(Inf_seq(AtomicFamily)) means
+  :Def62:for t being set st t in Inf_seq(AtomicFamily) holds
+          Fid(it,Inf_seq(AtomicFamily)).t = AtomicFunc(a,t);
+ existence
+   proof
+   deffunc F(set) = AtomicFunc(a,$1);
+   A1:for x being set st x in Inf_seq(AtomicFamily)
+        holds F(x) in BOOLEAN;
+   consider IT be Function of Inf_seq(AtomicFamily),BOOLEAN such that
+        A2:for x being set st x in Inf_seq(AtomicFamily) holds IT.x=F(x)
+            from FUNCT_2:sch 2(A1);
+   reconsider IT as Element of Funcs(Inf_seq(AtomicFamily),BOOLEAN)
+                       by FUNCT_2:11;
+   reconsider IT as Element of ModelSP(Inf_seq(AtomicFamily))
+                       by MODELC_1:def 40;
+   take IT;
+   for t being set st t in Inf_seq(AtomicFamily) holds
+          Fid(IT,Inf_seq(AtomicFamily)).t = AtomicFunc(a,t)
+     proof
+     let t be set such that B1: t in Inf_seq(AtomicFamily);
+     reconsider IT as Function of Inf_seq(AtomicFamily),BOOLEAN;
+     Fid(IT,Inf_seq(AtomicFamily)).t = IT.t by MODELC_1:def 41
+                  .= AtomicFunc(a,t) by A2,B1;
+     hence thesis;
+     end;
+   hence thesis;
+   end;
+ uniqueness
+   proof
+   for f1,f2 being Element of ModelSP(Inf_seq(AtomicFamily)) st
+       (for t being set st t in Inf_seq(AtomicFamily) holds
+          Fid(f1,Inf_seq(AtomicFamily)).t = AtomicFunc(a,t)) &
+       (for t being set st t in Inf_seq(AtomicFamily) holds
+          Fid(f2,Inf_seq(AtomicFamily)).t = AtomicFunc(a,t))
+      holds f1=f2
+     proof
+     let f1,f2 being Element of ModelSP(Inf_seq(AtomicFamily)) such that
+       B1:(for t being set st t in Inf_seq(AtomicFamily) holds
+          Fid(f1,Inf_seq(AtomicFamily)).t = AtomicFunc(a,t)) and
+       B2:(for t being set st t in Inf_seq(AtomicFamily) holds
+          Fid(f2,Inf_seq(AtomicFamily)).t = AtomicFunc(a,t));
+     Fid(f1,Inf_seq(AtomicFamily)) = Fid(f2,Inf_seq(AtomicFamily))
+       proof
+       for t being set st t in Inf_seq(AtomicFamily) holds
+         Fid(f1,Inf_seq(AtomicFamily)).t
+                    = Fid(f2,Inf_seq(AtomicFamily)).t
+          proof
+          let t being set such that C1: t in Inf_seq(AtomicFamily);
+          Fid(f1,Inf_seq(AtomicFamily)).t = AtomicFunc(a,t) by B1,C1;
+          hence thesis by B2,C1;
+          end;
+       hence thesis by FUNCT_2:18;
+       end;
+     hence thesis by LemFid;
+     end;
+   hence thesis;
+   end;
+ end;
+
+definition
+  func AtomicBasicAsgn -> non empty Subset of ModelSP(Inf_seq(AtomicFamily))
+     equals
+    {x where x is Element of ModelSP(Inf_seq(AtomicFamily)):
+               ex a being set st x = AtomicAsgn(a) };
+  correctness
+   proof
+   set M = {x where x is Element of ModelSP(Inf_seq(AtomicFamily)):
+               ex a being set st x = AtomicAsgn(a) };
+   set z = AtomicAsgn({});
+   set Y = ModelSP(Inf_seq(AtomicFamily));
+   A1:z in M;
+   M c= Y
+    proof
+      let x be set; assume x in M;
+      then consider y being Element of Y such that
+                      B1:x=y and
+                      ex a being set st y = AtomicAsgn(a);
+      thus thesis by B1;
+    end;
+   hence thesis by A1;
+   end;
+end;
+
+definition
+  func AtomicKai -> Function of
+      atomic_LTL,the BasicAssign of LTLModel(AtomicFamily,AtomicBasicAsgn)
+     means :Def64:
+     for a being set st a in atomic_LTL holds it.a = AtomicAsgn(a);
+   existence
+     proof
+     deffunc F(set) = AtomicAsgn($1);
+     A2:for a being set st a in atomic_LTL
+             holds F(a) in
+                 the BasicAssign of LTLModel(AtomicFamily,AtomicBasicAsgn);
+      consider IT be Function of
+      atomic_LTL,the BasicAssign of LTLModel(AtomicFamily,AtomicBasicAsgn)
+         such that
+            A3:for a being set st a in atomic_LTL holds IT.a=F(a)
+            from FUNCT_2:sch 2(A2);
+     take IT;
+     thus thesis by A3;
+     end;
+   uniqueness
+     proof
+     for f1,f2 being Function of
+      atomic_LTL,the BasicAssign of LTLModel(AtomicFamily,AtomicBasicAsgn)
+       st
+       (for a being set st a in atomic_LTL holds f1.a = AtomicAsgn(a)) &
+       (for a being set st a in atomic_LTL holds f2.a = AtomicAsgn(a))
+      holds f1=f2
+         proof
+         let f1,f2 be Function of
+           atomic_LTL,the BasicAssign of LTLModel(AtomicFamily,AtomicBasicAsgn)
+           such that
+            B1:(for a being set st a in atomic_LTL
+                            holds f1.a = AtomicAsgn(a)) and
+            B2:(for a being set st a in atomic_LTL
+                            holds f2.a = AtomicAsgn(a));
+         for a being set st a in atomic_LTL holds f1.a = f2.a
+           proof
+           let a be set such that C1:a in atomic_LTL;
+           f1.a= AtomicAsgn(a) by B1,C1;
+           hence thesis by B2,C1;
+           end;
+         hence thesis by FUNCT_2:18;
+         end;
+     hence thesis;
+     end;
+ end;
+
+definition
+  let r be Element of Inf_seq(AtomicFamily);
+  let H be LTL-formula;
+  pred r|= H means
+    :Def65: r|= Evaluate(H,AtomicKai);
+end;
+
+notation
+  let r be Element of Inf_seq(AtomicFamily);
+  let H be LTL-formula;
+  antonym r|/= H for r|= H;
+end;
+
+definition
+  let r be Element of Inf_seq(AtomicFamily);
+  let W be Subset of LTL_WFF;
+  pred r|= W means
+    :Def66: for H be LTL-formula st H in W holds r|= H;
+end;
+
+notation
+  let r be Element of Inf_seq(AtomicFamily);
+  let W be Subset of LTL_WFF;
+  antonym r|/= W for r|= W;
+end;
+
+definition
+  let W be Subset of LTL_WFF;
+  func 'X' W -> Subset of LTL_WFF equals
+    {x where x is LTL-formula:ex u being LTL-formula st u in W & x='X' u};
+  correctness
+   proof
+   set X = {x where x is LTL-formula:
+                      ex u being LTL-formula st u in W & x='X' u};
+   X c= LTL_WFF
+   proof
+     let y be set;
+     assume y in X;
+     then consider x being LTL-formula such that
+          A1:y=x and
+          ex u being LTL-formula st u in W & x='X' u;
+     thus y in LTL_WFF by A1,Th1;
+   end;
+   hence thesis;
+   end;
+end;
+
+reserve r for Element of Inf_seq(AtomicFamily);
+theorem
+  H is atomic implies
+               (r |= H iff H in (CastSeq(r,AtomicFamily)).0)
+  proof
+    assume A1:H is atomic;
+    consider f be Function of LTL_WFF,
+               the Assignations of LTLModel(AtomicFamily,AtomicBasicAsgn)
+       such that A2: f is-Evaluation-for AtomicKai &
+                     Evaluate(H,AtomicKai) = f.H by Def32;
+ A3:H in atomic_LTL by A1;
+ A4:Evaluate(H,AtomicKai) = AtomicKai.H by A1,A2,Def26
+                         .= AtomicAsgn(H) by Def64,A3;
+    r |= H iff r|= Evaluate(H,AtomicKai) by Def65;
+    then r |= H iff
+         (Fid(AtomicAsgn(H),Inf_seq(AtomicFamily))).r=TRUE by A4,Def59;
+    then r |= H iff AtomicFunc(H,r) = TRUE by Def62;
+    hence thesis by Def61;
+  end;
+
+theorem Th19:
+  r|= 'not' H iff r|/= H
+  proof
+  r |= 'not' H iff r |= Evaluate('not' H,AtomicKai) by Def65;
+  then r|= 'not' H iff r|= 'not' Evaluate(H,AtomicKai) by Th5;
+  then r|= 'not' H iff r|/= Evaluate(H,AtomicKai) by Th12;
+  hence thesis by Def65;
+  end;
+
+theorem Th20:
+  r|= H1 '&' H2 iff r|= H1 & r|= H2
+  proof
+  r|= H1 '&' H2 iff r|= Evaluate(H1 '&' H2,AtomicKai) by Def65;
+  then r|= H1 '&' H2 iff
+       r|= Evaluate(H1,AtomicKai) '&' Evaluate(H2,AtomicKai) by Th6;
+  then r|= H1 '&' H2 iff
+     r|= Evaluate(H1,AtomicKai) & r|= Evaluate(H2,AtomicKai) by Th13;
+  hence thesis by Def65;
+  end;
+
+theorem Th21:
+   r|= H1 'or' H2 iff r|= H1  or r|= H2
+  proof
+  r|= H1 'or' H2 iff r|= Evaluate(H1 'or' H2,AtomicKai) by Def65;
+  then r|= H1 'or' H2 iff r|= Evaluate(H1,AtomicKai) 'or'
+                                    Evaluate(H2,AtomicKai) by Th7;
+  then r|= H1 'or' H2 iff
+    r|= Evaluate(H1,AtomicKai) or r|= Evaluate(H2,AtomicKai) by Th16;
+  hence thesis by Def65;
+  end;
+
+theorem Th22:
+   r|= 'X' H iff Shift(r,1)|=H
+  proof
+  r |= 'X' H iff r |= Evaluate('X' H,AtomicKai) by Def65;
+  then r|= 'X' H iff r|= 'X' Evaluate(H,AtomicKai) by Th8;
+  then r|= 'X' H iff Shift(r,1)|= Evaluate(H,AtomicKai) by Th14;
+  hence thesis by Def65;
+  end;
+
+theorem Th23:
+   r|= H1 'U' H2  iff
+     ex m being Nat
+               st (for j being Nat st j<m
+                                   holds Shift(r,j) |= H1) &
+                  (Shift(r,m) |= H2 )
+  proof
+  r |= H1 'U' H2 iff r |= Evaluate(H1 'U' H2,AtomicKai) by Def65;
+  then A1:r|= H1 'U' H2 iff
+        r|= Evaluate(H1,AtomicKai) 'U' Evaluate(H2,AtomicKai) by Th9;
+  A2:(ex m being Nat
+          st (for j being Nat st j<m
+                         holds Shift(r,j) |= Evaluate(H1,AtomicKai)) &
+             (Shift(r,m) |= Evaluate(H2,AtomicKai) ))
+      implies
+          (ex m being Nat
+              st (for j being Nat st j<m
+                         holds Shift(r,j) |= H1) &
+                  (Shift(r,m) |= H2))
+    proof
+    assume ex m being Nat
+          st (for j being Nat st j<m
+                         holds Shift(r,j) |= Evaluate(H1,AtomicKai)) &
+             (Shift(r,m) |= Evaluate(H2,AtomicKai) );
+    then consider m be Nat such that
+          B1:(for j being Nat st j<m
+                         holds Shift(r,j) |= Evaluate(H1,AtomicKai)) and
+          B2:(Shift(r,m) |= Evaluate(H2,AtomicKai) );
+    take m;
+    for j being Nat st j<m holds Shift(r,j) |= H1
+      proof
+      let j be Nat such that C1: j<m;
+      Shift(r,j) |= Evaluate(H1,AtomicKai) by B1,C1;
+      hence thesis by Def65;
+      end;
+    hence thesis by B2,Def65;
+    end;
+   (ex m being Nat
+              st (for j being Nat st j<m
+                         holds Shift(r,j) |= H1) &
+                  (Shift(r,m) |= H2))
+       implies
+          (ex m being Nat
+          st (for j being Nat st j<m
+                         holds Shift(r,j) |= Evaluate(H1,AtomicKai)) &
+             (Shift(r,m) |= Evaluate(H2,AtomicKai) ))
+    proof
+    assume ex m being Nat
+              st (for j being Nat st j<m
+                         holds Shift(r,j) |= H1) &
+                  (Shift(r,m) |= H2);
+    then consider m be Nat such that
+          B1:(for j being Nat st j<m
+                         holds Shift(r,j) |= H1)  and
+          B2:(Shift(r,m) |= H2);
+    take m;
+    for j being Nat st j<m
+               holds Shift(r,j) |= Evaluate(H1,AtomicKai)
+      proof
+      let j be Nat such that C1: j<m;
+      Shift(r,j) |= H1 by B1,C1;
+      hence thesis by Def65;
+      end;
+    hence thesis by B2,Def65;
+    end;
+  hence thesis by A1,Th15,A2;
+  end;
+
+theorem
+   r|= H1 'R' H2 iff
+     for m being Nat
+             holds ((for j being Nat st j<m
+                           holds Shift(r,j) |= 'not' H1)
+                      implies Shift(r,m) |= H2)
+  proof
+  r |= H1 'R' H2 iff r |= Evaluate(H1 'R' H2,AtomicKai) by Def65;
+  then A1:r|= H1 'R' H2 iff
+        r|= Evaluate(H1,AtomicKai) 'R' Evaluate(H2,AtomicKai) by Th10;
+  A2: (for m being Nat holds
+          ((for j being Nat st j<m
+                   holds Shift(r,j) |= 'not' Evaluate(H1,AtomicKai))
+                 implies Shift(r,m) |= Evaluate(H2,AtomicKai)) )
+         implies
+      (for m being Nat holds
+          ((for j being Nat st j<m
+                   holds Shift(r,j) |=  'not' H1)
+                 implies Shift(r,m) |= H2) )
+    proof
+    assume B1:for m being Nat holds
+          ((for j being Nat st j<m
+                   holds Shift(r,j) |= 'not' Evaluate(H1,AtomicKai))
+                 implies Shift(r,m) |= Evaluate(H2,AtomicKai));
+    for m being Nat holds
+          ((for j being Nat st j<m
+                   holds Shift(r,j) |=  'not' H1)
+                 implies Shift(r,m) |= H2   )
+      proof
+      let m be Nat;
+      (for j being Nat st j<m
+                   holds Shift(r,j) |=  'not' H1)
+                 implies Shift(r,m) |= H2
+        proof
+        assume D1:for j being Nat st j<m
+                   holds Shift(r,j) |=  'not' H1;
+        for j being Nat st j<m
+                   holds Shift(r,j) |= 'not' Evaluate(H1,AtomicKai)
+          proof
+          let j be Nat such that D101:j<m;
+          Shift(r,j) |=  'not' H1 by D101,D1;
+          then Shift(r,j) |=  Evaluate('not' H1,AtomicKai) by Def65;
+          hence thesis by Th5;
+          end;
+        then Shift(r,m) |= Evaluate(H2,AtomicKai) by B1;
+        hence thesis by Def65;
+        end;
+      hence thesis;
+      end;
+    hence thesis;
+    end;
+   (for m being Nat holds
+          ((for j being Nat st j<m
+                   holds Shift(r,j) |=  'not' H1)
+                 implies Shift(r,m) |= H2))
+         implies
+      (for m being Nat holds
+          ((for j being Nat st j<m
+                   holds Shift(r,j) |= 'not' Evaluate(H1,AtomicKai))
+                 implies Shift(r,m) |= Evaluate(H2,AtomicKai)) )
+    proof
+    assume B1:for m being Nat holds
+          ((for j being Nat st j<m
+                   holds Shift(r,j) |=  'not' H1)
+                 implies Shift(r,m) |= H2);
+    for m being Nat holds
+          ((for j being Nat st j<m
+                   holds Shift(r,j) |= 'not' Evaluate(H1,AtomicKai))
+                 implies Shift(r,m) |= Evaluate(H2,AtomicKai))
+      proof
+      let m be Nat;
+      (for j being Nat st j<m
+                   holds Shift(r,j) |= 'not' Evaluate(H1,AtomicKai))
+                 implies Shift(r,m) |= Evaluate(H2,AtomicKai)
+        proof
+        assume D1:for j being Nat st j<m
+                   holds Shift(r,j) |= 'not' Evaluate(H1,AtomicKai);
+        for j being Nat st j<m
+                   holds Shift(r,j) |=  'not' H1
+          proof
+          let j be Nat such that D101:j<m;
+          Shift(r,j) |=  'not' Evaluate(H1,AtomicKai) by D101,D1;
+          then Shift(r,j) |= Evaluate('not' H1,AtomicKai) by Th5;
+          hence thesis by Def65;
+          end;
+        then Shift(r,m) |= H2 by B1;
+        hence thesis by Def65;
+        end;
+      hence thesis;
+      end;
+    hence thesis;
+    end;
+  hence thesis by A1,Th17,A2;
+  end;
+
+theorem Th25:
+   r|= 'not' (H1 'or' H2)  iff
+     r |=  ('not' H1) '&' ('not' H2)
+  proof
+  r|= 'not' (H1 'or' H2)  iff  r|/= H1 'or' H2 by Th19;
+  then r|= 'not' (H1 'or' H2) iff not (r |= H1 or r |= H2) by Th21;
+  then r|= 'not' (H1 'or' H2)
+                    iff (r |= 'not' H1 & r |= 'not' H2) by Th19;
+  hence thesis by Th20;
+  end;
+
+theorem Th2501:
+   r|= 'not' (H1 '&' H2)  iff
+     r |=  ('not' H1) 'or' ('not' H2)
+  proof
+  r|= 'not' (H1 '&' H2)  iff  r|/= H1 '&' H2 by Th19;
+  then r|= 'not' (H1 '&' H2)
+                      iff not (r |= H1 & r |= H2) by Th20;
+  then r|= 'not' (H1 '&' H2)
+                 iff (r |= 'not' H1 or r |= 'not' H2) by Th19;
+  hence thesis by Th21;
+  end;
+
+theorem Th26:
+   r|= H1 'R' H2  iff
+     r |= 'not' ( ('not' H1) 'U' ('not' H2))
+  proof
+  set H01= Evaluate(H1,AtomicKai);
+  set H02= Evaluate(H2,AtomicKai);
+  set nH1= 'not' H1;
+  set nH2= 'not' H2;
+  A1:'not' H01 = Evaluate(nH1,AtomicKai) by Th5;
+  A2:'not' H02 = Evaluate(nH2,AtomicKai) by Th5;
+  r |= nH1 'U' nH2 iff r |= Evaluate(nH1 'U' nH2,AtomicKai) by Def65;
+  then A3:r |= nH1 'U' nH2 iff r |= 'not' H01 'U' 'not' H02 by Th9,A1,A2;
+
+  r |= H1 'R' H2 iff r |= Evaluate(H1 'R' H2,AtomicKai) by Def65;
+  then r|= H1 'R' H2 iff r|= H01 'R' H02 by Th10;
+  then r|= H1 'R' H2
+       iff r |= 'not' ( ('not' H01) 'U' ('not' H02)) by Def5402;
+  hence thesis by Th12,Th19,A3;
+  end;
+
+theorem
+   r |/= 'not' H iff r |= H by Th19;
+
+theorem Th28:
+   r |= 'X'('not' H)  iff r |='not' ('X' H)
+ proof
+ r |= 'X'('not' H)  iff Shift(r,1)|='not' H by Th22;
+ then r |= 'X'('not' H)  iff Shift(r,1)|/= H by Th19;
+ then r |= 'X'('not' H)  iff not (r|= 'X' H) by Th22;
+ hence thesis by Th19;
+ end;
+
+theorem Th29:
+   r|= H1 'U' H2  iff r|=H2 'or' (H1 '&' ('X' (H1 'U' H2)))
+  proof
+  A1:r|= H1 'U' H2  implies r|=H2 'or' (H1 '&' ('X' (H1 'U' H2)))
+    proof
+    assume r|= H1 'U' H2;
+    then consider m be Nat
+               such that B1: (for j being Nat st j<m
+                                   holds Shift(r,j) |= H1)  and
+                         B2:(Shift(r,m) |= H2 ) by Th23;
+    per cases;
+       suppose m = 0;
+         then r|=H2 by LemShift03,B2;
+         hence thesis by Th21;
+         end;
+       suppose B3:m >0;
+         set G = H1 'U' H2;
+         set k = m-1;
+         set r1= Shift(r,1);
+         reconsider k as Nat by B3,NAT_1:20;
+         B301:Shift(r,0)= r by LemShift03;
+         B302:Shift(r,k+1) = Shift(r1,k) by LemShift04;
+         B4:r|=H1 by B1,B3,B301;
+         B5:for j being Nat st j<k
+                                   holds Shift(r1,j) |= H1
+           proof
+           let j be Nat such that C1: j<k;
+           C2:Shift(r,j+1) = Shift(r1,j) by LemShift04;
+           j+1<k+1 by C1,XREAL_1:10;
+           hence thesis by B1,C2;
+           end;
+         r1|= H1 'U' H2 by B302,B2,B5,Th23;
+         then r |= 'X' (H1 'U' H2) by Th22;
+         then r |= H1 '&' ('X' (H1 'U' H2) ) by B4,Th20;
+         hence thesis by Th21;
+         end;
+      end;
+  r|=H2 'or' (H1 '&' ('X' (H1 'U' H2))) implies r|= H1 'U' H2
+    proof
+    assume A1:r|=H2 'or' (H1 '&' ('X' (H1 'U' H2)));
+    now per cases by A1,Th21;
+      suppose B1:r|=H2;
+        ex m being Nat
+               st (for j being Nat st j<m
+                                   holds Shift(r,j) |= H1) &
+                  (Shift(r,m) |= H2 )
+          proof
+          take 0;
+          thus thesis by B1,LemShift03;
+          end;
+        hence thesis by Th23;
+        end;
+      suppose r|=H1 '&' ('X' (H1 'U' H2));
+        then B1:r|=H1 & r|='X' (H1 'U' H2) by Th20;
+        then B2:Shift(r,1) |= H1 'U' H2 by Th22;
+        set r1 = Shift(r,1);
+        consider m be Nat
+               such that B3: (for j being Nat st j<m
+                                   holds Shift(r1,j) |= H1)  and
+                  B4:(Shift(r1,m) |= H2 ) by B2,Th23;
+        set m1= m+1;
+        B5:(for j being Nat st j<m1
+                                   holds Shift(r,j) |= H1)
+          proof
+          let j be Nat such that C1: j<m1;
+          now per cases;
+            suppose j=0;
+              hence thesis by LemShift03,B1;
+              end;
+            suppose C3:j>0;
+              set j1= j-1;
+              reconsider j1 as Nat by C3,NAT_1:20;
+              j-1<m1-1 by C1, XREAL_1:16;
+              then Shift(r1,j1) |= H1 by B3;
+              then Shift(r,j1+1) |= H1 by LemShift04;
+              hence thesis;
+              end;
+            end;
+          hence thesis;
+          end;
+        Shift(r,m1) |= H2 by B4,LemShift04;
+        hence thesis by Th23,B5;
+        end;
+    end;
+    hence thesis;
+    end;
+  hence thesis by A1;
+  end;
+
+theorem
+   r|= H1 'R' H2  iff r|=(H1 '&' H2) 'or' (H2 '&' ('X' (H1 'R' H2)))
+  proof
+  set nH1= 'not' H1;
+  set nH2= 'not' H2;
+  r|= H1 'R' H2  iff r |= 'not' ( nH1 'U' nH2) by Th26;
+  then r|= H1 'R' H2  iff r |/=  nH1 'U' nH2 by Th19;
+  then r|= H1 'R' H2
+        iff r |/= nH2 'or' (nH1 '&' ('X' (nH1 'U' nH2))) by Th29;
+  then r|= H1 'R' H2
+        iff r |= 'not'( nH2 'or' (nH1 '&' ('X' (nH1 'U' nH2))) ) by Th19;
+  then r|= H1 'R' H2
+    iff r |= 'not'(nH2) '&' ('not'(nH1 '&' ('X' (nH1 'U' nH2)))) by Th25;
+  then r|= H1 'R' H2
+    iff r |= 'not'(nH2)  & r |= 'not'(nH1 '&' ('X' (nH1 'U' nH2)))
+                                                    by Th20;
+  then r|= H1 'R' H2
+    iff r |/= nH2  & (r |= 'not'(nH1) 'or' ('not'('X' (nH1 'U' nH2))))
+                                               by Th19,Th2501;
+  then r|= H1 'R' H2
+        iff r |= H2
+               & ( r |= 'not'(nH1) or r |='not'('X' (nH1 'U' nH2)))
+                                                by Th19,Th21;
+  then r|= H1 'R' H2
+   iff r |= H2  & ( r |/= nH1 or r |='X' ('not'(nH1 'U' nH2)))
+                                                 by Th19,Th28;
+  then r|= H1 'R' H2
+    iff r |= H2  & ( r |/= nH1 or Shift(r,1) |='not'(nH1 'U' nH2))
+                                                 by Th22;
+  then r|= H1 'R' H2
+    iff r |= H2  & ( r |= H1 or Shift(r,1)|=H1 'R' H2 ) by Th19,Th26;
+  then r|= H1 'R' H2
+    iff r |= H2  & ( r |= H1 or r |='X' (H1 'R' H2)) by Th22;
+  then r|= H1 'R' H2
+    iff (r |= H1 '&' H2) or (r |= H2 '&' 'X' (H1 'R' H2)) by Th20;
+  hence thesis by Th21;
+  end;
+
+reserve W for Subset of LTL_WFF;
+
+theorem
+  r |= 'X' W iff Shift(r,1) |=W
+  proof
+  A1:r |= 'X' W implies Shift(r,1) |=W
+    proof
+    assume B1:r |= 'X' W;
+    for H be LTL-formula st H in  W holds Shift(r,1) |= H
+      proof
+      let H being LTL-formula;
+      assume C1:H in W;
+      set u = 'X' H;
+      u in 'X' W by C1;
+      then r |= u by B1,Def66;
+      hence thesis by Th22;
+      end;
+    hence thesis by Def66;
+    end;
+  Shift(r,1) |=W implies r |= 'X' W
+    proof
+    assume B1:Shift(r,1) |=W;
+    B2:for u be LTL-formula st u in W holds r|= 'X' u
+      proof
+      let u be LTL-formula such that C1: u in W;
+      Shift(r,1)|= u by B1,Def66,C1;
+      hence thesis by Th22;
+      end;
+    for H be LTL-formula st H in 'X' W holds r |= H
+      proof
+      let H being LTL-formula;
+      assume H in 'X' W;
+      then consider x being LTL-formula
+        such that C1:H = x and
+                  C2: ex u being LTL-formula st u in W & x='X' u;
+      consider u being LTL-formula such that C3:u in W & x='X' u by C2;
+      thus thesis by C1,B2,C3;
+      end;
+    hence thesis by Def66;
+    end;
+  hence thesis by A1;
+  end;
+
+:: theorems for external articles
+
+theorem
+  (H is atomic implies
+    (not H is negative) & (not H is conjunctive) & (not H is disjunctive) &
+    (not H is next) & (not H is Until) & (not H is Release))
+  &
+ (H is negative implies
+    (not H is atomic) & (not H is conjunctive) & (not H is disjunctive) &
+    (not H is next) & (not H is Until) & (not H is Release))
+  &
+ (H is conjunctive implies
+    (not H is atomic) & (not H is negative) & (not H is disjunctive) &
+    (not H is next) & (not H is Until) & (not H is Release))
+  &
+ (H is disjunctive implies
+    (not H is atomic) & (not H is negative) & (not H is conjunctive) &
+    (not H is next) & (not H is Until) & (not H is Release))
+  &
+ (H is next implies
+    (not H is atomic) & (not H is negative) & (not H is conjunctive) &
+    (not H is disjunctive) & (not H is Until) & (not H is Release))
+  &
+ (H is Until implies
+    (not H is atomic) & (not H is negative) & (not H is conjunctive) &
+    (not H is disjunctive) & (not H is next) & (not H is Release))
+  &
+ (H is Release implies
+    (not H is atomic) & (not H is negative) & (not H is conjunctive) &
+    (not H is disjunctive) & (not H is next) & (not H is Until))
+  by Lm15,Lm16,Lm1601,Lm17,Lm18,Lm1801;
+
+theorem
+for t being Element of Inf_seq(S) holds Shift(t,0)=t by LemShift03;
+
+theorem
+  for seq being Element of Inf_seq(S) holds
+      Shift(Shift(seq,k),n) = Shift(seq,n+k) by LemShift04;
+
+theorem
+  for seq being sequence of S
+        holds CastSeq(CastSeq(seq),S) = seq by DefCasetSeq2;
+
+theorem
+  for seq being Element of Inf_seq(S)
+        holds CastSeq(CastSeq(seq,S)) = seq by DefCasetSeq2;
+
+theorem
+  (H in W & 'not' H in W) implies r |/=W
+  proof
+  assume B1:H in W & 'not' H in W;
+  now assume r |=W;
+    then r |= H & r |='not' H by B1,Def66;
+    hence contradiction by Th19;
+    end;
+  hence thesis;
+  end;

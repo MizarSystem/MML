@@ -12,7 +12,7 @@
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XXREAL_0"/>
 </Signature>
-<RCluster>
+<RCluster aid="XXREAL_0" nr="1">
 <ArgTypes/>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -21,7 +21,7 @@
 <Adjective nr="15"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="XXREAL_0" nr="2">
 <ArgTypes/>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -31,7 +31,7 @@
 <Adjective nr="16"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="XXREAL_0" nr="3">
 <ArgTypes/>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -41,7 +41,7 @@
 <Adjective nr="17"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="XXREAL_0" nr="4">
 <ArgTypes/>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -51,35 +51,35 @@
 <Adjective nr="15"/>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="XXREAL_0" nr="1">
 <ArgTypes/>
 <Func kind="K" nr="49"/>
 <Cluster>
 <Adjective nr="15"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="XXREAL_0" nr="2">
 <ArgTypes/>
 <Func kind="K" nr="50"/>
 <Cluster>
 <Adjective nr="15"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="XXREAL_0" nr="3">
 <ArgTypes/>
 <Func kind="K" nr="49"/>
 <Cluster>
 <Adjective nr="16"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="XXREAL_0" nr="4">
 <ArgTypes/>
 <Func kind="K" nr="50"/>
 <Cluster>
 <Adjective nr="17"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="XXREAL_0" nr="5">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -100,7 +100,7 @@
 <Adjective nr="15"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="XXREAL_0" nr="6">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -121,7 +121,7 @@
 <Adjective nr="15"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="XXREAL_0" nr="7">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -154,7 +154,7 @@
 <Adjective nr="14"/>
 </Cluster>
 </FCluster>
-<CCluster>
+<CCluster aid="XXREAL_0" nr="1">
 <ArgTypes/>
 <Cluster/>
 <Typ kind="M" nr="2">
@@ -165,7 +165,7 @@
 <Adjective nr="15"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="XXREAL_0" nr="2">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="14"/>
@@ -177,7 +177,7 @@
 <Adjective nr="15"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="XXREAL_0" nr="3">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="15"/>
@@ -192,7 +192,7 @@
 <Adjective nr="17" value="false"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="XXREAL_0" nr="4">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="1" value="false"/>
@@ -207,7 +207,7 @@
 <Adjective nr="16"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="XXREAL_0" nr="5">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="15"/>
@@ -222,7 +222,7 @@
 <Adjective nr="16" value="false"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="XXREAL_0" nr="6">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="1" value="false"/>
@@ -237,7 +237,7 @@
 <Adjective nr="17"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="XXREAL_0" nr="7">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="1"/>
@@ -252,7 +252,7 @@
 <Adjective nr="17" value="false"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="XXREAL_0" nr="8">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="15"/>

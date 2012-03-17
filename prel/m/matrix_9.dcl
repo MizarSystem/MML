@@ -30,7 +30,7 @@
 <ArticleID name="VECTSP_1"/>
 <ArticleID name="MATRIX_2"/>
 </Signature>
-<RCluster>
+<RCluster aid="MATRIX_9" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -51,7 +51,7 @@
 <Adjective nr="25"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="MATRIX_9" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -84,7 +84,7 @@
 <Adjective nr="29"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="MATRIX_9" nr="3">
 <ArgTypes/>
 <Typ kind="M" nr="4">
 <Cluster/>
@@ -138,7 +138,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="MATRIX_9" nr="4">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -189,7 +189,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="MATRIX_9" nr="5">
 <ArgTypes/>
 <Typ kind="M" nr="4">
 <Cluster/>
@@ -243,7 +243,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="MATRIX_9" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>

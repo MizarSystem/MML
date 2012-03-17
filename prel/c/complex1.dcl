@@ -14,7 +14,7 @@
 <ArticleID name="XREAL_0"/>
 <ArticleID name="COMPLEX1"/>
 </Signature>
-<FCluster>
+<FCluster aid="COMPLEX1" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -29,7 +29,7 @@
 <Adjective nr="16"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="COMPLEX1" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -44,14 +44,14 @@
 <Adjective nr="16"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="COMPLEX1" nr="3">
 <ArgTypes/>
 <Func kind="K" nr="18"/>
 <Cluster>
 <Adjective nr="7"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="COMPLEX1" nr="4">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>

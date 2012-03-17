@@ -30,7 +30,7 @@
 <ArticleID name="CLVECT_1"/>
 <ArticleID name="CONVEX4"/>
 </Signature>
-<RCluster>
+<RCluster aid="CONVEX4" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="12">
 <Cluster>
@@ -53,7 +53,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="CONVEX4" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="12">
 <Cluster>
@@ -76,7 +76,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="CONVEX4" nr="3">
 <ArgTypes>
 <Typ kind="G" nr="12">
 <Cluster>
@@ -99,7 +99,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="CONVEX4" nr="4">
 <ArgTypes>
 <Typ kind="G" nr="12">
 <Cluster>
@@ -122,7 +122,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="CONVEX4" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
@@ -142,7 +142,7 @@
 <Adjective nr="43"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="CONVEX4" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
@@ -160,7 +160,7 @@
 <Adjective nr="7"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="CONVEX4" nr="3">
 <ArgTypes>
 <Typ kind="G" nr="12">
 <Cluster>
@@ -175,7 +175,7 @@
 <Adjective nr="7" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="CONVEX4" nr="4">
 <ArgTypes>
 <Typ kind="G" nr="12">
 <Cluster>
@@ -196,7 +196,7 @@
 <Adjective nr="94"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="CONVEX4" nr="5">
 <ArgTypes>
 <Typ kind="G" nr="12">
 <Cluster>
@@ -221,7 +221,7 @@
 <Adjective nr="7" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="CONVEX4" nr="6">
 <ArgTypes>
 <Typ kind="G" nr="12">
 <Cluster>
@@ -238,7 +238,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="CONVEX4" nr="7">
 <ArgTypes>
 <Typ kind="G" nr="12">
 <Cluster>

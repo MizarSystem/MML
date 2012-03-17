@@ -34,7 +34,7 @@
 <ArticleID name="GRAPH_1"/>
 <ArticleID name="JGRAPH_1"/>
 </Signature>
-<FCluster>
+<FCluster aid="JGRAPH_1" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>

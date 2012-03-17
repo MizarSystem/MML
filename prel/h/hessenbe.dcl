@@ -22,7 +22,7 @@
 <ArticleID name="COLLSP"/>
 <ArticleID name="ANPROJ_2"/>
 </Signature>
-<CCluster>
+<CCluster aid="HESSENBE" nr="1">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="23" value="false"/>

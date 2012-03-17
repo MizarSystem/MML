@@ -9,11 +9,11 @@
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="ORDINAL1"/>
-<ArticleID name="FINSET_1"/>
-<ArticleID name="CARD_1"/>
 <ArticleID name="RELSET_1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
+<ArticleID name="FINSET_1"/>
+<ArticleID name="CARD_1"/>
 <ArticleID name="ENUMSET1"/>
 <ArticleID name="DOMAIN_1"/>
 <ArticleID name="REALSET1"/>
@@ -24,7 +24,7 @@
 <ArticleID name="RELAT_2"/>
 <ArticleID name="NECKLACE"/>
 </Signature>
-<RCluster>
+<RCluster aid="NECKLACE" nr="1">
 <ArgTypes/>
 <Typ kind="G" nr="5">
 <Cluster/>
@@ -34,7 +34,7 @@
 <Adjective nr="49"/>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="NECKLACE" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -49,7 +49,7 @@
 <Adjective nr="5"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="NECKLACE" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -65,7 +65,7 @@
 <Adjective nr="22"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="NECKLACE" nr="3">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster/>
@@ -79,7 +79,7 @@
 <Adjective nr="49"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="NECKLACE" nr="4">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
@@ -94,7 +94,7 @@
 <Adjective nr="43"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="NECKLACE" nr="5">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
@@ -110,7 +110,7 @@
 <Adjective nr="35"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="NECKLACE" nr="6">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -126,7 +126,7 @@
 <Adjective nr="49"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="NECKLACE" nr="7">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -142,7 +142,7 @@
 <Adjective nr="51"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="NECKLACE" nr="8">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -159,7 +159,7 @@
 <Adjective nr="35"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="NECKLACE" nr="9">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -173,10 +173,10 @@
 </Func>
 </Func>
 <Cluster>
-<Adjective nr="15"/>
+<Adjective nr="18"/>
 </Cluster>
 </FCluster>
-<CCluster>
+<CCluster aid="NECKLACE" nr="1">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="14"/>
@@ -185,10 +185,10 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="17"/>
+<Adjective nr="20"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="NECKLACE" nr="2">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="1"/>

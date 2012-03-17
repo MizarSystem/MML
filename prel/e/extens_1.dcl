@@ -35,7 +35,7 @@
 <ArticleID name="DTCONSTR"/>
 <ArticleID name="MSAFREE"/>
 </Signature>
-<RCluster>
+<RCluster aid="EXTENS_1" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>

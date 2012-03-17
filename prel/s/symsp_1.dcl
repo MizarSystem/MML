@@ -27,7 +27,7 @@
 <ArticleID name="ORDERS_2"/>
 <ArticleID name="SYMSP_1"/>
 </Signature>
-<RCluster>
+<RCluster aid="SYMSP_1" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="10">
 <Cluster>
@@ -55,7 +55,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="SYMSP_1" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="10">
 <Cluster>
@@ -81,7 +81,7 @@
 <Adjective nr="25" value="false"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="SYMSP_1" nr="3">
 <ArgTypes>
 <Typ kind="G" nr="10">
 <Cluster>
@@ -111,7 +111,7 @@
 <Adjective nr="72"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="SYMSP_1" nr="4">
 <ArgTypes>
 <Typ kind="G" nr="10">
 <Cluster>
@@ -150,7 +150,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="SYMSP_1" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="10">
 <Cluster>

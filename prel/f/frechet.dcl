@@ -31,7 +31,7 @@
 <ArticleID name="YELLOW_8"/>
 <ArticleID name="FRECHET"/>
 </Signature>
-<FCluster>
+<FCluster aid="FRECHET" nr="1">
 <ArgTypes/>
 <Func kind="K" nr="189"/>
 <Cluster>
@@ -40,7 +40,7 @@
 <Adjective nr="68"/>
 </Cluster>
 </FCluster>
-<CCluster>
+<CCluster aid="FRECHET" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
@@ -56,7 +56,7 @@
 </Typ>
 </ArgTypes>
 <Cluster/>
-<Typ kind="M" nr="14">
+<Typ kind="M" nr="13">
 <Cluster/>
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
@@ -65,7 +65,7 @@
 <Adjective nr="1" value="false"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="FRECHET" nr="2">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="20" value="false"/>
@@ -81,7 +81,7 @@
 <Adjective nr="70"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="FRECHET" nr="3">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="20" value="false"/>

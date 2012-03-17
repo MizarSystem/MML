@@ -25,14 +25,14 @@
 <ArticleID name="RSSPACE"/>
 <ArticleID name="RSSPACE3"/>
 </Signature>
-<FCluster>
+<FCluster aid="RSSPACE3" nr="1">
 <ArgTypes/>
 <Func kind="K" nr="166"/>
 <Cluster>
 <Adjective nr="7" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="RSSPACE3" nr="2">
 <ArgTypes/>
 <Func kind="K" nr="166"/>
 <Cluster>
@@ -41,7 +41,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="RSSPACE3" nr="3">
 <ArgTypes/>
 <Func kind="G" nr="11">
 <Func kind="K" nr="166"/>
@@ -67,7 +67,7 @@
 <Adjective nr="73"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="RSSPACE3" nr="4">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -136,7 +136,7 @@
 <Adjective nr="77"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="RSSPACE3" nr="5">
 <ArgTypes/>
 <Func kind="K" nr="168"/>
 <Cluster>

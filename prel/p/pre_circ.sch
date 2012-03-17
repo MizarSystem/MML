@@ -21,8 +21,6 @@
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="FINSEQ_2"/>
 <ArticleID name="PBOOLE"/>
-<ArticleID name="VALUED_0"/>
-<ArticleID name="SEQ_1"/>
 </Signature>
 <Scheme>
 <ArgTypes>
@@ -163,7 +161,7 @@
 <Not>
 <And>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="156">
+<Func kind="K" nr="97">
 <Func kind="F" nr="1"/>
 <Var nr="1"/>
 <Func kind="K" nr="23"/>
@@ -177,7 +175,7 @@
 </Cluster>
 </Typ>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="156">
+<Func kind="K" nr="97">
 <Func kind="F" nr="1"/>
 <Var nr="1"/>
 <Func kind="K" nr="92">
@@ -187,7 +185,7 @@
 </Func>
 <Func kind="F" nr="3">
 <Var nr="2"/>
-<Func kind="K" nr="156">
+<Func kind="K" nr="97">
 <Func kind="F" nr="1"/>
 <Var nr="1"/>
 <Var nr="2"/>
@@ -226,7 +224,7 @@
 <Not>
 <And>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="156">
+<Func kind="K" nr="97">
 <Func kind="F" nr="1"/>
 <Var nr="1"/>
 <Func kind="K" nr="23"/>
@@ -240,7 +238,7 @@
 </Cluster>
 </Typ>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="156">
+<Func kind="K" nr="97">
 <Func kind="F" nr="1"/>
 <Var nr="1"/>
 <Func kind="K" nr="92">
@@ -250,7 +248,7 @@
 </Func>
 <Func kind="F" nr="3">
 <Var nr="3"/>
-<Func kind="K" nr="156">
+<Func kind="K" nr="97">
 <Func kind="F" nr="1"/>
 <Var nr="1"/>
 <Var nr="3"/>
@@ -259,7 +257,7 @@
 </Pred>
 </For>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="156">
+<Func kind="K" nr="97">
 <Func kind="F" nr="1"/>
 <Var nr="2"/>
 <Func kind="K" nr="23"/>
@@ -273,7 +271,7 @@
 </Cluster>
 </Typ>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="156">
+<Func kind="K" nr="97">
 <Func kind="F" nr="1"/>
 <Var nr="2"/>
 <Func kind="K" nr="92">
@@ -283,7 +281,7 @@
 </Func>
 <Func kind="F" nr="3">
 <Var nr="3"/>
-<Func kind="K" nr="156">
+<Func kind="K" nr="97">
 <Func kind="F" nr="1"/>
 <Var nr="2"/>
 <Var nr="3"/>

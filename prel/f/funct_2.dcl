@@ -14,7 +14,7 @@
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 </Signature>
-<RCluster>
+<RCluster aid="FUNCT_2" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -37,7 +37,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="FUNCT_2" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -61,7 +61,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="FUNCT_2" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -80,7 +80,7 @@
 <Adjective nr="15" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="FUNCT_2" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -94,7 +94,7 @@
 <Adjective nr="15" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="FUNCT_2" nr="3">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -141,7 +141,7 @@
 <LocusVar nr="1"/>
 </Typ>
 </FCluster>
-<FCluster>
+<FCluster aid="FUNCT_2" nr="4">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -188,7 +188,7 @@
 <LocusVar nr="1"/>
 </Typ>
 </FCluster>
-<FCluster>
+<FCluster aid="FUNCT_2" nr="5">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -251,7 +251,7 @@
 <LocusVar nr="1"/>
 </Typ>
 </FCluster>
-<FCluster>
+<FCluster aid="FUNCT_2" nr="6">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -306,7 +306,7 @@
 <LocusVar nr="3"/>
 </Typ>
 </FCluster>
-<CCluster>
+<CCluster aid="FUNCT_2" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -335,7 +335,7 @@
 </Adjective>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="FUNCT_2" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -373,7 +373,7 @@
 </Adjective>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="FUNCT_2" nr="3">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -411,7 +411,7 @@
 </Adjective>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="FUNCT_2" nr="4">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -446,7 +446,7 @@
 </Adjective>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="FUNCT_2" nr="5">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -477,7 +477,7 @@
 </Adjective>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="FUNCT_2" nr="6">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>

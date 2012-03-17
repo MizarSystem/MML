@@ -20,7 +20,7 @@
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="SGRAPH1"/>
 </Signature>
-<RCluster>
+<RCluster aid="SGRAPH1" nr="1">
 <ArgTypes/>
 <Typ kind="G" nr="5">
 <Cluster/>
@@ -29,7 +29,7 @@
 <Adjective nr="33"/>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="SGRAPH1" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -50,7 +50,7 @@
 <Adjective nr="18"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="SGRAPH1" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -63,7 +63,7 @@
 <Adjective nr="14" value="false"/>
 </Cluster>
 </FCluster>
-<CCluster>
+<CCluster aid="SGRAPH1" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>

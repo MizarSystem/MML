@@ -34,7 +34,7 @@
 <ArticleID name="HAHNBAN"/>
 <ArticleID name="HAHNBAN1"/>
 </Signature>
-<RCluster>
+<RCluster aid="HAHNBAN1" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="10">
 <Cluster>
@@ -86,7 +86,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="HAHNBAN1" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="1">
 <Cluster/>
@@ -124,7 +124,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="HAHNBAN1" nr="3">
 <ArgTypes>
 <Typ kind="G" nr="12">
 <Cluster>
@@ -161,7 +161,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="HAHNBAN1" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
@@ -196,7 +196,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="HAHNBAN1" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="10">
 <Cluster>
@@ -234,7 +234,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="HAHNBAN1" nr="3">
 <ArgTypes>
 <Typ kind="G" nr="2">
 <Cluster>
@@ -268,7 +268,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="HAHNBAN1" nr="4">
 <ArgTypes>
 <Typ kind="G" nr="10">
 <Cluster>
@@ -355,7 +355,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="HAHNBAN1" nr="5">
 <ArgTypes>
 <Typ kind="G" nr="10">
 <Cluster>
@@ -418,7 +418,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="HAHNBAN1" nr="6">
 <ArgTypes>
 <Typ kind="G" nr="10">
 <Cluster>
@@ -487,7 +487,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="HAHNBAN1" nr="7">
 <ArgTypes>
 <Typ kind="G" nr="10">
 <Cluster>
@@ -573,7 +573,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="HAHNBAN1" nr="8">
 <ArgTypes>
 <Typ kind="G" nr="10">
 <Cluster>
@@ -636,7 +636,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="HAHNBAN1" nr="9">
 <ArgTypes>
 <Typ kind="G" nr="10">
 <Cluster>
@@ -707,7 +707,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="HAHNBAN1" nr="10">
 <ArgTypes>
 <Typ kind="G" nr="10">
 <Cluster>
@@ -740,7 +740,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="HAHNBAN1" nr="11">
 <ArgTypes>
 <Typ kind="G" nr="10">
 <Cluster>
@@ -773,7 +773,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="HAHNBAN1" nr="12">
 <ArgTypes>
 <Typ kind="G" nr="10">
 <Cluster>
@@ -806,7 +806,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="HAHNBAN1" nr="13">
 <ArgTypes>
 <Typ kind="G" nr="10">
 <Cluster>
@@ -839,7 +839,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="HAHNBAN1" nr="14">
 <ArgTypes>
 <Typ kind="G" nr="10">
 <Cluster>
@@ -875,7 +875,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="HAHNBAN1" nr="15">
 <ArgTypes>
 <Typ kind="G" nr="1">
 <Cluster/>
@@ -905,7 +905,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="HAHNBAN1" nr="16">
 <ArgTypes>
 <Typ kind="G" nr="1">
 <Cluster/>
@@ -935,7 +935,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="HAHNBAN1" nr="17">
 <ArgTypes>
 <Typ kind="G" nr="12">
 <Cluster>
@@ -961,7 +961,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="HAHNBAN1" nr="18">
 <ArgTypes>
 <Typ kind="G" nr="12">
 <Cluster>
@@ -987,7 +987,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="HAHNBAN1" nr="19">
 <ArgTypes>
 <Typ kind="G" nr="12">
 <Cluster>
@@ -1004,7 +1004,7 @@
 <Adjective nr="74"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="HAHNBAN1" nr="20">
 <ArgTypes>
 <Typ kind="G" nr="12">
 <Cluster>
@@ -1022,7 +1022,7 @@
 <Adjective nr="75"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="HAHNBAN1" nr="21">
 <ArgTypes>
 <Typ kind="G" nr="12">
 <Cluster>
@@ -1040,7 +1040,7 @@
 <Adjective nr="76"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="HAHNBAN1" nr="22">
 <ArgTypes>
 <Typ kind="G" nr="12">
 <Cluster>
@@ -1058,7 +1058,7 @@
 <Adjective nr="77"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="HAHNBAN1" nr="23">
 <ArgTypes>
 <Typ kind="G" nr="12">
 <Cluster>
@@ -1076,7 +1076,7 @@
 <Adjective nr="74"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="HAHNBAN1" nr="24">
 <ArgTypes>
 <Typ kind="G" nr="12">
 <Cluster>
@@ -1096,7 +1096,7 @@
 <Adjective nr="78"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="HAHNBAN1" nr="25">
 <ArgTypes>
 <Typ kind="G" nr="12">
 <Cluster>
@@ -1154,7 +1154,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="HAHNBAN1" nr="26">
 <ArgTypes>
 <Typ kind="G" nr="12">
 <Cluster>
@@ -1210,7 +1210,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="HAHNBAN1" nr="27">
 <ArgTypes>
 <Typ kind="G" nr="12">
 <Cluster>
@@ -1267,7 +1267,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="HAHNBAN1" nr="28">
 <ArgTypes>
 <Typ kind="G" nr="12">
 <Cluster>
@@ -1322,7 +1322,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<CCluster>
+<CCluster aid="HAHNBAN1" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="10">
 <Cluster>
@@ -1390,7 +1390,7 @@
 </Adjective>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="HAHNBAN1" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="1">
 <Cluster/>
@@ -1436,7 +1436,7 @@
 </Adjective>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="HAHNBAN1" nr="3">
 <ArgTypes>
 <Typ kind="G" nr="12">
 <Cluster>

@@ -11,8 +11,8 @@
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XREAL_0"/>
-<ArticleID name="MCART_1"/>
 <ArticleID name="RELSET_1"/>
+<ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="BINOP_1"/>
@@ -22,7 +22,7 @@
 <ArticleID name="PARTFUN1"/>
 <ArticleID name="COMPL_SP"/>
 </Signature>
-<RCluster>
+<RCluster aid="COMPL_SP" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
@@ -66,7 +66,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="COMPL_SP" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster/>
@@ -87,7 +87,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="COMPL_SP" nr="3">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster/>
@@ -108,7 +108,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="COMPL_SP" nr="4">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
@@ -131,7 +131,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="COMPL_SP" nr="5">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
@@ -154,7 +154,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="COMPL_SP" nr="6">
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
@@ -196,7 +196,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="COMPL_SP" nr="7">
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
@@ -238,7 +238,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="COMPL_SP" nr="8">
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
@@ -282,7 +282,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="COMPL_SP" nr="9">
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
@@ -326,7 +326,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="COMPL_SP" nr="10">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
@@ -376,7 +376,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="COMPL_SP" nr="11">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
@@ -426,7 +426,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="COMPL_SP" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster/>
@@ -451,7 +451,7 @@
 <Adjective nr="31"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="COMPL_SP" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
@@ -478,7 +478,7 @@
 <Adjective nr="36"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="COMPL_SP" nr="3">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
@@ -505,7 +505,7 @@
 <Adjective nr="38"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="COMPL_SP" nr="4">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
@@ -534,7 +534,7 @@
 <Adjective nr="39"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="COMPL_SP" nr="5">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>

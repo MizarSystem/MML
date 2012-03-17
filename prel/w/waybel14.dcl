@@ -45,7 +45,7 @@
 <ArticleID name="WAYBEL_9"/>
 <ArticleID name="WAYBEL11"/>
 </Signature>
-<FCluster>
+<FCluster aid="WAYBEL14" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
@@ -62,7 +62,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="262">
+<Func kind="K" nr="263">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -72,7 +72,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="WAYBEL14" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
@@ -91,7 +91,7 @@
 <Adjective nr="95"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="WAYBEL14" nr="3">
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
@@ -104,7 +104,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="307">
+<Func kind="K" nr="308">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>

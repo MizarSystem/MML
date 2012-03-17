@@ -35,7 +35,7 @@
 <ArticleID name="TOPREAL1"/>
 <ArticleID name="TOPREAL2"/>
 </Signature>
-<RCluster>
+<RCluster aid="TOPREAL2" nr="1">
 <ArgTypes/>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -52,14 +52,14 @@
 <Adjective nr="77"/>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="TOPREAL2" nr="1">
 <ArgTypes/>
 <Func kind="K" nr="268"/>
 <Cluster>
 <Adjective nr="77"/>
 </Cluster>
 </FCluster>
-<CCluster>
+<CCluster aid="TOPREAL2" nr="1">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="77"/>

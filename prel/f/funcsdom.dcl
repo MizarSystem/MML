@@ -28,7 +28,7 @@
 <ArticleID name="RLVECT_1"/>
 <ArticleID name="FUNCSDOM"/>
 </Signature>
-<RCluster>
+<RCluster aid="FUNCSDOM" nr="1">
 <ArgTypes/>
 <Typ kind="G" nr="10">
 <Cluster/>
@@ -46,7 +46,7 @@
 <Adjective nr="94"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="FUNCSDOM" nr="2">
 <ArgTypes/>
 <Typ kind="G" nr="13">
 <Cluster/>
@@ -55,7 +55,7 @@
 <Adjective nr="98"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="FUNCSDOM" nr="3">
 <ArgTypes/>
 <Typ kind="G" nr="13">
 <Cluster/>
@@ -64,7 +64,7 @@
 <Adjective nr="29" value="false"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="FUNCSDOM" nr="4">
 <ArgTypes/>
 <Typ kind="G" nr="13">
 <Cluster/>
@@ -83,7 +83,7 @@
 <Adjective nr="99"/>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="FUNCSDOM" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -99,7 +99,7 @@
 <Adjective nr="72"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="FUNCSDOM" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -115,7 +115,7 @@
 <Adjective nr="74"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="FUNCSDOM" nr="3">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -131,7 +131,7 @@
 <Adjective nr="98"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="FUNCSDOM" nr="4">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>

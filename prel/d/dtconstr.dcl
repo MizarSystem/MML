@@ -28,7 +28,7 @@
 <ArticleID name="LANG1"/>
 <ArticleID name="DTCONSTR"/>
 </Signature>
-<RCluster>
+<RCluster aid="DTCONSTR" nr="1">
 <ArgTypes/>
 <Typ kind="G" nr="5">
 <Cluster/>
@@ -41,7 +41,7 @@
 <Adjective nr="51"/>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="DTCONSTR" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -65,7 +65,7 @@
 <Adjective nr="45"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="DTCONSTR" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
@@ -81,7 +81,7 @@
 <Adjective nr="7" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="DTCONSTR" nr="3">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
@@ -97,7 +97,7 @@
 <Adjective nr="7" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="DTCONSTR" nr="4">
 <ArgTypes/>
 <Func kind="K" nr="231"/>
 <Cluster>
@@ -108,7 +108,7 @@
 <Adjective nr="51"/>
 </Cluster>
 </FCluster>
-<CCluster>
+<CCluster aid="DTCONSTR" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -125,7 +125,7 @@
 <Adjective nr="23"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="DTCONSTR" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>

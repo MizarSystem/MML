@@ -20,7 +20,7 @@
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="URYSOHN1"/>
 </Signature>
-<FCluster>
+<FCluster aid="URYSOHN1" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -34,14 +34,14 @@
 <Adjective nr="1" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="URYSOHN1" nr="2">
 <ArgTypes/>
 <Func kind="K" nr="118"/>
 <Cluster>
 <Adjective nr="1" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="URYSOHN1" nr="3">
 <ArgTypes/>
 <Func kind="K" nr="119"/>
 <Cluster>

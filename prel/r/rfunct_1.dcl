@@ -18,7 +18,7 @@
 <ArticleID name="MEMBERED"/>
 <ArticleID name="RFUNCT_1"/>
 </Signature>
-<FCluster>
+<FCluster aid="RFUNCT_1" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -45,7 +45,7 @@
 <Adjective nr="20"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="RFUNCT_1" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>

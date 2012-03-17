@@ -20,7 +20,7 @@
 <ArticleID name="CARD_5"/>
 <ArticleID name="CARD_FIL"/>
 </Signature>
-<RCluster>
+<RCluster aid="CARD_FIL" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -28,7 +28,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Typ kind="M" nr="9">
+<Typ kind="M" nr="10">
 <Cluster/>
 <LocusVar nr="1"/>
 </Typ>
@@ -42,7 +42,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="CARD_FIL" nr="2">
 <ArgTypes/>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -56,7 +56,7 @@
 <Adjective nr="23" value="false"/>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="CARD_FIL" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -72,7 +72,7 @@
 <Adjective nr="22"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="CARD_FIL" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -98,7 +98,7 @@
 <Adjective nr="1" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="CARD_FIL" nr="3">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -115,7 +115,7 @@
 <Adjective nr="23" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="CARD_FIL" nr="4">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -133,7 +133,7 @@
 <Adjective nr="22"/>
 </Cluster>
 </FCluster>
-<CCluster>
+<CCluster aid="CARD_FIL" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -149,7 +149,7 @@
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
-<Typ kind="M" nr="9">
+<Typ kind="M" nr="10">
 <Cluster/>
 <LocusVar nr="1"/>
 </Typ>
@@ -159,7 +159,7 @@
 </Adjective>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="CARD_FIL" nr="2">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="20" value="false"/>
@@ -176,7 +176,7 @@
 <Adjective nr="28"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="CARD_FIL" nr="3">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="20" value="false"/>
@@ -192,7 +192,7 @@
 <Adjective nr="23"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="CARD_FIL" nr="4">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="20" value="false"/>
@@ -209,7 +209,7 @@
 <Adjective nr="33"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="CARD_FIL" nr="5">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="20" value="false"/>
@@ -225,7 +225,7 @@
 <Adjective nr="32"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="CARD_FIL" nr="6">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="20" value="false"/>

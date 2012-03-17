@@ -14,7 +14,7 @@
 <ArticleID name="XXREAL_0"/>
 <ArticleID name="XREAL_0"/>
 </Signature>
-<RCluster>
+<RCluster aid="REAL_1" nr="1">
 <ArgTypes/>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -27,7 +27,7 @@
 <Adjective nr="19"/>
 </Cluster>
 </RCluster>
-<CCluster>
+<CCluster aid="REAL_1" nr="1">
 <ArgTypes/>
 <Cluster/>
 <Typ kind="M" nr="2">

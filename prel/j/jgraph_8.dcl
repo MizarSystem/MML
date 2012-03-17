@@ -48,7 +48,7 @@
 <ArticleID name="TOPALG_2"/>
 <ArticleID name="TOPREALA"/>
 </Signature>
-<FCluster>
+<FCluster aid="JGRAPH_8" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -83,7 +83,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="JGRAPH_8" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>

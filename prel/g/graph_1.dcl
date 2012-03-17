@@ -18,7 +18,7 @@
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="GRAPH_1"/>
 </Signature>
-<RCluster>
+<RCluster aid="GRAPH_1" nr="1">
 <ArgTypes/>
 <Typ kind="G" nr="1">
 <Cluster/>
@@ -27,7 +27,7 @@
 <Adjective nr="24"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="GRAPH_1" nr="2">
 <ArgTypes/>
 <Typ kind="G" nr="1">
 <Cluster/>
@@ -37,7 +37,7 @@
 <Adjective nr="25"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="GRAPH_1" nr="3">
 <ArgTypes/>
 <Typ kind="G" nr="1">
 <Cluster/>
@@ -46,7 +46,7 @@
 <Adjective nr="30"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="GRAPH_1" nr="4">
 <ArgTypes/>
 <Typ kind="G" nr="1">
 <Cluster/>
@@ -60,7 +60,7 @@
 <Adjective nr="30"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="GRAPH_1" nr="5">
 <ArgTypes>
 <Typ kind="G" nr="1">
 <Cluster>
@@ -82,7 +82,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="GRAPH_1" nr="6">
 <ArgTypes>
 <Typ kind="G" nr="1">
 <Cluster>
@@ -102,7 +102,7 @@
 <Adjective nr="22"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="GRAPH_1" nr="7">
 <ArgTypes>
 <Typ kind="G" nr="1">
 <Cluster>
@@ -125,7 +125,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="GRAPH_1" nr="8">
 <ArgTypes>
 <Typ kind="G" nr="1">
 <Cluster>
@@ -148,7 +148,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="GRAPH_1" nr="9">
 <ArgTypes>
 <Typ kind="G" nr="1">
 <Cluster>
@@ -174,7 +174,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="GRAPH_1" nr="10">
 <ArgTypes>
 <Typ kind="G" nr="1">
 <Cluster>

@@ -16,7 +16,7 @@
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="TREES_1"/>
 </Signature>
-<RCluster>
+<RCluster aid="TREES_A" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>

@@ -11,10 +11,10 @@
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XREAL_0"/>
-<ArticleID name="INT_1"/>
 <ArticleID name="RELSET_1"/>
+<ArticleID name="INT_1"/>
 </Signature>
-<FCluster>
+<FCluster aid="PRGCOR_1" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>

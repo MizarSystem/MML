@@ -16,7 +16,7 @@
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="ALGSTR_3"/>
 </Signature>
-<RCluster>
+<RCluster aid="ALGSTR_3" nr="1">
 <ArgTypes/>
 <Typ kind="G" nr="5">
 <Cluster/>
@@ -25,7 +25,7 @@
 <Adjective nr="27"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="ALGSTR_3" nr="2">
 <ArgTypes/>
 <Typ kind="G" nr="5">
 <Cluster/>
@@ -34,7 +34,7 @@
 <Adjective nr="19" value="false"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="ALGSTR_3" nr="3">
 <ArgTypes/>
 <Typ kind="G" nr="5">
 <Cluster/>
@@ -45,7 +45,7 @@
 <Adjective nr="28"/>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="ALGSTR_3" nr="1">
 <ArgTypes/>
 <Func kind="K" nr="92"/>
 <Cluster>

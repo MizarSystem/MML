@@ -20,7 +20,7 @@
 <ArticleID name="FILTER_0"/>
 <ArticleID name="FILTER_1"/>
 </Signature>
-<FCluster>
+<FCluster aid="FILTER_1" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="7">
 <Cluster>
@@ -33,7 +33,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="127">
+<Func kind="K" nr="128">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -42,7 +42,7 @@
 <Adjective nr="32"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="FILTER_1" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="7">
 <Cluster>
@@ -57,7 +57,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="127">
+<Func kind="K" nr="128">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>

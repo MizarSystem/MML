@@ -31,7 +31,7 @@
 <ArticleID name="SUPINF_2"/>
 <ArticleID name="MEASURE1"/>
 </Signature>
-<RCluster>
+<RCluster aid="MEASURE1" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -53,7 +53,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="MEASURE1" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -72,7 +72,7 @@
 <Adjective nr="54"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="MEASURE1" nr="3">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -96,7 +96,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="MEASURE1" nr="4">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -138,7 +138,7 @@
 <Adjective nr="36"/>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="MEASURE1" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -162,7 +162,7 @@
 <Adjective nr="7" value="false"/>
 </Cluster>
 </FCluster>
-<CCluster>
+<CCluster aid="MEASURE1" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -186,7 +186,7 @@
 <Adjective nr="13"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="MEASURE1" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -210,7 +210,7 @@
 <Adjective nr="12"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="MEASURE1" nr="3">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -238,7 +238,7 @@
 </Adjective>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="MEASURE1" nr="4">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -266,7 +266,7 @@
 </Adjective>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="MEASURE1" nr="5">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -299,7 +299,7 @@
 </Adjective>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="MEASURE1" nr="6">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>

@@ -29,7 +29,7 @@
 <ArticleID name="AFINSQ_1"/>
 <ArticleID name="CATALAN2"/>
 </Signature>
-<RCluster>
+<RCluster aid="CATALAN2" nr="1">
 <ArgTypes/>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -50,7 +50,7 @@
 <Adjective nr="39"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="CATALAN2" nr="2">
 <ArgTypes/>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -71,7 +71,7 @@
 <Adjective nr="39"/>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="CATALAN2" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="3">
 <Cluster/>

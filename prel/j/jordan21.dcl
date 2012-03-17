@@ -38,7 +38,7 @@
 <ArticleID name="JORDAN6"/>
 <ArticleID name="JORDAN21"/>
 </Signature>
-<RCluster>
+<RCluster aid="JORDAN21" nr="1">
 <ArgTypes/>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -73,7 +73,7 @@
 <Adjective nr="78"/>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="JORDAN21" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster>
@@ -96,7 +96,7 @@
 <Adjective nr="78"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="JORDAN21" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster>
@@ -119,7 +119,7 @@
 <Adjective nr="78"/>
 </Cluster>
 </FCluster>
-<CCluster>
+<CCluster aid="JORDAN21" nr="1">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="78"/>
@@ -138,7 +138,7 @@
 <Adjective nr="1" value="false"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="JORDAN21" nr="2">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="77"/>

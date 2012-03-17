@@ -25,7 +25,7 @@
 <ArticleID name="VECTSP_1"/>
 <ArticleID name="RLVECT_1"/>
 </Signature>
-<RCluster>
+<RCluster aid="BINOM" nr="1">
 <ArgTypes/>
 <Typ kind="G" nr="10">
 <Cluster/>
@@ -43,7 +43,7 @@
 <Adjective nr="96"/>
 </Cluster>
 </RCluster>
-<CCluster>
+<CCluster aid="BINOM" nr="1">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="27" value="false"/>
@@ -58,7 +58,7 @@
 <Adjective nr="39"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="BINOM" nr="2">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="27" value="false"/>
@@ -73,7 +73,7 @@
 <Adjective nr="40"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="BINOM" nr="3">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="27" value="false"/>

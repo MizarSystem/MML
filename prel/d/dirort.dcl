@@ -22,7 +22,7 @@
 <ArticleID name="ANALOAF"/>
 <ArticleID name="DIRORT"/>
 </Signature>
-<RCluster>
+<RCluster aid="DIRORT" nr="1">
 <ArgTypes/>
 <Typ kind="G" nr="12">
 <Cluster/>
@@ -32,7 +32,7 @@
 <Adjective nr="79"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="DIRORT" nr="2">
 <ArgTypes/>
 <Typ kind="G" nr="12">
 <Cluster/>
@@ -46,7 +46,7 @@
 <Adjective nr="83"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="DIRORT" nr="3">
 <ArgTypes/>
 <Typ kind="G" nr="12">
 <Cluster/>

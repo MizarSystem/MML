@@ -23,7 +23,7 @@
 <ArticleID name="GROUP_2"/>
 <ArticleID name="GROUP_3"/>
 </Signature>
-<RCluster>
+<RCluster aid="GROUP_3" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="7">
 <Cluster>
@@ -48,7 +48,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="GROUP_3" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="7">
 <Cluster>
@@ -65,7 +65,7 @@
 <Adjective nr="1" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="GROUP_3" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="7">
 <Cluster>

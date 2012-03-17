@@ -32,7 +32,7 @@
 <ArticleID name="FUNCOP_1"/>
 <ArticleID name="LOPBAN_1"/>
 </Signature>
-<FCluster>
+<FCluster aid="LOPBAN_5" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="14">
 <Cluster>

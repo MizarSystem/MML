@@ -25,7 +25,7 @@
 <ArticleID name="GROUP_6"/>
 <ArticleID name="GRSOLV_1"/>
 </Signature>
-<RCluster>
+<RCluster aid="GRSOLV_1" nr="1">
 <ArgTypes/>
 <Typ kind="G" nr="7">
 <Cluster/>

@@ -11,12 +11,12 @@
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
 <ArticleID name="RELSET_1"/>
+<ArticleID name="MCART_1"/>
+<ArticleID name="FUNCT_2"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="FINSEQ_2"/>
-<ArticleID name="MCART_1"/>
-<ArticleID name="FUNCT_2"/>
 <ArticleID name="FUNCOP_1"/>
 <ArticleID name="FUNCT_3"/>
 <ArticleID name="TREES_1"/>
@@ -36,7 +36,7 @@
 <ArticleID name="MSAFREE"/>
 <ArticleID name="MSATERM"/>
 </Signature>
-<FCluster>
+<FCluster aid="MSATERM" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -62,7 +62,7 @@
 <Adjective nr="7" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="MSATERM" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
@@ -87,7 +87,7 @@
 <Adjective nr="7" value="false"/>
 </Cluster>
 </FCluster>
-<CCluster>
+<CCluster aid="MSATERM" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
@@ -113,7 +113,7 @@
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="15"/>
+<Adjective nr="18"/>
 </Cluster>
 </CCluster>
 </Registrations>

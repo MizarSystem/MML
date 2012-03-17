@@ -28,7 +28,7 @@
 <ArticleID name="CARD_3"/>
 <ArticleID name="CLOSURE2"/>
 </Signature>
-<RCluster>
+<RCluster aid="CLOSURE2" nr="1">
 <ArgTypes/>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -38,7 +38,7 @@
 <Adjective nr="51"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="CLOSURE2" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -63,7 +63,7 @@
 <Adjective nr="53"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="CLOSURE2" nr="3">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -88,7 +88,7 @@
 <Adjective nr="51"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="CLOSURE2" nr="4">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -137,7 +137,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="CLOSURE2" nr="5">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -200,7 +200,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="CLOSURE2" nr="6">
 <ArgTypes>
 <Typ kind="G" nr="1">
 <Cluster/>
@@ -216,7 +216,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="CLOSURE2" nr="7">
 <ArgTypes>
 <Typ kind="G" nr="1">
 <Cluster/>
@@ -253,7 +253,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="CLOSURE2" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -276,7 +276,7 @@
 <Adjective nr="51"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="CLOSURE2" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -296,7 +296,7 @@
 <Adjective nr="53"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="CLOSURE2" nr="3">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -314,7 +314,7 @@
 <Adjective nr="5"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="CLOSURE2" nr="4">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -344,7 +344,7 @@
 <Adjective nr="4"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="CLOSURE2" nr="5">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -374,7 +374,7 @@
 <Adjective nr="3"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="CLOSURE2" nr="6">
 <ArgTypes>
 <Typ kind="G" nr="1">
 <Cluster/>
@@ -412,7 +412,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="CLOSURE2" nr="7">
 <ArgTypes>
 <Typ kind="G" nr="1">
 <Cluster/>
@@ -436,7 +436,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="CLOSURE2" nr="8">
 <ArgTypes>
 <Typ kind="G" nr="1">
 <Cluster/>
@@ -466,7 +466,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="CLOSURE2" nr="9">
 <ArgTypes>
 <Typ kind="G" nr="1">
 <Cluster/>
@@ -496,7 +496,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="CLOSURE2" nr="10">
 <ArgTypes>
 <Typ kind="G" nr="1">
 <Cluster/>
@@ -526,7 +526,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="CLOSURE2" nr="11">
 <ArgTypes>
 <Typ kind="G" nr="1">
 <Cluster/>
@@ -556,7 +556,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="CLOSURE2" nr="12">
 <ArgTypes>
 <Typ kind="G" nr="1">
 <Cluster/>
@@ -586,7 +586,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="CLOSURE2" nr="13">
 <ArgTypes>
 <Typ kind="G" nr="1">
 <Cluster/>
@@ -616,7 +616,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="CLOSURE2" nr="14">
 <ArgTypes>
 <Typ kind="G" nr="1">
 <Cluster/>
@@ -655,7 +655,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="CLOSURE2" nr="15">
 <ArgTypes>
 <Typ kind="G" nr="1">
 <Cluster/>
@@ -706,7 +706,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="CLOSURE2" nr="16">
 <ArgTypes>
 <Typ kind="G" nr="1">
 <Cluster/>
@@ -757,7 +757,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="CLOSURE2" nr="17">
 <ArgTypes>
 <Typ kind="G" nr="1">
 <Cluster/>
@@ -808,7 +808,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="CLOSURE2" nr="18">
 <ArgTypes>
 <Typ kind="G" nr="1">
 <Cluster/>
@@ -859,7 +859,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="CLOSURE2" nr="19">
 <ArgTypes>
 <Typ kind="G" nr="1">
 <Cluster/>
@@ -910,7 +910,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="CLOSURE2" nr="20">
 <ArgTypes>
 <Typ kind="G" nr="1">
 <Cluster/>
@@ -961,7 +961,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<CCluster>
+<CCluster aid="CLOSURE2" nr="1">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="1"/>
@@ -973,7 +973,7 @@
 <Adjective nr="51"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="CLOSURE2" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -1005,7 +1005,7 @@
 </Adjective>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="CLOSURE2" nr="3">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -1037,7 +1037,7 @@
 </Adjective>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="CLOSURE2" nr="4">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -1069,7 +1069,7 @@
 </Adjective>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="CLOSURE2" nr="5">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -1098,7 +1098,7 @@
 <Adjective nr="1" value="false"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="CLOSURE2" nr="6">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -1130,7 +1130,7 @@
 </Adjective>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="CLOSURE2" nr="7">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -1159,7 +1159,7 @@
 <Adjective nr="1" value="false"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="CLOSURE2" nr="8">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -1215,7 +1215,7 @@
 </Adjective>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="CLOSURE2" nr="9">
 <ArgTypes>
 <Typ kind="G" nr="1">
 <Cluster/>
@@ -1236,7 +1236,7 @@
 </Adjective>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="CLOSURE2" nr="10">
 <ArgTypes>
 <Typ kind="G" nr="1">
 <Cluster/>
@@ -1257,7 +1257,7 @@
 </Adjective>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="CLOSURE2" nr="11">
 <ArgTypes>
 <Typ kind="G" nr="1">
 <Cluster/>
@@ -1278,7 +1278,7 @@
 </Adjective>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="CLOSURE2" nr="12">
 <ArgTypes>
 <Typ kind="G" nr="1">
 <Cluster/>

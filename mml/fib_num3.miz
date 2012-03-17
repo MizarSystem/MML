@@ -8,17 +8,19 @@ environ
 
  vocabularies MCART_1, FUNCT_1, ARYTM_3, ARYTM_1, POWER, GROUP_1, SQUARE_1,
       PRE_FF, ARYTM, FIB_NUM3, FIB_NUM, MATRIX_2, ASYMPT_0, ZF_LANG, PREPOWER;
- notations XBOOLE_0, SUBSET_1, SQUARE_1, NUMBERS, XCMPLX_0, XXREAL_0, XREAL_0,
+ notations TARSKI,
+      XBOOLE_0, SUBSET_1, SQUARE_1, NUMBERS, XCMPLX_0, XXREAL_0, XREAL_0,
       ORDINAL1, NEWTON, NAT_1, MCART_1, DOMAIN_1, PREPOWER, POWER, FUNCT_2,
       SEQ_1, BINARITH, PRE_FF, FIB_NUM, ABIAN;
  constructors DOMAIN_1, SQUARE_1, NAT_1, MEMBERED, NEWTON, PREPOWER, POWER,
       PRE_FF, BINARITH, ABIAN, FIB_NUM, SEQ_1;
  registrations SUBSET_1, ORDINAL1, XXREAL_0, XREAL_0, SQUARE_1, NAT_1,
-      MEMBERED, XBOOLE_0;
+      MEMBERED, XBOOLE_0, XCMPLX_0, REAL_1;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions SQUARE_1;
  theorems REAL_2, NAT_1, MCART_1, POWER, PREPOWER, XCMPLX_1, PRE_FF, FIB_NUM,
-      SQUARE_1, WSIERP_1, NAT_2, ABIAN, FIB_NUM2, XREAL_1, BINARITH, XXREAL_0;
+      SQUARE_1, WSIERP_1, NAT_2, ABIAN, FIB_NUM2, XREAL_1, BINARITH, XXREAL_0,
+      ORDINAL1;
  schemes FIB_NUM, FIB_NUM2, NAT_1;
 
 begin :: Preliminaries
@@ -34,7 +36,7 @@ proof
 A1: a to_power n = 0;
   assume
 A2: a <> 0;
-  then a |^ n = 0 by A1,POWER:48;
+   a |^ n = 0 by A1,POWER:46;
   hence thesis by A2,PREPOWER:12;
 end;
 
@@ -56,12 +58,10 @@ proof
   hence thesis by FIB_NUM2:4;
 end;
 
-Lm1: -1 <> 0;
-
 theorem Th4:
-  for k being non empty Element of NAT holds k-'1+2 = k+2-'1
+  for k being non empty Nat holds k-'1+2 = k+2-'1
 proof
-  let k be non empty Element of NAT;
+  let k be non empty Nat;
   k >= 1 by NAT_2:21;
   hence thesis by BINARITH:56;
 end;
@@ -85,9 +85,8 @@ theorem Th6:
   (a to_power n) to_power 2 = a to_power (2*n)
 proof
   let a be non empty real number;
-A1: a to_power n <> 0 by Th1;
   ((a to_power n)to_power 2)=((a to_power n)to_power(1+1))
-    .=((a to_power n)to_power 1)*((a to_power n)to_power 1) by A1,FIB_NUM2:7
+    .=((a to_power n)to_power 1)*((a to_power n)to_power 1) by FIB_NUM2:7
     .=(a to_power n)*((a to_power n)to_power 1) by POWER:30
     .=(a to_power n)*(a to_power n) by POWER:30
     .=a to_power (n+n) by FIB_NUM2:7
@@ -112,7 +111,7 @@ theorem Th8:
 proof
   let a, b be non empty real number;
   (a * b) #Z n = (a * b) to_power n & a #Z n = a to_power n &
-  b #Z n = b to_power n by POWER:50,XCMPLX_1:6;
+  b #Z n = b to_power n by POWER:50;
   hence thesis by PREPOWER:50;
 end;
 
@@ -124,11 +123,11 @@ registration
 end;
 
 theorem Th9:
-  for n being Element of NAT holds
+  for n being Nat holds
   tau to_power n + tau to_power(n+1) = tau to_power(n+2)
 proof
-  let n be Element of NAT;
-  defpred P[Element of NAT] means
+  let n be Nat;
+  defpred P[Nat] means
   tau to_power $1 + tau to_power($1+1)= tau to_power($1+2);
 A1: P[0]
   proof
@@ -157,9 +156,9 @@ A3: P[1]
       .= tau to_power(1+2) by POWER:32;
     hence thesis;
   end;
-A4: for k being Element of NAT st P[k] & P[k+1] holds P[k+2]
+A4: for k being Nat st P[k] & P[k+1] holds P[k+2]
   proof
-    let k;
+    let k be Nat;
     assume that P[k] and P[k+1];
     tau to_power(k+2) + tau to_power((k+2)+1)
     =tau to_power(k+2)+(tau to_power(k+2)*tau to_power(1)) by POWER:32
@@ -168,16 +167,16 @@ A4: for k being Element of NAT st P[k] & P[k+1] holds P[k+2]
       .= tau to_power((k+2)+2) by POWER:32;
     hence thesis;
   end;
-  for k holds P[k] from FIB_NUM:sch 1 (A1, A3, A4);
+  for k being Nat holds P[k] from FIB_NUM:sch 1 (A1, A3, A4);
   hence thesis;
 end;
 
 theorem Th10:
-  for n being Element of NAT holds
+  for n being Nat holds
   tau_bar to_power n + tau_bar to_power(n+1) = tau_bar to_power(n+2)
 proof
-  let n be Element of NAT;
-  defpred P[Element of NAT] means
+  let n be Nat;
+  defpred P[Nat] means
   tau_bar to_power $1 + tau_bar to_power($1+1)= tau_bar to_power($1+2);
 A1: P[0]
   proof
@@ -208,9 +207,9 @@ A3: P[1]
       .= tau_bar to_power(1+2) by FIB_NUM2:7;
     hence thesis;
   end;
-A4: for k being Element of NAT st P[k] & P[k+1] holds P[k+2]
+A4: for k being Nat st P[k] & P[k+1] holds P[k+2]
   proof
-    let k;
+    let k be Nat;
     assume that P[k] and P[k+1];
     tau_bar to_power(k+2) + tau_bar to_power((k+2)+1)
     =tau_bar to_power(k+2)+(tau_bar to_power(k+2)*tau_bar to_power(1))
@@ -220,14 +219,14 @@ A4: for k being Element of NAT st P[k] & P[k+1] holds P[k+2]
       .= tau_bar to_power((k+2)+2) by FIB_NUM2:7;
     hence thesis;
   end;
-  for k holds P[k] from FIB_NUM:sch 1 (A1, A3, A4);
+  for k being Nat holds P[k] from FIB_NUM:sch 1 (A1, A3, A4);
   hence thesis;
 end;
 
 begin :: Lucas Numbers
 
 definition
-  let n be Element of NAT;
+  let n be Nat;
   func Lucas (n) -> Element of NAT means
   :Def1:
   ex L being Function of NAT, [:NAT, NAT:] st it = (L.n)`1 & L.0 = [2,1] &
@@ -263,7 +262,7 @@ end;
 
 theorem Th11:
   Lucas(0) = 2 & Lucas(1) = 1 &
-  for n being Element of NAT holds Lucas((n+1)+1) = Lucas(n) + Lucas(n+1)
+  for n being Nat holds Lucas((n+1)+1) = Lucas(n) + Lucas(n+1)
 proof
   deffunc F(set,Element of [: NAT, NAT :]) = [ $2`2, $2`1 + $2`2 ];
   consider L being Function of NAT, [: NAT, NAT :] such that
@@ -276,7 +275,7 @@ A2: for n being Nat
     .= ([ (L.0)`2, (L.0)`1 + (L.0)`2 ])`1 by A2
     .= [2, 1]`2 by A1,MCART_1:7
     .= 1 by MCART_1:7;
-  let n be Element of NAT;
+  let n be Nat;
 A3: (L.(n+1))`1 = [ (L.n)`2, (L.n)`1 + (L.n)`2 ]`1 by A2
     .= (L.n)`2 by MCART_1:7;
   thus Lucas((n+1)+1) = (L.((n+1)+1))`1 by A1,A2,Def1
@@ -289,17 +288,17 @@ A3: (L.(n+1))`1 = [ (L.n)`2, (L.n)`1 + (L.n)`2 ]`1 by A2
 end;
 
 theorem Th12:
-  for n being Element of NAT holds Lucas(n + 2) = Lucas (n) + Lucas (n+1)
+  for n being Nat holds Lucas(n + 2) = Lucas (n) + Lucas (n+1)
 proof
-  let n be Element of NAT;
+  let n be Nat;
   thus Lucas(n+2) = Lucas((n+1)+1)
     .= Lucas(n) + Lucas(n+1) by Th11;
 end;
 
 theorem Th13:
-  for n being Element of NAT holds Lucas(n+1) + Lucas(n+2) = Lucas(n+3)
+  for n being Nat holds Lucas(n+1) + Lucas(n+2) = Lucas(n+3)
 proof
-  let n be Element of NAT;
+  let n be Nat;
   Lucas(n+1) + Lucas(n+2) = Lucas((n+1+1)+1) by Th11
     .= Lucas(n+3);
   hence thesis;
@@ -333,14 +332,14 @@ proof
 end;
 
 theorem Th17:
-  for k being Element of NAT holds Lucas(k) >= k
+  for k being Nat holds Lucas(k) >= k
 proof
-  defpred P[Element of NAT] means Lucas($1) >= $1;
+  defpred P[Nat] means Lucas($1) >= $1;
 A1: P[0];
 A2: P[1] by Th11;
-A3: for k being Element of NAT st P[k] & P[k+1] holds P[k+2]
+A3: for k being Nat st P[k] & P[k+1] holds P[k+2]
   proof
-    let k;
+    let k be Nat;
     assume that
 A4: P[k] and
 A5: P[k+1];
@@ -360,7 +359,7 @@ A9:   k + (k+1) <= Lucas((k+1)+1) by A7,A8,XXREAL_0:2;
       hence thesis by A9,XXREAL_0:2;
     end;
   end;
-  thus for k being Element of NAT holds P[k] from FIB_NUM:sch 1 (A1, A2, A3);
+  thus for k being Nat holds P[k] from FIB_NUM:sch 1 (A1, A2, A3);
 end;
 
 theorem
@@ -369,12 +368,12 @@ proof
   let m be non empty Element of NAT;
   thus Lucas(m+1)>=Lucas(m)
   proof
-    defpred P[Element of NAT] means Lucas($1+1) >= Lucas($1);
+    defpred P[Nat] means Lucas($1+1) >= Lucas($1);
 A1: P[1] by Th11,Th14;
 A2: P[2] by Th14,Th15;
-A3: for k being non empty Element of NAT st P[k] & P[k+1] holds P[k+2]
+A3: for k being non empty Nat st P[k] & P[k+1] holds P[k+2]
     proof
-      let k be non empty Element of NAT;
+      let k be non empty Nat;
       assume that P[k] and P[k+1];
       thus P[k+2]
       proof
@@ -382,8 +381,7 @@ A3: for k being non empty Element of NAT st P[k] & P[k+1] holds P[k+2]
         hence thesis by NAT_1:12;
       end;
     end;
-    for k being non empty Element of NAT holds P[k]
-    from FIB_NUM2:sch 1(A1,A2,A3);
+    for k being non empty Nat holds P[k] from FIB_NUM2:sch 1(A1,A2,A3);
     hence thesis;
   end;
 end;
@@ -415,9 +413,9 @@ A1: Lucas(n+1) + Lucas(n+2) = Lucas(n+3) by Th13;
 end;
 
 theorem
-  for n being Element of NAT holds Lucas(n+1) = Fib(n) + Fib(n+2)
+  for n being Nat holds Lucas(n+1) = Fib(n) + Fib(n+2)
 proof
-  defpred P[Element of NAT] means Lucas($1 +1)=Fib($1) + Fib($1+2);
+  defpred P[Nat] means Lucas($1 +1)=Fib($1) + Fib($1+2);
   0+1+1=2;
   then
 A1: P[0] by Th11,PRE_FF:1;
@@ -425,9 +423,9 @@ A1: P[0] by Th11,PRE_FF:1;
   then Fib(2) = 1 by PRE_FF:1;
   then
 A2: P[1] by Th14,PRE_FF:1;
-A3: for k being Element of NAT st P[k] & P[k+1] holds P[k+2]
+A3: for k being Nat st P[k] & P[k+1] holds P[k+2]
   proof
-    let k be Element of NAT;
+    let k be Nat;
     assume that
 A4: P[k] and
 A5: P[k+1];
@@ -440,14 +438,14 @@ A6: Fib((k + 2) + 2) = Fib(k+2) + Fib((k+2) + 1) by PRE_FF:1;
       .= Fib(k+2) + Fib((k+2)+ 2) by A6;
     hence thesis;
   end;
-  thus for k being Element of NAT holds P[k] from FIB_NUM:sch 1 (A1, A2, A3);
+  thus for k being Nat holds P[k] from FIB_NUM:sch 1 (A1, A2, A3);
 end;
 
 theorem Th21: :: Binet Formula for Lucas Numbers
-  for n being Element of NAT holds
+  for n being Nat holds
   Lucas(n) = tau to_power n + tau_bar to_power n
 proof
-  defpred P[Element of NAT] means
+  defpred P[Nat] means
   Lucas($1) = tau to_power $1 + tau_bar to_power $1;
 A1: P[0]
   proof
@@ -461,9 +459,9 @@ A2: P[1]
     tau_bar to_power 1 = tau_bar & tau to_power 1 = tau by POWER:30;
     hence thesis by Th11,FIB_NUM:def 1,def 2;
   end;
-A3: for k being Element of NAT st P[k] & P[k+1] holds P[k+2]
+A3: for k being Nat st P[k] & P[k+1] holds P[k+2]
   proof
-    let k;
+    let k be Nat;
     assume that
 A4: P[k] and
 A5: P[k+1];
@@ -476,15 +474,15 @@ A5: P[k+1];
       .=tau to_power (k+2) + tau_bar to_power (k+2) by Th10;
     hence thesis;
   end;
-  for k holds P[k] from FIB_NUM:sch 1 (A1, A2, A3);
+  for k being Nat holds P[k] from FIB_NUM:sch 1 (A1, A2, A3);
   hence thesis;
 end;
 
 theorem
-  for n being Element of NAT
+  for n being Nat
   holds 2 * Lucas(n) + Lucas(n + 1) = 5 * Fib(n + 1)
 proof
-  defpred P[Element of NAT] means 2*Lucas($1)+Lucas($1+1)=5*Fib($1+1);
+  defpred P[Nat] means 2*Lucas($1)+Lucas($1+1)=5*Fib($1+1);
 A1: P[0] by Th11,PRE_FF:1;
 A2: P[1]
   proof
@@ -492,9 +490,9 @@ A2: P[1]
     then Fib(2) = 1 by PRE_FF:1;
     hence thesis by Th11,Th14;
   end;
-A3: for k being Element of NAT st P[k] & P[k+1] holds P[k+2]
+A3: for k being Nat st P[k] & P[k+1] holds P[k+2]
   proof
-    let k be Element of NAT;
+    let k be Nat;
     assume that
 A4: P[k] and
 A5: P[k+1];
@@ -510,18 +508,18 @@ A5: P[k+1];
       .= 5*Fib((k+2)+1);
     hence thesis;
   end;
-  thus for k being Element of NAT holds P[k] from FIB_NUM:sch 1 (A1,A2,A3);
+  thus for k being Nat holds P[k] from FIB_NUM:sch 1 (A1,A2,A3);
 end;
 
 theorem Th23:
-  for n being Element of NAT holds Lucas(n + 3) - 2 * Lucas(n) = 5 * Fib(n)
+  for n being Nat holds Lucas(n + 3) - 2 * Lucas(n) = 5 * Fib(n)
 proof
-  defpred P[Element of NAT] means Lucas($1+3)-2*Lucas($1)=5*Fib($1);
+  defpred P[Nat] means Lucas($1+3)-2*Lucas($1)=5*Fib($1);
 A1: P[0] by Th11,Th15,PRE_FF:1;
 A2: P[1] by Th11,Th16,PRE_FF:1;
-A3: for k being Element of NAT st P[k] & P[k+1] holds P[k+2]
+A3: for k being Nat st P[k] & P[k+1] holds P[k+2]
   proof
-    let k be Element of NAT;
+    let k be Nat;
     assume that
 A4: P[k] and
 A5: P[k+1];
@@ -536,42 +534,43 @@ A5: P[k+1];
       .= 5*Fib(k+2);
     hence thesis;
   end;
-  thus for k being Element of NAT holds P[k] from FIB_NUM:sch 1 (A1,A2,A3);
+  thus for k being Nat holds P[k] from FIB_NUM:sch 1 (A1,A2,A3);
 end;
 
 theorem
-  for n being Element of NAT holds Lucas(n) + Fib(n) = 2 * Fib(n+1)
+  for n being Nat holds Lucas(n) + Fib(n) = 2 * Fib(n+1)
 proof
-  let n be Element of NAT;
-  defpred P[Element of NAT] means Lucas($1)+Fib($1)=2*Fib($1+1);
+  let n be Nat;
+  defpred P[Nat] means Lucas($1)+Fib($1)=2*Fib($1+1);
 A1: P[0] by Th11,PRE_FF:1;
   0+1+1=2;
   then Fib(2) = 1 by PRE_FF:1;
   then
 A2: P[1] by Th11,PRE_FF:1;
-A3: for k being Element of NAT st P[k] & P[k+1] holds P[k+2]
+A3: for k being Nat st P[k] & P[k+1] holds P[k+2]
   proof
-    let k;
+    let k be Nat;
     assume that
 A4: P[k] and
 A5: P[k+1];
     Lucas(k+2)+Fib(k+2)= Lucas(k)+Lucas(k+1)+Fib(k+2) by Th12
       .= Lucas(k)+Lucas(k+1)+(Fib(k)+Fib(k+1)) by FIB_NUM2:26
-      .=2*(Fib(k+1)+Fib((k+1)+1)) by A4,A5
+      .= 2*Fib(k+1)+(Lucas(k+1)+Fib(k+1)) by A4
+      .= 2*Fib(k+1)+2*Fib(k+1+1) by A5
       .=2*(Fib(k+1)+Fib(k+2))
       .=2*Fib(k+3) by FIB_NUM2:27
       .=2*Fib((k+2)+1);
     hence thesis;
   end;
-  for k holds P[k] from FIB_NUM:sch 1 (A1, A2, A3);
+  for k being Nat holds P[k] from FIB_NUM:sch 1 (A1, A2, A3);
   hence thesis;
 end;
 
 theorem
-  for n being Element of NAT holds 3 * Fib(n) + Lucas(n) = 2 * Fib(n+2)
+  for n being Nat holds 3 * Fib(n) + Lucas(n) = 2 * Fib(n+2)
 proof
-  let n be Element of NAT;
-  defpred P[Element of NAT] means 3*Fib($1)+Lucas($1)=2*Fib($1+2);
+  let n be Nat;
+  defpred P[Nat] means 3*Fib($1)+Lucas($1)=2*Fib($1+2);
   0+1+1=2;
   then
 A1: Fib(2) = 1 by PRE_FF:1;
@@ -581,20 +580,21 @@ A2: P[0] by Th11,PRE_FF:1;
   then Fib(3)=2 by A1,PRE_FF:1;
   then
 A3: P[1] by Th11,PRE_FF:1;
-A4: for k being Element of NAT st P[k] & P[k+1] holds P[k+2]
+A4: for k being Nat st P[k] & P[k+1] holds P[k+2]
   proof
-    let k;
+    let k be Nat;
     assume that
 A5: P[k] and
 A6: P[k+1];
     3*Fib(k+2)+Lucas(k+2)= 3*(Fib(k)+Fib(k+1))+Lucas(k+2) by FIB_NUM2:26
       .= 3*Fib(k)+3*Fib(k+1)+(Lucas(k)+Lucas(k+1)) by Th12
-      .= 2*(Fib(k+2)+Fib((k+1)+2)) by A5,A6
+      .= 3*Fib(k)+Lucas(k)+(3*Fib(k+1)+Lucas(k+1))
+      .= 2*Fib(k+2)+2*Fib((k+1)+2) by A5,A6
       .= 2*(Fib(k+2)+Fib((k+2)+1))
       .= 2*Fib((k+2)+2) by FIB_NUM2:26;
     hence thesis;
   end;
-  for k holds P[k] from FIB_NUM:sch 1 (A2, A3, A4);
+  for k being Nat holds P[k] from FIB_NUM:sch 1 (A2, A3, A4);
   hence thesis;
 end;
 
@@ -602,7 +602,7 @@ theorem
   for n,m being Element of NAT holds
   2 * Lucas(n + m) = Lucas(n) * Lucas(m) + 5 * Fib(n) * Fib(m)
 proof
-  defpred P[Element of NAT] means for n holds
+  defpred P[Nat] means for n holds
   2* Lucas(n + $1) = Lucas(n)*Lucas($1) + 5*Fib(n)* Fib($1);
 A1: P[0] by Th11,PRE_FF:1;
 A2: P[1]
@@ -616,7 +616,7 @@ A2: P[1]
     hence thesis;
   end;
 A3: now
-    let k;
+    let k be Nat;
     assume that
 A4: P[k] and
 A5: P[k+1];
@@ -635,7 +635,7 @@ A6:   2* Lucas(n + (k+1)) = Lucas(n)*Lucas(k+1) + 5*Fib(n)* Fib(k+1) by A5;
       hence thesis;
     end;
   end;
-  for k holds P[k] from FIB_NUM:sch 1 (A1, A2, A3);
+  for k being Nat holds P[k] from FIB_NUM:sch 1 (A1, A2, A3);
   hence thesis;
 end;
 
@@ -643,7 +643,7 @@ theorem
   for n being Element of NAT holds
   Lucas(n + 3) * Lucas(n) = (Lucas(n + 2))|^2 - (Lucas(n+1))|^2
 proof
-  defpred P[Element of NAT] means
+  defpred P[Nat] means
   Lucas($1 + 3) * Lucas($1) = (Lucas($1 + 2))|^2 - (Lucas($1+1))|^2;
 A1: P[0]
   proof
@@ -660,9 +660,9 @@ A2: P[1]
       .= (Lucas(1 + 2))|^2 - (Lucas(1+1))|^2 by Th14,Th15,WSIERP_1:2;
     hence thesis;
   end;
-A3: for k being Element of NAT st P[k] & P[k+1] holds P[k+2]
+A3: for k being Nat st P[k] & P[k+1] holds P[k+2]
   proof
-    let k be Element of NAT;
+    let k be Nat;
     assume that P[k] and P[k+1];
     Lucas((k+2)+3)* Lucas(k+2)=Lucas((k+3)+2)*Lucas(k+2)
       .=(Lucas(k+3)+Lucas((k+3)+1))*Lucas(k+2) by Th12
@@ -677,14 +677,15 @@ A3: for k being Element of NAT st P[k] & P[k+1] holds P[k+2]
       .=(Lucas((k+2)+2))|^2-(Lucas((k+2)+1))|^2 by WSIERP_1:2;
     hence thesis;
   end;
-  for k holds P[k] from FIB_NUM:sch 1 (A1, A2, A3);
+  for k being Nat holds P[k] from FIB_NUM:sch 1 (A1, A2, A3);
   hence thesis;
 end;
 
 theorem Th28:
-  for n being Element of NAT holds Fib(2*n) = Fib(n) * Lucas(n)
+  for n being Nat holds Fib(2*n) = Fib(n) * Lucas(n)
 proof
-  let n be Element of NAT;
+  let n be Nat;
+X: n in NAT by ORDINAL1:def 13;
   Fib(n)*Lucas(n)= (((tau to_power n) -
   (tau_bar to_power n))/(sqrt 5))*Lucas(n) by FIB_NUM:7
     .=(((tau to_power n) - (tau_bar to_power n))/(sqrt 5))
@@ -694,7 +695,7 @@ proof
     .=((tau to_power n)to_power 2 - (tau_bar to_power n)to_power 2)/(sqrt 5)
   by Th7
     .=((tau to_power n)to_power 2 - tau_bar to_power (2*n))/(sqrt 5)
-  by Th6
+  by Th6,X
     .= (tau to_power (2*n) - tau_bar to_power (2*n))/(sqrt 5) by POWER:38
     .=Fib(2*n) by FIB_NUM:7;
   hence thesis;
@@ -704,7 +705,7 @@ theorem
   for n being Element of NAT holds
   2 * Fib(2*n+1) = Lucas(n+1) * Fib(n) + Lucas(n) * Fib(n+1)
 proof
-  defpred P[Element of NAT] means
+  defpred P[Nat] means
   2*Fib(2*$1+1)= Lucas($1+1)*Fib($1)+Lucas($1)*Fib($1+1);
   0+1+1=2;
   then
@@ -717,9 +718,9 @@ A4: P[1]
       .=Lucas(1+1)*Fib(1)+Lucas(1)*Fib(1+1) by A1,Th11,Th14,PRE_FF:1;
     hence thesis;
   end;
-A5: for k being Element of NAT st P[k] & P[k+1] holds P[k+2]
+A5: for k being Nat st P[k] & P[k+1] holds P[k+2]
   proof
-    let k;
+    let k be Nat;
     assume that
 A6: P[k] and
 A7: P[k+1];
@@ -768,7 +769,7 @@ A8: 2*Fib(2*k)=2*(Fib(2*k+2)-Fib(2*k+1)) by FIB_NUM2:32
       .=Lucas((k+2)+1)*Fib(k+2)+Lucas(k+2)*Fib((k+2)+1) by Th12;
     hence thesis;
   end;
-  for k holds P[k] from FIB_NUM:sch 1 (A3, A4, A5);
+  for k being Nat holds P[k] from FIB_NUM:sch 1 (A3, A4, A5);
   hence thesis;
 end;
 
@@ -797,7 +798,7 @@ A2: (Lucas(n))|^2=(Lucas(n)*Lucas(n)) by WSIERP_1:2
   then 5*(Fib(n))|^2-(Lucas(n))|^2=4*(-1)*(-1)to_power n by A1,A2
     .=4*((-1)to_power 1)*(-1)to_power n by POWER:30
     .=4*(((-1)to_power 1)*(-1)to_power n)
-    .=4*(-1)to_power(n+1) by Lm1,FIB_NUM2:7;
+    .=4*(-1)to_power(n+1) by FIB_NUM2:7;
   hence thesis;
 end;
 
@@ -816,7 +817,18 @@ end;
 begin :: Generalized Fibonacci Numbers
 
 definition
-  let a,b,n be Element of NAT;
+  let a,b be Nat;
+  redefine func [a,b] -> Element of [:NAT,NAT:];
+  coherence
+   proof
+    reconsider a,b as Element of NAT by ORDINAL1:def 13;
+    [a,b] is Element of [:NAT,NAT:];
+    hence thesis;
+   end;
+end;
+
+definition
+  let a,b,n be Nat;
   func GenFib (a,b,n) -> Element of NAT means
   :Def2:
   ex L being Function of NAT, [:NAT, NAT:] st it = (L.n)`1 & L.0 = [a,b] &
@@ -852,11 +864,11 @@ B6: for n being Nat holds
 end;
 
 theorem Th32:
-  for a,b being Element of NAT holds GenFib(a,b,0) = a & GenFib(a,b,1) = b &
-  for n being Element of NAT holds
+  for a,b being Nat holds GenFib(a,b,0) = a & GenFib(a,b,1) = b &
+  for n being Nat holds
   GenFib(a,b,(n+1)+1) = GenFib(a,b,n) + GenFib(a,b,n+1)
 proof
-  let a, b be Element of NAT;
+  let a, b be Nat;
   deffunc F(set,Element of [: NAT, NAT :]) = [ $2`2, $2`1 + $2`2 ];
   consider L being Function of NAT, [: NAT, NAT :] such that
 A1: L.0 = [a,b] and
@@ -868,7 +880,7 @@ A2: for n being Nat holds
     .= ([ (L.0)`2, (L.0)`1 + (L.0)`2 ])`1 by A2
     .= [a, b]`2 by A1,MCART_1:7
     .= b by MCART_1:7;
-  let n be Element of NAT;
+  let n be Nat;
 A3: (L.(n+1))`1 = [ (L.n)`2, (L.n)`1 + (L.n)`2 ]`1 by A2
     .= (L.n)`2 by MCART_1:7;
   GenFib(a,b,(n+1)+1) = (L.((n+1)+1))`1 by A1,A2,Def2
@@ -882,10 +894,11 @@ A3: (L.(n+1))`1 = [ (L.n)`2, (L.n)`1 + (L.n)`2 ]`1 by A2
 end;
 
 theorem Th33:
+ for k being Nat holds
   (GenFib(a,b,k+1)+GenFib(a,b,(k+1)+1)) |^ 2 =
   (GenFib(a,b,k+1)|^2+2*GenFib(a,b,k+1) *
   GenFib(a,b,(k+1)+1)+GenFib(a,b,(k+1)+1)|^2)
-proof
+proof let k be Nat;
   set a1 = GenFib(a,b,k+1);
   set b1 = GenFib(a,b,(k+1)+1);
   (GenFib(a,b,k+1)+GenFib(a,b,(k+1)+1))|^2 =a1*a1+a1*b1+b1*a1+b1*b1 by Th5
@@ -896,20 +909,20 @@ proof
 end;
 
 theorem Th34:
-  for a,b,n being Element of NAT holds
+  for a,b,n being Nat holds
   GenFib(a,b,n) + GenFib(a,b,n+1) = GenFib(a,b,n+2)
 proof
-  let a,b,n be Element of NAT;
+  let a,b,n be Nat;
   GenFib(a,b,n) + GenFib(a,b,n+1) = GenFib(a,b,n+1+1) by Th32
     .= GenFib(a,b,n+2);
   hence thesis;
 end;
 
 theorem Th35:
-  for a,b,n being Element of NAT holds
+  for a,b,n being Nat holds
   GenFib(a,b,n+1) + GenFib(a,b,n+2) = GenFib(a,b,n + 3)
 proof
-  let a,b,n be Element of NAT;
+  let a,b,n be Nat;
   GenFib(a,b,n+1) + GenFib(a,b,n+2)= GenFib(a,b,((n+1)+1)+1) by Th32
     .= GenFib(a,b,n + 3);
   hence thesis;
@@ -928,12 +941,12 @@ end;
 theorem
   for n being Element of NAT holds GenFib(0,1,n) = Fib(n)
 proof
-  defpred P[Element of NAT] means GenFib(0,1,$1) = Fib($1);
+  defpred P[Nat] means GenFib(0,1,$1) = Fib($1);
 A1: P[0] by Th32,PRE_FF:1;
 A2: P[1] by Th32,PRE_FF:1;
-A3: for k being Element of NAT st P[k] & P[k+1] holds P[k+2]
+A3: for k being Nat st P[k] & P[k+1] holds P[k+2]
   proof
-    let k be Element of NAT;
+    let k be Nat;
     assume that
 A4: P[k] and
 A5: P[k+1];
@@ -941,19 +954,19 @@ A5: P[k+1];
       .=Fib(k+2) by FIB_NUM2:26;
     hence thesis;
   end;
-  for k holds P[k] from FIB_NUM:sch 1 (A1, A2, A3);
+  for k being Nat holds P[k] from FIB_NUM:sch 1 (A1, A2, A3);
   hence thesis;
 end;
 
 theorem Th38:
   for n being Element of NAT holds GenFib(2,1,n) = Lucas(n)
 proof
-  defpred P[Element of NAT] means GenFib(2,1,$1)=Lucas($1);
+  defpred P[Nat] means GenFib(2,1,$1)=Lucas($1);
 A1: P[0] by Th11,Th32;
 A2: P[1] by Th11,Th32;
-A3: for k being Element of NAT st P[k] & P[k+1] holds P[k+2]
+A3: for k being Nat st P[k] & P[k+1] holds P[k+2]
   proof
-    let k be Element of NAT;
+    let k be Nat;
     assume that
 A4: P[k] and
 A5: P[k+1];
@@ -961,7 +974,7 @@ A5: P[k+1];
       .= Lucas(k+2) by Th12;
     hence thesis;
   end;
-  for k holds P[k] from FIB_NUM:sch 1 (A1, A2, A3);
+  for k being Nat holds P[k] from FIB_NUM:sch 1 (A1, A2, A3);
   hence thesis;
 end;
 
@@ -1013,7 +1026,7 @@ proof
   let a,b,n be non empty Element of NAT;
   thus GenFib(a,b,n)=GenFib(a,b,0)*Fib(n-'1)+GenFib(a,b,1)*Fib(n)
   proof
-    defpred P[Element of NAT] means
+    defpred P[Nat] means
     GenFib(a,b,$1) = GenFib(a,b,0)* Fib($1-'1)+GenFib(a,b,1)* Fib($1);
 A1: P[1]
     proof
@@ -1033,9 +1046,9 @@ A3:   Fib(2)=1 by PRE_FF:1;
         .= GenFib(a,b,0)* Fib(2-'1)+GenFib(a,b,1)* Fib(2);
       hence thesis;
     end;
-A4: for k being non empty Element of NAT st P[k] & P[k+1] holds P[k+2]
+A4: for k being non empty Nat st P[k] & P[k+1] holds P[k+2]
     proof
-      let k be non empty Element of NAT;
+      let k be non empty Nat;
       assume that
 A5:   P[k] and
 A6:   P[k+1];
@@ -1060,29 +1073,28 @@ A7:   Fib(k-'1)+Fib((k+1)-'1) = Fib(k-'1)+Fib(k-'1+1) by BINARITH:56
         .=GenFib(a,b,0)* Fib((k+2)-'1)+GenFib(a,b,1)* Fib(k+2) by Th32;
       hence thesis;
     end;
-    for k being non empty Element of NAT holds P[k]
-    from FIB_NUM2:sch 1(A1,A2,A4);
+    for k being non empty Nat holds P[k] from FIB_NUM2:sch 1(A1,A2,A4);
     hence thesis;
   end;
 end;
 
 theorem
-  for n,m being Element of NAT holds
+  for n,m being Nat holds
   Fib(m) * Lucas(n) + Lucas(m) * Fib(n) = GenFib(Fib(0),Lucas(0),n+m)
 proof
-  let n,m be Element of NAT;
-  defpred P[Element of NAT] means
+  let n,m be Nat;
+  defpred P[Nat] means
   Fib($1)* Lucas(n) + Lucas($1)* Fib(n) = GenFib(Fib(0),Lucas(0),n+$1);
 A1: P[0]
   proof
     2*Fib(n)= GenFib(0,2,n)
     proof
-      defpred R[Element of NAT] means 2* Fib($1)= GenFib(0,2,$1);
+      defpred R[Nat] means 2* Fib($1)= GenFib(0,2,$1);
 A2:   R[0] by Th32,PRE_FF:1;
 A3:   R[1] by Th32,PRE_FF:1;
-A4:   for i being Element of NAT st R[i] & R[i+1] holds R[i+2]
+A4:   for i being Nat st R[i] & R[i+1] holds R[i+2]
       proof
-        let i;
+        let i be Nat;
         assume that
 A5:     R[i] and
 A6:     R[i+1];
@@ -1091,7 +1103,7 @@ A6:     R[i+1];
           .= GenFib(0,2,i+2) by A5,A6,Th34;
         hence thesis;
       end;
-      for i holds R[i] from FIB_NUM:sch 1 (A2, A3, A4);
+      for i being Nat holds R[i] from FIB_NUM:sch 1 (A2, A3, A4);
       hence thesis;
     end;
     hence thesis by Th11,PRE_FF:1;
@@ -1100,7 +1112,7 @@ A7: P[1]
   proof
     Lucas(n) + Fib(n) = GenFib(0,2,n+1)
     proof
-      defpred Q[Element of NAT] means Lucas($1) + Fib($1) = GenFib(0,2,$1+1);
+      defpred Q[Nat] means Lucas($1) + Fib($1) = GenFib(0,2,$1+1);
 A8:   Q[0] by Th11,Th32,PRE_FF:1;
 A9:   Q[1]
       proof
@@ -1110,9 +1122,9 @@ A9:   Q[1]
           .= GenFib(0,2,1+1);
         hence thesis;
       end;
-A10:  for j being Element of NAT st Q[j] & Q[j+1] holds Q[j+2]
+A10:  for j being Nat st Q[j] & Q[j+1] holds Q[j+2]
       proof
-        let j be Element of NAT;
+        let j be Nat;
         assume that
 A11:    Q[j] and
 A12:    Q[j+1];
@@ -1123,14 +1135,14 @@ A12:    Q[j+1];
           .=GenFib(0,2,(j+2)+1);
         hence thesis;
       end;
-      for j holds Q[j] from FIB_NUM:sch 1 (A8, A9, A10);
+      for j being Nat holds Q[j] from FIB_NUM:sch 1 (A8, A9, A10);
       hence thesis;
     end;
     hence thesis by Th11,PRE_FF:1;
   end;
-A13: for k being Element of NAT st P[k] & P[k+1] holds P[k+2]
+A13: for k being Nat st P[k] & P[k+1] holds P[k+2]
   proof
-    let k;
+    let k be Nat;
     assume that
 A14: P[k] and
 A15: P[k+1];
@@ -1143,7 +1155,7 @@ A15: P[k+1];
       .= GenFib(Fib(0),Lucas(0),n+(k+2)) by Th11,PRE_FF:1;
     hence thesis;
   end;
-  for k holds P[k] from FIB_NUM:sch 1 (A1, A7, A13);
+  for k being Nat holds P[k] from FIB_NUM:sch 1 (A1, A7, A13);
   hence thesis;
 end;
 
@@ -1161,7 +1173,7 @@ theorem
   GenFib(a,a,n) = ((GenFib(a,a,0)) / 2) * (Fib(n) + Lucas(n))
 proof
   let a,b be Element of NAT;
-  defpred P[Element of NAT] means
+  defpred P[Nat] means
   GenFib(a,a,$1)=((GenFib(a,a,0))/2)*(Fib($1)+Lucas($1));
 A1: P[0] by Th11,PRE_FF:1;
 A2: P[1]
@@ -1169,9 +1181,9 @@ A2: P[1]
     GenFib(a,a,1)=a by Th32;
     hence thesis by Th11,Th32,PRE_FF:1;
   end;
-A3: for k being Element of NAT st P[k] & P[k+1] holds P[k+2]
+A3: for k being Nat st P[k] & P[k+1] holds P[k+2]
   proof
-    let k;
+    let k be Nat;
     assume that
 A4: P[k] and
 A5: P[k+1];
@@ -1182,7 +1194,7 @@ A5: P[k+1];
       .=((GenFib(a,a,0))/2)*(Fib(k+2)+Lucas(k+2)) by Th12;
     hence thesis;
   end;
-  for k holds P[k] from FIB_NUM:sch 1 (A1, A2, A3);
+  for k being Nat holds P[k] from FIB_NUM:sch 1 (A1, A2, A3);
   hence thesis;
 end;
 
@@ -1190,7 +1202,7 @@ theorem
   for a,b,n being Element of NAT holds GenFib(b,a+b,n) = GenFib(a,b,n+1)
 proof
   let a,b,n be Element of NAT;
-  defpred P[Element of NAT] means GenFib(b,a+b,$1) = GenFib(a,b,$1+1);
+  defpred P[Nat] means GenFib(b,a+b,$1) = GenFib(a,b,$1+1);
 A1: P[0]
   proof
     GenFib(b,a+b,0)=b by Th32
@@ -1206,9 +1218,9 @@ A2: P[1]
       .=GenFib(a,b,1+1);
     hence thesis;
   end;
-A3: for k being Element of NAT st P[k] & P[k+1] holds P[k+2]
+A3: for k being Nat st P[k] & P[k+1] holds P[k+2]
   proof
-    let k;
+    let k be Nat;
     assume that
 A4: P[k] and
 A5: P[k+1];
@@ -1217,7 +1229,7 @@ A5: P[k+1];
       .= GenFib(a,b,((k+2)+1));
     hence thesis;
   end;
-  for k holds P[k] from FIB_NUM:sch 1 (A1, A2, A3);
+  for k being Nat holds P[k] from FIB_NUM:sch 1 (A1, A2, A3);
   hence thesis;
 end;
 
@@ -1227,7 +1239,7 @@ theorem
   = ((-1)to_power n) * (GenFib(a,b,2)|^2 - GenFib(a,b,1) * GenFib(a,b,3))
 proof
   let a,b,n be Element of NAT;
-  defpred P[Element of NAT] means
+  defpred P[Nat] means
   GenFib(a,b,$1+2)* GenFib(a,b,$1)-GenFib(a,b,$1+1)|^2
   =((-1)to_power $1)*(GenFib(a,b,2)|^2-GenFib(a,b,1)*GenFib(a,b,3));
 A1: GenFib(a,b,2)=GenFib(a,b,0+2)
@@ -1263,9 +1275,9 @@ A4: P[1]
     by A1,Th32;
     hence thesis;
   end;
-A5: for k being Element of NAT st P[k] & P[k+1] holds P[k+2]
+A5: for k being Nat st P[k] & P[k+1] holds P[k+2]
   proof
-    let k;
+    let k be Nat;
     assume that
 A6: P[k] and
 A7: P[k+1];
@@ -1289,7 +1301,7 @@ A8: GenFib(a,b,2)|^2-GenFib(a,b,1)*GenFib(a,b,3)=(a+b)|^2-b*GenFib(a,b, 1+2
 A9: c-GenFib(a,b,(k+1)+1)|^2=((-1)to_power (k+1))*(GenFib(a,b,2)|^2
     -GenFib(a,b,1)*GenFib(a,b,3)) by A7;
 A10: (-1)to_power(k+1)+((-1)to_power k)=
-    ((-1)to_power(k)*(-1)to_power (1))+(-1)to_power k by Lm1,FIB_NUM2:7
+    ((-1)to_power(k)*(-1)to_power (1))+(-1)to_power k by FIB_NUM2:7
       .=(-1)to_power(k)*(-1)+(-1)to_power k by POWER:30
       .=0;
     d-GenFib(a,b,k+1)|^2 = ((-1)to_power k)*(a*a+a*b-b*b) by A6,A8;
@@ -1330,10 +1342,10 @@ A12: c+d-(GenFib(a,b,k+1)+GenFib(a,b,(k+1)+1))|^2
       .=((-1)to_power (k)*(-1)to_power (2))*(GenFib(a,b,2)|^2
     -GenFib(a,b,1)*GenFib(a,b,3)) by Th3
       .=((-1)to_power (k+2))*(GenFib(a,b,2)|^2-
-    GenFib(a,b,1)*GenFib(a,b,3)) by Lm1,FIB_NUM2:7;
+    GenFib(a,b,1)*GenFib(a,b,3)) by FIB_NUM2:7;
     hence thesis;
   end;
-  for k holds P[k] from FIB_NUM:sch 1 (A3, A4, A5);
+  for k being Nat holds P[k] from FIB_NUM:sch 1 (A3, A4, A5);
   hence thesis;
 end;
 
@@ -1342,13 +1354,13 @@ theorem
   GenFib(GenFib(a,b,k),GenFib(a,b,k+1),n) = GenFib(a,b,n+k)
 proof
   let a,b,k,n be Element of NAT;
-  defpred P[Element of NAT] means
+  defpred P[Nat] means
   GenFib(GenFib(a,b,k),GenFib(a,b,k+1),$1)=GenFib(a,b,$1+k);
 A1: P[0] by Th32;
 A2: P[1] by Th32;
-A3: for i being Element of NAT st P[i] & P[i+1] holds P[i+2]
+A3: for i being Nat st P[i] & P[i+1] holds P[i+2]
   proof
-    let i;
+    let i be Nat;
     assume that
 A4: P[i] and
 A5: P[i+1];
@@ -1358,7 +1370,7 @@ A5: P[i+1];
       .=GenFib(a,b,(i+2)+k);
     hence thesis;
   end;
-  for k holds P[k] from FIB_NUM:sch 1 (A1, A2, A3);
+  for k being Nat holds P[k] from FIB_NUM:sch 1 (A1, A2, A3);
   hence thesis;
 end;
 
@@ -1366,7 +1378,7 @@ theorem Th49:
   for a,b,n being Element of NAT holds GenFib(a,b,n+1) = a*Fib(n) + b*Fib(n+1)
 proof
   let a,b,n be Element of NAT;
-  defpred P[Element of NAT] means GenFib(a,b,$1+1)=a*Fib($1)+b*Fib($1+1);
+  defpred P[Nat] means GenFib(a,b,$1+1)=a*Fib($1)+b*Fib($1+1);
 A1: P[0] by Th32,PRE_FF:1;
 A2: GenFib(a,b,2)=GenFib(a,b,0+2)
     .=GenFib(a,b,0)+GenFib(a,b,0+1) by Th34
@@ -1376,9 +1388,9 @@ A2: GenFib(a,b,2)=GenFib(a,b,0+2)
     .=0+1 by FIB_NUM2:26,PRE_FF:1;
   then
 A3: P[1] by A2,PRE_FF:1;
-A4: for k being Element of NAT st P[k] & P[k+1] holds P[k+2]
+A4: for k being Nat st P[k] & P[k+1] holds P[k+2]
   proof
-    let k;
+    let k be Nat;
     assume that
 A5: P[k] and
 A6: P[k+1];
@@ -1390,7 +1402,7 @@ A6: P[k+1];
       .=a*Fib(k+2)+b*Fib((k+2)+1);
     hence thesis;
   end;
-  for k holds P[k] from FIB_NUM:sch 1 (A1, A3, A4);
+  for k being Nat holds P[k] from FIB_NUM:sch 1 (A1, A3, A4);
   hence thesis;
 end;
 
@@ -1398,12 +1410,12 @@ theorem
   for b,n being Element of NAT holds GenFib(0,b,n) = b * Fib(n)
 proof
   let b,n be Element of NAT;
-  defpred P[Element of NAT] means GenFib(0,b,$1)=b*Fib($1);
+  defpred P[Nat] means GenFib(0,b,$1)=b*Fib($1);
 A1: P[0] by Th32,PRE_FF:1;
 A2: P[1] by Th32,PRE_FF:1;
-A3: for k being Element of NAT st P[k] & P[k+1] holds P[k+2]
+A3: for k being Nat st P[k] & P[k+1] holds P[k+2]
   proof
-    let k;
+    let k be Nat;
     assume that
 A4: P[k] and
 A5: P[k+1];
@@ -1412,7 +1424,7 @@ A5: P[k+1];
       .=b*Fib(k+2) by FIB_NUM2:26;
     hence thesis;
   end;
-  for k holds P[k] from FIB_NUM:sch 1 (A1, A2, A3);
+  for k being Nat holds P[k] from FIB_NUM:sch 1 (A1, A2, A3);
   hence thesis;
 end;
 
@@ -1420,7 +1432,7 @@ theorem
   for a,n being Element of NAT holds GenFib(a,0,n+1) = a * Fib(n)
 proof
   let a,n be Element of NAT;
-  defpred P[Element of NAT] means GenFib(a,0,$1+1)=a*Fib($1);
+  defpred P[Nat] means GenFib(a,0,$1+1)=a*Fib($1);
 A1: P[0] by Th32,PRE_FF:1;
   GenFib(a,0,2)=GenFib(a,0,0+2)
     .=GenFib(a,0,0)+GenFib(a,0,0+1) by Th34
@@ -1428,9 +1440,9 @@ A1: P[0] by Th32,PRE_FF:1;
     .=a+0 by Th32;
   then
 A2: P[1] by PRE_FF:1;
-A3: for k being Element of NAT st P[k] & P[k+1] holds P[k+2]
+A3: for k being Nat st P[k] & P[k+1] holds P[k+2]
   proof
-    let k;
+    let k be Nat;
     assume that
 A4: P[k] and
 A5: P[k+1];
@@ -1440,7 +1452,7 @@ A5: P[k+1];
       .=a*Fib(k+2) by FIB_NUM2:26;
     hence thesis;
   end;
-  for k holds P[k] from FIB_NUM:sch 1 (A1, A2, A3);
+  for k being Nat holds P[k] from FIB_NUM:sch 1 (A1, A2, A3);
   hence thesis;
 end;
 
@@ -1449,7 +1461,7 @@ theorem
   GenFib(a,b,n) + GenFib(c,d,n) = GenFib(a+c,b+d,n)
 proof
   let a,b,c,d,n be Element of NAT;
-  defpred P[Element of NAT] means
+  defpred P[Nat] means
   GenFib(a,b,$1)+GenFib(c,d,$1)=GenFib(a+c,b+d,$1);
 A1: P[0]
   proof
@@ -1465,9 +1477,9 @@ A2: P[1]
       .=GenFib(a+c,b+d,1) by Th32;
     hence thesis;
   end;
-A3: for k being Element of NAT st P[k] & P[k+1] holds P[k+2]
+A3: for k being Nat st P[k] & P[k+1] holds P[k+2]
   proof
-    let k;
+    let k be Nat;
     assume that
 A4: P[k] and
 A5: P[k+1];
@@ -1478,7 +1490,7 @@ A5: P[k+1];
       .=GenFib(a+c,b+d,k+2) by A5,Th34;
     hence thesis;
   end;
-  for k holds P[k] from FIB_NUM:sch 1 (A1, A2, A3);
+  for k being Nat holds P[k] from FIB_NUM:sch 1 (A1, A2, A3);
   hence thesis;
 end;
 
@@ -1487,7 +1499,7 @@ theorem
   )
 proof
   let a,b,k,n be Element of NAT;
-  defpred P[Element of NAT] means GenFib(k*a,k*b,$1)=k*GenFib(a,b,$1);
+  defpred P[Nat] means GenFib(k*a,k*b,$1)=k*GenFib(a,b,$1);
 A1: P[0]
   proof
     GenFib(k*a,k*b,0)=k*a by Th32
@@ -1500,9 +1512,9 @@ A2: P[1]
       .=k*GenFib(a,b,1) by Th32;
     hence thesis;
   end;
-A3: for i being Element of NAT st P[i] & P[i+1] holds P[i+2]
+A3: for i being Nat st P[i] & P[i+1] holds P[i+2]
   proof
-    let i;
+    let i be Nat;
     assume that
 A4: P[i] and
 A5: P[i+1];
@@ -1511,7 +1523,7 @@ A5: P[i+1];
       .=k*GenFib(a,b,i+2) by Th34;
     hence thesis;
   end;
-  for i holds P[i] from FIB_NUM:sch 1 (A1, A2, A3);
+  for i being Nat holds P[i] from FIB_NUM:sch 1 (A1, A2, A3);
   hence thesis;
 end;
 
@@ -1521,7 +1533,7 @@ theorem :: Binet Formula for Generalized Fibonacci Numbers
   (a*tau-b) * tau_bar to_power n) / sqrt(5)
 proof
   let a,b,n be Element of NAT;
-  defpred P[Element of NAT] means
+  defpred P[Nat] means
   GenFib(a,b,$1)=((a*(-tau_bar)+b)*(tau)to_power($1)+
   (a*tau-b)*(tau_bar)to_power($1)) / sqrt(5);
 A1: P[0]
@@ -1546,9 +1558,9 @@ A2: P[1]
       .=GenFib(a,b,1) by Th32;
     hence thesis;
   end;
-A3: for k being Element of NAT st P[k] & P[k+1] holds P[k+2]
+A3: for k being Nat st P[k] & P[k+1] holds P[k+2]
   proof
-    let k;
+    let k be Nat;
     assume that
 A4: P[k] and
 A5: P[k+1];
@@ -1583,7 +1595,7 @@ A11: 1+tau_bar=(1-sqrt 5- sqrt 5 + 5)/4 by FIB_NUM:def 2
     (tau_bar)to_power(k+2)) / sqrt(5) by A8,A9,A10,A11;
     hence thesis;
   end;
-  for k holds P[k] from FIB_NUM:sch 1 (A1, A2, A3);
+  for k being Nat holds P[k] from FIB_NUM:sch 1 (A1, A2, A3);
   hence thesis;
 end;
 

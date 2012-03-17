@@ -39,7 +39,7 @@
 <ArticleID name="CLOSURE2"/>
 <ArticleID name="PRALG_2"/>
 </Signature>
-<RCluster>
+<RCluster aid="MSUALG_9" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -62,7 +62,7 @@
 <Adjective nr="19"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="MSUALG_9" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -86,7 +86,7 @@
 <Adjective nr="19"/>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="MSUALG_9" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
@@ -118,7 +118,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="MSUALG_9" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
@@ -145,7 +145,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="MSUALG_9" nr="3">
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
@@ -181,7 +181,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="MSUALG_9" nr="4">
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
@@ -200,7 +200,7 @@
 <Adjective nr="19"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="MSUALG_9" nr="5">
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
@@ -223,7 +223,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<CCluster>
+<CCluster aid="MSUALG_9" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
@@ -259,7 +259,7 @@
 <Adjective nr="23"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="MSUALG_9" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>

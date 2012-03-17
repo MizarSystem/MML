@@ -10,19 +10,19 @@ environ
       ARYTM_1, RFUNCT_2, AMI_1, SCMFSA_2, SF_MASTR, SCMFSA6A, SCMFSA7B, AMI_3,
       UNIALG_2, SCMFSA6C, SCMFSA6B, SCMFSA_4, CAT_1, AMI_5, ABSVALUE, SCMFSA8B,
       SCMFSA_9, CARD_1, SCMFSA8A, SFMASTR1, CARD_3, SCMFSA9A, SCM_1, FINSEQ_2,
-      SFMASTR3, ARYTM;
+      SFMASTR3, ARYTM, AMISTD_2;
  notations TARSKI, XBOOLE_0, SUBSET_1, CARD_1, NUMBERS, XCMPLX_0, CARD_3,
       NAT_1, INT_2, RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2, FUNCT_7, GRAPH_2,
-      FINSEQ_1, FINSEQ_2, AMI_1, SCMFSA_2, SCMFSA_4, SCMFSA6A, SCMFSA6B,
+      FINSEQ_1, FINSEQ_2, AMI_1, SCMNORM, SCMFSA_2, SCMFSA6A, SCMFSA6B,
       SF_MASTR, SCMFSA6C, SCMFSA7B, SCMFSA8A, SCMFSA8B, SCMFSA_9, SFMASTR1,
       SCMFSA9A, XXREAL_0;
  constructors PARTFUN1, SETWISEO, REAL_1, NAT_1, INT_2, SEQ_1, MESFUNC1,
       SCMFSA6A, SCMFSA6B, SCMFSA6C, SCMFSA8A, SCMFSA8B, SCMFSA_9, SFMASTR1,
-      SCMFSA9A, SCMNORM;
+      SCMFSA9A, SCMNORM, SCMFSA_4, AFINSQ_1;
  registrations SUBSET_1, SETFAM_1, FUNCT_1, ORDINAL1, RELSET_1, FUNCT_2,
       FINSET_1, FRAENKEL, NUMBERS, XXREAL_0, XREAL_0, NAT_1, INT_1, CARD_3,
-      WSIERP_1, SCMFSA_2, SCMFSA_4, SF_MASTR, SCMFSA6B, SCMFSA6C, SCMFSA7B,
-      SCMFSA8A, SCMFSA8B, SCMFSA_9, SFMASTR1, XBOOLE_0;
+      WSIERP_1, SCMFSA_2, SF_MASTR, SCMFSA6B, SCMFSA6C, SCMFSA7B, SCMFSA8A,
+      SCMFSA8B, SCMFSA_9, SFMASTR1, XBOOLE_0;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
 
 
@@ -32,8 +32,8 @@ reserve s for State of SCM+FSA,
   a, c for read-write Int-Location,
   aa, bb, cc, dd, x for Int-Location,
   f for FinSeq-Location,
-  I, J for Macro-Instruction,
-  Ig for good Macro-Instruction,
+  I, J for Program of SCM+FSA,
+  Ig for good Program of SCM+FSA,
   i, k for Element of NAT;
 
 canceled 6;
@@ -44,11 +44,11 @@ theorem :: SFMASTR3:7
 
 theorem :: SFMASTR3:8
   s.intloc 0 = 1 implies
-  IExec(SCM+FSA-Stop, s) | (Int-Locations \/ FinSeq-Locations) =
+  IExec(Stop SCM+FSA, s) | (Int-Locations \/ FinSeq-Locations) =
   s | (Int-Locations \/ FinSeq-Locations);
 
 theorem :: SFMASTR3:9
-  SCM+FSA-Stop does_not_refer aa;
+  Stop SCM+FSA does_not_refer aa;
 
 theorem :: SFMASTR3:10
   aa <> bb implies cc := bb does_not_refer aa;
@@ -61,7 +61,7 @@ theorem :: SFMASTR3:12   :: see SCMFSA_2:99
 
 registration
   let a be read-write Int-Location, b be Int-Location,
-  I, J be good Macro-Instruction;
+  I, J be good Program of SCM+FSA;
   cluster if>0(a, b, I, J) -> good;
 end;
 
@@ -78,7 +78,7 @@ theorem :: SFMASTR3:15
 begin :: The for-up macro instruction
 
 definition
-  let a, b, c be Int-Location, I be Macro-Instruction, s be State of SCM+FSA;
+  let a, b, c be Int-Location, I be Program of SCM+FSA, s be State of SCM+FSA;
   canceled 5;
   func StepForUp(a, b, c, I, s) -> Function of NAT,
   product the Object-Kind of SCM+FSA equals
@@ -115,7 +115,7 @@ theorem :: SFMASTR3:22
   = (s+*(aux, s.cc-s.bb+1)+*(a, s.bb)) | (Int-Locations \/ FinSeq-Locations);
 
 definition
-  let a, b, c be Int-Location, I be Macro-Instruction, s be State of SCM+FSA;
+  let a, b, c be Int-Location, I be Program of SCM+FSA, s be State of SCM+FSA;
   pred ProperForUpBody a, b, c, I, s means
 :: SFMASTR3:def 7
 
@@ -125,7 +125,7 @@ definition
 end;
 
 theorem :: SFMASTR3:23
-  for I being parahalting Macro-Instruction
+  for I being parahalting Program of SCM+FSA
   holds ProperForUpBody aa, bb, cc, I, s;
 
 theorem :: SFMASTR3:24
@@ -156,8 +156,8 @@ theorem :: SFMASTR3:27
   | (({a, bb, cc} \/ UsedIntLoc Ig) \/ FinSeq-Locations);
 
 definition
-  let a, b, c be Int-Location, I be Macro-Instruction;
-  func for-up(a, b, c, I) -> Macro-Instruction equals
+  let a, b, c be Int-Location, I be Program of SCM+FSA;
+  func for-up(a, b, c, I) -> Program of SCM+FSA equals
 :: SFMASTR3:def 8
   (1-stRWNotIn ({a, b, c} \/ UsedIntLoc I)) := c ';'
   SubFrom(1-stRWNotIn ({a, b, c} \/ UsedIntLoc I), b) ';'
@@ -172,7 +172,7 @@ theorem :: SFMASTR3:28
 
 registration
   let a be read-write Int-Location, b, c be Int-Location,
-  I be good Macro-Instruction;
+  I be good Program of SCM+FSA;
   cluster for-up(a, b, c, I) -> good;
 end;
 
@@ -205,7 +205,7 @@ definition
 ::  set aux1 = 1-stRWNotIn {start, finish, min_pos};
 ::  set aux2 = 2-ndRWNotIn {start, finish, min_pos};
 ::  set cv =   3-rdRWNotIn {start, finish, min_pos};
-  func FinSeqMin(f, start, finish, minpos) -> Macro-Instruction equals
+  func FinSeqMin(f, start, finish, minpos) -> Program of SCM+FSA equals
 :: SFMASTR3:def 9
   minpos := start ';'
   for-up ( 3-rdRWNotIn {start, finish, minpos}, start, finish,
@@ -214,7 +214,7 @@ definition
   ((2-ndRWNotIn {start, finish, minpos}) := (f, minpos)) ';'
   if>0((2-ndRWNotIn {start, finish, minpos}),
   (1-stRWNotIn {start, finish, minpos}), Macro (minpos :=
-  (3-rdRWNotIn {start, finish, minpos})), SCM+FSA-Stop) );
+  (3-rdRWNotIn {start, finish, minpos})), Stop SCM+FSA) );
 end;
 
 registration
@@ -251,7 +251,7 @@ definition
 
 ::  set aux1 = 1-stRWNotIn {a, b};
 ::  set aux2 = 2-ndRWNotIn {a, b};
-  func swap(f, a, b) -> Macro-Instruction equals
+  func swap(f, a, b) -> Program of SCM+FSA equals
 :: SFMASTR3:def 10
   1-stRWNotIn {a, b} := (f,a) ';'
   (2-ndRWNotIn {a, b} := (f,b)) ';' ((f,a) := (2-ndRWNotIn {a, b})) ';'
@@ -287,7 +287,7 @@ begin :: Selection sort
 
 definition
   let f be FinSeq-Location;
-  func Selection-sort f -> Macro-Instruction equals
+  func Selection-sort f -> Program of SCM+FSA equals
 :: SFMASTR3:def 11
   (1-stNotUsed swap(f, 1-stRWNotIn {} Int-Locations,
   2-ndRWNotIn {} Int-Locations)) :=len f ';'

@@ -14,7 +14,7 @@
 <ArticleID name="XREAL_0"/>
 <ArticleID name="QUIN_1"/>
 </Signature>
-<FCluster>
+<FCluster aid="QUIN_1" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -41,7 +41,7 @@
 <Adjective nr="15"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="QUIN_1" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>

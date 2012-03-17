@@ -9,22 +9,22 @@ environ
  vocabularies AMI_3, SCMPDS_2, AMI_1, INT_1, SCMPDS_4, FUNCT_1, RELAT_1,
       SCMFSA_7, SCMPDS_3, RELOC, CARD_1, SCMFSA6A, FUNCT_4, BOOLE, SCMFSA6B,
       FUNCT_7, SCM_1, AMI_2, AMI_5, SCMPDS_1, ABSVALUE, NAT_1, ARYTM_1,
-      SCMPDS_5, ARYTM;
+      SCMPDS_5, ARYTM, AMISTD_2;
  notations TARSKI, XBOOLE_0, SETFAM_1, ENUMSET1, SUBSET_1, CARD_1, NUMBERS,
       XCMPLX_0, RELAT_1, FUNCT_1, FUNCT_4, INT_1, NAT_1, STRUCT_0, AMI_1,
       SCMNORM, AMI_2, FUNCT_7, SCMPDS_1, SCMPDS_2, INT_2, SCMPDS_3, SCMPDS_4,
       XXREAL_0;
  constructors ENUMSET1, XXREAL_0, REAL_1, NAT_1, INT_2, SCMPDS_1, SCMPDS_4,
-      SCMNORM;
+      SCMNORM, SCMPDS_3, AFINSQ_1;
  registrations SETFAM_1, RELAT_1, FUNCT_1, FRAENKEL, NUMBERS, XREAL_0, INT_1,
       CARD_3, AMI_1, SCMPDS_2, SCMPDS_3, SCMPDS_4, ORDINAL1, XBOOLE_0, SCMNORM,
       FINSET_1;
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
- definitions FUNCOP_1, AMI_1, SCMPDS_3, SCMPDS_4, NAT_1;
- theorems AMI_1, NAT_1, REAL_1, CQC_LANG, TARSKI, FUNCT_4, FUNCT_1, INT_1,
+ definitions FUNCOP_1, AMI_1, SCMPDS_3, SCMPDS_4, NAT_1, SCMNORM, AFINSQ_1;
+ theorems AMI_1, NAT_1, REAL_1, TARSKI, FUNCT_4, FUNCT_1, INT_1,
       RELAT_1, SCMPDS_2, FUNCT_7, SCMPDS_3, CARD_1, PRE_CIRC, ENUMSET1,
       ABSVALUE, GRFUNC_1, SCMPDS_4, LATTICE2, XBOOLE_0, XBOOLE_1, XREAL_1,
-      ORDINAL1, FUNCOP_1, XXREAL_0, AMI_2, VALUED_1;
+      ORDINAL1, FUNCOP_1, XXREAL_0, AMI_2, VALUED_1, AFINSQ_1;
  schemes NAT_1;
 
 begin :: Preliminaries
@@ -36,7 +36,7 @@ reserve x for set,
   s,s1,s2 for State of SCMPDS,
   k1,k2 for Integer,
   loc,l1 for Instruction-Location of SCMPDS,
-  I,J for Program-block,
+  I,J for Program of SCMPDS,
   N for with_non-empty_elements set,
   IL for non empty set;
 
@@ -45,7 +45,7 @@ canceled;
 theorem Th2:
   x in dom Load i iff x = inspos 0
 proof
-  dom Load i = {inspos 0} by CQC_LANG:5;
+  dom Load i = {inspos 0} by FUNCOP_1:19;
   hence thesis by TARSKI:def 1;
 end;
 
@@ -56,31 +56,31 @@ proof
 A1: loc in dom (stop I) & (stop I).loc <> halt SCMPDS;
   assume
 A2: not loc in dom I;
-  set SS=SCMPDS-Stop, S2=Shift(SS, card I);
+  set SS=Stop SCMPDS, S2=Shift(SS, card I);
   loc in dom S2 by A1,A2,FUNCT_4:13;
   then loc in {l1+ card I where l1 is Element of NAT : l1 in dom SS}
    by VALUED_1:def 12;
   then consider l1 being Element of NAT such that
 A3: loc=l1+ card I & l1 in dom SS;
-  dom SS = {inspos 0} by CQC_LANG:5;
+  dom SS = {inspos 0} by AFINSQ_1:36,CARD_1:87;
   then l1=inspos 0 by A3,TARSKI:def 1;
   hence contradiction by A1,A3,SCMPDS_4:38,73;
 end;
 
 theorem     :: PDS4_72
-  dom Load i = {inspos 0} & (Load i).(inspos 0)=i by CQC_LANG:5,6;
+  dom Load i = {inspos 0} & (Load i).(inspos 0)=i by FUNCOP_1:19,87;
 
 theorem Th5:
   inspos 0 in dom Load i
 proof
-  dom Load i = {inspos 0} by CQC_LANG:5;
+  dom Load i = {inspos 0} by FUNCOP_1:19;
   hence thesis by TARSKI:def 1;
 end;
 
 theorem Th6:   :: PDS4_74
   card Load i = 1
 proof
-A1: dom Load i = {inspos 0} by CQC_LANG:5;
+A1: dom Load i = {inspos 0} by FUNCOP_1:19;
   thus card Load i = card dom Load i by PRE_CIRC:21
     .= 1 by A1,CARD_1:79;
 end;
@@ -109,7 +109,7 @@ proof
   set II=Load i;
   inspos 0 in dom II by Th5;
   hence (stop II).inspos 0 =II.inspos 0 by SCMPDS_4:37
-    .=i by CQC_LANG:6;
+    .=i by FUNCOP_1:87;
   inspos 1=inspos (0+1)
     .=inspos 0 + 1
     .=inspos 0 + card II by Th6;
@@ -169,11 +169,11 @@ end;
 canceled;
 
 theorem Th15:
-  for I,J being Program-block holds
+  for I,J being Program of SCMPDS holds
   Initialized I c= Initialized stop (I ';' J)
 proof
-  let I,J be Program-block;
-  set SA0=Start-At inspos 0, IS=I ';' (J ';' SCMPDS-Stop),
+  let I,J be Program of SCMPDS;
+  set SA0=Start-At inspos 0, IS=I ';' (J ';' Stop SCMPDS),
   Ip=Initialized stop (I ';' J);
 A1: dom IS misses dom SA0 by SCMPDS_4:54;
   Ip= IS +* SA0 by SCMPDS_4:46;
@@ -214,11 +214,11 @@ A3: x in dom sI;
 end;
 
 theorem Th17:   :: SCMPDS_4:42,T6A40
-  for I,J being Program-block holds
+  for I,J being Program of SCMPDS holds
   Initialized stop I +* Initialized stop (I ';' J)
   = Initialized stop (I ';' J)
 proof
-  let I,J be Program-block;
+  let I,J be Program of SCMPDS;
   set sI=stop I, IsI=Initialized sI, sIJ=stop (I ';' J), IsIJ=Initialized sIJ;
 A1: dom sI c= dom sIJ by Th16;
 A2: dom IsI = dom sI \/ {IC SCMPDS} by SCMPDS_4:27;
@@ -244,13 +244,13 @@ proof
 end;
 
 theorem Th20: ::T13
-  for I being parahalting Program-block st
+  for I being parahalting Program of SCMPDS st
   Initialized stop I c= s1 & Initialized stop I c= s2 &
   s1,s2 equal_outside NAT holds for k being Element of NAT holds
   Computation(s1,k), Computation(s2,k) equal_outside NAT &
   CurInstr Computation(s1,k) = CurInstr Computation(s2,k)
 proof
-  let I be parahalting Program-block;
+  let I be parahalting Program of SCMPDS;
   set SI=stop I;
   assume that
 A1: Initialized SI c= s1 and
@@ -276,12 +276,12 @@ A8: IC Computation(s2,k) in dom SI by A2,SCMPDS_4:def 9;
 end;
 
 theorem Th21: ::T14
-  for I being parahalting Program-block st
+  for I being parahalting Program of SCMPDS st
   Initialized stop I c= s1 & Initialized stop I c= s2 &
   s1,s2 equal_outside NAT holds LifeSpan s1 = LifeSpan s2 &
   Result s1, Result s2 equal_outside NAT
 proof
-  let I be parahalting Program-block;
+  let I be parahalting Program of SCMPDS;
   set SI=stop I;
   assume that
 A1: Initialized SI c= s1 and
@@ -308,10 +308,10 @@ A8: Result s2 = Computation(s2,LifeSpan s1) by A2,AMI_1:122,SCMPDS_4:63;
 end;
 
 theorem Th22: ::T27
-  for I being Program-block
+  for I being Program of SCMPDS
   holds IC IExec(I,s) = IC Result (s +* Initialized stop I)
 proof
-  let I be Program-block;
+  let I be Program of SCMPDS;
   set SI=stop I, IL=NAT;
 A1: dom s = {IC SCMPDS} \/ SCM-Data-Loc \/ IL by SCMPDS_4:19;
 A2: dom (s | IL) = dom s /\ IL by RELAT_1:90
@@ -327,11 +327,11 @@ A2: dom (s | IL) = dom s /\ IL by RELAT_1:90
 end;
 
 theorem Th23:
-  for I being parahalting Program-block, J being Program-block
+  for I being parahalting Program of SCMPDS, J being Program of SCMPDS
   st Initialized stop I c= s for m st m <= LifeSpan s
   holds Computation(s,m),Computation(s+*(I ';' J),m) equal_outside NAT
 proof
-  let I be parahalting Program-block, J be Program-block;
+  let I be parahalting Program of SCMPDS, J be Program of SCMPDS;
   set SI=stop I, IL=NAT;
   assume
 A1: Initialized SI c= s;
@@ -388,18 +388,18 @@ A16: dom I c= dom(I ';' J) by XBOOLE_1:7;
 end;
 
 theorem Th24:
-  for I being parahalting Program-block, J being Program-block
+  for I being parahalting Program of SCMPDS, J being Program of SCMPDS
   st Initialized stop I c= s for m st m <= LifeSpan s
   holds Computation(s,m),Computation(s+*Initialized stop(I ';' J),m)
   equal_outside NAT
 proof
-  let I be parahalting Program-block, J be Program-block;
+  let I be parahalting Program of SCMPDS, J be Program of SCMPDS;
   assume
 A1: Initialized stop I c= s;
   let m;
   assume
 A2: m <= LifeSpan s;
-  set sIJ=stop (I ';' J), SS=SCMPDS-Stop;
+  set sIJ=stop (I ';' J), SS=Stop SCMPDS;
   sIJ= I ';' (J ';' SS) by SCMPDS_4:46;
   then s +* Initialized sIJ =s +* (I ';' (J ';' SS)) by A1,SCMPDS_4:34;
   hence thesis by A1,A2,Th23;
@@ -419,7 +419,7 @@ A2: SA0 c= s by A1,XBOOLE_1:1;
   then IC SCMPDS in dom SA0 by TARSKI:def 1;
   then
 A3: IC s = SA0.IC SCMPDS by A2,GRFUNC_1:8
-    .= inspos 0 by CQC_LANG:6;
+    .= inspos 0 by FUNCOP_1:87;
 A4: inspos 0 in dom m0 & inspos 1 in dom m0 by Th9;
   m0 c= s by A1,SCMPDS_4:57;
   then
@@ -600,7 +600,7 @@ registration
   cluster halt SCMPDS -> parahalting;
   coherence
   proof
-    SCMPDS-Stop=Load halt SCMPDS;
+    Stop SCMPDS=Load halt SCMPDS;
     hence thesis by Def2;
   end;
 end;
@@ -628,7 +628,7 @@ A3: SA0 c= t by A2,XBOOLE_1:1;
   then IC SCMPDS in dom SA0 by TARSKI:def 1;
   then
 A4: IC t = SA0.IC SCMPDS by A3,GRFUNC_1:8
-    .= inspos 0 by CQC_LANG:6;
+    .= inspos 0 by FUNCOP_1:87;
 A5: inspos 0 in dom m0 & inspos 1 in dom m0 by Th9;
   m0 c= t by A2,SCMPDS_4:57;
   then
@@ -725,7 +725,7 @@ proof
   assume
 A1: InsCode i=1;
   assume i is parahalting;
-  then reconsider Li = Load i as parahalting Program-block by Def2;
+  then reconsider Li = Load i as parahalting Program of SCMPDS by Def2;
   set pi=stop Li, Ii=Initialized pi;
   consider s such that
 A2: for a holds s.a = 2 by SCMPDS_2:73;
@@ -761,7 +761,7 @@ definition
 end;
 
 registration
-  cluster parahalting shiftable No-StopCode Program-block;
+  cluster parahalting shiftable No-StopCode Program of SCMPDS;
   existence
   proof
     set ii=DataLoc(0,0):=0;
@@ -769,10 +769,10 @@ registration
     now
       let x be Instruction-Location of SCMPDS;
       assume x in dom II;
-      then x in {inspos 0} by CQC_LANG:5;
+      then x in {inspos 0} by FUNCOP_1:19;
       then x=inspos 0 by TARSKI:def 1;
       then
-A1:   II.x=ii by CQC_LANG:6;
+A1:   II.x=ii by FUNCOP_1:87;
       InsCode ii=2 by SCMPDS_2:23;
       hence II.x <> halt SCMPDS by A1,SCMPDS_2:21,93;
     end;
@@ -781,7 +781,7 @@ A1:   II.x=ii by CQC_LANG:6;
 end;
 
 registration
-  let I,J be No-StopCode Program-block;
+  let I,J be No-StopCode Program of SCMPDS;
   cluster I ';' J -> No-StopCode;
   coherence
   proof
@@ -822,7 +822,7 @@ registration
       let x be Instruction-Location of SCMPDS;
       assume x in dom p;
       then x = inspos 0 by Th2;
-      then p.x=i by CQC_LANG:6;
+      then p.x=i by FUNCOP_1:87;
       hence p.x <>halt SCMPDS by Def1;
     end;
     hence thesis by Def3;
@@ -830,13 +830,15 @@ registration
 end;
 
 registration
-  let i be No-StopCode Instruction of SCMPDS, J be No-StopCode Program-block;
+  let i be No-StopCode Instruction of SCMPDS,
+  J be No-StopCode Program of SCMPDS;
   cluster i ';' J -> No-StopCode;
   coherence;
 end;
 
 registration
-  let I be No-StopCode Program-block, j be No-StopCode Instruction of SCMPDS;
+  let I be No-StopCode Program of SCMPDS,
+  j be No-StopCode Instruction of SCMPDS;
   cluster I ';' j -> No-StopCode;
   coherence;
 end;
@@ -848,11 +850,11 @@ registration
 end;
 
 theorem Th27:   ::Th37
-  for I being parahalting No-StopCode Program-block
+  for I being parahalting No-StopCode Program of SCMPDS
   st Initialized (stop I) c= s holds
   IC  Computation( s,LifeSpan (s +* Initialized stop(I))) = inspos card I
 proof
-  let I be parahalting No-StopCode Program-block;
+  let I be parahalting No-StopCode Program of SCMPDS;
   set IsI=Initialized stop(I);
   assume
 A1: IsI c= s;
@@ -885,11 +887,11 @@ A8: n >= card I by SCMPDS_4:1;
 end;
 
 theorem Th28:
-  for I being parahalting Program-block,k be Element of NAT
+  for I being parahalting Program of SCMPDS,k be Element of NAT
   st k < LifeSpan (s +* Initialized stop(I))
   holds IC  Computation( (s +* Initialized stop(I)),k) in dom I
 proof
-  let I be parahalting Program-block,k be Element of NAT;
+  let I be parahalting Program of SCMPDS,k be Element of NAT;
   set IsI=Initialized stop(I), ss= s +* IsI, m=LifeSpan ss;
   assume
 A1: k < m;
@@ -920,12 +922,12 @@ A8: n = card I;
 end;
 
 theorem Th29:
-  for I being parahalting Program-block,k be Element of NAT
+  for I being parahalting Program of SCMPDS,k be Element of NAT
   st Initialized I c= s & k <= LifeSpan (s +* Initialized stop(I)) holds
    Computation( s,k), Computation( (s +* Initialized stop(I)),k)
   equal_outside NAT
 proof
-  let I be parahalting Program-block,k be Element of NAT;
+  let I be parahalting Program of SCMPDS,k be Element of NAT;
   set II=Initialized I, IsI=Initialized stop(I), IL=NAT,
   m=LifeSpan (s +* IsI);
   assume that
@@ -983,10 +985,10 @@ A15:  Computation(s,k+1) = Following Computation(s,k) by AMI_1:14
 end;
 
 theorem Th30: :: Th37,Lemma01
-  for I being parahalting No-StopCode Program-block st Initialized I c= s
+  for I being parahalting No-StopCode Program of SCMPDS st Initialized I c= s
   holds IC  Computation(s,LifeSpan (s +* Initialized stop(I))) = inspos card I
 proof
-  let I be parahalting No-StopCode Program-block;
+  let I be parahalting No-StopCode Program of SCMPDS;
   set IsI=Initialized stop(I), ss = s +* IsI, m=LifeSpan ss;
   assume
 A1: Initialized I c= s;
@@ -997,11 +999,11 @@ A2: IsI c= ss by FUNCT_4:26;
 end;
 
 theorem Th31:    ::Th37 end
-  for I being parahalting Program-block st Initialized I c= s holds
+  for I being parahalting Program of SCMPDS st Initialized I c= s holds
   CurInstr  Computation( s,LifeSpan (s +* Initialized stop(I))) = halt SCMPDS
   or IC  Computation( s,LifeSpan (s +* Initialized stop(I))) = inspos card I
 proof
-  let I be parahalting Program-block;
+  let I be parahalting Program of SCMPDS;
   set IsI=Initialized stop(I), ss = s +* IsI, m=LifeSpan ss;
   assume
 A1: Initialized I c= s;
@@ -1042,11 +1044,11 @@ A10:  inspos n in dom I by SCMPDS_4:1;
 end;
 
 theorem Th32: :: Th39
-  for I being parahalting No-StopCode Program-block,k being Element of NAT
+  for I being parahalting No-StopCode Program of SCMPDS,k being Element of NAT
   st Initialized I c= s & k < LifeSpan (s +* Initialized stop(I))
   holds CurInstr  Computation( s,k) <> halt SCMPDS
 proof
-  let I be parahalting No-StopCode Program-block,k be Element of NAT;
+  let I be parahalting No-StopCode Program of SCMPDS,k be Element of NAT;
   set sI=s +* Initialized stop(I), s1= Computation( s,k),
   s2= Computation( sI,k);
   assume
@@ -1060,12 +1062,13 @@ A3: IC s2 in dom I by A1,Th28;
 end;
 
 theorem Th33: ::Th40
-  for I being parahalting Program-block,J being Program-block,
+  for I being parahalting Program of SCMPDS,J being Program of SCMPDS,
   k being Element of NAT st k <= LifeSpan (s +* Initialized stop(I))
   holds  Computation( (s +* Initialized stop I ),k),
    Computation( (s +* ((I ';' J) +* Start-At inspos 0)),k) equal_outside NAT
 proof
-  let I be parahalting Program-block,J be Program-block,k be Element of NAT;
+  let I be parahalting Program of SCMPDS,J be Program of SCMPDS,
+  k be Element of NAT;
   set SA0=Start-At inspos 0, spI= stop I, IsI=Initialized spI;
   set s1 = s +* IsI;
   set s2 = s +* ((I ';' J) +* SA0);
@@ -1120,22 +1123,23 @@ A17: IC Computation(s1,m) in dom (I ';' J) by FUNCT_4:13;
 end;
 
 theorem Th34:    ::Th41B
-  for I being parahalting Program-block,J being Program-block,
+  for I being parahalting Program of SCMPDS,J being Program of SCMPDS,
   k being Element of NAT st k <= LifeSpan (s +* Initialized stop(I))
   holds  Computation( (s +* Initialized stop I ),k),
    Computation( (s +* Initialized stop (I ';' J)),k) equal_outside NAT
 proof
-  let I be parahalting Program-block,J be Program-block,k be Element of NAT;
+  let I be parahalting Program of SCMPDS,J be Program of SCMPDS,
+  k be Element of NAT;
   assume
 A1: k <= LifeSpan (s +* Initialized stop I);
   Initialized stop (I ';' J) =
-  (I ';' (J ';' SCMPDS-Stop)) +* Start-At inspos 0 by SCMPDS_4:46;
+  (I ';' (J ';' Stop SCMPDS)) +* Start-At inspos 0 by SCMPDS_4:46;
   hence thesis by A1,Th33;
 end;
 
 registration
-  let I be parahalting Program-block,
-  J be parahalting shiftable Program-block;
+  let I be parahalting Program of SCMPDS,
+  J be parahalting shiftable Program of SCMPDS;
   cluster I ';' J -> parahalting;
   coherence
   proof
@@ -1146,7 +1150,7 @@ A1: IsIJ c= s;
     then
 A2: s = s +* IsIJ by FUNCT_4:79
 
-.= s +* ((I ';' (J ';' SCMPDS-Stop)) +* Start-At inspos 0) by SCMPDS_4:46;
+.= s +* ((I ';' (J ';' Stop SCMPDS)) +* Start-At inspos 0) by SCMPDS_4:46;
 A3: sIJ c= s by A1,SCMPDS_4:57;
     set spJ = stop J, IsJ = Initialized spJ, s1 = s +* Initialized stop(I),
     m1 = LifeSpan s1, s3 =  Computation( s1,m1) +* IsJ, m3 = LifeSpan s3,
@@ -1197,7 +1201,7 @@ A15:  CurInstr s4 = halt SCMPDS;
     suppose
 A16:  IC s4 = inspos card I;
       reconsider m = m1 + m3 as Element of NAT;
-      sIJ = I ';' (J ';' SCMPDS-Stop) by SCMPDS_4:46
+      sIJ = I ';' (J ';' Stop SCMPDS) by SCMPDS_4:46
         .= I +* Shift(spJ, card I);
       then Shift(spJ, card I) c= sIJ by FUNCT_4:26;
       then Shift(spJ, card I) c= s by A3,XBOOLE_1:1;
@@ -1215,13 +1219,13 @@ end;
 
 registration
   let i be parahalting Instruction of SCMPDS,
-  J be parahalting shiftable Program-block;
+  J be parahalting shiftable Program of SCMPDS;
   cluster i ';' J -> parahalting;
   coherence;
 end;
 
 registration
-  let I be parahalting Program-block,
+  let I be parahalting Program of SCMPDS,
   j be parahalting shiftable Instruction of SCMPDS;
   cluster I ';' j -> parahalting;
   coherence;
@@ -1235,12 +1239,13 @@ registration
 end;
 
 theorem Th35:    :: SF4_28
-  for s,s1 being State of SCMPDS, J being parahalting shiftable Program-block
+  for s,s1 being State of SCMPDS, J being parahalting shiftable
+  Program of SCMPDS
   st s= Computation( (s1+*Initialized stop J),m)
   holds Exec(CurInstr s,s +* Start-At (IC s + n))
   = Following(s) +* Start-At (IC Following(s) + n)
 proof
-  let s,s1 be State of SCMPDS, J be parahalting shiftable Program-block;
+  let s,s1 be State of SCMPDS, J be parahalting shiftable Program of SCMPDS;
   set pJ=stop J, IsJ=Initialized pJ, s2=s1+*IsJ;
   assume
 A1: s=Computation(s2,m);
@@ -1665,8 +1670,8 @@ end;
 begin :: Computation of two consecutive program blocks
 
 theorem    ::Th42
-  for I being parahalting No-StopCode Program-block,J being parahalting
-  shiftable Program-block,k being Element of NAT
+  for I being parahalting No-StopCode Program of SCMPDS,J being parahalting
+  shiftable Program of SCMPDS,k being Element of NAT
   st Initialized stop (I ';' J) c= s holds
    Computation( (Result(s +*Initialized stop I) +* Initialized stop J ),k)
   +* Start-At (IC
@@ -1674,8 +1679,8 @@ theorem    ::Th42
   + card I),  Computation( (s +* Initialized stop (I ';' J)),
   (LifeSpan (s +* Initialized stop I)+k)) equal_outside NAT
 proof
-  let I be parahalting No-StopCode Program-block,J be parahalting
-  shiftable Program-block,k be Element of NAT;
+  let I be parahalting No-StopCode Program of SCMPDS,J be parahalting
+  shiftable Program of SCMPDS,k be Element of NAT;
   set IsI = Initialized stop I, sIsI = s +* IsI, RI = Result sIsI, pJ= stop J,
   IsJ = Initialized pJ, RIJ = RI +* IsJ, pIJ = stop (I ';' J),
   IsIJ = Initialized pIJ, sIsIJ = s +* IsIJ;
@@ -1778,8 +1783,8 @@ A19: IC CRSk1=IC (Following(CRk) +* Start-At (IC Following(CRk) + card I))
   hence thesis;
 end;
 
-Lm3: for I being parahalting No-StopCode Program-block,J being parahalting
-shiftable Program-block,s,s1 being State of SCMPDS
+Lm3: for I being parahalting No-StopCode Program of SCMPDS,J being parahalting
+shiftable Program of SCMPDS,s,s1 being State of SCMPDS
 st Initialized stop (I ';' J) c= s & s1=s +* Initialized stop I holds
 IC  Computation( s,LifeSpan s1) = inspos card I &
  Computation( s,LifeSpan s1) | SCM-Data-Loc =
@@ -1787,8 +1792,8 @@ IC  Computation( s,LifeSpan s1) = inspos card I &
 Shift(stop J,card I) c=  Computation( s,LifeSpan s1) &
 LifeSpan s = LifeSpan s1 + LifeSpan (Result s1 +* Initialized stop J)
 proof
-  let I be parahalting No-StopCode Program-block,J be parahalting
-  shiftable Program-block,s,s1 be State of SCMPDS;
+  let I be parahalting No-StopCode Program of SCMPDS,J be parahalting
+  shiftable Program of SCMPDS,s,s1 be State of SCMPDS;
   set IsI = Initialized stop I, spJ = stop J, IsJ = Initialized spJ,
   sIJ = stop (I ';' J), IsIJ = Initialized sIJ, m1 = LifeSpan s1,
   s3 =  Computation( s1,m1) +* IsJ;
@@ -1799,7 +1804,7 @@ proof
 A1: IsIJ c= s & s1=s +* IsI;
   then
 A2: s = s +* IsIJ by FUNCT_4:79
-    .= s +* ((I ';' (J ';' SCMPDS-Stop)) +* Start-At inspos 0) by SCMPDS_4:46;
+    .= s +* ((I ';' (J ';' Stop SCMPDS)) +* Start-At inspos 0) by SCMPDS_4:46;
 A3: sIJ c= s by A1,SCMPDS_4:57;
 A4: s3 | D = ( Computation( s1,m1) | D) +* IsJ | D by FUNCT_4:75;
 A5: now
@@ -1840,7 +1845,7 @@ A13: Initialized I c= IsIJ by Th15;
 A14: IC s4 = inspos card I by A1,Th30,XBOOLE_1:1; thus
 A15: s4 | D = s3 | D by A1,A2,A11,Th33,SCMPDS_4:24;
   reconsider m = m1 + m3 as Element of NAT;
-  sIJ = I ';' (J ';' SCMPDS-Stop) by SCMPDS_4:46
+  sIJ = I ';' (J ';' Stop SCMPDS) by SCMPDS_4:46
     .= I +* Shift(spJ, card I);
   then Shift(spJ, card I) c= sIJ by FUNCT_4:26;
   then Shift(spJ, card I) c= s by A3,XBOOLE_1:1;
@@ -1892,13 +1897,13 @@ A24: LifeSpan s = m by A20,A23,AMI_1:def 46;
 end;
 
 theorem Th37: ::Th43
-  for I being parahalting No-StopCode Program-block,J being parahalting
-  shiftable Program-block holds LifeSpan (s +* Initialized stop (I ';' J))
+  for I being parahalting No-StopCode Program of SCMPDS,J being parahalting
+  shiftable Program of SCMPDS holds LifeSpan (s +* Initialized stop (I ';' J))
   = LifeSpan (s +* Initialized stop I)
   + LifeSpan (Result (s +* Initialized stop I) +* Initialized stop J)
 proof
-  let I be parahalting No-StopCode Program-block,J be parahalting
-  shiftable Program-block;
+  let I be parahalting No-StopCode Program of SCMPDS,J be parahalting
+  shiftable Program of SCMPDS;
   set sI=stop I, IsI = Initialized sI, sIJ = stop (I ';' J),
   IsIJ= Initialized sIJ, s1=s +* IsIJ, s2=s +* IsI;
 A1: IsIJ c= s1 by FUNCT_4:26;
@@ -1930,12 +1935,12 @@ A10: IsJ c= s3 by FUNCT_4:26;
 end;
 
 theorem Th38:
-  for I being parahalting No-StopCode Program-block,J being parahalting
-  shiftable Program-block holds IExec(I ';' J,s) =
+  for I being parahalting No-StopCode Program of SCMPDS,J being parahalting
+  shiftable Program of SCMPDS holds IExec(I ';' J,s) =
   IExec(J,IExec(I,s)) +* Start-At (IC IExec(J,IExec(I,s)) + card I)
 proof
-  let I be parahalting No-StopCode Program-block,J be parahalting
-  shiftable Program-block;
+  let I be parahalting No-StopCode Program of SCMPDS,J be parahalting
+  shiftable Program of SCMPDS;
   set A = NAT, D = SCM-Data-Loc, ps = s | A, sI = stop I,
   IsI = Initialized sI, IsJ = Initialized stop J, sIJ = stop (I ';' J),
   IsIJ =Initialized sIJ, s1 = s +* IsI, m1 = LifeSpan s1,
@@ -2055,7 +2060,7 @@ A35:    x = IC SCMPDS;
         then x in {IC SCMPDS} by TARSKI:def 1;
         then
 A36:    x in dom Start-At l by FUNCOP_1:19;
-        thus IExec(I ';' J,s).x = (Start-At l).IC SCMPDS by A29,A35,CQC_LANG:6
+        thus IExec(I ';' J,s).x = (Start-At l).IC SCMPDS by A29,A35,FUNCOP_1:87
           .= (IExec(J,IExec(I,s)) +* Start-At
         (IC IExec(J,IExec(I,s)) + card I)).x by A35,A36,FUNCT_4:14;
       end;
@@ -2076,11 +2081,11 @@ A38:    IExec(I ';' J,s).x = IExec(J,IExec(I,s)).x by A37,SCMPDS_4 :21;
 end;
 
 theorem
-  for I being parahalting No-StopCode Program-block,J being parahalting
-  shiftable Program-block holds IExec(I ';' J, s).a = IExec(J,IExec(I,s)).a
+  for I being parahalting No-StopCode Program of SCMPDS,J being parahalting
+  shiftable Program of SCMPDS holds IExec(I ';' J, s).a = IExec(J,IExec(I,s)).a
 proof
-  let I be parahalting No-StopCode Program-block,J be parahalting
-  shiftable Program-block;
+  let I be parahalting No-StopCode Program of SCMPDS,J be parahalting
+  shiftable Program of SCMPDS;
 A1: IExec(I ';' J,s) =
   IExec(J,IExec(I,s)) +* Start-At (IC IExec(J,IExec(I,s)) + card I) by Th38;
   not a in dom Start-At (IC IExec(J,IExec(I,s)) + card I) by SCMPDS_4:59;
@@ -2103,11 +2108,11 @@ theorem Th40:   ::Th3c
 proof
   dom Start-At inspos 0 = {IC SCMPDS} by FUNCOP_1:19;
   then (Start-At inspos 0).IC SCMPDS = inspos 0 &
-  IC SCMPDS in dom Start-At inspos 0 by CQC_LANG:6,TARSKI:def 1;
+  IC SCMPDS in dom Start-At inspos 0 by FUNCOP_1:87,TARSKI:def 1;
   hence IC Initialized s = inspos 0 by FUNCT_4:14;
   not a in dom Start-At inspos 0 by SCMPDS_4:59;
   hence (Initialized s).a =s.a by FUNCT_4:12;
-  not loc in dom Start-At inspos 0 by SCMPDS_4:60;
+  not loc in dom Start-At inspos 0 by AMI_1:137;
   hence (Initialized s).loc = s.loc by FUNCT_4:12;
 end;
 
@@ -2599,11 +2604,11 @@ A36:    Following sI = Following  Computation( sI,0) by AMI_1:13
 end;
 
 theorem Th46:   ::Th7c
-  for I being parahalting No-StopCode Program-block,j being parahalting
+  for I being parahalting No-StopCode Program of SCMPDS,j being parahalting
   shiftable Instruction of SCMPDS
   holds IExec(I ';' j, s).a = Exec(j, IExec(I, s)).a
 proof
-  let I be parahalting No-StopCode Program-block,j be parahalting
+  let I be parahalting No-StopCode Program of SCMPDS,j be parahalting
   shiftable Instruction of SCMPDS;
   set Mj = Load j;
   set SA = Start-At (IC IExec(Mj,IExec(I,s)) + card I);

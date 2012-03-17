@@ -19,7 +19,7 @@
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="HILBERT1"/>
 </Signature>
-<RCluster>
+<RCluster aid="HILBERT1" nr="1">
 <ArgTypes/>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -29,21 +29,21 @@
 <Adjective nr="29"/>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="HILBERT1" nr="1">
 <ArgTypes/>
 <Func kind="K" nr="111"/>
 <Cluster>
 <Adjective nr="29"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="HILBERT1" nr="2">
 <ArgTypes/>
 <Func kind="K" nr="111"/>
 <Cluster>
 <Adjective nr="11"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="HILBERT1" nr="3">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -59,14 +59,14 @@
 <Adjective nr="30"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="HILBERT1" nr="4">
 <ArgTypes/>
 <Func kind="K" nr="116"/>
 <Cluster>
 <Adjective nr="30"/>
 </Cluster>
 </FCluster>
-<CCluster>
+<CCluster aid="HILBERT1" nr="1">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="29"/>
@@ -82,7 +82,7 @@
 <Adjective nr="28"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="HILBERT1" nr="2">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="25"/>
@@ -102,7 +102,7 @@
 <Adjective nr="29"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="HILBERT1" nr="3">
 <ArgTypes/>
 <Cluster/>
 <Typ kind="M" nr="2">

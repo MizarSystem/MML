@@ -30,7 +30,7 @@
 <ArticleID name="MSUALG_1"/>
 <ArticleID name="AUTALG_1"/>
 </Signature>
-<RCluster>
+<RCluster aid="AUTALG_1" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -50,7 +50,7 @@
 <Adjective nr="7" value="false"/>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="AUTALG_1" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="11">
 <Cluster>
@@ -71,7 +71,7 @@
 <Adjective nr="77"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="AUTALG_1" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -90,7 +90,7 @@
 <Adjective nr="2"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="AUTALG_1" nr="3">
 <ArgTypes>
 <Typ kind="G" nr="12">
 <Cluster>

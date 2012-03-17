@@ -28,7 +28,7 @@ environ
       FINSEQ_2, FINSEQ_3, FUNCT_1, FUNCT_2, FUNCT_4, GRFUNC_1, INT_1, MCART_1,
       CATALG_1, NAT_1, PRE_CIRC, REAL_1, REALSET1, RELAT_1, SETFAM_1, TARSKI,
       YELLOW_8, ZFMISC_1, CARD_3, ORDINAL1, XBOOLE_0, XBOOLE_1, FINSET_1,
-      XREAL_1, XXREAL_0, DOMAIN_1;
+      XREAL_1, XXREAL_0, DOMAIN_1, FUNCT_7, PARTFUN1;
  schemes FUNCT_7, FINSEQ_1, CLASSES1;
 
 begin
@@ -1704,7 +1704,7 @@ A10:  f.x = p.il.(S,m) by A3,A4;
 A11:  (the Object-Kind of S).x = ObjectKind y
         .= the Instructions of S by AMI_1:def 14;
       consider s being State of S such that
-A12:  p c= s by AMI_1:82;
+A12:  p c= s by CARD_3:97;
       consider j being Element of NAT such that
 A13:  il.(S,m+k) = il.(S,j+k) and
 A14:  il.(S,j) in dom p by A3,A8,A9;
@@ -3652,4 +3652,489 @@ theorem
 
 theorem
   for T being InsType of Trivial-AMI(IL,N) holds AddressParts T = {0} by Lm4;
+
+begin :: Addenda
+
+:: from SCMRING4, 2008.03.13, A.T.
+
+reserve i, j, k for natural number,
+  n for Element of NAT,
+  IL for non empty set,
+  N for with_non-empty_elements set,
+  S for standard (IC-Ins-separated definite
+  (non empty stored-program AMI-Struct over NAT,N)),
+  l for Instruction-Location of S,
+  f for FinPartState of S;
+
+theorem Th65:
+  l in dom f implies Shift(f,k).(l + k) = f.l
+proof
+  assume
+A1: l in dom f;
+  consider m being natural number such that
+A2: l = il.(S,m) by AMISTD_1:26;
+A3: m is Element of NAT by ORDINAL1:def 13;
+  thus Shift(f,k).(l + k) = Shift(f,k).(il.(S,locnum l+k))
+    .= Shift(f,k).(il.(S,m+k)) by A2,AMISTD_1:def 13
+    .= f.l by A1,A2,A3,Def16;
+end;
+
+theorem
+  dom Shift(f,k) = { il+k where il is Instruction-Location of S: il in dom f}
+proof
+A1: dom Shift(f,k) = { il.(S,m+k) where m is Element of NAT:
+  il.(S,m) in dom f } by Def16;
+  hereby
+    let e be set;
+    assume e in dom Shift(f,k);
+    then consider m being Element of NAT such that
+A2: e = il.(S,m+k) and
+A3: il.(S,m) in dom f by A1;
+    (il.(S,m))+k = il.(S,locnum (il.(S,m)) + k)
+      .= il.(S,m+k) by AMISTD_1:def 13;
+    hence e in { il+k where il is Instruction-Location of S:
+    il in dom f } by A2,A3;
+  end;
+  let e be set;
+  assume e in { il+k where il is Instruction-Location of S: il in dom f };
+  then consider il being Instruction-Location of S such that
+A4: e = il+k and
+A5: il in dom f;
+  il = il.(S,locnum il) & il+k = il.(S,locnum il+k) by AMISTD_1:def 13;
+  hence thesis by A1,A4,A5;
+end;
+
+Lm4: for
+a,b,c being set st a c= c & b c= c \ a holds c = a \/ (c \ (a\/b)) \/ b
+proof
+  let a,b,c be set such that
+A1: a c= c and
+A2: b c= c \ a;
+  thus a \/ (c \ (a\/b)) \/ b = a \/ (c \ a \ b) \/ b by XBOOLE_1:41
+    .= a \/ ((c \ a \ b) \/ b) by XBOOLE_1:4
+    .= a \/ ((c \ a) \/ b) by XBOOLE_1:39
+    .= a \/ (c \ a) by A2,XBOOLE_1:12
+    .= a \/ c by XBOOLE_1:39
+    .= c by A1,XBOOLE_1:12;
+end;
+
+Lm5: for S being IC-Ins-separated definite realistic
+(non empty stored-program AMI-Struct over IL,N) holds
+IL c= (the carrier of S) \ {IC S}
+proof
+  let S be IC-Ins-separated definite realistic
+  (non empty stored-program AMI-Struct over IL,N);
+  let i be set;
+A1: IL c= the carrier of S by AMI_1:def 3;
+  assume
+A2: i in IL;
+  then i is Instruction-Location of S by AMI_1:def 4;
+  then i <> IC S by AMI_1:48;
+  then not i in {IC S} by TARSKI:def 1;
+  hence thesis by A1,A2,XBOOLE_0:def 4;
+end;
+
+theorem Th13:
+  for S being Exec-preserving IC-Ins-separated definite realistic
+  steady-programmed (non empty stored-program AMI-Struct over NAT,N),
+  s being State of S, i being Instruction of S,
+  p being programmed FinPartState of S
+  holds Exec (i, s +* p) = Exec (i,s) +* p
+proof
+  let S be Exec-preserving IC-Ins-separated definite realistic
+  steady-programmed (non empty stored-program AMI-Struct over NAT,N),
+  s be State of S, i be Instruction of S, p be programmed FinPartState of S;
+  set C = the carrier of S;
+  set I = NAT;
+  set D = C \ ({IC S} \/ I);
+A1: dom p c= I by AMI_1:def 40;
+A2: dom s = C by AMI_1:79;
+A3: dom (s+*p) = C by AMI_1:79;
+A4: dom Exec(i,s) = C by AMI_1:79;
+A5: dom Exec(i,s+*p) = C by AMI_1:79;
+  D = C \ I \ {IC S} by XBOOLE_1:41;
+  then
+A6: D \/ {IC S} = (C \ I) \/ {IC S} by XBOOLE_1:39;
+X: {IC S} c= C by ZFMISC_1:37;
+  {IC S} c= C \ I
+  proof
+    let x be set;
+    assume
+A7: x in {IC S};
+    then
+A8: x = IC S by TARSKI:def 1;
+    now
+      assume x in I;
+      then reconsider l=x as Instruction-Location of S by AMI_1:def 4;
+      l=x;
+      hence contradiction by A8,AMI_1:48;
+    end;
+    hence thesis by A7,XBOOLE_0:def 4,X;
+  end;
+  then
+A9: C \ I = D \/ {IC S} by A6,XBOOLE_1:12;
+  I c= C \ {IC S} by Lm5;
+  then
+A10: C = {IC S} \/ D \/ I by Lm4,X;
+  D \/ {IC S} misses I
+  proof
+    assume not thesis;
+    then consider o being set such that
+A11: o in D \/ {IC S} and
+A12: o in I by XBOOLE_0:3;
+    reconsider l = o as Instruction-Location of S by A12,AMI_1:def 4;
+A13: o in D or o in {IC S} by A11,XBOOLE_0:def 2;
+    per cases by A13,TARSKI:def 1;
+    suppose o in D;
+      then not o in {IC S} \/ I by XBOOLE_0:def 4;
+      hence contradiction by A12,XBOOLE_0:def 2;
+    end;
+    suppose o = IC S;
+      then l = IC S;
+      hence contradiction by AMI_1:48;
+    end;
+  end;
+  then
+A14: D \/ {IC S} misses dom p by A1,XBOOLE_1:63;
+  s, s+*p equal_outside I
+  proof
+    thus s|(dom s \ I) = (s+*p)|(dom(s+*p) \ I) by A2,A3,A9,A14,FUNCT_4:76;
+  end;
+  then
+A15: Exec(i,s), Exec(i,s+*p) equal_outside I by Def19;
+A16: (Exec(i,s) +* p) | (D \/ {IC S})
+  = Exec(i,s) | (D \/ {IC S}) by A14,FUNCT_4:76
+    .= Exec(i,s +* p) | (D \/ {IC S}) by A4,A5,A9,A15,FUNCT_7:def 2;
+A17: Exec (i, s +* p)|I = (s +* p)|I by AMI_1:117
+    .= s|I +* p|I by FUNCT_4:75
+    .= Exec (i,s)|I +* p|I by AMI_1:117
+    .= (Exec (i, s) +* p)|I by FUNCT_4:75;
+  thus Exec (i, s +* p)
+  = Exec (i, s +* p)| ({IC S} \/ D \/ I) by A5,A10,RELAT_1:98
+    .= (Exec (i, s) +* p)| ({IC S} \/ D)
+  +* (Exec (i, s) +* p)|I by A16,A17,FUNCT_4:83
+    .= (Exec (i,s) +* p)| ({IC S} \/ D \/ I) by FUNCT_4:83
+    .= (Exec (i,s) +* p)| dom(Exec (i, s) +* p) by A10,AMI_1:79
+    .= Exec (i,s) +* p by RELAT_1:98;
+end;
+
+definition
+  let N be with_non-empty_elements set,
+  S be regular standard (IC-Ins-separated definite
+  (standard-ins non empty stored-program AMI-Struct over NAT,N)),
+  k be natural number, p be FinPartState of S;
+  func Relocated (p,k) -> FinPartState of S equals
+  Start-At ((IC p)+k) +* IncAddr(Shift(ProgramPart(p),k),k) +* DataPart p;
+  coherence;
+end;
+
+reserve S for regular standard (IC-Ins-separated definite
+  (standard-ins non empty stored-program AMI-Struct over NAT,N)),
+  g for FinPartState of S,
+  il for Instruction-Location of S;
+
+Lm3: now
+  let L,C,I be set;
+  set B = C \ (L \/ I);
+  thus I misses B
+  proof
+    assume I meets B;
+    then consider o being set such that
+A1: o in I and
+A2: o in B by XBOOLE_0:3;
+    not o in L \/ I by A2,XBOOLE_0:def 4;
+    hence thesis by A1,XBOOLE_0:def 2;
+  end;
+end;
+
+theorem Th47:
+  DataPart(Relocated(g,k)) = DataPart(g)
+proof
+  set I = NAT;
+  set B = (the carrier of S) \ ({IC S} \/ I);
+  set X = (Start-At ((IC g)+k)) | B;
+  consider x being Element of dom X;
+  now
+    assume dom X <> {};
+    then x in dom X;
+    then
+A1: x in dom (Start-At ((IC g)+k)) /\ B by FUNCT_1:68;
+    then x in B by XBOOLE_0:def 3;
+    then
+A2: not x in {IC S} \/ I by XBOOLE_0:def 4;
+    x in dom (Start-At ((IC g)+k)) by A1,XBOOLE_0:def 3;
+    then x in {IC S} by FUNCOP_1:19;
+    hence contradiction by A2,XBOOLE_0:def 2;
+  end;
+  then (Start-At ((IC g)+k)) | B is Function of {},{} by FUNCT_2:55;
+  then
+A3: (Start-At ((IC g)+k)) | B = {} by PARTFUN1:57;
+A4: dom IncAddr(Shift(ProgramPart(g),k),k) c= NAT by AMI_1:def 40;
+A5: dom DataPart g c= B by RELAT_1:87;
+A6: B misses I by Lm3;
+  thus DataPart(Relocated(g,k))
+  =(Start-At ((IC g)+k)+* (IncAddr(Shift(ProgramPart(g),k),k)+*DataPart g))
+  | B by FUNCT_4:15
+    .= ((Start-At ((IC g)+k)) | B) +*
+  (IncAddr(Shift(ProgramPart(g),k),k)+*DataPart g)| B by FUNCT_4:75
+    .= (IncAddr(Shift(ProgramPart(g),k),k)+*DataPart g) | B by A3,FUNCT_4:21
+    .= DataPart g by A4,A5,A6,FUNCT_4:81;
+end;
+
+theorem Th48:
+  S is realistic implies
+  ProgramPart(Relocated(g,k)) = IncAddr(Shift(ProgramPart(g),k),k)
+proof
+  assume
+A1: S is realistic;
+  set I = NAT;
+  set B = (the carrier of S) \ ({IC S} \/ I);
+  set X = (Start-At ((IC g)+k)) | I;
+  set f = IncAddr(Shift(ProgramPart(g),k),k);
+  consider x being Element of dom X;
+  now
+    assume dom X <> {};
+    then x in dom X;
+    then
+A2: x in dom (Start-At ((IC g)+k)) /\ I by FUNCT_1:68;
+    then x in I by XBOOLE_0:def 3;
+    then reconsider x as Instruction-Location of S by AMI_1:def 4;
+    x in dom (Start-At ((IC g)+k)) by A2,XBOOLE_0:def 3;
+    then x in {IC S} by FUNCOP_1:19;
+    then x = IC S by TARSKI:def 1;
+    hence contradiction by A1,AMI_1:48;
+  end;
+  then X is Function of {},{} by FUNCT_2:55;
+  then
+A3: X = {} by PARTFUN1:57;
+A4: dom f c= I by AMI_1:def 40;
+A5: dom DataPart g c= B by RELAT_1:87;
+A6: I misses B by Lm3;
+  thus ProgramPart(Relocated(g,k))
+  = (Start-At ((IC g)+k)+* (f+*DataPart g)) | I by FUNCT_4:15
+    .= ((Start-At ((IC g)+k)) | I) +* ((f+*DataPart g)| I) by FUNCT_4:75
+    .= (f+*DataPart g) | I by A3,FUNCT_4:21
+    .= f by A4,A5,A6,FUNCT_4:81;
+end;
+
+theorem Th49:
+  S is realistic implies dom ProgramPart(Relocated(g,k))
+  = { il.(S,j+k) where j is Element of NAT : il.(S,j) in dom ProgramPart(g) }
+proof
+  assume S is realistic;
+  hence dom ProgramPart(Relocated(g,k))
+  = dom IncAddr(Shift(ProgramPart(g),k),k) by Th48
+    .= dom Shift(ProgramPart(g),k) by Def15
+    .= { il.(S,j+k) where j is Element of NAT:
+  il.(S,j) in dom ProgramPart(g) } by Def16;
+end;
+
+theorem Th50:
+  S is realistic implies (il in dom g iff il+k in dom Relocated(g,k))
+proof
+  assume
+A1: S is realistic;
+  consider m being natural number such that
+A2: il = il.(S,m) by AMISTD_1:26;
+A3: il + k = il.(S,m+k) by A2,AMISTD_1:def 13;
+A4: dom ProgramPart(Relocated(g,k)) = { il.(S,j+k) where j is Element of NAT:
+  il.(S,j) in dom ProgramPart(g) } by A1,Th49;
+  ProgramPart(Relocated(g,k)) c= Relocated(g,k) by RELAT_1:88;
+  then
+A5: dom ProgramPart(Relocated(g,k)) c= dom Relocated(g,k) by GRFUNC_1:8;
+A6: m is Element of NAT by ORDINAL1:def 13;
+  hereby
+    assume il in dom g;
+    then il.(S,m) in dom ProgramPart g by A2,AMI_1:106;
+    then il + k in dom ProgramPart(Relocated(g,k)) by A3,A4,A6;
+    hence il + k in dom Relocated(g,k) by A5;
+  end;
+  assume il + k in dom Relocated(g,k);
+  then il + k in dom ProgramPart(Relocated(g,k)) by AMI_1:106;
+  then consider j being Element of NAT such that
+A7: il + k = il.(S,j+k) and
+A8: il.(S,j) in dom ProgramPart g by A4;
+  ProgramPart g c= g by RELAT_1:88;
+  then
+A9: dom ProgramPart g c= dom g by GRFUNC_1:8;
+  m+k = j+k by A3,A7,AMISTD_1:25;
+  hence il in dom g by A2,A8,A9;
+end;
+
+theorem Th51:
+  IC S in dom Relocated (g,k)
+proof
+A1: Relocated (g,k)
+  = Start-At ((IC g)+k) +* (IncAddr(Shift(ProgramPart(g),k),k)+*DataPart g)
+  by FUNCT_4:15;
+  dom(Start-At((IC g)+k)) = {IC S} by FUNCOP_1:19;
+  then IC S in dom (Start-At((IC g)+k)) by TARSKI:def 1;
+  hence IC S in dom Relocated (g,k) by A1,FUNCT_4:13;
+end;
+
+theorem Th52:
+  S is realistic implies IC Relocated (g,k) = (IC g) + k
+proof
+  assume
+A1: S is realistic;
+A2: Relocated (g,k) = Start-At ((IC g)+k)
+  +* (IncAddr(Shift(ProgramPart(g),k),k)+*DataPart g) by FUNCT_4:15;
+  ProgramPart(Relocated(g,k)) = IncAddr(Shift(ProgramPart(g),k),k) by A1,Th48;
+  then not IC S in dom(IncAddr(Shift(ProgramPart(g),k),k)) &
+  not IC S in dom(DataPart g) by A1,AMI_1:100,101;
+  then
+A3: not IC S in dom(IncAddr(Shift(ProgramPart(g),k),k)+*DataPart g)
+  by FUNCT_4:13;
+  IC S in dom Relocated (g,k) by Th51;
+  hence IC Relocated (g,k) = Relocated (g,k).IC S by AMI_1:def 43
+    .= (Start-At ((IC g)+k)).IC S by A2,A3,FUNCT_4:12
+    .= (IC g) +k by FUNCOP_1:87;
+end;
+
+theorem Th53:
+  for p being programmed FinPartState of S,
+  l being Element of NAT st l in dom p holds
+  IncAddr(p,k).l = IncAddr(pi(p,l),k)
+proof
+  let p be programmed FinPartState of S,
+  l be Element of NAT such that
+A1: l in dom p;
+  l is Instruction-Location of S by AMI_1:def 4;
+  then ex m being natural number st l = il.(S,m) by AMISTD_1:26;
+  hence IncAddr (p,k).l = IncAddr(pi(p,l),k) by A1,Def15;
+end;
+
+registration let N be set, S be AMI-Struct over NAT,N;
+ cluster -> natural Instruction-Location of S;
+ coherence;
+end;
+
+theorem Th54:
+  for p being programmed FinPartState of S holds
+  Shift(IncAddr(p,i),i) = IncAddr(Shift(p,i),i)
+proof
+  let p be programmed FinPartState of S;
+  set f = Shift(IncAddr(p,i),i);
+  set g = IncAddr(Shift(p,i),i);
+  dom(IncAddr(p,i)) = dom p by Def15;
+  then dom(Shift(p,i)) = { il.(S,m+i) where m is Element of NAT:
+  il.(S,m) in dom (IncAddr(p,i)) } by Def16
+    .= dom f by Def16;
+  then
+A1: dom f = dom g by Def15;
+  now
+    let x be set;
+A2: dom f c= NAT by AMI_1:def 40;
+    assume
+A3: x in dom f;
+    then reconsider x'=x as Instruction-Location of S by A2,AMI_1:def 4;
+    reconsider xx=x' as Element of NAT by ORDINAL1:def 13;
+    x in { il.(S,m+i) where m is Element of NAT:
+    il.(S,m) in dom IncAddr(p,i) } by A3,Def16;
+    then consider m being Element of NAT such that
+A4: x = il.(S,m+i) & il.(S,m) in dom IncAddr(p,i);
+A5: x = il.(S,m) + i by A4,AMISTD_1:def 13;
+A6: il.(S,m) in dom p by A4,Def15;
+    dom Shift(p,i) = { il.(S,mm+i) where mm is Element of NAT :
+    il.(S,mm) in dom p} by Def16;
+    then
+A7: x' in dom Shift(p,i) by A4,A6;
+    reconsider mm=il.(S,m) as Element of NAT by ORDINAL1:def 13;
+A8: pi(p,mm) = p.(il.(S,m)) by A6,AMI_1:def 47
+      .= Shift(p,i).(il.(S,m)+i) by A6,Th65
+      .= Shift(p,i).(il.(S,m+i)) by AMISTD_1:def 13
+      .= pi(Shift(p,i),xx) by A4,A7,AMI_1:def 47;
+    thus f.x = IncAddr(p,i).(il.(S,m)) by A4,A5,Th65
+      .= IncAddr(pi(Shift(p,i),xx),i) by A6,A8,Th53
+      .= g.x by A7,Th53;
+  end;
+  hence thesis by A1,FUNCT_1:9;
+end;
+
+theorem Th55:
+  S is realistic implies
+   for I being Instruction of S holds
+  il in dom ProgramPart g & I = g.il implies
+  IncAddr(I, k) = (Relocated (g, k)).(il + k)
+proof
+  assume
+A1: S is realistic;
+  let I be Instruction of S;
+  assume
+A2: il in dom ProgramPart g & I = g.il;
+A3: ProgramPart g c= g by RELAT_1:88;
+  consider i being natural number such that
+A4: il = il.(S,i) by AMISTD_1:26;
+  reconsider ii = il as Element of NAT by ORDINAL1:def 13;
+  i is Element of NAT by ORDINAL1:def 13;
+  then il.(S,i+k) in { il.(S,j+k) where j is Element of NAT:
+  il.(S,j) in dom ProgramPart(g) } by A2,A4;
+  then il.(S,i+k) in dom ProgramPart(Relocated(g,k)) by A1,Th49;
+  then
+A5: il + k in dom ProgramPart(Relocated(g,k)) by A4,AMISTD_1:def 13;
+A6: il in dom IncAddr(ProgramPart(g),k) by A2,Def15;
+A7: I = (ProgramPart g).il by A2,A3,GRFUNC_1:8;
+  ProgramPart (Relocated(g, k)) c= (Relocated(g, k)) by RELAT_1:88;
+  hence (Relocated(g, k)).(il+k)
+  = (ProgramPart(Relocated(g, k))).(il+k) by A5,GRFUNC_1:8
+    .= (IncAddr(Shift(ProgramPart(g),k),k)).(il+k) by A1,Th48
+    .= (Shift(IncAddr(ProgramPart(g),k),k)).(il+k) by Th54
+    .= (IncAddr(ProgramPart(g),k)).il by A6,Th65
+    .= IncAddr(pi(ProgramPart(g), ii),k) by A2,Th53
+    .= IncAddr(I,k) by A2,A7,AMI_1:def 47;
+end;
+
+theorem Th56:
+  S is realistic implies Start-At (IC g + k) c= Relocated (g,k)
+proof
+  assume
+A1: S is realistic;
+  let x be set;
+A2: Start-At (IC g + k) = {[IC S,IC g + k]} by FUNCT_4:87;
+A3: IC S in dom (Relocated(g,k)) by Th51;
+A4: IC Relocated(g,k) = IC g + k by A1,Th52;
+  IC Relocated(g,k) = Relocated(g,k).IC S by A3,AMI_1:def 43;
+  then [IC S,IC g + k] in Relocated(g,k) by A3,A4,FUNCT_1:def 4;
+  hence thesis by A2,TARSKI:def 1;
+end;
+
+Lm2: for a,b,c being set holds not c in a \ ({c} \/ b)
+proof
+  let a,b,c be set;
+  assume c in a \ ({c} \/ b);
+  then not c in {c} \/ b by XBOOLE_0:def 4;
+  then not c in {c} by XBOOLE_0:def 2;
+  hence thesis by TARSKI:def 1;
+end;
+
+theorem Th57:
+  S is realistic implies
+  for q being data-only FinPartState of S st IC S in dom g holds
+  Relocated((g +* q), k) = Relocated (g,k) +* q
+proof
+  assume
+A1: S is realistic;
+  let q be data-only FinPartState of S;
+  assume
+A2: IC S in dom g;
+  then
+A3: IC S in dom g \/ dom q by XBOOLE_0:def 2;
+  set I = NAT;
+  set B = (the carrier of S) \ ({IC S} \/ I);
+A4: dom q c= B by A1,AMISTD_1:62;
+  then
+A5: not IC S in dom q by Lm2;
+  IC S in dom (g +* q) by A3,FUNCT_4:def 1;
+  then
+A6: IC (g +* q) = (g +* q).IC S by AMI_1:def 43
+    .= g.IC S by A3,A5,FUNCT_4:def 1
+    .= IC g by A2,AMI_1:def 43;
+  I misses B by Lm3;
+  then dom q misses I by A4,XBOOLE_1:63;
+  then
+A7: ProgramPart (g +* q) = ProgramPart g by FUNCT_4:76;
+A8: DataPart (g +* q) = g | B +* q | B by FUNCT_4:75
+    .= DataPart g +* q by A4,RELAT_1:97;
+  thus Relocated((g +* q), k) = Relocated(g,k) +* q by A6,A7,A8,FUNCT_4:15;
+end;
 

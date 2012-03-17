@@ -37,7 +37,7 @@
 <ArticleID name="EUCLID"/>
 <ArticleID name="JORDAN16"/>
 </Signature>
-<RCluster>
+<RCluster aid="JORDAN16" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -58,7 +58,7 @@
 <Adjective nr="20"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="JORDAN16" nr="2">
 <ArgTypes/>
 <Typ kind="M" nr="5">
 <Cluster/>
@@ -83,7 +83,7 @@
 <Adjective nr="68"/>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="JORDAN16" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>

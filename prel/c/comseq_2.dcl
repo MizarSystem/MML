@@ -24,7 +24,7 @@
 <ArticleID name="VALUED_1"/>
 <ArticleID name="COMSEQ_2"/>
 </Signature>
-<RCluster>
+<RCluster aid="COMSEQ_2" nr="1">
 <ArgTypes/>
 <Typ kind="M" nr="4">
 <Cluster/>
@@ -47,7 +47,7 @@
 <Adjective nr="39"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="COMSEQ_2" nr="2">
 <ArgTypes/>
 <Typ kind="M" nr="4">
 <Cluster/>
@@ -72,7 +72,7 @@
 <Adjective nr="23"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="COMSEQ_2" nr="3">
 <ArgTypes/>
 <Typ kind="M" nr="4">
 <Cluster/>
@@ -95,7 +95,7 @@
 <Adjective nr="40"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="COMSEQ_2" nr="4">
 <ArgTypes/>
 <Typ kind="M" nr="4">
 <Cluster/>
@@ -120,7 +120,7 @@
 <Adjective nr="30"/>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="COMSEQ_2" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -151,7 +151,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="COMSEQ_2" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="4">
 <Cluster>
@@ -175,7 +175,7 @@
 <Adjective nr="40"/>
 </Cluster>
 </FCluster>
-<CCluster>
+<CCluster aid="COMSEQ_2" nr="1">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="4"/>
@@ -199,7 +199,7 @@
 <Adjective nr="39"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="COMSEQ_2" nr="2">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="4"/>

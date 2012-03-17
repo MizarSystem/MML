@@ -17,7 +17,7 @@
 <ArticleID name="CLASSES2"/>
 <ArticleID name="ORDINAL4"/>
 </Signature>
-<RCluster>
+<RCluster aid="ORDINAL4" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -26,7 +26,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Typ kind="M" nr="7">
+<Typ kind="M" nr="8">
 <Cluster/>
 <LocusVar nr="1"/>
 </Typ>
@@ -37,7 +37,7 @@
 <Adjective nr="14" value="false"/>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="ORDINAL4" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -55,7 +55,7 @@
 <Adjective nr="9"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="ORDINAL4" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>

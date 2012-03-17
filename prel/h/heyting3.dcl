@@ -36,7 +36,7 @@
 <ArticleID name="SUBSTLAT"/>
 <ArticleID name="HEYTING3"/>
 </Signature>
-<RCluster>
+<RCluster aid="HEYTING3" nr="1">
 <ArgTypes/>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -46,7 +46,7 @@
 <Adjective nr="35" value="false"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="HEYTING3" nr="2">
 <ArgTypes/>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -56,7 +56,7 @@
 <Adjective nr="35"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="HEYTING3" nr="3">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -66,7 +66,7 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="252">
+<Func kind="K" nr="253">
 <Func kind="K" nr="82"/>
 <Func kind="K" nr="105">
 <Func kind="K" nr="82"/>
@@ -79,7 +79,7 @@
 <Adjective nr="7" value="false"/>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="HEYTING3" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -98,7 +98,7 @@
 <Adjective nr="4"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="HEYTING3" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -107,7 +107,7 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="252">
+<Func kind="K" nr="253">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -116,7 +116,7 @@
 <Adjective nr="77"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="HEYTING3" nr="3">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -125,7 +125,7 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="252">
+<Func kind="K" nr="253">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -135,26 +135,7 @@
 <Adjective nr="53"/>
 </Cluster>
 </FCluster>
-<FCluster>
-<ArgTypes>
-<Typ kind="M" nr="2">
-<Cluster/>
-<Func kind="K" nr="82"/>
-</Typ>
-<Typ kind="M" nr="2">
-<Cluster/>
-<Func kind="K" nr="82"/>
-</Typ>
-</ArgTypes>
-<Func kind="K" nr="253">
-<LocusVar nr="1"/>
-<LocusVar nr="2"/>
-</Func>
-<Cluster>
-<Adjective nr="27"/>
-</Cluster>
-</FCluster>
-<FCluster>
+<FCluster aid="HEYTING3" nr="4">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -173,7 +154,7 @@
 <Adjective nr="27"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="HEYTING3" nr="5">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -184,7 +165,26 @@
 <Func kind="K" nr="82"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="253">
+<Func kind="K" nr="255">
+<LocusVar nr="1"/>
+<LocusVar nr="2"/>
+</Func>
+<Cluster>
+<Adjective nr="27"/>
+</Cluster>
+</FCluster>
+<FCluster aid="HEYTING3" nr="6">
+<ArgTypes>
+<Typ kind="M" nr="2">
+<Cluster/>
+<Func kind="K" nr="82"/>
+</Typ>
+<Typ kind="M" nr="2">
+<Cluster/>
+<Func kind="K" nr="82"/>
+</Typ>
+</ArgTypes>
+<Func kind="K" nr="254">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -192,14 +192,14 @@
 <Adjective nr="7" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="HEYTING3" nr="7">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="K" nr="82"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="255">
+<Func kind="K" nr="256">
 <Num nr="1"/>
 <LocusVar nr="1"/>
 </Func>
@@ -207,14 +207,14 @@
 <Adjective nr="7" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="HEYTING3" nr="8">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="K" nr="82"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="252">
+<Func kind="K" nr="253">
 <Func kind="K" nr="82"/>
 <Func kind="K" nr="105">
 <Func kind="K" nr="82"/>
@@ -225,14 +225,14 @@
 <Adjective nr="78" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="HEYTING3" nr="9">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="K" nr="82"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="251">
+<Func kind="K" nr="252">
 <Func kind="K" nr="82"/>
 <Func kind="K" nr="105">
 <Func kind="K" nr="82"/>

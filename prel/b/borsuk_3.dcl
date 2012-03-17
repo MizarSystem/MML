@@ -30,7 +30,7 @@
 <ArticleID name="PCOMPS_1"/>
 <ArticleID name="BORSUK_1"/>
 </Signature>
-<RCluster>
+<RCluster aid="BORSUK_3" nr="1">
 <ArgTypes/>
 <Typ kind="G" nr="5">
 <Cluster/>
@@ -41,7 +41,7 @@
 <Adjective nr="21"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="BORSUK_3" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster/>
@@ -61,7 +61,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="BORSUK_3" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -80,7 +80,7 @@
 <Adjective nr="1"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="BORSUK_3" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -99,7 +99,7 @@
 <Adjective nr="1"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="BORSUK_3" nr="3">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster/>
@@ -124,7 +124,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="BORSUK_3" nr="4">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster/>
@@ -149,7 +149,7 @@
 <Adjective nr="20"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="BORSUK_3" nr="5">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
@@ -173,7 +173,7 @@
 <Adjective nr="21"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="BORSUK_3" nr="6">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
@@ -198,7 +198,7 @@
 <Adjective nr="29"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="BORSUK_3" nr="7">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
@@ -227,7 +227,7 @@
 <Adjective nr="29"/>
 </Cluster>
 </FCluster>
-<CCluster>
+<CCluster aid="BORSUK_3" nr="1">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="12"/>

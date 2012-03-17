@@ -21,7 +21,6 @@
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="FINSEQ_2"/>
-<ArticleID name="BINOP_2"/>
 <ArticleID name="FRAENKEL"/>
 <ArticleID name="XBOOLEAN"/>
 <ArticleID name="MARGREL1"/>
@@ -87,7 +86,7 @@
 </Func>
 </Typ>
 <Pred kind="P" nr="1">
-<Func kind="K" nr="275">
+<Func kind="K" nr="227">
 <Func kind="F" nr="1"/>
 <Var nr="1"/>
 <Var nr="2"/>
@@ -97,7 +96,7 @@
 <Func kind="K" nr="148">
 <Func kind="K" nr="91"/>
 <Var nr="2"/>
-<Func kind="K" nr="249">
+<Func kind="K" nr="201">
 <Func kind="K" nr="91"/>
 <Func kind="K" nr="92"/>
 </Func>
@@ -108,7 +107,7 @@
 <Func kind="K" nr="148">
 <Func kind="K" nr="91"/>
 <Var nr="2"/>
-<Func kind="K" nr="249">
+<Func kind="K" nr="201">
 <Func kind="K" nr="91"/>
 <Num nr="1"/>
 </Func>
@@ -200,7 +199,7 @@
 </Typ>
 <And>
 <Pred kind="P" nr="1">
-<Func kind="K" nr="275">
+<Func kind="K" nr="227">
 <Func kind="F" nr="1"/>
 <Var nr="1"/>
 <Var nr="2"/>
@@ -210,7 +209,7 @@
 <Func kind="K" nr="148">
 <Func kind="K" nr="91"/>
 <Var nr="2"/>
-<Func kind="K" nr="249">
+<Func kind="K" nr="201">
 <Func kind="K" nr="91"/>
 <Func kind="K" nr="92"/>
 </Func>
@@ -218,7 +217,7 @@
 </Func>
 </Pred>
 <Pred kind="P" nr="2">
-<Func kind="K" nr="275">
+<Func kind="K" nr="227">
 <Func kind="F" nr="1"/>
 <Var nr="1"/>
 <Var nr="2"/>
@@ -228,7 +227,7 @@
 <Func kind="K" nr="148">
 <Func kind="K" nr="91"/>
 <Var nr="2"/>
-<Func kind="K" nr="249">
+<Func kind="K" nr="201">
 <Func kind="K" nr="91"/>
 <Num nr="1"/>
 </Func>

@@ -25,7 +25,7 @@
 <ArticleID name="RLVECT_1"/>
 <ArticleID name="PARSP_1"/>
 </Signature>
-<RCluster>
+<RCluster aid="PARSP_1" nr="1">
 <ArgTypes/>
 <Typ kind="G" nr="13">
 <Cluster/>
@@ -34,7 +34,7 @@
 <Adjective nr="93"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="PARSP_1" nr="2">
 <ArgTypes/>
 <Typ kind="G" nr="13">
 <Cluster/>
@@ -43,7 +43,7 @@
 <Adjective nr="23" value="false"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="PARSP_1" nr="3">
 <ArgTypes/>
 <Typ kind="G" nr="13">
 <Cluster/>
@@ -54,7 +54,7 @@
 <Adjective nr="94"/>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="PARSP_1" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="10">
 <Cluster>
@@ -79,7 +79,7 @@
 <Adjective nr="7" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="PARSP_1" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="10">
 <Cluster>
@@ -104,7 +104,7 @@
 <Adjective nr="7" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="PARSP_1" nr="3">
 <ArgTypes>
 <Typ kind="G" nr="10">
 <Cluster>

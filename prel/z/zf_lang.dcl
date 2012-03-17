@@ -16,7 +16,7 @@
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="ZF_LANG"/>
 </Signature>
-<RCluster>
+<RCluster aid="ZF_LANG" nr="1">
 <ArgTypes/>
 <Typ kind="M" nr="7">
 <Cluster/>
@@ -30,14 +30,14 @@
 <Adjective nr="21"/>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="ZF_LANG" nr="1">
 <ArgTypes/>
 <Func kind="K" nr="85"/>
 <Cluster>
 <Adjective nr="7" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="ZF_LANG" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -56,7 +56,7 @@
 <Adjective nr="21"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="ZF_LANG" nr="3">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -75,7 +75,7 @@
 <Adjective nr="21"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="ZF_LANG" nr="4">
 <ArgTypes>
 <Typ kind="M" nr="7">
 <Cluster>
@@ -91,7 +91,7 @@
 <Adjective nr="21"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="ZF_LANG" nr="5">
 <ArgTypes>
 <Typ kind="M" nr="7">
 <Cluster>
@@ -114,7 +114,7 @@
 <Adjective nr="21"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="ZF_LANG" nr="6">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>

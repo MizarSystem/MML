@@ -24,7 +24,7 @@
 <ArticleID name="GLIB_000"/>
 <ArticleID name="GLIB_002"/>
 </Signature>
-<RCluster>
+<RCluster aid="GLIB_002" nr="1">
 <ArgTypes/>
 <Typ kind="M" nr="15">
 <Cluster/>
@@ -39,7 +39,7 @@
 <Adjective nr="50"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="GLIB_002" nr="2">
 <ArgTypes/>
 <Typ kind="M" nr="15">
 <Cluster/>
@@ -54,7 +54,7 @@
 <Adjective nr="50"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="GLIB_002" nr="3">
 <ArgTypes>
 <Typ kind="M" nr="15">
 <Cluster>
@@ -76,7 +76,7 @@
 <Adjective nr="50"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="GLIB_002" nr="4">
 <ArgTypes>
 <Typ kind="M" nr="15">
 <Cluster>
@@ -98,7 +98,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="GLIB_002" nr="5">
 <ArgTypes>
 <Typ kind="M" nr="15">
 <Cluster>
@@ -121,7 +121,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="GLIB_002" nr="6">
 <ArgTypes>
 <Typ kind="M" nr="15">
 <Cluster>
@@ -144,7 +144,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="GLIB_002" nr="7">
 <ArgTypes/>
 <Typ kind="M" nr="11">
 <Cluster/>
@@ -159,7 +159,7 @@
 <Adjective nr="55"/>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="GLIB_002" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="11">
 <Cluster>
@@ -188,7 +188,7 @@
 </Cluster>
 </Typ>
 </FCluster>
-<FCluster>
+<FCluster aid="GLIB_002" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="11">
 <Cluster>
@@ -217,7 +217,7 @@
 </Cluster>
 </Typ>
 </FCluster>
-<FCluster>
+<FCluster aid="GLIB_002" nr="3">
 <ArgTypes>
 <Typ kind="M" nr="11">
 <Cluster>
@@ -246,7 +246,7 @@
 </Cluster>
 </Typ>
 </FCluster>
-<CCluster>
+<CCluster aid="GLIB_002" nr="1">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="27"/>
@@ -260,7 +260,7 @@
 <Adjective nr="48"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="GLIB_002" nr="2">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="27"/>
@@ -275,7 +275,7 @@
 <Adjective nr="50"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="GLIB_002" nr="3">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="27"/>
@@ -289,7 +289,7 @@
 <Adjective nr="33"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="GLIB_002" nr="4">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="27"/>
@@ -304,7 +304,7 @@
 <Adjective nr="49"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="GLIB_002" nr="5">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="27"/>
@@ -319,7 +319,7 @@
 <Adjective nr="50"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="GLIB_002" nr="6">
 <ArgTypes>
 <Typ kind="M" nr="15">
 <Cluster>
@@ -349,7 +349,7 @@
 <Adjective nr="50"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="GLIB_002" nr="7">
 <ArgTypes>
 <Typ kind="M" nr="15">
 <Cluster>
@@ -367,7 +367,7 @@
 <Adjective nr="49"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="GLIB_002" nr="8">
 <ArgTypes>
 <Typ kind="M" nr="15">
 <Cluster>
@@ -388,7 +388,7 @@
 <Adjective nr="48"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="GLIB_002" nr="9">
 <ArgTypes>
 <Typ kind="M" nr="15">
 <Cluster>
@@ -424,7 +424,7 @@
 </Adjective>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="GLIB_002" nr="10">
 <ArgTypes>
 <Typ kind="M" nr="15">
 <Cluster>
@@ -454,7 +454,7 @@
 </Adjective>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="GLIB_002" nr="11">
 <ArgTypes>
 <Typ kind="M" nr="15">
 <Cluster>
@@ -503,7 +503,7 @@
 <Adjective nr="50"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="GLIB_002" nr="12">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="38"/>
@@ -518,7 +518,7 @@
 <Adjective nr="53"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="GLIB_002" nr="13">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="38"/>
@@ -534,7 +534,7 @@
 <Adjective nr="55"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="GLIB_002" nr="14">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="38"/>
@@ -549,7 +549,7 @@
 <Adjective nr="46"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="GLIB_002" nr="15">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="38"/>
@@ -565,7 +565,7 @@
 <Adjective nr="54"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="GLIB_002" nr="16">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="38"/>

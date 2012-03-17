@@ -6,7 +6,7 @@
 <ArticleID name="RELAT_1"/>
 <ArticleID name="FUNCT_1"/>
 </Signature>
-<FCluster>
+<FCluster aid="GRFUNC_1" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>

@@ -23,7 +23,6 @@
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="FINSEQ_2"/>
 <ArticleID name="PBOOLE"/>
-<ArticleID name="BINOP_2"/>
 <ArticleID name="FRAENKEL"/>
 <ArticleID name="XBOOLEAN"/>
 <ArticleID name="MARGREL1"/>
@@ -61,7 +60,7 @@
 <ArticleID name="CHORD"/>
 <ArticleID name="LEXBFS"/>
 </Signature>
-<RCluster>
+<RCluster aid="LEXBFS" nr="1">
 <ArgTypes/>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -71,7 +70,7 @@
 <Adjective nr="246"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="LEXBFS" nr="2">
 <ArgTypes/>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -87,7 +86,7 @@
 <Adjective nr="246"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="LEXBFS" nr="3">
 <ArgTypes/>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -99,7 +98,7 @@
 <Adjective nr="247"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="LEXBFS" nr="4">
 <ArgTypes>
 <Typ kind="M" nr="29">
 <Cluster>
@@ -121,7 +120,7 @@
 <Adjective nr="177"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="LEXBFS" nr="5">
 <ArgTypes/>
 <Typ kind="M" nr="29">
 <Cluster/>
@@ -138,7 +137,7 @@
 <Adjective nr="249"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="LEXBFS" nr="6">
 <ArgTypes/>
 <Typ kind="M" nr="29">
 <Cluster/>
@@ -160,7 +159,7 @@
 <Adjective nr="252"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="LEXBFS" nr="7">
 <ArgTypes/>
 <Typ kind="M" nr="29">
 <Cluster/>
@@ -181,7 +180,7 @@
 <Adjective nr="250"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="LEXBFS" nr="8">
 <ArgTypes>
 <Typ kind="M" nr="29">
 <Cluster>
@@ -203,7 +202,7 @@
 <Adjective nr="249"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="LEXBFS" nr="9">
 <ArgTypes>
 <Typ kind="M" nr="29">
 <Cluster>
@@ -228,7 +227,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="LEXBFS" nr="10">
 <ArgTypes>
 <Typ kind="M" nr="29">
 <Cluster>
@@ -258,7 +257,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="LEXBFS" nr="11">
 <ArgTypes>
 <Typ kind="M" nr="29">
 <Cluster>
@@ -290,7 +289,7 @@
 <Adjective nr="249"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="LEXBFS" nr="12">
 <ArgTypes>
 <Typ kind="M" nr="29">
 <Cluster>
@@ -328,7 +327,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="LEXBFS" nr="13">
 <ArgTypes/>
 <Typ kind="M" nr="11">
 <Cluster/>
@@ -342,7 +341,7 @@
 <Adjective nr="255"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="LEXBFS" nr="14">
 <ArgTypes/>
 <Typ kind="M" nr="11">
 <Cluster/>
@@ -358,7 +357,7 @@
 <Adjective nr="259"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="LEXBFS" nr="15">
 <ArgTypes/>
 <Typ kind="M" nr="11">
 <Cluster/>
@@ -379,7 +378,7 @@
 <Adjective nr="262"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="LEXBFS" nr="16">
 <ArgTypes/>
 <Typ kind="M" nr="11">
 <Cluster/>
@@ -399,7 +398,7 @@
 <Adjective nr="260"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="LEXBFS" nr="17">
 <ArgTypes/>
 <Typ kind="M" nr="11">
 <Cluster/>
@@ -419,7 +418,7 @@
 <Adjective nr="264"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="LEXBFS" nr="18">
 <ArgTypes/>
 <Typ kind="M" nr="11">
 <Cluster/>
@@ -433,7 +432,7 @@
 <Adjective nr="265"/>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="LEXBFS" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -441,15 +440,15 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="477">
+<Func kind="K" nr="430">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
 <Adjective nr="59">
-<Func kind="K" nr="457">
+<Func kind="K" nr="410">
 <LocusVar nr="1"/>
 </Func>
-<Func kind="K" nr="457">
+<Func kind="K" nr="410">
 <LocusVar nr="1"/>
 </Func>
 </Adjective>
@@ -459,7 +458,7 @@
 <Adjective nr="71"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="LEXBFS" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="29">
 <Cluster>
@@ -470,16 +469,16 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="502">
+<Func kind="K" nr="455">
 <LocusVar nr="1"/>
-<Func kind="K" nr="597"/>
+<Func kind="K" nr="550"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
 <Adjective nr="181"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="LEXBFS" nr="3">
 <ArgTypes>
 <Typ kind="M" nr="29">
 <Cluster>
@@ -491,16 +490,16 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="502">
+<Func kind="K" nr="455">
 <LocusVar nr="1"/>
-<Func kind="K" nr="597"/>
+<Func kind="K" nr="550"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
 <Adjective nr="182"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="LEXBFS" nr="4">
 <ArgTypes>
 <Typ kind="M" nr="29">
 <Cluster>
@@ -512,16 +511,16 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="502">
+<Func kind="K" nr="455">
 <LocusVar nr="1"/>
-<Func kind="K" nr="597"/>
+<Func kind="K" nr="550"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
 <Adjective nr="183"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="LEXBFS" nr="5">
 <ArgTypes>
 <Typ kind="M" nr="29">
 <Cluster>
@@ -533,16 +532,16 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="502">
+<Func kind="K" nr="455">
 <LocusVar nr="1"/>
-<Func kind="K" nr="597"/>
+<Func kind="K" nr="550"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
 <Adjective nr="184"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="LEXBFS" nr="6">
 <ArgTypes>
 <Typ kind="M" nr="29">
 <Cluster>
@@ -554,16 +553,16 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="502">
+<Func kind="K" nr="455">
 <LocusVar nr="1"/>
-<Func kind="K" nr="597"/>
+<Func kind="K" nr="550"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
 <Adjective nr="184" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="LEXBFS" nr="7">
 <ArgTypes>
 <Typ kind="M" nr="29">
 <Cluster>
@@ -575,16 +574,16 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="502">
+<Func kind="K" nr="455">
 <LocusVar nr="1"/>
-<Func kind="K" nr="597"/>
+<Func kind="K" nr="550"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
 <Adjective nr="185"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="LEXBFS" nr="8">
 <ArgTypes>
 <Typ kind="M" nr="29">
 <Cluster>
@@ -596,16 +595,16 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="502">
+<Func kind="K" nr="455">
 <LocusVar nr="1"/>
-<Func kind="K" nr="597"/>
+<Func kind="K" nr="550"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
 <Adjective nr="186"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="LEXBFS" nr="9">
 <ArgTypes>
 <Typ kind="M" nr="29">
 <Cluster>
@@ -617,16 +616,16 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="502">
+<Func kind="K" nr="455">
 <LocusVar nr="1"/>
-<Func kind="K" nr="597"/>
+<Func kind="K" nr="550"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
 <Adjective nr="202"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="LEXBFS" nr="10">
 <ArgTypes>
 <Typ kind="M" nr="29">
 <Cluster>
@@ -638,16 +637,16 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="502">
+<Func kind="K" nr="455">
 <LocusVar nr="1"/>
-<Func kind="K" nr="597"/>
+<Func kind="K" nr="550"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
 <Adjective nr="203"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="LEXBFS" nr="11">
 <ArgTypes>
 <Typ kind="M" nr="29">
 <Cluster>
@@ -659,16 +658,16 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="502">
+<Func kind="K" nr="455">
 <LocusVar nr="1"/>
-<Func kind="K" nr="597"/>
+<Func kind="K" nr="550"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
 <Adjective nr="222"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="LEXBFS" nr="12">
 <ArgTypes>
 <Typ kind="M" nr="29">
 <Cluster>
@@ -680,16 +679,16 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="502">
+<Func kind="K" nr="455">
 <LocusVar nr="1"/>
-<Func kind="K" nr="597"/>
+<Func kind="K" nr="550"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
 <Adjective nr="221"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="LEXBFS" nr="13">
 <ArgTypes>
 <Typ kind="M" nr="29">
 <Cluster>
@@ -701,16 +700,16 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="502">
+<Func kind="K" nr="455">
 <LocusVar nr="1"/>
-<Func kind="K" nr="597"/>
+<Func kind="K" nr="550"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
 <Adjective nr="220"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="LEXBFS" nr="14">
 <ArgTypes>
 <Typ kind="M" nr="29">
 <Cluster>
@@ -722,16 +721,16 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="502">
+<Func kind="K" nr="455">
 <LocusVar nr="1"/>
-<Func kind="K" nr="568"/>
+<Func kind="K" nr="521"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
 <Adjective nr="249"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="LEXBFS" nr="15">
 <ArgTypes>
 <Typ kind="M" nr="29">
 <Cluster>
@@ -745,22 +744,22 @@
 <Cluster>
 <Adjective nr="4"/>
 </Cluster>
-<Func kind="K" nr="495">
+<Func kind="K" nr="448">
 <LocusVar nr="1"/>
 </Func>
 <LocusVar nr="2"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="502">
+<Func kind="K" nr="455">
 <LocusVar nr="1"/>
-<Func kind="K" nr="597"/>
+<Func kind="K" nr="550"/>
 <LocusVar nr="3"/>
 </Func>
 <Cluster>
 <Adjective nr="249"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="LEXBFS" nr="16">
 <ArgTypes>
 <Typ kind="M" nr="29">
 <Cluster>
@@ -769,21 +768,21 @@
 </Typ>
 <Typ kind="M" nr="11">
 <Cluster/>
-<Func kind="K" nr="495">
+<Func kind="K" nr="448">
 <LocusVar nr="1"/>
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="502">
+<Func kind="K" nr="455">
 <LocusVar nr="1"/>
-<Func kind="K" nr="597"/>
+<Func kind="K" nr="550"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
 <Adjective nr="249"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="LEXBFS" nr="17">
 <ArgTypes>
 <Typ kind="M" nr="29">
 <Cluster>
@@ -791,16 +790,16 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="502">
+<Func kind="K" nr="455">
 <LocusVar nr="1"/>
-<Func kind="K" nr="597"/>
+<Func kind="K" nr="550"/>
 <Func kind="K" nr="18"/>
 </Func>
 <Cluster>
 <Adjective nr="249"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="LEXBFS" nr="18">
 <ArgTypes>
 <Typ kind="M" nr="29">
 <Cluster>
@@ -810,7 +809,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="571">
+<Func kind="K" nr="524">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -819,7 +818,7 @@
 <Adjective nr="46"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="LEXBFS" nr="19">
 <ArgTypes>
 <Typ kind="M" nr="29">
 <Cluster>
@@ -829,7 +828,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="598">
+<Func kind="K" nr="551">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -838,7 +837,7 @@
 <Adjective nr="46"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="LEXBFS" nr="20">
 <ArgTypes>
 <Typ kind="M" nr="29">
 <Cluster>
@@ -848,7 +847,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="598">
+<Func kind="K" nr="551">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -857,7 +856,7 @@
 <Adjective nr="22"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="LEXBFS" nr="21">
 <ArgTypes>
 <Typ kind="M" nr="29">
 <Cluster>
@@ -867,7 +866,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="598">
+<Func kind="K" nr="551">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -876,7 +875,7 @@
 <Adjective nr="247"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="LEXBFS" nr="22">
 <ArgTypes>
 <Typ kind="M" nr="29">
 <Cluster>
@@ -892,7 +891,7 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="577">
+<Func kind="K" nr="530">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
@@ -903,7 +902,7 @@
 <Adjective nr="249"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="LEXBFS" nr="23">
 <ArgTypes>
 <Typ kind="M" nr="29">
 <Cluster>
@@ -922,7 +921,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="577">
+<Func kind="K" nr="530">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
@@ -933,7 +932,7 @@
 <Adjective nr="248"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="LEXBFS" nr="24">
 <ArgTypes>
 <Typ kind="M" nr="29">
 <Cluster>
@@ -952,7 +951,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="577">
+<Func kind="K" nr="530">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
@@ -963,7 +962,7 @@
 <Adjective nr="250"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="LEXBFS" nr="25">
 <ArgTypes>
 <Typ kind="M" nr="29">
 <Cluster>
@@ -982,7 +981,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="577">
+<Func kind="K" nr="530">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
@@ -993,7 +992,7 @@
 <Adjective nr="251"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="LEXBFS" nr="26">
 <ArgTypes>
 <Typ kind="M" nr="29">
 <Cluster>
@@ -1012,7 +1011,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="577">
+<Func kind="K" nr="530">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
@@ -1023,7 +1022,7 @@
 <Adjective nr="252"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="LEXBFS" nr="27">
 <ArgTypes>
 <Typ kind="M" nr="11">
 <Cluster>
@@ -1052,7 +1051,7 @@
 </Cluster>
 </Typ>
 </FCluster>
-<FCluster>
+<FCluster aid="LEXBFS" nr="28">
 <ArgTypes>
 <Typ kind="M" nr="11">
 <Cluster>
@@ -1084,7 +1083,7 @@
 </Cluster>
 </Typ>
 </FCluster>
-<FCluster>
+<FCluster aid="LEXBFS" nr="29">
 <ArgTypes>
 <Typ kind="M" nr="11">
 <Cluster>
@@ -1116,7 +1115,7 @@
 </Cluster>
 </Typ>
 </FCluster>
-<FCluster>
+<FCluster aid="LEXBFS" nr="30">
 <ArgTypes>
 <Typ kind="M" nr="11">
 <Cluster>
@@ -1148,7 +1147,7 @@
 </Cluster>
 </Typ>
 </FCluster>
-<FCluster>
+<FCluster aid="LEXBFS" nr="31">
 <ArgTypes>
 <Typ kind="M" nr="11">
 <Cluster>
@@ -1180,7 +1179,7 @@
 </Cluster>
 </Typ>
 </FCluster>
-<FCluster>
+<FCluster aid="LEXBFS" nr="32">
 <ArgTypes>
 <Typ kind="M" nr="11">
 <Cluster>
@@ -1209,7 +1208,7 @@
 </Cluster>
 </Typ>
 </FCluster>
-<FCluster>
+<FCluster aid="LEXBFS" nr="33">
 <ArgTypes>
 <Typ kind="M" nr="11">
 <Cluster>
@@ -1241,7 +1240,7 @@
 </Cluster>
 </Typ>
 </FCluster>
-<FCluster>
+<FCluster aid="LEXBFS" nr="34">
 <ArgTypes>
 <Typ kind="M" nr="11">
 <Cluster>
@@ -1276,7 +1275,7 @@
 </Cluster>
 </Typ>
 </FCluster>
-<FCluster>
+<FCluster aid="LEXBFS" nr="35">
 <ArgTypes>
 <Typ kind="M" nr="11">
 <Cluster>
@@ -1311,7 +1310,7 @@
 </Cluster>
 </Typ>
 </FCluster>
-<FCluster>
+<FCluster aid="LEXBFS" nr="36">
 <ArgTypes>
 <Typ kind="M" nr="11">
 <Cluster>
@@ -1346,7 +1345,7 @@
 </Cluster>
 </Typ>
 </FCluster>
-<FCluster>
+<FCluster aid="LEXBFS" nr="37">
 <ArgTypes>
 <Typ kind="M" nr="11">
 <Cluster>
@@ -1381,7 +1380,7 @@
 </Cluster>
 </Typ>
 </FCluster>
-<FCluster>
+<FCluster aid="LEXBFS" nr="38">
 <ArgTypes>
 <Typ kind="M" nr="11">
 <Cluster>
@@ -1416,7 +1415,7 @@
 </Cluster>
 </Typ>
 </FCluster>
-<FCluster>
+<FCluster aid="LEXBFS" nr="39">
 <ArgTypes>
 <Typ kind="M" nr="11">
 <Cluster>
@@ -1451,7 +1450,7 @@
 </Cluster>
 </Typ>
 </FCluster>
-<FCluster>
+<FCluster aid="LEXBFS" nr="40">
 <ArgTypes>
 <Typ kind="M" nr="29">
 <Cluster>
@@ -1460,7 +1459,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="610">
+<Func kind="K" nr="563">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -1474,7 +1473,7 @@
 <Adjective nr="262"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="LEXBFS" nr="41">
 <ArgTypes>
 <Typ kind="M" nr="29">
 <Cluster>
@@ -1483,7 +1482,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="610">
+<Func kind="K" nr="563">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -1497,7 +1496,7 @@
 <Adjective nr="262"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="LEXBFS" nr="42">
 <ArgTypes>
 <Typ kind="M" nr="29">
 <Cluster>
@@ -1513,7 +1512,7 @@
 </Typ>
 </ArgTypes>
 <Func kind="K" nr="12">
-<Func kind="K" nr="610">
+<Func kind="K" nr="563">
 <LocusVar nr="1"/>
 </Func>
 <LocusVar nr="2"/>
@@ -1532,7 +1531,7 @@
 </Cluster>
 </Typ>
 </FCluster>
-<FCluster>
+<FCluster aid="LEXBFS" nr="43">
 <ArgTypes>
 <Typ kind="M" nr="29">
 <Cluster>
@@ -1542,7 +1541,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="610">
+<Func kind="K" nr="563">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -1556,7 +1555,7 @@
 <Adjective nr="262"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="LEXBFS" nr="44">
 <ArgTypes>
 <Typ kind="M" nr="29">
 <Cluster>
@@ -1565,7 +1564,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="610">
+<Func kind="K" nr="563">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -1579,7 +1578,7 @@
 <Adjective nr="265"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="LEXBFS" nr="45">
 <ArgTypes>
 <Typ kind="M" nr="29">
 <Cluster>
@@ -1588,7 +1587,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="618">
+<Func kind="K" nr="571">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -1601,7 +1600,7 @@
 <Adjective nr="260"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="LEXBFS" nr="46">
 <ArgTypes>
 <Typ kind="M" nr="29">
 <Cluster>
@@ -1617,7 +1616,7 @@
 </Typ>
 </ArgTypes>
 <Func kind="K" nr="12">
-<Func kind="K" nr="618">
+<Func kind="K" nr="571">
 <LocusVar nr="1"/>
 </Func>
 <LocusVar nr="2"/>
@@ -1636,7 +1635,7 @@
 </Cluster>
 </Typ>
 </FCluster>
-<FCluster>
+<FCluster aid="LEXBFS" nr="47">
 <ArgTypes>
 <Typ kind="M" nr="29">
 <Cluster>
@@ -1646,7 +1645,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="618">
+<Func kind="K" nr="571">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -1659,7 +1658,7 @@
 <Adjective nr="260"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="LEXBFS" nr="48">
 <ArgTypes>
 <Typ kind="M" nr="29">
 <Cluster>
@@ -1668,7 +1667,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="618">
+<Func kind="K" nr="571">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -1681,7 +1680,7 @@
 <Adjective nr="260"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="LEXBFS" nr="49">
 <ArgTypes>
 <Typ kind="M" nr="29">
 <Cluster>
@@ -1690,7 +1689,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="618">
+<Func kind="K" nr="571">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -1703,7 +1702,7 @@
 <Adjective nr="265"/>
 </Cluster>
 </FCluster>
-<CCluster>
+<CCluster aid="LEXBFS" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -1720,7 +1719,7 @@
 <Adjective nr="21"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="LEXBFS" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="29">
 <Cluster>
@@ -1747,7 +1746,7 @@
 </Adjective>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="LEXBFS" nr="3">
 <ArgTypes>
 <Typ kind="M" nr="29">
 <Cluster>
@@ -1775,7 +1774,7 @@
 <Adjective nr="248"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="LEXBFS" nr="4">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="193"/>
@@ -1789,7 +1788,7 @@
 <Adjective nr="255"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="LEXBFS" nr="5">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="255"/>
@@ -1802,7 +1801,7 @@
 <Adjective nr="193"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="LEXBFS" nr="6">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="192"/>
@@ -1819,7 +1818,7 @@
 <Adjective nr="254"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="LEXBFS" nr="7">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="192"/>
@@ -1836,7 +1835,7 @@
 <Adjective nr="255"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="LEXBFS" nr="8">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="192"/>
@@ -1853,7 +1852,7 @@
 <Adjective nr="233"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="LEXBFS" nr="9">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="192"/>
@@ -1870,7 +1869,7 @@
 <Adjective nr="258"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="LEXBFS" nr="10">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="192"/>
@@ -1887,7 +1886,7 @@
 <Adjective nr="256"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="LEXBFS" nr="11">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="192"/>
@@ -1904,7 +1903,7 @@
 <Adjective nr="263"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="LEXBFS" nr="12">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="192"/>

@@ -22,7 +22,7 @@
 <ArticleID name="ANALOAF"/>
 <ArticleID name="ANALORT"/>
 </Signature>
-<FCluster>
+<FCluster aid="ANALORT" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="11">
 <Cluster>
@@ -57,7 +57,7 @@
 <Adjective nr="76"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="ANALORT" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="11">
 <Cluster>

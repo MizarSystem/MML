@@ -41,7 +41,7 @@
 <ArticleID name="VECTSP_1"/>
 <ArticleID name="RINGCAT1"/>
 </Signature>
-<RCluster>
+<RCluster aid="RINGCAT1" nr="1">
 <ArgTypes/>
 <Typ kind="G" nr="16">
 <Cluster/>
@@ -50,7 +50,7 @@
 <Adjective nr="140"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="RINGCAT1" nr="2">
 <ArgTypes/>
 <Typ kind="G" nr="16">
 <Cluster/>
@@ -60,7 +60,7 @@
 <Adjective nr="141"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="RINGCAT1" nr="3">
 <ArgTypes>
 <Typ kind="G" nr="10">
 <Cluster>
@@ -87,7 +87,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Typ kind="M" nr="28">
+<Typ kind="M" nr="29">
 <Cluster/>
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
@@ -97,7 +97,7 @@
 <Adjective nr="141"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="RINGCAT1" nr="4">
 <ArgTypes/>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -107,7 +107,7 @@
 <Adjective nr="142"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="RINGCAT1" nr="5">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -132,7 +132,7 @@
 <Adjective nr="134"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="RINGCAT1" nr="6">
 <ArgTypes/>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -142,7 +142,7 @@
 <Adjective nr="143"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="RINGCAT1" nr="7">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -160,7 +160,7 @@
 <Adjective nr="141"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="RINGCAT1" nr="8">
 <ArgTypes>
 <Typ kind="G" nr="10">
 <Cluster>
@@ -186,7 +186,7 @@
 <Adjective nr="134"/>
 </Cluster>
 </Typ>
-<Typ kind="M" nr="31">
+<Typ kind="M" nr="32">
 <Cluster/>
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
@@ -201,7 +201,7 @@
 <Adjective nr="141"/>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="RINGCAT1" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="10">
 <Cluster>
@@ -228,7 +228,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="RINGCAT1" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="10">
 <Cluster>
@@ -243,7 +243,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="350">
+<Func kind="K" nr="351">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -251,7 +251,7 @@
 <Adjective nr="141"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="RINGCAT1" nr="3">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -260,14 +260,14 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="355">
+<Func kind="K" nr="356">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
 <Adjective nr="7" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="RINGCAT1" nr="4">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -276,14 +276,14 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="355">
+<Func kind="K" nr="356">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
 <Adjective nr="142"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="RINGCAT1" nr="5">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -292,7 +292,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="364">
+<Func kind="K" nr="365">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -300,7 +300,7 @@
 <Adjective nr="95" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="RINGCAT1" nr="6">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -309,14 +309,14 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="364">
+<Func kind="K" nr="365">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
 <Adjective nr="96"/>
 </Cluster>
 </FCluster>
-<CCluster>
+<CCluster aid="RINGCAT1" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="10">
 <Cluster>
@@ -377,7 +377,7 @@
 </Adjective>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="RINGCAT1" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="10">
 <Cluster>

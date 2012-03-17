@@ -16,7 +16,7 @@
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="CLASSES2"/>
 </Signature>
-<RCluster>
+<RCluster aid="CLASSES2" nr="1">
 <ArgTypes/>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -26,7 +26,7 @@
 <Adjective nr="22"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="CLASSES2" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -43,7 +43,7 @@
 <Adjective nr="1" value="false"/>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="CLASSES2" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -56,7 +56,7 @@
 <Adjective nr="18"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="CLASSES2" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -72,7 +72,7 @@
 <Adjective nr="12"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="CLASSES2" nr="3">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -88,7 +88,7 @@
 <Adjective nr="22"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="CLASSES2" nr="4">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -103,7 +103,7 @@
 <Adjective nr="22"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="CLASSES2" nr="5">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -116,7 +116,7 @@
 <Adjective nr="10"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="CLASSES2" nr="6">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -131,7 +131,7 @@
 <Adjective nr="10"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="CLASSES2" nr="7">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -146,7 +146,7 @@
 <Adjective nr="10"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="CLASSES2" nr="8">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -162,7 +162,7 @@
 <Adjective nr="22"/>
 </Cluster>
 </FCluster>
-<CCluster>
+<CCluster aid="CLASSES2" nr="1">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="18"/>
@@ -174,7 +174,7 @@
 <Adjective nr="17"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="CLASSES2" nr="2">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="22"/>
@@ -187,7 +187,7 @@
 <Adjective nr="18"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="CLASSES2" nr="3">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="10"/>

@@ -21,7 +21,7 @@
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="SEQM_3"/>
 </Signature>
-<RCluster>
+<RCluster aid="SEQM_3" nr="1">
 <ArgTypes/>
 <Typ kind="M" nr="4">
 <Cluster/>
@@ -47,7 +47,7 @@
 <Adjective nr="32"/>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="SEQM_3" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="4">
 <Cluster>
@@ -81,7 +81,7 @@
 <Adjective nr="32"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="SEQM_3" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -98,7 +98,7 @@
 <Adjective nr="6"/>
 </Cluster>
 </FCluster>
-<CCluster>
+<CCluster aid="SEQM_3" nr="1">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="4"/>
@@ -114,7 +114,7 @@
 <Adjective nr="34"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="SEQM_3" nr="2">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="4"/>
@@ -130,7 +130,7 @@
 <Adjective nr="35"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="SEQM_3" nr="3">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="4"/>
@@ -147,7 +147,7 @@
 <Adjective nr="35"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="SEQM_3" nr="4">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="4"/>
@@ -164,7 +164,7 @@
 <Adjective nr="6"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="SEQM_3" nr="5">
 <ArgTypes/>
 <Cluster/>
 <Typ kind="M" nr="7">

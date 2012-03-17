@@ -1065,7 +1065,8 @@ begin
 
 reserve fp,fp1,fp2 for FinSequence of NAT,
   fr for FinSequence of INT,
-  a,b,c,d,k,n for Element of NAT;
+  b,c,d,k,n for Element of NAT,
+  a for Nat;
 
 theorem Th30:
   for b,n st b in dom fp & len fp = n+1
@@ -1230,6 +1231,9 @@ A27:          Product Del(fp,b) hcf fp.b = 1 by A3,A11,A14,A25,NAT_1:13;
               = Product Del(fp1,k+1) hcf d by FINSEQ_1:59
                 .= Product(fp) hcf d by WSIERP_1:48
                 .= 1 by A17,WSIERP_1:43;
+  (for a be Nat st a in dom fp holds fp.a hcf d=1)
+   implies (Product(fp) hcf d)=1
+                     by WSIERP_1:43;
             end;
           end;
           hence CC[fp1];
@@ -1338,10 +1342,11 @@ A1: n > 0 & i1 mod n = 0;
 end;
 
 theorem Th36:
-  (for b st b in dom fp holds a divides fp.b) implies a divides Sum fp
+  (for b being Nat st b in dom fp holds a divides fp.b)
+   implies a divides Sum fp
 proof
   defpred RP[FinSequence of NAT] means
-  for b st b in dom $1 holds a divides $1.b;
+  for b being Nat st b in dom $1 holds a divides $1.b;
   defpred CC[FinSequence of NAT] means a divides Sum $1;
   defpred TH[FinSequence of NAT] means RP[$1] implies CC[$1];
 A1: TH[<*>NAT] by NAT_D:6,RVSUM_1:102;
@@ -1354,7 +1359,7 @@ A3: TH[fp];
 A4:   RP[fp1];
 A5:   RP[fp]
       proof
-        let b such that
+        let b be Nat such that
 A6:     b in dom fp;
 A7:     dom fp c= dom fp1 by FINSEQ_1:39;
         fp1.b = fp.b by A6,FINSEQ_1:def 7;
@@ -1640,7 +1645,7 @@ A7:     i<0;
       hence thesis by A6,NAT_D:def 3;
     end;
     k is Element of NAT by ORDINAL1:def 13;
-    then Product fp divides k by A1,A3,Th38;
+    Product fp divides k by A1,A3,Th38;
     then consider l being Nat such that
 A8: k=(Product fp)*l by NAT_D:def 3;
     Product fp divides (x-y) by A8,INT_1:def 9;
@@ -1661,20 +1666,14 @@ A11:  (x-fp1.b) mod fp.b = 0 & (y-fp1.b) mod fp.b = 0 by A2,A10;
       then consider i being Integer such that
 A12:  y-x=(fp.b)*i by INT_1:def 9;
 A13:  k=(fp.b)*i by A12;
-      i>=0
-      proof
-        assume
-A14:    i<0;
-        fp.b>0 by A1,A10;
-        hence contradiction by A13,A14,XREAL_1:134;
-      end;
+      i>=0 by A13,A1,A10,XREAL_1:134;
       then i in NAT by INT_1:16;
       then reconsider i as Nat by ORDINAL1:def 13;
       k is Nat & fp.b is Nat & i is Nat;
       hence thesis by A12,NAT_D:def 3;
     end;
     k is Element of NAT by ORDINAL1:def 13;
-    then Product fp divides k by A1,A9,Th38;
+    Product fp divides k by A1,A9,Th38;
     then consider l being Nat such that
 A15: k=(Product fp)*l by NAT_D:def 3;
     Product fp divides (y-x) by A15,INT_1:def 9;

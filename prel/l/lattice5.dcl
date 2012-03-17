@@ -38,7 +38,7 @@
 <ArticleID name="YELLOW_2"/>
 <ArticleID name="LATTICE5"/>
 </Signature>
-<RCluster>
+<RCluster aid="LATTICE5" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
@@ -89,7 +89,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="LATTICE5" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
@@ -101,7 +101,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Typ kind="M" nr="23">
+<Typ kind="M" nr="22">
 <Cluster/>
 <LocusVar nr="1"/>
 </Typ>
@@ -115,7 +115,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="LATTICE5" nr="3">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -169,13 +169,13 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="LATTICE5" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="256">
+<Func kind="K" nr="257">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -186,13 +186,13 @@
 <Adjective nr="77"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="LATTICE5" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="256">
+<Func kind="K" nr="257">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -202,20 +202,20 @@
 <Adjective nr="78"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="LATTICE5" nr="3">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="261">
+<Func kind="K" nr="262">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
 <Adjective nr="1" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="LATTICE5" nr="4">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -228,7 +228,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="264">
+<Func kind="K" nr="265">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -236,7 +236,7 @@
 <Adjective nr="1" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="LATTICE5" nr="5">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -275,7 +275,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="269">
+<Func kind="K" nr="270">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>

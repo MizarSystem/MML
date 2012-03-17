@@ -13,7 +13,7 @@
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="ORDERS_1"/>
 </Signature>
-<FCluster>
+<FCluster aid="ORDERS_1" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>

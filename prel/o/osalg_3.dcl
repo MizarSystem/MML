@@ -32,7 +32,7 @@
 <ArticleID name="OSALG_1"/>
 <ArticleID name="OSALG_3"/>
 </Signature>
-<RCluster>
+<RCluster aid="OSALG_3" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="15">
 <Cluster>
@@ -68,7 +68,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="OSALG_3" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="12">
 <Cluster>
@@ -101,7 +101,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="OSALG_3" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="15">
 <Cluster>
@@ -140,7 +140,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<CCluster>
+<CCluster aid="OSALG_3" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="15">
 <Cluster>

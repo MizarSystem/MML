@@ -12,10 +12,10 @@
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XCMPLX_0"/>
 <ArticleID name="XREAL_0"/>
-<ArticleID name="NAT_1"/>
 <ArticleID name="RELSET_1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
+<ArticleID name="NAT_1"/>
 <ArticleID name="FRAENKEL"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
@@ -28,14 +28,14 @@
 <ArticleID name="VALUED_0"/>
 <ArticleID name="MESFUNC1"/>
 </Signature>
-<FCluster>
+<FCluster aid="MESFUNC1" nr="1">
 <ArgTypes/>
-<Func kind="K" nr="150"/>
+<Func kind="K" nr="151"/>
 <Cluster>
 <Adjective nr="14" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="MESFUNC1" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -43,8 +43,8 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="152">
-<Func kind="K" nr="56">
+<Func kind="K" nr="153">
+<Func kind="K" nr="92">
 <LocusVar nr="1"/>
 <Num nr="1"/>
 </Func>

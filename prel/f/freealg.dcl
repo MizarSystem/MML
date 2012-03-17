@@ -33,7 +33,7 @@
 <ArticleID name="UNIALG_2"/>
 <ArticleID name="FREEALG"/>
 </Signature>
-<RCluster>
+<RCluster aid="FREEALG" nr="1">
 <ArgTypes/>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -43,7 +43,7 @@
 <Adjective nr="80"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="FREEALG" nr="2">
 <ArgTypes/>
 <Typ kind="M" nr="7">
 <Cluster/>
@@ -58,7 +58,7 @@
 <Adjective nr="23"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="FREEALG" nr="3">
 <ArgTypes/>
 <Typ kind="M" nr="7">
 <Cluster/>
@@ -73,7 +73,7 @@
 <Adjective nr="23"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="FREEALG" nr="4">
 <ArgTypes/>
 <Typ kind="G" nr="10">
 <Cluster/>
@@ -87,7 +87,7 @@
 <Adjective nr="82"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="FREEALG" nr="5">
 <ArgTypes>
 <Typ kind="G" nr="10">
 <Cluster>
@@ -109,7 +109,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="FREEALG" nr="6">
 <ArgTypes/>
 <Typ kind="G" nr="10">
 <Cluster/>
@@ -124,7 +124,7 @@
 <Adjective nr="82"/>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="FREEALG" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="7">
 <Cluster>
@@ -145,7 +145,7 @@
 <Adjective nr="45"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="FREEALG" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="7">
 <Cluster>
@@ -166,7 +166,7 @@
 <Adjective nr="50"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="FREEALG" nr="3">
 <ArgTypes>
 <Typ kind="M" nr="7">
 <Cluster>
@@ -189,7 +189,7 @@
 <Adjective nr="51"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="FREEALG" nr="4">
 <ArgTypes>
 <Typ kind="M" nr="7">
 <Cluster>
@@ -215,7 +215,7 @@
 <Adjective nr="51"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="FREEALG" nr="5">
 <ArgTypes>
 <Typ kind="M" nr="7">
 <Cluster>
@@ -243,7 +243,7 @@
 <Adjective nr="82"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="FREEALG" nr="6">
 <ArgTypes>
 <Typ kind="M" nr="7">
 <Cluster>

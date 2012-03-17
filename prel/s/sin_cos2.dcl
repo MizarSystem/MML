@@ -16,7 +16,7 @@
 <ArticleID name="XREAL_0"/>
 <ArticleID name="SIN_COS2"/>
 </Signature>
-<FCluster>
+<FCluster aid="SIN_COS2" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -29,7 +29,7 @@
 <Adjective nr="18"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="SIN_COS2" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -42,7 +42,7 @@
 <Adjective nr="18"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="SIN_COS2" nr="3">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>

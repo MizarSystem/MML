@@ -23,7 +23,7 @@
 <ArticleID name="BHSP_1"/>
 <ArticleID name="BHSP_5"/>
 </Signature>
-<RCluster>
+<RCluster aid="BHSP_5" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="13">
 <Cluster>
@@ -45,7 +45,7 @@
 <Adjective nr="18"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="BHSP_5" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="13">
 <Cluster>

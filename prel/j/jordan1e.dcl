@@ -12,14 +12,14 @@
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XCMPLX_0"/>
+<ArticleID name="MCART_1"/>
+<ArticleID name="FUNCT_2"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="XREAL_0"/>
 <ArticleID name="INT_1"/>
 <ArticleID name="FINSEQ_2"/>
-<ArticleID name="MCART_1"/>
-<ArticleID name="FUNCT_2"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="BINOP_1"/>
@@ -36,7 +36,7 @@
 <ArticleID name="TOPREAL1"/>
 <ArticleID name="JORDAN1E"/>
 </Signature>
-<FCluster>
+<FCluster aid="JORDAN1E" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster>
@@ -56,9 +56,10 @@
 </Func>
 </Func>
 </Typ>
-<Typ kind="M" nr="2">
-<Cluster/>
-<Func kind="K" nr="57"/>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="14"/>
+</Cluster>
 </Typ>
 </ArgTypes>
 <Func kind="K" nr="276">
@@ -69,7 +70,7 @@
 <Adjective nr="7" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="JORDAN1E" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster>
@@ -89,9 +90,10 @@
 </Func>
 </Func>
 </Typ>
-<Typ kind="M" nr="2">
-<Cluster/>
-<Func kind="K" nr="57"/>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="14"/>
+</Cluster>
 </Typ>
 </ArgTypes>
 <Func kind="K" nr="277">
@@ -102,7 +104,7 @@
 <Adjective nr="7" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="JORDAN1E" nr="3">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster>
@@ -138,7 +140,7 @@
 <Adjective nr="77"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="JORDAN1E" nr="4">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster>
@@ -174,7 +176,7 @@
 <Adjective nr="77"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="JORDAN1E" nr="5">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster>
@@ -207,7 +209,7 @@
 <Adjective nr="78"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="JORDAN1E" nr="6">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster>

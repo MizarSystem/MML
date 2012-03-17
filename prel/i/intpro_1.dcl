@@ -19,7 +19,7 @@
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="INTPRO_1"/>
 </Signature>
-<RCluster>
+<RCluster aid="INTPRO_1" nr="1">
 <ArgTypes/>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -29,21 +29,21 @@
 <Adjective nr="31"/>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="INTPRO_1" nr="1">
 <ArgTypes/>
 <Func kind="K" nr="111"/>
 <Cluster>
 <Adjective nr="31"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="INTPRO_1" nr="2">
 <ArgTypes/>
 <Func kind="K" nr="111"/>
 <Cluster>
 <Adjective nr="11"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="INTPRO_1" nr="3">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -59,14 +59,14 @@
 <Adjective nr="32"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="INTPRO_1" nr="4">
 <ArgTypes/>
 <Func kind="K" nr="118"/>
 <Cluster>
 <Adjective nr="32"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="INTPRO_1" nr="5">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -82,14 +82,14 @@
 <Adjective nr="33"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="INTPRO_1" nr="6">
 <ArgTypes/>
 <Func kind="K" nr="122"/>
 <Cluster>
 <Adjective nr="33"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="INTPRO_1" nr="7">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -105,14 +105,14 @@
 <Adjective nr="34"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="INTPRO_1" nr="8">
 <ArgTypes/>
 <Func kind="K" nr="124"/>
 <Cluster>
 <Adjective nr="34"/>
 </Cluster>
 </FCluster>
-<CCluster>
+<CCluster aid="INTPRO_1" nr="1">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="31"/>
@@ -130,7 +130,7 @@
 <Adjective nr="30"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="INTPRO_1" nr="2">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="25"/>
@@ -152,7 +152,7 @@
 <Adjective nr="31"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="INTPRO_1" nr="3">
 <ArgTypes/>
 <Cluster/>
 <Typ kind="M" nr="2">

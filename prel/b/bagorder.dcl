@@ -19,7 +19,6 @@
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="FINSEQ_2"/>
 <ArticleID name="XCMPLX_0"/>
-<ArticleID name="BINOP_2"/>
 <ArticleID name="FRAENKEL"/>
 <ArticleID name="XBOOLEAN"/>
 <ArticleID name="MARGREL1"/>
@@ -53,7 +52,7 @@
 <ArticleID name="POLYNOM1"/>
 <ArticleID name="BAGORDER"/>
 </Signature>
-<RCluster>
+<RCluster aid="BAGORDER" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -63,20 +62,20 @@
 </ArgTypes>
 <Typ kind="M" nr="4">
 <Cluster/>
-<Func kind="K" nr="457">
+<Func kind="K" nr="410">
 <LocusVar nr="1"/>
 </Func>
-<Func kind="K" nr="457">
+<Func kind="K" nr="410">
 <LocusVar nr="1"/>
 </Func>
 </Typ>
 <Cluster>
 <Adjective nr="2"/>
 <Adjective nr="59">
-<Func kind="K" nr="457">
+<Func kind="K" nr="410">
 <LocusVar nr="1"/>
 </Func>
-<Func kind="K" nr="457">
+<Func kind="K" nr="410">
 <LocusVar nr="1"/>
 </Func>
 </Adjective>
@@ -88,7 +87,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="BAGORDER" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -110,7 +109,7 @@
 <Adjective nr="177"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="BAGORDER" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -131,7 +130,7 @@
 <LocusVar nr="1"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="474">
+<Func kind="K" nr="427">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
@@ -141,7 +140,7 @@
 <Adjective nr="46"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="BAGORDER" nr="3">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -162,7 +161,7 @@
 <LocusVar nr="1"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="474">
+<Func kind="K" nr="427">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
@@ -172,7 +171,7 @@
 <Adjective nr="177"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="BAGORDER" nr="4">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -186,7 +185,7 @@
 <Func kind="K" nr="99"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="475">
+<Func kind="K" nr="428">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -194,7 +193,7 @@
 <Adjective nr="1" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="BAGORDER" nr="5">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -202,15 +201,15 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="460">
+<Func kind="K" nr="413">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
 <Adjective nr="59">
-<Func kind="K" nr="457">
+<Func kind="K" nr="410">
 <LocusVar nr="1"/>
 </Func>
-<Func kind="K" nr="457">
+<Func kind="K" nr="410">
 <LocusVar nr="1"/>
 </Func>
 </Adjective>
@@ -222,7 +221,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="BAGORDER" nr="6">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -230,15 +229,15 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="477">
+<Func kind="K" nr="430">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
 <Adjective nr="59">
-<Func kind="K" nr="457">
+<Func kind="K" nr="410">
 <LocusVar nr="1"/>
 </Func>
-<Func kind="K" nr="457">
+<Func kind="K" nr="410">
 <LocusVar nr="1"/>
 </Func>
 </Adjective>
@@ -250,7 +249,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="BAGORDER" nr="7">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -258,15 +257,15 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="479">
+<Func kind="K" nr="432">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
 <Adjective nr="59">
-<Func kind="K" nr="457">
+<Func kind="K" nr="410">
 <LocusVar nr="1"/>
 </Func>
-<Func kind="K" nr="457">
+<Func kind="K" nr="410">
 <LocusVar nr="1"/>
 </Func>
 </Adjective>
@@ -278,7 +277,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="BAGORDER" nr="8">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -286,15 +285,15 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="480">
+<Func kind="K" nr="433">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
 <Adjective nr="59">
-<Func kind="K" nr="457">
+<Func kind="K" nr="410">
 <LocusVar nr="1"/>
 </Func>
-<Func kind="K" nr="457">
+<Func kind="K" nr="410">
 <LocusVar nr="1"/>
 </Func>
 </Adjective>
@@ -306,7 +305,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="BAGORDER" nr="9">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
@@ -318,7 +317,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="487">
+<Func kind="K" nr="440">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -328,7 +327,7 @@
 <Adjective nr="79"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="BAGORDER" nr="10">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
@@ -340,7 +339,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="487">
+<Func kind="K" nr="440">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>

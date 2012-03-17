@@ -22,7 +22,7 @@
 <ArticleID name="MARGREL1"/>
 <ArticleID name="BVFUNC_1"/>
 </Signature>
-<RCluster>
+<RCluster aid="BVFUNC_1" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -48,7 +48,7 @@
 <Adjective nr="32"/>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="BVFUNC_1" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -62,7 +62,7 @@
 <Adjective nr="29"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="BVFUNC_1" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -89,7 +89,7 @@
 <Adjective nr="32"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="BVFUNC_1" nr="3">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -116,7 +116,7 @@
 <Adjective nr="32"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="BVFUNC_1" nr="4">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -143,7 +143,7 @@
 <Adjective nr="32"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="BVFUNC_1" nr="5">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -158,7 +158,7 @@
 <Adjective nr="7"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="BVFUNC_1" nr="6">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -173,7 +173,7 @@
 <Adjective nr="7"/>
 </Cluster>
 </FCluster>
-<CCluster>
+<CCluster aid="BVFUNC_1" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>

@@ -54,7 +54,7 @@
 <ArticleID name="BORSUK_1"/>
 <ArticleID name="TOPMETR"/>
 </Signature>
-<RCluster>
+<RCluster aid="TOPREAL6" nr="1">
 <ArgTypes/>
 <Typ kind="G" nr="5">
 <Cluster/>
@@ -66,7 +66,7 @@
 <Adjective nr="43"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="TOPREAL6" nr="2">
 <ArgTypes/>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -85,7 +85,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="TOPREAL6" nr="3">
 <ArgTypes/>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -102,7 +102,7 @@
 <Adjective nr="109"/>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="TOPREAL6" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster/>
@@ -127,7 +127,7 @@
 <Adjective nr="42"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="TOPREAL6" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -162,7 +162,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="TOPREAL6" nr="3">
 <ArgTypes/>
 <Func kind="K" nr="299"/>
 <Cluster>
@@ -173,7 +173,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="TOPREAL6" nr="4">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster>
@@ -191,7 +191,7 @@
 <Adjective nr="1" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="TOPREAL6" nr="5">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster>
@@ -209,7 +209,7 @@
 <Adjective nr="108"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="TOPREAL6" nr="6">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster>
@@ -227,7 +227,7 @@
 <Adjective nr="107"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="TOPREAL6" nr="7">
 <ArgTypes/>
 <Func kind="K" nr="401"/>
 <Cluster>
@@ -236,7 +236,7 @@
 <Adjective nr="51"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="TOPREAL6" nr="8">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -263,7 +263,7 @@
 </Func>
 </Typ>
 </FCluster>
-<CCluster>
+<CCluster aid="TOPREAL6" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster/>
@@ -286,7 +286,7 @@
 </Adjective>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="TOPREAL6" nr="2">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="98" value="false"/>
@@ -305,7 +305,7 @@
 <Adjective nr="1" value="false"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="TOPREAL6" nr="3">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="99" value="false"/>
@@ -324,7 +324,7 @@
 <Adjective nr="1" value="false"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="TOPREAL6" nr="4">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="97">
@@ -356,7 +356,7 @@
 </Adjective>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="TOPREAL6" nr="5">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="44">
@@ -388,7 +388,7 @@
 </Adjective>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="TOPREAL6" nr="6">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="1"/>
@@ -407,7 +407,7 @@
 <Adjective nr="98"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="TOPREAL6" nr="7">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="1"/>
@@ -426,7 +426,7 @@
 <Adjective nr="99"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="TOPREAL6" nr="8">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="95"/>
@@ -449,7 +449,7 @@
 </Adjective>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="TOPREAL6" nr="9">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="23"/>

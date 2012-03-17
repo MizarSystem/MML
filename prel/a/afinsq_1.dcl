@@ -25,7 +25,7 @@
 <ArticleID name="VALUED_0"/>
 <ArticleID name="AFINSQ_1"/>
 </Signature>
-<RCluster>
+<RCluster aid="AFINSQ_1" nr="1">
 <ArgTypes/>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -37,7 +37,7 @@
 <Adjective nr="25"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="AFINSQ_1" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -54,7 +54,7 @@
 <Adjective nr="25"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="AFINSQ_1" nr="3">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -72,7 +72,7 @@
 <Adjective nr="25"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="AFINSQ_1" nr="4">
 <ArgTypes/>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -85,7 +85,7 @@
 <Adjective nr="25"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="AFINSQ_1" nr="5">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -103,7 +103,7 @@
 <Adjective nr="25"/>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="AFINSQ_1" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -121,14 +121,14 @@
 <Adjective nr="13"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="AFINSQ_1" nr="2">
 <ArgTypes/>
 <Func kind="K" nr="23"/>
 <Cluster>
 <Adjective nr="11"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="AFINSQ_1" nr="3">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -141,7 +141,7 @@
 <Adjective nr="14" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="AFINSQ_1" nr="4">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -155,7 +155,7 @@
 <Adjective nr="25"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="AFINSQ_1" nr="5">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -185,7 +185,7 @@
 <Adjective nr="25"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="AFINSQ_1" nr="6">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -199,7 +199,7 @@
 <Adjective nr="4"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="AFINSQ_1" nr="7">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -213,7 +213,7 @@
 <Adjective nr="25"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="AFINSQ_1" nr="8">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -231,7 +231,7 @@
 <Adjective nr="4"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="AFINSQ_1" nr="9">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -253,7 +253,7 @@
 <Adjective nr="4"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="AFINSQ_1" nr="10">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -271,7 +271,7 @@
 <Adjective nr="25"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="AFINSQ_1" nr="11">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -293,7 +293,7 @@
 <Adjective nr="25"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="AFINSQ_1" nr="12">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -306,7 +306,7 @@
 <Adjective nr="14" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="AFINSQ_1" nr="13">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -335,7 +335,7 @@
 <Adjective nr="25"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="AFINSQ_1" nr="14">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -352,7 +352,7 @@
 <Adjective nr="13" value="false"/>
 </Cluster>
 </FCluster>
-<CCluster>
+<CCluster aid="AFINSQ_1" nr="1">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="25"/>
@@ -366,7 +366,7 @@
 <Adjective nr="34"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="AFINSQ_1" nr="2">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="25"/>

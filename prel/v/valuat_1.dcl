@@ -25,7 +25,7 @@
 <ArticleID name="CQC_LANG"/>
 <ArticleID name="VALUAT_1"/>
 </Signature>
-<FCluster>
+<FCluster aid="VALUAT_1" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>

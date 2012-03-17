@@ -22,7 +22,7 @@
 <ArticleID name="ANALOAF"/>
 <ArticleID name="AFVECT01"/>
 </Signature>
-<RCluster>
+<RCluster aid="AFVECT01" nr="1">
 <ArgTypes/>
 <Typ kind="G" nr="12">
 <Cluster/>
@@ -34,7 +34,7 @@
 <Adjective nr="79"/>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="AFVECT01" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>

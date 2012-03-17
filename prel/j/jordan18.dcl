@@ -37,7 +37,7 @@
 <ArticleID name="PCOMPS_1"/>
 <ArticleID name="PSCOMP_1"/>
 </Signature>
-<FCluster>
+<FCluster aid="JORDAN18" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -58,7 +58,7 @@
 <Adjective nr="7" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="JORDAN18" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -79,7 +79,7 @@
 <Adjective nr="7" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="JORDAN18" nr="3">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -100,7 +100,7 @@
 <Adjective nr="7" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="JORDAN18" nr="4">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -121,7 +121,7 @@
 <Adjective nr="7" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="JORDAN18" nr="5">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -143,7 +143,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="JORDAN18" nr="6">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -165,7 +165,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="JORDAN18" nr="7">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -187,7 +187,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="JORDAN18" nr="8">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>

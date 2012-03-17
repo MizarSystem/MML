@@ -29,7 +29,7 @@
 <ArticleID name="CLOPBAN1"/>
 <ArticleID name="CSSPACE4"/>
 </Signature>
-<RCluster>
+<RCluster aid="CSSPACE4" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -77,14 +77,14 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="CSSPACE4" nr="1">
 <ArgTypes/>
 <Func kind="K" nr="216"/>
 <Cluster>
 <Adjective nr="7" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="CSSPACE4" nr="2">
 <ArgTypes/>
 <Func kind="K" nr="216"/>
 <Cluster>
@@ -93,7 +93,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="CSSPACE4" nr="3">
 <ArgTypes/>
 <Func kind="G" nr="13">
 <Func kind="K" nr="216"/>
@@ -119,7 +119,7 @@
 <Adjective nr="85"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="CSSPACE4" nr="4">
 <ArgTypes/>
 <Func kind="G" nr="14">
 <Func kind="K" nr="216"/>
@@ -146,7 +146,7 @@
 <Adjective nr="87"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="CSSPACE4" nr="5">
 <ArgTypes/>
 <Func kind="K" nr="218"/>
 <Cluster>
@@ -159,7 +159,7 @@
 <Adjective nr="88"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="CSSPACE4" nr="6">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -186,7 +186,7 @@
 <Adjective nr="7" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="CSSPACE4" nr="7">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -250,7 +250,7 @@
 <Adjective nr="85"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="CSSPACE4" nr="8">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -283,7 +283,7 @@
 <Adjective nr="85"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="CSSPACE4" nr="9">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -316,7 +316,7 @@
 <Adjective nr="88"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="CSSPACE4" nr="10">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>

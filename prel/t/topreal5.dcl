@@ -34,7 +34,7 @@
 <ArticleID name="TOPREAL2"/>
 <ArticleID name="SPPOL_1"/>
 </Signature>
-<CCluster>
+<CCluster aid="TOPREAL5" nr="1">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="66"/>

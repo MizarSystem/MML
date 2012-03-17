@@ -32,7 +32,7 @@
 <ArticleID name="RFUNCT_3"/>
 <ArticleID name="REARRAN1"/>
 </Signature>
-<RCluster>
+<RCluster aid="REARRAN1" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>

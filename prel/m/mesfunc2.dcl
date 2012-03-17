@@ -22,7 +22,7 @@
 <ArticleID name="PROB_1"/>
 <ArticleID name="PROB_2"/>
 </Signature>
-<RCluster>
+<RCluster aid="MESFUNC2" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>

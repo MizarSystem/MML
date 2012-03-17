@@ -31,7 +31,7 @@
 <ArticleID name="TOPMETR"/>
 <ArticleID name="WEIERSTR"/>
 </Signature>
-<FCluster>
+<FCluster aid="HAUSDORF" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
@@ -50,7 +50,7 @@
 <Adjective nr="35"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="HAUSDORF" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
@@ -92,7 +92,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="HAUSDORF" nr="3">
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
@@ -145,7 +145,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="HAUSDORF" nr="4">
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>

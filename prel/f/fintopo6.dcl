@@ -12,10 +12,10 @@
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
 <ArticleID name="RELSET_1"/>
+<ArticleID name="FUNCT_2"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
-<ArticleID name="FUNCT_2"/>
 <ArticleID name="FUNCOP_1"/>
 <ArticleID name="ORDERS_1"/>
 <ArticleID name="STRUCT_0"/>
@@ -23,7 +23,7 @@
 <ArticleID name="FIN_TOPO"/>
 <ArticleID name="FINTOPO6"/>
 </Signature>
-<RCluster>
+<RCluster aid="FINTOPO6" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster/>
@@ -37,7 +37,7 @@
 <Adjective nr="37"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="FINTOPO6" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
@@ -54,7 +54,7 @@
 <Adjective nr="37"/>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="FINTOPO6" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
@@ -71,7 +71,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="FINTOPO6" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
@@ -89,7 +89,7 @@
 <Adjective nr="1"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="FINTOPO6" nr="3">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
@@ -120,7 +120,7 @@
 </Func>
 </Typ>
 </FCluster>
-<FCluster>
+<FCluster aid="FINTOPO6" nr="4">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
@@ -134,7 +134,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="91">
+<Func kind="K" nr="96">
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
@@ -149,7 +149,7 @@
 </Func>
 </Typ>
 </FCluster>
-<FCluster>
+<FCluster aid="FINTOPO6" nr="5">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
@@ -166,7 +166,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="FINTOPO6" nr="6">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
@@ -197,7 +197,7 @@
 </Func>
 </Typ>
 </FCluster>
-<CCluster>
+<CCluster aid="FINTOPO6" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>

@@ -15,7 +15,7 @@
 <ArticleID name="ALGSTR_0"/>
 <ArticleID name="MIDSP_1"/>
 </Signature>
-<RCluster>
+<RCluster aid="MIDSP_1" nr="1">
 <ArgTypes/>
 <Typ kind="G" nr="11">
 <Cluster/>
@@ -24,7 +24,7 @@
 <Adjective nr="56"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="MIDSP_1" nr="2">
 <ArgTypes/>
 <Typ kind="G" nr="11">
 <Cluster/>
@@ -33,7 +33,7 @@
 <Adjective nr="12" value="false"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="MIDSP_1" nr="3">
 <ArgTypes/>
 <Typ kind="G" nr="11">
 <Cluster/>
@@ -44,7 +44,7 @@
 <Adjective nr="57"/>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="MIDSP_1" nr="1">
 <ArgTypes/>
 <Func kind="K" nr="91"/>
 <Cluster>
@@ -52,7 +52,7 @@
 <Adjective nr="56"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="MIDSP_1" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="11">
 <Cluster>
@@ -80,7 +80,7 @@
 <Adjective nr="7" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="MIDSP_1" nr="3">
 <ArgTypes>
 <Typ kind="G" nr="11">
 <Cluster>
@@ -96,7 +96,7 @@
 <Adjective nr="7" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="MIDSP_1" nr="4">
 <ArgTypes>
 <Typ kind="G" nr="11">
 <Cluster>

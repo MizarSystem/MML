@@ -19,7 +19,7 @@
 <ArticleID name="FUNCOP_1"/>
 <ArticleID name="FUNCT_7"/>
 </Signature>
-<FCluster>
+<FCluster aid="FINSEQ_7" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>

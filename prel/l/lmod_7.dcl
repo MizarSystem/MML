@@ -27,7 +27,7 @@
 <ArticleID name="VECTSP_5"/>
 <ArticleID name="LMOD_7"/>
 </Signature>
-<RCluster>
+<RCluster aid="LMOD_7" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="10">
 <Cluster>
@@ -78,7 +78,7 @@
 <Adjective nr="89"/>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="LMOD_7" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="10">
 <Cluster>
@@ -120,7 +120,7 @@
 <Adjective nr="7" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="LMOD_7" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="10">
 <Cluster>
@@ -163,7 +163,7 @@
 <Adjective nr="40"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="LMOD_7" nr="3">
 <ArgTypes>
 <Typ kind="G" nr="10">
 <Cluster>
@@ -209,7 +209,7 @@
 <Adjective nr="89"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="LMOD_7" nr="4">
 <ArgTypes>
 <Typ kind="G" nr="10">
 <Cluster>
@@ -254,7 +254,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="LMOD_7" nr="5">
 <ArgTypes>
 <Typ kind="G" nr="10">
 <Cluster>

@@ -33,7 +33,7 @@
 <ArticleID name="EUCLID"/>
 <ArticleID name="JGRAPH_3"/>
 </Signature>
-<FCluster>
+<FCluster aid="JGRAPH_3" nr="1">
 <ArgTypes/>
 <Func kind="K" nr="266"/>
 <Cluster>

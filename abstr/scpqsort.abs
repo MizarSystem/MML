@@ -17,7 +17,8 @@ environ
       SCMPDS_6, SCMP_GCD, CARD_3, FINSEQ_1, SCMPDS_8, GRAPH_2, RFINSEQ,
       SCPISORT;
  constructors REAL_1, NAT_1, RECDEF_1, NEWTON, RFINSEQ, MESFUNC1, SCM_1,
-      SCMPDS_4, SCMPDS_5, SCMPDS_6, SCMP_GCD, SCMPDS_8, SCPISORT, SCMNORM;
+      SCMPDS_4, SCMPDS_5, SCMPDS_6, SCMP_GCD, SCMPDS_8, SCPISORT, SCMNORM,
+      SCMPDS_3;
  registrations XBOOLE_0, SETFAM_1, FUNCT_1, RELSET_1, FRAENKEL, NUMBERS,
       XXREAL_0, XREAL_0, NAT_1, INT_1, FINSEQ_1, CARD_3, SCMPDS_2, SCMPDS_4,
       SCMPDS_5, SCMPDS_6, SCMPDS_8, ORDINAL1, VALUED_0, MEMBERED, SCMNORM;
@@ -30,18 +31,18 @@ reserve x for Int_position,
   n,p0 for Element of NAT;
 
 registration
-  let I,J be shiftable Program-block, a be Int_position,k1 be Integer;
+  let I,J be shiftable Program of SCMPDS, a be Int_position,k1 be Integer;
   cluster if>0(a,k1,I,J) -> shiftable;
 end;
 
 theorem :: SCPQSORT:1      :: see SCMPDS_6:87
-  for s being State of SCMPDS,I being No-StopCode shiftable Program-block,
-  J being shiftable Program-block,a,b be Int_position,k1 being Integer
+  for s being State of SCMPDS,I being No-StopCode shiftable Program of SCMPDS,
+  J being shiftable Program of SCMPDS,a,b be Int_position,k1 being Integer
   st s.DataLoc(s.a,k1) > 0 & I is_closed_on s & I is_halting_on s
   holds IExec(if>0(a,k1,I,J),s).b = IExec(I,s).b;
 
 theorem :: SCPQSORT:2
-  for s,sm be State of SCMPDS,I be No-StopCode shiftable Program-block,
+  for s,sm be State of SCMPDS,I be No-StopCode shiftable Program of SCMPDS,
   a be Int_position,i be Integer, m be Element of NAT
   st card I>0 & I is_closed_on s & I is_halting_on s & s.DataLoc(s.a,i) > 0 &
   m=LifeSpan (s +* Initialized stop I)+2 &
@@ -50,7 +51,8 @@ theorem :: SCPQSORT:2
   sm +*Initialized stop while>0(a,i,I)=sm;
 
 theorem :: SCPQSORT:3
-  for s be State of SCMPDS,I be Program-block st for t be State of SCMPDS st
+  for s be State of SCMPDS,I be Program of SCMPDS st
+  for t be State of SCMPDS st
   t | SCM-Data-Loc =s | SCM-Data-Loc holds I is_halting_on t
   holds I is_closed_on s;
 
@@ -59,7 +61,7 @@ theorem :: SCPQSORT:4
   card (i1 ';' i2 ';' i3 ';' i4)=4;
 
 theorem :: SCPQSORT:5
-  for s being State of SCMPDS,I being No-StopCode shiftable Program-block,
+  for s being State of SCMPDS,I being No-StopCode shiftable Program of SCMPDS,
   a,x,y be Int_position, i,c be Integer st card I > 0 &
   s.x >= c+s.DataLoc(s.a,i) &
   (for t be State of SCMPDS st t.x >= c+t.DataLoc(s.a,i) & t.y=s.y &
@@ -72,7 +74,7 @@ theorem :: SCPQSORT:5
   IExec(while>0(a,i,I),s) =IExec(while>0(a,i,I),IExec(I,s)));
 
 theorem :: SCPQSORT:6
-  for s being State of SCMPDS,I being No-StopCode shiftable Program-block,
+  for s being State of SCMPDS,I being No-StopCode shiftable Program of SCMPDS,
   a,x,y be Int_position, i,c be Integer st card I > 0 & s.x >= c &
   (for t be State of SCMPDS st t.x >= c & t.y=s.y &
   t.a=s.a & t.DataLoc(s.a,i) > 0 holds
@@ -84,7 +86,7 @@ theorem :: SCPQSORT:6
   IExec(while>0(a,i,I),s) =IExec(while>0(a,i,I),IExec(I,s)));
 
 theorem :: SCPQSORT:7
-  for s being State of SCMPDS,I being No-StopCode shiftable Program-block,
+  for s being State of SCMPDS,I being No-StopCode shiftable Program of SCMPDS,
   a,x1,x2,x3,x4 be Int_position, i,c,md be Integer st
   card I > 0 & s.x4=s.x3-c+s.x1 & md <= s.x3-c &
   (for t be State of SCMPDS st t.x4=t.x3-c+t.x1 & md <= t.x3-c &
@@ -125,7 +127,7 @@ begin :: Program Partition is to split a sequence into a "smaller" and
 :: a5=a7=length  a2=mid(x[1]), a3=x[2], a4=x[n], a6=save
 
 definition
-  func Partition -> Program-block equals
+  func Partition -> Program of SCMPDS equals
 :: SCPQSORT:def 1
 
   ((GBP,5):=(GBP,4) ';'
@@ -148,7 +150,7 @@ begin :: The Construction of Quick Sort
 
 definition
   let n,p0 be Element of NAT;
-  func QuickSort(n,p0) -> Program-block equals
+  func QuickSort(n,p0) -> Program of SCMPDS equals
 :: SCPQSORT:def 2
 
   ((GBP:=0) ';' (SBP:=1) ';'

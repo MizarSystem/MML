@@ -30,7 +30,7 @@
 <ArticleID name="LOPBAN_1"/>
 <ArticleID name="RSSPACE4"/>
 </Signature>
-<RCluster>
+<RCluster aid="RSSPACE4" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -78,14 +78,14 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="RSSPACE4" nr="1">
 <ArgTypes/>
 <Func kind="K" nr="208"/>
 <Cluster>
 <Adjective nr="7" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="RSSPACE4" nr="2">
 <ArgTypes/>
 <Func kind="K" nr="208"/>
 <Cluster>
@@ -94,7 +94,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="RSSPACE4" nr="3">
 <ArgTypes/>
 <Func kind="G" nr="11">
 <Func kind="K" nr="208"/>
@@ -120,7 +120,7 @@
 <Adjective nr="75"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="RSSPACE4" nr="4">
 <ArgTypes/>
 <Func kind="G" nr="12">
 <Func kind="K" nr="208"/>
@@ -147,7 +147,7 @@
 <Adjective nr="79"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="RSSPACE4" nr="5">
 <ArgTypes/>
 <Func kind="K" nr="210"/>
 <Cluster>
@@ -160,7 +160,7 @@
 <Adjective nr="80"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="RSSPACE4" nr="6">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -187,7 +187,7 @@
 <Adjective nr="7" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="RSSPACE4" nr="7">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -251,7 +251,7 @@
 <Adjective nr="75"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="RSSPACE4" nr="8">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -284,7 +284,7 @@
 <Adjective nr="75"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="RSSPACE4" nr="9">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -317,7 +317,7 @@
 <Adjective nr="80"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="RSSPACE4" nr="10">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>

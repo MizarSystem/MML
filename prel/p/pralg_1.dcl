@@ -28,7 +28,7 @@
 <ArticleID name="UNIALG_1"/>
 <ArticleID name="PRALG_1"/>
 </Signature>
-<RCluster>
+<RCluster aid="PRALG_1" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -38,7 +38,7 @@
 </ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="154">
+<Func kind="K" nr="155">
 <LocusVar nr="1"/>
 </Func>
 </Typ>
@@ -50,7 +50,7 @@
 <Adjective nr="27"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="PRALG_1" nr="2">
 <ArgTypes/>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -61,7 +61,7 @@
 <Adjective nr="49"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="PRALG_1" nr="3">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -77,7 +77,7 @@
 <Adjective nr="50"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="PRALG_1" nr="4">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -96,7 +96,7 @@
 <Adjective nr="51"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="PRALG_1" nr="5">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -122,7 +122,7 @@
 <Adjective nr="52"/>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="PRALG_1" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -130,7 +130,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="190">
+<Func kind="K" nr="191">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -144,7 +144,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="PRALG_1" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -158,7 +158,7 @@
 <LocusVar nr="1"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="195">
+<Func kind="K" nr="196">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -166,7 +166,7 @@
 <Adjective nr="2"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="PRALG_1" nr="3">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -180,14 +180,14 @@
 <LocusVar nr="1"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="103">
+<Func kind="K" nr="104">
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
 <Adjective nr="7" value="false"/>
 </Cluster>
 </FCluster>
-<CCluster>
+<CCluster aid="PRALG_1" nr="1">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="1"/>

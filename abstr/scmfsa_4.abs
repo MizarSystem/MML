@@ -8,7 +8,7 @@ environ
 
  vocabularies AMI_1, AMI_3, BOOLE, RELAT_1, FUNCT_1, FUNCT_4, SCMFSA_2,
       ARYTM_1, CAT_1, RELOC, AMI_5, AMI_2, NAT_1, ABSVALUE, FINSEQ_1, FINSEQ_2,
-      SCMFSA_4, CARD_3, FINSEQ_4, ARYTM;
+      SCMFSA_4, CARD_3, FINSEQ_4, ARYTM, AMISTD_2, SCMNORM;
  notations TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, NUMBERS, CARD_3, XCMPLX_0,
       NAT_1, INT_1, INT_2, RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2, FUNCT_4,
       FUNCOP_1, FUNCT_7, FINSEQ_1, FINSEQ_2, STRUCT_0, AMI_1, SCMNORM, AMI_3,
@@ -21,25 +21,13 @@ environ
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
 
 
-begin  :: Incrementing and decrementing the instruction locations
+begin :: Incrementing addresses
 
 reserve j, k, l, m, n, p, q for Element of NAT;
-
-canceled 5;
 
 reserve L for Instruction-Location of SCM,
   A for Data-Location,
   I for Instruction of SCM;
-
-theorem :: SCMFSA_4:6
-  for l1,l2 being Instruction-Location of SCM+FSA , k being Element of NAT
-  holds Start-At(l1 + k) = Start-At(l2 +k) iff Start-At l1 = Start-At l2;
-
-theorem :: SCMFSA_4:7
-  for l1,l2 being Instruction-Location of SCM+FSA , k being Element of NAT
-  st Start-At l1 = Start-At l2 holds Start-At(l1 -' k) = Start-At(l2 -' k);
-
-begin :: Incrementing addresses
 
 definition
   canceled 2;
@@ -50,6 +38,8 @@ definition
   ex I being Instruction of SCM st I = i & it = IncAddr(I,k)
   if InsCode i in {6,7,8} otherwise it = i;
 end;
+
+canceled 7;
 
 theorem :: SCMFSA_4:8
   for k being Element of NAT holds IncAddr(halt SCM+FSA,k) = halt SCM+FSA;
@@ -110,27 +100,6 @@ theorem :: SCMFSA_4:22
   for I being Instruction of SCM+FSA, k being Element of NAT
   holds InsCode (IncAddr (I, k)) = InsCode I;
 
-definition
-  let IT be FinPartState of SCM+FSA;
-  attr IT is initial means
-:: SCMFSA_4:def 4
-  for m,n st n in dom IT & m < n holds m in dom IT;
-end;
-
-definition
-  func SCM+FSA-Stop -> FinPartState of SCM+FSA equals
-:: SCMFSA_4:def 5
-  (insloc 0).--> halt SCM+FSA;
-end;
-
-registration
-  cluster SCM+FSA-Stop -> non empty initial programmed;
-end;
-
-registration
-  cluster initial programmed non empty FinPartState of SCM+FSA;
-end;
-
 reserve i for Instruction of SCM+FSA;
 
 theorem :: SCMFSA_4:23
@@ -139,8 +108,9 @@ theorem :: SCMFSA_4:23
 begin :: Incrementing Addresses in a finite partial state
 
 definition
-  let p be programmed FinPartState of SCM+FSA, k be Element of NAT;
-  func IncAddr(p,k) -> programmed FinPartState of SCM+FSA means
+ canceled 2;
+  let p be preProgram of SCM+FSA, k be Element of NAT;
+  func IncAddr(p,k) -> preProgram of SCM+FSA means
 :: SCMFSA_4:def 6
 
   dom it = dom p &
@@ -148,24 +118,24 @@ definition
 end;
 
 theorem :: SCMFSA_4:24
-  for p being programmed FinPartState of SCM+FSA , k being Element of NAT
+  for p being preProgram of SCM+FSA , k being Element of NAT
   for l being Element of NAT st l in dom p
   holds IncAddr (p,k).l = IncAddr(pi(p,l),k);
 
 theorem :: SCMFSA_4:25
-  for I,J being programmed FinPartState of SCM+FSA holds
+  for I,J being preProgram of SCM+FSA holds
   IncAddr(I +* J, n) = IncAddr(I,n) +* IncAddr(J,n);
 
 theorem :: SCMFSA_4:26
   for f being Function of the Instructions of SCM+FSA,
   the Instructions of SCM+FSA
   st f = (id the Instructions of SCM+FSA) +* (halt SCM+FSA .--> i)
-  for s being programmed FinPartState of SCM+FSA holds IncAddr(f*s,n) =
+  for s being preProgram of SCM+FSA holds IncAddr(f*s,n) =
   ((id the Instructions of SCM+FSA) +* (halt SCM+FSA .--> IncAddr(i,n)))*
   IncAddr(s,n);
 
 theorem :: SCMFSA_4:27
-  for I being programmed FinPartState of SCM+FSA
+  for I being preProgram of SCM+FSA
   holds IncAddr(IncAddr(I,m),n) = IncAddr(I,m+n);
 
 theorem :: SCMFSA_4:28
@@ -184,6 +154,6 @@ begin :: Shifting the finite partial state
 canceled 5;
 
 theorem :: SCMFSA_4:35
-  for i,j being Element of NAT, p being programmed FinPartState of SCM+FSA
+  for i,j being Element of NAT, p being preProgram of SCM+FSA
   holds Shift(IncAddr(p,i),j) = IncAddr(Shift(p,j),i);
 

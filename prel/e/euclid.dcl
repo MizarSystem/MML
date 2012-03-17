@@ -39,7 +39,7 @@
 <ArticleID name="MONOID_0"/>
 <ArticleID name="EUCLID"/>
 </Signature>
-<FCluster>
+<FCluster aid="EUCLID" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -57,7 +57,7 @@
 <Adjective nr="22" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="EUCLID" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -82,7 +82,7 @@
 <Adjective nr="7"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="EUCLID" nr="3">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -102,7 +102,7 @@
 <Adjective nr="54"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="EUCLID" nr="4">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -119,7 +119,7 @@
 <Adjective nr="39"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="EUCLID" nr="5">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -136,7 +136,7 @@
 <Adjective nr="123"/>
 </Cluster>
 </FCluster>
-<CCluster>
+<CCluster aid="EUCLID" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>

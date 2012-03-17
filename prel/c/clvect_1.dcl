@@ -21,7 +21,7 @@
 <ArticleID name="RLVECT_1"/>
 <ArticleID name="CLVECT_1"/>
 </Signature>
-<RCluster>
+<RCluster aid="CLVECT_1" nr="1">
 <ArgTypes/>
 <Typ kind="G" nr="12">
 <Cluster/>
@@ -30,7 +30,7 @@
 <Adjective nr="76"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="CLVECT_1" nr="2">
 <ArgTypes/>
 <Typ kind="G" nr="12">
 <Cluster/>
@@ -39,7 +39,7 @@
 <Adjective nr="25" value="false"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="CLVECT_1" nr="3">
 <ArgTypes/>
 <Typ kind="G" nr="12">
 <Cluster/>
@@ -54,7 +54,7 @@
 <Adjective nr="77"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="CLVECT_1" nr="4">
 <ArgTypes>
 <Typ kind="G" nr="12">
 <Cluster>
@@ -81,7 +81,7 @@
 <Adjective nr="77"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="CLVECT_1" nr="5">
 <ArgTypes/>
 <Typ kind="G" nr="13">
 <Cluster/>
@@ -90,7 +90,7 @@
 <Adjective nr="79"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="CLVECT_1" nr="6">
 <ArgTypes/>
 <Typ kind="G" nr="13">
 <Cluster/>
@@ -99,7 +99,7 @@
 <Adjective nr="25" value="false"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="CLVECT_1" nr="7">
 <ArgTypes/>
 <Typ kind="G" nr="13">
 <Cluster/>
@@ -115,7 +115,7 @@
 <Adjective nr="80"/>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="CLVECT_1" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -172,7 +172,7 @@
 <Adjective nr="76"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="CLVECT_1" nr="2">
 <ArgTypes/>
 <Func kind="K" nr="135"/>
 <Cluster>

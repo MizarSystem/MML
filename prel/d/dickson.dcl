@@ -46,7 +46,7 @@
 <ArticleID name="WELLFND1"/>
 <ArticleID name="DICKSON"/>
 </Signature>
-<FCluster>
+<FCluster aid="DICKSON" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -62,7 +62,7 @@
 <Adjective nr="73"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="DICKSON" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
@@ -78,7 +78,7 @@
 <Adjective nr="63"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="DICKSON" nr="3">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
@@ -94,7 +94,7 @@
 <Adjective nr="66"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="DICKSON" nr="4">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster/>
@@ -108,7 +108,7 @@
 <Adjective nr="67"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="DICKSON" nr="5">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -135,7 +135,7 @@
 <Adjective nr="110"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="DICKSON" nr="6">
 <ArgTypes>
 <Typ kind="M" nr="11">
 <Cluster>
@@ -153,7 +153,7 @@
 <Adjective nr="63"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="DICKSON" nr="7">
 <ArgTypes>
 <Typ kind="M" nr="11">
 <Cluster>
@@ -171,7 +171,7 @@
 <Adjective nr="67"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="DICKSON" nr="8">
 <ArgTypes>
 <Typ kind="M" nr="11">
 <Cluster>
@@ -189,7 +189,7 @@
 <Adjective nr="122"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="DICKSON" nr="9">
 <ArgTypes>
 <Typ kind="M" nr="11">
 <Cluster>
@@ -207,7 +207,7 @@
 <Adjective nr="123"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="DICKSON" nr="10">
 <ArgTypes/>
 <Func kind="K" nr="347"/>
 <Cluster>
@@ -215,7 +215,7 @@
 <Adjective nr="100"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="DICKSON" nr="11">
 <ArgTypes/>
 <Func kind="K" nr="347"/>
 <Cluster>
@@ -223,7 +223,7 @@
 <Adjective nr="123"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="DICKSON" nr="12">
 <ArgTypes/>
 <Func kind="K" nr="347"/>
 <Cluster>
@@ -231,7 +231,7 @@
 <Adjective nr="122"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="DICKSON" nr="13">
 <ArgTypes/>
 <Func kind="K" nr="347"/>
 <Cluster>
@@ -239,7 +239,7 @@
 <Adjective nr="67"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="DICKSON" nr="14">
 <ArgTypes/>
 <Func kind="K" nr="347"/>
 <Cluster>
@@ -247,7 +247,7 @@
 <Adjective nr="66"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="DICKSON" nr="15">
 <ArgTypes/>
 <Func kind="K" nr="347"/>
 <Cluster>
@@ -255,7 +255,7 @@
 <Adjective nr="117"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="DICKSON" nr="16">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -274,7 +274,7 @@
 <Adjective nr="63"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="DICKSON" nr="17">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -293,7 +293,7 @@
 <Adjective nr="123"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="DICKSON" nr="18">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -312,7 +312,7 @@
 <Adjective nr="122"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="DICKSON" nr="19">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>

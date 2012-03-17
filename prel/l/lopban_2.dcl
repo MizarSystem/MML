@@ -12,9 +12,9 @@
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XREAL_0"/>
-<ArticleID name="INT_1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
+<ArticleID name="INT_1"/>
 <ArticleID name="BINOP_1"/>
 <ArticleID name="FUNCOP_1"/>
 <ArticleID name="FRAENKEL"/>
@@ -34,7 +34,7 @@
 <ArticleID name="VECTSP_1"/>
 <ArticleID name="LOPBAN_2"/>
 </Signature>
-<RCluster>
+<RCluster aid="LOPBAN_2" nr="1">
 <ArgTypes/>
 <Typ kind="G" nr="13">
 <Cluster/>
@@ -54,7 +54,7 @@
 <Adjective nr="95"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="LOPBAN_2" nr="2">
 <ArgTypes/>
 <Typ kind="G" nr="16">
 <Cluster/>
@@ -63,7 +63,7 @@
 <Adjective nr="111"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="LOPBAN_2" nr="3">
 <ArgTypes/>
 <Typ kind="G" nr="16">
 <Cluster/>
@@ -72,7 +72,7 @@
 <Adjective nr="30" value="false"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="LOPBAN_2" nr="4">
 <ArgTypes/>
 <Typ kind="G" nr="16">
 <Cluster/>
@@ -92,7 +92,7 @@
 <Adjective nr="111"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="LOPBAN_2" nr="5">
 <ArgTypes/>
 <Typ kind="G" nr="16">
 <Cluster/>
@@ -115,7 +115,7 @@
 <Adjective nr="115"/>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="LOPBAN_2" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="13">
 <Cluster>
@@ -137,7 +137,7 @@
 <Adjective nr="73"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="LOPBAN_2" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="13">
 <Cluster>
@@ -158,7 +158,7 @@
 <Adjective nr="96"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="LOPBAN_2" nr="3">
 <ArgTypes>
 <Typ kind="G" nr="13">
 <Cluster>
@@ -186,7 +186,7 @@
 <Adjective nr="107"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="LOPBAN_2" nr="4">
 <ArgTypes>
 <Typ kind="G" nr="13">
 <Cluster>
@@ -208,7 +208,7 @@
 <Adjective nr="83"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="LOPBAN_2" nr="5">
 <ArgTypes>
 <Typ kind="G" nr="13">
 <Cluster>
@@ -229,7 +229,7 @@
 <Adjective nr="96"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="LOPBAN_2" nr="6">
 <ArgTypes/>
 <Func kind="K" nr="206"/>
 <Cluster>
@@ -237,7 +237,7 @@
 <Adjective nr="95"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="LOPBAN_2" nr="7">
 <ArgTypes/>
 <Func kind="K" nr="206"/>
 <Cluster>
@@ -245,7 +245,7 @@
 <Adjective nr="35" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="LOPBAN_2" nr="8">
 <ArgTypes>
 <Typ kind="G" nr="13">
 <Cluster>
@@ -267,7 +267,7 @@
 <Adjective nr="111"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="LOPBAN_2" nr="9">
 <ArgTypes>
 <Typ kind="G" nr="13">
 <Cluster>
@@ -288,7 +288,7 @@
 <Adjective nr="96"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="LOPBAN_2" nr="10">
 <ArgTypes>
 <Typ kind="G" nr="13">
 <Cluster>
@@ -318,7 +318,7 @@
 <Adjective nr="104"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="LOPBAN_2" nr="11">
 <ArgTypes>
 <Typ kind="G" nr="13">
 <Cluster>
@@ -341,7 +341,7 @@
 <Adjective nr="115"/>
 </Cluster>
 </FCluster>
-<CCluster>
+<CCluster aid="LOPBAN_2" nr="1">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="30" value="false"/>
@@ -380,7 +380,7 @@
 <Adjective nr="114"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="LOPBAN_2" nr="2">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="30" value="false"/>

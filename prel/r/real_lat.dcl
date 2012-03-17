@@ -19,7 +19,7 @@
 <ArticleID name="FRAENKEL"/>
 <ArticleID name="REAL_LAT"/>
 </Signature>
-<FCluster>
+<FCluster aid="REAL_LAT" nr="1">
 <ArgTypes/>
 <Func kind="K" nr="100"/>
 <Cluster>
@@ -27,7 +27,7 @@
 <Adjective nr="30"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="REAL_LAT" nr="2">
 <ArgTypes/>
 <Func kind="K" nr="100"/>
 <Cluster>
@@ -35,7 +35,7 @@
 <Adjective nr="37"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="REAL_LAT" nr="3">
 <ArgTypes/>
 <Func kind="K" nr="100"/>
 <Cluster>
@@ -43,7 +43,7 @@
 <Adjective nr="38"/>
 </Cluster>
 </FCluster>
-<CCluster>
+<CCluster aid="REAL_LAT" nr="1">
 <ArgTypes/>
 <Cluster/>
 <Typ kind="M" nr="2">

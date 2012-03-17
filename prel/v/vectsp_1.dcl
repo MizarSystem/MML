@@ -24,7 +24,7 @@
 <ArticleID name="GROUP_1"/>
 <ArticleID name="VECTSP_1"/>
 </Signature>
-<RCluster>
+<RCluster aid="VECTSP_1" nr="1">
 <ArgTypes/>
 <Typ kind="G" nr="6">
 <Cluster/>
@@ -38,7 +38,7 @@
 <Adjective nr="72"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="VECTSP_1" nr="2">
 <ArgTypes/>
 <Typ kind="G" nr="9">
 <Cluster/>
@@ -48,7 +48,7 @@
 <Adjective nr="87"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="VECTSP_1" nr="3">
 <ArgTypes/>
 <Typ kind="G" nr="7">
 <Cluster/>
@@ -59,7 +59,7 @@
 <Adjective nr="82"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="VECTSP_1" nr="4">
 <ArgTypes/>
 <Typ kind="G" nr="8">
 <Cluster/>
@@ -71,7 +71,7 @@
 <Adjective nr="82"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="VECTSP_1" nr="5">
 <ArgTypes/>
 <Typ kind="G" nr="10">
 <Cluster/>
@@ -93,7 +93,7 @@
 <Adjective nr="89"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="VECTSP_1" nr="6">
 <ArgTypes>
 <Typ kind="G" nr="1">
 <Cluster/>
@@ -109,7 +109,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="VECTSP_1" nr="7">
 <ArgTypes>
 <Typ kind="G" nr="1">
 <Cluster/>
@@ -126,7 +126,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="VECTSP_1" nr="8">
 <ArgTypes>
 <Typ kind="G" nr="10">
 <Cluster>
@@ -159,7 +159,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="VECTSP_1" nr="9">
 <ArgTypes/>
 <Typ kind="G" nr="6">
 <Cluster/>
@@ -169,7 +169,7 @@
 <Adjective nr="92"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="VECTSP_1" nr="10">
 <ArgTypes/>
 <Typ kind="G" nr="10">
 <Cluster/>
@@ -196,7 +196,7 @@
 <Adjective nr="92"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="VECTSP_1" nr="11">
 <ArgTypes/>
 <Typ kind="G" nr="8">
 <Cluster/>
@@ -206,7 +206,7 @@
 <Adjective nr="87"/>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="VECTSP_1" nr="1">
 <ArgTypes/>
 <Func kind="K" nr="149"/>
 <Cluster>
@@ -214,7 +214,7 @@
 <Adjective nr="40"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="VECTSP_1" nr="2">
 <ArgTypes/>
 <Func kind="K" nr="149"/>
 <Cluster>
@@ -225,7 +225,7 @@
 <Adjective nr="72"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="VECTSP_1" nr="3">
 <ArgTypes/>
 <Func kind="K" nr="150"/>
 <Cluster>
@@ -233,7 +233,7 @@
 <Adjective nr="68"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="VECTSP_1" nr="4">
 <ArgTypes/>
 <Func kind="K" nr="150"/>
 <Cluster>
@@ -241,7 +241,7 @@
 <Adjective nr="87"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="VECTSP_1" nr="5">
 <ArgTypes/>
 <Func kind="K" nr="150"/>
 <Cluster>
@@ -249,7 +249,7 @@
 <Adjective nr="78"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="VECTSP_1" nr="6">
 <ArgTypes/>
 <Func kind="K" nr="150"/>
 <Cluster>
@@ -267,7 +267,7 @@
 <Adjective nr="89"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="VECTSP_1" nr="7">
 <ArgTypes>
 <Typ kind="G" nr="1">
 <Cluster/>
@@ -334,7 +334,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<CCluster>
+<CCluster aid="VECTSP_1" nr="1">
 <ArgTypes/>
 <Cluster/>
 <Typ kind="M" nr="2">
@@ -347,7 +347,7 @@
 <Adjective nr="76"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="VECTSP_1" nr="2">
 <ArgTypes/>
 <Cluster/>
 <Typ kind="M" nr="2">
@@ -360,7 +360,7 @@
 <Adjective nr="76"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="VECTSP_1" nr="3">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="25" value="false"/>
@@ -375,7 +375,7 @@
 <Adjective nr="85"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="VECTSP_1" nr="4">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="25" value="false"/>
@@ -390,7 +390,7 @@
 <Adjective nr="88"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="VECTSP_1" nr="5">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="25" value="false"/>
@@ -405,7 +405,7 @@
 <Adjective nr="89"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="VECTSP_1" nr="6">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="25" value="false"/>
@@ -420,7 +420,7 @@
 <Adjective nr="78"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="VECTSP_1" nr="7">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="25" value="false"/>
@@ -434,7 +434,7 @@
 <Adjective nr="78"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="VECTSP_1" nr="8">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="25" value="false"/>

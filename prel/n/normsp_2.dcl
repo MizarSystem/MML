@@ -13,10 +13,10 @@
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XREAL_0"/>
 <ArticleID name="RELSET_1"/>
+<ArticleID name="FUNCT_2"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
-<ArticleID name="FUNCT_2"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="COMPTS_1"/>
@@ -31,7 +31,7 @@
 <ArticleID name="RLTOPSP1"/>
 <ArticleID name="NORMSP_2"/>
 </Signature>
-<FCluster>
+<FCluster aid="NORMSP_2" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="14">
 <Cluster>
@@ -54,7 +54,7 @@
 <Adjective nr="110"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="NORMSP_2" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="14">
 <Cluster>
@@ -84,7 +84,7 @@
 <Adjective nr="117"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="NORMSP_2" nr="3">
 <ArgTypes>
 <Typ kind="G" nr="14">
 <Cluster>
@@ -107,7 +107,7 @@
 <Adjective nr="115"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="NORMSP_2" nr="4">
 <ArgTypes>
 <Typ kind="G" nr="14">
 <Cluster>
@@ -130,7 +130,7 @@
 <Adjective nr="115"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="NORMSP_2" nr="5">
 <ArgTypes>
 <Typ kind="G" nr="14">
 <Cluster>
@@ -153,7 +153,7 @@
 <Adjective nr="115"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="NORMSP_2" nr="6">
 <ArgTypes>
 <Typ kind="G" nr="14">
 <Cluster>
@@ -176,7 +176,7 @@
 <Adjective nr="115"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="NORMSP_2" nr="7">
 <ArgTypes>
 <Typ kind="G" nr="14">
 <Cluster>

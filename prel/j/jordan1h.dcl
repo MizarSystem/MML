@@ -57,7 +57,7 @@
 <ArticleID name="SPPOL_1"/>
 <ArticleID name="JORDAN1H"/>
 </Signature>
-<RCluster>
+<RCluster aid="JORDAN1H" nr="1">
 <ArgTypes/>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -66,7 +66,7 @@
 <Adjective nr="3" value="false"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="JORDAN1H" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -75,7 +75,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Typ kind="M" nr="9">
+<Typ kind="M" nr="10">
 <Cluster/>
 <Func kind="K" nr="134">
 <LocusVar nr="1"/>
@@ -92,7 +92,7 @@
 <Adjective nr="137"/>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="JORDAN1H" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -112,9 +112,9 @@
 <Adjective nr="7"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="JORDAN1H" nr="2">
 <ArgTypes/>
-<Func kind="K" nr="419"/>
+<Func kind="K" nr="420"/>
 <Cluster>
 <Adjective nr="136">
 <Func kind="K" nr="50"/>
@@ -126,7 +126,7 @@
 <Adjective nr="157"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="JORDAN1H" nr="3">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster>
@@ -137,16 +137,16 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="405">
+<Func kind="K" nr="406">
 <Func kind="K" nr="50"/>
 <LocusVar nr="1"/>
-<Func kind="K" nr="419"/>
+<Func kind="K" nr="420"/>
 </Func>
 <Cluster>
 <Adjective nr="130"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="JORDAN1H" nr="4">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -154,7 +154,7 @@
 <Adjective nr="2"/>
 </Cluster>
 </Typ>
-<Typ kind="M" nr="9">
+<Typ kind="M" nr="10">
 <Cluster>
 <Adjective nr="1" value="false"/>
 <Adjective nr="5"/>
@@ -164,16 +164,16 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="413">
+<Func kind="K" nr="414">
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
 <Adjective nr="1" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="JORDAN1H" nr="5">
 <ArgTypes>
-<Typ kind="M" nr="9">
+<Typ kind="M" nr="10">
 <Cluster>
 <Adjective nr="6" value="false"/>
 <Adjective nr="128"/>
@@ -191,14 +191,14 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="413">
+<Func kind="K" nr="414">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
 <Adjective nr="1" value="false"/>
 </Cluster>
 </FCluster>
-<CCluster>
+<CCluster aid="JORDAN1H" nr="1">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="6" value="false"/>
@@ -208,7 +208,7 @@
 <Adjective nr="134"/>
 <Adjective nr="135"/>
 </Cluster>
-<Typ kind="M" nr="9">
+<Typ kind="M" nr="10">
 <Cluster/>
 <Func kind="K" nr="134">
 <Func kind="U" nr="1">

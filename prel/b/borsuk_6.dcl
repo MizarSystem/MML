@@ -34,7 +34,7 @@
 <ArticleID name="BORSUK_4"/>
 <ArticleID name="BORSUK_6"/>
 </Signature>
-<RCluster>
+<RCluster aid="BORSUK_6" nr="1">
 <ArgTypes/>
 <Typ kind="G" nr="1">
 <Cluster/>
@@ -44,7 +44,7 @@
 <Adjective nr="72"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="BORSUK_6" nr="2">
 <ArgTypes/>
 <Typ kind="G" nr="5">
 <Cluster/>
@@ -55,7 +55,7 @@
 <Adjective nr="72"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="BORSUK_6" nr="3">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster/>
@@ -76,7 +76,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="BORSUK_6" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
@@ -109,7 +109,7 @@
 <Adjective nr="15"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="BORSUK_6" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
@@ -142,7 +142,7 @@
 <Adjective nr="15"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="BORSUK_6" nr="3">
 <ArgTypes>
 <Typ kind="M" nr="7">
 <Cluster>
@@ -167,7 +167,7 @@
 <Adjective nr="15"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="BORSUK_6" nr="4">
 <ArgTypes>
 <Typ kind="M" nr="7">
 <Cluster>
@@ -192,7 +192,7 @@
 <Adjective nr="15"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="BORSUK_6" nr="5">
 <ArgTypes/>
 <Func kind="K" nr="206"/>
 <Cluster>
@@ -201,7 +201,7 @@
 <Adjective nr="72"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="BORSUK_6" nr="6">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster/>
@@ -216,7 +216,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="BORSUK_6" nr="7">
 <ArgTypes/>
 <Func kind="K" nr="215"/>
 <Cluster>
@@ -235,7 +235,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="BORSUK_6" nr="8">
 <ArgTypes/>
 <Func kind="K" nr="216"/>
 <Cluster>
@@ -254,7 +254,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="BORSUK_6" nr="9">
 <ArgTypes/>
 <Func kind="K" nr="217"/>
 <Cluster>
@@ -273,7 +273,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="BORSUK_6" nr="10">
 <ArgTypes/>
 <Func kind="K" nr="218"/>
 <Cluster>
@@ -286,7 +286,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="BORSUK_6" nr="11">
 <ArgTypes/>
 <Func kind="K" nr="219"/>
 <Cluster>
@@ -299,7 +299,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="BORSUK_6" nr="12">
 <ArgTypes/>
 <Func kind="K" nr="220"/>
 <Cluster>
@@ -312,7 +312,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<CCluster>
+<CCluster aid="BORSUK_6" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="1">
 <Cluster>
@@ -331,7 +331,7 @@
 <Adjective nr="15"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="BORSUK_6" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>

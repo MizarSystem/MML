@@ -14,11 +14,11 @@ environ
       CARD_4, AMI_1, ORDERS_1, WAYBEL23, SQUARE_1, COMPL_SP;
  notations BHSP_3, METRIC_6, RELAT_2, BINOP_1, URYSOHN1, TOPMETR, CARD_1,
       CANTOR_1, WELLORD1, COMPLEX1, FINSET_1, SEQ_2, TARSKI, XBOOLE_0,
-      SUBSET_1, ORDINAL1, NUMBERS, ZFMISC_1, XXREAL_0, XREAL_0, REAL_1, NAT_1,
+      SUBSET_1, ORDINAL1, NUMBERS, ZFMISC_1, XXREAL_0, XREAL_0, REAL_1,
       SETFAM_1, DOMAIN_1, STRUCT_0, PRE_TOPC, TOPS_2, COMPTS_1, RELAT_1,
       FUNCT_1, VALUED_1, SEQ_1, TBSP_1, RELSET_1, PARTFUN1, FUNCT_2, METRIC_1,
       PCOMPS_1, CARD_3, PROB_1, SEQM_3, FRECHET, KURATO_2, WELLFND1, WAYBEL23,
-      ORDERS_2, CARD_4, TOPGEN_1;
+      ORDERS_2, CARD_4, TOPGEN_1, NAT_1;
  constructors REAL_1, NAT_1, TBSP_1, YELLOW_6, FRECHET, FRECHET2, KURATO_2,
       COMPLEX1, SEQ_2, TOPS_2, WELLORD1, CARD_4, CANTOR_1, URYSOHN3, METRIC_6,
       REALSET1, WELLFND1, TOPGEN_4, WAYBEL23, TOPGEN_1, SEQ_1;
@@ -1614,8 +1614,8 @@ definition
   attr T is countably_compact means
   :Def9:
   for F being Subset-Family of T st
-  F is_a_cover_of T & F is open & F is countable ex G being Subset-Family of T
-  st G c= F & G is_a_cover_of T & G is finite;
+  F is Cover of T & F is open & F is countable ex G being Subset-Family of T
+  st G c= F & G is Cover of T & G is finite;
 end;
 
 theorem Th20:
@@ -1624,7 +1624,7 @@ proof
   let T be TopStruct such that
 A1: T is compact;
   let F being Subset-Family of T such that
-A2: F is_a_cover_of T & F is open & F is countable;
+A2: F is Cover of T & F is open & F is countable;
   thus thesis by A1,A2,COMPTS_1:def 3;
 end;
 
@@ -1648,10 +1648,10 @@ A4: meet F = {};
     F <> {} by A2,COMPTS_1:def 2;
     then union COMPLEMENT(F) = (meet F)` by TOPS_2:12
       .= [#] T by A4;
-    then COMPLEMENT(F) is_a_cover_of T & COMPLEMENT(F) is open &
-    COMPLEMENT(F) is countable by A2,A3,PRE_TOPC:def 8,TOPGEN_4:1,TOPS_2:16;
+    then COMPLEMENT(F) is Cover of T & COMPLEMENT(F) is open &
+    COMPLEMENT(F) is countable by A2,A3,SETFAM_1:60,TOPGEN_4:1,TOPS_2:16;
     then consider G' be Subset-Family of T such that
-A5: G' c= COMPLEMENT(F) & G' is_a_cover_of T and
+A5: G' c= COMPLEMENT(F) & G' is Cover of T and
 A6: G' is finite by A1,Def9;
 A7: COMPLEMENT(G') c= F
     proof
@@ -1664,7 +1664,7 @@ A8:   x in COMPLEMENT(G');
     end;
 A9: G' <> {} by A5,TOPS_2:5;
 A10: meet COMPLEMENT(G') = (union G')` by A5,TOPS_2:5,11
-      .= ([#] T) \ ([#] T) by A5,PRE_TOPC:def 8
+      .= ([#] T) \ ([#] T) by A5,SETFAM_1:60
       .= {} by XBOOLE_1:37;
     COMPLEMENT(G') <> {} & COMPLEMENT(G') is finite by A6,A9,TOPS_2:10,13;
     hence contradiction by A2,A7,A10,COMPTS_1:def 2;
@@ -1673,12 +1673,12 @@ A10: meet COMPLEMENT(G') = (union G')` by A5,TOPS_2:5,11
 A11: for F being Subset-Family of T st
   F is centered & F is closed & F is countable holds meet F <> {};
   let F be Subset-Family of T such that
-A12: F is_a_cover_of T & F is open and
+A12: F is Cover of T & F is open and
 A13: F is countable;
 A14: COMPLEMENT(F) is countable & COMPLEMENT(F) is closed &
   F <> {} by A12,A13,TOPGEN_4:1,TOPS_2:5,17;
   then meet COMPLEMENT(F) = (union F)` by TOPS_2:11
-    .= ([#] T) \ ([#] T) by A12,PRE_TOPC:def 8
+    .= ([#] T) \ ([#] T) by A12,SETFAM_1:60
     .= {} by XBOOLE_1:37;
   then COMPLEMENT(F) <> {} & not COMPLEMENT(F) is centered
   by A11,A14,TOPS_2:10;
@@ -1698,7 +1698,7 @@ A17: x in F';
   end;
   union F' = (meet G')` by A15,TOPS_2:12
     .= [#] T by A16;
-  hence thesis by A16,PRE_TOPC:def 8,TOPS_2:13;
+  hence thesis by A16,SETFAM_1:60,TOPS_2:13;
 end;
 
 theorem Th22:
@@ -1747,7 +1747,7 @@ A7: for S be non-empty closed SetSequence of T st
     let F be Subset-Family of T such that
 A8: F is centered & F is closed and
 A9: F is countable;
-A10: Card F <=` alef 0 by A9,CARD_4:def 1;
+A10: Card F c= alef 0 by A9,CARD_4:def 1;
     now per cases by A10,CARD_1:13;
       suppose Card F = alef 0;
         then NAT,F are_equipotent by CARD_1:21,38;
@@ -1777,7 +1777,7 @@ A18:      z in dom s & s.z=y by A11,FUNCT_1:def 5;
         end;
         hence meet F is non empty by A17,SETFAM_1:def 1;
       end;
-      suppose Card F <` alef 0;
+      suppose Card F in alef 0;
         then F is finite & F<>{} by A8,CARD_4:2,COMPTS_1:def 2;
         hence meet F is non empty by A8,COMPTS_1:def 2;
       end;
@@ -1891,8 +1891,8 @@ A20: dom S=NAT by FUNCT_2:def 1;
 A21: x in W & W is open and
 A22: { V where V is Subset of T: V in rngS & V meets W } is finite
     by PCOMPS_1:def 2;
-    reconsider S as Function of NAT,rngS by A20,FUNCT_2:3;
-    reconsider S'=S" as Function;
+    reconsider Sp=S as Function of NAT,rngS by A20,FUNCT_2:3;
+    reconsider S'=Sp" as Function;
     reconsider S' as Function of rngS,NAT by A18,FUNCT_2:31;
     deffunc s'(Element of rngS)=S'.$1;
     set X={ V where V is Subset of T: V in rngS & V meets W };
@@ -1922,8 +1922,8 @@ A29: x in CLF & CLF in clf Sn by A28,TARSKI:def 4;
 A30: CLF = Cl U & U in Sn by A29,PCOMPS_1:def 3;
     consider j be Element of NAT such that
 A31: U=S.j & j>=n1 by A27,A30;
-    S.j in rngS & S.j meets W by A21,A29,A30,A31,TOPS_1:39;
-    then S.j in X & (S").(S.j) = j by A18,FUNCT_2:32;
+    Sp.j in rngS & Sp.j meets W by A21,A29,A30,A31,TOPS_1:39;
+    then Sp.j in X & (S").(S.j) = j by A18,FUNCT_2:32;
     then j in Y;
     then j <=n by A25;
     hence thesis by A31,NAT_1:13;
@@ -2902,14 +2902,14 @@ end;
 
 theorem Th34:
   for T be non empty TopSpace holds T is second-countable implies
-  for F being Subset-Family of T st F is_a_cover_of T & F is open
-  ex G being Subset-Family of T st G c= F & G is_a_cover_of T & G is countable
+  for F being Subset-Family of T st F is Cover of T & F is open
+  ex G being Subset-Family of T st G c= F & G is Cover of T & G is countable
 proof
   let T be non empty TopSpace;
   assume
 A1: T is second-countable;
   let F being Subset-Family of T such that
-A2: F is_a_cover_of T and
+A2: F is Cover of T and
 A3: F is open;
   consider B being Basis of T such that
 A4: B is countable by A1,TOPGEN_4:60;
@@ -2951,7 +2951,7 @@ A12: z in dom p & p.z=y by FUNCT_1:def 5;
     then (p.z in F & z c= p.z or p.z={}) & y<>{} by A9,A11,A12,ZFMISC_1:64;
     hence thesis by A12;
   end;
-  thus RNG is_a_cover_of T
+  thus RNG is Cover of T
   proof
     the carrier of T c= union RNG
     proof
@@ -2970,7 +2970,7 @@ A17:  pU in F & U c= pU by A9,A14,A15;
       hence thesis by A15,A17,TARSKI:def 4;
     end;
     then [#]T=union RNG by XBOOLE_0:def 10;
-    hence thesis by PRE_TOPC:def 8;
+    hence thesis by SETFAM_1:60;
   end;
   Card rng p c= Card B & Card B c= omega
   by A4,A10,CARD_1:83,CARD_2:80,CARD_4:def 1;
@@ -2994,12 +2994,12 @@ A1: T is countably_compact;
   then
 A2: T is second-countable by Th33;
   let F be Subset-Family of T such that
-A3: F is_a_cover_of T & F is open;
+A3: F is Cover of T & F is open;
   consider G be Subset-Family of T such that
-A4: G c= F & G is_a_cover_of T & G is countable by A2,A3,Th34;
+A4: G c= F & G is Cover of T & G is countable by A2,A3,Th34;
   G is open by A3,A4,TOPS_2:18;
   then consider H be Subset-Family of T such that
-A5: H c= G & H is_a_cover_of T & H is finite by A1,A4,Def9;
+A5: H c= G & H is Cover of T & H is finite by A1,A4,Def9;
   thus thesis by A4,A5,XBOOLE_1:1;
 end;
 
@@ -3014,7 +3014,7 @@ A1: F is finite;
 A2: A is infinite & A c= union F;
   set I=INTERSECTION (F,{A});
   Card [:F,{A}:] =Card F by CARD_2:13;
-  then Card I<=` Card F by TOPGEN_4:25;
+  then Card I c= Card F by TOPGEN_4:25;
   then
 A3: I is finite by A1,CARD_2:68;
   defpred P[set,set] means $1 in $2;
@@ -3218,7 +3218,7 @@ A43:  r>0 & Ball(p',r) c= U by A42,TOPMETR:22;
 A44:  for m be Element of NAT st n<=m holds abs(df.m-0)<r/2
       by A40,SEQ_2:def 7;
       f.n is infinite by A26;
-      then Card {p} <` Card (f.n) & p in f.n by A41,CARD_FIL:1,KURATO_2:6;
+      then Card {p} in Card (f.n) & p in f.n by A41,CARD_FIL:1,KURATO_2:6;
       then {p} <>f.n & {p} c= f.n by ZFMISC_1:37;
       then {p} c<f.n by XBOOLE_0:def 8;
       then f.n\{p} <>{} by XBOOLE_1:105;

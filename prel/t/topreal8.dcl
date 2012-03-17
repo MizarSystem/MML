@@ -11,16 +11,16 @@
 <ArticleID name="RELSET_1"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
+<ArticleID name="MCART_1"/>
+<ArticleID name="FUNCT_2"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
-<ArticleID name="MCART_1"/>
-<ArticleID name="FUNCT_2"/>
 <ArticleID name="ENUMSET1"/>
 <ArticleID name="DOMAIN_1"/>
 <ArticleID name="REALSET1"/>
 </Signature>
-<RCluster>
+<RCluster aid="TOPREAL8" nr="1">
 <ArgTypes/>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -31,7 +31,7 @@
 <Adjective nr="24"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="TOPREAL8" nr="2">
 <ArgTypes/>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -40,8 +40,8 @@
 <Adjective nr="1"/>
 <Adjective nr="4"/>
 <Adjective nr="6" value="false"/>
-<Adjective nr="15"/>
-<Adjective nr="19"/>
+<Adjective nr="18"/>
+<Adjective nr="22"/>
 </Cluster>
 </RCluster>
 </Registrations>

@@ -12,14 +12,14 @@
 <ArticleID name="ARYTM_3"/>
 <ArticleID name="ARYTM_2"/>
 </Signature>
-<FCluster>
+<FCluster aid="ARYTM_2" nr="1">
 <ArgTypes/>
 <Func kind="K" nr="54"/>
 <Cluster>
 <Adjective nr="1" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="ARYTM_2" nr="2">
 <ArgTypes/>
 <Func kind="K" nr="55"/>
 <Cluster>

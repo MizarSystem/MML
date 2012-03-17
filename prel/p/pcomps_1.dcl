@@ -22,7 +22,7 @@
 <ArticleID name="METRIC_1"/>
 <ArticleID name="PCOMPS_1"/>
 </Signature>
-<RCluster>
+<RCluster aid="PCOMPS_1" nr="1">
 <ArgTypes/>
 <Typ kind="G" nr="5">
 <Cluster/>
@@ -33,7 +33,7 @@
 <Adjective nr="52"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="PCOMPS_1" nr="2">
 <ArgTypes/>
 <Typ kind="G" nr="5">
 <Cluster/>
@@ -45,7 +45,7 @@
 <Adjective nr="35"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="PCOMPS_1" nr="3">
 <ArgTypes/>
 <Typ kind="G" nr="5">
 <Cluster/>
@@ -57,7 +57,7 @@
 <Adjective nr="53"/>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="PCOMPS_1" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster/>
@@ -71,7 +71,7 @@
 <Adjective nr="29"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="PCOMPS_1" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>

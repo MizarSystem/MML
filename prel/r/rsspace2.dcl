@@ -26,7 +26,7 @@
 <ArticleID name="BHSP_3"/>
 <ArticleID name="RSSPACE"/>
 </Signature>
-<FCluster>
+<FCluster aid="RSSPACE2" nr="1">
 <ArgTypes/>
 <Func kind="K" nr="167"/>
 <Cluster>
@@ -34,7 +34,7 @@
 <Adjective nr="87"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="RSSPACE2" nr="2">
 <ArgTypes/>
 <Func kind="K" nr="167"/>
 <Cluster>

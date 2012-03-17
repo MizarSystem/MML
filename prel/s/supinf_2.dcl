@@ -21,7 +21,7 @@
 <ArticleID name="VALUED_0"/>
 <ArticleID name="SUPINF_2"/>
 </Signature>
-<RCluster>
+<RCluster aid="SUPINF_2" nr="1">
 <ArgTypes/>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -35,7 +35,7 @@
 <Adjective nr="34"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="SUPINF_2" nr="2">
 <ArgTypes/>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -50,7 +50,7 @@
 <Adjective nr="45"/>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="SUPINF_2" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster>
@@ -77,7 +77,7 @@
 <Adjective nr="7" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="SUPINF_2" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster>
@@ -95,7 +95,7 @@
 <Adjective nr="7" value="false"/>
 </Cluster>
 </FCluster>
-<CCluster>
+<CCluster aid="SUPINF_2" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -143,7 +143,7 @@
 </Adjective>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="SUPINF_2" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>

@@ -13,7 +13,7 @@
 <ArticleID name="XREAL_0"/>
 <ArticleID name="ABSVALUE"/>
 </Signature>
-<FCluster>
+<FCluster aid="ABSVALUE" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>

@@ -20,10 +20,11 @@ environ
       FRAENKEL, XXREAL_0, XREAL_0, NAT_1, INT_1, QC_LANG1, CQC_LANG, SUBSTUT1,
       SUBLEMMA;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
- definitions TARSKI;
+ definitions TARSKI, FUNCOP_1;
  theorems TARSKI, FUNCT_1, MCART_1, XBOOLE_0, XBOOLE_1, CQC_LANG, QC_LANG1,
       ZFMISC_1, RELAT_1, QC_LANG3, PARTFUN1, RELSET_1, QC_LANG2, SUBSTUT1,
-      FUNCT_4, SUBLEMMA, CQC_SIM1, FUNCT_2, NAT_1, INT_1, XREAL_1, XXREAL_0;
+      FUNCT_4, SUBLEMMA, CQC_SIM1, FUNCT_2, NAT_1, INT_1, XREAL_1, XXREAL_0,
+      FUNCOP_1;
  schemes CQC_LANG, NAT_1;
 
 begin :: Further Properties of Substitution
@@ -210,7 +211,7 @@ proof
 A1: now
     assume
 A2: x in rng finSub;
-A3: {[x,x.upVar(finSub,p)]} = x .--> x.upVar(finSub,p) by CQC_LANG:45;
+A3: {[x,x.upVar(finSub,p)]} = x .--> x.upVar(finSub,p) by FUNCT_4:87;
     reconsider F = {[x,x.upVar(finSub,p)]} as Function;
     dom F = {x} by RELAT_1:23;
     then dom finSub misses dom F by Th6;
@@ -219,27 +220,22 @@ A3: {[x,x.upVar(finSub,p)]} = x .--> x.upVar(finSub,p) by CQC_LANG:45;
 A4: @finSub \/ F = @finSub +* F by FUNCT_4:32;
     consider Sub1;
     ExpandSub(x,p,finSub) = finSub \/ F by A2,SUBSTUT1:def 13;
-    then
-A5: ExpandSub(x,p,finSub) = @finSub +* F by A4,SUBSTUT1:def 2;
-    F = x .--> z by A2,A3,Th7;
-    hence ExpandSub(x,p,finSub) = @finSub +* (x|z) by A5,SUBLEMMA:def 9;
+    then ExpandSub(x,p,finSub) = @finSub +* F by A4,SUBSTUT1:def 2;
+    hence ExpandSub(x,p,finSub) = @finSub +* (x|z) by A2,A3,Th7;
   end;
   now
     assume
 A6: not x in rng finSub;
-A7: {[x,x]} = x .--> x by CQC_LANG:45;
+A7: {[x,x]} = x .--> x by FUNCT_4:87;
     reconsider F = {[x,x]} as Function;
     dom F = {x} by RELAT_1:23;
     then dom finSub misses dom F by Th6;
     then dom @finSub misses dom F by SUBSTUT1:def 2;
     then
 A8: @finSub \/ F = @finSub +* F by FUNCT_4:32;
-    consider Sub1;
     ExpandSub(x,p,finSub) = finSub \/ F by A6,SUBSTUT1:def 13;
-    then
-A9: ExpandSub(x,p,finSub) = @finSub +* F by A8,SUBSTUT1:def 2;
-    F = x .--> z by A6,A7,Th8;
-    hence ExpandSub(x,p,finSub) = @finSub +* (x|z) by A9,SUBLEMMA:def 9;
+    then ExpandSub(x,p,finSub) = @finSub +* F by A8,SUBSTUT1:def 2;
+    hence ExpandSub(x,p,finSub) = @finSub +* (x|z) by A6,A7,Th8;
   end;
   hence thesis by A1;
 end;
@@ -314,15 +310,18 @@ A1: S`1 = p & S`2 = Sub by Th12;
   end;
 end;
 
+notation
+  let x,y;
+  synonym Sbst(x,y) for x .--> y;
+end;
+
 definition
   let x,y;
-  func Sbst(x,y) -> CQC_Substitution equals
-
-  x .--> y;
+  redefine func Sbst(x,y) -> CQC_Substitution;
   coherence
   proof
-A1: dom(x .--> y) = {x} by CQC_LANG:5;
-    rng(x .--> y) = {y} by CQC_LANG:5;
+A1: dom(x .--> y) = {x} by FUNCOP_1:19;
+    rng(x .--> y) = {y} by FUNCOP_1:14;
     then x .--> y is PartFunc of bound_QC-variables,bound_QC-variables
     by A1,RELSET_1:11;
     hence x .--> y is CQC_Substitution by PARTFUN1:119,SUBSTUT1:def 1;
@@ -332,6 +331,7 @@ end;
 begin :: Facts about Substitution and Quantifiers of a Formula
 
 definition
+ canceled;
   let p,x,y;
   func p.(x,y) -> Element of CQC-WFF equals
 
@@ -573,7 +573,7 @@ A11:  now
         assume not p is universal;
         then b1 = {} by A10,SUBSTUT1:def 14;
         then b1 is PartFunc of bound_QC-variables,bound_QC-variables by
-        PARTFUN1:56;
+        RELSET_1:25;
         then b1 is CQC_Substitution by PARTFUN1:119,SUBSTUT1:def 1;
         hence b is CQC_Substitution by A10,ZFMISC_1:33;
       end;
@@ -640,9 +640,9 @@ A1: for Sub holds QuantNbr(p) = QuantNbr(CQC_Sub([p,Sub]));
   set S1 = [All(x,p),Sub];
   set S = [p,CFQ.[All(x,p),Sub]];
 A2: QScope(p,x,Sub) is quantifiable by Th22;
-  then
+:::  then
 A3: Sub_All(QScope(p,x,Sub),Qsc(p,x,Sub)) =
-  CQCSub_All(QScope(p,x,Sub),Qsc(p,x,Sub)) by SUBLEMMA:def 6
+  CQCSub_All(QScope(p,x,Sub),Qsc(p,x,Sub)) by SUBLEMMA:def 6,Th22
     .= S1 by Th22;
   then
 A4: S1 is Sub_universal by A2,SUBSTUT1:def 28;
@@ -657,7 +657,7 @@ A5: CQC_Sub(S1) = CQCQuant(S1,CQC_Sub(CQCSub_the_scope_of S1)) by SUBLEMMA:29;
 A6: CQC_Sub(S1) = CQCQuant(CQCSub_All(QScope(p,x,Sub),
   Qsc(p,x,Sub)),CQC_Sub(S)) by A5,Th22;
   set y = S_Bound(@CQCSub_All(QScope(p,x,Sub),Qsc(p,x,Sub)));
-  QuantNbr(CQC_Sub(S1)) = QuantNbr(All(y,CQC_Sub(S))) by A2,A6,SUBLEMMA:32
+  QuantNbr(CQC_Sub(S1)) = QuantNbr(All(y,CQC_Sub(S))) by Th22,A6,SUBLEMMA:32
     .= QuantNbr(CQC_Sub(S))+1 by CQC_SIM1:18
     .= QuantNbr(p)+1 by A1;
   hence thesis by CQC_SIM1:18;

@@ -20,7 +20,7 @@
 <ArticleID name="TREES_1"/>
 <ArticleID name="TREES_2"/>
 </Signature>
-<RCluster>
+<RCluster aid="QC_LANG4" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>

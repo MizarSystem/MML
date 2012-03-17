@@ -27,7 +27,7 @@ environ
       MATRIX_1, MATRIX_2, MATRIX_3, MOD_2, ZFMISC_1, NAT_1, FVSUM_1, SUBSET_1,
       CARD_2, FINSEQOP, FUNCOP_1, RELAT_1, RELSET_1, PARTFUN2, XBOOLE_0,
       XBOOLE_1, RLVECT_2, XREAL_1, NEWTON, ORDINAL1, PARTFUN1, CARD_1;
- schemes FINSEQ_1, FINSEQ_2, FUNCT_2, MATRIX_1, GOBOARD2, NAT_1, CLASSES1;
+ schemes FINSEQ_1, FINSEQ_2, FUNCT_2, MATRIX_1, NAT_1, CLASSES1, FINSEQ_4;
 
 begin :: Preliminaries
 
@@ -1406,7 +1406,6 @@ A3: i in dom Sum(M1^M2);
     i in Seg len (M1^M2) by A2,Def8,X;
     then
 A4: i in dom (M1^M2) by FINSEQ_1:def 3;
-A5: i in NAT by ORDINAL1:def 13;
     now per cases by A4,FINSEQ_1:38;
       suppose
 A6:     i in dom M1;
@@ -1415,7 +1414,7 @@ A6:     i in dom M1;
 A7:     dom M1 = dom Sum M1 by FINSEQ_3:31;
         thus Sum(M1^M2).i = (Sum(M1^M2))/.i by A3,PARTFUN1:def 8
           .= Sum ((M1^M2)/.i) by A3,Def8
-          .= Sum (M1/.i) by A5,A6,FINSEQ_4:83
+          .= Sum (M1/.i) by A6,FINSEQ_4:83
           .= (Sum M1)/.i by A6,A7,Def8
           .= (Sum M1).i by A6,A7,PARTFUN1:def 8
           .= ((Sum M1)^(Sum M2)).i by A6,A7,FINSEQ_1:def 7;
@@ -1427,10 +1426,9 @@ A9:     len M1 = len Sum M1 by Def8;
         len M2 = len Sum M2 by Def8;
         then
 A10:    dom M2 = dom Sum M2 by FINSEQ_3:31;
-A11:    n in NAT by ORDINAL1:def 13;
         thus Sum(M1^M2).i = (Sum(M1^M2))/.i by A3,PARTFUN1:def 8
           .= Sum ((M1^M2)/.i) by A3,Def8
-          .= Sum (M2/.n) by A8,A11,FINSEQ_4:84
+          .= Sum (M2/.n) by A8,FINSEQ_4:84
           .= (Sum M2)/.n by A8,A10,Def8
           .= (Sum M2).n by A8,A10,PARTFUN1:def 8
           .= ((Sum M1)^(Sum M2)).i by A8,A9,A10,FINSEQ_1:def 7;
@@ -2198,13 +2196,9 @@ A6: for i,j st [i,j] in Indices M holds M*(i,j) = V(i,j) from MATRIX_1:sch 1;
   deffunc W(Nat) = Sum mlt(a,Col(M,$1));
   consider dd being FinSequence of K such that
 A7: len dd = len b2 &
-  for j be Element of NAT st j in dom dd holds dd/.j = W(j)
-  from GOBOARD2:sch 1;
-A8: now
-    let j;
-    j in NAT by ORDINAL1:def 13;
-    hence j in dom dd implies dd/.j = W(j) by A7;
-  end;
+  for j be Nat st j in dom dd holds dd/.j = W(j)
+  from FINSEQ_4:sch 2;
+A8: for j holds j in dom dd implies dd/.j = W(j) by A7;
   len M = len b1 by MATRIX_1:def 3;
   then
 A9: dom M = dom b1 by FINSEQ_3:31;
@@ -2256,7 +2250,7 @@ A26:  [i,j] in Indices M by MATRIX_1:def 5;
   end;
 A27: j in dom dd by A2,A7,FINSEQ_3:31;
   thus (Sum(lmlt(a,f*b1))|--b2)/.j = (Sum(lmlt(dd,b2))|--b2)/.j
-  by A1,A3,A5,A7,A8,A10,A20,Th38
+  by A1,A3,A5,A7,A10,A20,Th38
     .= dd/.j by A7,Th41
     .= Sum(mlt(a,Col(M,j))) by A8,A27
     .= Sum(mlt(a,d)) by A12,A16,NEWTON:3;

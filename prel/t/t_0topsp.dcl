@@ -18,7 +18,7 @@
 <ArticleID name="EQREL_1"/>
 <ArticleID name="T_0TOPSP"/>
 </Signature>
-<RCluster>
+<RCluster aid="T_0TOPSP" nr="1">
 <ArgTypes/>
 <Typ kind="G" nr="5">
 <Cluster/>
@@ -29,7 +29,7 @@
 <Adjective nr="36"/>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="T_0TOPSP" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>

@@ -19,7 +19,8 @@ environ
       WSIERP_1, BINOP_1, PROB_3, RECDEF_1;
  constructors BINARITH, ABIAN, WSIERP_1, PEPIN, UPROOTS, NAT_3, NAT_D,
       REALSET1, GR_CY_1, FINSEQ_5, GOBRD10, EULER_2, RFINSEQ, GROUP_4,
-      FINSEQ_7, REAL_1, WELLORD2, CALCUL_2, SETFAM_1, PROB_3, SEQ_1, RECDEF_1;
+      FINSEQ_7, REAL_1, WELLORD2, CALCUL_2, SETFAM_1, PROB_3, SEQ_1, RECDEF_1,
+      BINOP_2;
  registrations XXREAL_0, MEMBERED, RELAT_1, FINSEQ_1, ORDINAL1, WSIERP_1,
       NUMBERS, XBOOLE_0, XREAL_0, NAT_1, INT_1, FINSET_1, NAT_3, RVSUM_1,
       CALCUL_2, FUNCT_1, CARD_1, NEWTON, SUBSET_1, POLYNOM1, VALUED_0,
@@ -853,16 +854,6 @@ proof
   hence thesis by INT_2:51;
 end;
 
-registration
-  let k be Integer, a be Nat;
-  cluster k |^ a -> integer;
-  coherence
-  proof reconsider a as Element of NAT by ORDINAL1:def 13;
-    k |^ a is integer;
-    hence thesis;
-  end;
-end;
-
 theorem Th13:
   for i,j,m being Integer st i mod m = j mod m holds i|^n mod m = j|^n mod m
 proof
@@ -968,7 +959,6 @@ proof
   then p is odd by PEPIN:17;
   then
 A1: p-1 is even by HILBERT3:2;
-A2: p in NAT by ORDINAL1:def 13;
 A3: p>1 by INT_2:def 5;
   then
 A4: p-'1 = p-1 by BINARITH:50;
@@ -1009,9 +999,8 @@ A10: for d st d in dom fp holds fp.d hcf p = 1
     let d;
     assume
 A11: d in dom fp;
-A12: d in NAT by ORDINAL1:def 13;
     d hcf p = 1 by A7,A11;
-    then d^2 hcf p = 1 by A2,A12,WSIERP_1:12;
+    then d^2 hcf p = 1 by WSIERP_1:12;
     hence thesis by A6,A11;
   end;
 A13: for d st d in dom fp holds fp.d is_quadratic_residue_mod p
@@ -1836,10 +1825,7 @@ proof
 A1: p>2;
   assume
 A2: for d st d in dom fp holds fp.d hcf p = 1;
-  then
-A3: for d being Element of NAT st d in dom fp holds fp.d hcf p = 1;
-  p in NAT by ORDINAL1:def 13;
-  then Product(fp) hcf p = 1 by A3,WSIERP_1:43;
+  Product(fp) hcf p = 1 by A2,WSIERP_1:43;
   then
 A4: Lege (Product fp,p),(Product fp)|^((p-'1) div 2) are_congruent_mod p
   by A1,Th28;
@@ -1925,11 +1911,10 @@ A2: Lege(d^2,p) = 1 by Th26;
     then k in Seg(len fp) by FINSEQ_1:def 3;
     then
 A3: k in Seg 2 by FINSEQ_1:61;
-A4: d in NAT by ORDINAL1:def 13;
     per cases by A3,FINSEQ_1:4,TARSKI:def 2;
     suppose k = 1;
       then fp.k = d^2 by FINSEQ_1:61;
-      hence thesis by A1,A4,WSIERP_1:12;
+      hence thesis by A1,WSIERP_1:12;
     end;
     suppose k = 2;
       hence thesis by A1,FINSEQ_1:61;
@@ -2051,13 +2036,7 @@ proof
   defpred P[Nat] means for f being FinSequence of NAT
   st len f = $1 & (for d st d in dom f holds f.d>0 & f.d<=$1)
   & f is one-to-one holds rng f = Seg $1;
-A1: P[0]
-  proof
-    let f be FinSequence of NAT;
-    assume len f = 0;
-    then f = {} by CARD_2:59;
-    hence thesis by FINSEQ_1:4,RELAT_1:60;
-  end;
+A1: P[0] by FINSEQ_1:4,RELAT_1:60,CARD_2:59;
 A2: for n be Element of NAT st P[n] holds P[n+1]
   proof
     let n be Element of NAT;
@@ -2230,7 +2209,6 @@ A1: p>2 & a hcf p = 1 & f = a*(idseq ((p-'1) div 2)) &
   m=Card{k where k is Element of NAT:k in rng (f mod p) & k > p/2};
   then
 A2: a|^((p-'1) div 2),Lege(a,p) are_congruent_mod p by Th28,INT_1:35;
-A3: p in NAT by ORDINAL1:def 13;
   set p' = (p-'1) div 2;
   set f1 = f mod p;
   set f2 = Sgm rng f1;
@@ -2270,9 +2248,9 @@ A13: p' divides (p-'1) by NAT_D:def 3;
 A14: p' < p by A9,XREAL_1:148,XXREAL_0:2;
 A15: p' = ((p-'1)+1) div 2 by A11,NAT_2:28
     .= p div 2 by A8,BINARITH:53;
-  for d being Element of NAT st d in dom I holds I.d hcf p = 1
+  for d being Nat st d in dom I holds I.d hcf p = 1
   proof
-    let d be Element of NAT;
+    let d be Nat;
     assume d in dom I;
     then d in Seg len I by FINSEQ_1:def 3;
     then
@@ -2285,7 +2263,7 @@ A17: I.d = d by A10,FINSEQ_2:57;
     hence thesis by A17,INT_2:def 4;
   end;
   then
-A18: (Product I) hcf p = 1 by A3,WSIERP_1:43;
+A18: (Product I) hcf p = 1 by WSIERP_1:43;
 A19: for d st d in dom f holds f.d = a*d
   proof
     let d;

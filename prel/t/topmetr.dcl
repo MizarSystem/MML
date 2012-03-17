@@ -29,7 +29,7 @@
 <ArticleID name="BORSUK_1"/>
 <ArticleID name="TOPMETR"/>
 </Signature>
-<RCluster>
+<RCluster aid="TOPMETR" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
@@ -40,7 +40,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Typ kind="M" nr="13">
+<Typ kind="M" nr="12">
 <Cluster/>
 <LocusVar nr="1"/>
 </Typ>
@@ -52,7 +52,7 @@
 <Adjective nr="56"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="TOPMETR" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
@@ -64,7 +64,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Typ kind="M" nr="13">
+<Typ kind="M" nr="12">
 <Cluster/>
 <LocusVar nr="1"/>
 </Typ>
@@ -77,7 +77,7 @@
 <Adjective nr="56"/>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="TOPMETR" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
@@ -108,7 +108,7 @@
 <Adjective nr="48"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="TOPMETR" nr="2">
 <ArgTypes/>
 <Func kind="K" nr="189"/>
 <Cluster>
@@ -117,7 +117,7 @@
 <Adjective nr="29"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="TOPMETR" nr="3">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>

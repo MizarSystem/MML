@@ -38,7 +38,7 @@
 <ArticleID name="RLTOPSP1"/>
 <ArticleID name="CIRCLED1"/>
 </Signature>
-<RCluster>
+<RCluster aid="CIRCLED1" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="12">
 <Cluster>
@@ -72,7 +72,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="CIRCLED1" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="12">
 <Cluster>
@@ -117,7 +117,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="CIRCLED1" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="12">
 <Cluster>
@@ -165,7 +165,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="CIRCLED1" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="12">
 <Cluster>

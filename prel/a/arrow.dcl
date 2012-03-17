@@ -15,7 +15,7 @@
 <ArticleID name="PARTFUN1"/>
 <ArticleID name="ARROW"/>
 </Signature>
-<RCluster>
+<RCluster aid="ARROW" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -38,7 +38,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="ARROW" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -53,7 +53,7 @@
 <Adjective nr="7" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="ARROW" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>

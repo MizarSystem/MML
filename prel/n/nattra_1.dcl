@@ -27,7 +27,7 @@
 <ArticleID name="CAT_2"/>
 <ArticleID name="NATTRA_1"/>
 </Signature>
-<RCluster>
+<RCluster aid="NATTRA_1" nr="1">
 <ArgTypes/>
 <Typ kind="G" nr="2">
 <Cluster/>
@@ -38,7 +38,7 @@
 <Adjective nr="51"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="NATTRA_1" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="2">
 <Cluster>

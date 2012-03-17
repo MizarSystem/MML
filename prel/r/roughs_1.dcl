@@ -10,13 +10,13 @@
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
-<ArticleID name="RELAT_2"/>
 <ArticleID name="RELSET_1"/>
+<ArticleID name="MCART_1"/>
+<ArticleID name="FUNCT_2"/>
+<ArticleID name="RELAT_2"/>
 <ArticleID name="PARTFUN1"/>
 <ArticleID name="EQREL_1"/>
 <ArticleID name="XREAL_0"/>
-<ArticleID name="MCART_1"/>
-<ArticleID name="FUNCT_2"/>
 <ArticleID name="FRAENKEL"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
@@ -46,7 +46,7 @@
 <ArticleID name="ORDERS_3"/>
 <ArticleID name="ROUGHS_1"/>
 </Signature>
-<RCluster>
+<RCluster aid="ROUGHS_1" nr="1">
 <ArgTypes/>
 <Typ kind="G" nr="5">
 <Cluster/>
@@ -56,13 +56,13 @@
 <Adjective nr="114" value="false"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="ROUGHS_1" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Typ kind="M" nr="14">
+<Typ kind="M" nr="13">
 <Cluster/>
 <LocusVar nr="1"/>
 </Typ>
@@ -74,7 +74,7 @@
 <Adjective nr="43"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="ROUGHS_1" nr="3">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -82,7 +82,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Typ kind="M" nr="14">
+<Typ kind="M" nr="13">
 <Cluster/>
 <LocusVar nr="1"/>
 </Typ>
@@ -95,7 +95,7 @@
 <Adjective nr="43"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="ROUGHS_1" nr="4">
 <ArgTypes/>
 <Typ kind="G" nr="5">
 <Cluster/>
@@ -107,7 +107,7 @@
 <Adjective nr="115"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="ROUGHS_1" nr="5">
 <ArgTypes/>
 <Typ kind="G" nr="5">
 <Cluster/>
@@ -119,7 +119,7 @@
 <Adjective nr="115"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="ROUGHS_1" nr="6">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
@@ -142,7 +142,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="ROUGHS_1" nr="7">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
@@ -166,7 +166,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="ROUGHS_1" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -174,7 +174,7 @@
 </ArgTypes>
 <Func kind="G" nr="5">
 <LocusVar nr="1"/>
-<Func kind="K" nr="65">
+<Func kind="K" nr="90">
 <LocusVar nr="1"/>
 </Func>
 </Func>
@@ -183,7 +183,7 @@
 <Adjective nr="109"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="ROUGHS_1" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -193,7 +193,7 @@
 </ArgTypes>
 <Func kind="G" nr="5">
 <LocusVar nr="1"/>
-<Func kind="K" nr="67">
+<Func kind="K" nr="92">
 <LocusVar nr="1"/>
 </Func>
 </Func>
@@ -202,7 +202,7 @@
 <Adjective nr="114" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="ROUGHS_1" nr="3">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -224,7 +224,7 @@
 <Adjective nr="59"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="ROUGHS_1" nr="4">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -232,7 +232,7 @@
 </ArgTypes>
 <Func kind="G" nr="5">
 <LocusVar nr="1"/>
-<Func kind="K" nr="65">
+<Func kind="K" nr="90">
 <LocusVar nr="1"/>
 </Func>
 </Func>
@@ -241,7 +241,7 @@
 <Adjective nr="115"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="ROUGHS_1" nr="5">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
@@ -254,9 +254,9 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="15"/>
-<Adjective nr="17"/>
-<Adjective nr="23">
+<Adjective nr="18"/>
+<Adjective nr="20"/>
+<Adjective nr="26">
 <Func kind="U" nr="1">
 <LocusVar nr="1"/>
 </Func>
@@ -266,7 +266,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="ROUGHS_1" nr="6">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
@@ -279,37 +279,10 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="22"/>
+<Adjective nr="25"/>
 </Cluster>
 </FCluster>
-<FCluster>
-<ArgTypes>
-<Typ kind="G" nr="5">
-<Cluster>
-<Adjective nr="47" value="false"/>
-<Adjective nr="115"/>
-</Cluster>
-</Typ>
-<Typ kind="M" nr="2">
-<Cluster/>
-<Func kind="K" nr="23">
-<Func kind="U" nr="1">
-<LocusVar nr="1"/>
-</Func>
-</Func>
-</Typ>
-</ArgTypes>
-<Func kind="K" nr="348">
-<LocusVar nr="1"/>
-<LocusVar nr="2"/>
-</Func>
-<Cluster>
-<Adjective nr="117" value="false">
-<LocusVar nr="1"/>
-</Adjective>
-</Cluster>
-</FCluster>
-<FCluster>
+<FCluster aid="ROUGHS_1" nr="7">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
@@ -336,7 +309,34 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="ROUGHS_1" nr="8">
+<ArgTypes>
+<Typ kind="G" nr="5">
+<Cluster>
+<Adjective nr="47" value="false"/>
+<Adjective nr="115"/>
+</Cluster>
+</Typ>
+<Typ kind="M" nr="2">
+<Cluster/>
+<Func kind="K" nr="23">
+<Func kind="U" nr="1">
+<LocusVar nr="1"/>
+</Func>
+</Func>
+</Typ>
+</ArgTypes>
+<Func kind="K" nr="350">
+<LocusVar nr="1"/>
+<LocusVar nr="2"/>
+</Func>
+<Cluster>
+<Adjective nr="117" value="false">
+<LocusVar nr="1"/>
+</Adjective>
+</Cluster>
+</FCluster>
+<FCluster aid="ROUGHS_1" nr="9">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
@@ -353,7 +353,7 @@
 </Typ>
 </ArgTypes>
 <Func kind="K" nr="105">
-<Func kind="K" nr="72">
+<Func kind="K" nr="97">
 <Func kind="U" nr="1">
 <LocusVar nr="1"/>
 </Func>
@@ -371,7 +371,7 @@
 <Adjective nr="32"/>
 </Cluster>
 </FCluster>
-<CCluster>
+<CCluster aid="ROUGHS_1" nr="1">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="61"/>
@@ -385,7 +385,7 @@
 <Adjective nr="61"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="ROUGHS_1" nr="2">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="52"/>
@@ -398,7 +398,7 @@
 <Adjective nr="109"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="ROUGHS_1" nr="3">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="109"/>
@@ -410,7 +410,7 @@
 <Adjective nr="114"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="ROUGHS_1" nr="4">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="114" value="false"/>
@@ -422,7 +422,7 @@
 <Adjective nr="109" value="false"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="ROUGHS_1" nr="5">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="1"/>
@@ -438,7 +438,7 @@
 <Adjective nr="41"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="ROUGHS_1" nr="6">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="115"/>
@@ -450,7 +450,7 @@
 <Adjective nr="116"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="ROUGHS_1" nr="7">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>

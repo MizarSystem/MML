@@ -29,7 +29,7 @@
 <ArticleID name="T_0TOPSP"/>
 <ArticleID name="YELLOW_8"/>
 </Signature>
-<RCluster>
+<RCluster aid="YELLOW_8" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
@@ -52,7 +52,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="YELLOW_8" nr="2">
 <ArgTypes/>
 <Typ kind="G" nr="5">
 <Cluster/>
@@ -63,7 +63,7 @@
 <Adjective nr="60"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="YELLOW_8" nr="3">
 <ArgTypes/>
 <Typ kind="G" nr="5">
 <Cluster/>
@@ -75,7 +75,7 @@
 <Adjective nr="60" value="false"/>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="YELLOW_8" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -91,7 +91,7 @@
 <Adjective nr="21"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="YELLOW_8" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -105,7 +105,7 @@
 <Adjective nr="22"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="YELLOW_8" nr="3">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -121,7 +121,7 @@
 <Adjective nr="45"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="YELLOW_8" nr="4">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -137,7 +137,7 @@
 <Adjective nr="60" value="false"/>
 </Cluster>
 </FCluster>
-<CCluster>
+<CCluster aid="YELLOW_8" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster/>
@@ -160,7 +160,7 @@
 <Adjective nr="1" value="false"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="YELLOW_8" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
@@ -187,7 +187,7 @@
 <Adjective nr="11"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="YELLOW_8" nr="3">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="13" value="false"/>
@@ -203,7 +203,7 @@
 <Adjective nr="60"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="YELLOW_8" nr="4">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="13" value="false"/>

@@ -10,7 +10,7 @@ environ
       FINSET_1, FUNCOP_1, FUNCT_1, FUNCT_4, GRAPH_1, GRAPH_5, GLIB_000,
       GLIB_001, GLIB_003, GLIB_005, MATRIX_2, MSAFREE2, NAT_1, NEWTON,
       PARTFUN1, PBOOLE, POLYNOM1, PRE_TOPC, REALSET1, RELAT_1, RLVECT_1, SEQ_1,
-      SEQM_3, SGRAPH1, TREES_1, UPROOTS;
+      SEQM_3, SGRAPH1, TREES_1, UPROOTS, SQUARE_1;
  notations TARSKI, XBOOLE_0, CARD_1, NUMBERS, SUBSET_1, XCMPLX_0, XXREAL_0,
       XREAL_0, DOMAIN_1, REAL_1, RELAT_1, PARTFUN1, FUNCT_1, FINSEQ_1, SEQ_1,
       PBOOLE, FUNCT_2, GRAPH_5, ORDINAL1, POLYNOM1, UPROOTS, RELSET_1,
@@ -27,8 +27,8 @@ environ
       FUNCT_2, FUNCT_4, GLIB_000, GLIB_001, GLIB_003, GLIB_004, GRAPH_5,
       HEYTING3, INT_1, NAT_1, PBOOLE, PEPIN, POLYNOM1, REAL_1, RELAT_1, TARSKI,
       UPROOTS, XBOOLE_0, XBOOLE_1, ZFMISC_1, XREAL_1, XXREAL_0, ORDINAL1,
-      NAT_D, VALUED_0;
- schemes BINARITH, NAT_1, SUBSET_1, FINSEQ_1, FUNCT_1, RECDEF_1, GRAPH_5;
+      NAT_D, VALUED_0, XREAL_0, PRE_CIRC;
+ schemes NAT_1, SUBSET_1, FINSEQ_1, RECDEF_1, CLASSES1;
 
 begin ::Preliminaries definitions for Maximum Flow Algorithm
 
@@ -2122,8 +2122,6 @@ definition
     $2 = (the_Weight_of G).(W.(2*$1)) - (the_ELabel_of G).(W.(2*$1))) &
     (not W.(2*$1) DJoins W.(2*$1-1),W.(2*$1+1),G implies
     $2 = (the_ELabel_of G).(W.(2*$1)));
-A1: for k being Nat,y1,y2 being set
-    st k in Seg len W.edgeSeq() & P[k,y1] & P[k,y2] holds y1=y2;
     now
       let k be Nat;
       assume k in Seg len W.edgeSeq();
@@ -2142,7 +2140,7 @@ A2: for k being Nat st k in Seg len W.edgeSeq() ex x being set st P[k, x];
     consider IT being FinSequence such that
 A3: dom IT = Seg len W.edgeSeq() &
     for k being Nat st k in Seg len W.edgeSeq() holds P[k,IT.k]
-    from FINSEQ_1:sch 1(A1,A2);
+    from FINSEQ_1:sch 1(A2);
     now
       let y be set;
       assume y in rng IT;
@@ -2219,15 +2217,12 @@ A2:   x in dom W.edgeSeq() & y = W.edgeSeq().x by A1,FUNCT_1:def 5;
       x in dom W.flowSeq() by A2,Def18;
       then W.flowSeq().x in D by FUNCT_1:def 5;
       then reconsider D as non empty finite Subset of REAL;
-      deffunc F(Real) = $1;
-      consider IT being Element of D such that
-A3:   for k being Element of D holds F(IT) <= F(k) from GRAPH_5:sch 2;
-      reconsider IT as Real;
+      reconsider IT = min D as Real by XREAL_0:def 1;
       take IT;
-      thus IT in rng W.flowSeq();
+      thus IT in rng W.flowSeq() by PRE_CIRC:def 4;
       let k be Real;
       assume k in rng W.flowSeq();
-      hence IT <= k by A3;
+      hence IT <= k by PRE_CIRC:def 4;
     end;
     thus thesis;
   end;
@@ -2317,37 +2312,6 @@ definition
     (not P.(n+1) DJoins P.n,P.(n+2),G implies
     $2 = (the_ELabel_of G).(P.(n+1)) - P.tolerance()));
     now
-      let x,y1,y2 be set;
-      assume
-A1:   x in the_Edges_of G & P[x,y1] & P[x,y2];
-      now per cases;
-        suppose not x in P.edges();
-          hence y1 = y2 by A1;
-        end;
-        suppose x in P.edges();
-          then consider n being odd Element of NAT such that
-A2:       n < len P & P.(n+1) = x by GLIB_001:101;
-          now per cases;
-            suppose (P.(n+1) DJoins P.n,P.(n+2),G);
-              then y1 = (the_ELabel_of G).(P.(n+1)) + P.tolerance() &
-              y2 = (the_ELabel_of G).(P.(n+1)) + P.tolerance() by A1,A2;
-              hence y1 = y2;
-            end;
-            suppose not (P.(n+1) DJoins P.n,P.(n+2),G);
-              then y1 = (the_ELabel_of G).(P.(n+1)) - P.tolerance() &
-              y2 = (the_ELabel_of G).(P.(n+1)) - P.tolerance() by A1,A2;
-              hence y1 = y2;
-            end;
-          end;
-          hence y1 = y2;
-        end;
-      end;
-      hence y1 = y2;
-    end;
-    then
-A3: for x,y1,y2 being set st x in the_Edges_of G & P[x,y1] & P[x,y2]
-    holds y1 = y2;
-    now
       let x be set;
       assume x in the_Edges_of G;
       now per cases;
@@ -2415,7 +2379,7 @@ A13: for x being set st x in the_Edges_of G holds ex y being set st P[ x,y];
     consider IT being Function such that
 A14: dom IT = the_Edges_of G &
     for e being set st e in the_Edges_of G holds P[e,IT.e]
-    from FUNCT_1:sch 2(A3,A13);
+    from CLASSES1:sch 1(A13);
     reconsider IT as ManySortedSet of the_Edges_of G by A14,PBOOLE:def 3;
     take IT;
     thus for e being set st e in the_Edges_of G & not e in P.edges()
@@ -2955,7 +2919,7 @@ proof
   assume
 A1: G has_valid_flow_from source,sink & source in V & not sink in V;
   set EL = the_ELabel_of G, VG = the_Vertices_of G;
-  defpred P[Element of NAT] means for V being Subset of VG
+  defpred P[Nat] means for V being Subset of VG
   st card (the_Vertices_of G \ V) = $1 & source in V & not sink in V holds
   G.flow(source,sink) = Sum (EL | G.edgesDBetween(V, the_Vertices_of G \ V)) -
   Sum (EL | G.edgesDBetween(the_Vertices_of G \ V, V));
@@ -3163,7 +3127,7 @@ A36:      e in EOUT by A34,XBOOLE_0:def 4;
   then
 A37: P[1];
 A38: now
-    let n be non empty Element of NAT;
+    let n be non empty Nat;
     assume
 A39: P[n];
     now
@@ -3852,8 +3816,8 @@ A154:       e in EXXeb by A152,XBOOLE_0:def 4;
     end;
     hence P[n+1];
   end;
-A155: for n being non empty Element of NAT holds P[n]
-  from BINARITH:sch 1(A37,A38);
+A155: for n being non empty Nat holds P[n]
+  from NAT_1:sch 10(A37,A38);
   set n = card (VG \ V);
   now
     assume n = 0;

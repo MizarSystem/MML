@@ -30,7 +30,7 @@
 <ArticleID name="TSEP_1"/>
 <ArticleID name="TDLAT_3"/>
 </Signature>
-<RCluster>
+<RCluster aid="TDLAT_3" nr="1">
 <ArgTypes/>
 <Typ kind="G" nr="5">
 <Cluster/>
@@ -42,7 +42,7 @@
 <Adjective nr="65"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="TDLAT_3" nr="2">
 <ArgTypes/>
 <Typ kind="G" nr="5">
 <Cluster/>
@@ -52,7 +52,7 @@
 <Adjective nr="66"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="TDLAT_3" nr="3">
 <ArgTypes/>
 <Typ kind="G" nr="5">
 <Cluster/>
@@ -65,7 +65,7 @@
 <Adjective nr="65"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="TDLAT_3" nr="4">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
@@ -92,7 +92,7 @@
 <Adjective nr="66"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="TDLAT_3" nr="5">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
@@ -112,7 +112,7 @@
 <Adjective nr="66"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="TDLAT_3" nr="6">
 <ArgTypes/>
 <Typ kind="G" nr="5">
 <Cluster/>
@@ -123,7 +123,7 @@
 <Adjective nr="66"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="TDLAT_3" nr="7">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
@@ -144,7 +144,7 @@
 <Adjective nr="66"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="TDLAT_3" nr="8">
 <ArgTypes/>
 <Typ kind="G" nr="5">
 <Cluster/>
@@ -156,7 +156,7 @@
 <Adjective nr="67"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="TDLAT_3" nr="9">
 <ArgTypes/>
 <Typ kind="G" nr="5">
 <Cluster/>
@@ -168,7 +168,7 @@
 <Adjective nr="68"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="TDLAT_3" nr="10">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
@@ -189,7 +189,7 @@
 <Adjective nr="67"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="TDLAT_3" nr="11">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
@@ -211,7 +211,7 @@
 <Adjective nr="68"/>
 </Cluster>
 </RCluster>
-<CCluster>
+<CCluster aid="TDLAT_3" nr="1">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="64"/>
@@ -223,7 +223,7 @@
 <Adjective nr="21"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="TDLAT_3" nr="2">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="65"/>
@@ -235,7 +235,7 @@
 <Adjective nr="21"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="TDLAT_3" nr="3">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="64"/>
@@ -247,7 +247,7 @@
 <Adjective nr="66"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="TDLAT_3" nr="4">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="65"/>
@@ -259,7 +259,7 @@
 <Adjective nr="66"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="TDLAT_3" nr="5">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
@@ -284,7 +284,7 @@
 <Adjective nr="64"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="TDLAT_3" nr="6">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
@@ -303,7 +303,7 @@
 <Adjective nr="65"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="TDLAT_3" nr="7">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="21"/>
@@ -317,7 +317,7 @@
 <Adjective nr="66"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="TDLAT_3" nr="8">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="21"/>
@@ -331,7 +331,7 @@
 <Adjective nr="66"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="TDLAT_3" nr="9">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
@@ -353,7 +353,7 @@
 <Adjective nr="66"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="TDLAT_3" nr="10">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
@@ -378,7 +378,7 @@
 </Adjective>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="TDLAT_3" nr="11">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
@@ -403,7 +403,7 @@
 </Adjective>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="TDLAT_3" nr="12">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="12" value="false"/>
@@ -419,7 +419,7 @@
 <Adjective nr="67"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="TDLAT_3" nr="13">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="12" value="false"/>
@@ -435,7 +435,7 @@
 <Adjective nr="68"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="TDLAT_3" nr="14">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
@@ -460,7 +460,7 @@
 <Adjective nr="67"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="TDLAT_3" nr="15">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>

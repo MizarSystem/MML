@@ -10,12 +10,12 @@
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
-<ArticleID name="MCART_1"/>
 <ArticleID name="RELSET_1"/>
+<ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="RINFSUP2"/>
 </Signature>
-<FCluster>
+<FCluster aid="RINFSUP2" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="5">
 <Cluster>
@@ -41,7 +41,7 @@
 <Adjective nr="24"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="RINFSUP2" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="5">
 <Cluster>

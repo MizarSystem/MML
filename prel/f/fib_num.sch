@@ -12,14 +12,18 @@
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XCMPLX_0"/>
 <ArticleID name="XXREAL_0"/>
+<ArticleID name="RELSET_1"/>
+<ArticleID name="MCART_1"/>
+<ArticleID name="FUNCT_2"/>
 <ArticleID name="NAT_1"/>
 </Signature>
 <Scheme>
 <ArgTypes/>
 <For>
-<Typ kind="M" nr="2">
-<Cluster/>
-<Func kind="K" nr="46"/>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="14"/>
+</Cluster>
 </Typ>
 <Pred kind="P" nr="1">
 <Var nr="1"/>
@@ -32,9 +36,10 @@
 <Num nr="1"/>
 </Pred>
 <For>
-<Typ kind="M" nr="2">
-<Cluster/>
-<Func kind="K" nr="46"/>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="14"/>
+</Cluster>
 </Typ>
 <Not>
 <And>
@@ -42,14 +47,14 @@
 <Var nr="1"/>
 </Pred>
 <Pred kind="P" nr="1">
-<Func kind="K" nr="62">
+<Func kind="K" nr="97">
 <Var nr="1"/>
 <Num nr="1"/>
 </Func>
 </Pred>
 <Not>
 <Pred kind="P" nr="1">
-<Func kind="K" nr="62">
+<Func kind="K" nr="97">
 <Var nr="1"/>
 <Num nr="2"/>
 </Func>

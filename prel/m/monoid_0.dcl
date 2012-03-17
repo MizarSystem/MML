@@ -33,7 +33,7 @@
 <ArticleID name="GR_CY_1"/>
 <ArticleID name="MONOID_0"/>
 </Signature>
-<RCluster>
+<RCluster aid="MONOID_0" nr="1">
 <ArgTypes/>
 <Typ kind="G" nr="1">
 <Cluster/>
@@ -42,7 +42,7 @@
 <Adjective nr="102"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="MONOID_0" nr="2">
 <ArgTypes/>
 <Typ kind="G" nr="1">
 <Cluster/>
@@ -51,7 +51,7 @@
 <Adjective nr="103"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="MONOID_0" nr="3">
 <ArgTypes/>
 <Typ kind="G" nr="7">
 <Cluster/>
@@ -70,7 +70,7 @@
 <Adjective nr="118"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="MONOID_0" nr="4">
 <ArgTypes/>
 <Typ kind="G" nr="8">
 <Cluster/>
@@ -90,7 +90,7 @@
 <Adjective nr="118"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="MONOID_0" nr="5">
 <ArgTypes>
 <Typ kind="G" nr="7">
 <Cluster/>
@@ -104,7 +104,7 @@
 <Adjective nr="56"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="MONOID_0" nr="6">
 <ArgTypes>
 <Typ kind="G" nr="7">
 <Cluster>
@@ -124,7 +124,7 @@
 <Adjective nr="82"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="MONOID_0" nr="7">
 <ArgTypes>
 <Typ kind="G" nr="7">
 <Cluster/>
@@ -138,7 +138,7 @@
 <Adjective nr="49"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="MONOID_0" nr="8">
 <ArgTypes>
 <Typ kind="G" nr="7">
 <Cluster>
@@ -155,7 +155,7 @@
 <Adjective nr="49"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="MONOID_0" nr="9">
 <ArgTypes>
 <Typ kind="G" nr="7">
 <Cluster>
@@ -180,7 +180,7 @@
 <Adjective nr="118"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="MONOID_0" nr="10">
 <ArgTypes>
 <Typ kind="G" nr="7">
 <Cluster/>
@@ -194,7 +194,7 @@
 <Adjective nr="56"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="MONOID_0" nr="11">
 <ArgTypes>
 <Typ kind="G" nr="7">
 <Cluster>
@@ -211,7 +211,7 @@
 <Adjective nr="56"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="MONOID_0" nr="12">
 <ArgTypes>
 <Typ kind="G" nr="8">
 <Cluster>
@@ -236,7 +236,7 @@
 <Adjective nr="118"/>
 </Cluster>
 </RCluster>
-<CCluster>
+<CCluster aid="MONOID_0" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="1">
 <Cluster>
@@ -256,7 +256,7 @@
 <Adjective nr="4"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="MONOID_0" nr="2">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="103"/>
@@ -268,7 +268,7 @@
 <Adjective nr="102"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="MONOID_0" nr="3">
 <ArgTypes>
 <Typ kind="G" nr="1">
 <Cluster>
@@ -287,7 +287,7 @@
 <Adjective nr="24"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="MONOID_0" nr="4">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="27" value="false"/>
@@ -302,7 +302,7 @@
 <Adjective nr="114"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="MONOID_0" nr="5">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="27" value="false"/>
@@ -317,7 +317,7 @@
 <Adjective nr="74"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="MONOID_0" nr="6">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="27" value="false"/>
@@ -332,7 +332,7 @@
 <Adjective nr="113"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="MONOID_0" nr="7">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="27" value="false"/>
@@ -347,7 +347,7 @@
 <Adjective nr="114"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="MONOID_0" nr="8">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="27" value="false"/>
@@ -362,7 +362,7 @@
 <Adjective nr="116"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="MONOID_0" nr="9">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="27" value="false"/>
@@ -377,7 +377,7 @@
 <Adjective nr="117"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="MONOID_0" nr="10">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="27" value="false"/>
@@ -393,7 +393,7 @@
 <Adjective nr="117"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="MONOID_0" nr="11">
 <ArgTypes>
 <Typ kind="G" nr="7">
 <Cluster>
@@ -410,7 +410,7 @@
 <Adjective nr="27" value="false"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="MONOID_0" nr="12">
 <ArgTypes>
 <Typ kind="G" nr="7">
 <Cluster>
@@ -427,7 +427,7 @@
 <Adjective nr="102"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="MONOID_0" nr="13">
 <ArgTypes>
 <Typ kind="G" nr="7">
 <Cluster>
@@ -444,7 +444,7 @@
 <Adjective nr="103"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="MONOID_0" nr="14">
 <ArgTypes>
 <Typ kind="G" nr="7">
 <Cluster>
@@ -462,7 +462,7 @@
 <Adjective nr="73"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="MONOID_0" nr="15">
 <ArgTypes>
 <Typ kind="G" nr="7">
 <Cluster>
@@ -480,7 +480,7 @@
 <Adjective nr="75"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="MONOID_0" nr="16">
 <ArgTypes>
 <Typ kind="G" nr="7">
 <Cluster>
@@ -498,7 +498,7 @@
 <Adjective nr="77"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="MONOID_0" nr="17">
 <ArgTypes>
 <Typ kind="G" nr="7">
 <Cluster>
@@ -516,7 +516,7 @@
 <Adjective nr="114"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="MONOID_0" nr="18">
 <ArgTypes>
 <Typ kind="G" nr="7">
 <Cluster>
@@ -534,7 +534,7 @@
 <Adjective nr="117"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="MONOID_0" nr="19">
 <ArgTypes>
 <Typ kind="G" nr="7">
 <Cluster>
@@ -552,7 +552,7 @@
 <Adjective nr="118"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="MONOID_0" nr="20">
 <ArgTypes>
 <Typ kind="G" nr="7">
 <Cluster>
@@ -573,7 +573,7 @@
 <Adjective nr="102"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="MONOID_0" nr="21">
 <ArgTypes>
 <Typ kind="G" nr="7">
 <Cluster>
@@ -594,7 +594,7 @@
 <Adjective nr="102"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="MONOID_0" nr="22">
 <ArgTypes>
 <Typ kind="G" nr="7">
 <Cluster>
@@ -615,7 +615,7 @@
 <Adjective nr="103"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="MONOID_0" nr="23">
 <ArgTypes>
 <Typ kind="G" nr="7">
 <Cluster>
@@ -636,7 +636,7 @@
 <Adjective nr="103"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="MONOID_0" nr="24">
 <ArgTypes>
 <Typ kind="G" nr="8">
 <Cluster>
@@ -657,7 +657,7 @@
 <Adjective nr="82"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="MONOID_0" nr="25">
 <ArgTypes>
 <Typ kind="G" nr="7">
 <Cluster>
@@ -678,7 +678,7 @@
 <Adjective nr="77"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="MONOID_0" nr="26">
 <ArgTypes>
 <Typ kind="G" nr="7">
 <Cluster>
@@ -699,7 +699,7 @@
 <Adjective nr="77"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="MONOID_0" nr="27">
 <ArgTypes>
 <Typ kind="G" nr="7">
 <Cluster>
@@ -720,7 +720,7 @@
 <Adjective nr="75"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="MONOID_0" nr="28">
 <ArgTypes>
 <Typ kind="G" nr="7">
 <Cluster>
@@ -741,7 +741,7 @@
 <Adjective nr="75"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="MONOID_0" nr="29">
 <ArgTypes>
 <Typ kind="G" nr="7">
 <Cluster>
@@ -762,7 +762,7 @@
 <Adjective nr="111"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="MONOID_0" nr="30">
 <ArgTypes>
 <Typ kind="G" nr="7">
 <Cluster>
@@ -783,7 +783,7 @@
 <Adjective nr="111"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="MONOID_0" nr="31">
 <ArgTypes>
 <Typ kind="G" nr="7">
 <Cluster>
@@ -804,7 +804,7 @@
 <Adjective nr="117"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="MONOID_0" nr="32">
 <ArgTypes>
 <Typ kind="G" nr="7">
 <Cluster>
@@ -825,7 +825,7 @@
 <Adjective nr="117"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="MONOID_0" nr="33">
 <ArgTypes>
 <Typ kind="G" nr="8">
 <Cluster>
@@ -847,7 +847,7 @@
 <Adjective nr="118"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="MONOID_0" nr="34">
 <ArgTypes>
 <Typ kind="G" nr="7">
 <Cluster>

@@ -17,7 +17,7 @@
 <ArticleID name="INT_1"/>
 <ArticleID name="INT_2"/>
 </Signature>
-<RCluster>
+<RCluster aid="INT_2" nr="1">
 <ArgTypes/>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -35,7 +35,7 @@
 <Adjective nr="21"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="INT_2" nr="2">
 <ArgTypes/>
 <Typ kind="M" nr="1">
 <Cluster/>

@@ -19,7 +19,7 @@
 <ArticleID name="FRAENKEL"/>
 <ArticleID name="FINSEQ_2"/>
 </Signature>
-<RCluster>
+<RCluster aid="FINSEQ_2" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -33,7 +33,7 @@
 <Adjective nr="7" value="false"/>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="FINSEQ_2" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -54,7 +54,7 @@
 <Adjective nr="7" value="false"/>
 </Cluster>
 </FCluster>
-<CCluster>
+<CCluster aid="FINSEQ_2" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>

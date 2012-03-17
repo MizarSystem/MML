@@ -27,7 +27,7 @@
 <ArticleID name="NEWTON"/>
 <ArticleID name="SIN_COS"/>
 </Signature>
-<FCluster>
+<FCluster aid="TAYLOR_1" nr="1">
 <ArgTypes/>
 <Func kind="K" nr="201"/>
 <Cluster>
@@ -39,7 +39,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="TAYLOR_1" nr="2">
 <ArgTypes/>
 <Func kind="K" nr="100">
 <Func kind="K" nr="58"/>

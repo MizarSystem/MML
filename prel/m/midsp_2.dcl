@@ -26,7 +26,7 @@
 <ArticleID name="RLVECT_1"/>
 <ArticleID name="MIDSP_2"/>
 </Signature>
-<RCluster>
+<RCluster aid="MIDSP_2" nr="1">
 <ArgTypes/>
 <Typ kind="G" nr="6">
 <Cluster/>
@@ -41,7 +41,7 @@
 <Adjective nr="95"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="MIDSP_2" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="12">
 <Cluster>
@@ -59,7 +59,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="MIDSP_2" nr="3">
 <ArgTypes>
 <Typ kind="G" nr="12">
 <Cluster>
@@ -78,7 +78,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="MIDSP_2" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="12">
 <Cluster>
@@ -97,7 +97,7 @@
 <Adjective nr="91"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="MIDSP_2" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="12">
 <Cluster>
@@ -113,7 +113,7 @@
 <Adjective nr="95"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="MIDSP_2" nr="3">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -147,7 +147,7 @@
 <Adjective nr="84"/>
 </Cluster>
 </FCluster>
-<CCluster>
+<CCluster aid="MIDSP_2" nr="1">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="23" value="false"/>

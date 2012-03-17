@@ -16,7 +16,7 @@
 <ArticleID name="LATTICES"/>
 <ArticleID name="TDLAT_1"/>
 </Signature>
-<FCluster>
+<FCluster aid="TDLAT_1" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
@@ -31,7 +31,7 @@
 <Adjective nr="7" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="TDLAT_1" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
@@ -46,7 +46,7 @@
 <Adjective nr="7" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="TDLAT_1" nr="3">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>

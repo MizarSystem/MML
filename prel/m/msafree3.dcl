@@ -47,7 +47,7 @@
 <ArticleID name="CATALG_1"/>
 <ArticleID name="MSAFREE3"/>
 </Signature>
-<FCluster>
+<FCluster aid="MSAFREE3" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="9">
 <Cluster>
@@ -74,7 +74,7 @@
 <Adjective nr="1" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="MSAFREE3" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="9">
 <Cluster>
@@ -104,7 +104,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="MSAFREE3" nr="3">
 <ArgTypes>
 <Typ kind="G" nr="9">
 <Cluster>
@@ -135,7 +135,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<CCluster>
+<CCluster aid="MSAFREE3" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="9">
 <Cluster>
@@ -170,7 +170,7 @@
 <Adjective nr="5"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="MSAFREE3" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="9">
 <Cluster>
@@ -205,7 +205,7 @@
 <Adjective nr="31"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="MSAFREE3" nr="3">
 <ArgTypes>
 <Typ kind="G" nr="9">
 <Cluster>
@@ -239,7 +239,7 @@
 <Adjective nr="41"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="MSAFREE3" nr="4">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="2"/>
@@ -256,7 +256,7 @@
 <Adjective nr="31"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="MSAFREE3" nr="5">
 <ArgTypes>
 <Typ kind="G" nr="9">
 <Cluster>

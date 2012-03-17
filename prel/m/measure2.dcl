@@ -11,9 +11,9 @@
 <ArticleID name="RELSET_1"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
-<ArticleID name="XREAL_0"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
+<ArticleID name="XREAL_0"/>
 <ArticleID name="FRAENKEL"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
@@ -23,7 +23,7 @@
 <ArticleID name="CARD_4"/>
 <ArticleID name="MEASURE2"/>
 </Signature>
-<RCluster>
+<RCluster aid="MEASURE2" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -45,7 +45,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Typ kind="M" nr="12">
+<Typ kind="M" nr="13">
 <Cluster/>
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
@@ -59,7 +59,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="MEASURE2" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -81,7 +81,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Typ kind="M" nr="12">
+<Typ kind="M" nr="13">
 <Cluster/>
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>

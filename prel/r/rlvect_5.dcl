@@ -11,18 +11,18 @@
 <ArticleID name="RELSET_1"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
+<ArticleID name="MCART_1"/>
+<ArticleID name="FUNCT_2"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
-<ArticleID name="MCART_1"/>
-<ArticleID name="FUNCT_2"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="ALGSTR_0"/>
 <ArticleID name="RLVECT_1"/>
 <ArticleID name="RLSUB_1"/>
 <ArticleID name="RLVECT_5"/>
 </Signature>
-<RCluster>
+<RCluster aid="RLVECT_5" nr="1">
 <ArgTypes/>
 <Typ kind="G" nr="11">
 <Cluster/>
@@ -38,7 +38,7 @@
 <Adjective nr="77"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="RLVECT_5" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="11">
 <Cluster>
@@ -66,7 +66,7 @@
 <Adjective nr="77"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="RLVECT_5" nr="3">
 <ArgTypes>
 <Typ kind="G" nr="11">
 <Cluster>
@@ -95,7 +95,7 @@
 <Adjective nr="77"/>
 </Cluster>
 </RCluster>
-<CCluster>
+<CCluster aid="RLVECT_5" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="11">
 <Cluster>

@@ -24,7 +24,7 @@
 <ArticleID name="LATTICE4"/>
 <ArticleID name="FILTER_2"/>
 </Signature>
-<FCluster>
+<FCluster aid="FILTER_2" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="7">
 <Cluster>
@@ -51,7 +51,7 @@
 <Adjective nr="7" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="FILTER_2" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="7">
 <Cluster>
@@ -80,7 +80,7 @@
 <Adjective nr="7" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="FILTER_2" nr="3">
 <ArgTypes>
 <Typ kind="G" nr="7">
 <Cluster>
@@ -118,7 +118,7 @@
 <Adjective nr="7" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="FILTER_2" nr="4">
 <ArgTypes>
 <Typ kind="G" nr="7">
 <Cluster>
@@ -137,7 +137,7 @@
 <Adjective nr="45"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="FILTER_2" nr="5">
 <ArgTypes>
 <Typ kind="G" nr="7">
 <Cluster>

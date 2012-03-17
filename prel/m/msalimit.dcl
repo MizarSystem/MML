@@ -33,7 +33,7 @@
 <ArticleID name="ORDERS_2"/>
 <ArticleID name="MSALIMIT"/>
 </Signature>
-<RCluster>
+<RCluster aid="MSALIMIT" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="12">
 <Cluster>
@@ -72,7 +72,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="MSALIMIT" nr="2">
 <ArgTypes/>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -82,7 +82,7 @@
 <Adjective nr="85"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="MSALIMIT" nr="3">
 <ArgTypes/>
 <Typ kind="G" nr="6">
 <Cluster/>
@@ -93,7 +93,7 @@
 <Adjective nr="50"/>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="MSALIMIT" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -138,7 +138,7 @@
 <Adjective nr="4"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="MSALIMIT" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -175,7 +175,7 @@
 <Adjective nr="27"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="MSALIMIT" nr="3">
 <ArgTypes>
 <Typ kind="G" nr="12">
 <Cluster>
@@ -217,7 +217,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="MSALIMIT" nr="4">
 <ArgTypes/>
 <Func kind="K" nr="239"/>
 <Cluster>
@@ -226,7 +226,7 @@
 <Adjective nr="50"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="MSALIMIT" nr="5">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>

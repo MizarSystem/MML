@@ -17,7 +17,7 @@
 <ArticleID name="ORDERS_2"/>
 <ArticleID name="FIN_TOPO"/>
 </Signature>
-<RCluster>
+<RCluster aid="FIN_TOPO" nr="1">
 <ArgTypes/>
 <Typ kind="G" nr="5">
 <Cluster/>
@@ -27,7 +27,7 @@
 <Adjective nr="24"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="FIN_TOPO" nr="2">
 <ArgTypes/>
 <Typ kind="G" nr="5">
 <Cluster/>
@@ -39,7 +39,7 @@
 <Adjective nr="26"/>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="FIN_TOPO" nr="1">
 <ArgTypes/>
 <Func kind="K" nr="103"/>
 <Cluster>
@@ -47,7 +47,7 @@
 <Adjective nr="24"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="FIN_TOPO" nr="2">
 <ArgTypes/>
 <Func kind="K" nr="103"/>
 <Cluster>

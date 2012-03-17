@@ -29,7 +29,7 @@
 <ArticleID name="ALGSEQ_1"/>
 <ArticleID name="POLYNOM8"/>
 </Signature>
-<FCluster>
+<FCluster aid="POLYNOM8" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="10">
 <Cluster>
@@ -95,7 +95,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<CCluster>
+<CCluster aid="POLYNOM8" nr="1">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="26" value="false"/>

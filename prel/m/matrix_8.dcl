@@ -27,7 +27,7 @@
 <ArticleID name="VECTSP_1"/>
 <ArticleID name="MATRIX_8"/>
 </Signature>
-<FCluster>
+<FCluster aid="MATRIX_8" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -65,7 +65,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="MATRIX_8" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>

@@ -22,28 +22,28 @@
 <ArticleID name="CARD_3"/>
 <ArticleID name="AMI_2"/>
 </Signature>
-<FCluster>
+<FCluster aid="AMI_2" nr="1">
 <ArgTypes/>
 <Func kind="K" nr="129"/>
 <Cluster>
 <Adjective nr="1" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="AMI_2" nr="2">
 <ArgTypes/>
 <Func kind="K" nr="128"/>
 <Cluster>
 <Adjective nr="1" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="AMI_2" nr="3">
 <ArgTypes/>
 <Func kind="K" nr="132"/>
 <Cluster>
 <Adjective nr="1" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="AMI_2" nr="4">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>

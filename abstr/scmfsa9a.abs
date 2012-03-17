@@ -10,7 +10,7 @@ environ
       SCMFSA_2, SCM_1, SF_MASTR, CAT_1, FINSUB_1, PROB_1, TARSKI, FUNCOP_1,
       SCMFSA_4, BOOLE, SCMFSA8A, SCMFSA6A, SCMFSA7B, SCMFSA8B, CARD_1, FUNCT_4,
       AMI_5, RELOC, SCMFSA_9, UNIALG_2, CARD_3, SCMFSA6B, AMI_2, SCMFSA6C,
-      SFMASTR1, PRE_FF, ABSVALUE, SCMFSA9A, ARYTM;
+      SFMASTR1, PRE_FF, ABSVALUE, SCMFSA9A, ARYTM, AMISTD_2;
  notations TARSKI, XBOOLE_0, SUBSET_1, CARD_1, NUMBERS, XCMPLX_0, FINSUB_1,
       FUNCOP_1, CARD_3, INT_1, NAT_1, ABIAN, RELAT_1, FUNCT_1, FUNCT_2,
       FUNCT_4, PRE_FF, AMI_1, SCMNORM, SCMFSA_2, SCMFSA_4, SCMFSA_5, SCMFSA6A,
@@ -18,11 +18,11 @@ environ
       SCMFSA_9, SFMASTR1, INT_2, XXREAL_0;
  constructors XXREAL_0, NAT_1, NAT_D, SEQ_1, PRE_FF, ABIAN, SCMFSA_5, SCMFSA_7,
       SCMFSA6A, SCMFSA6B, SCMFSA6C, SCMFSA8A, SCMFSA8B, SCMFSA_9, SFMASTR1,
-      SCMNORM;
+      SCMNORM, SCMFSA_4, AFINSQ_1;
  registrations XBOOLE_0, SETFAM_1, FUNCT_1, ORDINAL1, RELSET_1, FINSET_1,
       FINSUB_1, FRAENKEL, NUMBERS, XXREAL_0, XREAL_0, NAT_1, INT_1, CARD_3,
-      ABIAN, SCMFSA_2, SCMFSA_4, SF_MASTR, SCMFSA6B, SCMFSA6C, SCMFSA7B,
-      SCMFSA8A, SCMFSA8B, SCMFSA_9, SFMASTR1, SCMNORM;
+      ABIAN, SCMFSA_2, SF_MASTR, SCMFSA6B, SCMFSA6C, SCMFSA7B, SCMFSA8A,
+      SCMFSA8B, SCMFSA_9, SFMASTR1, SCMNORM, AMI_1;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
 
 
@@ -43,10 +43,10 @@ theorem :: SCMFSA9A:8  :: singleUsedF:
   UsedInt*Loc (l .--> i) = UsedInt*Loc i;
 
 theorem :: SCMFSA9A:9  :: StopUsed:
-  UsedIntLoc SCM+FSA-Stop = {};
+  UsedIntLoc Stop SCM+FSA = {};
 
 theorem :: SCMFSA9A:10  :: StopUsedF:
-  UsedInt*Loc SCM+FSA-Stop = {};
+  UsedInt*Loc Stop SCM+FSA = {};
 
 theorem :: SCMFSA9A:11  :: GotoUsed:
   UsedIntLoc Goto l = {};
@@ -57,8 +57,8 @@ theorem :: SCMFSA9A:12  :: GotoUsedF:
 reserve s, s1, s2 for State of SCM+FSA,
   a for read-write Int-Location,
   b for Int-Location,
-  I, J for Macro-Instruction,
-  Ig for good Macro-Instruction,
+  I, J for Program of SCM+FSA,
+  Ig for good Program of SCM+FSA,
   i, j, k, m, n for Element of NAT;
 
 :: set D = Int-Locations U FinSeq-Locations;
@@ -88,7 +88,7 @@ theorem :: SCMFSA9A:18  :: ewhileUsedF:
 
 definition
   let s be State of SCM+FSA, a be read-write Int-Location,
-  I be Macro-Instruction;
+  I be Program of SCM+FSA;
   pred ProperBodyWhile=0 a, I, s means
 :: SCMFSA9A:def 1
 
@@ -105,14 +105,14 @@ definition
 end;
 
 theorem :: SCMFSA9A:19  :: eParaProper:
-  for I being parahalting Macro-Instruction holds ProperBodyWhile=0 a, I, s;
+  for I being parahalting Program of SCM+FSA holds ProperBodyWhile=0 a, I, s;
 
 theorem :: SCMFSA9A:20    :: SCMFSA_9:24, corrected
   ProperBodyWhile=0 a, I, s & WithVariantWhile=0 a, I, s
   implies while=0(a,I) is_halting_on s & while=0(a,I) is_closed_on s;
 
 theorem :: SCMFSA9A:21    :: SCMFSA_9:25, corrected
-  for I being parahalting Macro-Instruction st WithVariantWhile=0 a, I, s
+  for I being parahalting Program of SCM+FSA st WithVariantWhile=0 a, I, s
   holds while=0(a,I) is_halting_on s & while=0(a,I) is_closed_on s;
 
 theorem :: SCMFSA9A:22  :: based on SCMFSA_9:10
@@ -154,7 +154,7 @@ theorem :: SCMFSA9A:27  :: eSW12:
 
 definition
   let s be State of SCM+FSA, a be read-write Int-Location,
-  I be Macro-Instruction;
+  I be Program of SCM+FSA;
   assume that
  ProperBodyWhile=0 a, I, s or I is parahalting and
  WithVariantWhile=0 a, I, s;
@@ -191,7 +191,7 @@ theorem :: SCMFSA9A:31  :: whileUsedF:
 
 definition
   let s be State of SCM+FSA, a be read-write Int-Location,
-  I be Macro-Instruction;
+  I be Program of SCM+FSA;
   pred ProperBodyWhile>0 a, I, s means
 :: SCMFSA9A:def 4
 
@@ -208,14 +208,14 @@ definition
 end;
 
 theorem :: SCMFSA9A:32  :: ParaProper:
-  for I being parahalting Macro-Instruction holds ProperBodyWhile>0 a, I, s;
+  for I being parahalting Program of SCM+FSA holds ProperBodyWhile>0 a, I, s;
 
 theorem :: SCMFSA9A:33    :: SCMFSA_9:42, corrected
   ProperBodyWhile>0 a, I, s & WithVariantWhile>0 a, I, s
   implies while>0(a,I) is_halting_on s & while>0(a,I) is_closed_on s;
 
 theorem :: SCMFSA9A:34    :: SCMFSA_9:43, corrected
-  for I being parahalting Macro-Instruction st WithVariantWhile>0 a, I, s
+  for I being parahalting Program of SCM+FSA st WithVariantWhile>0 a, I, s
   holds while>0(a,I) is_halting_on s & while>0(a,I) is_closed_on s;
 
 theorem :: SCMFSA9A:35  :: based on SCMFSA_9:32
@@ -257,7 +257,7 @@ theorem :: SCMFSA9A:40  :: SW12:
 
 definition
   let s be State of SCM+FSA, a be read-write Int-Location,
-  I be Macro-Instruction;
+  I be Program of SCM+FSA;
   assume that
  ProperBodyWhile>0 a, I, s or I is parahalting and
  WithVariantWhile>0 a, I, s;
@@ -333,7 +333,7 @@ definition
 :: set aux  = 2-ndRWNotIn {N, result};
 :: set rem2 = 3-rdRWNotIn {N, result};
 :: while and if do not allocate memory, no need to save anything
-  func Fusc_macro ( N, result ) -> Macro-Instruction equals
+  func Fusc_macro ( N, result ) -> Program of SCM+FSA equals
 :: SCMFSA9A:def 8
   SubFrom(result, result) ';' ((1-stRWNotIn {N, result}) := intloc 0) ';'
   ((2-ndRWNotIn {N, result}) := N) ';' while>0 ( 2-ndRWNotIn {N, result},

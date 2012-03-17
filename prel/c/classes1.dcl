@@ -11,7 +11,7 @@
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="CLASSES1"/>
 </Signature>
-<FCluster>
+<FCluster aid="CLASSES1" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>

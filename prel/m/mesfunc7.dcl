@@ -11,10 +11,10 @@
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XREAL_0"/>
-<ArticleID name="ENUMSET1"/>
-<ArticleID name="MCART_1"/>
 <ArticleID name="RELSET_1"/>
+<ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
+<ArticleID name="ENUMSET1"/>
 <ArticleID name="FINSUB_1"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
@@ -35,7 +35,7 @@
 <ArticleID name="SETWISEO"/>
 <ArticleID name="MESFUNC7"/>
 </Signature>
-<RCluster>
+<RCluster aid="MESFUNC7" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -55,7 +55,7 @@
 <Adjective nr="68"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="MESFUNC7" nr="2">
 <ArgTypes/>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -68,7 +68,7 @@
 <Adjective nr="57"/>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="MESFUNC7" nr="1">
 <ArgTypes/>
 <Func kind="K" nr="233"/>
 <Cluster>
@@ -88,7 +88,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="MESFUNC7" nr="2">
 <ArgTypes/>
 <Func kind="K" nr="233"/>
 <Cluster>
@@ -105,7 +105,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="MESFUNC7" nr="3">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -128,7 +128,7 @@
 <Adjective nr="57"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="MESFUNC7" nr="4">
 <ArgTypes/>
 <Func kind="K" nr="110">
 <Func kind="K" nr="48"/>
@@ -137,7 +137,7 @@
 <Adjective nr="57"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="MESFUNC7" nr="5">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -151,7 +151,7 @@
 <Adjective nr="57"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="MESFUNC7" nr="6">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>

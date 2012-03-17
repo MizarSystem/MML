@@ -31,7 +31,7 @@
 <ArticleID name="VALUED_1"/>
 <ArticleID name="RFUNCT_3"/>
 </Signature>
-<RCluster>
+<RCluster aid="RFUNCT_3" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -49,7 +49,7 @@
 <Adjective nr="7" value="false"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="RFUNCT_3" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -69,7 +69,7 @@
 <Adjective nr="32"/>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="RFUNCT_3" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -94,7 +94,7 @@
 <Adjective nr="32"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="RFUNCT_3" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>

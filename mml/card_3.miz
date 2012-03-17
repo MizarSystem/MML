@@ -25,7 +25,7 @@ environ
  theorems TARSKI, ZFMISC_1, FINSET_1, FUNCT_1, FUNCT_2, MCART_1, ORDINAL1,
       RELAT_1, RELAT_2, WELLORD1, WELLORD2, CARD_1, FUNCOP_1, FUNCT_5, CARD_2,
       CLASSES1, GRFUNC_1, XBOOLE_0, XBOOLE_1, XCMPLX_1, SETFAM_1, FUNCT_4,
-      PARTFUN1, FRAENKEL, RELSET_1, NAT_1;
+      PARTFUN1, FRAENKEL, RELSET_1, NAT_1, SUBSET_1;
  schemes NAT_1, FUNCT_1, PARTFUN1, ORDINAL1, FUNCT_5, RELAT_1, XBOOLE_0,
       CLASSES1;
 
@@ -89,15 +89,17 @@ registration
   cluster X --> K -> Cardinal-yielding;
   coherence
   proof
-    X --> K is Cardinal-yielding
-    proof
       let x;
       assume x in dom(X --> K);
       then x in X;
       hence thesis by FUNCOP_1:13;
-    end;
-    hence thesis;
   end;
+end;
+
+registration
+  let X,K;
+  cluster X .--> K -> Cardinal-yielding;
+  coherence;
 end;
 
 canceled 2;
@@ -258,7 +260,7 @@ proof
 end;
 
 theorem Th12:
-  disjoin ({x} --> X) = {x} --> [:X,{x}:]
+  disjoin (x .--> X) = x .--> [:X,{x}:]
 proof
 A1: dom disjoin ({x} --> X) = dom ({x} --> X) & dom ({x} --> X) = {x} &
   dom ({x} --> [:X,{x}:]) = {x} by Def3,FUNCOP_1:19;
@@ -315,7 +317,7 @@ A1: X <> {};
 end;
 
 theorem
-  Union ({x} --> Y) = Y by Th16;
+  Union (x .--> Y) = Y by Th16;
 
 theorem Th18:
   g in product f iff dom g = dom f & for x st x in dom f holds g.x in f.x
@@ -395,7 +397,6 @@ definition
   proof
     consider Y such that
 A1: y in Y iff y in X & P[y] from XBOOLE_0:sch 1;
-A2: for y,z1,z2 being set st y in Y & R[y,z1] & R[y,z2] holds z1 = z2;
 A3: for y st y in Y ex z st R[y,z]
     proof
       let y;
@@ -404,7 +405,7 @@ A3: for y st y in Y ex z st R[y,z]
       take y.x, y; thus thesis;
     end;
     consider f such that
-A4: dom f = Y & for y st y in Y holds R[y,f.y] from FUNCT_1:sch 2(A2,A3);
+A4: dom f = Y & for y st y in Y holds R[y,f.y] from CLASSES1:sch 1(A3);
     take rng f;
     let y;
     thus y in rng f implies ex f st f in X & y = f.x
@@ -591,12 +592,11 @@ proof
 end;
 
 theorem Th31:
-  Card pi(X,x) <=` Card X
+  Card pi(X,x) c= Card X
 proof
   consider Y such that
 A1: y in Y iff y in X & P[y] from XBOOLE_0:sch 1;
   defpred R[set,set] means ex g st $1 = g & $2 = g.x;
-A2: for y,z1,z2 being set st y in Y & R[y,z1] & R[y,z2] holds z1 = z2;
 A3: for y st y in Y ex z st R[y,z]
   proof
     let y;
@@ -605,7 +605,7 @@ A3: for y st y in Y ex z st R[y,z]
     take y.x, y; thus thesis;
   end;
   consider f such that
-A4: dom f = Y & for y st y in Y holds R[y,f.y] from FUNCT_1:sch 2(A2,A3);
+A4: dom f = Y & for y st y in Y holds R[y,f.y] from CLASSES1:sch 1(A3);
   now
     let y;
     thus y in rng f implies ex f st f in X & y = f.x
@@ -625,12 +625,12 @@ A8: g in Y by A1,A7;
   end;
   then rng f = pi(X,x) by Def6;
   then
-A9: Card pi(X,x) <=` Card Y by A4,CARD_1:28;
+A9: Card pi(X,x) c= Card Y by A4,CARD_1:28;
   Y c= X
   proof
     let x; thus thesis by A1;
   end;
-  then Card Y <=` Card X by CARD_1:27;
+  then Card Y c= Card X by CARD_1:27;
   hence thesis by A9,XBOOLE_1:1;
 end;
 
@@ -673,9 +673,9 @@ A4: x`2 in dom f & x`1 in f.(x`2) & x = [x`1,x`2];
 end;
 
 theorem Th34:
-  f <= g implies disjoin f <= disjoin g
+  f c= g implies disjoin f c= disjoin g
 proof
-  assume f <= g;
+  assume f c= g;
   then
 A1: dom f c= dom g & (for x st x in dom f holds f.x = g.x) by GRFUNC_1:8;
 A2: dom disjoin f = dom f & dom disjoin g = dom g by Def3;
@@ -690,9 +690,9 @@ A2: dom disjoin f = dom f & dom disjoin g = dom g by Def3;
 end;
 
 theorem Th35:
-  f <= g implies Union f c= Union g
+  f c= g implies Union f c= Union g
 proof
-  assume f <= g;
+  assume f c= g;
   then
 A1: dom f c= dom g & (for x st x in dom f holds f.x = g.x) by GRFUNC_1:8;
   let x;
@@ -836,7 +836,7 @@ end;
 canceled 2;
 
 theorem
-  dom F = dom G & (for x st x in dom F holds F.x c= G.x) implies Sum F <=` Sum
+  dom F = dom G & (for x st x in dom F holds F.x c= G.x) implies Sum F c= Sum
   G
 proof
   assume
@@ -871,27 +871,21 @@ end;
 
 theorem
   dom F = dom G & (for x st x in dom F holds F.x c= G.x) implies
-  Product F <=` Product G
+  Product F c= Product G by Th38,CARD_1:27;
+
+theorem
+  F c= G implies Sum F c= Sum G
 proof
-  assume dom F = dom G & for x st x in dom F holds F.x c= G.x;
-  then Card product G = Product G & Card product F = Product F &
-  product F c= product G by Th38;
-  hence thesis by CARD_1:27;
+  assume F c= G;
+  then disjoin F c= disjoin G by Th34;
+  hence Sum F c= Sum G by Th35,CARD_1:27;
 end;
 
 theorem
-  F <= G implies Sum F <=` Sum G
-proof
-  assume F <= G;
-  then disjoin F <= disjoin G by Th34;
-  hence Sum F <=` Sum G by Th35,CARD_1:27;
-end;
-
-theorem
-  F <= G & not 0 in rng G implies Product F <=` Product G
+  F c= G & not 0 in rng G implies Product F c= Product G
 proof
   assume
-A1: F <= G;
+A1: F c= G;
   then
 A2: dom F c= dom G & for x st x in dom F holds F.x = G.x by GRFUNC_1:8;
   assume
@@ -956,18 +950,18 @@ theorem
   Product ({} --> K) = 1 by Th19,CARD_1:50;
 
 theorem
-  Sum({x} --> K) = K
+  Sum(x .--> K) = K
 proof
-  thus Sum({x} --> K) = Card Union ({x} --> [:K,{x}:]) by Th12
+  thus Sum(x .--> K) = Card Union (x .--> [:K,{x}:]) by Th12
     .= Card [:K,{x}:] by Th16
     .= Card K by CARD_2:13
     .= K by CARD_1:def 5;
 end;
 
 theorem
-  Product({x} --> K) = K
+  Product(x .--> K) = K
 proof
-  thus Product({x} --> K) = Card Funcs({x},K) by Th20
+  thus Product(x .--> K) = Card Funcs({x},K) by Th20
     .= Card K by FUNCT_5:65
     .= K by CARD_1:def 5;
 end;
@@ -989,7 +983,7 @@ proof
 end;
 
 theorem Th54:
-  Card Union f <=` Sum Card f
+  Card Union f c= Sum Card f
 proof
 A1: now
     assume dom f = {};
@@ -1002,16 +996,6 @@ A2: dom f <> {};
     defpred P[set,set] means
     x in $2 iff x in Funcs(Card $1,$1) & ex g st x = g & rng g = $1;
     defpred W[set,set] means P[f.$1,$2];
-A3: for x,y1,y2 st x in dom f & W[x,y1] & W[x,y2] holds y1 = y2
-    proof
-      let x,y1,y2 such that x in dom f;
-      defpred Q[set] means
-      $1 in Funcs(Card (f.x),f.x) & ex g st $1 = g & rng g = f.x;
-      assume that
-A4:   z in y1 iff Q[z] and
-A5:   z in y2 iff Q[z];
-      thus y1 = y2 from XBOOLE_0:sch 2(A4,A5);
-    end;
 A6: for x st x in dom f ex y st W[x,y]
     proof
       let x such that x in dom f;
@@ -1022,8 +1006,8 @@ A7:   z in Y iff z in Funcs(Card (f.x),f.x) & A[z] from XBOOLE_0:sch 1;
       thus thesis by A7;
     end;
     consider k being Function such that
-A8: dom k = dom f & for x st x in dom f holds W[x,k.x] from FUNCT_1:sch 2
-    (A3,A6);
+A8: dom k = dom f & for x st x in dom f holds W[x,k.x] from CLASSES1:sch 1
+    (A6);
     reconsider M = rng k as non empty set by A2,A8,RELAT_1:65;
     now
       let X;
@@ -1040,7 +1024,6 @@ A10:  g is one-to-one & dom g = Card(f.x) & rng g = f.x by WELLORD2:def 4;
 A11: dom FF = M & for X st X in M holds FF.X in X by WELLORD2:28;
     set DD = union rng disjoin Card f;
     defpred S[set,set] means ex g st g = FF.(k.$1`2) & $2 = g.$1`1;
-A12: for x,y1,y2 st x in DD & S[x,y1] & S[x,y2] holds y1 = y2;
 A13: for x st x in DD ex y st S[x,y]
     proof
       let x;
@@ -1062,8 +1045,8 @@ A18:  FF.(k.x`2) = g & dom g = Card (f.x`2) & rng g c= f.x`2 by FUNCT_2:def 2;
       take g.x`1, g; thus thesis by A18;
     end;
     consider t being Function such that
-A19: dom t = DD & for x st x in DD holds S[x,t.x] from FUNCT_1:sch 2
-    (A12,A13);
+A19: dom t = DD & for x st x in DD holds S[x,t.x] from CLASSES1:sch 1
+    (A13);
     union rng f c= rng t
     proof
       let x;
@@ -1097,7 +1080,7 @@ A25:  [z,y] in DD & [z,y]`1 = z & [z,y]`2 = y by MCART_1:7,TARSKI:def 4;
 end;
 
 theorem
-  Card Union F <=` Sum F
+  Card Union F c= Sum F
 proof Card F = F by Th8;
   hence thesis by Th54;
 end;
@@ -1108,7 +1091,7 @@ end;
 
 theorem
   dom F = dom G & (for x st x in dom F holds F.x in G.x) implies
-  Sum F <` Product G
+  Sum F in Product G
 proof
   assume
 A1: dom F = dom G & (for x st x in dom F holds F.x in G.x);
@@ -1132,22 +1115,6 @@ A5: a = h & dom h = dom f & for x st x in dom f holds h.x in f.x by A4,Def5;
   defpred P[set,Function] means dom $2 = dom F & for x st x in dom F holds
   ($1`2 = x implies $2.x = $1`1) & ($1`2 <> x implies $2.x = h.x);
   defpred R[set,set] means ex g st $2 = g & P[$1,g];
-A6: for x,y,z st x in Union disjoin F & R[x,y] & R[x,z] holds y = z
-  proof
-    let x,y,z such that x in Union disjoin F;
-    given g1 being Function such that
-A7: y = g1 & P[x,g1];
-    given g2 being Function such that
-A8: z = g2 & P[x,g2];
-    now
-      let u;
-      assume u in dom F;
-      then (x`2 = u implies g1.u = x`1) & (x`2 <> u implies g1.u = h.u) &
-      (x`2 = u implies g2.u = x`1) & (x`2 <> u implies g2.u = h.u) by A7,A8;
-      hence g1.u = g2.u;
-    end;
-    hence thesis by A7,A8,FUNCT_1:9;
-  end;
 A9: for x st x in Union disjoin F ex y st R[x,y]
   proof
     let x such that x in Union disjoin F;
@@ -1163,7 +1130,7 @@ A10: dom g = dom F & for u st u in dom F holds
   end;
   consider f1 such that
 A11: dom f1 = Union disjoin F & for x st x in Union disjoin F holds R[x,f1.x]
-  from FUNCT_1:sch 2(A6,A9);
+  from CLASSES1:sch 1(A9);
 A12: f1 is one-to-one
   proof
     let x,y;
@@ -1204,16 +1171,16 @@ A20: f1.y = g & P[y,g] by A11,A19;
       assume
 A21:  x in dom G;
       then reconsider Gx = G.x, Fx = F.x as Cardinal by A1,Def1;
-      Fx <` Gx by A1,A21;
+      Fx in Gx by A1,A21;
       then (y`2 = x implies g.x = y`1) & (y`2 <> x implies g.x = h.x) &
       h.x in f.x & f.x = Gx \ Fx & f.x = f.x & y`1 in F.(y`2) &
-      Fx <=` Gx & Fx = Fx by A1,A2,A5,A11,A19,A20,A21,Th33,CARD_1:13;
+      Fx c= Gx & Fx = Fx by A1,A2,A5,A11,A19,A20,A21,Th33,CARD_1:13;
       hence g.x in G.x;
     end;
     hence thesis by A1,A19,A20,Def5;
   end;
   then
-A22: Sum F <=` Product G by A11,A12,CARD_1:26;
+A22: Sum F c= Product G by A11,A12,CARD_1:26;
   now
     assume Sum F = Product G;
     then Union disjoin F,product G are_equipotent by CARD_1:21;
@@ -1229,10 +1196,10 @@ A24: dom K = dom F & for x st x in dom F holds K.x = f(x) from FUNCT_1:sch 3;
 A25:  x in dom F & {} = K.x by A24,FUNCT_1:def 5;
 A26:  K.x = G.x \ pi(f.:((disjoin F).x),x) by A24,A25;
       reconsider Fx = F.x, Gx = G.x as Cardinal by A1,A25,Def1;
-A27:  Card pi(f.:((disjoin F).x),x) <=` Card (f.:((disjoin F).x)) &
-      Card (f.:((disjoin F).x)) <=` Card ((disjoin F).x) by Th31,CARD_2:3;
+A27:  Card pi(f.:((disjoin F).x),x) c= Card (f.:((disjoin F).x)) &
+      Card (f.:((disjoin F).x)) c= Card ((disjoin F).x) by Th31,CARD_2:3;
       Card ((disjoin F).x) = Fx & Fx in Gx by A1,A25,Th40;
-      then Card pi(f.:((disjoin F).x),x) <=` Fx & Fx <` Gx & Card Gx = Gx
+      then Card pi(f.:((disjoin F).x),x) c= Fx & Fx in Gx & Card Gx = Gx
       by A27,CARD_1:def 5,XBOOLE_1:1;
       hence contradiction by A25,A26,CARD_2:4,ORDINAL1:22;
     end;
@@ -1412,15 +1379,6 @@ scheme FuncSeparation { X()->set, F(set)->set, P[set,set] }:
   for x st x in X() for y holds y in f.x iff y in F(x) & P[x,y]
 proof
   defpred Q[set,set] means y in $2 iff y in F($1) & P[$1,y];
-A1: for x,y1,y2 st x in X() & Q[x,y1] & Q[x,y2] holds y1 = y2
-  proof
-    let x,y1,y2 such that x in X();
-    defpred Z[set] means $1 in F(x) & P[x,$1];
-    assume that
-A2: y in y1 iff Z[y] and
-A3: y in y2 iff Z[y];
-    thus y1 = y2 from XBOOLE_0:sch 2(A2,A3);
-  end;
 A4: for x st x in X() ex y st Q[x,y]
   proof
     let x such that x in X();
@@ -1431,7 +1389,7 @@ A5: y in Y iff y in F(x) & R[y] from XBOOLE_0:sch 1;
     thus thesis by A5;
   end;
   thus ex f st dom f = X() &
-  for x st x in X() holds Q[x,f.x] from FUNCT_1:sch 2(A1,A4);
+  for x st x in X() holds Q[x,f.x] from CLASSES1:sch 1(A4);
 end;
 
 Lm1: Rank n is finite implies Rank (n+1) is finite
@@ -1459,7 +1417,7 @@ proof
 end;
 
 theorem
-  X is finite implies Card X <` Card omega
+  X is finite implies Card X in Card omega
 proof
   assume
 A1: X is finite;
@@ -1467,19 +1425,19 @@ A1: X is finite;
   then Card X is finite by A1,CARD_1:68;
   then consider n being Nat such that
 A2: Card X = card n by CARD_1:86;
-  thus Card X <` Card omega by A2,CARD_1:84;
+  thus Card X in Card omega by A2,CARD_1:84;
 end;
 
 theorem Th59:
-  Card A <` Card B implies A in B
+  Card A in Card B implies A in B
 proof
-  assume Card A <` Card B & not A in B;
-  then not Card B <=` Card A & B c= A by CARD_1:14,ORDINAL1:26;
+  assume Card A in Card B & not A in B;
+  then not Card B c= Card A & B c= A by CARD_1:14,ORDINAL1:26;
   hence contradiction by CARD_1:27;
 end;
 
 theorem Th60:
-  Card A <` M implies A in M
+  Card A in M implies A in M
 proof M = M & Card M = M by CARD_1:def 5;
   hence thesis by Th59;
 end;
@@ -1569,11 +1527,11 @@ A19: y in dom f & y in Y & Z2 = f.y by A14,FUNCT_1:def 12;
 end;
 
 theorem
-  (for Z st Z in X holds Card Z <` M) & X is c=-linear implies
-  Card union X <=` M
+  (for Z st Z in X holds Card Z in M) & X is c=-linear implies
+  Card union X c= M
 proof
   assume that
-A1: Z in X implies Card Z <` M and
+A1: Z in X implies Card Z in M and
 A2: X is c=-linear;
   consider XX being set such that
 A3: XX c= X & union XX = union X and
@@ -1821,8 +1779,8 @@ A56: x in order_type_of Q;
     then consider Z such that
 A57: g.x in Z & Z in XX by A3,TARSKI:def 4;
     Q-Seg(g.x) c= Z by A43,A57;
-    then Card (Q-Seg(g.x)) <=` Card Z & Card Z <` M by A1,A3,A57,CARD_1:27;
-    then Card (Q-Seg(g.x)) = Card A & Card (Q-Seg(g.x)) <` M by A47,A56,
+    then Card (Q-Seg(g.x)) c= Card Z & Card Z in M by A1,A3,A57,CARD_1:27;
+    then Card (Q-Seg(g.x)) = Card A & Card (Q-Seg(g.x)) in M by A47,A56,
     ORDINAL1:22;
     hence x in M by Th60;
   end;
@@ -1981,7 +1939,7 @@ registration
     for x st x in dom g holds g.x in f.x;
     consider A being set such that
 A1: x in A iff x in PFuncs(dom f, union rng f) & P[x] from XBOOLE_0:sch 1;
-    {} is PartFunc of dom f, union rng f by PARTFUN1:56;
+    {} is PartFunc of dom f, union rng f by RELSET_1:25;
     then
 A2: {} in PFuncs(dom f, union rng f) by PARTFUN1:119;
     dom {} c= dom f & for x st x in dom {} holds {} .x in f.x by XBOOLE_1:2;
@@ -2034,7 +1992,7 @@ proof
   hence {} in sproduct f by Def9;
 end;
 
-theorem
+theorem Th67:
   product f c= sproduct f
 proof
   let x;
@@ -2099,11 +2057,11 @@ end;
 
 theorem
   product f <> {} implies
-  (g in sproduct f iff ex h st h in product f & g <= h)
+  (g in sproduct f iff ex h st h in product f & g c= h)
 proof
   assume
 A1: product f <> {};
-  thus g in sproduct f implies ex h st h in product f & g <= h
+  thus g in sproduct f implies ex h st h in product f & g c= h
   proof
     assume
 A2: g in sproduct f;
@@ -2111,10 +2069,10 @@ A2: g in sproduct f;
     reconsider k as Function;
     take k +* g;
     thus k +* g in product f by A1,A2,Th69;
-    thus g <= k +* g by FUNCT_4:26;
+    thus g c= k +* g by FUNCT_4:26;
   end;
   given h such that
-A3: h in product f & g <= h;
+A3: h in product f & g c= h;
 A4: dom h = dom f & for x st x in dom f holds h.x in f.x by A3,Th18;
 A5: dom g c= dom h by A3,RELAT_1:25;
   now
@@ -2388,7 +2346,7 @@ A5: x in dom g;
   hence g in sproduct f by A4,Def9;
 end;
 
-theorem
+theorem Th81:
   g in sproduct f implies g|A in sproduct f by Th80,RELAT_1:88;
 
 theorem Th82:
@@ -2906,5 +2864,48 @@ A6: z in dom p;
     hence g.z in p.z by A4,A6,Th18;
   end;
   hence x in S by A1,A4,A5,Th18;
+end;
+
+:: from AMI_1, 2008.04.11, A.T. (generalized)
+
+theorem
+  for f being Function
+  for s, t being Element of product f, A be set holds
+   s +* t|A is Element of product f
+proof let f be Function;
+  let s, t be Element of product f, A be set;
+  per cases;
+  suppose f is non-empty;
+   then not {} in rng f by RELAT_1:def 9;
+   then product f <> {} by Th37;
+   then
+A1: t in product f;
+  product f c= sproduct f by Th67;
+  hence s +* t|A is Element of product f by A1,Th69,Th81;
+  end;
+  suppose f is not non-empty;
+   then {} in rng f by RELAT_1:def 9;
+   then
+A:    product f = {} by Th37;
+   then
+B: s = {} by SUBSET_1:def 2;
+   t = {} by A,SUBSET_1:def 2;
+   then t|A = {} by RELAT_1:111;
+   then s +* t|A = {} by B;
+  hence s +* t|A is Element of product f by A,SUBSET_1:def 2;
+  end;
+end;
+
+theorem
+  for f being non-empty Function
+  for p being Element of sproduct f
+  ex s being Element of product f st p c= s
+proof
+  let f be non-empty Function,
+      p be Element of sproduct f;
+  consider h being Element of product f;
+  reconsider s = h +* p as Element of product f by Th69;
+  take s;
+  thus p c= s by FUNCT_4:26;
 end;
 

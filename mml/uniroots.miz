@@ -24,11 +24,12 @@ environ
  constructors WELLORD2, BINOP_1, ARYTM_0, REAL_1, SQUARE_1, NAT_D, FINSEQOP,
       FINSOP_1, RVSUM_1, PREPOWER, POWER, REALSET1, BINARITH, SIN_COS, GROUP_4,
       MOD_2, MATRIX_2, HAHNBAN1, GRAPH_2, POLYNOM4, POLYNOM5, UPROOTS, SEQ_1,
-      RECDEF_1;
+      RECDEF_1, BINOP_2;
  registrations XBOOLE_0, RELAT_1, FUNCT_1, ORDINAL1, FINSET_1, NUMBERS,
       XCMPLX_0, XXREAL_0, XREAL_0, NAT_1, INT_1, BINOP_2, CARD_1, MEMBERED,
       FINSEQ_1, FINSEQ_2, REALSET1, WSIERP_1, STRUCT_0, GROUP_1, VECTSP_1,
-      COMPLFLD, QUOFIELD, POLYNOM1, POLYNOM3, POLYNOM5, VALUED_0, ALGSTR_0;
+      COMPLFLD, QUOFIELD, POLYNOM1, POLYNOM3, POLYNOM5, VALUED_0, ALGSTR_0,
+      POWER;
  requirements NUMERALS, BOOLE, SUBSET, ARITHM, REAL;
  definitions TARSKI, GROUP_1, XBOOLE_0, BINOP_1, REALSET1, SQUARE_1, HAHNBAN1,
       POLYNOM3, FINSEQ_2, COMPLEX1, GROUP_4, RLVECT_1, ALGSTR_0;
@@ -913,7 +914,7 @@ A6: |.x.| < 1;
     reconsider n' = n as Rational;
     |.x.| #Q n' < 1 by A4,A6,PREPOWER:76;
     then |.x.| |^ n < 1 by A4,PREPOWER:60;
-    hence contradiction by A3,A4,POWER:46;
+    hence contradiction by A3;
   end;
   suppose |.x.| > 1;
     hence contradiction by A3,POWER:40;
@@ -954,7 +955,7 @@ A9:     |.x.| < 1;
         reconsider n' = n as Rational;
         |.x.| #Q n' < 1 by A8,A9,PREPOWER:76;
         then |.x.| |^ n < 1 by A8,PREPOWER:60;
-        hence contradiction by A5,A8,POWER:46;
+        hence contradiction by A5;
       end;
       suppose |.x.| > 1;
         hence contradiction by A5,POWER:40;
@@ -962,8 +963,7 @@ A9:     |.x.| < 1;
     end;
     reconsider z = x as Element of COMPLEX by XCMPLX_0:def 2;
     n >= 0+1 by NAT_1:13;
-    then
-A10: |.z.| to_power n = |.z.| |^ n by POWER:47;
+A10: |.z.| to_power n = |.z.| |^ n;
 A11: z|^n = (|.z.| |^ n)*cos (n*Arg z)+(|.z.| |^ n)*sin (n*Arg z)*<i>
     by COMPTRIG:72;
     x is CRoot of n,(1_F_Complex) by A1,Th24;
@@ -971,7 +971,7 @@ A11: z|^n = (|.z.| |^ n)*cos (n*Arg z)+(|.z.| |^ n)*sin (n*Arg z)*<i>
     then
 A12: z |^n = [** 1, 0 **] by COMPLFLD:112;
     then
-A13: cos(n*Arg x) = 1 & sin(n*Arg x) = 0 by A5,A10,A11,COMPLEX1:163;
+A13: cos(n*Arg x) = 1 & sin(n*Arg x) = 0 by A5,A11,COMPLEX1:163;
     consider r being real number such that
 A14: r = (2*PI) * (-[\ ((n*Arg x)/(2*PI)) /]) + (n*Arg x) &
     0 <= r & r < (2*PI) by COMPLEX2:2,COMPTRIG:21;
@@ -995,7 +995,7 @@ A17: cos(n*Arg x) = cos.(2*PI*m + r) by A14,SIN_COS:def 23
       .= sin(r) by SIN_COS:def 21;
     then r = 0 or r = PI by A13,A14,COMPTRIG:33;
     then (n*Arg x)/(n
-    *1) = (2*PI*m)/n by A5,A10,A11,A12,A14,A17,COMPLEX1:163,SIN_COS:82;
+    *1) = (2*PI*m)/n by A5,A11,A12,A14,A17,COMPLEX1:163,SIN_COS:82;
     then ((n/n)*Arg x)/1 = (2*PI*m)/n by XCMPLX_1:84;
     then (Arg x)/1 = (2*PI*m)/n by XCMPLX_1:89;
     hence ex k being Element of NAT st x=[**cos((2*PI*k)/n),sin((2*PI*k)/n)**]
@@ -2442,7 +2442,7 @@ A19: n in Seg n by A1,FINSEQ_1:3;
 A20: f.n = cyclotomic_poly n by A6,A11;
   reconsider fn = f|Seg n as FinSequence of cPRFC by FINSEQ_1:23;
 A21: f = fn by A10,FINSEQ_2:23
-    .= fm^<*cyclotomic_poly n*> by A6,A8,A9,A19,A20,FINSEQ_5:11;
+    .= fm^<*cyclotomic_poly n*> by A6,A8,A19,A20,FINSEQ_5:11;
   reconsider FC1 = <%1_F_Complex %> as Element of cPRFC by POLYNOM3:def 12;
   <* FC1 *> is FinSequence of cPRFC;
   then reconsider h = fm^<* <%1_F_Complex %> *> as FinSequence of cPRFC
@@ -2744,7 +2744,7 @@ A50:            i in dom r;
 A51:  for l being Nat st l in Seg len f ex x being set st G[l,x];
       consider F being FinSequence such that dom F = Seg len f and
 A52:  for i being Nat st i in Seg len f holds G[i,F.i] from FINSEQ_1:sch 1
-      (A13,A51);
+      (A51);
       consider g being FinSequence of cPRFC,
       p1 being Polynomial of F_Complex such that
 A53:  g = f | Seg k & p1 = Product(g) & F.k = p1 and

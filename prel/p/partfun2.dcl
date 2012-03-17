@@ -10,7 +10,7 @@
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="RELSET_1"/>
 </Signature>
-<RCluster>
+<RCluster aid="PARTFUN2" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -30,7 +30,7 @@
 <Adjective nr="5"/>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="PARTFUN2" nr="1">
 <ArgTypes/>
 <Func kind="K" nr="18"/>
 <Cluster>

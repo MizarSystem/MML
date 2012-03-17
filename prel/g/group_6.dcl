@@ -25,7 +25,7 @@
 <ArticleID name="GROUP_3"/>
 <ArticleID name="GROUP_6"/>
 </Signature>
-<RCluster>
+<RCluster aid="GROUP_6" nr="1">
 <ArgTypes/>
 <Typ kind="G" nr="7">
 <Cluster/>
@@ -39,7 +39,7 @@
 <Adjective nr="72"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="GROUP_6" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="7">
 <Cluster>
@@ -91,7 +91,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="GROUP_6" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="7">
 <Cluster>
@@ -111,7 +111,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="GROUP_6" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="7">
 <Cluster>
@@ -131,7 +131,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="GROUP_6" nr="3">
 <ArgTypes>
 <Typ kind="G" nr="7">
 <Cluster>
@@ -149,7 +149,7 @@
 <Adjective nr="48"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="GROUP_6" nr="4">
 <ArgTypes>
 <Typ kind="G" nr="7">
 <Cluster>
@@ -175,7 +175,7 @@
 <Adjective nr="7" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="GROUP_6" nr="5">
 <ArgTypes>
 <Typ kind="G" nr="7">
 <Cluster>
@@ -202,7 +202,7 @@
 <Adjective nr="48"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="GROUP_6" nr="6">
 <ArgTypes>
 <Typ kind="G" nr="7">
 <Cluster>
@@ -229,7 +229,7 @@
 <Adjective nr="72"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="GROUP_6" nr="7">
 <ArgTypes>
 <Typ kind="G" nr="7">
 <Cluster>
@@ -281,7 +281,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="GROUP_6" nr="8">
 <ArgTypes>
 <Typ kind="G" nr="7">
 <Cluster>
@@ -332,7 +332,7 @@
 <Adjective nr="48"/>
 </Cluster>
 </FCluster>
-<CCluster>
+<CCluster aid="GROUP_6" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="7">
 <Cluster>

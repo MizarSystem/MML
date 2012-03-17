@@ -23,7 +23,7 @@
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="FSM_1"/>
 </Signature>
-<RCluster>
+<RCluster aid="FSM_1" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -32,7 +32,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Typ kind="M" nr="9">
+<Typ kind="M" nr="10">
 <Cluster/>
 <LocusVar nr="1"/>
 </Typ>
@@ -42,7 +42,7 @@
 <Adjective nr="20"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="FSM_1" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -58,7 +58,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="FSM_1" nr="3">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -73,7 +73,7 @@
 <Adjective nr="43"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="FSM_1" nr="4">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -96,7 +96,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="FSM_1" nr="5">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -119,7 +119,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="FSM_1" nr="6">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -140,7 +140,7 @@
 <Adjective nr="43"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="FSM_1" nr="7">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -161,7 +161,7 @@
 <Adjective nr="43"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="FSM_1" nr="8">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -188,7 +188,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="FSM_1" nr="9">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -215,7 +215,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="FSM_1" nr="10">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -246,7 +246,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="FSM_1" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -257,7 +257,7 @@
 <Adjective nr="20"/>
 </Cluster>
 </Typ>
-<Typ kind="M" nr="4">
+<Typ kind="M" nr="5">
 <Cluster>
 <Adjective nr="7"/>
 <Adjective nr="10">
@@ -293,7 +293,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="FSM_1" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -309,7 +309,7 @@
 <Adjective nr="20"/>
 </Cluster>
 </Typ>
-<Typ kind="M" nr="4">
+<Typ kind="M" nr="5">
 <Cluster>
 <Adjective nr="7"/>
 <Adjective nr="10">
@@ -326,7 +326,7 @@
 </Func>
 <LocusVar nr="3"/>
 </Typ>
-<Typ kind="M" nr="4">
+<Typ kind="M" nr="5">
 <Cluster>
 <Adjective nr="7"/>
 <Adjective nr="10">
@@ -365,7 +365,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="FSM_1" nr="3">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -381,7 +381,7 @@
 <Adjective nr="20"/>
 </Cluster>
 </Typ>
-<Typ kind="M" nr="4">
+<Typ kind="M" nr="5">
 <Cluster>
 <Adjective nr="7"/>
 <Adjective nr="10">
@@ -398,7 +398,7 @@
 </Func>
 <LocusVar nr="3"/>
 </Typ>
-<Typ kind="M" nr="4">
+<Typ kind="M" nr="5">
 <Cluster>
 <Adjective nr="7"/>
 <Adjective nr="10">
@@ -431,7 +431,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="FSM_1" nr="4">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -466,7 +466,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="FSM_1" nr="5">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -497,7 +497,7 @@
 <Adjective nr="20"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="FSM_1" nr="6">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -539,7 +539,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<CCluster>
+<CCluster aid="FSM_1" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -548,7 +548,7 @@
 </Typ>
 </ArgTypes>
 <Cluster/>
-<Typ kind="M" nr="9">
+<Typ kind="M" nr="10">
 <Cluster/>
 <LocusVar nr="1"/>
 </Typ>

@@ -24,7 +24,7 @@
 <ArticleID name="COLLSP"/>
 <ArticleID name="ANPROJ_1"/>
 </Signature>
-<RCluster>
+<RCluster aid="ANPROJ_1" nr="1">
 <ArgTypes/>
 <Typ kind="G" nr="11">
 <Cluster/>
@@ -42,7 +42,7 @@
 <Adjective nr="84"/>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="ANPROJ_1" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="11">
 <Cluster>
@@ -63,7 +63,7 @@
 <Adjective nr="7" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="ANPROJ_1" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="11">
 <Cluster>
@@ -84,7 +84,7 @@
 <Adjective nr="7" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="ANPROJ_1" nr="3">
 <ArgTypes>
 <Typ kind="G" nr="11">
 <Cluster>

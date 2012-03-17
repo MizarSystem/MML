@@ -53,7 +53,7 @@
 <ArticleID name="UPROOTS"/>
 <ArticleID name="UNIROOTS"/>
 </Signature>
-<RCluster>
+<RCluster aid="UNIROOTS" nr="1">
 <ArgTypes/>
 <Typ kind="G" nr="10">
 <Cluster/>
@@ -80,7 +80,7 @@
 <Adjective nr="133"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="UNIROOTS" nr="2">
 <ArgTypes/>
 <Typ kind="G" nr="10">
 <Cluster/>
@@ -105,7 +105,7 @@
 <Adjective nr="109"/>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="UNIROOTS" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="10">
 <Cluster>
@@ -123,7 +123,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="428">
+<Func kind="K" nr="429">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -134,7 +134,7 @@
 <Adjective nr="93"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="UNIROOTS" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="3">
 <Cluster>
@@ -143,14 +143,14 @@
 <Func kind="K" nr="82"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="429">
+<Func kind="K" nr="430">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
 <Adjective nr="14" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="UNIROOTS" nr="3">
 <ArgTypes>
 <Typ kind="M" nr="3">
 <Cluster>
@@ -159,14 +159,14 @@
 <Func kind="K" nr="82"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="429">
+<Func kind="K" nr="430">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
 <Adjective nr="22"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="UNIROOTS" nr="4">
 <ArgTypes>
 <Typ kind="G" nr="10">
 <Cluster>
@@ -182,7 +182,7 @@
 <Func kind="K" nr="82"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="431">
+<Func kind="K" nr="432">
 <LocusVar nr="2"/>
 <LocusVar nr="1"/>
 </Func>

@@ -15,7 +15,7 @@
 <ArticleID name="BCIALG_1"/>
 <ArticleID name="BCIIDEAL"/>
 </Signature>
-<RCluster>
+<RCluster aid="BCIIDEAL" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
@@ -38,7 +38,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="BCIIDEAL" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>

@@ -29,7 +29,7 @@
 <ArticleID name="ALTCAT_1"/>
 <ArticleID name="ALTCAT_2"/>
 </Signature>
-<RCluster>
+<RCluster aid="ALTCAT_2" nr="1">
 <ArgTypes/>
 <Typ kind="G" nr="7">
 <Cluster/>
@@ -39,7 +39,7 @@
 <Adjective nr="61"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="ALTCAT_2" nr="2">
 <ArgTypes/>
 <Typ kind="G" nr="7">
 <Cluster/>
@@ -49,7 +49,7 @@
 <Adjective nr="75"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="ALTCAT_2" nr="3">
 <ArgTypes/>
 <Typ kind="G" nr="8">
 <Cluster/>
@@ -59,7 +59,7 @@
 <Adjective nr="75"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="ALTCAT_2" nr="4">
 <ArgTypes/>
 <Typ kind="G" nr="8">
 <Cluster/>
@@ -69,7 +69,7 @@
 <Adjective nr="66"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="ALTCAT_2" nr="5">
 <ArgTypes>
 <Typ kind="G" nr="8">
 <Cluster/>
@@ -83,7 +83,7 @@
 <Adjective nr="66"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="ALTCAT_2" nr="6">
 <ArgTypes>
 <Typ kind="G" nr="8">
 <Cluster>
@@ -101,7 +101,7 @@
 <Adjective nr="66"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="ALTCAT_2" nr="7">
 <ArgTypes>
 <Typ kind="G" nr="8">
 <Cluster/>
@@ -118,7 +118,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="ALTCAT_2" nr="8">
 <ArgTypes>
 <Typ kind="G" nr="8">
 <Cluster>
@@ -138,7 +138,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="ALTCAT_2" nr="9">
 <ArgTypes>
 <Typ kind="G" nr="8">
 <Cluster>
@@ -164,7 +164,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="ALTCAT_2" nr="10">
 <ArgTypes>
 <Typ kind="G" nr="8">
 <Cluster>
@@ -187,7 +187,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="ALTCAT_2" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -200,7 +200,7 @@
 <Adjective nr="22"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="ALTCAT_2" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -219,7 +219,7 @@
 <Adjective nr="22"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="ALTCAT_2" nr="3">
 <ArgTypes>
 <Typ kind="G" nr="2">
 <Cluster>
@@ -228,7 +228,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="199">
+<Func kind="K" nr="200">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -239,15 +239,15 @@
 <Adjective nr="72"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="ALTCAT_2" nr="4">
 <ArgTypes/>
-<Func kind="K" nr="200"/>
+<Func kind="K" nr="201"/>
 <Cluster>
 <Adjective nr="50"/>
 <Adjective nr="66"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="ALTCAT_2" nr="5">
 <ArgTypes>
 <Typ kind="G" nr="8">
 <Cluster>
@@ -261,7 +261,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="201">
+<Func kind="K" nr="202">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -271,7 +271,7 @@
 <Adjective nr="66"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="ALTCAT_2" nr="6">
 <ArgTypes>
 <Typ kind="G" nr="8">
 <Cluster>
@@ -288,7 +288,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="201">
+<Func kind="K" nr="202">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -302,7 +302,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<CCluster>
+<CCluster aid="ALTCAT_2" nr="1">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="50" value="false"/>
@@ -316,7 +316,7 @@
 <Adjective nr="75"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="ALTCAT_2" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="8">
 <Cluster>
@@ -339,7 +339,7 @@
 <Adjective nr="62"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="ALTCAT_2" nr="3">
 <ArgTypes>
 <Typ kind="G" nr="8">
 <Cluster>
@@ -362,7 +362,7 @@
 <Adjective nr="71"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="ALTCAT_2" nr="4">
 <ArgTypes>
 <Typ kind="G" nr="8">
 <Cluster>

@@ -20,7 +20,7 @@
 <ArticleID name="METRIC_1"/>
 <ArticleID name="TOPREAL7"/>
 </Signature>
-<FCluster>
+<FCluster aid="TOPREAL7" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
@@ -42,7 +42,7 @@
 <Adjective nr="31"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="TOPREAL7" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
@@ -66,7 +66,7 @@
 <Adjective nr="36"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="TOPREAL7" nr="3">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
@@ -90,7 +90,7 @@
 <Adjective nr="38"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="TOPREAL7" nr="4">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
@@ -114,7 +114,7 @@
 <Adjective nr="39"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="TOPREAL7" nr="5">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>

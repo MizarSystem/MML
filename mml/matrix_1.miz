@@ -498,7 +498,7 @@ A2: i in dom M & j in Seg width M by A1,ZFMISC_1:106;
 A3: M.i in rng M by FUNCT_1:def 5;
     rng M c= D* by FINSEQ_1:def 4;
     then reconsider p=M.i as FinSequence of D by A3,FINSEQ_1:def 11;
-    M<> {} by RELAT_1:60,A2;
+    M<> {} by RELAT_1:60,A1,ZFMISC_1:106;
     then len M <> 0 & len M >= 0 by CARD_2:59,NAT_1:2;
     then len M > 0 by REAL_1:def 5;
     then consider s such that
@@ -535,8 +535,7 @@ A5: k in dom M1;
 A6: M1.k in rng M1 & M2.k in rng M2 by A4,FUNCT_1:def 5;
 A7: rng M1 c= D* & rng M2 c= D* by FINSEQ_1:def 4;
     then reconsider p = M1.k as FinSequence of D by A6,FINSEQ_1:def 11;
-    M1 <> {} by RELAT_1:60,A5;
-    then len M1 <> 0 & len M1 >= 0 by CARD_2:59,NAT_1:2;
+    len M1 <> 0 & len M1 >= 0 by CARD_2:59,NAT_1:2,RELAT_1:60,A5;
     then
 A8: len M1 > 0 by REAL_1:def 5;
     then M1 is Matrix of len M1,width M1,D by Th20;
@@ -575,28 +574,6 @@ scheme MatrixLambda { D() -> non empty set, n, m() -> Element of NAT,
 proof
   defpred P[set,set] means ex p being FinSequence st
   $2=p & len p = m() & for i st i in Seg m() holds p.i = f($1,i);
-A1: for k be Nat,y1,y2 st k in Seg n() & P[k,y1] & P[k,y2] holds y1=y2
-  proof
-    let k be Nat,y1,y2;
-    assume k in Seg n();
-    given p1 being FinSequence such that
-A2: y1 =p1 and
-A3: len p1 =m() and
-A4: for i st i in Seg m() holds p1.i =f(k,i);
-    given p2 being FinSequence such that
-A5: y2 =p2 and
-A6: len p2 =m() and
-A7: for i st i in Seg m() holds p2.i =f(k,i);
-X: dom p1 = Seg m() by A3,FINSEQ_1:def 3;
-    now
-      let j be Nat;
-      assume
-A8:   j in dom p1;
-      then p1.j=f(k,j) by A4,X;
-      hence p1.j=p2.j by A7,A8,X;
-    end;
-    hence y1=y2 by A2,A3,A5,A6,FINSEQ_2:10;
-  end;
 A9: for k be Nat st k in Seg n() ex y st P[k,y]
   proof
     let k be Nat;
@@ -611,7 +588,7 @@ A10: len p =m() & for i be Nat st i in dom p holds p.i = F(i)
   end;
   consider M being FinSequence such that
 A11: dom M = Seg n() and
-A12: for k be Nat st k in Seg n() holds P[k,M.k] from FINSEQ_1:sch 1(A1,A9);
+A12: for k be Nat st k in Seg n() holds P[k,M.k] from FINSEQ_1:sch 1(A9);
 A13: len M = n() by A11,FINSEQ_1:def 3;
   rng M c=D()*
   proof
@@ -720,28 +697,6 @@ A5: for x,y st x in Seg n() & y in Seg m() holds Q[x,y,f.(x,y)]
   from BINOP_1:sch 1(A2);
   defpred R[set,set] means ex p being FinSequence st
   $2=p & len p = m() & for i st i in Seg m() holds p.i = f.($1,i);
-A6: for k be Nat,y1,y2 st k in Seg n() & R[k,y1] & R[k,y2] holds y1=y2
-  proof
-    let k be Nat,y1,y2;
-    assume k in Seg n();
-    given p1 being FinSequence such that
-A7: y1 =p1 and
-A8: len p1 =m() and
-A9: for i st i in Seg m() holds p1.i =f.(k,i);
-    given p2 being FinSequence such that
-A10: y2 =p2 and
-A11: len p2 =m() and
-A12: for i st i in Seg m() holds p2.i =f.(k,i);
-X: dom p1 = Seg m() by A8,FINSEQ_1:def 3;
-    now
-      let j be Nat;
-      assume
-A13:  j in dom p1;
-      then p1.j=f.(k,j) by A9,X;
-      hence p1.j=p2.j by A12,A13,X;
-    end;
-    hence y1=y2 by A7,A8,A10,A11,FINSEQ_2:10;
-  end;
 A14: for k be Nat st k in Seg n() ex y st R[k,y]
   proof
     let k be Nat;
@@ -756,7 +711,7 @@ A15: len p =m() & for i be Nat st i in dom p holds p.i = F(i)
   end;
   consider M being FinSequence such that
 A16: dom M = Seg n() and
-A17: for k be Nat st k in Seg n() holds R[k,M.k] from FINSEQ_1:sch 1(A6,A14);
+A17: for k be Nat st k in Seg n() holds R[k,M.k] from FINSEQ_1:sch 1(A14);
 A18: len M = n() by A16,FINSEQ_1:def 3;
   rng M c=D()*
   proof
@@ -1720,8 +1675,7 @@ Z: 1 <= i & i <= n & 1 <= j & j <= m;
 A: len M = n by Def3;
   per cases by NAT_1:3;
   suppose n = 0;
-    then 1 <= 0 by XXREAL_0:2,Z;
-   hence thesis;
+   hence thesis by XXREAL_0:2,Z;
   end;
   suppose n > 0;
    then m = width M by Th24;
@@ -1729,3 +1683,33 @@ A: len M = n by Def3;
   end;
 end;
 
+:: from GOBOARD5, 2008.03.08, A.T.
+
+theorem Th1:
+  for M being tabular FinSequence, i,j st [i,j] in Indices M
+  holds 1 <= i & i <= len M & 1 <= j & j <= width M
+proof
+  let M be tabular FinSequence, i,j;
+  assume [i,j] in Indices M;
+  then i in dom M & j in Seg width M by ZFMISC_1:106;
+  hence 1 <= i & i <= len M & 1 <= j & j <= width M by FINSEQ_1:3,FINSEQ_3:27;
+end;
+
+theorem
+ for M being Matrix of n,m,D  st [i,j] in Indices M
+  holds 1 <= i & i <= n & 1 <= j & j <= m
+proof let M be Matrix of n,m,D such that
+Z: [i,j] in Indices M;
+A: len M = n by Def3;
+  per cases by NAT_1:3;
+  suppose
+S:   n = 0;
+    i in dom M by Z,ZFMISC_1:106;
+    then 1 <= i & i <= 0 by S,FINSEQ_3:27,A;
+   hence thesis by XXREAL_0:2;
+  end;
+  suppose n > 0;
+   then m = width M by Th24;
+  hence 1 <= i & i <= n & 1 <= j & j <= m by Z,Th1,A;
+  end;
+end;

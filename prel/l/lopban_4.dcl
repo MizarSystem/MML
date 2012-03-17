@@ -12,9 +12,9 @@
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XREAL_0"/>
 <ArticleID name="RELSET_1"/>
-<ArticleID name="VALUED_0"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
+<ArticleID name="VALUED_0"/>
 <ArticleID name="SEQM_3"/>
 <ArticleID name="INT_1"/>
 <ArticleID name="FINSET_1"/>
@@ -35,7 +35,7 @@
 <ArticleID name="LOPBAN_3"/>
 <ArticleID name="LOPBAN_4"/>
 </Signature>
-<FCluster>
+<FCluster aid="LOPBAN_4" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="15">
 <Cluster>
@@ -66,7 +66,7 @@
 </Func>
 <Cluster>
 <Adjective nr="4"/>
-<Adjective nr="22">
+<Adjective nr="16">
 <Func kind="K" nr="46"/>
 <Func kind="U" nr="1">
 <LocusVar nr="1"/>

@@ -35,7 +35,7 @@
 <ArticleID name="FILTER_1"/>
 <ArticleID name="LATTICE3"/>
 </Signature>
-<FCluster>
+<FCluster aid="WAYBEL16" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
@@ -47,14 +47,14 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="177">
+<Func kind="K" nr="178">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
 <Adjective nr="1" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="WAYBEL16" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
@@ -66,8 +66,8 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="185">
-<Func kind="K" nr="177">
+<Func kind="K" nr="186">
+<Func kind="K" nr="178">
 <LocusVar nr="1"/>
 </Func>
 </Func>

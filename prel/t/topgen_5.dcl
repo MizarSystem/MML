@@ -46,21 +46,21 @@
 <ArticleID name="TOPMETR"/>
 <ArticleID name="TOPGEN_5"/>
 </Signature>
-<FCluster>
+<FCluster aid="TOPGEN_5" nr="1">
 <ArgTypes/>
 <Func kind="K" nr="360"/>
 <Cluster>
 <Adjective nr="1" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="TOPGEN_5" nr="2">
 <ArgTypes/>
 <Func kind="K" nr="361"/>
 <Cluster>
 <Adjective nr="1" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="TOPGEN_5" nr="3">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -94,7 +94,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="TOPGEN_5" nr="4">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -135,7 +135,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<CCluster>
+<CCluster aid="TOPGEN_5" nr="1">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="23"/>
@@ -151,7 +151,7 @@
 <Adjective nr="76"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="TOPGEN_5" nr="2">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="37"/>
@@ -166,7 +166,7 @@
 <Adjective nr="49"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="TOPGEN_5" nr="3">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="28" value="false"/>
@@ -183,7 +183,7 @@
 <Adjective nr="99"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="TOPGEN_5" nr="4">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>

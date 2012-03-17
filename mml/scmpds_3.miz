@@ -8,7 +8,7 @@ environ
 
  vocabularies SCMPDS_2, INT_1, AMI_1, AMI_2, SCMPDS_1, ABSVALUE, ARYTM_1,
       RELAT_1, FUNCT_1, BOOLE, AMI_5, AMI_3, NAT_1, FUNCT_4, CARD_3, CAT_1,
-      FUNCOP_1, SCMPDS_3, ARYTM;
+      FUNCOP_1, SCMPDS_3, ARYTM, AMISTD_2, SCMNORM;
  notations TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, XCMPLX_0, CARD_3, RELAT_1,
       FUNCT_1, FUNCT_4, INT_1, NAT_1, STRUCT_0, FUNCOP_1, INT_2, XXREAL_0,
       AMI_1, SCMNORM, AMI_2, SCMPDS_1, SCMPDS_2;
@@ -18,10 +18,10 @@ environ
       FRAENKEL, NUMBERS, XREAL_0, INT_1, CARD_3, AMI_1, AMI_3, SCMPDS_2,
       SCMNORM, FINSET_1;
  requirements NUMERALS, SUBSET, BOOLE, ARITHM, REAL;
- definitions AMI_1, AMI_2, AMI_3, FUNCOP_1, SCMPDS_2, NAT_1;
+ definitions AMI_1, AMI_2, AMI_3, FUNCOP_1, SCMPDS_2, NAT_1, SCMNORM;
  theorems AMI_1, AMI_3, GRFUNC_1, NAT_1, FUNCOP_1, TARSKI, FUNCT_4, FUNCT_1,
       FINSET_1, ZFMISC_1, INT_1, RELAT_1, ABSVALUE, SCMPDS_2, BINARITH,
-      XBOOLE_0, XBOOLE_1, CARD_3, AMI_2, NUMBERS, ORDINAL1;
+      XBOOLE_0, XBOOLE_1, CARD_3, AMI_2, NUMBERS, ORDINAL1, SCMNORM;
 
 begin :: Preliminaries
 
@@ -798,11 +798,11 @@ canceled;
 
 theorem
   for i being Instruction of SCMPDS, s being State of SCMPDS ,
-  p being programmed FinPartState of SCMPDS holds
+  p being preProgram of SCMPDS holds
   Exec (i, s +* p) = Exec (i,s) +* p
 proof
   let i be Instruction of SCMPDS, s be State of SCMPDS,
-  p be programmed FinPartState of SCMPDS;
+  p be preProgram of SCMPDS;
 A1: dom p c= NAT by AMI_1:def 40;
   now
     assume {IC SCMPDS } meets NAT;
@@ -906,9 +906,9 @@ A4: (NAT) \ dom p <> {} by XBOOLE_1:37;
     set p1 = p +* ((il .--> (d1:=0)) +* Start-At il);
     set p2 = p +* ((il .--> (d1:=1)) +* Start-At il);
     consider s1 being State of SCMPDS such that
-A5: p1 c= s1 by AMI_1:82;
+A5: p1 c= s1 by CARD_3:97;
     consider s2 being State of SCMPDS such that
-A6: p2 c= s2 by AMI_1:82;
+A6: p2 c= s2 by CARD_3:97;
     take s1,s2;
 A7: dom p misses {IC SCMPDS} by A2,ZFMISC_1:56;
     not il in dom p by A4,XBOOLE_0:def 4;
@@ -1132,9 +1132,9 @@ A2: not IC p in dom p;
   set p1 = p +* ((il .--> goto 0));
   set p2 = p +* ((il .--> goto 1));
   consider s1 being State of SCMPDS such that
-A3: p1 c= s1 by AMI_1:82;
+A3: p1 c= s1 by CARD_3:97;
   consider s2 being State of SCMPDS such that
-A4: p2 c= s2 by AMI_1:82;
+A4: p2 c= s2 by CARD_3:97;
   p is not autonomic
   proof
 A5: dom (il .--> (goto 1)) = {il} by FUNCOP_1:19;
@@ -1211,9 +1211,9 @@ A7: loc in dom (loc .--> goto 0 ) &
   then
 A8: loc in dom p1 & loc in dom p2 by A5,XBOOLE_0:def 2;
   consider s1 being State of SCMPDS such that
-A9: p1 c= s1 by AMI_1:82;
+A9: p1 c= s1 by CARD_3:97;
   consider s2 being State of SCMPDS such that
-A10: p2 c= s2 by AMI_1:82;
+A10: p2 c= s2 by CARD_3:97;
   set Cs1i = Computation(s1,i);
   set Cs2i = Computation(s2,i);
   p is not autonomic
@@ -1645,87 +1645,5 @@ definition
   func inspos k -> Instruction-Location of SCMPDS equals
    k;
   coherence by AMI_1:def 4;
-end;
-
-canceled 3;
-
-theorem
-  for loc being Instruction-Location of SCMPDS,k being Element of NAT
-  holds loc + k -' k = loc by BINARITH:39;
-
-theorem
-  for l1,l2 being Instruction-Location of SCMPDS, k being Element of NAT holds
-  Start-At(l1 + k) = Start-At(l2 +k) iff Start-At l1 = Start-At l2
-proof
-  let l1,l2 be Instruction-Location of SCMPDS, k be Element of NAT;
-  hereby
-    assume
-A1: Start-At(l1 + k) = Start-At(l2 + k);
-A2: Start-At(l1 + k) = IC SCMPDS .--> (l1 + k) &
-    Start-At(l2 + k) = IC SCMPDS .--> (l2 + k);
-    {[IC SCMPDS, l1 + k]} = IC SCMPDS .--> (l2 + k) by A1,AMI_1:96;
-    then {[IC SCMPDS, l1 + k]} = {[IC SCMPDS, l2 + k]} by A2,AMI_1:96;
-    then [IC SCMPDS, l1 + k] = [IC SCMPDS, l2 + k] by ZFMISC_1:6;
-    then l1 + k = l2 + k by ZFMISC_1:33;
-    then l1 = l2 + k -' k by BINARITH:39;
-    hence Start-At l1 = Start-At l2 by BINARITH:39;
-  end;
-  assume Start-At l1 = Start-At l2;
-  then {[IC SCMPDS, l1]} = Start-At l2 by AMI_1:96;
-  then {[IC SCMPDS, l1]} = {[IC SCMPDS, l2]} by AMI_1:96;
-  then [IC SCMPDS, l1] = [IC SCMPDS, l2] by ZFMISC_1:6;
-  hence Start-At(l1 + k) = Start-At(l2 + k) by ZFMISC_1:33;
-end;
-
-theorem
-  for l1,l2 being Instruction-Location of SCMPDS, k being Nat
-  st Start-At l1 = Start-At l2 holds Start-At(l1 -' k) = Start-At(l2 -' k)
-proof
-  let l1,l2 be Instruction-Location of SCMPDS, k be Nat;
-  assume Start-At l1 = Start-At l2;
-  then {[IC SCMPDS, l1]} = Start-At l2 by AMI_1:96;
-  then {[IC SCMPDS, l1]} = {[IC SCMPDS, l2]} by AMI_1:96;
-  then [IC SCMPDS, l1] = [IC SCMPDS, l2] by ZFMISC_1:6;
-  hence Start-At(l1 -' k) = Start-At(l2 -' k) by ZFMISC_1:33;
-end;
-
-definition
-  canceled 2;
-  let IT be FinPartState of SCMPDS;
-  attr IT is initial means
-  for m,n st n in dom IT & m < n holds m in dom IT;
-end;
-
-definition
-  func SCMPDS-Stop -> FinPartState of SCMPDS equals
-  (inspos 0).--> halt SCMPDS;
-  correctness;
-end;
-
-registration
-  cluster SCMPDS-Stop -> non empty initial programmed;
-  coherence
-  proof
-    thus SCMPDS-Stop is non empty;
-A1: dom SCMPDS-Stop = {inspos 0} by FUNCOP_1:19;
-    thus SCMPDS-Stop is initial
-    proof
-      let m,n such that
-A2:    n in dom SCMPDS-Stop and
-A3:   m < n;
-      inspos n = inspos 0 by A1,A2,TARSKI:def 1;
-      hence  m in dom SCMPDS-Stop by A3,NAT_1:2;
-    end;
-    thus dom SCMPDS-Stop c= NAT by A1,ZFMISC_1:37;
-  end;
-end;
-
-registration
-  cluster initial programmed non empty FinPartState of SCMPDS;
-  existence
-  proof
-    take SCMPDS-Stop;
-    thus thesis;
-  end;
 end;
 

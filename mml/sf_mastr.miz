@@ -9,19 +9,19 @@ environ
  vocabularies FUNCT_1, RELAT_1, FUNCT_4, BOOLE, FINSET_1, FINSUB_1, PROB_1,
       AMI_1, AMI_3, SCMFSA_2, FINSEQ_1, AMI_5, TARSKI, SCMFSA6A, RELOC, CAT_1,
       CARD_1, FUNCOP_1, SQUARE_1, AMI_2, ARYTM_1, NAT_1, ABSVALUE, FINSEQ_2,
-      SF_MASTR, CARD_3, FINSEQ_4, SETWISEO, ARYTM;
+      SF_MASTR, CARD_3, FINSEQ_4, SETWISEO, ARYTM, SCMNORM;
  notations TARSKI, XBOOLE_0, ENUMSET1, ZFMISC_1, SUBSET_1, CARD_1, NUMBERS,
       XCMPLX_0, FINSET_1, FINSUB_1, NAT_1, INT_1, STRUCT_0, SETWISEO, FUNCOP_1,
       SEQ_4, CARD_3, FINSEQ_1, FINSEQ_2, FINSEQ_4, RELAT_1, FUNCT_1, RELSET_1,
       PARTFUN1, FUNCT_2, FUNCT_4, FUNCT_7, AMI_1, SCMNORM, AMI_3, SCMFSA_2,
       SCMFSA_4, SCMFSA_5, SCMFSA6A, INT_2, XXREAL_0;
  constructors PARTFUN1, SETWISEO, XXREAL_0, NAT_1, INT_2, SEQ_4, FINSEQ_4,
-      AMI_5, SCMFSA_5, SCMFSA6A, SCMNORM;
+      AMI_5, SCMFSA_5, SCMFSA6A, SCMNORM, SCMFSA_4;
  registrations SETFAM_1, FUNCT_1, ORDINAL1, RELSET_1, FUNCT_2, FUNCOP_1,
       FINSET_1, FINSUB_1, FRAENKEL, NUMBERS, XREAL_0, INT_1, MEMBERED, CARD_3,
       STRUCT_0, AMI_1, AMI_3, AMI_5, SCMFSA_2, CARD_4, XBOOLE_0, SCMNORM;
  requirements NUMERALS, BOOLE, SUBSET, ARITHM;
- definitions XBOOLE_0, FUNCOP_1, AMI_1, AMI_3, SCMFSA_2;
+ definitions XBOOLE_0, FUNCOP_1, AMI_1, AMI_3, SCMFSA_2, SCMFSA6A, SCMNORM;
  theorems TARSKI, ENUMSET1, ZFMISC_1, FINSEQ_1, FINSUB_1, SETWISEO, NAT_1,
       RELAT_1, GRFUNC_1, FUNCT_1, FUNCT_2, FUNCT_4, FUNCT_7, FUNCOP_1, SEQ_4,
       CARD_3, AMI_1, SCMFSA_2, SCMFSA_4, SCMFSA_5, SCMFSA6A, XBOOLE_0,
@@ -446,7 +446,7 @@ A1: i = a :=len f or i = f :=<0,...,0>a;
 end;
 
 definition
-  let p be programmed FinPartState of SCM+FSA;
+  let p be Function;
   func UsedIntLoc p -> Subset of Int-Locations means
   :Def2:
   ex UIL being Function of the Instructions of SCM+FSA, Fin Int-Locations
@@ -469,15 +469,12 @@ consider UIL being Function of the Instructions of SCM+FSA, Fin Int-Locations
     such that
 A2: for i being Element of the Instructions of SCM+FSA holds P[i,UIL.i]
     from FUNCT_2:sch 3(A1);
-    set IT = Union (UIL * p);
-    reconsider dp = dom p as finite set;
-    rng p c= the Instructions of SCM+FSA by AMI_1:118;
-    then reconsider p' = p as Function of
-    dp, the Instructions of SCM+FSA by FUNCT_2:4;
-    reconsider Up = UIL * p' as Function of dp, Fin Int-Locations;
+    set IT = Union (UIL * p), dp = dom p, Up  =UIL * p;
+X:  rng Up c= rng UIL by RELAT_1:45;
 A3: IT = union rng Up by CARD_3:def 4;
     Fin Int-Locations c= bool Int-Locations by FINSUB_1:26;
-    then rng Up c= bool Int-Locations by XBOOLE_1:1;
+    then rng UIL c= bool Int-Locations by XBOOLE_1:1;
+    then rng Up c= bool Int-Locations by X,XBOOLE_1:1;
     then
 A4: union rng Up c= union bool Int-Locations by ZFMISC_1:95;
     take IT;
@@ -513,7 +510,7 @@ A6: (for i being Instruction of SCM+FSA holds UIL2.i = UsedIntLoc i) &
 end;
 
 registration
-  let p be programmed FinPartState of SCM+FSA;
+  let p be preProgram of SCM+FSA;
   cluster UsedIntLoc p -> finite;
   coherence
   proof
@@ -532,8 +529,8 @@ A1: (for i being Instruction of SCM+FSA holds UIL.i = UsedIntLoc i) &
   end;
 end;
 
-reserve p, r for programmed FinPartState of SCM+FSA,
-  I, J for Macro-Instruction,
+reserve p, r for preProgram of SCM+FSA,
+  I, J for Program of SCM+FSA,
   k, m, n for Element of NAT;
 
 theorem Th23:
@@ -844,12 +841,12 @@ A9: Ip.x = IncAddr(pi(p,m),k) by A4,A6,A7,A8,SCMFSA_4:def 6
 end;
 
 theorem Th29:
-  UsedIntLoc I = UsedIntLoc ProgramPart Relocated (I, k)
+  UsedIntLoc I = UsedIntLoc [ProgramPart Relocated (I, k)]
 proof
   UsedIntLoc ProgramPart Relocated (I, k)
-  = UsedIntLoc IncAddr(Shift(ProgramPart(I),k),k) by SCMFSA_5:2
-    .= UsedIntLoc Shift (ProgramPart I, k) by Th28
-    .= UsedIntLoc ProgramPart I by Th26;
+  = UsedIntLoc IncAddr([Shift(ProgramPart(I),k)],k) by SCMFSA_5:2
+    .= UsedIntLoc Shift ([ProgramPart I], k) by Th28
+    .= UsedIntLoc [ProgramPart I] by Th26;
   hence thesis by AMI_1:105;
 end;
 
@@ -873,36 +870,29 @@ A3: for c be Element of the Instructions of SCM+FSA holds UIL.c = UIL2.c
       .= UIL2.c by A2;
   end;
 A4: dom UIL = the Instructions of SCM+FSA by FUNCT_2:def 1;
-  dom id the Instructions of SCM+FSA = the Instructions of SCM+FSA
-  by RELAT_1:71;
-  then
-A5: (id the Instructions of SCM+FSA) +* (halt SCM+FSA .--> goto insloc card I)
-  = (id the Instructions of SCM+FSA)+*
-  (halt SCM+FSA, goto insloc card I) by FUNCT_7:def 3;
 A6: UIL.halt SCM+FSA = {} by A1,Th17;
 A7: UIL.goto insloc card I = UsedIntLoc goto insloc card I by A1
     .= {} by Th19;
-  UIL * Directed I = UIL * (((id the Instructions of SCM+FSA) +*
-  (halt SCM+FSA .--> goto insloc card I))*I) by SCMFSA6A:def 1
+  rng I c= the Instructions of SCM+FSA by AMI_1:118;
+  then UIL * Directed I = UIL * (((id the Instructions of SCM+FSA) +*
+  (halt SCM+FSA, goto insloc card I))*I) by FUNCT_7:118
     .= UIL * ((id the Instructions of SCM+FSA) +*
-  (halt SCM+FSA .--> goto insloc card I)) * I by RELAT_1:55
-    .= UIL * I by A4,A5,A6,A7,FUNCT_7:110;
+  (halt SCM+FSA, goto insloc card I)) * I by RELAT_1:55
+    .= UIL * I by A4,A6,A7,FUNCT_7:110;
   hence thesis by A1,A2,A3,FUNCT_2:113;
 end;
 
 theorem Th31:
   UsedIntLoc (I ';' J) = (UsedIntLoc I) \/ (UsedIntLoc J)
 proof
-  dom I = dom Directed I by SCMFSA6A:14;
+  dom I = dom Directed I by FUNCT_4:105;
   then
 A1: dom (Directed I) misses dom (ProgramPart Relocated(J, card I))
   by SCMFSA6A:16;
   thus UsedIntLoc (I ';' J)
-  = UsedIntLoc (Directed I +* ProgramPart Relocated(J, card I))
-  by SCMFSA6A:def 4
-    .= UsedIntLoc (Directed I) \/ UsedIntLoc ProgramPart Relocated(J, card I)
+    = UsedIntLoc (Directed I) \/ UsedIntLoc [ProgramPart Relocated(J, card I)]
   by A1,Th25
-    .= (UsedIntLoc I) \/ UsedIntLoc ProgramPart Relocated(J, card I) by Th30
+    .= (UsedIntLoc I) \/ UsedIntLoc [ProgramPart Relocated(J, card I)] by Th30
     .= (UsedIntLoc I) \/ (UsedIntLoc J) by Th29;
 end;
 
@@ -913,9 +903,7 @@ proof
   such that
 A1: (for i being Instruction of SCM+FSA holds UIL.i = UsedIntLoc i) &
   UsedIntLoc Macro i = Union (UIL * Macro i) by Def2;
-A2: rng (Macro i)
-  = rng ((insloc 0,insloc 1) --> (i,halt SCM+FSA)) by SCMFSA6A:def 2
-    .= {i, halt SCM+FSA} by FUNCT_4:67;
+A2: rng (Macro i) = {i, halt SCM+FSA} by FUNCT_4:67;
 A3: dom UIL = the Instructions of SCM+FSA by FUNCT_2:def 1; thus
   UsedIntLoc Macro i = union rng (UIL * Macro i) by A1,CARD_3:def 4
     .= union (UIL.:rng Macro i) by RELAT_1:160
@@ -929,16 +917,14 @@ end;
 theorem :: MiJ:
   UsedIntLoc (i ';' J) = (UsedIntLoc i) \/ UsedIntLoc J
 proof
-  thus UsedIntLoc (i ';' J) = UsedIntLoc (Macro i ';' J) by SCMFSA6A:def 5
-    .= (UsedIntLoc Macro i) \/ UsedIntLoc J by Th31
+  thus UsedIntLoc (i ';' J) = (UsedIntLoc Macro i) \/ UsedIntLoc J by Th31
     .= (UsedIntLoc i) \/ UsedIntLoc J by Th32;
 end;
 
 theorem :: MIj:
   UsedIntLoc (I ';' j) = (UsedIntLoc I) \/ UsedIntLoc j
 proof
-  thus UsedIntLoc (I ';' j) = UsedIntLoc (I ';' Macro j) by SCMFSA6A:def 6
-    .= (UsedIntLoc I) \/ UsedIntLoc Macro j by Th31
+  thus UsedIntLoc (I ';' j) = (UsedIntLoc I) \/ UsedIntLoc Macro j by Th31
     .= (UsedIntLoc I) \/ UsedIntLoc j by Th32;
 end;
 
@@ -946,8 +932,7 @@ theorem :: Mij:
   UsedIntLoc (i ';' j) = (UsedIntLoc i) \/ UsedIntLoc j
 proof
   thus UsedIntLoc (i ';' j)
-  = UsedIntLoc (Macro i ';' Macro j) by SCMFSA6A:def 7
-    .= (UsedIntLoc Macro i) \/ UsedIntLoc Macro j by Th31
+    = (UsedIntLoc Macro i) \/ UsedIntLoc Macro j by Th31
     .= (UsedIntLoc Macro i) \/ UsedIntLoc j by Th32
     .= (UsedIntLoc i) \/ UsedIntLoc j by Th32;
 end;
@@ -1073,7 +1058,7 @@ A1: i = a :=len f or i = f :=<0,...,0>a;
 end;
 
 definition
-  let p be programmed FinPartState of SCM+FSA;
+  let p be Function;
   func UsedInt*Loc p -> Subset of FinSeq-Locations means
   :Def4:
   ex UIL being Function of the Instructions of SCM+FSA, Fin FinSeq-Locations
@@ -1095,15 +1080,12 @@ A1: for e being Element of the Instructions of SCM+FSA
     Fin FinSeq-Locations such that
 A2: for i being Element of the Instructions of SCM+FSA holds P[i,UIL.i]
     from FUNCT_2:sch 3(A1);
-    set IT = Union (UIL * p);
-    reconsider dp = dom p as finite set;
-    rng p c= the Instructions of SCM+FSA by AMI_1:118;
-    then reconsider p' = p as Function of
-    dp, the Instructions of SCM+FSA by FUNCT_2:4;
-    reconsider Up = UIL * p' as Function of dp, Fin FinSeq-Locations;
+    set IT = Union (UIL * p), dp = dom p, Up = UIL * p;
+X:  rng Up c= rng UIL by RELAT_1:45;
 A3: IT = union rng Up by CARD_3:def 4;
     Fin FinSeq-Locations c= bool FinSeq-Locations by FINSUB_1:26;
-    then rng Up c= bool FinSeq-Locations by XBOOLE_1:1;
+    then rng UIL c= bool FinSeq-Locations by XBOOLE_1:1;
+    then rng Up c= bool FinSeq-Locations by XBOOLE_1:1,X;
     then
 A4: union rng Up c= union bool FinSeq-Locations by ZFMISC_1:95;
     take IT;
@@ -1141,7 +1123,7 @@ A6: (for i being Instruction of SCM+FSA holds UIL2.i = UsedInt*Loc i) &
 end;
 
 registration
-  let p be programmed FinPartState of SCM+FSA;
+  let p be preProgram of SCM+FSA;
   cluster UsedInt*Loc p -> finite;
   coherence
   proof
@@ -1464,9 +1446,9 @@ theorem Th45:
   UsedInt*Loc I = UsedInt*Loc ProgramPart Relocated (I, k)
 proof
   UsedInt*Loc ProgramPart Relocated (I, k)
-  = UsedInt*Loc IncAddr(Shift(ProgramPart(I),k),k) by SCMFSA_5:2
+  = UsedInt*Loc IncAddr([Shift(ProgramPart(I),k)],k) by SCMFSA_5:2
     .= UsedInt*Loc Shift (ProgramPart I, k) by Th44
-    .= UsedInt*Loc ProgramPart I by Th42;
+    .= UsedInt*Loc [ProgramPart I] by Th42;
   hence thesis by AMI_1:105;
 end;
 
@@ -1489,35 +1471,28 @@ A3: for c be Element of the Instructions of SCM+FSA holds UIL.c = UIL2.c
       .= UIL2.c by A2;
   end;
 A4: dom UIL = the Instructions of SCM+FSA by FUNCT_2:def 1;
-  dom id the Instructions of SCM+FSA = the Instructions of SCM+FSA
-  by RELAT_1:71;
-  then
-A5: (id the Instructions of SCM+FSA) +* (halt SCM+FSA .--> goto insloc card I)
-  = (id the Instructions of SCM+FSA)+*
-  (halt SCM+FSA, goto insloc card I) by FUNCT_7:def 3;
 A6: UIL.halt SCM+FSA = UsedInt*Loc halt SCM+FSA by A1
     .= {} by Th36;
 A7: UIL.goto insloc card I = UsedInt*Loc goto insloc card I by A1
     .= {} by Th36;
-  UIL * Directed I = UIL * (((id the Instructions of SCM+FSA) +*
-  (halt SCM+FSA .--> goto insloc card I))*I) by SCMFSA6A:def 1
+  rng I c= the Instructions of SCM+FSA by AMI_1:118;
+  then UIL * Directed I = UIL * (((id the Instructions of SCM+FSA) +*
+  (halt SCM+FSA, goto insloc card I))*I) by FUNCT_7:118
     .= UIL * ((id the Instructions of SCM+FSA) +*
-  (halt SCM+FSA .--> goto insloc card I)) * I by RELAT_1:55
-    .= UIL * I by A4,A5,A6,A7,FUNCT_7:110;
+  (halt SCM+FSA, goto insloc card I)) * I by RELAT_1:55
+    .= UIL * I by A4,A6,A7,FUNCT_7:110;
   hence thesis by A1,A2,A3,FUNCT_2:113;
 end;
 
 theorem Th47:
   UsedInt*Loc (I ';' J) = (UsedInt*Loc I) \/ (UsedInt*Loc J)
 proof
-  dom I = dom Directed I by SCMFSA6A:14;
+  dom I = dom Directed I by FUNCT_4:105;
   then
 A1: dom (Directed I) misses dom (ProgramPart Relocated(J, card I))
   by SCMFSA6A:16;
   thus UsedInt*Loc (I ';' J)
-  = UsedInt*Loc (Directed I +* ProgramPart Relocated(J, card I))
-  by SCMFSA6A:def 4
-    .= UsedInt*Loc (Directed I) \/ UsedInt*Loc ProgramPart Relocated(J, card I)
+  = UsedInt*Loc (Directed I) \/ UsedInt*Loc [ProgramPart Relocated(J, card I)]
   by A1,Th41
     .= (UsedInt*Loc I) \/ UsedInt*Loc ProgramPart Relocated(J, card I) by Th46
     .= (UsedInt*Loc I) \/ (UsedInt*Loc J) by Th45;
@@ -1530,9 +1505,7 @@ proof
   Fin FinSeq-Locations such that
 A1: (for i being Instruction of SCM+FSA holds UIL.i = UsedInt*Loc i) &
   UsedInt*Loc Macro i = Union (UIL * Macro i) by Def4;
-A2: rng (Macro i)
-  = rng ((insloc 0,insloc 1) --> (i,halt SCM+FSA)) by SCMFSA6A:def 2
-    .= {i, halt SCM+FSA} by FUNCT_4:67;
+A2: rng (Macro i) = {i, halt SCM+FSA} by FUNCT_4:67;
 A3: dom UIL = the Instructions of SCM+FSA by FUNCT_2:def 1; thus
   UsedInt*Loc Macro i = union rng (UIL * Macro i) by A1,CARD_3:def 4
     .= union (UIL.:rng Macro i) by RELAT_1:160
@@ -1547,16 +1520,16 @@ end;
 theorem :: FMiJ:
   UsedInt*Loc (i ';' J) = (UsedInt*Loc i) \/ UsedInt*Loc J
 proof
-  thus UsedInt*Loc (i ';' J) = UsedInt*Loc (Macro i ';' J) by SCMFSA6A:def 5
-    .= (UsedInt*Loc Macro i) \/ UsedInt*Loc J by Th47
+  thus UsedInt*Loc (i ';' J)
+    = (UsedInt*Loc Macro i) \/ UsedInt*Loc J by Th47
     .= (UsedInt*Loc i) \/ UsedInt*Loc J by Th48;
 end;
 
 theorem :: FMIj:
   UsedInt*Loc (I ';' j) = (UsedInt*Loc I) \/ UsedInt*Loc j
 proof
-  thus UsedInt*Loc (I ';' j) = UsedInt*Loc (I ';' Macro j) by SCMFSA6A:def 6
-    .= (UsedInt*Loc I) \/ UsedInt*Loc Macro j by Th47
+  thus UsedInt*Loc (I ';' j)
+    = (UsedInt*Loc I) \/ UsedInt*Loc Macro j by Th47
     .= (UsedInt*Loc I) \/ UsedInt*Loc j by Th48;
 end;
 
@@ -1564,8 +1537,7 @@ theorem :: FMij:
   UsedInt*Loc (i ';' j) = (UsedInt*Loc i) \/ UsedInt*Loc j
 proof
   thus UsedInt*Loc (i ';' j)
-  = UsedInt*Loc (Macro i ';' Macro j) by SCMFSA6A:def 7
-    .= (UsedInt*Loc Macro i) \/ UsedInt*Loc Macro j by Th47
+    = (UsedInt*Loc Macro i) \/ UsedInt*Loc Macro j by Th47
     .= (UsedInt*Loc Macro i) \/ UsedInt*Loc j by Th48
     .= (UsedInt*Loc i) \/ UsedInt*Loc j by Th48;
 end;
@@ -1653,7 +1625,7 @@ A4: m = min sn by A1,A2,AMI_3:52;
 end;
 
 definition
-  let p be programmed FinPartState of SCM+FSA;
+  let p be preProgram of SCM+FSA;
   func FirstNotUsed p -> Int-Location means
   :Def7:
   ex sil being finite Subset of Int-Locations st
@@ -1671,7 +1643,7 @@ definition
 end;
 
 registration
-  let p be programmed FinPartState of SCM+FSA;
+  let p be preProgram of SCM+FSA;
   cluster FirstNotUsed p -> read-write;
   coherence
   proof
@@ -1802,7 +1774,7 @@ A3: sn = {k where k is Element of NAT : not fsloc k in L} by Def8;
 end;
 
 definition
-  let p be programmed FinPartState of SCM+FSA;
+  let p be preProgram of SCM+FSA;
   func First*NotUsed p -> FinSeq-Location means
   :Def9:
   ex sil being finite Subset of FinSeq-Locations st sil = UsedInt*Loc p &
@@ -2491,8 +2463,6 @@ A9: f in UsedInt*Loc I;
       .= t.f by A2,A9,FUNCT_1:72
       .=  Computation(t,0).f by AMI_1:13;
   end;
-:::  set Cs = Computation s;
-:::  set Ct = Computation t;
 A10: now
     let m;
     assume

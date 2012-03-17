@@ -37,7 +37,7 @@
 <ArticleID name="MONOID_0"/>
 <ArticleID name="MONOID_1"/>
 </Signature>
-<FCluster>
+<FCluster aid="MONOID_1" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="7">
 <Cluster>
@@ -56,7 +56,7 @@
 <Adjective nr="23" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="MONOID_1" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="7">
 <Cluster>
@@ -75,7 +75,7 @@
 <Adjective nr="104"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="MONOID_1" nr="3">
 <ArgTypes>
 <Typ kind="G" nr="7">
 <Cluster>
@@ -104,7 +104,7 @@
 <Adjective nr="7" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="MONOID_1" nr="4">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -125,7 +125,7 @@
 <Adjective nr="32"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="MONOID_1" nr="5">
 <ArgTypes>
 <Typ kind="G" nr="7">
 <Cluster>

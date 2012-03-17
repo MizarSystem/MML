@@ -13,15 +13,15 @@
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XREAL_0"/>
 <ArticleID name="RELSET_1"/>
-<ArticleID name="FINSET_1"/>
 <ArticleID name="FUNCT_2"/>
+<ArticleID name="FINSET_1"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="BINOP_1"/>
 <ArticleID name="FUNCT_5"/>
 <ArticleID name="METRIC_1"/>
 <ArticleID name="TBSP_1"/>
 </Signature>
-<RCluster>
+<RCluster aid="TBSP_1" nr="1">
 <ArgTypes/>
 <Typ kind="G" nr="5">
 <Cluster/>
@@ -35,7 +35,7 @@
 <Adjective nr="46"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="TBSP_1" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
@@ -57,7 +57,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="TBSP_1" nr="3">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
@@ -78,10 +78,10 @@
 </Typ>
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="16"/>
+<Adjective nr="19"/>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="TBSP_1" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -97,7 +97,7 @@
 <Adjective nr="46"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="TBSP_1" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
@@ -114,7 +114,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="TBSP_1" nr="3">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
@@ -132,7 +132,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<CCluster>
+<CCluster aid="TBSP_1" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
@@ -144,7 +144,7 @@
 </ArgTypes>
 <Cluster>
 <Adjective nr="5"/>
-<Adjective nr="18">
+<Adjective nr="16">
 <Func kind="K" nr="66"/>
 <Func kind="U" nr="1">
 <LocusVar nr="1"/>
@@ -163,7 +163,7 @@
 </Typ>
 <Cluster>
 <Adjective nr="5"/>
-<Adjective nr="18">
+<Adjective nr="16">
 <Func kind="K" nr="66"/>
 <Func kind="U" nr="1">
 <LocusVar nr="1"/>
@@ -174,7 +174,7 @@
 </Adjective>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="TBSP_1" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
@@ -186,7 +186,7 @@
 </Typ>
 </ArgTypes>
 <Cluster>
-<Adjective nr="16"/>
+<Adjective nr="19"/>
 </Cluster>
 <Typ kind="M" nr="2">
 <Cluster/>

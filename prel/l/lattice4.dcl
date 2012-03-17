@@ -16,7 +16,7 @@
 <ArticleID name="LATTICES"/>
 <ArticleID name="LATTICE4"/>
 </Signature>
-<RCluster>
+<RCluster aid="LATTICE4" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="7">
 <Cluster>
@@ -33,7 +33,7 @@
 <Adjective nr="7" value="false"/>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="LATTICE4" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="7">
 <Cluster>

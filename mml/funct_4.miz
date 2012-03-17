@@ -171,43 +171,37 @@ A2: X --> a c= Y --> b;
 end;
 
 theorem
-  x in dom f implies {x} --> f.x c= f
+  x in dom f implies x .--> f.x c= f
 proof
   assume
 A1: x in dom f;
-A3: dom ({x} --> f.x) c= dom f
+A3: dom (x .--> f.x) c= dom f
   proof
     let y;
-    assume y in dom ({x} --> f.x);
-    hence thesis by A1,TARSKI:def 1;
+    thus thesis by A1,FUNCOP_1:90;
   end;
   now
     let y;
-    assume y in dom ({x} --> f.x);
-    then ({x} --> f.x).y = f.x & y = x by FUNCOP_1:13,TARSKI:def 1;
-    hence ({x} --> f.x).y = f.y;
+    assume y in dom (x .--> f.x);
+     then x = y by FUNCOP_1:90;
+    hence (x .--> f.x).y = f.y by FUNCOP_1:87;
   end;
   hence thesis by A3,GRFUNC_1:8;
 end;
 
 :: Natural order on functions
 
-notation
-  let f,g;
-  synonym f <= g for f c= g;
-end;
-
 theorem
-  Y|f|X <= f
-proof Y|f|X <= Y|f & Y|f <= f by RELAT_1:88,117;
+  Y|f|X c= f
+proof Y|f|X c= Y|f & Y|f c= f by RELAT_1:88,117;
   hence thesis by XBOOLE_1:1;
 end;
 
 theorem
-  f <= g implies Y|f|X <= Y|g|X
+  f c= g implies Y|f|X c= Y|g|X
 proof
-  assume f <= g;
-  then Y|f <= Y|g by RELAT_1:132;
+  assume f c= g;
+  then Y|f c= Y|g by RELAT_1:132;
   hence thesis by RELAT_1:105;
 end;
 
@@ -249,7 +243,7 @@ A4: for x st x in dom f \/ dom g holds
   idempotence;
 end;
 
-theorem
+theorem Th11:
   dom f c= dom(f+*g) & dom g c= dom(f+*g)
 proof dom(f+*g) = dom f \/ dom g by Def1;
   hence thesis by XBOOLE_1:7;
@@ -567,7 +561,7 @@ proof
   hence thesis by Th31;
 end;
 
-theorem
+theorem Th33:
   dom f misses dom g implies f c= f +* g
 proof
   assume dom f misses dom g;
@@ -1210,7 +1204,7 @@ definition
   let x,y,a,b be set;
   func (x,y) --> (a,b) -> set equals
 
-  ({x} --> a) +* ({y} --> b);
+  (x .--> a) +* (y .--> b);
   correctness;
 end;
 
@@ -1600,7 +1594,7 @@ theorem
 
 :: from AMI_1, 2006.03.14, A.T.
 
-theorem Th86:
+theorem
   for a,b,c being set holds (a,a) --> (b,c) = a .--> c
 proof
   let a,b,c be set;
@@ -1670,7 +1664,6 @@ A2: a <> c;
     hence (a,c) --> (b,d) c= f by A2,Th71;
   end;
   suppose a = c;
-    then (a,c) --> (b,d) = c .--> d by Th86;
     hence (a,c) --> (b,d) c= f by A1,Th90;
   end;
 end;
@@ -1832,3 +1825,296 @@ A11: not x1 in dom g & not x2 in dom g;
   end;
 end;
 
+:: from SCMFSA_9, 2008.03.04, A.T.
+
+theorem
+  for f,g being Function holds f +* g +* g = f +* g
+proof
+  let f,g be Function;
+  thus f +* g +* g = f +*( g +* g ) by Th15
+    .= f +* g;
+end;
+
+theorem
+  for f,g,h being Function, D being set holds
+  (f +* g)|D =h | D implies (h +* g) | D = (f +* g) | D
+proof
+  let f,g,h be Function, D be set;
+  assume
+A1: (f +* g)|D =h | D;
+A2: dom ((f +* g) | D) = dom (f +* g) /\ D by RELAT_1:90
+    .= (dom f \/ dom g) /\ D by Def1;
+A3: dom ((h +* g) | D) = dom (h +* g) /\ D by RELAT_1:90
+    .= (dom h \/ dom g) /\ D by Def1;
+  then
+A4: dom ((h +* g) | D) = (dom h /\ D) \/ (dom g /\ D) by XBOOLE_1:23
+    .= ((dom f \/ dom g) /\ D) \/ (dom g /\ D) by A1,A2,RELAT_1:90
+    .= ((dom f \/ dom g) \/ dom g) /\ D by XBOOLE_1:23
+    .= (dom f \/ (dom g \/ dom g)) /\ D by XBOOLE_1:4
+    .= (dom f \/ dom g ) /\ D;
+  now
+    let x be set;
+    assume
+A5: x in dom ((f +* g) | D);
+    then
+A6: x in dom f \/ dom g & x in D by A2,XBOOLE_0:def 3;
+A7: x in dom h \/ dom g by A2,A3,A4,A5,XBOOLE_0:def 3;
+A8: ((h +* g) | D).x = (h +* g).x by A2,A4,A5,FUNCT_1:70;
+    per cases;
+    suppose
+A9:   x in dom g;
+      ((f +* g) | D).x = (f +* g).x by A5,FUNCT_1:70
+        .=g.x by A6,A9,Def1;
+      hence ((h +* g) | D).x =((f +* g) | D).x by A7,A8,A9,Def1;
+    end;
+    suppose not x in dom g;
+      hence ((h +* g) | D).x = h.x by A7,A8,Def1
+        .=((f +* g) | D).x by A1,A6,FUNCT_1:72;
+    end;
+  end;
+  hence thesis by A2,A4,FUNCT_1:9;
+end;
+
+theorem
+  for f,g,h being Function, D being set holds
+  f | D =h | D implies (h +* g) | D = (f +* g) | D
+proof
+  let f,g,h be Function, D be set;
+  assume
+A1: f |D =h | D;
+A2: dom ((f +* g) | D) = dom (f +* g) /\ D by RELAT_1:90
+    .= (dom f \/ dom g) /\ D by Def1;
+A3: dom ((h +* g) | D) = dom (h +* g) /\ D by RELAT_1:90
+    .= (dom h \/ dom g) /\ D by Def1;
+  then
+A4: dom ((h +* g) | D) = (dom h /\ D) \/ (dom g /\ D) by XBOOLE_1:23
+    .= dom (f| D) \/ (dom g /\ D) by A1,RELAT_1:90
+    .= (dom f /\ D) \/ (dom g /\ D) by RELAT_1:90
+    .= (dom f \/ dom g ) /\ D by XBOOLE_1:23;
+  now
+    let x be set;
+    assume
+A5: x in dom ((f +* g) | D);
+    then
+A6: x in dom f \/ dom g & x in D by A2,XBOOLE_0:def 3;
+A7: x in dom h \/ dom g by A2,A3,A4,A5,XBOOLE_0:def 3;
+A8: ((h +* g) | D).x = (h +* g).x by A2,A4,A5,FUNCT_1:70;
+    per cases;
+    suppose
+A9:   x in dom g;
+      ((f +* g) | D).x = (f +* g).x by A5,FUNCT_1:70
+        .=g.x by A6,A9,Def1;
+      hence ((h +* g) | D).x =((f +* g) | D).x by A7,A8,A9,Def1;
+    end;
+    suppose
+A10:  not x in dom g;
+      then
+A11:  ((h +* g) | D).x = h.x by A7,A8,Def1
+        .=(h | D ).x by A6,FUNCT_1:72;
+      thus ((f +* g) | D).x = (f +* g).x by A5,FUNCT_1:70
+        .=f.x by A6,A10,Def1
+        .=((h +* g) | D).x by A1,A6,A11,FUNCT_1:72;
+    end;
+  end;
+  hence thesis by A2,A4,FUNCT_1:9;
+end;
+
+:: missing, 2008.03.20, A.T.
+
+theorem Th102:
+ x .--> x = id{x}
+proof
+  for y,z holds [y,z] in x .--> x iff y in {x} & y = z
+   proof let y,z;
+J:   x .--> x = {[x,x]} by ZFMISC_1:35;
+    thus [y,z] in x .--> x implies y in {x} & y = z
+     proof assume [y,z] in x .--> x;
+       then [y,z] = [x,x] by J,TARSKI:def 1;
+       then y = x & z = x by ZFMISC_1:33;
+      hence y in {x} & y = z by TARSKI:def 1;
+     end;
+    assume y in {x};
+     then y = x by TARSKI:def 1;
+    hence thesis by J,TARSKI:def 1;
+   end;
+ hence x .--> x = id{x} by RELAT_1:def 10;
+end;
+
+theorem
+ f c= g implies f+*g = g
+proof
+ assume
+Z:  f c= g;
+  then f tolerates g by PARTFUN1:135;
+ hence f+*g = f\/ g by Th31
+      .= g by Z,XBOOLE_1:12;
+end;
+
+theorem Th104:
+ f c= g implies g+*f = g
+proof
+ assume
+Z:  f c= g;
+  then f tolerates g by PARTFUN1:135;
+ hence g+*f = f\/ g by Th31
+      .= g by Z,XBOOLE_1:12;
+end;
+
+begin :: Changing a value in the range, 2008.03.20, A.T.
+
+definition let f,x,y;
+ func f+~(x,y) equals
+  f+*((x .--> y)*f);
+ coherence;
+end;
+
+registration let f,x,y;
+ cluster f+~(x,y) -> Relation-like Function-like;
+ coherence;
+end;
+
+theorem Tw1:
+ dom(f+~(x,y)) = dom f
+ proof
+  thus dom(f+~(x,y)) = dom f \/ dom((x .--> y)*f) by Def1
+       .= dom f by RELAT_1:44,XBOOLE_1:12;
+ end;
+
+theorem Tw2:
+ x <> y implies not x in rng(f+~(x,y))
+proof assume
+Z1: x <> y;
+ assume x in rng(f+~(x,y));
+  then consider z such that
+W1: z in dom(f+~(x,y)) and
+W2: (f+~(x,y)).z = x by FUNCT_1:def 5;
+A: z in dom f by W1,Tw1;
+D: now
+   assume
+Z: not z in dom((x .--> y)*f);
+   then f.z = x by W2,Th12;
+   then f.z in dom(x .--> y) by FUNCOP_1:89;
+   hence contradiction by Z,A,FUNCT_1:21;
+  end;
+   (x .--> y).(f.z) = ((x .--> y)*f).z by A,FUNCT_1:23
+              .= x by W2,Th14,D;
+  then f.z <> x by Z1,FUNCOP_1:87;
+  then not f.z in dom(x .--> y) by FUNCOP_1:90;
+ hence thesis by D,FUNCT_1:21;
+end;
+
+theorem
+ x in rng f implies y in rng(f+~(x,y))
+proof assume x in rng f;
+  then consider z such that
+W1: z in dom f and
+W2: f.z = x by FUNCT_1:def 5;
+  x in dom(x.-->y) by FUNCOP_1:89;
+  then
+A:   z in dom((x .--> y)*f) by W1,W2,FUNCT_1:21;
+B: dom((x .--> y)*f) c= dom(f+~(x,y)) by Th11;
+  (f+~(x,y)).z = ((x .--> y)*f).z by Th14,A
+         .= (x .--> y).(f.z) by W1,FUNCT_1:23
+         .= y by W2,FUNCOP_1:87;
+ hence y in rng(f+~(x,y)) by FUNCT_1:12,A,B;
+end;
+
+theorem TH1:
+ f+~(x,x) = f
+proof
+A: (id{x})*f c= f by RELAT_1:76;
+ thus f+~(x,x) = f+*((id{x})*f) by Th102
+     .= f by A,Th104;
+end;
+
+theorem TH2:
+ not x in rng f implies f+~(x,y) = f
+proof assume
+Z: not x in rng f;
+  dom (x .--> y) = {x} by FUNCOP_1:19;
+  then dom (x .--> y) misses rng f by Z,ZFMISC_1:56;
+  then (x .--> y)*f = {} by RELAT_1:67;
+ hence f+~(x,y) = f by Th22;
+end;
+
+theorem
+ rng(f+~(x,y)) c= rng f \ {x} \/ {y}
+proof
+ per cases;
+ suppose
+S:  not x in rng f;
+  then f+~(x,y) = f by TH2;
+  then rng(f+~(x,y)) = rng f \ {x} by S,ZFMISC_1:65;
+ hence thesis by XBOOLE_1:7;
+ end;
+ suppose that
+ S1: x in rng f and
+ S2: x = y;
+   f+~(x,y) = f by TH1,S2;
+ hence thesis by S1,S2,ZFMISC_1:140;
+ end;
+ suppose that
+S1:  x <> y;
+F: rng(f+~(x,y)) c= rng f \/ rng((x .--> y)*f) by Th18;
+  rng(x .--> y) = {y} by FUNCOP_1:14;
+  then rng f \/ rng((x .--> y)*f) c= rng f \/ {y} by XBOOLE_1:9,RELAT_1:45;
+  then
+G: rng(f+~(x,y)) c= rng f \/ {y} by F,XBOOLE_1:1;
+   not x in rng(f+~(x,y)) by S1,Tw2;
+   then rng(f+~(x,y)) \ {x} = rng(f+~(x,y)) by ZFMISC_1:65;
+   then rng(f+~(x,y)) c= rng f \/ {y} \ {x} by G,XBOOLE_1:33;
+  hence thesis by S1,ZFMISC_1:147;
+ end;
+end;
+
+theorem
+ f.z <> x implies (f+~(x,y)).z = f.z
+ proof assume f.z <> x;
+   then not f.z in dom(x.-->y) by FUNCOP_1:90;
+   then not z in dom((x.-->y)*f) by FUNCT_1:21;
+  hence (f+~(x,y)).z = f.z by Th12;
+ end;
+
+theorem
+ z in dom f & f.z = x implies (f+~(x,y)).z = y
+ proof assume that
+Z1: z in dom f and
+Z2:  f.z = x;
+   f.z in dom(x.-->y) by Z2,FUNCOP_1:89;
+   then
+A: z in dom((x.-->y)*f) by Z1,FUNCT_1:21;
+  hence (f+~(x,y)).z = ((x.-->y)*f).z by Th14
+      .= (x.-->y).x by A,Z2,FUNCT_1:22
+      .= y by FUNCOP_1:87;
+ end;
+
+canceled 2;
+
+:: missing, 2008.04.06, A.T.
+
+theorem
+ not x in dom f implies f c= f +*(x .--> y)
+proof assume not x in dom f;
+  then dom f misses {x} by ZFMISC_1:56;
+  then dom f misses dom(x .--> y) by FUNCOP_1:19;
+ hence f c= f +*(x .--> y) by Th33;
+end;
+
+theorem
+ for f being PartFunc of X,Y, x,y st x in X & y in Y
+  holds f+*(x .--> y) is PartFunc of X,Y
+proof let f be PartFunc of X,Y, x,y;
+ assume that
+Z1: x in X and
+Z2: y in Y;
+C: dom(f+*(x .--> y)) = dom f \/ dom(x .--> y) by Def1
+       .= dom f \/ {x} by FUNCOP_1:19;
+B: {x} c= X by Z1,ZFMISC_1:37;
+   {y} c= Y by Z2,ZFMISC_1:37;
+   then
+E: rng(x .--> y) c= Y by FUNCOP_1:14;
+D: rng(f+*(x .--> y)) c= rng f \/ rng(x .--> y) by Th18;
+  rng f \/ rng(x .--> y) c= Y by E,XBOOLE_1:8;
+  then rng(f+*(x .--> y)) c= Y by D,XBOOLE_1:1;
+ hence f+*(x .--> y) is PartFunc of X,Y by B,C,XBOOLE_1:8,RELSET_1:11;
+end;

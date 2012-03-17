@@ -43,7 +43,7 @@
 <ArticleID name="FACIRC_1"/>
 <ArticleID name="GFACIRC2"/>
 </Signature>
-<FCluster>
+<FCluster aid="GFACIRC2" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -65,7 +65,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="396">
+<Func kind="K" nr="398">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
@@ -74,7 +74,7 @@
 <Adjective nr="90"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="GFACIRC2" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -96,7 +96,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="400">
+<Func kind="K" nr="402">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>

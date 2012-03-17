@@ -1,0 +1,4150 @@
+:: Invertibility of Matrices of Field Elements
+::  by Yatsuka Nakamura , Kunio Oniumi and Wenpai Chang
+:: 
+:: Received April 2, 2008
+:: Copyright (c) 2008 Association of Mizar Users
+
+environ
+
+ vocabularies VECTSP_1, RLVECT_1, MATRIX_1, ARYTM_1, FINSEQ_1, TREES_1,
+      RELAT_1, GROUP_1, QC_LANG1, MATRIX_6, CAT_1, MATRIX14, MATRIXR2, FUNCT_1,
+      ARYTM, MATRIX_3, BOOLE, FINSEQ_7, FINSEQ_2, FINSOP_1, PRALG_1, INCSP_1,
+      CAT_3, RVSUM_1, EUCLID, EUCLID_2, FINSEQ_4, CQC_LANG, PARTFUN1, ALGSTR_0,
+      RFINSEQ;
+ notations TARSKI, XBOOLE_0, SUBSET_1, XXREAL_0, RELAT_1, FUNCT_1, BINOP_1,
+      ALGSTR_0, ZFMISC_1, MATRIX_1, FVSUM_1, PARTFUN1, FUNCT_3, RLVECT_1,
+      NUMBERS, FINSEQ_7, FUNCT_2, FUNCOP_1, FINSEQ_1, STRUCT_0, GROUP_1,
+      MATRIX_3, MATRIX_6, BINARITH, XCMPLX_0, NAT_1, VECTSP_1, FINSEQ_2,
+      FINSOP_1, RFINSEQ;
+ constructors DOMAIN_1, RELAT_1, XXREAL_0, FUNCT_3, FVSUM_1, ALGSTR_0,
+      SETWOP_2, NUMBERS, ORDINAL1, BINOP_2, VECTSP_2, MATRIX_1, FINSEQ_7,
+      SETWISEO, FINSOP_1, VECTSP_1, MATRIX_4, MATRIX_2, MATRIX_3, BINOP_1,
+      JORDAN3, BINARITH, RFINSEQ, FINSEQ_4, MATRIX_7, INTEGRA2, MATRIXR1,
+      MATRIX_5, XCMPLX_0, FINSEQ_2, FINSEQOP, SEQ_1, GROUP_1, FINSEQ_1,
+      XREAL_0, MATRIX_6, PARTFUN1, REAL_1, NAT_1, POLYNOM1;
+ registrations FINSEQ_2, XREAL_0, NAT_1, FUNCOP_1, STRUCT_0, XBOOLE_0,
+      VECTSP_1, ORDINAL1, XXREAL_0, RELAT_1, MATRIX_1;
+ requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
+ definitions TARSKI, XBOOLE_0, MATRIX_1, STRUCT_0, BINOP_1, RLVECT_1, VECTSP_1,
+      ALGSTR_0;
+ theorems MATRIX_3, VECTSP_1, MATRIX_1, MATRIX_4, GROUP_1, FUNCT_1, FINSEQ_1,
+      NAT_1, FINSEQ_7, FINSEQ_2, TARSKI, FINSOP_1, FVSUM_1, FUNCT_2, XBOOLE_0,
+      ZFMISC_1, MATRIX_7, MATRIXR1, FINSEQ_3, XXREAL_0, ORDINAL1, FINSEQ_4,
+      MATRIXR2, XREAL_1, REAL_1, FUNCOP_1, BINARITH, RLVECT_1, MATRIX_6,
+      MATRIX12, POLYNOM1, PARTFUN1, CARD_2;
+ schemes NAT_1, MATRIX_1;
+
+begin :: Preparation
+
+reserve x,y,y1,y2 for set,
+        D for non empty set,
+        k,n,m,i,j,l for Element of NAT,
+        K for Field;
+
+definition let K be non empty ZeroStr, n;
+  func 0*(K,n) -> FinSequence of K equals
+    n |-> (0.K);
+  coherence;
+end;
+
+definition let K be non empty ZeroStr;let n;
+  redefine func 0*(K,n) -> Element of n-tuples_on (the carrier of K);
+  coherence
+  proof
+   A2: len (0*(K,n))=n by FINSEQ_2:69;
+   (0*(K,n)) in (the carrier of K)* by FINSEQ_1:def 11;then
+   0*(K,n) in { s where s is Element of (the carrier of K)*:len s = n } by A2;
+   hence thesis by FINSEQ_2:def 4;
+  end;
+end;
+
+reserve L for non empty addLoopStr;
+
+theorem BB100:
+ for x being FinSequence of L holds
+  x is Element of (len x)-tuples_on the carrier of L
+proof let x be FinSequence of L;
+  x is Element of (the carrier of L)* by FINSEQ_1:def 11;then
+ A1: x in { s where s is Element of (the carrier of L)*: len s = len x };
+ thus thesis by A1,FINSEQ_2:def 4;
+end;
+
+theorem Th6:
+ for x1,x2 being FinSequence of L st
+ len x1=len x2 holds
+  len (x1+x2)=len x1
+proof let x1,x2 be FinSequence of L;
+  assume A1: len x1=len x2;
+  set n=len x1;
+  reconsider z1=x1 as Element of (len x1)-tuples_on (the carrier of L)
+                                   by FINSEQ_2:110;
+  reconsider z2=x2 as Element of n-tuples_on (the carrier of L)
+                             by A1,FINSEQ_2:110;
+  dom (z1+z2)=Seg n by FINSEQ_2:144;
+  hence thesis by FINSEQ_1:def 3;
+end;
+
+theorem Th7:
+ for x1,x2 being FinSequence of L st
+ len x1=len x2 holds
+  len (x1-x2)=len x1
+proof let x1,x2 be FinSequence of L;
+  assume A1: len x1=len x2;
+  set n=len x1;
+  reconsider z1=x1 as Element of (len x1)-tuples_on (the carrier of L)
+                               by FINSEQ_2:110;
+  reconsider z2=x2 as Element of n-tuples_on (the carrier of L)
+                          by A1,FINSEQ_2:110;
+  dom (z1-z2)=Seg n by FINSEQ_2:144;
+  hence thesis by FINSEQ_1:def 3;
+end;
+
+reserve G for non empty multLoopStr;
+
+theorem FV73:
+ for x1,x2 being FinSequence of G,i st i in dom mlt(x1,x2) holds
+   mlt(x1,x2).i = (x1/.i)*(x2/.i) & (mlt(x1,x2))/.i=(x1/.i)*(x2/.i)
+proof let x1,x2 be FinSequence of G,i;
+ assume A1: i in dom mlt(x1,x2);
+   A4: dom (the multF of G)=[:the carrier of G,the carrier of G:]
+                   by FUNCT_2:def 1;
+   A5: rng x1 c= the carrier of G by FINSEQ_1:def 4;
+   rng x2 c= the carrier of G by FINSEQ_1:def 4;then
+   A8: [:rng x1, rng x2:] c= dom the multF of G by ZFMISC_1:119,A5,A4;
+   mlt(x1,x2)=(the multF of G).:(x1,x2) by FVSUM_1:def 7;then
+   dom mlt(x1,x2) = dom x1 /\ dom x2 by A8,FUNCOP_1:84;then
+   A6: i in dom x1 & i in dom x2 by A1,XBOOLE_0:def 3;then
+   A2: x1/.i=x1.i by PARTFUN1:def 8;
+   A3: x2/.i=x2.i by A6,PARTFUN1:def 8;
+  thus mlt(x1,x2).i = (x1/.i)*(x2/.i) by A1,A2,A3,FVSUM_1:73;
+  hence (mlt(x1,x2))/.i=(x1/.i)*(x2/.i) by A1,PARTFUN1:def 8;
+end;
+
+theorem BB120:
+ for x1,x2 being FinSequence of L,i being Nat st
+ len x1=len x2 & 1<=i & i<=len x1 holds
+  (x1+x2).i=x1/.i + x2/.i & (x1-x2).i=x1/.i - x2/.i
+proof let x1,x2 be FinSequence of L,i be Nat;
+  assume A1: len x1=len x2 & 1<=i & i<=len x1;then
+  reconsider x10=x1,x20=x2 as Element of (len x1)-tuples_on the carrier of L
+    by BB100;
+  i in Seg len x1 by A1,FINSEQ_1:3;then
+  A3: i in Seg len (x1+x2) by A1,Th6;
+  A4: x10/.i=x10.i by A1,FINSEQ_4:24;
+  A5: x20/.i=x20.i by A1,FINSEQ_4:24;
+  i in dom (x1+x2) by FINSEQ_1:def 3,A3;
+  hence (x1+x2).i=x1/.i + x2/.i by FVSUM_1:21,A4,A5;
+ i in Seg len x1 by A1,FINSEQ_1:3;then
+ i in Seg len (x1-x2) by A1,Th7;then
+  i in dom (x1-x2) by FINSEQ_1:def 3;
+ hence thesis by FVSUM_1:42,A4,A5;
+end;
+
+theorem BB200:
+ for a being Element of K, x being FinSequence of K holds
+  -a*x = (-a)*x & -a*x = a*(-x)
+proof let a be Element of K, x be FinSequence of K;
+  set n=len x;
+  reconsider x0=x as Element of n-tuples_on (the carrier of K) by BB100;
+  reconsider x1=x as Element of (n-tuples_on (the carrier of K)) by BB100;
+  reconsider y=a*x0 as Element of (n-tuples_on (the carrier of K));
+  thus -a*x=(-1_K)*y by FVSUM_1:72
+          .=((-1_K)*a)*x0 by FVSUM_1:67
+          .=(- 1_K *a)*x0 by VECTSP_1:40
+          .=(- a)*x by VECTSP_1:def 19;
+  thus -a*x= (-1_K)*y by FVSUM_1:72
+      .=((-1_K)*a)*x0 by FVSUM_1:67
+      .=a*((-1_K)*x0) by FVSUM_1:67
+      .=a*(-x) by FVSUM_1:72;
+end;
+
+theorem BB240:
+ for x1,x2,y1,y2 being FinSequence of G st
+ len x1=len x2 & len y1=len y2 holds
+  mlt(x1^y1,x2^y2)=(mlt(x1,x2))^(mlt(y1,y2))
+proof let x1,x2,y1,y2 be FinSequence of G;
+ assume A1: len x1=len x2 & len y1=len y2;
+   A3: (the multF of G).:(x1^y1,x2^y2)=(the multF of G) *
+               (<: x1^y1,x2^y2 :>) by FUNCOP_1:def 3;
+   A4: dom (the multF of G)=[:the carrier of G,the carrier of G:]
+                   by FUNCT_2:def 1;
+   A5: rng (x1^y1) c= the carrier of G by FINSEQ_1:def 4;
+   B4c: rng (x2^y2) c= the carrier of G by FINSEQ_1:def 4;
+   B4b: [:rng (x1^y1), rng (x2^y2):] c= dom (the multF of G)
+                        by ZFMISC_1:119,A5,A4,B4c;
+  B4a: dom ((the multF of G) *
+      (<: x1^y1,x2^y2 :>)) =dom (x1^y1) /\ dom (x2^y2)
+                                  by FUNCOP_1:84,A3,B4b;
+  B5: len (x1^y1)=len x1+len y1 by FINSEQ_1:35;
+  B6: len (x2^y2)=len x2+len y2 by FINSEQ_1:35;
+  B7: dom (x1^y1)=Seg len (x1^y1) by FINSEQ_1:def 3;
+  D1: dom (x2^y2)=Seg len (x2^y2) by FINSEQ_1:def 3;
+  D2: dom (x1^y1)=dom (x2^y2) by A1,FINSEQ_1:35,B6,B7,D1;
+  B10: dom (mlt(x1^y1,x2^y2))= dom (x1^y1) by FVSUM_1:def 7,A3,B4a,D2;
+  A8: len (mlt(x1^y1,x2^y2))=len (x1^y1) by B7,FINSEQ_1:def 3,B10
+                       .=len x1 + len y1 by FINSEQ_1:35;
+  C5: dom x2=Seg len x1 by FINSEQ_1:def 3,A1
+           .=dom x1 by FINSEQ_1:def 3;
+  C5b: dom y2=Seg len y1 by FINSEQ_1:def 3,A1
+           .=dom y1 by FINSEQ_1:def 3;
+   A3: (the multF of G).:(x1,x2)=(the multF of G) * (<:x1,x2:>)
+                            by FUNCOP_1:def 3;
+   A4: dom (the multF of G)=[:the carrier of G,the carrier of G:]
+                   by FUNCT_2:def 1;
+   A5: rng (x1) c= the carrier of G by FINSEQ_1:def 4;
+   B12: rng (x2) c= the carrier of G by FINSEQ_1:def 4;
+   B13: [:rng (x1), rng (x2):] c= dom (the multF of G)
+                        by ZFMISC_1:119,A5,A4,B12;
+  B14: dom ((the multF of G) * (<:x1,x2:>)) =dom (x1) /\ dom (x2)
+                                  by FUNCOP_1:84,A3,B13;
+  C8: dom (mlt(x1,x2)) =dom x1 by C5,FVSUM_1:def 7,A3,B14;
+  B16: dom (mlt(x1,x2))=Seg len x1 by FINSEQ_1:def 3,C8;
+  A3: (the multF of G).:(y1,y2)=(the multF of G) * (<:y1,y2:>)
+                            by FUNCOP_1:def 3;
+  A5: rng y1 c= the carrier of G by FINSEQ_1:def 4;
+  B18: rng y2 c= the carrier of G by FINSEQ_1:def 4;
+  B19: [:rng y1, rng y2:] c= dom the multF of G by ZFMISC_1:119,A5,A4,B18;
+  B20: dom ((the multF of G) * (<:y1,y2:>)) =dom y1 /\ dom y2
+                                  by FUNCOP_1:84,A3,B19;
+  C8b: dom mlt(y1,y2) =dom y1 by C5b,FVSUM_1:def 7,A3,B20;
+  B21: dom (mlt(y1,y2))=Seg len y1 by FINSEQ_1:def 3,C8b;
+  B23: len (mlt(y1,y2))= len y1 by FINSEQ_1:def 3,B21;
+  B24:len (mlt(x1^y1,x2^y2)) =len (mlt(x1,x2))+ len(mlt(y1,y2))
+          by A8,FINSEQ_1:def 3,B16,B23;
+ A2: len (mlt(x1^y1,x2^y2))=len ((mlt(x1,x2))^(mlt(y1,y2)))
+    by FINSEQ_1:35,B24;
+ for i being Nat st 1<=i & i<=len (mlt(x1^y1,x2^y2))
+  holds (mlt(x1^y1,x2^y2)).i=((mlt(x1,x2))^(mlt(y1,y2))).i
+  proof let i be Nat;
+   assume B1: 1<=i & i<=len (mlt(x1^y1,x2^y2));
+    B2: i in Seg len (mlt(x1^y1,x2^y2)) by FINSEQ_1:3,B1;
+    B3: i in dom (mlt(x1^y1,x2^y2)) by FINSEQ_1:def 3,B2;
+    B22: 1<=i & i<=len x1+len y1 by FINSEQ_1:3,B3,B7,B5,B10;
+    K2: i<=len (x1^y1) by FINSEQ_1:3,B3,B7,B10;
+    A36: (x1^y1)/.i= (x1^y1).i by B1,FINSEQ_4:24,K2;
+    A36a: i<=len (x2^y2) by FINSEQ_1:3,B3,B7,B5,B10,B6,A1;
+    A37: (x2^y2)/.i= (x2^y2).i by B1,FINSEQ_4:24,A36a;
+    now per cases;
+    suppose C0: i<=len x1;then
+      C2: i in Seg len x1 by B1,FINSEQ_1:3;
+      C1: i in dom x1 by FINSEQ_1:def 3,C2;
+      A34: x1/.i=x1.i by B1,FINSEQ_4:24,C0;
+      A35: x2/.i=x2.i  by B1,FINSEQ_4:24,C0,A1;
+      K2: i in dom x2 by FINSEQ_1:def 3,C2,A1;
+      C4: (x2^y2).i=x2.i by FINSEQ_1:def 7,K2;
+      C7: i in dom (mlt(x1,x2)) by FINSEQ_1:def 3,C2,C8;
+      ((mlt(x1,x2))^(mlt(y1,y2))).i
+        =(mlt(x1,x2)).i by FINSEQ_1:def 7,C7
+       .=(x1/.i)*(x2/.i) by C7,FV73;
+     hence ((x1^y1)/.i)*((x2^y2)/.i)=((mlt(x1,x2))^(mlt(y1,y2))).i
+             by FINSEQ_1:def 7,C1,C4,A34,A35,A36,A37;
+    end;
+    suppose C0: i>len x1;
+      set k=i -' len x1;
+      C11: k=i-len x1 by BINARITH:50,C0;
+      C2: i= len x1 +k by C11;
+      C2a: k>0 by C0,C11,XREAL_1:52;
+      C12: 0+1<=k by NAT_1:13,C2a;
+      C12a: i-len x1 <=len x1 + len y1 - len x1 by B22,XREAL_1:15;
+      C56: k<=len y1 by BINARITH:50,C0,C12a;
+      C10: k in Seg len y1 by C12,FINSEQ_1:3,C56;
+      C10a: k in dom y2 by FINSEQ_1:def 3,A1,C10;
+      C4a: k in Seg len y1 by C12,FINSEQ_1:3,C56;
+      C13: k in dom y1 by FINSEQ_1:def 3,C4a;
+      C3: (x1^y1).i=y1.k by C2,FINSEQ_1:def 7,C13;
+      C7: k in dom (mlt(y1,y2)) by C8b,FINSEQ_1:def 3,C4a;
+      A34: y1/.k=y1.k by C56,C12,FINSEQ_4:24;
+      A35: y2/.k=y2.k by C56,C12,FINSEQ_4:24,A1;
+      K2: i<=len (x1^y1) by FINSEQ_1:3,B3,B7,B10;
+      A36: (x1^y1)/.i= (x1^y1).i by B1,FINSEQ_4:24,K2;
+      A36a: i<=len (x2^y2) by FINSEQ_1:3,B3,B7,B5,B10,B6,A1;
+      A37: (x2^y2)/.i= (x2^y2).i by B1,FINSEQ_4:24,A36a;
+      A37a: i=len (mlt(x1,x2)) +k by FINSEQ_1:def 3,B16,C2;
+      ((mlt(x1,x2))^(mlt(y1,y2))).i
+       =(mlt(y1,y2)).k by C7,FINSEQ_1:def 7,A37a
+      .=(y1/.k)*(y2/.k) by C7,FV73;
+     hence ((x1^y1)/.i)*((x2^y2)/.i)=((mlt(x1,x2))^(mlt(y1,y2))).i
+          by C3,C2,FINSEQ_1:def 7,A1,C10a,A34,A35,A36,A37;
+    end;
+    end;
+   hence (mlt(x1^y1,x2^y2)).i=((mlt(x1,x2))^(mlt(y1,y2))).i by B3,FV73;
+  end;
+ hence thesis by FINSEQ_1:18,A2;
+end;
+
+notation let K;let e1,e2 be FinSequence of K;
+  synonym |( e1,e2 )| for e1 "*" e2;
+end;
+
+theorem BB243:
+ for x,y being FinSequence of K,a being Element of K st
+ len x=len y holds
+   mlt(a*x,y)=a*(mlt(x,y)) & mlt(x,a*y)=a*(mlt(x,y))
+proof let x,y be FinSequence of K,a be Element of K;
+ assume A0: len x=len y;
+  reconsider x0=x as Element of (len x)-tuples_on (the carrier of K)
+                          by BB100;
+  reconsider y0=y as Element of (len x)-tuples_on (the carrier of K)
+                          by BB100,A0;
+ thus mlt(a*x,y)=a*(mlt(x0,y0)) by FVSUM_1:83 .=a*(mlt(x,y));
+ thus mlt(x,a*y)=a*(mlt(x0,y0)) by FVSUM_1:83 .=a*(mlt(x,y));
+end;
+
+theorem
+ for x,y being FinSequence of K,a being Element of K st
+ len x=len y holds
+  |(a*x,y)| = a*|(x,y)|
+proof let x,y be FinSequence of K,a be Element of K;
+ assume A1: len x=len y;
+  A3: Sum mlt(a*x,y) = Sum (a*(mlt(x,y))) by BB243,A1;
+  A4: Sum mlt(a*x,y) =a*(Sum mlt(x,y)) by FVSUM_1:92,A3;
+  Sum mlt(a*x,y) =a*|(x,y)| by FVSUM_1:def 10,A4;
+ hence |(a*x,y)| = a*|(x,y)| by FVSUM_1:def 10;
+end;
+
+theorem BB246:
+ for x,y being FinSequence of K,a being Element of K st
+ len x=len y holds
+  |(x,a*y)| = a*|(x,y)|
+proof let x,y be FinSequence of K,a be Element of K;
+  assume A1: len x=len y;
+  A3: Sum mlt(x,a*y) =(Sum (a*(mlt(x,y)))) by BB243,A1;
+  A4: Sum mlt(x,a*y) =a*(Sum mlt(x,y)) by FVSUM_1:92,A3;
+  Sum mlt(x,a*y) =a*|(x,y)| by FVSUM_1:def 10,A4;
+  hence |(x,a*y)| = a*|(x,y)| by FVSUM_1:def 10;
+end;
+
+theorem BB248:
+ for x,y1,y2 being FinSequence of K,a being Element of K st
+ len x=len y1 & len x=len y2 holds
+  |(x,y1+y2)| = |(x,y1)| + |(x,y2)|
+proof let x,y1,y2 be FinSequence of K,a be Element of K;
+ assume A0: len x=len y1 & len x=len y2;
+  reconsider x0=x as Element of (len x)-tuples_on (the carrier of K)
+                          by BB100;
+  reconsider y10=y1,y20=y2 as Element of (len x)-tuples_on (the carrier of K)
+                          by BB100,A0;
+  K2: Sum mlt(x,y1+y2) = Sum (mlt(x0,y10) + mlt(x0,y20)) by MATRIX_4:57,A0;
+  K3: Sum mlt(x,y1+y2) = Sum mlt(x0,y10) + Sum mlt(x0,y20) by FVSUM_1:95,K2;
+  K4: Sum mlt(x,y1+y2) = Sum mlt(x,y1) + |(x,y2)| by FVSUM_1:def 10,K3;
+  Sum mlt(x,y1+y2) = |(x,y1)| + |(x,y2)| by FVSUM_1:def 10,K4;
+ hence |(x,y1+y2)| = |(x,y1)| + |(x,y2)| by FVSUM_1:def 10;
+end;
+
+theorem BB250:
+ for x1,x2,y1,y2 being FinSequence of K st
+ len x1=len x2 & len y1=len y2 holds
+  |( x1^y1, x2^y2 )| = |(x1,x2)| + |(y1,y2)|
+proof let x1,x2,y1,y2 be FinSequence of K;
+ assume A1: len x1=len x2 & len y1=len y2;
+  Sum ((mlt(x1,x2))^(mlt(y1,y2)))=Sum mlt(x1,x2) + Sum mlt(y1,y2)
+                             by RLVECT_1:58;then
+  Sum mlt(x1^y1,x2^y2) = Sum mlt(x1,x2) + Sum mlt(y1,y2) by BB240,A1;then
+  |( x1^y1, x2^y2 )| = Sum mlt(x1,x2) + Sum mlt(y1,y2) by FVSUM_1:def 10;then
+  |( x1^y1, x2^y2 )| = Sum mlt(x1,x2) + |(y1,y2)| by FVSUM_1:def 10;
+ hence |( x1^y1, x2^y2 )| = |(x1,x2)| + |(y1,y2)| by FVSUM_1:def 10;
+end;
+
+theorem Th2:
+ for p1 being Element of n-tuples_on the carrier of K holds
+   mlt(p1,(n |-> (0.K)))=n |-> (0.K)
+proof let p1 be Element of n-tuples_on (the carrier of K);
+ thus mlt(p1,(n |-> (0.K)))= mlt(p1,(0.K)*(0*(K,n))) by FVSUM_1:71
+                     .= (0.K)*(mlt(p1,0*(K,n))) by FVSUM_1:83
+                     .= n |-> (0.K) by FVSUM_1:71;
+end;
+
+notation let n;let K;let A be Matrix of n,K;
+ synonym Inv A for A~;
+end;
+
+begin :: Zero Vectors and Base Vectors of Field Elements
+
+theorem MR103:
+  1.(K,0)=0.(K,0) & 1.(K,0)={}
+proof A1: len 1.(K,0) = 0 & width 1.(K,0)=0 by MATRIX_1:25;
+  len 0.(K,0) = 0 by MATRIX_1:25;then
+  0.(K,0)={} by CARD_2:59;
+ hence 1.(K,0)=0.(K,0) by A1,CARD_2:59;
+ thus 1.(K,0)={} by A1,CARD_2:59;
+end;
+
+theorem AA4350:
+ for A being Matrix of 0,K holds
+  A={} & A=1.(K,0) & A=0.(K,0)
+proof let A be Matrix of 0,K;
+ len A=0 by MATRIX_1:25;
+ hence A={} by CARD_2:59;
+ hence A=1.(K,0) by MR103;
+ hence A=0.(K,0) by MR103;
+end;
+
+theorem
+for A being Matrix of 0,K holds A is invertible
+proof let A be Matrix of 0,K;
+   A*A= 1.(K,0) by AA4350;then
+   A is_reverse_of A by MATRIX_6:def 2;
+   hence A is invertible by MATRIX_6:def 3;
+end;
+
+theorem AA41:
+ for A,B,C being Matrix of n,K holds
+  A*B*C=A*(B*C)
+proof let A,B,C be Matrix of n,K;
+  B1: len A=n & width A=n by MATRIX_1:25;
+  B2: len B=n & width B=n by MATRIX_1:25;
+  len C =n & width C =n by MATRIX_1:25;
+ hence A*B*C=A*(B*C) by B1,B2,MATRIX_3:35;
+end;
+
+theorem AA4140:
+ for A,B being Matrix of n,K holds
+  A is invertible & B=A~ iff B*A=1.(K,n) & A*B=1.(K,n)
+proof let A,B be Matrix of n,K;
+ hereby assume A is invertible & B=A~;then
+    B is_reverse_of A by MATRIX_6:def 4;
+  hence B*A=1.(K,n) & A*B=1.(K,n) by MATRIX_6:def 2;
+ end;
+ hereby assume B*A=1.(K,n) & A*B=1.(K,n);then
+   B2: B is_reverse_of A by MATRIX_6:def 2;
+  hence A is invertible by MATRIX_6:def 3;
+  hence B=A~ by MATRIX_6:def 4,B2;
+ end;
+end;
+
+theorem AA4145:
+ for A being Matrix of n,K holds
+  A is invertible iff ex B being Matrix of n,K st
+  B*A=1.(K,n) & A*B=1.(K,n)
+proof let A be Matrix of n,K;
+ thus A is invertible implies ex B being Matrix of n,K st
+ B*A=1.(K,n) & A*B=1.(K,n)
+  proof assume A is invertible;then
+   (A~)*A=1.(K,n) & A*(A~)=1.(K,n) by AA4140;
+  hence ex B being Matrix of n,K st
+   B*A=1.(K,n) & A*B=1.(K,n);
+  end;
+ thus (ex B being Matrix of n,K st
+ B*A=1.(K,n) & A*B=1.(K,n)) implies A is invertible by AA4140;
+end;
+
+theorem Th17:
+ for x being FinSequence of K holds
+  |(x, 0*(K,len x))| = 0.K
+proof let x be FinSequence of K;
+   set n=len x;
+   reconsider p1=x as Element of n-tuples_on (the carrier of K)
+                                 by FINSEQ_2:110;
+   |(x, 0*(K,n))| = Sum mlt(p1,0*(K,n)) by FVSUM_1:def 10
+      .= Sum 0*(K,n) by Th2
+      .= 0.K by MATRIX_3:13;
+ hence thesis;
+end;
+
+theorem Th18:
+ for x being FinSequence of K holds
+  |(0*(K,len x),x)| = 0.K
+proof let x be FinSequence of K;
+ thus |(0*(K,len x),x)| = |(x,0*(K,len x))| by FVSUM_1:115
+                       .= 0.K by Th17;
+end;
+
+theorem BB270:
+ for a being Element of K holds
+  |( <* 0.K *>, <* a *> )|=0.K
+proof let a be Element of K;
+  A1: len (<* a *>) =1 by FINSEQ_1:56;
+ thus |( <* 0.K *>, <* a *> )| =|( 0*(K,1),<* a *> )| by FINSEQ_2:73
+                             .= 0.K by A1,Th18;
+end;
+
+definition let K be non empty set, n be Nat, a be Element of K;
+  redefine func n |-> a -> FinSequence of K;
+  coherence
+  proof
+    reconsider n' = n as Element of NAT by ORDINAL1:def 13;
+    n' |-> a is FinSequence of K;
+    hence thesis;
+  end;
+end;
+
+definition let K;let n,i be Nat;
+  func Base_FinSeq(K,n,i) -> FinSequence of K equals
+    Replace((n |-> 0.K),i,1.K);
+  coherence;
+end;
+
+theorem AA1100:
+  for n, i being Nat holds len Base_FinSeq(K,n,i)=n
+proof
+  let n, i be Nat;
+  len (Replace((n |-> (0.K)),i,1.K))
+    = len (n |-> (0.K)) by FINSEQ_7:7
+   .= n by FINSEQ_2:69;
+  hence len (Base_FinSeq(K,n,i))=n;
+end;
+
+theorem AA1110:
+  for i, n being Nat st 1<=i & i<=n holds
+    (Base_FinSeq(K,n,i)).i=1.K
+proof let i, n be Nat; assume A1: 1<=i & i<=n;
+  A3: len (n |-> (0.K))=n by FINSEQ_2:69;
+  A2: len (Replace((n |-> (0.K)),i,1.K))
+    = len (n |-> 0.K) by FINSEQ_7:7
+   .= n by FINSEQ_2:69;
+ thus (Base_FinSeq(K,n,i)).i
+    = (Replace((n |-> (0.K)),i,1.K))/.i by FINSEQ_4:24,A2,A1
+   .= 1.K by FINSEQ_7:10,A1,A3;
+end;
+
+theorem AA1120:
+  for i,j,n be Nat st 1<=i & i<=n & 1<=j & j<=n & i<>j holds
+   (Base_FinSeq(K,n,i)).j=0.K
+proof let i,j,n be Nat; assume A1: 1<=i & i<=n & 1<=j & j<=n & i<>j;then
+  A6: j in Seg n by FINSEQ_1:3;
+  A3: len (n |-> (0.K))=n by FINSEQ_2:69;
+  A2: len (Replace((n |-> (0.K)),i,(1.K)))
+   = len (n |-> (0.K)) by FINSEQ_7:7
+  .= n by FINSEQ_2:69;
+ thus (Base_FinSeq(K,n,i)).j
+   = (Replace((n |-> (0.K)),i,(1.K)))/.j by FINSEQ_4:24,A2,A1
+  .= ((n |-> (0.K)))/.j by FINSEQ_7:12,A1,A3
+  .=((n |-> (0.K))).j by FINSEQ_4:24,A3,A1
+  .= 0.K by A1,A6,FINSEQ_2:71;
+end;
+
+theorem AA1200:
+  for i,n being Nat st 1<=i & i<=n holds
+   (1.(K,n)).i=Base_FinSeq(K,n,i)
+proof let i,n be Nat; assume A1: 1<=i & i<=n;
+  A2: len (1.(K,n))=n by MATRIX_1:25;
+  A12: 1<=n by A1,XXREAL_0:2;
+  A3: len Base_FinSeq(K,n,i)=n by AA1100;
+  [i,1] in Indices (1.(K,n)) by A1,A12,MATRIX_1:38;then
+  consider q being FinSequence of K such that
+  A10:  q = (1.(K,n)).i & (1.(K,n))*(i,1) = q.1 by MATRIX_1:def 6;
+  i in dom (1.(K,n)) by A1,A2,FINSEQ_3:27;then
+  q in rng (1.(K,n)) by FUNCT_1:def 5,A10;then
+  A2b: len q=n by MATRIX_1:def 3;
+  for j be Nat st 1<=j & j<=n holds q.j=(Base_FinSeq(K,n,i)).j
+  proof let j be Nat;
+    assume B1: 1<=j & j<=n;
+    A8: [i,j] in Indices (1.(K,n)) by A1,B1,MATRIX_1:38;then
+    consider q0 being FinSequence of K such that
+    A10b:  q0 = (1.(K,n)).i & (1.(K,n))*(i,j) = q0.j by MATRIX_1:def 6;
+    per cases;
+    suppose B0: i=j;
+      (1.(K,n))*(i,i) = 1_(K) by A8,MATRIX_1:def 12,B0;
+     hence q.j=(Base_FinSeq(K,n,i)).j by B0,AA1110,A1,A10,A10b;
+    end;
+    suppose B0: i<>j;
+     q.j=0.K by A8,MATRIX_1:def 12,B0,A10,A10b;
+     hence q.j=(Base_FinSeq(K,n,i)).j by B0,AA1120,A1,B1;
+    end;
+  end;
+ hence thesis by A10,A2b,A3,FINSEQ_1:18;
+end;
+
+theorem BB300:
+ for i,j st 1<=i & i<=n & 1<=j & j<=n holds
+   (1.(K,n))*(i,j)=(Base_FinSeq(K,n,i)).j
+proof let i,j;
+  assume A1: 1<=i & i<=n & 1<=j & j<=n;then
+   [i,j] in Indices (1.(K,n)) by MATRIX_1:38;then
+   ex p3 being FinSequence of K st
+     p3 = (1.(K,n)).i & 1.(K,n)*(i,j) = p3.j by MATRIX_1:def 6;
+  hence 1.(K,n)*(i,j)=(Base_FinSeq(K,n,i)).j by A1,AA1200;
+end;
+
+theorem
+ for A being Matrix of n,K holds
+  A=0.(K,n) iff for i,j being Element of NAT st
+  1<=i & i<=n & 1<=j & j<=n holds A*(i,j)=0.K
+proof let A be Matrix of n,K;
+ thus A=0.(K,n) implies for i,j being Element of NAT st
+ 1<=i & i<=n & 1<=j & j<=n holds A*(i,j)=0.K
+  proof assume B1: A=0.(K,n);
+    let i,j be Element of NAT;
+    assume C1: 1<=i & i<=n & 1<=j & j<=n;
+    set A3=0.(K,n,n);
+    reconsider B3=0.(K,n,n) as Matrix of n,K;
+    set A2=0.(K,n),B2=0.(K,n);
+    C3: A3=A2 & B3=B2 & A=A2 & B2=A by B1,MATRIX_3:def 1;
+    C6: [i,j] in Indices A2 by C1,MATRIX_1:38;
+    C7: (A2+B2)*(i,j)=A2*(i,j)+B2*(i,j) by MATRIX_3:def 3,C6;
+    C8: A2*(i,j)=A2*(i,j)+A2*(i,j) by MATRIX_3:6,C3,C7;
+    A2*(i,j) - A2*(i,j) = A2*(i,j) +(A2*(i,j) - A2*(i,j)) by RLVECT_1:42,C8
+                        .=A2*(i,j) +0.K by RLVECT_1:28
+                        .=A2*(i,j) by RLVECT_1:10;
+   hence A*(i,j)=0.K by B1,RLVECT_1:28;
+  end;
+ assume
+   B1: for i,j being Element of NAT st
+      1<=i & i<=n & 1<=j & j<=n holds A*(i,j)=0.K;
+   B2: len A=n & width A=n & Indices A=[: Seg n,Seg n :] by MATRIX_1:25;
+    for i,j being Nat st [i,j] in Indices A holds
+      A*(i,j) = A*(i,j) + A*(i,j)
+    proof let i,j be Nat;
+     assume [i,j] in Indices A;then
+      i in Seg n & j in Seg n by B2,ZFMISC_1:106;then
+      C2: 1<=i & i<=n & 1<=j & j<=n by FINSEQ_1:3;
+      reconsider i0=i,j0=j as Element of NAT by ORDINAL1:def 13;
+      A*(i0,j0)=0.K by B1,C2;
+     hence A*(i,j) = A*(i,j) + A*(i,j) by RLVECT_1:10;
+    end;then
+   B4: A=A+A by MATRIX_3:def 3,B2;
+   A = 0.(K,len A,width A) by B4,MATRIX_4:6;
+   hence A=0.(K,n) by B2,MATRIX_3:def 1;
+end;
+
+theorem BB370:
+ for A being Matrix of n,K holds
+  A=1.(K,n) iff for i,j being Element of NAT st
+  1<=i & i<=n & 1<=j & j<=n holds A*(i,j)=IFEQ(i,j,1.K,0.K)
+proof let A be Matrix of n,K;
+   B2: len A=n & width A=n & Indices A=[: Seg n,Seg n :] by MATRIX_1:25;
+   B2b: len (1.(K,n))=n & width (1.(K,n))=n &
+          Indices (1.(K,n))=[: Seg n,Seg n :] by MATRIX_1:25;
+  thus A=1.(K,n) implies for i,j being Element of NAT st
+   1<=i & i<=n & 1<=j & j<=n holds A*(i,j)=IFEQ(i,j,1.K,0.K)
+  proof assume B1:A=1.(K,n);
+    let i,j be Element of NAT;
+    assume
+X:     1<=i & i<=n & 1<=j & j<=n;
+     C2: [i,j] in Indices A by MATRIX_1:38,X;
+     per cases;
+     suppose D1: i=j;then
+       A*(i,j)=1.K by MATRIX_1:def 12,C2,B1;
+      hence A*(i,j)=IFEQ(i,j,1.K,0.K) by D1,FUNCOP_1:def 8;
+     end;
+     suppose D1: i<>j;then
+       A*(i,j)=0.K by MATRIX_1:def 12,C2,B1;
+      hence A*(i,j)=IFEQ(i,j,1.K,0.K) by D1,FUNCOP_1:def 8;
+     end;
+  end;
+  thus (for i,j being Element of NAT st
+   1<=i & i<=n & 1<=j & j<=n holds A*(i,j)=IFEQ(i,j,1.K,0.K)) implies
+   A=1.(K,n)
+  proof assume C1: for i,j being Element of NAT st
+    1<=i & i<=n & 1<=j & j<=n holds A*(i,j)=IFEQ(i,j,1.K,0.K);
+   C3: len A = len (1.(K,n)) & width A = width (1.(K,n)) by MATRIX_1:25,B2b;
+    for i,j being Nat st [i,j] in Indices A holds A*(i,j) = (1.(K,n))*(i,j)
+    proof let i,j be Nat;
+     assume D1: [i,j] in Indices A;then
+      i in Seg n & j in Seg n by B2,ZFMISC_1:106;then
+      D3: 1<=i & i<=n & 1<=j & j<=n by FINSEQ_1:3;
+      reconsider i0=i,j0=j as Element of NAT by ORDINAL1:def 13;
+      D4: A*(i0,j0)=IFEQ(i0,j0,1.K,0.K) by C1,D3;
+      per cases;
+      suppose E1: i0=j0;then
+        A*(i0,j0)=1_K by D4,FUNCOP_1:def 8;
+       hence A*(i,j) = (1.(K,n))*(i,j) by E1,MATRIX_1:def 12,D1,B2,B2b;
+      end;
+      suppose E1: i0<>j0;then
+        A*(i0,j0)=0.K by D4,FUNCOP_1:def 8;
+       hence A*(i,j) = (1.(K,n))*(i,j) by E1,MATRIX_1:def 12,D1,B2,B2b;
+      end;
+    end;
+   hence A=1.(K,n) by MATRIX_1:21,C3;
+  end;
+end;
+
+begin :: Conditions of Invertibility
+
+theorem AA44:
+  for A,B being Matrix of n,K holds
+    (A*B)@=(B@)*(A@)
+proof let A,B be Matrix of n,K;
+ per cases;
+ suppose B0: n<>0;
+   B1: len A=n & len B=n by MATRIX_1:25;
+   width A=n & width B=n by MATRIX_1:25;
+  hence (A*B)@=(B@)*(A@) by MATRIX_3:24,B0,B1;
+ end;
+ suppose B0: n=0;
+  thus (A*B)@=1.(K,n) by AA4350,B0
+       .=(B@)*(A@) by AA4350,B0;
+ end;
+end;
+
+theorem BB400:
+ for A being Matrix of n,K st A is invertible holds
+  A@ is invertible & (A@)~ =(A~)@
+proof let A be Matrix of n,K;
+ assume A is invertible;then
+  consider B being Matrix of n,K such that
+  A2: B*A=1.(K,n) & A*B=1.(K,n) by AA4145;
+  (A*B)@ = (B@)*(A@) by AA44;then
+  A3: (B@)*(A@)=1.(K,n) by A2,MATRIX_6:10;
+  (B*A)@ = (A@)*(B@) by AA44;then
+  A4: (A@)*(B@)=1.(K,n) by A2,MATRIX_6:10;
+  B=A~ by AA4140,A2;
+ hence A@ is invertible & (A@)~=(A~)@ by AA4140,A3,A4;
+end;
+
+theorem AA2626:
+ for x being FinSequence of K, a being Element of K st
+ (ex i st 1<=i & i<=len x & x.i=a &
+ (for j st j<>i & 1<=j & j<=len x holds x.j=0.K)) holds
+   Sum x=a
+proof let x be FinSequence of K, a be Element of K;
+  given i such that
+  A2: 1<=i & i<=len x & x.i=a
+   & (for j st j<>i & 1<=j & j<=len x holds x.j=0.K);
+  A9: 1<=len x by A2,XXREAL_0:2;
+  consider f being Function of NAT,(the carrier of K) such that
+  A4: f.1 = x.1 &
+     (for n st 0 <> n & n < len x holds
+       f.(n + 1) = (the addF of K).(f.n,x.(n + 1))) &
+                 (the addF of K) "**" x = f.(len x)
+                             by FINSOP_1:def 1,A9;
+  A30: for j st 1<=j & j<i holds f.j=0.K
+  proof let j;assume
+    B0: 1<=j & j<i;
+    defpred P[Nat] means 1<=$1 & $1<i implies f.$1=0.K;
+    B2: P[0];
+    B3: for k st P[k] holds P[k+1]
+    proof let k;
+     assume KK1: P[k];
+      per cases;
+      suppose C0: not(1<=k & k<i);
+       now per cases by C0;
+       suppose 1>k;then
+         D2: 1>=k+1 by NAT_1:13;
+         1<=1+k by NAT_1:12;then
+         D3: k+1=1 by D2,XXREAL_0:1;
+         now per cases;
+         suppose k+1<i;then
+           k+1< len x by A2,XXREAL_0:2;
+          hence 1<=k+1 & k+1<i implies f.(k+1)= 0.K by A4,D3,A2;
+         end;
+         suppose k+1>=i;
+          hence 1<=k+1 & k+1<i implies f.(k+1)= 0.K;
+         end;
+         end;
+        hence 1<=k+1 & k+1<i implies f.(k+1)= 0.K;
+       end;
+       suppose k>=i;
+        hence 1<=k+1 & k+1<i implies f.(k+1)= 0.K by NAT_1:12;
+       end;
+       end;
+      hence P[k+1];
+      end;
+      suppose C0: 1<=k & k<i;
+        C5: k<len x by A2,XXREAL_0:2,C0;
+        C1: k+1<=i by C0,NAT_1:13;
+        now per cases by C1,REAL_1:def 5;
+        suppose D0: k+1<i;then
+          D13: k+1< len x by A2,XXREAL_0:2;
+          f.(k + 1) = (the addF of K).(f.k,x.(k + 1)) by A4,C0,C5
+                   .= 0.K+0.K by D13,A2,D0,NAT_1:12,KK1,C0
+                   .= 0.K by RLVECT_1:10;
+         hence 1<=k+1 & k+1<i implies f.(k+1)= 0.K;
+        end;
+        suppose k+1=i;
+         hence 1<=k+1 & k+1<i implies f.(k+1)= 0.K;
+        end;
+        end;
+       hence P[k+1];
+      end;
+    end;
+    for l being Element of NAT holds P[l] from NAT_1:sch 1(B2,B3);
+   hence f.j= 0.K by B0;
+  end;
+ A20: for j st i<=j & j<=len x holds f.j=a
+ proof let j;
+  assume B0: i<=j & j<=len x;
+  defpred P[Nat] means i<=$1 & $1<=len x implies f.$1=a;
+    B2: P[0] by A2;
+    B3: for k st P[k] holds P[k+1]
+    proof let k;
+     assume C12a: P[k];
+      per cases;
+      suppose not(i<=k+1 & k+1<=len x);
+       hence P[k+1];
+      end;
+      suppose D0: i<=k+1 & k+1<=len x;
+        D35: k<len x by D0,NAT_1:13;
+        D36: 1<=k+1 by A2,D0,XXREAL_0:2;
+        now per cases by REAL_1:def 5,D0;
+        suppose D9: i<k+1;
+        D4: i<=k by NAT_1:13,D9;
+        D5: k<len x by NAT_1:13,D0;
+        f.(k + 1) = (the addF of K).(f.k,x.(k + 1)) by A4,D5,D4,A2
+                 .= a+0.K by NAT_1:13,D0,C12a,D9,A2,D36
+                 .= a by RLVECT_1:10;
+        hence P[k+1];
+        end;
+        suppose D0: i=k+1;
+         D4: k<i by D0,NAT_1:13;
+         now per cases;
+         suppose E0: 1<=k;
+        f.(k + 1) = (the addF of K).(f.k,x.(k + 1)) by A4,D35,E0
+                 .= 0.K+a by D0,A2,E0,A30,D4
+                 .= a by RLVECT_1:10;
+         hence P[k+1];
+         end;
+         suppose k<1;then
+          E1:  k+1<=1 by NAT_1:13;
+          E10: 1<=1+k by NAT_1:12;
+          i=1 by D0,E1,XXREAL_0:1,E10;
+         hence P[k+1] by A2,E1,XXREAL_0:1,A4;
+         end;
+         end;
+         hence P[k+1];
+        end;
+        end;
+        hence P[k+1];
+       end;
+    end;
+    for l being Element of NAT holds P[l] from NAT_1:sch 1(B2,B3);
+  hence f.j=a by B0;
+ end;
+ f.(len x)=a by A20,A2;
+ hence Sum x=a by FVSUM_1:def 8,A4;
+end;
+
+theorem
+ for f1,f2 being FinSequence of K holds
+  dom mlt(f1,f2) = dom f1 /\ dom f2 &
+  for i st i in dom (mlt(f1,f2)) holds
+   (mlt(f1,f2)).i = (f1/.i) * (f2/.i)
+proof let f1,f2 be FinSequence of K;
+   A2: mlt(f1,f2)=(the multF of K).:(f1,f2) by FVSUM_1:def 7;
+   A4: dom (the multF of K)=[:the carrier of K,the carrier of K:]
+                   by FUNCT_2:def 1;
+   A5: rng (f1) c= the carrier of K by FINSEQ_1:def 4;
+   rng (f2) c= the carrier of K by FINSEQ_1:def 4;then
+   [:rng (f1), rng (f2):] c= dom (the multF of K) by ZFMISC_1:119,A5,A4;
+  hence dom (mlt(f1,f2))= dom (f1) /\ dom (f2) by A2,FUNCOP_1:84;
+  thus for i st i in dom (mlt(f1,f2)) holds
+   (mlt(f1,f2)).i = (f1/.i) * (f2/.i) by FV73;
+end;
+
+theorem AA2626b:
+ for x,y being FinSequence of K,i st
+ len x=m & y=mlt (x,Base_FinSeq(K,m,i)) & 1<=i & i<=m holds
+   y.i=x.i & (for j st j<>i & 1<=j & j<=m holds y.j= 0.K)
+proof let x,y be FinSequence of K,i;
+  assume A1: len x=m &
+    y=mlt (x,Base_FinSeq(K,m,i)) & 1<=i & i<=m;
+   A2: i in dom x by FINSEQ_3:27,A1;
+   A3: len (Base_FinSeq(K,m,i))=m by AA1100;
+   A4: dom (the multF of K)=[:the carrier of K,the carrier of K:]
+                   by FUNCT_2:def 1;
+   A5: rng (x) c= the carrier of K by FINSEQ_1:def 4;
+   B1: rng (Base_FinSeq(K,m,i)) c= the carrier of K by FINSEQ_1:def 4;
+   B2: [:rng (x), rng (Base_FinSeq(K,m,i)):] c= dom (the multF of K)
+                        by ZFMISC_1:119,A5,A4,B1;
+   B3: dom ((the multF of K).:(x,Base_FinSeq(K,m,i)))
+    =dom x /\ dom (Base_FinSeq(K,m,i)) by FUNCOP_1:84,B2;
+    A5: dom (mlt (x,Base_FinSeq(K,m,i)))= dom x /\ dom (Base_FinSeq(K,m,i))
+                                        by FVSUM_1:def 7,B3
+                                .= Seg m /\ dom (Base_FinSeq(K,m,i))
+                                        by FINSEQ_1:def 3,A1
+                                .= Seg m /\ Seg m by FINSEQ_1:def 3,A3
+                                .= Seg m;then
+   A4: i in dom (mlt (x,Base_FinSeq(K,m,i))) by A1,FINSEQ_1:3;
+   C1: 1<=i & i<=len (Base_FinSeq(K,m,i)) by A1,AA1100;
+   A32: (Base_FinSeq(K,m,i))/.i=(Base_FinSeq(K,m,i)).i by FINSEQ_4:24,C1;
+   (mlt (x,Base_FinSeq(K,m,i))).i=(x/.i)*((Base_FinSeq(K,m,i))/.i) by A4,FV73
+                              .= (x/.i)* 1.K by AA1110,A1,A32
+                              .= x/.i by VECTSP_1:def 16
+                              .= x.i by PARTFUN1:def 8,A2;
+  hence y.i=x.i by A1;
+    let j;
+    assume B1: j<>i & 1<=j & j<=m;
+     C2: 1<=j & j<=len (Base_FinSeq(K,m,i)) by B1,AA1100;
+     C3:  (Base_FinSeq(K,m,i))/.j
+        = (Base_FinSeq(K,m,i)).j by C2,FINSEQ_4:24
+       .= 0.K by B1,AA1120,A1;
+     A4b: j in dom (mlt (x,Base_FinSeq(K,m,i))) by FINSEQ_1:3,A5,B1;
+       (mlt (x,Base_FinSeq(K,m,i))).j
+                         = (x/.j)*((Base_FinSeq(K,m,i))/.j) by A4b,FV73
+                        .= 0.K by C3,VECTSP_1:36;
+    hence y.j= 0.K by A1;
+end;
+
+theorem AA2627:
+ for x being FinSequence of K st
+ len x=m & 1<=i & i<=m holds
+  |( x,Base_FinSeq(K,m,i) )|=x.i & |( x,Base_FinSeq(K,m,i) )|=x/.i
+proof let x be FinSequence of K;
+  assume A1: len x=m & 1<=i & i<=m;
+   reconsider q=(mlt (x,Base_FinSeq(K,m,i))) as FinSequence of K;
+   A3: len (Base_FinSeq(K,m,i))=m by AA1100;
+   A4: dom (the multF of K)=[:the carrier of K,the carrier of K:]
+                   by FUNCT_2:def 1;
+   A5: rng (x) c= the carrier of K by FINSEQ_1:def 4;
+   rng (Base_FinSeq(K,m,i)) c= the carrier of K by FINSEQ_1:def 4;then
+   [:rng (x), rng (Base_FinSeq(K,m,i)):] c= dom (the multF of K)
+                        by ZFMISC_1:119,A5,A4;then
+   A5d: dom ((the multF of K).:(x,Base_FinSeq(K,m,i)))
+    =dom x /\ dom (Base_FinSeq(K,m,i)) by FUNCOP_1:84;
+   B1: dom (mlt (x,Base_FinSeq(K,m,i)))= dom x /\ dom (Base_FinSeq(K,m,i))
+                                        by FVSUM_1:def 7,A5d
+                                .= Seg m /\ dom (Base_FinSeq(K,m,i))
+                                        by FINSEQ_1:def 3,A1
+                                .= Seg m /\ Seg m by FINSEQ_1:def 3,A3
+                                .= Seg m;
+  A18: x/.i=x.i by A1,FINSEQ_4:24;
+  A2: len (mlt (x,Base_FinSeq(K,m,i)))=m by FINSEQ_1:def 3,B1;
+  A2a: (mlt(x,Base_FinSeq(K,m,i))).i=x/.i &
+        (for j st j<>i & 1<=j & j<=m holds
+            (mlt (x,Base_FinSeq(K,m,i))).j= 0.K) by AA2626b,A1,A18;
+  A2b: Sum (mlt (x,Base_FinSeq(K,m,i)))=x.i by AA2626,A1,A2,A18,A2a;
+ hence |( x,Base_FinSeq(K,m,i) )|=x.i by FVSUM_1:def 10;
+  x.i=x/.i by A1,FINSEQ_4:24;
+ hence |( x,Base_FinSeq(K,m,i) )|=x/.i by FVSUM_1:def 10,A2b;
+end;
+
+theorem AA2629:
+ for m,i st 1<=i & i<=m holds
+   |( Base_FinSeq(K,m,i),Base_FinSeq(K,m,i) )|= 1.K
+proof let m,i;
+ assume A0: 1<=i & i<=m;
+  len (Base_FinSeq(K,m,i))=m by AA1100;
+ hence |( Base_FinSeq(K,m,i),Base_FinSeq(K,m,i) )|
+    = (Base_FinSeq(K,m,i)).i by A0,AA2627 .=1.K by AA1110,A0;
+end;
+
+theorem AA3000:
+ for a being Element of K,P,Q being Matrix of n,K st
+ n>0 & a<>0.K & P*(1,1)= a" &
+ (for i st 1<i & i<=n holds P.i=Base_FinSeq(K,n,i)) &
+ Q*(1,1)=a & (for j st 1<j & j<=n holds Q*(1,j)= -a*(P*(1,j))) &
+ (for i st 1<i & i<=n holds Q.i=Base_FinSeq(K,n,i)) holds
+   P is invertible & Q=P~
+proof let a be Element of K,P,Q be Matrix of n,K;
+ assume A1: n>0 & a<>0.K & P*(1,1)= a" &
+  (for i st 1<i & i<=n holds P.i=Base_FinSeq(K,n,i)) &
+  Q*(1,1)=a & (for j st 1<j & j<=n holds Q*(1,j)= -a*(P*(1,j))) &
+  (for i st 1<i & i<=n holds Q.i=Base_FinSeq(K,n,i));then
+  A40: 0+1<=n by NAT_1:13;
+  A1b: for j st 1<j & j<=n holds P*(1,j)= -(a")*(Q*(1,j))
+   proof let j;
+    assume B1: 1<j & j<=n;
+     D3: -(a")*(Q*(1,j))= -(a")*( -a*(P*(1,j))) by A1,B1;
+     D4: -(a")*(Q*(1,j))= -(a")*( (-a)*(P*(1,j))) by VECTSP_1:41,D3;
+     D5: -(a")*(Q*(1,j))= (-(a"))*( (-a)*(P*(1,j))) by VECTSP_1:41,D4;
+     D6: -(a")*(Q*(1,j))= ((-(a"))*(-a))*(P*(1,j)) by GROUP_1:def 4,D5;
+     D8: -(a")*(Q*(1,j))= ((a)*(a"))*(P*(1,j)) by VECTSP_1:42,D6;
+     -(a")*(Q*(1,j))= (1.K)*(P*(1,j)) by VECTSP_1:def 22,A1,D8;
+     hence P*(1,j)= -(a")*(Q*(1,j)) by VECTSP_1:def 16;
+   end;
+  A2d: len Q=n & width Q=n by MATRIX_1:25;
+  A2a: len P=n & width P=n by MATRIX_1:25;
+  A2: len Line(P,1)=n by MATRIX_1:def 8,A2a;
+  A2b: len Base_FinSeq(K,n,1)=n by AA1100;
+  A20: len (Col(Q,1))=len Q by MATRIX_1:def 9 .=n by MATRIX_1:25;
+  A21: len (a*(Base_FinSeq(K,n,1)))=len (Base_FinSeq(K,n,1)) by MATRIXR1:16
+                           .= n by AA1100;
+  for k be Nat st 1<=k & k<=n holds (Col(Q,1)).k=(a*(Base_FinSeq(K,n,1))).k
+  proof let k be Nat;
+   assume B1: 1<=k & k<=n;
+    B: k in NAT by ORDINAL1:def 13;
+    B2:k in Seg n by FINSEQ_1:3,B1;
+    B3: k in dom Q by FINSEQ_1:def 3,A2d,B2;
+    A13: ((Base_FinSeq(K,n,1))/.k)=((Base_FinSeq(K,n,1)).k)
+                               by B1,FINSEQ_4:24,A2b;
+    A13a: 1<=n by B1,XXREAL_0:2;
+    B11: 1 in dom Q by FINSEQ_3:27,A2d,A13a;
+    B92: k in dom (a*(Base_FinSeq(K,n,1))) by A21,B1,FINSEQ_3:27;
+    B5: now assume C0: k<>1;
+     thus (a*(Base_FinSeq(K,n,1))).k= a*((Base_FinSeq(K,n,1))/.k)
+                             by FVSUM_1:62,B92,A13
+                                  .= a*(0.K) by A13,AA1120,B1,C0,A13a
+                                  .= 0.K by VECTSP_1:36;
+    end;
+    B6: now assume C0: k=1;
+     thus (a*(Base_FinSeq(K,n,1))).k=a*((Base_FinSeq(K,n,1))/.k)
+                          by FVSUM_1:62,B92,A13
+         .= a*(1.K) by AA1110,C0,B1,A13
+         .= a by VECTSP_1:def 16;
+    end;
+    now assume B20: k<>1;then
+      B19: 1<k by B1,REAL_1:def 5;
+      [k,1] in Indices Q by B1,MATRIX_1:38,A40;
+      then consider p being FinSequence of K such that
+      C3: p = Q.k & Q*(k,1) = p.1 by MATRIX_1:def 6;
+      Q*(k,1)=(Base_FinSeq(K,n,k)).1 by C3,B19,B1,A1,B
+            .= 0.K by B20,B1,A40,AA1120;
+     hence (Col(Q,1)).k= 0.K by MATRIX_1:def 9,B3;
+    end;
+   hence (Col(Q,1)).k=(a*(Base_FinSeq(K,n,1))).k
+    by B5,B6,MATRIX_1:def 9,B11,A1;
+  end;then
+  A3: Col(Q,1)=a*(Base_FinSeq(K,n,1)) by A20,A21,FINSEQ_1:18;
+  A4: 0+1<=n by NAT_1:13,A1;then
+  A10: 1 in Seg width P by A2a,FINSEQ_1:3;
+  A11: 1 in Seg len P by A2a,FINSEQ_1:3,A4;
+  K1: 1 in dom P by A11,FINSEQ_1:def 3;
+  K3: len (a*(Line(P,1)))=len ((Line(P,1))) by MATRIXR1:16
+      .= n by MATRIX_1:def 8,A2a;
+  K4: 1 in dom (Line(P,1)) by A11,A2a,A2,FINSEQ_1:def 3;
+  A8d: Indices Q=[: Seg n,Seg n :] by MATRIX_1:25;
+  A8: Indices P=[: Seg n,Seg n :] by MATRIX_1:25;
+  A12: [1,1] in Indices P by A4,MATRIX_1:38;
+  A18: Indices (P*Q)=[: Seg n,Seg n :] by MATRIX_1:25;then
+  A13: (P*Q)*(1,1)= |( Line(P,1), Col(Q,1) )|
+                      by MATRIX_3:def 4,A12,A8,A2d,A2a
+             .= a*( |( Line(P,1), Base_FinSeq(K,n,1) )| )
+                           by A3,BB246,A2,A2b
+             .=a*(Line(P,1))/.1 by AA2627,A2,A4
+             .=(a*(Line(P,1)))/.1 by POLYNOM1:def 2,K4
+             .=(a*(Line(P,1))).1 by FINSEQ_4:24,K3,A4
+             .=a*(P*(1,1)) by MATRIX12:3,K1,A10
+             .=1.K by VECTSP_1:def 22,A1;
+  A14: for j st 1<j & j<=n holds (P*Q)*(1,j)= 0.K
+   proof let j;
+    assume B1: 1<j & j<=n;then
+     B20: j in Seg n by FINSEQ_1:3;
+     A22: [1,j] in Indices (P*Q) by B1,MATRIX_1:38,A4;
+     B3: len (Col(Q,j))=len Q by MATRIX_1:def 9 .=n by MATRIX_1:25;
+     B4: len (-a*(P*(1,j))*(Base_FinSeq(K,n,1)))
+       =len ((-a*(P*(1,j)))*(Base_FinSeq(K,n,1))) by BB200
+      .=len (Base_FinSeq(K,n,1)) by MATRIXR1:16 .=n by AA1100;
+     B5b: len (Base_FinSeq(K,n,j))=n by AA1100;then
+     B5: len (-a*(P*(1,j))*(Base_FinSeq(K,n,1))+Base_FinSeq(K,n,j))
+          =n by B4,Th6;
+     reconsider p=Col(Q,j),q=-a*(P*(1,j))*(Base_FinSeq(K,n,1))
+                               +Base_FinSeq(K,n,j) as FinSequence of K;
+     A21b: len ((-a*(P*(1,j)))*(Base_FinSeq(K,n,1)))
+                            =len (Base_FinSeq(K,n,1)) by MATRIXR1:16
+                           .= n by AA1100;
+     for k be Nat st 1 <=k & k <= n holds p.k=q.k
+     proof let k be Nat;
+      assume C0: 1 <=k & k <= n;
+       A4: 0+1<=n by NAT_1:13,C0;
+       B92: k in dom ((-a*(P*(1,j)))*(Base_FinSeq(K,n,1)))
+                               by A21b,C0,FINSEQ_3:27;
+       C12: k in dom Q by C0,FINSEQ_3:27,A2d;
+       A13: ((Base_FinSeq(K,n,1))/.k)=((Base_FinSeq(K,n,1)).k)
+                              by C0,FINSEQ_4:24,A2b;
+       C4: (-a*(P*(1,j))*(Base_FinSeq(K,n,1))).k
+           =((-a*(P*(1,j)))*(Base_FinSeq(K,n,1))).k by BB200
+          .=(-a*(P*(1,j)))*((Base_FinSeq(K,n,1))/.k)
+            by FVSUM_1:62,B92,A13;
+         A3a: len (Base_FinSeq(K,n,1))=n by AA1100;
+         E1: ((Base_FinSeq(K,n,1))/.k)=((Base_FinSeq(K,n,1)).k)
+              by C0,FINSEQ_4:24,A3a;
+       per cases by C0,REAL_1:def 5;
+       suppose D0: 1=k;
+         D2: p.k=Q*(1,j) by MATRIX_1:def 9,C12,D0
+               .=-a*(P*(1,j)) by A1,B1;
+         D1: (-a*(P*(1,j))*(Base_FinSeq(K,n,1))).k
+           =(-a*(P*(1,j)))*(1_K) by D0,AA1110,C0,E1,C4
+          .=-a*(P*(1,j)) by GROUP_1:def 5;
+        K1: (Base_FinSeq(K,n,j))/.k
+          = (Base_FinSeq(K,n,j)).k by FINSEQ_4:24,B5b,C0
+         .= 0.K by D0,B1,AA1120,C0;
+        K1a: q.k=(-a*(P*(1,j))*(Base_FinSeq(K,n,1)))/.k +0.K
+             by BB120,B4,B5b,C0,K1;
+        q.k=(-a*(P*(1,j))*(Base_FinSeq(K,n,1)))/.k by RLVECT_1:10,K1a;
+       hence p.k=q.k by D2,D1,FINSEQ_4:24,B4,C0;
+       end;
+       suppose D0: 1<k;
+          [k,j] in Indices Q by MATRIX_1:38,B1,C0;
+          then
+          consider p2 being FinSequence of K such that
+         D3: p2 = Q.k & Q*(k,j) = p2.j by MATRIX_1:def 6;
+B:       k in NAT by ORDINAL1:def 13;
+         D2: p.k=p2.j by D3,MATRIX_1:def 9,C12
+               .= (Base_FinSeq(K,n,k)).j by A1,D0,C0,D3,B;
+         now per cases;
+         suppose E0: k <> j;
+           (-a*(P*(1,j))*(Base_FinSeq(K,n,1)))/.k
+            =(-a*(P*(1,j)))*((Base_FinSeq(K,n,1))/.k)
+              by C4,FINSEQ_4:24,B4,C0
+           .=(-a*(P*(1,j)))*(0.K) by D0,AA1120,A4,C0,E1
+           .= 0.K by VECTSP_1:36;then
+           q.k = 0.K +(Base_FinSeq(K,n,j))/.k by BB120,B4,B5b,C0
+              .= (Base_FinSeq(K,n,j))/.k by RLVECT_1:10
+              .= (Base_FinSeq(K,n,j)).k by FINSEQ_4:24,B5b,C0
+              .= 0.K by B1,AA1120,C0,E0;
+          hence p.k=q.k by D2,AA1120,B1,C0,E0;
+         end;
+         suppose E0: k=j;
+           (-a*(P*(1,j))*(Base_FinSeq(K,n,1)))/.k
+            =(-a*(P*(1,j)))*((Base_FinSeq(K,n,1))/.k)
+              by C4,FINSEQ_4:24,B4,C0
+           .=(-a*(P*(1,j)))*(0.K) by D0,AA1120,A4,C0,E1
+           .= 0.K by VECTSP_1:36;then
+           q.k = 0.K +(Base_FinSeq(K,n,j))/.k by BB120,B4,B5b,C0
+              .= (Base_FinSeq(K,n,j))/.k by RLVECT_1:10
+              .= (Base_FinSeq(K,n,j)).k by FINSEQ_4:24,B5b,C0
+              .= 1.K by AA1110,C0,E0;
+           hence p.k=q.k by D2,AA1110,C0,E0;
+         end;
+         end;
+        hence p.k=q.k;
+       end;
+     end;then
+     B7: Col(Q,j)=-a*(P*(1,j))*(Base_FinSeq(K,n,1))+Base_FinSeq(K,n,j)
+                        by B3,B5,FINSEQ_1:18;
+     A2a: len P=n & width P=n by MATRIX_1:25;
+     K2: len Line(P,1) = n by MATRIX_1:def 8,A2a;
+     K3: (Line(P,1))/.j = ( Line(P,1)).j by FINSEQ_4:24,K2,B1
+     .= P*(1,j) by MATRIX_1:def 8,B20,A2a;
+     K0: (Line(P,1))/.1 = (Line(P,1)).1 by FINSEQ_4:24,K2,A4
+     .=a" by A1,MATRIX_1:def 8,A10;
+      (P*Q)*(1,j)= |( Line(P,1), Col(Q,j) )| by MATRIX_3:def 4,A2a,A2d,A22
+                .= |( Line(P,1), -a*(P*(1,j))*(Base_FinSeq(K,n,1)) )|
+                  +|( Line(P,1), Base_FinSeq(K,n,j) )|
+                                 by BB248,B4,A2,B7,B5b
+                .= |( Line(P,1), (-a*(P*(1,j)))*(Base_FinSeq(K,n,1)) )|
+                  +|( Line(P,1), Base_FinSeq(K,n,j) )| by BB200
+       .=(-a*(P*(1,j)))* |( Line(P,1), (Base_FinSeq(K,n,1)) )|
+                  +|( Line(P,1), Base_FinSeq(K,n,j) )| by BB246,A2,A2b
+       .=(-a*(P*(1,j)))* (a")
+                  +|( Line(P,1), Base_FinSeq(K,n,j) )| by K0,AA2627,A2,A4
+      .= -(a*(P*(1,j)))* (a")
+                  +|( Line(P,1), Base_FinSeq(K,n,j) )| by VECTSP_1:41
+      .= -((P*(1,j))*(a* (a")))
+                  +|( Line(P,1), Base_FinSeq(K,n,j) )|  by GROUP_1:def 4
+      .= -((P*(1,j))*(1_K)) +|( Line(P,1), Base_FinSeq(K,n,j) )|
+                                by VECTSP_1:def 22,A1
+      .= -(P*(1,j)*(1.K)) + (Line(P,1))/.j by AA2627,B1,A2
+      .= -(P*(1,j)) + P*(1,j) by K3,VECTSP_1:def 16
+      .= 0.K by RLVECT_1:16;
+    hence (P*Q)*(1,j)= 0.K;
+   end;
+   A15: for i,j st 1<i & i<=n & 1<=j & j<=n & i<>j holds (P*Q)*(i,j)= 0.K
+   proof let i,j;
+    assume B1: 1<i & i<=n & 1<=j & j<=n & i<>j;then
+     B20: i in Seg n & j in Seg n by FINSEQ_1:3;
+     B2: [i,j] in Indices P by B1,MATRIX_1:38;
+     A22: [i,j] in Indices (P*Q) by B1,MATRIX_1:38;
+     A23b: [i,1] in Indices P by B1,MATRIX_1:38,A40;
+     B3: len (Col(Q,j))=len Q by MATRIX_1:def 9 .=n by MATRIX_1:25;
+     B4: len (-a*(P*(1,j))*(Base_FinSeq(K,n,1)))
+       =len ((-a*(P*(1,j)))*(Base_FinSeq(K,n,1))) by BB200
+      .=len (Base_FinSeq(K,n,1)) by MATRIXR1:16
+      .=n by AA1100;
+     B5b: len (Base_FinSeq(K,n,j))=n by AA1100;then
+     B5: len (-a*(P*(1,j))*(Base_FinSeq(K,n,1))+Base_FinSeq(K,n,j))
+          =n by B4,Th6;
+     B4b: len (a*(Base_FinSeq(K,n,1)))
+      =len (Base_FinSeq(K,n,1)) by MATRIXR1:16 .=n by AA1100;
+    now per cases;
+    suppose F0: j>1;
+    reconsider p=Col(Q,j),q=-a*(P*(1,j))*(Base_FinSeq(K,n,1))
+                            +Base_FinSeq(K,n,j) as FinSequence of K;
+     for k be Nat st 1 <=k & k <= n holds p.k=q.k
+     proof let k be Nat;
+      assume C0: 1 <=k & k <= n;
+       C10a: len ((-a*(P*(1,j)))*(Base_FinSeq(K,n,1)))
+           = len (Base_FinSeq(K,n,1)) by MATRIXR1:16 .=n by AA1100;
+       B92b: k in dom ((-a*(P*(1,j)))*(Base_FinSeq(K,n,1)))
+                          by C0,FINSEQ_3:27,C10a;
+       C12: k in dom Q by C0,FINSEQ_3:27,A2d;
+       C2: p.k=Q*(k,j) by MATRIX_1:def 9,C12;
+       A13: ((Base_FinSeq(K,n,1))/.k)=((Base_FinSeq(K,n,1)).k)
+                              by C0,FINSEQ_4:24,A2b;
+       C4: (-a*(P*(1,j))*(Base_FinSeq(K,n,1))).k
+           =((-a*(P*(1,j)))*(Base_FinSeq(K,n,1))).k by BB200
+          .=(-a*(P*(1,j)))*((Base_FinSeq(K,n,1))/.k)
+             by FVSUM_1:62,B92b,A13;
+       A3a: len (Base_FinSeq(K,n,1))=n by AA1100;
+       E1: ((Base_FinSeq(K,n,1))/.k)=((Base_FinSeq(K,n,1)).k)
+              by C0,FINSEQ_4:24,A3a;
+       per cases by C0,REAL_1:def 5;
+       suppose D0: 1=k;
+          K3: 1 <= k & k <= len (-a*(P*(1,j))*(Base_FinSeq(K,n,1)))
+              by C0,C10a,BB200;
+          K1: (Base_FinSeq(K,n,j))/.k
+            = (Base_FinSeq(K,n,j)).k by FINSEQ_4:24,B5b,C0
+           .= 0.K by D0,B1,AA1120,C0,F0;
+          K2: (-a*(P*(1,j))*(Base_FinSeq(K,n,1)))/.k
+            = (-a*(P*(1,j)))*((Base_FinSeq(K,n,1))/.k)
+              by C4,FINSEQ_4:24,K3
+           .= (-a*(P*(1,j)))*(1.K) by D0,AA1110,A4,E1;
+          q.k= (-a*(P*(1,j)))*(1.K)+ 0.K by BB120,B4,B5b,C0,K2,K1
+            .= (-a*(P*(1,j)))*(1_K) by RLVECT_1:10
+            .= (-a*(P*(1,j))) by GROUP_1:def 5;
+         hence p.k=q.k by A1,B1,F0,C2,D0;
+        end;
+       suppose D0: 1<k;
+          [k,j] in Indices Q by C0,MATRIX_1:38,B1;
+          then
+          consider p2 being FinSequence of K such that
+         D3: p2 = Q.k & Q*(k,j) = p2.j by MATRIX_1:def 6;
+          K3: 1 <= k & k <= len (-a*(P*(1,j))*(Base_FinSeq(K,n,1)))
+              by C0,C10a,BB200;
+B:       k in NAT by ORDINAL1:def 13;
+         D2: p.k=(Base_FinSeq(K,n,k)).j by A1,D0,C0,D3,B,C2;
+         now per cases;
+         suppose E0: k <> j;
+           E4: (-a*(P*(1,j))*(Base_FinSeq(K,n,1))).k
+            =(-a*(P*(1,j)))*(0.K) by D0,AA1120,A4,C0,E1,C4
+           .= 0.K by VECTSP_1:36;
+           K1: (Base_FinSeq(K,n,j))/.k
+             =(Base_FinSeq(K,n,j)).k by FINSEQ_4:24,B5b,C0
+            .= 0.K by B1,AA1120,C0,E0;
+           K2: q.k = (-a*(P*(1,j))*(Base_FinSeq(K,n,1)))/.k +0.K
+            by BB120,B4,B5b,C0,K1;
+           q.k = (-a*(P*(1,j))*(Base_FinSeq(K,n,1)))/.k by RLVECT_1:10,K2
+              .= (-a*(P*(1,j))*(Base_FinSeq(K,n,1))).k by FINSEQ_4:24,K3;
+          hence p.k=q.k by D2,AA1120,B1,C0,E0,E4;
+         end;
+         suppose E0: k=j;then
+           E2: p.k=1.K by D2,AA1110,C0;
+           K1: (Base_FinSeq(K,n,j))/.k
+               = (Base_FinSeq(K,n,j)).k by FINSEQ_4:24,B5b,C0
+              .= 1.K by AA1110,C0,E0;
+           K2: (-a*(P*(1,j))*(Base_FinSeq(K,n,1)))/.k
+            =(-a*(P*(1,j))*(Base_FinSeq(K,n,1))).k by FINSEQ_4:24,B4,C0;
+           E3: (-a*(P*(1,j))*(Base_FinSeq(K,n,1))).k
+            =(-a*(P*(1,j)))*(0.K) by D0,AA1120,A4,C0,A13,C4
+           .= 0.K by VECTSP_1:36;
+           q.k= 0.K + 1.K by E3,BB120,B4,B5b,C0,K1,K2;
+           hence p.k=q.k by E2,RLVECT_1:10;
+         end;
+         end;
+        hence p.k=q.k;
+       end;
+     end;then
+     B7: Col(Q,j)=-a*(P*(1,j))*(Base_FinSeq(K,n,1))+Base_FinSeq(K,n,j)
+                        by B3,B5,FINSEQ_1:18;
+     A2a: len P=n & width P=n by MATRIX_1:25;
+     K2: len Line(P,i) = n by MATRIX_1:def 8,A2a;
+     K3: (Line(P,i))/.j = (Line(P,i)).j by FINSEQ_4:24,K2,B1
+     .= P*(i,j) by MATRIX_1:def 8,B20,A2a;
+     K0: (Line(P,i))/.1 = (Line(P,i)).1 by FINSEQ_4:24,K2,A4
+     .= P*(i,1) by MATRIX_1:def 8,A10;
+     B18: 1<=n by XXREAL_0:2,B1;
+     B28: (P*Q)*(i,j)= |( Line(P,i), Col(Q,j) )| by MATRIX_3:def 4,A2a,A2d,A22
+                .= |( Line(P,i), -a*(P*(1,j))*(Base_FinSeq(K,n,1)) )|
+                  +|( Line(P,i), Base_FinSeq(K,n,j) )|
+                                 by BB248,B4,K2,B7,B5b
+                .= |( Line(P,i), (-a*(P*(1,j)))*(Base_FinSeq(K,n,1)) )|
+                  +|( Line(P,i), Base_FinSeq(K,n,j) )| by BB200
+       .=(-a*(P*(1,j)))* |( Line(P,i), (Base_FinSeq(K,n,1)) )|
+                  +|( Line(P,i), Base_FinSeq(K,n,j) )| by BB246,K2,A2b
+       .=(-a*(P*(1,j)))* (P*(i,1))
+                  +|( Line(P,i), Base_FinSeq(K,n,j) )|
+                   by K0,AA2627,K2,A4
+      .= -(a*(P*(1,j)))* (P*(i,1))
+                  +|( Line(P,i), Base_FinSeq(K,n,j) )| by VECTSP_1:41
+      .= -((P*(1,j))*(a* (P*(i,1))))
+                  +|( Line(P,i), Base_FinSeq(K,n,j) )| by GROUP_1:def 4
+     .= -(P*(1,j))*(a* (P*(i,1))) + P*(i,j) by K3,AA2627,B1,K2;
+     consider p1 being FinSequence of K such that
+     A97:  p1 = P.i & P*(i,j) = p1.j by MATRIX_1:def 6,B2;
+     p1=Base_FinSeq(K,n,i) by A1,A97,B1;then
+     A98: p1.j= 0.K by AA1120,B1;
+     consider p2 being FinSequence of K such that
+     A99:  p2 = P.i & P*(i,1) = p2.1 by MATRIX_1:def 6,A23b;
+     K2: p2=Base_FinSeq(K,n,i) by A1,A99,B1;
+    (P*Q)*(i,j)= -(P*(1,j))*(a* (0.K)) + P*(i,j)
+            by B28,A99,AA1120,B18,B1,K2
+                    .= -(P*(1,j))*(0.K) + P*(i,j) by VECTSP_1:36
+                    .= - (0.K) + P*(i,j) by VECTSP_1:36
+                    .= 0.K + 0.K by A97,A98,RLVECT_1:25
+                    .= 0.K by RLVECT_1:10;
+    hence thesis;
+    end;
+    suppose F1: j<=1;
+      reconsider p=Col(Q,j),q=a*(Base_FinSeq(K,n,1)) as FinSequence of K;
+     F2: for k be Nat st 1 <=k & k <= n holds p.k=q.k
+      proof let k be Nat;
+      assume C0: 1 <=k & k <= n;
+       B92: k in dom (a*(Base_FinSeq(K,n,1))) by A21,C0,FINSEQ_3:27;
+       C12: k in dom Q by C0,FINSEQ_3:27,A2d;
+       A2b: len (Base_FinSeq(K,n,1))=n by AA1100;
+       A13: ((Base_FinSeq(K,n,1))/.k)=((Base_FinSeq(K,n,1)).k)
+                               by C0,FINSEQ_4:24,A2b;
+       C4: (a*(Base_FinSeq(K,n,1))).k
+          =a*((Base_FinSeq(K,n,1))/.k) by FVSUM_1:62,B92,A13;
+       per cases by C0,REAL_1:def 5;
+       suppose D0: 1=k;
+          D2: p.k=Q*(1,j) by MATRIX_1:def 9,C12,D0
+                .=a by A1,F1,B1,XXREAL_0:1;
+          q.k= (a)*(1.K) by C4,D0,AA1110,C0,A13
+           .=a by VECTSP_1:def 16;
+         hence p.k=q.k by D2;
+        end;
+       suppose D0: 1<k;
+          [k,j] in Indices Q by B1,MATRIX_1:38,C0;
+          then
+          consider p2 being FinSequence of K such that
+         D3: p2 = Q.k & Q*(k,j) = p2.j by MATRIX_1:def 6;
+B:       k in NAT by ORDINAL1:def 13;
+         D2: p.k=Q*(k,j) by MATRIX_1:def 9,C12
+               .= (Base_FinSeq(K,n,k)).j by A1,D0,C0,D3,B;
+         now per cases;
+         suppose E0: k <> j;
+           A13: ((Base_FinSeq(K,n,1))/.k)=((Base_FinSeq(K,n,1)).k)
+                               by C0,FINSEQ_4:24,A2b;
+           A13a: 1<=n by C0,XXREAL_0:2;
+           a*(Base_FinSeq(K,n,1))/.k
+            = a*(0.K) by A13,AA1120,D0,C0,A13a
+           .= 0.K by VECTSP_1:36;
+          hence p.k=q.k by E0,D2,AA1120,B1,C0,C4;
+         end;
+         suppose k=j;
+           hence p.k=q.k by F1,D0;
+         end;
+         end;
+        hence p.k=q.k;
+       end;
+       end;
+     A2x: len (Line(P,i))=n by MATRIX_1:def 8,A2a;
+     K0: (Line(P,i))/.1 = (Line(P,i)).1 by FINSEQ_4:24,A2x,A4
+     .= P*(i,1) by MATRIX_1:def 8,A10;
+     B18: 1<=n by XXREAL_0:2,B1;
+     B28: (P*Q)*(i,j)= |( Line(P,i), Col(Q,j) )| by MATRIX_3:def 4,A2a,A2d,A22
+       .= |( Line(P,i), a*(Base_FinSeq(K,n,1)) )| by F2,B3,B4b,FINSEQ_1:18
+       .= a* |( Line(P,i), (Base_FinSeq(K,n,1)) )| by BB246,A2x,A2b
+       .= a* (P*(i,1)) by K0,AA2627,A2x,A4;
+      consider p2 being FinSequence of K such that
+     A99:  p2 = P.i & P*(i,1) = p2.1 by MATRIX_1:def 6,A23b;
+     p2=Base_FinSeq(K,n,i) by A1,A99,B1;
+    hence (P*Q)*(i,j)= a*(0.K) by B28,A99,AA1120,B18,B1
+      .=0.K by VECTSP_1:36;
+    end;
+    end;
+    hence (P*Q)*(i,j)= 0.K;
+   end;
+   A85: for i,j st 1<i & i<=n & i=j holds (P*Q)*(i,j)=1.K
+    proof let i,j;
+     assume B1: 1<i & i<=n & i=j;then
+     B20: i in Seg n & j in Seg n by FINSEQ_1:3;
+     B2: [i,j] in Indices P by B1,MATRIX_1:38;
+     A22: [i,j] in Indices (P*Q) by B1,MATRIX_1:38;
+     A23b: [i,1] in Indices P by B1,MATRIX_1:38,A40;
+     B3: len (Col(Q,j))=len Q by MATRIX_1:def 9 .=n by MATRIX_1:25;
+     B4: len (-a*(P*(1,j))*(Base_FinSeq(K,n,1)))
+       =len ((-a*(P*(1,j)))*(Base_FinSeq(K,n,1))) by BB200
+      .=len (Base_FinSeq(K,n,1)) by MATRIXR1:16 .=n by AA1100;
+     B5b: len (Base_FinSeq(K,n,j))=n by AA1100;then
+     B5: len (-a*(P*(1,j))*(Base_FinSeq(K,n,1))+Base_FinSeq(K,n,j))
+          =n by B4,Th6;
+      reconsider p=Col(Q,j),q=-a*(P*(1,j))*(Base_FinSeq(K,n,1))
+                 +Base_FinSeq(K,n,j) as FinSequence of K;
+     for k be Nat st 1 <=k & k <= n holds p.k=q.k
+     proof let k be Nat;
+      assume C0: 1 <=k & k <= n;then
+       C10: k in Seg n by FINSEQ_1:3;
+       C10a: len ((-a*(P*(1,j)))*(Base_FinSeq(K,n,1)))
+           = len (Base_FinSeq(K,n,1)) by MATRIXR1:16 .=n by AA1100;
+       A21b: len ((-a*(P*(1,j)))*(Base_FinSeq(K,n,1)))
+                            =len (Base_FinSeq(K,n,1)) by MATRIXR1:16
+                           .= n by AA1100;
+       B92b: k in dom ((-a*(P*(1,j)))*(Base_FinSeq(K,n,1)))
+                                 by A21b,C0,FINSEQ_3:27;
+       C12: k in dom Q by C0,FINSEQ_3:27,A2d;
+       C2: p.k=Q*(k,j) by MATRIX_1:def 9,C12;
+       A13: ((Base_FinSeq(K,n,1))/.k)=((Base_FinSeq(K,n,1)).k)
+                              by C0,FINSEQ_4:24,A2b;
+       C4: (-a*(P*(1,j))*(Base_FinSeq(K,n,1))).k
+           =((-a*(P*(1,j)))*(Base_FinSeq(K,n,1))).k by BB200
+          .=(-a*(P*(1,j)))*((Base_FinSeq(K,n,1))/.k)
+             by FVSUM_1:62,B92b,A13;
+       A3a: len (Base_FinSeq(K,n,1))=n by AA1100;
+       E1: ((Base_FinSeq(K,n,1))/.k)=((Base_FinSeq(K,n,1)).k)
+              by C0,FINSEQ_4:24,A3a;
+       per cases by C0,REAL_1:def 5;
+       suppose D0: 1=k;
+          K3: 1 <= k & k <= len (-a*(P*(1,j))*(Base_FinSeq(K,n,1)))
+              by C0,C10a,BB200;
+          K1: (Base_FinSeq(K,n,j))/.k
+            = (Base_FinSeq(K,n,j)).k by FINSEQ_4:24,B5b,C0
+           .= 0.K by D0,B1,AA1120,C0;
+          K2: (-a*(P*(1,j))*(Base_FinSeq(K,n,1)))/.k
+            = (-a*(P*(1,j)))*((Base_FinSeq(K,n,1))/.k)
+               by C4,FINSEQ_4:24,K3
+           .= (-a*(P*(1,j)))*(1.K) by D0,AA1110,A4,E1;
+          q.k= (-a*(P*(1,j)))*(1.K)+ 0.K
+           by BB120,B4,B5b,C0,K2,K1
+            .= (-a*(P*(1,j)))*(1.K) by RLVECT_1:10
+            .= -a*(P*(1,j)) by VECTSP_1:def 16;
+         hence p.k=q.k by A1,B1,C2,D0;
+        end;
+       suppose D0: 1<k;
+          [k,j] in Indices Q by A8d,B20,C10,ZFMISC_1:106;then
+          consider p2 being FinSequence of K such that
+         D3: p2 = Q.k & Q*(k,j) = p2.j by MATRIX_1:def 6;
+B:       k in NAT by ORDINAL1:def 13;
+         D2: p.k= (Base_FinSeq(K,n,k)).j by A1,D0,C0,D3,B,C2;
+         now per cases;
+         suppose E0: k <> j;then
+           E2: p.k= 0.K by D2,AA1120,B1,C0;
+           K1: (Base_FinSeq(K,n,j))/.k
+               = (Base_FinSeq(K,n,j)).k by FINSEQ_4:24,B5b,C0
+              .= 0.K by B1,AA1120,C0,E0;
+           K2: (-a*(P*(1,j))*(Base_FinSeq(K,n,1)))/.k
+            =(-a*(P*(1,j))*(Base_FinSeq(K,n,1))).k
+                  by FINSEQ_4:24,B4,C0;
+           E3: (-a*(P*(1,j))*(Base_FinSeq(K,n,1))).k
+            =(-a*(P*(1,j)))*(0.K) by D0,AA1120,A4,C0,A13,C4
+           .= 0.K by VECTSP_1:36;
+           q.k=0.K + 0.K by E3,BB120,B4,B5b,C0,K1,K2;
+          hence p.k=q.k by E2,RLVECT_1:10;
+         end;
+         suppose E0: k=j;then
+           E2: p.k=1.K by D2,AA1110,C0;
+           K1: (Base_FinSeq(K,n,j))/.k
+               = (Base_FinSeq(K,n,j)).k by FINSEQ_4:24,B5b,C0
+              .= 1.K by B1,AA1110,E0;
+           K2: (-a*(P*(1,j))*(Base_FinSeq(K,n,1)))/.k
+            =(-a*(P*(1,j))*(Base_FinSeq(K,n,1))).k
+                  by FINSEQ_4:24,B4,C0;
+           E3: (-a*(P*(1,j))*(Base_FinSeq(K,n,1))).k
+            =(-a*(P*(1,j)))*(0.K) by D0,AA1120,A4,C0,A13,C4
+           .= 0.K by VECTSP_1:36;
+           q.k= 0.K + 1.K by E3,BB120,B4,B5b,C0,K1,K2;
+          hence p.k=q.k by E2,RLVECT_1:10;
+         end;
+         end;
+        hence p.k=q.k;
+       end;
+     end;then
+     B7: Col(Q,j)=-a*(P*(1,j))*(Base_FinSeq(K,n,1))+Base_FinSeq(K,n,j)
+                        by B3,B5,FINSEQ_1:18;
+     A2a: len P=n & width P=n by MATRIX_1:25;
+     K2: len Line(P,i) = n by MATRIX_1:def 8,A2a;
+     K0: (Line(P,i))/.j = (Line(P,i)).j by FINSEQ_4:24,K2,B1
+     .= P*(i,j) by MATRIX_1:def 8,B20,A2a;
+     K3: (Line(P,i))/.1 = (Line(P,i)).1 by FINSEQ_4:24,K2,A4
+     .= P*(i,1) by MATRIX_1:def 8,A10;
+     B18: 1<=n by XXREAL_0:2,B1;
+     B28: (P*Q)*(i,j)= |( Line(P,i), Col(Q,j) )|
+      by MATRIX_3:def 4,A2a,A2d,A22
+                .= |( Line(P,i), -a*(P*(1,j))*(Base_FinSeq(K,n,1)) )|
+                  +|( Line(P,i), Base_FinSeq(K,n,j) )|
+                                 by BB248,B4,K2,B7,B5b
+                .= |( Line(P,i), (-a*(P*(1,j)))*(Base_FinSeq(K,n,1)) )|
+                  +|( Line(P,i), Base_FinSeq(K,n,j) )| by BB200
+       .=(-a*(P*(1,j)))* |( Line(P,i), (Base_FinSeq(K,n,1)) )|
+                  +|( Line(P,i), Base_FinSeq(K,n,j) )| by BB246,K2,A2b
+       .=(-a*(P*(1,j)))* (P*(i,1))
+                  +|( Line(P,i), Base_FinSeq(K,n,j) )|
+                   by K3,AA2627,K2,A4
+      .= -(a*(P*(1,j)))* (P*(i,1))
+                  +|( Line(P,i), Base_FinSeq(K,n,j) )| by VECTSP_1:41
+      .= -((P*(1,j))*(a* (P*(i,1))))
+                  +|( Line(P,i), Base_FinSeq(K,n,j) )| by GROUP_1:def 4
+     .= -(P*(1,j))*(a* (P*(i,1))) + P*(i,j) by K0,AA2627,B1,K2;
+     consider p1 being FinSequence of K such that
+     A97:  p1 = P.i & P*(i,j) = p1.j by MATRIX_1:def 6,B2;
+     p1=Base_FinSeq(K,n,i) by A1,A97,B1;then
+     A98: p1.j=1.K by AA1110,B1;
+     consider p2 being FinSequence of K such that
+     A99:  p2 = P.i & P*(i,1) = p2.1 by MATRIX_1:def 6,A23b;
+     p2=Base_FinSeq(K,n,i) by A1,A99,B1;
+     hence (P*Q)*(i,j)= -(P*(1,j))*(a* (0.K)) + P*(i,j)
+       by A99,B28,AA1120,B18,B1
+     .= -(P*(1,j))*((0.K)) + P*(i,j) by VECTSP_1:36
+     .= -((0.K)) + P*(i,j) by VECTSP_1:36
+     .= 0.K + 1.K by A97,A98,RLVECT_1:25
+     .= 1.K by RLVECT_1:10;
+    end;
+  for i,j being Nat st [i,j] in Indices (P*Q) holds
+                   (P*Q)*(i,j)=(1.(K,n))*(i,j)
+  proof let i,j be Nat;
+   assume [i,j] in Indices (P*Q);then
+    B2: i in Seg n & j in Seg n by A18,ZFMISC_1:106;then
+    B3: 1<=i & i<=n by FINSEQ_1:3;
+    B4: 1<=j & j<=n by B2,FINSEQ_1:3;
+    reconsider i0=i,j0=j as Element of NAT by ORDINAL1:def 13;
+    per cases by B3,REAL_1:def 5;
+    suppose C0: 1<i;
+      now per cases;
+      suppose D0: i<>j;
+        D1: (1.(K,n))*(i,j)=(Base_FinSeq(K,n,i0)).j0 by BB300,B3,B4
+                          .= 0.K by AA1120,D0,B3,B4;
+       thus (P*Q)*(i,j)=(P*Q)*(i0,j0)
+                      .=(1.(K,n))*(i,j) by D1,C0,B3,B4,A15,D0;
+      end;
+      suppose D0: i=j;
+        D1: (1.(K,n))*(i,j)=(Base_FinSeq(K,n,i0)).j0 by BB300,B3,B4
+                          .=1.K by AA1110,D0,B4;
+       thus (P*Q)*(i,j)=(P*Q)*(i0,j0)
+                      .=(1.(K,n))*(i,j) by D1,C0,B4,A85,D0;
+      end;
+      end;
+     hence (P*Q)*(i,j)=(1.(K,n))*(i,j);
+    end;
+    suppose C0: 1=i;
+      now per cases;
+     suppose D0: i<j;
+      D1: (1.(K,n))*(i,j)=(Base_FinSeq(K,n,i0)).j0 by BB300,B3,B4
+                        .= 0.K by AA1120,B3,B4,D0;
+       thus (P*Q)*(i,j)=(P*Q)*(i0,j0)
+                      .=(1.(K,n))*(i,j) by D1,C0,B4,A14,D0;
+     end;
+     suppose D9: i>=j;then
+      D0: i=j by B4,XXREAL_0:1,C0;
+      D1: (1.(K,n))*(i,j)=(Base_FinSeq(K,n,i0)).j0 by BB300,B3,B4
+                        .=1.K by D0,AA1110,B4;
+       thus (P*Q)*(i,j)=(1.(K,n))*(i,j) by D1,C0,A13,D9,B4,XXREAL_0:1;
+     end;
+     end;
+     hence (P*Q)*(i,j)=(1.(K,n))*(i,j);
+    end;
+  end;then
+  A5: P*Q=1.(K,n) by MATRIX_1:28;
+  A2d: len P=n & width P=n by MATRIX_1:25;
+  A2a: len Q=n & width Q=n by MATRIX_1:25;
+  A2: len (Line(Q,1))=n by MATRIX_1:def 8,A2a;
+  A2b: len (Base_FinSeq(K,n,1))=n by AA1100;
+  A20: len (Col(P,1))=len P by MATRIX_1:def 9 .=n by MATRIX_1:25;
+  A21: len ((a")*(Base_FinSeq(K,n,1)))=len (Base_FinSeq(K,n,1)) by MATRIXR1:16
+                           .= n by AA1100;
+  for k be Nat st 1<=k & k<=n holds (Col(P,1)).k=((a")*(Base_FinSeq(K,n,1))).k
+  proof let k be Nat;
+   B: k in NAT by ORDINAL1:def 13;
+   assume B1: 1<=k & k<=n;then
+    B32: k in Seg n by FINSEQ_1:3;then
+    B3: k in dom P by FINSEQ_1:def 3,A2d;
+    B92: k in dom ((a")*(Base_FinSeq(K,n,1))) by A21,B1,FINSEQ_3:27;
+    1<=n by B1,XXREAL_0:2;then
+    B11: 1 in dom P by FINSEQ_3:27,A2d;
+    A13: ((Base_FinSeq(K,n,1))/.k)=((Base_FinSeq(K,n,1)).k)
+                               by B1,FINSEQ_4:24,A2b;
+    A13a: 1<=n by B1,XXREAL_0:2;
+    B5: now assume C0: k<>1;
+     thus ((a")*(Base_FinSeq(K,n,1))).k
+                         = (a")*((Base_FinSeq(K,n,1))/.k)
+                                 by FVSUM_1:62,B92,A13
+                        .= (a")*(0.K) by A13,AA1120,B1,C0,A13a
+                        .= 0.K by VECTSP_1:36;
+    end;
+    B6: now assume C0: k=1;
+      k in dom ((a")*(Base_FinSeq(K,n,1))) by B32,FINSEQ_1:def 3,A21;
+     hence ((a")*(Base_FinSeq(K,n,1))).k
+           =(a")*((Base_FinSeq(K,n,1))/.k) by FVSUM_1:62,A13
+          .=(a")*(1.K) by AA1110,C0,B1,A13
+          .= a" by VECTSP_1:def 16;
+    end;
+    now assume B20: k<>1;then
+      B19: 1<k by B1,REAL_1:def 5;
+      [k,1] in Indices P by B1,MATRIX_1:38,A40;then
+      consider p being FinSequence of K such that
+      C3: p = P.k & P*(k,1) = p.1 by MATRIX_1:def 6;
+      P*(k,1)=(Base_FinSeq(K,n,k)).1 by C3,B19,B1,A1,B
+            .= 0.K by B20,B1,A40,AA1120;
+     hence (Col(P,1)).k= 0.K by MATRIX_1:def 9,B3;
+    end;
+   hence (Col(P,1)).k=((a")*(Base_FinSeq(K,n,1))).k
+    by B5,B6,MATRIX_1:def 9,B11,A1;
+  end;then
+  A3: Col(P,1)=(a")*(Base_FinSeq(K,n,1)) by A20,A21,FINSEQ_1:18;
+  A4: 0+1<=n by NAT_1:13,A1;then
+  A10: 1 in Seg width Q by A2a,FINSEQ_1:3;
+  A11: 1 in Seg len Q by A2a,FINSEQ_1:3,A4;
+  K1: 1 in dom Q by A11,FINSEQ_1:def 3;
+  K3: len ((a")*(Line(Q,1)))=len ((Line(Q,1))) by MATRIXR1:16
+      .= n by MATRIX_1:def 8,A2a;
+  K4: 1 in dom (Line(Q,1)) by A11,A2a,A2,FINSEQ_1:def 3;
+  A8d: Indices P=[: Seg n,Seg n :] by MATRIX_1:25;
+  A8: Indices Q=[: Seg n,Seg n :] by MATRIX_1:25;
+  A12: [1,1] in Indices Q by A4,MATRIX_1:38;
+  A18: Indices (Q*P)=[: Seg n,Seg n :] by MATRIX_1:25;then
+  A13: (Q*P)*(1,1)= |( Line(Q,1), Col(P,1) )|
+                      by MATRIX_3:def 4,A12,A8,A2d,A2a
+             .= (a")*( |( Line(Q,1), Base_FinSeq(K,n,1) )| )
+                           by A3,BB246,A2,A2b
+             .=(a")*(Line(Q,1))/.1 by AA2627,A2,A4
+             .=((a")*(Line(Q,1)))/.1 by POLYNOM1:def 2,K4
+             .=((a")*(Line(Q,1))).1 by FINSEQ_4:24,K3,A4
+             .=(a")*(Q*(1,1)) by MATRIX12:3,K1,A10
+             .=1.K by VECTSP_1:def 22,A1;
+  A14: for j st 1<j & j<=n holds (Q*P)*(1,j)= 0.K
+   proof let j;
+    assume B1: 1<j & j<=n;then
+     B20: j in Seg n by FINSEQ_1:3;
+     A22: [1,j] in Indices (Q*P) by B1,MATRIX_1:38,A4;
+     B3: len (Col(P,j))=len P by MATRIX_1:def 9 .=n by MATRIX_1:25;
+     B4: len (-(a")*(Q*(1,j))*(Base_FinSeq(K,n,1)))
+       =len ((-(a")*(Q*(1,j)))*(Base_FinSeq(K,n,1))) by BB200
+      .=len (Base_FinSeq(K,n,1)) by MATRIXR1:16 .=n by AA1100;
+     B4d: len ((-(a")*(Q*(1,j)))*(Base_FinSeq(K,n,1)))
+                       =len Base_FinSeq(K,n,1) by MATRIXR1:16
+                      .=n by AA1100;
+     B5b: len (Base_FinSeq(K,n,j))=n by AA1100;then
+     B5: len (-(a")*(Q*(1,j))*(Base_FinSeq(K,n,1))+Base_FinSeq(K,n,j))
+          =n by B4,Th6;
+     reconsider p=Col(P,j),q=-(a")*(Q*(1,j))*(Base_FinSeq(K,n,1))
+                            +Base_FinSeq(K,n,j)
+                           as FinSequence of K;
+     for k be Nat st 1 <=k & k <= n holds p.k=q.k
+     proof let k be Nat;
+      assume C0: 1 <=k & k <= n;then
+       C10b: k in dom ((-(a")*(Q*(1,j)))*(Base_FinSeq(K,n,1)))
+                           by B4d,FINSEQ_3:27;
+       C10a: len ((-(a")*(Q*(1,j)))*(Base_FinSeq(K,n,1)))
+           = len (Base_FinSeq(K,n,1)) by MATRIXR1:16 .=n by AA1100;
+       C12: k in dom P by C0,FINSEQ_3:27,A2d;
+       C2: p.k=P*(k,j) by MATRIX_1:def 9,C12;
+       A2b: len (Base_FinSeq(K,n,1))=n by AA1100;
+       A13: ((Base_FinSeq(K,n,1))/.k)=((Base_FinSeq(K,n,1)).k)
+                              by C0,FINSEQ_4:24,A2b;
+       C4: (-(a")*(Q*(1,j))*(Base_FinSeq(K,n,1))).k
+           =((-(a")*(Q*(1,j)))*(Base_FinSeq(K,n,1))).k by BB200
+          .=(-(a")*(Q*(1,j)))*((Base_FinSeq(K,n,1))/.k)
+            by FVSUM_1:62,C10b,A13;
+       per cases by C0,REAL_1:def 5;
+       suppose D0: 1=k;then
+         D2: p.1=-(a")*(Q*(1,j)) by A1b,B1,C2;
+         K3: 1 <= len (-(a")*(Q*(1,j))*(Base_FinSeq(K,n,1)))
+              by C0,C10a,BB200,D0;
+         K1: (Base_FinSeq(K,n,j))/.1
+            = (Base_FinSeq(K,n,j)).1 by FINSEQ_4:24,B5b,C0,D0
+           .= 0.K by D0,B1,AA1120,C0;
+         D1:(-(a")*(Q*(1,j))*(Base_FinSeq(K,n,1)))/.1
+           =(-(a")*(Q*(1,j)))*((Base_FinSeq(K,n,1))/.1)
+             by C4,FINSEQ_4:24,K3,D0
+          .=(-(a")*(Q*(1,j)))*(1.K) by D0,AA1110,A4,A13
+          .=-(a")*(Q*(1,j)) by VECTSP_1:def 16;
+        q.1= -(a")*(Q*(1,j)) + 0.K by D1,BB120,B4,B5b,C0,K1,D0;
+        hence p.k=q.k by D2,RLVECT_1:10,D0;
+       end;
+       suppose D0: 1<k;
+          [k,j] in Indices P by MATRIX_1:38,C0,B1;then
+          consider p2 being FinSequence of K such that
+         D3: p2 = P.k & P*(k,j) = p2.j by MATRIX_1:def 6;
+B:       k in NAT by ORDINAL1:def 13;
+         D2: p.k= (Base_FinSeq(K,n,k)).j by A1,D0,C0,D3,B,C2;
+         now per cases;
+         suppose E0: k <> j;then
+           E2: p.k= 0.K by D2,AA1120,B1,C0;
+           A3a: len (Base_FinSeq(K,n,1))=n by AA1100;
+           E1: ((Base_FinSeq(K,n,1))/.k)=((Base_FinSeq(K,n,1)).k)
+              by C0,FINSEQ_4:24,A3a;
+           K1: (Base_FinSeq(K,n,j))/.k
+               = (Base_FinSeq(K,n,j)).k by FINSEQ_4:24,B5b,C0
+              .= 0.K by B1,AA1120,C0,E0;
+           K2: (-(a")*(Q*(1,j))*(Base_FinSeq(K,n,1)))/.k
+            =(-(a")*(Q*(1,j))*(Base_FinSeq(K,n,1))).k
+                  by FINSEQ_4:24,B4,C0;
+           E3: (-(a")*(Q*(1,j))*(Base_FinSeq(K,n,1))).k
+            =(-(a")*(Q*(1,j)))*(0.K) by D0,AA1120,A4,C0,E1,C4
+           .= 0.K by VECTSP_1:36;
+           q.k= 0.K + 0.K by E3,BB120,B4,B5b,C0,K1,K2;
+          hence p.k=q.k by E2,RLVECT_1:10;
+         end;
+         suppose E0: k=j;then
+           E2: p.k=1.K by D2,AA1110,C0;
+           A3a: len (Base_FinSeq(K,n,1))=n by AA1100;
+           E1: ((Base_FinSeq(K,n,1))/.k)=((Base_FinSeq(K,n,1)).k)
+              by C0,FINSEQ_4:24,A3a;
+           K1: (Base_FinSeq(K,n,k))/.k
+               = (Base_FinSeq(K,n,k)).k by FINSEQ_4:24,B5b,C0,E0
+              .= 1.K by B1,AA1110,E0;
+           K2: (-(a")*(Q*(1,k))*(Base_FinSeq(K,n,1)))/.k
+            =(-(a")*(Q*(1,k))*(Base_FinSeq(K,n,1))).k
+                  by FINSEQ_4:24,B4,C0,E0;
+           E3: (-(a")*(Q*(1,k))*(Base_FinSeq(K,n,1))).k
+            =(-(a")*(Q*(1,k)))*(0.K) by D0,AA1120,A4,C0,E1,C4,E0
+           .= 0.K by VECTSP_1:36;
+            q.k= 0.K + 1.K by BB120,B4,B5b,C0,E3,K1,K2,E0;
+           hence p.k=q.k by E2,RLVECT_1:10;
+         end;
+         end;
+        hence p.k=q.k;
+       end;
+     end;then
+     B7: Col(P,j)=-(a")*(Q*(1,j))*(Base_FinSeq(K,n,1))+Base_FinSeq(K,n,j)
+                        by B3,B5,FINSEQ_1:18;
+     K1: 1<=n by B1,XXREAL_0:2;
+     B8: 1 in Seg width Q by FINSEQ_1:3,A2a,K1;
+     K2: (Line(Q,1))/.1 = (Line(Q,1)).1 by FINSEQ_4:24,K1,A2
+       .= a by A1,MATRIX_1:def 8,B8;
+     K2a: len Line(Q,1) = n by MATRIX_1:def 8,A2a;
+     K3: (Line(Q,1))/.j = (Line(Q,1)).j by FINSEQ_4:24,K2a,B1;
+      (Q*P)*(1,j)= |( Line(Q,1), Col(P,j) )| by MATRIX_3:def 4,A2a,A2d,A22
+                .= |( Line(Q,1), -(a")*(Q*(1,j))*(Base_FinSeq(K,n,1)) )|
+                  +|( Line(Q,1), Base_FinSeq(K,n,j) )|
+                                 by BB248,B4,A2,B7,B5b
+                .= |( Line(Q,1), (-(a")*(Q*(1,j)))*(Base_FinSeq(K,n,1)) )|
+                  +|( Line(Q,1), Base_FinSeq(K,n,j) )| by BB200
+       .=(-(a")*(Q*(1,j)))* |( Line(Q,1), (Base_FinSeq(K,n,1)) )|
+                  +|( Line(Q,1), Base_FinSeq(K,n,j) )| by BB246,A2,A2b
+       .=(-(a")*(Q*(1,j)))* a
+                  +|( Line(Q,1), Base_FinSeq(K,n,j) )| by K2,AA2627,A2,A4
+      .= -((a")*(Q*(1,j)))* a
+                  +|( Line(Q,1), Base_FinSeq(K,n,j) )| by VECTSP_1:41
+      .= -((Q*(1,j))*((a")* a))
+                  +|( Line(Q,1), Base_FinSeq(K,n,j) )| by GROUP_1:def 4
+      .= -((Q*(1,j))*(1.K))
+                  +|( Line(Q,1), Base_FinSeq(K,n,j) )| by VECTSP_1:def 22,A1
+      .= -((Q*(1,j))*(1.K)) + ( Line(Q,1))/.j by AA2627,A2,B1
+      .= -(Q*(1,j)) + ( Line(Q,1))/.j by VECTSP_1:def 16
+     .= -(Q*(1,j)) + Q*(1,j) by MATRIX_1:def 8,A2a,B20,K3
+     .= 0.K by RLVECT_1:16;
+    hence (Q*P)*(1,j)= 0.K;
+   end;
+   A15: for i,j st 1<i & i<=n & 1<=j & j<=n & i<>j holds (Q*P)*(i,j)= 0.K
+   proof let i,j;
+    assume B1: 1<i & i<=n & 1<=j & j<=n & i<>j;then
+     B20: i in Seg n & j in Seg n by FINSEQ_1:3;
+     B2: [i,j] in Indices Q by B1,MATRIX_1:38;
+     A22: [i,j] in Indices (Q*P) by B1,MATRIX_1:38;
+     A23b: [i,1] in Indices Q by B1,MATRIX_1:38,A4;
+     B3: len (Col(P,j))=len P by MATRIX_1:def 9 .=n by MATRIX_1:25;
+     B4: len (-(a")*(Q*(1,j))*(Base_FinSeq(K,n,1)))
+       =len ((-(a")*(Q*(1,j)))*(Base_FinSeq(K,n,1))) by BB200
+      .=len (Base_FinSeq(K,n,1)) by MATRIXR1:16 .=n by AA1100;
+     B4d: len ((-(a")*(Q*(1,j)))*(Base_FinSeq(K,n,1)))
+        =len (Base_FinSeq(K,n,1)) by MATRIXR1:16 .=n by AA1100;
+     B5b: len (Base_FinSeq(K,n,j))=n by AA1100;then
+     B5: len (-(a")*(Q*(1,j))*(Base_FinSeq(K,n,1))+Base_FinSeq(K,n,j))
+          =n by B4,Th6;
+     B4b: len ((a")*(Base_FinSeq(K,n,1)))
+      =len Base_FinSeq(K,n,1) by MATRIXR1:16 .=n by AA1100;
+    now per cases;
+    suppose F0: j>1;
+    reconsider p=Col(P,j),q=-(a")*(Q*(1,j))*(Base_FinSeq(K,n,1))
+                              +Base_FinSeq(K,n,j)
+                           as FinSequence of K;
+     for k be Nat st 1 <=k & k <= n holds p.k=q.k
+     proof let k be Nat;
+      assume C0: 1 <=k & k <= n;then
+            k in Seg n by FINSEQ_1:3;then
+       C10b: k in dom ((-(a")*(Q*(1,j)))*(Base_FinSeq(K,n,1)))
+                           by B4d,FINSEQ_1:def 3;
+       C12: k in dom P by C0,FINSEQ_3:27,A2d;
+       C2: p.k=P*(k,j) by MATRIX_1:def 9,C12;
+       A2b: len (Base_FinSeq(K,n,1))=n by AA1100;
+       A13: ((Base_FinSeq(K,n,1))/.k)=((Base_FinSeq(K,n,1)).k)
+                              by C0,FINSEQ_4:24,A2b;
+       C4: (-(a")*(Q*(1,j))*(Base_FinSeq(K,n,1))).k
+           =((-(a")*(Q*(1,j)))*(Base_FinSeq(K,n,1))).k by BB200
+          .=(-(a")*(Q*(1,j)))*((Base_FinSeq(K,n,1))/.k)
+             by FVSUM_1:62,C10b,A13;
+       A3a: len (Base_FinSeq(K,n,1))=n by AA1100;
+       E1: ((Base_FinSeq(K,n,1))/.k)=((Base_FinSeq(K,n,1)).k)
+              by C0,FINSEQ_4:24,A3a;
+       per cases by C0,REAL_1:def 5;
+       suppose D0: 1=k;
+          K1: (Base_FinSeq(K,n,j))/.k
+            = (Base_FinSeq(K,n,j)).k by FINSEQ_4:24,B5b,C0
+           .= 0.K by D0,B1,AA1120,C0,F0;
+          K2: (-(a")*(Q*(1,j))*(Base_FinSeq(K,n,1)))/.k
+            =(-(a")*(Q*(1,j))*(Base_FinSeq(K,n,1))).k
+                  by FINSEQ_4:24,B4,C0;
+          D1:(-(a")*(Q*(1,j))*(Base_FinSeq(K,n,1))).k
+            =(-(a")*(Q*(1,j)))*(1.K) by D0,AA1110,A4,A13,C4;
+          q.k= (-(a")*(Q*(1,j)))*(1.K)+ 0.K
+           by BB120,B4,B5b,C0,D1,K1,K2
+            .= (-(a")*(Q*(1,j)))*(1.K) by RLVECT_1:10
+            .=-(a")*(Q*(1,j)) by VECTSP_1:def 16;
+         hence p.k=q.k by A1b,B1,F0,C2,D0;
+        end;
+       suppose D0: 1<k;
+          [k,j] in Indices P by B1,MATRIX_1:38,C0;
+          then
+          consider p2 being FinSequence of K such that
+         D3: p2 = P.k & P*(k,j) = p2.j by MATRIX_1:def 6;
+B:       k in NAT by ORDINAL1:def 13;
+         D2: p.k=(Base_FinSeq(K,n,k)).j by A1,D0,C0,D3,B,C2;
+         now per cases;
+         suppose E0: k <> j;
+           (-(a")*(Q*(1,j))*(Base_FinSeq(K,n,1)))/.k
+            =(-(a")*(Q*(1,j)))*((Base_FinSeq(K,n,1))/.k)
+              by C4,FINSEQ_4:24,B4,C0
+           .=(-(a")*(Q*(1,j)))*(0.K) by D0,AA1120,A4,C0,E1
+           .= 0.K by VECTSP_1:36;then
+           q.k = 0.K +(Base_FinSeq(K,n,j))/.k by BB120,B4,B5b,C0
+              .= (Base_FinSeq(K,n,j))/.k by RLVECT_1:10
+              .= (Base_FinSeq(K,n,j)).k by FINSEQ_4:24,B5b,C0
+              .= 0.K by B1,AA1120,C0,E0;
+          hence p.k=q.k by D2,AA1120,B1,C0,E0;
+         end;
+         suppose E0: k=j;
+           (-(a")*(Q*(1,j))*(Base_FinSeq(K,n,1)))/.k
+            =(-(a")*(Q*(1,j)))*((Base_FinSeq(K,n,1))/.k)
+              by C4,FINSEQ_4:24,B4,C0
+           .=(-(a")*(Q*(1,j)))*(0.K) by D0,AA1120,A4,C0,E1
+           .= 0.K by VECTSP_1:36;then
+           q.k = 0.K +(Base_FinSeq(K,n,j))/.k by BB120,B4,B5b,C0
+              .= (Base_FinSeq(K,n,j))/.k by RLVECT_1:10
+              .= (Base_FinSeq(K,n,j)).k by FINSEQ_4:24,B5b,C0
+              .= 1.K by B1,AA1110,E0;
+           hence p.k=q.k by D2,AA1110,C0,E0;
+         end;
+         end;
+        hence p.k=q.k;
+       end;
+     end;then
+     B7: Col(P,j)=-(a")*(Q*(1,j))*(Base_FinSeq(K,n,1))+Base_FinSeq(K,n,j)
+                        by B3,B5,FINSEQ_1:18;
+     A2a: len Q=n & width Q=n by MATRIX_1:25;
+     K2: len Line(Q,i) = n by MATRIX_1:def 8,A2a;
+     K3: (Line(Q,i))/.j = ( Line(Q,i)).j by FINSEQ_4:24,K2,B1
+     .= Q*(i,j) by MATRIX_1:def 8,B20,A2a;
+     K0: (Line(Q,i))/.1 = (Line(Q,i)).1 by FINSEQ_4:24,K2,A4
+     .= Q*(i,1) by MATRIX_1:def 8,A10;
+     B18: 1<=n by XXREAL_0:2,B1;
+     B28: (Q*P)*(i,j)= |( Line(Q,i), Col(P,j) )| by MATRIX_3:def 4,A2a,A2d,A22
+        .= |( Line(Q,i), -(a")*(Q*(1,j))*(Base_FinSeq(K,n,1)) )|
+                  +|( Line(Q,i), Base_FinSeq(K,n,j) )|
+                                 by BB248,B4,K2,B7,B5b
+        .= |( Line(Q,i), (-(a")*(Q*(1,j)))*(Base_FinSeq(K,n,1)) )|
+                  +|( Line(Q,i), Base_FinSeq(K,n,j) )| by BB200
+       .=(-(a")*(Q*(1,j)))* |( Line(Q,i), (Base_FinSeq(K,n,1)) )|
+                  +|( Line(Q,i), Base_FinSeq(K,n,j) )| by BB246,K2,A2b
+       .=(-(a")*(Q*(1,j)))* (Q*(i,1))
+                  +|( Line(Q,i), Base_FinSeq(K,n,j) )|
+                   by K0,AA2627,K2,A4
+      .= -((Q*(1,j))*(a")* (Q*(i,1)))
+                  +|( Line(Q,i), Base_FinSeq(K,n,j) )| by VECTSP_1:41
+      .= -((Q*(1,j))*((a")* (Q*(i,1))))
+                  +|( Line(Q,i), Base_FinSeq(K,n,j) )| by GROUP_1:def 4
+     .= -(Q*(1,j))*((a")* (Q*(i,1))) + Q*(i,j) by K3,AA2627,B1,K2;
+     consider p1 being FinSequence of K such that
+     A97:  p1 = Q.i & Q*(i,j) = p1.j by MATRIX_1:def 6,B2;
+     p1=Base_FinSeq(K,n,i) by A1,A97,B1;then
+     A98: p1.j= 0.K by AA1120,B1;
+     consider p2 being FinSequence of K such that
+     A99:  p2 = Q.i & Q*(i,1) = p2.1 by MATRIX_1:def 6,A23b;
+     p2=Base_FinSeq(K,n,i) by A1,A99,B1;
+    hence (Q*P)*(i,j) = -(Q*(1,j))*((a")* (0.K)) + Q*(i,j)
+      by B28,A99,AA1120,B18,B1
+        .= -(Q*(1,j))*((0.K)) + Q*(i,j) by VECTSP_1:36
+        .= -(0.K) + Q*(i,j) by VECTSP_1:36
+        .= 0.K + 0.K by A97,A98,RLVECT_1:25
+        .= 0.K by RLVECT_1:10;
+    end;
+    suppose F1: j<=1;
+      reconsider p=Col(P,j),q=a"*(Base_FinSeq(K,n,1))
+                           as FinSequence of K;
+     F2: for k be Nat st 1 <=k & k <= n holds p.k=q.k
+      proof let k be Nat;
+      assume C0: 1 <=k & k <= n;then
+       C10: k in Seg n by FINSEQ_1:3;then
+       C10b: k in dom ((a")*(Base_FinSeq(K,n,1)))
+                           by B4b,FINSEQ_1:def 3;
+       A2b: len (Base_FinSeq(K,n,1))=n by AA1100;
+       C12: k in dom P by C0,FINSEQ_3:27,A2d;
+       C2: p.k=P*(k,j) by MATRIX_1:def 9,C12;
+       A13: ((Base_FinSeq(K,n,1))/.k)=((Base_FinSeq(K,n,1)).k)
+                               by C0,FINSEQ_4:24,A2b;
+       C4: ((a")*(Base_FinSeq(K,n,1))).k
+               = (a")*((Base_FinSeq(K,n,1))/.k) by FVSUM_1:62,C10b,A13;
+       per cases by C0,REAL_1:def 5;
+       suppose D0: 1=k;
+          q.k= (a")*(1.K) by C4,D0,AA1110,C0,A13
+           .=a" by VECTSP_1:def 16;
+         hence p.k=q.k by A1,F1,B1,XXREAL_0:1,C2,D0;
+        end;
+       suppose D0: 1<k;
+          [k,j] in Indices P by A8d,B20,C10,ZFMISC_1:106;then
+          consider p2 being FinSequence of K such that
+         D3: p2 = P.k & P*(k,j) = p2.j by MATRIX_1:def 6;
+B:       k in NAT by ORDINAL1:def 13;
+         D2: p.k=(Base_FinSeq(K,n,k)).j by A1,D0,C0,D3,B,C2;
+         now per cases;
+         suppose E0: k <> j;
+           A13: ((Base_FinSeq(K,n,1))/.k)=((Base_FinSeq(K,n,1)).k)
+                               by C0,FINSEQ_4:24,A2b;
+           A13a: 1<=n by C0,XXREAL_0:2;
+           (a")*(Base_FinSeq(K,n,1))/.k
+            = a"*(0.K) by A13,AA1120,D0,C0,A13a
+           .= 0.K by VECTSP_1:36;
+          hence p.k=q.k by E0,D2,AA1120,B1,C0,C4;
+         end;
+         suppose k=j;
+           hence p.k=q.k by F1,D0;
+         end;
+         end;
+        hence p.k=q.k;
+       end;
+       end;
+     A2a: len Q=n & width Q=n by MATRIX_1:25;
+     K2: len Line(Q,i) = n by MATRIX_1:def 8,A2a;
+     K0: (Line(Q,i))/.1 = (Line(Q,i)).1 by FINSEQ_4:24,K2,A4
+     .= Q*(i,1) by MATRIX_1:def 8,A10;
+     B18: 1<=n by XXREAL_0:2,B1;
+     B28: (Q*P)*(i,j)= |( Line(Q,i), Col(P,j) )| by MATRIX_3:def 4,A2a,A2d,A22
+       .= |( Line(Q,i), a"*(Base_FinSeq(K,n,1)) )|
+                                  by F2,B3,B4b,FINSEQ_1:18
+       .= a"* |( Line(Q,i), (Base_FinSeq(K,n,1)) )| by BB246,K2,A2b
+       .= a"* (Q*(i,1)) by K0,AA2627,K2,A4;
+      consider p2 being FinSequence of K such that
+     A99:  p2 = Q.i & Q*(i,1) = p2.1 by MATRIX_1:def 6,A23b;
+     p2=Base_FinSeq(K,n,i) by A1,A99,B1;
+    hence (Q*P)*(i,j)=a"* (0.K) by B28,A99,AA1120,B18,B1
+      .= 0.K by VECTSP_1:36;
+    end;
+    end;
+    hence (Q*P)*(i,j)= 0.K;
+   end;
+   A85: for i,j st 1<i & i<=n & i=j holds (Q*P)*(i,j)=1.K
+    proof let i,j;
+     assume B1: 1<i & i<=n & i=j;then
+     B20: i in Seg n & j in Seg n by FINSEQ_1:3;
+     B2: [i,j] in Indices Q by B1,MATRIX_1:38;
+     A22: [i,j] in Indices (Q*P) by B1,MATRIX_1:38;
+     A23b: [i,1] in Indices Q by B1,MATRIX_1:38,A40;
+     B3: len (Col(P,j))=len P by MATRIX_1:def 9 .=n by MATRIX_1:25;
+     B4: len (-(a")*(Q*(1,j))*(Base_FinSeq(K,n,1)))
+       =len ((-(a")*(Q*(1,j)))*(Base_FinSeq(K,n,1))) by BB200
+      .=len (Base_FinSeq(K,n,1)) by MATRIXR1:16 .=n by AA1100;
+     B4d: len ((-(a")*(Q*(1,j)))*(Base_FinSeq(K,n,1)))
+        =len (Base_FinSeq(K,n,1)) by MATRIXR1:16 .=n by AA1100;
+     B5b: len (Base_FinSeq(K,n,j))=n by AA1100;then
+     B5: len (-(a")*(Q*(1,j))*(Base_FinSeq(K,n,1))+Base_FinSeq(K,n,j))
+          =n by B4,Th6;
+      reconsider p=Col(P,j),q=-(a")*(Q*(1,j))*(Base_FinSeq(K,n,1))
+                 +Base_FinSeq(K,n,j) as FinSequence of K;
+     for k be Nat st 1 <=k & k <= n holds p.k=q.k
+     proof let k be Nat;
+      assume C0: 1 <=k & k <= n;then
+            k in Seg n by FINSEQ_1:3;then
+       C10b: k in dom ((-(a")*(Q*(1,j)))*(Base_FinSeq(K,n,1)))
+                           by B4d,FINSEQ_1:def 3;
+       C10a: len ((-(a")*(Q*(1,j)))*(Base_FinSeq(K,n,1)))
+           = len (Base_FinSeq(K,n,1)) by MATRIXR1:16 .=n by AA1100;
+       C12: k in dom P by C0,FINSEQ_3:27,A2d;
+       C2: p.k=P*(k,j) by MATRIX_1:def 9,C12;
+       A2b: len (Base_FinSeq(K,n,1))=n by AA1100;
+       A13: ((Base_FinSeq(K,n,1))/.k)=((Base_FinSeq(K,n,1)).k)
+                              by C0,FINSEQ_4:24,A2b;
+       C4: (-(a")*(Q*(1,j))*(Base_FinSeq(K,n,1))).k
+           =((-(a")*(Q*(1,j)))*(Base_FinSeq(K,n,1))).k by BB200
+          .=(-(a")*(Q*(1,j)))*((Base_FinSeq(K,n,1))/.k)
+             by FVSUM_1:62,C10b,A13;
+       per cases by C0,REAL_1:def 5;
+       suppose D0: 1=k;
+         D2: p.k=-(a")*(Q*(1,j)) by A1b,B1,C2,D0;
+         K3: 1 <= k & k <= len (-(a")*(Q*(1,j))*(Base_FinSeq(K,n,1)))
+              by C0,C10a,BB200;
+         K1: (Base_FinSeq(K,n,j))/.k
+            = (Base_FinSeq(K,n,j)).k by FINSEQ_4:24,B5b,C0
+           .= 0.K by D0,B1,AA1120,C0;
+         D1:(-(a")*(Q*(1,j))*(Base_FinSeq(K,n,1)))/.k
+           =(-(a")*(Q*(1,j)))*((Base_FinSeq(K,n,1))/.k) by C4,FINSEQ_4:24,K3
+          .=(-(a")*(Q*(1,j)))*(1.K) by D0,AA1110,A4,A13
+          .=-(a")*(Q*(1,j)) by VECTSP_1:def 16;
+          q.k= -(a")*(Q*(1,j)) + 0.K by D1,BB120,B4,B5b,C0,K1;
+          hence p.k=q.k by D2,RLVECT_1:10;
+        end;
+       suppose D0: 1<k;
+          [k,j] in Indices P by B1,MATRIX_1:38,C0;
+          then
+          consider p2 being FinSequence of K such that
+         D3: p2 = P.k & P*(k,j) = p2.j by MATRIX_1:def 6;
+B:       k in NAT by ORDINAL1:def 13;
+         D2: p.k=(Base_FinSeq(K,n,k)).j by A1,D0,C0,D3,B,C2;
+         now per cases;
+         suppose E0: k <> j;then
+           E2: p.k= 0.K by D2,AA1120,B1,C0;
+           A3a: len (Base_FinSeq(K,n,1))=n by AA1100;
+           E1: ((Base_FinSeq(K,n,1))/.k)=((Base_FinSeq(K,n,1)).k)
+              by C0,FINSEQ_4:24,A3a;
+           K1: (Base_FinSeq(K,n,j))/.k
+               = (Base_FinSeq(K,n,j)).k by FINSEQ_4:24,B5b,C0
+              .= 0.K by B1,AA1120,C0,E0;
+           K2: (-(a")*(Q*(1,j))*(Base_FinSeq(K,n,1)))/.k
+            =(-(a")*(Q*(1,j))*(Base_FinSeq(K,n,1))).k
+                  by FINSEQ_4:24,B4,C0;
+           E3: (-(a")*(Q*(1,j))*(Base_FinSeq(K,n,1))).k
+            =(-(a")*(Q*(1,j)))*(0.K) by D0,AA1120,A4,C0,E1,C4
+           .= 0.K by VECTSP_1:36;
+           q.k= 0.K + 0.K by E3,BB120,B4,B5b,C0,K1,K2;
+          hence p.k=q.k by E2,RLVECT_1:10;
+         end;
+         suppose E0: k=j;then
+           E2: p.k=1.K by D2,AA1110,C0;
+           A3a: len (Base_FinSeq(K,n,1))=n by AA1100;
+           E1: ((Base_FinSeq(K,n,1))/.k)=((Base_FinSeq(K,n,1)).k)
+              by C0,FINSEQ_4:24,A3a;
+           K1: (Base_FinSeq(K,n,j))/.k
+               = (Base_FinSeq(K,n,j)).k  by FINSEQ_4:24,B5b,C0
+              .= 1.K by AA1110,C0,E0;
+           K2: (-(a")*(Q*(1,j))*(Base_FinSeq(K,n,1)))/.k
+            =(-(a")*(Q*(1,j))*(Base_FinSeq(K,n,1))).k
+                  by FINSEQ_4:24,B4,C0;
+           E3: (-(a")*(Q*(1,j))*(Base_FinSeq(K,n,1))).k
+            =(-(a")*(Q*(1,j)))*(0.K) by D0,AA1120,A4,C0,E1,C4
+           .= 0.K by VECTSP_1:36;
+            q.k= 0.K + 1.K by BB120,B4,B5b,C0,E3,K1,K2;
+           hence p.k=q.k by E2,RLVECT_1:10;
+         end;
+         end;
+        hence p.k=q.k;
+       end;
+     end;then
+     B7: Col(P,j)=-(a")*(Q*(1,j))*(Base_FinSeq(K,n,1))+Base_FinSeq(K,n,j)
+                        by B3,B5,FINSEQ_1:18;
+     K2: len Line(Q,i)=n by MATRIX_1:def 8,A2a;
+     A2a: len Q=n & width Q=n by MATRIX_1:25;
+     K3: (Line(Q,i))/.j = (Line(Q,i)).j by FINSEQ_4:24,K2,B1
+     .= Q*(i,j) by MATRIX_1:def 8,B20,A2a;
+     K0: (Line(Q,i))/.1 = (Line(Q,i)).1 by FINSEQ_4:24,K2,A4
+     .= Q*(i,1) by MATRIX_1:def 8,A10;
+     B18: 1<=n by XXREAL_0:2,B1;
+     B28: (Q*P)*(i,j)= |( Line(Q,i), Col(P,j) )| by MATRIX_3:def 4,A2a,A2d,A22
+      .= |( Line(Q,i), -(a")*(Q*(1,j))*(Base_FinSeq(K,n,1)) )|
+                  +|( Line(Q,i), Base_FinSeq(K,n,j) )|
+                                 by BB248,B4,K2,B7,B5b
+      .= |( Line(Q,i), (-(a")*(Q*(1,j)))*(Base_FinSeq(K,n,1)) )|
+                  +|( Line(Q,i), Base_FinSeq(K,n,j) )| by BB200
+      .=(-(a")*(Q*(1,j)))* |( Line(Q,i), (Base_FinSeq(K,n,1)) )|
+                  +|( Line(Q,i), Base_FinSeq(K,n,j) )| by BB246,K2,A2b
+      .=(-(a")*(Q*(1,j)))* (Q*(i,1))
+                  +|( Line(Q,i), Base_FinSeq(K,n,j) )| by K0,AA2627,K2,A4
+      .= -((Q*(1,j))*(a")* (Q*(i,1)))
+                  +|( Line(Q,i), Base_FinSeq(K,n,j) )| by VECTSP_1:41
+      .= -((Q*(1,j))*((a")* (Q*(i,1))))
+                  +|( Line(Q,i), Base_FinSeq(K,n,j) )| by GROUP_1:def 4
+     .= -(Q*(1,j))*((a")* (Q*(i,1))) + Q*(i,j) by K3,AA2627,B1,K2;
+     consider p1 being FinSequence of K such that
+     A97:  p1 = Q.i & Q*(i,j) = p1.j by MATRIX_1:def 6,B2;
+     p1=Base_FinSeq(K,n,i) by A1,A97,B1;then
+     A98: p1.j=1.K by AA1110,B1;
+     consider p2 being FinSequence of K such that
+     A99:  p2 = Q.i & Q*(i,1) = p2.1 by MATRIX_1:def 6,A23b;
+     p2=Base_FinSeq(K,n,i) by A1,A99,B1;
+     hence (Q*P)*(i,j)= -(Q*(1,j))*((a")* ( 0.K)) + Q*(i,j)
+      by B28,A99,AA1120,B18,B1
+        .= -(Q*(1,j))*(( 0.K)) + Q*(i,j) by VECTSP_1:36
+        .= -(0.K) + Q*(i,j) by VECTSP_1:36
+        .= (0.K) + 1.K by A97,A98,RLVECT_1:25
+        .= 1.K by RLVECT_1:10;
+    end;
+  KK1: for i,j being Nat st [i,j] in Indices (Q*P) holds
+                   (Q*P)*(i,j)=(1.(K,n))*(i,j)
+  proof let i,j be Nat;
+   assume [i,j] in Indices (Q*P);then
+    B2: i in Seg n & j in Seg n by A18,ZFMISC_1:106;then
+    B3: 1<=i & i<=n by FINSEQ_1:3;
+    B4: 1<=j & j<=n by B2,FINSEQ_1:3;
+    reconsider i0=i,j0=j as Element of NAT by ORDINAL1:def 13;
+    per cases by B3,REAL_1:def 5;
+    suppose C0: 1<i;
+      now per cases;
+      suppose D0: i<>j;
+        D1: (1.(K,n))*(i,j)=(Base_FinSeq(K,n,i0)).j0 by BB300,B3,B4
+                          .= 0.K by AA1120,D0,B3,B4;
+       thus (Q*P)*(i,j)=(Q*P)*(i0,j0)
+                      .=(1.(K,n))*(i,j) by D1,C0,B3,B4,A15,D0;
+      end;
+      suppose D0: i=j;
+        D1: (1.(K,n))*(i,j)=(Base_FinSeq(K,n,i0)).j0 by BB300,B3,B4
+                          .=1.K by AA1110,D0,B4;
+       thus (Q*P)*(i,j)=(Q*P)*(i0,j0)
+                      .=(1.(K,n))*(i,j) by D1,C0,B4,A85,D0;
+      end;
+      end;
+     hence (Q*P)*(i,j)=(1.(K,n))*(i,j);
+    end;
+    suppose C0: 1=i;
+      now per cases;
+     suppose D0: i<j;
+      D1: (1.(K,n))*(i,j)=(Base_FinSeq(K,n,i0)).j0 by BB300,B3,B4
+                        .= 0.K by AA1120,B3,B4,D0;
+       thus (Q*P)*(i,j)=(Q*P)*(i0,j0)
+                      .=(1.(K,n))*(i,j) by D1,C0,B4,A14,D0;
+     end;
+     suppose D9: i>=j;then
+      D0: i=j by B4,XXREAL_0:1,C0;
+      D1: (1.(K,n))*(i,j)=(Base_FinSeq(K,n,i0)).j0 by BB300,B3,B4
+                        .=1.K by D0,AA1110,B4;
+       thus (Q*P)*(i,j)=(1.(K,n))*(i,j)
+          by D1,C0,A13,D9,B4,XXREAL_0:1;
+
+     end;
+     end;
+     hence (Q*P)*(i,j)=(1.(K,n))*(i,j);
+    end;
+  end;
+  A25: Q*P=1.(K,n) by MATRIX_1:28,KK1;
+ hence P is invertible by AA4145,A5;
+ thus Q= P~ by AA4140,A5,A25;
+end;
+
+theorem AA3010:
+ for a being Element of K,P being Matrix of n,K st
+ n>0 & a<>0.K & P*(1,1)= a" &
+ (for i st 1<i & i<=n holds P.i=Base_FinSeq(K,n,i)) holds
+    P is invertible
+ proof let a be Element of K,P be Matrix of n,K;
+  assume A1: n>0 & a<>0.K & P*(1,1)= a" &
+   (for i st 1<i & i<=n holds P.i=Base_FinSeq(K,n,i));
+   defpred P[Nat,Nat,Element of K] means
+    ($1=1 implies (($2=1 implies $3=a)&
+                   ($2<>1 implies $3=- a*( P*(1,$2) )))) &
+    ($1 <>1 implies for i0 being Element of NAT st i0=$1 holds
+                           $3= (Base_FinSeq(K,n,i0)).$2);
+   A5: for i,j being Nat st [i,j] in [:Seg n, Seg n:]
+     for x1,x2 being Element of K st P[i,j,x1] & P[i,j,x2] holds x1 = x2
+     proof let i,j be Nat;
+       assume [i,j] in [:Seg n, Seg n:];
+       reconsider i0=i,j0=j as Element of NAT by ORDINAL1:def 13;
+      thus for x1,x2 being Element of K st P[i,j,x1] & P[i,j,x2]
+       holds x1 = x2
+      proof let x1,x2 be Element of K;
+        assume B1: P[i,j,x1] & P[i,j,x2];
+         per cases;
+         suppose C0: i=1;
+           thus x1 = x2 by C0,B1;
+         end;
+         suppose i<>1; then
+           x1= (Base_FinSeq(K,n,i0)).j & x2= (Base_FinSeq(K,n,i0)).j by B1;
+          hence x1 = x2;
+         end;
+      end;
+     end;
+    A6: for i,j being Nat st [i,j] in [:Seg n, Seg n:]
+     ex x being Element of K st P[i,j,x]
+     proof let i,j be Nat;
+      assume B1: [i,j] in [:Seg n, Seg n:];
+      reconsider i0=i,j0=j as Element of NAT by ORDINAL1:def 13;
+      i0 in Seg n & j0 in Seg n by B1,ZFMISC_1:106;then
+      B1b: 1<=i0 & i0 <=n & 1<=j0 & j0<=n by FINSEQ_1:3;
+         per cases;
+         suppose C0: i=1;
+           now per cases;
+           case D0: j=1;
+             set x1=a;
+             thus (i=1 implies ((j=1 implies x1=a)&
+             (j<>1 implies x1=- a*(P*(1,j) )))) &
+             (i <>1 implies for i1 being Element of NAT st i1=i holds
+                           x1= (Base_FinSeq(K,n,i1)).j) by C0,D0;
+           end;
+           case D0: j<>1;
+             set x1= -(a)*( P*(1,j) );
+             thus (i=1 implies ((j=1 implies x1=a)&
+                   (j<>1 implies x1=- a*(P*(1,j))))) &
+             (i <>1 implies for i1 being Element of NAT st i1=i holds
+               x1= (Base_FinSeq(K,n,i1)).j) by C0,D0;
+           end;
+           end;
+          hence ex x being Element of K st
+            (i=1 implies ((j=1 implies x=a)&
+                   (j<>1 implies x=- a*( P*(1,j) )))) &
+          (i <>1 implies for i1 being Element of NAT st i1=i holds
+          x= (Base_FinSeq(K,n,i1)).j);
+         end;
+         suppose C0: i<>1;
+           len (Base_FinSeq(K,n,i0))=n by AA1100;then
+           (Base_FinSeq(K,n,i0))/.j0= (Base_FinSeq(K,n,i0)).j0
+                                     by B1b,FINSEQ_4:24;then
+           reconsider x1= (Base_FinSeq(K,n,i0)).j0 as Element of K;
+           (i=1 implies ((j=1 implies x1=a)&
+                   (j<>1 implies x1=- a*( P*(1,j) )))) &
+          (i <>1 implies for i1 being Element of NAT st i1=i holds
+             x1= (Base_FinSeq(K,n,i1)).j) by C0;
+          hence ex x being Element of K
+              st (i=1 implies ((j=1 implies x=a)&
+                   (j<>1 implies x=- a*( P*(1,j) )))) &
+          (i <>1 implies for i1 being Element of NAT st i1=i holds
+             x= (Base_FinSeq(K,n,i1)).j);
+         end;
+     end;
+    consider Q0 being Matrix of n,n,K such that
+    A7: for i,j being Nat st [i,j] in Indices Q0 holds P[i,j,Q0*(i,j)]
+                             from MATRIX_1:sch 2(A5,A6);
+     A70: Indices Q0=[:Seg n,Seg n:] by MATRIX_1:25;
+     A70a: 0+1<=n by A1,NAT_1:13;
+     A30: 1 in Seg n by FINSEQ_1:3,A70a;
+     A30a: [1,1] in Indices Q0 by A70a,MATRIX_1:38;
+     A10: Q0*(1,1)=a by A7,A30a;
+     A11: for j st 1<j & j<=n holds Q0*(1,j)= -a*(P*(1,j))
+      proof let j;
+       assume B1: 1<j & j<=n;
+        [1,j] in Indices Q0 by B1,MATRIX_1:38,A70a;
+       hence Q0*(1,j)=- a*( P*(1,j) ) by B1,A7;
+      end;
+     for i st 1<i & i<=n holds Q0.i=Base_FinSeq(K,n,i)
+     proof let i;
+      assume B1: 1<i & i<=n;
+        B2: i in Seg n by FINSEQ_1:3,B1;
+        B2a: [i,1] in Indices Q0 by A30,ZFMISC_1:106,A70,B2;
+        consider p being FinSequence of K such that
+        B3: p = Q0.i & Q0*(i,1) = p.1 by MATRIX_1:def 6,B2a;
+        B8: len Q0 = n & for p3 being FinSequence of K st
+        p3 in rng Q0 holds len p3 = n by MATRIX_1:def 3;
+        B8a: i in Seg len Q0 by FINSEQ_1:3,B1,B8;
+        B8b: i in dom Q0 by FINSEQ_1:def 3,B8a;
+        B8c: p in rng Q0 by B3,FUNCT_1:def 5,B8b;
+        B20: len p=n by MATRIX_1:def 3,B8c;
+        B21: len (Base_FinSeq(K,n,i))= n by AA1100;
+      for j be Nat st 1<=j & j<=n holds p.j=(Base_FinSeq(K,n,i)).j
+      proof let j be Nat;
+       assume C0: 1<=j & j<=n;
+        C2: [i,j] in Indices Q0 by B1,MATRIX_1:38,C0;
+        consider p2 being FinSequence of K such that
+        B4: p2 = Q0.i & Q0*(i,j) = p2.j by MATRIX_1:def 6,C2;
+       thus p.j=(Base_FinSeq(K,n,i)).j by A7,B1,C2,B3,B4;
+      end;
+     hence Q0.i=Base_FinSeq(K,n,i) by B20,B21,FINSEQ_1:18,B3;
+    end;
+   hence P is invertible by AA3000,A1,A10,A11;
+ end;
+
+theorem AA3020:
+ for A being Matrix of n,K st n>0 & A*(1,1)<>0.K
+ ex P being Matrix of n,K st P is invertible & (A*P)*(1,1)=1.K &
+ (for j st 1<j & j<=n holds (A*P)*(1,j)= 0.K)&
+ (for i st 1<i & i<=n & A*(i,1)= 0.K holds (A*P)*(i,1)= 0.K)
+proof let A be Matrix of n,K;
+ assume A1: n>0 & A*(1,1)<>0.K;
+   set a=A*(1,1);
+   defpred P[Nat,Nat,Element of K] means
+    ($1=1 implies (($2=1 implies $3=a")&
+                   ($2<>1 implies $3=- (a")*( A*(1,$2) )))) &
+    ($1 <>1 implies for i0 being Element of NAT st i0=$1 holds
+                           $3= (Base_FinSeq(K,n,i0)).$2);
+    A5: for i,j being Nat st [i,j] in [:Seg n, Seg n:]
+     for x1,x2 being Element of K st P[i,j,x1] & P[i,j,x2]
+      holds x1 = x2
+     proof let i,j be Nat;
+       assume [i,j] in [:Seg n, Seg n:];
+       reconsider i0=i,j0=j as Element of NAT by ORDINAL1:def 13;
+        let x1,x2 be Element of K;
+        assume B1: P[i,j,x1] & P[i,j,x2];
+         per cases;
+         suppose i=1;
+           hence x1 = x2 by B1;
+         end;
+         suppose i<>1; then
+          x1= (Base_FinSeq(K,n,i0)).j & x2= (Base_FinSeq(K,n,i0)).j by B1;
+          hence x1 = x2;
+      end;
+     end;
+    A6: for i,j being Nat st [i,j] in [:Seg n, Seg n:]
+     ex x being Element of K st P[i,j,x]
+     proof let i,j be Nat;
+      assume B1: [i,j] in [:Seg n, Seg n:];
+      reconsider i0=i,j0=j as Element of NAT by ORDINAL1:def 13;
+      B1a: i0 in Seg n & j0 in Seg n by B1,ZFMISC_1:106;
+      B1b: 1<=i0 & i0 <=n & 1<=j0 & j0<=n by FINSEQ_1:3,B1a;
+         per cases;
+         suppose C0: i=1;
+           per cases;
+           suppose D0: j=1;
+            set x1=a";
+            thus ex x being Element of K st P[i,j,x] by C0,D0;
+           end;
+           suppose D0: j<>1;
+            set x1= -(a")*( A*(1,j) );
+            thus ex x being Element of K st P[i,j,x] by C0,D0;
+           end;
+         end;
+         suppose C0: i<>1;
+           set x1= (Base_FinSeq(K,n,i0))/.j0;
+           C7: len (Base_FinSeq(K,n,i0))=n by AA1100;
+           for i1 being Element of NAT st i1=i holds
+             x1= (Base_FinSeq(K,n,i1)).j by B1b,FINSEQ_4:24,C7;
+          hence ex x being Element of K st P[i,j,x] by C0;
+         end;
+     end;
+    consider P0 being Matrix of n,n,K such that
+    A7: for i,j being Nat st [i,j] in Indices P0 holds P[i,j,P0*(i,j)]
+                             from MATRIX_1:sch 2(A5,A6);
+   A40: 0+1<=n by A1,NAT_1:13;
+   A72a: [1,1] in Indices P0 by A40,MATRIX_1:38;
+   A12: P0*(1,1)= a" by A7,A72a;
+   A91: for i st 1<i & i<=n holds P0.i=Base_FinSeq(K,n,i)
+    proof let i;
+     assume B1: 1<i & i<=n;
+      B2a: [i,1] in Indices P0 by B1,MATRIX_1:38,A40;
+      consider p being FinSequence of K such that
+      B3: p = P0.i & P0*(i,1) = p.1 by MATRIX_1:def 6,B2a;
+      B8: len P0 = n & for p3 being FinSequence of K st
+            p3 in rng P0 holds len p3 = n by MATRIX_1:def 3;
+      B9: i in Seg len P0 by FINSEQ_1:3,B1,B8;
+      B10: i in dom P0 by FINSEQ_1:def 3,B9;
+      B11: p in rng P0 by B3,FUNCT_1:def 5,B10;
+      B20: len p=n by MATRIX_1:def 3,B11;
+      B21: len (Base_FinSeq(K,n,i))= n by AA1100;
+      for j be Nat st 1<=j & j<=n holds p.j=(Base_FinSeq(K,n,i)).j
+      proof let j be Nat;
+       assume C0: 1<=j & j<=n;
+        C2: [i,j] in Indices P0 by C0,B1,MATRIX_1:38;
+        consider p2 being FinSequence of K such that
+        B4: p2 = P0.i & P0*(i,j) = p2.j by MATRIX_1:def 6,C2;
+       thus p.j=(Base_FinSeq(K,n,i)).j by A7,B1,C2,B3,B4;
+      end;
+     hence P0.i=Base_FinSeq(K,n,i) by B20,B21,FINSEQ_1:18,B3;
+    end;then
+   A71: P0 is invertible by A1,AA3010,A12;
+   A2d: len P0=n & width P0=n by MATRIX_1:25;
+   A2a: len A=n & width A=n by MATRIX_1:25;
+   A2: len (Line(A,1))=n by MATRIX_1:def 8,A2a;
+   A2b: len (Base_FinSeq(K,n,1))=n by AA1100;
+   A20: len (Col(P0,1))=len P0 by MATRIX_1:def 9 .=n by MATRIX_1:25;
+   A21: len ((a")*(Base_FinSeq(K,n,1)))=len (Base_FinSeq(K,n,1)) by MATRIXR1:16
+                           .= n by AA1100;
+   A11: 1 in Seg len P0 by A2d,FINSEQ_1:3,A40;
+   A8d: Indices P0=[: Seg n,Seg n :] by MATRIX_1:25;
+   B4e: len ((a")*(Base_FinSeq(K,n,1)))
+        =len (Base_FinSeq(K,n,1)) by MATRIXR1:16 .=n by AA1100;
+  for k be Nat st 1<=k & k<=n holds
+    (Col(P0,1)).k=((a")*(Base_FinSeq(K,n,1))).k
+  proof let k be Nat;
+   assume B1: 1<=k & k<=n;then
+    k in Seg n by FINSEQ_1:3;then
+    B3: k in dom P0 by FINSEQ_1:def 3,A2d;
+    k in Seg n by FINSEQ_1:3,B1;then
+    C10d: k in dom ((a")*(Base_FinSeq(K,n,1))) by B4e,FINSEQ_1:def 3;
+    1<=n by B1,XXREAL_0:2;then
+    B11: 1 in dom P0 by FINSEQ_3:27,A2d;
+    A13: ((Base_FinSeq(K,n,1))/.k)=((Base_FinSeq(K,n,1)).k)
+                               by B1,FINSEQ_4:24,A2b;
+    A13a: 1<=n by B1,XXREAL_0:2;
+    B5: now assume C0: k<>1;
+     thus ((a")*(Base_FinSeq(K,n,1))).k
+                         = (a")*((Base_FinSeq(K,n,1))/.k)
+                                 by FVSUM_1:62,C10d,A13
+                        .= (a")*(0.K) by A13,AA1120,B1,C0,A13a
+                        .= 0.K by VECTSP_1:36;
+    end;
+    B6: now assume C0: k=1;
+    thus ((a")*(Base_FinSeq(K,n,1))).k
+            =(a")*((Base_FinSeq(K,n,1))/.1) by C10d,FVSUM_1:62,A13,C0
+           .=(a")*(1.K) by AA1110,C0,B1,A13
+           .= a" by VECTSP_1:def 16;
+    end;
+    now assume B20: k<>1;
+B:    k in NAT by ORDINAL1:def 13;
+      B19: 1<k by B1,REAL_1:def 5,B20;
+      B19a: k in Seg n by B1,FINSEQ_1:3;
+      B19b: [k,1] in Indices P0 by A8d,A11,ZFMISC_1:106,A2d,B19a;
+      consider p being FinSequence of K such that
+      C3: p = P0.k & P0*(k,1) = p.1 by MATRIX_1:def 6,B19b;
+      P0*(k,1)=(Base_FinSeq(K,n,k)).1 by C3,B19,B1,A91,B
+             .= 0.K by B20,B1,A40,AA1120;
+     hence (Col(P0,1)).k= 0.K by MATRIX_1:def 9,B3;
+    end;
+   hence (Col(P0,1)).k=((a")*(Base_FinSeq(K,n,1))).k
+    by B5,B6,MATRIX_1:def 9,B11,A12;
+  end;then
+  A3: Col(P0,1)=(a")*(Base_FinSeq(K,n,1)) by A20,A21,FINSEQ_1:18;
+  A4: 0+1<=n by NAT_1:13,A1;then
+  A10: 1 in Seg width A by A2a,FINSEQ_1:3;
+  A11: 1 in Seg len A by A2a,FINSEQ_1:3,A4;
+  K1: 1 in dom A by A11,FINSEQ_1:def 3;
+  K3: len ((a")*(Line(A,1)))=len ((Line(A,1))) by MATRIXR1:16
+      .= n by MATRIX_1:def 8,A2a;
+  K4: 1 in dom (Line(A,1)) by A11,A2a,A2,FINSEQ_1:def 3;
+  A8: Indices A=[: Seg n,Seg n :] by MATRIX_1:25;
+  A12b: [1,1] in Indices A by A4,MATRIX_1:38;
+       Indices (A*P0)=[: Seg n,Seg n :] by MATRIX_1:25;then
+  A72: (A*P0)*(1,1)= |( Line(A,1), Col(P0,1) )|
+                      by MATRIX_3:def 4,A12b,A8,A2d,A2a
+             .= (a")*( |( Line(A,1), Base_FinSeq(K,n,1) )| )
+                           by A3,BB246,A2,A2b
+             .=(a")*(Line(A,1))/.1 by AA2627,A2,A4
+             .=((a")*(Line(A,1)))/.1 by POLYNOM1:def 2,K4
+             .=((a")*(Line(A,1))).1 by FINSEQ_4:24,K3,A4
+             .=(a")*(A*(1,1)) by MATRIX12:3,K1,A10
+             .=1.K by VECTSP_1:def 22,A1;
+  A73: for j st 1<j & j<=n holds (A*P0)*(1,j)= 0.K
+  proof let j;
+    assume B1: 1<j & j<=n;then
+     B20: j in Seg n by FINSEQ_1:3;
+     A22: [1,j] in Indices (A*P0) by B1,MATRIX_1:38,A40;
+     A22b: [1,j] in Indices P0 by B1,MATRIX_1:38,A40;
+     B3: len (Col(P0,j))=len P0 by MATRIX_1:def 9 .=n by MATRIX_1:25;
+     B4: len (-(a")*(A*(1,j))*(Base_FinSeq(K,n,1)))
+       =len ((-(a")*(A*(1,j)))*(Base_FinSeq(K,n,1))) by BB200
+      .=len (Base_FinSeq(K,n,1)) by MATRIXR1:16 .=n by AA1100;
+     B4d: len ((-(a")*(A*(1,j)))*(Base_FinSeq(K,n,1)))
+         =len (Base_FinSeq(K,n,1)) by MATRIXR1:16 .=n by AA1100;
+     B5b: len (Base_FinSeq(K,n,j))=n by AA1100;then
+     B5: len (-(a")*(A*(1,j))*(Base_FinSeq(K,n,1))+Base_FinSeq(K,n,j))
+          =n by B4,Th6;
+     reconsider p=Col(P0,j),q=-(a")*(A*(1,j))*(Base_FinSeq(K,n,1))
+                            +Base_FinSeq(K,n,j) as FinSequence of K;
+     for k be Nat st 1 <=k & k <= n holds p.k=q.k
+     proof let k be Nat;
+      assume C0: 1 <=k & k <= n;
+       A4: 0+1<=n by NAT_1:13,C0;
+            k in Seg n by FINSEQ_1:3,C0;then
+       C10b: k in dom ((-(a")*(A*(1,j)))*(Base_FinSeq(K,n,1)))
+                           by B4d,FINSEQ_1:def 3;
+       C10a: len ((-(a")*(A*(1,j)))*(Base_FinSeq(K,n,1)))
+           = len (Base_FinSeq(K,n,1)) by MATRIXR1:16 .=n by AA1100;
+       C12: k in dom P0 by C0,FINSEQ_3:27,A2d;
+       C2: p.k=P0*(k,j) by MATRIX_1:def 9,C12;
+       A2b: len (Base_FinSeq(K,n,1))=n by AA1100;
+       A13: ((Base_FinSeq(K,n,1))/.k)=((Base_FinSeq(K,n,1)).k)
+                              by C0,FINSEQ_4:24,A2b;
+       C4: (-(a")*(A*(1,j))*(Base_FinSeq(K,n,1))).k
+           =((-(a")*(A*(1,j)))*(Base_FinSeq(K,n,1))).k by BB200
+          .=(-(a")*(A*(1,j)))*((Base_FinSeq(K,n,1))/.k)
+             by FVSUM_1:62,C10b,A13;
+         A3a: len (Base_FinSeq(K,n,1))=n by AA1100;
+         E1: ((Base_FinSeq(K,n,1))/.k)=((Base_FinSeq(K,n,1)).k)
+              by C0,FINSEQ_4:24,A3a;
+       per cases by C0,REAL_1:def 5;
+       suppose D0: 1=k;then
+         D2: p.k=-(a")*(A*(1,j)) by A7,B1,A22b,C2;
+         K3: 1 <= k & k <= len (-(a")*(A*(1,j))*(Base_FinSeq(K,n,1)))
+              by C0,C10a,BB200;
+         K1: (Base_FinSeq(K,n,j))/.k
+            = (Base_FinSeq(K,n,j)).k by FINSEQ_4:24,B5b,C0
+           .= 0.K by D0,B1,AA1120,C0;
+         D1: (-(a")*(A*(1,j))*(Base_FinSeq(K,n,1)))/.k
+           =(-(a")*(A*(1,j)))*((Base_FinSeq(K,n,1))/.k)
+             by C4,FINSEQ_4:24,K3
+          .=(-(a")*(A*(1,j)))*(1.K) by D0,AA1110,C0,E1
+          .=-(a")*(A*(1,j)) by VECTSP_1:def 16;
+          q.k= -(a")*(A*(1,j)) + 0.K
+           by D1,BB120,B4,B5b,C0,K1;
+        hence p.k=q.k by D2,RLVECT_1:10;
+       end;
+       suppose D0: 1<k;
+         D1: [k,j] in Indices P0 by B1,MATRIX_1:38,C0;
+B:       k in NAT by ORDINAL1:def 13;
+         D2: p.k=(Base_FinSeq(K,n,k)).j by A7,D0,D1,B,C2;
+         per cases;
+         suppose E0: k <> j;then
+           E2: p.k= 0.K by D2,AA1120,B1,C0;
+           A3a: len (Base_FinSeq(K,n,1))=n by AA1100;
+           E1: ((Base_FinSeq(K,n,1))/.k)=((Base_FinSeq(K,n,1)).k)
+              by C0,FINSEQ_4:24,A3a;
+           K1: (Base_FinSeq(K,n,j))/.k
+               = (Base_FinSeq(K,n,j)).k  by FINSEQ_4:24,B5b,C0
+              .= 0.K by B1,AA1120,C0,E0;
+           K2: (-(a")*(A*(1,j))*(Base_FinSeq(K,n,1)))/.k
+            =(-(a")*(A*(1,j))*(Base_FinSeq(K,n,1))).k by FINSEQ_4:24,B4,C0;
+           E3: (-(a")*(A*(1,j))*(Base_FinSeq(K,n,1))).k
+            =(-(a")*(A*(1,j)))*(0.K) by D0,AA1120,A4,C0,E1,C4
+           .= 0.K by VECTSP_1:36;
+           q.k= 0.K + 0.K by E3,BB120,B4,B5b,C0,K1,K2;
+          hence p.k=q.k by E2,RLVECT_1:10;
+         end;
+         suppose E0: k=j;
+           E2: p.k=1.K by D2,AA1110,C0,E0;
+          A3a: len (Base_FinSeq(K,n,1))=n by AA1100;
+           E1: ((Base_FinSeq(K,n,1))/.k)=((Base_FinSeq(K,n,1)).k)
+              by C0,FINSEQ_4:24,A3a;
+           K1: (Base_FinSeq(K,n,j))/.k
+               = (Base_FinSeq(K,n,j)).k  by FINSEQ_4:24,B5b,C0
+              .= 1.K by AA1110,C0,E0;
+           K2: (-(a")*(A*(1,j))*(Base_FinSeq(K,n,1)))/.k
+            =(-(a")*(A*(1,j))*(Base_FinSeq(K,n,1))).k
+                  by FINSEQ_4:24,B4,C0;
+           E3: (-(a")*(A*(1,j))*(Base_FinSeq(K,n,1))).k
+            =(-(a")*(A*(1,j)))*(0.K) by D0,AA1120,A4,C0,E1,C4
+           .= 0.K by VECTSP_1:36;
+            q.k= 0.K + 1.K by BB120,B4,B5b,C0,E3,K1,K2;
+           hence p.k=q.k by E2,RLVECT_1:10;
+         end;
+       end;
+     end;then
+     B7: Col(P0,j)=-(a")*(A*(1,j))*(Base_FinSeq(K,n,1))+Base_FinSeq(K,n,j)
+                        by B3,B5,FINSEQ_1:18;
+     A2a: len A=n & width A=n by MATRIX_1:25;
+     K2: len Line(A,1) = n by MATRIX_1:def 8,A2a;
+     K3: (Line(A,1))/.j = (Line(A,1)).j by FINSEQ_4:24,K2,B1
+     .= A*(1,j) by MATRIX_1:def 8,B20,A2a;
+     K0: (Line(A,1))/.1 = (Line(A,1)).1 by FINSEQ_4:24,K2,A4
+     .= a by MATRIX_1:def 8,A10;
+      (A*P0)*(1,j)= |( Line(A,1), Col(P0,j) )| by MATRIX_3:def 4,A2a,A2d,A22
+       .= |( Line(A,1), -(a")*(A*(1,j))*(Base_FinSeq(K,n,1)) )|
+                  +|( Line(A,1), Base_FinSeq(K,n,j) )|
+                                 by BB248,B4,A2,B7,B5b
+       .= |( Line(A,1), (-(a")*(A*(1,j)))*(Base_FinSeq(K,n,1)) )|
+                  +|( Line(A,1), Base_FinSeq(K,n,j) )| by BB200
+       .=(-(a")*(A*(1,j)))* |( Line(A,1), (Base_FinSeq(K,n,1)) )|
+                  +|( Line(A,1), Base_FinSeq(K,n,j) )| by BB246,A2,A2b
+       .=(-(a")*(A*(1,j)))* a
+                  +|( Line(A,1), Base_FinSeq(K,n,j) )| by K0,AA2627,A2,A4
+      .= -((a")*(A*(1,j)))* a
+                  +|( Line(A,1), Base_FinSeq(K,n,j) )| by VECTSP_1:41
+      .= -((A*(1,j))*((a")* a))
+                  +|( Line(A,1), Base_FinSeq(K,n,j) )| by GROUP_1:def 4
+      .= -((A*(1,j))*(1.K))
+                  +|( Line(A,1), Base_FinSeq(K,n,j) )| by VECTSP_1:def 22,A1
+      .= -((A*(1,j))*(1.K)) +( Line(A,1))/.j by AA2627,B1,A2
+      .= -(A*(1,j)) + A*(1,j) by K3,VECTSP_1:def 16
+      .= 0.K by RLVECT_1:16;
+   hence (A*P0)*(1,j)= 0.K;
+  end;
+  for i st 1<i & i<=n & A*(i,1)= 0.K holds (A*P0)*(i,1)= 0.K
+  proof let i;
+   assume B0: 1<i & i<=n & A*(i,1)= 0.K;
+    set Q=A,P=P0;
+     B1: 1<=n  by B0,XXREAL_0:2;
+     A22: [i,1] in Indices (Q*P) by B0,B1,MATRIX_1:38;
+     B3: len (Col(P,1))=len P by MATRIX_1:def 9 .=n by MATRIX_1:25;
+     B4b: len ((a")*(Base_FinSeq(K,n,1)))
+      =len (Base_FinSeq(K,n,1)) by MATRIXR1:16 .=n by AA1100;
+      reconsider p=Col(P,1),q=a"*(Base_FinSeq(K,n,1))
+                           as FinSequence of K;
+     F2: for k be Nat st 1 <=k & k <= n holds p.k=q.k
+      proof let k be Nat;
+      assume C0: 1 <=k & k <= n;
+       C113: k in dom ((a")*(Base_FinSeq(K,n,1))) by C0,B4b,FINSEQ_3:27;
+       C12: k in dom P by C0,FINSEQ_3:27,A2d;
+       C2: p.k=P*(k,1) by MATRIX_1:def 9,C12;
+       A2b: len (Base_FinSeq(K,n,1))=n by AA1100;
+       A13: ((Base_FinSeq(K,n,1))/.k)=((Base_FinSeq(K,n,1)).k)
+                               by C0,FINSEQ_4:24,A2b;
+       C4: ((a")*(Base_FinSeq(K,n,1))).k
+               = (a")*((Base_FinSeq(K,n,1))/.k)
+                          by FVSUM_1:62,C113,A13;
+       per cases by C0,REAL_1:def 5;
+       suppose D0: 1=k;
+          q.k= (a")*(1.K) by C4,D0,AA1110,C0,A13
+            .=a" by VECTSP_1:def 16;
+         hence p.k=q.k by A7,A72a,C2,D0;
+        end;
+       suppose D0: 1<k;
+          [k,1] in Indices P by B1,MATRIX_1:38,C0;then
+          consider p2 being FinSequence of K such that
+         D3: p2 = P.k & P*(k,1) = p2.1 by MATRIX_1:def 6;
+B:       k in NAT by ORDINAL1:def 13;
+         D2: p.k=(Base_FinSeq(K,n,k)).1 by A91,D0,C0,D3,B,C2;
+           A13: ((Base_FinSeq(K,n,1))/.k)=((Base_FinSeq(K,n,1)).k)
+                               by C0,FINSEQ_4:24,A2b;
+           A13a: 1<=n by C0,XXREAL_0:2;
+           (a")*(Base_FinSeq(K,n,1))/.k
+            = a"*(0.K) by A13,AA1120,D0,C0,A13a
+           .= 0.K by VECTSP_1:36;
+          hence p.k=q.k by D0,D2,AA1120,B1,C0,C4;
+       end;
+       end;
+     A2a: len Q=n & width Q=n by MATRIX_1:25;
+     K2: len Line(Q,i) = n by MATRIX_1:def 8,A2a;
+     K0: (Line(Q,i))/.1 = (Line(Q,i)).1 by FINSEQ_4:24,K2,A4
+     .= Q*(i,1) by MATRIX_1:def 8,A10;
+     thus (Q*P)*(i,1)= |( Line(Q,i), Col(P,1) )| by MATRIX_3:def 4,A2a,A2d,A22
+                .= |( Line(Q,i), a"*(Base_FinSeq(K,n,1)) )|
+                                  by F2,B3,B4b,FINSEQ_1:18
+        .= a"* |( Line(Q,i), (Base_FinSeq(K,n,1)) )| by BB246,K2,A2b
+       .= a"* (Q*(i,1)) by K0,AA2627,K2,A4
+       .= 0.K by B0,VECTSP_1:36;
+  end;
+ hence thesis by A71,A72,A73;
+end;
+
+theorem AA3030:
+ for A being Matrix of n,K st n>0 & A*(1,1)<>0.K
+ ex P being Matrix of n,K st P is invertible & (P*A)*(1,1)=1.K &
+ (for i st 1<i & i<=n holds (P*A)*(i,1)= 0.K)&
+ (for j st 1<j & j<=n & A*(1,j)= 0.K holds (P*A)*(1,j)= 0.K)
+proof let A be Matrix of n,K;
+  assume A1: n>0 & A*(1,1)<>0.K;
+   set B=A@;
+X:   0+1<=n by A1,NAT_1:13;
+   [1,1] in Indices A by X,MATRIX_1:38;then
+   A5: B*(1,1)=A*(1,1) by MATRIX_1:def 7;
+   consider P0 being Matrix of n,K such that
+   A6: P0 is invertible & (B*P0)*(1,1)=1.K &
+    (for i st 1<i & i<=n holds (B*P0)*(1,i)= 0.K)&
+    (for j st 1<j & j<=n & B*(j,1)= 0.K holds (B*P0)*(j,1)= 0.K)
+                              by AA3020,A5,A1;
+    A7: for i st 1<i & i<=n holds ((P0@)*A)*(i,1)= 0.K
+    proof let i;
+     assume B0: 1<i & i<=n;
+       B1: [1,i] in Indices (B*P0) by B0,MATRIX_1:38,X;
+       B2: (B*P0)*(1,i)= 0.K by A6,B0;
+       (B*P0)@=(P0@)*(B@) by AA44
+             .=(P0@)*A by MATRIXR2:29;
+     hence ((P0@)*A)*(i,1)= 0.K by B1,MATRIX_1:def 7,B2;
+    end;
+    A8: P0@ is invertible by BB400,A6;
+    A12: for j st 1<j & j<=n & A*(1,j)= 0.K holds ((P0@)*A)*(1,j)= 0.K
+    proof let j;
+     assume B1: 1<j & j<=n & A*(1,j)= 0.K;
+       B1b: [j,1] in Indices (B*P0) by B1,MATRIX_1:38,X;
+      [1,j] in Indices A by B1,MATRIX_1:38,X;then
+      B*(j,1)=A*(1,j) by MATRIX_1:def 7;then
+      (B*P0)*(j,1)= 0.K by A6,B1;then
+      ((B*P0)@)*(1,j)= 0.K by B1b,MATRIX_1:def 7;then
+      ((P0@)*(B@))*(1,j)= 0.K by AA44;
+     hence ((P0@)*A)*(1,j)= 0.K by MATRIXR2:29;
+    end;
+    A43: [1,1] in Indices (B*P0) by MATRIX_1:38,X;
+    ((P0@)*A)*(1,1)=((P0@)*(B@))*(1,1) by MATRIXR2:29
+                  .=((B*P0)@)*(1,1) by AA44
+                  .=1.K by A6,A43,MATRIX_1:def 7;
+  hence thesis by A8,A7,A12;
+end;
+
+theorem AA3040:
+ for A being Matrix of n,K st n>0 & A*(1,1)<>0.K
+ ex P,Q being Matrix of n,K st P is invertible & Q is invertible &
+ (P*A*Q)*(1,1)=1.K &
+ (for i st 1<i & i<=n holds (P*A*Q)*(i,1)= 0.K)&
+ (for j st 1<j & j<=n holds (P*A*Q)*(1,j)= 0.K)
+proof let A be Matrix of n,K;
+ assume A1: n>0 & A*(1,1)<>0.K;then
+  consider P being Matrix of n,K such that
+  A3: P is invertible & (P*A)*(1,1)=1.K &
+   (for i st 1<i & i<=n holds (P*A)*(i,1)= 0.K)&
+   (for j st 1<j & j<=n & A*(1,j)= 0.K holds (P*A)*(1,j)= 0.K) by AA3030;
+  consider Q being Matrix of n,K such that
+  A4: Q is invertible & ((P*A)*Q)*(1,1)=1.K &
+  (for j st 1<j & j<=n holds ((P*A)*Q)*(1,j)= 0.K) &
+  (for i st 1<i & i<=n & (P*A)*(i,1)= 0.K holds ((P*A)*Q)*(i,1)= 0.K)
+                         by A1,A3,AA3020;
+  for i st 1<i & i<=n holds (P*A*Q)*(i,1)= 0.K
+   proof let i;
+    assume B1: 1<i & i<=n;then
+     (P*A)*(i,1)= 0.K by A3;
+    hence (P*A*Q)*(i,1)= 0.K by B1,A4;
+   end;
+ hence thesis by A4,A3;
+end;
+
+begin :: A Transformation of Matrix to Some Canonical Form
+
+theorem AA330: for D being non empty set,m,n,i,j being Element of NAT,
+A being Matrix of m,n,D holds
+Swap(A,i,j) is Matrix of m,n,D
+proof let D be non empty set,m,n,i,j being Element of NAT,
+A be Matrix of m,n,D;
+  rng Swap(A,i,j)=rng A by FINSEQ_7:24;then
+  ex n3 being Nat st for x being set st x in rng Swap(A,i,j)
+    ex p being FinSequence of D st x = p & len p = n3 by MATRIX_1:9;then
+  A7: Swap(A,i,j) is Matrix of D by MATRIX_1:9;
+  A2: len A=m & for p being FinSequence of D st p in rng A holds len p = n
+                           by MATRIX_1:def 3;
+  A3: for p being FinSequence of D st p in rng (Swap(A,i,j)) holds len p = n
+  proof let p be FinSequence of D;
+   assume B1: p in rng (Swap(A,i,j));
+    rng (Swap(A,i,j))= rng A by FINSEQ_7:24;
+   hence len p = n by MATRIX_1:def 3,B1;
+  end;
+  len (Swap(A,i,j))=len A by FINSEQ_7:20;
+ hence Swap(A,i,j) is Matrix of m,n,D by A2,MATRIX_1:def 3,A3,A7;
+end;
+
+definition let K;let n be Element of NAT, i0 be Nat;
+ func SwapDiagonal(K,n,i0) -> Matrix of n,K equals
+  Swap(1.(K,n),1,i0);
+correctness
+proof i0 in NAT by ORDINAL1:def 13;
+ hence thesis by AA330;
+ end;
+end;
+
+theorem XA:
+ for n being Element of NAT,i0 being Nat,A being Matrix of n,K
+ st 1<=i0 & i0<=n & A= SwapDiagonal(K,n,i0)
+holds for i,j being Nat st 1<=i & i<=n & 1<=j & j<=n holds
+ (i0<>1 implies
+  (i=1 & j=i0 implies A*(i,j)=1.K)&
+  (i=i0 & j=1 implies A*(i,j)=1.K)&
+  (i=1 & j=1 implies A*(i,j)=0.K)&
+  (i=i0 & j=i0 implies A*(i,j)=0.K)&
+  (not ((i=1 or i=i0) &(j=1 or j=i0)) implies
+    (i=j implies A*(i,j)=1.K)&
+    (i<>j implies A*(i,j)=0.K)))
+proof let n be Element of NAT,i0 be Nat,A be Matrix of n,K;
+ assume A0: 1<=i0 & i0<=n;
+   assume A1: A= SwapDiagonal(K,n,i0);
+   B44: len A=n & width A=n & Indices A=[: Seg n,Seg n :] by MATRIX_1:25;
+    let i,j be Nat;
+    assume B1: 1<=i & i<=n & 1<=j & j<=n;
+     B2: [i,j] in Indices A by B1,MATRIX_1:38;
+     B77: 1<=n by B1,XXREAL_0:2;
+     assume C1: i0<>1;
+     thus i=1 & j=i0 implies A*(i,j)=1.K
+     proof assume D0: i=1 & j=i0;then
+       D1: 1<i0 by B1,C1,REAL_1:def 5;
+       reconsider f=1.(K,n) as FinSequence of (the carrier of K)*;
+       D20: len f=n by MATRIX_1:def 3;
+       reconsider g=f/^1 as FinSequence of (the carrier of K)*;
+       reconsider j0=i0-'2 as Element of NAT;
+       reconsider h= (g|j0)
+                       as FinSequence of (the carrier of K)*;
+       len ((<*f/.i0*>)^h)
+             = len (<*f/.i0*>)+len (h) by FINSEQ_1:35
+            .= 1+len (h) by FINSEQ_1:56;then
+       D7: 1<= len ((<*f/.i0*>)^h) by NAT_1:11;
+       D8: 1= len (<*f/.i0*>) by FINSEQ_1:56;
+       D28: A.i=((<*f/.i0*>)^h^<*f/.1*>^(f/^i0)).i
+                                 by D0,D1,B1,D20,FINSEQ_7:30,A1
+         .=  ((<*f/.i0*>)^h^(<*f/.1*>^(f/^i0))).i by FINSEQ_1:45
+         .= (<*f/.i0*>^h).1 by D0,FINSEQ_1:85,D7
+         .= (<*f/.i0*>).1 by FINSEQ_1:85,D8
+         .= f/.i0 by FINSEQ_1:def 8;
+        reconsider qq=(f/.i0) as FinSequence of (the carrier of K)
+                                 by FINSEQ_1:def 11;
+        1 <= i0 & i0 <= len f by D0,B1,MATRIX_1:def 3;then
+        f/.i0=f.i0 by FINSEQ_4:24.=Base_FinSeq(K,n,i0)
+                         by AA1200,D0,B1;then
+        qq.j=1.K by D0,B1,AA1110;
+      hence A*(i,j)=1.K by D28,B2,MATRIX_1:def 6;
+     end;
+     thus i=i0 & j=1 implies A*(i,j)=1.K
+     proof assume D0: i=i0 & j=1;
+       reconsider f=1.(K,n) as FinSequence of (the carrier of K)*;
+       D20: len f=n by MATRIX_1:def 3;
+       reconsider g=f/^1 as FinSequence of (the carrier of K)*;
+       reconsider j0=i0-'2 as Element of NAT;
+       reconsider h= (g|j0)
+                       as FinSequence of (the carrier of K)*;
+       D28: A.i=A/.i by FINSEQ_4:24,B44,B1
+           .=f/.1  by B1,D20,A1,FINSEQ_7:33,D0;
+        reconsider qq=(f/.1) as FinSequence of (the carrier of K)
+                                 by FINSEQ_1:def 11;
+        f/.1=f.1 by B77,D20,FINSEQ_4:24
+           .=Base_FinSeq(K,n,1) by B77,AA1200;then
+        qq.j=1.K by D0,B1,AA1110;
+      hence A*(i,j)=1.K by D28,B2,MATRIX_1:def 6;
+     end;
+     thus i=1 & j=1 implies A*(i,j)=0.K
+    proof assume D0: i=1 & j=1;
+       reconsider f=1.(K,n) as FinSequence of (the carrier of K)*;
+       D20: len f=n by MATRIX_1:def 3;
+       reconsider g=f/^1 as FinSequence of (the carrier of K)*;
+       reconsider j0=i0-'2 as Element of NAT;
+       reconsider h= (g|j0)
+                       as FinSequence of (the carrier of K)*;
+       D28: A.i=A/.i by FINSEQ_4:24,B44,B1
+           .=f/.i0 by A0,D20,B1,A1,FINSEQ_7:33,D0;
+        reconsider qq=(f/.i0) as FinSequence of (the carrier of K)
+                                 by FINSEQ_1:def 11;
+        f/.i0=f.i0 by A0,D20,FINSEQ_4:24
+           .=Base_FinSeq(K,n,i0) by AA1200,A0;then
+        qq.j=0.K by D0,B1,C1,AA1120,A0;
+      hence A*(i,j)=0.K by D28,B2,MATRIX_1:def 6;
+     end;
+
+     thus i=i0 & j=i0 implies A*(i,j)=0.K
+     proof assume D0: i=i0 & j=i0;
+       reconsider f=1.(K,n) as FinSequence of (the carrier of K)*;
+       D20: len f=n by MATRIX_1:def 3;
+       reconsider g=f/^1 as FinSequence of (the carrier of K)*;
+       reconsider j0=i0-'2 as Element of NAT;
+       reconsider h= (g|j0)
+                       as FinSequence of (the carrier of K)*;
+       D28: A.i=A/.i by FINSEQ_4:24,B44,B1
+
+           .=f/.1 by B1,D20,B77,A1,FINSEQ_7:33,D0;
+        reconsider qq=(f/.1) as FinSequence of (the carrier of K)
+                                 by FINSEQ_1:def 11;
+        f/.1=f.1 by B77,D20,FINSEQ_4:24
+           .=Base_FinSeq(K,n,1) by B77,AA1200;then
+        qq.j=0.K by D0,C1,AA1120,A0,B77;
+      hence A*(i,j)=0.K by D28,B2,MATRIX_1:def 6;
+     end;
+      assume E0: not ((i=1 or i=i0) &(j=1 or j=i0));
+      per cases by E0;
+      suppose E1: i<>1 & i<>i0;
+      thus i=j implies A*(i,j)=1.K
+       proof assume D0: i=j;
+       reconsider f=1.(K,n) as FinSequence of (the carrier of K)*;
+       D20: len f=n by MATRIX_1:def 3;
+       reconsider g=f/^1 as FinSequence of (the carrier of K)*;
+       reconsider j0=i0-'2 as Element of NAT;
+       reconsider h= (g|j0)
+                       as FinSequence of (the carrier of K)*;
+       D28: A.i=A/.i by FINSEQ_4:24,B44,B1
+
+           .=f/.i by B1,D20,A1,FINSEQ_7:32,E1;
+        reconsider qq=(f/.i) as FinSequence of (the carrier of K)
+                                 by FINSEQ_1:def 11;
+        1 <= j & j <= len f by B1,MATRIX_1:def 3;then
+        f/.i=f.i by D0,FINSEQ_4:24
+           .=Base_FinSeq(K,n,i) by AA1200,B1;then
+        qq.j=1.K by D0,B1,AA1110;
+      hence A*(i,j)=1.K by D28,B2,MATRIX_1:def 6;
+      end;
+       thus i<>j implies A*(i,j)=0.K
+       proof assume D0: i<>j;
+       reconsider f=1.(K,n) as FinSequence of (the carrier of K)*;
+       D20: len f=n by MATRIX_1:def 3;
+       reconsider g=f/^1 as FinSequence of (the carrier of K)*;
+       reconsider j0=i0-'2 as Element of NAT;
+       reconsider h= (g|j0)
+                       as FinSequence of (the carrier of K)*;
+       D28: A.i=A/.i by FINSEQ_4:24,B44,B1
+
+           .=f/.i by B1,D20,A1,FINSEQ_7:32,E1;
+        reconsider qq=(f/.i) as FinSequence of (the carrier of K)
+                                 by FINSEQ_1:def 11;
+        f/.i=f.i by B1,D20,FINSEQ_4:24
+           .=Base_FinSeq(K,n,i) by AA1200,B1;then
+        qq.j=0.K by D0,AA1120,B1;
+      hence A*(i,j)=0.K by D28,B2,MATRIX_1:def 6;
+     end;
+      end;
+      suppose F0: j<>1 & j<>i0;
+       thus i=j implies A*(i,j)=1.K
+       proof
+       assume D0: i=j;
+       reconsider f=1.(K,n) as FinSequence of (the carrier of K)*;
+       D20: len f=n by MATRIX_1:def 3;
+       reconsider g=f/^1 as FinSequence of (the carrier of K)*;
+       reconsider j0=i0-'2 as Element of NAT;
+       reconsider h= (g|j0)
+                       as FinSequence of (the carrier of K)*;
+       D28: A.i=A/.i by FINSEQ_4:24,B44,B1
+
+           .=f/.i by B1,D20,A1,FINSEQ_7:32,D0,F0;
+        reconsider qq=(f/.i) as FinSequence of (the carrier of K)
+                                 by FINSEQ_1:def 11;
+        1 <= j & j <= len f by B1,MATRIX_1:def 3;then
+        f/.i=f.i by D0,FINSEQ_4:24
+           .=Base_FinSeq(K,n,i) by AA1200,B1;then
+        qq.j=1.K by D0,B1,AA1110;
+        hence A*(i,j)=1.K by D28,B2,MATRIX_1:def 6;
+      end;
+      thus i<>j implies A*(i,j)=0.K
+      proof
+       assume D0: i<>j;
+       per cases;
+       suppose G0: not(i=1 or i=i0);
+       reconsider f=1.(K,n) as FinSequence of (the carrier of K)*;
+       D20: len f=n by MATRIX_1:def 3;
+       reconsider g=f/^1 as FinSequence of (the carrier of K)*;
+       reconsider j0=i0-'2 as Element of NAT;
+       reconsider h= (g|j0)
+                       as FinSequence of (the carrier of K)*;
+       D28: A.i=A/.i by FINSEQ_4:24,B44,B1
+
+           .=f/.i by B1,D20,A1,FINSEQ_7:32,G0;
+        reconsider qq=(f/.i) as FinSequence of (the carrier of K)
+                                 by FINSEQ_1:def 11;
+        f/.i=f.i by B1,D20,FINSEQ_4:24
+           .=Base_FinSeq(K,n,i) by AA1200,B1;then
+        qq.j=0.K by D0,AA1120,B1;
+       hence A*(i,j)=0.K by D28,B2,MATRIX_1:def 6;
+      end;
+      suppose G0: i=1 or i=i0;
+       per cases by G0;
+       suppose H0: i=1;
+       reconsider f=1.(K,n) as FinSequence of (the carrier of K)*;
+       D20: len f=n by MATRIX_1:def 3;
+       reconsider g=f/^1 as FinSequence of (the carrier of K)*;
+       reconsider j0=i0-'2 as Element of NAT;
+       reconsider h= (g|j0)
+                       as FinSequence of (the carrier of K)*;
+       D28: A.i=A/.i by FINSEQ_4:24,B44,B1
+
+           .=f/.i0 by A0,D20,B1,A1,FINSEQ_7:33,H0;
+        reconsider qq=(f/.i0) as FinSequence of (the carrier of K)
+                                 by FINSEQ_1:def 11;
+        f/.i0=f.i0 by A0,D20,FINSEQ_4:24
+           .=Base_FinSeq(K,n,i0) by AA1200,A0;then
+        qq.j=0.K by AA1120,A0,B1,F0;
+         hence A*(i,j)=0.K by D28,B2,MATRIX_1:def 6;
+
+       end;
+       suppose H0: i=i0;
+       reconsider f=1.(K,n) as FinSequence of (the carrier of K)*;
+       D20: len f=n by MATRIX_1:def 3;
+       reconsider g=f/^1 as FinSequence of (the carrier of K)*;
+       reconsider j0=i0-'2 as Element of NAT;
+       reconsider h= (g|j0)
+                       as FinSequence of (the carrier of K)*;
+       D28: A.i=A/.i by FINSEQ_4:24,B44,B1
+
+           .=f/.1 by B1,D20,B77,A1,FINSEQ_7:33,H0;
+        reconsider qq=(f/.1) as FinSequence of (the carrier of K)
+                                 by FINSEQ_1:def 11;
+        f/.1=f.1 by B77,D20,FINSEQ_4:24
+           .=Base_FinSeq(K,n,1) by B77,AA1200;then
+        qq.j=0.K by AA1120,B77,B1,F0;
+         hence A*(i,j)=0.K by D28,B2,MATRIX_1:def 6;
+       end;
+      end;
+      end;
+     end;
+end;
+
+theorem XB:
+ for n being Element of NAT, A being Matrix of n,K
+ for i being Nat st 1<=i & i<=n holds
+   SwapDiagonal(K,n,1)*(i,i)=1.K
+proof let n be Element of NAT, A be Matrix of n,K;
+   set A= SwapDiagonal(K,n,1);
+    let i be Nat;
+    assume
+X:     1<=i & i<=n ;
+      C2: A=1.(K,n) by FINSEQ_7:21;
+      [i,i] in Indices A by X,MATRIX_1:38;
+     hence A*(i,i)=1.K by MATRIX_1:def 12,C2;
+end;
+
+theorem
+  XC: for n being Element of NAT, A being Matrix of n,K
+ for i,j being Nat st 1<=i & i<=n & 1<=j & j<=n holds
+    (i<>j implies SwapDiagonal(K,n,1)*(i,j)=0.K)
+proof let n be Element of NAT, A be Matrix of n,K;
+   set A= SwapDiagonal(K,n,1);
+    let i,j be Nat;
+    assume 1<=i & i<=n & 1<=j & j<=n;then
+     B2: [i,j] in Indices A by MATRIX_1:38;
+      C2: A=1.(K,n) by FINSEQ_7:21;
+     thus i<>j implies A*(i,j)=0.K by MATRIX_1:def 12,B2,C2;
+end;
+
+theorem AA4000:
+ for K for n,i0 being Element of NAT,A being Matrix of n,K
+ st 1<=i0 & i0<=n & i0 = 1 &
+ for i,j being Nat st
+ 1<=i & i<=n & 1<=j & j<=n holds
+    (i=j implies A*(i,j)=1.K)&
+    (i<>j implies A*(i,j)=0.K)
+ holds A= SwapDiagonal(K,n,i0)
+proof let K;let n,i0 be Element of NAT,A be Matrix of n,K;
+ assume A0: 1<=i0 & i0<=n & i0 = 1;
+  assume B0: for i,j being Nat st 1<=i & i<=n & 1<=j & j<=n holds
+    (i=j implies A*(i,j)=1.K)&
+    (i<>j implies A*(i,j)=0.K);
+   for i,j being Nat st [i,j] in Indices A holds
+                     A*(i,j) = (SwapDiagonal(K,n,i0))*(i,j)
+   proof let i,j be Nat;
+    assume C0: [i,j] in Indices A;
+     len A = n & width A = n &
+     Indices A = [:Seg n, Seg n:] by MATRIX_1:25;then
+     i in Seg n & j in Seg n by C0,ZFMISC_1:106;then
+     B1: 1<=i & i<=n & 1<=j & j<=n by FINSEQ_1:3;then
+    (i=j implies A*(i,j)=1.K)&
+    (i<>j implies A*(i,j)=0.K) by B0;
+    hence A*(i,j) = (SwapDiagonal(K,n,i0))*(i,j) by XB,A0,B1,XC;
+   end;
+  hence A= SwapDiagonal(K,n,i0) by MATRIX_1:28;
+end;
+
+theorem AA400X:
+ for K for n,i0 being Element of NAT,A being Matrix of n,K
+ st 1<=i0 & i0<=n & i0 <> 1 &
+ for i,j being Nat st
+ 1<=i & i<=n & 1<=j & j<=n holds
+  (i=1 & j=i0 implies A*(i,j)=1.K)&
+  (i=i0 & j=1 implies A*(i,j)=1.K)&
+  (i=1 & j=1 implies A*(i,j)=0.K)&
+  (i=i0 & j=i0 implies A*(i,j)=0.K)&
+  (not ((i=1 or i=i0) &(j=1 or j=i0)) implies
+    (i=j implies A*(i,j)=1.K)&
+    (i<>j implies A*(i,j)=0.K))
+ holds  A= SwapDiagonal(K,n,i0)
+proof let K;let n,i0 be Element of NAT,A be Matrix of n,K;
+ assume A0: 1<=i0 & i0<=n & i0<>1;
+  assume B0: for i,j being Nat st 1<=i & i<=n & 1<=j & j<=n holds
+ (
+  (i=1 & j=i0 implies A*(i,j)=1.K)&
+  (i=i0 & j=1 implies A*(i,j)=1.K)&
+  (i=1 & j=1 implies A*(i,j)=0.K)&
+  (i=i0 & j=i0 implies A*(i,j)=0.K)&
+  (not ((i=1 or i=i0) &(j=1 or j=i0)) implies
+    (i=j implies A*(i,j)=1.K)&
+    (i<>j implies A*(i,j)=0.K)));
+   for i,j being Nat st [i,j] in Indices A holds
+                     A*(i,j) = (SwapDiagonal(K,n,i0))*(i,j)
+   proof let i,j be Nat;
+    assume C0: [i,j] in Indices A;
+     len A = n & width A = n &
+     Indices A = [:Seg n, Seg n:] by MATRIX_1:25;then
+     i in Seg n & j in Seg n by C0,ZFMISC_1:106;then
+     B1: 1<=i & i<=n & 1<=j & j<=n by FINSEQ_1:3;then
+     B2:
+  (i=1 & j=i0 implies A*(i,j)=1.K)&
+  (i=i0 & j=1 implies A*(i,j)=1.K)&
+  (i=1 & j=1 implies A*(i,j)=0.K)&
+  (i=i0 & j=i0 implies A*(i,j)=0.K)&
+  (not ((i=1 or i=i0) &(j=1 or j=i0)) implies
+    (i=j implies A*(i,j)=1.K)&
+    (i<>j implies A*(i,j)=0.K)) by B0;
+  (i=1 & j=i0 implies (SwapDiagonal(K,n,i0))*(i,j)=1.K)&
+  (i=i0 & j=1 implies (SwapDiagonal(K,n,i0))*(i,j)=1.K)&
+  (i=1 & j=1 implies (SwapDiagonal(K,n,i0))*(i,j)=0.K)&
+  (i=i0 & j=i0 implies (SwapDiagonal(K,n,i0))*(i,j)=0.K)&
+  (not ((i=1 or i=i0) &(j=1 or j=i0)) implies
+    (i=j implies (SwapDiagonal(K,n,i0))*(i,j)=1.K)&
+    (i<>j implies (SwapDiagonal(K,n,i0))*(i,j)=0.K)) by XA,A0,B1;
+    hence A*(i,j) = (SwapDiagonal(K,n,i0))*(i,j) by B2;
+   end;
+  hence A= SwapDiagonal(K,n,i0) by MATRIX_1:28;
+end;
+
+theorem AA4100:
+ for A being (Matrix of n,K),i0 being Element of NAT st
+ 1<=i0 & i0 <=n holds
+  (for j st 1<=j & j<=n holds ((SwapDiagonal(K,n,i0))*A)*(i0,j)=A*(1,j) &
+  ((SwapDiagonal(K,n,i0))*A)*(1,j)=A*(i0,j))&
+  (for i,j st i<>1 & i<>i0 & 1<=i & i<=n & 1<=j & j<=n holds
+   ((SwapDiagonal(K,n,i0))*A)*(i,j)=A*(i,j))
+proof let A be (Matrix of n,K),i0 be Element of NAT;
+ assume A1: 1<=i0 & i0 <=n;
+  thus for j st 1<=j & j<=n holds ((SwapDiagonal(K,n,i0))*A)*(i0,j)=A*(1,j) &
+  ((SwapDiagonal(K,n,i0))*A)*(1,j)=A*(i0,j)
+   proof let j;
+    assume B1: 1<=j & j<=n;
+     B12: 1<=n by XXREAL_0:2,B1;
+     B3: 1 in Seg n by FINSEQ_1:3,B12;
+     B2: j in Seg n by FINSEQ_1:3,B1;
+     set Q=(SwapDiagonal(K,n,i0)) ,P=A;
+     B9: len (Q*P)=n & width (Q*P)=n &
+           Indices (Q*P)=[: Seg n,Seg n :] by MATRIX_1:25;
+     A2a: len Q=n & width Q=n & Indices Q=[: Seg n,Seg n :] by MATRIX_1:25;
+     A2d: len P=n & width P=n & Indices P=[: Seg n,Seg n :]
+                             by MATRIX_1:25;
+     A9: 1 in dom P by B3,FINSEQ_1:def 3,A2d;
+     C1: 1<=n & 1<=i0 & i0<=n by XXREAL_0:2,A1;
+     C1a: i0 in Seg n by FINSEQ_1:3,A1;
+     A9b: i0 in dom P by FINSEQ_1:def 3,A2d,C1a;
+     A6: Line(Q,1)=Base_FinSeq(K,n,i0)
+     proof
+       C2: len (Base_FinSeq(K,n,i0)) = n by AA1100
+         .= width Q by MATRIX_1:25;
+       for j2 being Nat st
+             j2 in Seg width Q holds (Base_FinSeq(K,n,i0)).j2 = Q*(1,j2)
+       proof let j2 be Nat;
+        assume j2 in Seg width Q;then
+         D2: 1<=j2 & j2<=n by A2a,FINSEQ_1:3;
+         reconsider j3=j2 as Element of NAT by ORDINAL1:def 13;
+       now per cases;
+       suppose D0: i0<>1;
+         now per cases;
+         suppose i0=1 & j2=i0;
+          hence (Base_FinSeq(K,n,i0)).j2 = (SwapDiagonal(K,n,i0))*(1,j2) by D0;
+         end;
+         suppose E0: i0=i0 & j2=1;
+           (SwapDiagonal(K,n,i0))*(1,j3)=0.K by XA,D2,D0,E0,A1;
+          hence (Base_FinSeq(K,n,i0)).j2 = (SwapDiagonal(K,n,i0))*(1,j2)
+            by C1,E0,AA1120,D0;
+         end;
+         suppose i0=1 & j2=1;
+          hence (Base_FinSeq(K,n,i0)).j2 = (SwapDiagonal(K,n,i0))*(1,j2) by D0;
+         end;
+         suppose E0: i0=i0 & j2=i0;
+           (SwapDiagonal(K,n,i0))*(1,j3)=1.K by C1,XA,D0,E0;
+          hence (Base_FinSeq(K,n,i0)).j2 = (SwapDiagonal(K,n,i0))*(1,j2)
+                             by D2,E0,AA1110;
+         end;
+         suppose E0: not ((i0=1 or i0=i0) &(j2=1 or j2=i0));
+           now per cases;
+           suppose F0: i0=j2;
+            thus (Base_FinSeq(K,n,i0)).j2 = (SwapDiagonal(K,n,i0))*(1,j2)
+                           by E0,F0;
+           end;
+           suppose F0: i0<>j2;
+             (SwapDiagonal(K,n,i0))*(1,j3)=0.K by C1,XA,E0,D2,D0;
+            hence (Base_FinSeq(K,n,i0)).j2 = (SwapDiagonal(K,n,i0))*(1,j2)
+              by A1,D2,F0,AA1120;
+           end;
+           end;
+          hence (Base_FinSeq(K,n,i0)).j2 = (SwapDiagonal(K,n,i0))*(1,j2);
+         end;
+         end;
+         hence (Base_FinSeq(K,n,i0)).j2 = (SwapDiagonal(K,n,i0))*(1,j2);
+         end;
+         suppose D0: i0=1;
+          now per cases;
+          suppose E0: i0=j2;
+             (SwapDiagonal(K,n,i0))*(1,j3)=1.K by XB,D2,D0,E0;
+             hence (Base_FinSeq(K,n,i0)).j2 = (SwapDiagonal(K,n,i0))*(1,j2)
+               by AA1110,D2,E0;
+           end;
+          suppose E0: i0<>j2;
+            (SwapDiagonal(K,n,i0))*(1,j3)=0.K by A1,D2,XC,D0,E0;
+           hence (Base_FinSeq(K,n,i0)).j2 = (SwapDiagonal(K,n,i0))*(1,j2)
+             by A1,D2,E0,AA1120;
+          end;
+          end;
+          hence (Base_FinSeq(K,n,i0)).j2 = (SwapDiagonal(K,n,i0))*(1,j2);
+         end;
+         end;
+        hence (Base_FinSeq(K,n,i0)).j2 = Q*(1,j2);
+       end;
+      hence Line(Q,1)=Base_FinSeq(K,n,i0) by MATRIX_1:def 8,C2;
+     end;
+     A6b: Line(Q,i0)=Base_FinSeq(K,n,1)
+     proof
+       C1: 1<=n & 1<=i0 & i0<=n by XXREAL_0:2,A1;
+       C2: len (Base_FinSeq(K,n,1)) = n by AA1100
+       .= width Q by MATRIX_1:25;
+       for j2 being Nat st
+             j2 in Seg width Q holds (Base_FinSeq(K,n,1)).j2 = Q*(i0,j2)
+       proof let j2 be Nat;
+        assume j2 in Seg width Q;then
+         D2: 1<=j2 & j2<=n by A2a,FINSEQ_1:3;
+         reconsider j3=j2 as Element of NAT by ORDINAL1:def 13;
+       now per cases;
+       suppose D0: i0<>1;
+         now per cases;
+         suppose i0=1 & j2=i0;
+          hence (Base_FinSeq(K,n,1)).j2 = (SwapDiagonal(K,n,i0))*(i0,j2) by D0;
+         end;
+         suppose E0: i0=i0 & j2=1;
+           (SwapDiagonal(K,n,i0))*(i0,j3)=1.K by C1,XA,D0,E0;
+          hence (Base_FinSeq(K,n,1)).j2 = (SwapDiagonal(K,n,i0))*(i0,j2)
+            by D2,E0,AA1110;
+         end;
+         suppose i0=1 & j2=1;
+          hence (Base_FinSeq(K,n,1)).j2 = (SwapDiagonal(K,n,i0))*(i0,j2) by D0;
+         end;
+         suppose E0: i0=i0 & j2=i0;then
+           (SwapDiagonal(K,n,i0))*(i0,j3)=0.K by XA,D2,D0;
+          hence (Base_FinSeq(K,n,1)).j2 = (SwapDiagonal(K,n,i0))*(i0,j2)
+                             by C1,E0,AA1120,D0;
+         end;
+         suppose E0: not ((i0=1 or i0=i0) &(j2=1 or j2=i0));
+           now per cases;
+           suppose F0: i0=j2;
+            thus (Base_FinSeq(K,n,1)).j2 = (SwapDiagonal(K,n,i0))*(i0,j2)
+                           by E0,F0;
+           end;
+           suppose i0<>j2;
+             (SwapDiagonal(K,n,i0))*(i0,j3)=0.K by A1,XA,E0,D2,D0;
+            hence (Base_FinSeq(K,n,1)).j2 = (SwapDiagonal(K,n,i0))*(i0,j2)
+              by C1,D2,E0,AA1120;
+           end;
+           end;
+          hence (Base_FinSeq(K,n,1)).j2 = (SwapDiagonal(K,n,i0))*(i0,j2);
+         end;
+         end;
+         hence (Base_FinSeq(K,n,1)).j2 = (SwapDiagonal(K,n,i0))*(i0,j2);
+         end;
+         suppose D0: i0=1;
+          now per cases;
+          suppose E0: i0=j2;
+            (SwapDiagonal(K,n,i0))*(i0,j3)=1.K by XB,D2,D0,E0;
+             hence (Base_FinSeq(K,n,1)).j2 = (SwapDiagonal(K,n,i0))*(i0,j2)
+              by AA1110,D2,D0,E0;
+           end;
+          suppose E0: i0<>j2;
+            (SwapDiagonal(K,n,1))*(i0,j3)=0.K by D2,XC,E0,A1;
+           hence (Base_FinSeq(K,n,1)).j2 = (SwapDiagonal(K,n,i0))*(i0,j2)
+              by A1,D2,E0,AA1120,D0;
+          end;
+          end;
+          hence (Base_FinSeq(K,n,1)).j2 = (SwapDiagonal(K,n,i0))*(i0,j2);
+         end;
+         end;
+        hence (Base_FinSeq(K,n,1)).j2 = Q*(i0,j2);
+       end;
+      hence Line(Q,i0)=Base_FinSeq(K,n,1) by MATRIX_1:def 8,C2;
+     end;
+     A10: len (Col(P,j))=n by A2d,MATRIX_1:def 9;
+     B18: 1<=n by XXREAL_0:2,B1;
+     B8b: 1 in Seg n by B18,FINSEQ_1:3;
+     A22: [i0,j] in Indices (Q*P) by B1,MATRIX_1:38,A1;
+     A22b: [1,j] in Indices (Q*P) by B8b,ZFMISC_1:106,B2,B9;
+     thus ((SwapDiagonal(K,n,i0))*A)*(i0,j)
+                   = |( Base_FinSeq(K,n,1),Col(P,j))|
+                      by A6b,MATRIX_3:def 4,A2a,A2d,A22
+                  .= |( Col(P,j),Base_FinSeq(K,n,1) )| by FVSUM_1:115
+                  .= (Col(P,j)).1 by AA2627,A10,B12
+                  .=A*(1,j) by MATRIX_1:def 9,A9;
+     thus ((SwapDiagonal(K,n,i0))*A)*(1,j)
+                   = |( Base_FinSeq(K,n,i0),Col(P,j))|
+                     by A6,MATRIX_3:def 4,A2a,A2d,A22b
+                  .= |( Col(P,j),Base_FinSeq(K,n,i0) )| by FVSUM_1:115
+                  .= (Col(P,j)).i0 by A1,AA2627,A10
+                  .=A*(i0,j) by MATRIX_1:def 9,A9b;
+  end;
+  thus (for i,j st i<>1 & i<>i0 & 1<=i & i<=n & 1<=j & j<=n holds
+   ((SwapDiagonal(K,n,i0))*A)*(i,j)=A*(i,j))
+   proof let i,j;
+    assume B1: i<>1 & i<>i0 & 1<=i & i<=n & 1<=j & j<=n;
+     B3b: i in Seg n by FINSEQ_1:3,B1;
+     set Q=(SwapDiagonal(K,n,i0)) ,P=A;
+     A2a: len Q=n & width Q=n & Indices Q=[: Seg n,Seg n :] by MATRIX_1:25;
+     A2d: len P=n & width P=n & Indices P=[: Seg n,Seg n :]
+                             by MATRIX_1:25;
+     A9c: i in dom P by FINSEQ_1:def 3,B3b,A2d;
+    A6d: Line(Q,i)=Base_FinSeq(K,n,i)
+     proof
+       C2: len (Base_FinSeq(K,n,i)) = n by AA1100
+        .= width Q by MATRIX_1:25;
+       for j2 being Nat st
+             j2 in Seg width Q holds (Base_FinSeq(K,n,i)).j2 = Q*(i,j2)
+       proof let j2 be Nat;
+        assume j2 in Seg width Q;then
+         D2: 1<=j2 & j2<=n by A2a,FINSEQ_1:3;
+         reconsider j3=j2 as Element of NAT by ORDINAL1:def 13;
+       now per cases;
+       suppose D0: i0<>1;
+         now per cases;
+         suppose i=1 & j2=i0;
+          hence (Base_FinSeq(K,n,i)).j2 = (SwapDiagonal(K,n,i0))*(i,j2) by B1;
+         end;
+         suppose i=i0 & j2=1;
+          hence (Base_FinSeq(K,n,i)).j2 = (SwapDiagonal(K,n,i0))*(i,j2)
+           by B1;
+         end;
+         suppose i=1 & j2=1;
+          hence (Base_FinSeq(K,n,i)).j2 = (SwapDiagonal(K,n,i0))*(i,j2) by B1;
+         end;
+         suppose E0: i=i0 & j2=i0;
+          thus (Base_FinSeq(K,n,i)).j2 = (SwapDiagonal(K,n,i0))*(i,j2)
+                             by B1,E0;
+         end;
+         suppose E0: not ((i=1 or i=i0) &(j2=1 or j2=i0));
+           now per cases;
+           suppose F0: i=j2;then
+             (SwapDiagonal(K,n,i0))*(i,j3)=1.K by XA,A1,E0,D2,D0;
+            hence (Base_FinSeq(K,n,i)).j2 = (SwapDiagonal(K,n,i0))*(i,j2)
+                           by B1,F0,AA1110;
+           end;
+           suppose F0: i<>j2;
+             (SwapDiagonal(K,n,i0))*(i,j3)=0.K by B1,XA,A1,D2,D0,F0;
+            hence (Base_FinSeq(K,n,i)).j2 = (SwapDiagonal(K,n,i0))*(i,j2)
+             by B1,D2,F0,AA1120;
+           end;
+           end;
+          hence (Base_FinSeq(K,n,i)).j2 = (SwapDiagonal(K,n,i0))*(i,j2);
+         end;
+         end;
+         hence (Base_FinSeq(K,n,i)).j2 = (SwapDiagonal(K,n,i0))*(i,j2);
+         end;
+         suppose D0: i0=1;
+          now per cases;
+          suppose E0: i=j2;
+            (SwapDiagonal(K,n,i0))*(i,j3)=1.K by XB,D2,D0,E0;
+             hence (Base_FinSeq(K,n,i)).j2 = (SwapDiagonal(K,n,i0))*(i,j2)
+               by AA1110,D2,E0;
+           end;
+          suppose E0: i<>j2;
+            (SwapDiagonal(K,n,i0))*(i,j3)=0.K by B1,D2,XC,D0,E0;
+           hence (Base_FinSeq(K,n,i)).j2 = (SwapDiagonal(K,n,i0))*(i,j2)
+             by AA1120,B1,D2,E0;
+          end;
+          end;
+          hence (Base_FinSeq(K,n,i)).j2 = (SwapDiagonal(K,n,i0))*(i,j2);
+         end;
+         end;
+        hence (Base_FinSeq(K,n,i)).j2 = Q*(i,j2);
+       end;
+      hence Line(Q,i)=Base_FinSeq(K,n,i) by MATRIX_1:def 8,C2;
+     end;
+     A10: len (Col(P,j))=n by A2d,MATRIX_1:def 9;
+     A22: [i,j] in Indices (Q*P) by B1,MATRIX_1:38;
+     thus ((SwapDiagonal(K,n,i0))*A)*(i,j)
+                   = |( Base_FinSeq(K,n,i),Col(P,j))|
+                     by A6d,MATRIX_3:def 4,A2a,A2d,A22
+                  .= |( Col(P,j),Base_FinSeq(K,n,i) )| by FVSUM_1:115
+                  .= (Col(P,j)).i by AA2627,A10,B1
+                  .=A*(i,j) by MATRIX_1:def 9,A9c;
+  end;
+end;
+
+theorem AA4150:
+ for i0 being Element of NAT st 1<=i0 & i0<=n holds
+  SwapDiagonal(K,n,i0) is invertible
+ & (SwapDiagonal(K,n,i0))~ =SwapDiagonal(K,n,i0)
+proof let i0 be Element of NAT;
+ assume A1: 1<=i0 & i0<=n;
+   A51: 1<=n by XXREAL_0:2,A1;
+   set R=(SwapDiagonal(K,n,i0))*(SwapDiagonal(K,n,i0));
+   A10: len R=n & width R=n & Indices R=[: Seg n,Seg n :] by MATRIX_1:25;
+   A11: len (1.(K,n))=n & width (1.(K,n))=n &
+       Indices (1.(K,n))=[: Seg n,Seg n :] by MATRIX_1:25;
+   A5: len R = len (1.(K,n)) & width R = width (1.(K,n)) by MATRIX_1:25,A11;
+   for i4,j4 being Nat st [i4,j4] in Indices R holds
+      R*(i4,j4) = (1.(K,n))*(i4,j4)
+   proof let i4,j4 be Nat;
+     assume B1: [i4,j4] in Indices R;
+      reconsider i=i4,j=j4 as Element of NAT by ORDINAL1:def 13;
+      B15: i in Seg n & j in Seg n by B1,A10,ZFMISC_1:106;
+      B2: 1<=i & i<=n & 1<=j & j<=n by FINSEQ_1:3,B15;
+      B77: [i,j] in Indices (1.(K,n)) by MATRIX_1:25,A10,B1;
+      per cases by B2,REAL_1:def 5;
+      suppose C0: 1<i;
+        now per cases;
+        suppose D0: i<>i0;
+          now per cases;
+          suppose E0: i=j;
+             E1: (1.(K,n))*(i,j)= 1.K by MATRIX_1:def 12,B77,E0;
+            now per cases;
+            suppose i0<>1;
+             hence (SwapDiagonal(K,n,i0))*(i,j)=1.K by XA,A1,D0,E0,C0,B2;
+            end;
+            suppose i0=1;
+             hence (SwapDiagonal(K,n,i0))*(i,j)=1.K by E0,XB,B2;
+            end;
+            end;
+           hence R*(i,j) = (1.(K,n))*(i,j) by AA4100,A1,C0,B2,D0,E1;
+          end;
+          suppose E0: i<>j;
+            E1: (1.(K,n))*(i,j)=0.K by MATRIX_1:def 12,B77,E0;
+            now per cases;
+            suppose i0=1;
+             hence (SwapDiagonal(K,n,i0))*(i,j)=0.K by XC,E0,B2;
+            end;
+            suppose i0<>1;
+             hence (SwapDiagonal(K,n,i0))*(i,j)=0.K by XA,A1,D0,E0,C0,B2;
+            end;
+            end;
+           hence R*(i,j) = (1.(K,n))*(i,j) by E1,AA4100,A1,C0,B2,D0;
+          end;
+          end;
+         hence R*(i,j) = (1.(K,n))*(i,j);
+        end;
+        suppose D0: i=i0;
+         now per cases;
+         suppose E0: i=j;then
+            E1: (1.(K,n))*(i,j)=1.K by MATRIX_1:def 12,B77;
+          now per cases;
+          suppose i0=1;
+           hence (SwapDiagonal(K,n,i0))*(1,i0)=1.K by D0,C0;
+          end;
+          suppose i0<>1;
+           hence (SwapDiagonal(K,n,i0))*(1,i0)=1.K by XA,A1,A51;
+          end;
+          end;
+           hence R*(i,j) = (1.(K,n))*(i,j) by E1,E0,D0,AA4100,A1;
+         end;
+         suppose E0: i<>j;then
+            E1: (1.(K,n))*(i,j)=0.K by MATRIX_1:def 12,B77;
+           now per cases;
+           suppose i0=1;
+            hence (SwapDiagonal(K,n,i0))*(1,j)=0.K by D0,C0;
+           end;
+           suppose i0<>1;
+             now per cases;
+             suppose j=1;
+            hence (SwapDiagonal(K,n,i0))*(1,j)=0.K by XA,A1,D0,C0,A51;
+             end;
+             suppose j<>1;
+              hence (SwapDiagonal(K,n,i0))*(1,j)=0.K by XA,D0,E0,C0,B2,A51;
+             end;
+             end;
+            hence (SwapDiagonal(K,n,i0))*(1,j)=0.K;
+           end;
+           end;
+           hence R*(i,j) = (1.(K,n))*(i,j) by E1,D0,B2,AA4100;
+         end;
+         end;
+         hence R*(i,j) = (1.(K,n))*(i,j);
+        end;
+        end;
+       hence R*(i4,j4) = (1.(K,n))*(i4,j4);
+      end;
+      suppose C0: 1=i;
+       now per cases;
+       suppose D0: i0<>1;
+        per cases;
+        suppose E0: j<>1;then
+          E1: (1.(K,n))*(i,j)=0.K by C0,MATRIX_1:def 12,B77;
+          now per cases;
+          suppose j=i0;
+           hence (SwapDiagonal(K,n,i0))*(i0,j)=0.K by XA,E0,B2;
+          end;
+          suppose j<>i0;
+           hence (SwapDiagonal(K,n,i0))*(i0,j)=0.K by A1,XA,D0,E0,B2;
+          end;
+          end;
+         hence R*(i,j) = (1.(K,n))*(i,j) by C0,E1,AA4100,A1,B2;
+        end;
+        suppose E0: j=1;then
+          E1: (1.(K,n))*(i,j)= 1.K by MATRIX_1:def 12,B77,C0;
+          (SwapDiagonal(K,n,i0))*(i0,j)=1.K by XA,A1,D0,E0,A51;
+         hence R*(i,j) = (1.(K,n))*(i,j) by C0,E1,AA4100,A1,B2;
+        end;
+       end;
+       suppose D0: i0=1;
+        now per cases;
+        suppose E0: i<>j;then
+          E1: (1.(K,n))*(i,j)=0.K by MATRIX_1:def 12,B77;
+          (SwapDiagonal(K,n,1))*(1,j)=0.K by XC,E0,C0,B2;
+         hence R*(i,j) = (1.(K,n))*(i,j) by C0,E1,AA4100,B2,D0;
+        end;
+        suppose E0: i=j;
+          E1: (1.(K,n))*(j,j)= 1.K by MATRIX_1:def 12,B77,E0;
+          ((SwapDiagonal(K,n,i0))*(SwapDiagonal(K,n,i0)))*(1,j)
+          =(SwapDiagonal(K,n,i0))*(i0,j) by AA4100,A1,B2;
+         hence R*(i,j) = (1.(K,n))*(i,j) by XB,A1,D0,E0,C0,E1;
+        end;
+        end;
+        hence R*(i,j) = (1.(K,n))*(i,j);
+       end;
+       end;
+       hence R*(i4,j4) = (1.(K,n))*(i4,j4);
+      end;
+   end;then
+  A88: (SwapDiagonal(K,n,i0))*(SwapDiagonal(K,n,i0))=1.(K,n) by A5,MATRIX_1:21;
+ hence SwapDiagonal(K,n,i0) is invertible by AA4145;
+ thus (SwapDiagonal(K,n,i0))~=SwapDiagonal(K,n,i0) by AA4140,A88;
+end;
+
+theorem AA4160:
+ for i0 being Element of NAT st 1<=i0 & i0<=n holds
+  (SwapDiagonal(K,n,i0))@=(SwapDiagonal(K,n,i0))
+ proof let i0 be Element of NAT;
+  assume A1: 1<=i0 & i0<=n;
+  per cases;
+  suppose
+S:  i0<> 1;
+ for i,j being Nat st 1<=i & i<=n & 1<=j & j<=n holds
+  (i=1 & j=i0 implies (SwapDiagonal(K,n,i0))@ *(i,j)=1.K)&
+  (i=i0 & j=1 implies (SwapDiagonal(K,n,i0))@ *(i,j)=1.K)&
+  (i=1 & j=1 implies (SwapDiagonal(K,n,i0))@ *(i,j)= 0.K)&
+  (i=i0 & j=i0 implies (SwapDiagonal(K,n,i0))@ *(i,j)= 0.K)&
+  (not ((i=1 or i=i0) &(j=1 or j=i0)) implies
+    (i=j implies SwapDiagonal(K,n,i0)@ *(i,j)=1.K)&
+    (i<>j implies SwapDiagonal(K,n,i0)@*(i,j)=0.K))
+ proof let i,j be Nat;
+  assume B1: 1<=i & i<=n & 1<=j & j<=n;
+  B2: i in Seg n & j in Seg n by FINSEQ_1:3,B1;
+ A5: len (SwapDiagonal(K,n,i0))=n & width (SwapDiagonal(K,n,i0))=n &
+    Indices (SwapDiagonal(K,n,i0))=[: Seg n,Seg n :] by MATRIX_1:25;
+  hereby assume C0: i=1 & j=i0;
+    [j,i] in Indices (SwapDiagonal(K,n,i0)) by B2,A5,ZFMISC_1:106;
+   hence (SwapDiagonal(K,n,i0))@ *(i,j)=(SwapDiagonal(K,n,i0)) *(j,i)
+                                    by MATRIX_1:def 7
+                              .=1.K by S,C0,XA,B1;
+  end;
+ hereby assume C0: i=i0 & j=1;
+    [j,i] in Indices (SwapDiagonal(K,n,i0)) by B2,A5,ZFMISC_1:106;
+   hence (SwapDiagonal(K,n,i0))@ *(i,j)=(SwapDiagonal(K,n,i0)) *(j,i)
+                                    by MATRIX_1:def 7
+                              .=1.K by S,C0,XA,B1;
+  end;
+ hereby assume C0: i=1 & j=1;
+    [j,i] in Indices (SwapDiagonal(K,n,i0)) by B2,A5,ZFMISC_1:106;
+   hence (SwapDiagonal(K,n,i0))@ *(i,j)=(SwapDiagonal(K,n,i0)) *(j,i)
+                                     by MATRIX_1:def 7
+                              .= 0.K by S,C0,XA,A1,B1;
+  end;
+ hereby assume C0: i=i0 & j=i0;
+    [j,i] in Indices (SwapDiagonal(K,n,i0)) by B2,A5,ZFMISC_1:106;
+   hence (SwapDiagonal(K,n,i0))@ *(i,j)=(SwapDiagonal(K,n,i0)) *(j,i)
+                                     by MATRIX_1:def 7
+                              .= 0.K by S,C0,XA,B1;
+  end;
+ hereby assume C0: not ((i=1 or i=i0) &(j=1 or j=i0));
+    C1: [j,i] in Indices (SwapDiagonal(K,n,i0)) by B2,A5,ZFMISC_1:106;
+    C2: now assume D0: i=j;
+     thus (SwapDiagonal(K,n,i0))@ *(i,j)=(SwapDiagonal(K,n,i0)) *(j,i)
+                         by C1,MATRIX_1:def 7
+                              .=1.K by S,C0,XA,A1,B1,D0;
+    end;
+    now assume D0: i<>j;
+          thus (SwapDiagonal(K,n,i0))@ *(i,j)=(SwapDiagonal(K,n,i0)) *(j,i)
+                                             by C1,MATRIX_1:def 7
+                              .= 0.K by S,C0,XA,A1,B1,D0;
+    end;
+   hence (i=j implies (SwapDiagonal(K,n,i0))@ *(i,j)=1.K)&
+    (i<>j implies (SwapDiagonal(K,n,i0))@ *(i,j)= 0.K) by C2;
+  end;
+ end;
+  hence thesis by AA400X,A1,S;
+  end;
+  suppose
+S: i0=1;
+ for i,j being Nat st 1<=i & i<=n & 1<=j & j<=n holds
+    (i=j implies (SwapDiagonal(K,n,i0))@ *(i,j)=1.K)&
+    (i<>j implies (SwapDiagonal(K,n,i0))@ *(i,j)= 0.K)
+ proof let i,j be Nat;
+  assume B1: 1<=i & i<=n & 1<=j & j<=n;
+  B2: i in Seg n & j in Seg n by FINSEQ_1:3,B1;
+ A5: len (SwapDiagonal(K,n,i0))=n & width (SwapDiagonal(K,n,i0))=n &
+    Indices (SwapDiagonal(K,n,i0))=[: Seg n,Seg n :] by MATRIX_1:25;
+    C1: [j,i] in Indices (SwapDiagonal(K,n,i0)) by B2,A5,ZFMISC_1:106;
+   hereby assume C0: i=j;
+    thus (SwapDiagonal(K,n,i0))@ *(i,j)=(SwapDiagonal(K,n,i0)) *(j,i)
+                                             by C1,MATRIX_1:def 7
+                              .=1.K by S,C0,XB,B1;
+   end;
+   hereby assume C0: i<>j;
+    thus (SwapDiagonal(K,n,i0))@ *(i,j)=(SwapDiagonal(K,n,i0)) *(j,i)
+                                             by C1,MATRIX_1:def 7
+                              .= 0.K by S,C0,XC,B1;
+   end;
+ end;
+  hence thesis by AA4000,A1,S;
+  end;
+ end;
+
+theorem AA4170:
+ for A being (Matrix of n,K),j0 being Element of NAT st
+ 1<=j0 & j0 <=n holds
+  (for i st 1<=i & i<=n holds (A*(SwapDiagonal(K,n,j0)))*(i,j0)=A*(i,1) &
+  (A*(SwapDiagonal(K,n,j0)))*(i,1)=A*(i,j0))&
+  (for i,j st j<>1 & j<>j0 & 1<=i & i<=n & 1<=j & j<=n holds
+   (A*(SwapDiagonal(K,n,j0)))*(i,j)=A*(i,j))
+proof let A be (Matrix of n,K),j0 be Element of NAT;
+  assume A1: 1<=j0 & j0 <=n;
+   A5: ((SwapDiagonal(K,n,j0))*(A@))@=(A@@)*((SwapDiagonal(K,n,j0))@) by AA44
+                        .= A*((SwapDiagonal(K,n,j0))@) by MATRIXR2:29
+                        .= A*(SwapDiagonal(K,n,j0)) by AA4160,A1;
+  A12: for i st 1<=i & i<=n holds (A*(SwapDiagonal(K,n,j0)))*(i,j0)=A*(i,1) &
+  (A*(SwapDiagonal(K,n,j0)))*(i,1)=A*(i,j0)
+   proof let i;
+    assume B1: 1<=i & i<=n;then
+X:    1<=n by XXREAL_0:2;
+    B2: [j0,i] in Indices ((SwapDiagonal(K,n,j0))*(A@)) by B1,MATRIX_1:38,A1;
+    B15: [1,i] in Indices ((SwapDiagonal(K,n,j0))*(A@)) by B1,MATRIX_1:38,X;
+    B3: [i,1] in Indices A by B1,MATRIX_1:38,X;
+    B14: [i,j0] in Indices A by B1,MATRIX_1:38,A1;
+    thus (A*(SwapDiagonal(K,n,j0)))*(i,j0)
+      =(((SwapDiagonal(K,n,j0))*(A@)))*(j0,i) by MATRIX_1:def 7,B2,A5
+     .=(A@)*(1,i) by B1,A1,AA4100
+     .=A*(i,1) by MATRIX_1:def 7,B3;
+    thus (A*(SwapDiagonal(K,n,j0)))*(i,1)
+      =(((SwapDiagonal(K,n,j0))*(A@)))*(1,i) by MATRIX_1:def 7,B15,A5
+     .=(A@)*(j0,i) by B1,A1,AA4100
+     .=A*(i,j0) by MATRIX_1:def 7,B14;
+   end;
+  for i,j st j<>1 & j<>j0 & 1<=i & i<=n & 1<=j & j<=n holds
+   (A*(SwapDiagonal(K,n,j0)))*(i,j)=A*(i,j)
+  proof let i,j;
+   assume B1: j<>1 & j<>j0 & 1<=i & i<=n & 1<=j & j<=n;
+    B15: [j,i] in Indices ((SwapDiagonal(K,n,j0))*(A@)) by B1,MATRIX_1:38;
+    B17: [i,j] in Indices A by B1,MATRIX_1:38;
+   thus (A*(SwapDiagonal(K,n,j0)))*(i,j)
+      =(((SwapDiagonal(K,n,j0))*(A@)))*(j,i) by MATRIX_1:def 7,B15,A5
+     .=(A@)*(j,i) by B1,A1,AA4100
+     .=A*(i,j) by MATRIX_1:def 7,B17;
+  end;
+ hence thesis by A12;
+end;
+
+theorem AA4190:
+ for A being Matrix of n,K holds
+  A=0.(K,n) iff (for i,j st 1<=i & i<=n & 1<=j & j<=n holds A*(i,j)= 0.K)
+proof let A be Matrix of n,K;
+   A2: len A=n & width A=n & Indices A=[: Seg n,Seg n :] by MATRIX_1:25;
+  thus A=0.(K,n) implies
+    for i,j st 1<=i & i<=n & 1<=j & j<=n holds A*(i,j)= 0.K
+   proof assume A=0.(K,n);then
+    B1b: A=0.(K,n,n) by MATRIX_3:def 1;
+    thus for i,j st 1<=i & i<=n & 1<=j & j<=n holds A*(i,j)= 0.K
+     proof let i,j;
+      assume C1: 1<=i & i<=n & 1<=j & j<=n;
+       [i,j] in Indices A by C1,MATRIX_1:38;
+      hence A*(i,j)= 0.K by B1b,MATRIX_3:3;
+     end;
+   end;
+  assume B0: (for i,j st 1<=i & i<=n & 1<=j & j<=n holds A*(i,j)=0.K);
+    for i,j being Nat st [i,j] in Indices A holds A*(i,j)=(A+A)*(i,j)
+      proof let i,j be Nat;
+       assume B1: [i,j] in Indices A;then
+         i in Seg n & j in Seg n by A2,ZFMISC_1:106;then
+         B3: 1<=i & i<=n & 1<=j & j<=n by FINSEQ_1:3;
+         reconsider i0=i,j0=j as Element of NAT by ORDINAL1:def 13;
+         B4: A*(i0,j0)= 0.K by B3,B0;
+        (A+A)*(i,j) = 0.K+(A*(i,j)) by B4,MATRIX_3:def 3,B1
+                  .= A*(i,j) by RLVECT_1:10;
+       hence thesis;
+      end;then
+     A=A+A by MATRIX_1:28; then
+     A = 0.(K,n,n) by MATRIX_4:6,A2;
+     hence A= 0.(K,n) by MATRIX_3:def 1;
+end;
+
+begin :: Left/Right Invertibility and Invertibility
+
+theorem AA4200:
+ for A being Matrix of n,K st A<> 0.(K,n) holds
+  ex B,C being Matrix of n,K st
+   B is invertible & C is invertible &
+   (B*A*C)*(1,1) =1.K &
+   (for i st 1<i & i<=n holds (B*A*C)*(i,1)= 0.K)&
+   (for j st 1<j & j<=n holds (B*A*C)*(1,j)= 0.K)
+proof let A be Matrix of n,K;
+  assume A0: A<> 0.(K,n);
+   consider i0,j0 being Element of NAT such that
+   A4:  1<=i0 & i0<=n & 1<=j0 & j0<=n & A*(i0,j0)<>0.K by AA4190,A0;
+   set A2= ((SwapDiagonal(K,n,i0))*A);
+    B1: 1<=n by A4,XXREAL_0:2;
+    B3: (((SwapDiagonal(K,n,i0))*A)*(SwapDiagonal(K,n,j0)))*(1,1)
+      =A2*(1,j0) by A4,AA4170,B1 .=A*(i0,j0) by A4,AA4100;
+    set A3=((SwapDiagonal(K,n,i0))*A)*(SwapDiagonal(K,n,j0));
+    consider P,Q being Matrix of n,K such that
+    A13: P is invertible & Q is invertible &
+    (P*A3*Q)*(1,1)=1.K &
+   (for i st 1<i & i<=n holds (P*A3*Q)*(i,1)= 0.K)&
+   (for j st 1<j & j<=n holds (P*A3*Q)*(1,j)= 0.K) by A4,B3,AA3040;
+   set B0=P*(SwapDiagonal(K,n,i0)),C0=(SwapDiagonal(K,n,j0))*Q;
+   A15a: SwapDiagonal(K,n,i0) is invertible by A4,AA4150;
+   A15: B0 is invertible by A13,MATRIX_6:37,A15a;
+   A15b: SwapDiagonal(K,n,j0) is invertible by A4,AA4150;
+   A17: C0 is invertible by A13,MATRIX_6:37,A15b;
+   (B0*A*C0)=(P*((SwapDiagonal(K,n,i0))*A)*((SwapDiagonal(K,n,j0))*Q)) by AA41
+           .=(P*((SwapDiagonal(K,n,i0))*A)*(SwapDiagonal(K,n,j0))*Q) by AA41
+           .=(P*A3*Q) by AA41;
+ hence thesis by A15,A17,A13;
+end;
+
+theorem AA4500:
+ for A,B being Matrix of n,K st
+  B*A=1.(K,n) holds ex B2 being Matrix of n,K st A*B2=1.(K,n)
+proof let A,B be Matrix of n,K;
+ thus B*A=1.(K,n) implies ex B2 being Matrix of n,K st A*B2=1.(K,n)
+  proof assume B1: B*A=1.(K,n);
+  defpred P[Element of NAT] means for D,B3 being Matrix of $1,K st
+    B3*D=1.(K,$1) holds ex B4 being Matrix of $1,K st D*B4=1.(K,$1);
+  for D,B0 being Matrix of 0,K st
+    B0*D=1.(K,0) holds ex B1 being Matrix of 0,K st D*B1=1.(K,0)
+   proof let D,B0 be Matrix of 0,K;
+    assume B0*D=1.(K,0);
+    D*(0.(K,0))=1.(K,0) & (0.(K,0))*D=1.(K,0) by AA4350;
+    hence ex B1 being Matrix of 0,K st D*B1=1.(K,0);
+   end;then
+   B3: P[0];
+   B4: for k being Element of NAT st P[k] holds P[k+1]
+    proof let k be Element of NAT;
+     assume C1: P[k];
+     for A2,B3 being Matrix of k+1,K st
+      B3*A2=1.(K,k+1) holds ex B4 being Matrix of k+1,K st
+      A2*B4=1.(K,k+1)
+      proof let A2,B2 be Matrix of (k+1),K;
+       assume D2: B2*A2=1.(K,k+1);
+        D8a: (Det B2)*(Det A2)= Det(1.(K,k+1)) by D2,MATRIXR2:45;
+        D6: now assume A2=0.(K,k+1);then
+        D6a:  A2=0.(K,k+1,k+1) by MATRIX_3:def 1;
+        D6b:  Det(A2)= 0.K by MATRIX_7:15,NAT_1:12,D6a;
+        D7: (Det B2)*(Det A2)=0.K by VECTSP_1:36,D6b;
+          not 0.K = 1_K;
+         hence contradiction by MATRIX_7:16,NAT_1:12,D8a,D7;
+        end;
+        consider B,C being Matrix of (k+1),K such that
+        D9: B is invertible & C is invertible &
+         (B*A2*C)*(1,1) =1.K &
+         (for i st 1<i & i<=k+1 holds (B*A2*C)*(i,1)= 0.K)&
+         (for j st 1<j & j<=k+1 holds (B*A2*C)*(1,j)= 0.K) by AA4200,D6;
+        set A3=B*A2*C,B3=(C~)*B2*(B~);
+        A1e: len (A2*C)= k+1 by MATRIX_1:25;
+        A1d: len C=k+1 by MATRIX_1:25;
+        D44: B3*A3=(((C~))*B2*((B~)))*(B*(A2*C)) by AA41
+            .=(Inv(C))*B2*(Inv(B))*B*(A2*C) by AA41
+            .=(Inv(C))*B2*((Inv(B))*B)*(A2*C) by AA41
+            .=(Inv(C))*B2*(1.(K,k+1))*(A2*C) by D9,AA4140
+            .=(Inv(C))*B2*((1.(K,k+1))*(A2*C)) by AA41
+            .=(Inv(C))*B2*(A2*C) by MATRIXR2:68,A1e
+            .=(Inv(C))*B2*A2*C by AA41
+            .=(Inv(C))*(1.(K,k+1))*C by D2,AA41
+            .=(Inv(C))*((1.(K,k+1))*C) by AA41
+            .=(Inv(C))*C by MATRIXR2:68,A1d
+            .=1.(K,k+1) by AA4140,D9;
+        D71: for i be Nat st 1<i & i<=k+1 holds
+          B3*(i,1)=(1.(K,k+1))*(i,1)
+        proof let i be Nat;
+          assume G1: 1<i & i<=k+1;then
+          G2: 1<=k+1 by XXREAL_0:2;
+          E4b: len B3=k+1 & width B3=k+1 & Indices B3=[: Seg(k+1),Seg(k+1) :]
+                                by MATRIX_1:25;
+          E4c: len A3=k+1 & width A3=k+1 & Indices A3=[: Seg(k+1),Seg(k+1) :]
+                                by MATRIX_1:25;
+          G5: len (Col(A3,1))=len A3 by MATRIX_1:def 9 .=k+1 by MATRIX_1:25;
+          G6: len (Base_FinSeq(K,k+1,1))=k+1 by AA1100;
+          G6a: for k2 being Nat st 1<=k2 & k2<=len (Col(A3,1))
+            holds (Col(A3,1)).k2=(Base_FinSeq(K,k+1,1)).k2
+           proof let k2 be Nat;
+            B: k2 in NAT by ORDINAL1:def 13;
+            assume H1: 1<=k2 & k2<=len (Col(A3,1));then
+             k2 in Seg len A3 by FINSEQ_1:3,G5,E4c;then
+             H2: k2 in dom A3 by FINSEQ_1:def 3;
+             now per cases by H1,REAL_1:def 5;
+             suppose k2=1;
+              hence A3*(k2,1)=(Base_FinSeq(K,k+1,1)).k2
+                               by AA1110,H1,G5,D9;
+             end;
+             suppose I0: 1<k2;
+              hence A3*(k2,1)= 0.K by B,D9,H1,G5 .=(Base_FinSeq(K,k+1,1)).k2
+                                          by I0,AA1120,G2,H1,G5;
+             end;
+             end;
+            hence (Col(A3,1)).k2=(Base_FinSeq(K,k+1,1)).k2
+                             by MATRIX_1:def 9,H2;
+           end;
+          G9: len (Line(B3,i))=width B3 by MATRIX_1:def 8
+                         .= k+1 by MATRIX_1:25;
+          G10b: 1 in Seg width B3 by E4b,G2,FINSEQ_1:3;
+          [i,1] in Indices (B3*A3) by MATRIX_1:38,G1,G2;
+          then
+          (B3*A3)*(i,1)= |( Line(B3,i),Col(A3,1) )|
+                       by MATRIX_3:def 4,E4b,E4c
+                      .= |( Line(B3,i),Base_FinSeq(K,k+1,1) )|
+                          by G5,G6,FINSEQ_1:18,G6a
+                      .= (Line(B3,i)).1 by G2,G9,AA2627
+                      .= B3*(i,1) by MATRIX_1:def 8,G10b;
+         hence B3*(i,1)=(1.(K,k+1))*(i,1) by D44;
+        end;
+        deffunc f(Nat,Nat)=A3*($1+1,$2+1);
+        consider F being Matrix of k,k,K such that
+        D12: for i,j being Nat st [i,j] in Indices F holds F*(i,j) = f(i,j)
+                                from MATRIX_1:sch 1;
+        deffunc g(Nat,Nat)=B3*($1+1,$2+1);
+        consider G being Matrix of k,k,K such that
+        D13: for i,j being Nat st [i,j] in Indices G holds G*(i,j) = g(i,j)
+                                from MATRIX_1:sch 1;
+        E30: len (1.(K,k+1))=k+1 & width (1.(K,k+1))=k+1 &
+               Indices (1.(K,k+1))= [: Seg (k+1),Seg (k+1) :] by MATRIX_1:25;
+           E4b: len B3=k+1 & width B3=k+1 &
+                      Indices B3=[: Seg (k+1),Seg (k+1) :] by MATRIX_1:25;
+           E5b: len A3=k+1 & width A3=k+1 &
+                      Indices A3=[: Seg (k+1),Seg (k+1) :] by MATRIX_1:25;
+           E5: len F=k & width F=k & Indices F=[: Seg k,Seg k :]
+                                by MATRIX_1:25;
+           E22: len (<* 0.K *>)=1 by FINSEQ_1:57;
+        for i,j being Element of NAT st
+           1<=i & i<=k & 1<=j & j<=k holds (G*F)*(i,j)=IFEQ(i,j,1.K,0.K)
+        proof let i,j be Element of NAT;
+         assume E1: 1<=i & i<=k & 1<=j & j<=k;
+           E40: len (Line(B3,i+1))=width B3 by MATRIX_1:def 8;
+           E40b: len (Col(A3,j+1))=len A3 by MATRIX_1:def 9;
+           E45: len (Line(G,i))=width G by MATRIX_1:def 8;
+           E46: len (Col(F,j))=len F by MATRIX_1:def 9;
+           E12: 1<=i+1 & 1<=j+1 by NAT_1:11;
+           E13:  i+1<=k+1 by E1,XREAL_1:9;
+           E13a: j+1<=k+1 by E1,XREAL_1:9;
+           E3: [i,j] in Indices (G*F) by MATRIX_1:38,E1;
+           E4: len G=k & width G=k & Indices G=[: Seg k,Seg k :]
+                                by MATRIX_1:25;
+           E3b: [i+1,j+1] in Indices (B3*A3) by MATRIX_1:38,E12,E13,E13a;
+           E29: k+1=len (<* 0.K *>) +k by FINSEQ_1:56;then
+           E30a: dom (Line(B3,i+1)) = Seg (len (<* 0.K *>) + len (Line(G,i)))
+                              by FINSEQ_1:def 3,E4b,E40,E45,E4;
+           E31: for k2 being Nat st
+                 k2 in dom (<* 0.K *>) holds (Line(B3,i+1)).k2=(<* 0.K *>).k2
+        proof let k2 be Nat;
+         assume F1a: k2 in dom (<* 0.K *>);
+          F1b: k2 in Seg len (<* 0.K *>) by FINSEQ_1:def 3,F1a;
+          F1d: k2 in {1} by FINSEQ_1:4,FINSEQ_1:57,F1b;
+          F5: k2=1 by TARSKI:def 1,F1d;
+          F1e: 1<=1+k by NAT_1:11;
+          F8a: 1<=k+1 by NAT_1:11;
+          F12: k2 in Seg width B3 by F5,E4b,FINSEQ_1:3,F8a;
+          E12b: 1<i+1 by E1,NAT_1:13;
+          then
+          F52: [i+1,1] in Indices (1.(K,k+1)) by MATRIX_1:38,F1e,E13;
+          B3*(i+1,1) = (1.(K,k+1))*(i+1,1) by E12b,E13,D71
+                     .= 0.K by E12b,F52,MATRIX_1:def 12;then
+          (Line(B3,i+1)).k2= 0.K by F12,F5,MATRIX_1:def 8;
+         hence (Line(B3,i+1)).k2=(<* 0.K *>).k2 by FINSEQ_1:57,F5;
+        end;
+       for k2 being Nat st k2 in dom (Line(G,i)) holds
+                     (Line(B3,i+1)).(len (<* 0.K *>) + k2) = (Line(G,i)).k2
+        proof let k2 be Nat;
+         assume F1a: k2 in dom (Line(G,i));
+          F1: k2 in Seg len (Line(G,i)) by FINSEQ_1:def 3,F1a;
+          F1b: len (Line(G,i))=width G by MATRIX_1:def 8.=k
+                      by MATRIX_1:25;
+          F2: 1<=k2 & k2<=k by FINSEQ_1:3,F1,F1b;
+          E4c: len B3=k+1 & width B3=k+1 &
+                      Indices B3=[: Seg (k+1),Seg (k+1) :] by MATRIX_1:25;
+          F30f: 1<=k2+1 & k2+1<=k+1 by F2,XREAL_1:9, NAT_1:11;
+          F3: k2+1 in Seg width B3 by E4c,FINSEQ_1:3,F30f;
+          F30d: [i,k2] in Indices G by MATRIX_1:38,F2,E1;
+          F30: B3*(i+1,k2+1) = G*(i,k2) by D13,F30d;
+          F30a: k2 in Seg k by FINSEQ_1:def 3,F1a,F1b;
+          F30b: k2 in Seg width G by MATRIX_1:25,F30a;
+          F30c: B3*(i+1,k2+1)=(Line(G,i)).k2 by F30,MATRIX_1:def 8,F30b;
+          ((Line(B3,i+1)).(k2+1) = (Line(G,i)).k2) by F3,MATRIX_1:def 8,F30c;
+         hence ((Line(B3,i+1)).(len (<* 0.K *>) + k2) = (Line(G,i)).k2)
+                                  by FINSEQ_1:57;
+        end;then
+       E18: (<* 0.K *>) ^ Line(G,i)= (Line(B3,i+1))
+                                  by FINSEQ_1:def 7,E30a,E31;
+       E30b: dom (Col(A3,j+1)) = Seg (len (<* 0.K *>) + len (Col(F,j)))
+                              by FINSEQ_1:def 3,E5b,E29,E40b,E46,E5;
+       E31b: (for k2 being Nat st
+                 k2 in dom (<* 0.K *>) holds (Col(A3,j+1)).k2=(<* 0.K *>).k2)
+        proof let k2 be Nat;
+         assume F1a: k2 in dom (<* 0.K *>);
+          F1b: k2 in Seg len (<* 0.K *>) by FINSEQ_1:def 3,F1a;
+          F1d: k2 in {1} by FINSEQ_1:4,FINSEQ_1:57,F1b;
+          F5: k2=1 by TARSKI:def 1,F1d;
+          F16a: 1<=k+1 by NAT_1:11;
+          F16b: k2 in Seg len A3 by F5,E5b,FINSEQ_1:3,F16a;
+          F12: k2 in dom A3 by FINSEQ_1:def 3,F16b;
+          F71: 1<=j+1 & j+1<=k+1
+          by NAT_1:11,E1,XREAL_1:9;
+          F1f: 1<j+1 by E1,NAT_1:13;
+          F1g: A3*(1,j+1) = 0.K by F71,D9,F1f;
+          (Col(A3,j+1)).k2= 0.K by F12,F5,MATRIX_1:def 9,F1g;
+         hence (Col(A3,j+1)).k2=(<* 0.K *>).k2 by FINSEQ_1:57,F5;
+        end;
+       for k2 being Nat st k2 in dom (Col(F,j)) holds
+                     ((Col(A3,j+1)).(len (<* 0.K *>) + k2) = (Col(F,j)).k2)
+        proof let k2 be Nat;
+         assume F0: k2 in dom (Col(F,j));
+          reconsider j0=j+1 as Element of NAT;
+          E46: len (Col(F,j0-'1))=len F by MATRIX_1:def 9;
+          F33: j0-'1=j by BINARITH:39;
+          F33a: k2 in Seg len (Col(F,j0-'1)) by F0,FINSEQ_1:def 3,F33;
+          F2: 1<=k2 & k2<=k by E5,E46,FINSEQ_1:3,F33a;
+          K11: 1<=k2+1 & k2+1<=k+1 by F2,XREAL_1:9,NAT_1:11;
+          F3: k2+1 in dom A3 by E5b,FINSEQ_3:27,K11;
+          K4: [k2,j] in Indices F by MATRIX_1:38,F2,E1;
+          K5: [k2,j0-'1] in Indices F by BINARITH:39,K4;
+          F30: A3*(k2+1,j0-'1+1) = F*(k2,j0-'1) by D12,K5;
+          K6: k2 in Seg k by E5,E46,F0,FINSEQ_1:def 3,F33;
+          K7: k2 in dom F by E5,FINSEQ_1:def 3,K6;
+          A3*(k2+1,j0-'1+1)=(Col(F,j0-'1)).k2 by F30,MATRIX_1:def 9,K7;
+         hence thesis by F33,E22,F3,MATRIX_1:def 9;
+        end;then
+          E19: (<* 0.K *>) ^ Col(F,j)= (Col(A3,j+1))
+                                  by FINSEQ_1:def 7,E30b,E31b;
+          E20: len (Line(G,i))=width G by MATRIX_1:def 8
+           .=k by MATRIX_1:25;
+          E21: len (Col(F,j)) = len F by MATRIX_1:def 9
+           .=k by MATRIX_1:25;
+          E23: (B3*A3)*(i+1,j+1)
+            =|( Line(B3,i+1),Col(A3,j+1) )| by MATRIX_3:def 4,E3b,E4b,E5b
+           .=|( <* 0.K *>, <* 0.K *> )|
+                  + |( Line(G,i), Col(F,j) )| by BB250,E20,E21,E18,E19,E22
+           .= 0.K +|( Line(G,i), Col(F,j) )| by BB270
+           .= |( Line(G,i), Col(F,j) )| by RLVECT_1:10;
+          now per cases;
+          suppose F0: i=j;
+            [i+1,j+1] in Indices (1.(K,k+1)) by MATRIX_1:38,E12,E13,E13a;
+            then (1.(K,k+1))*(i+1,j+1)= 1.K by F0,MATRIX_1:def 12;
+           hence (1.(K,k+1))*(i+1,j+1)=IFEQ(i,j,1.K,0.K)
+             by FUNCOP_1:def 8,F0;
+          end;
+          suppose F0: i<>j;
+            F3: [i+1,j+1] in Indices (1.(K,k+1)) by MATRIX_1:38,E12,E13,E13a;
+            i+1 <> j+1 implies (1.(K,k+1))*(i+1,j+1) = 0.K
+             by MATRIX_1:def 12,F3;
+           hence (1.(K,k+1))*(i+1,j+1)=IFEQ(i,j,1.K,0.K) by FUNCOP_1:def 8,F0;
+          end;
+          end;
+         hence (G*F)*(i,j)=IFEQ(i,j,1.K,0.K)
+           by E23,MATRIX_3:def 4,E3,E4,E5,D44;
+        end;then
+        G*F=1.(K,k) by BB370;then
+        consider G2 being Matrix of k,K such that
+        D16: F*G2=1.(K,k) by C1;
+        D16b: len F=k & width F=k & Indices F=[:Seg (k),Seg (k):]
+                                      by MATRIX_1:25;
+        D16c: len G2=k & width G2=k & Indices G2=[:Seg (k),Seg (k):]
+                                      by MATRIX_1:25;
+        deffunc h(Nat,Nat) = IFEQ($1,1,IFEQ($2,1,1.K,0.K),
+               IFEQ($2,1,0.K,G2*($1-'1,$2-'1)));
+        consider B4 being Matrix of k+1,k+1,K such that
+        D13: for i,j being Nat st [i,j] in Indices B4 holds B4*(i,j) = h(i,j)
+                                from MATRIX_1:sch 1;
+        D70: len B4=k+1 & width B4=k+1 & Indices B4=[:Seg (k+1),Seg (k+1):]
+                                      by MATRIX_1:25;
+        D71: len (A3*B4)=k+1 & width (A3*B4)=k+1 &
+                        Indices (A3*B4)=[:Seg (k+1),Seg (k+1):]
+                                      by MATRIX_1:25;
+        D92c: len (Line(A3,1))=width A3 by MATRIX_1:def 8 .=k+1 by MATRIX_1:25;
+        D92k: len (Line(A3,1))=len (Base_FinSeq(K,k+1,1)) by AA1100,D92c;
+        D94a: for j be Nat st 1<=j & j<=len (Line(A3,1)) holds
+                     (Line(A3,1)).j=(Base_FinSeq(K,k+1,1)).j
+         proof let j be Nat;
+          assume E0: 1<=j & j<=len (Line(A3,1));
+           E1: len (Line(A3,1))=width A3 by MATRIX_1:def 8;
+           E2: j in Seg width A3 by E0,FINSEQ_1:3,E1;
+           E3: 1<=j & j<=k+1 by E0,MATRIX_1:def 8,E5b;
+           E3b: 1<=k+1 by XXREAL_0:2,E3;
+           per cases by E0,REAL_1:def 5;
+           suppose F0: 1=j;
+             (Line(A3,1)).j=1.K by D9,F0,E2,MATRIX_1:def 8;
+            hence thesis by F0,AA1110,E3;
+           end;
+           suppose F0: 1<j;
+B:         j in NAT by ORDINAL1:def 13;
+            (Line(A3,1)).j=A3*(1,j) by E2,MATRIX_1:def 8
+                          .=0.K by D9,F0,E3,B;
+            hence thesis by AA1120,E3,F0,E3b;
+           end;
+         end;
+        D94: Line(A3,1)=Base_FinSeq(K,k+1,1) by FINSEQ_1:18,D92k,D94a;
+        len (Col(B4,1))=len B4 by MATRIX_1:def 9 .=k+1 by MATRIX_1:25;then
+        D92: len (Col(B4,1))=len (Base_FinSeq(K,k+1,1)) by AA1100;
+        D95a: for j be Nat st 1<=j & j<=len (Col(B4,1)) holds
+                     (Col(B4,1)).j=(Base_FinSeq(K,k+1,1)).j
+         proof let j be Nat;
+          assume E0: 1<=j & j<=len (Col(B4,1));
+           E1: len (Col(B4,1))=len B4 by MATRIX_1:def 9;
+           E1b: j in Seg width B4 by E0,FINSEQ_1:3,D70,E1;
+           E2: j in dom B4 by FINSEQ_1:def 3,D70,E1b;
+           E3: 1<=j & j<=k+1 by E0,D70,MATRIX_1:def 9;
+           E3b: 1<=k+1 by XXREAL_0:2,E3;
+           F2: [j,1] in Indices B4 by MATRIX_1:38,E3,E3b;
+           per cases by E0,REAL_1:def 5;
+           suppose F0: 1=j;
+             (Col(B4,1)).j=B4*(j,1) by E2,MATRIX_1:def 9
+                          .=IFEQ(j,1,
+            IFEQ(1,1,1.K,0.K),IFEQ(1,1,0.K,G2*(j-'1,1-'1))) by D13,F2
+             .=IFEQ(1,1,1.K,0.K) by F0,FUNCOP_1:def 8
+                          .=1.K by FUNCOP_1:def 8;
+            hence (Col(B4,1)).j=(Base_FinSeq(K,k+1,1)).j
+             by F0,AA1110,E3;
+           end;
+           suppose F0: 1<j;
+            (Col(B4,1)).j=B4*(j,1) by E2,MATRIX_1:def 9
+                          .=IFEQ(j,1,
+            IFEQ(1,1,1.K,0.K),
+               IFEQ(1,1,0.K,G2*(j-'1,1-'1))) by D13,F2
+                  .= IFEQ(1,1,0.K,G2*(j-'1,1-'1)) by F0,FUNCOP_1:def 8
+                          .=0.K by FUNCOP_1:def 8;
+            hence (Col(B4,1)).j=(Base_FinSeq(K,k+1,1)).j
+             by AA1120,E3,F0,E3b;
+           end;
+         end;
+        D95: Col(B4,1)=Base_FinSeq(K,k+1,1) by FINSEQ_1:18,D92,D95a;
+        D100: 1<=k+1 by NAT_1:11;
+        FF0: for i,j being Nat st [i,j] in Indices (A3*B4) holds
+                  (A3*B4)*(i,j) = (1.(K,k+1))*(i,j)
+        proof let i,j be Nat;
+          assume E0: [i,j] in Indices (A3*B4);
+          reconsider i0=i,j0=j as Element of NAT by ORDINAL1:def 13;
+          E20b: len (Line(F,i-'1))=width F by MATRIX_1:def 8
+                                 .=k by MATRIX_1:25;
+          E21b: len (Col(G2,j-'1)) = len G2 by MATRIX_1:def 9
+                                 .=k by MATRIX_1:25;
+          E40c: len (Line(A3,i))=width A3 by MATRIX_1:def 8
+                               .=k+1 by MATRIX_1:25;
+          E40d: len (Col(B4,j))=len B4 by MATRIX_1:def 9.=k+1 by MATRIX_1:25;
+          E103: i in Seg (k+1) & j in Seg (k+1)
+           by E0,D71,ZFMISC_1:106;
+          E3: 1<=i & i<=k+1 & 1<=j & j<=k+1 by FINSEQ_1:3,E103;
+          E4b: len B4=k+1 & width B4=k+1 &
+                      Indices B4=[: Seg (k+1),Seg (k+1) :] by MATRIX_1:25;
+          E4c: len A3=k+1 & width A3=k+1 &
+                      Indices A3=[: Seg (k+1),Seg (k+1) :] by MATRIX_1:25;
+          E89: [i,j] in Indices B4 by MATRIX_1:25,D71,E0;
+          E101: [i,j] in [:Seg (k+1),Seg (k+1) :] by MATRIX_1:25,E0;
+          E104: [i,j] in Indices (1.(K,k+1)) by MATRIX_1:25,E101;
+          now per cases by E3,REAL_1:def 5;
+          suppose F0: i=1;
+            now per cases by E3,REAL_1:def 5;
+            suppose G0: j=1;
+              (A3*B4)*(i,j)=|( Line(A3,i0),Col(B4,j0) )|
+              by MATRIX_3:def 4,E0,E4b,E4c
+                          .=1.K by D94,AA2629,D95,D100,F0,G0;
+             hence (A3*B4)*(i,j) = (1.(K,k+1))*(i,j)
+              by F0,G0,MATRIX_1:def 12,E104;
+            end;
+            suppose G0: j>1;
+              1<=len B4 by D100,MATRIX_1:25;then
+              G5: 1 in dom B4 by FINSEQ_3:27;
+              (A3*B4)*(i,j)=|( Line(A3,i0),Col(B4,j0) )|
+                   by MATRIX_3:def 4,E0,E4b,E4c
+                          .=|(Base_FinSeq(K,k+1,1),Col(B4,j0))|
+                           by F0,FINSEQ_1:18,D92k,D94a
+                          .=|(Col(B4,j0),Base_FinSeq(K,k+1,1))| by FVSUM_1:115
+                          .=(Col(B4,j0)).1 by AA2627,E40d,D100
+                          .= B4*(1,j) by MATRIX_1:def 9,G5
+        .= IFEQ(i,1,IFEQ(j,1,1.K,0.K),
+                 IFEQ(j,1,0.K,G2*(i-'1,j-'1))) by D13,E89,F0
+        .=IFEQ(j,1,1.K,0.K) by FUNCOP_1:def 8,F0
+        .= 0.K by G0,FUNCOP_1:def 8;
+             hence (A3*B4)*(i,j) = (1.(K,k+1))*(i,j)
+              by F0,G0,E30,MATRIX_1:def 12,E101;
+            end;
+            end;
+           hence (A3*B4)*(i,j) = (1.(K,k+1))*(i,j);
+          end;
+          suppose F0: 1<i;then
+           F1b: 1+1<=i by NAT_1:13;
+           now per cases by E3,REAL_1:def 5;
+           suppose H0: j=1;
+             H5: len (Line(A3,i))=width A3 by MATRIX_1:def 8
+                                .=k+1 by MATRIX_1:25;
+             H6: 1 in Seg width A3 by E5b,FINSEQ_1:3,D100;
+             (A3*B4)*(i,j)=|( Line(A3,i0),Col(B4,j0) )|
+                by MATRIX_3:def 4,E0,E4b,E4c
+                             .=|( Line(A3,i),Base_FinSeq(K,k+1,1) )|
+                              by FINSEQ_1:18,D92,D95a,H0
+                             .=(Line(A3,i)).1 by AA2627,H5,D100
+                             .=(B*A2*C)*(i0,1) by MATRIX_1:def 8,H6
+                             .= 0.K by D9,F0,E3;
+            hence (A3*B4)*(i,j) = (1.(K,k+1))*(i,j)
+             by F0,MATRIX_1:def 12,E104,H0;
+           end;
+           suppose G0: j>1;
+             G1b: 1+1<=j by NAT_1:13,G0;
+             G1: i-'1=i-1 by F0,BINARITH:50;
+             G2: 1<=i-1 by F1b,XREAL_1:21;
+             G3: j-'1=j-1 by G0,BINARITH:50;
+             G4: 1<=j-1 by G1b,XREAL_1:21;
+             G5: i-'1<=k by E3,G1,XREAL_1:22;
+             G6: j-'1<=k by E3,G3,XREAL_1:22;
+             G7: i-'1 in Seg k by FINSEQ_1:3,G1,G2,G5;
+             j-'1 in Seg k by FINSEQ_1:3,G3,G4,G6;then
+             G9: [i-'1,j-'1] in [:Seg k,Seg k:] by ZFMISC_1:106,G7;
+          E45b: len (Line(F,i-'1))=width F by MATRIX_1:def 8.=k by MATRIX_1:25;
+          E46: len (Col(G2,j-'1))=len G2 by MATRIX_1:def 9.=k by MATRIX_1:25;
+       E30a: dom (Line(A3,i-'1+1))= Seg (k+1) by E40c,G1,FINSEQ_1:def 3
+                        .=Seg (len (<* 0.K *>) + len (Line(F,i-'1)))
+                              by FINSEQ_1:56,E45b;
+       E31: for k2 being Nat st k2 in dom (<* 0.K *>) holds
+                  (Line(A3,i-'1+1)).k2=(<* 0.K *>).k2
+        proof let k2 be Nat;
+         assume F1a: k2 in dom (<* 0.K *>);
+          F1b: k2 in Seg len (<* 0.K *>) by FINSEQ_1:def 3,F1a;
+          F1d: k2 in {1} by FINSEQ_1:4,FINSEQ_1:57,F1b;
+          F5: k2=1 by TARSKI:def 1,F1d;
+          F1e: 1<=k+1 by NAT_1:11;
+          F12: k2 in Seg width A3 by E4c,F5,FINSEQ_1:3,F1e;
+          F1g: A3*(i0,1) = 0.K by D9,E3,F0;
+          (Line(A3,i)).k2=0.K by F12,F5,MATRIX_1:def 8,F1g;
+         hence (Line(A3,i-'1+1)).k2=(<* 0.K *>).k2 by G1,FINSEQ_1:57,F5;
+        end;
+       (for k2 being Nat st k2 in dom (Line(F,i-'1)) holds
+             (Line(A3,i-'1+1)).(len (<* 0.K *>) + k2) = (Line(F,i-'1)).k2)
+        proof let k2 be Nat;
+         assume F2a: k2 in dom (Line(F,i-'1));
+          F2b: k2 in Seg len (Line(F,i-'1)) by FINSEQ_1:def 3,F2a;
+          F2: 1<=k2 & k2<=k by E45b,FINSEQ_1:3,F2b;
+          F2d: 1<=k2+1 & k2+1<=k+1 by F2,XREAL_1:9,NAT_1:11;
+          F3: k2+1 in Seg width A3 by E4c,FINSEQ_1:3,F2d;
+          F2f: [i-'1,k2] in Indices F by MATRIX_1:38,F2,G1,G2,G5;
+          F30: A3*(i-'1+1,k2+1) = F*(i-'1,k2) by D12,F2f;
+          F2h: k2 in Seg width F by D16b,E45b,FINSEQ_1:def 3,F2a;
+          F2k: A3*(i-'1+1,k2+1)=(Line(F,i-'1)).k2
+                       by F30,MATRIX_1:def 8,F2h;
+          ((Line(A3,i-'1+1)).(k2+1) = (Line(F,i-'1)).k2)
+           by F3,MATRIX_1:def 8,F2k;
+         hence ((Line(A3,i-'1+1)).(len (<* 0.K *>) + k2) = (Line(F,i-'1)).k2)
+                                  by FINSEQ_1:57;
+        end;then
+       E18: (<* 0.K *>) ^ Line(F,i-'1)= (Line(A3,i-'1+1))
+                                  by FINSEQ_1:def 7,E30a,E31;
+       E30b: dom (Col(B4,j-'1+1)) = Seg len (Col(B4,j-'1+1))
+                               by FINSEQ_1:def 3
+                    .=Seg (len (<* 0.K *>) + len (Col(G2,j-'1)))
+                              by E46,FINSEQ_1:56,E40d,G3;
+       E31b: for k2 being Nat st
+                 k2 in dom (<* 0.K *>) holds (Col(B4,j-'1+1)).k2=(<* 0.K *>).k2
+        proof let k2 be Nat;
+         assume F8a: k2 in dom (<* 0.K *>);
+          F8b: k2 in Seg len (<* 0.K *>) by FINSEQ_1:def 3,F8a;
+          F8d: k2 in {1} by FINSEQ_1:4,FINSEQ_1:57,F8b;
+          F5: k2=1 by TARSKI:def 1,F8d;
+          F8e: 1<=1+k by NAT_1:11;
+          F8f: 1<=k+1 by NAT_1:11;
+          F8g: k2 in Seg len B4 by F5,E4b,FINSEQ_1:3,F8f;
+          F12: k2 in dom B4 by FINSEQ_1:def 3,F8g;
+          F8h: [1,j] in Indices B4 by MATRIX_1:38,F8e,E3;
+          F8k: B4*(1,j) = IFEQ(1,1,
+           IFEQ(j,1,1.K,0.K),
+               IFEQ(j,1,0.K,G2*(1-'1,j-'1))) by D13,F8h;
+          F8m: B4*(1,j) = IFEQ(j,1,1.K,0.K)
+                                 by FUNCOP_1:def 8,F8k
+                  .= 0.K by FUNCOP_1:def 8,G0;
+          (Col(B4,j)).k2=0.K by F12,F5,MATRIX_1:def 9,F8m;
+         hence (Col(B4,j-'1+1)).k2=(<* 0.K *>).k2 by G3,FINSEQ_1:57,F5;
+        end;
+       for k2 be Nat st k2 in dom (Col(G2,j-'1)) holds
+         ((Col(B4,j-'1+1)).(len (<* 0.K *>) + k2) = (Col(G2,j-'1)).k2)
+        proof let k2 be Nat;
+         assume F3a: k2 in dom (Col(G2,j-'1));
+          F2: 1<=k2 & k2<=k by E46,FINSEQ_3:27,F3a;
+          F20: 1<k2+1 by F2,NAT_1:13;
+          F3e: 1<=k2+1 & k2+1<=k+1 by F2,XREAL_1:9,NAT_1:11;
+          F3: k2+1 in dom B4 by E4b,FINSEQ_3:27,F3e;
+          F3g: [k2+1,j] in Indices B4 by MATRIX_1:38,F3e,E3;
+          F3h: B4*(k2+1,j) = IFEQ(k2+1,1,
+           IFEQ(j,1,1.K,0.K),
+               IFEQ(j,1,0.K,G2*(k2+1-'1,j-'1))) by D13,F3g;
+          F30: B4*(k2+1,j) = IFEQ(j,1,0.K,G2*(k2+1-'1,j-'1))
+                             by F20,FUNCOP_1:def 8,F3h
+                     .= G2*(k2+1-'1,j-'1) by FUNCOP_1:def 8,G0
+                     .= G2*(k2,j-'1) by BINARITH:39;
+          F3k: k2 in Seg k
+            by E46,FINSEQ_1:def 3,F3a;
+          F10: k2 in dom G2 by FINSEQ_1:def 3,D16c,F3k;
+          F3m: B4*(k2+1,j-'1+1)=(Col(G2,j-'1)).k2
+                       by F30,F10,G3,MATRIX_1:def 9;
+          ((Col(B4,j-'1+1)).(k2+1) = (Col(G2,j-'1)).k2)
+            by F3,MATRIX_1:def 9,F3m;
+         hence ((Col(B4,j-'1+1)).(len (<* 0.K *>) + k2) = (Col(G2,j-'1)).k2)
+                                  by FINSEQ_1:57;
+        end;then
+          E19: (<* 0.K *>) ^ Col(G2,j-'1)= (Col(B4,j-'1+1))
+                                  by FINSEQ_1:def 7,E30b,E31b;
+             E88c: [i-'1,j-'1] in Indices (F*G2) by G9,MATRIX_1:25;
+             E88b: [i-'1,j-'1] in Indices (1.(K,k)) by G9,MATRIX_1:25;
+             E160: i-'1+1=i-1+1 by F0,BINARITH:50 .=i;
+             E161: j-'1+1=j-1+1 by G0,BINARITH:50 .=j;
+             G4: (A3*B4)*(i,j)=|( Line(A3,i-'1+1),Col(B4,j-'1+1) )|
+                            by E160,E161,MATRIX_3:def 4,E0,E4b,E4c
+                           .=|( <* 0.K *>, <* 0.K *> )|
+            + |( Line(F,i-'1), Col(G2,j-'1) )| by BB250,E20b,E21b,E18,E19,E22
+           .= 0.K +|( Line(F,i-'1), Col(G2,j-'1) )| by BB270
+           .= 0.K +(F*G2)*(i-'1,j-'1) by MATRIX_3:def 4,E88c,D16b,D16c
+           .= (1.(K,k))*(i-'1,j-'1) by D16,RLVECT_1:10;
+             now per cases;
+             suppose H0: i=j;then
+               (1.(K,k+1))*(i0,j0) =1.K by MATRIX_1:def 12,E104;
+              hence (A3*B4)*(i,j) = (1.(K,k+1))*(i,j)
+                  by G4,H0,MATRIX_1:def 12,E88b;
+             end;
+             suppose H0: i<>j;
+              i-1<>j-1 by H0;then
+              i0-'1<> j0-'1 by F0,BINARITH:50,G3;then
+              (1.(K,k))*(i0-'1,j0-'1) =0.K by MATRIX_1:def 12,E88b;
+              hence (A3*B4)*(i,j) = (1.(K,k+1))*(i,j)
+               by MATRIX_1:def 12,E104,H0,G4;
+             end;
+             end;
+            hence (A3*B4)*(i,j) = (1.(K,k+1))*(i,j);
+           end;
+           end;
+           hence (A3*B4)*(i,j) = (1.(K,k+1))*(i,j);
+          end;
+          end;
+         hence (A3*B4)*(i,j) = (1.(K,k+1))*(i,j);
+        end;
+        K2: width Inv B= k+1 by MATRIX_1:25;
+        K3: len (A2*(C*B4))=k+1 by MATRIX_1:25;
+        K3a: B*A2*C*B4=1.(K,k+1) by MATRIX_1:28,FF0;
+        K3b: (Inv(B))*(B*A2*C*B4)=Inv B by MATRIXR2:67,K2,K3a;
+        K3c: (Inv(B))*(B*A2*C*B4)*B=1.(K,k+1) by D9,AA4140,K3b;
+        K3d: (Inv(B))*(B*A2*(C*B4))*B=1.(K,k+1) by AA41,K3c;
+        K3e: (Inv(B))*(B*(A2*(C*B4)))*B=1.(K,k+1) by AA41,K3d;
+        K3f: (Inv(B))*B*(A2*(C*B4))*B=1.(K,k+1) by AA41,K3e;
+        K3g: (1.(K,k+1))*(A2*(C*B4))*B=1.(K,k+1)
+                                by D9,AA4140,K3f;
+        K3h: A2*(C*B4)*B=1.(K,k+1) by MATRIXR2:68,K3,K3g;
+        A2*((C*B4)*B)=1.(K,k+1) by AA41,K3h;
+       hence thesis;
+      end;
+     hence P[k+1];
+    end;
+   for k being Element of NAT holds P[k] from NAT_1:sch 1(B3,B4);
+   hence thesis by B1;
+  end;
+end;
+
+theorem AA4600:
+ for A being Matrix of n,K holds
+  (ex B1 being Matrix of n,K st B1*A=1.(K,n)) iff
+  (ex B2 being Matrix of n,K st A*B2=1.(K,n))
+proof let A be Matrix of n,K;
+ per cases;
+ suppose A1: n>0;
+ thus (ex B being Matrix of n,K st B*A=1.(K,n)) implies
+  (ex B2 being Matrix of n,K st A*B2=1.(K,n)) by AA4500;
+ thus (ex B being Matrix of n,K st A*B=1.(K,n)) implies
+  (ex B2 being Matrix of n,K st B2*A=1.(K,n))
+  proof assume (ex B being Matrix of n,K st A*B=1.(K,n));then
+    consider B being Matrix of n,K such that
+    B2: A*B=1.(K,n);
+    B12: len A=n & width A=n by MATRIX_1:25;
+    B13: len B=n & width B=n by MATRIX_1:25;
+    (A*B)@=1.(K,n) by B2,MATRIX_6:10;then
+    (B@)*(A@)=1.(K,n) by MATRIX_3:24,A1,B12,B13;then
+    consider B2 being Matrix of n,K such that
+    B3: (A@)*B2= 1.(K,n) by AA4500;
+    B12: len (A@) =n & width (A@) =n by MATRIX_1:25;
+    B13: len B2=n & width B2=n by MATRIX_1:25;
+    ((A@)*B2)@ = 1.(K,n) by B3,MATRIX_6:10;then
+    (B2@)*((A@)@) = 1.(K,n) by MATRIX_3:24,A1,B12,B13;then
+    (B2@)*A= 1.(K,n) by MATRIXR2:29;
+    hence thesis;
+  end;
+ end;
+ suppose B0: n=0;then
+   A*A=1.(K,0) by AA4350;
+  hence thesis by B0;
+ end;
+end;
+
+theorem for A,B being Matrix of n,K st
+  A*B = 1.(K,n) holds
+ A is invertible & B is invertible
+proof let A,B be Matrix of n,K;
+   assume A1: A*B = 1.(K,n);
+    consider B2 being Matrix of n,K such that
+    A5: B2*A= 1.(K,n) by AA4600,A1;
+    B2=B2*(1.(K,n)) by MATRIX_3:21
+                                   .=(B2*A)*B by AA41,A1
+                                   .=B by A5,MATRIX_3:20;then
+    A is_reverse_of B by MATRIX_6:def 2,A1,A5;
+    hence A is invertible by MATRIX_6:def 3;
+   consider B3 being Matrix of n,K such that
+   A5: B*B3= 1.(K,n) by AA4500,A1;
+   B3=(1.(K,n))*B3 by MATRIX_3:20
+                                  .=A*(B*B3) by AA41,A1
+                                  .=A by A5,MATRIX_3:21;then
+   B is_reverse_of A by MATRIX_6:def 2,A1,A5;
+  hence thesis by MATRIX_6:def 3;
+end;
+

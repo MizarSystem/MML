@@ -31,7 +31,7 @@
 <ArticleID name="ALTCAT_2"/>
 <ArticleID name="FUNCTOR0"/>
 </Signature>
-<RCluster>
+<RCluster aid="FUNCTOR1" nr="1">
 <ArgTypes/>
 <Typ kind="G" nr="8">
 <Cluster/>
@@ -43,7 +43,7 @@
 <Adjective nr="75"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="FUNCTOR1" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="8">
 <Cluster>
@@ -61,7 +61,7 @@
 <Adjective nr="75"/>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="FUNCTOR1" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="8">
 <Cluster>
@@ -93,7 +93,7 @@
 <LocusVar nr="1"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="231">
+<Func kind="K" nr="232">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="4"/>

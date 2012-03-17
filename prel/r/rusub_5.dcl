@@ -27,7 +27,7 @@
 <ArticleID name="RUSUB_4"/>
 <ArticleID name="RUSUB_5"/>
 </Signature>
-<FCluster>
+<FCluster aid="RUSUB_5" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="14">
 <Cluster>
@@ -48,7 +48,7 @@
 <Adjective nr="28"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="RUSUB_5" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="14">
 <Cluster>

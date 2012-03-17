@@ -28,7 +28,7 @@
 <ArticleID name="MSUALG_1"/>
 <ArticleID name="MSUALG_4"/>
 </Signature>
-<RCluster>
+<RCluster aid="MSUALG_4" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -44,7 +44,7 @@
 <Adjective nr="63"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="MSUALG_4" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
@@ -81,7 +81,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="MSUALG_4" nr="3">
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
@@ -126,7 +126,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="MSUALG_4" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
@@ -180,7 +180,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<CCluster>
+<CCluster aid="MSUALG_4" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>

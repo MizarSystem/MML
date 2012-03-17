@@ -12,10 +12,10 @@
 <ArticleID name="MCART_1"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
+<ArticleID name="FUNCT_2"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
-<ArticleID name="FUNCT_2"/>
 <ArticleID name="FINSEQ_2"/>
 <ArticleID name="FUNCOP_1"/>
 <ArticleID name="FUNCT_7"/>
@@ -23,7 +23,7 @@
 <ArticleID name="GRAPH_5"/>
 <ArticleID name="GRAPHSP"/>
 </Signature>
-<FCluster>
+<FCluster aid="GRAPHSP" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -41,10 +41,10 @@
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="15"/>
+<Adjective nr="18"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="GRAPHSP" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -62,7 +62,7 @@
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="15"/>
+<Adjective nr="18"/>
 </Cluster>
 </FCluster>
 </Registrations>

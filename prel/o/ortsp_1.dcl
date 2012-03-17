@@ -28,7 +28,7 @@
 <ArticleID name="SYMSP_1"/>
 <ArticleID name="ORTSP_1"/>
 </Signature>
-<RCluster>
+<RCluster aid="ORTSP_1" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="10">
 <Cluster>

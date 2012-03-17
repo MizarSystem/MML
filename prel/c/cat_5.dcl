@@ -27,7 +27,7 @@
 <ArticleID name="CAT_2"/>
 <ArticleID name="CAT_5"/>
 </Signature>
-<RCluster>
+<RCluster aid="CAT_5" nr="1">
 <ArgTypes/>
 <Typ kind="G" nr="2">
 <Cluster/>
@@ -39,7 +39,7 @@
 <Adjective nr="50"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="CAT_5" nr="2">
 <ArgTypes/>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -49,7 +49,7 @@
 <Adjective nr="51"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="CAT_5" nr="3">
 <ArgTypes/>
 <Typ kind="G" nr="2">
 <Cluster/>
@@ -61,7 +61,7 @@
 <Adjective nr="52"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="CAT_5" nr="4">
 <ArgTypes/>
 <Typ kind="G" nr="2">
 <Cluster/>
@@ -75,30 +75,7 @@
 <Adjective nr="53"/>
 </Cluster>
 </RCluster>
-<FCluster>
-<ArgTypes>
-<Typ kind="G" nr="2">
-<Cluster>
-<Adjective nr="40" value="false"/>
-<Adjective nr="41"/>
-</Cluster>
-</Typ>
-<Typ kind="M" nr="2">
-<Cluster/>
-<Func kind="U" nr="1">
-<LocusVar nr="1"/>
-</Func>
-</Typ>
-</ArgTypes>
-<Func kind="K" nr="216">
-<LocusVar nr="1"/>
-<LocusVar nr="2"/>
-</Func>
-<Cluster>
-<Adjective nr="1" value="false"/>
-</Cluster>
-</FCluster>
-<FCluster>
+<FCluster aid="CAT_5" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="2">
 <Cluster>
@@ -121,7 +98,30 @@
 <Adjective nr="1" value="false"/>
 </Cluster>
 </FCluster>
-<CCluster>
+<FCluster aid="CAT_5" nr="2">
+<ArgTypes>
+<Typ kind="G" nr="2">
+<Cluster>
+<Adjective nr="40" value="false"/>
+<Adjective nr="41"/>
+</Cluster>
+</Typ>
+<Typ kind="M" nr="2">
+<Cluster/>
+<Func kind="U" nr="1">
+<LocusVar nr="1"/>
+</Func>
+</Typ>
+</ArgTypes>
+<Func kind="K" nr="218">
+<LocusVar nr="1"/>
+<LocusVar nr="2"/>
+</Func>
+<Cluster>
+<Adjective nr="1" value="false"/>
+</Cluster>
+</FCluster>
+<CCluster aid="CAT_5" nr="1">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="40" value="false"/>
@@ -137,7 +137,7 @@
 <Adjective nr="50"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="CAT_5" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="2">
 <Cluster>

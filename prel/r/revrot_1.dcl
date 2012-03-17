@@ -42,7 +42,7 @@
 <ArticleID name="GOBOARD5"/>
 <ArticleID name="SPRECT_2"/>
 </Signature>
-<RCluster>
+<RCluster aid="REVROT_1" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -65,7 +65,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="REVROT_1" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -95,7 +95,7 @@
 <Adjective nr="6" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="REVROT_1" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster>
@@ -113,7 +113,7 @@
 <Adjective nr="35"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="REVROT_1" nr="3">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -154,7 +154,7 @@
 <Adjective nr="113"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="REVROT_1" nr="4">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -195,7 +195,7 @@
 <Adjective nr="118"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="REVROT_1" nr="5">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -241,7 +241,7 @@
 <Adjective nr="114"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="REVROT_1" nr="6">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -283,7 +283,7 @@
 <Adjective nr="119"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="REVROT_1" nr="7">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>

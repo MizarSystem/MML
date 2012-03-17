@@ -38,7 +38,7 @@
 <ArticleID name="WAYBEL_1"/>
 <ArticleID name="CONLAT_1"/>
 </Signature>
-<RCluster>
+<RCluster aid="CONLAT_1" nr="1">
 <ArgTypes/>
 <Typ kind="G" nr="10">
 <Cluster/>
@@ -47,7 +47,7 @@
 <Adjective nr="126"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="CONLAT_1" nr="2">
 <ArgTypes/>
 <Typ kind="G" nr="10">
 <Cluster/>
@@ -57,7 +57,7 @@
 <Adjective nr="127" value="false"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="CONLAT_1" nr="3">
 <ArgTypes/>
 <Typ kind="G" nr="10">
 <Cluster/>
@@ -67,7 +67,7 @@
 <Adjective nr="128" value="false"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="CONLAT_1" nr="4">
 <ArgTypes/>
 <Typ kind="G" nr="10">
 <Cluster/>
@@ -78,7 +78,7 @@
 <Adjective nr="128"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="CONLAT_1" nr="5">
 <ArgTypes/>
 <Typ kind="G" nr="11">
 <Cluster/>
@@ -87,7 +87,7 @@
 <Adjective nr="129"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="CONLAT_1" nr="6">
 <ArgTypes/>
 <Typ kind="G" nr="11">
 <Cluster/>
@@ -97,7 +97,7 @@
 <Adjective nr="129"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="CONLAT_1" nr="7">
 <ArgTypes/>
 <Typ kind="G" nr="11">
 <Cluster/>
@@ -107,7 +107,7 @@
 <Adjective nr="129"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="CONLAT_1" nr="8">
 <ArgTypes>
 <Typ kind="G" nr="10">
 <Cluster>
@@ -127,7 +127,7 @@
 <Adjective nr="1" value="false"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="CONLAT_1" nr="9">
 <ArgTypes>
 <Typ kind="G" nr="10">
 <Cluster>
@@ -147,7 +147,7 @@
 <Adjective nr="1" value="false"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="CONLAT_1" nr="10">
 <ArgTypes>
 <Typ kind="G" nr="10">
 <Cluster/>
@@ -163,7 +163,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="CONLAT_1" nr="11">
 <ArgTypes>
 <Typ kind="G" nr="10">
 <Cluster>
@@ -184,7 +184,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="CONLAT_1" nr="12">
 <ArgTypes>
 <Typ kind="G" nr="10">
 <Cluster>
@@ -205,7 +205,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="CONLAT_1" nr="13">
 <ArgTypes>
 <Typ kind="G" nr="11">
 <Cluster>
@@ -226,7 +226,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="CONLAT_1" nr="14">
 <ArgTypes>
 <Typ kind="G" nr="11">
 <Cluster>
@@ -250,7 +250,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="CONLAT_1" nr="15">
 <ArgTypes>
 <Typ kind="G" nr="11">
 <Cluster>
@@ -277,7 +277,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="CONLAT_1" nr="16">
 <ArgTypes>
 <Typ kind="G" nr="11">
 <Cluster>
@@ -304,7 +304,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="CONLAT_1" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="10">
 <Cluster>
@@ -319,7 +319,7 @@
 <Adjective nr="1" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="CONLAT_1" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="10">
 <Cluster>
@@ -334,7 +334,7 @@
 <Adjective nr="1" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="CONLAT_1" nr="3">
 <ArgTypes>
 <Typ kind="G" nr="11">
 <Cluster>
@@ -342,14 +342,14 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="265">
+<Func kind="K" nr="266">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
 <Adjective nr="1" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="CONLAT_1" nr="4">
 <ArgTypes>
 <Typ kind="G" nr="11">
 <Cluster>
@@ -357,7 +357,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="269">
+<Func kind="K" nr="270">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -366,7 +366,7 @@
 <Adjective nr="38"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="CONLAT_1" nr="5">
 <ArgTypes>
 <Typ kind="G" nr="11">
 <Cluster>
@@ -374,7 +374,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="269">
+<Func kind="K" nr="270">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -383,7 +383,7 @@
 <Adjective nr="62"/>
 </Cluster>
 </FCluster>
-<CCluster>
+<CCluster aid="CONLAT_1" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="10">
 <Cluster>
@@ -402,7 +402,7 @@
 </Adjective>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="CONLAT_1" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="10">
 <Cluster>

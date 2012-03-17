@@ -36,7 +36,7 @@
 <ArticleID name="TOPMETR"/>
 <ArticleID name="BORSUK_2"/>
 </Signature>
-<RCluster>
+<RCluster aid="TOPALG_3" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
@@ -65,7 +65,7 @@
 <Adjective nr="62"/>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="TOPALG_3" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
@@ -87,7 +87,7 @@
 <Adjective nr="33"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="TOPALG_3" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
@@ -112,7 +112,7 @@
 <Adjective nr="33"/>
 </Cluster>
 </FCluster>
-<CCluster>
+<CCluster aid="TOPALG_3" nr="1">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="20"/>
@@ -124,7 +124,7 @@
 <Adjective nr="33"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="TOPALG_3" nr="2">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="20" value="false"/>
@@ -140,7 +140,7 @@
 <Adjective nr="86"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="TOPALG_3" nr="3">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
@@ -156,7 +156,7 @@
 </Typ>
 </ArgTypes>
 <Cluster/>
-<Typ kind="M" nr="18">
+<Typ kind="M" nr="17">
 <Cluster/>
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>

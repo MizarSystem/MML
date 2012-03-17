@@ -29,7 +29,7 @@
 <ArticleID name="DTCONSTR"/>
 <ArticleID name="BINTREE1"/>
 </Signature>
-<RCluster>
+<RCluster aid="BINTREE1" nr="1">
 <ArgTypes/>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -41,7 +41,7 @@
 <Adjective nr="52"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="BINTREE1" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -61,7 +61,7 @@
 <Adjective nr="53"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="BINTREE1" nr="3">
 <ArgTypes/>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -74,7 +74,7 @@
 <Adjective nr="53"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="BINTREE1" nr="4">
 <ArgTypes/>
 <Typ kind="G" nr="5">
 <Cluster/>
@@ -88,7 +88,7 @@
 <Adjective nr="54"/>
 </Cluster>
 </RCluster>
-<CCluster>
+<CCluster aid="BINTREE1" nr="1">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="1" value="false"/>
@@ -104,7 +104,7 @@
 <Adjective nr="27"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="BINTREE1" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>

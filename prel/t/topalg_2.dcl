@@ -53,7 +53,7 @@
 <ArticleID name="TOPALG_1"/>
 <ArticleID name="TOPALG_2"/>
 </Signature>
-<RCluster>
+<RCluster aid="TOPALG_2" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -77,7 +77,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="TOPALG_2" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -99,7 +99,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="TOPALG_2" nr="3">
 <ArgTypes/>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -114,7 +114,7 @@
 <Adjective nr="138"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="TOPALG_2" nr="4">
 <ArgTypes/>
 <Typ kind="M" nr="11">
 <Cluster/>
@@ -128,7 +128,7 @@
 <Adjective nr="139"/>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="TOPALG_2" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -161,7 +161,7 @@
 <Adjective nr="54"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="TOPALG_2" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="11">
 <Cluster>
@@ -186,7 +186,7 @@
 <Adjective nr="54"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="TOPALG_2" nr="3">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -204,7 +204,7 @@
 <Adjective nr="54"/>
 </Cluster>
 </FCluster>
-<CCluster>
+<CCluster aid="TOPALG_2" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -228,7 +228,7 @@
 <Adjective nr="136"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="TOPALG_2" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -257,13 +257,13 @@
 <LocusVar nr="2"/>
 </Func>
 </Typ>
-<Typ kind="M" nr="20">
+<Typ kind="M" nr="19">
 <Cluster/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
 <LocusVar nr="4"/>
 </Typ>
-<Typ kind="M" nr="20">
+<Typ kind="M" nr="19">
 <Cluster/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
@@ -271,7 +271,7 @@
 </Typ>
 </ArgTypes>
 <Cluster/>
-<Typ kind="M" nr="21">
+<Typ kind="M" nr="20">
 <Cluster/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
@@ -289,7 +289,7 @@
 </Adjective>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="TOPALG_2" nr="3">
 <ArgTypes/>
 <Cluster/>
 <Typ kind="M" nr="11">
@@ -300,7 +300,7 @@
 <Adjective nr="130"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="TOPALG_2" nr="4">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="7"/>
@@ -317,7 +317,7 @@
 <Adjective nr="138"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="TOPALG_2" nr="5">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="27" value="false"/>
@@ -332,7 +332,7 @@
 <Adjective nr="136"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="TOPALG_2" nr="6">
 <ArgTypes>
 <Typ kind="M" nr="11">
 <Cluster>
@@ -353,13 +353,13 @@
 <LocusVar nr="1"/>
 </Func>
 </Typ>
-<Typ kind="M" nr="20">
+<Typ kind="M" nr="19">
 <Cluster/>
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
 </Typ>
-<Typ kind="M" nr="20">
+<Typ kind="M" nr="19">
 <Cluster/>
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
@@ -367,7 +367,7 @@
 </Typ>
 </ArgTypes>
 <Cluster/>
-<Typ kind="M" nr="21">
+<Typ kind="M" nr="20">
 <Cluster/>
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>

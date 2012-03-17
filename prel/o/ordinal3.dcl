@@ -10,7 +10,7 @@
 <ArticleID name="ORDINAL2"/>
 <ArticleID name="ORDINAL3"/>
 </Signature>
-<FCluster>
+<FCluster aid="ORDINAL3" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -31,7 +31,7 @@
 <Adjective nr="10"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="ORDINAL3" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -52,7 +52,7 @@
 <Adjective nr="10"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="ORDINAL3" nr="3">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -76,7 +76,7 @@
 <Adjective nr="14"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="ORDINAL3" nr="4">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>

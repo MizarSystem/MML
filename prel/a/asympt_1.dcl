@@ -15,9 +15,9 @@
 <ArticleID name="XCMPLX_0"/>
 <ArticleID name="XREAL_0"/>
 <ArticleID name="XXREAL_0"/>
+<ArticleID name="FUNCT_2"/>
 <ArticleID name="INT_1"/>
 <ArticleID name="VALUED_0"/>
-<ArticleID name="FUNCT_2"/>
 <ArticleID name="RAT_1"/>
 <ArticleID name="MEMBERED"/>
 <ArticleID name="VALUED_1"/>
@@ -29,7 +29,7 @@
 <ArticleID name="ASYMPT_0"/>
 <ArticleID name="ASYMPT_1"/>
 </Signature>
-<FCluster>
+<FCluster aid="ASYMPT_1" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster>
@@ -53,26 +53,26 @@
 </Func>
 <Cluster>
 <Adjective nr="4"/>
-<Adjective nr="27">
+<Adjective nr="20">
 <Func kind="K" nr="77"/>
 <Func kind="K" nr="73"/>
 </Adjective>
 <Adjective nr="47"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="ASYMPT_1" nr="2">
 <ArgTypes/>
 <Func kind="K" nr="216"/>
 <Cluster>
 <Adjective nr="4"/>
-<Adjective nr="27">
+<Adjective nr="20">
 <Func kind="K" nr="77"/>
 <Func kind="K" nr="73"/>
 </Adjective>
 <Adjective nr="47"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="ASYMPT_1" nr="3">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -84,28 +84,28 @@
 </Func>
 <Cluster>
 <Adjective nr="4"/>
-<Adjective nr="27">
+<Adjective nr="20">
 <Func kind="K" nr="77"/>
 <Func kind="K" nr="73"/>
 </Adjective>
 <Adjective nr="47"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="ASYMPT_1" nr="4">
 <ArgTypes/>
 <Func kind="K" nr="218">
 <Num nr="1"/>
 </Func>
 <Cluster>
 <Adjective nr="4"/>
-<Adjective nr="27">
+<Adjective nr="20">
 <Func kind="K" nr="77"/>
 <Func kind="K" nr="73"/>
 </Adjective>
 <Adjective nr="45"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="ASYMPT_1" nr="5">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -117,7 +117,7 @@
 </Func>
 <Cluster>
 <Adjective nr="4"/>
-<Adjective nr="27">
+<Adjective nr="20">
 <Func kind="K" nr="77"/>
 <Func kind="K" nr="73"/>
 </Adjective>

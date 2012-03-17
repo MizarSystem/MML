@@ -17,7 +17,8 @@ environ
       SCMPDS_6, SCMP_GCD, CARD_3, FINSEQ_1, SCMPDS_8, GRAPH_2, RFINSEQ,
       SCPISORT;
  constructors REAL_1, NAT_1, RECDEF_1, NEWTON, RFINSEQ, MESFUNC1, SCM_1,
-      SCMPDS_4, SCMPDS_5, SCMPDS_6, SCMP_GCD, SCMPDS_8, SCPISORT, SCMNORM;
+      SCMPDS_4, SCMPDS_5, SCMPDS_6, SCMP_GCD, SCMPDS_8, SCPISORT, SCMNORM,
+      SCMPDS_3;
  registrations XBOOLE_0, SETFAM_1, FUNCT_1, RELSET_1, FRAENKEL, NUMBERS,
       XXREAL_0, XREAL_0, NAT_1, INT_1, FINSEQ_1, CARD_3, SCMPDS_2, SCMPDS_4,
       SCMPDS_5, SCMPDS_6, SCMPDS_8, ORDINAL1, VALUED_0, MEMBERED, SCMNORM;
@@ -35,21 +36,22 @@ begin :: The Several Properties of "while" Program and Finite Sequence
 reserve x for Int_position,
   n,p0 for Element of NAT;
 
-Lm1: for s being State of SCMPDS, I,J being shiftable Program-block,
+Lm1: for s being State of SCMPDS, I,J being shiftable Program of SCMPDS,
 n being Element of NAT holds I ';' Goto n ';' J is shiftable
 proof
-  let s be State of SCMPDS, I,J be shiftable Program-block,n be Element of NAT;
+  let s be State of SCMPDS, I,J be shiftable Program of SCMPDS,
+  n be Element of NAT;
   I ';' Goto n ';' J = I ';' Load (goto n) ';' J by SCMPDS_6:def 1;
   hence thesis;
 end;
 
 registration
-  let I,J be shiftable Program-block, a be Int_position,k1 be Integer;
+  let I,J be shiftable Program of SCMPDS, a be Int_position,k1 be Integer;
   cluster if>0(a,k1,I,J) -> shiftable;
   correctness
   proof
     set i = (a,k1)<=0_goto (card I + 2), G =Goto (card J+1);
-    reconsider IJ=I ';' G ';' J as shiftable Program-block by Lm1;
+    reconsider IJ=I ';' G ';' J as shiftable Program of SCMPDS by Lm1;
     if>0(a,k1,I,J) = i ';' I ';' G ';' J by SCMPDS_6:def 5
       .=i ';' (I ';' G) ';' J by SCMPDS_4:50
       .=i ';' IJ by SCMPDS_4:50
@@ -59,13 +61,13 @@ registration
 end;
 
 theorem Th1:     :: see SCMPDS_6:87
-  for s being State of SCMPDS,I being No-StopCode shiftable Program-block,
-  J being shiftable Program-block,a,b be Int_position,k1 being Integer
+  for s being State of SCMPDS,I being No-StopCode shiftable Program of SCMPDS,
+  J being shiftable Program of SCMPDS,a,b be Int_position,k1 being Integer
   st s.DataLoc(s.a,k1) > 0 & I is_closed_on s & I is_halting_on s
   holds IExec(if>0(a,k1,I,J),s).b = IExec(I,s).b
 proof
-  let s be State of SCMPDS,I be No-StopCode shiftable Program-block,
-  J be shiftable Program-block,a,b be Int_position,k1 be Integer;
+  let s be State of SCMPDS,I be No-StopCode shiftable Program of SCMPDS,
+  J be shiftable Program of SCMPDS,a,b be Int_position,k1 be Integer;
   assume s.DataLoc(s.a,k1)>0 & I is_closed_on s & I is_halting_on s;
   then
 A1: IExec(if>0(a,k1,I,J),s) =
@@ -75,19 +77,19 @@ A1: IExec(if>0(a,k1,I,J),s) =
 end;
 set A = NAT, D = SCM-Data-Loc;
 
-Lm2: for a be Int_position,i be Integer,I be Program-block holds
+Lm2: for a be Int_position,i be Integer,I be Program of SCMPDS holds
 while>0(a,i,I)= ((a,i)<=0_goto (card I +2)) ';' (I ';' goto -(card I+1))
 proof
-  let a be Int_position,i be Integer,I be Program-block;
+  let a be Int_position,i be Integer,I be Program of SCMPDS;
   set i1=(a,i)<=0_goto (card I +2), i2=goto -(card I+1);
   thus while>0(a,i,I) = i1 ';' I ';' i2 by SCMPDS_8:def 3
     .= i1 ';' (I ';' i2) by SCMPDS_4:51;
 end;
 
-Lm3: for I being Program-block,a being Int_position,i being Integer
+Lm3: for I being Program of SCMPDS,a being Int_position,i being Integer
 holds Shift(I,1) c= while>0(a,i,I)
 proof
-  let I be Program-block,a be Int_position,i be Integer;
+  let I be Program of SCMPDS,a be Int_position,i be Integer;
   set i1=(a,i)<=0_goto (card I+2), i2=goto -(card I+1);
 A1: card Load i1=1 by SCMPDS_5:6;
   while>0(a,i,I) = i1 ';' I ';' i2 by SCMPDS_8:def 3
@@ -97,7 +99,7 @@ A1: card Load i1=1 by SCMPDS_5:6;
 end;
 
 theorem Th2:
-  for s,sm be State of SCMPDS,I be No-StopCode shiftable Program-block,
+  for s,sm be State of SCMPDS,I be No-StopCode shiftable Program of SCMPDS,
   a be Int_position,i be Integer, m be Element of NAT
   st card I>0 & I is_closed_on s & I is_halting_on s & s.DataLoc(s.a,i) > 0 &
   m=LifeSpan (s +* Initialized stop I)+2 &
@@ -105,7 +107,7 @@ theorem Th2:
   sm | SCM-Data-Loc =IExec(I,s)|SCM-Data-Loc &
   sm +*Initialized stop while>0(a,i,I)=sm
 proof
-  let s,sm be State of SCMPDS,I be No-StopCode shiftable Program-block,
+  let s,sm be State of SCMPDS,I be No-StopCode shiftable Program of SCMPDS,
   a be Int_position,i be Integer,m be Element of NAT;
   set b=DataLoc(s.a,i);
   set WH =while>0(a,i,I), iWH=Initialized stop WH, IsI=Initialized stop I;
@@ -184,11 +186,12 @@ A23: IC s7=s7.IC SCMPDS by AMI_1:def 15
 end;
 
 theorem Th3:
-  for s be State of SCMPDS,I be Program-block st for t be State of SCMPDS st
+  for s be State of SCMPDS,I be Program of SCMPDS st
+  for t be State of SCMPDS st
   t | SCM-Data-Loc =s | SCM-Data-Loc holds I is_halting_on t
   holds I is_closed_on s
 proof
-  let s be State of SCMPDS,I be Program-block;
+  let s be State of SCMPDS,I be Program of SCMPDS;
   assume
 A1: for t be State of SCMPDS st t | D =s | D holds I is_halting_on t;
   set pI=stop I, II=Initialized pI, sI=s +* II;
@@ -273,7 +276,7 @@ proof
 end;
 
 theorem Th5:
-  for s being State of SCMPDS,I being No-StopCode shiftable Program-block,
+  for s being State of SCMPDS,I being No-StopCode shiftable Program of SCMPDS,
   a,x,y be Int_position, i,c be Integer st card I > 0 &
   s.x >= c+s.DataLoc(s.a,i) &
   (for t be State of SCMPDS st t.x >= c+t.DataLoc(s.a,i) & t.y=s.y &
@@ -285,7 +288,7 @@ theorem Th5:
   (s.DataLoc(s.a,i) > 0 implies
   IExec(while>0(a,i,I),s) =IExec(while>0(a,i,I),IExec(I,s)))
 proof
-  let s be State of SCMPDS,I be No-StopCode shiftable Program-block,
+  let s be State of SCMPDS,I be No-StopCode shiftable Program of SCMPDS,
   a,x1,y1 be Int_position, i,c be Integer;
   set b=DataLoc(s.a,i);
   assume
@@ -331,7 +334,7 @@ A9:   x in {y1};
 end;
 
 theorem Th6:
-  for s being State of SCMPDS,I being No-StopCode shiftable Program-block,
+  for s being State of SCMPDS,I being No-StopCode shiftable Program of SCMPDS,
   a,x,y be Int_position, i,c be Integer st card I > 0 & s.x >= c &
   (for t be State of SCMPDS st t.x >= c & t.y=s.y &
   t.a=s.a & t.DataLoc(s.a,i) > 0 holds
@@ -342,7 +345,7 @@ theorem Th6:
   ( s.DataLoc(s.a,i) > 0 implies
   IExec(while>0(a,i,I),s) =IExec(while>0(a,i,I),IExec(I,s)))
 proof
-  let s be State of SCMPDS,I be No-StopCode shiftable Program-block,
+  let s be State of SCMPDS,I be No-StopCode shiftable Program of SCMPDS,
   a,x,y be Int_position, i,c be Integer;
   set b=DataLoc(s.a,i);
   assume
@@ -429,7 +432,7 @@ A16: s.b > 0;
 end;
 
 theorem Th7:
-  for s being State of SCMPDS,I being No-StopCode shiftable Program-block,
+  for s being State of SCMPDS,I being No-StopCode shiftable Program of SCMPDS,
   a,x1,x2,x3,x4 be Int_position, i,c,md be Integer st
   card I > 0 & s.x4=s.x3-c+s.x1 & md <= s.x3-c &
   (for t be State of SCMPDS st t.x4=t.x3-c+t.x1 & md <= t.x3-c &
@@ -442,7 +445,7 @@ theorem Th7:
   ( s.DataLoc(s.a,i) > 0 implies
   IExec(while>0(a,i,I),s) =IExec(while>0(a,i,I),IExec(I,s)) )
 proof
-  let s be State of SCMPDS,I be No-StopCode shiftable Program-block,
+  let s be State of SCMPDS,I be No-StopCode shiftable Program of SCMPDS,
   a,x1,x2,x3,x4 be Int_position, i,c,md be Integer;
   set b=DataLoc(s.a,i);
   assume
@@ -760,7 +763,7 @@ A36: len p2 + y in dom s2 by A11,A31,FINSEQ_1:41;
     .=g.k by A9,A36,FINSEQ_1:def 7;
 end;
 
-Lm4: for s be State of SCMPDS,I be No-StopCode shiftable Program-block,
+Lm4: for s be State of SCMPDS,I be No-StopCode shiftable Program of SCMPDS,
 a be Int_position, i,c be Integer,f,g be FinSequence of INT,m,n,m1
 be Element of NAT st card I> 0 & s.a=c & len f=n & len g=n &
 f is_FinSequence_on s,m &
@@ -791,7 +794,7 @@ len f1=n & len f2=n implies f1,f2 are_fiberwise_equipotent)) holds
 while>0(a,i,I) is_halting_on s &
 f,g are_fiberwise_equipotent & g is_non_decreasing_on 1,n
 proof
-  let s be State of SCMPDS,I be No-StopCode shiftable Program-block,
+  let s be State of SCMPDS,I be No-StopCode shiftable Program of SCMPDS,
   a be Int_position, i,c be Integer,f,g be FinSequence of INT,
   m,n,m1 be Element of NAT;
   set b=DataLoc(c,i);
@@ -1372,7 +1375,7 @@ A119: now
   hence thesis by A1,A104,FINSEQ_2:10;
 end;
 
-Lm5: for s be State of SCMPDS,I be No-StopCode shiftable Program-block,
+Lm5: for s be State of SCMPDS,I be No-StopCode shiftable Program of SCMPDS,
 a be Int_position, i,c be Integer,m,n,m1 be Element of NAT
 st card I> 0 & s.a=c &
 1=s.DataLoc(c,i) & m1=m+n+1 & m+1=s.intpos m1 & m+n=s.intpos(m1+1) &
@@ -1400,7 +1403,7 @@ IExec(I,t).intpos (m+j) >= IExec(I,t).intpos (m+ym)))) &
 len f1=n & len f2=n implies f1,f2 are_fiberwise_equipotent)) holds
 while>0(a,i,I) is_halting_on s
 proof
-  let s be State of SCMPDS,I be No-StopCode shiftable Program-block,
+  let s be State of SCMPDS,I be No-StopCode shiftable Program of SCMPDS,
   a be Int_position, i,c be Integer,m,n,m1 be Element of NAT;
   set b=DataLoc(c,i);
   assume
@@ -1444,7 +1447,7 @@ A7: len g=n & for i be Element of NAT st 1<=i & i <= len g holds
   hence thesis by A1,A2,A3,A4,A5,A6,A7,Lm4;
 end;
 
-Lm6: for s be State of SCMPDS,I be No-StopCode shiftable Program-block,
+Lm6: for s be State of SCMPDS,I be No-StopCode shiftable Program of SCMPDS,
 a be Int_position, i,c be Integer,m,n,m1 be Element of NAT st card I> 0 &
 s.a=c & 1=s.DataLoc(c,i) & m1=m+n+1 & m+1=s.intpos m1 & m+n=s.intpos(m1+1) &
 (for t be State of SCMPDS,f1,f2 be FinSequence of INT,
@@ -1471,7 +1474,7 @@ IExec(I,t).intpos (m+j) >= IExec(I,t).intpos (m+ym)))) &
 len f1=n & len f2=n implies f1,f2 are_fiberwise_equipotent)) holds
 while>0(a,i,I) is_halting_on s & while>0(a,i,I) is_closed_on s
 proof
-  let s be State of SCMPDS,I be No-StopCode shiftable Program-block,
+  let s be State of SCMPDS,I be No-StopCode shiftable Program of SCMPDS,
   a be Int_position, i,c be Integer,m,n,m1 be Element of NAT;
   set b=DataLoc(c,i);
   assume
@@ -1526,7 +1529,7 @@ begin :: Program Partition is to split a sequence into a "smaller" and
 :: a5=a7=length  a2=mid(x[1]), a3=x[2], a4=x[n], a6=save
 
 definition
-  func Partition -> Program-block equals
+  func Partition -> Program of SCMPDS equals
 
   ((GBP,5):=(GBP,4) ';'
   SubFrom(GBP,5,GBP,2) ';' (GBP,3):=(GBP,2) ';' AddTo(GBP,3,1)) ';'
@@ -1549,7 +1552,7 @@ begin :: The Construction of Quick Sort
 
 definition
   let n,p0 be Element of NAT;
-  func QuickSort(n,p0) -> Program-block equals
+  func QuickSort(n,p0) -> Program of SCMPDS equals
 
   ((GBP:=0) ';' (SBP:=1) ';'
   (SBP,p0+n):=(p0+1) ';' (SBP,p0+n+1):=(p0+n)) ';' while>0(GBP,1,
@@ -4709,7 +4712,7 @@ len g = n & g is_FinSequence_on IExec(QuickSort(n,p0),s),p0 &
 f,g are_fiberwise_equipotent & g is_non_decreasing_on 1,n)
 proof
   let s be State of SCMPDS,p0,n be Element of NAT;
-  reconsider Pt=Partition as No-StopCode shiftable Program-block;
+  reconsider Pt=Partition as No-StopCode shiftable Program of SCMPDS;
   set pn=p0+n;
   set l1= (GBP,2):=(SBP,pn+1), l2= SubFrom(GBP,2,SBP,pn),
   l3= (GBP,2):=(SBP,pn), l4= (GBP,4):=(SBP,pn+1), l5= (SBP,pn+3):=(SBP,pn+1),

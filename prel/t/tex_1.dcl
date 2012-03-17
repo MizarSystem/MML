@@ -17,7 +17,7 @@
 <ArticleID name="TDLAT_3"/>
 <ArticleID name="TEX_1"/>
 </Signature>
-<RCluster>
+<RCluster aid="TEX_1" nr="1">
 <ArgTypes/>
 <Typ kind="G" nr="5">
 <Cluster/>
@@ -28,7 +28,7 @@
 <Adjective nr="20"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="TEX_1" nr="2">
 <ArgTypes/>
 <Typ kind="G" nr="5">
 <Cluster/>
@@ -39,7 +39,7 @@
 <Adjective nr="20"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="TEX_1" nr="3">
 <ArgTypes/>
 <Typ kind="G" nr="5">
 <Cluster/>
@@ -51,7 +51,7 @@
 <Adjective nr="21"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="TEX_1" nr="4">
 <ArgTypes/>
 <Typ kind="G" nr="5">
 <Cluster/>
@@ -63,7 +63,7 @@
 <Adjective nr="21"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="TEX_1" nr="5">
 <ArgTypes/>
 <Typ kind="G" nr="5">
 <Cluster/>
@@ -76,7 +76,7 @@
 <Adjective nr="32" value="false"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="TEX_1" nr="6">
 <ArgTypes/>
 <Typ kind="G" nr="5">
 <Cluster/>
@@ -89,7 +89,7 @@
 <Adjective nr="32"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="TEX_1" nr="7">
 <ArgTypes/>
 <Typ kind="G" nr="5">
 <Cluster/>
@@ -102,7 +102,7 @@
 <Adjective nr="32" value="false"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="TEX_1" nr="8">
 <ArgTypes/>
 <Typ kind="G" nr="5">
 <Cluster/>
@@ -116,7 +116,7 @@
 <Adjective nr="33"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="TEX_1" nr="9">
 <ArgTypes/>
 <Typ kind="G" nr="5">
 <Cluster/>
@@ -128,7 +128,7 @@
 <Adjective nr="33" value="false"/>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="TEX_1" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -141,7 +141,7 @@
 <Adjective nr="1" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="TEX_1" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -156,7 +156,7 @@
 <Adjective nr="32"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="TEX_1" nr="3">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -171,7 +171,7 @@
 <Adjective nr="12" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="TEX_1" nr="4">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -184,7 +184,7 @@
 <Adjective nr="31"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="TEX_1" nr="5">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -203,7 +203,7 @@
 <Adjective nr="21"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="TEX_1" nr="6">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -223,7 +223,7 @@
 <Adjective nr="12" value="false"/>
 </Cluster>
 </FCluster>
-<CCluster>
+<CCluster aid="TEX_1" nr="1">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="12" value="false"/>
@@ -240,7 +240,7 @@
 <Adjective nr="32"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="TEX_1" nr="2">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="12" value="false"/>
@@ -257,7 +257,7 @@
 <Adjective nr="21"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="TEX_1" nr="3">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="12" value="false"/>
@@ -273,7 +273,7 @@
 <Adjective nr="21"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="TEX_1" nr="4">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="12" value="false"/>
@@ -289,7 +289,7 @@
 <Adjective nr="21"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="TEX_1" nr="5">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="12" value="false"/>

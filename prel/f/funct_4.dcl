@@ -13,7 +13,7 @@
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="FUNCT_4"/>
 </Signature>
-<FCluster>
+<FCluster aid="FUNCT_4" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -33,6 +33,31 @@
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
 <LocusVar nr="4"/>
+</Func>
+<Cluster>
+<Adjective nr="1"/>
+<Adjective nr="4"/>
+</Cluster>
+</FCluster>
+<FCluster aid="FUNCT_4" nr="2">
+<ArgTypes>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="1"/>
+<Adjective nr="4"/>
+</Cluster>
+</Typ>
+<Typ kind="M" nr="1">
+<Cluster/>
+</Typ>
+<Typ kind="M" nr="1">
+<Cluster/>
+</Typ>
+</ArgTypes>
+<Func kind="K" nr="78">
+<LocusVar nr="1"/>
+<LocusVar nr="2"/>
+<LocusVar nr="3"/>
 </Func>
 <Cluster>
 <Adjective nr="1"/>

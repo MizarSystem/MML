@@ -9,14 +9,14 @@
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="RELSET_1"/>
-<ArticleID name="FINSET_1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
+<ArticleID name="FINSET_1"/>
 <ArticleID name="ENUMSET1"/>
 <ArticleID name="DOMAIN_1"/>
 <ArticleID name="REALSET1"/>
 </Signature>
-<RCluster>
+<RCluster aid="RPR_1" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -35,7 +35,7 @@
 <Adjective nr="13"/>
 </Cluster>
 </RCluster>
-<CCluster>
+<CCluster aid="RPR_1" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -55,7 +55,7 @@
 </Typ>
 <Cluster>
 <Adjective nr="7" value="false"/>
-<Adjective nr="8"/>
+<Adjective nr="11"/>
 <Adjective nr="13"/>
 </Cluster>
 </CCluster>

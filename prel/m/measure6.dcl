@@ -19,7 +19,7 @@
 <ArticleID name="MEASURE5"/>
 <ArticleID name="MEASURE6"/>
 </Signature>
-<FCluster>
+<FCluster aid="MEASURE6" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="3">
 <Cluster>

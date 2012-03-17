@@ -10,7 +10,7 @@ environ
       SCMFSA8A, SCMFSA_4, SCMFSA8C, FUNCT_1, FUNCT_4, CAT_1, RELAT_1, RFINSEQ,
       BOOLE, ABSVALUE, SCMFSA6C, SF_MASTR, SCMFSA6B, ORDINAL2, AMI_2, AMI_5,
       ARYTM_1, NAT_1, FINSEQ_1, FINSEQ_2, FINSUB_1, PROB_1, INT_1, RELOC,
-      PARTFUN1, SCM_HALT, SCMBSORT, FINSEQ_4, ARYTM;
+      PARTFUN1, SCM_HALT, SCMBSORT, FINSEQ_4, ARYTM, AMISTD_2, SCMNORM;
  notations TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, ORDINAL1, CARD_1, NUMBERS,
       XCMPLX_0, NAT_1, INT_1, RELAT_1, FINSEQ_1, FUNCT_1, COMPLEX1, FUNCT_2,
       FUNCT_4, FINSEQ_2, FUNCT_7, STRUCT_0, AMI_1, SCMNORM, SCMFSA_2, FUNCOP_1,
@@ -19,17 +19,17 @@ environ
       SCM_HALT, XXREAL_0;
  constructors PARTFUN1, SETWISEO, XXREAL_0, REAL_1, NAT_1, INT_2, SEQM_3,
       RFINSEQ, AMI_5, SCMFSA6A, SF_MASTR, SCMFSA6B, SCMFSA6C, SCMFSA8A,
-      SCMFSA8B, SCMFSA8C, SCM_HALT, SEQ_1, SCMNORM;
+      SCMFSA8B, SCMFSA8C, SCM_HALT, SEQ_1, SCMNORM, SCMFSA_4;
  registrations XBOOLE_0, SETFAM_1, FUNCT_1, RELSET_1, FUNCOP_1, FINSUB_1,
       FRAENKEL, NUMBERS, XXREAL_0, XREAL_0, NAT_1, INT_1, MEMBERED, CARD_3,
-      RFINSEQ, AMI_1, SCMFSA_2, SCMFSA_4, SF_MASTR, SCMFSA6C, SCMFSA7B,
+      RFINSEQ, AMI_1, SCMFSA_2, SF_MASTR, SCMFSA6C, SCMFSA7B, FINSET_1,
       SCMFSA8A, SCMFSA8B, SCMFSA_9, SCM_HALT, STRUCT_0, VALUED_0, ORDINAL1;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
 
 
 begin :: Preliminaries
 
-reserve p for programmed FinPartState of SCM+FSA,
+reserve p for preProgram of SCM+FSA,
   ic for Instruction of SCM+FSA,
   i,j,k for Element of NAT,
   fa,f for FinSeq-Location,
@@ -39,7 +39,7 @@ reserve p for programmed FinPartState of SCM+FSA,
 canceled 2;
 
 theorem :: SCMBSORT:3
-  for I being Macro-Instruction,a,b being Int-Location st
+  for I being Program of SCM+FSA,a,b being Int-Location st
   I does_not_destroy b & a<>b holds Times(a,I) does_not_destroy b;
 
 canceled 4;
@@ -64,7 +64,7 @@ theorem :: SCMBSORT:11
 
 theorem :: SCMBSORT:12
   for s be State of SCM+FSA, f be FinSeq-Location, a be read-write Int-Location
-  holds IExec(SCM+FSA-Stop,s).a =s.a & IExec(SCM+FSA-Stop,s).f =s.f;
+  holds IExec(Stop SCM+FSA,s).a =s.a & IExec(Stop SCM+FSA,s).f =s.f;
 
 reserve n for natural number;
 
@@ -98,7 +98,7 @@ theorem :: SCMBSORT:21
 canceled;
 
 theorem :: SCMBSORT:23
-  for t being FinPartState of SCM+FSA,p being Macro-Instruction,
+  for t being FinPartState of SCM+FSA,p being Program of SCM+FSA,
   x being set st dom t c= Int-Locations \/ FinSeq-Locations &
   x in dom t \/ UsedInt*Loc p \/ UsedIntLoc p
   holds x is Int-Location or x is FinSeq-Location;
@@ -107,7 +107,7 @@ canceled;
 
 theorem :: SCMBSORT:25
   for i,k being Element of NAT,t being FinPartState of SCM+FSA,
-  p being Macro-Instruction, s1,s2 being State of SCM+FSA
+  p being Program of SCM+FSA, s1,s2 being State of SCM+FSA
   st k <= i & p c= s1 & p c= s2 & dom t c= Int-Locations \/ FinSeq-Locations &
   (for j holds IC Computation(s1,j) in dom p &
   IC Computation(s2,j) in dom p) &
@@ -119,7 +119,7 @@ theorem :: SCMBSORT:25
   Computation(s2,i) |(dom t \/ UsedInt*Loc p \/ UsedIntLoc p);
 
 theorem :: SCMBSORT:26
-  for i,k being Element of NAT,p being Macro-Instruction,
+  for i,k being Element of NAT,p being Program of SCM+FSA,
   s1,s2 being State of SCM+FSA st k <= i & p c= s1 & p c= s2 &
   (for j holds IC Computation(s1,j) in dom p &
   IC Computation(s2,j) in dom p) &
@@ -133,31 +133,31 @@ theorem :: SCMBSORT:26
 canceled 2;
 
 theorem :: SCMBSORT:29
-  for I,J being Macro-Instruction, a being Int-Location holds
+  for I,J being Program of SCM+FSA, a being Int-Location holds
   UsedIntLoc if=0(a,I,J) = {a} \/ UsedIntLoc I \/ UsedIntLoc J &
   UsedIntLoc if>0(a,I,J) = {a} \/ UsedIntLoc I \/ UsedIntLoc J;
 
 theorem :: SCMBSORT:30
-  for I be Macro-Instruction,l be Instruction-Location of SCM+FSA holds
+  for I be Program of SCM+FSA,l be Instruction-Location of SCM+FSA holds
   UsedIntLoc (Directed(I,l)) = UsedIntLoc I;
 
 theorem :: SCMBSORT:31
-  for a being Int-Location,I being Macro-Instruction holds
+  for a being Int-Location,I being Program of SCM+FSA holds
   UsedIntLoc Times(a,I) = UsedIntLoc I \/ {a,intloc 0};
 
 canceled 3;
 
 theorem :: SCMBSORT:35
-  for I,J being Macro-Instruction, a being Int-Location holds
+  for I,J being Program of SCM+FSA, a being Int-Location holds
   UsedInt*Loc if=0(a,I,J) = UsedInt*Loc I \/ UsedInt*Loc J &
   UsedInt*Loc if>0(a,I,J) = UsedInt*Loc I \/ UsedInt*Loc J;
 
 theorem :: SCMBSORT:36
-  for I be Macro-Instruction,l be Instruction-Location of SCM+FSA holds
+  for I be Program of SCM+FSA,l be Instruction-Location of SCM+FSA holds
   UsedInt*Loc (Directed(I,l)) = UsedInt*Loc I;
 
 theorem :: SCMBSORT:37
-  for a being Int-Location,I being Macro-Instruction holds
+  for a being Int-Location,I being Program of SCM+FSA holds
   UsedInt*Loc Times(a,I) = UsedInt*Loc I;
 
 definition
@@ -177,33 +177,33 @@ theorem :: SCMBSORT:40
   dom( ((intloc 0) .--> 1) +* Start-At(insloc 0) ) ={intloc 0,IC SCM+FSA};
 
 theorem :: SCMBSORT:41
-  for I be Macro-Instruction holds
+  for I be Program of SCM+FSA holds
   dom (Initialized I) = dom I \/ {intloc 0,IC SCM+FSA};
 
 theorem :: SCMBSORT:42
-  for w being FinSequence of INT,f be FinSeq-Location,I be Macro-Instruction
+  for w being FinSequence of INT,f be FinSeq-Location,I be Program of SCM+FSA
   holds dom (Initialized I +* (f.--> w)) = dom I \/ {intloc 0,IC SCM+FSA,f};
 
 theorem :: SCMBSORT:43
   for l being Instruction-Location of SCM+FSA holds IC SCM+FSA <> l;
 
 theorem :: SCMBSORT:44
-  for a being Int-Location,I being Macro-Instruction holds
+  for a being Int-Location,I being Program of SCM+FSA holds
   card Times(a,I) = card I + 12;
 
 theorem :: SCMBSORT:45
   for i1,i2,i3 be Instruction of SCM+FSA holds card (i1 ';' i2 ';' i3)=6;
 
 theorem :: SCMBSORT:46
-  for t be FinSequence of INT,f be FinSeq-Location,I be Macro-Instruction
+  for t be FinSequence of INT,f be FinSeq-Location,I be Program of SCM+FSA
   holds dom (Initialized I) misses dom (f .--> t);
 
 theorem :: SCMBSORT:47
-  for w be FinSequence of INT,f be FinSeq-Location,I be Macro-Instruction
+  for w be FinSequence of INT,f be FinSeq-Location,I be Program of SCM+FSA
   holds Initialized I +* (f .--> w) starts_at 0;
 
 theorem :: SCMBSORT:48
-  for I,J being Macro-Instruction, k being Element of NAT,
+  for I,J being Program of SCM+FSA, k being Element of NAT,
   i being Instruction of SCM+FSA st k< card J & i = J.insloc k holds
   (I ';' J).(insloc (card I +k)) =IncAddr( i, card I );
 
@@ -214,29 +214,29 @@ theorem :: SCMBSORT:49
   ic = a :=len f or ic = f :=<0,...,0>a implies ic <> halt SCM+FSA;
 
 theorem :: SCMBSORT:50
-  for I,J be Macro-Instruction,k be Element of NAT,
+  for I,J be Program of SCM+FSA,k be Element of NAT,
   i be Instruction of SCM+FSA st
   (for n be Element of NAT holds IncAddr( i, n)=i) & i <> halt SCM+FSA &
   k= card I holds (I ';' i ';' J).(insloc k) = i &
   (I ';' i ';' J).(insloc (k+1)) = goto insloc (card I+2);
 
 theorem :: SCMBSORT:51
-  for I,J being Macro-Instruction, k being Element of NAT holds
+  for I,J being Program of SCM+FSA, k being Element of NAT holds
   k= card I implies (I ';'(a:=b) ';' J).(insloc k) = a:= b
   & (I ';'(a:=b) ';' J).(insloc (k+1)) = goto insloc (card I+2);
 
 theorem :: SCMBSORT:52
-  for I,J being Macro-Instruction, k being Element of NAT holds
+  for I,J being Program of SCM+FSA, k being Element of NAT holds
   k= card I implies (I ';'(a:=len f) ';' J).(insloc k) = a:=len f
   & (I ';'(a:=len f) ';' J).(insloc (k+1)) = goto insloc (card I+2);
 
 theorem :: SCMBSORT:53
   for w being FinSequence of INT,f be FinSeq-Location,s being State of SCM+FSA,
-  I be Macro-Instruction st Initialized I +* (f.--> w) c= s holds I c= s;
+  I be Program of SCM+FSA st Initialized I +* (f.--> w) c= s holds I c= s;
 
 theorem :: SCMBSORT:54
   for w being FinSequence of INT,f be FinSeq-Location,s be State of SCM+FSA,
-  I be Macro-Instruction st Initialized I +* (f .--> w) c= s
+  I be Program of SCM+FSA st Initialized I +* (f .--> w) c= s
   holds s.f = w & s.(intloc 0) = 1;
 
 theorem :: SCMBSORT:55
@@ -244,11 +244,11 @@ theorem :: SCMBSORT:55
   holds {a,IC SCM+FSA,f} c= dom s;
 
 theorem :: SCMBSORT:56
-  for p being Macro-Instruction,s being State of SCM+FSA holds
+  for p being Program of SCM+FSA,s being State of SCM+FSA holds
   UsedInt*Loc p \/ UsedIntLoc p c= dom s;
 
 theorem :: SCMBSORT:57
-  for s be State of SCM+FSA,I be Macro-Instruction,f be FinSeq-Location
+  for s be State of SCM+FSA,I be Program of SCM+FSA,f be FinSeq-Location
   holds (Result (s +* Initialized I)).f = IExec(I,s).f;
 
 :: set a0 = intloc 0;
@@ -263,7 +263,7 @@ theorem :: SCMBSORT:57
 
 definition
   let f be FinSeq-Location;
-  func bubble-sort f -> Macro-Instruction equals
+  func bubble-sort f -> Program of SCM+FSA equals
 :: SCMBSORT:def 1
   ( ((intloc 2):= (intloc 0)) ';' ((intloc 3):= (intloc 0)) ';'
   ((intloc 4):= (intloc 0)) ';' ((intloc 5):= (intloc 0)) ';'
@@ -273,11 +273,11 @@ definition
   SubFrom(intloc 3,intloc 0) ';' ((intloc 5):=(f,intloc 3)) ';'
   ((intloc 6):=(f,(intloc 4))) ';' SubFrom(intloc 6,intloc 5) ';'
   if>0(intloc 6,((intloc 6):=(f,intloc 4)) ';' ((f,intloc 3):=(intloc 6)) ';'
-  ((f,intloc 4):=(intloc 5)),SCM+FSA-Stop) ) );
+  ((f,intloc 4):=(intloc 5)),Stop SCM+FSA) ) );
 end;
 
 definition
-  func Bubble-Sort-Algorithm -> Macro-Instruction equals
+  func Bubble-Sort-Algorithm -> Program of SCM+FSA equals
 :: SCMBSORT:def 2
 
   bubble-sort fsloc 0;

@@ -5,7 +5,7 @@
 <ArticleID name="TARSKI"/>
 <ArticleID name="XBOOLE_0"/>
 </Signature>
-<FCluster>
+<FCluster aid="ZFMISC_1" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>

@@ -28,7 +28,7 @@
 <ArticleID name="RLVECT_1"/>
 <ArticleID name="COMPLFLD"/>
 </Signature>
-<FCluster>
+<FCluster aid="COMPLFLD" nr="1">
 <ArgTypes/>
 <Func kind="K" nr="180"/>
 <Cluster>
@@ -36,7 +36,7 @@
 <Adjective nr="71"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="COMPLFLD" nr="2">
 <ArgTypes/>
 <Func kind="K" nr="180"/>
 <Cluster>
@@ -44,7 +44,7 @@
 <Adjective nr="81"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="COMPLFLD" nr="3">
 <ArgTypes/>
 <Func kind="K" nr="180"/>
 <Cluster>
@@ -62,7 +62,7 @@
 <Adjective nr="90"/>
 </Cluster>
 </FCluster>
-<CCluster>
+<CCluster aid="COMPLFLD" nr="1">
 <ArgTypes/>
 <Cluster/>
 <Typ kind="M" nr="2">

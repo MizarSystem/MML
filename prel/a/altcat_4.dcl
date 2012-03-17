@@ -31,7 +31,7 @@
 <ArticleID name="ALTCAT_3"/>
 <ArticleID name="ALTCAT_4"/>
 </Signature>
-<RCluster>
+<RCluster aid="ALTCAT_4" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="8">
 <Cluster>
@@ -58,7 +58,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="ALTCAT_4" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="8">
 <Cluster>
@@ -73,7 +73,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="185">
+<Func kind="K" nr="186">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="2"/>
@@ -82,7 +82,7 @@
 <Adjective nr="7" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="ALTCAT_4" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="8">
 <Cluster>
@@ -97,7 +97,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="192">
+<Func kind="K" nr="193">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -124,7 +124,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="ALTCAT_4" nr="3">
 <ArgTypes>
 <Typ kind="G" nr="8">
 <Cluster>
@@ -141,7 +141,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="192">
+<Func kind="K" nr="193">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -153,30 +153,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
-<ArgTypes>
-<Typ kind="G" nr="8">
-<Cluster>
-<Adjective nr="28" value="false"/>
-<Adjective nr="62"/>
-<Adjective nr="71"/>
-<Adjective nr="72"/>
-</Cluster>
-</Typ>
-</ArgTypes>
-<Func kind="K" nr="203">
-<LocusVar nr="1"/>
-</Func>
-<Cluster>
-<Adjective nr="28" value="false"/>
-<Adjective nr="62"/>
-<Adjective nr="66"/>
-<Adjective nr="77">
-<LocusVar nr="1"/>
-</Adjective>
-</Cluster>
-</FCluster>
-<FCluster>
+<FCluster aid="ALTCAT_4" nr="4">
 <ArgTypes>
 <Typ kind="G" nr="8">
 <Cluster>
@@ -199,7 +176,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="ALTCAT_4" nr="5">
 <ArgTypes>
 <Typ kind="G" nr="8">
 <Cluster>
@@ -222,7 +199,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="ALTCAT_4" nr="6">
 <ArgTypes>
 <Typ kind="G" nr="8">
 <Cluster>
@@ -245,7 +222,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="ALTCAT_4" nr="7">
 <ArgTypes>
 <Typ kind="G" nr="8">
 <Cluster>
@@ -257,6 +234,29 @@
 </Typ>
 </ArgTypes>
 <Func kind="K" nr="207">
+<LocusVar nr="1"/>
+</Func>
+<Cluster>
+<Adjective nr="28" value="false"/>
+<Adjective nr="62"/>
+<Adjective nr="66"/>
+<Adjective nr="77">
+<LocusVar nr="1"/>
+</Adjective>
+</Cluster>
+</FCluster>
+<FCluster aid="ALTCAT_4" nr="8">
+<ArgTypes>
+<Typ kind="G" nr="8">
+<Cluster>
+<Adjective nr="28" value="false"/>
+<Adjective nr="62"/>
+<Adjective nr="71"/>
+<Adjective nr="72"/>
+</Cluster>
+</Typ>
+</ArgTypes>
+<Func kind="K" nr="208">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>

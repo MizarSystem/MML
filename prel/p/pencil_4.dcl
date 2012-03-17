@@ -54,7 +54,7 @@
 <ArticleID name="PENCIL_1"/>
 <ArticleID name="PENCIL_4"/>
 </Signature>
-<FCluster>
+<FCluster aid="PENCIL_4" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -62,14 +62,14 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="363">
+<Func kind="K" nr="364">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
 <Adjective nr="7" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="PENCIL_4" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -80,7 +80,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="364">
+<Func kind="K" nr="365">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -88,7 +88,7 @@
 <Adjective nr="7" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="PENCIL_4" nr="3">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -99,7 +99,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="364">
+<Func kind="K" nr="365">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -107,7 +107,7 @@
 <Adjective nr="19" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="PENCIL_4" nr="4">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -125,7 +125,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="365">
+<Func kind="K" nr="366">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -133,7 +133,7 @@
 <Adjective nr="7" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="PENCIL_4" nr="5">
 <ArgTypes>
 <Typ kind="G" nr="14">
 <Cluster>
@@ -141,7 +141,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="366">
+<Func kind="K" nr="367">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -149,7 +149,7 @@
 <Adjective nr="120"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="PENCIL_4" nr="6">
 <ArgTypes>
 <Typ kind="G" nr="14">
 <Cluster>
@@ -158,7 +158,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="366">
+<Func kind="K" nr="367">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -166,7 +166,7 @@
 <Adjective nr="159" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="PENCIL_4" nr="7">
 <ArgTypes>
 <Typ kind="G" nr="14">
 <Cluster>
@@ -176,7 +176,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="366">
+<Func kind="K" nr="367">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -184,7 +184,7 @@
 <Adjective nr="160" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="PENCIL_4" nr="8">
 <ArgTypes>
 <Typ kind="G" nr="14">
 <Cluster>
@@ -194,7 +194,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="366">
+<Func kind="K" nr="367">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -202,7 +202,7 @@
 <Adjective nr="161"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="PENCIL_4" nr="9">
 <ArgTypes>
 <Typ kind="G" nr="14">
 <Cluster>
@@ -210,7 +210,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="366">
+<Func kind="K" nr="367">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>

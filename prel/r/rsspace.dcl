@@ -24,7 +24,7 @@
 <ArticleID name="BHSP_1"/>
 <ArticleID name="RSSPACE"/>
 </Signature>
-<FCluster>
+<FCluster aid="RSSPACE" nr="1">
 <ArgTypes/>
 <Func kind="G" nr="11">
 <Func kind="K" nr="153"/>
@@ -37,7 +37,7 @@
 <Adjective nr="70"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="RSSPACE" nr="2">
 <ArgTypes/>
 <Func kind="K" nr="159"/>
 <Cluster>
@@ -45,7 +45,7 @@
 <Adjective nr="69"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="RSSPACE" nr="3">
 <ArgTypes/>
 <Func kind="K" nr="159"/>
 <Cluster>
@@ -56,7 +56,7 @@
 <Adjective nr="73"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="RSSPACE" nr="4">
 <ArgTypes/>
 <Func kind="K" nr="163"/>
 <Cluster>
@@ -66,7 +66,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="RSSPACE" nr="5">
 <ArgTypes/>
 <Func kind="G" nr="13">
 <Func kind="K" nr="163"/>
@@ -89,7 +89,7 @@
 <Adjective nr="81"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="RSSPACE" nr="6">
 <ArgTypes/>
 <Func kind="K" nr="165"/>
 <Cluster>

@@ -18,7 +18,7 @@
 <ArticleID name="CARD_3"/>
 <ArticleID name="FINSUB_1"/>
 </Signature>
-<FCluster>
+<FCluster aid="CARD_4" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>

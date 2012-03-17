@@ -19,7 +19,7 @@
 <ArticleID name="CARD_1"/>
 <ArticleID name="CARD_3"/>
 </Signature>
-<RCluster>
+<RCluster aid="CARD_3" nr="1">
 <ArgTypes/>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -30,7 +30,7 @@
 <Adjective nr="26"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="CARD_3" nr="2">
 <ArgTypes/>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -41,7 +41,7 @@
 <Adjective nr="27"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="CARD_3" nr="3">
 <ArgTypes/>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -51,7 +51,7 @@
 <Adjective nr="28"/>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="CARD_3" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -73,7 +73,7 @@
 <Adjective nr="26"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="CARD_3" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -92,7 +92,26 @@
 <Adjective nr="26"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="CARD_3" nr="3">
+<ArgTypes>
+<Typ kind="M" nr="1">
+<Cluster/>
+</Typ>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="24"/>
+</Cluster>
+</Typ>
+</ArgTypes>
+<Func kind="K" nr="101">
+<LocusVar nr="1"/>
+<LocusVar nr="2"/>
+</Func>
+<Cluster>
+<Adjective nr="26"/>
+</Cluster>
+</FCluster>
+<FCluster aid="CARD_3" nr="4">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -108,7 +127,7 @@
 <Adjective nr="21"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="CARD_3" nr="5">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -125,7 +144,7 @@
 <Adjective nr="1" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="CARD_3" nr="6">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -142,7 +161,7 @@
 <Adjective nr="21"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="CARD_3" nr="7">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -158,7 +177,7 @@
 <Adjective nr="28"/>
 </Cluster>
 </FCluster>
-<CCluster>
+<CCluster aid="CARD_3" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -176,7 +195,7 @@
 <LocusVar nr="2"/>
 </Adjective>
 </Cluster>
-<Typ kind="M" nr="4">
+<Typ kind="M" nr="5">
 <Cluster/>
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
@@ -190,7 +209,7 @@
 </Adjective>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="CARD_3" nr="2">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="28"/>

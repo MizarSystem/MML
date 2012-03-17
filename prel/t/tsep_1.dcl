@@ -15,7 +15,7 @@
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="TSEP_1"/>
 </Signature>
-<RCluster>
+<RCluster aid="TSEP_1" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
@@ -35,7 +35,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="TSEP_1" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>

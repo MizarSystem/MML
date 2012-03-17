@@ -34,7 +34,7 @@
 <ArticleID name="MEASURE5"/>
 <ArticleID name="MEASURE7"/>
 </Signature>
-<FCluster>
+<FCluster aid="MEASURE7" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>

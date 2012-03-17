@@ -28,12 +28,12 @@ environ
       RELSET_1, MEMBERED, PRE_CIRC, ORDINAL1, CARD_2, PNPROC_1, FINSEQ_3,
       RVSUM_1, XBOOLE_0, FIB_NUM, TARSKI, FUNCT_1, FUNCT_2, ZFMISC_1, BINARITH,
       PEPIN, GRFUNC_1, FUNCT_4, FINSEQ_2, ENUMSET1, ABIAN, SEQ_4, SETFAM_1,
-      XREAL_1, XXREAL_0, FINSOP_1, NAT_D;
- schemes NAT_1, FIB_NUM, BINARITH, FUNCT_2, DOMAIN_1, BINOP_2;
+      XREAL_1, XXREAL_0, NAT_D;
+ schemes NAT_1, FIB_NUM, FUNCT_2, DOMAIN_1, BINOP_2;
 
 begin :: Preliminaries
 
-reserve n, k, r, m, i, j for Element of NAT;
+reserve n, k, r, m, i, j for Nat;
 
 theorem
   for n being non empty Element of NAT holds n -' 1 + 2 = n + 1
@@ -102,22 +102,14 @@ A2: n is even;
 end;
 
 theorem Th7:
-  for a being non empty real number holds
+  for a being real number holds
   a to_power (k+m) = (a to_power k) * (a to_power m)
 proof
-  let a be non empty real number;
-  per cases;
-  suppose a > 0;
-    hence thesis by POWER:32;
-  end;
-  suppose
-A1: a < 0;
-    then a to_power (k+m) = a #Z (k+m) by POWER:def 2
-      .= (a #Z k) * (a #Z m) by PREPOWER:54
-      .= (a to_power k) * (a #Z m) by A1,POWER:def 2
-      .= (a to_power k) * (a to_power m) by A1,POWER:def 2;
-    hence thesis;
-  end;
+  let a be real number;
+ thus a to_power (k+m) = a |^ (k+m) by POWER:46
+    .= a |^ k * a |^ m by NEWTON:13
+    .= (a to_power k) * a |^ m by POWER:46
+    .= (a to_power k) * (a to_power m) by POWER:46;
 end;
 
 theorem Th8:
@@ -129,18 +121,14 @@ proof
   suppose k > 0;
     hence thesis by POWER:38;
   end;
-  suppose
-A1: k < 0;
+  suppose k < 0;
     then -k > -(0 qua Nat) by XREAL_1:26;
     then
 A2: (-k) to_power m > 0 by POWER:39;
-    (-k) to_power m = -(k to_power m) by Th2;
-    then
-A3: k to_power m < -(0 qua Nat) by A2,XREAL_1:26;
-    k to_power (m * n) = k #Z (m * n) by A1,POWER:def 2
+    k to_power (m * n) = k #Z (m * n) by POWER:def 2
       .= k #Z m #Z n by PREPOWER:55
-      .= k to_power m #Z n by A1,POWER:def 2
-      .= k to_power m to_power n by A3,POWER:def 2;
+      .= k to_power m #Z n by POWER:def 2
+      .= k to_power m to_power n by POWER:def 2;
     hence thesis;
   end;
 end;
@@ -151,7 +139,7 @@ proof
   ((-1) to_power (-n)) ^2 = ((-1) #Z (-n)) ^2 by POWER:def 2
     .= (1 / (-1) #Z n) ^2 by PREPOWER:51
     .= (1 / ((-1) #Z n)) to_power 2 by POWER:53
-    .= (1 / ((-1) #Z n)) |^2 by POWER:47
+    .= (1 / ((-1) #Z n)) |^2 by POWER:46
     .= 1 / (((-1) #Z n) |^ 2) by PREPOWER:14
     .= 1 / (((-1) #Z n) #Z 2) by PREPOWER:46
     .= 1 / ((-1) #Z (n*2)) by PREPOWER:55
@@ -170,21 +158,12 @@ proof
   set K = -k;
   set M = -m;
   let a be non empty real number;
-  per cases;
-  suppose
-A1: a < 0;
-    then (a to_power (-k)) *(a to_power (-m)) = (a #Z (-k)) * (a to_power (-
+    (a to_power (-k)) *(a to_power (-m)) = (a #Z (-k)) * (a to_power (-
     m)) by POWER:def 2
-      .= (a #Z K) * (a #Z M) by A1,POWER:def 2
+      .= (a #Z K) * (a #Z M) by POWER:def 2
       .= a #Z (K+M) by PREPOWER:54
-      .= a to_power (-k-m) by A1,POWER:def 2;
+      .= a to_power (-k-m) by POWER:def 2;
     hence thesis;
-  end;
-  suppose a > 0;
-    then (a to_power (-k)) *(a to_power (-m)) = a to_power (-k+(-m)) by
-    POWER:32;
-    hence thesis;
-  end;
 end;
 
 theorem Th11:
@@ -207,21 +186,12 @@ theorem Th12:
   (a to_power k) * (a to_power (-k)) = 1
 proof
   let a be non empty real number;
-  per cases;
-  suppose a > 0;
-    then (a to_power k) * (a to_power (-k)) = a to_power (k + (-k)) by POWER:32
-      .= 1 by POWER:29;
-    hence thesis;
-  end;
-  suppose
-A1: a < 0;
-    then (a to_power k) * (a to_power (-k)) = (a #Z k) * (a to_power (-k))
+     (a to_power k) * (a to_power (-k)) = (a #Z k) * (a to_power (-k))
     by POWER:def 2
-      .= (a #Z k) * (a #Z (-k)) by A1,POWER:def 2
+      .= (a #Z k) * (a #Z (-k)) by POWER:def 2
       .= a #Z (k + (-k)) by PREPOWER:54
       .= 1 by PREPOWER:44;
     hence thesis;
-  end;
 end;
 
 registration
@@ -365,7 +335,7 @@ registration
   coherence
   proof
     take m = 0;
-    for n holds m <= n;
+    for n being Element of NAT holds m <= n;
     hence thesis;
   end;
 end;
@@ -386,8 +356,10 @@ A3: dom X = {i,j} by RELAT_1:24;
       now
         let x be set;
         assume x in {i,j};
-        then x = i or x = j by TARSKI:def 2;
-        hence x in Seg j by A1,A2,FINSEQ_1:5;
+        then
+X:       x = i or x = j by TARSKI:def 2;
+         i in NAT by ORDINAL1:def 13;
+        hence x in Seg j by A1,A2,FINSEQ_1:5,X;
       end;
       hence thesis by TARSKI:def 3;
     end;
@@ -551,53 +523,51 @@ end;
 
 begin :: Fibonacci Numbers
 
-scheme FibInd1 {P[set] } : for k being non empty Element of NAT holds P[k]
+scheme FibInd1 {P[set] } : for k being non empty Nat holds P[k]
 provided
 A1: P[1]
 and
 A2: P[2]
 and
-A3: for k being non empty Element of NAT st P[k] & P[k+1] holds P[k+2]
+A3: for k being non empty Nat st P[k] & P[k+1] holds P[k+2]
 proof
-  defpred Q[Element of NAT] means P[$1] & P[$1 + 1];
+  defpred Q[Nat] means P[$1] & P[$1 + 1];
 A4: Q[1] by A1,A2;
-A5: for k being non empty Element of NAT st Q[k] holds Q[k+1]
+A5: for k being non empty Nat st Q[k] holds Q[k+1]
   proof
-    let k be non empty Element of NAT;
+    let k be non empty Nat;
     assume
 A6: Q[k];
     k + 2 = (k + 1) + 1;
     hence thesis by A3,A6;
   end;
-A7: for k being non empty Element of NAT holds Q[k]
-  from BINARITH:sch 1(A4,A5);
-  let k be non empty Element of NAT;
+A7: for k being non empty Nat holds Q[k] from NAT_1:sch 10(A4,A5);
+  let k be non empty Nat;
   thus thesis by A7;
 end;
 
-scheme FibInd2 {P[set] } : for k be non trivial Element of NAT holds P[k]
+scheme FibInd2 {P[set] } : for k be non trivial Nat holds P[k]
 provided
 A1: P[2]
 and
 A2: P[3]
 and
-A3: for k be non trivial Element of NAT st P[k] & P[k+1] holds P[k+2]
+A3: for k be non trivial Nat st P[k] & P[k+1] holds P[k+2]
 proof
-  defpred Q[Element of NAT] means P[$1+1] & P[$1+2];
+  defpred Q[Nat] means P[$1+1] & P[$1+2];
 A4: Q[1] by A1,A2;
-A5: for k being non empty Element of NAT st Q[k] holds Q[k+1]
+A5: for k being non empty Nat st Q[k] holds Q[k+1]
   proof
-    let k be non empty Element of NAT;
+    let k be non empty Nat;
     k+1 <> 0 + 1;
     then
-A6: k+1 is non trivial Element of NAT by NAT_2:def 1;
+A6: k+1 is non trivial Nat by NAT_2:def 1;
     assume Q[k];
     then P[k+1] & P[k+1+1];
     hence thesis by A3,A6;
   end;
-A7: for k being non empty Element of NAT holds Q[k]
-  from BINARITH:sch 1(A4,A5);
-  let k be non trivial Element of NAT;
+A7: for k being non empty Nat holds Q[k] from NAT_1:sch 10(A4,A5);
+  let k be non trivial Nat;
   k <> 0 & k <> 1 by NAT_2:def 1;
   then
 A8: k > 1 by NAT_2:21;
@@ -633,9 +603,10 @@ proof
 end;
 
 theorem Th26:
+ for n being Nat holds
   Fib (n + 2) = Fib (n) + Fib (n + 1)
-proof
-  defpred P[Element of NAT] means Fib($1 + 2) = Fib($1) + Fib($1 + 1);
+proof let n be Nat;
+  defpred P[Nat] means Fib($1 + 2) = Fib($1) + Fib($1 + 1);
 A1: P[0]
   proof
     Fib (0+2) = Fib (0+1+1)
@@ -643,22 +614,23 @@ A1: P[0]
     hence thesis;
   end;
 A2: P[1] by PRE_FF:1;
-A3: for k being Element of NAT st P[k] & P[k+1] holds P[k+2]
+A3: for k being Nat st P[k] & P[k+1] holds P[k+2]
   proof
-    let k be Element of NAT;
+    let k be Nat;
     assume P[k];
     assume P[k+1];
     Fib (k+2+2) = Fib ((k+2+1)+1)
       .= Fib (k+2) + Fib (k+2+1) by PRE_FF:1;
     hence thesis;
   end;
-  for n being Element of NAT holds P[n] from FIB_NUM:sch 1(A1,A2,A3);
+  for n being Nat holds P[n] from FIB_NUM:sch 1(A1,A2,A3);
   hence thesis;
 end;
 
 theorem Th27:
+ for n being Nat holds
   Fib (n + 3) = Fib (n + 2) + Fib (n + 1)
-proof
+proof let n be Nat;
   Fib (n+3) = Fib ((n+1)+2)
     .= Fib (n+1+1) + Fib (n+1) by Th26
     .= Fib (n+2) + Fib (n+1);
@@ -681,8 +653,9 @@ proof
   hence thesis;
 end;
 
-Lm1: Fib (2 * (k + 2) + 1) = Fib (2 * k + 3) + Fib (2 * k + 4)
-proof
+Lm1: for k being Nat holds
+ Fib (2 * (k + 2) + 1) = Fib (2 * k + 3) + Fib (2 * k + 4)
+proof let k be Nat;
   Fib (2 * (k + 2) + 1) =
   Fib (2 * k + 2 + 1) + Fib (2 * k + 2 + 1 + 1) by PRE_FF:1
     .= Fib (2 * k + 3) + Fib (2 * k + 4);
@@ -698,8 +671,9 @@ proof
 end;
 
 theorem Th31:
+ for n being Nat holds
   Fib (n + 1) = Fib (n + 2) - Fib (n)
-proof
+proof let n be Nat;
   Fib (n+2) - Fib (n) = Fib (n+1+1) - Fib (n)
     .= Fib (n) + Fib (n+1) - Fib (n) by PRE_FF:1
     .= Fib (n+1);
@@ -719,12 +693,12 @@ begin :: Cassini's and Catalan's Identities
 theorem Th33:
   Fib (n) * Fib (n+2) - (Fib (n+1)) ^2 = (-1) |^ (n+1)
 proof
-  defpred P[Element of NAT] means
+  defpred P[Nat] means
   Fib ($1) * Fib ($1+2) - (Fib ($1+1)) ^2 = (-1) |^ ($1+1);
 A1: P[0] by NEWTON:10,PRE_FF:1;
-A2: for k being Element of NAT st P[k] holds P[k+1]
+A2: for k being Nat st P[k] holds P[k+1]
   proof
-    let k be Element of NAT;
+    let k be Nat;
     assume
 A3: P[k];
 A4: Fib (k) = Fib (k+2) - Fib (k+1)
@@ -744,7 +718,7 @@ A5: Fib (k+2) = Fib (k+3) - Fib (k+1)
       .= Fib (k+1) * Fib ((k+1)+2) - ( Fib ((k+1)+1)) ^2 by A4,A5;
     hence thesis;
   end;
-  for n being Element of NAT holds P[n] from NAT_1:sch 1(A1, A2);
+  for n being Nat holds P[n] from NAT_1:sch 2(A1, A2);
   hence thesis;
 end;
 
@@ -779,7 +753,7 @@ A1: 1 - sqrt 5 <> 0 by SQUARE_1:85,95;
   then -(1 + sqrt 5) < -(0 qua Nat) by XREAL_1:26;
   then
 A2: (-1 - sqrt 5) / 2 < 0 by REAL_2:128;
-  then (- tau) to_power (-1) = ((- 1 - sqrt 5) / 2) #Z (-1)
+   (- tau) to_power (-1) = ((- 1 - sqrt 5) / 2) #Z (-1)
   by FIB_NUM:def 1,POWER:def 2
     .= 1 / ((- 1 - sqrt 5) / 2) #Z 1 by A2,PREPOWER:51
     .= 1 / ((- 1 - sqrt 5) / 2) by PREPOWER:45
@@ -797,18 +771,16 @@ theorem Th37:
   (-tau) to_power ((-1) * n) = (-tau) to_power (-1) to_power n
 proof
 A1: - tau < -(0 qua Nat) by Th35,XREAL_1:26;
-  then
-A2: 1 / (- tau) < 0 by REAL_2:128;
-  (- tau) to_power ((-1) * n) = (- tau) #Z ((-1) * n) by A1,POWER:def 2
+  (- tau) to_power ((-1) * n) = (- tau) #Z ((-1) * n) by POWER:def 2
     .= ((- tau) #Z (-1)) #Z n by PREPOWER:55
     .= (1 / (- tau) #Z 1) #Z n by A1,PREPOWER:51
     .= (1 / (- tau)) #Z n by PREPOWER:45
-    .= (1 / (- tau)) to_power n by A2,POWER:def 2
+    .= (1 / (- tau)) to_power n by POWER:def 2
     .= ((1 / (- tau)) to_power 1) to_power n by POWER:30
-    .= ((1 / (- tau)) #Z 1) to_power n by A2,POWER:def 2
+    .= ((1 / (- tau)) #Z 1) to_power n by POWER:def 2
     .= (1 / (- tau) #Z 1) to_power n by PREPOWER:52
     .= ((- tau) #Z (-1)) to_power n by A1,PREPOWER:51;
-  hence thesis by A1,POWER:def 2;
+  hence thesis by POWER:def 2;
 end;
 
 theorem Th38:
@@ -833,18 +805,17 @@ proof
 A1: -1 / tau < 0 by XCMPLX_1:188;
   then
 A2: 1 / tau > -(0 qua Nat) by XREAL_1:26;
-A3: (1 / tau) ^2 <> -(0 qua Nat) by A1,SQUARE_1:74;
   (((tau to_power r) - (tau_bar to_power r))) ^2 =
   (tau to_power r) ^2 - 2 * (tau to_power r) * ((-1 / tau) to_power r) +
   ((-1 / tau) to_power r) ^2 by Th38
     .= (tau to_power r) ^2 - 2 * (tau to_power r) *
-  (((-1) * (1 / tau)) #Z r) + ((-1 / tau) to_power r) ^2 by A1,POWER:def 2
+  (((-1) * (1 / tau)) #Z r) + ((-1 / tau) to_power r) ^2 by POWER:def 2
     .= (tau to_power r) ^2 - 2 * (tau to_power r) * (((-1) #Z r) *
   ((1 / tau) #Z r)) + ((-1 / tau) to_power r) ^2 by PREPOWER:50
     .= (tau to_power r) ^2 - 2 * (tau to_power r) * (((1 / tau) |^ r) *
   ((-1) #Z r)) + ((-1 / tau) to_power r) ^2 by PREPOWER:46
     .= (tau to_power r) ^2 - 2 * (tau |^ r) * (((1 / tau) |^ r) *
-  ((-1) #Z r)) + ((-1 / tau) to_power r) ^2 by Th35,POWER:46
+  ((-1) #Z r)) + ((-1 / tau) to_power r) ^2 by POWER:46
     .= (tau to_power r) ^2 - 2 * ((tau |^ r) * ((1 / tau) |^ r)) *
   ((-1) #Z r) + ((-1 / tau) to_power r) ^2
     .= (tau to_power r) ^2 - 2 * ((tau * (1 / tau))|^ r) * ((-1) #Z r) +
@@ -856,13 +827,13 @@ A3: (1 / tau) ^2 <> -(0 qua Nat) by A1,SQUARE_1:74;
     .= (tau to_power r) ^2 - 2 * ((-1) to_power r) +
   ((-1 / tau) to_power r) ^2 by POWER:def 2
     .= (tau to_power r) ^2 - 2 * ((-1) to_power r) +
-  ((-1 / tau) #Z r) ^2 by A1,POWER:def 2
+  ((-1 / tau) #Z r) ^2 by POWER:def 2
     .= (tau to_power r) ^2 - 2 * ((-1) to_power r) +
   (((-1 / tau) * (-1 / tau)) #Z r) by PREPOWER:50
     .= (tau to_power r) ^2 - 2 * ((-1) to_power r) +
   (((-1 / tau) ^2) |^ r) by PREPOWER:46
     .= (tau to_power r) ^2 - 2 * ((-1) to_power r) +
-  (((1 / tau) ^2) to_power r) by A3,POWER:46
+  (((1 / tau) ^2) to_power r) by POWER:46
     .= (tau to_power r) ^2 - 2 * ((-1) to_power r) +
   ((1 / tau) to_power r) ^2 by A2,POWER:35
     .= (tau to_power r) ^2 - 2 * ((-1) to_power r) + (tau to_power (-r)) ^2
@@ -1046,11 +1017,11 @@ A6: - 1 = 2 * (-1) + 1;
   ((-1) to_power (2 * r + Y)) * (T to_power (-2 * r))) by A4
     .= (S ^2) * (- 2 * (((-1) to_power r) * ((-1) to_power (n -' r))) +
   ((-1) to_power Y) * (T to_power (2 * r)) +
-  ((-1) to_power (2 * r + Y)) * (T to_power (-2 * r))) by A5,Th7
+  ((-1) to_power (2 * r + Y)) * (T to_power (-2 * r))) by Th7
     .= (S ^2) * (- 2 * (((-1) to_power r) * ((-1) to_power (n -' r))) +
   ((-1) to_power (n-'r)) * (T to_power (2 * r)) +
   (((-1) to_power (2 * r)) * ((-1) to_power (n -'r))) *
-  (T to_power (-2 * r))) by A5,Th7
+  (T to_power (-2 * r))) by Th7
     .= (S ^2) * (-2 * (((-1) to_power r)) +
   T to_power (2 * r) + T to_power (-2 * r) * ((-1) to_power (2 * r))) *
   ((-1) to_power (n-'r))
@@ -1074,7 +1045,7 @@ A6: - 1 = 2 * (-1) + 1;
     .= ((-1) to_power (n-'r)) * (((tau to_power r) -
   (tau_bar to_power r)) / (sqrt 5)) ^2 by XCMPLX_1:100
     .= ((-1) |^(n-'r)) * (((T to_power r) - (tau_bar to_power r)) /
-  (sqrt 5)) ^2 by POWER:48
+  (sqrt 5)) ^2 by POWER:46
     .= ((-1) |^(n-'r)) * (Fib (r)) ^2 by FIB_NUM:7;
   hence thesis;
 end;
@@ -1082,13 +1053,13 @@ end;
 theorem
   (Fib (n)) ^2 + (Fib (n+1)) ^2 = Fib (2*n + 1)
 proof
-  defpred P[Element of NAT] means
+  defpred P[Nat] means
   (Fib ($1)) ^2 + (Fib ($1+1)) ^2 = Fib (2*$1 + 1);
 A1: P[0] by PRE_FF:1;
 A2: P[1] by Th23,PRE_FF:1;
-A3: for k being Element of NAT st P[k]& P[k+1] holds P[k+2]
+A3: for k being Nat st P[k]& P[k+1] holds P[k+2]
   proof
-    let k be Element of NAT;
+    let k be Nat;
     assume
 A4: P[k];
     assume
@@ -1113,7 +1084,7 @@ A5: P[k+1];
       .= (Fib (k+3)) ^2 + (Fib (k+2)) ^2 by Th27;
     hence thesis;
   end;
-  for n being Element of NAT holds P[n] from FIB_NUM:sch 1(A1,A2,A3);
+  for n being Nat holds P[n] from FIB_NUM:sch 1(A1,A2,A3);
   hence thesis;
 end;
 
@@ -1121,7 +1092,7 @@ theorem Th42:
   for k being non empty Element of NAT holds
   Fib (n+k) = Fib (k) * Fib (n+1) + Fib (k-'1) * Fib (n)
 proof
-  defpred P[Element of NAT] means
+  defpred P[Nat] means
   Fib (n+$1) = Fib ($1) * Fib (n+1) + Fib ($1-'1) * Fib (n);
 A1: P[1]
   proof
@@ -1135,9 +1106,9 @@ A2: P[2]
     2 -' 1 = 2 - 1 by BINARITH:57;
     hence thesis by Th23,Th26,PRE_FF:1;
   end;
-A3: for m being non empty Element of NAT st P[m] & P[m+1] holds P[m+2]
+A3: for m being non empty Nat st P[m] & P[m+1] holds P[m+2]
   proof
-    let m be non empty Element of NAT;
+    let m be non empty Nat;
 A4: m >= 1 by NAT_2:21;
     set k = m-'1;
     set F1 = Fib (n+1) * Fib (m+2);
@@ -1158,7 +1129,7 @@ A6: P[m+1];
       .= F2 + Fib (m+2-'1) * Fib (n) by A4,BINARITH:56;
     hence thesis;
   end;
-  for k being non empty Element of NAT holds P[k] from FibInd1(A1,A2,A3);
+  for k being non empty Nat holds P[k] from FibInd1(A1,A2,A3);
   hence thesis;
 end;
 
@@ -1166,18 +1137,18 @@ theorem Th43:
   for n being non empty Element of NAT holds Fib (n) divides Fib (n*k)
 proof
   let n be non empty Element of NAT;
-  defpred P[Element of NAT] means Fib (n) divides Fib (n*$1);
+  defpred P[Nat] means Fib (n) divides Fib (n*$1);
 A1: P[0] by NAT_D:6,PRE_FF:1;
-A2: for k being Element of NAT st P[k] holds P[k+1]
+A2: for k being Nat st P[k] holds P[k+1]
   proof
-    let k be Element of NAT;
+    let k be Nat;
     assume
 A3: P[k];
     Fib (n * (k+1)) = Fib ((n*k) + n)
       .= Fib (n) * Fib (n*k + 1) + Fib (n*k) * Fib (n -' 1) by Th42;
     hence thesis by A3,Th14;
   end;
-  for n being Element of NAT holds P[n] from NAT_1:sch 1(A1, A2);
+  for n being Nat holds P[n] from NAT_1:sch 2(A1, A2);
   hence thesis;
 end;
 
@@ -1190,18 +1161,18 @@ proof
   then consider m being Nat such that
 A1: n = k * m by NAT_D:def 3;
   m in NAT by ORDINAL1:def 13;
-  hence thesis by A1,Th43;
+  thus thesis by A1,Th43;
 end;
 
 theorem Th45:
   Fib (n) <= Fib (n + 1)
 proof
-  defpred P[Element of NAT] means Fib ($1) <= Fib ($1 + 1);
+  defpred P[Nat] means Fib ($1) <= Fib ($1 + 1);
 A1: P[0] by PRE_FF:1;
 A2: P[1] by Th23,PRE_FF:1;
-A3: for k being Element of NAT st P[k] & P[k+1] holds P[k+2]
+A3: for k being Nat st P[k] & P[k+1] holds P[k+2]
   proof
-    let k be Element of NAT;
+    let k be Nat;
     assume
 A4: P[k];
     assume P[k+1];
@@ -1210,7 +1181,7 @@ A4: P[k];
     then Fib (k+2) <= Fib (k+3) by Th27;
     hence thesis;
   end;
-  for n being Element of NAT holds P[n] from FIB_NUM:sch 1(A1,A2,A3);
+  for n being Nat holds P[n] from FIB_NUM:sch 1(A1,A2,A3);
   hence thesis;
 end;
 
@@ -1220,12 +1191,12 @@ proof
   let n be Element of NAT such that
 A1: n > 1;
 A2: n is non trivial by A1,NAT_2:def 1;
-  defpred P[Element of NAT] means Fib ($1) < Fib ($1 + 1);
+  defpred P[Nat] means Fib ($1) < Fib ($1 + 1);
 A3: P[2] by Th23,Th24;
 A4: P[3] by Th24,Th25;
-A5: for k being non trivial Element of NAT st P[k] & P[k+1] holds P[k+2]
+A5: for k being non trivial Nat st P[k] & P[k+1] holds P[k+2]
   proof
-    let k be non trivial Element of NAT;
+    let k be non trivial Nat;
     assume
 A6: P[k];
     assume P[k+1];
@@ -1234,12 +1205,12 @@ A6: P[k];
     then Fib (k+2) < Fib (k+3) by Th27;
     hence thesis;
   end;
-  for n being non trivial Element of NAT holds P[n] from FibInd2(A3,A4,A5);
+  for n being non trivial Nat holds P[n] from FibInd2(A3,A4,A5);
   hence thesis by A2;
 end;
 
 theorem
-  for m, n being Element of NAT st m >= n holds Fib(m) >= Fib(n)
+  for m, n st m >= n holds Fib(m) >= Fib(n)
 proof
   let m, n;
   assume m >= n;
@@ -1247,12 +1218,12 @@ proof
 A1: m = n + k by NAT_1:10;
   reconsider k as Element of NAT by ORDINAL1:def 13;
 A2: m = n + k by A1;
-  for k, n being Element of NAT holds Fib(n+k) >= Fib(n)
+  for k, n being Nat holds Fib(n+k) >= Fib(n)
   proof
-    defpred P[Element of NAT] means
-    for n being Element of NAT holds Fib(n+$1) >= Fib(n);
+    defpred P[Nat] means
+    for n being Nat holds Fib(n+$1) >= Fib(n);
 A3: P[0];
-A4: for k being Element of NAT st P[k] holds P[k+1]
+A4: for k being Nat st P[k] holds P[k+1]
     proof
       let k;
       assume
@@ -1264,7 +1235,7 @@ A6:   Fib(n + (k+1)) >= Fib(n+k) by Th45;
       Fib(n+k) >= Fib(n) by A5;
       hence thesis by A6,XXREAL_0:2;
     end;
-A7: for k holds P[k] from NAT_1:sch 1(A3, A4);
+A7: for k holds P[k] from NAT_1:sch 2(A3, A4);
     let k;
     let n;
     thus thesis by A7;
@@ -1273,33 +1244,33 @@ A7: for k holds P[k] from NAT_1:sch 1(A3, A4);
 end;
 
 theorem Th48:
-  for k being Element of NAT st k > 1 holds k < n implies Fib (k) < Fib (n)
+  for k being Nat st k > 1 holds k < n implies Fib (k) < Fib (n)
 proof
-  let k be Element of NAT such that
+  let k be Nat such that
 A1: k > 1;
   assume
 A2: k < n;
   then consider m being Nat such that
 A3: n = k + m by NAT_1:10;
   reconsider m as non empty Element of NAT by A2,A3,ORDINAL1:def 13;
-  reconsider k as non empty Element of NAT by A1;
+  reconsider k as non empty Element of NAT by A1,ORDINAL1:def 13;
   for k, m being non empty Element of NAT st k > 1 holds Fib (k) < Fib (k + m)
   proof
     let k, m be non empty Element of NAT such that
 A4: k > 1;
-    defpred P[Element of NAT] means Fib (k) < Fib (k + $1);
+    defpred P[Nat] means Fib (k) < Fib (k + $1);
 A5: P[1] by A4,Th46;
-A6: for r being non empty Element of NAT st P[r] holds P[r+1]
+A6: for r being non empty Nat st P[r] holds P[r+1]
     proof
-      let r be non empty Element of NAT;
+      let r be non empty Nat;
 A7:   k + r > 0 + 1 by A4,XREAL_1:10;
       assume
 A8:   P[r];
       Fib (k + r) < Fib ((k + r) + 1) by A7,Th46;
       hence thesis by A8,XXREAL_0:2;
     end;
-    for k being non empty Element of NAT holds P[k]
-    from BINARITH:sch 1(A5,A6);
+    for k being non empty Nat holds P[k]
+    from NAT_1:sch 10(A5,A6);
     hence thesis;
   end;
   then Fib (k) < Fib (k + m) by A1;
@@ -1787,10 +1758,10 @@ A7: FIB | ({1} \/ {3}) = (FIB | {1}) \/ (FIB | {3}) by RELAT_1:107
 end;
 
 theorem Th64:
-  for k being Element of NAT holds
+  for k being Nat holds
   OddNAT /\ Seg (2 * k + 3) \/ {2 * k + 5} = OddNAT /\ Seg (2 * k + 5)
 proof
-  let k be Element of NAT;
+  let k be Nat;
   2 * k + 5 = 2 * (k + 2) + 1;
   then
 A1: 2 * k + 5 in OddNAT;
@@ -1812,11 +1783,11 @@ A2: {2 * k + 4} misses OddNAT by ZFMISC_1:56;
 end;
 
 theorem Th65:
-  for k being Element of NAT holds
+  for k being Nat holds
   (FIB | (OddNAT /\ Seg (2 * k + 3))) \/ {[2*k+5,FIB.(2 * k + 5)]} =
   (FIB | (OddNAT /\ Seg (2 * k + 5)))
 proof
-  let k be Element of NAT;
+  let k be Nat;
 A1: dom FIB = NAT by FUNCT_2:def 1;
   (FIB | (OddNAT /\ Seg (2 * k + 5))) =
   (FIB | (OddNAT /\ Seg (2 * k + 3) \/ {2 * k + 5})) by Th64
@@ -1828,16 +1799,16 @@ A1: dom FIB = NAT by FUNCT_2:def 1;
 end;
 
 theorem Th66:
-  for n being Element of NAT holds
+  for n being Nat holds
   OddFibs (2 * n + 3) = OddFibs (2 * n + 1) ^ <* Fib (2 * n + 3) *>
 proof
-  let n be Element of NAT;
-  defpred P[Element of NAT] means
+  let n be Nat;
+  defpred P[Nat] means
   OddFibs (2 * $1 + 3) = OddFibs (2 * $1 + 1) ^ <* Fib (2 * $1 + 3) *>;
 A1: P[0] by Th24,Th62,Th63;
-A2: for k being Element of NAT st P[k] holds P[k+1]
+A2: for k being Nat st P[k] holds P[k+1]
   proof
-    let k be Element of NAT;
+    let k be Nat;
     assume P[k];
     set LEFTk = OddFibs (2 * (k + 1) + 3);
     set RIGHTk = OddFibs (2 * (k + 1) + 1) ^ <* Fib (2 * (k + 1) + 3)*>;
@@ -1866,7 +1837,7 @@ A9: RR = {[2 * k + 5,FIB.(2 * k + 5)]} by Th20;
       .= LEFTk by A7,A9,Th65;
     hence thesis;
   end;
-  for k being Element of NAT holds P[k] from NAT_1:sch 1(A1,A2);
+  for k being Nat holds P[k] from NAT_1:sch 2(A1,A2);
   hence thesis;
 end;
 
@@ -1875,9 +1846,9 @@ theorem
   Sum EvenFibs (2 * n + 2) = Fib (2 * n + 3) - 1
 proof
   let n be Element of NAT;
-  defpred P[Element of NAT] means
+  defpred P[Nat] means
   Sum EvenFibs (2 * $1 + 2) = Fib (2 * $1 + 3) - 1;
-A1: P[0] by Th24,Th57,FINSOP_1:12;
+A1: P[0] by Th24,Th57,RVSUM_1:103;
 A2: for k being Element of NAT st P[k] holds P[k+1]
   proof
     let k be Element of NAT;
@@ -1897,14 +1868,14 @@ A3: P[k];
 end;
 
 theorem
-  for n being Element of NAT holds Sum OddFibs (2 * n + 1) = Fib (2 * n + 2)
+  for n being Nat holds Sum OddFibs (2 * n + 1) = Fib (2 * n + 2)
 proof
-  let n be Element of NAT;
-  defpred P[Element of NAT] means Sum OddFibs (2 * $1 + 1) = Fib (2 * $1 + 2);
-A1: P[0] by Th23,Th62,FINSOP_1:12;
-A2: for k being Element of NAT st P[k] holds P[k+1]
+  let n be Nat;
+  defpred P[Nat] means Sum OddFibs (2 * $1 + 1) = Fib (2 * $1 + 2);
+A1: P[0] by Th23,Th62,RVSUM_1:103;
+A2: for k being Nat st P[k] holds P[k+1]
   proof
-    let k be Element of NAT;
+    let k be Nat;
     reconsider EE = OddFibs (2 * k + 1) as FinSequence of REAL;
     assume
 A3: P[k];
@@ -1915,7 +1886,7 @@ A3: P[k];
       .= Fib (2 * k + 4) by A3,Th28;
     hence thesis;
   end;
-  for n being Element of NAT holds P[n] from NAT_1:sch 1(A1, A2);
+  for n being Nat holds P[n] from NAT_1:sch 2(A1, A2);
   hence thesis;
 end;
 
@@ -1932,12 +1903,12 @@ A1: n,n + 1 are_relative_prime by PEPIN:1;
 end;
 
 theorem Th70:
-  for n being non empty Element of NAT, m being Element of NAT st m <> 1 holds
+  for n being non empty Nat, m being Nat st m <> 1 holds
   m divides Fib (n) implies not m divides Fib (n-'1)
 proof
-  let n be non empty Element of NAT;
+  let n be non empty Nat;
 A1: n >= 1 by NAT_2:21;
-  let m be Element of NAT;
+  let m be Nat;
   assume
 A2: m <> 1;
   assume
@@ -1952,11 +1923,11 @@ A4: m divides Fib (n-'1);
 end;
 
 theorem
-  for n being non empty Element of NAT holds
+  for n being non empty Nat holds
   m is prime & n is prime & m divides Fib (n) implies
-  for r being Element of NAT st r < n & r <> 0 holds not m divides Fib (r)
+  for r being Nat st r < n & r <> 0 holds not m divides Fib (r)
 proof
-  let n be non empty Element of NAT;
+  let n be non empty Nat;
   assume
 A1: m is prime;
   then
@@ -1966,16 +1937,17 @@ A3: n is prime;
   assume
 A4: m divides Fib(n);
   assume
-A5: not for r being Element of NAT st (r < n & r <> 0)
+A5: not for r being Nat st (r < n & r <> 0)
   holds not m divides Fib (r);
   defpred R[Element of NAT] means $1 < n & $1 <> 0 & m divides Fib ($1);
   reconsider C = {x where x is Element of NAT : R[x]} as Subset of NAT
   from DOMAIN_1:sch 7;
   C is non empty Subset of NAT
   proof
-    consider r being Element of NAT such that
+    consider r being Nat such that
 A6: r < n & r <> 0 & m divides Fib (r) by A5;
-    r in C by A6;
+    r in NAT by ORDINAL1:def 13;
+    then r in C by A6;
     hence thesis;
   end;
   then reconsider C as non empty Subset of NAT;
@@ -1983,7 +1955,7 @@ A6: r < n & r <> 0 & m divides Fib (r) by A5;
   r in C by SEQ_4:def 6;
   then consider r' being Element of NAT such that
 A7: r' = r & R[r'];
-  defpred P[Element of NAT] means
+  defpred P[Nat] means
   (m divides Fib (n -' r * ($1 + 1)) & r <= n / ($1 + 2));
 A8: not m divides Fib (r-'1) by A2,A7,Th70;
 A9: P[0]
@@ -2004,9 +1976,9 @@ A13: m divides Fib (r-'1) * Fib (n-'r) by A4,A12,NAT_D:10;
     then n / 2 >= (2*r) / 2 by REAL_1:73;
     hence thesis by A1,A8,A13,NEWTON:98;
   end;
-A14: for k being Element of NAT st P[k] holds P[k+1]
+A14: for k being Nat st P[k] holds P[k+1]
   proof
-    let k be Element of NAT;
+    let k be Nat;
     assume
 A15: P[k];
     then
@@ -2077,7 +2049,7 @@ A27: n -' (k+2) * r <> 0 by A22,BINARITH:def 3;
     then n / (1+k+2) >= r * (1+k+2) / (1+k+2) by XCMPLX_1:100;
     hence thesis by A1,A8,A25,NEWTON:98,XCMPLX_1:90;
   end;
-A28: for k being Element of NAT holds P[k] from NAT_1:sch 1(A9,A14);
+A28: for k being Nat holds P[k] from NAT_1:sch 2(A9,A14);
   r < 1 + 0
   proof
     n + 2 > n by XREAL_1:31;

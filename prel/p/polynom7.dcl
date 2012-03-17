@@ -47,7 +47,7 @@
 <ArticleID name="POLYNOM2"/>
 <ArticleID name="POLYNOM7"/>
 </Signature>
-<RCluster>
+<RCluster aid="POLYNOM7" nr="1">
 <ArgTypes/>
 <Typ kind="G" nr="2">
 <Cluster/>
@@ -57,7 +57,7 @@
 <Adjective nr="48" value="false"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="POLYNOM7" nr="2">
 <ArgTypes/>
 <Typ kind="G" nr="10">
 <Cluster/>
@@ -77,7 +77,7 @@
 <Adjective nr="131"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="POLYNOM7" nr="3">
 <ArgTypes>
 <Typ kind="G" nr="2">
 <Cluster>
@@ -97,7 +97,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="POLYNOM7" nr="4">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -134,7 +134,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="POLYNOM7" nr="5">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -179,7 +179,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="POLYNOM7" nr="6">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -201,7 +201,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="POLYNOM7" nr="7">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -238,7 +238,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="POLYNOM7" nr="8">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -275,7 +275,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="POLYNOM7" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -306,7 +306,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="POLYNOM7" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -338,7 +338,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="POLYNOM7" nr="3">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -376,7 +376,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="POLYNOM7" nr="4">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -446,7 +446,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="POLYNOM7" nr="5">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -516,7 +516,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<CCluster>
+<CCluster aid="POLYNOM7" nr="1">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="48" value="false"/>
@@ -528,7 +528,7 @@
 <Adjective nr="43" value="false"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="POLYNOM7" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -555,7 +555,7 @@
 </Adjective>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="POLYNOM7" nr="3">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -608,7 +608,7 @@
 </Adjective>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="POLYNOM7" nr="4">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>

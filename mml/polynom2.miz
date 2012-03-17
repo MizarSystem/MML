@@ -349,44 +349,6 @@ A7:   M() <= i & i <= j + 1;
   hence thesis;
 end;
 
-scheme IndFinSeq {D() -> set, F() -> FinSequence of D(), P[set]} :
-  for i being Element of NAT st 1 <= i & i <= len F() holds P[F().i]
-provided
-A1: P[F().1]
-and
-A2: for i being Element of NAT st 1 <= i & i < len F()
-holds P[F().i] implies P[F().(i+1)]
-proof
-  defpred Q[Nat] means 1 <= $1 & $1 <= len F() & not(P[F().($1)]);
-
-assume not(for i being Element of NAT st 1 <= i & i <= len F() holds P[F().i]);
-  then
-A3: ex k being Nat st Q[k];
-  consider k being Nat such that
-A4: Q[k] & for k' being Nat st Q[k'] holds k <= k' from NAT_1:sch 5(A3);
-  per cases;
-  suppose k = 1;
-    hence thesis by A1,A4;
-  end;
-  suppose
-A5: k <> 1;
-    1 - 1 <= k - 1 by A4,XREAL_1:11;
-    then reconsider k' = k - 1 as Element of NAT by INT_1:16;
-A6: (k - 1) + 1 = k + 0;
-A7: k' <= k' + 1 by NAT_1:11;
-    k' <> k' + 1;
-    then
-A8: k' < k by A7,REAL_1:def 5;
-    then
-A9: not(Q[k']) by A4;
-    1 < k by A4,A5,REAL_1:def 5;
-    then
-A10: 1 <= k' by A6,NAT_1:13;
-    k' < len F() by A4,A8,XXREAL_0:2;
-    hence thesis by A2,A4,A6,A9,A10;
-  end;
-end;
-
 Lm1: for X being set, A being Subset of X, O being Order of X
 holds O is_reflexive_in A & O is_antisymmetric_in A & O is_transitive_in A
 proof
@@ -631,14 +593,7 @@ A1: i in dom p & p/.i = 0.L;
   defpred P[Element of NAT] means for p being FinSequence of the carrier of L
   st len p = $1 & ex i being Element of NAT st i in dom p & p/.i = 0.L
   holds Product p = 0.L;
-A2: P[0]
-  proof
-    let p be FinSequence of the carrier of L;
-    assume
-A3: len p = 0 & ex i being Element of NAT st i in dom p & p/.i = 0.L;
-    then p = {} by CARD_2:59;
-    hence thesis by A3,RELAT_1:60;
-  end;
+A2: P[0] by CARD_2:59,RELAT_1:60;
 A4: for j being Element of NAT holds P[j] implies P[j+1]
   proof
     let j be Element of NAT;

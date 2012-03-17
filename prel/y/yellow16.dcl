@@ -55,7 +55,7 @@
 <ArticleID name="WAYBEL_3"/>
 <ArticleID name="YELLOW16"/>
 </Signature>
-<RCluster>
+<RCluster aid="YELLOW16" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="12">
 <Cluster>
@@ -109,7 +109,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="YELLOW16" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="1">
 <Cluster/>
@@ -138,7 +138,7 @@
 <Adjective nr="143"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="YELLOW16" nr="3">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -155,7 +155,7 @@
 <Adjective nr="242"/>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="YELLOW16" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -176,7 +176,7 @@
 <Adjective nr="242"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="YELLOW16" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -191,7 +191,7 @@
 <LocusVar nr="1"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="395">
+<Func kind="K" nr="396">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -201,7 +201,7 @@
 <Adjective nr="105"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="YELLOW16" nr="3">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -217,7 +217,7 @@
 </Cluster>
 <Func kind="K" nr="23">
 <Func kind="U" nr="1">
-<Func kind="K" nr="396">
+<Func kind="K" nr="397">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -228,7 +228,7 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="402">
+<Func kind="K" nr="403">
 <LocusVar nr="4"/>
 <LocusVar nr="3"/>
 </Func>
@@ -236,7 +236,7 @@
 <Adjective nr="7" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="YELLOW16" nr="4">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -256,7 +256,7 @@
 </Cluster>
 <Func kind="K" nr="23">
 <Func kind="U" nr="1">
-<Func kind="K" nr="395">
+<Func kind="K" nr="396">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -267,7 +267,7 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="402">
+<Func kind="K" nr="403">
 <LocusVar nr="4"/>
 <LocusVar nr="3"/>
 </Func>
@@ -275,7 +275,7 @@
 <Adjective nr="7" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="YELLOW16" nr="5">
 <ArgTypes>
 <Typ kind="G" nr="12">
 <Cluster>
@@ -292,7 +292,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="396">
+<Func kind="K" nr="397">
 <LocusVar nr="2"/>
 <LocusVar nr="1"/>
 </Func>
@@ -301,7 +301,7 @@
 <Adjective nr="230"/>
 </Cluster>
 </FCluster>
-<CCluster>
+<CCluster aid="YELLOW16" nr="1">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="1"/>

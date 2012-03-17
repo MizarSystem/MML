@@ -36,7 +36,7 @@
 <ArticleID name="MSAFREE"/>
 <ArticleID name="MSAFREE2"/>
 </Signature>
-<FCluster>
+<FCluster aid="CIRCUIT1" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
@@ -77,7 +77,7 @@
 <Adjective nr="18"/>
 </Cluster>
 </FCluster>
-<CCluster>
+<CCluster aid="CIRCUIT1" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
@@ -126,7 +126,7 @@
 <Adjective nr="18"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="CIRCUIT1" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>

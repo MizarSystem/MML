@@ -52,7 +52,7 @@
 <ArticleID name="TOPREALB"/>
 <ArticleID name="BROUWER"/>
 </Signature>
-<FCluster>
+<FCluster aid="BROUWER" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
@@ -76,7 +76,7 @@
 <Adjective nr="7" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="BROUWER" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
@@ -100,7 +100,7 @@
 <Adjective nr="7" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="BROUWER" nr="3">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -130,7 +130,7 @@
 <Adjective nr="39" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="BROUWER" nr="4">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>

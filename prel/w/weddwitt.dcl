@@ -40,7 +40,7 @@
 <ArticleID name="MONOID_0"/>
 <ArticleID name="WEDDWITT"/>
 </Signature>
-<RCluster>
+<RCluster aid="WEDDWITT" nr="1">
 <ArgTypes/>
 <Typ kind="G" nr="7">
 <Cluster/>
@@ -59,7 +59,7 @@
 <Adjective nr="134"/>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="WEDDWITT" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="7">
 <Cluster>
@@ -78,7 +78,7 @@
 <Adjective nr="73"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="WEDDWITT" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="7">
 <Cluster>
@@ -104,7 +104,7 @@
 <Adjective nr="73"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="WEDDWITT" nr="3">
 <ArgTypes>
 <Typ kind="G" nr="7">
 <Cluster>
@@ -128,7 +128,7 @@
 <Adjective nr="1" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="WEDDWITT" nr="4">
 <ArgTypes>
 <Typ kind="G" nr="10">
 <Cluster>
@@ -165,7 +165,7 @@
 <Adjective nr="112"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="WEDDWITT" nr="5">
 <ArgTypes>
 <Typ kind="G" nr="10">
 <Cluster>

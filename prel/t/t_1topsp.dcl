@@ -24,7 +24,7 @@
 <ArticleID name="URYSOHN1"/>
 <ArticleID name="T_1TOPSP"/>
 </Signature>
-<RCluster>
+<RCluster aid="T_1TOPSP" nr="1">
 <ArgTypes/>
 <Typ kind="G" nr="5">
 <Cluster/>
@@ -35,7 +35,7 @@
 <Adjective nr="48"/>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="T_1TOPSP" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
@@ -53,7 +53,7 @@
 <Adjective nr="21"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="T_1TOPSP" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>

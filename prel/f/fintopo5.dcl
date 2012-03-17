@@ -21,7 +21,7 @@
 <ArticleID name="ORDERS_2"/>
 <ArticleID name="FINTOPO5"/>
 </Signature>
-<FCluster>
+<FCluster aid="FINTOPO5" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster>
@@ -45,7 +45,7 @@
 <Adjective nr="36"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="FINTOPO5" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster>

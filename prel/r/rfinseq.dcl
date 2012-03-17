@@ -19,7 +19,7 @@
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
 </Signature>
-<RCluster>
+<RCluster aid="RFINSEQ" nr="1">
 <ArgTypes/>
 <Typ kind="M" nr="8">
 <Cluster/>
@@ -36,7 +36,7 @@
 <Adjective nr="33"/>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="RFINSEQ" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>

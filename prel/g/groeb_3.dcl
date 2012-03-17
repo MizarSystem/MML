@@ -45,7 +45,7 @@
 <ArticleID name="POLYNOM7"/>
 <ArticleID name="GROEB_3"/>
 </Signature>
-<FCluster>
+<FCluster aid="GROEB_3" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -97,7 +97,7 @@
 <Adjective nr="18"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="GROEB_3" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -167,7 +167,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="GROEB_3" nr="3">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -263,7 +263,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="GROEB_3" nr="4">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -364,7 +364,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="GROEB_3" nr="5">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>

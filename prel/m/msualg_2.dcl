@@ -26,7 +26,7 @@
 <ArticleID name="MSUALG_1"/>
 <ArticleID name="MSUALG_2"/>
 </Signature>
-<RCluster>
+<RCluster aid="MSUALG_2" nr="1">
 <ArgTypes/>
 <Typ kind="G" nr="9">
 <Cluster/>
@@ -38,7 +38,7 @@
 <Adjective nr="69"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="MSUALG_2" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="9">
 <Cluster>
@@ -62,7 +62,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="MSUALG_2" nr="3">
 <ArgTypes>
 <Typ kind="G" nr="9">
 <Cluster>
@@ -93,7 +93,7 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="MSUALG_2" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -118,7 +118,7 @@
 <Adjective nr="3"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="MSUALG_2" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -143,7 +143,7 @@
 <Adjective nr="3"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="MSUALG_2" nr="3">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -191,7 +191,7 @@
 <Adjective nr="62"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="MSUALG_2" nr="4">
 <ArgTypes>
 <Typ kind="G" nr="9">
 <Cluster>
@@ -224,7 +224,7 @@
 <Adjective nr="1" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="MSUALG_2" nr="5">
 <ArgTypes>
 <Typ kind="G" nr="9">
 <Cluster>
@@ -250,7 +250,7 @@
 <Adjective nr="3"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="MSUALG_2" nr="6">
 <ArgTypes>
 <Typ kind="G" nr="9">
 <Cluster>
@@ -287,7 +287,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="MSUALG_2" nr="7">
 <ArgTypes>
 <Typ kind="G" nr="9">
 <Cluster>
@@ -319,7 +319,7 @@
 <Adjective nr="1" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="MSUALG_2" nr="8">
 <ArgTypes>
 <Typ kind="G" nr="9">
 <Cluster>
@@ -340,7 +340,7 @@
 <Adjective nr="1" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="MSUALG_2" nr="9">
 <ArgTypes>
 <Typ kind="G" nr="9">
 <Cluster>
@@ -379,7 +379,7 @@
 <Adjective nr="1" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="MSUALG_2" nr="10">
 <ArgTypes>
 <Typ kind="G" nr="9">
 <Cluster>
@@ -422,7 +422,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="MSUALG_2" nr="11">
 <ArgTypes>
 <Typ kind="G" nr="9">
 <Cluster>
@@ -443,7 +443,7 @@
 <Adjective nr="1" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="MSUALG_2" nr="12">
 <ArgTypes>
 <Typ kind="G" nr="9">
 <Cluster>

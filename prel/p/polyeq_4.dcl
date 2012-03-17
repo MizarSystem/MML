@@ -6,7 +6,7 @@
 <ArticleID name="XREAL_0"/>
 <ArticleID name="POLYEQ_4"/>
 </Signature>
-<FCluster>
+<FCluster aid="POLYEQ_4" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -57,7 +57,7 @@
 <Adjective nr="1"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="POLYEQ_4" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>

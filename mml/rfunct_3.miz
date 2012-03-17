@@ -19,7 +19,8 @@ environ
       SEQM_3, PROB_1, SEQ_4, FINSEQOP, RCOMP_1, FINSEQ_4, FINSOP_1, PARTFUN2,
       RFUNCT_1, RVSUM_1, LIMFUNC1, RFINSEQ, SEQ_1;
  registrations XBOOLE_0, RELSET_1, PARTFUN1, FINSET_1, NUMBERS, XXREAL_0,
-      XREAL_0, NAT_1, MEMBERED, FINSEQ_1, FINSEQ_2, RFINSEQ, VALUED_0;
+      XREAL_0, NAT_1, MEMBERED, FINSEQ_1, FINSEQ_2, RFINSEQ, VALUED_0,
+      FUNCT_1;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, BINOP_1, SETWISEO, RFINSEQ, XBOOLE_0, SUBSET_1, FINSEQ_2,
       RVSUM_1, LIMFUNC1, VALUED_1;
@@ -27,7 +28,7 @@ environ
       CARD_1, FINSET_1, LIMFUNC1, PARTFUN1, RCOMP_1, BINOP_1, FINSEQ_3,
       FUNCOP_1, RFUNCT_1, ZFMISC_1, RVSUM_1, ABSVALUE, RFINSEQ, RELAT_1,
       FINSOP_1, XREAL_0, XBOOLE_0, XBOOLE_1, XCMPLX_0, XCMPLX_1, XREAL_1,
-      COMPLEX1, XXREAL_0, VALUED_1;
+      COMPLEX1, XXREAL_0, VALUED_1, RELSET_1;
  schemes NAT_1, FINSEQ_1, SEQ_1, BINOP_1;
 
 begin
@@ -429,7 +430,7 @@ definition
     for x being Element of it holds x is PartFunc of X,Y;
   existence
   proof
-    reconsider h={} as PartFunc of X,Y by PARTFUN1:56;
+    reconsider h={} as PartFunc of X,Y by RELSET_1:25;
     take {h};
     thus thesis by TARSKI:def 1;
   end;
@@ -440,7 +441,7 @@ registration
   cluster non empty PartFunc-set of X,Y;
   existence
   proof
-    reconsider h={} as PartFunc of X,Y by PARTFUN1:56;
+    reconsider h={} as PartFunc of X,Y by RELSET_1:25;
     {h} is PartFunc-set of X,Y
     proof
       let x be Element of {h};
@@ -807,7 +808,6 @@ definition
     consider p be FinSequence such that
 A1: len p = len f and
 A2: for n be Nat st n in dom p holds p.n = F(n) from FINSEQ_1:sch 2;
-A3: dom p = Seg len f by A1,FINSEQ_1:def 3;
     rng p c= PFuncs(D,REAL)
     proof
       let x be set;
@@ -822,8 +822,7 @@ A4:   n in dom p & p.n = x by FINSEQ_2:11;
     thus len p = len f by A1;
     let n;
     assume n in dom p;
-    then n in Seg len f by A1,FINSEQ_1:def 3;
-    hence p.n = chi(f.n,D) by A2,A3;
+    hence p.n = chi(f.n,D) by A2;
   end;
   uniqueness
   proof
@@ -1017,8 +1016,7 @@ A1: d1 is_common_for_dom f;
 A2: m in dom fn & fn.m = G;
   now per cases;
     case len f<n;
-      then fn = <*>PFuncs(D1,D2) by RFINSEQ:def 2;
-      hence thesis by A2,RELAT_1:60;
+      hence thesis by A2,RELAT_1:60,RFINSEQ:def 2;
     end;
     case n<=len f;
       then
@@ -1395,19 +1393,23 @@ theorem
   max+(F) = F + abs(F)
 proof
   let D be non empty set, F be PartFunc of D,REAL;
-A1: dom max+(F) = dom F & dom max-(F) = dom F & dom abs(F) = dom F &
-  dom(2(#)max+(F)) = dom max+(F) by Def10,Def11,VALUED_1:def 5,def 11;
-  dom F = dom F /\ dom F;
+A1: dom max+(F) = dom F by Def10;
+B1: dom max-(F) = dom F by Def11;
+C1: dom abs(F) = dom F &
+  dom(2(#)max+(F)) = dom max+(F) by VALUED_1:def 5,def 11;
+X:dom F = dom F /\ dom F;
+  dom -max-(F) = dom max-(F) by VALUED_1:def 5;
   then
-A2: dom F = dom(max+(F) - max-(F)) & dom abs(F) = dom(max+(F) + max-(F)) &
-  dom(2(#)max+(F)) = dom(F + abs(F)) by A1,VALUED_1:12,def 1;
+A2: dom F =dom(max+(F) + -max-(F)) by X,A1,B1,VALUED_1:def 1;
+B2: dom abs(F) = dom(max+(F) + max-(F)) &
+  dom(2(#)max+(F)) = dom(F + abs(F)) by X,A1,C1,B1,VALUED_1:def 1;
   now
     let d be Element of D;
     assume
 A3: d in dom F;
     hence (max+(F) - max-(F)).d = max+(F).d - max-(F).d by A2,VALUED_1:13
       .= max+(F.d) - max-(F).d by A1,A3,Def10
-      .= max+(F.d) - max-(F.d) by A1,A3,Def11
+      .= max+(F.d) - max-(F.d) by B1,A3,Def11
       .= F.d by Th1;
   end;
   hence F = max+(F) - max-(F) by A2,PARTFUN1:34;
@@ -1415,24 +1417,24 @@ A3: d in dom F;
     let d be Element of D;
     assume
 A4: d in dom abs(F);
-    hence (max+(F) + max-(F)).d = max+(F).d + max-(F).d by A2,VALUED_1:def 1
-      .= max+(F.d) + max-(F).d by A1,A4,Def10
-      .= max+(F.d) + max-(F.d) by A1,A4,Def11
+    hence (max+(F) + max-(F)).d = max+(F).d + max-(F).d by B2,VALUED_1:def 1
+      .= max+(F.d) + max-(F).d by A1,C1,A4,Def10
+      .= max+(F.d) + max-(F.d) by C1,B1,A4,Def11
       .= abs(F.d) by Th2
       .= (abs(F)).d by VALUED_1:18;
   end;
-  hence abs(F) = max+(F) + max-(F) by A2,PARTFUN1:34;
+  hence abs(F) = max+(F) + max-(F) by B2,PARTFUN1:34;
   now
     let d be Element of D;
     assume
 A5: d in dom F;
-    hence (2(#)max+(F)).d = 2*(max+(F).d) by A1,VALUED_1:def 5
+    hence (2(#)max+(F)).d = 2*(max+(F).d) by A1,C1,VALUED_1:def 5
       .=2*max+(F.d) by A1,A5,Def10
       .= F.d + abs(F.d) by Th3
       .= F.d + (abs(F)).d by VALUED_1:18
-      .=(F+abs(F)).d by A1,A2,A5,VALUED_1:def 1;
+      .=(F+abs(F)).d by A1,C1,B2,A5,VALUED_1:def 1;
   end;
-  hence thesis by A1,A2,PARTFUN1:34;
+  hence thesis by A1,C1,B2,PARTFUN1:34;
 end;
 
 theorem Th38:
@@ -1714,7 +1716,7 @@ registration
   cluster finite PartFunc of A,B;
   existence
   proof
-    {} is finite & {} is PartFunc of A,B by PARTFUN1:56;
+    {} is finite & {} is PartFunc of A,B by RELSET_1:25;
     hence thesis;
   end;
 end;
@@ -1924,7 +1926,7 @@ A5: d in dom F by A1,A2,XBOOLE_0:def 3;
       .= (F-r).d by A5,VALUED_1:3
       .=((F-r)|X).d by A1,A2,A3,A4,FUNCT_1:68;
   end;
-  hence thesis by A1,A2,A3,PARTFUN1:34;
+  hence thesis by A2,A3,PARTFUN1:34,VALUED_1:3;
 end;
 
 theorem Th53:
@@ -2751,8 +2753,7 @@ A3: rng fx = rng(F|X) by RFINSEQ:1;
   fy ^ <*F.d*>, F|X are_fiberwise_equipotent by A1,Th69;
   then
 A4: fx, fy^<*F.d*> are_fiberwise_equipotent by A2,RFINSEQ:2;
-  rng fx <> {} by A1,A3,FUNCT_1:12;
-  then fx <> {} by RELAT_1:60;
+  fx <> {} by RELAT_1:60,A1,A3,FUNCT_1:12;
   then len fx <> 0 & 0<=len fx by CARD_2:59;
   then 0+1<=len fx by NAT_1:13;
   then max(0,len fx -1) = len fx - 1 by FINSEQ_2:4;
@@ -2807,9 +2808,8 @@ A1: P[n];
 A2: dy = dom(F|Y) & dom(F|X) is finite & Y c= X & n+1 = card dy &
   for d1,d2 be Element of D st d1 in dom(F|Y) & d2 in dxy holds F.d1>=F.d2;
 A3: dx = dom F /\ X & dy = dom F /\ Y & dxy = dom F /\ (X\Y) by A2,FUNCT_1:68;
-  then dy c= dx & dxy c= dx by A2,XBOOLE_1:26;
   then
-A4: dy is finite & dxy is finite by A2,FINSET_1:13;
+A4: dy is finite & dxy is finite by A2,FINSET_1:13,XBOOLE_1:26;
   then
 A5: F|Y, fy are_fiberwise_equipotent & F|(X\Y) ,fxy
   are_fiberwise_equipotent by A2,Def14;
@@ -2858,7 +2858,6 @@ A17: y in dom F & y in Y by A3,A15,XBOOLE_0:def 3;
 A18: card dyd = card dy - card {d} by A11,A12,CARD_2:63
     .= n+1-1 by A2,CARD_1:79
     .= n;
-A19: Yd c= X by A2,XBOOLE_1:1;
 A20: {d} c= X & {d} c= Y & {d} c= dom F by A2,A11,ZFMISC_1:37;
 A21: X \ Yd = (X\Y) \/ X /\ {d} by XBOOLE_1:52
     .= (X\Y) \/ {d} by A20,XBOOLE_1:28;
@@ -2898,7 +2897,7 @@ A27:    1<=m & m<=len fy by A26,FINSEQ_3:27;
     hence F.d1>=F.d2;
   end;
   then
-A28: FinS(F,X) = FinS(F,Yd) ^ FinS(F,X \ Yd) by A1,A2,A18,A19;
+A28: FinS(F,X) = FinS(F,Yd) ^ FinS(F,X \ Yd) by A1,A2,A18,XBOOLE_1:1;
 A29: (X \ Yd) \ {d} = X \ (Yd \/ {d}) by XBOOLE_1:41
     .= X \ (Y \/ {d}) by XBOOLE_1:39
     .= X \ Y by A20,XBOOLE_1:12;
@@ -2981,8 +2980,7 @@ A1: for n holds P[n] from NAT_1:sch 1(Lm3,Lm4);
 A2: dom(F|X) is finite & Y c= X & for d1,d2 be Element of D st
   d1 in dom(F|Y) & d2 in dom(F|(X\Y)) holds F.d1>=F.d2;
   then F|Y c= F|X by RELAT_1:104;
-  then dom(F|Y) c= dom(F|X) by RELAT_1:25;
-  then reconsider dFY = dom(F|Y) as finite set by A2,FINSET_1:13;
+  then reconsider dFY = dom(F|Y) as finite set by A2,FINSET_1:13,RELAT_1:25;
   card dFY = card dFY;
   hence thesis by A1,A2;
 end;
@@ -3015,8 +3013,7 @@ A8: d in dom(F-r) by A1,A3,XBOOLE_0:def 3;
   then
 A9: (F-r).d = F.d - r by A2,VALUED_1:3;
 A10: (F|X).d in rng(F|X) by A1,FUNCT_1:def 5;
-  rng fx <> {} by A1,A6,FUNCT_1:12;
-  then fx <> {} by RELAT_1:60;
+  fx <> {} by RELAT_1:60,A1,A6,FUNCT_1:12;
   then len fx <> 0 & 0<=len fx by CARD_2:59;
   then 0+1<=len fx by NAT_1:13;
   then
@@ -3227,13 +3224,12 @@ A41:  m in dom (fx - n1r);
       suppose
 A42:    m=n+1;
         then
-A43:    n1r.m = r by A38,FUNCOP_1:13;
-A44:    m in dom (fx - n1r) by A41;
+A43:    n1r.m = r by FUNCOP_1:13,FINSEQ_1:6;
         ((fy - nr)^(<*F.d*> - <*r*>)).m = (<*F.d*> - <*r*>).(n+1-n)
         by A33,A36,A39,A42,FINSEQ_1:37
           .= F.d - r by A34,A40,VALUED_1:13;
         hence (fx - n1r).m = ((fy - nr)^(<*F.d*> - <*r*>)).m
-        by A16,A31,A42,A43,A44,VALUED_1:13;
+        by A16,A31,A42,A43,A41,VALUED_1:13;
       end;
       suppose
 A45:    m<>n+1;
@@ -3253,11 +3249,10 @@ A50:    nr.m = r by A48,FUNCOP_1:13;
 A51:    (fx|n).m = fx.m & m in dom fx & n1r.m=r
         by A31,A37,A41,A48,FUNCOP_1:13,RFINSEQ:19,X;
         reconsider s=fx.m as Real;
-A52:    m in dom(fx - n1r) by A41;
         m in dom(fy - nr) by A33,A48,FINSEQ_1:def 3;
         hence ((fy - nr)^(<*F.d*> - <*r*>)).m = s-r
         by A17,A49,A50,A51,VALUED_1:13
-          .=(fx - n1r).m by A51,A52,VALUED_1:13;
+          .=(fx - n1r).m by A51,A41,VALUED_1:13;
       end;
     end;
     hence thesis by A9,A18,A20,A28,A29,A32,A36,FINSEQ_2:10;
@@ -3315,8 +3310,7 @@ proof
   assume
 A1: dom(F|(X \/ Y)) is finite;
   F|Y c= F|(X \/ Y) by RELAT_1:104,XBOOLE_1:7;
-  then dom(F|Y) c= dom(F|(X \/ Y)) by RELAT_1:25;
-  then reconsider dfy = dom(F|Y) as finite set by A1,FINSET_1:13;
+  then reconsider dfy = dom(F|Y) as finite set by A1,FINSET_1:13,RELAT_1:25;
   defpred P[Element of NAT] means
   for Y be set, Z being finite set st Z = dom(F|Y) &
   dom(F|(X \/ Y)) is finite & X /\ Y = {} & $1 = card Z

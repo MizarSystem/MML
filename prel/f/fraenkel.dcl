@@ -15,7 +15,7 @@
 <ArticleID name="FINSET_1"/>
 <ArticleID name="FRAENKEL"/>
 </Signature>
-<RCluster>
+<RCluster aid="FRAENKEL" nr="1">
 <ArgTypes/>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -25,7 +25,7 @@
 <Adjective nr="14"/>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="FRAENKEL" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -42,7 +42,7 @@
 <Adjective nr="14"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="FRAENKEL" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -63,7 +63,7 @@
 <Adjective nr="12"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="FRAENKEL" nr="3">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -80,7 +80,7 @@
 <Adjective nr="14"/>
 </Cluster>
 </FCluster>
-<CCluster>
+<CCluster aid="FRAENKEL" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>

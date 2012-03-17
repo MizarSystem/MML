@@ -26,7 +26,7 @@
 <ArticleID name="MEMBERED"/>
 <ArticleID name="NEWTON"/>
 </Signature>
-<RCluster>
+<RCluster aid="NEWTON" nr="1">
 <ArgTypes/>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -52,7 +52,7 @@
 <Adjective nr="40"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="NEWTON" nr="2">
 <ArgTypes/>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -70,7 +70,7 @@
 <Adjective nr="21"/>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="NEWTON" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -94,7 +94,7 @@
 <Adjective nr="28"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="NEWTON" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -115,7 +115,7 @@
 <Adjective nr="16"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="NEWTON" nr="3">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -136,7 +136,7 @@
 <Adjective nr="15"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="NEWTON" nr="4">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -157,7 +157,7 @@
 <Adjective nr="14"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="NEWTON" nr="5">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -172,7 +172,7 @@
 <Adjective nr="16"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="NEWTON" nr="6">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -193,7 +193,7 @@
 <Adjective nr="16"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="NEWTON" nr="7">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -214,7 +214,7 @@
 <Adjective nr="14"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="NEWTON" nr="8">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -229,7 +229,7 @@
 <Adjective nr="22"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="NEWTON" nr="9">
 <ArgTypes/>
 <Func kind="K" nr="143">
 <Num nr="2"/>
@@ -238,7 +238,7 @@
 <Adjective nr="7"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="NEWTON" nr="10">
 <ArgTypes/>
 <Func kind="K" nr="142"/>
 <Cluster>

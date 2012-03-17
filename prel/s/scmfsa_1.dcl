@@ -23,28 +23,28 @@
 <ArticleID name="AMI_2"/>
 <ArticleID name="SCMFSA_1"/>
 </Signature>
-<FCluster>
+<FCluster aid="SCMFSA_1" nr="1">
 <ArgTypes/>
 <Func kind="K" nr="145"/>
 <Cluster>
 <Adjective nr="7" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="SCMFSA_1" nr="2">
 <ArgTypes/>
 <Func kind="K" nr="144"/>
 <Cluster>
 <Adjective nr="7" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="SCMFSA_1" nr="3">
 <ArgTypes/>
 <Func kind="K" nr="149"/>
 <Cluster>
 <Adjective nr="7" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="SCMFSA_1" nr="4">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>

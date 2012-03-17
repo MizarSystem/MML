@@ -23,7 +23,7 @@
 <ArticleID name="RAT_1"/>
 <ArticleID name="BINOP_2"/>
 </Signature>
-<FCluster>
+<FCluster aid="BINOP_2" nr="1">
 <ArgTypes/>
 <Func kind="K" nr="154"/>
 <Cluster>
@@ -43,7 +43,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="BINOP_2" nr="2">
 <ArgTypes/>
 <Func kind="K" nr="156"/>
 <Cluster>
@@ -63,7 +63,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="BINOP_2" nr="3">
 <ArgTypes/>
 <Func kind="K" nr="160"/>
 <Cluster>
@@ -83,7 +83,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="BINOP_2" nr="4">
 <ArgTypes/>
 <Func kind="K" nr="162"/>
 <Cluster>
@@ -103,7 +103,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="BINOP_2" nr="5">
 <ArgTypes/>
 <Func kind="K" nr="166"/>
 <Cluster>
@@ -123,7 +123,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="BINOP_2" nr="6">
 <ArgTypes/>
 <Func kind="K" nr="168"/>
 <Cluster>
@@ -143,7 +143,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="BINOP_2" nr="7">
 <ArgTypes/>
 <Func kind="K" nr="171"/>
 <Cluster>
@@ -163,7 +163,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="BINOP_2" nr="8">
 <ArgTypes/>
 <Func kind="K" nr="173"/>
 <Cluster>
@@ -183,7 +183,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="BINOP_2" nr="9">
 <ArgTypes/>
 <Func kind="K" nr="174"/>
 <Cluster>
@@ -203,7 +203,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="BINOP_2" nr="10">
 <ArgTypes/>
 <Func kind="K" nr="175"/>
 <Cluster>
@@ -223,7 +223,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="BINOP_2" nr="11">
 <ArgTypes/>
 <Func kind="K" nr="154"/>
 <Cluster>
@@ -240,7 +240,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="BINOP_2" nr="12">
 <ArgTypes/>
 <Func kind="K" nr="160"/>
 <Cluster>
@@ -257,7 +257,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="BINOP_2" nr="13">
 <ArgTypes/>
 <Func kind="K" nr="166"/>
 <Cluster>
@@ -274,7 +274,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="BINOP_2" nr="14">
 <ArgTypes/>
 <Func kind="K" nr="171"/>
 <Cluster>
@@ -291,7 +291,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="BINOP_2" nr="15">
 <ArgTypes/>
 <Func kind="K" nr="174"/>
 <Cluster>
@@ -308,7 +308,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="BINOP_2" nr="16">
 <ArgTypes/>
 <Func kind="K" nr="156"/>
 <Cluster>
@@ -325,7 +325,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="BINOP_2" nr="17">
 <ArgTypes/>
 <Func kind="K" nr="162"/>
 <Cluster>
@@ -342,7 +342,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="BINOP_2" nr="18">
 <ArgTypes/>
 <Func kind="K" nr="168"/>
 <Cluster>
@@ -359,7 +359,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="BINOP_2" nr="19">
 <ArgTypes/>
 <Func kind="K" nr="173"/>
 <Cluster>
@@ -376,7 +376,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="BINOP_2" nr="20">
 <ArgTypes/>
 <Func kind="K" nr="175"/>
 <Cluster>
@@ -393,7 +393,7 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<CCluster>
+<CCluster aid="BINOP_2" nr="1">
 <ArgTypes/>
 <Cluster/>
 <Typ kind="M" nr="2">

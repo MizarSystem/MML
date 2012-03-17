@@ -34,7 +34,7 @@
 <ArticleID name="VECTSP_1"/>
 <ArticleID name="CLOPBAN2"/>
 </Signature>
-<RCluster>
+<RCluster aid="CLOPBAN2" nr="1">
 <ArgTypes/>
 <Typ kind="G" nr="14">
 <Cluster/>
@@ -51,7 +51,7 @@
 <Adjective nr="97"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="CLOPBAN2" nr="2">
 <ArgTypes/>
 <Typ kind="G" nr="18">
 <Cluster/>
@@ -60,7 +60,7 @@
 <Adjective nr="115"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="CLOPBAN2" nr="3">
 <ArgTypes/>
 <Typ kind="G" nr="18">
 <Cluster/>
@@ -69,7 +69,7 @@
 <Adjective nr="28" value="false"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="CLOPBAN2" nr="4">
 <ArgTypes/>
 <Typ kind="G" nr="18">
 <Cluster/>
@@ -89,7 +89,7 @@
 <Adjective nr="115"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="CLOPBAN2" nr="5">
 <ArgTypes/>
 <Typ kind="G" nr="18">
 <Cluster/>
@@ -109,7 +109,7 @@
 <Adjective nr="119"/>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="CLOPBAN2" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="14">
 <Cluster>
@@ -131,7 +131,7 @@
 <Adjective nr="71"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="CLOPBAN2" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="14">
 <Cluster>
@@ -152,7 +152,7 @@
 <Adjective nr="100"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="CLOPBAN2" nr="3">
 <ArgTypes>
 <Typ kind="G" nr="14">
 <Cluster>
@@ -179,7 +179,7 @@
 <Adjective nr="110"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="CLOPBAN2" nr="4">
 <ArgTypes>
 <Typ kind="G" nr="14">
 <Cluster>
@@ -201,7 +201,7 @@
 <Adjective nr="98"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="CLOPBAN2" nr="5">
 <ArgTypes>
 <Typ kind="G" nr="14">
 <Cluster>
@@ -222,7 +222,7 @@
 <Adjective nr="100"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="CLOPBAN2" nr="6">
 <ArgTypes/>
 <Func kind="K" nr="184"/>
 <Cluster>
@@ -230,7 +230,7 @@
 <Adjective nr="97"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="CLOPBAN2" nr="7">
 <ArgTypes/>
 <Func kind="K" nr="184"/>
 <Cluster>
@@ -238,7 +238,7 @@
 <Adjective nr="33" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="CLOPBAN2" nr="8">
 <ArgTypes>
 <Typ kind="G" nr="14">
 <Cluster>
@@ -260,7 +260,7 @@
 <Adjective nr="115"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="CLOPBAN2" nr="9">
 <ArgTypes>
 <Typ kind="G" nr="14">
 <Cluster>
@@ -281,7 +281,7 @@
 <Adjective nr="100"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="CLOPBAN2" nr="10">
 <ArgTypes>
 <Typ kind="G" nr="14">
 <Cluster>
@@ -311,7 +311,7 @@
 <Adjective nr="108"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="CLOPBAN2" nr="11">
 <ArgTypes>
 <Typ kind="G" nr="14">
 <Cluster>
@@ -334,7 +334,7 @@
 <Adjective nr="119"/>
 </Cluster>
 </FCluster>
-<CCluster>
+<CCluster aid="CLOPBAN2" nr="1">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="28" value="false"/>
@@ -373,7 +373,7 @@
 <Adjective nr="118"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="CLOPBAN2" nr="2">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="28" value="false"/>

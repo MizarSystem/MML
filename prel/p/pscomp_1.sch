@@ -12,8 +12,8 @@
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
 <ArticleID name="RELSET_1"/>
-<ArticleID name="VALUED_0"/>
 <ArticleID name="FUNCT_2"/>
+<ArticleID name="VALUED_0"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="SEQ_1"/>
@@ -31,7 +31,7 @@
 <Typ kind="M" nr="6">
 <Cluster>
 <Adjective nr="5"/>
-<Adjective nr="21">
+<Adjective nr="15">
 <Func kind="U" nr="1">
 <Func kind="F" nr="1"/>
 </Func>

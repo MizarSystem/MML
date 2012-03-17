@@ -24,7 +24,7 @@
 <ArticleID name="RCOMP_1"/>
 <ArticleID name="LIMFUNC1"/>
 </Signature>
-<FCluster>
+<FCluster aid="FCONT_3" nr="1">
 <ArgTypes/>
 <Func kind="K" nr="28">
 <Func kind="K" nr="53"/>
@@ -34,7 +34,7 @@
 <Adjective nr="36"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="FCONT_3" nr="2">
 <ArgTypes/>
 <Func kind="K" nr="27">
 <Func kind="K" nr="53"/>
@@ -44,7 +44,7 @@
 <Adjective nr="36"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="FCONT_3" nr="3">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -59,7 +59,7 @@
 <Adjective nr="36"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="FCONT_3" nr="4">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -74,7 +74,7 @@
 <Adjective nr="36"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="FCONT_3" nr="5">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -89,7 +89,7 @@
 <Adjective nr="35"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="FCONT_3" nr="6">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>

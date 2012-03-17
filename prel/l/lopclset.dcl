@@ -19,7 +19,7 @@
 <ArticleID name="LATTICE4"/>
 <ArticleID name="LOPCLSET"/>
 </Signature>
-<RCluster>
+<RCluster aid="LOPCLSET" nr="1">
 <ArgTypes/>
 <Typ kind="G" nr="8">
 <Cluster/>
@@ -43,7 +43,7 @@
 <Adjective nr="47"/>
 </Cluster>
 </RCluster>
-<RCluster>
+<RCluster aid="LOPCLSET" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -62,7 +62,7 @@
 <Adjective nr="15"/>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="LOPCLSET" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
@@ -78,7 +78,7 @@
 <Adjective nr="1" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="LOPCLSET" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="8">
 <Cluster>
@@ -96,7 +96,7 @@
 <Adjective nr="1" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="LOPCLSET" nr="3">
 <ArgTypes>
 <Typ kind="G" nr="8">
 <Cluster>
@@ -114,7 +114,7 @@
 <Adjective nr="1" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="LOPCLSET" nr="4">
 <ArgTypes>
 <Typ kind="G" nr="8">
 <Cluster>

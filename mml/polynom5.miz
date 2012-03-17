@@ -22,7 +22,7 @@ environ
       GROUP_1, RECDEF_1;
  constructors FINSEQ_4, ENUMSET1, REAL_1, SEQ_4, FINSOP_1, COMSEQ_2, RVSUM_1,
       COMSEQ_3, CFCONT_1, RFINSEQ, BINARITH, FUNCSDOM, VECTSP_2, ALGSTR_1,
-      MATRIX_2, HAHNBAN1, POLYNOM1, POLYNOM4, SEQ_1, RECDEF_1;
+      MATRIX_2, HAHNBAN1, POLYNOM1, POLYNOM4, SEQ_1, RECDEF_1, BINOP_2;
  registrations XBOOLE_0, FUNCT_1, ORDINAL1, RELSET_1, FUNCT_2, NUMBERS,
       XCMPLX_0, XXREAL_0, XREAL_0, NAT_1, INT_1, MEMBERED, FINSEQ_1, SEQM_3,
       COMSEQ_2, STRUCT_0, GROUP_1, VECTSP_1, COMPLFLD, ALGSTR_1, POLYNOM3,
@@ -39,7 +39,7 @@ environ
       POLYNOM3, POLYNOM4, XBOOLE_0, XCMPLX_0, XCMPLX_1, VECTSP_2, XREAL_1,
       XXREAL_0, FINSOP_1, NORMSP_1, PARTFUN1, ORDINAL1, VALUED_1, RELAT_1,
       CARD_1;
- schemes NAT_1, FUNCT_2, FINSEQ_2, FINSEQ_1, BINOP_1, BINARITH, GOBOARD2,
+ schemes NAT_1, FUNCT_2, FINSEQ_2, FINSEQ_1, BINOP_1, FINSEQ_4,
       SEQ_1, CFCONT_1, DOMAIN_1;
 
 begin :: Preliminaries
@@ -314,11 +314,11 @@ definition
   for n be Element of NAT st n in dom p holds it/.n = |.p/.n.|;
   existence
   proof
-    deffunc F(Element of NAT) = |.p/.$1.|;
+    deffunc F(Nat) = |.p/.$1.|;
     consider q be FinSequence of REAL such that
 A1: len q = len p and
-A2: for n be Element of NAT st n in dom q holds q/.n = F(n)
-    from GOBOARD2:sch 1;
+A2: for n be Nat st n in dom q holds q/.n = F(n)
+    from FINSEQ_4:sch 2;
     take q;
     dom p = dom q by A1,FINSEQ_3:31;
     hence thesis by A1,A2;
@@ -332,7 +332,7 @@ A5: len q2 = len p and
 A6: for n be Element of NAT st n in dom p holds q2/.n = |.p/.n.|;
 A7: dom q1 = dom p & dom q2 = dom p by A3,A5,FINSEQ_3:31;
     now
-      let n be Element of NAT;
+      let n be Nat;
       assume
 A8:   n in dom p;
       hence q1/.n = |.p/.n.| by A4
@@ -824,8 +824,9 @@ registration
     let i be Nat;
     assume
 A1: i >= s;
-    i in NAT by ORDINAL1:def 13;
-    hence (v*p).i = v*p.i by Def3
+    reconsider ii=i as Element of NAT by ORDINAL1:def 13;
+    thus (v*p).i = (v*p).ii
+      .= v*p.ii by Def3
       .= v*0.L by A1,ALGSEQ_1:22
       .= 0.L by VECTSP_1:36;
   end;
@@ -841,9 +842,11 @@ proof
 A1: 0 is_at_least_length_of (0.L*p)
   proof
     let i be Nat;
-    assume i>=0;
-    i in NAT by ORDINAL1:def 13;
-    hence (0.L*p).i = 0.L*p.i by Def3
+    assume
+Z:   i>=0;
+    reconsider ii=i as Element of NAT by ORDINAL1:def 13;
+    thus (0.L*p).i = (0.L*p).ii
+       .= 0.L*p.ii by Def3
       .= 0.L by VECTSP_1:39;
   end;
   for n be Nat st n is_at_least_length_of (0.L*p) holds 0<=n;
@@ -868,8 +871,9 @@ A2: len p is_at_least_length_of (v*p)
     let i be Nat;
     assume
 A3: i >= len p;
-    i in NAT by ORDINAL1:def 13;
-    hence (v*p).i = v*p.i by Def3
+    reconsider ii=i as Element of NAT by ORDINAL1:def 13;
+    thus (v*p).i = (v*p).ii
+      .= v*p.ii by Def3
       .= v*0.L by A3,ALGSEQ_1:22
       .= 0.L by VECTSP_1:36;
   end;
@@ -1778,7 +1782,7 @@ A5: for n be Element of NAT st n in dom F holds F.n = p.(n-'1)*(q`^(n-'1))
 A6: 0+1 <= len F by NAT_1:13;
   then
 A7: 1 in dom F by FINSEQ_3:27;
-  defpred P[Element of NAT] means for F1 be Polynomial of L
+  defpred P[Nat] means for F1 be Polynomial of L
   st F1 = Sum(F|$1) holds len F1 <= len (q`^($1-'1));
 A8: P[1]
   proof
@@ -1799,9 +1803,9 @@ A9: F1 = Sum(F|1);
     then len F1 <= len (q`^0) by Th16;
     hence len F1 <= len (q`^(1-'1)) by BINARITH:51;
   end;
-A10: for n be non empty Element of NAT st P[n] holds P[n+1]
+A10: for n be non empty Nat st P[n] holds P[n+1]
   proof
-    let n be non empty Element of NAT;
+    let n be non empty Nat;
     assume
 A11: for F1 be Polynomial of L st F1 = Sum(F|n) holds
     len F1 <= len (q`^(n-'1));
@@ -1819,47 +1823,48 @@ A15: len(q`^(n-'1)) = (n-'1)*len q-(n-'1)+1 by A2,Th24
       .= (n-1)*len q-(n-'1)+1 by A13,BINARITH:def 3
       .= n*len q-1*len q-(n-1)+1 by A13,BINARITH:def 3
       .= n*len q-len q-n+1+1;
+    reconsider nn = n as Element of NAT by ORDINAL1:def 13;
     n*len q+(len q-'1) >= n*len q by NAT_1:11;
     then n*len q-(len q-'1) <= n*len q by XREAL_1:22;
     then n*len q-(len q-1) <= n*len q by A14,BINARITH:def 3;
     then n*len q-len q+1-n <= n*len q-n by XREAL_1:11;
     then n*len q-len q-n+1+1 <= n*len q-n+1 by XREAL_1:8;
     then
-A16: len (q`^(n-'1)) <= len (q`^n) by A2,A15,Th24;
+A16: len (q`^(n-'1)) <= len (q`^nn) by A2,A15,Th24;
     per cases;
     suppose
 A17:  n+1 <= len F;
       n+1 >= 1 by NAT_1:11;
       then
 A18:  n+1 in dom F by A17,FINSEQ_3:27;
-      F|(n+1) = F|n ^ <*F/.(n+1)*> by A17,JORDAN8:2;
+      F|(n+1) = F|n ^ <*F/.(nn+1)*> by A17,JORDAN8:2;
       then
 A19:  F1 = Sum(F|n) + F/.(n+1) by A12,FVSUM_1:87;
-      reconsider maxFq = max(len F2,len (p.n*(q`^n))) as Element of NAT
+      reconsider maxFq = max(len F2,len (p.nn*(q`^nn))) as Element of NAT
       by FINSEQ_2:1;
-A20:  maxFq >= len F2 & maxFq >= len (p.n*(q`^n)) by XXREAL_0:25;
+A20:  maxFq >= len F2 & maxFq >= len (p.nn*(q`^nn)) by XXREAL_0:25;
       F/.(n+1) = F.(n+1) by A18,PARTFUN1:def 8
         .= p.(n+1-'1)*(q`^(n+1-'1)) by A5,A18
-        .= p.n*(q`^(n+1-'1)) by BINARITH:39
-        .= p.n*(q`^n) by BINARITH:39;
-      then F1 = F2 + p.n*(q`^n) by A19,POLYNOM3:def 12;
+        .= p.nn*(q`^(n+1-'1)) by BINARITH:39
+        .= p.nn*(q`^nn) by BINARITH:39;
+      then F1 = F2 + p.nn*(q`^nn) by A19,POLYNOM3:def 12;
       then
 A21:  len F1 <= maxFq by A20,POLYNOM4:9;
       len F2 <= len (q`^(n-'1)) by A11;
       then
-A22:  len F2 <= len (q`^n) by A16,XXREAL_0:2;
-      len (p.n*(q`^n)) <= len (q`^n)
+A22:  len F2 <= len (q`^nn) by A16,XXREAL_0:2;
+      len (p.nn*(q`^nn)) <= len (q`^nn)
       proof
         per cases;
         suppose p.n <> 0.L;
-          hence len (p.n*(q`^n)) <= len (q`^n) by Th26;
+          hence len (p.nn*(q`^nn)) <= len (q`^nn) by Th26;
         end;
         suppose p.n = 0.L;
-          hence len (p.n*(q`^n)) <= len (q`^n) by Th25;
+          hence len (p.nn*(q`^nn)) <= len (q`^nn) by Th25;
         end;
       end;
-      then maxFq <= len (q`^n) by A22,SQUARE_1:50;
-      then len F1 <= len (q`^n) by A21,XXREAL_0:2;
+      then maxFq <= len (q`^nn) by A22,SQUARE_1:50;
+      then len F1 <= len (q`^nn) by A21,XXREAL_0:2;
       hence len F1 <= len (q`^(n+1-'1)) by BINARITH:39;
     end;
     suppose
@@ -1867,11 +1872,11 @@ A23:  n+1 > len F;
       then n >= len F by NAT_1:13;
       then F|n = F & F|(n+1) = F by A23,FINSEQ_1:79;
       then len F1 <= len (q`^(n-'1)) by A11,A12;
-      then len F1 <= len (q`^n) by A16,XXREAL_0:2;
+      then len F1 <= len (q`^nn) by A16,XXREAL_0:2;
       hence len F1 <= len (q`^(n+1-'1)) by BINARITH:39;
     end;
   end;
-A24: for n be non empty Element of NAT holds P[n] from BINARITH:sch 1(A8,A10);
+A24: for n be non empty Nat holds P[n] from NAT_1:sch 10(A8,A10);
   len p > 0 by A1;
   then len p >= 0+1 by NAT_1:13;
   then
@@ -1907,7 +1912,7 @@ A34:    len F1 <> {};
         then 0+1 <= len F1 by NAT_1:13;
         then
 A35:    1 in dom F1 by FINSEQ_3:27;
-        defpred P[Element of NAT] means for F2 be Polynomial of L
+        defpred P[Nat] means for F2 be Polynomial of L
         st F2 = Sum(F1|$1) holds len F2 <= $1*len q-len q-$1+2;
 A36:    P[1]
         proof
@@ -1926,9 +1931,9 @@ A37:      F2 = Sum(F1|1);
             .= <%p.0%> by Th30;
           hence len F2 <= 1*len q-len q-1+2 by A37,ALGSEQ_1:def 6;
         end;
-A38:    for n be non empty Element of NAT st P[n] holds P[n+1]
+A38:    for n be non empty Nat st P[n] holds P[n+1]
         proof
-          let n be non empty Element of NAT;
+          let n be non empty Nat;
           assume
 A39:      for F2 be Polynomial of L st F2 = Sum(F1|n) holds
           len F2 <= n*len q-len q-n+2;
@@ -1955,25 +1960,27 @@ A46:          n+1 in dom F1 by A44,FINSEQ_3:27;
               then n+1 <= len F by A44,XXREAL_0:2;
               then
 A47:          n+1 in dom F by A45,FINSEQ_3:27;
+    reconsider nn = n as Element of NAT by ORDINAL1:def 13;
 A48:          F1/.(n+1) = F1.(n+1) by A46,PARTFUN1:def 8
                 .= F.(n+1) by A31,A46,FINSEQ_1:def 7
                 .= p.(n+1-'1)*(q`^(n+1-'1)) by A5,A47
-                .= p.n*(q`^(n+1-'1)) by BINARITH:39
-                .= p.n*(q`^n) by BINARITH:39;
-              reconsider maxFq = max(len F3,len (p.n*(q`^n))) as Element of NAT
+                .= p.nn*(q`^(n+1-'1)) by BINARITH:39
+                .= p.nn*(q`^nn) by BINARITH:39;
+              reconsider maxFq = max(len F3,len (p.nn*(q`^nn)))
+               as Element of NAT
               by FINSEQ_2:1;
-A49:          maxFq >= len F3 & maxFq >= len (p.n*(q`^n)) by XXREAL_0:25;
-              F1|(n+1) = F1|n ^ <*F1/.(n+1)*> by A44,JORDAN8:2;
+A49:          maxFq >= len F3 & maxFq >= len (p.nn*(q`^nn)) by XXREAL_0:25;
+              F1|(nn+1) = F1|nn ^ <*F1/.(nn+1)*> by A44,JORDAN8:2;
               then F2 = Sum(F1|n) + F1/.(n+1) by A40,FVSUM_1:87
-                .= F3 + p.n*(q`^n) by A48,POLYNOM3:def 12;
+                .= F3 + p.nn*(q`^nn) by A48,POLYNOM3:def 12;
               then
 A50:          len F2 <= maxFq by A49,POLYNOM4:9;
-              len (p.n*(q`^n)) <= n*len q-n+1
+              len (p.nn*(q`^nn)) <= n*len q-n+1
               proof
                 per cases;
                 suppose p.n <> 0.L;
-                  then len (p.n*(q`^n)) = len (q`^n) by Th26;
-                  hence len (p.n*(q`^n)) <= n*len q-n+1 by A2,Th24;
+                  then len (p.nn*(q`^nn)) = len (q`^nn) by Th26;
+                  hence len (p.nn*(q`^nn)) <= n*len q-n+1 by A2,Th24;
                 end;
                 suppose
 A51:              p.n = 0.L;
@@ -1983,7 +1990,7 @@ A51:              p.n = 0.L;
 A52:              n*(len q-1) >= 0 by REAL_2:121;
                   n*len q <= n*len q+1 by NAT_1:11;
                   then n*len q-n <= n*len q+1-n by XREAL_1:11;
-                  hence len (p.n*(q`^n)) <= n*len q-n+1 by A51,A52,Th25;
+                  hence len (p.nn*(q`^nn)) <= n*len q-n+1 by A51,A52,Th25;
                 end;
               end;
               then maxFq <= n*len q-n+1 by A43,SQUARE_1:50;
@@ -2003,8 +2010,7 @@ A54:          len F2 <= n*len q-len q-n+2 by A39,A40;
           end;
           hence len F2 <= (n+1)*len q-len q-(n+1)+2;
         end;
-A55:    for n be non empty Element of NAT holds P[n]
-        from BINARITH:sch 1(A36,A38);
+A55:    for n be non empty Nat holds P[n] from NAT_1:sch 10(A36,A38);
         F1|(len F1) = F1 by FINSEQ_1:79;
         then
 A56:    len sF1 <= (len F1)*(len q)-len q-len F1+2 by A34,A55;
@@ -2284,8 +2290,8 @@ registration
       let n be Nat;
       assume
 A1:   n >= len p;
-      n in NAT by ORDINAL1:def 13;
-      hence (NormPolynomial(p)).n = p.n / p.(len p-'1) by Def10
+    reconsider nn = n as Element of NAT by ORDINAL1:def 13;
+      thus (NormPolynomial(p)).n = p.nn / p.(len p-'1) by Def10
         .= 0.L / p.(len p-'1) by A1,ALGSEQ_1:22
         .= 0.L * (p.(len p-'1))" by VECTSP_1:def 23
         .= 0.L by VECTSP_1:39;
@@ -2332,8 +2338,8 @@ A2: len p is_at_least_length_of NormPolynomial(p)
     let n be Nat;
     assume
 A3: n >= len p;
-    n in NAT by ORDINAL1:def 13;
-    hence (NormPolynomial(p)).n = p.n / p.(len p-'1) by Def10
+    reconsider nn = n as Element of NAT by ORDINAL1:def 13;
+    thus (NormPolynomial(p)).n = p.nn / p.(len p-'1) by Def10
       .= 0.L / p.(len p-'1) by A3,ALGSEQ_1:22
       .= 0.L * (p.(len p-'1))" by VECTSP_1:def 23
       .= 0.L by VECTSP_1:39;
@@ -2346,10 +2352,12 @@ A4: n is_at_least_length_of NormPolynomial(p);
     proof
       let i be Nat;
 A5:   i in NAT by ORDINAL1:def 13;
-      assume i >= n;
-      then (NormPolynomial(p)).i = 0.L by A4,ALGSEQ_1:def 3;
-      then p.i / p.(len p-'1) = 0.L by A5,Def10;
-      then p.i * (p.(len p-'1))" = 0.L by VECTSP_1:def 23;
+      assume
+Z:       i >= n;
+    reconsider ii = i as Element of NAT by ORDINAL1:def 13;
+      (NormPolynomial(p)).i = 0.L by A4,ALGSEQ_1:def 3,Z;
+      then p.ii / p.(len p-'1) = 0.L by Def10;
+      then p.ii * (p.(len p-'1))" = 0.L by VECTSP_1:def 23;
       hence p.i = 0.L by A1,VECTSP_1:44;
     end;
     hence len p <= n by ALGSEQ_1:def 4;
@@ -3410,7 +3418,7 @@ A10: k+1 > 1 by A8,NAT_1:13;
     k1 < len q by A8,ALGSEQ_1:22;
     then
 A11: k+1+0 <= len q by NAT_1:13;
-    consider sq be CRoot of k1,-(q.0/q.k);
+    consider sq be CRoot of k1,-(q.0/q.k1);
     deffunc O(Nat) = (q.(k1+$1))*((power F_Complex).(sq,k1+$1));
     consider F2 be FinSequence of the carrier of F_Complex such that
 A12: len F2 = len q-'(k1+1) and
@@ -3477,11 +3485,11 @@ A32:  Sum (F1|k) = (F1|k1)/.1 by A24,POLYNOM2:5
         .= q.0 by GROUP_1:def 5;
 A33:  F1/.(k+1) = F1.(k+1) by A21,PARTFUN1:def 8
         .= q.(k+1-'1)*(power F_Complex).(z1,k+1-'1) by A20,A21
-        .= q.k*(power F_Complex).(z1,k+1-'1) by BINARITH:39
+        .= q.k1*(power F_Complex).(z1,k+1-'1) by BINARITH:39
         .= q.k1*(power F_Complex).(z1,k1) by BINARITH:39
         .= q.k1*((power F_Complex).([**c,0**],k1)*
       (power F_Complex).(sq,k1)) by GROUP_1:100
-        .= q.k*((power F_Complex).([**c,0**],k1)*(-(q.0/q.k)))
+        .= q.k1*((power F_Complex).([**c,0**],k1)*(-(q.0/q.k1)))
       by COMPLFLD:def 2
         .= q.k1*(-(q.0/q.k1))*(power F_Complex).([**c,0**],k1)
         .= q.k1*((-(q.0))/q.k1)*(power F_Complex).([**c,0**],k1)

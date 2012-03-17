@@ -16,7 +16,7 @@
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="HALLMAR1"/>
 </Signature>
-<RCluster>
+<RCluster aid="HALLMAR1" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -39,7 +39,7 @@
 <Adjective nr="19"/>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="HALLMAR1" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -65,7 +65,7 @@
 <Adjective nr="15"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="HALLMAR1" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -91,7 +91,7 @@
 <Adjective nr="15"/>
 </Cluster>
 </FCluster>
-<CCluster>
+<CCluster aid="HALLMAR1" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -123,7 +123,7 @@
 <Adjective nr="7" value="false"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="HALLMAR1" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>

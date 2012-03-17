@@ -39,7 +39,7 @@
 <ArticleID name="MSUALG_5"/>
 <ArticleID name="MSUALG_7"/>
 </Signature>
-<RCluster>
+<RCluster aid="MSUALG_7" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="7">
 <Cluster>
@@ -49,7 +49,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Typ kind="M" nr="26">
+<Typ kind="M" nr="25">
 <Cluster/>
 <LocusVar nr="1"/>
 </Typ>
@@ -65,7 +65,7 @@
 <Adjective nr="79"/>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="MSUALG_7" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -77,7 +77,7 @@
 <LocusVar nr="1"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="285">
+<Func kind="K" nr="286">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -88,7 +88,7 @@
 <Adjective nr="50"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="MSUALG_7" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -100,7 +100,7 @@
 <LocusVar nr="1"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="285">
+<Func kind="K" nr="286">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -111,7 +111,7 @@
 <Adjective nr="79"/>
 </Cluster>
 </FCluster>
-<CCluster>
+<CCluster aid="MSUALG_7" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="7">
 <Cluster>
@@ -126,7 +126,7 @@
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
-<Typ kind="M" nr="26">
+<Typ kind="M" nr="25">
 <Cluster/>
 <LocusVar nr="1"/>
 </Typ>
@@ -134,7 +134,7 @@
 <Adjective nr="79"/>
 </Cluster>
 </CCluster>
-<CCluster>
+<CCluster aid="MSUALG_7" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="7">
 <Cluster>
@@ -149,7 +149,7 @@
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
-<Typ kind="M" nr="26">
+<Typ kind="M" nr="25">
 <Cluster/>
 <LocusVar nr="1"/>
 </Typ>

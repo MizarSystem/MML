@@ -12,10 +12,10 @@
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
 <ArticleID name="RELSET_1"/>
+<ArticleID name="FUNCT_2"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
-<ArticleID name="FUNCT_2"/>
 <ArticleID name="FUNCOP_1"/>
 <ArticleID name="FRAENKEL"/>
 <ArticleID name="FINSEQ_2"/>
@@ -47,7 +47,7 @@
 <ArticleID name="WAYBEL_3"/>
 <ArticleID name="WAYBEL23"/>
 </Signature>
-<RCluster>
+<RCluster aid="WAYBEL31" nr="1">
 <ArgTypes/>
 <Typ kind="G" nr="6">
 <Cluster/>
@@ -65,7 +65,7 @@
 <Adjective nr="141"/>
 </Cluster>
 </RCluster>
-<FCluster>
+<FCluster aid="WAYBEL31" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
@@ -77,7 +77,7 @@
 <Adjective nr="151"/>
 </Cluster>
 </Typ>
-<Typ kind="M" nr="31">
+<Typ kind="M" nr="30">
 <Cluster>
 <Adjective nr="160">
 <LocusVar nr="1"/>
@@ -99,7 +99,7 @@
 <Adjective nr="96"/>
 </Cluster>
 </FCluster>
-<FCluster>
+<FCluster aid="WAYBEL31" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
@@ -123,7 +123,7 @@
 <Adjective nr="151"/>
 </Cluster>
 </FCluster>
-<CCluster>
+<CCluster aid="WAYBEL31" nr="1">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="33"/>
