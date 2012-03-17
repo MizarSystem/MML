@@ -16,20 +16,17 @@
 <ArticleID name="CARD_1"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="PRE_TOPC"/>
+<ArticleID name="SETFAM_1"/>
 <ArticleID name="ENUMSET1"/>
 <ArticleID name="DOMAIN_1"/>
 <ArticleID name="RELAT_2"/>
 <ArticleID name="EQREL_1"/>
-<ArticleID name="NUMBERS"/>
-<ArticleID name="XREAL_0"/>
 <ArticleID name="CONNSP_2"/>
-<ArticleID name="BINOP_1"/>
-<ArticleID name="FUNCT_5"/>
-<ArticleID name="METRIC_1"/>
-<ArticleID name="PCOMPS_1"/>
 <ArticleID name="RELSET_1"/>
 <ArticleID name="BORSUK_1"/>
+<ArticleID name="NUMBERS"/>
 <ArticleID name="XCMPLX_0"/>
+<ArticleID name="XREAL_0"/>
 <ArticleID name="XXREAL_0"/>
 <ArticleID name="CARD_3"/>
 <ArticleID name="ORDERS_1"/>
@@ -52,12 +49,16 @@
 <ArticleID name="VALUED_1"/>
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="FINSEQ_2"/>
+<ArticleID name="BINOP_1"/>
+<ArticleID name="FUNCT_5"/>
+<ArticleID name="METRIC_1"/>
 <ArticleID name="ALGSTR_0"/>
 <ArticleID name="RLVECT_1"/>
 <ArticleID name="RLTOPSP1"/>
 <ArticleID name="EUCLID"/>
 <ArticleID name="XXREAL_3"/>
 <ArticleID name="TOPDIM_1"/>
+<ArticleID name="PCOMPS_1"/>
 <ArticleID name="TOPDIM_2"/>
 </Signature>
 <RCluster aid="TOPDIM_2" nr="1">
@@ -75,7 +76,7 @@
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="262">
+<Adjective nr="265">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -87,7 +88,7 @@
 </Typ>
 <Typ kind="M" nr="2">
 <Cluster>
-<Adjective nr="262">
+<Adjective nr="265">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -98,8 +99,8 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="448">
-<Func kind="K" nr="458">
+<Func kind="K" nr="452">
+<Func kind="K" nr="466">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -107,7 +108,7 @@
 </Func>
 <Cluster>
 <Adjective nr="24"/>
-<Adjective nr="86"/>
+<Adjective nr="74"/>
 </Cluster>
 </FCluster>
 <FCluster aid="TOPDIM_2" nr="2">
@@ -117,7 +118,7 @@
 </Typ>
 <Typ kind="M" nr="2">
 <Cluster>
-<Adjective nr="262">
+<Adjective nr="265">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -128,13 +129,13 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="458">
+<Func kind="K" nr="466">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="86"/>
-<Adjective nr="177"/>
+<Adjective nr="74"/>
+<Adjective nr="165"/>
 </Cluster>
 </FCluster>
 <FCluster aid="TOPDIM_2" nr="3">
@@ -142,8 +143,8 @@
 <Typ kind="G" nr="6">
 <Cluster>
 <Adjective nr="44"/>
-<Adjective nr="81"/>
-<Adjective nr="174"/>
+<Adjective nr="162"/>
+<Adjective nr="264"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="2">
@@ -194,21 +195,21 @@
 <Typ kind="G" nr="6">
 <Cluster>
 <Adjective nr="44"/>
-<Adjective nr="81"/>
-<Adjective nr="174"/>
+<Adjective nr="162"/>
 <Adjective nr="261"/>
+<Adjective nr="264"/>
 </Cluster>
 </Typ>
 <Typ kind="G" nr="6">
 <Cluster>
 <Adjective nr="44"/>
-<Adjective nr="81"/>
-<Adjective nr="174"/>
+<Adjective nr="162"/>
 <Adjective nr="261"/>
+<Adjective nr="264"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="183">
+<Func kind="K" nr="155">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -226,7 +227,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="443">
+<Func kind="K" nr="447">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -252,7 +253,7 @@
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="262">
+<Adjective nr="265">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -262,12 +263,12 @@
 <Typ kind="G" nr="6">
 <Cluster>
 <Adjective nr="44"/>
-<Adjective nr="81"/>
+<Adjective nr="264"/>
 </Cluster>
 </Typ>
 </ArgTypes>
 <Cluster>
-<Adjective nr="92"/>
+<Adjective nr="80"/>
 </Cluster>
 <Typ kind="M" nr="2">
 <Cluster/>

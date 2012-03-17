@@ -6,6 +6,7 @@
 <ArticleID name="XBOOLE_0"/>
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
+<ArticleID name="SETFAM_1"/>
 <ArticleID name="RELAT_1"/>
 <ArticleID name="FUNCT_1"/>
 <ArticleID name="MCART_1"/>
@@ -26,8 +27,8 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="36" value="false"/>
-<Adjective nr="47"/>
+<Adjective nr="39" value="false"/>
+<Adjective nr="50"/>
 </Cluster>
 </RCluster>
 <RCluster aid="FIN_TOPO" nr="2">
@@ -36,27 +37,27 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="36" value="false"/>
-<Adjective nr="42"/>
-<Adjective nr="47"/>
-<Adjective nr="49"/>
+<Adjective nr="39" value="false"/>
+<Adjective nr="45"/>
+<Adjective nr="50"/>
+<Adjective nr="52"/>
 </Cluster>
 </RCluster>
 <FCluster aid="FIN_TOPO" nr="1">
 <ArgTypes/>
-<Func kind="K" nr="122"/>
+<Func kind="K" nr="131"/>
 <Cluster>
-<Adjective nr="36" value="false"/>
-<Adjective nr="47"/>
+<Adjective nr="39" value="false"/>
+<Adjective nr="50"/>
 </Cluster>
 </FCluster>
 <FCluster aid="FIN_TOPO" nr="2">
 <ArgTypes/>
-<Func kind="K" nr="122"/>
+<Func kind="K" nr="131"/>
 <Cluster>
-<Adjective nr="42"/>
-<Adjective nr="47"/>
-<Adjective nr="49"/>
+<Adjective nr="45"/>
+<Adjective nr="50"/>
+<Adjective nr="52"/>
 </Cluster>
 </FCluster>
 </Registrations>

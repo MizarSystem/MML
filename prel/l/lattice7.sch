@@ -20,6 +20,7 @@
 <ArticleID name="ORDERS_2"/>
 <ArticleID name="LATTICES"/>
 <ArticleID name="FUNCT_4"/>
+<ArticleID name="SETFAM_1"/>
 <ArticleID name="EQREL_1"/>
 <ArticleID name="FILTER_1"/>
 <ArticleID name="LATTICE3"/>
@@ -32,8 +33,8 @@
 <Adjective nr="56"/>
 <Adjective nr="57"/>
 <Adjective nr="58"/>
-<Adjective nr="82"/>
-<Adjective nr="83"/>
+<Adjective nr="85"/>
+<Adjective nr="86"/>
 </Cluster>
 </Typ>
 </ArgTypes>

@@ -12,7 +12,6 @@
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XCMPLX_0"/>
 <ArticleID name="XREAL_0"/>
-<ArticleID name="MEMBERED"/>
 <ArticleID name="PARTFUN1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
@@ -21,6 +20,7 @@
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="FINSEQ_2"/>
+<ArticleID name="MEMBERED"/>
 <ArticleID name="SIN_COS2"/>
 <ArticleID name="COMPLEX1"/>
 <ArticleID name="INT_2"/>
@@ -37,7 +37,7 @@
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="23"/>
+<Adjective nr="38"/>
 <Adjective nr="45"/>
 </Cluster>
 </RCluster>
@@ -50,9 +50,9 @@
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="23"/>
-<Adjective nr="24"/>
-<Adjective nr="25"/>
+<Adjective nr="38"/>
+<Adjective nr="39"/>
+<Adjective nr="40"/>
 <Adjective nr="45"/>
 </Cluster>
 </RCluster>
@@ -93,7 +93,7 @@
 <Func kind="K" nr="196"/>
 <Cluster>
 <Adjective nr="6"/>
-<Adjective nr="30">
+<Adjective nr="24">
 <Func kind="K" nr="44"/>
 <Func kind="K" nr="44"/>
 </Adjective>
@@ -108,7 +108,7 @@
 <Func kind="K" nr="199"/>
 <Cluster>
 <Adjective nr="6"/>
-<Adjective nr="30">
+<Adjective nr="24">
 <Func kind="K" nr="44"/>
 <Func kind="K" nr="44"/>
 </Adjective>
@@ -123,7 +123,7 @@
 <Func kind="K" nr="132"/>
 <Cluster>
 <Adjective nr="6"/>
-<Adjective nr="30">
+<Adjective nr="24">
 <Func kind="K" nr="44"/>
 <Func kind="K" nr="44"/>
 </Adjective>
@@ -138,7 +138,7 @@
 <Func kind="K" nr="135"/>
 <Cluster>
 <Adjective nr="6"/>
-<Adjective nr="30">
+<Adjective nr="24">
 <Func kind="K" nr="44"/>
 <Func kind="K" nr="44"/>
 </Adjective>
@@ -166,12 +166,12 @@
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="23"/>
+<Adjective nr="38"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="23"/>
+<Adjective nr="38"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -204,12 +204,12 @@
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="23"/>
+<Adjective nr="38"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="23"/>
+<Adjective nr="38"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -242,12 +242,12 @@
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="23"/>
+<Adjective nr="38"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="23"/>
+<Adjective nr="38"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -280,12 +280,12 @@
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="23"/>
+<Adjective nr="38"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="23"/>
+<Adjective nr="38"/>
 </Cluster>
 </Typ>
 </ArgTypes>

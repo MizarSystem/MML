@@ -3,22 +3,28 @@
 ::
 :: Received November 23, 1989
 :: Copyright (c) 1990 Association of Mizar Users
+::, XXREAL_1;
 
 environ
 
  vocabularies NUMBERS, SUBSET_1, XREAL_0, ORDINAL1, SEQ_1, ORDINAL2, NAT_1,
       ARYTM_3, XXREAL_0, REAL_1, CARD_1, ARYTM_1, MEMBERED, XXREAL_2, COMPLEX1,
       TARSKI, XBOOLE_0, SEQ_2, FUNCT_1, VALUED_0, RELAT_1, FUNCOP_1, VALUED_1,
-      SQUARE_1, SEQM_3, SEQ_4;
- notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0,
-      REAL_1, RELAT_1, COMPLEX1, FUNCT_2, NAT_1, VALUED_0, VALUED_1, SEQ_1,
-      SEQ_2, FUNCOP_1, SQUARE_1, SEQM_3, MEMBERED, XXREAL_0, XXREAL_2,
-      RECDEF_1;
+      SQUARE_1, SEQM_3, SEQ_4, BINOP_1, BINOP_2, FINSEQOP, XCMPLX_0, COMPLSP1,
+      FINSEQ_1, ZFMISC_1, FINSEQ_2, CARD_3, RVSUM_1, RCOMP_1, SETFAM_1,
+      METRIC_1, FINSET_1, ORDINAL4, PARTFUN1, GOBOARD2;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, CARD_1, FINSET_1,
+      MEMBERED, ORDINAL1, NUMBERS, XXREAL_2, XCMPLX_0, XXREAL_0, XREAL_0,
+      SETFAM_1, REAL_1, SQUARE_1, COMPLEX1, FUNCT_1, RELSET_1, PARTFUN1, SEQ_1,
+      SEQ_2, SEQM_3, FUNCT_2, BINOP_1, BINOP_2, FINSEQ_1, FUNCOP_1, NAT_1,
+      VALUED_0, VALUED_1, RVSUM_1, FINSEQ_2, RECDEF_1, FINSEQOP;
  constructors FUNCOP_1, REAL_1, NAT_1, COMPLEX1, PARTFUN1, SEQ_2, SEQM_3,
-      SQUARE_1, VALUED_1, SEQ_1, RECDEF_1, XXREAL_2, FINSET_1, RELSET_1;
+      SQUARE_1, VALUED_1, SEQ_1, RECDEF_1, XXREAL_2, FINSET_1, RELSET_1,
+      BINOP_1, BINOP_2, SETWISEO, FINSEQOP, ZFMISC_1, RVSUM_1;
  registrations XBOOLE_0, ORDINAL1, RELSET_1, NUMBERS, XXREAL_0, XREAL_0,
       MEMBERED, VALUED_0, VALUED_1, FUNCT_2, XXREAL_2, FUNCOP_1, SEQ_2,
-      FINSET_1;
+      FINSET_1, BINOP_2, FUNCT_1, FINSEQ_2, SUBSET_1, NAT_1, RELAT_1, FINSEQ_1,
+      CARD_1, SEQM_3;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
 
 
@@ -330,4 +336,506 @@ scheme :: SEQ_4:sch 1
   st P[n] holds k <= n
 provided
  for k holds F(k+1) < F(k) or P[k];
+
+begin :: moved from COMPLSP1, 2010.02.25
+
+reserve i,j,k,n for Element of NAT,
+  r,r9,r1,r2 for Real,
+  c,c9,c1,c2,c3 for Element of COMPLEX;
+
+theorem :: SEQ_4:66
+  0c is_a_unity_wrt addcomplex;
+
+theorem :: SEQ_4:67
+  compcomplex is_an_inverseOp_wrt addcomplex;
+
+theorem :: SEQ_4:68
+  addcomplex is having_an_inverseOp;
+
+theorem :: SEQ_4:69
+  the_inverseOp_wrt addcomplex = compcomplex;
+
+definition
+  redefine func diffcomplex equals
+:: SEQ_4:def 6
+  addcomplex*(id COMPLEX,compcomplex);
+end;
+
+theorem :: SEQ_4:70
+  1r is_a_unity_wrt multcomplex;
+
+theorem :: SEQ_4:71
+  multcomplex is_distributive_wrt addcomplex;
+
+definition let c be complex number;
+  func c multcomplex -> UnOp of COMPLEX equals
+:: SEQ_4:def 7
+  multcomplex[;](c,id COMPLEX);
+end;
+
+theorem :: SEQ_4:72
+  (c multcomplex).c9 = c*c9;
+
+theorem :: SEQ_4:73
+  c multcomplex is_distributive_wrt addcomplex;
+
+definition
+  func abscomplex -> Function of COMPLEX,REAL means
+:: SEQ_4:def 8
+  for c holds it.c = |.c.|;
+end;
+
+reserve z,z1,z2 for FinSequence of COMPLEX;
+
+definition let z1,z2;
+  redefine func z1 + z2 -> FinSequence of COMPLEX equals
+:: SEQ_4:def 9
+  addcomplex.:(z1,z2);
+  redefine func z1 - z2 -> FinSequence of COMPLEX equals
+:: SEQ_4:def 10
+  diffcomplex.:(z1,z2);
+end;
+
+definition let z;
+  redefine func -z -> FinSequence of COMPLEX equals
+:: SEQ_4:def 11
+  compcomplex*z;
+end;
+
+notation let z;
+  let c be complex number;
+  synonym c*z for c(#)z;
+end;
+
+definition let z;
+  let c be complex number;
+  redefine func c*z -> FinSequence of COMPLEX equals
+:: SEQ_4:def 12
+  (c multcomplex)*z;
+end;
+
+definition let z;
+  redefine func abs z -> FinSequence of REAL equals
+:: SEQ_4:def 13
+  abscomplex*z;
+end;
+
+definition let n;
+  func COMPLEX n -> FinSequence-DOMAIN of COMPLEX equals
+:: SEQ_4:def 14
+  n-tuples_on COMPLEX;
+end;
+
+registration let n;
+  cluster COMPLEX n -> non empty;
+end;
+
+reserve x,z,z1,z2,z3 for Element of COMPLEX n,
+  A,B for Subset of COMPLEX n;
+
+theorem :: SEQ_4:74
+  k in Seg n implies z.k in COMPLEX;
+
+definition let n,z1,z2;
+  redefine func z1 + z2 -> Element of COMPLEX n;
+end;
+
+theorem :: SEQ_4:75
+  k in Seg n & c1 = z1.k & c2 = z2.k implies (z1 + z2).k = c1 + c2;
+
+definition let n;
+  func 0c n -> FinSequence of COMPLEX equals
+:: SEQ_4:def 15
+  n |-> 0c;
+end;
+
+definition let n;
+  redefine func 0c n -> Element of COMPLEX n;
+end;
+
+theorem :: SEQ_4:76
+  z + 0c n = z & z = 0c n + z;
+
+definition let n,z;
+  redefine func -z -> Element of COMPLEX n;
+end;
+
+theorem :: SEQ_4:77
+  k in Seg n & c = z.k implies (-z).k = -c;
+
+theorem :: SEQ_4:78
+  z + -z = 0c n & -z + z = 0c n;
+
+theorem :: SEQ_4:79
+  z1 + z2 = 0c n implies z1 = -z2 & z2 = -z1;
+
+theorem :: SEQ_4:80
+  --z = z;
+
+theorem :: SEQ_4:81
+  -z1 = -z2 implies z1 = z2;
+
+theorem :: SEQ_4:82
+  z1 + z = z2 + z or z1 + z = z + z2 implies z1 = z2;
+
+theorem :: SEQ_4:83
+  -(z1 + z2) = -z1 + -z2;
+
+definition let n,z1,z2;
+  redefine func z1 - z2 -> Element of COMPLEX n;
+end;
+
+theorem :: SEQ_4:84
+  k in Seg n implies (z1 - z2).k = z1.k - z2.k;
+
+theorem :: SEQ_4:85
+  z - 0c n = z;
+
+theorem :: SEQ_4:86
+  0c n - z = -z;
+
+theorem :: SEQ_4:87
+  z1 - -z2 = z1 + z2;
+
+theorem :: SEQ_4:88
+  -(z1 - z2) = z2 - z1;
+
+theorem :: SEQ_4:89
+  -(z1 - z2) = -z1 + z2;
+
+theorem :: SEQ_4:90
+  z - z = 0c n;
+
+theorem :: SEQ_4:91
+  z1 - z2 = 0c n implies z1 = z2;
+
+theorem :: SEQ_4:92
+  z1 - z2 - z3 = z1 - (z2 + z3);
+
+theorem :: SEQ_4:93
+  z1 + (z2 - z3) = z1 + z2 - z3;
+
+theorem :: SEQ_4:94
+  z1 - (z2 - z3) = z1 - z2 + z3;
+
+theorem :: SEQ_4:95
+  z1 - z2 + z3 = z1 + z3 - z2;
+
+theorem :: SEQ_4:96
+  z1 = z1 + z - z;
+
+theorem :: SEQ_4:97
+  z1 + (z2 - z1) = z2;
+
+theorem :: SEQ_4:98
+  z1 = z1 - z + z;
+
+definition let n,z,c;
+  redefine func c*z -> Element of COMPLEX n;
+end;
+
+theorem :: SEQ_4:99
+  k in Seg n & c9 = z.k implies (c*z).k = c*c9;
+
+theorem :: SEQ_4:100
+  c1*(c2*z) = (c1*c2)*z;
+
+theorem :: SEQ_4:101
+  (c1 + c2)*z = c1*z + c2*z;
+
+theorem :: SEQ_4:102
+  c*(z1+z2) = c*z1 + c*z2;
+
+theorem :: SEQ_4:103
+  1r*z = z;
+
+theorem :: SEQ_4:104
+  0c*z = 0c n;
+
+theorem :: SEQ_4:105
+  (-1r)*z = -z;
+
+definition let n,z;
+  redefine func abs z -> Element of n-tuples_on REAL;
+end;
+
+theorem :: SEQ_4:106
+  k in Seg n & c = z.k implies (abs z).k = |.c.|;
+
+theorem :: SEQ_4:107
+  abs 0c n = n |-> 0;
+
+theorem :: SEQ_4:108
+  abs -z = abs z;
+
+theorem :: SEQ_4:109
+  abs(c*z) = |.c.|*(abs z);
+
+definition
+  let z be FinSequence of COMPLEX;
+  func |.z.| -> Real equals
+:: SEQ_4:def 16
+  sqrt Sum sqr abs z;
+end;
+
+theorem :: SEQ_4:110
+  |.0c n.| = 0;
+
+theorem :: SEQ_4:111
+  |.z.| = 0 implies z = 0c n;
+
+theorem :: SEQ_4:112
+  0 <= |.z.|;
+
+theorem :: SEQ_4:113
+  |.-z.| = |.z.|;
+
+theorem :: SEQ_4:114
+  |.c*z.| = |.c.|*|.z.|;
+
+theorem :: SEQ_4:115
+  |.z1 + z2.| <= |.z1.| + |.z2.|;
+
+theorem :: SEQ_4:116
+  |.z1 - z2.| <= |.z1.| + |.z2.|;
+
+theorem :: SEQ_4:117
+  |.z1.| - |.z2.| <= |.z1 + z2.|;
+
+theorem :: SEQ_4:118
+  |.z1.| - |.z2.| <= |.z1 - z2.|;
+
+theorem :: SEQ_4:119
+  |.z1 - z2.| = 0 iff z1 = z2;
+
+theorem :: SEQ_4:120
+  z1 <> z2 implies 0 < |.z1 - z2.|;
+
+theorem :: SEQ_4:121
+  |.z1 - z2.| = |.z2 - z1.|;
+
+theorem :: SEQ_4:122
+  |.z1 - z2.| <= |.z1 - z.| + |.z - z2.|;
+
+definition
+  let n;
+  let A be Subset of COMPLEX n;
+  attr A is open means
+:: SEQ_4:def 17
+
+  for x st x in A ex r st 0 < r & for z st |.z.|
+  < r holds x + z in A;
+end;
+
+definition let n;
+  let A be Subset of COMPLEX n;
+  attr A is closed means
+:: SEQ_4:def 18
+  for x st for r st r > 0 ex z st |.z.| < r & x + z in
+  A holds x in A;
+end;
+
+theorem :: SEQ_4:123
+  for A being Subset of COMPLEX n st A = {} holds A is open;
+
+theorem :: SEQ_4:124
+  for A being Subset of COMPLEX n st A = COMPLEX n holds A is open;
+
+theorem :: SEQ_4:125
+  for AA being Subset-Family of COMPLEX n st for A being Subset of
+  COMPLEX n st A in AA holds A is open for A being Subset of COMPLEX n st A =
+  union AA holds A is open;
+
+theorem :: SEQ_4:126
+  for A,B being Subset of COMPLEX n st A is open & B is open for C
+  being Subset of COMPLEX n st C = A /\ B holds C is open;
+
+definition
+  let n,x,r;
+  func Ball(x,r) -> Subset of COMPLEX n equals
+:: SEQ_4:def 19
+  { z : |.z - x.| < r };
+end;
+
+theorem :: SEQ_4:127
+  z in Ball(x,r) iff |.x - z.| < r;
+
+theorem :: SEQ_4:128
+  0 < r implies x in Ball(x,r);
+
+theorem :: SEQ_4:129
+  Ball(z1,r1) is open;
+
+scheme :: SEQ_4:sch 2
+
+  SubsetFD { A, D() -> non empty set, F(set) -> Element of D(), P[set] }: { F(
+  x) where x is Element of A(): P[x]} is Subset of D();
+
+scheme :: SEQ_4:sch 3
+
+  SubsetFD2 { A, B, D() -> non empty set, F(set,set) -> Element of D(), P[set,
+  set] }: { F(x,y) where x is Element of A(), y is Element of B(): P[x,y]} is
+  Subset of D();
+
+definition let n,x,A;
+  func dist(x,A) -> Real means
+:: SEQ_4:def 20
+
+  for X being Subset of REAL st X = {|.x
+  - z.| : z in A} holds it = lower_bound X;
+end;
+
+definition let n,A,r;
+  func Ball(A,r) -> Subset of COMPLEX n equals
+:: SEQ_4:def 21
+  { z : dist(z,A) < r };
+end;
+
+theorem :: SEQ_4:130
+  for X being Subset of REAL, r st X <> {} & for r9 st r9 in X
+  holds r <= r9 holds lower_bound X >= r;
+
+theorem :: SEQ_4:131
+  A <> {} implies dist(x,A) >= 0;
+
+theorem :: SEQ_4:132
+  A <> {} implies dist(x + z,A) <= dist(x,A) + |.z.|;
+
+theorem :: SEQ_4:133
+  x in A implies dist(x,A) = 0;
+
+theorem :: SEQ_4:134
+  not x in A & A <> {} & A is closed implies dist(x,A) > 0;
+
+theorem :: SEQ_4:135
+  A <> {} implies |.z1 - x.| + dist(x,A) >= dist(z1,A);
+
+theorem :: SEQ_4:136
+  z in Ball(A,r) iff dist(z,A) < r;
+
+theorem :: SEQ_4:137
+  0 < r & x in A implies x in Ball(A,r);
+
+theorem :: SEQ_4:138
+  0 < r implies A c= Ball(A,r);
+
+theorem :: SEQ_4:139
+  A <> {} implies Ball(A,r1) is open;
+
+definition
+  let n,A,B;
+  func dist(A,B) -> Real means
+:: SEQ_4:def 22
+
+  for X being Subset of REAL st X = {|.x
+  - z.| : x in A & z in B} holds it = lower_bound X;
+end;
+
+definition
+  let X,Y be Subset of REAL;
+  func X + Y -> Subset of REAL equals
+:: SEQ_4:def 23
+  { r + r1 : r in X & r1 in Y};
+end;
+
+theorem :: SEQ_4:140
+  for X,Y being Subset of REAL holds X <> {} & Y <> {} implies X + Y <> {};
+
+theorem :: SEQ_4:141
+  for X,Y being Subset of REAL holds X is bounded_below & Y is
+  bounded_below implies X+Y is bounded_below;
+
+theorem :: SEQ_4:142
+  for X,Y being Subset of REAL st X <> {} & X is bounded_below & Y
+  <> {} & Y is bounded_below holds lower_bound (X + Y) = lower_bound X +
+  lower_bound Y;
+
+theorem :: SEQ_4:143
+  for X,Y being Subset of REAL st Y is bounded_below & X <> {} &
+for r st r in X ex r1 st r1 in Y & r1 <= r holds lower_bound X >= lower_bound Y
+;
+
+theorem :: SEQ_4:144
+  A <> {} & B <> {} implies dist(A,B) >= 0;
+
+theorem :: SEQ_4:145
+  dist(A,B) = dist(B,A);
+
+theorem :: SEQ_4:146
+  A <> {} & B <> {} implies dist(x,A) + dist(x,B) >= dist(A,B);
+
+theorem :: SEQ_4:147
+  A meets B implies dist(A,B) = 0;
+
+definition
+  let n;
+  func ComplexOpenSets(n) -> Subset-Family of COMPLEX n equals
+:: SEQ_4:def 24
+  {A where A is
+  Subset of COMPLEX n: A is open};
+end;
+
+theorem :: SEQ_4:148
+  for A being Subset of COMPLEX n holds A in ComplexOpenSets n
+  iff A is open;
+
+theorem :: SEQ_4:149
+  for A being Subset of COMPLEX n holds A is closed iff A` is open;
+
+begin :: moved from GOBOARD2, 2010.03.001, A.T.
+
+reserve r,s for Real,
+  v,v1,v2 for FinSequence of REAL,
+  n,m,i,j,k for
+  Element of NAT,
+  x for set;
+
+theorem :: SEQ_4:150
+  for R being finite Subset of REAL holds R <> {} implies R is
+bounded_above & upper_bound(R) in R & R is bounded_below & lower_bound(R) in R;
+
+theorem :: SEQ_4:151
+  for n being Nat for f being FinSequence holds 1 <= n & n+1 <= len
+  f iff n in dom f & n+1 in dom f;
+
+theorem :: SEQ_4:152
+  for n being Nat for f being FinSequence holds 1 <= n & n+2 <= len f
+  iff n in dom f & n+1 in dom f & n+2 in dom f;
+
+theorem :: SEQ_4:153
+  for D being non empty set, f1,f2 being FinSequence of D, n st 1
+  <= n & n <= len f2 holds (f1^f2)/.(n + len f1) = f2/.n;
+
+theorem :: SEQ_4:154
+  v is increasing implies for n,m st n in dom v & m in dom v & n<=m
+  holds v.n <= v.m;
+
+theorem :: SEQ_4:155
+  v is increasing implies for n,m st n in dom v & m in dom v & n<>
+  m holds v.n<>v.m;
+
+theorem :: SEQ_4:156
+  v is increasing & v1 = v|Seg n implies v1 is increasing;
+
+theorem :: SEQ_4:157
+  for v holds ex v1 st rng v1 = rng v & len v1 = card rng v & v1 is
+  increasing;
+
+theorem :: SEQ_4:158
+  for v1,v2 st len v1 = len v2 & rng v1 = rng v2 & v1 is increasing & v2
+  is increasing holds v1 = v2;
+
+definition
+  let v;
+  func Incr(v) ->increasing FinSequence of REAL means
+:: SEQ_4:def 25
+
+  rng it = rng v &
+  len it = card rng v;
+end;
+
+registration
+  let v be non empty FinSequence of REAL;
+  cluster Incr v -> non empty;
+end;
 

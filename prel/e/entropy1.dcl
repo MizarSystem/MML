@@ -26,18 +26,16 @@
 <ArticleID name="RLVECT_1"/>
 <ArticleID name="MATRIX_1"/>
 <ArticleID name="NAT_1"/>
-<ArticleID name="MEMBERED"/>
 <ArticleID name="VALUED_0"/>
+<ArticleID name="MEMBERED"/>
 <ArticleID name="VALUED_1"/>
 <ArticleID name="MATRPROB"/>
 <ArticleID name="FUNCT_3"/>
 <ArticleID name="RFUNCT_1"/>
-<ArticleID name="SEQ_2"/>
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="BINOP_1"/>
 <ArticleID name="FUNCT_5"/>
 <ArticleID name="METRIC_1"/>
-<ArticleID name="PCOMPS_1"/>
 <ArticleID name="RLTOPSP1"/>
 <ArticleID name="EUCLID"/>
 <ArticleID name="PSCOMP_1"/>
@@ -62,10 +60,10 @@
 <Adjective nr="29"/>
 <Adjective nr="35"/>
 <Adjective nr="36"/>
-<Adjective nr="104"/>
-<Adjective nr="105"/>
-<Adjective nr="106"/>
-<Adjective nr="179"/>
+<Adjective nr="98"/>
+<Adjective nr="99"/>
+<Adjective nr="100"/>
+<Adjective nr="164"/>
 </Cluster>
 </RCluster>
 <RCluster aid="ENTROPY1" nr="2">
@@ -97,7 +95,7 @@
 <Adjective nr="35"/>
 <Adjective nr="36"/>
 <Adjective nr="96"/>
-<Adjective nr="180">
+<Adjective nr="165">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -113,7 +111,7 @@
 </Typ>
 <Cluster>
 <Adjective nr="11" value="false"/>
-<Adjective nr="179"/>
+<Adjective nr="164"/>
 </Cluster>
 </CCluster>
 <CCluster aid="ENTROPY1" nr="2">

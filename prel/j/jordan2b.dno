@@ -27,10 +27,10 @@
 <ArticleID name="METRIC_1"/>
 <ArticleID name="NAT_1"/>
 <ArticleID name="VALUED_0"/>
-<ArticleID name="MEMBERED"/>
 <ArticleID name="RAT_1"/>
-<ArticleID name="ALGSTR_0"/>
+<ArticleID name="MEMBERED"/>
 <ArticleID name="VALUED_1"/>
+<ArticleID name="ALGSTR_0"/>
 <ArticleID name="RLVECT_1"/>
 <ArticleID name="RLTOPSP1"/>
 <ArticleID name="EUCLID"/>

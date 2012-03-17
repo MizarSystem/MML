@@ -19,6 +19,17 @@
 <ArticleID name="VALUED_0"/>
 <ArticleID name="SEQ_2"/>
 <ArticleID name="SEQM_3"/>
+<ArticleID name="XXREAL_0"/>
+<ArticleID name="INT_1"/>
+<ArticleID name="RAT_1"/>
+<ArticleID name="MEMBERED"/>
+<ArticleID name="VALUED_1"/>
+<ArticleID name="XXREAL_2"/>
+<ArticleID name="FINSET_1"/>
+<ArticleID name="CARD_1"/>
+<ArticleID name="FINSEQ_1"/>
+<ArticleID name="FINSEQ_2"/>
+<ArticleID name="SEQ_4"/>
 </Signature>
 <RCluster aid="SEQ_4" nr="1">
 <ArgTypes/>
@@ -105,6 +116,37 @@
 </Func>
 </Func>
 </Typ>
+</FCluster>
+<FCluster aid="SEQ_4" nr="2">
+<ArgTypes>
+<Typ kind="M" nr="2">
+<Cluster/>
+<Func kind="K" nr="85"/>
+</Typ>
+</ArgTypes>
+<Func kind="K" nr="226">
+<LocusVar nr="1"/>
+</Func>
+<Cluster>
+<Adjective nr="11" value="false"/>
+</Cluster>
+</FCluster>
+<FCluster aid="SEQ_4" nr="3">
+<ArgTypes>
+<Typ kind="M" nr="9">
+<Cluster>
+<Adjective nr="11" value="false"/>
+</Cluster>
+<Func kind="K" nr="81"/>
+</Typ>
+</ArgTypes>
+<Func kind="K" nr="241">
+<LocusVar nr="1"/>
+</Func>
+<Cluster>
+<Adjective nr="11" value="false"/>
+<Adjective nr="33"/>
+</Cluster>
 </FCluster>
 <CCluster aid="SEQ_4" nr="1">
 <ArgTypes/>

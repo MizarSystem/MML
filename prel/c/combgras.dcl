@@ -6,6 +6,7 @@
 <ArticleID name="XBOOLE_0"/>
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
+<ArticleID name="SETFAM_1"/>
 <ArticleID name="RELAT_1"/>
 <ArticleID name="FUNCT_1"/>
 <ArticleID name="ORDINAL1"/>
@@ -13,8 +14,8 @@
 <ArticleID name="NUMBERS"/>
 <ArticleID name="PARTFUN1"/>
 <ArticleID name="FUNCT_2"/>
-<ArticleID name="FINSET_1"/>
 <ArticleID name="INCSP_1"/>
+<ArticleID name="FINSET_1"/>
 <ArticleID name="COMBGRAS"/>
 </Signature>
 <RCluster aid="COMBGRAS" nr="1">
@@ -23,10 +24,10 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="29"/>
+<Adjective nr="28"/>
+<Adjective nr="32"/>
 <Adjective nr="33"/>
 <Adjective nr="34"/>
-<Adjective nr="35"/>
 </Cluster>
 </RCluster>
 <RCluster aid="COMBGRAS" nr="2">
@@ -44,7 +45,7 @@
 <LocusVar nr="2"/>
 </Typ>
 <Cluster>
-<Adjective nr="48">
+<Adjective nr="51">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Adjective>

@@ -28,8 +28,8 @@
 <ArticleID name="RLVECT_1"/>
 <ArticleID name="MATRIX_1"/>
 <ArticleID name="CARD_3"/>
-<ArticleID name="MEMBERED"/>
 <ArticleID name="VALUED_0"/>
+<ArticleID name="MEMBERED"/>
 <ArticleID name="VALUED_1"/>
 <ArticleID name="WELLORD1"/>
 <ArticleID name="RELAT_2"/>
@@ -55,9 +55,9 @@
 <Adjective nr="29"/>
 <Adjective nr="35"/>
 <Adjective nr="36"/>
-<Adjective nr="113"/>
-<Adjective nr="114"/>
-<Adjective nr="115"/>
+<Adjective nr="107"/>
+<Adjective nr="108"/>
+<Adjective nr="109"/>
 <Adjective nr="141"/>
 </Cluster>
 </RCluster>

@@ -33,8 +33,8 @@
 <ArticleID name="MATRIX_1"/>
 <ArticleID name="CARD_3"/>
 <ArticleID name="RAT_1"/>
-<ArticleID name="MEMBERED"/>
 <ArticleID name="VALUED_0"/>
+<ArticleID name="MEMBERED"/>
 <ArticleID name="VALUED_1"/>
 <ArticleID name="WELLORD1"/>
 <ArticleID name="RELAT_2"/>
@@ -45,8 +45,8 @@
 <ArticleID name="ENUMSET1"/>
 <ArticleID name="MOD_2"/>
 <ArticleID name="FUNCT_3"/>
-<ArticleID name="FUNCT_5"/>
 <ArticleID name="CLASSES2"/>
+<ArticleID name="FUNCT_5"/>
 <ArticleID name="GRAPH_1"/>
 <ArticleID name="CAT_1"/>
 <ArticleID name="CAT_2"/>

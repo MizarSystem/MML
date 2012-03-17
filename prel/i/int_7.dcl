@@ -25,9 +25,8 @@
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="FINSEQ_2"/>
 <ArticleID name="NEWTON"/>
-<ArticleID name="RAT_1"/>
-<ArticleID name="CARD_3"/>
 <ArticleID name="NAT_1"/>
+<ArticleID name="RAT_1"/>
 <ArticleID name="VALUED_0"/>
 <ArticleID name="MEMBERED"/>
 <ArticleID name="VALUED_1"/>
@@ -37,6 +36,7 @@
 <ArticleID name="TREES_2"/>
 <ArticleID name="TREES_3"/>
 <ArticleID name="TREES_4"/>
+<ArticleID name="CARD_3"/>
 <ArticleID name="RELAT_2"/>
 <ArticleID name="WELLORD1"/>
 <ArticleID name="PRE_POLY"/>

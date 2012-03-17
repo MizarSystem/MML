@@ -27,6 +27,7 @@
 <ArticleID name="WAYBEL_1"/>
 <ArticleID name="LATTICES"/>
 <ArticleID name="FUNCT_4"/>
+<ArticleID name="SETFAM_1"/>
 <ArticleID name="EQREL_1"/>
 <ArticleID name="FILTER_1"/>
 <ArticleID name="LATTICE3"/>
@@ -39,8 +40,8 @@
 <Adjective nr="56"/>
 <Adjective nr="57"/>
 <Adjective nr="58"/>
-<Adjective nr="127"/>
-<Adjective nr="128"/>
+<Adjective nr="130"/>
+<Adjective nr="131"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -72,13 +73,13 @@
 <Adjective nr="57"/>
 <Adjective nr="58"/>
 <Adjective nr="95"/>
-<Adjective nr="127"/>
-<Adjective nr="128"/>
+<Adjective nr="130"/>
+<Adjective nr="131"/>
 </Cluster>
 </RCluster>
 <RCluster aid="LATTICE7" nr="3">
 <ArgTypes/>
-<Typ kind="M" nr="15">
+<Typ kind="M" nr="16">
 <Cluster/>
 </Typ>
 <Cluster>
@@ -87,7 +88,7 @@
 </RCluster>
 <FCluster aid="LATTICE7" nr="1">
 <ArgTypes>
-<Typ kind="M" nr="15">
+<Typ kind="M" nr="16">
 <Cluster>
 <Adjective nr="1" value="false"/>
 </Cluster>
@@ -99,8 +100,8 @@
 <Cluster>
 <Adjective nr="54"/>
 <Adjective nr="95"/>
-<Adjective nr="127"/>
-<Adjective nr="128"/>
+<Adjective nr="130"/>
+<Adjective nr="131"/>
 </Cluster>
 </FCluster>
 </Registrations>

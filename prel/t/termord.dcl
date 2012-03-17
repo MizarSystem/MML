@@ -31,8 +31,8 @@
 <ArticleID name="ORDERS_1"/>
 <ArticleID name="ORDERS_2"/>
 <ArticleID name="RAT_1"/>
-<ArticleID name="MEMBERED"/>
 <ArticleID name="VALUED_0"/>
+<ArticleID name="MEMBERED"/>
 <ArticleID name="VALUED_1"/>
 <ArticleID name="RELAT_2"/>
 <ArticleID name="WELLORD1"/>

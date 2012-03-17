@@ -16,20 +16,20 @@
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="NAT_1"/>
+<ArticleID name="VALUED_0"/>
+<ArticleID name="INT_1"/>
+<ArticleID name="RAT_1"/>
 <ArticleID name="MEMBERED"/>
+<ArticleID name="VALUED_1"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
+<ArticleID name="FINSEQ_2"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="COMPTS_1"/>
 <ArticleID name="ALGSTR_0"/>
 <ArticleID name="RLVECT_1"/>
-<ArticleID name="INT_1"/>
-<ArticleID name="RAT_1"/>
-<ArticleID name="FINSEQ_2"/>
-<ArticleID name="VALUED_0"/>
-<ArticleID name="VALUED_1"/>
 <ArticleID name="BINOP_1"/>
 <ArticleID name="FUNCT_5"/>
 <ArticleID name="METRIC_1"/>
@@ -51,7 +51,7 @@
 </Typ>
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="68">
+<Adjective nr="86">
 <Func kind="K" nr="276">
 <Num nr="2"/>
 </Func>
@@ -73,7 +73,7 @@
 </Typ>
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="68">
+<Adjective nr="86">
 <Func kind="K" nr="276">
 <Num nr="2"/>
 </Func>

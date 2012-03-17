@@ -36,14 +36,14 @@
 </RCluster>
 <FCluster aid="NECKLA_2" nr="1">
 <ArgTypes/>
-<Func kind="K" nr="133"/>
+<Func kind="K" nr="134"/>
 <Cluster>
 <Adjective nr="11" value="false"/>
 </Cluster>
 </FCluster>
 <FCluster aid="NECKLA_2" nr="2">
 <ArgTypes/>
-<Func kind="K" nr="134"/>
+<Func kind="K" nr="135"/>
 <Cluster>
 <Adjective nr="11" value="false"/>
 </Cluster>
@@ -59,7 +59,7 @@
 <Cluster/>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="123">
+<Func kind="K" nr="124">
 <LocusVar nr="1"/>
 </Func>
 </Typ>
@@ -72,7 +72,7 @@
 <Cluster/>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="108"/>
+<Func kind="K" nr="109"/>
 </Typ>
 <Cluster>
 <Adjective nr="25"/>

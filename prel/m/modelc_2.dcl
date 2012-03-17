@@ -22,6 +22,7 @@
 <ArticleID name="MARGREL1"/>
 <ArticleID name="RELAT_2"/>
 <ArticleID name="FUNCT_7"/>
+<ArticleID name="ZF_LANG"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="FINSUB_1"/>
 <ArticleID name="CLASSES1"/>
@@ -29,7 +30,6 @@
 <ArticleID name="CAT_1"/>
 <ArticleID name="COH_SP"/>
 <ArticleID name="COHSP_1"/>
-<ArticleID name="ZF_LANG"/>
 <ArticleID name="MODELC_1"/>
 <ArticleID name="MODELC_2"/>
 </Signature>

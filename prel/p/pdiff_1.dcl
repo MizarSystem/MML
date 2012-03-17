@@ -39,8 +39,8 @@
 <ArticleID name="LOPBAN_1"/>
 <ArticleID name="INT_1"/>
 <ArticleID name="RAT_1"/>
-<ArticleID name="MEMBERED"/>
 <ArticleID name="FINSEQ_2"/>
+<ArticleID name="MEMBERED"/>
 <ArticleID name="VALUED_1"/>
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="METRIC_1"/>
@@ -51,20 +51,20 @@
 </Signature>
 <FCluster aid="PDIFF_1" nr="1">
 <ArgTypes/>
-<Func kind="K" nr="456">
+<Func kind="K" nr="457">
 <Num nr="1"/>
 <Num nr="1"/>
 </Func>
 <Cluster>
 <Adjective nr="6"/>
 <Adjective nr="24">
-<Func kind="K" nr="430">
+<Func kind="K" nr="431">
 <Num nr="1"/>
 </Func>
 <Func kind="K" nr="44"/>
 </Adjective>
 <Adjective nr="26">
-<Func kind="K" nr="430">
+<Func kind="K" nr="431">
 <Num nr="1"/>
 </Func>
 <Func kind="K" nr="44"/>

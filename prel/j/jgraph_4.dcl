@@ -31,12 +31,12 @@
 <ArticleID name="VALUED_0"/>
 <ArticleID name="MEMBERED"/>
 <ArticleID name="VALUED_1"/>
+<ArticleID name="SETFAM_1"/>
 <ArticleID name="ENUMSET1"/>
 <ArticleID name="DOMAIN_1"/>
 <ArticleID name="RELAT_2"/>
 <ArticleID name="EQREL_1"/>
 <ArticleID name="CONNSP_2"/>
-<ArticleID name="PCOMPS_1"/>
 <ArticleID name="RELSET_1"/>
 <ArticleID name="BORSUK_1"/>
 <ArticleID name="TOPMETR"/>
@@ -53,26 +53,26 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="356">
+<Func kind="K" nr="360">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
 <Adjective nr="6"/>
 <Adjective nr="15">
 <Func kind="U" nr="1">
-<Func kind="K" nr="351">
+<Func kind="K" nr="355">
 <LocusVar nr="1"/>
 </Func>
 </Func>
 <Func kind="U" nr="1">
-<Func kind="K" nr="323"/>
+<Func kind="K" nr="327"/>
 </Func>
 </Adjective>
 <Adjective nr="51">
-<Func kind="K" nr="351">
+<Func kind="K" nr="355">
 <LocusVar nr="1"/>
 </Func>
-<Func kind="K" nr="323"/>
+<Func kind="K" nr="327"/>
 </Adjective>
 </Cluster>
 </FCluster>

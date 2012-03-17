@@ -261,7 +261,7 @@
 </Typ>
 </ArgTypes>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="41">
+<Func kind="K" nr="42">
 <Func kind="F" nr="3"/>
 <Func kind="K" nr="3">
 <Fraenkel>
@@ -292,7 +292,7 @@
 </Func>
 </Func>
 </Typ>
-<Func kind="K" nr="41">
+<Func kind="K" nr="42">
 <Func kind="F" nr="3"/>
 <Func kind="F" nr="2">
 <Var nr="1"/>

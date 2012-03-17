@@ -9,10 +9,10 @@
 <ArticleID name="XBOOLE_0"/>
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
-<ArticleID name="NUMBERS"/>
 <ArticleID name="PARTFUN1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
+<ArticleID name="NUMBERS"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
@@ -28,6 +28,7 @@
 <ArticleID name="YELLOW_1"/>
 <ArticleID name="YELLOW_2"/>
 <ArticleID name="WAYBEL_1"/>
+<ArticleID name="SETFAM_1"/>
 <ArticleID name="LATTICES"/>
 <ArticleID name="EQREL_1"/>
 <ArticleID name="FILTER_1"/>
@@ -49,8 +50,8 @@
 <Adjective nr="62"/>
 <Adjective nr="67"/>
 <Adjective nr="102"/>
-<Adjective nr="134"/>
-<Adjective nr="135"/>
+<Adjective nr="137"/>
+<Adjective nr="138"/>
 </Cluster>
 </RCluster>
 <RCluster aid="LATTICE8" nr="2">
@@ -63,7 +64,7 @@
 </ArgTypes>
 <Typ kind="M" nr="11">
 <Cluster/>
-<Func kind="K" nr="219">
+<Func kind="K" nr="228">
 <LocusVar nr="1"/>
 </Func>
 </Typ>
@@ -71,21 +72,21 @@
 <Adjective nr="44" value="false"/>
 <Adjective nr="49" value="false"/>
 <Adjective nr="70">
-<Func kind="K" nr="219">
+<Func kind="K" nr="228">
 <LocusVar nr="1"/>
 </Func>
 </Adjective>
 <Adjective nr="71">
-<Func kind="K" nr="219">
+<Func kind="K" nr="228">
 <LocusVar nr="1"/>
 </Func>
 </Adjective>
 <Adjective nr="72">
-<Func kind="K" nr="219">
+<Func kind="K" nr="228">
 <LocusVar nr="1"/>
 </Func>
 </Adjective>
-<Adjective nr="145"/>
+<Adjective nr="148"/>
 </Cluster>
 </RCluster>
 <FCluster aid="LATTICE8" nr="1">
@@ -94,7 +95,7 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="239">
+<Func kind="K" nr="248">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -114,7 +115,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="241">
+<Func kind="K" nr="250">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -135,8 +136,8 @@
 <Adjective nr="61"/>
 <Adjective nr="62"/>
 <Adjective nr="67"/>
-<Adjective nr="134"/>
-<Adjective nr="135"/>
+<Adjective nr="137"/>
+<Adjective nr="138"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="2">
@@ -165,7 +166,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="245">
+<Func kind="K" nr="254">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>

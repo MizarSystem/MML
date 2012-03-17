@@ -31,10 +31,10 @@
 <ArticleID name="VALUED_0"/>
 <ArticleID name="FUNCOP_1"/>
 <ArticleID name="FUNCT_3"/>
-<ArticleID name="BINOP_1"/>
-<ArticleID name="FUNCT_5"/>
-<ArticleID name="FUNCSDOM"/>
 <ArticleID name="SETFAM_1"/>
+<ArticleID name="BINOP_1"/>
+<ArticleID name="FUNCSDOM"/>
+<ArticleID name="FUNCT_5"/>
 <ArticleID name="CLASSES2"/>
 <ArticleID name="FUNCT_4"/>
 <ArticleID name="GRAPH_1"/>
@@ -51,8 +51,6 @@
 <ArticleID name="VALUED_1"/>
 <ArticleID name="RLTOPSP1"/>
 <ArticleID name="EUCLID"/>
-<ArticleID name="PCOMPS_1"/>
-<ArticleID name="SEQ_2"/>
 <ArticleID name="PSCOMP_1"/>
 <ArticleID name="C0SP2"/>
 </Signature>
@@ -69,7 +67,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="525">
+<Func kind="K" nr="514">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -81,7 +79,7 @@
 </Func>
 <Func kind="K" nr="44"/>
 </Adjective>
-<Adjective nr="233">
+<Adjective nr="218">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -95,7 +93,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="526">
+<Func kind="K" nr="515">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -111,7 +109,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="526">
+<Func kind="K" nr="515">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -140,12 +138,12 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="527">
+<Func kind="K" nr="516">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
 <Adjective nr="38" value="false"/>
-<Adjective nr="146"/>
+<Adjective nr="149"/>
 </Cluster>
 </FCluster>
 <FCluster aid="C0SP2" nr="5">
@@ -157,7 +155,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="527">
+<Func kind="K" nr="516">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -173,7 +171,7 @@
 <Adjective nr="102"/>
 <Adjective nr="104"/>
 <Adjective nr="106"/>
-<Adjective nr="147"/>
+<Adjective nr="150"/>
 </Cluster>
 </FCluster>
 <FCluster aid="C0SP2" nr="6">
@@ -186,7 +184,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="529">
+<Func kind="K" nr="518">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -204,7 +202,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="529">
+<Func kind="K" nr="518">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -221,7 +219,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="529">
+<Func kind="K" nr="518">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -236,7 +234,7 @@
 <Adjective nr="102"/>
 <Adjective nr="104"/>
 <Adjective nr="106"/>
-<Adjective nr="147"/>
+<Adjective nr="150"/>
 </Cluster>
 </FCluster>
 <FCluster aid="C0SP2" nr="9">
@@ -249,7 +247,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="529">
+<Func kind="K" nr="518">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -269,7 +267,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="529">
+<Func kind="K" nr="518">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -286,7 +284,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="529">
+<Func kind="K" nr="518">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -303,7 +301,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="529">
+<Func kind="K" nr="518">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>

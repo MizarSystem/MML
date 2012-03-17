@@ -14,8 +14,8 @@
 <ArticleID name="PARTFUN1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
-<ArticleID name="NAT_1"/>
 <ArticleID name="BINOP_1"/>
+<ArticleID name="NAT_1"/>
 <ArticleID name="VALUED_0"/>
 <ArticleID name="MESFUNC8"/>
 <ArticleID name="MESFUNC9"/>

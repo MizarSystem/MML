@@ -6,6 +6,7 @@
 <ArticleID name="XBOOLE_0"/>
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
+<ArticleID name="SETFAM_1"/>
 <ArticleID name="RELAT_1"/>
 <ArticleID name="FUNCT_1"/>
 <ArticleID name="ORDINAL1"/>
@@ -59,27 +60,27 @@
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="4"/>
-<Adjective nr="7">
+<Adjective nr="7"/>
+<Adjective nr="10">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="8">
+<Adjective nr="11">
 <LocusVar nr="2"/>
 </Adjective>
-<Adjective nr="9"/>
-<Adjective nr="22">
+<Adjective nr="12"/>
+<Adjective nr="25">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Adjective>
-<Adjective nr="188"/>
+<Adjective nr="191"/>
 </Cluster>
 </RCluster>
 <RCluster aid="KNASTER" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="8">
 <Cluster>
-<Adjective nr="46" value="false"/>
-<Adjective nr="66"/>
+<Adjective nr="49" value="false"/>
+<Adjective nr="69"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -93,10 +94,10 @@
 </Typ>
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="194">
+<Adjective nr="197">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="195">
+<Adjective nr="198">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -104,17 +105,17 @@
 <CCluster aid="KNASTER" nr="1">
 <ArgTypes/>
 <Cluster>
-<Adjective nr="46" value="false"/>
-<Adjective nr="66"/>
-<Adjective nr="133"/>
+<Adjective nr="49" value="false"/>
+<Adjective nr="69"/>
+<Adjective nr="136"/>
 </Cluster>
 <Typ kind="G" nr="8">
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="46" value="false"/>
-<Adjective nr="66"/>
-<Adjective nr="71"/>
+<Adjective nr="49" value="false"/>
+<Adjective nr="69"/>
+<Adjective nr="74"/>
 </Cluster>
 </CCluster>
 </Registrations>

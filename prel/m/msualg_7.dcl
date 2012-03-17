@@ -13,6 +13,7 @@
 <ArticleID name="TARSKI"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
+<ArticleID name="SETFAM_1"/>
 <ArticleID name="FUNCOP_1"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
@@ -40,26 +41,26 @@
 <ArgTypes>
 <Typ kind="G" nr="8">
 <Cluster>
-<Adjective nr="44" value="false"/>
-<Adjective nr="64"/>
-<Adjective nr="97"/>
+<Adjective nr="47" value="false"/>
+<Adjective nr="67"/>
+<Adjective nr="100"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Typ kind="M" nr="20">
+<Typ kind="M" nr="21">
 <Cluster/>
 <LocusVar nr="1"/>
 </Typ>
 <Cluster>
-<Adjective nr="44" value="false"/>
-<Adjective nr="58"/>
-<Adjective nr="59"/>
-<Adjective nr="60"/>
+<Adjective nr="47" value="false"/>
 <Adjective nr="61"/>
 <Adjective nr="62"/>
 <Adjective nr="63"/>
 <Adjective nr="64"/>
-<Adjective nr="97"/>
+<Adjective nr="65"/>
+<Adjective nr="66"/>
+<Adjective nr="67"/>
+<Adjective nr="100"/>
 </Cluster>
 </RCluster>
 <FCluster aid="MSUALG_7" nr="1">
@@ -82,15 +83,15 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="275">
+<Func kind="K" nr="284">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="44" value="false"/>
-<Adjective nr="57"/>
-<Adjective nr="64"/>
-<Adjective nr="69"/>
+<Adjective nr="47" value="false"/>
+<Adjective nr="60"/>
+<Adjective nr="67"/>
+<Adjective nr="72"/>
 </Cluster>
 </FCluster>
 <FCluster aid="MSUALG_7" nr="2">
@@ -113,61 +114,61 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="275">
+<Func kind="K" nr="284">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="44" value="false"/>
-<Adjective nr="57"/>
-<Adjective nr="64"/>
-<Adjective nr="97"/>
+<Adjective nr="47" value="false"/>
+<Adjective nr="60"/>
+<Adjective nr="67"/>
+<Adjective nr="100"/>
 </Cluster>
 </FCluster>
 <CCluster aid="MSUALG_7" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="8">
 <Cluster>
-<Adjective nr="44" value="false"/>
-<Adjective nr="64"/>
-<Adjective nr="97"/>
+<Adjective nr="47" value="false"/>
+<Adjective nr="67"/>
+<Adjective nr="100"/>
 </Cluster>
 </Typ>
 </ArgTypes>
 <Cluster>
-<Adjective nr="117">
+<Adjective nr="120">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
-<Typ kind="M" nr="20">
+<Typ kind="M" nr="21">
 <Cluster/>
 <LocusVar nr="1"/>
 </Typ>
 <Cluster>
-<Adjective nr="97"/>
+<Adjective nr="100"/>
 </Cluster>
 </CCluster>
 <CCluster aid="MSUALG_7" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="8">
 <Cluster>
-<Adjective nr="44" value="false"/>
-<Adjective nr="64"/>
-<Adjective nr="97"/>
+<Adjective nr="47" value="false"/>
+<Adjective nr="67"/>
+<Adjective nr="100"/>
 </Cluster>
 </Typ>
 </ArgTypes>
 <Cluster>
-<Adjective nr="118">
+<Adjective nr="121">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
-<Typ kind="M" nr="20">
+<Typ kind="M" nr="21">
 <Cluster/>
 <LocusVar nr="1"/>
 </Typ>
 <Cluster>
-<Adjective nr="97"/>
+<Adjective nr="100"/>
 </Cluster>
 </CCluster>
 </Registrations>

@@ -6,6 +6,7 @@
 <ArticleID name="XBOOLE_0"/>
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
+<ArticleID name="SETFAM_1"/>
 <ArticleID name="RELAT_1"/>
 <ArticleID name="FUNCT_1"/>
 <ArticleID name="ORDINAL1"/>
@@ -36,14 +37,14 @@
 </Typ>
 <Typ kind="G" nr="8">
 <Cluster>
-<Adjective nr="45" value="false"/>
-<Adjective nr="93"/>
+<Adjective nr="48" value="false"/>
+<Adjective nr="96"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="2">
 <Cluster>
-<Adjective nr="9"/>
-<Adjective nr="35">
+<Adjective nr="12"/>
+<Adjective nr="38">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="1"/>
 </Adjective>
@@ -60,17 +61,17 @@
 <For>
 <Typ kind="M" nr="2">
 <Cluster>
-<Adjective nr="9"/>
-<Adjective nr="35">
+<Adjective nr="12"/>
+<Adjective nr="38">
 <Func kind="U" nr="1">
 <Func kind="F" nr="2"/>
 </Func>
-<Func kind="K" nr="125">
+<Func kind="K" nr="134">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="1"/>
 </Func>
 </Adjective>
-<Adjective nr="99">
+<Adjective nr="102">
 <Func kind="F" nr="2"/>
 <Func kind="F" nr="1"/>
 </Adjective>
@@ -80,7 +81,7 @@
 <Func kind="U" nr="1">
 <Func kind="F" nr="2"/>
 </Func>
-<Func kind="K" nr="125">
+<Func kind="K" nr="134">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="1"/>
 </Func>
@@ -96,11 +97,11 @@
 </Func>
 </Typ>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="127">
+<Func kind="K" nr="136">
 <Func kind="U" nr="1">
 <Func kind="F" nr="2"/>
 </Func>
-<Func kind="K" nr="125">
+<Func kind="K" nr="134">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="1"/>
 </Func>
@@ -115,15 +116,15 @@
 </Not>
 </For>
 </Not>
-<Pred kind="R" nr="29">
+<Pred kind="R" nr="31">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="3">
-<Func kind="K" nr="162">
+<Func kind="K" nr="171">
 <Func kind="F" nr="2"/>
 </Func>
 </Func>
-<Func kind="K" nr="91">
+<Func kind="K" nr="100">
 <Func kind="F" nr="1"/>
 </Func>
 </Pred>
@@ -141,17 +142,17 @@
 <Func kind="F" nr="2"/>
 </Func>
 </Typ>
-<Pred kind="R" nr="29">
+<Pred kind="R" nr="31">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="3">
-<Func kind="K" nr="155">
+<Func kind="K" nr="164">
 <Func kind="F" nr="2"/>
 <Var nr="1"/>
 <Var nr="2"/>
 </Func>
 </Func>
-<Func kind="K" nr="86">
+<Func kind="K" nr="95">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="1"/>

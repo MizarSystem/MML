@@ -89,4 +89,91 @@
 </Not>
 </For>
 </Scheme>
+<Scheme>
+<ArgTypes>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="11" value="false"/>
+</Cluster>
+</Typ>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="11" value="false"/>
+</Cluster>
+</Typ>
+<Typ kind="M" nr="2">
+<Cluster/>
+<Func kind="F" nr="2"/>
+</Typ>
+</ArgTypes>
+<Is>
+<Fraenkel>
+<Typ kind="M" nr="2">
+<Cluster/>
+<Func kind="F" nr="1"/>
+</Typ>
+<Func kind="F" nr="3">
+<Var nr="1"/>
+</Func>
+<Pred kind="P" nr="1">
+<Var nr="1"/>
+</Pred>
+</Fraenkel>
+<Typ kind="M" nr="2">
+<Cluster/>
+<Func kind="K" nr="21">
+<Func kind="F" nr="2"/>
+</Func>
+</Typ>
+</Is>
+</Scheme>
+<Scheme>
+<ArgTypes>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="11" value="false"/>
+</Cluster>
+</Typ>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="11" value="false"/>
+</Cluster>
+</Typ>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="11" value="false"/>
+</Cluster>
+</Typ>
+<Typ kind="M" nr="2">
+<Cluster/>
+<Func kind="F" nr="3"/>
+</Typ>
+</ArgTypes>
+<Is>
+<Fraenkel>
+<Typ kind="M" nr="2">
+<Cluster/>
+<Func kind="F" nr="1"/>
+</Typ>
+<Typ kind="M" nr="2">
+<Cluster/>
+<Func kind="F" nr="2"/>
+</Typ>
+<Func kind="F" nr="4">
+<Var nr="1"/>
+<Var nr="2"/>
+</Func>
+<Pred kind="P" nr="1">
+<Var nr="1"/>
+<Var nr="2"/>
+</Pred>
+</Fraenkel>
+<Typ kind="M" nr="2">
+<Cluster/>
+<Func kind="K" nr="21">
+<Func kind="F" nr="3"/>
+</Func>
+</Typ>
+</Is>
+</Scheme>
 </Schemes>

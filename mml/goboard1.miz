@@ -8,7 +8,7 @@ environ
 
  vocabularies NUMBERS, PRE_TOPC, EUCLID, FINSEQ_1, REAL_1, SUBSET_1, COMPLEX1,
       ARYTM_1, XXREAL_0, ARYTM_3, CARD_1, NAT_1, RELAT_1, FINSEQ_3, FUNCT_1,
-      XBOOLE_0, TARSKI, VALUED_0, ORDINAL2, PARTFUN1, MCART_1, TOPREAL1,
+      XBOOLE_0, TARSKI, ORDINAL2, PARTFUN1, MCART_1, TOPREAL1,
       RLTOPSP1, MATRIX_1, TREES_1, INCSP_1, ZFMISC_1, MATRIX_2, STRUCT_0,
       ORDINAL4, GOBOARD1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1, PARTFUN1,
@@ -16,14 +16,14 @@ environ
       FINSEQ_3, SEQ_1, STRUCT_0, PRE_TOPC, EUCLID, TOPREAL1, MATRIX_1,
       MATRIX_2;
  constructors PARTFUN1, XXREAL_0, NAT_1, COMPLEX1, MATRIX_2, SEQ_1, TOPREAL1,
-      SEQM_3, RELSET_1;
+      SEQM_3, RELSET_1, REAL_1;
  registrations RELAT_1, ORDINAL1, NUMBERS, XXREAL_0, XREAL_0, NAT_1, FINSEQ_1,
       STRUCT_0, EUCLID, MEMBERED, VALUED_0, CARD_1;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, XBOOLE_0, FUNCT_1, SEQM_3;
  theorems TARSKI, NAT_1, ZFMISC_1, FUNCT_1, FINSEQ_1, ABSVALUE, FINSEQ_2,
       FINSEQ_3, MATRIX_1, TOPREAL1, MATRIX_2, TOPREAL3, FINSEQ_4, RELAT_1,
-      INT_1, CARD_1, PARTFUN2, XBOOLE_0, XBOOLE_1, XREAL_1, COMPLEX1, XXREAL_0,
+      INT_1, CARD_1, PARTFUN2, XBOOLE_0, XREAL_1, COMPLEX1, XXREAL_0,
       ORDINAL1, PARTFUN1, SEQM_3;
  schemes NAT_1, MATRIX_1, FINSEQ_1, FINSEQ_4;
 
@@ -31,235 +31,14 @@ begin
 
 reserve p for Point of TOP-REAL 2,
   f,f1,f2,g for FinSequence of TOP-REAL 2,
-  v,
-  v1,v2 for FinSequence of REAL,
+  v, v1,v2 for FinSequence of REAL,
   r,s for Real,
   n,m,i,j,k for Element of NAT,
-  x
-  for set;
-
-:: Real numbers preliminaries
-
-theorem Th1:
-  abs(r-s)=1 iff r>s & r=s+1 or r<s & s=r+1
-proof
-  thus abs(r-s)=1 implies r>s & r=s+1 or r<s & s=r+1
-  proof
-    assume
-A1: abs(r-s) = 1;
-    now
-      per cases by XXREAL_0:1;
-      case
-A2:     r>s;
-        then 0<r-s by XREAL_1:52;
-        then r-s=1 by A1,ABSVALUE:def 1;
-        hence thesis by A2;
-      end;
-      case
-        r=s;
-        hence contradiction by A1,ABSVALUE:7;
-      end;
-      case
-A3:     r<s;
-        then
-A4:     0<s-r by XREAL_1:52;
-        1=abs(-(r-s)) by A1,COMPLEX1:138
-          .=s-r by A4,ABSVALUE:def 1;
-        hence thesis by A3;
-      end;
-    end;
-    hence thesis;
-  end;
-  assume
-A5: r>s & r=s+1 or r<s & s=r+1;
-  per cases by A5;
-  suppose
-    r>s & r=s+1;
-    hence thesis by ABSVALUE:def 1;
-  end;
-  suppose
-A6: s>r & s=r+1;
-    thus abs(r-s)=abs(-(r-s)) by COMPLEX1:138
-      .= 1 by A6,ABSVALUE:def 1;
-  end;
-end;
-
-theorem Th2:
-  abs(i-j)+abs(n-m)=1 iff abs(i-j)=1 & n=m or abs(n-m)=1 & i=j
-proof
-  thus abs(i-j)+abs(n-m)=1 implies abs(i-j)=1 & n=m or abs(n-m)=1 & i=j
-  proof
-    assume
-A1: abs(i-j)+abs(n-m)=1;
-    now
-      per cases;
-      suppose
-A2:     n=m;
-        then 1=abs(i-j)+0 by A1,ABSVALUE:7
-          .= abs(i-j);
-        hence thesis by A2;
-      end;
-      suppose
-A3:     n<>m;
-        now
-          per cases by A3,XXREAL_0:1;
-          suppose
-A4:         n<m;
-            then reconsider l=m-n as Element of NAT by INT_1:18;
-            0<l by A4,XREAL_1:52;
-            then
-A5:         0+1<=l by NAT_1:13;
-A6:         abs(-(m-n))=abs(l) by COMPLEX1:138;
-            then
-A7:         abs(n-m)=abs(l);
-A8:         abs(l)=l by ABSVALUE:def 1;
-            then
-A9:         l<=1 by A1,A6,COMPLEX1:132,XREAL_1:33;
-            then l=1 by A5,XXREAL_0:1;
-            then i-j=0 by A1,A8,A7,ABSVALUE:7;
-            hence thesis by A6,A5,A8,A9,XXREAL_0:1;
-          end;
-          suppose
-A10:        n>m;
-            then reconsider l=n-m as Element of NAT by INT_1:18;
-            0<l by A10,XREAL_1:52;
-            then
-A11:        0+1<=l by NAT_1:13;
-A12:        abs(n-m)=l by ABSVALUE:def 1;
-            then
-A13:        l<=1 by A1,COMPLEX1:132,XREAL_1:33;
-            then l=1 by A11,XXREAL_0:1;
-            then i-j=0 by A1,A12,ABSVALUE:7;
-            hence thesis by A11,A12,A13,XXREAL_0:1;
-          end;
-        end;
-        hence thesis;
-      end;
-    end;
-    hence thesis;
-  end;
-  assume
-A14: abs(i-j)=1 & n=m or abs(n-m)=1 & i=j;
-  now
-    per cases by A14;
-    suppose
-A15:  abs(i-j)=1 & n=m;
-      then abs(n-m)=0 by ABSVALUE:7;
-      hence thesis by A15;
-    end;
-    suppose
-A16:  abs(n-m)=1 & i=j;
-      then abs(i-j)=0 by ABSVALUE:7;
-      hence thesis by A16;
-    end;
-  end;
-  hence thesis;
-end;
-
-theorem Th3:
-  n>1 iff ex m st n=m+1 & m>0
-proof
-  thus n>1 implies ex m st n=m+1 & m>0
-  proof
-    assume
-A1: 1<n;
-    then consider m being Nat such that
-A2: n = m+1 by NAT_1:6;
-    reconsider m as Element of NAT by ORDINAL1:def 13;
-    take m;
-    m <> 0 by A1,A2;
-    hence thesis by A2;
-  end;
-  given m such that
-A3: n=m+1 & m>0;
-  0+1<n by A3,XREAL_1:8;
-  hence thesis;
-end;
-
-begin :: Finite sequences preliminaries
-
-canceled 3;
-
-theorem Th7:
-  for f being FinSequence,n,m,k st len f = m+1 & n in dom f & k in
-  Seg m holds Del(f,n).k = f.k or Del(f,n).k = f.(k+1)
-proof
-  let f be FinSequence,n,m,k such that
-A1: len f = m+1 & n in dom f and
-A2: k in Seg m;
-  set X = dom f \ {n};
-A3: dom f=Seg len f by FINSEQ_1:def 3;
-  then
-A4: n<=k & k<=m implies Sgm(X).k=k+1 by A1,A2,FINSEQ_3:117;
-  X c= Seg len f by A3,XBOOLE_1:36;
-  then rng Sgm(X) = X by FINSEQ_1:def 13;
-  then
-A5: dom (f*Sgm(X)) = dom Sgm(X) by RELAT_1:46,XBOOLE_1:36;
-A6: dom Sgm(X)=Seg len Sgm(X) & Del(f,n) = f*Sgm(X) by FINSEQ_1:def 3 ,
-  FINSEQ_3:def 2;
-A7: len Sgm(X) = m by A1,A3,FINSEQ_3:116;
-  1<=k & k<n implies Sgm(X).k=k by A1,A2,A3,FINSEQ_3:117;
-  hence thesis by A2,A6,A5,A7,A4,FINSEQ_3:27,FUNCT_1:22;
-end;
-
-canceled 2;
-
-definition
-  canceled;
-  let f be FinSequence;
-  redefine attr f is constant means
-  :Def2:
-  for n,m st n in dom f & m in dom f
-  holds f.n=f.m;
-  compatibility
-  proof
-    thus f is constant implies for n,m st n in dom f & m in dom f holds f.n=f.
-    m by FUNCT_1:def 16;
-    assume
-A1: for n,m st n in dom f & m in dom f holds f.n=f.m;
-    let n,m be set;
-    assume
-    n in dom f & m in dom f;
-    hence thesis by A1;
-  end;
-end;
-
-registration
-  cluster -> real-valued FinSequence of REAL;
-  coherence;
-end;
-
-registration
-  cluster non empty increasing FinSequence of REAL;
-  existence
-  proof
-    take v = <* 0 qua Real *>;
-    thus v is non empty;
-    let n,m;
-    assume that
-A1: n in dom v and
-A2: m in dom v;
-A3: dom<* 0 *> = { 1 } by FINSEQ_1:4,55;
-    then n = 1 by A1,TARSKI:def 1;
-    hence thesis by A3,A2,TARSKI:def 1;
-  end;
-end;
-
-registration
-  cluster constant FinSequence of REAL;
-  existence
-  proof
-    take v = <*>REAL;
-    let n,m;
-    assume that
-A1: n in dom v and
-    m in dom v;
-    thus thesis by A1;
-  end;
-end;
+  x for set;
 
 definition
   let f;
+ canceled 2;
   func X_axis(f) -> FinSequence of REAL means
   :Def3:
   len it = len f & for n st
@@ -340,321 +119,7 @@ A22:  n in (dom f);
   end;
 end;
 
-canceled 4;
-
-theorem Th14:
-  v<>{} & rng v c= Seg n & v.(len v) = n & (for k st 1<=k & k<=len
-v - 1 holds for r,s st r = v.k & s = v.(k+1) holds abs(r-s) = 1 or r=s) & i in
-  Seg n & i+1 in Seg n & m in dom v & v.m = i & (for k st k in dom v & v.k = i
-  holds k<=m) implies m+1 in dom v & v.(m+1)=i+1
-proof
-  assume that
-A1: v<>{} and
-A2: rng v c= Seg n and
-A3: v.(len v) = n and
-A4: for k st 1<=k & k<=len v - 1 holds for r,s st r = v.k & s = v.(k+1)
-  holds abs(r-s) = 1 or r=s and
-A5: i in Seg n and
-A6: i+1 in Seg n and
-A7: m in dom v and
-A8: v.m = i and
-A9: for k st k in dom v & v.k = i holds k<=m;
-A10: m<=len v by A7,FINSEQ_3:27;
-  0+1<=len v by A1,NAT_1:13;
-  then
-A11: len v in dom v by FINSEQ_3:27;
-  reconsider r=v.(m+1) as Real;
-A12: i<=n by A5,FINSEQ_1:3;
-A13: 1<=m by A7,FINSEQ_3:27;
-A14: i+1<=n by A6,FINSEQ_1:3;
-A15: now
-    assume
-    not m+1 in dom v;
-    then 1>m+1 or m+1>len v by FINSEQ_3:27;
-    then
-A16: len v <=m by NAT_1:11,13;
-    i<n by A14,NAT_1:13;
-    hence contradiction by A3,A8,A10,A16,XXREAL_0:1;
-  end;
-  then
-A17: m+1<=len v by FINSEQ_3:27;
-  then
-A18: m<len v by NAT_1:13;
-A19: m<=len v - 1 by A17,XREAL_1:21;
-  now
-    per cases by A4,A8,A13,A19;
-    case
-A20:  abs(i - r) = 1;
-      now
-        per cases by A20,Th1;
-        case
-A21:      i>r & i=r+1;
-          defpred P[set] means for k,r st k=$1 & k>0 & m+k in dom v & r=v.(m+k
-          ) holds r<i;
-A22:      for k st P[k] holds P[k+1]
-          proof
-            let k such that
-A23:        P[k];
-            let j,s such that
-A24:        j=k+1 and
-A25:        j>0 and
-A26:        m+j in dom v and
-A27:        s=v.(m+j);
-            now
-              per cases;
-              suppose
-                k=0;
-                hence thesis by A21,A24,A27;
-              end;
-              suppose
-A28:            k<>0;
-A29:            m+k<=m+k+1 by NAT_1:11;
-                m<=m+k by NAT_1:11;
-                then
-A30:            1<=m+k by A13,XXREAL_0:2;
-A31:            m+(k+1)<=len v by A24,A26,FINSEQ_3:27;
-                then m+k<=len v by A29,XXREAL_0:2;
-                then
-A32:            m+k in dom v by A30,FINSEQ_3:27;
-                then v.(m+k) in rng v by FUNCT_1:def 5;
-                then v.(m+k) in Seg n by A2;
-                then reconsider r1=v.(m+k) as Element of NAT;
-A33:            r1<i by A23,A28,A32;
-A34:            m+k<=len v - 1 by A29,A31,XREAL_1:21;
-                now
-                  per cases by A4,A24,A27,A29,A30,A34;
-                  suppose
-A35:                abs(r1-s)=1;
-                    now
-                      per cases by A35,Th1;
-                      suppose
-                        r1>s & r1=s+1;
-                        hence thesis by A33,XXREAL_0:2;
-                      end;
-                      suppose
-                        r1<s & s=r1+1;
-                        then
-A36:                    s<=i by A33,NAT_1:13;
-                        now
-                          per cases by A36,XXREAL_0:1;
-                          case
-                            s<i;
-                            hence thesis;
-                          end;
-                          case
-                            s=i;
-                            then m+j<=m by A9,A26,A27;
-                            then j<=m-m by XREAL_1:21;
-                            hence contradiction by A25;
-                          end;
-                        end;
-                        hence thesis;
-                      end;
-                    end;
-                    hence thesis;
-                  end;
-                  suppose
-                    r1=s;
-                    hence thesis by A23,A28,A32;
-                  end;
-                end;
-                hence thesis;
-              end;
-            end;
-            hence thesis;
-          end;
-          reconsider l = len v - m as Element of NAT by A18,INT_1:18;
-A37:      0< len v - m & m+l = len v by A17,XREAL_1:21;
-A38:      P[0];
-          for k holds P[k] from NAT_1:sch 1(A38,A22);
-          hence contradiction by A3,A11,A12,A37;
-        end;
-        case
-          i<r & r=i+1;
-          hence thesis by A15;
-        end;
-      end;
-      hence thesis;
-    end;
-    case
-      i=r;
-      then m+1<=m by A9,A15;
-      then 1<=m-m by XREAL_1:21;
-      then 1<=0;
-      hence contradiction;
-    end;
-  end;
-  hence thesis;
-end;
-
-theorem
-  v<>{} & rng v c= Seg n & v.1 = 1 & v.(len v) = n & (for k st 1<=k & k
-  <=len v - 1 holds for r,s st r = v.k & s = v.(k+1) holds abs(r-s) = 1 or r=s)
-  implies (for i st i in Seg n ex k st k in dom v & v.k = i) & for m,k,i,r st m
-  in dom v & v.m = i & (for j st j in dom v & v.j = i holds j<=m) & m<k & k in
-  dom v & r = v.k holds i<r
-proof
-  assume that
-A1: v<>{} and
-A2: rng v c= Seg n and
-A3: v.1 = 1 and
-A4: v.(len v) = n and
-A5: for k st 1<=k & k<=len v - 1 holds for r,s st r = v.k & s = v.(k+1)
-  holds abs(r-s) = 1 or r=s;
-  defpred P[Element of NAT] means $1 in Seg n implies ex k st k in dom v & v.k
-  = $1;
-A6: 0+1<=len v by A1,NAT_1:13;
-  then
-A7: len v in dom v by FINSEQ_3:27;
-A8: for i st P[i] holds P[i+1]
-  proof
-    let i such that
-A9: i in Seg n implies ex k st k in dom v & v.k = i;
-    assume
-A10: i+1 in Seg n;
-    now
-      per cases;
-      suppose
-A11:    i = 0;
-        take k=1;
-        thus k in dom v & v.k = i+1 by A3,A6,A11,FINSEQ_3:27;
-      end;
-      suppose
-A12:    i<>0;
-        defpred R[set] means $1 in dom v & v.$1 = i;
-A13:    for k be Nat holds R[k] implies k<=len v by FINSEQ_3:27;
-        i+1<=n by A10,FINSEQ_1:3;
-        then
-A14:    i<=n by NAT_1:13;
-A15:    0+1<=i by A12,NAT_1:13;
-        then
-A16:    ex k be Nat st R[k] by A9,A14,FINSEQ_1:3;
-        consider m be Nat such that
-A17:    R[m] & for k be Nat st R[k] holds k<=m from NAT_1:sch 6(A13,
-        A16);
-A18:    for k st R[k] holds k<=m by A17;
-        reconsider m as Element of NAT by ORDINAL1:def 13;
-        take k = m+1;
-        i in Seg n by A15,A14,FINSEQ_1:3;
-        hence k in dom v & v.k = i+1 by A1,A2,A4,A5,A10,A17,A18,Th14;
-      end;
-    end;
-    hence thesis;
-  end;
-A19: P[0] by FINSEQ_1:3;
-  thus for i holds P[i] from NAT_1:sch 1(A19,A8);
-  let m,k,i,r;
-  assume that
-A20: m in dom v and
-A21: v.m = i and
-A22: for j st j in dom v & v.j = i holds j<=m and
-A23: m<k and
-A24: k in dom v and
-A25: r = v.k;
-A26: m<=len v & k<=len v by A20,A24,FINSEQ_3:27;
-A27: 1<=m by A20,FINSEQ_3:27;
-A28: i in rng v by A20,A21,FUNCT_1:def 5;
-  then
-A29: i<=n by A2,FINSEQ_1:3;
-  now
-    per cases;
-    suppose
-      i=n;
-      then len v<=m by A4,A7,A22;
-      hence thesis by A23,A26,XXREAL_0:1;
-    end;
-    suppose
-A30:  i<>n;
-      defpred P[set] means for j,s st j=$1 & j>0 & m+j in dom v & s=v.(m+j)
-      holds i<s;
-      i<n by A29,A30,XXREAL_0:1;
-      then 1<=i+1 & i+1<=n by NAT_1:11,13;
-      then i+1 in Seg n by FINSEQ_1:3;
-      then
-A31:  v.(m+1) = i+1 by A1,A2,A4,A5,A20,A21,A22,A28,Th14;
-A32:  for k st P[k] holds P[k+1]
-      proof
-        let k such that
-A33:    P[k];
-        let j,s such that
-A34:    j=k+1 and
-A35:    j>0 and
-A36:    m+j in dom v and
-A37:    s=v.(m+j);
-        per cases;
-        suppose
-          k=0;
-          hence thesis by A31,A34,A37,NAT_1:13;
-        end;
-        suppose
-A38:      k<>0;
-          m<=m+k by NAT_1:11;
-          then
-A39:      1<=m+k by A27,XXREAL_0:2;
-          s in rng v by A36,A37,FUNCT_1:def 5;
-          then s in Seg n by A2;
-          then reconsider s1=s as Element of NAT;
-A40:      m+(k+1)<=len v by A34,A36,FINSEQ_3:27;
-          m+k<=m+k+1 by NAT_1:11;
-          then m+k<=len v by A40,XXREAL_0:2;
-          then
-A41:      m+k in dom v by A39,FINSEQ_3:27;
-          then v.(m+k) in rng v by FUNCT_1:def 5;
-          then v.(m+k) in Seg n by A2;
-          then reconsider r1=v.(m+k) as Element of NAT;
-A42:      i<r1 by A33,A38,A41;
-A43:      m+k+1 = m+(k+1);
-          then
-A44:      m+k<= len v - 1 by A40,XREAL_1:21;
-          now
-            per cases by A5,A34,A37,A43,A39,A44;
-            suppose
-A45:          abs(r1-s)=1;
-              now
-                per cases by A45,Th1;
-                suppose
-                  r1>s & r1=s+1;
-                  then
-A46:              i<=s1 by A42,NAT_1:13;
-                  now
-                    per cases by A46,XXREAL_0:1;
-                    case
-                      i<s;
-                      hence thesis;
-                    end;
-                    case
-                      s=i;
-                      then m+j<=m by A22,A36,A37;
-                      then j<=m-m by XREAL_1:21;
-                      hence contradiction by A35;
-                    end;
-                  end;
-                  hence thesis;
-                end;
-                suppose
-                  r1<s & s=r1+1;
-                  hence thesis by A42,XXREAL_0:2;
-                end;
-              end;
-              hence thesis;
-            end;
-            suppose
-              r1=s;
-              hence thesis by A33,A38,A41;
-            end;
-          end;
-          hence thesis;
-        end;
-      end;
-      reconsider l = k - m as Element of NAT by A23,INT_1:18;
-A47:  0< k - m & m+l = k by A23,XREAL_1:52;
-A48:  P[0];
-      for k holds P[k] from NAT_1:sch 1(A48,A32);
-      hence thesis by A24,A25,A47;
-    end;
-  end;
-  hence thesis;
-end;
+canceled 15;
 
 theorem Th16:
   i in dom f & 2<=len f implies f/.i in L~f
@@ -924,7 +389,7 @@ A28: j in dom(X_axis(Lm)) by A17,FINSEQ_3:31;
   then
 A29: j in dom X_axis(Lm) by A17,A25,Def3;
   i in dom(X_axis(Lm)) by A8,A10,A22,A27,FINSEQ_3:31;
-  then (X_axis(Lm)).i = (X_axis(Lm)).j by A7,A28,Def2;
+  then (X_axis(Lm)).i = (X_axis(Lm)).j by A7,A28,SEQM_3:def 15;
   then
 A30: (M*(m,i))`1 = (X_axis(Lm)).j by A8,A25,A10,A22,A27,A20,A24,Def3
     .= p`1 by A29,A26,Def3;
@@ -977,7 +442,7 @@ A20: Seg len Lm = dom Lm by FINSEQ_1:def 3;
 A21: j in dom Y_axis(Lm) by A16,A18,Def4;
   Y_axis(Col(M,m)) is constant by A4,Def7;
   then (Y_axis(Lm)).i = (Y_axis(Lm)).j by A6,A16,A18,A8,A9,A15,A11,A20,
-  Def2;
+  SEQM_3:def 15;
   then
 A22: (M*(i,m))`2 = (Y_axis(Lm)).j by A6,A18,A8,A9,A15,A11,A14,Def4
     .= p`2 by A21,A19,Def4;
@@ -1159,7 +624,7 @@ A16:  N*(k,j)=Del(Line(G,k),i).j by A13;
 A17:  len Line(G,k) = m+1 by A3,MATRIX_1:def 8;
       i in Seg len Line(G,k) by A1,MATRIX_1:def 8;
       then i in dom Line(G,k) by FINSEQ_1:def 3;
-      hence thesis by A15,A16,A17,Th7;
+      hence thesis by A15,A16,A17,SEQM_3:84;
     end;
 A18: for k st k in Seg m holds Col(N,k)=Col(G,k) or Col(N,k)=Col(G,k+1)
     proof
@@ -1255,9 +720,9 @@ A42:    lg.n=G*(k,n) & lg.(n+1)=G*(k,n+1) & lg.j=G*(k,j) &
         lg.j = lg/.j & lg.(j+1) = lg/.(j+1) by A36,A41,PARTFUN1:def 8;
         then xg.n=G*(k,n)`1 & xg.(n+1)=G*(k,n+1)`1 & xg.j=G*(k,j)`1 &
         xg.(j+1)=G*(k,j+1)`1 by A36,A41,A42,Def3;
-        hence X.n = X.j by A33,A36,A37,A38,A39,A41,A42,Def2;
+        hence X.n = X.j by A33,A36,A37,A38,A39,A41,A42,SEQM_3:def 15;
       end;
-      hence X_axis(Line(M,k)) is constant by Def2;
+      hence X_axis(Line(M,k)) is constant by SEQM_3:def 15;
     end;
 A43: now
       let k;
@@ -1449,7 +914,7 @@ proof
   assume that
 A1: i in Seg width G and
 A2: width G > 1;
-  ex m st width G = m+1 & m>0 by A2,Th3;
+  ex m st width G = m+1 & m>0 by A2,SEQM_3:83;
   hence thesis by A1,Th26;
 end;
 
@@ -1476,7 +941,7 @@ A3: m>0 and
 A4: 1<=k and
 A5: k<i;
 A6: width N = m by A1,A2,A3,Th26;
-A7: 1<width G by A2,A3,Th3;
+A7: 1<width G by A2,A3,SEQM_3:83;
   then
 A8: len N = len G by A1,Def10;
   i<=m+1 by A1,A2,FINSEQ_1:3;
@@ -1516,7 +981,7 @@ A3: m>0 and
 A4: i<=k and
 A5: k<=m;
 A6: len Col(N,k) = len N by MATRIX_1:def 9;
-A7: 1<width G by A2,A3,Th3;
+A7: 1<width G by A2,A3,SEQM_3:83;
   then
 A8: len N = len G by A1,Def10;
 A9: 1<=k+1 & k+1<=m+1 by A5,NAT_1:11,XREAL_1:8;
@@ -1555,7 +1020,7 @@ A1: i in Seg width G and
 A2: width G = m+1 & m>0 and
 A3: n in dom G and
 A4: 1<=k & k<i;
-  1<width G by A2,Th3;
+  1<width G by A2,SEQM_3:83;
   then
 A5: len (DelCol(G,i)) = len G by A1,Def10;
 A6: dom G = Seg len G & Seg len(DelCol(G,i)) = dom(DelCol(G,i)) by FINSEQ_1:
@@ -1575,7 +1040,7 @@ A1: i in Seg width G and
 A2: width G = m+1 & m>0 and
 A3: n in dom G and
 A4: i<=k & k<=m;
-  1<width G by A2,Th3;
+  1<width G by A2,SEQM_3:83;
   then
 A5: len (DelCol(G,i)) = len G by A1,Def10;
 A6: dom G = Seg len G & Seg len(DelCol(G,i)) = dom(DelCol(G,i)) by FINSEQ_1:
@@ -1594,7 +1059,7 @@ proof
 A1: width G = m+1 and
 A2: m>0 and
 A3: k in Seg m;
-  1<=width G by A1,A2,Th3;
+  1<=width G by A1,A2,SEQM_3:83;
   then
 A4: 1 in Seg width G by FINSEQ_1:3;
   1<=k & k<=m by A3,FINSEQ_1:3;
@@ -1610,7 +1075,7 @@ A1: width G = m+1 and
 A2: m>0 and
 A3: k in Seg m and
 A4: n in dom G;
-  1<=width G by A1,A2,Th3;
+  1<=width G by A1,A2,SEQM_3:83;
   then
 A5: 1 in Seg width G by FINSEQ_1:3;
   1<=k & k<=m by A3,FINSEQ_1:3;
@@ -1628,7 +1093,7 @@ A3: k in Seg m;
   k<=m by A3,FINSEQ_1:3;
   then
 A4: k<width G by A1,NAT_1:13;
-  1<=width G by A1,A2,Th3;
+  1<=width G by A1,A2,SEQM_3:83;
   then
 A5: width G in Seg width G by FINSEQ_1:3;
   1<=k by A3,FINSEQ_1:3;
@@ -1647,7 +1112,7 @@ A4: n in dom G;
   k<=m by A3,FINSEQ_1:3;
   then
 A5: k<width G by A1,NAT_1:13;
-  1<=width G by A1,A2,Th3;
+  1<=width G by A1,A2,SEQM_3:83;
   then
 A6: width G in Seg width G by FINSEQ_1:3;
   1<=k by A3,FINSEQ_1:3;
@@ -1683,7 +1148,7 @@ A15: i<=width G by A4,A12,A10,FINSEQ_3:27;
 A16: 1<=j by A8,FINSEQ_3:27;
   consider M be Element of NAT such that
 A17: width G = M+1 and
-A18: M>0 by A6,Th3;
+A18: M>0 by A6,SEQM_3:83;
 A19: width D = M by A4,A17,A18,Th26;
   per cases by A1,A3,A5,A14,Th24,XXREAL_0:1;
   suppose
@@ -1925,7 +1390,7 @@ A7: Indices G = [:dom G,Seg width G:] by MATRIX_1:def 5;
 A8: dom G = Seg len G & dom D = Seg len D by FINSEQ_1:def 3;
   consider M be Element of NAT such that
 A9: width G = M+1 and
-A10: M>0 by A4,Th3;
+A10: M>0 by A4,SEQM_3:83;
 A11: width D = M by A2,A9,A10,Th26;
 A12: now
     let n such that
@@ -2130,7 +1595,7 @@ A17: Line(G,j1).j2=f/.( i+1) by A6,A15,MATRIX_1:def 8;
   then
 A18: f/.(i+1) in rng Line(G,j1) by A16,FUNCT_1:def 5;
   now
-    per cases by A14,Th2;
+    per cases by A14,SEQM_3:82;
     suppose
       abs(n-j1)=1 & i2=j2;
       hence thesis by A8,A18,Th19;
@@ -2272,7 +1737,7 @@ A47: Seg len L2 = dom L2 & len L2 = width G by FINSEQ_1:def 3,MATRIX_1:def
 A48: [n2,y] in Indices G by MATRIX_1:def 5;
     f/.(k+1) = G*(n2,y) by A47,A44,A45,MATRIX_1:def 8;
     then abs(n1-n2)+abs(x-y)= 1 by A3,A38,A35,A43,A46,A48,Def11;
-    hence thesis by Th2;
+    hence thesis by SEQM_3:82;
   end;
 A49: v.m = i
   proof
@@ -2301,9 +1766,9 @@ A56: v.(len v) <> len G;
     hence contradiction by A2,A56,A55,A54,Th19;
   end;
 A57: dom G = Seg len G & v<>{} by A1,A21,FINSEQ_1:def 3;
-  hence m+1 in dom f by A4,A5,A6,A21,A23,A27,A53,A29,A49,A24,Th14;
+  hence m+1 in dom f by A4,A5,A6,A21,A23,A27,A53,A29,A49,A24,SEQM_3:85;
   m+1 in dom v & v.(m+1)=i+1 by A4,A5,A6,A21,A23,A57,A27,A53,A29,A49,A24,
-  Th14;
+  SEQM_3:85;
   hence thesis by A21,A22;
 end;
 
@@ -2448,7 +1913,7 @@ A50:        i+n = i+o+1 by A39;
                 then
 A51:            abs(l1-l) = 1 by A42,A43;
                 now
-                  per cases by A51,Th1;
+                  per cases by A51,SEQM_3:81;
                   suppose
                     l1>l & l1=l+1;
                     then
@@ -2549,7 +2014,7 @@ A17: Col(G,j2).j1=f/.(i+1) by A6,A8,MATRIX_1:def 9;
   then
 A18: f/.(i+1) in rng Col(G,j2) by A10,FUNCT_1:def 5;
   now
-    per cases by A16,Th2;
+    per cases by A16,SEQM_3:82;
     suppose
       abs(i1-j1)=1 & n=j2;
       hence thesis by A17,A10,FUNCT_1:def 5;
@@ -2689,7 +2154,7 @@ A48: dom L2 = Seg len L2 & len L2 = len G by FINSEQ_1:def 3,MATRIX_1:def 9;
 A49: [y,n2] in Indices G by MATRIX_1:def 5;
     f/.(k+1) = G*(y,n2) by A9,A48,A45,A46,MATRIX_1:def 9;
     then abs(x-y)+abs(n1-n2)= 1 by A3,A39,A36,A44,A47,A49,Def11;
-    hence thesis by Th2;
+    hence thesis by SEQM_3:82;
   end;
 A50: v.m = i
   proof
@@ -2718,9 +2183,9 @@ A57: v.(len v) <> width G;
     hence contradiction by A2,A57,A56,A55,Th20;
   end;
 A58: v<>{} by A1,A22;
-  hence m+1 in dom f by A4,A5,A6,A22,A24,A28,A54,A30,A50,A25,Th14;
+  hence m+1 in dom f by A4,A5,A6,A22,A24,A28,A54,A30,A50,A25,SEQM_3:85;
   m+1 in dom v & v.(m+1)=i+1 by A4,A5,A6,A22,A24,A58,A28,A54,A30,A50,A25,
-  Th14;
+  SEQM_3:85;
   hence thesis by A22,A23;
 end;
 
@@ -2865,7 +2330,7 @@ A50:        i+n = i+o+1 by A39;
                 then
 A51:            abs(l1-l) = 1 by A42,A43;
                 now
-                  per cases by A51,Th1;
+                  per cases by A51,SEQM_3:81;
                   suppose
                     l1>l & l1=l+1;
                     then
@@ -2979,7 +2444,7 @@ A26:        i2<k;
                 then
 A27:            abs(i2-m)=1 by A12;
                 now
-                  per cases by A27,Th1;
+                  per cases by A27,SEQM_3:81;
                   suppose
                     i2>m & i2=m+1;
                     hence thesis by A26,XXREAL_0:2;
@@ -3023,7 +2488,7 @@ A4: width G > 1 and
 A5: 1<=len f;
   consider k such that
 A6: width G=k+1 and
-A7: k>0 by A4,Th3;
+A7: k>0 by A4,SEQM_3:83;
 A8: width G in Seg width G by A4,FINSEQ_1:3;
   then
 A9: len D=len G by A4,Def10;

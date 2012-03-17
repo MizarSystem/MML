@@ -12,9 +12,10 @@ environ
       SPPOL_2, GROUP_2, SUPINF_2, STRUCT_0, JORDAN3;
  notations TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, XCMPLX_0, XXREAL_0, REAL_1,
       NAT_1, RFINSEQ, NAT_D, RELAT_1, FUNCT_1, PARTFUN1, FINSEQ_1, FINSEQ_5,
-      SEQ_4, STRUCT_0, TOPREAL1, PRE_TOPC, RLVECT_1, RLTOPSP1, EUCLID, SPPOL_2;
+      SEQ_4, FINSEQ_6,
+      STRUCT_0, TOPREAL1, PRE_TOPC, RLVECT_1, RLTOPSP1, EUCLID, SPPOL_2;
  constructors PARTFUN1, XXREAL_0, REAL_1, NAT_1, SEQ_4, REALSET1, RFINSEQ,
-      NAT_D, FINSEQ_5, TOPREAL1, BINOP_2, RELSET_1;
+      NAT_D, FINSEQ_5, TOPREAL1, BINOP_2, RELSET_1, FINSEQ_6;
  registrations XBOOLE_0, SUBSET_1, ORDINAL1, RELSET_1, XXREAL_0, XREAL_0,
       NAT_1, MEMBERED, FINSEQ_1, FINSEQ_5, STRUCT_0, EUCLID, SPPOL_2, XXREAL_2,
       CARD_1;
@@ -22,14 +23,10 @@ environ
  definitions TARSKI, RLTOPSP1;
  theorems TARSKI, TOPREAL1, FINSEQ_1, FINSEQ_4, RFINSEQ, SPPOL_1, FUNCT_1,
       NAT_1, TOPREAL3, SPPOL_2, FINSEQ_5, EUCLID, FINSEQ_6, ZFMISC_1, FINSEQ_3,
-      RELAT_1, PARTFUN2, XBOOLE_0, XBOOLE_1, FINSEQ_2, XCMPLX_1, XREAL_1,
+      PARTFUN2, XBOOLE_0, XBOOLE_1, FINSEQ_2, XCMPLX_1, XREAL_1,
       XXREAL_0, ORDINAL1, PARTFUN1, CARD_1, XXREAL_2, XREAL_0, NAT_D, RLTOPSP1;
 
 begin
-
-::-------------------------------------------:
-::              Preliminaries                :
-::-------------------------------------------:
 
 reserve k for Nat;
 reserve r,r1,r2 for Real;
@@ -37,653 +34,7 @@ reserve n,i,i1,i2,j,j1,j2 for Element of NAT;
 reserve D for non empty set;
 reserve f for FinSequence of D;
 
-canceled 14;
-
-theorem Th15:
-  for i be Nat for p,q being FinSequence st len p<i & (i<=len p +
-  len q or i<=len (p^q)) holds (p^q).i=q.(i-len p)
-proof
-  let i be Nat;
-  let p,q be FinSequence;
-  assume that
-A1: len p<i and
-A2: i<=len p +len q or i<=len (p^q);
-  i<=len p + len q by A2,FINSEQ_1:35;
-  then
-A3: i-len p<=len p+len q -len p by XREAL_1:11;
-  len p +1<=i by A1,NAT_1:13;
-  then
-A4: len p +1-len p<=i-len p by XREAL_1:11;
-  then
-A5: len p+(i-'len p)=len p+(i-len p) by XREAL_0:def 2
-    .=i;
-  i-len p=i-'len p by A4,XREAL_0:def 2;
-  then i-'len p in dom q by A4,A3,FINSEQ_3:27;
-  hence thesis by A5,FINSEQ_1:def 7;
-end;
-
-canceled;
-
-theorem Th17:
-  for x being set,f being FinSequence of D st 1<=len f holds (f^<*
-x*>).1=f.1 & (f^<*x*>).1=f/.1 & (<*x*>^f).(len f +1)=f.len f & (<*x*>^f).(len f
-  +1)=f/.len f
-proof
-  let x be set,f be FinSequence of D;
-  assume
-A1: 1<=len f;
-  then
-A2: len f in dom f by FINSEQ_3:27;
-  1 in dom f by A1,FINSEQ_3:27;
-  then
-A3: (f^<*x*>).1=f.1 by FINSEQ_1:def 7;
-  (<*x*>^f).(len f +1) =(<*x*>^f).(len <*x*>+len f) by FINSEQ_1:56
-    .=f.len f by A2,FINSEQ_1:def 7;
-  hence thesis by A1,A3,FINSEQ_4:24;
-end;
-
-theorem Th18:
-  for f being FinSequence st len f=1 holds Rev f=f
-proof
-  let f be FinSequence;
-  assume
-  len f=1;
-  then f=<*f.1*> by FINSEQ_1:57;
-  hence thesis by FINSEQ_5:63;
-end;
-
-theorem
-  for f being FinSequence of D,k being Nat holds len (f/^k)=len f-'k by
-  RFINSEQ:42;
-
-canceled;
-
-theorem
-  for f being FinSequence of D,l1,l2 being Nat holds (f/^l1)|(l2-'l1)=(f
-  |l2)/^l1 by FINSEQ_5:83;
-
-begin
-
-::-------------------------------------------:
-::    Middle Function for Finite Sequences   :
-::-------------------------------------------:
-
-definition
-  let f be FinSequence,k1,k2 be Nat;
-  func mid(f,k1,k2) -> FinSequence equals
-  :Def1:
-  (f/^(k1-'1))|(k2-'k1+1)
-  if k1<=k2 otherwise Rev ((f/^(k2-'1))|(k1-'k2+1));
-  correctness;
-end;
-
-definition
-  let D;
-  let f be FinSequence of D,k1,k2 be Nat;
-  redefine func mid(f,k1,k2) -> FinSequence of D;
-  coherence
-  proof
-    k1<=k2 or k1>k2;
-    then mid(f,k1,k2) = (f/^(k1-'1))|(k2-'k1+1) or
-    mid(f,k1,k2) = Rev ((f/^(k2-'1))|(k1-'k2+1)) by Def1;
-    hence thesis;
-  end;
-end;
-
-theorem Th22:
-  for f being FinSequence of D,k1,k2 being Element of NAT st 1<=k1
-  & k1<=len f & 1<=k2 & k2<=len f holds Rev mid(f,k1,k2)=mid(Rev f,len f-'k2+1,
-  len f-'k1+1)
-proof
-  let f be FinSequence of D,k1,k2 be Element of NAT;
-  assume that
-A1: 1<=k1 and
-A2: k1<=len f and
-A3: 1<=k2 and
-A4: k2<=len f;
-  per cases;
-  suppose
-A5: k1<=k2;
-A6: len f-'(k1-'1)=len f-(k1-'1) by A2,NAT_D:50,XREAL_1:235
-      .=len f-(k1-1) by A1,XREAL_1:235
-      .=len f-k1+1
-      .=len f-'k1+1 by A2,XREAL_1:235;
-A7: len f-'k1=len f-k1 by A2,XREAL_1:235;
-A8: len f-'k2=len f-k2 by A4,XREAL_1:235;
-    k2-k1<=len f-k1 by A4,XREAL_1:11;
-    then k2-'k1<=len f-k1 by A5,XREAL_1:235;
-    then k2-'k1<=len f-'k1 by A2,XREAL_1:235;
-    then k2-'k1+1<=len f-'k1+1 by XREAL_1:8;
-    then
-A9: (len f-'(k1-'1)-'(k2-'k1+1)) =(len f-'k1+1)-(k2-'k1+1) by A6,
-    XREAL_1:235
-      .=(len f-k1+1)-(k2-k1+1) by A5,A7,XREAL_1:235
-      .=len f+1-1-k2
-      .=len f-'k2 by A4,XREAL_1:235;
-    then
-A10: (len (f/^(k1-'1))-'(k2-'k1+1))+(k2-'k1+1) =len f-'k2+(k2-'k1+1) by
-    RFINSEQ:42
-      .=len f-k2+(k2-k1+1) by A5,A8,XREAL_1:235
-      .=len f-(k1-1)
-      .=len f-(k1-'1) by A1,XREAL_1:235
-      .=len f-'(k1-'1) by A2,NAT_D:50,XREAL_1:235
-      .=len (f/^(k1-'1)) by RFINSEQ:42;
-A11: len f-'k1<=len f-'k1+1 by NAT_1:11;
-    len f-'k1>=len f-'k2 by A5,NAT_D:41;
-    then
-A12: len f-'(k1-'1)-'(len f-'k2) =len f-'k1+1-(len f-'k2) by A6,A11,
-    XREAL_1:235,XXREAL_0:2
-      .=len f-k1+1-(len f-k2) by A4,A7,XREAL_1:235
-      .=k2-k1+1
-      .=k2-'k1+1 by A5,XREAL_1:235;
-A13: (len f-'(k1-'1))+(k1-'1) =(len f-(k1-'1))+(k1-'1) by A2,NAT_D:50,
-    XREAL_1:235
-      .=len f;
-    len f-'k1>=len f-'k2 by A5,NAT_D:41;
-    then len f-'k1+1>=len f-'k2+1 by XREAL_1:8;
-    then
-A14: (len f-'k1+1)-'(len f-'k2+1)+1 =(len f-'k1+1)-(len f-'k2+1)+1 by
-    XREAL_1:235
-      .=(len f-k1+1)-(len f-k2+1)+1 by A4,A7,XREAL_1:235
-      .=k2-k1+1
-      .=k2-'k1+1 by A5,XREAL_1:235;
-    len f-'k1>=len f-'k2 by A5,NAT_D:41;
-    then len f-'k1+1>=len f-'k2+1 by XREAL_1:8;
-    then mid(Rev f,len f-'k2+1,len f-'k1+1) =(((Rev f)/^((len f-'k2+1)-'1))|(
-    k2-'k1+1)) by A14,Def1
-      .=(Rev f/^(len f-'k2))|(len f-'(k1-'1)-'(len f-'k2)) by A12,NAT_D:34
-      .=(Rev f|(len f-'(k1-'1)))/^(len f-'k2) by FINSEQ_5:83
-      .=(Rev f|(len f-'(k1-'1)))/^(len (f/^(k1-'1))-'(k2-'k1+1)) by A9,
-    RFINSEQ:42
-      .=(Rev (f/^(k1-'1)))/^(len (f/^(k1-'1))-'(k2-'k1+1)) by A13
-    ,FINSEQ_6:90
-      .=Rev (((f/^(k1-'1))|(k2-'k1+1))) by A10,FINSEQ_6:91
-      .=Rev mid(f,k1,k2) by A5,Def1;
-    hence thesis;
-  end;
-  suppose
-A15: k1>k2;
-A16: len f-'(k2-'1)=len f-(k2-'1) by A4,NAT_D:50,XREAL_1:235
-      .=len f-(k2-1) by A3,XREAL_1:235
-      .=len f-k2+1
-      .=len f-'k2+1 by A4,XREAL_1:235;
-A17: len f-'k2=len f-k2 by A4,XREAL_1:235;
-    len f-'k2>=len f-'k1 by A15,NAT_D:41;
-    then len f-'k2+1>=len f-'k1+1 by XREAL_1:8;
-    then
-A18: (len f-'k2+1)-'(len f-'k1+1)+1 =(len f-'k2+1)-(len f-'k1+1)+1 by
-    XREAL_1:235
-      .=(len f-k2+1)-(len f-k1+1)+1 by A2,A17,XREAL_1:235
-      .=k1-k2+1
-      .=k1-'k2+1 by A15,XREAL_1:235;
-A19: len f-'k1=len f-k1 by A2,XREAL_1:235;
-A20: len f-'k2<=len f-'k2+1 by NAT_1:11;
-    len f-'k2>=len f-'k1 by A15,NAT_D:41;
-    then
-A21: len f-'(k2-'1)-'(len f-'k1) =len f-'k2+1-(len f-'k1) by A16,A20,
-    XREAL_1:235,XXREAL_0:2
-      .=len f-k2+1-(len f-k1) by A2,A17,XREAL_1:235
-      .=k1-k2+1
-      .=k1-'k2+1 by A15,XREAL_1:235;
-A22: (len f-'(k2-'1))+(k2-'1) =(len f-(k2-'1))+(k2-'1) by A4,NAT_D:50,
-    XREAL_1:235
-      .=len f;
-    k1-k2<=len f-k2 by A2,XREAL_1:11;
-    then k1-'k2<=len f-k2 by A15,XREAL_1:235;
-    then k1-'k2<=len f-'k2 by A4,XREAL_1:235;
-    then k1-'k2+1<=len f-'k2+1 by XREAL_1:8;
-    then
-A23: (len f-'(k2-'1)-'(k1-'k2+1)) =(len f-'k2+1)-(k1-'k2+1) by A16,
-    XREAL_1:235
-      .=(len f-k2+1)-(k1-k2+1) by A15,A17,XREAL_1:235
-      .=len f+1-1-k1
-      .=len f-'k1 by A2,XREAL_1:235;
-    then
-A24: (len (f/^(k2-'1))-'(k1-'k2+1))+(k1-'k2+1) =len f-'k1+(k1-'k2+1) by
-    RFINSEQ:42
-      .=len f-k1+(k1-k2+1) by A15,A19,XREAL_1:235
-      .=len f-(k2-1)
-      .=len f-(k2-'1) by A3,XREAL_1:235
-      .=len f-'(k2-'1) by A4,NAT_D:50,XREAL_1:235
-      .=len (f/^(k2-'1)) by RFINSEQ:42;
-    len f-k2>len f-k1 by A15,XREAL_1:12;
-    then len f-'k2+1>len f-'k1+1 by A17,A19,XREAL_1:8;
-    then
-    mid(Rev f,len f-'k2+1,len f-'k1+1) =Rev((((Rev f)/^((len f-'k1+1)-'1)
-    )|(k1-'k2+1))) by A18,Def1
-      .=Rev((Rev f/^(len f-'k1))|(len f-'(k2-'1)-'(len f-'k1))) by A21,NAT_D
-    :34
-      .=Rev((Rev f|(len f-'(k2-'1)))/^(len f-'k1)) by FINSEQ_5:83
-      .=Rev((Rev f|(len f-'(k2-'1)))/^(len (f/^(k2-'1))-'(k1-'k2+1))) by A23
-    ,RFINSEQ:42
-      .=Rev((Rev (f/^(k2-'1)))/^(len (f/^(k2-'1))-'(k1-'k2+1))) by A22,
-    FINSEQ_6:90
-      .=Rev(Rev (((f/^(k2-'1))|(k1-'k2+1)))) by A24,FINSEQ_6:91
-      .= Rev mid(f,k1,k2) by A15,Def1;
-    hence thesis;
-  end;
-end;
-
-theorem Th23:
-  for n,m being Element of NAT,f being FinSequence of D st 1<= m &
-  m+n<=len f holds (f/^n).m=f.(m+n)
-proof
-  let n,m be Element of NAT,f be FinSequence of D;
-  assume that
-A1: 1<= m and
-A2: m+n<=len f;
-A3: m+n-n<=len f -n by A2,XREAL_1:11;
-  n<=n+m by NAT_1:11;
-  then
-A4: n<=len f by A2,XXREAL_0:2;
-  then len (f/^n) = len f -n by RFINSEQ:def 2;
-  then m in dom (f/^n) by A1,A3,FINSEQ_3:27;
-  hence thesis by A4,RFINSEQ:def 2;
-end;
-
-theorem Th24:
-  for i being Element of NAT,f being FinSequence of D st 1<=i & i
-  <=len f holds (Rev f).i=f.(len f -i+1)
-proof
-  let i be Element of NAT,f be FinSequence of D;
-  assume that
-A1: 1<=i and
-A2: i<=len f;
-  i in dom (f) by A1,A2,FINSEQ_3:27;
-  hence thesis by FINSEQ_5:61;
-end;
-
-theorem
-  for f being FinSequence of D,k being Nat st 1<=k holds mid(f,1,k)=f|k
-proof
-  let f be FinSequence of D,k be Nat;
-  1-'1=0 by XREAL_1:234;
-  then
-A1: f/^(1-'1)=f by FINSEQ_5:31;
-  assume
-A2: 1<=k;
-  then mid(f,1,k)=(f/^(1-'1))|(k-'1+1) by Def1;
-  hence thesis by A2,A1,XREAL_1:237;
-end;
-
-theorem Th26:
-  for f being FinSequence of D,k being Element of NAT st k<=len f
-  holds mid(f,k,len f)=f/^(k-'1)
-proof
-  let f be FinSequence of D,k be Element of NAT;
-  assume
-A1: k<=len f;
-  then
-A2: mid(f,k,len f)=(f/^(k-'1))|(len f-'k+1) by Def1;
-  k-'1<=len f by A1,NAT_D:44;
-  then
-A3: len (f/^(k-'1))=len f-(k-'1) by RFINSEQ:def 2;
-A4: len f-'k+1=len f-k+1 by A1,XREAL_1:235
-    .=len f -(k-1);
-  now
-    per cases;
-    case
-A5:   k=0;
-      0-1<0;
-      then k-'1=0 by A5,XREAL_0:def 2;
-      then
-A6:   f/^(k-'1)=f by FINSEQ_5:31;
-      len f-'k+1=len f +1 by A5,NAT_D:40;
-      then len f <= len f-'k+1 by NAT_1:11;
-      then Seg len f c= Seg (len f -'k+1) by FINSEQ_1:7;
-      then dom (f/^(k-'1)) c= Seg (len f -'k+1) by A6,FINSEQ_1:def 3;
-      then (f/^(k-'1))|Seg (len f -'k+1)= f/^(k-'1) by RELAT_1:97;
-      hence thesis by A2,FINSEQ_1:def 15;
-    end;
-    case
-      k<>0;
-      then 0+1<=k by NAT_1:13;
-      then len (f/^(k-'1))=len f-'k+1 by A3,A4,XREAL_1:235;
-      hence mid(f,k,len f)=(f/^(k-'1))|Seg len (f/^(k-'1)) by A2, FINSEQ_1:
-      def 15
-        .=(f/^(k-'1))|dom (f/^(k-'1)) by FINSEQ_1:def 3
-        .=(f/^(k-'1)) by RELAT_1:97;
-    end;
-  end;
-  hence thesis;
-end;
-
-theorem Th27:
-  for f being FinSequence of D,k1,k2 being Element of NAT st 1<=k1
-& k1<=len f & 1<=k2 & k2<=len f holds mid(f,k1,k2).1=f.k1 & (k1<=k2 implies len
-mid(f,k1,k2) = k2 -' k1 +1 & for i being Element of NAT st 1<=i & i<=len mid(f,
-k1,k2) holds mid(f,k1,k2).i=f.(i+k1-'1)) & (k1>k2 implies len mid(f,k1,k2) = k1
--' k2 +1 & for i being Element of NAT st 1<=i & i<=len mid(f,k1,k2) holds mid(f
-  ,k1,k2).i=f.(k1-'i+1))
-proof
-  let f be FinSequence of D,k11,k21 be Element of NAT;
-  assume that
-A1: 1<=k11 and
-A2: k11<=len f and
-A3: 1<=k21 and
-A4: k21<=len f;
-  k21-'1<=len f by A4,NAT_D:44;
-  then
-A5: len (f/^(k21-'1))=len f -(k21-'1) by RFINSEQ:def 2;
-A6: k21-1>=0 by A3,XREAL_1:50;
-  then
-A7: k21-'1=k21-1 by XREAL_0:def 2;
-A8: now
-    let k1,k2 be Element of NAT;
-    now
-      assume that
-A9:   k1<=k2 and
-A10:  1<=k1 and
-A11:  k1<=len f;
-A12:  mid(f,k1,k2).1=((f/^(k1-'1))|(k2-'k1+1)).1 by A9,Def1
-        .=((f/^(k1-'1))|(Seg (k2-'k1+1))).1 by FINSEQ_1:def 15;
-      k1-1>=0 by A10,XREAL_1:50;
-      then
-A13:  1+(k1-'1)=1+(k1-1) by XREAL_0:def 2
-        .=k1;
-      then 1+(k1-'1)<=len f -(k1-'1)+(k1-'1) by A11;
-      then
-A14:  1<=len f - (k1-'1) by XREAL_1:8;
-A15:  k1-'1<=len f by A11,NAT_D:44;
-      then len (f/^(k1-'1))=len f -(k1-'1) by RFINSEQ:def 2;
-      then 1 in Seg(len (f/^(k1-'1))) by A14,FINSEQ_1:3;
-      then
-A16:  1 in dom (f/^(k1-'1)) by FINSEQ_1:def 3;
-      0+1<=k2-'k1+1 by XREAL_1:8;
-      then 1 in Seg(k2-'k1+1) by FINSEQ_1:3;
-      then 1 in dom (f/^(k1-'1)) /\ Seg(k2-'k1+1) by A16,XBOOLE_0:def 4;
-      then 1 in dom ((f/^(k1-'1))|(Seg (k2-'k1+1))) by RELAT_1:90;
-      then mid(f,k1,k2).1=(f/^(k1-'1)).1 by A12,FUNCT_1:70;
-      hence mid(f,k1,k2).1=f.k1 by A13,A15,A16,RFINSEQ:def 2;
-    end;
-    hence k1<=k2 & 1<=k1 & k1<=len f implies mid(f,k1,k2).1=f.k1;
-  end;
-  thus mid(f,k11,k21).1=f.k11
-  proof
-    per cases;
-    suppose
-      k11<=k21;
-      hence thesis by A1,A2,A8;
-    end;
-    suppose
-A17:  k11>k21;
-A18:  k21-1>=0 by A3,XREAL_1:50;
-A19:  k11-k21>=0 by A17,XREAL_1:50;
-      then k11-'k21=k11-k21 by XREAL_0:def 2;
-      then
-A20:  k21-'1 +(k11-'k21+1)= k21-1+(k11-(k21-1)) by A18,XREAL_0:def 2
-        .=k11;
-      k21-'1<=len f by A4,NAT_D:44;
-      then
-A21:  len (f/^(k21-'1))=len f -(k21-'1) by RFINSEQ:def 2;
-A22:  1<=(k11-'k21+1) by NAT_1:11;
-      k11-'k21+1=k11-k21+1 by A19,XREAL_0:def 2
-        .=k11-(k21-1)
-        .=k11-(k21-'1) by A18,XREAL_0:def 2;
-      then
-A23:  k11-'k21+1 <=len (f/^(k21-'1)) by A2,A21,XREAL_1:11;
-      then
-A24:  len ((f/^(k21-'1))|(k11-'k21+1))=(k11-'k21+1) by FINSEQ_1:80;
-      then
-A25:  k11-'k21+1 in dom ((f/^(k21-'1))|(k11-'k21+1)) by A22,
-      FINSEQ_3
-      :27;
-A26:  k11-'k21+1 in dom (f/^(k21-'1)) by A22,A23,FINSEQ_3:27;
-A27:  ((f/^(k21-'1))|(k11-'k21+1)).len ((f/^(k21-'1))|(k11-'k21+1)) =((f
-      /^(k21-'1))|(k11-'k21+1))/.(k11-'k21+1) by A22,A24,FINSEQ_4:24
-        .=(f/^(k21-'1))/.(k11-'k21+1) by A25,FINSEQ_4:85
-        .=f/.((k21-'1 +(k11-'k21+1))) by A26,FINSEQ_5:30
-        .=f.k11 by A1,A2,A20,FINSEQ_4:24;
-      1 in dom ((f/^(k21-'1))|(k11-'k21+1)) by A22,A24,FINSEQ_3:27;
-      then
-      (Rev ((f/^(k21-'1))|(k11-'k21+1))).1 = ((f/^(k21-'1))|(k11-'k21+1))
-      .(len ((f/^(k21-'1))|(k11-'k21+1)) - 1 + 1) by FINSEQ_5:61
-        .= f.k11 by A27;
-      hence thesis by A17,Def1;
-    end;
-  end;
-  thus k11<=k21 implies len mid(f,k11,k21) = k21 -' k11 +1 & for i being
-Element of NAT st 1<=i & i<=len mid(f,k11,k21) holds mid(f,k11,k21).i=f.(i+k11
-  -'1)
-  proof
-A28: k11-1>=0 by A1,XREAL_1:50;
-    then
-A29: k11-'1=k11-1 by XREAL_0:def 2;
-    k11-'1<=len f by A2,NAT_D:44;
-    then
-A30: len (f/^(k11-'1))=len f -(k11-'1) by RFINSEQ:def 2;
-    assume
-A31: k11<=k21;
-    then
-A32: mid(f,k11,k21)=(f/^(k11-'1))|(k21-'k11+1) by Def1;
-A33: k21-k11>=0 by A31,XREAL_1:50;
-    then
-A34: k21-'k11=k21-k11 by XREAL_0:def 2;
-    k21-'k11+1=k21-k11+1 by A33,XREAL_0:def 2
-      .=k21-(k11-1)
-      .=k21-(k11-'1) by A28,XREAL_0:def 2;
-    then
-A35: k21-'k11+1 <=len (f/^(k11-'1)) by A4,A30,XREAL_1:11;
-    then
-A36: len ((f/^(k11-'1))|(k21-'k11+1))=(k21-'k11+1) by FINSEQ_1:80;
-    for i being Element of NAT st 1<=i & i<=len mid(f,k11,k21) holds mid(
-    f,k11,k21).i=f.(i+k11-'1)
-    proof
-      let i be Element of NAT;
-      assume that
-A37:  1<=i and
-A38:  i<=len mid(f,k11,k21);
-A39:  i<= (k21-'k11+1) by A32,A35,A38,FINSEQ_1:80;
-      i+(k11-1)<=k21-(k11-1)+(k11-1) by A32,A34,A36,A38,XREAL_1:8;
-      then
-A40:  i+(k11-'1)<=len f by A4,A29,XXREAL_0:2;
-A41:  k11<=k11+i by NAT_1:11;
-A42:  i+(k11-'1)=i+(k11-1) by A28,XREAL_0:def 2
-        .=i+k11-1
-        .=i+k11-'1 by A1,A41,XREAL_1:235,XXREAL_0:2;
-      mid(f,k11,k21).i=(f/^(k11-'1))|(k21-'k11+1).i by A31,Def1
-        .=(f/^(k11-'1)).i by A39,FINSEQ_3:121
-        .=f.(i+(k11-'1)) by A37,A40,Th23;
-      hence thesis by A42;
-    end;
-    hence thesis by A32,A35,FINSEQ_1:80;
-  end;
-  assume
-A43: k11>k21;
-  then
-A44: k11-k21>=0 by XREAL_1:50;
-  then
-A45: k11-'k21=k11-k21 by XREAL_0:def 2;
-A46: mid(f,k11,k21)=Rev ((f/^(k21-'1))|(k11-'k21+1)) by A43,Def1;
-  then
-A47: len mid(f,k11,k21)=len ((f/^(k21-'1))|(k11-'k21+1)) by FINSEQ_5:
-  def 3;
-  k11-'k21+1=k11-k21+1 by A44,XREAL_0:def 2
-    .=k11-(k21-1)
-    .=k11-(k21-'1) by A6,XREAL_0:def 2;
-  then
-A48: k11-'k21+1 <=len (f/^(k21-'1)) by A2,A5,XREAL_1:11;
-  hence
-A49: len mid(f,k11,k21) = k11 -' k21 +1 by A47,FINSEQ_1:80;
-A50: len ((f/^(k21-'1))|(k11-'k21+1))=(k11-'k21+1) by A48,FINSEQ_1:80;
-  thus for i being Element of NAT st 1<=i & i<=len mid(f,k11,k21) holds mid(f,
-  k11,k21).i=f.(k11-'i+1)
-  proof
-    let i be Element of NAT;
-    assume that
-A51: 1<=i and
-A52: i<=len mid(f,k11,k21);
-A53: i+(k21-1)<=k11-(k21-1)+(k21-1) by A45,A49,A52,XREAL_1:8;
-    k11-'k21+1<= k11-'k21+1+(i-'1) by NAT_1:11;
-    then k11-'k21+1<= k11-'k21+1+(i-1) by A51,XREAL_1:235;
-    then k11-'k21+1-(i-1)<= k11-'k21+1+(i-1)-(i-1) by XREAL_1:11;
-    then
-A54: k11-'k21+1-i+1<= k11-'k21+1;
-    i<=k11-'k21+1 by A47,A48,A52,FINSEQ_1:80;
-    then
-A55: (k11-'k21+1-'i+1)<=(k11-'k21+1) by A54,XREAL_1:235;
-A56: i+k11<=i+len f by A2,XREAL_1:8;
-A57: i<=i+(k21-'1) by NAT_1:11;
-A58: k11-'k21+1-'i+1+(k21-'1) =k11-'k21+1-i+1+(k21-'1) by A49,A52,XREAL_1:
-    235
-      .= k11-(k21-1)-i+1+(k21-1) by A6,A45,XREAL_0:def 2
-      .=k11-i+1
-      .=k11-'i+1 by A7,A53,A57,XREAL_1:235,XXREAL_0:2;
-    1+k11<=i+k11 by A51,XREAL_1:8;
-    then 1+k11<=i+len f by A56,XXREAL_0:2;
-    then 1+k11-i<=i+len f -i by XREAL_1:11;
-    then k11-i+1<=len f;
-    then
-A59: k11-'k21+1-'i+1+(k21-'1)<= len f by A7,A53,A57,A58,XREAL_1:235
-    ,XXREAL_0:2;
-    mid(f,k11,k21).i=((f/^(k21-'1))|(k11-'k21+1)) .(len ((f/^(k21-'1))|(
-    k11-'k21+1)) -i+1) by A46,A47,A51,A52,Th24
-      .=((f/^(k21-'1))|(k11-'k21+1)) .(len ((f/^(k21-'1))|(k11-'k21+1)) -'i+
-    1) by A47,A52,XREAL_1:235
-      .=(f/^(k21-'1)).(k11-'k21+1-'i+1) by A50,A55,FINSEQ_3:121
-      .=f.(k11-'i+1) by A58,A59,Th23,NAT_1:11;
-    hence thesis;
-  end;
-end;
-
-theorem Th28:
-  for f being FinSequence of D,k1,k2 being Element of NAT holds
-  rng mid(f,k1,k2) c= rng f
-proof
-  let f be FinSequence of D,k1,k2 be Element of NAT;
-  per cases;
-  suppose
-    k1<=k2;
-    then mid(f,k1,k2) = (f/^(k1-'1))|(k2-'k1+1) by Def1;
-    then
-A1: rng mid(f,k1,k2) c= rng (f/^(k1-'1)) by FINSEQ_5:21;
-    rng (f/^(k1-'1)) c= rng f by FINSEQ_5:36;
-    hence thesis by A1,XBOOLE_1:1;
-  end;
-  suppose
-    k1>k2;
-    then mid(f,k1,k2) = Rev ((f/^(k2-'1))|(k1-'k2+1)) by Def1;
-    then rng mid(f,k1,k2) = rng ((f/^(k2-'1))|(k1-'k2+1)) by FINSEQ_5:60;
-    then
-A2: rng mid(f,k1,k2) c= rng (f/^(k2-'1)) by FINSEQ_5:21;
-    rng (f/^(k2-'1)) c= rng f by FINSEQ_5:36;
-    hence thesis by A2,XBOOLE_1:1;
-  end;
-end;
-
-theorem
-  for f being FinSequence of D st 1<=len f holds mid(f,1,len f)=f
-proof
-  let f be FinSequence of D;
-  assume
-A1: 1<=len f;
-  then mid(f,1,len f)=(f/^(1-'1))|(len f-'1+1) by Def1
-    .=(f/^0)|(len f-'1+1) by XREAL_1:234
-    .=f|(len f-'1+1) by FINSEQ_5:31
-    .=f|len f by A1,XREAL_1:237
-    .=f by FINSEQ_1:79;
-  hence thesis;
-end;
-
-theorem
-  for f being FinSequence of D st 1<=len f holds mid(f,len f,1)=Rev f
-proof
-  let f be FinSequence of D;
-  assume
-A1: 1<=len f;
-A2: 1-'1=0 by XREAL_1:234;
-  per cases;
-  suppose
-    len f<>1;
-    then 1<len f by A1,XXREAL_0:1;
-    then mid(f,len f,1)=Rev ((f/^(1-'1))|(len f-'1+1)) by Def1
-      .=Rev ((f/^0)|len f) by A1,A2,XREAL_1:237
-      .=Rev (f|len f) by FINSEQ_5:31
-      .=Rev f by FINSEQ_1:79;
-    hence thesis;
-  end;
-  suppose
-A3: len f=1;
-    then
-A4: f|1=f by FINSEQ_1:79;
-    mid(f,len f,1)=(f/^(1-'1))|(1-'1+1) by A3,Def1
-      .=f|1 by A2,FINSEQ_5:31;
-    hence thesis by A1,A4,Th18,FINSEQ_1:80;
-  end;
-end;
-
-theorem Th31:
-  for f being FinSequence of D, k1,k2,i being Element of NAT st 1
-  <=k1 & k1<=k2 & k2<=len f & 1<=i & (i<=k2-'k1+1 or i<=k2-k1+1 or i<=k2+1-k1)
-holds mid(f,k1,k2).i=f.(i+k1-'1) & mid(f,k1,k2).i=f.(i-'1+k1) & mid(f,k1,k2).i=
-  f.(i+k1-1) & mid(f,k1,k2).i=f.(i-1+k1)
-proof
-  let f be FinSequence of D, k1,k2,i be Element of NAT;
-  assume that
-A1: 1<=k1 and
-A2: k1<=k2 and
-A3: k2<=len f and
-A4: 1<=i and
-A5: i<=k2-'k1+1 or i<=k2-k1+1 or i<=k2+1-k1;
-A6: k1<=len f by A2,A3,XXREAL_0:2;
-  i+k1>=1+k1 by A4,XREAL_1:8;
-  then
-A7: i+k1-1>=1+k1-1 by XREAL_1:11;
-A8: i<=k2-k1+1 implies i<=k2-'k1+1 by A2,XREAL_1:235;
-  i-1>=1-1 by A4,XREAL_1:11;
-  then
-A9: i-'1+k1=i-1+k1 by XREAL_0:def 2
-    .=i+k1-'1 by A7,XREAL_0:def 2;
-A10: 1<=k2 by A1,A2,XXREAL_0:2;
-  then len mid(f,k1,k2)=k2-'k1+1 by A1,A2,A3,A6,Th27;
-  hence
-A11: mid(f,k1,k2).i=f.(i+k1-'1) & mid(f,k1,k2).i=f.(i-'1+k1) by A1,A2,
-  A3,A4,A5,A10,A6,A8,A9,Th27;
-  hence mid(f,k1,k2).i=f.(i+k1-1) by A7,XREAL_0:def 2;
-  thus thesis by A4,A11,XREAL_1:235;
-end;
-
-theorem Th32:
-  for f being FinSequence of D,k,i being Nat st 1<=i & i<=k & k<=
-  len f holds mid(f,1,k).i=f.i
-proof
-  let f be FinSequence of D,k,i be Nat;
-  assume that
-A1: 1<=i and
-A2: i<=k and
-A3: k<=len f;
-A4: i<=k-1+1 by A2;
-A5: k in NAT by ORDINAL1:def 13;
-A6: i in NAT by ORDINAL1:def 13;
-  1<=k by A1,A2,XXREAL_0:2;
-  then mid(f,1,k).i=f.(i+1-'1) by A1,A3,A6,A5,A4,Th31;
-  hence thesis by NAT_D:34;
-end;
-
-theorem
-  for f being FinSequence of D, k1,k2 being Element of NAT st 1<=k1 & k1
-  <=k2 & k2<=len f holds len mid(f,k1,k2)<=len f
-proof
-  let f be FinSequence of D, k1,k2 be Element of NAT;
-  assume that
-A1: 1<=k1 and
-A2: k1<=k2 and
-A3: k2<=len f;
-A4: k1<=len f by A2,A3,XXREAL_0:2;
-  k2-k1>=0 by A2,XREAL_1:50;
-  then
-A5: k2-'k1+1=k2-k1+1 by XREAL_0:def 2
-    .=k2-(k1-1);
-  k2<=k2+(k1-'1) by NAT_1:11;
-  then
-A6: k2-(k1-'1)<=k2+(k1-'1)-(k1-'1) by XREAL_1:11;
-  k1-1>=0 by A1,XREAL_1:50;
-  then
-A7: k1-1=k1-'1 by XREAL_0:def 2;
-  1<=k2 by A1,A2,XXREAL_0:2;
-  then len mid(f,k1,k2)=k2-'k1+1 by A1,A2,A3,A4,Th27;
-  hence thesis by A3,A5,A7,A6,XXREAL_0:2;
-end;
+canceled 33;
 
 theorem
   for f being FinSequence of TOP-REAL n st 2<=len f holds f.1 in L~f & f
@@ -844,7 +195,7 @@ A10: 1+1<=len f-k1+1 by XREAL_1:8;
       .=len f-k1+1;
     then
 A11: f/^(k1-'1) is being_S-Seq by A1,A3,A10,Th38,NAT_D:50;
-    mid(f,k1,k2)=(f/^(k1-'1))|(k2-'k1+1) by A7,Def1;
+    mid(f,k1,k2)=(f/^(k1-'1))|(k2-'k1+1) by A7,FINSEQ_6:def 3;
     hence thesis by A11,A9,Th37;
   end;
   suppose
@@ -865,7 +216,7 @@ A15: 1+1<=len f-k2+1 by XREAL_1:8;
     then f/^(k2-'1) is being_S-Seq by A1,A5,A15,Th38,NAT_D:50;
     then
 A16: (f/^(k2-'1))|(k1-'k2+1) is S-Sequence_in_R2 by A14,Th37;
-    mid(f,k1,k2)= Rev ((f/^(k2-'1))|(k1-'k2+1)) by A12,Def1;
+    mid(f,k1,k2)= Rev ((f/^(k2-'1))|(k1-'k2+1)) by A12,FINSEQ_6:def 3;
     hence thesis by A16,SPPOL_2:47;
   end;
 end;
@@ -878,6 +229,7 @@ begin
 
 definition
   let f be FinSequence of TOP-REAL 2,p be Point of TOP-REAL 2;
+ canceled;
   assume
 A1: p in L~f;
   func Index(p,f) -> Element of NAT means
@@ -1181,7 +533,7 @@ A20: 1<=len f by A15,NAT_1:13;
   then
 A21: len(mid(f,Index(p,f)+1,len f))=len f -' (Index(p,f)+1)+1 by A14,
   A19,
-  Th27;
+  FINSEQ_6:124;
 A22: len g=(len <*p*>)+ len(mid(f,Index(p,f)+1,len f)) by A2,FINSEQ_1:35
     .=1+ len(mid(f,Index(p,f)+1,len f)) by FINSEQ_1:56;
   then len g=1+(len f -(Index(p,f)+1)+1) by A17,A21,XREAL_0:def 2
@@ -1200,7 +552,7 @@ A28: j+1-'1=j+1-1 by A25,XREAL_1:235;
   then j+1-'1 in dom mid(f,Index(p,f)+1,len f) by A3,A7,FINSEQ_3:27;
   then g.(j+1) =mid(f,Index(p,f)+1,len f).(j+1-'1) by A2,A27,FINSEQ_1:def
   7
-    .=f.(j+1-'1+(Index(p,f)+1)-'1) by A3,A19,A16,A20,A28,A7,Th27
+    .=f.(j+1-'1+(Index(p,f)+1)-'1) by A3,A19,A16,A20,A28,A7,FINSEQ_6:124
     .=f.(j+1-'1+1+Index(p,f)-'1)
     .=f.(j+1+Index(p,f)-'1) by A25,XREAL_1:237
     .=f.(Index(p,f)+j+1-'1)
@@ -1228,7 +580,7 @@ A34:  1<=j-'1 by A32,SPPOL_1:6;
       then j-'1 in dom mid(f,Index(p,f)+1,len f) by A33,A34,FINSEQ_3:27;
       then
 A35:  g.j =mid(f,Index(p,f)+1,len f).(j-'1) by A2,A11,FINSEQ_1:def 7
-        .=f.(j-'1+(Index(p,f)+1)-'1) by A19,A16,A20,A8,A34,Th27
+        .=f.(j-'1+(Index(p,f)+1)-'1) by A19,A16,A20,A8,A34,FINSEQ_6:124
         .=f.(j-'1+1+Index(p,f)-'1)
         .=f.(Index(p,f)+j-'1) by A3,XREAL_1:237;
       g/.j=g.j by A3,A5,FINSEQ_4:24;
@@ -1341,7 +693,7 @@ A20: len f -'(Index(p,f)+1)=len f -(Index(p,f)+1) by XREAL_0:def 2
 A21: 0+1<=Index(p,f)+1 by NAT_1:11;
   then
 A22: len(mid(f,Index(p,f)+1,len f))=len f -' (Index(p,f)+1)+1 by A7,A17,
-  Th27;
+  FINSEQ_6:124;
 A23: for j be Nat st 1 <= j & j + 2 <= len g holds LSeg(g,j) /\ LSeg(g,j+1)
   = {g/.(j+1)}
   proof
@@ -1403,7 +755,7 @@ A44: j+1-'1<=len mid(f,Index(p,f)+1,len f) by A5,A27,A42,XREAL_1:8;
     27;
     then g.(j+1) = mid(f,Index(p,f)+1,len f).(j+1-'1) by A4,A43,
     FINSEQ_1:def 7
-      .=f.(j+1-'1+(Index(p,f)+1)-'1) by A7,A17,A21,A24,A42,A44,Th27
+      .=f.(j+1-'1+(Index(p,f)+1)-'1) by A7,A17,A21,A24,A42,A44,FINSEQ_6:124
       .=f.(j+1-'1+1+Index(p,f)-'1)
       .=f.(j+1+Index(p,f)-'1) by A36,XREAL_1:237
       .=f.(Index(p,f)+j+1-'1)
@@ -1432,7 +784,7 @@ A50: len f - Index(p,f)>=0 by A2,Th41,XREAL_1:52;
 A51: len f -Index(p,f)=len f -' Index(p,f) by XREAL_0:def 2;
   then
 A52: mid(f,Index(p,f)+1,len f).(len f -' Index(p,f)) =f.(len f -' Index(p,f)
-  +(Index(p,f)+1)-'1) by A7,A18,A17,A21,A22,A20,Th27;
+  +(Index(p,f)+1)-'1) by A7,A18,A17,A21,A22,A20,FINSEQ_6:124;
 A53: len g -'1= len f -' Index(p,f) by A47,A48,XREAL_0:def 2;
   for x1,x2 being set st x1 in dom g & x2 in dom g & g.x1=g.x2 holds x1=
   x2
@@ -1472,7 +824,7 @@ A67:    1<=n2-'1 by A62,A65,SPPOL_1:6;
         27;
         then g.n2 =mid(f,Index(p,f)+1,len f).(n2-'1) by A4,A66, FINSEQ_1:
         def 7
-          .=f.(n2-'1+(Index(p,f)+1)-'1) by A7,A17,A21,A65,A63,A67,Th27
+          .=f.(n2-'1+(Index(p,f)+1)-'1) by A7,A17,A21,A65,A63,A67,FINSEQ_6:124
           .=f.(n2+Index(p,f)-'1) by A65;
         then
 A68:    f.(n2+Index(p,f)-'1)=p by A56,A61,A64,FINSEQ_1:57;
@@ -1507,7 +859,7 @@ A77:    1<=n1-'1 by A71,A75,SPPOL_1:6;
         27;
         then g.n1 =mid(f,Index(p,f)+1,len f).(n1-'1) by A4,A76, FINSEQ_1:
         def 7
-          .=f.(n1-'1+(Index(p,f)+1)-'1) by A7,A17,A21,A75,A73,A77,Th27
+          .=f.(n1-'1+(Index(p,f)+1)-'1) by A7,A17,A21,A75,A73,A77,FINSEQ_6:124
           .=f.(n1+Index(p,f)-'1) by A75;
         then
 A78:    f.(n1+Index(p,f)-'1)=p by A56,A72,A74,FINSEQ_1:57;
@@ -1549,7 +901,7 @@ A92:    n1-1<=1+len mid(f,Index(p,f)+1,len f)-1 by A5,A57,XREAL_1:11;
         then
 A93:    g.n1 =mid(f,Index(p,f)+1,len f).(n1-'1) by A4,A91,
         FINSEQ_1:def 7
-          .=f.(n1-'1+(Index(p,f)+1)-'1) by A7,A17,A21,A87,A88,A92,Th27
+          .=f.(n1-'1+(Index(p,f)+1)-'1) by A7,A17,A21,A87,A88,A92,FINSEQ_6:124
           .=f.(n1+Index(p,f)-'1) by A87;
         n1-'1 <= len f -' Index(p,f) by A53,A57,NAT_D:42;
         then n1-'1+Index(p,f)<=len f - Index(p,f)+ Index(p,f) by A51,
@@ -1568,7 +920,7 @@ A98:    n2-1<=1+len mid(f,Index(p,f)+1,len f)-1 by A5,A59,XREAL_1:11;
 A99:    g.n2 =mid(f,Index(p,f)+1,len f).(n2-'1) by A4,
         A85, FINSEQ_1
         :def 7
-          .=f.(n2-'1+(Index(p,f)+1)-'1) by A7,A17,A21,A84,A95,A98,Th27
+          .=f.(n2-'1+(Index(p,f)+1)-'1) by A7,A17,A21,A84,A95,A98,FINSEQ_6:124
           .=f.(n2+Index(p,f)-'1) by A84;
         n2-'1 <= len f -' Index(p,f) by A53,A59,NAT_D:42;
         then n2-'1+Index(p,f)<=len f - Index(p,f)+ Index(p,f) by A51,
@@ -1597,7 +949,7 @@ A104: 1 <= j and
 A105: j+1 <= len g;
 A106: LSeg(g,j) = LSeg(g/.j,g/.(j+1)) by A104,A105,TOPREAL1:def 5;
     j+1-1<=1+len mid(f,Index(p,f)+1,len f)-1 by A5,A105,XREAL_1:11;
-    then j+1-1<= len f -Index(p,f) by A7,A17,A21,A102,Th27;
+    then j+1-1<= len f -Index(p,f) by A7,A17,A21,A102,FINSEQ_6:124;
     then
 A107: j+Index(p,f)<= len f -Index(p,f)+Index(p,f) by XREAL_1:8;
     Index(p,f)+1<=Index(p,f)+j by A104,XREAL_1:8;
@@ -1656,7 +1008,7 @@ A10: j<=len g by A3,XXREAL_0:2;
   now
     len g=len mid(f,1,Index(p,f)) + len <*p*> by A4,FINSEQ_1:35
       .=len mid(f,1,Index(p,f))+1 by FINSEQ_1:56;
-    then len g=Index(p,f)-'1+1+1 by A5,A9,A8,Th27;
+    then len g=Index(p,f)-'1+1+1 by A5,A9,A8,FINSEQ_6:124;
     then
 A11: len g=Index(p,f)+1 by A1,Th41,XREAL_1:237;
     then
@@ -1665,20 +1017,20 @@ A12: j<=Index(p,f) by A3,XREAL_1:8;
     then j+1<=len f +1 by A3,A11,XXREAL_0:2;
     then
 A13: j+1-1<=len f +1-1 by XREAL_1:11;
-A14: len mid(f,1,Index(p,f))=Index(p,f)-'1+1 by A5,A9,A8,Th27
+A14: len mid(f,1,Index(p,f))=Index(p,f)-'1+1 by A5,A9,A8,FINSEQ_6:124
       .=Index(p,f) by A1,Th41,XREAL_1:237;
     then
 A15: j in dom mid(f,1,Index(p,f)) by A2,A12,FINSEQ_3:27;
 A16: g/.j=g.j by A2,A10,FINSEQ_4:24
       .=mid(f,1,Index(p,f)).j by A4,A15,FINSEQ_1:def 7
-      .=f.(j+1-'1) by A2,A6,A5,A9,A8,A12,A14,Th27
+      .=f.(j+1-'1) by A2,A6,A5,A9,A8,A12,A14,FINSEQ_6:124
       .=f.j by NAT_D:34
       .=f/.j by A2,A13,FINSEQ_4:24;
     now
       per cases;
       case
 A17:    j+1<=Index(p,f);
-A18:    len mid(f,1,Index(p,f))=Index(p,f)-'1+1 by A5,A9,A8,Th27
+A18:    len mid(f,1,Index(p,f))=Index(p,f)-'1+1 by A5,A9,A8,FINSEQ_6:124
           .=Index(p,f) by A1,Th41,XREAL_1:237;
         then
 A19:    j+1 in dom mid(f,1,Index(p,f)) by A7,A17,FINSEQ_3:27;
@@ -1686,7 +1038,7 @@ A20:    LSeg(g,j)=LSeg(g/.j,g/.(j+1)) by A2,A3,TOPREAL1:def 5;
 A21:    j+1<=len f by A5,A17,XXREAL_0:2;
         g/.(j+1)=g.(j+1) by A3,FINSEQ_4:24,NAT_1:11
           .= mid(f,1,Index(p,f)).(j+1) by A4,A19,FINSEQ_1:def 7
-          .=f.(j+1+1-'1) by A5,A9,A8,A7,A17,A18,Th27
+          .=f.(j+1+1-'1) by A5,A9,A8,A7,A17,A18,FINSEQ_6:124
           .=f.(j+1) by NAT_D:34
           .=f/.(j+1) by A21,FINSEQ_4:24,NAT_1:11;
         hence thesis by A2,A16,A21,A20,TOPREAL1:def 5;
@@ -1709,7 +1061,7 @@ A24:    LSeg(f,j)=LSeg(f/.j,f/.(j+1)) by A2,TOPREAL1:def 5;
         1<=len <*p*> by FINSEQ_1:57;
         then
 A25:    1 in dom <*p*> by FINSEQ_3:27;
-A26:    len mid(f,1,Index(p,f))=Index(p,f)-'1+1 by A5,A9,A8,Th27
+A26:    len mid(f,1,Index(p,f))=Index(p,f)-'1+1 by A5,A9,A8,FINSEQ_6:124
           .=Index(p,f) by A1,Th41,XREAL_1:237;
 A27:    f/.j in LSeg(f/.j,f/.(j+1)) by RLTOPSP1:69;
         g/.(j+1)=g.(j+1) by A3,FINSEQ_4:24,NAT_1:11
@@ -1803,11 +1155,11 @@ A22: 1<=Index(p,f) by A2,Th41;
   then
 A23: 1<=len f by A21,XXREAL_0:2;
   then
-A24: len mid(f,1,Index(p,f))=Index(p,f)-'1+1 by A22,A5,Th27;
+A24: len mid(f,1,Index(p,f))=Index(p,f)-'1+1 by A22,A5,FINSEQ_6:124;
   then
 A25: len mid(f,1,Index(p,f))=Index(p,f) by A2,Th41,XREAL_1:237;
-  then g.1=mid(f,1,Index(p,f)).1 by A4,A22,Th17;
-  then g.1=f.1 by A22,A5,A23,Th27;
+  then g.1=mid(f,1,Index(p,f)).1 by A4,A22,FINSEQ_6:115;
+  then g.1=f.1 by A22,A5,A23,FINSEQ_6:124;
   then
 A26: g.1=f/.1 by A23,FINSEQ_4:24;
 A27: for j be Nat st 1 <= j & j + 2 <= len g holds LSeg(g,j) /\ LSeg(g,j+1)
@@ -1861,7 +1213,7 @@ A42:      j+1<=Index(p,f) by A25,A36,A39,XREAL_1:8;
 A43:      f.(j+1)=f/.(j+1) by A32,FINSEQ_4:24;
           g.(j+1)=mid(f,1,Index(p,f)).(j+1) by A4,A25,A32,A42, FINSEQ_1
           :85
-            .=f.(j+1) by A5,A32,A42,Th32;
+            .=f.(j+1) by A5,A32,A42,FINSEQ_6:129;
           hence thesis by A38,A33,A41,A43,XBOOLE_0:def 10;
         end;
       end;
@@ -1925,7 +1277,7 @@ A63:        n2<=len mid(f,1,Index(p,f)) by A20,NAT_1:13;
             then
 A64:        n2 <= len f by A5,A25,XXREAL_0:2;
             g.n2=mid(f,1,Index(p,f)).n2 by A4,A58,A63,FINSEQ_1:85;
-            then g.n2=f.(n2+1-'1) by A22,A5,A23,A58,A63,Th27;
+            then g.n2=f.(n2+1-'1) by A22,A5,A23,A58,A63,FINSEQ_6:124;
             then
 A65:        p=f.n2 by A55,A60,A61,NAT_D:34;
             then 1 < n2 by A3,A58,XXREAL_0:1;
@@ -1945,7 +1297,7 @@ A68:        n1<=len mid(f,1,Index(p,f)) by A20,NAT_1:13;
             then
 A69:        n1 <= len f by A5,A25,XXREAL_0:2;
             g.n1=mid(f,1,Index(p,f)).n1 by A4,A56,A68,FINSEQ_1:85;
-            then g.n1=f.(n1+1-'1) by A22,A5,A23,A56,A68,Th27;
+            then g.n1=f.(n1+1-'1) by A22,A5,A23,A56,A68,FINSEQ_6:124;
             then
 A70:        p=f.n1 by A55,A60,A66,NAT_D:34;
             then 1 < n1 by A3,A56,XXREAL_0:1;
@@ -1967,10 +1319,10 @@ A74:      n1<=len f by A5,A25,XXREAL_0:2;
 A75:      n2<=len mid(f,1,Index(p,f)) by A20,NAT_1:13;
           then
 A76:      g.n2=mid(f,1,Index(p,f)).n2 by A4,A58,FINSEQ_1:85
-            .=f.n2 by A5,A25,A58,A75,Th32;
+            .=f.n2 by A5,A25,A58,A75,FINSEQ_6:129;
 A77:      n2<=len f by A5,A25,A75,XXREAL_0:2;
           g.n1=mid(f,1,Index(p,f)).n1 by A4,A56,A73,FINSEQ_1:85
-            .=f.n1 by A5,A25,A56,A73,Th32;
+            .=f.n1 by A5,A25,A56,A73,FINSEQ_6:129;
           hence thesis by A13,A55,A56,A58,A74,A77,A76;
         end;
       end;
@@ -2084,74 +1436,7 @@ A10: len f -' Index(p,f)+1<=len Rev f by A6,NAT_1:13;
   hence thesis by A7,XREAL_1:237;
 end;
 
-theorem Th55:
-  for D for f being FinSequence of D, k being Element of NAT, p
-  being Element of D holds (<*p*>^f)|(k+1) = <*p*>^(f|k)
-proof
-  let D;
-  let f be FinSequence of D, k be Element of NAT, p be Element of D;
-A1: f|Seg k = f|k by FINSEQ_1:def 15;
-  thus (<*p*>^f)|(k+1) = (<*p*>^f)|Seg(k+1) by FINSEQ_1:def 15
-    .= (<*p*>^f)|Seg(k+len<*p*>) by FINSEQ_1:56
-    .= <*p*>^(f|k) by A1,FINSEQ_6:16;
-end;
-
-theorem Th56:
-  for D for f being FinSequence of D, k1,k2 being Element of NAT
-  st k1 < k2 & k1 in dom f holds mid(f,k1,k2) = <*f.k1*>^ mid(f,k1+1,k2)
-proof
-  let D;
-  let f be FinSequence of D, k1,k2 be Element of NAT;
-  assume
-A1: k1 < k2;
-  then
-A2: k1+1 <= k2 by NAT_1:13;
-A3: 1 <= k2 -' k1
-  proof
-    per cases by A2,XXREAL_0:1;
-    suppose
-      k1 + 1 = k2;
-      hence thesis by NAT_D:34;
-    end;
-    suppose
-A4:   k1 + 1 < k2;
-      k2-'k1 <= 1 implies k2 <= 1 + k1
-      proof
-        assume
-        k2-'k1 <= 1;
-        then k2-'k1 +k1 <= 1 + k1 by XREAL_1:8;
-        hence thesis by A1,XREAL_1:237;
-      end;
-      hence thesis by A4;
-    end;
-  end;
-  then k2-'k1 = k2-k1 by NAT_D:39;
-  then
-A5: k2-'k1-'1 = k2-k1-1 by A3,XREAL_1:235
-    .= k2-(k1+1)
-    .= k2-'(k1+1) by A2,XREAL_1:235;
-  assume
-A6: k1 in dom f;
-  then
-A7: f.k1 = f/.k1 by PARTFUN1:def 8;
-  1 <= k1 by A6,FINSEQ_3:27;
-  then k1 -' 1 + 1 = k1 by XREAL_1:237;
-  then (f/^(k1-'1)) = <*f/.k1*>^(f/^k1) by A6,FINSEQ_5:34;
-  hence mid(f,k1,k2) = (<*f/.k1*>^ (f/^k1))|(k2-'k1+1) by A1,Def1
-    .= <*f.k1*>^ ((f/^k1)|(k2-'k1)) by A7,Th55
-    .= <*f.k1*>^ ((f/^k1)|(k2-'(k1+1)+1)) by A3,A5,XREAL_1:237
-    .= <*f.k1*>^ ((f/^(k1+1-'1))|(k2-'(k1+1)+1)) by NAT_D:34
-    .= <*f.k1*>^ mid(f,k1+1,k2) by A2,Def1;
-end;
-
-:: registration let f be non empty FinSequence;
-::  cluster Rev f -> non empty;
-::  coherence
-::   proof
-::    dom Rev f = dom f by FINSEQ_5:60;
-::    hence thesis by RELAT_1:60,64;
-::   end;
-:: end;
+canceled 2;
 
 theorem Th57:
   for f being FinSequence of TOP-REAL 2, p being Point of TOP-REAL
@@ -2200,7 +1485,7 @@ A22: Index(p,Rev f) = len f - Index(p,f);
       .= <*p*>^mid(Rev f,len f -'Index(p,f)+1,len f) by A8,A22,XREAL_1:235
       .= <*p*>^mid(Rev f,len f -'Index(p,f)+1,len f -' 1 + 1) by A12,
     XREAL_1:237
-      .= <*p*>^Rev mid(f,1,Index(p,f)) by A12,A5,A8,Th22
+      .= <*p*>^Rev mid(f,1,Index(p,f)) by A12,A5,A8,FINSEQ_6:119
       .= Rev(mid(f,1,Index(p,f))^<*p*>) by FINSEQ_5:66
       .= Rev R_Cut(f,p) by A18,Def5;
   end;
@@ -2208,7 +1493,7 @@ A22: Index(p,Rev f) = len f - Index(p,f);
 A23: p = f.1;
 A24: len Rev f-'1+1=len Rev f by A3,A12,XREAL_1:237;
     then
-A25: (Rev f/^(len Rev f-'1)).1=Rev f.len Rev f by Th23;
+A25: (Rev f/^(len Rev f-'1)).1=Rev f.len Rev f by FINSEQ_6:120;
 A26: len (Rev f/^(len Rev f-'1))=len Rev f-'(len Rev f-'1) by RFINSEQ:42;
     1<=len Rev f-(len Rev f-'1) by A24;
     then
@@ -2216,7 +1501,7 @@ A27: 1<=len (Rev f/^(len Rev f-'1)) by A26,NAT_D:39;
     len Rev f-'len Rev f+1=len Rev f-len Rev f+1 by XREAL_1:235
       .=1;
     then
-A28: mid(Rev f,len Rev f,len Rev f)=(Rev f/^(len Rev f-'1))|1 by Def1
+A28: mid(Rev f,len Rev f,len Rev f)=(Rev f/^(len Rev f-'1))|1 by FINSEQ_6:def 3
       .=<*(Rev f/^(len Rev f-'1))/.1 *> by A27,CARD_1:47,FINSEQ_5:23
       .=<*Rev f.len Rev f*> by A25,A27,FINSEQ_4:24;
 A29: p = (Rev f).len f by A23,FINSEQ_5:65;
@@ -2243,10 +1528,10 @@ A35: len f -' Index(p,f) = len f - Index(p,f) by A8,XREAL_1:235
 A36: Index(p, Rev f)+1 < len f by A9,A34,XXREAL_0:1;
     thus L_Cut(Rev f,p) = mid(Rev f,Index(p,Rev f)+1,len f) by A3,A34,Def4
       .= <*p*>^mid(Rev f,len f -' Index(p,f)+1, len f) by A16,A10,A34,A35,
-    A36,Th56
+    A36,FINSEQ_6:132
       .= <*p*>^mid(Rev f,len f -' Index(p,f)+1, len f-'1+1) by A12,XREAL_1:
     237
-      .= <*p*>^Rev mid(f,1,Index(p,f)) by A12,A5,A8,Th22
+      .= <*p*>^Rev mid(f,1,Index(p,f)) by A12,A5,A8,FINSEQ_6:119
       .= Rev (mid(f,1,Index(p,f))^<*p*>) by FINSEQ_5:66
       .= Rev R_Cut(f,p) by A30,Def5;
   end;
@@ -2274,7 +1559,7 @@ A43: Index(p, f) < len f by A2,Th41;
     A40,Def4
       .= <*p*>^mid(Rev f,len f -' Index(p,f)+1, len f-'1+1) by A12,XREAL_1:
     237
-      .= <*p*>^Rev mid(f,1,Index(p,f)) by A12,A5,A8,Th22
+      .= <*p*>^Rev mid(f,1,Index(p,f)) by A12,A5,A8,FINSEQ_6:119
       .= Rev (mid(f,1,Index(p,f))^<*p*>) by FINSEQ_5:66
       .= Rev R_Cut(f,p) by A37,Def5;
   end;
@@ -2305,7 +1590,7 @@ A5:   1 <= len f by FINSEQ_3:27;
 A6:   Index(p,f)+1 <= len f by NAT_1:13;
 A7:   1 <= Index(p,f)+1 by NAT_1:11;
       L_Cut(f,p)=mid(f,Index(p,f)+1,len f) by A4,Def4;
-      hence (L_Cut(f,p)).1 = p by A4,A7,A6,A5,Th27;
+      hence (L_Cut(f,p)).1 = p by A4,A7,A6,A5,FINSEQ_6:124;
     end;
     suppose
       p<> f.(Index(p,f)+1);
@@ -2323,7 +1608,7 @@ A11: 1<=Index(p,f)+1 by NAT_1:11;
   then
 A12: 1<=len f by A2,XXREAL_0:2;
   then len mid(f,Index(p,f)+1,len f)=len f -'(Index(p,f)+1)+1 by A11,A2,
-  Th27;
+  FINSEQ_6:124;
   then
 A13: len <*p*>+len mid(f,Index(p,f)+1,len f) =1+(len f -'(Index(p,f)+1)+1)
   by FINSEQ_1:57
@@ -2339,7 +1624,7 @@ A16: 1<=i-'1 by NAT_D:39;
     p = f.(Index(p,f)+1);
     then L_Cut(f,p)=mid(f,Index(p,f)+1,len f) by Def4;
     hence (L_Cut(f,p)).i = f.(i+(Index(p,f)+1)-'1) by A8,A9,A11,A2,A12,
-    Th27
+    FINSEQ_6:124
       .= f.(i+Index(p,f)+1-'1)
       .= f.(Index(p,f)+i) by NAT_D:34;
   end;
@@ -2355,10 +1640,10 @@ A19: i-'1<=len f -(Index(p,f)+1)+1 by A15,NAT_D:39;
   len <*p*><i by A8,FINSEQ_1:56;
   then (L_Cut(f,p)).i =mid(f,Index(p,f)+1,len f).(i-len <*p*>) by A9,
   A18,
-  Th15
+  FINSEQ_6:114
     .=mid(f,Index(p,f)+1,len f).(i-'len <*p*>) by A10,XREAL_1:235
     .=mid(f,Index(p,f)+1,len f).(i-'1) by FINSEQ_1:56
-    .=f.((i-'1)+(Index(p,f)+1)-'1) by A11,A2,A16,A19,Th31
+    .=f.((i-'1)+(Index(p,f)+1)-'1) by A11,A2,A16,A19,FINSEQ_6:128
     .=f.(Index(p,f)+i-'1) by A14;
   hence thesis by A8,A17,XREAL_1:235,XXREAL_0:2;
 end;
@@ -2396,7 +1681,7 @@ A5:   R_Cut(f,p) = <*p*> by Def5;
 A6: 1<=Index(p,f) by A1,Th41;
   then len f > 1 by A2,XXREAL_0:2;
   then
-A7: len mid(f,1,Index(p,f))=Index(p,f)-'1+1 by A6,A2,Th27
+A7: len mid(f,1,Index(p,f))=Index(p,f)-'1+1 by A6,A2,FINSEQ_6:124
     .= Index(p,f) by A1,Th41,XREAL_1:237;
   thus for i be Element of NAT st 1<=i & i<=Index(p,f) holds R_Cut(f,p).i=f.i
   proof
@@ -2410,7 +1695,7 @@ A9: i<=Index(p,f);
         p<>f.1;
         then (R_Cut(f,p)).i=(mid(f,1,Index(p,f))^<*p*>).i by Def5
           .= mid(f,1,Index(p,f)).i by A7,A8,A9,FINSEQ_1:85
-          .=f.i by A2,A8,A9,Th32;
+          .=f.i by A2,A8,A9,FINSEQ_6:129;
         hence thesis;
       end;
       case
@@ -2457,7 +1742,7 @@ A6: 1<=len f by A2,XXREAL_0:2;
       hence len R_Cut(f,p) = len mid(f,1,Index(p,f))+len <*p*> by FINSEQ_1
       :35
         .= len mid(f,1,Index(p,f))+1 by FINSEQ_1:56
-        .= Index(p,f)-'1+1+1 by A6,A4,A5,Th27
+        .= Index(p,f)-'1+1+1 by A6,A4,A5,FINSEQ_6:124
         .= Index(p,f)+1 by A1,Th41,XREAL_1:237;
     end;
     case
@@ -2507,14 +1792,15 @@ A7: len f -(Index(p,f)+1) >= 0 by XREAL_1:21;
       p<>f.(Index(p,f)+1);
       then L_Cut(f,p)=<*p*>^mid(f,Index(p,f)+1,len f) by Def4;
       hence len L_Cut(f,p) = 1+len mid(f,Index(p,f)+1,len f) by FINSEQ_5:8
-        .= len f -'(Index(p,f)+1)+1+1 by A4,A5,A6,Th27
+        .= len f -'(Index(p,f)+1)+1+1 by A4,A5,A6,FINSEQ_6:124
         .= len f -(Index(p,f)+1)+1+1 by A7,XREAL_0:def 2
         .= len f-Index(p,f)+1;
     end;
     case
       p=f.(Index(p,f)+1);
       then L_Cut(f,p)=mid(f,Index(p,f)+1,len f) by Def4;
-      hence len L_Cut(f,p) = len f -' (Index(p,f)+1) + 1 by A4,A5,A6, Th27
+      hence len L_Cut(f,p) = len f -' (Index(p,f)+1) + 1
+       by A4,A5,A6, FINSEQ_6:124
         .= len f -(Index(p,f)+1)+1 by A7,XREAL_0:def 2
         .= len f-Index(p,f);
     end;
@@ -2727,7 +2013,8 @@ A16: Index(p,f)+1<=len f by A4,A9,XXREAL_0:2;
 A17: 1<=Index(q,f) by A2,Th41;
   then 1<len f by A4,XXREAL_0:2;
   then
-  len mid(f,Index(p,f)+1,len f) = len f -'(Index(p,f)+1)+1 by A8,A16, Th27;
+  len mid(f,Index(p,f)+1,len f) = len f -'(Index(p,f)+1)+1
+   by A8,A16, FINSEQ_6:124;
   then
 A18: len <*p*>+len mid(f,Index(p,f)+1,len f) = 1+(len f -'(Index(p,f)+1)+1)
   by FINSEQ_1:57
@@ -2745,7 +2032,8 @@ A21: len L_Cut(f,p)=len f -Index(p,f) by A1,Th61;
     then (L_Cut(f,p))/.(Index(q,f)-'Index(p,f)) = L_Cut(f,p).(Index(q,f)-'
     Index(p,f)) by A11,FINSEQ_4:24
       .= mid(f,Index(p,f)+1,len f).(Index(q,f)-'Index(p,f)) by A20,Def4
-      .= f.(Index(p,f)+1+(Index(q,f)-'Index(p,f))-1) by A11,A8,A16,A7,Th31
+      .= f.(Index(p,f)+1+(Index(q,f)-'Index(p,f))-1)
+       by A11,A8,A16,A7,FINSEQ_6:128
       .= f.(Index(p,f)+1+(Index(q,f)-Index(p,f))-1) by A3,XREAL_1:235
       .= f.Index(q,f);
     then
@@ -2776,7 +2064,7 @@ A30: Index(q,f)+1<=len f by A25,NAT_1:13;
     Index(p,f)+1) by A13,FINSEQ_4:24
       .= (mid(f,Index(p,f)+1,len f)).(Index(q,f)-'Index(p,f)+1) by A20,Def4
       .= f.(Index(p,f)+1+(Index(q,f)-'Index(p,f)+1)-1) by A12,A8,A16,A28,
-    Th31
+    FINSEQ_6:128
       .= f.(Index(p,f)+1+(Index(q,f)-Index(p,f)+1)-1) by A3,XREAL_1:235
       .= f/.(Index(q,f)+1) by A23,A30,FINSEQ_4:24;
     then q in LSeg((L_Cut(f,p))/.((Index(q,f)-'Index(p,f))), (L_Cut(f,p))/.((
@@ -2792,10 +2080,11 @@ A32: len L_Cut(f,p)=len f -Index(p,f)+1 by A1,A31,Th61;
       .= (<*p*>^mid(f,Index(p,f)+1,len f)).(Index(q,f)-'Index(p,f)+1) by A31
     ,Def4
       .= mid(f,Index(p,f)+1,len f).(Index(q,f)-'Index(p,f)+1-len <*p*>) by
-    A14,A19,Th15
+    A14,A19,FINSEQ_6:114
       .= mid(f,Index(p,f)+1,len f).(Index(q,f)-'Index(p,f)+1-1) by FINSEQ_1:
     57
-      .= f.(Index(p,f)+1+(Index(q,f)-'Index(p,f))-1) by A11,A8,A16,A7,Th31
+      .= f.(Index(p,f)+1+(Index(q,f)-'Index(p,f))-1)
+       by A11,A8,A16,A7,FINSEQ_6:128
       .= f.(Index(p,f)+1+(Index(q,f)-Index(p,f))-1) by A3,XREAL_1:235
       .= f.Index(q,f);
     then
@@ -2832,11 +2121,11 @@ A43: Index(q,f)-'Index(p,f)+1+1<=len <*p*>+len mid(f,Index(p,f)+1,len f)
       .= (<*p*>^mid(f,Index(p,f)+1,len f)).(Index(q,f)-'Index(p,f)+1+1) by
     A31,Def4
       .= mid(f,Index(p,f)+1,len f).(Index(q,f)-'Index(p,f)+1+1-len <*p*>) by
-    A15,A43,Th15
+    A15,A43,FINSEQ_6:114
       .= mid(f,Index(p,f)+1,len f).(Index(q,f)-'Index(p,f)+1+1-1) by
     FINSEQ_1:57
       .= f.(Index(p,f)+1+(Index(q,f)-'Index(p,f)+1)-1) by A12,A8,A16,A37,
-    Th31
+    FINSEQ_6:128
       .= f.(Index(p,f)+1+(Index(q,f)-Index(p,f)+1)-1) by A3,XREAL_1:235
       .= f/.(Index(q,f)+1) by A39,A41,FINSEQ_4:24;
     then
@@ -3019,7 +2308,7 @@ A26: i1+1<=len L_Cut(f,p) by A14,XREAL_1:8;
   1<=Index(q,f) by A2,Th41;
   then 1<len f by A23,XXREAL_0:2;
   then len mid(f,Index(p,f)+1,len f) = len f -'(Index(p,f)+1)+1 by A4,A7,A22,
-  Th27;
+  FINSEQ_6:124;
   then
   len <*p*> + len mid(f,Index(p,f)+1,len f) = 1+(len f -'(Index(p,f)+1)+1
   ) by FINSEQ_1:57
@@ -3033,11 +2322,11 @@ A27: Index(q,f)-'Index(p,f)+1+1<=len <*p*>+len mid(f,Index(p,f)+1,len f) by
     .= (<*p*>^mid(f,Index(p,f)+1,len f)).(Index(q,f)-'Index(p,f)+1+1) by A8
   ,Def4
     .= mid(f,Index(p,f)+1,len f).(Index(q,f)-'Index(p,f)+1+1-len <*p*>) by
-  A16,A27,Th15
+  A16,A27,FINSEQ_6:114
     .= mid(f,Index(p,f)+1,len f).(Index(q,f)-'Index(p,f)+1+1-1) by FINSEQ_1:
   57
     .= f.(Index(p,f)+1+(Index(q,f)-Index(p,f)+1)-1) by A4,A7,A6,A22,A21,
-  Th31
+  FINSEQ_6:128
     .= f/.(Index(q,f)+1) by A15,A25,FINSEQ_4:24;
   then q in LSeg((L_Cut(f,p))/.((Index(q,f)-'Index(p,f)+1)), (L_Cut(f,p))/.((
   Index(q,f)-'Index(p,f)+1+1))) by A4,A5,A24,Th65;
@@ -3307,7 +2596,7 @@ A8: len g >= 2 by A3,TOPREAL1:def 10;
   then
 A9: 1<=len g by XXREAL_0:2;
   then
-A10: len mid(g,2,len g)=len g -'2+1 by A8,Th27
+A10: len mid(g,2,len g)=len g -'2+1 by A8,FINSEQ_6:124
     .=len g -2+1 by A8,XREAL_1:235
     .=len g -1;
   for x1,x2 being set st x1 in dom (f^mid(g,2,len g)) & x2 in dom (f^mid(
@@ -3326,7 +2615,7 @@ A16: x2 in Seg len (f^mid(g,2,len g )) by A14,FINSEQ_1:def 3;
 A17: 1<=n2 by FINSEQ_1:3;
     (f^mid(g,2,len g)).x1 in rng (f^mid(g,2,len g)) by A13,FUNCT_1:def 5;
     then reconsider q=(f^mid(g,2,len g)).x1 as Point of TOP-REAL 2 by A12;
-A18: rng mid(g,2,len g) c= rng g by Th28;
+A18: rng mid(g,2,len g) c= rng g by FINSEQ_6:125;
 A19: rng f c= L~f by A5,SPPOL_2:18;
 A20: now
 A21:  now
@@ -3341,7 +2630,7 @@ A24:    2-'1=2-1 by XREAL_1:235;
         assume
         g.1 in rng mid(g,2,len g);
         then
-A25:    g.1 in rng (g/^1) by A8,A24,Th26;
+A25:    g.1 in rng (g/^1) by A8,A24,FINSEQ_6:123;
         rng(g|1) misses rng (g/^1) by A3,FINSEQ_5:37;
         hence contradiction by A25,A23,XBOOLE_0:3;
       end;
@@ -3426,7 +2715,7 @@ A49:    n1-'len f+1 in dom g by A43,FINSEQ_3:27;
           .=n1;
         then
 A50:    (f^mid(g,2,len g)).n1 =g.(n1-'len f+1) by A8,A9,A30,A41,A48,A44
-        ,Th27;
+        ,FINSEQ_6:124;
         now
           per cases;
           case
@@ -3462,7 +2751,7 @@ A59:        (f^mid(g,2,len g)).(len f +(n2-'len f)) =mid(g,2,len g).(n2-'
             len f + (n2-'len f)=len f+(n2-len f) by A52,XREAL_1:235
               .=n2;
             then (f^mid(g,2,len g)).n2 =g.(n2-'len f+1) by A8,A9,A28,A53,A59
-            ,A58,Th27;
+            ,A58,FINSEQ_6:124;
             then n1-'len f+1=n2-'len f+1 by A3,A15,A49,A50,A57, FUNCT_1
             :def 8;
             then n1-len f=n2-'len f by A40,XREAL_1:235;
@@ -3636,11 +2925,11 @@ A109:             1<=j-'len f;
                   then
 A110:             len f<j by NAT_1:13;
                   then (f^mid(g,2,len g)).j=mid(g,2,len g).(j-len f) by A95,
-                  Th15;
+                  FINSEQ_6:114;
                   then (f^mid(g,2,len g)).j=mid(g,2,len g).(j-'len f) by A110
                   ,XREAL_1:235;
                   then (f^mid(g,2,len g)).j=g.(j-'len f+2-1) by A8,A107,A109,
-                  Th31;
+                  FINSEQ_6:128;
                   hence (f^mid(g,2,len g)).j=g.(j-'len f+1);
                 end;
 A111:           j-'len f+1=j-len f+1 by A85,XREAL_1:235
@@ -3654,11 +2943,11 @@ A113:             1<=(j+1)-'len f;
                   then
 A114:             len f<(j+1) by NAT_1:13;
                   then (f^mid(g,2,len g)).(j+1)=mid(g,2,len g).((j+1)-len f)
-                  by A85,Th15;
+                  by A85,FINSEQ_6:114;
                   then (f^mid(g,2,len g)).(j+1)=mid(g,2,len g).((j+1)-'len f)
                   by A114,XREAL_1:235;
                   then (f^mid(g,2,len g)).(j+1)=g.((j+1)-'len f+2-1) by A8,
-                  A106,A111,A113,Th31;
+                  A106,A111,A113,FINSEQ_6:128;
                   hence (f^mid(g,2,len g)).(j+1)=g.((j+1)-'len f+1);
                 end;
                 1<=1+(j-'len f) by NAT_1:11;
@@ -3866,11 +3155,11 @@ A166:             1<=j-'len f;
                   then
 A167:             len f<j by NAT_1:13;
                   then (f^mid(g,2,len g)).j=mid(g,2,len g).(j-len f) by A155,
-                  Th15;
+                  FINSEQ_6:114;
                   then (f^mid(g,2,len g)).j=mid(g,2,len g).(j-'len f) by A167
                   ,XREAL_1:235;
                   then (f^mid(g,2,len g)).j=g.(j-'len f+2-1) by A8,A164,A166,
-                  Th31;
+                  FINSEQ_6:128;
                   hence (f^mid(g,2,len g)).j=g.(j-'len f+1);
                 end;
 A168:           j-'len f+1=j-len f+1 by A85,XREAL_1:235
@@ -3884,11 +3173,11 @@ A170:             1<=(j+1)-'len f;
                   then
 A171:             len f<(j+1) by NAT_1:13;
                   then (f^mid(g,2,len g)).(j+1)=mid(g,2,len g).((j+1)-len f)
-                  by A85,Th15;
+                  by A85,FINSEQ_6:114;
                   then (f^mid(g,2,len g)).(j+1)=mid(g,2,len g).((j+1)-'len f)
                   by A171,XREAL_1:235;
                   then (f^mid(g,2,len g)).(j+1)=g.((j+1)-'len f+2-1) by A8,
-                  A163,A168,A170,Th31;
+                  A163,A168,A170,FINSEQ_6:128;
                   hence (f^mid(g,2,len g)).(j+1)=g.((j+1)-'len f+1);
                 end;
                 1<=1+(j-'len f) by NAT_1:11;
@@ -4042,8 +3331,8 @@ A219:           len f+1-len f<=i-len f by XREAL_1:11;
                 then
 A220:           i-'len f<=len g -2+1;
                 (f^mid(g,2,len g)).i =mid(g,2,len g).(i-'len f) by A188,
-                A207,A218,Th15
-                  .=g.(i-'len f+2-1) by A8,A188,A219,A220,Th31
+                A207,A218,FINSEQ_6:114
+                  .=g.(i-'len f+2-1) by A8,A188,A219,A220,FINSEQ_6:128
                   .=g.(i-'len f +1);
                 hence
                 (f^mid(g,2,len g))/.i=g/.(i-'len f+1) by A203,A207,A215,
@@ -4057,13 +3346,13 @@ A221:       j+1-len f<=len f+(len g-1)-len f by XREAL_1:11;
 A222:       (j-'len f+1)<=len g-2+1 by A197;
 A223:       j-'len f+1+2-1=j-'len f+1+1;
 A224:       (f^mid(g,2,len g)).(j+1)=mid(g,2,len g).(j+1-len f) by A195,
-            A199,Th15
-              .=g.(j-'len f +1+1) by A8,A197,A193,A222,A223,Th31;
+            A199,FINSEQ_6:114
+              .=g.(j-'len f +1+1) by A8,A197,A193,A222,A223,FINSEQ_6:128;
 A225:       i-'len f+1+2-1 =i-'len f+1+1;
 A226:       (i-'len f+1)<=len g-2+1 by A188,A208;
             (f^mid(g,2,len g)).(i+1)=mid(g,2,len g).(i+1-len f) by A186,
-            A206,Th15
-              .=g.(i-'len f +1+1) by A8,A188,A196,A226,A225,Th31;
+            A206,FINSEQ_6:114
+              .=g.(i-'len f +1+1) by A8,A188,A196,A226,A225,FINSEQ_6:128;
             then
 A227:       LSeg(f^mid(g,2,len g),i)=LSeg(g,(i-'len f+1)) by A188,A196,
             A209,A216,A211,A210,A213,TOPREAL1:def 5;
@@ -4085,8 +3374,8 @@ A233:       g/.((j-'len f+1)+1)=g.((j-'len f+1)+1) by FINSEQ_4:24,
             then
 A234:       j-'len f<=len g -2+1;
             (f^mid(g,2,len g)).j=mid(g,2,len g).(j-len f) by A194,A231,
-            Th15
-              .=g.(j-'len f+2-1) by A8,A197,A202,A234,Th31
+            FINSEQ_6:114
+              .=g.(j-'len f+2-1) by A8,A197,A202,A234,FINSEQ_6:128
               .=g.(j-'len f +1);
             then LSeg(f^mid(g,2,len g),j)=LSeg(g,j-'len f+1) by A197,A193,
             A228,A232,A230,A201,A233,A224,A212,TOPREAL1:def 5;
@@ -4123,7 +3412,7 @@ A239: i<=len (f^mid(g,2,len g)) by A237,NAT_D:47;
 A240: 1<=i+1+1 by A236,NAT_D:48;
 A241: i+1<=len (f^mid(g,2,len g)) by A237,NAT_D:47;
     i+1+1<=len f + len mid(g,2,len g) by A237,FINSEQ_1:35;
-    then i+1+1<=len f + (len g -'2+1) by A8,A9,Th27;
+    then i+1+1<=len f + (len g -'2+1) by A8,A9,FINSEQ_6:124;
     then i+1+1<=len f + (len g -(1+1)+1) by A8,XREAL_1:235;
     then
 A242: i+1+1-len f<=len f + (len g -(1+1)+1)-len f by XREAL_1:11;
@@ -4248,11 +3537,13 @@ A279:         1<=i-'len f;
               then
 A280:         len f<i by NAT_1:13;
               then
-              (f^mid(g,2,len g)).i=mid(g,2,len g).(i-len f) by A239, Th15;
+              (f^mid(g,2,len g)).i=mid(g,2,len g).(i-len f)
+               by A239, FINSEQ_6:114;
               then (f^mid(g,2,len g)).i=mid(g,2,len g).(i-'len f) by A280,
               XREAL_1:235;
               then
-              (f^mid(g,2,len g)).i=g.(i-'len f+2-1) by A8,A277,A279, Th31;
+              (f^mid(g,2,len g)).i=g.(i-'len f+2-1)
+               by A8,A277,A279, FINSEQ_6:128;
               hence (f^mid(g,2,len g)).i=g.(i-'len f+1);
             end;
             i-'len f+1<=len g by A274,NAT_D:46;
@@ -4274,11 +3565,11 @@ A286:         1<=(i+1)-'len f;
               then
 A287:         len f<(i+1) by NAT_1:13;
               then (f^mid(g,2,len g)).(i+1)=mid(g,2,len g).((i+1)-len f) by
-              A241,Th15;
+              A241,FINSEQ_6:114;
               then (f^mid(g,2,len g)).(i+1)=mid(g,2,len g).((i+1)-'len f) by
               A287,XREAL_1:235;
               then (f^mid(g,2,len g)).(i+1)=g.((i+1)-'len f+2-1) by A8,A284,
-              A286,Th31;
+              A286,FINSEQ_6:128;
               hence (f^mid(g,2,len g)).(i+1)=g.((i+1)-'len f+1);
             end;
 A288:       now
@@ -4308,11 +3599,11 @@ A295:         1<=(i+1+1)-'len f;
               then
 A296:         len f<(i+1+1) by NAT_1:13;
               then (f^mid(g,2,len g)).(i+1+1)=mid(g,2,len g).((i+1+1)-len f)
-              by A237,Th15;
+              by A237,FINSEQ_6:114;
               then (f^mid(g,2,len g)).(i+1+1)=mid(g,2,len g).((i+1+1)-'len f)
               by A296,XREAL_1:235;
               then (f^mid(g,2,len g)).(i+1+1)=g.((i+1+1)-'len f+2-1) by A8,
-              A293,A295,Th31;
+              A293,A295,FINSEQ_6:128;
               hence (f^mid(g,2,len g)).(i+1+1)=g.((i+1+1)-'len f+1);
             end;
 A297:       (f^mid(g,2,len g))/.(i+1+1)=(f^mid(g,2,len g)).(i+1+1) by
@@ -4364,10 +3655,10 @@ A312:       g/.1 in LSeg(f/.(len f-'1),f/.len f) by RLTOPSP1:69;
 A313:       0+1<=len g-2+1 by XREAL_1:8;
             len f<(i+1+1) by A300,NAT_1:13;
             then (f^mid(g,2,len g)).(i+1+1)=mid(g,2,len g).((i+1+1)-len f) by
-            A237,Th15;
+            A237,FINSEQ_6:114;
             then
 A314:       (f^mid(g,2,len g)).(i+1+1)=g.(2+1-'1) by A8,A300,A313,
-            Th31
+            FINSEQ_6:128
               .=g.2 by NAT_D:34;
 A315:       LSeg(g,1)c=L~g by TOPREAL3:26;
             LSeg(f,i)c=L~f by TOPREAL3:26;
@@ -4468,11 +3759,11 @@ A344:     1<=i-'len f;
           then
 A345:     len f<i by NAT_1:13;
           then (f^mid(g,2,len g)).i=mid(g,2,len g).(i-len f) by A333,
-          Th15;
+          FINSEQ_6:114;
           then (f^mid(g,2,len g)).i=mid(g,2,len g).(i-'len f) by A345,
           XREAL_1:235;
           then (f^mid(g,2,len g)).i=g.(i-'len f+2-1) by A8,A342,A344,
-          Th31;
+          FINSEQ_6:128;
           hence (f^mid(g,2,len g)).i=g.(i-'len f+1);
         end;
         1<=i+1 by A322,NAT_D:48;
@@ -4486,12 +3777,12 @@ A347:   1<=i-'len f+1 by NAT_1:11;
 A348:   i+1-'len f<=len g -'2+1 by A337,XREAL_1:235;
         len f<(i+1) by A331,NAT_1:13;
         then (f^mid(g,2,len g)).(i+1)=mid(g,2,len g).((i+1)-len f) by A323,
-        Th15;
+        FINSEQ_6:114;
         then (f^mid(g,2,len g)).(i+1)=mid(g,2,len g).((i+1)-'len f) by A337,
         XREAL_1:235;
         then
 A349:   (f^mid(g,2,len g)).(i+1)=g.((i+1)-'len f+2-1) by A8,A348,A332,
-        Th31;
+        FINSEQ_6:128;
         i-'len f+1+1<=len g by A334,A340,XREAL_0:def 2;
         then
 A350:   g/.(i-'len f+1+1)=g.(i-'len f+1+1) by FINSEQ_4:24,NAT_1:11;
@@ -4533,7 +3824,7 @@ A9: (f^mid(g,2,len g)).1=f.1 by FINSEQ_1:85
 A10: len (f^mid(g,2,len g))=len f + len mid(g,2,len g) by FINSEQ_1:35;
 A11: 1<=len g by A6,XXREAL_0:2;
   then
-A12: len mid(g,2,len g)=len g -'2+1 by A6,Th27;
+A12: len mid(g,2,len g)=len g -'2+1 by A6,FINSEQ_6:124;
   then
 A13: len mid(g,2,len g) =len g -2+1 by A6,XREAL_1:235
     .=len g -1;
@@ -4543,8 +3834,8 @@ A14: len (mid(g,2,len g))+2-1=len g;
   then len f+1<=len (f^mid(g,2,len g)) by A10,A13,XREAL_1:8;
   then len f<len (f^mid(g,2,len g)) by NAT_1:13;
   then (f^mid(g,2,len g)).(len (f^mid(g,2,len g))) =(mid(g,2,len g)).(len (f^
-  mid(g,2,len g))-len f) by Th15
-    .=g.len g by A6,A10,A12,A7,A14,Th31
+  mid(g,2,len g))-len f) by FINSEQ_6:114
+    .=g.len g by A6,A10,A12,A7,A14,FINSEQ_6:128
     .=g/.len g by A11,FINSEQ_4:24;
   hence thesis by A5,A9,Def3;
 end;
@@ -4607,13 +3898,13 @@ A4: Index(p,f)<=len f by A1,Th41;
 A5: p<>f.1;
 A6: f/.(Index(p,f)) in LSeg(f/.(Index(p,f)),f/.(Index(p,f)+1)) by
     RLTOPSP1:69;
-A7: len (mid(f,1,Index(p,f))) =Index(p,f)-'1+1 by A3,A2,A4,Th27
+A7: len (mid(f,1,Index(p,f))) =Index(p,f)-'1+1 by A3,A2,A4,FINSEQ_6:124
       .=Index(p,f) by A1,Th41,XREAL_1:237;
     then (mid(f,1,Index(p,f)))<><*>(the carrier of TOP-REAL 2) by A2;
     then
 A8: L~(mid(f,1,Index(p,f))^<*p*>) = L~mid(f,1,Index(p,f)) \/ LSeg((mid(f,
     1,Index(p,f))/.Index(p,f)),p) by A7,SPPOL_2:19;
-    mid(f,1,Index(p,f)) =(f/^(1-'1))|(Index(p,f)-'1+1) by A2,Def1
+    mid(f,1,Index(p,f)) =(f/^(1-'1))|(Index(p,f)-'1+1) by A2,FINSEQ_6:def 3
       .=(f/^(0))|(Index(p,f)-'1+1) by XREAL_1:234
       .=f|(Index(p,f)-'1+1) by FINSEQ_5:31
       .=f|Index(p,f) by A1,Th41,XREAL_1:237;
@@ -4632,7 +3923,7 @@ A12: p in LSeg(f/.(Index(p,f)),f/.(Index(p,f)+1)) by A2,A10,
     def 5;
     (mid(f,1,Index(p,f)))/.Index(p,f)=mid(f,1,Index(p,f)).Index(p,f) by
     A2,A7,FINSEQ_4:24
-      .=f.(Index(p,f)) by A2,A4,Th32
+      .=f.(Index(p,f)) by A2,A4,FINSEQ_6:129
       .=f/.(Index(p,f)) by A1,A4,Th41,FINSEQ_4:24;
     then
     LSeg((mid(f,1,Index(p,f))/.Index(p,f)),p) c= LSeg(f/.(Index(p,f)),f/.
@@ -4668,10 +3959,10 @@ A4: k-'1+1-(k-'1)<=len f1-(k-'1) by XREAL_1:11;
 A5: 1<=len (f1/^(k-'1)) by A4,NAT_D:39;
   k-'1+1=k by A1,XREAL_1:237;
   then
-A6: (f1/^(k-'1)).1=f1.k by A2,Th23;
+A6: (f1/^(k-'1)).1=f1.k by A2,FINSEQ_6:120;
   k-'k+1=k-k+1 by XREAL_1:235
     .=1;
-  then mid(f1,k,k)=(f1/^(k-'1))|1 by Def1
+  then mid(f1,k,k)=(f1/^(k-'1))|1 by FINSEQ_6:def 3
     .=<*(f1/^(k-'1))/.1*> by A5,CARD_1:47,FINSEQ_5:23;
   hence thesis by A6,A3,A5,FINSEQ_1:56,FINSEQ_4:24;
 end;
@@ -4684,7 +3975,7 @@ proof
 A1: 0-'1=0 by XREAL_0:def 2;
   0-'0+1=0-0+1 by XREAL_1:235
     .=1;
-  then mid(f1,0,0)=(f1/^(0-'1))|1 by Def1;
+  then mid(f1,0,0)=(f1/^(0-'1))|1 by FINSEQ_6:def 3;
   hence thesis by A1,FINSEQ_5:31;
 end;
 
@@ -4704,7 +3995,7 @@ A2: len f1+1-1<=k-1 by XREAL_1:11;
 A3: f1/^(k-'1)=<*>D by FINSEQ_5:35;
   k-'k+1=k-k+1 by XREAL_1:235
     .=1;
-  then mid(f1,k,k)=(f1/^(k-'1))|1 by Def1;
+  then mid(f1,k,k)=(f1/^(k-'1))|1 by FINSEQ_6:def 3;
   hence thesis by A3,Lm2;
 end;
 
@@ -4717,12 +4008,12 @@ proof
     case
 A1:   k1<=k2;
       then
-A2:   mid(f1,k1,k2)=(f1/^(k1-'1))|(k2-'k1+1) by Def1;
+A2:   mid(f1,k1,k2)=(f1/^(k1-'1))|(k2-'k1+1) by FINSEQ_6:def 3;
       now
         per cases by A1,XXREAL_0:1;
         case
           k1<k2;
-          then mid(f1,k2,k1)=Rev mid(f1,k1,k2) by A2,Def1;
+          then mid(f1,k2,k1)=Rev mid(f1,k1,k2) by A2,FINSEQ_6:def 3;
           hence thesis by FINSEQ_6:29;
         end;
         case
@@ -4769,8 +4060,8 @@ A5:           mid(f1,k1,k2)=f1|1 by A3,Lm4;
     end;
     case
 A6:   k1>k2;
-      then mid(f1,k1,k2)=Rev ((f1/^(k2-'1))|(k1-'k2+1)) by Def1;
-      hence thesis by A6,Def1;
+      then mid(f1,k1,k2)=Rev ((f1/^(k2-'1))|(k1-'k2+1)) by FINSEQ_6:def 3;
+      hence thesis by A6,FINSEQ_6:def 3;
     end;
   end;
   hence thesis;
@@ -4812,7 +4103,7 @@ A10:    i+1 <= len mid(h,i1,i2) by A7;
 A11:    LSeg(mid(h,i1,i2),i)=LSeg(mid(h,i1,i2)/.i,mid(h,i1,i2)/.(i+1)) by
         A9,A10,TOPREAL1:def 5;
 
-        len mid(h,i1,i2)=i2-'i1+1 by A1,A2,A3,A4,A6,Th27;
+        len mid(h,i1,i2)=i2-'i1+1 by A1,A2,A3,A4,A6,FINSEQ_6:124;
         then i+1-1<=i2-'i1+1-1 by A10,XREAL_1:11;
         then i<=i2-i1 by A6,XREAL_1:235;
         then
@@ -4828,7 +4119,7 @@ A15:    h/.(i+i1-'1)=h.(i+i1-'1) by A13,FINSEQ_4:24,NAT_D:44;
         1<=i+1 by NAT_1:11;
         then
 A16:    mid(h,i1,i2).(i+1)=h.(i+1+i1-'1) by A1,A2,A3,A4,A6,A10,
-        Th27;
+        FINSEQ_6:124;
 A17:    i+1+i1-'1=i+1+i1-1 by A1,NAT_1:12,XREAL_1:235
           .=i+i1;
         then
@@ -4844,7 +4135,7 @@ A21:    mid(h,i1,i2)/.(i+1)=mid(h,i1,i2).(i+1) by A10,FINSEQ_4:24,NAT_1:
         11;
 
 A22:    i+i1<=len h by A4,A12,XXREAL_0:2;
-        mid(h,i1,i2).i=h.(i+i1-'1) by A1,A2,A3,A4,A6,A9,A19,Th27;
+        mid(h,i1,i2).i=h.(i+i1-'1) by A1,A2,A3,A4,A6,A9,A19,FINSEQ_6:124;
 
         then
         LSeg(mid(h,i1,i2),i)=LSeg(h/.(i+i1-'1),h/.(i+1+i1-'1)) by A1,A11,
@@ -4882,7 +4173,7 @@ A27:    i+1 <= len mid(h,i2,i1) by A24;
 A28:    LSeg(mid(h,i2,i1),i)=LSeg(mid(h,i2,i1)/.i,mid(h,i2,i1)/.(i+1)) by
         A26,A27,TOPREAL1:def 5;
 
-        len mid(h,i2,i1)=i1-'i2+1 by A1,A2,A3,A4,A23,Th27;
+        len mid(h,i2,i1)=i1-'i2+1 by A1,A2,A3,A4,A23,FINSEQ_6:124;
         then i+1-1<=i1-'i2+1-1 by A27,XREAL_1:11;
         then i<=i1-i2 by A23,XREAL_1:235;
         then
@@ -4899,7 +4190,7 @@ A32:    h/.(i+i2-'1)=h.(i+i2-'1) by A30,FINSEQ_4:24,NAT_D:44;
 
         then
 A33:    mid(h,i2,i1).(i+1)=h.(i+1+i2-'1) by A1,A2,A3,A4,A23,A27,
-        Th27;
+        FINSEQ_6:124;
 
 A34:    i+1+i2-'1=i+1+i2-1 by A3,NAT_1:12,XREAL_1:235
           .=i+i2;
@@ -4916,7 +4207,7 @@ A38:    mid(h,i2,i1)/.(i+1)=mid(h,i2,i1).(i+1) by A27,FINSEQ_4:24,NAT_1:
         11;
 
 A39:    i+i2<=len h by A2,A29,XXREAL_0:2;
-        mid(h,i2,i1).i=h.(i+i2-'1) by A1,A2,A3,A4,A23,A26,A36,Th27;
+        mid(h,i2,i1).i=h.(i+i2-'1) by A1,A2,A3,A4,A23,A26,A36,FINSEQ_6:124;
 
         then
         LSeg(mid(h,i2,i1),i)=LSeg(h/.(i+i2-'1),h/.(i+1+i2-'1)) by A3,A28,
@@ -4950,7 +4241,8 @@ A4: j in dom f;
 A5: 1 <= j by FINSEQ_3:27;
 A6: j <= len f by A4,FINSEQ_3:27;
   1 <= i by A2,FINSEQ_3:27;
-  then len mid(f,i,j)=i-'j+1 or len mid(f,i,j)=j-'i+1 by A3,A5,A6,A1,Th27;
+  then len mid(f,i,j)=i-'j+1 or len mid(f,i,j)=j-'i+1
+   by A3,A5,A6,A1,FINSEQ_6:124;
   hence thesis by NAT_1:11;
 end;
 
@@ -4978,7 +4270,7 @@ A6: j <= len f by A4,FINSEQ_3:27;
   mid(f,i,j) is non empty by A1,A4,Lm9;
   then 1 in dom mid(f,i,j) by FINSEQ_5:6;
   hence (mid(f,i,j))/.1 = mid(f,i,j).1 by PARTFUN1:def 8
-    .= f.i by A2,A3,A5,A6,Th27
+    .= f.i by A2,A3,A5,A6,FINSEQ_6:124
     .= f/.i by A1,PARTFUN1:def 8;
 end;
 
@@ -5144,7 +4436,7 @@ A15: len f-'(len f-'1)+1=len f-(len f-'1)+1 by NAT_D:50,XREAL_1:235
   1<=len f by A12,XXREAL_0:2;
   then (Rev g)^(Rev mid(f,1,len f-'1)) is being_S-Seq by
   A13,A10,A15,A11,A14
-  ,A9,Th22;
+  ,A9,FINSEQ_6:119;
   then Rev (mid(f,1,len f-'1)^g) is being_S-Seq by FINSEQ_5:67;
   then Rev Rev (mid(f,1,len f-'1)^g) is being_S-Seq by SPPOL_2:47;
   hence thesis by FINSEQ_6:29;
@@ -5167,12 +4459,12 @@ A6: len f >= 2 by A2,TOPREAL1:def 10;
   then
 A7: 1<=len f-'1 by NAT_D:39;
 A8: 1<=len f by A6,XXREAL_0:2;
-  then len mid(f,1,len f-'1)=len f-'1-'1+1 by A5,A7,Th27
+  then len mid(f,1,len f-'1)=len f-'1-'1+1 by A5,A7,FINSEQ_6:124
     .=len f-'1 -1+1 by A7,XREAL_1:235
     .=len f -'1;
   then
 A9: (mid(f,1,len f-'1)^g).1=mid(f,1,len f-'1).1 by A7,FINSEQ_1:85
-    .=f.1 by A5,A7,Th32
+    .=f.1 by A5,A7,FINSEQ_6:129
     .=f/.1 by A8,FINSEQ_4:24;
 A10: len (mid(f,1,len f-'1)^g)=len (mid(f,1,len f-'1)) + len g by FINSEQ_1:
   35;
@@ -5183,7 +4475,7 @@ A12: 1<=len g by XXREAL_0:2;
   8;
   then
 A13: (mid(f,1,len f-'1)^g).(len (mid(f,1,len f-'1)^g)) =g.(len (mid(f,1,len
-  f-'1)^g)-len (mid(f,1,len f-'1))) by A10,Th15
+  f-'1)^g)-len (mid(f,1,len f-'1))) by A10,FINSEQ_6:114
     .=g/.len g by A12,A10,FINSEQ_4:24;
   mid(f,1,len f-'1)^g is being_S-Seq by A1,A2,A3,A4,Th80;
   hence thesis by A9,A13,Def3;

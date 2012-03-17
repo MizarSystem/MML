@@ -12,9 +12,10 @@ environ
       SPPOL_2, GROUP_2, SUPINF_2, STRUCT_0, JORDAN3;
  notations TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, XCMPLX_0, XXREAL_0, REAL_1,
       NAT_1, RFINSEQ, NAT_D, RELAT_1, FUNCT_1, PARTFUN1, FINSEQ_1, FINSEQ_5,
-      SEQ_4, STRUCT_0, TOPREAL1, PRE_TOPC, RLVECT_1, RLTOPSP1, EUCLID, SPPOL_2;
+      SEQ_4, FINSEQ_6, STRUCT_0, TOPREAL1, PRE_TOPC, RLVECT_1, RLTOPSP1,
+      EUCLID, SPPOL_2;
  constructors PARTFUN1, XXREAL_0, REAL_1, NAT_1, SEQ_4, REALSET1, RFINSEQ,
-      NAT_D, FINSEQ_5, TOPREAL1, BINOP_2, RELSET_1;
+      NAT_D, FINSEQ_5, TOPREAL1, BINOP_2, RELSET_1, FINSEQ_6;
  registrations XBOOLE_0, SUBSET_1, ORDINAL1, RELSET_1, XXREAL_0, XREAL_0,
       NAT_1, MEMBERED, FINSEQ_1, FINSEQ_5, STRUCT_0, EUCLID, SPPOL_2, XXREAL_2,
       CARD_1;
@@ -23,113 +24,13 @@ environ
 
 begin
 
-::-------------------------------------------:
-::              Preliminaries                :
-::-------------------------------------------:
-
 reserve k for Nat;
 reserve r,r1,r2 for Real;
 reserve n,i,i1,i2,j,j1,j2 for Element of NAT;
 reserve D for non empty set;
 reserve f for FinSequence of D;
 
-canceled 14;
-
-theorem :: JORDAN3:15
-  for i be Nat for p,q being FinSequence st len p<i & (i<=len p +
-  len q or i<=len (p^q)) holds (p^q).i=q.(i-len p);
-
-canceled;
-
-theorem :: JORDAN3:17
-  for x being set,f being FinSequence of D st 1<=len f holds (f^<*
-x*>).1=f.1 & (f^<*x*>).1=f/.1 & (<*x*>^f).(len f +1)=f.len f & (<*x*>^f).(len f
-  +1)=f/.len f;
-
-theorem :: JORDAN3:18
-  for f being FinSequence st len f=1 holds Rev f=f;
-
-theorem :: JORDAN3:19
-  for f being FinSequence of D,k being Nat holds len (f/^k)=len f-'k;
-
-canceled;
-
-theorem :: JORDAN3:21
-  for f being FinSequence of D,l1,l2 being Nat holds (f/^l1)|(l2-'l1)=(f
-  |l2)/^l1;
-
-begin
-
-::-------------------------------------------:
-::    Middle Function for Finite Sequences   :
-::-------------------------------------------:
-
-definition
-  let f be FinSequence,k1,k2 be Nat;
-  func mid(f,k1,k2) -> FinSequence equals
-:: JORDAN3:def 1
-
-  (f/^(k1-'1))|(k2-'k1+1)
-  if k1<=k2 otherwise Rev ((f/^(k2-'1))|(k1-'k2+1));
-end;
-
-definition
-  let D;
-  let f be FinSequence of D,k1,k2 be Nat;
-  redefine func mid(f,k1,k2) -> FinSequence of D;
-end;
-
-theorem :: JORDAN3:22
-  for f being FinSequence of D,k1,k2 being Element of NAT st 1<=k1
-  & k1<=len f & 1<=k2 & k2<=len f holds Rev mid(f,k1,k2)=mid(Rev f,len f-'k2+1,
-  len f-'k1+1);
-
-theorem :: JORDAN3:23
-  for n,m being Element of NAT,f being FinSequence of D st 1<= m &
-  m+n<=len f holds (f/^n).m=f.(m+n);
-
-theorem :: JORDAN3:24
-  for i being Element of NAT,f being FinSequence of D st 1<=i & i
-  <=len f holds (Rev f).i=f.(len f -i+1);
-
-theorem :: JORDAN3:25
-  for f being FinSequence of D,k being Nat st 1<=k holds mid(f,1,k)=f|k;
-
-theorem :: JORDAN3:26
-  for f being FinSequence of D,k being Element of NAT st k<=len f
-  holds mid(f,k,len f)=f/^(k-'1);
-
-theorem :: JORDAN3:27
-  for f being FinSequence of D,k1,k2 being Element of NAT st 1<=k1
-& k1<=len f & 1<=k2 & k2<=len f holds mid(f,k1,k2).1=f.k1 & (k1<=k2 implies len
-mid(f,k1,k2) = k2 -' k1 +1 & for i being Element of NAT st 1<=i & i<=len mid(f,
-k1,k2) holds mid(f,k1,k2).i=f.(i+k1-'1)) & (k1>k2 implies len mid(f,k1,k2) = k1
--' k2 +1 & for i being Element of NAT st 1<=i & i<=len mid(f,k1,k2) holds mid(f
-  ,k1,k2).i=f.(k1-'i+1));
-
-theorem :: JORDAN3:28
-  for f being FinSequence of D,k1,k2 being Element of NAT holds
-  rng mid(f,k1,k2) c= rng f;
-
-theorem :: JORDAN3:29
-  for f being FinSequence of D st 1<=len f holds mid(f,1,len f)=f;
-
-theorem :: JORDAN3:30
-  for f being FinSequence of D st 1<=len f holds mid(f,len f,1)=Rev f;
-
-theorem :: JORDAN3:31
-  for f being FinSequence of D, k1,k2,i being Element of NAT st 1
-  <=k1 & k1<=k2 & k2<=len f & 1<=i & (i<=k2-'k1+1 or i<=k2-k1+1 or i<=k2+1-k1)
-holds mid(f,k1,k2).i=f.(i+k1-'1) & mid(f,k1,k2).i=f.(i-'1+k1) & mid(f,k1,k2).i=
-  f.(i+k1-1) & mid(f,k1,k2).i=f.(i-1+k1);
-
-theorem :: JORDAN3:32
-  for f being FinSequence of D,k,i being Nat st 1<=i & i<=k & k<=
-  len f holds mid(f,1,k).i=f.i;
-
-theorem :: JORDAN3:33
-  for f being FinSequence of D, k1,k2 being Element of NAT st 1<=k1 & k1
-  <=k2 & k2<=len f holds len mid(f,k1,k2)<=len f;
+canceled 33;
 
 theorem :: JORDAN3:34
   for f being FinSequence of TOP-REAL n st 2<=len f holds f.1 in L~f & f
@@ -165,6 +66,7 @@ begin
 
 definition
   let f be FinSequence of TOP-REAL 2,p be Point of TOP-REAL 2;
+ canceled;
   assume
  p in L~f;
   func Index(p,f) -> Element of NAT means
@@ -272,22 +174,7 @@ theorem :: JORDAN3:54
 st f is unfolded s.n.c. & p in L~f & p <> f.(Index(p,f)+1) holds Index(p,Rev f)
   + Index(p,f) = len f;
 
-theorem :: JORDAN3:55
-  for D for f being FinSequence of D, k being Element of NAT, p
-  being Element of D holds (<*p*>^f)|(k+1) = <*p*>^(f|k);
-
-theorem :: JORDAN3:56
-  for D for f being FinSequence of D, k1,k2 being Element of NAT
-  st k1 < k2 & k1 in dom f holds mid(f,k1,k2) = <*f.k1*>^ mid(f,k1+1,k2);
-
-:: registration let f be non empty FinSequence;
-::  cluster Rev f -> non empty;
-::  coherence
-::   proof
-::    dom Rev f = dom f by FINSEQ_5:60;
-::    hence thesis by RELAT_1:60,64;
-::   end;
-:: end;
+canceled 2;
 
 theorem :: JORDAN3:57
   for f being FinSequence of TOP-REAL 2, p being Point of TOP-REAL

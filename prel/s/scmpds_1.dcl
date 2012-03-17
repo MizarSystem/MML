@@ -7,10 +7,10 @@
 <ArticleID name="XBOOLE_0"/>
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
-<ArticleID name="PARTFUN1"/>
 <ArticleID name="TARSKI"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
+<ArticleID name="PARTFUN1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="XREAL_0"/>
@@ -38,10 +38,10 @@
 <Adjective nr="22">
 <Func kind="K" nr="134"/>
 <Func kind="K" nr="17">
-<Func kind="K" nr="42">
-<Func kind="K" nr="54"/>
+<Func kind="K" nr="35">
+<Func kind="K" nr="47"/>
 </Func>
-<Func kind="K" nr="43">
+<Func kind="K" nr="36">
 <Func kind="K" nr="149"/>
 <Func kind="K" nr="136"/>
 </Func>

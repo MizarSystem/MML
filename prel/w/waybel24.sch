@@ -14,6 +14,7 @@
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
+<ArticleID name="SETFAM_1"/>
 <ArticleID name="RELAT_2"/>
 <ArticleID name="EQREL_1"/>
 <ArticleID name="STRUCT_0"/>
@@ -35,12 +36,12 @@
 <ArgTypes>
 <Typ kind="G" nr="7">
 <Cluster>
-<Adjective nr="41" value="false"/>
+<Adjective nr="44" value="false"/>
 </Cluster>
 </Typ>
 <Typ kind="G" nr="7">
 <Cluster>
-<Adjective nr="41" value="false"/>
+<Adjective nr="44" value="false"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="2">
@@ -105,11 +106,11 @@
 <ArgTypes>
 <Typ kind="G" nr="7">
 <Cluster>
-<Adjective nr="69"/>
-<Adjective nr="70"/>
-<Adjective nr="71"/>
-<Adjective nr="127"/>
-<Adjective nr="128"/>
+<Adjective nr="72"/>
+<Adjective nr="73"/>
+<Adjective nr="74"/>
+<Adjective nr="130"/>
+<Adjective nr="131"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
@@ -185,7 +186,7 @@
 <ArgTypes>
 <Typ kind="G" nr="12">
 <Cluster>
-<Adjective nr="41" value="false"/>
+<Adjective nr="44" value="false"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
@@ -255,7 +256,7 @@
 <ArgTypes>
 <Typ kind="G" nr="7">
 <Cluster>
-<Adjective nr="41" value="false"/>
+<Adjective nr="44" value="false"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
@@ -325,12 +326,12 @@
 <ArgTypes>
 <Typ kind="G" nr="12">
 <Cluster>
-<Adjective nr="41" value="false"/>
+<Adjective nr="44" value="false"/>
 </Cluster>
 </Typ>
 <Typ kind="G" nr="12">
 <Cluster>
-<Adjective nr="41" value="false"/>
+<Adjective nr="44" value="false"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="2">

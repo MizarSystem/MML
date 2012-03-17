@@ -16,11 +16,10 @@
 <ArticleID name="FUNCT_3"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
+<ArticleID name="FINSEQ_1"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="BINOP_1"/>
-<ArticleID name="FINSEQ_1"/>
 <ArticleID name="FINSEQ_2"/>
-<ArticleID name="FUNCT_4"/>
 <ArticleID name="CARD_3"/>
 <ArticleID name="FUNCOP_1"/>
 <ArticleID name="PBOOLE"/>
@@ -28,6 +27,7 @@
 <ArticleID name="ALTCAT_1"/>
 <ArticleID name="GRAPH_1"/>
 <ArticleID name="CAT_1"/>
+<ArticleID name="FUNCT_4"/>
 <ArticleID name="ALTCAT_2"/>
 <ArticleID name="FUNCTOR0"/>
 <ArticleID name="YELLOW20"/>

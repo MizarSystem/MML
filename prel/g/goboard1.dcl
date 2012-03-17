@@ -41,49 +41,6 @@
 <ArgTypes/>
 <Typ kind="M" nr="6">
 <Cluster/>
-<Func kind="K" nr="51"/>
-</Typ>
-<Cluster>
-<Adjective nr="1"/>
-<Adjective nr="5">
-<Func kind="K" nr="51"/>
-</Adjective>
-<Adjective nr="6"/>
-<Adjective nr="11" value="false"/>
-<Adjective nr="28"/>
-<Adjective nr="34"/>
-<Adjective nr="35"/>
-<Adjective nr="97"/>
-<Adjective nr="98"/>
-<Adjective nr="99"/>
-<Adjective nr="103"/>
-</Cluster>
-</RCluster>
-<RCluster aid="GOBOARD1" nr="2">
-<ArgTypes/>
-<Typ kind="M" nr="6">
-<Cluster/>
-<Func kind="K" nr="51"/>
-</Typ>
-<Cluster>
-<Adjective nr="1"/>
-<Adjective nr="5">
-<Func kind="K" nr="51"/>
-</Adjective>
-<Adjective nr="6"/>
-<Adjective nr="8"/>
-<Adjective nr="28"/>
-<Adjective nr="34"/>
-<Adjective nr="35"/>
-<Adjective nr="97"/>
-<Adjective nr="98"/>
-<Adjective nr="99"/>
-</Cluster>
-</RCluster>
-<RCluster aid="GOBOARD1" nr="3">
-<ArgTypes/>
-<Typ kind="M" nr="6">
-<Cluster/>
 <Func kind="K" nr="136">
 <Func kind="U" nr="1">
 <Func kind="K" nr="290">
@@ -115,15 +72,4 @@
 <Adjective nr="157"/>
 </Cluster>
 </RCluster>
-<CCluster aid="GOBOARD1" nr="1">
-<ArgTypes/>
-<Cluster/>
-<Typ kind="M" nr="6">
-<Cluster/>
-<Func kind="K" nr="51"/>
-</Typ>
-<Cluster>
-<Adjective nr="99"/>
-</Cluster>
-</CCluster>
 </Registrations>

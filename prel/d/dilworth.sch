@@ -8,33 +8,33 @@
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="RELAT_1"/>
 <ArticleID name="FUNCT_1"/>
+<ArticleID name="XXREAL_0"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
-<ArticleID name="XXREAL_0"/>
 </Signature>
 <Scheme>
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="21"/>
+<Adjective nr="24"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="21"/>
+<Adjective nr="24"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Pred kind="R" nr="16">
-<Func kind="K" nr="48">
+<Pred kind="R" nr="15">
+<Func kind="K" nr="53">
 <Func kind="F" nr="2"/>
 </Func>
-<Func kind="K" nr="48">
+<Func kind="K" nr="53">
 <Func kind="F" nr="1"/>
 </Func>
 </Pred>

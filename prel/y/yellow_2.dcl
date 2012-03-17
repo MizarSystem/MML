@@ -6,6 +6,7 @@
 <ArticleID name="XBOOLE_0"/>
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
+<ArticleID name="SETFAM_1"/>
 <ArticleID name="RELAT_1"/>
 <ArticleID name="FUNCT_1"/>
 <ArticleID name="MCART_1"/>
@@ -49,7 +50,7 @@
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
-<Adjective nr="40" value="false"/>
+<Adjective nr="43" value="false"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="2">
@@ -63,14 +64,14 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="338">
+<Func kind="K" nr="347">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="40" value="false"/>
-<Adjective nr="54"/>
-<Adjective nr="148">
+<Adjective nr="43" value="false"/>
+<Adjective nr="57"/>
+<Adjective nr="151">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -79,18 +80,18 @@
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
-<Adjective nr="40" value="false"/>
+<Adjective nr="43" value="false"/>
 </Cluster>
 </Typ>
 <Typ kind="G" nr="6">
 <Cluster>
-<Adjective nr="40" value="false"/>
+<Adjective nr="43" value="false"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="2">
 <Cluster>
-<Adjective nr="9"/>
-<Adjective nr="23">
+<Adjective nr="12"/>
+<Adjective nr="26">
 <Func kind="U" nr="1">
 <LocusVar nr="1"/>
 </Func>
@@ -111,15 +112,15 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="360">
+<Func kind="K" nr="369">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
 </Func>
 <Cluster>
-<Adjective nr="40" value="false"/>
-<Adjective nr="54"/>
-<Adjective nr="148">
+<Adjective nr="43" value="false"/>
+<Adjective nr="57"/>
+<Adjective nr="151">
 <LocusVar nr="2"/>
 </Adjective>
 </Cluster>
@@ -128,13 +129,13 @@
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
-<Adjective nr="40" value="false"/>
-<Adjective nr="56"/>
-<Adjective nr="57"/>
+<Adjective nr="43" value="false"/>
+<Adjective nr="59"/>
+<Adjective nr="60"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="345">
+<Func kind="K" nr="354">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -145,87 +146,87 @@
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
-<Adjective nr="56"/>
-<Adjective nr="57"/>
-<Adjective nr="58"/>
-<Adjective nr="83"/>
+<Adjective nr="59"/>
+<Adjective nr="60"/>
+<Adjective nr="61"/>
+<Adjective nr="86"/>
 </Cluster>
 </Typ>
 </ArgTypes>
+<Func kind="K" nr="363">
 <Func kind="K" nr="354">
-<Func kind="K" nr="345">
 <LocusVar nr="1"/>
 </Func>
 </Func>
 <Cluster>
-<Adjective nr="54"/>
-<Adjective nr="83"/>
+<Adjective nr="57"/>
+<Adjective nr="86"/>
 </Cluster>
 </FCluster>
 <FCluster aid="YELLOW_2" nr="5">
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
-<Adjective nr="56"/>
-<Adjective nr="57"/>
-<Adjective nr="58"/>
-<Adjective nr="82"/>
+<Adjective nr="59"/>
+<Adjective nr="60"/>
+<Adjective nr="61"/>
+<Adjective nr="85"/>
 </Cluster>
 </Typ>
 </ArgTypes>
+<Func kind="K" nr="363">
 <Func kind="K" nr="354">
-<Func kind="K" nr="345">
 <LocusVar nr="1"/>
 </Func>
 </Func>
 <Cluster>
-<Adjective nr="54"/>
-<Adjective nr="82"/>
+<Adjective nr="57"/>
+<Adjective nr="85"/>
 </Cluster>
 </FCluster>
 <FCluster aid="YELLOW_2" nr="6">
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
-<Adjective nr="56"/>
-<Adjective nr="57"/>
-<Adjective nr="58"/>
-<Adjective nr="82"/>
-<Adjective nr="145"/>
+<Adjective nr="59"/>
+<Adjective nr="60"/>
+<Adjective nr="61"/>
+<Adjective nr="85"/>
+<Adjective nr="148"/>
 </Cluster>
 </Typ>
 </ArgTypes>
+<Func kind="K" nr="363">
 <Func kind="K" nr="354">
-<Func kind="K" nr="345">
 <LocusVar nr="1"/>
 </Func>
 </Func>
 <Cluster>
-<Adjective nr="54"/>
-<Adjective nr="84"/>
+<Adjective nr="57"/>
+<Adjective nr="87"/>
 </Cluster>
 </FCluster>
 <FCluster aid="YELLOW_2" nr="7">
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
-<Adjective nr="40" value="false"/>
-<Adjective nr="56"/>
-<Adjective nr="57"/>
-<Adjective nr="58"/>
-<Adjective nr="176"/>
+<Adjective nr="43" value="false"/>
+<Adjective nr="59"/>
+<Adjective nr="60"/>
+<Adjective nr="61"/>
+<Adjective nr="179"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="361">
+<Func kind="K" nr="370">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="9"/>
-<Adjective nr="23">
+<Adjective nr="12"/>
+<Adjective nr="26">
 <Func kind="U" nr="1">
+<Func kind="K" nr="363">
 <Func kind="K" nr="354">
-<Func kind="K" nr="345">
 <LocusVar nr="1"/>
 </Func>
 </Func>
@@ -234,9 +235,9 @@
 <LocusVar nr="1"/>
 </Func>
 </Adjective>
-<Adjective nr="144">
+<Adjective nr="147">
+<Func kind="K" nr="363">
 <Func kind="K" nr="354">
-<Func kind="K" nr="345">
 <LocusVar nr="1"/>
 </Func>
 </Func>
@@ -248,34 +249,34 @@
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
-<Adjective nr="40" value="false"/>
-<Adjective nr="56"/>
-<Adjective nr="57"/>
-<Adjective nr="58"/>
+<Adjective nr="43" value="false"/>
+<Adjective nr="59"/>
+<Adjective nr="60"/>
+<Adjective nr="61"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="362">
+<Func kind="K" nr="371">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="9"/>
-<Adjective nr="23">
+<Adjective nr="12"/>
+<Adjective nr="26">
 <Func kind="U" nr="1">
 <LocusVar nr="1"/>
 </Func>
 <Func kind="U" nr="1">
+<Func kind="K" nr="363">
 <Func kind="K" nr="354">
-<Func kind="K" nr="345">
 <LocusVar nr="1"/>
 </Func>
 </Func>
 </Func>
 </Adjective>
-<Adjective nr="144">
+<Adjective nr="147">
 <LocusVar nr="1"/>
+<Func kind="K" nr="363">
 <Func kind="K" nr="354">
-<Func kind="K" nr="345">
 <LocusVar nr="1"/>
 </Func>
 </Func>
@@ -285,23 +286,23 @@
 <CCluster aid="YELLOW_2" nr="1">
 <ArgTypes/>
 <Cluster>
-<Adjective nr="40" value="false"/>
-<Adjective nr="56"/>
-<Adjective nr="57"/>
-<Adjective nr="58"/>
-<Adjective nr="146"/>
-<Adjective nr="176"/>
-<Adjective nr="177"/>
+<Adjective nr="43" value="false"/>
+<Adjective nr="59"/>
+<Adjective nr="60"/>
+<Adjective nr="61"/>
+<Adjective nr="149"/>
+<Adjective nr="179"/>
+<Adjective nr="180"/>
 </Cluster>
 <Typ kind="G" nr="6">
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="40" value="false"/>
-<Adjective nr="56"/>
-<Adjective nr="57"/>
-<Adjective nr="58"/>
-<Adjective nr="84"/>
+<Adjective nr="43" value="false"/>
+<Adjective nr="59"/>
+<Adjective nr="60"/>
+<Adjective nr="61"/>
+<Adjective nr="87"/>
 </Cluster>
 </CCluster>
 </Registrations>

@@ -15,6 +15,7 @@
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="NAT_1"/>
+<ArticleID name="SETFAM_1"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="XREAL_0"/>
@@ -25,13 +26,9 @@
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="ENUMSET1"/>
 <ArticleID name="DOMAIN_1"/>
-<ArticleID name="BINOP_1"/>
-<ArticleID name="FUNCT_5"/>
-<ArticleID name="METRIC_1"/>
 <ArticleID name="RELAT_2"/>
 <ArticleID name="EQREL_1"/>
 <ArticleID name="CONNSP_2"/>
-<ArticleID name="PCOMPS_1"/>
 <ArticleID name="RELSET_1"/>
 <ArticleID name="BORSUK_1"/>
 <ArticleID name="SEQ_2"/>
@@ -65,23 +62,23 @@
 <Func kind="K" nr="48"/>
 <Func kind="K" nr="44"/>
 </Adjective>
-<Adjective nr="33"/>
-<Adjective nr="34"/>
-<Adjective nr="35"/>
-<Adjective nr="45"/>
-<Adjective nr="103"/>
+<Adjective nr="36"/>
+<Adjective nr="37"/>
+<Adjective nr="38"/>
+<Adjective nr="48"/>
+<Adjective nr="91"/>
 </Cluster>
 </RCluster>
 <FCluster aid="TIETZE" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
-<Adjective nr="60"/>
+<Adjective nr="63"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="2">
 <Cluster>
-<Adjective nr="62">
+<Adjective nr="65">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -92,13 +89,13 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="133">
+<Func kind="K" nr="142">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="59"/>
-<Adjective nr="97">
+<Adjective nr="62"/>
+<Adjective nr="85">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>

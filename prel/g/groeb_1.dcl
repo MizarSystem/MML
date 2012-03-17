@@ -28,6 +28,7 @@
 <ArticleID name="RELAT_2"/>
 <ArticleID name="ORDERS_1"/>
 <ArticleID name="ORDERS_2"/>
+<ArticleID name="SETFAM_1"/>
 <ArticleID name="EQREL_1"/>
 <ArticleID name="DICKSON"/>
 <ArticleID name="XCMPLX_0"/>
@@ -51,16 +52,16 @@
 </Typ>
 </ArgTypes>
 <Func kind="G" nr="14">
-<Func kind="K" nr="307">
+<Func kind="K" nr="316">
 <LocusVar nr="1"/>
 </Func>
-<Func kind="K" nr="343">
+<Func kind="K" nr="352">
 <LocusVar nr="1"/>
 </Func>
 </Func>
 <Cluster>
 <Adjective nr="128"/>
-<Adjective nr="138"/>
+<Adjective nr="141"/>
 </Cluster>
 </FCluster>
 </Registrations>

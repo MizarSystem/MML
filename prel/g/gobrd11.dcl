@@ -26,11 +26,11 @@
 <ArticleID name="BINOP_1"/>
 <ArticleID name="FUNCT_5"/>
 <ArticleID name="METRIC_1"/>
+<ArticleID name="VALUED_0"/>
 <ArticleID name="MEMBERED"/>
+<ArticleID name="VALUED_1"/>
 <ArticleID name="FINSEQ_2"/>
 <ArticleID name="ALGSTR_0"/>
-<ArticleID name="VALUED_0"/>
-<ArticleID name="VALUED_1"/>
 <ArticleID name="RLVECT_1"/>
 <ArticleID name="RLTOPSP1"/>
 <ArticleID name="EUCLID"/>
@@ -70,7 +70,7 @@
 <Num nr="2"/>
 </Func>
 </Func>
-<Func kind="K" nr="298">
+<Func kind="K" nr="300">
 <Num nr="2"/>
 <LocusVar nr="1"/>
 </Func>

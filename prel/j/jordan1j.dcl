@@ -27,12 +27,12 @@
 <ArticleID name="ALGSTR_0"/>
 <ArticleID name="RLVECT_1"/>
 <ArticleID name="MATRIX_1"/>
+<ArticleID name="VALUED_0"/>
 <ArticleID name="MEMBERED"/>
+<ArticleID name="VALUED_1"/>
 <ArticleID name="BINOP_1"/>
 <ArticleID name="FUNCT_5"/>
 <ArticleID name="METRIC_1"/>
-<ArticleID name="VALUED_0"/>
-<ArticleID name="VALUED_1"/>
 <ArticleID name="RLTOPSP1"/>
 <ArticleID name="EUCLID"/>
 <ArticleID name="GRAPH_1"/>

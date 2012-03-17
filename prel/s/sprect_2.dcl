@@ -89,7 +89,7 @@
 </RCluster>
 <FCluster aid="SPRECT_2" nr="1">
 <ArgTypes/>
-<Func kind="K" nr="297"/>
+<Func kind="K" nr="299"/>
 <Cluster>
 <Adjective nr="63">
 <Func kind="K" nr="276">
@@ -120,7 +120,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="309">
+<Func kind="K" nr="311">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -152,7 +152,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="299">
+<Func kind="K" nr="301">
 <Num nr="2"/>
 <LocusVar nr="1"/>
 </Func>

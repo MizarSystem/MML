@@ -21,10 +21,10 @@
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="FINSEQ_2"/>
 <ArticleID name="RELAT_2"/>
-<ArticleID name="CARD_3"/>
-<ArticleID name="UNIALG_1"/>
 <ArticleID name="ORDERS_1"/>
 <ArticleID name="ORDERS_2"/>
+<ArticleID name="CARD_3"/>
+<ArticleID name="UNIALG_1"/>
 <ArticleID name="PRALG_1"/>
 <ArticleID name="WELLORD2"/>
 <ArticleID name="YELLOW_0"/>

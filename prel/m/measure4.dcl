@@ -16,6 +16,7 @@
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="NAT_1"/>
 <ArticleID name="XXREAL_0"/>
+<ArticleID name="SETFAM_1"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="CARD_3"/>
@@ -27,7 +28,6 @@
 <ArticleID name="XXREAL_3"/>
 <ArticleID name="SUPINF_2"/>
 <ArticleID name="MEASURE1"/>
-<ArticleID name="SETFAM_1"/>
 <ArticleID name="MEASURE2"/>
 <ArticleID name="MEASURE4"/>
 </Signature>
@@ -41,16 +41,16 @@
 <LocusVar nr="1"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="188">
+<Func kind="K" nr="189">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
 <Adjective nr="11" value="false"/>
-<Adjective nr="40">
+<Adjective nr="43">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="81">
+<Adjective nr="84">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>

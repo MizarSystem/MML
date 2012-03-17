@@ -34,7 +34,7 @@
 <ArticleID name="RLVECT_1"/>
 <ArticleID name="RLTOPSP1"/>
 <ArticleID name="EUCLID"/>
-<ArticleID name="PCOMPS_1"/>
+<ArticleID name="SETFAM_1"/>
 <ArticleID name="ENUMSET1"/>
 <ArticleID name="DOMAIN_1"/>
 <ArticleID name="RELAT_2"/>
@@ -73,7 +73,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="357">
+<Func kind="K" nr="361">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
@@ -110,7 +110,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="368">
+<Func kind="K" nr="372">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>

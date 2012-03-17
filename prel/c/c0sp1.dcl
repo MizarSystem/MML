@@ -24,10 +24,10 @@
 <ArticleID name="NORMSP_1"/>
 <ArticleID name="INT_1"/>
 <ArticleID name="FUNCT_3"/>
-<ArticleID name="BINOP_1"/>
-<ArticleID name="FUNCT_5"/>
-<ArticleID name="FUNCSDOM"/>
 <ArticleID name="SETFAM_1"/>
+<ArticleID name="BINOP_1"/>
+<ArticleID name="FUNCSDOM"/>
+<ArticleID name="FUNCT_5"/>
 <ArticleID name="CLASSES2"/>
 <ArticleID name="FUNCT_4"/>
 <ArticleID name="GRAPH_1"/>
@@ -119,7 +119,7 @@
 <Adjective nr="89"/>
 <Adjective nr="90"/>
 <Adjective nr="91"/>
-<Adjective nr="102"/>
+<Adjective nr="105"/>
 <Adjective nr="136"/>
 <Adjective nr="138"/>
 <Adjective nr="140"/>
@@ -143,8 +143,8 @@
 <Adjective nr="90"/>
 <Adjective nr="91"/>
 <Adjective nr="93"/>
-<Adjective nr="101"/>
-<Adjective nr="102"/>
+<Adjective nr="104"/>
+<Adjective nr="105"/>
 <Adjective nr="134"/>
 <Adjective nr="136"/>
 <Adjective nr="138"/>
@@ -193,8 +193,8 @@
 <Adjective nr="89"/>
 <Adjective nr="90"/>
 <Adjective nr="91"/>
-<Adjective nr="101"/>
-<Adjective nr="102"/>
+<Adjective nr="104"/>
+<Adjective nr="105"/>
 <Adjective nr="136"/>
 <Adjective nr="138"/>
 <Adjective nr="140"/>
@@ -209,7 +209,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="382">
+<Func kind="K" nr="383">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -234,7 +234,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="387">
+<Func kind="K" nr="388">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -249,7 +249,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="387">
+<Func kind="K" nr="388">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -264,7 +264,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="387">
+<Func kind="K" nr="388">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -287,7 +287,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="387">
+<Func kind="K" nr="388">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -366,7 +366,7 @@
 <Adjective nr="89"/>
 <Adjective nr="90"/>
 <Adjective nr="91"/>
-<Adjective nr="102"/>
+<Adjective nr="105"/>
 <Adjective nr="136"/>
 <Adjective nr="138"/>
 <Adjective nr="140"/>

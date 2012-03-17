@@ -6,6 +6,7 @@
 <ArticleID name="XBOOLE_0"/>
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
+<ArticleID name="SETFAM_1"/>
 <ArticleID name="RELAT_1"/>
 <ArticleID name="FUNCT_1"/>
 <ArticleID name="ORDINAL1"/>
@@ -26,26 +27,26 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="32" value="false"/>
-<Adjective nr="44"/>
-<Adjective nr="48"/>
+<Adjective nr="35" value="false"/>
+<Adjective nr="47"/>
+<Adjective nr="51"/>
 </Cluster>
 </RCluster>
 <FCluster aid="T_0TOPSP" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
-<Adjective nr="32" value="false"/>
-<Adjective nr="44"/>
+<Adjective nr="35" value="false"/>
+<Adjective nr="47"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="112">
+<Func kind="K" nr="121">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="32" value="false"/>
-<Adjective nr="44"/>
+<Adjective nr="35" value="false"/>
+<Adjective nr="47"/>
 </Cluster>
 </FCluster>
 </Registrations>

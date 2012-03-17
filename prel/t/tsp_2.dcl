@@ -16,17 +16,12 @@
 <ArticleID name="CARD_1"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="PRE_TOPC"/>
+<ArticleID name="SETFAM_1"/>
 <ArticleID name="ENUMSET1"/>
 <ArticleID name="DOMAIN_1"/>
 <ArticleID name="RELAT_2"/>
 <ArticleID name="EQREL_1"/>
-<ArticleID name="NUMBERS"/>
-<ArticleID name="XREAL_0"/>
 <ArticleID name="CONNSP_2"/>
-<ArticleID name="BINOP_1"/>
-<ArticleID name="FUNCT_5"/>
-<ArticleID name="METRIC_1"/>
-<ArticleID name="PCOMPS_1"/>
 <ArticleID name="RELSET_1"/>
 <ArticleID name="BORSUK_1"/>
 <ArticleID name="TSEP_1"/>
@@ -51,7 +46,7 @@
 <Adjective nr="32" value="false"/>
 <Adjective nr="43"/>
 <Adjective nr="44"/>
-<Adjective nr="95">
+<Adjective nr="82">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -66,7 +61,7 @@
 </ArgTypes>
 <Cluster>
 <Adjective nr="32" value="false"/>
-<Adjective nr="95">
+<Adjective nr="82">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -97,7 +92,7 @@
 </Typ>
 <Cluster>
 <Adjective nr="32" value="false"/>
-<Adjective nr="95" value="false">
+<Adjective nr="82" value="false">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -112,7 +107,7 @@
 </Typ>
 </ArgTypes>
 <Cluster>
-<Adjective nr="95">
+<Adjective nr="82">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -121,7 +116,7 @@
 <LocusVar nr="1"/>
 </Typ>
 <Cluster>
-<Adjective nr="90">
+<Adjective nr="77">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -136,7 +131,7 @@
 </Typ>
 </ArgTypes>
 <Cluster>
-<Adjective nr="90" value="false">
+<Adjective nr="77" value="false">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -145,7 +140,7 @@
 <LocusVar nr="1"/>
 </Typ>
 <Cluster>
-<Adjective nr="95" value="false">
+<Adjective nr="82" value="false">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -160,10 +155,10 @@
 </Typ>
 </ArgTypes>
 <Cluster>
-<Adjective nr="85">
+<Adjective nr="72">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="95">
+<Adjective nr="82">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -172,7 +167,7 @@
 <LocusVar nr="1"/>
 </Typ>
 <Cluster>
-<Adjective nr="86" value="false">
+<Adjective nr="73" value="false">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -187,10 +182,10 @@
 </Typ>
 </ArgTypes>
 <Cluster>
-<Adjective nr="85">
+<Adjective nr="72">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="86">
+<Adjective nr="73">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -199,7 +194,7 @@
 <LocusVar nr="1"/>
 </Typ>
 <Cluster>
-<Adjective nr="95" value="false">
+<Adjective nr="82" value="false">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -214,10 +209,10 @@
 </Typ>
 </ArgTypes>
 <Cluster>
-<Adjective nr="86">
+<Adjective nr="73">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="95">
+<Adjective nr="82">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -226,7 +221,7 @@
 <LocusVar nr="1"/>
 </Typ>
 <Cluster>
-<Adjective nr="85" value="false">
+<Adjective nr="72" value="false">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -241,10 +236,10 @@
 </Typ>
 </ArgTypes>
 <Cluster>
-<Adjective nr="82">
+<Adjective nr="69">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="95">
+<Adjective nr="82">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -253,7 +248,7 @@
 <LocusVar nr="1"/>
 </Typ>
 <Cluster>
-<Adjective nr="86" value="false">
+<Adjective nr="73" value="false">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -268,10 +263,10 @@
 </Typ>
 </ArgTypes>
 <Cluster>
-<Adjective nr="82">
+<Adjective nr="69">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="86">
+<Adjective nr="73">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -280,7 +275,7 @@
 <LocusVar nr="1"/>
 </Typ>
 <Cluster>
-<Adjective nr="95" value="false">
+<Adjective nr="82" value="false">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -295,10 +290,10 @@
 </Typ>
 </ArgTypes>
 <Cluster>
-<Adjective nr="86">
+<Adjective nr="73">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="95">
+<Adjective nr="82">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -307,7 +302,7 @@
 <LocusVar nr="1"/>
 </Typ>
 <Cluster>
-<Adjective nr="82" value="false">
+<Adjective nr="69" value="false">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>

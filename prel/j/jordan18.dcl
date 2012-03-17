@@ -35,8 +35,6 @@
 <ArticleID name="RLTOPSP1"/>
 <ArticleID name="EUCLID"/>
 <ArticleID name="TOPREAL1"/>
-<ArticleID name="SEQ_2"/>
-<ArticleID name="PCOMPS_1"/>
 <ArticleID name="PSCOMP_1"/>
 </Signature>
 <FCluster aid="JORDAN18" nr="1">
@@ -51,7 +49,7 @@
 </Typ>
 </ArgTypes>
 <Func kind="K" nr="9">
-<Func kind="K" nr="303"/>
+<Func kind="K" nr="291"/>
 <Func kind="K" nr="283">
 <LocusVar nr="1"/>
 </Func>
@@ -72,7 +70,7 @@
 </Typ>
 </ArgTypes>
 <Func kind="K" nr="9">
-<Func kind="K" nr="303"/>
+<Func kind="K" nr="291"/>
 <Func kind="K" nr="285">
 <LocusVar nr="1"/>
 </Func>
@@ -93,7 +91,7 @@
 </Typ>
 </ArgTypes>
 <Func kind="K" nr="9">
-<Func kind="K" nr="302"/>
+<Func kind="K" nr="290"/>
 <Func kind="K" nr="286">
 <LocusVar nr="1"/>
 </Func>
@@ -114,7 +112,7 @@
 </Typ>
 </ArgTypes>
 <Func kind="K" nr="9">
-<Func kind="K" nr="302"/>
+<Func kind="K" nr="290"/>
 <Func kind="K" nr="284">
 <LocusVar nr="1"/>
 </Func>

@@ -38,11 +38,11 @@
 <ArticleID name="WAYBEL_0"/>
 <ArticleID name="RAT_1"/>
 <ArticleID name="XXREAL_0"/>
-<ArticleID name="MEMBERED"/>
-<ArticleID name="FUNCT_3"/>
 <ArticleID name="VALUED_0"/>
-<ArticleID name="RFUNCT_1"/>
+<ArticleID name="MEMBERED"/>
 <ArticleID name="VALUED_1"/>
+<ArticleID name="FUNCT_3"/>
+<ArticleID name="RFUNCT_1"/>
 <ArticleID name="RFUNCT_3"/>
 <ArticleID name="WELLFND1"/>
 <ArticleID name="ALGSTR_1"/>
@@ -268,7 +268,7 @@
 <Adjective nr="41">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="203"/>
+<Adjective nr="197"/>
 <Adjective nr="228"/>
 </Cluster>
 </Typ>

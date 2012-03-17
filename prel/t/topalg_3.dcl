@@ -20,6 +20,7 @@
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="CONNSP_1"/>
 <ArticleID name="TOPS_2"/>
+<ArticleID name="SETFAM_1"/>
 <ArticleID name="BINOP_1"/>
 <ArticleID name="FUNCT_3"/>
 <ArticleID name="FUNCT_5"/>
@@ -32,7 +33,6 @@
 <ArticleID name="ENUMSET1"/>
 <ArticleID name="DOMAIN_1"/>
 <ArticleID name="CONNSP_2"/>
-<ArticleID name="PCOMPS_1"/>
 <ArticleID name="RELSET_1"/>
 <ArticleID name="BORSUK_1"/>
 <ArticleID name="TOPMETR"/>
@@ -64,7 +64,7 @@
 <Adjective nr="59">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="85"/>
+<Adjective nr="88"/>
 </Cluster>
 </RCluster>
 <FCluster aid="TOPALG_3" nr="1">
@@ -104,7 +104,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="207">
+<Func kind="K" nr="211">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -158,7 +158,7 @@
 </Typ>
 </ArgTypes>
 <Cluster/>
-<Typ kind="M" nr="16">
+<Typ kind="M" nr="17">
 <Cluster/>
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
@@ -166,7 +166,7 @@
 </Typ>
 <Cluster>
 <Adjective nr="48">
-<Func kind="K" nr="229"/>
+<Func kind="K" nr="233"/>
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>

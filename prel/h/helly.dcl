@@ -23,7 +23,6 @@
 <ArticleID name="FUNCOP_1"/>
 <ArticleID name="FUNCT_7"/>
 <ArticleID name="ABIAN"/>
-<ArticleID name="FINSEQ_2"/>
 <ArticleID name="GLIB_001"/>
 <ArticleID name="GLIB_002"/>
 <ArticleID name="HELLY"/>
@@ -49,7 +48,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="233">
+<Func kind="K" nr="228">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="2"/>
@@ -84,7 +83,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="233">
+<Func kind="K" nr="228">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="2"/>
@@ -113,7 +112,7 @@
 </Typ>
 </ArgTypes>
 <Cluster/>
-<Typ kind="M" nr="16">
+<Typ kind="M" nr="14">
 <Cluster/>
 <LocusVar nr="1"/>
 </Typ>
@@ -141,7 +140,7 @@
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
-<Typ kind="M" nr="16">
+<Typ kind="M" nr="14">
 <Cluster/>
 <LocusVar nr="1"/>
 </Typ>
@@ -174,7 +173,7 @@
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
-<Typ kind="M" nr="16">
+<Typ kind="M" nr="14">
 <Cluster/>
 <LocusVar nr="1"/>
 </Typ>

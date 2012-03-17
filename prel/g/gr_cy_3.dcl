@@ -15,19 +15,19 @@
 <ArticleID name="COMPLEX1"/>
 <ArticleID name="INT_1"/>
 <ArticleID name="INT_2"/>
+<ArticleID name="XXREAL_0"/>
 <ArticleID name="PARTFUN1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
-<ArticleID name="XXREAL_0"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="ALGSTR_0"/>
 <ArticleID name="RLVECT_1"/>
 <ArticleID name="GROUP_1"/>
-<ArticleID name="VECTSP_1"/>
 <ArticleID name="ALGSEQ_1"/>
+<ArticleID name="VECTSP_1"/>
 <ArticleID name="COMPTRIG"/>
 <ArticleID name="COMPLFLD"/>
 <ArticleID name="UNIROOTS"/>
@@ -48,11 +48,11 @@
 <Adjective nr="22"/>
 <Adjective nr="23"/>
 <Adjective nr="24"/>
-<Adjective nr="29"/>
-<Adjective nr="33"/>
-<Adjective nr="39"/>
-<Adjective nr="40"/>
-<Adjective nr="41" value="false"/>
+<Adjective nr="25"/>
+<Adjective nr="26"/>
+<Adjective nr="27" value="false"/>
+<Adjective nr="32"/>
+<Adjective nr="36"/>
 <Adjective nr="118"/>
 </Cluster>
 </RCluster>
@@ -71,11 +71,11 @@
 <Adjective nr="22"/>
 <Adjective nr="23"/>
 <Adjective nr="24"/>
-<Adjective nr="29"/>
-<Adjective nr="33"/>
-<Adjective nr="39"/>
-<Adjective nr="40"/>
-<Adjective nr="41" value="false"/>
+<Adjective nr="25"/>
+<Adjective nr="26"/>
+<Adjective nr="27" value="false"/>
+<Adjective nr="32"/>
+<Adjective nr="36"/>
 <Adjective nr="119"/>
 </Cluster>
 </RCluster>
@@ -92,8 +92,8 @@
 <Adjective nr="93"/>
 <Adjective nr="101"/>
 <Adjective nr="103"/>
-<Adjective nr="108"/>
 <Adjective nr="109"/>
+<Adjective nr="110"/>
 </Cluster>
 </Typ>
 </ArgTypes>

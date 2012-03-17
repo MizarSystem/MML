@@ -11,13 +11,13 @@
 <ArticleID name="MCART_1"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
-<ArticleID name="PARTFUN1"/>
-<ArticleID name="FUNCT_2"/>
 <ArticleID name="XREAL_0"/>
 <ArticleID name="INT_1"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
+<ArticleID name="PARTFUN1"/>
+<ArticleID name="FUNCT_2"/>
 <ArticleID name="FUNCT_4"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="SETFAM_1"/>
@@ -36,11 +36,11 @@
 <Cluster>
 <Adjective nr="4"/>
 <Adjective nr="7" value="false">
-<Func kind="K" nr="218"/>
+<Func kind="K" nr="219"/>
 </Adjective>
 <Adjective nr="7">
 <Func kind="U" nr="1">
-<Func kind="K" nr="231"/>
+<Func kind="K" nr="232"/>
 </Func>
 </Adjective>
 <Adjective nr="9"/>
@@ -49,16 +49,16 @@
 <Func kind="K" nr="1">
 <Func kind="K" nr="67"/>
 </Func>
-<Func kind="K" nr="231"/>
+<Func kind="K" nr="232"/>
 </Func>
 </Adjective>
-<Adjective nr="27"/>
+<Adjective nr="23"/>
 <Adjective nr="57"/>
 <Adjective nr="68">
 <Func kind="K" nr="1">
 <Func kind="K" nr="67"/>
 </Func>
-<Func kind="K" nr="231"/>
+<Func kind="K" nr="232"/>
 </Adjective>
 </Cluster>
 </RCluster>

@@ -22,20 +22,18 @@
 <ArticleID name="FUNCT_3"/>
 <ArticleID name="MEMBERED"/>
 <ArticleID name="RFUNCT_1"/>
-<ArticleID name="SEQ_2"/>
+<ArticleID name="VALUED_1"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
+<ArticleID name="FINSEQ_1"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="PRE_TOPC"/>
+<ArticleID name="ALGSTR_0"/>
+<ArticleID name="RLVECT_1"/>
 <ArticleID name="BINOP_1"/>
 <ArticleID name="FUNCT_5"/>
-<ArticleID name="METRIC_1"/>
-<ArticleID name="PCOMPS_1"/>
-<ArticleID name="FINSEQ_1"/>
 <ArticleID name="FINSEQ_2"/>
-<ArticleID name="ALGSTR_0"/>
-<ArticleID name="VALUED_1"/>
-<ArticleID name="RLVECT_1"/>
+<ArticleID name="METRIC_1"/>
 <ArticleID name="RLTOPSP1"/>
 <ArticleID name="EUCLID"/>
 <ArticleID name="PSCOMP_1"/>
@@ -69,9 +67,9 @@
 <Adjective nr="32"/>
 <Adjective nr="33"/>
 <Adjective nr="51"/>
-<Adjective nr="171"/>
-<Adjective nr="173"/>
-<Adjective nr="174"/>
+<Adjective nr="156"/>
+<Adjective nr="158"/>
+<Adjective nr="159"/>
 </Cluster>
 </RCluster>
 <RCluster aid="CATALAN2" nr="2">
@@ -97,9 +95,9 @@
 <Adjective nr="32"/>
 <Adjective nr="33"/>
 <Adjective nr="51"/>
-<Adjective nr="171"/>
-<Adjective nr="173"/>
-<Adjective nr="174"/>
+<Adjective nr="156"/>
+<Adjective nr="158"/>
+<Adjective nr="159"/>
 </Cluster>
 </RCluster>
 <FCluster aid="CATALAN2" nr="1">
@@ -113,7 +111,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="380">
+<Func kind="K" nr="368">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -136,7 +134,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="409">
+<Func kind="K" nr="397">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>

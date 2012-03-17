@@ -34,8 +34,8 @@
 <ArticleID name="MATRIX_1"/>
 <ArticleID name="CARD_3"/>
 <ArticleID name="RAT_1"/>
-<ArticleID name="MEMBERED"/>
 <ArticleID name="VALUED_0"/>
+<ArticleID name="MEMBERED"/>
 <ArticleID name="VALUED_1"/>
 <ArticleID name="WELLORD1"/>
 <ArticleID name="RELAT_2"/>
@@ -147,17 +147,17 @@
 </Func>
 </Pred>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="448">
+<Func kind="K" nr="449">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="5"/>
 </Func>
-<Func kind="K" nr="448">
+<Func kind="K" nr="449">
 <Func kind="F" nr="1"/>
 <Var nr="1"/>
 </Func>
 </Pred>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="448">
+<Func kind="K" nr="449">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="5"/>
 </Func>
@@ -171,7 +171,7 @@
 </Pred>
 <Pred kind="V" nr="122">
 <Func kind="F" nr="1"/>
-<Func kind="K" nr="446">
+<Func kind="K" nr="447">
 <Func kind="U" nr="1">
 <Func kind="F" nr="1"/>
 </Func>
@@ -209,7 +209,7 @@
 <Var nr="4"/>
 <Func kind="K" nr="41">
 <Func kind="K" nr="90"/>
-<Func kind="K" nr="445">
+<Func kind="K" nr="446">
 <Var nr="3"/>
 </Func>
 <Var nr="4"/>
@@ -300,7 +300,7 @@
 <Not>
 <Pred kind="R" nr="20">
 <Func kind="K" nr="13">
-<Func kind="K" nr="445">
+<Func kind="K" nr="446">
 <Var nr="3"/>
 </Func>
 <Var nr="4"/>
@@ -547,17 +547,17 @@
 </Func>
 </Pred>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="448">
+<Func kind="K" nr="449">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="5"/>
 </Func>
-<Func kind="K" nr="448">
+<Func kind="K" nr="449">
 <Func kind="F" nr="1"/>
 <Var nr="1"/>
 </Func>
 </Pred>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="448">
+<Func kind="K" nr="449">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="5"/>
 </Func>
@@ -570,7 +570,7 @@
 <Var nr="2"/>
 </Pred>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="446">
+<Func kind="K" nr="447">
 <Func kind="U" nr="1">
 <Func kind="F" nr="1"/>
 </Func>
@@ -667,7 +667,7 @@
 <Not>
 <Pred kind="R" nr="20">
 <Func kind="K" nr="13">
-<Func kind="K" nr="445">
+<Func kind="K" nr="446">
 <Var nr="3"/>
 </Func>
 <Var nr="4"/>

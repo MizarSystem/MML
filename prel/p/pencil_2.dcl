@@ -10,12 +10,12 @@
 <ArticleID name="TARSKI"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
-<ArticleID name="PARTFUN1"/>
-<ArticleID name="MCART_1"/>
-<ArticleID name="FUNCT_2"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
+<ArticleID name="PARTFUN1"/>
+<ArticleID name="MCART_1"/>
+<ArticleID name="FUNCT_2"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="RELAT_2"/>
@@ -68,12 +68,12 @@
 </Adjective>
 <Adjective nr="6"/>
 <Adjective nr="11" value="false"/>
-<Adjective nr="21">
+<Adjective nr="31">
 <Func kind="U" nr="1">
 <LocusVar nr="1"/>
 </Func>
 </Adjective>
-<Adjective nr="22">
+<Adjective nr="32">
 <Func kind="U" nr="1">
 <LocusVar nr="1"/>
 </Func>

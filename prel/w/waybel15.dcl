@@ -11,6 +11,7 @@
 <ArticleID name="MCART_1"/>
 <ArticleID name="RELAT_2"/>
 <ArticleID name="PARTFUN1"/>
+<ArticleID name="SETFAM_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
@@ -43,29 +44,29 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="216">
+<Func kind="K" nr="225">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="54"/>
-<Adjective nr="147"/>
+<Adjective nr="57"/>
+<Adjective nr="150"/>
 </Cluster>
 </FCluster>
 <CCluster aid="WAYBEL15" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
-<Adjective nr="56"/>
-<Adjective nr="57"/>
-<Adjective nr="58"/>
-<Adjective nr="82"/>
-<Adjective nr="83"/>
-<Adjective nr="137"/>
+<Adjective nr="59"/>
+<Adjective nr="60"/>
+<Adjective nr="61"/>
+<Adjective nr="85"/>
+<Adjective nr="86"/>
+<Adjective nr="140"/>
 </Cluster>
 </Typ>
 </ArgTypes>
 <Cluster>
-<Adjective nr="148">
+<Adjective nr="151">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -76,7 +77,7 @@
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="144">
+<Adjective nr="147">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>

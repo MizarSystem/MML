@@ -38,8 +38,8 @@
 <ArticleID name="FUNCT_6"/>
 <ArticleID name="PRVECT_1"/>
 <ArticleID name="RAT_1"/>
-<ArticleID name="MEMBERED"/>
 <ArticleID name="VALUED_0"/>
+<ArticleID name="MEMBERED"/>
 <ArticleID name="VALUED_1"/>
 <ArticleID name="WELLORD1"/>
 <ArticleID name="RELAT_2"/>
@@ -186,7 +186,7 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="418">
+<Func kind="K" nr="419">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>

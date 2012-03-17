@@ -47,7 +47,7 @@
 <ArticleID name="TOPS_2"/>
 <ArticleID name="ENUMSET1"/>
 <ArticleID name="DOMAIN_1"/>
-<ArticleID name="PCOMPS_1"/>
+<ArticleID name="SETFAM_1"/>
 <ArticleID name="RELAT_2"/>
 <ArticleID name="EQREL_1"/>
 <ArticleID name="CONNSP_2"/>
@@ -56,6 +56,7 @@
 <ArticleID name="TOPMETR"/>
 <ArticleID name="BORSUK_4"/>
 <ArticleID name="YELLOW_8"/>
+<ArticleID name="PCOMPS_1"/>
 <ArticleID name="EUCLID_9"/>
 </Signature>
 <FCluster aid="EUCLID_9" nr="1">
@@ -749,7 +750,7 @@
 </FCluster>
 <FCluster aid="EUCLID_9" nr="25">
 <ArgTypes/>
-<Func kind="K" nr="502">
+<Func kind="K" nr="558">
 <Func kind="K" nr="457">
 <Func kind="K" nr="86"/>
 </Func>
@@ -852,7 +853,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="554">
+<Func kind="K" nr="562">
 <Func kind="K" nr="16"/>
 <LocusVar nr="1"/>
 </Func>
@@ -878,7 +879,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="554">
+<Func kind="K" nr="562">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -911,7 +912,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="555">
+<Func kind="K" nr="563">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
@@ -936,7 +937,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="555">
+<Func kind="K" nr="563">
 <Func kind="K" nr="86"/>
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
@@ -967,7 +968,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="555">
+<Func kind="K" nr="563">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
@@ -997,14 +998,14 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="555">
+<Func kind="K" nr="563">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
 </Func>
 <Cluster>
 <Adjective nr="161">
-<Func kind="K" nr="502">
+<Func kind="K" nr="558">
 <Func kind="K" nr="457">
 <LocusVar nr="1"/>
 </Func>
@@ -1028,26 +1029,26 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="556">
+<Func kind="K" nr="564">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
 <Adjective nr="11" value="false"/>
 <Adjective nr="204">
-<Func kind="K" nr="502">
+<Func kind="K" nr="558">
 <Func kind="K" nr="457">
 <LocusVar nr="1"/>
 </Func>
 </Func>
 </Adjective>
 <Adjective nr="227">
-<Func kind="K" nr="502">
+<Func kind="K" nr="558">
 <Func kind="K" nr="457">
 <LocusVar nr="1"/>
 </Func>
 </Func>
-<Func kind="K" nr="553">
+<Func kind="K" nr="561">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>

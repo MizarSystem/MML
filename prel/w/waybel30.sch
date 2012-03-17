@@ -6,6 +6,7 @@
 <ArticleID name="XBOOLE_0"/>
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
+<ArticleID name="SETFAM_1"/>
 <ArticleID name="RELAT_1"/>
 <ArticleID name="FUNCT_1"/>
 <ArticleID name="PARTFUN1"/>
@@ -36,13 +37,13 @@
 <ArgTypes>
 <Typ kind="G" nr="12">
 <Cluster>
-<Adjective nr="44"/>
-<Adjective nr="60"/>
-<Adjective nr="61"/>
-<Adjective nr="62"/>
-<Adjective nr="127"/>
-<Adjective nr="128"/>
-<Adjective nr="148"/>
+<Adjective nr="47"/>
+<Adjective nr="63"/>
+<Adjective nr="64"/>
+<Adjective nr="65"/>
+<Adjective nr="130"/>
+<Adjective nr="131"/>
+<Adjective nr="151"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">

@@ -18,10 +18,10 @@
 <ArticleID name="INT_1"/>
 <ArticleID name="XXREAL_0"/>
 <ArticleID name="RELAT_2"/>
-<ArticleID name="FUNCOP_1"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
+<ArticleID name="FUNCOP_1"/>
 <ArticleID name="FUNCT_7"/>
 <ArticleID name="ABIAN"/>
 <ArticleID name="SQUARE_1"/>
@@ -101,7 +101,7 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="40"/>
+<Adjective nr="39"/>
 <Adjective nr="54" value="false"/>
 <Adjective nr="55"/>
 </Cluster>
@@ -233,7 +233,7 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="40"/>
+<Adjective nr="39"/>
 </Cluster>
 </CCluster>
 </Registrations>

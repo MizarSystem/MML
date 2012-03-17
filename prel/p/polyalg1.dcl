@@ -28,12 +28,12 @@
 <ArticleID name="NORMSP_1"/>
 <ArticleID name="FINSEQ_2"/>
 <ArticleID name="FINSUB_1"/>
-<ArticleID name="CARD_3"/>
 <ArticleID name="NAT_1"/>
 <ArticleID name="RAT_1"/>
-<ArticleID name="MEMBERED"/>
 <ArticleID name="VALUED_0"/>
+<ArticleID name="MEMBERED"/>
 <ArticleID name="VALUED_1"/>
+<ArticleID name="CARD_3"/>
 <ArticleID name="WELLORD1"/>
 <ArticleID name="RELAT_2"/>
 <ArticleID name="PRE_POLY"/>

@@ -37,10 +37,10 @@
 <ArticleID name="RLTOPSP1"/>
 <ArticleID name="EUCLID"/>
 <ArticleID name="TOPREAL2"/>
+<ArticleID name="SETFAM_1"/>
 <ArticleID name="RELAT_2"/>
 <ArticleID name="EQREL_1"/>
 <ArticleID name="CONNSP_2"/>
-<ArticleID name="PCOMPS_1"/>
 <ArticleID name="RELSET_1"/>
 <ArticleID name="BORSUK_1"/>
 <ArticleID name="TOPMETR"/>
@@ -95,7 +95,7 @@
 </RCluster>
 <FCluster aid="BORSUK_4" nr="1">
 <ArgTypes/>
-<Func kind="K" nr="348"/>
+<Func kind="K" nr="352"/>
 <Cluster>
 <Adjective nr="171"/>
 </Cluster>

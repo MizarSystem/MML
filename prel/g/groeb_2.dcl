@@ -28,8 +28,8 @@
 <ArticleID name="XCMPLX_0"/>
 <ArticleID name="NAT_1"/>
 <ArticleID name="RAT_1"/>
-<ArticleID name="MEMBERED"/>
 <ArticleID name="VALUED_0"/>
+<ArticleID name="MEMBERED"/>
 <ArticleID name="VALUED_1"/>
 <ArticleID name="ALGSTR_1"/>
 <ArticleID name="IDEAL_1"/>

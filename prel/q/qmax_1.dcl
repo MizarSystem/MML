@@ -10,6 +10,7 @@
 <ArticleID name="FUNCT_1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="XXREAL_0"/>
+<ArticleID name="SETFAM_1"/>
 <ArticleID name="RELAT_2"/>
 <ArticleID name="PARTFUN1"/>
 <ArticleID name="EQREL_1"/>
@@ -33,7 +34,7 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="103"/>
+<Adjective nr="106"/>
 </Cluster>
 </RCluster>
 <RCluster aid="QMAX_1" nr="2">
@@ -42,8 +43,8 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="103"/>
-<Adjective nr="104"/>
+<Adjective nr="106"/>
+<Adjective nr="107"/>
 </Cluster>
 </RCluster>
 <RCluster aid="QMAX_1" nr="3">
@@ -52,7 +53,7 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="105"/>
+<Adjective nr="108"/>
 </Cluster>
 </RCluster>
 <FCluster aid="QMAX_1" nr="1">
@@ -65,10 +66,10 @@
 <Typ kind="M" nr="2">
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="48">
+<Adjective nr="51">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="51">
+<Adjective nr="54">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -79,7 +80,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="174">
+<Func kind="K" nr="183">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -93,7 +94,7 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="175">
+<Func kind="K" nr="184">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -106,7 +107,7 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="176">
+<Func kind="K" nr="185">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -117,11 +118,11 @@
 <ArgTypes>
 <Typ kind="G" nr="13">
 <Cluster>
-<Adjective nr="104"/>
+<Adjective nr="107"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="178">
+<Func kind="K" nr="187">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>

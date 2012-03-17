@@ -16,6 +16,7 @@
 <ArticleID name="XCMPLX_0"/>
 <ArticleID name="NAT_1"/>
 <ArticleID name="XXREAL_0"/>
+<ArticleID name="SETFAM_1"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="CARD_3"/>
@@ -27,7 +28,6 @@
 <ArticleID name="XXREAL_3"/>
 <ArticleID name="SUPINF_2"/>
 <ArticleID name="MEASURE1"/>
-<ArticleID name="SETFAM_1"/>
 <ArticleID name="MEASURE2"/>
 <ArticleID name="MEASURE4"/>
 <ArticleID name="RELSET_1"/>
@@ -42,7 +42,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="207">
+<Func kind="K" nr="208">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>

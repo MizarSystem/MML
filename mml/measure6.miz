@@ -9,20 +9,35 @@ environ
  vocabularies NUMBERS, FUNCT_1, ZFMISC_1, RELAT_1, SUPINF_2, XXREAL_0, CARD_1,
       SUPINF_1, SUBSET_1, NAT_1, ARYTM_3, ORDINAL1, XREAL_0, XXREAL_2,
       ORDINAL2, XBOOLE_0, REAL_1, ARYTM_1, RELAT_2, MEASURE5, XXREAL_1,
-      MEMBERED, MEMBER_1, TARSKI, XCMPLX_0, MEASURE6;
- notations XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, MEMBERED,
-      XREAL_0, RELAT_1, FUNCT_1, RELSET_1, FUNCT_2, XXREAL_0, XXREAL_1,
-      XXREAL_2, XXREAL_3, REAL_1, NAT_1, SUPINF_1, SUPINF_2, MEASURE5;
+      MEMBERED, MEMBER_1, TARSKI, XCMPLX_0, MEASURE6, FREEALG, QUANTAL1,
+      SETFAM_1, FINSET_1, COMPLEX1, SEQ_1, SEQ_2, VALUED_0, SEQ_4, PSCOMP_1,
+      RCOMP_1, FUNCOP_1, PRALG_1, PRE_TOPC, PARTFUN1, INT_1;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, SETFAM_1,
+      ORDINAL1, FINSET_1, NUMBERS, MEMBERED, ABSVALUE,
+      COMPLEX1, VALUED_0,
+      RELAT_1, FUNCT_1, RELSET_1, PARTFUN1, FUNCT_2, FUNCOP_1,
+      XXREAL_0, XXREAL_1,
+      XXREAL_2, XXREAL_3, XCMPLX_0, XREAL_0, REAL_1, NAT_1, INT_1,
+      SEQ_1, SEQ_2, SEQ_4, RCOMP_1,
+      SUPINF_1, SUPINF_2, MEASURE5, VALUED_1;
  constructors WELLORD2, DOMAIN_1, REAL_1, NAT_1, CARD_1, SUPINF_2, MEASURE5,
-      SUPINF_1, RCOMP_1, RELSET_1;
+      SUPINF_1, RCOMP_1, RELSET_1, COMPLEX1, SEQ_2, SEQM_3, VALUED_0, VALUED_1,
+      SEQ_1, FUNCOP_1, SEQ_4, BINOP_2, LIMFUNC1;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, ORDINAL1, NUMBERS, XXREAL_0,
-      XREAL_0, MEMBERED, XXREAL_1, XXREAL_2, XXREAL_3;
+      XREAL_0, MEMBERED, XXREAL_1, XXREAL_2, XXREAL_3, VALUED_0, VALUED_1,
+      NAT_1, INT_1, SETFAM_1, FINSET_1,
+      RCOMP_1, SEQ_2, SEQ_4, FUNCOP_1,
+      FCONT_3, FUNCT_2;
  requirements NUMERALS, BOOLE, SUBSET, ARITHM, REAL;
- definitions TARSKI, XBOOLE_0, SUPINF_2, XXREAL_2, SUBSET_1, XXREAL_3;
+ definitions SEQ_2, TARSKI, XBOOLE_0, SUPINF_2, XXREAL_2, SUBSET_1, XXREAL_3,
+      FINSET_1, RCOMP_1, VALUED_1, XCMPLX_0;
  theorems SUPINF_2, FUNCT_1, MEASURE5, FUNCT_2, NAT_1, CARD_4, WELLORD2,
       XREAL_0, XBOOLE_0, XBOOLE_1, XREAL_1, XXREAL_0, ORDINAL1, MEMBERED,
-      XXREAL_1, XXREAL_2, XXREAL_3;
- schemes SUBSET_1, RECDEF_1, NAT_1;
+      XXREAL_1, XXREAL_2, XXREAL_3, SETFAM_1, TARSKI, RELAT_1, COMPLEX1,
+      ABSVALUE, VALUED_1, SEQ_1, XCMPLX_1, SEQ_4, SEQ_2, RCOMP_1, FUNCOP_1,
+      RELSET_1, INT_1, SUBSET_1;
+ schemes SUBSET_1, RECDEF_1, NAT_1, FINSET_1, FUNCT_2, BINOP_2, DOMAIN_1,
+      WELLORD2;
 
 begin
 
@@ -106,7 +121,7 @@ A1: 0. < x0 and
 A2: x0 < eps by XXREAL_3:3;
   consider x being real number such that
 A3: 0. < x and
-A4: x + x < x0 by A1,XXREAL_3:56;
+A4: x + (x qua ext-real number) < x0 by A1,XXREAL_3:56;
   reconsider x as Element of ExtREAL by XXREAL_0:def 1;
 A5: for n being Element of NAT for x being Element of ExtREAL ex y being
   Element of ExtREAL st P[n,x,y]
@@ -995,5 +1010,1638 @@ A5: x + y in x ++ A by A4,Def6;
       .= sup(x ++ A) - inf(x ++ A) by Th68
       .= diameter(x ++ A) by A5,MEASURE5:def 10;
   end;
+end;
+
+begin :: from PSCOMP_1, 2010.02.26, A.T.
+
+notation
+  let X be set;
+  synonym X is without_zero for X is with_non-empty_elements;
+  antonym X is with_zero for X is with_non-empty_elements;
+end;
+
+definition
+  let X be set;
+  redefine attr X is without_zero means
+  :Def1:
+  not 0 in X;
+  compatibility by SETFAM_1:def 9;
+end;
+
+registration
+  cluster REAL -> with_zero;
+  coherence by Def1;
+  cluster NAT -> with_zero;
+  coherence by Def1;
+end;
+
+registration
+  cluster non empty without_zero set;
+  existence
+  proof
+    set s = {1};
+    take s;
+    thus s is non empty;
+    thus thesis;
+  end;
+  cluster non empty with_zero set;
+  existence by Def1;
+end;
+
+registration
+  cluster non empty without_zero Subset of REAL;
+  existence
+  proof
+    set s = {1 qua Real};
+    take s;
+    thus s is non empty;
+    thus thesis;
+  end;
+  cluster non empty with_zero Subset of REAL;
+  existence by Def1;
+end;
+
+theorem Th1:
+  for F being set st F is non empty with_non-empty_elements
+  c=-linear holds F is centered
+proof
+  defpred P[set] means $1 <> {} implies ex x being set st x in $1 & for y
+  being set st y in $1 holds x c= y;
+  let F be set;
+  assume that
+A1: F is non empty and
+A2: F is with_non-empty_elements and
+A3: F is c=-linear;
+  thus F <> {} by A1;
+  let G be set;
+  assume that
+A4: G <> {} and
+A5: G c= F and
+A6: G is finite;
+A7: now
+    let x, B be set;
+    assume that
+A8: x in G and
+A9: B c= G and
+A10: P[B];
+    thus P[B \/ {x}]
+    proof
+      per cases;
+      suppose
+A11:    B is empty;
+        assume
+        B \/ {x} <> {};
+        take x9 = x;
+        thus x9 in B \/ {x} by A11,TARSKI:def 1;
+        let y be set;
+        thus thesis by A11,TARSKI:def 1;
+      end;
+      suppose
+A12:    B is non empty;
+        assume
+        B \/ {x} <> {};
+        consider z being set such that
+A13:    z in B and
+A14:    for y being set st y in B holds z c= y by A10,A12;
+        thus ex x9 being set st x9 in B \/ {x} & for y being set st y in B \/
+        {x} holds x9 c= y
+        proof
+          z in G by A9,A13;
+          then
+A15:      x, z are_c=-comparable by A3,A5,A8,ORDINAL1:def 9;
+          per cases by A15,XBOOLE_0:def 9;
+          suppose
+A16:        x c= z;
+            take x9 = x;
+            x9 in {x} by TARSKI:def 1;
+            hence x9 in B \/ {x} by XBOOLE_0:def 3;
+            let y be set;
+            assume
+A17:        y in B \/ {x};
+            thus x9 c= y
+            proof
+              per cases by A17,XBOOLE_0:def 3;
+              suppose
+                y in B;
+                then z c= y by A14;
+                hence thesis by A16,XBOOLE_1:1;
+              end;
+              suppose
+                y in {x};
+                hence thesis by TARSKI:def 1;
+              end;
+            end;
+          end;
+          suppose
+A18:        z c= x;
+            take x9 = z;
+            thus x9 in B \/ {x} by A13,XBOOLE_0:def 3;
+            let y be set;
+            assume
+A19:        y in B \/ {x};
+            thus x9 c= y
+            proof
+              per cases by A19,XBOOLE_0:def 3;
+              suppose
+                y in B;
+                hence thesis by A14;
+              end;
+              suppose
+                y in {x};
+                hence thesis by A18,TARSKI:def 1;
+              end;
+            end;
+          end;
+        end;
+      end;
+    end;
+  end;
+A20: P[{}];
+  P[G] from FINSET_1:sch 2(A6, A20, A7);
+  then consider x being set such that
+A21: x in G and
+A22: for y being set st y in G holds x c= y by A4;
+  consider xe being set such that
+A23: xe in x by A2,A5,A21,XBOOLE_0:def 1;
+  now
+    let y be set;
+    assume
+    y in G;
+    then x c= y by A22;
+    hence xe in y by A23;
+  end;
+  hence thesis by A4,SETFAM_1:def 1;
+end;
+
+registration
+  let F be set;
+  cluster non empty with_non-empty_elements c=-linear -> centered
+    Subset-Family of F;
+  coherence by Th1;
+end;
+
+registration
+  let X, Y be non empty set, f be Function of X, Y;
+  cluster f.:X -> non empty;
+  coherence
+  proof
+    consider x being Element of X;
+A1: dom f = X by FUNCT_2:def 1;
+    then f.x in rng f by FUNCT_1:def 5;
+    hence thesis by A1,FUNCT_1:def 12;
+  end;
+end;
+
+definition
+  let X, Y be set, f be Function of X, Y;
+  func "f -> Function of bool Y, bool X means
+  :Def2:
+  for y being Subset of Y
+  holds it.y = f"y;
+  existence
+  proof
+    deffunc F(Subset of Y) = f"$1;
+    thus ex T be Function of bool Y, bool X st for y be Subset of Y holds T.y
+    = F(y) from FUNCT_2:sch 4;
+  end;
+  uniqueness
+  proof
+    deffunc F(Subset of Y) = f"$1;
+    thus for T1,T2 be Function of bool Y, bool X st (for y being Subset of Y
+holds T1.y = F(y)) & (for y being Subset of Y holds T2.y = F(y)) holds T1 = T2
+    from BINOP_2:sch 1;
+  end;
+end;
+
+theorem Th2:
+  for X, Y, x being set, S being Subset-Family of Y, f being
+  Function of X, Y st x in meet (("f).:S) holds f.x in meet S
+proof
+  let X, Y, x be set, S be Subset-Family of Y, f be Function of X, Y;
+  assume
+A1: x in meet (("f).:S);
+A2: now
+    let SS be set;
+    assume
+A3: SS in S;
+    then ("f).SS in ("f).:S by FUNCT_2:43;
+    then
+A4: x in ("f).SS by A1,SETFAM_1:def 1;
+    ("f).SS = f"SS by A3,Def2;
+    hence f.x in SS by A4,FUNCT_1:def 13;
+  end;
+  ("f).:S is non empty by A1,SETFAM_1:def 1;
+  then S is non empty by RELAT_1:149;
+  hence thesis by A2,SETFAM_1:def 1;
+end;
+
+reserve r, s, t, g for real number;
+
+theorem Th3:
+  abs r + abs s = 0 implies r = 0
+proof
+  set aa = abs(r), ab = abs(s);
+A1: 0 <= aa & 0 <= ab by COMPLEX1:132;
+  assume
+  abs(r)+abs(s) = 0;
+  then aa = 0 by A1;
+  hence thesis by ABSVALUE:7;
+end;
+
+theorem Th4:
+  r < s & s < t implies abs s < abs r + abs t
+proof
+  assume that
+A1: r < s and
+A2: s < t;
+  per cases;
+  suppose
+A3: s<0;
+    -s < -r by A1,XREAL_1:26;
+    then
+A4: -s+0 < -r+abs(t) by COMPLEX1:132,XREAL_1:10;
+    -s = abs(s) by A3,ABSVALUE:def 1;
+    hence thesis by A1,A3,A4,ABSVALUE:def 1;
+  end;
+  suppose
+A5: 0<=s;
+A6: s+0 < t+abs(r) by A2,COMPLEX1:132,XREAL_1:10;
+    s = abs(s) by A5,ABSVALUE:def 1;
+    hence thesis by A2,A5,A6,ABSVALUE:def 1;
+  end;
+end;
+
+reserve seq for Real_Sequence,
+  X, Y for Subset of REAL;
+
+theorem Th6:
+  seq is convergent & seq is non-zero & lim seq = 0 implies seq" is
+  non bounded
+proof
+  assume that
+A1: seq is convergent and
+A2: seq is non-zero and
+A3: lim seq = 0;
+  given r such that
+A4: for n being Element of NAT holds (seq").n<r;
+  given s such that
+A5: for n being Element of NAT holds s<(seq").n;
+  set aa = abs(r), ab = abs(s);
+  set rab = 1/(aa+ab);
+A6: 0 <= aa & 0 <= ab by COMPLEX1:132;
+A7: now
+    let n be Element of NAT;
+    set g = seq.n, t = (seq").n;
+    set At = abs(t);
+    t = g" by VALUED_1:10;
+    then t= 1/g by XCMPLX_1:217;
+    then
+A8: At = 1/(abs g) by ABSVALUE:15;
+    t" = g " " by VALUED_1:10;
+    then t <> 0 by A2,SEQ_1:7,XCMPLX_1:203;
+    then
+A9: 0 < At by COMPLEX1:133;
+    s<t & t<r by A4,A5;
+    then At < aa+ab by Th4;
+    then At" > (aa+ab)" by A9,XREAL_1:90;
+    then At" > rab by XCMPLX_1:217;
+    then 1/At > rab by XCMPLX_1:217;
+    hence abs(seq.n) > rab by A8;
+  end;
+A10: (seq").1<r by A4;
+A11: s<(seq").1 by A5;
+  now
+    assume
+    0 >= aa+ab;
+    then
+A12: aa+ab = 0 by A6;
+    then r = 0 by Th3;
+    hence contradiction by A11,A10,A12,Th3;
+  end;
+  then consider n being Element of NAT such that
+A13: for m being Element of NAT st n<=m holds abs(seq.m-0)<rab by A1,A3,
+  SEQ_2:def 7;
+  abs(seq.n-0)<rab by A13;
+  hence contradiction by A7;
+end;
+
+theorem Th7:
+  rng seq is bounded iff seq is bounded
+proof
+  thus rng seq is bounded implies seq is bounded
+  proof
+    given s such that
+A1: s is LowerBound of rng seq;
+    given t such that
+A2: t is UpperBound of rng seq;
+    thus seq is bounded_above
+    proof
+      take t+1;
+      let n be Element of NAT;
+      seq.n <= t & t < t+1 by A2,FUNCT_2:6,XREAL_1:31,XXREAL_2:def 1;
+      hence thesis by XXREAL_0:2;
+    end;
+    take s-1;
+    let n be Element of NAT;
+    s < s+1 by XREAL_1:31;
+    then
+A3: s-1 < s by XREAL_1:21;
+    seq.n >= s by A1,FUNCT_2:6,XXREAL_2:def 2;
+    hence thesis by A3,XXREAL_0:2;
+  end;
+  given t such that
+A4: for n being Element of NAT holds seq.n<t;
+  given s such that
+A5: for n being Element of NAT holds seq.n>s;
+  thus rng seq is bounded_below
+  proof
+    take s;
+    let r be ext-real number;
+    assume
+    r in rng seq;
+    then ex n being set st n in dom seq & seq.n = r by FUNCT_1:def 5;
+    hence thesis by A5;
+  end;
+  take t;
+  let r be ext-real number;
+  assume
+  r in rng seq;
+  then ex n being set st n in dom seq & seq.n = r by FUNCT_1:def 5;
+  hence thesis by A4;
+end;
+
+notation
+  let X be real-membered set;
+  synonym sup X for upper_bound X;
+  synonym inf X for lower_bound X;
+end;
+
+definition
+  let X be real-membered set;
+  attr X is with_max means
+  :Def3:
+  X is bounded_above & sup X in X;
+  attr X is with_min means
+  :Def4:
+  X is bounded_below & inf X in X;
+end;
+
+registration
+  cluster non empty closed bounded Subset of REAL;
+  existence
+  proof
+    reconsider 0r = 0 as Real;
+    [. 0,0 .]={0} by XXREAL_1:17;
+    hence thesis;
+  end;
+end;
+
+definition
+  let R be Subset-Family of REAL;
+  attr R is open means
+  :Def5:
+  for X being Subset of REAL st X in R holds X is
+  open;
+  attr R is closed means
+  :Def6X:
+  for X being Subset of REAL st X in R holds X
+  is closed;
+end;
+
+reserve p, q, r3, r1, r2, q3, p3 for Real;
+
+definition
+  let X be Subset of REAL;
+  func -X -> Subset of REAL equals
+  { -r3 : r3 in X};
+  coherence
+  proof
+    deffunc F(Real) = -$1;
+    defpred P[set] means $1 in X;
+    thus { F(r3) : P[r3]} is Subset of REAL from DOMAIN_1:sch 8;
+  end;
+  involutiveness
+  proof
+    let IT,X be Subset of REAL;
+    assume
+A1: IT = { -r3 : r3 in X};
+    thus X c= { -r3 : r3 in IT}
+    proof
+      let e be set;
+      assume
+A2:   e in X;
+      then reconsider r0 = e as Element of REAL;
+      e = - -r0 & -r0 in IT by A1,A2;
+      hence thesis;
+    end;
+    let e be set;
+    assume
+    e in { -r3 : r3 in IT};
+    then consider r0 being Element of REAL such that
+A3: -r0 = e and
+A4: r0 in IT;
+    ex r1 being Element of REAL st -r1 = r0 & r1 in X by A1,A4;
+    hence thesis by A3;
+  end;
+end;
+
+theorem Th14:
+  r in X iff -r in -X
+proof
+  thus r in X implies -r in -X;
+  assume
+  -r in -X;
+  then ex mr being Real st -r = -mr & mr in X;
+  hence thesis;
+end;
+
+registration
+  let X be non empty Subset of REAL;
+  cluster -X -> non empty;
+  coherence
+  proof
+    ex x being Real st x in X by SUBSET_1:10;
+    hence thesis by Th14;
+  end;
+end;
+
+Lm1: for X being Subset of REAL st X is bounded_above holds -X is
+bounded_below
+
+proof
+  let X be Subset of REAL;
+  given s such that
+A1: s is UpperBound of X;
+  take -s;
+  let t be ext-real number;
+  assume
+  t in -X;
+  then consider r3 such that
+A2: t = -r3 and
+A3: r3 in X;
+  r3 <= s by A1,A3,XXREAL_2:def 1;
+  hence thesis by A2,XREAL_1:26;
+end;
+
+Lm2: for X being Subset of REAL st X is bounded_below holds -X is
+bounded_above
+
+proof
+  let X be Subset of REAL;
+  given s such that
+A1: s is LowerBound of X;
+  take -s;
+  let t be ext-real number;
+  assume
+  t in -X;
+  then consider r3 such that
+A2: t = -r3 and
+A3: r3 in X;
+  r3 >= s by A1,A3,XXREAL_2:def 2;
+  hence thesis by A2,XREAL_1:26;
+end;
+
+theorem Th15:
+  X is bounded_above iff -X is bounded_below
+proof
+  X = - -X;
+  hence thesis by Lm1,Lm2;
+end;
+
+theorem
+  X is bounded_below iff -X is bounded_above
+proof
+  X = - -X;
+  hence thesis by Th15;
+end;
+
+theorem Th17:
+  for X being non empty Subset of REAL st X is bounded_below holds
+  inf X = - sup -X
+proof
+  let X be non empty Subset of REAL;
+  set r = - sup -X;
+A1: now
+    let t;
+    assume
+A2: for s st s in X holds s >= t;
+    now
+      let s;
+      assume
+      s in -X;
+      then -s in - -X;
+      then -s >= t by A2;
+      then - -s <= -t by XREAL_1:26;
+      hence s <= -t;
+    end;
+    then -r <= -t by SEQ_4:62;
+    hence r >= t by XREAL_1:26;
+  end;
+  assume
+  X is bounded_below;
+  then
+A3: -X is bounded_above by Lm2;
+  now
+    let s;
+    assume
+    s in X;
+    then -s in -X;
+    then -s <= -r by A3,SEQ_4:def 4;
+    hence s >= r by XREAL_1:26;
+  end;
+  hence thesis by A1,SEQ_4:61;
+end;
+
+theorem Th18:
+  for X being non empty Subset of REAL st X is bounded_above holds
+  sup X = - inf -X
+proof
+  let X be non empty Subset of REAL;
+  set r = - inf -X;
+A1: now
+    let s;
+    assume
+A2: for t st t in X holds t <= s;
+    now
+      let t;
+      assume
+      t in -X;
+      then -t in - -X;
+      then -t <= s by A2;
+      then - -t >= -s by XREAL_1:26;
+      hence t >= -s;
+    end;
+    then -r >= -s by SEQ_4:60;
+    hence r <= s by XREAL_1:26;
+  end;
+  assume
+  X is bounded_above;
+  then
+A3: -X is bounded_below by Lm1;
+  now
+    let t;
+    assume
+    t in X;
+    then -t in -X;
+    then -t >= -r by A3,SEQ_4:def 5;
+    hence t <= r by XREAL_1:26;
+  end;
+  hence thesis by A1,SEQ_4:63;
+end;
+
+Lm3: for X being Subset of REAL st X is closed holds -X is closed
+proof
+  let X be Subset of REAL;
+  assume
+A1: X is closed;
+  let s1 be Real_Sequence;
+  assume that
+A2: (rng s1) c= -X and
+A3: s1 is convergent;
+A4: - lim s1 = lim -s1 by A3,SEQ_2:24;
+A5: rng -s1 c= X
+  proof
+    let x be set;
+    assume
+    x in rng -s1;
+    then consider n being set such that
+A6: n in dom -s1 and
+A7: x = (-s1).n by FUNCT_1:def 5;
+    reconsider n as Element of NAT by A6;
+A8: s1.n in rng s1 by FUNCT_2:6;
+    x = -(s1.n) by A7,SEQ_1:14;
+    then x in - -X by A2,A8;
+    hence thesis;
+  end;
+  -s1 is convergent by A3,SEQ_2:23;
+  then lim -s1 in X by A1,A5,RCOMP_1:def 4;
+  then - -lim s1 in -X by A4;
+  hence thesis;
+end;
+
+theorem Th19:
+  X is closed iff -X is closed
+proof
+  - -X = X;
+  hence thesis by Lm3;
+end;
+
+definition
+  let X be Subset of REAL, p be Real;
+  redefine func p++X equals
+  { p+r3 : r3 in X};
+  compatibility
+  proof
+    let IT be Subset of REAL;
+    hereby
+      assume
+A1:   IT = p ++ X;
+A2:   IT c= { p+r3 : r3 in X }
+      proof
+        let x be set;
+        assume
+A3:     x in IT;
+        then reconsider x9 = x as Real;
+        ex z being Real st z in X & x9 = p + z by A1,A3,Def6;
+        hence thesis;
+      end;
+      { p+r3 : r3 in X } c= IT
+      proof
+        let x be set;
+        assume
+        x in { p+r3 : r3 in X };
+        then ex r3 be Real st x = p + r3 & r3 in X;
+        hence thesis by A1,Def6;
+      end;
+      hence IT = { p+r3 : r3 in X } by A2,XBOOLE_0:def 10;
+    end;
+    assume
+A4: IT = { p+r3 : r3 in X };
+    now
+      let y be Real;
+      hereby
+        assume
+        y in IT;
+        then ex r3 being Real st y = p+r3 & r3 in X by A4;
+        hence ex z being Real st z in X & y = p + z;
+      end;
+      given z being Real such that
+A5:   z in X & y = p + z;
+      thus y in IT by A4,A5;
+    end;
+    hence thesis by Def6;
+  end;
+end;
+
+theorem Th20:
+  r in X iff q3+r in q3++X
+proof
+  thus r in X implies q3+r in q3++X;
+  assume
+  q3+r in q3++X;
+  then ex mr being Real st q3+r = q3+mr & mr in X;
+  hence thesis;
+end;
+
+registration
+  let X be non empty Subset of REAL, s be Real;
+  cluster s++X -> non empty;
+  coherence
+  proof
+    ex x being Real st x in X by SUBSET_1:10;
+    hence thesis by Th20;
+  end;
+end;
+
+theorem Th21:
+  X = 0++X
+proof
+  now
+    let x be set;
+    hereby
+      assume
+A1:   x in X;
+      then reconsider x9 = x as Real;
+      0+x9 = x;
+      hence x in 0++X by A1;
+    end;
+    assume
+    x in 0++X;
+    then ex r3 st x = 0+r3 & r3 in X;
+    hence x in X;
+  end;
+  hence thesis by TARSKI:2;
+end;
+
+theorem Th22:
+  q3++(p3++X) = (q3+p3)++X
+proof
+  now
+    let x be set;
+    hereby
+      assume
+      x in q3++(p3++X);
+      then consider r3 such that
+A1:   x = q3+r3 and
+A2:   r3 in p3++X;
+      consider q such that
+A3:   r3 = p3+q and
+A4:   q in X by A2;
+      x = (q3+p3)+q by A1,A3;
+      hence x in (q3+p3)++X by A4;
+    end;
+    assume
+    x in (q3+p3)++X;
+    then consider r3 such that
+A5: x = (q3+p3)+r3 and
+A6: r3 in X;
+    p3+r3 in p3++X by A6;
+    then q3+(p3+r3) in q3++(p3++X);
+    hence x in q3++(p3++X) by A5;
+  end;
+  hence thesis by TARSKI:2;
+end;
+
+Lm4: for X being Subset of REAL, s being Real st X is bounded_above holds s++X
+is bounded_above
+
+proof
+  let X be Subset of REAL, p be Real;
+  given s such that
+A1: s is UpperBound of X;
+  take p+s;
+  let t be ext-real number;
+  assume
+  t in p++X;
+  then consider r3 such that
+A2: t = p+r3 and
+A3: r3 in X;
+  r3 <= s by A1,A3,XXREAL_2:def 1;
+  hence thesis by A2,XREAL_1:8;
+end;
+
+theorem
+  X is bounded_above iff q3++X is bounded_above
+proof
+  -q3++(q3++X) = (-q3+q3)++X by Th22
+    .= X by Th21;
+  hence thesis by Lm4;
+end;
+
+Lm5: for X being Subset of REAL, p being Real st X is bounded_below holds p++X
+is bounded_below
+
+proof
+  let X be Subset of REAL, p be Real;
+  given s such that
+A1: s is LowerBound of X;
+  take p+s;
+  let t be ext-real number;
+  assume
+  t in p++X;
+  then consider r3 such that
+A2: t = p+r3 and
+A3: r3 in X;
+  r3 >= s by A1,A3,XXREAL_2:def 2;
+  hence thesis by A2,XREAL_1:8;
+end;
+
+theorem
+  X is bounded_below iff q3++X is bounded_below
+proof
+  -q3++(q3++X) = (-q3+q3)++X by Th22
+    .= X by Th21;
+  hence thesis by Lm5;
+end;
+
+theorem
+  for X being non empty Subset of REAL st X is bounded_below holds inf (
+  q3++X) = q3+inf X
+proof
+  let X be non empty Subset of REAL such that
+A1: X is bounded_below;
+  set i = q3+inf X;
+A2: now
+    let t;
+    assume
+A3: for s st s in q3++X holds s >= t;
+    now
+      let s;
+      assume
+      s in X;
+      then q3+s in q3++X;
+      then t <= q3+s by A3;
+      hence t-q3 <= s by XREAL_1:22;
+    end;
+    then inf X >= t-q3 by SEQ_4:60;
+    hence t <= i by XREAL_1:22;
+  end;
+  now
+    let s;
+    assume
+    s in q3++X;
+    then consider r3 such that
+A4: q3+r3 = s and
+A5: r3 in X;
+    r3 >= inf X by A1,A5,SEQ_4:def 5;
+    hence s >= i by A4,XREAL_1:8;
+  end;
+  hence thesis by A2,SEQ_4:61;
+end;
+
+theorem
+  for X being non empty Subset of REAL st X is bounded_above holds sup (
+  q3++X) = q3+sup X
+proof
+  let X be non empty Subset of REAL such that
+A1: X is bounded_above;
+  set i = q3+sup X;
+A2: now
+    let t;
+    assume
+A3: for s st s in q3++X holds s <= t;
+    now
+      let s;
+      assume
+      s in X;
+      then q3+s in q3++X;
+      then q3+s <= t by A3;
+      hence s <= t-q3 by XREAL_1:21;
+    end;
+    then sup X <= t-q3 by SEQ_4:62;
+    hence i <= t by XREAL_1:21;
+  end;
+  now
+    let s;
+    assume
+    s in q3++X;
+    then consider r3 such that
+A4: q3+r3 = s and
+A5: r3 in X;
+    r3 <= sup X by A1,A5,SEQ_4:def 4;
+    hence s <= i by A4,XREAL_1:8;
+  end;
+  hence thesis by A2,SEQ_4:63;
+end;
+
+Lm6: for X being Subset of REAL st X is closed holds q3++X is closed
+proof
+  let X be Subset of REAL;
+  assume
+A1: X is closed;
+  reconsider s0 = NAT --> q3 as Real_Sequence;
+  let s1 be Real_Sequence;
+  assume that
+A2: (rng s1) c= q3++X and
+A3: s1 is convergent;
+  lim (s1-s0) = (lim s1) - s0.0 by A3,SEQ_4:59
+    .= (lim s1) - q3 by FUNCOP_1:13;
+  then
+A4: q3+lim(s1-s0) = lim s1;
+A5: rng (s1-s0) c= X
+  proof
+    let x be set;
+    assume
+A6: x in rng (s1-s0);
+    then consider n being set such that
+A7: n in dom (s1-s0) and
+A8: x = (s1-s0).n by FUNCT_1:def 5;
+    reconsider x9 = x as Real by A6;
+    reconsider n as Element of NAT by A7;
+A9: s1.n in rng s1 by FUNCT_2:6;
+    x = s1.n + (-s0).n by A8,SEQ_1:11
+      .= s1.n + -(s0.n) by SEQ_1:14
+      .= s1.n + - q3 by FUNCOP_1:13
+      .= s1.n - q3;
+    then x9+q3 in q3++X by A2,A9;
+    hence thesis by Th20;
+  end;
+  s1-s0 is convergent by A3,SEQ_2:25;
+  then lim (s1-s0) in X by A1,A5,RCOMP_1:def 4;
+  hence thesis by A4;
+end;
+
+theorem Th27:
+  X is closed iff q3++X is closed
+proof
+  -q3++(q3++X) = (-q3+q3)++X by Th22
+    .= X by Th21;
+  hence thesis by Lm6;
+end;
+
+definition
+  let X be Subset of REAL;
+  func Inv X -> Subset of REAL equals
+  { 1/r3 : r3 in X};
+  coherence
+  proof
+    deffunc F(Real) = 1/$1;
+    defpred P[set] means $1 in X;
+    thus { F(r3) : P[r3]} is Subset of REAL from DOMAIN_1:sch 8;
+  end;
+  involutiveness
+  proof
+    let Y,X be Subset of REAL;
+    assume
+A1: Y = { 1/r3 : r3 in X};
+    thus X c= { 1/r3 : r3 in Y}
+    proof
+      let e be set;
+      assume
+A2:   e in X;
+      then reconsider r=e as Element of REAL;
+A3:   1/(1/r) = r;
+      1/r in Y by A1,A2;
+      hence thesis by A3;
+    end;
+    let e be set;
+    assume
+    e in { 1/r3 : r3 in Y};
+    then consider r3 such that
+A4: e = 1/r3 and
+A5: r3 in Y;
+    ex r1 st r3 = 1/r1 & r1 in X by A1,A5;
+    hence thesis by A4;
+  end;
+end;
+
+theorem Th28:
+  for X being Subset of REAL holds r in X iff 1/r in Inv X
+proof
+  let X be Subset of REAL;
+  thus r in X implies 1/r in Inv X;
+  assume
+  1/r in Inv X;
+  then ex mr being Real st 1/r = 1/mr & mr in X;
+  hence thesis by XCMPLX_1:59;
+end;
+
+registration
+  let X be non empty Subset of REAL;
+  cluster Inv X -> non empty;
+  coherence
+  proof
+    ex x being Real st x in X by SUBSET_1:10;
+    hence thesis by Th28;
+  end;
+end;
+
+registration
+  let X be without_zero Subset of REAL;
+  cluster Inv X -> without_zero;
+  coherence
+  proof
+    now
+      assume
+      0 in Inv X;
+      then ex r3 st 0 = 1/r3 & r3 in X;
+      hence contradiction by XCMPLX_1:203;
+    end;
+    hence thesis by Def1;
+  end;
+end;
+
+theorem
+  for X being without_zero Subset of REAL st X is closed & X is bounded
+  holds Inv X is closed
+proof
+  let X be without_zero Subset of REAL;
+  assume that
+A1: X is closed and
+A2: X is bounded;
+  let s1 be Real_Sequence;
+  assume that
+A3: (rng s1) c= Inv X and
+A4: s1 is convergent;
+A5: rng (s1") c= X
+  proof
+    let x be set;
+    assume
+    x in rng (s1");
+    then consider n being set such that
+A6: n in dom (s1") and
+A7: x = (s1").n by FUNCT_1:def 5;
+    reconsider n as Element of NAT by A6;
+    s1.n in rng s1 by FUNCT_2:6;
+    then 1/(s1.n) in Inv Inv X by A3;
+    hence thesis by A7,VALUED_1:10;
+  end;
+A8: not 0 in rng s1 by A3;
+A9: now
+    assume
+    not s1 is non-zero;
+    then ex n being Element of NAT st s1.n = 0 by SEQ_1:7;
+    hence contradiction by A8,FUNCT_2:6;
+  end;
+A10: now
+A11: rng (s1") c= X
+    proof
+      let y be set;
+      assume
+      y in rng (s1");
+      then consider x being set such that
+A12:  x in dom (s1") and
+A13:  y = (s1").x by FUNCT_1:def 5;
+      reconsider x as Element of NAT by A12;
+      s1.x in rng s1 by FUNCT_2:6;
+      then 1/(s1.x) in Inv Inv X by A3;
+      hence thesis by A13,VALUED_1:10;
+    end;
+    assume
+    lim s1 = 0;
+    then s1" is non bounded by A4,A9,Th6;
+    then rng (s1") is non bounded by Th7;
+    hence contradiction by A2,A11,XXREAL_2:45;
+  end;
+  then s1" is convergent by A4,A9,SEQ_2:35;
+  then lim s1" in X by A1,A5,RCOMP_1:def 4;
+  then 1/lim s1 in X by A4,A9,A10,SEQ_2:36;
+  then 1/(1/lim s1) in Inv X;
+  hence thesis;
+end;
+
+theorem Th31:
+  for Z being Subset-Family of REAL st Z is closed holds meet Z is
+  closed
+proof
+  let Z be Subset-Family of REAL;
+  assume
+A1: Z is closed;
+  let seq be Real_Sequence;
+  set mZ = meet Z;
+  assume that
+A2: rng seq c= mZ and
+A3: seq is convergent;
+  per cases;
+  suppose
+    Z = {};
+    then mZ = {} by SETFAM_1:def 1;
+    hence thesis by A2;
+  end;
+  suppose
+A4: Z <> {};
+    now
+      let X be set;
+      assume
+A5:   X in Z;
+      then reconsider X9 = X as Subset of REAL;
+A6:   rng seq c= X
+      proof
+        let x be set;
+        assume
+        x in rng seq;
+        hence thesis by A2,A5,SETFAM_1:def 1;
+      end;
+      X9 is closed by A1,A5,Def6X;
+      hence lim seq in X by A3,A6,RCOMP_1:def 4;
+    end;
+    hence thesis by A4,SETFAM_1:def 1;
+  end;
+end;
+
+definition
+  let X be Subset of REAL;
+  func Cl X -> Subset of REAL equals
+  meet { A where A is Subset of REAL : X c=
+  A & A is closed };
+  coherence
+  proof
+    defpred P[Subset of REAL] means X c= $1 & $1 is closed;
+    reconsider Z = { A where A is Subset of REAL : P[A] } as Subset-Family of
+    REAL from DOMAIN_1:sch 7;
+    reconsider Z as Subset-Family of REAL;
+    meet Z is Subset of REAL;
+    hence thesis;
+  end;
+  projectivity
+  proof
+    reconsider W = [#]REAL as Subset of REAL;
+    let IT,X be Subset of REAL;
+    set ClX = { A where A is Subset of REAL : X c= A & A is closed }, ClIT = {
+    A where A is Subset of REAL : IT c= A & A is closed };
+    assume
+A1: IT= meet ClX;
+A2: W in ClX;
+A3: W in ClIT;
+    thus IT c= meet { A where A is Subset of REAL : IT c= A & A is closed }
+    proof
+      let e be set;
+      assume
+A4:   e in IT;
+      for Y being set holds Y in ClIT implies e in Y
+      proof
+        let Y be set;
+        assume
+        Y in ClIT;
+        then consider A being Subset of REAL such that
+A5:     A = Y and
+A6:     IT c= A and
+A7:     A is closed;
+        for Z being set st Z in ClX holds X c= Z
+        proof
+          let Z be set;
+          assume
+          Z in ClX;
+          then ex B being Subset of REAL st Z = B & X c= B & B is closed;
+          hence thesis;
+        end;
+        then X c= IT by A1,A2,SETFAM_1:6;
+        then X c= A by A6,XBOOLE_1:1;
+        then A in ClX by A7;
+        hence thesis by A1,A4,A5,SETFAM_1:def 1;
+      end;
+      hence thesis by A3,SETFAM_1:def 1;
+    end;
+    let e be set;
+    assume
+A8: e in meet ClIT;
+    for Y being set holds Y in ClX implies e in Y
+    proof
+      let Y be set;
+      assume
+A9:   Y in ClX;
+      then consider A being Subset of REAL such that
+A10:  A = Y and
+      X c= A and
+A11:  A is closed;
+      IT c= A by A1,A9,A10,SETFAM_1:4;
+      then A in ClIT by A11;
+      hence thesis by A8,A10,SETFAM_1:def 1;
+    end;
+    hence thesis by A1,A2,SETFAM_1:def 1;
+  end;
+end;
+
+registration
+  let X be Subset of REAL;
+  cluster Cl X -> closed;
+  coherence
+  proof
+    defpred P[Subset of REAL] means X c= $1 & $1 is closed;
+    reconsider Z = { A where A is Subset of REAL : P[A] } as Subset-Family of
+    REAL from DOMAIN_1:sch 7;
+    reconsider Z as Subset-Family of REAL;
+    Z is closed
+    proof
+      let Y be Subset of REAL;
+      assume
+      Y in Z;
+      then ex A being Subset of REAL st Y = A & X c= A & A is closed;
+      hence thesis;
+    end;
+    hence thesis by Th31;
+  end;
+end;
+
+theorem Th32:
+  for Y being closed Subset of REAL st X c= Y holds Cl X c= Y
+proof
+  let Y be closed Subset of REAL;
+  set ClX = { A where A is Subset of REAL : X c= A & A is closed };
+  assume
+  X c= Y;
+  then Y in ClX;
+  hence thesis by SETFAM_1:4;
+end;
+
+theorem Th33:
+  X c= Cl X
+proof
+  let x be set;
+  set ClX = { A where A is Subset of REAL : X c= A & A is closed };
+  assume
+A1: x in X;
+A2: now
+    let Y be set;
+    assume
+    Y in ClX;
+    then ex YY being Subset of REAL st YY = Y & X c= YY & YY is closed;
+    hence x in Y by A1;
+  end;
+  [#]REAL in ClX;
+  hence thesis by A2,SETFAM_1:def 1;
+end;
+
+theorem Th34:
+  X is closed iff X = Cl X
+proof
+  hereby
+    set ClX = { A where A is Subset of REAL : X c= A & A is closed };
+    assume
+    X is closed;
+    then X in ClX;
+    then
+A1: Cl X c= X by SETFAM_1:4;
+    X c= Cl X by Th33;
+    hence X = Cl X by A1,XBOOLE_0:def 10;
+  end;
+  thus thesis;
+end;
+
+theorem
+  Cl ({}REAL) = {} by Th34;
+
+theorem
+  Cl ([#]REAL) = REAL by Th34;
+
+theorem
+  X c= Y implies Cl X c= Cl Y
+proof
+  assume
+A1: X c= Y;
+  set ClX = { A where A is Subset of REAL : X c= A & A is closed };
+  Y c= Cl Y by Th33;
+  then X c= Cl Y by A1,XBOOLE_1:1;
+  then Cl Y in ClX;
+  hence thesis by SETFAM_1:4;
+end;
+
+theorem Th38:
+  r3 in Cl X iff for O being open Subset of REAL st r3 in O holds
+  O /\ X is non empty
+proof
+  hereby
+    assume
+A1: r3 in Cl X;
+    let O be open Subset of REAL such that
+A2: r3 in O and
+A3: O /\ X is empty;
+    O misses X by A3,XBOOLE_0:def 7;
+    then
+A4: X c= O` by SUBSET_1:43;
+A5: O misses O` by SUBSET_1:44;
+    O` is closed by RCOMP_1:def 5;
+    then Cl X c= O` by A4,Th32;
+    hence contradiction by A1,A2,A5,XBOOLE_0:3;
+  end;
+  (Cl X)`` = Cl X;
+  then
+A6: (Cl X)` is open by RCOMP_1:def 5;
+  X c= Cl X & (Cl X)` /\ X c= X by Th33,XBOOLE_1:17;
+  then
+A7: (Cl X)` /\ X c= Cl X by XBOOLE_1:1;
+  (Cl X)` /\ X c= (Cl X)` by XBOOLE_1:17;
+  then
+A8: (Cl X)` /\ X is empty by A7,SUBSET_1:40;
+  assume
+  for O being open Subset of REAL st r3 in O holds O /\ X is non empty;
+  then not r3 in (Cl X)` by A6,A8;
+  hence thesis by SUBSET_1:50;
+end;
+
+theorem Th39:
+  r3 in Cl X implies ex seq st rng seq c= X & seq is convergent &
+  lim seq = r3
+proof
+  defpred P[set,set] means ex n being Nat st $1 = n & $2 = choose(X/\].r3-1/(n
+  +1),r3+1/(n+1).[);
+  assume
+A1: r3 in Cl X;
+A2: now
+    let x be set;
+    assume
+    x in NAT;
+    then reconsider n = x as Element of NAT;
+    set n1 = n+1;
+    set oi = ].r3-1/n1,r3+1/n1.[;
+    reconsider u = choose(X/\oi) as set;
+    take u;
+A3: r3 < r3+1/n1 by XREAL_1:31;
+    then r3-1/n1 < r3 by XREAL_1:21;
+    then r3 in oi by A3;
+    then X/\oi is non empty by A1,Th38;
+    then u in X/\oi;
+    hence u in REAL;
+    thus P[x,u];
+  end;
+  consider seq being Function such that
+A4: dom seq = NAT & rng seq c= REAL and
+A5: for x being set st x in NAT holds P[x,seq.x] from WELLORD2:sch 1(A2);
+  reconsider seq as Real_Sequence by A4,FUNCT_2:def 1,RELSET_1:11;
+  take seq;
+  thus rng seq c= X
+  proof
+    let y be set;
+    assume
+    y in rng seq;
+    then consider x being set such that
+A6: x in dom seq and
+A7: seq.x = y by FUNCT_1:def 5;
+    consider n being Nat such that
+    x = n and
+A8: seq.x = choose(X/\].r3-1/(n+1),r3+1/(n+1).[) by A5,A6;
+    reconsider n as Element of NAT by ORDINAL1:def 13;
+    set n1 = n+1;
+    set oi = ].r3-1/n1,r3+1/n1.[;
+A9: r3 < r3+1/n1 by XREAL_1:31;
+    then r3-1/n1 < r3 by XREAL_1:21;
+    then r3 in oi by A9;
+    then X/\oi is non empty by A1,Th38;
+    hence thesis by A7,A8,XBOOLE_0:def 4;
+  end;
+A10: now
+    let p be real number;
+    set cp = [/ 1/p \];
+A11: 1/p <= cp by INT_1:def 5;
+    assume
+A12: 0<p;
+    then
+A13: 0 < cp by INT_1:def 5;
+    then reconsider cp as Element of NAT by INT_1:16;
+    take n = cp;
+    n < n+1 by NAT_1:13;
+    then
+A14: 1/(n+1) < 1/n by A13,XREAL_1:90;
+    1/(1/p) >= 1/cp by A12,A11,XREAL_1:87;
+    then
+A15: 1/(n+1) < p by A14,XXREAL_0:2;
+    let m be Element of NAT;
+    assume
+    n<=m;
+    then
+A16: n+1 <= m+1 by XREAL_1:8;
+    set m1 = m+1;
+    1/m1 <= 1/(n+1) by A16,XREAL_1:87;
+    then
+A17: 1/m1 < p by A15,XXREAL_0:2;
+    set oi = ].r3-1/m1,r3+1/m1.[;
+A18: r3 < r3+1/m1 by XREAL_1:31;
+    then r3-1/m1 < r3 by XREAL_1:21;
+    then r3 in oi by A18;
+    then
+A19: X/\oi is non empty by A1,Th38;
+    ex m9 being Nat st m9 = m & seq.m = choose(X/\].r3-1/(m9+ 1),r3+1/(m9+
+    1).[) by A5;
+    then seq.m in oi by A19,XBOOLE_0:def 4;
+    then consider s being Real such that
+A20: seq.m = s and
+A21: r3-1/m1 < s & s < r3+1/m1;
+    -1/m1 < s-r3 & s-r3 < 1/m1 by A21,XREAL_1:21,22;
+    then abs(s-r3) < 1/m1 by SEQ_2:9;
+    hence abs(seq.m-r3)<p by A20,A17,XXREAL_0:2;
+  end;
+  hence seq is convergent by SEQ_2:def 6;
+  hence thesis by A10,SEQ_2:def 7;
+end;
+
+begin :: Functions into Reals
+
+definition
+  let X be set, f be Function of X, REAL;
+  redefine attr f is bounded_below means
+  :Def11:
+  f.:X is bounded_below;
+  compatibility
+  proof
+A1: dom f = X by FUNCT_2:def 1;
+    thus f is bounded_below implies f.:X is bounded_below
+    proof
+      given r such that
+A2:   for y being set st y in dom f holds r<f.y;
+      take r;
+      let s be ext-real number;
+      assume
+      s in f.:X;
+      then ex x being set st x in X & x in X & s = f.x by FUNCT_2:115;
+      hence thesis by A1,A2;
+    end;
+    given p being real number such that
+A3: p is LowerBound of f.:X;
+    take p - 1;
+    let y be set;
+    assume
+    y in dom f;
+    then f.y in rng f by FUNCT_1:12;
+    then f.y in f.:X by RELSET_1:38;
+    then
+A4: p <= f.y by A3,XXREAL_2:def 2;
+    f.y < f.y + 1 by XREAL_1:31;
+    then p < f.y + 1 by A4,XXREAL_0:2;
+    hence thesis by XREAL_1:21;
+  end;
+  attr f is bounded_above means
+  :Def12:
+  f.:X is bounded_above;
+  compatibility
+  proof
+A5: dom f = X by FUNCT_2:def 1;
+    thus f is bounded_above implies f.:X is bounded_above
+    proof
+      given r such that
+A6:   for y being set st y in dom f holds r>f.y;
+      take r;
+      let s be ext-real number;
+      assume
+      s in f.:X;
+      then ex x being set st x in X & x in X & s = f.x by FUNCT_2:115;
+      hence thesis by A5,A6;
+    end;
+    given p being real number such that
+A7: p is UpperBound of f.:X;
+    take p + 1;
+    let y be set;
+    assume
+    y in dom f;
+    then f.y in rng f by FUNCT_1:12;
+    then f.y in f.:X by RELSET_1:38;
+    then p >= f.y by A7,XXREAL_2:def 1;
+    then
+A8: p+1 >= f.y+1 by XREAL_1:8;
+    f.y < f.y + 1 by XREAL_1:31;
+    hence thesis by A8,XXREAL_0:2;
+  end;
+end;
+
+definition
+  let X be set, f be Function of X, REAL;
+  attr f is with_max means
+  :Def14:
+  f.:X is with_max;
+  attr f is with_min means
+  :Def15:
+  f.:X is with_min;
+end;
+
+theorem Th40:
+  for X, A being set, f being Function of X, REAL holds (-f).:A =
+  -(f.:A)
+proof
+  let X, A be set, f be Function of X, REAL;
+  now
+    let x be set;
+    hereby
+      assume
+      x in (-f).:A;
+      then consider x1 being set such that
+A1:   x1 in X & x1 in A & x = (-f).x1 by FUNCT_2:115;
+      x = -(f.x1) & f.x1 in f.:A by A1,FUNCT_2:43,VALUED_1:8;
+      hence x in -(f.:A);
+    end;
+    assume
+    x in -(f.:A);
+    then consider r3 such that
+A2: x = -r3 and
+A3: r3 in f.:A;
+    consider x1 being set such that
+A4: x1 in X & x1 in A and
+A5: r3 = f.x1 by A3,FUNCT_2:115;
+    x = (-f).x1 by A2,A5,VALUED_1:8;
+    hence x in (-f).:A by A4,FUNCT_2:43;
+  end;
+  hence thesis by TARSKI:2;
+end;
+
+Lm7: for X being non empty set, f being Function of X, REAL st f is with_max
+holds -f is with_min
+
+proof
+  let X be non empty set, f be Function of X, REAL;
+  assume that
+A1: f.:X is bounded_above and
+A2: sup (f.:X) in f.:X;
+A3: -(f.:X) = (-f).:X by Th40;
+  hence (-f).:X is bounded_below by A1,Lm1;
+  then
+A4: inf ((-f).:X) = - sup - -(f.:X) by A3,Th17
+    .= - sup (f.:X);
+  - sup (f.:X) in -(f.:X) by A2;
+  hence thesis by A4,Th40;
+end;
+
+Lm8: for X being non empty set, f being Function of X, REAL st f is with_min
+holds -f is with_max
+
+proof
+  let X be non empty set, f be Function of X, REAL;
+  assume that
+A1: f.:X is bounded_below and
+A2: inf (f.:X) in f.:X;
+A3: -(f.:X) = (-f).:X by Th40;
+  hence (-f).:X is bounded_above by A1,Lm2;
+  then
+A4: sup ((-f).:X) = - inf - -(f.:X) by A3,Th18
+    .= - inf (f.:X);
+  - inf (f.:X) in -(f.:X) by A2;
+  hence thesis by A4,Th40;
+end;
+
+theorem Th41:
+  for X being non empty set, f being Function of X, REAL holds f
+  is with_min iff -f is with_max
+proof
+  let X be non empty set, f be Function of X, REAL;
+  - -f = f;
+  hence thesis by Lm7,Lm8;
+end;
+
+theorem
+  for X being non empty set, f being Function of X, REAL holds f is
+  with_max iff -f is with_min
+proof
+  let X be non empty set, f be Function of X, REAL;
+  - -f = f;
+  hence thesis by Th41;
+end;
+
+theorem Th43:
+  for X being set, A being Subset of REAL, f being Function of X,
+  REAL holds (-f)"A = f"(-A)
+proof
+  let X be set, A be Subset of REAL, f be Function of X, REAL;
+  now
+    let x be set;
+    hereby
+A1:   (-f).x = -(f.x) by VALUED_1:8;
+      assume
+A2:   x in (-f)"A;
+      then (-f).x in A by FUNCT_2:46;
+      then - -f.x in -A by A1;
+      hence x in f"(-A) by A2,FUNCT_2:46;
+    end;
+A3: (-f).x = -(f.x) by VALUED_1:8;
+    assume
+A4: x in f"(-A);
+    then f.x in -A by FUNCT_2:46;
+    then (-f).x in - -A by A3;
+    hence x in (-f)"A by A4,FUNCT_2:46;
+  end;
+  hence thesis by TARSKI:2;
+end;
+
+theorem
+  for X, A being set, f being Function of X, REAL, s being Real holds (s
+  +f).:A = s++(f.:A)
+proof
+  let X, A be set, f be Function of X, REAL, s be Real;
+  now
+    let x be set;
+    hereby
+      assume
+      x in (s+f).:A;
+      then consider x1 being set such that
+A1:   x1 in X & x1 in A & x = (s+f).x1 by FUNCT_2:115;
+      x = s+(f.x1) & f.x1 in f.:A by A1,FUNCT_2:43,VALUED_1:2;
+      hence x in s++(f.:A);
+    end;
+    assume
+    x in s++(f.:A);
+    then consider r3 such that
+A2: x = s+r3 and
+A3: r3 in f.:A;
+    consider x1 being set such that
+A4: x1 in X and
+A5: x1 in A and
+A6: r3 = f.x1 by A3,FUNCT_2:115;
+    x = (s+f).x1 by A2,A4,A6,VALUED_1:2;
+    hence x in (s+f).:A by A4,A5,FUNCT_2:43;
+  end;
+  hence thesis by TARSKI:2;
+end;
+
+theorem Th45:
+  for X being set, A being Subset of REAL, f being Function of X,
+  REAL, q3 holds (q3+f)"A = f"(-q3++A)
+proof
+  let X be set, A be Subset of REAL, f be Function of X, REAL, q3 be Real;
+  now
+    let x be set;
+    hereby
+      assume
+A1:   x in (q3+f)"A;
+      then (q3+f).x in A & (q3+f).x = q3+(f.x) by FUNCT_2:46,VALUED_1:2;
+      then -q3+(q3+(f.x)) in -q3++A;
+      hence x in f"(-q3++A) by A1,FUNCT_2:46;
+    end;
+    assume
+A2: x in f"(-q3++A);
+    then f.x in -q3++A & (q3+f).x = q3+(f.x) by FUNCT_2:46,VALUED_1:2;
+    then (q3+f).x in q3++(-q3++A);
+    then (q3+f).x in (q3+-q3)++A by Th22;
+    then (q3+f).x in A by Th21;
+    hence x in (q3+f)"A by A2,FUNCT_2:46;
+  end;
+  hence thesis by TARSKI:2;
+end;
+
+notation
+  let f be real-valued Function;
+  synonym Inv f for f";
+end;
+
+definition
+  let C be set;
+  let D be real-membered set;
+  let f be PartFunc of C,D;
+  redefine func Inv f -> PartFunc of C,REAL;
+  coherence
+  proof
+    f" is PartFunc of C,REAL;
+    hence thesis;
+  end;
+end;
+
+theorem Th46:
+  for X being set, A being without_zero Subset of REAL, f being
+  Function of X, REAL holds (Inv f)"A = f"(Inv A)
+proof
+  let X be set, A be without_zero Subset of REAL, f be Function of X, REAL;
+  now
+    let x be set;
+    hereby
+A1:   (Inv f).x = (f.x)" by VALUED_1:10;
+      assume
+A2:   x in (Inv f)"A;
+      then (Inv f).x in A by FUNCT_2:46;
+      then 1/((f.x)") in Inv A by A1;
+      hence x in f"(Inv A) by A2,FUNCT_2:46;
+    end;
+A3: (f.x)" = 1/(f.x) & (Inv f).x = (f.x)" by VALUED_1:10;
+    assume
+A4: x in f"(Inv A);
+    then f.x in Inv A by FUNCT_2:46;
+    then (Inv f).x in Inv Inv A by A3;
+    hence x in (Inv f)"A by A4,FUNCT_2:46;
+  end;
+  hence thesis by TARSKI:2;
 end;
 

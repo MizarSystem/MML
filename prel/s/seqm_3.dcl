@@ -92,6 +92,55 @@
 <Adjective nr="32"/>
 </Cluster>
 </RCluster>
+<RCluster aid="SEQM_3" nr="3">
+<ArgTypes/>
+<Typ kind="M" nr="7">
+<Cluster/>
+<Func kind="K" nr="81"/>
+</Typ>
+<Cluster>
+<Adjective nr="1"/>
+<Adjective nr="4">
+<Func kind="K" nr="85"/>
+</Adjective>
+<Adjective nr="5">
+<Func kind="K" nr="81"/>
+</Adjective>
+<Adjective nr="6"/>
+<Adjective nr="11" value="false"/>
+<Adjective nr="26"/>
+<Adjective nr="27"/>
+<Adjective nr="28"/>
+<Adjective nr="32"/>
+<Adjective nr="38"/>
+<Adjective nr="44"/>
+<Adjective nr="45"/>
+</Cluster>
+</RCluster>
+<RCluster aid="SEQM_3" nr="4">
+<ArgTypes/>
+<Typ kind="M" nr="7">
+<Cluster/>
+<Func kind="K" nr="81"/>
+</Typ>
+<Cluster>
+<Adjective nr="1"/>
+<Adjective nr="4">
+<Func kind="K" nr="85"/>
+</Adjective>
+<Adjective nr="5">
+<Func kind="K" nr="81"/>
+</Adjective>
+<Adjective nr="6"/>
+<Adjective nr="8"/>
+<Adjective nr="26"/>
+<Adjective nr="27"/>
+<Adjective nr="28"/>
+<Adjective nr="38"/>
+<Adjective nr="44"/>
+<Adjective nr="45"/>
+</Cluster>
+</RCluster>
 <FCluster aid="SEQM_3" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="2">
@@ -181,6 +230,17 @@
 </Typ>
 <Cluster>
 <Adjective nr="31"/>
+</Cluster>
+</CCluster>
+<CCluster aid="SEQM_3" nr="4">
+<ArgTypes/>
+<Cluster/>
+<Typ kind="M" nr="7">
+<Cluster/>
+<Func kind="K" nr="81"/>
+</Typ>
+<Cluster>
+<Adjective nr="28"/>
 </Cluster>
 </CCluster>
 </Registrations>

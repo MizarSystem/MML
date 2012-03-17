@@ -8,20 +8,21 @@ environ
 
  vocabularies NUMBERS, FINSEQ_1, ZFMISC_1, XBOOLE_0, FINSEQ_5, RELAT_1,
       ORDINAL4, NAT_1, TARSKI, FUNCT_1, XXREAL_0, SUBSET_1, ARYTM_3, FINSEQ_4,
-      ARYTM_1, CARD_1, ORDINAL1, RFINSEQ, PARTFUN1, FINSEQ_6;
+      ARYTM_1, CARD_1, ORDINAL1, RFINSEQ, PARTFUN1, FINSEQ_6, JORDAN3, REAL_1;
  notations TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0,
-      XXREAL_0, REALSET1, NAT_1, RELAT_1, PARTFUN1, RELSET_1, FUNCT_1,
+      XXREAL_0, REALSET1, REAL_1,
+      NAT_1, NAT_D, RELAT_1, PARTFUN1, RELSET_1, FUNCT_1,
       FINSEQ_1, FINSEQ_4, RFINSEQ, FINSEQ_5;
  constructors XXREAL_0, NAT_1, INT_1, PARTFUN1, FINSEQ_4, REALSET1, RFINSEQ,
-      BINARITH, FINSEQ_5, REAL_1, RELSET_1;
+      BINARITH, FINSEQ_5, REAL_1, RELSET_1, NAT_D;
  registrations XBOOLE_0, RELAT_1, FUNCT_1, XREAL_0, INT_1, FINSEQ_1, REALSET1,
-      FINSEQ_5, ORDINAL1, NAT_1, CARD_1;
+      FINSEQ_5, ORDINAL1, NAT_1, CARD_1, XXREAL_0;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, XBOOLE_0;
  theorems NAT_1, FINSEQ_1, FINSEQ_4, FINSEQ_3, FINSEQ_2, FUNCT_1, ZFMISC_1,
       FINSEQ_5, RELAT_1, RFINSEQ, TARSKI, ENUMSET1, PARTFUN2, GRFUNC_1,
       REALSET1, INT_1, XBOOLE_0, XBOOLE_1, XREAL_1, XXREAL_0, ORDINAL1,
-      PARTFUN1;
+      PARTFUN1, NAT_D, XREAL_0;
 
 begin :: Preliminaries
 
@@ -2645,5 +2646,709 @@ A5: x = [y,z] by A2,RELAT_1:def 1;
   dom f = {y} by A2,A5,RELAT_1:23;
   then 1 = y by A3,TARSKI:def 1;
   hence f = <*z*> by A2,A5,FINSEQ_1:def 5;
+end;
+
+begin :: from JORDAN3, 2010.02.25, A.T.
+
+reserve k for Nat;
+reserve r,r1,r2 for Real;
+reserve n,i,i1,i2,j,j1,j2 for Element of NAT;
+reserve D for non empty set;
+reserve f for FinSequence of D;
+
+theorem Th15:
+  for i be Nat for p,q being FinSequence st len p<i & (i<=len p +
+  len q or i<=len (p^q)) holds (p^q).i=q.(i-len p)
+proof
+  let i be Nat;
+  let p,q be FinSequence;
+  assume that
+A1: len p<i and
+A2: i<=len p +len q or i<=len (p^q);
+  i<=len p + len q by A2,FINSEQ_1:35;
+  then
+A3: i-len p<=len p+len q -len p by XREAL_1:11;
+  len p +1<=i by A1,NAT_1:13;
+  then
+A4: len p +1-len p<=i-len p by XREAL_1:11;
+  then
+A5: len p+(i-'len p)=len p+(i-len p) by XREAL_0:def 2
+    .=i;
+  i-len p=i-'len p by A4,XREAL_0:def 2;
+  then i-'len p in dom q by A4,A3,FINSEQ_3:27;
+  hence thesis by A5,FINSEQ_1:def 7;
+end;
+
+theorem Th17:
+  for x being set,f being FinSequence of D st 1<=len f holds (f^<*
+x*>).1=f.1 & (f^<*x*>).1=f/.1 & (<*x*>^f).(len f +1)=f.len f & (<*x*>^f).(len f
+  +1)=f/.len f
+proof
+  let x be set,f be FinSequence of D;
+  assume
+A1: 1<=len f;
+  then
+A2: len f in dom f by FINSEQ_3:27;
+  1 in dom f by A1,FINSEQ_3:27;
+  then
+A3: (f^<*x*>).1=f.1 by FINSEQ_1:def 7;
+  (<*x*>^f).(len f +1) =(<*x*>^f).(len <*x*>+len f) by FINSEQ_1:56
+    .=f.len f by A2,FINSEQ_1:def 7;
+  hence thesis by A1,A3,FINSEQ_4:24;
+end;
+
+theorem Th18:
+  for f being FinSequence st len f=1 holds Rev f=f
+proof
+  let f be FinSequence;
+  assume
+  len f=1;
+  then f=<*f.1*> by FINSEQ_1:57;
+  hence thesis by FINSEQ_5:63;
+end;
+
+theorem
+  for f being FinSequence of D,k being Nat holds len (f/^k)=len f-'k by
+  RFINSEQ:42;
+
+theorem
+  for f being FinSequence of D,l1,l2 being Nat holds (f/^l1)|(l2-'l1)=(f
+  |l2)/^l1 by FINSEQ_5:83;
+
+definition
+  let f be FinSequence,k1,k2 be Nat;
+  func mid(f,k1,k2) -> FinSequence equals
+  :Def1:
+  (f/^(k1-'1))|(k2-'k1+1)
+  if k1<=k2 otherwise Rev ((f/^(k2-'1))|(k1-'k2+1));
+  correctness;
+end;
+
+definition
+  let D;
+  let f be FinSequence of D,k1,k2 be Nat;
+  redefine func mid(f,k1,k2) -> FinSequence of D;
+  coherence
+  proof
+    k1<=k2 or k1>k2;
+    then mid(f,k1,k2) = (f/^(k1-'1))|(k2-'k1+1) or
+    mid(f,k1,k2) = Rev ((f/^(k2-'1))|(k1-'k2+1)) by Def1;
+    hence thesis;
+  end;
+end;
+
+theorem Th22:
+  for f being FinSequence of D,k1,k2 being Element of NAT st 1<=k1
+  & k1<=len f & 1<=k2 & k2<=len f holds Rev mid(f,k1,k2)=mid(Rev f,len f-'k2+1,
+  len f-'k1+1)
+proof
+  let f be FinSequence of D,k1,k2 be Element of NAT;
+  assume that
+A1: 1<=k1 and
+A2: k1<=len f and
+A3: 1<=k2 and
+A4: k2<=len f;
+  per cases;
+  suppose
+A5: k1<=k2;
+A6: len f-'(k1-'1)=len f-(k1-'1) by A2,NAT_D:50,XREAL_1:235
+      .=len f-(k1-1) by A1,XREAL_1:235
+      .=len f-k1+1
+      .=len f-'k1+1 by A2,XREAL_1:235;
+A7: len f-'k1=len f-k1 by A2,XREAL_1:235;
+A8: len f-'k2=len f-k2 by A4,XREAL_1:235;
+    k2-k1<=len f-k1 by A4,XREAL_1:11;
+    then k2-'k1<=len f-k1 by A5,XREAL_1:235;
+    then k2-'k1<=len f-'k1 by A2,XREAL_1:235;
+    then k2-'k1+1<=len f-'k1+1 by XREAL_1:8;
+    then
+A9: (len f-'(k1-'1)-'(k2-'k1+1)) =(len f-'k1+1)-(k2-'k1+1) by A6,
+    XREAL_1:235
+      .=(len f-k1+1)-(k2-k1+1) by A5,A7,XREAL_1:235
+      .=len f+1-1-k2
+      .=len f-'k2 by A4,XREAL_1:235;
+    then
+A10: (len (f/^(k1-'1))-'(k2-'k1+1))+(k2-'k1+1) =len f-'k2+(k2-'k1+1) by
+    RFINSEQ:42
+      .=len f-k2+(k2-k1+1) by A5,A8,XREAL_1:235
+      .=len f-(k1-1)
+      .=len f-(k1-'1) by A1,XREAL_1:235
+      .=len f-'(k1-'1) by A2,NAT_D:50,XREAL_1:235
+      .=len (f/^(k1-'1)) by RFINSEQ:42;
+A11: len f-'k1<=len f-'k1+1 by NAT_1:11;
+    len f-'k1>=len f-'k2 by A5,NAT_D:41;
+    then
+A12: len f-'(k1-'1)-'(len f-'k2) =len f-'k1+1-(len f-'k2) by A6,A11,
+    XREAL_1:235,XXREAL_0:2
+      .=len f-k1+1-(len f-k2) by A4,A7,XREAL_1:235
+      .=k2-k1+1
+      .=k2-'k1+1 by A5,XREAL_1:235;
+A13: (len f-'(k1-'1))+(k1-'1) =(len f-(k1-'1))+(k1-'1) by A2,NAT_D:50,
+    XREAL_1:235
+      .=len f;
+    len f-'k1>=len f-'k2 by A5,NAT_D:41;
+    then len f-'k1+1>=len f-'k2+1 by XREAL_1:8;
+    then
+A14: (len f-'k1+1)-'(len f-'k2+1)+1 =(len f-'k1+1)-(len f-'k2+1)+1 by
+    XREAL_1:235
+      .=(len f-k1+1)-(len f-k2+1)+1 by A4,A7,XREAL_1:235
+      .=k2-k1+1
+      .=k2-'k1+1 by A5,XREAL_1:235;
+    len f-'k1>=len f-'k2 by A5,NAT_D:41;
+    then len f-'k1+1>=len f-'k2+1 by XREAL_1:8;
+    then mid(Rev f,len f-'k2+1,len f-'k1+1) =(((Rev f)/^((len f-'k2+1)-'1))|(
+    k2-'k1+1)) by A14,Def1
+      .=(Rev f/^(len f-'k2))|(len f-'(k1-'1)-'(len f-'k2)) by A12,NAT_D:34
+      .=(Rev f|(len f-'(k1-'1)))/^(len f-'k2) by FINSEQ_5:83
+      .=(Rev f|(len f-'(k1-'1)))/^(len (f/^(k1-'1))-'(k2-'k1+1)) by A9,
+    RFINSEQ:42
+      .=(Rev (f/^(k1-'1)))/^(len (f/^(k1-'1))-'(k2-'k1+1)) by A13
+    ,Th90
+      .=Rev (((f/^(k1-'1))|(k2-'k1+1))) by A10,Th91
+      .=Rev mid(f,k1,k2) by A5,Def1;
+    hence thesis;
+  end;
+  suppose
+A15: k1>k2;
+A16: len f-'(k2-'1)=len f-(k2-'1) by A4,NAT_D:50,XREAL_1:235
+      .=len f-(k2-1) by A3,XREAL_1:235
+      .=len f-k2+1
+      .=len f-'k2+1 by A4,XREAL_1:235;
+A17: len f-'k2=len f-k2 by A4,XREAL_1:235;
+    len f-'k2>=len f-'k1 by A15,NAT_D:41;
+    then len f-'k2+1>=len f-'k1+1 by XREAL_1:8;
+    then
+A18: (len f-'k2+1)-'(len f-'k1+1)+1 =(len f-'k2+1)-(len f-'k1+1)+1 by
+    XREAL_1:235
+      .=(len f-k2+1)-(len f-k1+1)+1 by A2,A17,XREAL_1:235
+      .=k1-k2+1
+      .=k1-'k2+1 by A15,XREAL_1:235;
+A19: len f-'k1=len f-k1 by A2,XREAL_1:235;
+A20: len f-'k2<=len f-'k2+1 by NAT_1:11;
+    len f-'k2>=len f-'k1 by A15,NAT_D:41;
+    then
+A21: len f-'(k2-'1)-'(len f-'k1) =len f-'k2+1-(len f-'k1) by A16,A20,
+    XREAL_1:235,XXREAL_0:2
+      .=len f-k2+1-(len f-k1) by A2,A17,XREAL_1:235
+      .=k1-k2+1
+      .=k1-'k2+1 by A15,XREAL_1:235;
+A22: (len f-'(k2-'1))+(k2-'1) =(len f-(k2-'1))+(k2-'1) by A4,NAT_D:50,
+    XREAL_1:235
+      .=len f;
+    k1-k2<=len f-k2 by A2,XREAL_1:11;
+    then k1-'k2<=len f-k2 by A15,XREAL_1:235;
+    then k1-'k2<=len f-'k2 by A4,XREAL_1:235;
+    then k1-'k2+1<=len f-'k2+1 by XREAL_1:8;
+    then
+A23: (len f-'(k2-'1)-'(k1-'k2+1)) =(len f-'k2+1)-(k1-'k2+1) by A16,
+    XREAL_1:235
+      .=(len f-k2+1)-(k1-k2+1) by A15,A17,XREAL_1:235
+      .=len f+1-1-k1
+      .=len f-'k1 by A2,XREAL_1:235;
+    then
+A24: (len (f/^(k2-'1))-'(k1-'k2+1))+(k1-'k2+1) =len f-'k1+(k1-'k2+1) by
+    RFINSEQ:42
+      .=len f-k1+(k1-k2+1) by A15,A19,XREAL_1:235
+      .=len f-(k2-1)
+      .=len f-(k2-'1) by A3,XREAL_1:235
+      .=len f-'(k2-'1) by A4,NAT_D:50,XREAL_1:235
+      .=len (f/^(k2-'1)) by RFINSEQ:42;
+    len f-k2>len f-k1 by A15,XREAL_1:12;
+    then len f-'k2+1>len f-'k1+1 by A17,A19,XREAL_1:8;
+    then
+    mid(Rev f,len f-'k2+1,len f-'k1+1) =Rev((((Rev f)/^((len f-'k1+1)-'1)
+    )|(k1-'k2+1))) by A18,Def1
+      .=Rev((Rev f/^(len f-'k1))|(len f-'(k2-'1)-'(len f-'k1))) by A21,NAT_D
+    :34
+      .=Rev((Rev f|(len f-'(k2-'1)))/^(len f-'k1)) by FINSEQ_5:83
+      .=Rev((Rev f|(len f-'(k2-'1)))/^(len (f/^(k2-'1))-'(k1-'k2+1))) by A23
+    ,RFINSEQ:42
+      .=Rev((Rev (f/^(k2-'1)))/^(len (f/^(k2-'1))-'(k1-'k2+1))) by A22,
+    Th90
+      .=Rev(Rev (((f/^(k2-'1))|(k1-'k2+1)))) by A24,Th91
+      .= Rev mid(f,k1,k2) by A15,Def1;
+    hence thesis;
+  end;
+end;
+
+theorem Th23:
+  for n,m being Element of NAT,f being FinSequence of D st 1<= m &
+  m+n<=len f holds (f/^n).m=f.(m+n)
+proof
+  let n,m be Element of NAT,f be FinSequence of D;
+  assume that
+A1: 1<= m and
+A2: m+n<=len f;
+A3: m+n-n<=len f -n by A2,XREAL_1:11;
+  n<=n+m by NAT_1:11;
+  then
+A4: n<=len f by A2,XXREAL_0:2;
+  then len (f/^n) = len f -n by RFINSEQ:def 2;
+  then m in dom (f/^n) by A1,A3,FINSEQ_3:27;
+  hence thesis by A4,RFINSEQ:def 2;
+end;
+
+theorem Th24:
+  for i being Element of NAT,f being FinSequence of D st 1<=i & i
+  <=len f holds (Rev f).i=f.(len f -i+1)
+proof
+  let i be Element of NAT,f be FinSequence of D;
+  assume that
+A1: 1<=i and
+A2: i<=len f;
+  i in dom (f) by A1,A2,FINSEQ_3:27;
+  hence thesis by FINSEQ_5:61;
+end;
+
+theorem
+  for f being FinSequence of D,k being Nat st 1<=k holds mid(f,1,k)=f|k
+proof
+  let f be FinSequence of D,k be Nat;
+  1-'1=0 by XREAL_1:234;
+  then
+A1: f/^(1-'1)=f by FINSEQ_5:31;
+  assume
+A2: 1<=k;
+  then mid(f,1,k)=(f/^(1-'1))|(k-'1+1) by Def1;
+  hence thesis by A2,A1,XREAL_1:237;
+end;
+
+theorem Th26:
+  for f being FinSequence of D,k being Element of NAT st k<=len f
+  holds mid(f,k,len f)=f/^(k-'1)
+proof
+  let f be FinSequence of D,k be Element of NAT;
+  assume
+A1: k<=len f;
+  then
+A2: mid(f,k,len f)=(f/^(k-'1))|(len f-'k+1) by Def1;
+  k-'1<=len f by A1,NAT_D:44;
+  then
+A3: len (f/^(k-'1))=len f-(k-'1) by RFINSEQ:def 2;
+A4: len f-'k+1=len f-k+1 by A1,XREAL_1:235
+    .=len f -(k-1);
+  now
+    per cases;
+    case
+A5:   k=0;
+      0-1<0;
+      then k-'1=0 by A5,XREAL_0:def 2;
+      then
+A6:   f/^(k-'1)=f by FINSEQ_5:31;
+      len f-'k+1=len f +1 by A5,NAT_D:40;
+      then len f <= len f-'k+1 by NAT_1:11;
+      then Seg len f c= Seg (len f -'k+1) by FINSEQ_1:7;
+      then dom (f/^(k-'1)) c= Seg (len f -'k+1) by A6,FINSEQ_1:def 3;
+      then (f/^(k-'1))|Seg (len f -'k+1)= f/^(k-'1) by RELAT_1:97;
+      hence thesis by A2,FINSEQ_1:def 15;
+    end;
+    case
+      k<>0;
+      then 0+1<=k by NAT_1:13;
+      then len (f/^(k-'1))=len f-'k+1 by A3,A4,XREAL_1:235;
+      hence mid(f,k,len f)=(f/^(k-'1))|Seg len (f/^(k-'1)) by A2, FINSEQ_1:
+      def 15
+        .=(f/^(k-'1))|dom (f/^(k-'1)) by FINSEQ_1:def 3
+        .=(f/^(k-'1)) by RELAT_1:97;
+    end;
+  end;
+  hence thesis;
+end;
+
+theorem Th27:
+  for f being FinSequence of D,k1,k2 being Element of NAT st 1<=k1
+& k1<=len f & 1<=k2 & k2<=len f holds mid(f,k1,k2).1=f.k1 & (k1<=k2 implies len
+mid(f,k1,k2) = k2 -' k1 +1 & for i being Element of NAT st 1<=i & i<=len mid(f,
+k1,k2) holds mid(f,k1,k2).i=f.(i+k1-'1)) & (k1>k2 implies len mid(f,k1,k2) = k1
+-' k2 +1 & for i being Element of NAT st 1<=i & i<=len mid(f,k1,k2) holds mid(f
+  ,k1,k2).i=f.(k1-'i+1))
+proof
+  let f be FinSequence of D,k11,k21 be Element of NAT;
+  assume that
+A1: 1<=k11 and
+A2: k11<=len f and
+A3: 1<=k21 and
+A4: k21<=len f;
+  k21-'1<=len f by A4,NAT_D:44;
+  then
+A5: len (f/^(k21-'1))=len f -(k21-'1) by RFINSEQ:def 2;
+A6: k21-1>=0 by A3,XREAL_1:50;
+  then
+A7: k21-'1=k21-1 by XREAL_0:def 2;
+A8: now
+    let k1,k2 be Element of NAT;
+    now
+      assume that
+A9:   k1<=k2 and
+A10:  1<=k1 and
+A11:  k1<=len f;
+A12:  mid(f,k1,k2).1=((f/^(k1-'1))|(k2-'k1+1)).1 by A9,Def1
+        .=((f/^(k1-'1))|(Seg (k2-'k1+1))).1 by FINSEQ_1:def 15;
+      k1-1>=0 by A10,XREAL_1:50;
+      then
+A13:  1+(k1-'1)=1+(k1-1) by XREAL_0:def 2
+        .=k1;
+      then 1+(k1-'1)<=len f -(k1-'1)+(k1-'1) by A11;
+      then
+A14:  1<=len f - (k1-'1) by XREAL_1:8;
+A15:  k1-'1<=len f by A11,NAT_D:44;
+      then len (f/^(k1-'1))=len f -(k1-'1) by RFINSEQ:def 2;
+      then 1 in Seg(len (f/^(k1-'1))) by A14,FINSEQ_1:3;
+      then
+A16:  1 in dom (f/^(k1-'1)) by FINSEQ_1:def 3;
+      0+1<=k2-'k1+1 by XREAL_1:8;
+      then 1 in Seg(k2-'k1+1) by FINSEQ_1:3;
+      then 1 in dom (f/^(k1-'1)) /\ Seg(k2-'k1+1) by A16,XBOOLE_0:def 4;
+      then 1 in dom ((f/^(k1-'1))|(Seg (k2-'k1+1))) by RELAT_1:90;
+      then mid(f,k1,k2).1=(f/^(k1-'1)).1 by A12,FUNCT_1:70;
+      hence mid(f,k1,k2).1=f.k1 by A13,A15,A16,RFINSEQ:def 2;
+    end;
+    hence k1<=k2 & 1<=k1 & k1<=len f implies mid(f,k1,k2).1=f.k1;
+  end;
+  thus mid(f,k11,k21).1=f.k11
+  proof
+    per cases;
+    suppose
+      k11<=k21;
+      hence thesis by A1,A2,A8;
+    end;
+    suppose
+A17:  k11>k21;
+A18:  k21-1>=0 by A3,XREAL_1:50;
+A19:  k11-k21>=0 by A17,XREAL_1:50;
+      then k11-'k21=k11-k21 by XREAL_0:def 2;
+      then
+A20:  k21-'1 +(k11-'k21+1)= k21-1+(k11-(k21-1)) by A18,XREAL_0:def 2
+        .=k11;
+      k21-'1<=len f by A4,NAT_D:44;
+      then
+A21:  len (f/^(k21-'1))=len f -(k21-'1) by RFINSEQ:def 2;
+A22:  1<=(k11-'k21+1) by NAT_1:11;
+      k11-'k21+1=k11-k21+1 by A19,XREAL_0:def 2
+        .=k11-(k21-1)
+        .=k11-(k21-'1) by A18,XREAL_0:def 2;
+      then
+A23:  k11-'k21+1 <=len (f/^(k21-'1)) by A2,A21,XREAL_1:11;
+      then
+A24:  len ((f/^(k21-'1))|(k11-'k21+1))=(k11-'k21+1) by FINSEQ_1:80;
+      then
+A25:  k11-'k21+1 in dom ((f/^(k21-'1))|(k11-'k21+1)) by A22,
+      FINSEQ_3
+      :27;
+A26:  k11-'k21+1 in dom (f/^(k21-'1)) by A22,A23,FINSEQ_3:27;
+A27:  ((f/^(k21-'1))|(k11-'k21+1)).len ((f/^(k21-'1))|(k11-'k21+1)) =((f
+      /^(k21-'1))|(k11-'k21+1))/.(k11-'k21+1) by A22,A24,FINSEQ_4:24
+        .=(f/^(k21-'1))/.(k11-'k21+1) by A25,FINSEQ_4:85
+        .=f/.((k21-'1 +(k11-'k21+1))) by A26,FINSEQ_5:30
+        .=f.k11 by A1,A2,A20,FINSEQ_4:24;
+      1 in dom ((f/^(k21-'1))|(k11-'k21+1)) by A22,A24,FINSEQ_3:27;
+      then
+      (Rev ((f/^(k21-'1))|(k11-'k21+1))).1 = ((f/^(k21-'1))|(k11-'k21+1))
+      .(len ((f/^(k21-'1))|(k11-'k21+1)) - 1 + 1) by FINSEQ_5:61
+        .= f.k11 by A27;
+      hence thesis by A17,Def1;
+    end;
+  end;
+  thus k11<=k21 implies len mid(f,k11,k21) = k21 -' k11 +1 & for i being
+Element of NAT st 1<=i & i<=len mid(f,k11,k21) holds mid(f,k11,k21).i=f.(i+k11
+  -'1)
+  proof
+A28: k11-1>=0 by A1,XREAL_1:50;
+    then
+A29: k11-'1=k11-1 by XREAL_0:def 2;
+    k11-'1<=len f by A2,NAT_D:44;
+    then
+A30: len (f/^(k11-'1))=len f -(k11-'1) by RFINSEQ:def 2;
+    assume
+A31: k11<=k21;
+    then
+A32: mid(f,k11,k21)=(f/^(k11-'1))|(k21-'k11+1) by Def1;
+A33: k21-k11>=0 by A31,XREAL_1:50;
+    then
+A34: k21-'k11=k21-k11 by XREAL_0:def 2;
+    k21-'k11+1=k21-k11+1 by A33,XREAL_0:def 2
+      .=k21-(k11-1)
+      .=k21-(k11-'1) by A28,XREAL_0:def 2;
+    then
+A35: k21-'k11+1 <=len (f/^(k11-'1)) by A4,A30,XREAL_1:11;
+    then
+A36: len ((f/^(k11-'1))|(k21-'k11+1))=(k21-'k11+1) by FINSEQ_1:80;
+    for i being Element of NAT st 1<=i & i<=len mid(f,k11,k21) holds mid(
+    f,k11,k21).i=f.(i+k11-'1)
+    proof
+      let i be Element of NAT;
+      assume that
+A37:  1<=i and
+A38:  i<=len mid(f,k11,k21);
+A39:  i<= (k21-'k11+1) by A32,A35,A38,FINSEQ_1:80;
+      i+(k11-1)<=k21-(k11-1)+(k11-1) by A32,A34,A36,A38,XREAL_1:8;
+      then
+A40:  i+(k11-'1)<=len f by A4,A29,XXREAL_0:2;
+A41:  k11<=k11+i by NAT_1:11;
+A42:  i+(k11-'1)=i+(k11-1) by A28,XREAL_0:def 2
+        .=i+k11-1
+        .=i+k11-'1 by A1,A41,XREAL_1:235,XXREAL_0:2;
+      mid(f,k11,k21).i=(f/^(k11-'1))|(k21-'k11+1).i by A31,Def1
+        .=(f/^(k11-'1)).i by A39,FINSEQ_3:121
+        .=f.(i+(k11-'1)) by A37,A40,Th23;
+      hence thesis by A42;
+    end;
+    hence thesis by A32,A35,FINSEQ_1:80;
+  end;
+  assume
+A43: k11>k21;
+  then
+A44: k11-k21>=0 by XREAL_1:50;
+  then
+A45: k11-'k21=k11-k21 by XREAL_0:def 2;
+A46: mid(f,k11,k21)=Rev ((f/^(k21-'1))|(k11-'k21+1)) by A43,Def1;
+  then
+A47: len mid(f,k11,k21)=len ((f/^(k21-'1))|(k11-'k21+1)) by FINSEQ_5:
+  def 3;
+  k11-'k21+1=k11-k21+1 by A44,XREAL_0:def 2
+    .=k11-(k21-1)
+    .=k11-(k21-'1) by A6,XREAL_0:def 2;
+  then
+A48: k11-'k21+1 <=len (f/^(k21-'1)) by A2,A5,XREAL_1:11;
+  hence
+A49: len mid(f,k11,k21) = k11 -' k21 +1 by A47,FINSEQ_1:80;
+A50: len ((f/^(k21-'1))|(k11-'k21+1))=(k11-'k21+1) by A48,FINSEQ_1:80;
+  thus for i being Element of NAT st 1<=i & i<=len mid(f,k11,k21) holds mid(f,
+  k11,k21).i=f.(k11-'i+1)
+  proof
+    let i be Element of NAT;
+    assume that
+A51: 1<=i and
+A52: i<=len mid(f,k11,k21);
+A53: i+(k21-1)<=k11-(k21-1)+(k21-1) by A45,A49,A52,XREAL_1:8;
+    k11-'k21+1<= k11-'k21+1+(i-'1) by NAT_1:11;
+    then k11-'k21+1<= k11-'k21+1+(i-1) by A51,XREAL_1:235;
+    then k11-'k21+1-(i-1)<= k11-'k21+1+(i-1)-(i-1) by XREAL_1:11;
+    then
+A54: k11-'k21+1-i+1<= k11-'k21+1;
+    i<=k11-'k21+1 by A47,A48,A52,FINSEQ_1:80;
+    then
+A55: (k11-'k21+1-'i+1)<=(k11-'k21+1) by A54,XREAL_1:235;
+A56: i+k11<=i+len f by A2,XREAL_1:8;
+A57: i<=i+(k21-'1) by NAT_1:11;
+A58: k11-'k21+1-'i+1+(k21-'1) =k11-'k21+1-i+1+(k21-'1) by A49,A52,XREAL_1:
+    235
+      .= k11-(k21-1)-i+1+(k21-1) by A6,A45,XREAL_0:def 2
+      .=k11-i+1
+      .=k11-'i+1 by A7,A53,A57,XREAL_1:235,XXREAL_0:2;
+    1+k11<=i+k11 by A51,XREAL_1:8;
+    then 1+k11<=i+len f by A56,XXREAL_0:2;
+    then 1+k11-i<=i+len f -i by XREAL_1:11;
+    then k11-i+1<=len f;
+    then
+A59: k11-'k21+1-'i+1+(k21-'1)<= len f by A7,A53,A57,A58,XREAL_1:235
+    ,XXREAL_0:2;
+    mid(f,k11,k21).i=((f/^(k21-'1))|(k11-'k21+1)) .(len ((f/^(k21-'1))|(
+    k11-'k21+1)) -i+1) by A46,A47,A51,A52,Th24
+      .=((f/^(k21-'1))|(k11-'k21+1)) .(len ((f/^(k21-'1))|(k11-'k21+1)) -'i+
+    1) by A47,A52,XREAL_1:235
+      .=(f/^(k21-'1)).(k11-'k21+1-'i+1) by A50,A55,FINSEQ_3:121
+      .=f.(k11-'i+1) by A58,A59,Th23,NAT_1:11;
+    hence thesis;
+  end;
+end;
+
+theorem Th28:
+  for f being FinSequence of D,k1,k2 being Element of NAT holds
+  rng mid(f,k1,k2) c= rng f
+proof
+  let f be FinSequence of D,k1,k2 be Element of NAT;
+  per cases;
+  suppose
+    k1<=k2;
+    then mid(f,k1,k2) = (f/^(k1-'1))|(k2-'k1+1) by Def1;
+    then
+A1: rng mid(f,k1,k2) c= rng (f/^(k1-'1)) by FINSEQ_5:21;
+    rng (f/^(k1-'1)) c= rng f by FINSEQ_5:36;
+    hence thesis by A1,XBOOLE_1:1;
+  end;
+  suppose
+    k1>k2;
+    then mid(f,k1,k2) = Rev ((f/^(k2-'1))|(k1-'k2+1)) by Def1;
+    then rng mid(f,k1,k2) = rng ((f/^(k2-'1))|(k1-'k2+1)) by FINSEQ_5:60;
+    then
+A2: rng mid(f,k1,k2) c= rng (f/^(k2-'1)) by FINSEQ_5:21;
+    rng (f/^(k2-'1)) c= rng f by FINSEQ_5:36;
+    hence thesis by A2,XBOOLE_1:1;
+  end;
+end;
+
+theorem
+  for f being FinSequence of D st 1<=len f holds mid(f,1,len f)=f
+proof
+  let f be FinSequence of D;
+  assume
+A1: 1<=len f;
+  then mid(f,1,len f)=(f/^(1-'1))|(len f-'1+1) by Def1
+    .=(f/^0)|(len f-'1+1) by XREAL_1:234
+    .=f|(len f-'1+1) by FINSEQ_5:31
+    .=f|len f by A1,XREAL_1:237
+    .=f by FINSEQ_1:79;
+  hence thesis;
+end;
+
+theorem
+  for f being FinSequence of D st 1<=len f holds mid(f,len f,1)=Rev f
+proof
+  let f be FinSequence of D;
+  assume
+A1: 1<=len f;
+A2: 1-'1=0 by XREAL_1:234;
+  per cases;
+  suppose
+    len f<>1;
+    then 1<len f by A1,XXREAL_0:1;
+    then mid(f,len f,1)=Rev ((f/^(1-'1))|(len f-'1+1)) by Def1
+      .=Rev ((f/^0)|len f) by A1,A2,XREAL_1:237
+      .=Rev (f|len f) by FINSEQ_5:31
+      .=Rev f by FINSEQ_1:79;
+    hence thesis;
+  end;
+  suppose
+A3: len f=1;
+    then
+A4: f|1=f by FINSEQ_1:79;
+    mid(f,len f,1)=(f/^(1-'1))|(1-'1+1) by A3,Def1
+      .=f|1 by A2,FINSEQ_5:31;
+    hence thesis by A1,A4,Th18,FINSEQ_1:80;
+  end;
+end;
+
+theorem Th31:
+  for f being FinSequence of D, k1,k2,i being Element of NAT st 1
+  <=k1 & k1<=k2 & k2<=len f & 1<=i & (i<=k2-'k1+1 or i<=k2-k1+1 or i<=k2+1-k1)
+holds mid(f,k1,k2).i=f.(i+k1-'1) & mid(f,k1,k2).i=f.(i-'1+k1) & mid(f,k1,k2).i=
+  f.(i+k1-1) & mid(f,k1,k2).i=f.(i-1+k1)
+proof
+  let f be FinSequence of D, k1,k2,i be Element of NAT;
+  assume that
+A1: 1<=k1 and
+A2: k1<=k2 and
+A3: k2<=len f and
+A4: 1<=i and
+A5: i<=k2-'k1+1 or i<=k2-k1+1 or i<=k2+1-k1;
+A6: k1<=len f by A2,A3,XXREAL_0:2;
+  i+k1>=1+k1 by A4,XREAL_1:8;
+  then
+A7: i+k1-1>=1+k1-1 by XREAL_1:11;
+A8: i<=k2-k1+1 implies i<=k2-'k1+1 by A2,XREAL_1:235;
+  i-1>=1-1 by A4,XREAL_1:11;
+  then
+A9: i-'1+k1=i-1+k1 by XREAL_0:def 2
+    .=i+k1-'1 by A7,XREAL_0:def 2;
+A10: 1<=k2 by A1,A2,XXREAL_0:2;
+  then len mid(f,k1,k2)=k2-'k1+1 by A1,A2,A3,A6,Th27;
+  hence
+A11: mid(f,k1,k2).i=f.(i+k1-'1) & mid(f,k1,k2).i=f.(i-'1+k1) by A1,A2,
+  A3,A4,A5,A10,A6,A8,A9,Th27;
+  hence mid(f,k1,k2).i=f.(i+k1-1) by A7,XREAL_0:def 2;
+  thus thesis by A4,A11,XREAL_1:235;
+end;
+
+theorem Th32:
+  for f being FinSequence of D,k,i being Nat st 1<=i & i<=k & k<=
+  len f holds mid(f,1,k).i=f.i
+proof
+  let f be FinSequence of D,k,i be Nat;
+  assume that
+A1: 1<=i and
+A2: i<=k and
+A3: k<=len f;
+A4: i<=k-1+1 by A2;
+A5: k in NAT by ORDINAL1:def 13;
+A6: i in NAT by ORDINAL1:def 13;
+  1<=k by A1,A2,XXREAL_0:2;
+  then mid(f,1,k).i=f.(i+1-'1) by A1,A3,A6,A5,A4,Th31;
+  hence thesis by NAT_D:34;
+end;
+
+theorem
+  for f being FinSequence of D, k1,k2 being Element of NAT st 1<=k1 & k1
+  <=k2 & k2<=len f holds len mid(f,k1,k2)<=len f
+proof
+  let f be FinSequence of D, k1,k2 be Element of NAT;
+  assume that
+A1: 1<=k1 and
+A2: k1<=k2 and
+A3: k2<=len f;
+A4: k1<=len f by A2,A3,XXREAL_0:2;
+  k2-k1>=0 by A2,XREAL_1:50;
+  then
+A5: k2-'k1+1=k2-k1+1 by XREAL_0:def 2
+    .=k2-(k1-1);
+  k2<=k2+(k1-'1) by NAT_1:11;
+  then
+A6: k2-(k1-'1)<=k2+(k1-'1)-(k1-'1) by XREAL_1:11;
+  k1-1>=0 by A1,XREAL_1:50;
+  then
+A7: k1-1=k1-'1 by XREAL_0:def 2;
+  1<=k2 by A1,A2,XXREAL_0:2;
+  then len mid(f,k1,k2)=k2-'k1+1 by A1,A2,A3,A4,Th27;
+  hence thesis by A3,A5,A7,A6,XXREAL_0:2;
+end;
+
+theorem Th55:
+  for D for f being FinSequence of D, k being Element of NAT, p
+  being Element of D holds (<*p*>^f)|(k+1) = <*p*>^(f|k)
+proof
+  let D;
+  let f be FinSequence of D, k be Element of NAT, p be Element of D;
+A1: f|Seg k = f|k by FINSEQ_1:def 15;
+  thus (<*p*>^f)|(k+1) = (<*p*>^f)|Seg(k+1) by FINSEQ_1:def 15
+    .= (<*p*>^f)|Seg(k+len<*p*>) by FINSEQ_1:56
+    .= <*p*>^(f|k) by A1,Th16;
+end;
+
+theorem Th56:
+  for D for f being FinSequence of D, k1,k2 being Element of NAT
+  st k1 < k2 & k1 in dom f holds mid(f,k1,k2) = <*f.k1*>^ mid(f,k1+1,k2)
+proof
+  let D;
+  let f be FinSequence of D, k1,k2 be Element of NAT;
+  assume
+A1: k1 < k2;
+  then
+A2: k1+1 <= k2 by NAT_1:13;
+A3: 1 <= k2 -' k1
+  proof
+    per cases by A2,XXREAL_0:1;
+    suppose
+      k1 + 1 = k2;
+      hence thesis by NAT_D:34;
+    end;
+    suppose
+A4:   k1 + 1 < k2;
+      k2-'k1 <= 1 implies k2 <= 1 + k1
+      proof
+        assume
+        k2-'k1 <= 1;
+        then k2-'k1 +k1 <= 1 + k1 by XREAL_1:8;
+        hence thesis by A1,XREAL_1:237;
+      end;
+      hence thesis by A4;
+    end;
+  end;
+  then k2-'k1 = k2-k1 by NAT_D:39;
+  then
+A5: k2-'k1-'1 = k2-k1-1 by A3,XREAL_1:235
+    .= k2-(k1+1)
+    .= k2-'(k1+1) by A2,XREAL_1:235;
+  assume
+A6: k1 in dom f;
+  then
+A7: f.k1 = f/.k1 by PARTFUN1:def 8;
+  1 <= k1 by A6,FINSEQ_3:27;
+  then k1 -' 1 + 1 = k1 by XREAL_1:237;
+  then (f/^(k1-'1)) = <*f/.k1*>^(f/^k1) by A6,FINSEQ_5:34;
+  hence mid(f,k1,k2) = (<*f/.k1*>^ (f/^k1))|(k2-'k1+1) by A1,Def1
+    .= <*f.k1*>^ ((f/^k1)|(k2-'k1)) by A7,Th55
+    .= <*f.k1*>^ ((f/^k1)|(k2-'(k1+1)+1)) by A3,A5,XREAL_1:237
+    .= <*f.k1*>^ ((f/^(k1+1-'1))|(k2-'(k1+1)+1)) by NAT_D:34
+    .= <*f.k1*>^ mid(f,k1+1,k2) by A2,Def1;
 end;
 

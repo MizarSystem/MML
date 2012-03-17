@@ -31,8 +31,8 @@
 <ArticleID name="FUNCOP_1"/>
 <ArticleID name="FUNCT_6"/>
 <ArticleID name="RAT_1"/>
-<ArticleID name="MEMBERED"/>
 <ArticleID name="VALUED_0"/>
+<ArticleID name="MEMBERED"/>
 <ArticleID name="VALUED_1"/>
 <ArticleID name="RFINSEQ"/>
 <ArticleID name="RVSUM_1"/>

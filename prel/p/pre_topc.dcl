@@ -437,6 +437,31 @@
 <Adjective nr="43"/>
 </Cluster>
 </FCluster>
+<FCluster aid="PRE_TOPC" nr="10">
+<ArgTypes>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="1" value="false"/>
+</Cluster>
+</Typ>
+<Typ kind="M" nr="2">
+<Cluster/>
+<Func kind="K" nr="10">
+<Func kind="K" nr="10">
+<LocusVar nr="1"/>
+</Func>
+</Func>
+</Typ>
+</ArgTypes>
+<Func kind="G" nr="6">
+<LocusVar nr="1"/>
+<LocusVar nr="2"/>
+</Func>
+<Cluster>
+<Adjective nr="32" value="false"/>
+<Adjective nr="43"/>
+</Cluster>
+</FCluster>
 <CCluster aid="PRE_TOPC" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="6">

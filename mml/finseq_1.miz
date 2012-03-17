@@ -8,19 +8,21 @@ environ
 
  vocabularies NUMBERS, NAT_1, FUNCT_1, SUBSET_1, XXREAL_0, TARSKI, XCMPLX_0,
       XBOOLE_0, CARD_1, ARYTM_3, RELAT_1, FINSET_1, ZFMISC_1, ORDINAL1,
-      PARTFUN1, FUNCOP_1, ORDINAL4, ARYTM_1, REAL_1, FINSEQ_1;
+      PARTFUN1, FUNCOP_1, ORDINAL4, ARYTM_1, REAL_1, FINSEQ_1, ORDINAL2,
+      VALUED_0;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, XCMPLX_0, RELAT_1, FUNCT_1,
       FUNCOP_1, WELLORD2, ORDINAL1, REAL_1, NAT_1, CARD_1, NUMBERS, PARTFUN1,
-      FINSET_1, XXREAL_0, FUNCT_2, INT_1;
+      FINSET_1, XXREAL_0, FUNCT_2, INT_1, VALUED_0;
  constructors WELLORD2, FUNCOP_1, FUNCT_4, XXREAL_0, XREAL_0, NAT_1, CARD_1,
-      RELSET_1, XCMPLX_0, INT_1;
+      RELSET_1, XCMPLX_0, INT_1, VALUED_0;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1, FINSET_1,
-      XXREAL_0, XREAL_0, NAT_1, CARD_1, NUMBERS, RELSET_1, INT_1, XCMPLX_0;
+      XXREAL_0, XREAL_0, NAT_1, CARD_1, NUMBERS, RELSET_1, INT_1, XCMPLX_0,
+      VALUED_0;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions TARSKI, FINSET_1, FUNCT_1, WELLORD2, XBOOLE_0, RELAT_1;
  theorems TARSKI, AXIOMS, FUNCT_1, NAT_1, ZFMISC_1, RELAT_1, RELSET_1,
       WELLORD2, ORDINAL1, CARD_1, FINSET_1, XBOOLE_0, XBOOLE_1, FUNCOP_1,
-      XREAL_1, XXREAL_0, SETFAM_1, ORDINAL3, SUBSET_1;
+      XREAL_1, XXREAL_0, SETFAM_1, ORDINAL3, SUBSET_1, VALUED_0;
  schemes FUNCT_1, SUBSET_1, NAT_1, XBOOLE_0, WELLORD2, RELAT_1, CLASSES1;
 
 begin
@@ -3685,6 +3687,25 @@ registration let n,m;
   proof
    len f = n & len g = m by Def18;
    hence len(f^g) = n+m by Th35;
+  end;
+end;
+
+:: from JORDAN7, 2010.02.26, A.T
+
+registration
+  cluster increasing -> one-to-one (real-valued FinSequence);
+  coherence
+  proof
+    let f be real-valued FinSequence;
+    assume
+A1: f is increasing;
+    let x,y be set;
+    assume that
+A2: x in dom f & y in dom f and
+A3: f.x=f.y;
+    reconsider nx=x,ny=y as Element of NAT by A2;
+    nx<=ny & nx>=ny by A1,A2,A3,VALUED_0:def 13;
+    hence thesis by XXREAL_0:1;
   end;
 end;
 

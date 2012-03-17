@@ -27,6 +27,7 @@
 <ArticleID name="RLVECT_1"/>
 <ArticleID name="ENUMSET1"/>
 <ArticleID name="DOMAIN_1"/>
+<ArticleID name="SETFAM_1"/>
 <ArticleID name="BINOP_1"/>
 <ArticleID name="FUNCT_5"/>
 <ArticleID name="FINSEQ_2"/>
@@ -40,7 +41,6 @@
 <ArticleID name="EUCLID"/>
 <ArticleID name="EQREL_1"/>
 <ArticleID name="CONNSP_2"/>
-<ArticleID name="PCOMPS_1"/>
 <ArticleID name="RELSET_1"/>
 <ArticleID name="BORSUK_1"/>
 <ArticleID name="TOPMETR"/>
@@ -58,17 +58,17 @@
 <Cluster>
 <Adjective nr="51" value="false"/>
 <Adjective nr="56" value="false"/>
-<Adjective nr="133"/>
+<Adjective nr="136"/>
 </Cluster>
 </Typ>
 <Typ kind="G" nr="13">
 <Cluster>
 <Adjective nr="51" value="false"/>
-<Adjective nr="133"/>
+<Adjective nr="136"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="399">
+<Func kind="K" nr="403">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -81,18 +81,18 @@
 <Typ kind="G" nr="13">
 <Cluster>
 <Adjective nr="51" value="false"/>
-<Adjective nr="133"/>
+<Adjective nr="136"/>
 </Cluster>
 </Typ>
 <Typ kind="G" nr="13">
 <Cluster>
 <Adjective nr="51" value="false"/>
 <Adjective nr="56" value="false"/>
-<Adjective nr="133"/>
+<Adjective nr="136"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="399">
+<Func kind="K" nr="403">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -109,7 +109,7 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="305">
+<Func kind="K" nr="314">
 <LocusVar nr="1"/>
 </Func>
 </Func>
@@ -121,7 +121,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="400">
+<Func kind="K" nr="404">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
@@ -139,7 +139,7 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="305">
+<Func kind="K" nr="314">
 <LocusVar nr="1"/>
 </Func>
 </Func>
@@ -150,7 +150,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="400">
+<Func kind="K" nr="404">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>

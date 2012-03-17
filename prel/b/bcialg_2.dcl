@@ -17,6 +17,7 @@
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="BCIALG_1"/>
 <ArticleID name="NUMBERS"/>
+<ArticleID name="SETFAM_1"/>
 <ArticleID name="RELAT_2"/>
 <ArticleID name="EQREL_1"/>
 <ArticleID name="BCIALG_2"/>
@@ -40,7 +41,7 @@
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="72">
+<Adjective nr="75">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -64,7 +65,7 @@
 <Adjective nr="52">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="72">
+<Adjective nr="75">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -85,7 +86,7 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="76">
+<Adjective nr="79">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -101,12 +102,12 @@
 <Adjective nr="49"/>
 </Cluster>
 </Typ>
-<Typ kind="M" nr="9">
+<Typ kind="M" nr="10">
 <Cluster/>
 <LocusVar nr="1"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="116">
+<Func kind="K" nr="125">
 <Func kind="U" nr="1">
 <LocusVar nr="1"/>
 </Func>
@@ -127,12 +128,12 @@
 <Adjective nr="49"/>
 </Cluster>
 </Typ>
-<Typ kind="M" nr="9">
+<Typ kind="M" nr="10">
 <Cluster/>
 <LocusVar nr="1"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="130">
+<Func kind="K" nr="139">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -155,13 +156,13 @@
 <Cluster/>
 <LocusVar nr="1"/>
 </Typ>
-<Typ kind="M" nr="12">
+<Typ kind="M" nr="13">
 <Cluster/>
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="130">
+<Func kind="K" nr="139">
 <LocusVar nr="1"/>
 <LocusVar nr="3"/>
 </Func>
@@ -190,7 +191,7 @@
 </Typ>
 </ArgTypes>
 <Cluster/>
-<Typ kind="M" nr="12">
+<Typ kind="M" nr="13">
 <Cluster/>
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
@@ -201,8 +202,8 @@
 <LocusVar nr="1"/>
 </Func>
 </Adjective>
-<Adjective nr="65"/>
-<Adjective nr="70"/>
+<Adjective nr="68"/>
+<Adjective nr="73"/>
 </Cluster>
 </CCluster>
 </Registrations>

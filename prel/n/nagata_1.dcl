@@ -22,13 +22,13 @@
 <ArticleID name="INT_1"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="PRE_TOPC"/>
-<ArticleID name="VALUED_0"/>
-<ArticleID name="MEMBERED"/>
 <ArticleID name="BINOP_1"/>
 <ArticleID name="FUNCT_5"/>
 <ArticleID name="METRIC_1"/>
 <ArticleID name="PCOMPS_1"/>
+<ArticleID name="VALUED_0"/>
 <ArticleID name="RAT_1"/>
+<ArticleID name="MEMBERED"/>
 <ArticleID name="VALUED_1"/>
 <ArticleID name="NAGATA_1"/>
 </Signature>
@@ -97,8 +97,8 @@
 <Func kind="K" nr="10">
 <Func kind="K" nr="11">
 <Func kind="K" nr="85"/>
-<Func kind="K" nr="164">
-<Func kind="K" nr="164">
+<Func kind="K" nr="10">
+<Func kind="K" nr="10">
 <Func kind="U" nr="1">
 <LocusVar nr="1"/>
 </Func>
@@ -114,8 +114,8 @@
 <Func kind="K" nr="85"/>
 </Adjective>
 <Adjective nr="8">
-<Func kind="K" nr="164">
-<Func kind="K" nr="164">
+<Func kind="K" nr="10">
+<Func kind="K" nr="10">
 <Func kind="U" nr="1">
 <LocusVar nr="1"/>
 </Func>
@@ -128,8 +128,8 @@
 </Adjective>
 <Adjective nr="15">
 <Func kind="K" nr="85"/>
-<Func kind="K" nr="164">
-<Func kind="K" nr="164">
+<Func kind="K" nr="10">
+<Func kind="K" nr="10">
 <Func kind="U" nr="1">
 <LocusVar nr="1"/>
 </Func>
@@ -155,8 +155,8 @@
 <Func kind="K" nr="10">
 <Func kind="K" nr="11">
 <Func kind="K" nr="85"/>
-<Func kind="K" nr="164">
-<Func kind="K" nr="164">
+<Func kind="K" nr="10">
+<Func kind="K" nr="10">
 <Func kind="U" nr="1">
 <LocusVar nr="1"/>
 </Func>
@@ -172,8 +172,8 @@
 <Func kind="K" nr="85"/>
 </Adjective>
 <Adjective nr="8">
-<Func kind="K" nr="164">
-<Func kind="K" nr="164">
+<Func kind="K" nr="10">
+<Func kind="K" nr="10">
 <Func kind="U" nr="1">
 <LocusVar nr="1"/>
 </Func>
@@ -186,8 +186,8 @@
 </Adjective>
 <Adjective nr="15">
 <Func kind="K" nr="85"/>
-<Func kind="K" nr="164">
-<Func kind="K" nr="164">
+<Func kind="K" nr="10">
+<Func kind="K" nr="10">
 <Func kind="U" nr="1">
 <LocusVar nr="1"/>
 </Func>
@@ -222,7 +222,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="165">
+<Func kind="K" nr="162">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>

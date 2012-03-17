@@ -25,9 +25,8 @@
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="FINSEQ_2"/>
 <ArticleID name="NEWTON"/>
-<ArticleID name="RAT_1"/>
-<ArticleID name="CARD_3"/>
 <ArticleID name="NAT_1"/>
+<ArticleID name="RAT_1"/>
 <ArticleID name="VALUED_0"/>
 <ArticleID name="MEMBERED"/>
 <ArticleID name="VALUED_1"/>
@@ -37,6 +36,7 @@
 <ArticleID name="TREES_2"/>
 <ArticleID name="TREES_3"/>
 <ArticleID name="TREES_4"/>
+<ArticleID name="CARD_3"/>
 <ArticleID name="RELAT_2"/>
 <ArticleID name="WELLORD1"/>
 <ArticleID name="PRE_POLY"/>
@@ -53,7 +53,7 @@
 <Adjective nr="34"/>
 <Adjective nr="40"/>
 <Adjective nr="41"/>
-<Adjective nr="55"/>
+<Adjective nr="50"/>
 <Adjective nr="94"/>
 </Cluster>
 </RCluster>
@@ -75,7 +75,7 @@
 <Adjective nr="14">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="55"/>
+<Adjective nr="50"/>
 <Adjective nr="94"/>
 </Cluster>
 </RCluster>
@@ -97,7 +97,7 @@
 <Adjective nr="14">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="50"/>
+<Adjective nr="45"/>
 <Adjective nr="94"/>
 </Cluster>
 </RCluster>
@@ -130,7 +130,7 @@
 <Adjective nr="1"/>
 <Adjective nr="6"/>
 <Adjective nr="40"/>
-<Adjective nr="52"/>
+<Adjective nr="47"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
@@ -147,7 +147,7 @@
 <Adjective nr="1"/>
 <Adjective nr="6"/>
 <Adjective nr="40"/>
-<Adjective nr="52"/>
+<Adjective nr="47"/>
 </Cluster>
 </FCluster>
 <FCluster aid="NAT_3" nr="3">
@@ -157,7 +157,7 @@
 <Adjective nr="1"/>
 <Adjective nr="6"/>
 <Adjective nr="40"/>
-<Adjective nr="55"/>
+<Adjective nr="50"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
@@ -174,7 +174,7 @@
 <Adjective nr="1"/>
 <Adjective nr="6"/>
 <Adjective nr="40"/>
-<Adjective nr="55"/>
+<Adjective nr="50"/>
 </Cluster>
 </FCluster>
 <FCluster aid="NAT_3" nr="4">
@@ -192,7 +192,7 @@
 <Adjective nr="14">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="52"/>
+<Adjective nr="47"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
@@ -215,7 +215,7 @@
 <Adjective nr="14">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="52"/>
+<Adjective nr="47"/>
 </Cluster>
 </FCluster>
 <FCluster aid="NAT_3" nr="5">
@@ -233,7 +233,7 @@
 <Adjective nr="14">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="55"/>
+<Adjective nr="50"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
@@ -256,7 +256,7 @@
 <Adjective nr="14">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="55"/>
+<Adjective nr="50"/>
 </Cluster>
 </FCluster>
 <FCluster aid="NAT_3" nr="6">
@@ -274,7 +274,7 @@
 <Adjective nr="14">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="52"/>
+<Adjective nr="47"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -304,7 +304,7 @@
 <Adjective nr="14">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="52"/>
+<Adjective nr="47"/>
 <Adjective nr="94"/>
 </Cluster>
 </Typ>
@@ -346,7 +346,7 @@
 <Adjective nr="14">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="52"/>
+<Adjective nr="47"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
@@ -359,7 +359,7 @@
 <Adjective nr="14">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="52"/>
+<Adjective nr="47"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -377,7 +377,7 @@
 <Adjective nr="14">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="52"/>
+<Adjective nr="47"/>
 </Cluster>
 </FCluster>
 <FCluster aid="NAT_3" nr="9">
@@ -395,7 +395,7 @@
 <Adjective nr="14">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="55"/>
+<Adjective nr="50"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
@@ -408,7 +408,7 @@
 <Adjective nr="14">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="55"/>
+<Adjective nr="50"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -426,7 +426,7 @@
 <Adjective nr="14">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="55"/>
+<Adjective nr="50"/>
 </Cluster>
 </FCluster>
 <FCluster aid="NAT_3" nr="10">
@@ -444,7 +444,7 @@
 <Adjective nr="14">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="52"/>
+<Adjective nr="47"/>
 <Adjective nr="94"/>
 </Cluster>
 </Typ>
@@ -458,7 +458,7 @@
 <Adjective nr="14">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="52"/>
+<Adjective nr="47"/>
 <Adjective nr="94"/>
 </Cluster>
 </Typ>
@@ -495,7 +495,7 @@
 <Adjective nr="14">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="52"/>
+<Adjective nr="47"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
@@ -508,7 +508,7 @@
 <Adjective nr="14">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="52"/>
+<Adjective nr="47"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -526,7 +526,7 @@
 <Adjective nr="14">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="52"/>
+<Adjective nr="47"/>
 </Cluster>
 </FCluster>
 <FCluster aid="NAT_3" nr="12">
@@ -544,7 +544,7 @@
 <Adjective nr="14">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="55"/>
+<Adjective nr="50"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
@@ -557,7 +557,7 @@
 <Adjective nr="14">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="55"/>
+<Adjective nr="50"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -575,7 +575,7 @@
 <Adjective nr="14">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="55"/>
+<Adjective nr="50"/>
 </Cluster>
 </FCluster>
 <FCluster aid="NAT_3" nr="13">
@@ -593,7 +593,7 @@
 <Adjective nr="14">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="52"/>
+<Adjective nr="47"/>
 <Adjective nr="94"/>
 </Cluster>
 </Typ>
@@ -607,7 +607,7 @@
 <Adjective nr="14">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="52"/>
+<Adjective nr="47"/>
 <Adjective nr="94"/>
 </Cluster>
 </Typ>
@@ -644,7 +644,7 @@
 <Adjective nr="14">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="55"/>
+<Adjective nr="50"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
@@ -668,7 +668,7 @@
 <Adjective nr="14">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="55"/>
+<Adjective nr="50"/>
 </Cluster>
 </FCluster>
 <FCluster aid="NAT_3" nr="15">
@@ -686,7 +686,7 @@
 <Adjective nr="14">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="52"/>
+<Adjective nr="47"/>
 <Adjective nr="94"/>
 </Cluster>
 </Typ>
@@ -734,7 +734,7 @@
 <Adjective nr="14">
 <Func kind="K" nr="187"/>
 </Adjective>
-<Adjective nr="55"/>
+<Adjective nr="50"/>
 </Cluster>
 </FCluster>
 <FCluster aid="NAT_3" nr="17">
@@ -840,7 +840,7 @@
 <Adjective nr="14">
 <Func kind="K" nr="187"/>
 </Adjective>
-<Adjective nr="55"/>
+<Adjective nr="50"/>
 <Adjective nr="94"/>
 </Cluster>
 </FCluster>

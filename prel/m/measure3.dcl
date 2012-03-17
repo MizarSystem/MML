@@ -16,6 +16,7 @@
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="NAT_1"/>
 <ArticleID name="XXREAL_0"/>
+<ArticleID name="SETFAM_1"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="CARD_3"/>
@@ -27,7 +28,6 @@
 <ArticleID name="XXREAL_3"/>
 <ArticleID name="SUPINF_2"/>
 <ArticleID name="MEASURE1"/>
-<ArticleID name="SETFAM_1"/>
 <ArticleID name="MEASURE2"/>
 <ArticleID name="MEASURE3"/>
 </Signature>
@@ -39,10 +39,10 @@
 <Typ kind="M" nr="2">
 <Cluster>
 <Adjective nr="11" value="false"/>
-<Adjective nr="40">
+<Adjective nr="43">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="43">
+<Adjective nr="46">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -59,9 +59,9 @@
 <LocusVar nr="2"/>
 <Func kind="K" nr="57"/>
 </Adjective>
-<Adjective nr="65"/>
-<Adjective nr="77"/>
-<Adjective nr="82">
+<Adjective nr="68"/>
+<Adjective nr="80"/>
+<Adjective nr="85">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Adjective>
@@ -74,17 +74,17 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="189">
+<Func kind="K" nr="190">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
 </Func>
 <Cluster>
 <Adjective nr="11" value="false"/>
-<Adjective nr="40">
+<Adjective nr="43">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="81">
+<Adjective nr="84">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>

@@ -12,6 +12,7 @@
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="TARSKI"/>
 <ArticleID name="FUNCT_4"/>
+<ArticleID name="SETFAM_1"/>
 <ArticleID name="RELAT_2"/>
 <ArticleID name="EQREL_1"/>
 <ArticleID name="ORDINAL1"/>
@@ -25,46 +26,46 @@
 <ArgTypes>
 <Typ kind="G" nr="8">
 <Cluster>
-<Adjective nr="41" value="false"/>
+<Adjective nr="44" value="false"/>
 </Cluster>
 </Typ>
 <Typ kind="G" nr="8">
 <Cluster>
-<Adjective nr="41" value="false"/>
+<Adjective nr="44" value="false"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="128">
+<Func kind="K" nr="137">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="41" value="false"/>
-<Adjective nr="54"/>
+<Adjective nr="44" value="false"/>
+<Adjective nr="57"/>
 </Cluster>
 </FCluster>
 <FCluster aid="FILTER_1" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="8">
 <Cluster>
-<Adjective nr="41" value="false"/>
-<Adjective nr="61"/>
+<Adjective nr="44" value="false"/>
+<Adjective nr="64"/>
 </Cluster>
 </Typ>
 <Typ kind="G" nr="8">
 <Cluster>
-<Adjective nr="41" value="false"/>
-<Adjective nr="61"/>
+<Adjective nr="44" value="false"/>
+<Adjective nr="64"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="128">
+<Func kind="K" nr="137">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="54"/>
-<Adjective nr="61"/>
+<Adjective nr="57"/>
+<Adjective nr="64"/>
 </Cluster>
 </FCluster>
 </Registrations>

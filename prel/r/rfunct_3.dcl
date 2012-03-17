@@ -21,13 +21,13 @@
 <ArticleID name="XXREAL_0"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
-<ArticleID name="MEMBERED"/>
-<ArticleID name="FUNCOP_1"/>
-<ArticleID name="FINSEQ_1"/>
-<ArticleID name="FUNCT_3"/>
 <ArticleID name="VALUED_0"/>
-<ArticleID name="RFUNCT_1"/>
+<ArticleID name="MEMBERED"/>
 <ArticleID name="VALUED_1"/>
+<ArticleID name="FINSEQ_1"/>
+<ArticleID name="FUNCOP_1"/>
+<ArticleID name="FUNCT_3"/>
+<ArticleID name="RFUNCT_1"/>
 <ArticleID name="RFUNCT_3"/>
 </Signature>
 <RCluster aid="RFUNCT_3" nr="1">
@@ -115,7 +115,7 @@
 </Typ>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="40"/>
+<Adjective nr="52"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -128,7 +128,7 @@
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="51"/>
+<Adjective nr="40"/>
 </Cluster>
 </CCluster>
 </Registrations>

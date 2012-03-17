@@ -33,8 +33,8 @@
 <ArticleID name="MATRIX_1"/>
 <ArticleID name="CARD_3"/>
 <ArticleID name="RAT_1"/>
-<ArticleID name="MEMBERED"/>
 <ArticleID name="VALUED_0"/>
+<ArticleID name="MEMBERED"/>
 <ArticleID name="VALUED_1"/>
 <ArticleID name="WELLORD1"/>
 <ArticleID name="RELAT_2"/>
@@ -82,7 +82,7 @@
 <Func kind="K" nr="90"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="430">
+<Func kind="K" nr="431">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <Func kind="K" nr="337">
@@ -98,7 +98,7 @@
 <Cluster>
 <Adjective nr="117">
 <LocusVar nr="1"/>
-<Func kind="K" nr="425">
+<Func kind="K" nr="426">
 <LocusVar nr="1"/>
 <Func kind="K" nr="207">
 <LocusVar nr="2"/>
@@ -110,7 +110,7 @@
 <Cluster/>
 <Func kind="K" nr="21">
 <Func kind="U" nr="1">
-<Func kind="K" nr="425">
+<Func kind="K" nr="426">
 <LocusVar nr="1"/>
 <Func kind="K" nr="207">
 <LocusVar nr="2"/>

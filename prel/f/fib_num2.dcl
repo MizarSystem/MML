@@ -13,10 +13,10 @@
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XCMPLX_0"/>
 <ArticleID name="XREAL_0"/>
+<ArticleID name="INT_1"/>
 <ArticleID name="PARTFUN1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
-<ArticleID name="INT_1"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
@@ -44,12 +44,12 @@
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="30"/>
+<Adjective nr="26"/>
 <Adjective nr="57" value="false"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="62">
+<Func kind="K" nr="63">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -61,12 +61,12 @@
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="30"/>
+<Adjective nr="26"/>
 <Adjective nr="57"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="62">
+<Func kind="K" nr="63">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -79,15 +79,15 @@
 <Typ kind="M" nr="2">
 <Cluster>
 <Adjective nr="12"/>
-<Adjective nr="27">
-<Func kind="K" nr="56"/>
-<Func kind="K" nr="56"/>
+<Adjective nr="28">
+<Func kind="K" nr="57"/>
+<Func kind="K" nr="57"/>
 </Adjective>
 </Cluster>
 <Func kind="K" nr="10">
 <Func kind="K" nr="11">
-<Func kind="K" nr="56"/>
-<Func kind="K" nr="56"/>
+<Func kind="K" nr="57"/>
+<Func kind="K" nr="57"/>
 </Func>
 </Func>
 </Typ>
@@ -99,7 +99,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="38">
+<Func kind="K" nr="39">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -110,7 +110,7 @@
 </FCluster>
 <FCluster aid="FIB_NUM2" nr="4">
 <ArgTypes/>
-<Func kind="K" nr="51"/>
+<Func kind="K" nr="52"/>
 <Cluster>
 <Adjective nr="64"/>
 </Cluster>
@@ -119,10 +119,10 @@
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="56"/>
+<Func kind="K" nr="57"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="117">
+<Func kind="K" nr="118">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>

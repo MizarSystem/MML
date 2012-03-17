@@ -18,10 +18,10 @@
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
+<ArticleID name="SETFAM_1"/>
 <ArticleID name="CARD_3"/>
 <ArticleID name="FUNCT_4"/>
 <ArticleID name="STRUCT_0"/>
-<ArticleID name="SETFAM_1"/>
 <ArticleID name="FUNCOP_1"/>
 <ArticleID name="FUNCT_7"/>
 <ArticleID name="AMI_1"/>
@@ -41,7 +41,7 @@
 </Adjective>
 <Adjective nr="4">
 <Func kind="U" nr="1">
-<Func kind="K" nr="231"/>
+<Func kind="K" nr="232"/>
 </Func>
 </Adjective>
 <Adjective nr="5">
@@ -49,7 +49,7 @@
 <Func kind="K" nr="35">
 <Func kind="K" nr="47"/>
 </Func>
-<Func kind="K" nr="231"/>
+<Func kind="K" nr="232"/>
 </Func>
 </Adjective>
 <Adjective nr="6"/>
@@ -58,7 +58,7 @@
 <Func kind="K" nr="35">
 <Func kind="K" nr="47"/>
 </Func>
-<Func kind="K" nr="231"/>
+<Func kind="K" nr="232"/>
 </Func>
 </Adjective>
 <Adjective nr="27"/>
@@ -74,7 +74,7 @@
 </Adjective>
 <Adjective nr="4">
 <Func kind="U" nr="1">
-<Func kind="K" nr="231"/>
+<Func kind="K" nr="232"/>
 </Func>
 </Adjective>
 <Adjective nr="5">
@@ -82,7 +82,7 @@
 <Func kind="K" nr="35">
 <Func kind="K" nr="47"/>
 </Func>
-<Func kind="K" nr="231"/>
+<Func kind="K" nr="232"/>
 </Func>
 </Adjective>
 <Adjective nr="6"/>
@@ -91,7 +91,7 @@
 <Func kind="K" nr="35">
 <Func kind="K" nr="47"/>
 </Func>
-<Func kind="K" nr="231"/>
+<Func kind="K" nr="232"/>
 </Func>
 </Adjective>
 <Adjective nr="27"/>
@@ -108,7 +108,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="273">
+<Func kind="K" nr="274">
 <LocusVar nr="3"/>
 <LocusVar nr="4"/>
 <LocusVar nr="1"/>
@@ -121,7 +121,7 @@
 </Adjective>
 <Adjective nr="4">
 <Func kind="U" nr="1">
-<Func kind="K" nr="231"/>
+<Func kind="K" nr="232"/>
 </Func>
 </Adjective>
 <Adjective nr="5">
@@ -129,7 +129,7 @@
 <Func kind="K" nr="35">
 <Func kind="K" nr="47"/>
 </Func>
-<Func kind="K" nr="231"/>
+<Func kind="K" nr="232"/>
 </Func>
 </Adjective>
 <Adjective nr="6"/>
@@ -138,7 +138,7 @@
 <Func kind="K" nr="35">
 <Func kind="K" nr="47"/>
 </Func>
-<Func kind="K" nr="231"/>
+<Func kind="K" nr="232"/>
 </Func>
 </Adjective>
 <Adjective nr="27"/>

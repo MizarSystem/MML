@@ -36,12 +36,12 @@
 <ArticleID name="RLTOPSP1"/>
 <ArticleID name="EUCLID"/>
 <ArticleID name="TOPREAL2"/>
+<ArticleID name="SETFAM_1"/>
 <ArticleID name="ENUMSET1"/>
 <ArticleID name="DOMAIN_1"/>
 <ArticleID name="RELAT_2"/>
 <ArticleID name="EQREL_1"/>
 <ArticleID name="CONNSP_2"/>
-<ArticleID name="PCOMPS_1"/>
 <ArticleID name="RELSET_1"/>
 <ArticleID name="BORSUK_1"/>
 <ArticleID name="TOPMETR"/>
@@ -63,7 +63,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="365">
+<Func kind="K" nr="369">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -91,7 +91,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="364">
+<Func kind="K" nr="368">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -109,7 +109,7 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="354"/>
+<Func kind="K" nr="358"/>
 </Func>
 </Typ>
 <Cluster>

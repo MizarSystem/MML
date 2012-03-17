@@ -19,6 +19,7 @@
 <ArticleID name="ORDERS_2"/>
 <ArticleID name="LATTICES"/>
 <ArticleID name="FUNCT_4"/>
+<ArticleID name="SETFAM_1"/>
 <ArticleID name="RELAT_2"/>
 <ArticleID name="EQREL_1"/>
 <ArticleID name="FILTER_1"/>
@@ -91,13 +92,13 @@
 <Cluster>
 <Adjective nr="35" value="false"/>
 <Adjective nr="50"/>
-<Adjective nr="84"/>
+<Adjective nr="87"/>
 </Cluster>
 </Typ>
 </ArgTypes>
 <Pred kind="R" nr="29">
 <Func kind="F" nr="1"/>
-<Func kind="K" nr="157">
+<Func kind="K" nr="166">
 <Func kind="F" nr="1"/>
 <Func kind="K" nr="3">
 <Fraenkel>
@@ -116,7 +117,7 @@
 </Fraenkel>
 </Func>
 </Func>
-<Func kind="K" nr="157">
+<Func kind="K" nr="166">
 <Func kind="F" nr="1"/>
 <Fraenkel>
 <Typ kind="M" nr="2">
@@ -127,7 +128,7 @@
 </Func>
 </Func>
 </Typ>
-<Func kind="K" nr="157">
+<Func kind="K" nr="166">
 <Func kind="F" nr="1"/>
 <Var nr="1"/>
 </Func>
@@ -145,14 +146,14 @@
 <Adjective nr="48"/>
 <Adjective nr="49"/>
 <Adjective nr="50"/>
-<Adjective nr="82"/>
-<Adjective nr="83"/>
-<Adjective nr="84"/>
+<Adjective nr="85"/>
+<Adjective nr="86"/>
+<Adjective nr="87"/>
 </Cluster>
 </Typ>
 </ArgTypes>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="157">
+<Func kind="K" nr="166">
 <Func kind="F" nr="1"/>
 <Fraenkel>
 <Typ kind="M" nr="2">
@@ -163,7 +164,7 @@
 </Func>
 </Func>
 </Typ>
-<Func kind="K" nr="157">
+<Func kind="K" nr="166">
 <Func kind="F" nr="1"/>
 <Var nr="1"/>
 </Func>
@@ -172,7 +173,7 @@
 </Pred>
 </Fraenkel>
 </Func>
-<Func kind="K" nr="157">
+<Func kind="K" nr="166">
 <Func kind="F" nr="1"/>
 <Func kind="K" nr="3">
 <Fraenkel>
@@ -199,13 +200,13 @@
 <Cluster>
 <Adjective nr="35" value="false"/>
 <Adjective nr="50"/>
-<Adjective nr="84"/>
+<Adjective nr="87"/>
 </Cluster>
 </Typ>
 </ArgTypes>
 <Pred kind="R" nr="29">
 <Func kind="F" nr="1"/>
-<Func kind="K" nr="156">
+<Func kind="K" nr="165">
 <Func kind="F" nr="1"/>
 <Fraenkel>
 <Typ kind="M" nr="2">
@@ -216,7 +217,7 @@
 </Func>
 </Func>
 </Typ>
-<Func kind="K" nr="156">
+<Func kind="K" nr="165">
 <Func kind="F" nr="1"/>
 <Var nr="1"/>
 </Func>
@@ -225,7 +226,7 @@
 </Pred>
 </Fraenkel>
 </Func>
-<Func kind="K" nr="156">
+<Func kind="K" nr="165">
 <Func kind="F" nr="1"/>
 <Func kind="K" nr="3">
 <Fraenkel>
@@ -253,14 +254,14 @@
 <Adjective nr="48"/>
 <Adjective nr="49"/>
 <Adjective nr="50"/>
-<Adjective nr="82"/>
-<Adjective nr="83"/>
-<Adjective nr="84"/>
+<Adjective nr="85"/>
+<Adjective nr="86"/>
+<Adjective nr="87"/>
 </Cluster>
 </Typ>
 </ArgTypes>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="156">
+<Func kind="K" nr="165">
 <Func kind="F" nr="1"/>
 <Fraenkel>
 <Typ kind="M" nr="2">
@@ -271,7 +272,7 @@
 </Func>
 </Func>
 </Typ>
-<Func kind="K" nr="156">
+<Func kind="K" nr="165">
 <Func kind="F" nr="1"/>
 <Var nr="1"/>
 </Func>
@@ -280,7 +281,7 @@
 </Pred>
 </Fraenkel>
 </Func>
-<Func kind="K" nr="156">
+<Func kind="K" nr="165">
 <Func kind="F" nr="1"/>
 <Func kind="K" nr="3">
 <Fraenkel>
@@ -329,7 +330,7 @@
 <Adjective nr="9"/>
 <Adjective nr="15">
 <Func kind="U" nr="1">
-<Func kind="K" nr="175">
+<Func kind="K" nr="184">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 </Func>
@@ -342,7 +343,7 @@
 <Func kind="K" nr="10">
 <Func kind="K" nr="11">
 <Func kind="U" nr="1">
-<Func kind="K" nr="175">
+<Func kind="K" nr="184">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 </Func>
@@ -369,7 +370,7 @@
 </Func>
 </Typ>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="152">
+<Func kind="K" nr="161">
 <Var nr="1"/>
 <Var nr="2"/>
 <Var nr="3"/>

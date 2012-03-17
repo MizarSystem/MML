@@ -8,14 +8,14 @@ environ
 
  vocabularies NUMBERS, FINSEQ_1, ZFMISC_1, XBOOLE_0, FINSEQ_5, RELAT_1,
       ORDINAL4, NAT_1, TARSKI, FUNCT_1, XXREAL_0, SUBSET_1, ARYTM_3, FINSEQ_4,
-      ARYTM_1, CARD_1, ORDINAL1, RFINSEQ, PARTFUN1, FINSEQ_6;
+      ARYTM_1, CARD_1, ORDINAL1, RFINSEQ, PARTFUN1, FINSEQ_6, JORDAN3, REAL_1;
  notations TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0,
-      XXREAL_0, REALSET1, NAT_1, RELAT_1, PARTFUN1, RELSET_1, FUNCT_1,
-      FINSEQ_1, FINSEQ_4, RFINSEQ, FINSEQ_5;
+      XXREAL_0, REALSET1, REAL_1, NAT_1, NAT_D, RELAT_1, PARTFUN1, RELSET_1,
+      FUNCT_1, FINSEQ_1, FINSEQ_4, RFINSEQ, FINSEQ_5;
  constructors XXREAL_0, NAT_1, INT_1, PARTFUN1, FINSEQ_4, REALSET1, RFINSEQ,
-      BINARITH, FINSEQ_5, REAL_1, RELSET_1;
+      BINARITH, FINSEQ_5, REAL_1, RELSET_1, NAT_D;
  registrations XBOOLE_0, RELAT_1, FUNCT_1, XREAL_0, INT_1, FINSEQ_1, REALSET1,
-      FINSEQ_5, ORDINAL1, NAT_1, CARD_1;
+      FINSEQ_5, ORDINAL1, NAT_1, CARD_1, XXREAL_0;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
 
 
@@ -434,4 +434,106 @@ begin :: Addenda
 theorem :: FINSEQ_6:113
   for f being trivial FinSequence of D holds f is empty or ex x being
   Element of D st f = <*x*>;
+
+begin :: from JORDAN3, 2010.02.25, A.T.
+
+reserve k for Nat;
+reserve r,r1,r2 for Real;
+reserve n,i,i1,i2,j,j1,j2 for Element of NAT;
+reserve D for non empty set;
+reserve f for FinSequence of D;
+
+theorem :: FINSEQ_6:114
+  for i be Nat for p,q being FinSequence st len p<i & (i<=len p +
+  len q or i<=len (p^q)) holds (p^q).i=q.(i-len p);
+
+theorem :: FINSEQ_6:115
+  for x being set,f being FinSequence of D st 1<=len f holds (f^<*
+x*>).1=f.1 & (f^<*x*>).1=f/.1 & (<*x*>^f).(len f +1)=f.len f & (<*x*>^f).(len f
+  +1)=f/.len f;
+
+theorem :: FINSEQ_6:116
+  for f being FinSequence st len f=1 holds Rev f=f;
+
+theorem :: FINSEQ_6:117
+  for f being FinSequence of D,k being Nat holds len (f/^k)=len f-'k;
+
+theorem :: FINSEQ_6:118
+  for f being FinSequence of D,l1,l2 being Nat holds (f/^l1)|(l2-'l1)=(f
+  |l2)/^l1;
+
+definition
+  let f be FinSequence,k1,k2 be Nat;
+  func mid(f,k1,k2) -> FinSequence equals
+:: FINSEQ_6:def 3
+
+  (f/^(k1-'1))|(k2-'k1+1)
+  if k1<=k2 otherwise Rev ((f/^(k2-'1))|(k1-'k2+1));
+end;
+
+definition
+  let D;
+  let f be FinSequence of D,k1,k2 be Nat;
+  redefine func mid(f,k1,k2) -> FinSequence of D;
+end;
+
+theorem :: FINSEQ_6:119
+  for f being FinSequence of D,k1,k2 being Element of NAT st 1<=k1
+  & k1<=len f & 1<=k2 & k2<=len f holds Rev mid(f,k1,k2)=mid(Rev f,len f-'k2+1,
+  len f-'k1+1);
+
+theorem :: FINSEQ_6:120
+  for n,m being Element of NAT,f being FinSequence of D st 1<= m &
+  m+n<=len f holds (f/^n).m=f.(m+n);
+
+theorem :: FINSEQ_6:121
+  for i being Element of NAT,f being FinSequence of D st 1<=i & i
+  <=len f holds (Rev f).i=f.(len f -i+1);
+
+theorem :: FINSEQ_6:122
+  for f being FinSequence of D,k being Nat st 1<=k holds mid(f,1,k)=f|k;
+
+theorem :: FINSEQ_6:123
+  for f being FinSequence of D,k being Element of NAT st k<=len f
+  holds mid(f,k,len f)=f/^(k-'1);
+
+theorem :: FINSEQ_6:124
+  for f being FinSequence of D,k1,k2 being Element of NAT st 1<=k1
+& k1<=len f & 1<=k2 & k2<=len f holds mid(f,k1,k2).1=f.k1 & (k1<=k2 implies len
+mid(f,k1,k2) = k2 -' k1 +1 & for i being Element of NAT st 1<=i & i<=len mid(f,
+k1,k2) holds mid(f,k1,k2).i=f.(i+k1-'1)) & (k1>k2 implies len mid(f,k1,k2) = k1
+-' k2 +1 & for i being Element of NAT st 1<=i & i<=len mid(f,k1,k2) holds mid(f
+  ,k1,k2).i=f.(k1-'i+1));
+
+theorem :: FINSEQ_6:125
+  for f being FinSequence of D,k1,k2 being Element of NAT holds
+  rng mid(f,k1,k2) c= rng f;
+
+theorem :: FINSEQ_6:126
+  for f being FinSequence of D st 1<=len f holds mid(f,1,len f)=f;
+
+theorem :: FINSEQ_6:127
+  for f being FinSequence of D st 1<=len f holds mid(f,len f,1)=Rev f;
+
+theorem :: FINSEQ_6:128
+  for f being FinSequence of D, k1,k2,i being Element of NAT st 1
+  <=k1 & k1<=k2 & k2<=len f & 1<=i & (i<=k2-'k1+1 or i<=k2-k1+1 or i<=k2+1-k1)
+holds mid(f,k1,k2).i=f.(i+k1-'1) & mid(f,k1,k2).i=f.(i-'1+k1) & mid(f,k1,k2).i=
+  f.(i+k1-1) & mid(f,k1,k2).i=f.(i-1+k1);
+
+theorem :: FINSEQ_6:129
+  for f being FinSequence of D,k,i being Nat st 1<=i & i<=k & k<=
+  len f holds mid(f,1,k).i=f.i;
+
+theorem :: FINSEQ_6:130
+  for f being FinSequence of D, k1,k2 being Element of NAT st 1<=k1 & k1
+  <=k2 & k2<=len f holds len mid(f,k1,k2)<=len f;
+
+theorem :: FINSEQ_6:131
+  for D for f being FinSequence of D, k being Element of NAT, p
+  being Element of D holds (<*p*>^f)|(k+1) = <*p*>^(f|k);
+
+theorem :: FINSEQ_6:132
+  for D for f being FinSequence of D, k1,k2 being Element of NAT
+  st k1 < k2 & k1 in dom f holds mid(f,k1,k2) = <*f.k1*>^ mid(f,k1+1,k2);
 

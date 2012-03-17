@@ -10,8 +10,8 @@
 <ArticleID name="PARTFUN1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
-<ArticleID name="RELAT_2"/>
 <ArticleID name="TARSKI"/>
+<ArticleID name="RELAT_2"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="CLASSES1"/>
 <ArticleID name="NUMBERS"/>

@@ -12,35 +12,35 @@
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XCMPLX_0"/>
 <ArticleID name="XREAL_0"/>
-<ArticleID name="MEMBERED"/>
 <ArticleID name="PARTFUN1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
+<ArticleID name="NAT_1"/>
+<ArticleID name="VALUED_0"/>
+<ArticleID name="INT_1"/>
+<ArticleID name="RAT_1"/>
+<ArticleID name="MEMBERED"/>
+<ArticleID name="VALUED_1"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
+<ArticleID name="FINSEQ_1"/>
+<ArticleID name="FINSEQ_2"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="COMPTS_1"/>
-<ArticleID name="NAT_1"/>
-<ArticleID name="FINSEQ_1"/>
-<ArticleID name="FINSEQ_2"/>
-<ArticleID name="INT_1"/>
-<ArticleID name="RAT_1"/>
 <ArticleID name="BINOP_1"/>
 <ArticleID name="FUNCT_5"/>
 <ArticleID name="METRIC_1"/>
 <ArticleID name="ALGSTR_0"/>
-<ArticleID name="VALUED_0"/>
-<ArticleID name="VALUED_1"/>
 <ArticleID name="RLVECT_1"/>
 <ArticleID name="RLTOPSP1"/>
 <ArticleID name="EUCLID"/>
+<ArticleID name="SETFAM_1"/>
 <ArticleID name="ENUMSET1"/>
 <ArticleID name="DOMAIN_1"/>
 <ArticleID name="RELAT_2"/>
 <ArticleID name="EQREL_1"/>
 <ArticleID name="CONNSP_2"/>
-<ArticleID name="PCOMPS_1"/>
 <ArticleID name="RELSET_1"/>
 <ArticleID name="BORSUK_1"/>
 <ArticleID name="TOPMETR"/>
@@ -54,20 +54,20 @@
 <Func kind="K" nr="48"/>
 </Typ>
 </ArgTypes>
-<Typ kind="M" nr="6">
+<Typ kind="M" nr="11">
 <Cluster/>
 <Func kind="K" nr="276">
 <LocusVar nr="1"/>
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="40" value="false"/>
-<Adjective nr="51"/>
-<Adjective nr="52"/>
-<Adjective nr="56"/>
-<Adjective nr="57"/>
-<Adjective nr="58"/>
-<Adjective nr="63"/>
+<Adjective nr="62" value="false"/>
+<Adjective nr="73"/>
+<Adjective nr="74"/>
+<Adjective nr="78"/>
+<Adjective nr="79"/>
+<Adjective nr="80"/>
+<Adjective nr="85"/>
 </Cluster>
 </RCluster>
 <FCluster aid="JORDAN5A" nr="1">
