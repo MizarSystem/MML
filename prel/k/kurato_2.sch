@@ -28,17 +28,13 @@
 </Signature>
 <Scheme>
 <ArgTypes>
-<Typ kind="G" nr="1">
-<Cluster>
-<Adjective nr="20" value="false"/>
-</Cluster>
+<Typ kind="M" nr="1">
+<Cluster/>
 </Typ>
 <Typ kind="M" nr="3">
 <Cluster/>
 <Func kind="K" nr="40">
-<Func kind="U" nr="1">
 <Func kind="F" nr="1"/>
-</Func>
 </Func>
 </Typ>
 </ArgTypes>
@@ -50,17 +46,13 @@
 <Adjective nr="21">
 <Func kind="K" nr="56"/>
 <Func kind="K" nr="40">
-<Func kind="U" nr="1">
 <Func kind="F" nr="1"/>
-</Func>
 </Func>
 </Adjective>
 </Cluster>
 <Func kind="K" nr="56"/>
 <Func kind="K" nr="40">
-<Func kind="U" nr="1">
 <Func kind="F" nr="1"/>
-</Func>
 </Func>
 </Typ>
 <Not>
@@ -72,9 +64,7 @@
 </Typ>
 <Pred kind="R" nr="1">
 <Func kind="K" nr="138">
-<Func kind="U" nr="1">
 <Func kind="F" nr="1"/>
-</Func>
 <Var nr="1"/>
 <Var nr="2"/>
 </Func>
@@ -89,18 +79,15 @@
 </Scheme>
 <Scheme>
 <ArgTypes>
-<Typ kind="G" nr="3">
+<Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="20" value="false"/>
-<Adjective nr="25"/>
+<Adjective nr="1" value="false"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="3">
 <Cluster/>
 <Func kind="K" nr="40">
-<Func kind="U" nr="1">
 <Func kind="F" nr="1"/>
-</Func>
 </Func>
 </Typ>
 </ArgTypes>
@@ -112,17 +99,13 @@
 <Adjective nr="21">
 <Func kind="K" nr="56"/>
 <Func kind="K" nr="40">
-<Func kind="U" nr="1">
 <Func kind="F" nr="1"/>
-</Func>
 </Func>
 </Adjective>
 </Cluster>
 <Func kind="K" nr="56"/>
 <Func kind="K" nr="40">
-<Func kind="U" nr="1">
 <Func kind="F" nr="1"/>
-</Func>
 </Func>
 </Typ>
 <Not>
@@ -134,9 +117,7 @@
 </Typ>
 <Pred kind="R" nr="1">
 <Func kind="K" nr="138">
-<Func kind="U" nr="1">
 <Func kind="F" nr="1"/>
-</Func>
 <Var nr="1"/>
 <Var nr="2"/>
 </Func>
@@ -361,7 +342,9 @@
 </Typ>
 <Pred kind="P" nr="1">
 <Func kind="K" nr="158">
+<Func kind="U" nr="1">
 <Func kind="F" nr="1"/>
+</Func>
 <Var nr="1"/>
 <Var nr="2"/>
 </Func>
@@ -391,7 +374,9 @@
 </Pred>
 <Pred kind="P" nr="1">
 <Func kind="K" nr="158">
+<Func kind="U" nr="1">
 <Func kind="F" nr="1"/>
+</Func>
 <Func kind="F" nr="2"/>
 <Var nr="2"/>
 </Func>

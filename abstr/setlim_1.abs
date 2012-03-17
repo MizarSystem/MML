@@ -1,0 +1,477 @@
+:: Limit of Sequence of Subsets
+::  by Bo Zhang , Hiroshi Yamazaki and Yatsuka Nakamura
+:: 
+:: Received March 15, 2005
+:: Copyright (c) 2005 Association of Mizar Users
+
+environ
+
+ vocabularies RELAT_1, SEQ_2, FUNCT_1, ORDINAL2, BOOLE, SUBSET_1, PROB_2,
+      SETLIM_1, SETFAM_1, TARSKI, SEQM_3, PROB_1, YELLOW_6;
+ notations ORDINAL1, NUMBERS, XREAL_0, NAT_1, FUNCT_1, TARSKI, XBOOLE_0,
+      SEQM_3, YELLOW_6, ZFMISC_1, SUBSET_1, RELSET_1, SETFAM_1, FUNCOP_1,
+      PROB_1, FUNCT_2, KURATO_2;
+ constructors NAT_1, XBOOLE_0, SETFAM_1, FUNCT_1, SUPINF_2, PROB_1, KURATO_2,
+      SEQM_3, YELLOW_6;
+ registrations SUBSET_1, XREAL_0, RELSET_1, ARYTM_3, ZFMISC_1, PROB_1,
+      STRUCT_0, XBOOLE_0, ORDINAL2, SETFAM_1, FUNCT_1;
+ requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
+
+
+begin
+
+ reserve n,m,k,k1,k2,i,j for Nat;
+ reserve x,y,z,X,Y,Z for set;
+ reserve A for Subset of X;
+ reserve A1,A2,A3 for SetSequence of X;
+ reserve Si for SigmaField of X;
+ reserve S,S1,S2,S3 for SetSequence of Si;
+
+theorem :: SETLIM_1:1
+  (X <> {} & for x st x in X holds x = y) implies union X = y;
+
+theorem :: SETLIM_1:2
+  (X <> {} & for x st x in X holds x = y) implies meet X = y;
+
+theorem :: SETLIM_1:3
+  for f be Function of NAT,Y for n holds {f.k: n <= k} <> {};
+
+theorem :: SETLIM_1:4
+  for f be Function of NAT,Y holds f.(n + m) in {f.k : n <= k};
+
+theorem :: SETLIM_1:5
+  for f being Function of NAT,Y holds
+    {f.k1: n <= k1} = {f.k2 : n+1 <=k2} \/ {f.n};
+
+theorem :: SETLIM_1:6
+  for f be Function of NAT,Y holds
+    (for k1 holds x in f.(n+k1)) iff
+    (for Z st Z in {f.k2 : n <= k2} holds x in Z);
+
+theorem :: SETLIM_1:7
+  for Y being non empty set for f being Function of NAT,Y holds
+    x in rng f iff ex n st x = f.n;
+
+theorem :: SETLIM_1:8
+  for X, Y being non empty set for f being Function of X,Y holds
+    rng f <> {} & f <> {};
+
+theorem :: SETLIM_1:9
+  for Y be non empty set for f being Function of NAT,Y holds
+    rng f = {f.k : 0 <= k};
+
+theorem :: SETLIM_1:10
+  for Y being non empty set for f being Function of NAT,Y holds
+    rng (f ^\ k) = {f.n: k <= n};
+
+theorem :: SETLIM_1:11
+  meet rng A1 is Subset of X;
+
+theorem :: SETLIM_1:12
+  x in meet rng A1 iff for n holds x in A1.n;
+
+theorem :: SETLIM_1:13
+  Intersection A1 = meet rng A1;
+
+theorem :: SETLIM_1:14
+  Intersection A1 c= Union A1;
+
+theorem :: SETLIM_1:15
+  (for n holds A1.n = A) implies Union A1 = A;
+
+theorem :: SETLIM_1:16
+  (for n holds A1.n = A) implies Intersection A1 = A;
+
+theorem :: SETLIM_1:17
+  A1 is constant implies Union A1 = Intersection A1;
+
+theorem :: SETLIM_1:18
+  A1 is constant & the_value_of A1 = A implies
+    for n holds union {A1.k : n <= k} = A;
+
+theorem :: SETLIM_1:19
+  A1 is constant & the_value_of A1 = A implies
+    for n holds meet {A1.k : n <= k} = A;
+
+theorem :: SETLIM_1:20
+for X being set, A1 being SetSequence of X holds
+ ex f being Function of NAT,bool X st
+  for n,Y st Y = {A1.k: n <= k} holds f.n = meet Y;
+
+theorem :: SETLIM_1:21
+  for X being set,A1 being SetSequence of X holds
+    ex f being Function of NAT,bool X st
+      for n,Y st Y = {A1.k: n <= k} holds f.n = union Y;
+
+definition let X,A1;
+  attr A1 is monotone means
+:: SETLIM_1:def 1
+  A1 is non-decreasing or A1 is non-increasing;
+end;
+
+definition
+ let X be set, A1 be SetSequence of X;
+func inferior_setsequence A1 -> SetSequence of X means
+:: SETLIM_1:def 2
+ for n,Y st Y = {A1.k : n <= k} holds it.n = meet Y;
+end;
+
+definition
+ let X be set, A1 be SetSequence of X;
+func superior_setsequence A1 -> SetSequence of X means
+:: SETLIM_1:def 3
+ for n,Y st Y = {A1.k : n <= k} holds it.n = union Y;
+end;
+
+theorem :: SETLIM_1:22
+  (inferior_setsequence A1).0 = Intersection A1;
+
+theorem :: SETLIM_1:23
+  (superior_setsequence A1).0 = Union A1;
+
+theorem :: SETLIM_1:24
+  x in (inferior_setsequence A1).n iff for k holds x in A1.(n+k);
+
+theorem :: SETLIM_1:25
+  x in (superior_setsequence A1).n iff ex k st x in A1.(n + k);
+
+theorem :: SETLIM_1:26
+  (inferior_setsequence A1).n = (inferior_setsequence A1).(n+1) /\ A1.n;
+
+theorem :: SETLIM_1:27
+  (superior_setsequence A1).n = (superior_setsequence A1).(n+1) \/ A1.n;
+
+theorem :: SETLIM_1:28
+  inferior_setsequence A1 is non-decreasing;
+
+theorem :: SETLIM_1:29
+  superior_setsequence A1 is non-increasing;
+
+theorem :: SETLIM_1:30
+  inferior_setsequence A1 is monotone &
+    superior_setsequence A1 is monotone;
+
+registration
+  let X be set, A be SetSequence of X;
+  cluster inferior_setsequence A -> non-decreasing;
+end;
+
+registration
+  let X be set, A be SetSequence of X;
+  cluster superior_setsequence A -> non-increasing;
+end;
+
+theorem :: SETLIM_1:31
+  Intersection A1 c= (inferior_setsequence A1).n;
+
+theorem :: SETLIM_1:32
+  (superior_setsequence A1).n c= Union A1;
+
+theorem :: SETLIM_1:33
+  for A1,n holds {A1.k: n <= k} is Subset of bool X;
+
+theorem :: SETLIM_1:34
+  for A1,n holds {A1.k: n <= k} is Subset-Family of X;
+
+theorem :: SETLIM_1:35
+  Union A1 = (Intersection Complement A1)`;
+
+theorem :: SETLIM_1:36
+  (inferior_setsequence A1).n = ((superior_setsequence Complement A1).n)`;
+
+theorem :: SETLIM_1:37
+  (superior_setsequence A1).n = ((inferior_setsequence Complement A1).n)`;
+
+theorem :: SETLIM_1:38
+Complement (inferior_setsequence A1) = (superior_setsequence Complement A1);
+
+theorem :: SETLIM_1:39
+Complement superior_setsequence A1 = inferior_setsequence Complement A1;
+
+theorem :: SETLIM_1:40
+  (for n holds A3.n = A1.n \/ A2.n) implies for n holds
+    (inferior_setsequence(A1)).n \/ (inferior_setsequence(A2)).n
+      c= (inferior_setsequence(A3)).n;
+
+theorem :: SETLIM_1:41
+  (for n holds A3.n = A1.n /\ A2.n) implies for n holds
+    (inferior_setsequence A3).n
+      = (inferior_setsequence A1).n /\ (inferior_setsequence A2).n;
+
+theorem :: SETLIM_1:42
+  (for n holds A3.n = A1.n  \/ A2.n) implies for n holds
+    (superior_setsequence(A3)).n
+     = (superior_setsequence(A1)).n \/ (superior_setsequence(A2)).n;
+
+theorem :: SETLIM_1:43
+  (for n holds A3.n = A1.n /\ A2.n) implies for n holds
+    (superior_setsequence A3).n
+      c= (superior_setsequence A1).n /\ (superior_setsequence A2).n;
+
+theorem :: SETLIM_1:44
+  A1 is constant & the_value_of A1 = A implies
+    for n holds (inferior_setsequence A1).n = A;
+
+theorem :: SETLIM_1:45
+  A1 is constant & the_value_of A1 = A implies
+    for n holds (superior_setsequence A1).n = A;
+
+theorem :: SETLIM_1:46
+  A1 is non-decreasing implies A1.n c= (superior_setsequence(A1)).(n+1);
+
+theorem :: SETLIM_1:47
+  A1 is non-decreasing implies
+    (superior_setsequence A1).n = (superior_setsequence A1).(n+1);
+
+theorem :: SETLIM_1:48
+  A1 is non-decreasing implies (superior_setsequence A1).n = Union A1;
+
+theorem :: SETLIM_1:49
+A1 is non-decreasing implies Intersection superior_setsequence A1 = Union A1;
+
+theorem :: SETLIM_1:50
+  A1 is non-decreasing implies A1.n c= (inferior_setsequence A1).(n+1);
+
+theorem :: SETLIM_1:51
+  A1 is non-decreasing implies (inferior_setsequence A1).n = A1.n;
+
+theorem :: SETLIM_1:52
+  A1 is non-decreasing implies inferior_setsequence A1 = A1;
+
+theorem :: SETLIM_1:53
+  A1 is non-increasing implies (superior_setsequence A1).(n+1) c= A1.n;
+
+theorem :: SETLIM_1:54
+  A1 is non-increasing implies (superior_setsequence(A1)).n = A1.n;
+
+theorem :: SETLIM_1:55
+  A1 is non-increasing implies superior_setsequence(A1) = A1;
+
+theorem :: SETLIM_1:56
+  A1 is non-increasing implies (inferior_setsequence(A1)).(n+1) c= A1.n;
+
+theorem :: SETLIM_1:57
+  A1 is non-increasing implies
+   (inferior_setsequence(A1)).n = (inferior_setsequence(A1)).(n+1);
+
+theorem :: SETLIM_1:58
+A1 is non-increasing implies (inferior_setsequence(A1)).n = Intersection A1;
+
+theorem :: SETLIM_1:59
+A1 is non-increasing implies Union inferior_setsequence(A1) = Intersection A1;
+
+definition
+  let X be set, A1 be SetSequence of X;
+  redefine func lim_inf A1 equals
+:: SETLIM_1:def 4
+ Union inferior_setsequence A1;
+end;
+
+definition
+  let X be set, A1 be SetSequence of X;
+  redefine func lim_sup A1 equals
+:: SETLIM_1:def 5
+ Intersection superior_setsequence A1;
+end;
+
+definition
+  let X be set, A1 be SetSequence of X;
+  assume  A1 is convergent;
+  func lim A1 -> Subset of X means
+:: SETLIM_1:def 6
+ it = lim_sup A1 & it = lim_inf A1;
+end;
+
+theorem :: SETLIM_1:60
+  Intersection A1 c= lim_inf A1;
+
+theorem :: SETLIM_1:61
+  lim_inf A1 = lim inferior_setsequence(A1);
+
+theorem :: SETLIM_1:62
+  lim_sup A1 = lim superior_setsequence(A1);
+
+theorem :: SETLIM_1:63
+  lim_sup A1 = (lim_inf Complement A1)`;
+
+theorem :: SETLIM_1:64
+  A1 is constant & the_value_of A1 = A implies
+    A1 is convergent & lim A1 = A & lim_inf A1 = A & lim_sup A1 = A;
+
+theorem :: SETLIM_1:65
+  A1 is non-decreasing implies lim_sup A1 = Union A1;
+
+theorem :: SETLIM_1:66
+  A1 is non-decreasing implies lim_inf A1 = Union A1;
+
+theorem :: SETLIM_1:67
+  A1 is non-increasing implies lim_sup A1 = Intersection A1;
+
+theorem :: SETLIM_1:68
+  A1 is non-increasing implies lim_inf A1 = Intersection A1;
+
+theorem :: SETLIM_1:69
+  A1 is non-decreasing implies A1 is convergent & lim A1 = Union A1;
+
+theorem :: SETLIM_1:70
+  A1 is non-increasing implies A1 is convergent & lim A1 = Intersection A1;
+
+theorem :: SETLIM_1:71
+  A1 is monotone implies A1 is convergent;
+
+definition
+ let X be set,
+     Si be SigmaField of X,
+     S be SetSequence of Si;
+ redefine attr S is constant means
+:: SETLIM_1:def 7
+  ex A being Element of Si st for n holds S.n = A;
+end;
+
+definition
+ let X be set,
+     Si be SigmaField of X,
+     S be SetSequence of Si;
+ func @inferior_setsequence S -> SetSequence of Si equals
+:: SETLIM_1:def 8
+    inferior_setsequence S;
+end;
+
+definition
+  let X be set,
+      Si be SigmaField of X,
+      S be SetSequence of Si;
+  func @superior_setsequence S -> SetSequence of Si equals
+:: SETLIM_1:def 9
+ superior_setsequence S;
+end;
+
+theorem :: SETLIM_1:72
+  @superior_setsequence S is non-increasing;
+
+theorem :: SETLIM_1:73
+  @inferior_setsequence(S) is non-decreasing;
+
+registration
+  let X be set,
+      Si be SigmaField of X,
+      S be SetSequence of Si;
+  cluster @superior_setsequence(S) -> non-increasing;
+end;
+
+registration
+  let X be set,
+      Si be SigmaField of X,
+      S be SetSequence of Si;
+  cluster @inferior_setsequence(S) -> non-decreasing;
+end;
+
+definition
+  let X be set,
+      Si be SigmaField of X,
+      S be SetSequence of Si;
+  func lim_inf S -> Element of Si equals
+:: SETLIM_1:def 10
+  Union @inferior_setsequence(S);
+end;
+
+definition
+ let X be set,
+     Si be SigmaField of X,
+     S be SetSequence of Si;
+ func lim_sup S -> Element of Si equals
+:: SETLIM_1:def 11
+  Intersection @superior_setsequence(S);
+end;
+
+definition
+  let X be set,
+     Si be SigmaField of X,
+     S be SetSequence of Si;
+  attr S is convergent means
+:: SETLIM_1:def 12
+ lim_sup S = lim_inf S;
+end;
+
+definition
+  let X be set,
+      Si be SigmaField of X,
+      S be SetSequence of Si;
+  assume  S is convergent;
+  func lim S -> Element of Si means
+:: SETLIM_1:def 13
+ it = lim_sup S & it = lim_inf S;
+end;
+
+theorem :: SETLIM_1:74
+  x in lim_sup S iff for n holds ex k st x in S.(n+k);
+
+theorem :: SETLIM_1:75
+  x in lim_inf S iff ex n st for k holds x in S.(n+k);
+
+theorem :: SETLIM_1:76
+  Intersection S c= lim_inf S;
+
+theorem :: SETLIM_1:77
+  lim_sup S c= Union S;
+
+theorem :: SETLIM_1:78
+  lim_inf S c= lim_sup S;
+
+definition
+  let X be set,
+      Si be SigmaField of X,
+      S be SetSequence of Si;
+  func @Complement S -> SetSequence of Si equals
+:: SETLIM_1:def 14
+ Complement S;
+end;
+
+theorem :: SETLIM_1:79
+  lim_inf S = (lim_sup @Complement S)`;
+
+theorem :: SETLIM_1:80
+  lim_sup S = (lim_inf @Complement S)`;
+
+theorem :: SETLIM_1:81
+  (for n holds S3.n = S1.n \/ S2.n) implies
+    lim_inf S1 \/ lim_inf S2 c= lim_inf S3;
+
+theorem :: SETLIM_1:82
+  (for n holds S3.n = S1.n /\ S2.n) implies
+    lim_inf S3 = lim_inf S1 /\ lim_inf S2;
+
+theorem :: SETLIM_1:83
+  (for n holds S3.n = S1.n \/ S2.n) implies
+    lim_sup S3 = lim_sup S1 \/ lim_sup S2;
+
+theorem :: SETLIM_1:84
+  (for n holds S3.n = S1.n /\ S2.n) implies
+    lim_sup S3 c= lim_sup S1 /\ lim_sup S2;
+
+theorem :: SETLIM_1:85
+  S is constant & the_value_of S = A implies
+    S is convergent & lim S = A &
+    lim_inf S = A & lim_sup S = A;
+
+theorem :: SETLIM_1:86
+  S is non-decreasing implies lim_sup S = Union S;
+
+theorem :: SETLIM_1:87
+  S is non-decreasing implies lim_inf S = Union S;
+
+theorem :: SETLIM_1:88
+  S is non-decreasing implies S is convergent & lim S = Union S;
+
+theorem :: SETLIM_1:89
+  S is non-increasing implies lim_sup S = Intersection S;
+
+theorem :: SETLIM_1:90
+  S is non-increasing implies lim_inf S = Intersection S;
+
+theorem :: SETLIM_1:91
+  S is non-increasing implies S is convergent &
+    lim S = Intersection S;
+
+theorem :: SETLIM_1:92
+  S is monotone implies S is convergent;

@@ -25,10 +25,11 @@
 <ArticleID name="FUNCT_6"/>
 <ArticleID name="XCMPLX_0"/>
 <ArticleID name="FUNCT_3"/>
+<ArticleID name="MEMBERED"/>
+<ArticleID name="SEQ_1"/>
 <ArticleID name="RFUNCT_1"/>
 <ArticleID name="SQUARE_1"/>
 <ArticleID name="RFINSEQ"/>
-<ArticleID name="SEQ_1"/>
 <ArticleID name="RFUNCT_3"/>
 <ArticleID name="FUNCT_7"/>
 <ArticleID name="MARGREL1"/>
@@ -43,22 +44,22 @@
 <Cluster>
 <Adjective nr="2"/>
 <Adjective nr="5"/>
-<Adjective nr="43"/>
-<Adjective nr="45"/>
-<Adjective nr="46"/>
-<Adjective nr="47"/>
-<Adjective nr="54"/>
+<Adjective nr="48"/>
+<Adjective nr="50"/>
+<Adjective nr="51"/>
+<Adjective nr="52"/>
+<Adjective nr="59"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
 <Cluster>
 <Adjective nr="2"/>
 <Adjective nr="5"/>
-<Adjective nr="43"/>
-<Adjective nr="45"/>
-<Adjective nr="46"/>
-<Adjective nr="47"/>
-<Adjective nr="55"/>
+<Adjective nr="48"/>
+<Adjective nr="50"/>
+<Adjective nr="51"/>
+<Adjective nr="52"/>
+<Adjective nr="60"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="3">
@@ -118,7 +119,7 @@
 <Pred kind="R" nr="1">
 <Func kind="K" nr="32">
 <Func kind="F" nr="1"/>
-<Func kind="K" nr="290">
+<Func kind="K" nr="304">
 <Func kind="K" nr="56"/>
 <Var nr="1"/>
 </Func>
@@ -163,33 +164,33 @@
 <Cluster>
 <Adjective nr="2"/>
 <Adjective nr="5"/>
-<Adjective nr="43"/>
-<Adjective nr="45"/>
-<Adjective nr="46"/>
-<Adjective nr="47"/>
-<Adjective nr="55"/>
+<Adjective nr="48"/>
+<Adjective nr="50"/>
+<Adjective nr="51"/>
+<Adjective nr="52"/>
+<Adjective nr="60"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
 <Cluster>
 <Adjective nr="2"/>
 <Adjective nr="5"/>
-<Adjective nr="43"/>
-<Adjective nr="45"/>
-<Adjective nr="46"/>
-<Adjective nr="47"/>
-<Adjective nr="55"/>
+<Adjective nr="48"/>
+<Adjective nr="50"/>
+<Adjective nr="51"/>
+<Adjective nr="52"/>
+<Adjective nr="60"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
 <Cluster>
 <Adjective nr="2"/>
 <Adjective nr="5"/>
-<Adjective nr="43"/>
-<Adjective nr="45"/>
-<Adjective nr="46"/>
-<Adjective nr="47"/>
-<Adjective nr="55"/>
+<Adjective nr="48"/>
+<Adjective nr="50"/>
+<Adjective nr="51"/>
+<Adjective nr="52"/>
+<Adjective nr="60"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="3">

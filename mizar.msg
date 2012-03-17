@@ -58,7 +58,7 @@ Non-unique matching of a locus of the substitute of a functor variable
 # 43
 Cannot decompose a conjunction of formal sentences
 # 44
-A formal predicate in a Fraenkel operator of formal construction
+Formal predicate in a Fraenkel operator of formal construction
 # 45
 Wrong order of the declarations of scheme functor or nested functor
 # 46
@@ -104,7 +104,7 @@ Unexpected correctness condition
 # 73
 Correctness condition missing
 # 76
-Don't mix cluster correctness with other correctness conditions
+Registration correctness condition mismatch
 # 77
 Still not implemented
 # 78
@@ -138,11 +138,11 @@ Prefix must be a structure
 # 95
 Inconsistent cluster
 # 96
-Only standard functors and selectors can be used in a functor cluster
+Only standard functors and selectors can be used in a functorial cluster registration
 # 97
 Non clusterable attribute
 # 100
-Inaccessible locus
+Unused locus
 # 101
 Unknown mode
 # 102
@@ -216,7 +216,7 @@ Inaccessible selector
 # 136
 Non registered cluster
 # 137
-"requirements SUBSET;" missing
+"SUBSET" missing in the "requirements" directive
 # 138
 Cannot identify a local constant, free in the default type
 # 140
@@ -374,9 +374,9 @@ Directives are not allowed in the text proper
 # 242
 "reserve", "struct", "scheme" and "theorem" not allowed in a definition block
 # 250
-"$1",...,"$8" are allowed only inside definiens of a private constructor
+"$1",...,"$10" are allowed only inside the definiens of a private constructor
 # 251
-"it" is allowed only inside definiens of a public functor or mode
+"it" is allowed only inside the definiens of a public functor or mode
 # 253
 "means" expected
 # 255
@@ -386,7 +386,7 @@ Redefined mode cannot be expandable
 # 272
 It's meaningless to redefine cluster
 # 274
-Don't use "means" in the definition of an expandable mode
+"means" not allowed in a definition of an expandable mode
 # 300
 Identifier expected
 # 301
@@ -604,11 +604,11 @@ Beginning of an inaccessible item
 # 611
 End of an inaccessible item
 # 612
-Beginning of an inaccessible conditions
+Beginning of inaccessible conditions
 # 613
-End of an inaccessible conditions
+End of inaccessible conditions
 # 614
-Duplicating label identifier
+Duplicated label identifier
 # 615
 Unexpected "@proof"
 # 616
@@ -618,15 +618,15 @@ Unnecessary "proof thus thesis; end;"
 # 704
 Irrelevant signature directive
 # 706
-Unnecessary theorems directive
+Unnecessary item in the "theorems" directive
 # 707
-Unnecessary schemes directive
+Unnecessary item in the "schemes" directive
 # 708
 Theorem should be replaced by an equal one
 # 709
-Irrelevant vocabulary directive
+Irrelevant item in the "vocabularies" directive
 # 710
-Irrelevant definitions directive
+Irrelevant item in the "definitions" directive
 # 711
 Identity functor definition
 # 712
@@ -636,21 +636,21 @@ Irrelevant redefinition of a functor
 # 714
 Irrelevant redefinition of a mode
 # 715
-Irrelevant reconsider of a variable
+Irrelevant "reconsider" of a variable
 # 716
-Irrelevant reconsider of a term
+Irrelevant "reconsider" of a term
 # 717
 Irrelevant reconsider
 # 720
 The first two arguments of the iterative equality are equal
 # 721
-The first argument of the iterative equality is equal with a next one
+The first argument of the iterative equality is equal to the next one
 # 722
-The second argument of the iterative equality is equal with a next one
+The second argument of the iterative equality is equal to the next one
 # 724
-This argument of the iterative equality is equal with a next one
+This argument of the iterative equality is equal to the next one
 # 725
-The equal argument of the iterative equality with a previous one
+This argument of the iterative equality is equal to the previous one
 # 730
 Redundant reconsidering of variables
 # 731
@@ -698,7 +698,7 @@ Cannot find schemes file
 # 808
 Cannot find constructors file
 # 809
-Cannot find clusters file
+Cannot find registrations file
 # 810
 Directive name repeated
 # 811
@@ -722,7 +722,7 @@ Cannot find constructors name on constructor list
 # 830
 Nothing imported from notations
 # 831
-Nothing imported from clusters
+Nothing imported from registrations
 # 832
 Nothing imported from definitions
 # 833

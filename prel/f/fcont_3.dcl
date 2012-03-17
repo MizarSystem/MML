@@ -15,6 +15,7 @@
 <ArticleID name="XREAL_0"/>
 <ArticleID name="RELSET_1"/>
 <ArticleID name="FUNCT_2"/>
+<ArticleID name="MEMBERED"/>
 <ArticleID name="SETFAM_1"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
@@ -23,7 +24,6 @@
 <ArticleID name="RCOMP_1"/>
 <ArticleID name="SQUARE_1"/>
 <ArticleID name="LIMFUNC1"/>
-<ArticleID name="MEMBERED"/>
 </Signature>
 <FCluster>
 <ArgTypes/>
@@ -31,10 +31,10 @@
 <Func kind="K" nr="52"/>
 </Func>
 <Cluster>
-<Adjective nr="33"/>
-<Adjective nr="34"/>
-<Adjective nr="43"/>
-<Adjective nr="44"/>
+<Adjective nr="24"/>
+<Adjective nr="25"/>
+<Adjective nr="38"/>
+<Adjective nr="39"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -44,13 +44,13 @@
 </Func>
 <Cluster>
 <Adjective nr="1"/>
-<Adjective nr="33"/>
-<Adjective nr="34"/>
-<Adjective nr="43"/>
-<Adjective nr="44"/>
-<Adjective nr="45"/>
-<Adjective nr="46"/>
-<Adjective nr="47"/>
+<Adjective nr="24"/>
+<Adjective nr="25"/>
+<Adjective nr="26"/>
+<Adjective nr="27"/>
+<Adjective nr="28"/>
+<Adjective nr="38"/>
+<Adjective nr="39"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -65,9 +65,9 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="34"/>
-<Adjective nr="43"/>
-<Adjective nr="44"/>
+<Adjective nr="24"/>
+<Adjective nr="25"/>
+<Adjective nr="39"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -82,9 +82,9 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="34"/>
-<Adjective nr="43"/>
-<Adjective nr="44"/>
+<Adjective nr="24"/>
+<Adjective nr="25"/>
+<Adjective nr="39"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -99,9 +99,9 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="33"/>
-<Adjective nr="43"/>
-<Adjective nr="44"/>
+<Adjective nr="24"/>
+<Adjective nr="25"/>
+<Adjective nr="38"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -116,9 +116,9 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="33"/>
-<Adjective nr="43"/>
-<Adjective nr="44"/>
+<Adjective nr="24"/>
+<Adjective nr="25"/>
+<Adjective nr="38"/>
 </Cluster>
 </FCluster>
 </Registrations>

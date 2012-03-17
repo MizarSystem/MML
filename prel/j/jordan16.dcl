@@ -25,6 +25,7 @@
 <ArticleID name="FINSEQ_2"/>
 <ArticleID name="RVSUM_1"/>
 <ArticleID name="EUCLID"/>
+<ArticleID name="MEMBERED"/>
 <ArticleID name="SEQ_1"/>
 <ArticleID name="REALSET1"/>
 <ArticleID name="PARTFUN1"/>
@@ -48,7 +49,7 @@
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="50"/>
+<Adjective nr="55"/>
 </Cluster>
 </RCluster>
 <RCluster>
@@ -66,12 +67,12 @@
 <Func kind="K" nr="52"/>
 <Func kind="K" nr="52"/>
 </Adjective>
-<Adjective nr="49"/>
-<Adjective nr="51">
+<Adjective nr="54"/>
+<Adjective nr="56">
 <Func kind="K" nr="52"/>
 <Func kind="K" nr="52"/>
 </Adjective>
-<Adjective nr="52"/>
+<Adjective nr="57"/>
 </Cluster>
 </RCluster>
 <FCluster>
@@ -87,7 +88,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="201">
+<Func kind="K" nr="213">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -99,12 +100,12 @@
 <Func kind="K" nr="52"/>
 <Func kind="K" nr="52"/>
 </Adjective>
-<Adjective nr="49"/>
-<Adjective nr="51">
+<Adjective nr="54"/>
+<Adjective nr="56">
 <Func kind="K" nr="52"/>
 <Func kind="K" nr="52"/>
 </Adjective>
-<Adjective nr="52"/>
+<Adjective nr="57"/>
 </Cluster>
 </FCluster>
 </Registrations>

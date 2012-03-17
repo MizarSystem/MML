@@ -6,7 +6,7 @@
 
 environ
 
- vocabulary PRE_TOPC, RLVECT_3, PBOOLE, RELAT_1, FUNCT_1, PROB_1, CARD_1,
+ vocabularies PRE_TOPC, RLVECT_3, PBOOLE, RELAT_1, FUNCT_1, PROB_1, CARD_1,
       ARYTM, BOOLE, FRECHET, SETFAM_1, TARSKI, WAYBEL23, CANTOR_1, ORDINAL1,
       CARD_4, CARD_2, FINSET_1, NATTRA_1, PUA2MSS1, SUBSET_1, TOPS_1, YELLOW_9,
       FINSUB_1, FUNCT_5, FINSEQ_1, EQREL_1, PCOMPS_1, TOPGEN_2;
@@ -91,7 +91,7 @@ A2:  dom B = the carrier of T by PBOOLE:def 3;
      proof let a; assume a in Union B; then
        consider b such that
 A3:    b in dom B & a in B.b by CARD_5:10;
-       reconsider b as Point of T by A2,A3;
+       reconsider b as Point of T by PBOOLE:def 3,A3;
        B.b is Basis of b by A1;
        hence a in bool the carrier of T by A3;
      end; then
@@ -100,7 +100,7 @@ A4:  W c= the topology of T
      proof let a; assume a in W; then
        consider b such that
 A3:    b in dom B & a in B.b by CARD_5:10;
-       reconsider b as Point of T by A2,A3;
+       reconsider b as Point of T by PBOOLE:def 3,A3;
        B.b is Basis of b by A1; then
        B.b c= the topology of T by YELLOW_8:def 2;
        hence a in the topology of T by A3;
@@ -631,7 +631,7 @@ A3: weight T = meet M by WAYBEL23:def 5;
     Card B0 in M;
     hence weight T <=` Card the carrier of T by A2,A3,SETFAM_1:4;
     B0 c= B by Th19;
-    hence Card the carrier of T <=` weight T  by A1,A2,CARD_1:27;
+    hence Card the carrier of T <=` weight T by A1,A2,CARD_1:27;
   end;
 
 registration
@@ -648,8 +648,8 @@ registration
   end;
 end;
   
-::<DESC name="1.1.15. Twierdzenie: o istnieniu bazy bed/acej podrodzin/a bazy i maj/acej moc r/own/a wadze przestrzeni" monograph="topology"/>
-theorem
+canceled;
+LemA2:
   for T being infinite-weight TopSpace
   for B being Basis of T
   ex B1 being Basis of T st B1 c= B & Card B1 = weight T
@@ -660,7 +660,7 @@ theorem
 A1: Card B0 = weight T by WAYBEL31:2;
 A2: weight T is infinite by Def4;
     defpred P[set,set] means
-    union $2 = $1 & Card $2 <=`  weight T;
+    union $2 = $1 & Card $2 <=` weight T;
 A3: now
       let a; assume a in B0; then
       reconsider W = a as open Subset of T by YELLOW_8:19;
@@ -807,7 +807,7 @@ A7:   U in B & x in U & U c= V by YELLOW_9:31;
   end;
      
 theorem Th22:
-  for T being non empty TopSpace
+  for T being TopSpace
   for B0,B being Basis of T
   for f being Function of the carrier of T, the topology of T
   st
@@ -816,7 +816,7 @@ theorem Th22:
      for U being open Subset of T st x in U holds f.x c= U
   holds B0 c= B
   proof
-    let T be non empty TopSpace;
+    let T be TopSpace;
     let B0,B be Basis of T;
     let f be Function of the carrier of T, the topology of T;
     assume
@@ -829,7 +829,7 @@ A4: a in B0; then
     consider b such that
 A2: b in dom f & a = f.b by A0,FUNCT_1:def 5;
     reconsider b as Element of T by A2;
-    reconsider V = a as Subset of T  by A4;
+    reconsider V = a as Subset of T by A4;
     V is open & b in V by A1,A2,A4,YELLOW_8:19; then
     consider U being Subset of T such that
 A5: U in B & b in U & U c= V by YELLOW_9:31;
@@ -839,7 +839,7 @@ A5: U in B & b in U & U c= V by YELLOW_9:31;
   end;
   
 theorem Th23:
-  for T being non empty TopSpace
+  for T being TopSpace
   for B0 being Basis of T
   for f being Function of the carrier of T, the topology of T
   st
@@ -848,7 +848,7 @@ theorem Th23:
      for U being open Subset of T st x in U holds f.x c= U
   holds weight T = Card B0
   proof
-    let T be non empty TopSpace;
+    let T be TopSpace;
     let B0 be Basis of T;
     let f be Function of the carrier of T, the topology of T such that
 A1: B0 = rng f &
@@ -864,13 +864,12 @@ A3: weight T = meet M by WAYBEL23:def 5;
     hence thesis by A2,CARD_1:27;
   end;
 
-::<DESC name="1.1.15. Twierdzenie: o istnieniu bazy bed/acej podrodzin/a bazy i maj/acej moc r/own/a wadze przestrzeni" monograph="topology"/>
-theorem
-  for T being non empty finite-weight TopSpace
+LemA1:
+  for T being finite-weight non empty TopSpace
   for B being Basis of T
   ex B1 being Basis of T st B1 c= B & Card B1 = weight T
   proof
-    let T be non empty finite-weight TopSpace;
+    let T be finite-weight non empty TopSpace;
     let B be Basis of T;
     consider B0 being Basis of T,
        f being Function of the carrier of T, the topology of T such that
@@ -883,8 +882,20 @@ A1: B0 = rng f &
     thus thesis by WAYBEL31:1;
   end;
 
+::<DESC name="1.1.15. Twierdzenie: o istnieniu bazy bed/acej podrodzin/a bazy i maj/acej moc r/own/a wadze przestrzeni" monograph="topology"/>
+theorem
+  for T being non empty TopSpace
+  for B being Basis of T
+  ex B1 being Basis of T st B1 c= B & Card B1 = weight T
+  proof
+    let T be non empty TopSpace,
+        B be Basis of T;
+    T is finite-weight or T is infinite-weight;
+    hence thesis by LemA1,LemA2;
+  end;
+
 begin :: Example 1.1.8: Almost discrete topological space with infinity
-  
+
 definition
   let X, x0 be set; :: X is infinite, x0 in X
   func DiscrWithInfin(X,x0) -> strict TopStruct means:
@@ -1132,13 +1143,13 @@ theorem
     let X,x0 be set such that
 A1: x0 in X;
     set T = DiscrWithInfin(X,x0);
-A0: the carrier of T = X by Def7; then
+    the carrier of T = X by Def7; then
     reconsider T as non empty TopSpace by A1,STRUCT_0:def 1;
-    reconsider x = x0 as Point of T by A1,A0;
+    reconsider x = x0 as Point of T by A1,Def7;
     let A be Subset of DiscrWithInfin(X,x0);
     reconsider A' = A as Subset of T;
     assume A` is infinite; then
-    Cl A` = A'` \/ {x}  by A1,Th35;
+    Cl A` = A'` \/ {x} by A1,Th35;
     hence Int A = (A'` \/ {x})` by TOPS_1:def 1
        .= (A' \ {x})`` by SUBSET_1:33 .= A \ {x0};
   end;
@@ -1377,7 +1388,7 @@ theorem
     set SX = SmallestPartition X,
         FX = {F` where F is Subset of X: F is finite},
         AX = {{x}` where x is Element of X: not contradiction};
-    reconsider SX as Subset-Family of T by 00;
+    reconsider SX as Subset-Family of T by Def7;
     AX c= bool X
     proof let a; assume a in AX; then
      ex x being Element of X st a = {x}`;
@@ -1410,7 +1421,7 @@ A6:  a = F` & F is finite by 00;
      reconsider SF as Subset-Family of T by 00,SETFAM_1:def 7;
      per cases;
      suppose F = {}; then
-      a = ({}X)` by A6,00 .= [#]X by SUBSET_1:22 .= X by SUBSET_1:def 4;
+      a = ({}X)` by A6,Def7 .= [#]X by SUBSET_1:22 .= X by SUBSET_1:def 4;
       hence thesis by 00,CANTOR_1:8;
      end;
      suppose F <> {}; then
@@ -1429,7 +1440,7 @@ A9:    a in COMPLEMENT SF; then
        by PUA2MSS1:13; then
        consider b being Element of F such that
 A10:   a` = {b};
-       reconsider b as Element of X by 00;
+       reconsider b as Element of X by Def7;
        {b}` in AX;
        hence thesis by 00,A10,XBOOLE_0:def 2;
       end; then
@@ -1450,7 +1461,7 @@ A8:   Intersect COMPLEMENT SF in FinMeetCl pB by A7,CANTOR_1:def 4;
     hence thesis;
   end;
 
-begin :: Exrecises
+begin :: Exercises
 
 ::<DSCR name="Exercise 1.1.B" monograph="topology"/>
 theorem

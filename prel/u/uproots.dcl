@@ -42,6 +42,7 @@
 <ArticleID name="COMPLFLD"/>
 <ArticleID name="POLYNOM5"/>
 <ArticleID name="FUNCT_3"/>
+<ArticleID name="MEMBERED"/>
 <ArticleID name="SEQ_1"/>
 <ArticleID name="PBOOLE"/>
 <ArticleID name="ALGSTR_1"/>
@@ -64,7 +65,7 @@
 <Typ kind="G" nr="2">
 <Cluster>
 <Adjective nr="35" value="false"/>
-<Adjective nr="109" value="false"/>
+<Adjective nr="114" value="false"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -87,7 +88,7 @@
 <Adjective nr="75">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="133">
+<Adjective nr="138">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -114,13 +115,13 @@
 <Adjective nr="64" value="false"/>
 <Adjective nr="69"/>
 <Adjective nr="91"/>
-<Adjective nr="95"/>
-<Adjective nr="96"/>
-<Adjective nr="97"/>
-<Adjective nr="98"/>
-<Adjective nr="99"/>
 <Adjective nr="100"/>
-<Adjective nr="109" value="false"/>
+<Adjective nr="101"/>
+<Adjective nr="102"/>
+<Adjective nr="103"/>
+<Adjective nr="104"/>
+<Adjective nr="105"/>
+<Adjective nr="114" value="false"/>
 </Cluster>
 </RCluster>
 <FCluster>
@@ -164,7 +165,7 @@
 <Adjective nr="75">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="133">
+<Adjective nr="138">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -192,12 +193,12 @@
 <Adjective nr="52"/>
 <Adjective nr="57"/>
 <Adjective nr="69"/>
-<Adjective nr="95"/>
-<Adjective nr="96"/>
-<Adjective nr="97"/>
-<Adjective nr="98"/>
-<Adjective nr="99"/>
 <Adjective nr="100"/>
+<Adjective nr="101"/>
+<Adjective nr="102"/>
+<Adjective nr="103"/>
+<Adjective nr="104"/>
+<Adjective nr="105"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -230,7 +231,7 @@
 <Adjective nr="75">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="133">
+<Adjective nr="138">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -251,7 +252,7 @@
 <Adjective nr="75">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="133">
+<Adjective nr="138">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -285,7 +286,7 @@
 <Adjective nr="75">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="133">
+<Adjective nr="138">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -348,7 +349,7 @@
 <Adjective nr="75">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="133">
+<Adjective nr="138">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -383,7 +384,7 @@
 <Adjective nr="75">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="133">
+<Adjective nr="138">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>

@@ -6,7 +6,7 @@
 
 environ
 
- vocabulary ASYMPT_0, BOOLE, NEWTON, NAT_1, INT_1, POWER, SERIES_1, SQUARE_1,
+ vocabularies ASYMPT_0, BOOLE, NEWTON, NAT_1, INT_1, POWER, SERIES_1, SQUARE_1,
       ABSVALUE, SEQ_2, SEQ_1, FUNCT_1, ARYTM_1, FUNCT_2, ARYTM_3, RELAT_1,
       ORDINAL2, RLVECT_1, FUNCOP_1, FRAENKEL, QC_LANG1, PROB_1, GROUP_1,
       FINSEQ_1, FINSEQ_2, ZF_LANG, ASYMPT_1, FINSEQ_4, ARYTM;
@@ -1902,8 +1902,6 @@ A1: Big_Theta(g) = { s where s is Element of Funcs(NAT, REAL) :
     A6:  n >= N & n >= [/(N+1)/d\] by SQUARE_1:46;
            n is Integer by SQUARE_1:49;
         then reconsider n as Nat by A6,INT_1:16;
-           n! > 0 by NEWTON:23;
-    then A7:  (n!)" > 0 by REAL_1:72;
     A8: n! <> 0 by NEWTON:23;
     A9:  (d*g.n)*(n!)" = (d*((n+1)!))*(n!)" by Def5
                      .= (d*((n+1)*(n!)))*(n!)" by NEWTON:21
@@ -5653,7 +5651,7 @@ A2: for k st _P[k] holds _P[k+1] proof let k such that
        per cases by A4,NAT_1:26;
        suppose n <= k;
        then A5: n! <= k! by A3;
-       A6: k+1 >= 0+1 by AXIOMS:24;
+       k+1 >= 0+1 by AXIOMS:24;
            then (k+1)*(k!) >= 1*(k!) by AXIOMS:25;
            then (k+1)! >= k! by NEWTON:21;
         hence n! <= (k+1)! by A5,AXIOMS:22;
@@ -5829,19 +5827,7 @@ end;
 
 Lm62:
  for n,k st k >= 1 & n! <= k & k < (n+1)! holds Step1(k) = n!
-proof
- let n,k such that
-A1: k >= 1 and
-A2: n! <= k & k < (n+1)!;
-   consider n1 such that
-A3: n1! <= k & k < (n1+1)! and
-A4: Step1(k) = n1! by A1,Def9;
-   consider n2 such that
-      n2! <= k & k < (n2+1)! and
-A5: for m st m! <= k & k < (m+1)! holds m = n2 by A1,Lm60;
-      n = n2 by A2,A5;
- hence thesis by A3,A4,A5;
-end;
+   by Def9;
 
 theorem
     for f being Real_Sequence st (for n holds f.n = Step1(n))
@@ -5950,7 +5936,6 @@ A20: now let n;
  A33: n2 > 2 by A32,AXIOMS:22;
  then A34:n2! >= 2 by Lm59,NEWTON:20;
  then A35: n1 >= 1 by A5,REAL_1:49;
- A36: n2! is Nat;
     reconsider n1 as Nat by A35,INT_1:16;
   set n3 = n2-1;
  A37:n3 >= 1 by A5,A33,REAL_1:49;
@@ -6007,9 +5992,8 @@ end;
 
 begin :: Problem 3.34
 
-registration
- cluster (seq_n^(1) - seq_const(1)) -> eventually-positive;
-  coherence proof
+Lm: seq_n^(1) - seq_const(1) is eventually-positive
+    proof
    set f = seq_n^(1);
    set g = seq_const(1);
    take 2;
@@ -6023,41 +6007,43 @@ registration
               .= n + -1 by A3,A4,SEQ_1:14
               .= n-1;
      hence (f-g).n > 0 by A2,REAL_1:86;
-  end;
 end;
 
 :: This is to show that Big_Theta(n-1) + Big_Theta(n) = Big_Theta(n).
 :: Note that it is not true that Big_Theta(n) = Big_Theta(n) - Big_Theta(n-1).
 :: Consider n and n. The function n - n = 0, which is not in Big_Theta(n).
 theorem
-    Big_Theta(seq_n^(1) - seq_const(1)) + Big_Theta(seq_n^(1))
-    = Big_Theta(seq_n^(1))
+  for F being eventually-nonnegative Real_Sequence st
+  F = seq_n^(1) - seq_const(1) holds
+  Big_Theta(F) + Big_Theta(seq_n^(1)) = Big_Theta(seq_n^(1))
 proof
+  let F be eventually-nonnegative Real_Sequence such that
+a1: F = seq_n^(1) - seq_const(1);
  set p = seq_n^(1);
  set q = seq_const(1);
  set f = p - q;
  set g = p;
-A1: Big_Theta(f) + Big_Theta(g)
+A1: Big_Theta(F) + Big_Theta(g)
     = { t where t is Element of Funcs(NAT,REAL) :
      ex f',g' being Element of Funcs(NAT,REAL)
-      st f' in Big_Theta(f) & g' in Big_Theta(g) &
+      st f' in Big_Theta(F) & g' in Big_Theta(g) &
        for n being Element of NAT holds t.n = f'.n + g'.n } by ASYMPT_0:def 21;
-A2: Big_Theta(f) =
+A2: Big_Theta(F) =
     { t where t is Element of Funcs(NAT, REAL) :
      ex c,d,N st c > 0 & d > 0 &
-      for n st n >= N holds d*f.n <= t.n & t.n <= c*f.n } by ASYMPT_0:27;
+      for n st n >= N holds d*f.n <= t.n & t.n <= c*f.n } by a1,ASYMPT_0:27;
 A3: Big_Theta(g) = { t where t is Element of Funcs(NAT, REAL) :
      ex c,d,N st c > 0 & d > 0 &
       for n st n >= N holds d*g.n <= t.n & t.n <= c*g.n } by ASYMPT_0:27;
     now let x;
-  hereby assume x in Big_Theta(f) + Big_Theta(g);
+  hereby assume x in Big_Theta(F) + Big_Theta(g);
      then consider t being Element of Funcs(NAT, REAL) such that
   A4: t = x and
   A5: ex f',g' being Element of Funcs(NAT,REAL)
-      st f' in Big_Theta(f) & g' in Big_Theta(g) &
+      st f' in Big_Theta(F) & g' in Big_Theta(g) &
        for n being Element of NAT holds t.n = f'.n + g'.n by A1;
      consider f',g' being Element of Funcs(NAT,REAL) such that
-  A6: f' in Big_Theta(f) & g' in Big_Theta(g) and
+  A6: f' in Big_Theta(F) & g' in Big_Theta(g) and
   A7: for n being Element of NAT holds t.n = f'.n + g'.n by A5;
      consider r being Element of Funcs(NAT,REAL) such that
   A8: r = f' and
@@ -6151,7 +6137,7 @@ N2 by SQUARE_1:46;
        then 2"*t.n <= c*f.n by A36,A38,A39,AXIOMS:22;
      hence f'.n <= c*f.n by SEQ_1:13;
     end;
- then A40: f' in Big_Theta(f) by A2,A29,A31,A32;
+ then A40: f' in Big_Theta(F) by A2,A29,A31,A32;
        now let n; assume n >= N0;
        then n >= N & n >= 2 by A33,AXIOMS:22;
        then d*g.n <= t.n & t.n <= c*g.n by A30;
@@ -6166,7 +6152,7 @@ N2 by SQUARE_1:46;
                     .= 1*t.n;
       hence thesis;
     end;
-  hence x in Big_Theta(f) + Big_Theta(g) by A1,A27,A32,A40,A41;
+  hence x in Big_Theta(F) + Big_Theta(g) by A1,A27,A32,A40,A41;
  end;
  hence thesis by TARSKI:2;
 end;
@@ -6366,7 +6352,8 @@ theorem
 theorem
     for n st n >= 3 holds n! > n by Lm61;
 
-canceled;
+theorem
+  seq_n^(1) - seq_const(1) is eventually-positive by Lm;
 
 theorem
     for n st n >= 2 holds 2 to_power n > n+1 by Lm1;

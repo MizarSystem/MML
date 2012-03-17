@@ -43,6 +43,7 @@
 <ArticleID name="FVSUM_1"/>
 <ArticleID name="NEWTON"/>
 <ArticleID name="FUNCT_3"/>
+<ArticleID name="MEMBERED"/>
 <ArticleID name="SEQ_1"/>
 <ArticleID name="PBOOLE"/>
 <ArticleID name="VECTSP_2"/>
@@ -82,7 +83,7 @@
 <Adjective nr="63"/>
 <Adjective nr="64"/>
 <Adjective nr="65" value="false"/>
-<Adjective nr="97" value="false"/>
+<Adjective nr="102" value="false"/>
 </Cluster>
 </RCluster>
 <RCluster>
@@ -106,7 +107,7 @@
 <Adjective nr="63"/>
 <Adjective nr="64"/>
 <Adjective nr="65" value="false"/>
-<Adjective nr="97" value="false"/>
+<Adjective nr="102" value="false"/>
 </Cluster>
 </RCluster>
 <FCluster>
@@ -128,7 +129,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="488">
+<Func kind="K" nr="500">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -149,7 +150,7 @@
 <Func kind="K" nr="56"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="489">
+<Func kind="K" nr="501">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -165,7 +166,7 @@
 <Func kind="K" nr="56"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="489">
+<Func kind="K" nr="501">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -188,7 +189,7 @@
 <Func kind="K" nr="56"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="491">
+<Func kind="K" nr="503">
 <LocusVar nr="2"/>
 <LocusVar nr="1"/>
 </Func>
@@ -204,7 +205,7 @@
 <Adjective nr="69">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="121">
+<Adjective nr="126">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>

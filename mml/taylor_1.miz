@@ -6,7 +6,7 @@
 
 environ
 
- vocabulary PRE_TOPC, BOOLE, RLVECT_1, FUNCT_1, ARYTM, ARYTM_1, ARYTM_3,
+ vocabularies PRE_TOPC, BOOLE, RLVECT_1, FUNCT_1, ARYTM, ARYTM_1, ARYTM_3,
       RELAT_1, ABSVALUE, SUBSET_1, ORDINAL2, QC_LANG1, PARTFUN1, LIMFUNC1,
       FCONT_1, INT_1, RAT_1, SEQ_1, SEQ_2, SEQM_3, RCOMP_1, SEQFUNC, SIN_COS,
       FDIFF_1, PREPOWER, POWER, SERIES_1, GROUP_1, FINSEQ_4, SUPINF_2,
@@ -201,26 +201,29 @@ then 1-1 <=k-1 by REAL_1:92;
 then reconsider k1=k-1 as Nat by INT_1:16;
 A19: dom(( #Z k))  /\ dom(( #Z 1))
       =REAL /\ dom(( #Z 1)) by FUNCT_2:def 1
-      .=REAL /\ REAL by FUNCT_2:def 1
-      .=dom( #Z (k+1)) by FUNCT_2:def 1;
-A20: for x be Real st x in dom( #Z (k+1))
+      .=REAL /\ REAL by FUNCT_2:def 1;
+a2:   REAL = dom( #Z (k+1)) by FUNCT_2:def 1;
+A20: for x be set st x in dom( #Z (k+1))
           holds ( #Z (k+1)).x=( #Z k).x * ( #Z 1).x
  proof
- let x be Real such that x in dom( #Z (k+1));
-    thus ( #Z (k+1)).x = x #Z (k+1) by Def1
-                       .=(x #Z k) * (x #Z 1) by Th1
-                       .=( #Z k).x * x #Z (1) by Def1
+ let x be set;
+ assume
+ x in dom( #Z (k+1));
+    then reconsider x1 = x as Real by a2;
+    thus ( #Z (k+1)).x = x1 #Z (k+1) by Def1
+                       .=(x1 #Z k) * (x1 #Z 1) by Th1
+                       .=( #Z k).x * x1 #Z (1) by Def1
                        .=( #Z k).x *( #Z 1).x by Def1;
  end;
  then A21:   ( #Z (k+1)) = ( #Z k) (#) ( #Z 1)
-           by A19,SEQ_1:def 5;
+           by a2,A19,SEQ_1:def 5;
  let x be real number;
   A22: x is Real by XREAL_0:def 1;
    A23: ( #Z k) is_differentiable_in x by A13;
    A24: ( #Z 1) is_differentiable_in x by A16;
     hence #Z (k+1) is_differentiable_in x by A21,A22,A23,FDIFF_1:24;
     thus diff(( #Z (k+1)), x)
-            = diff( ( #Z k) (#) ( #Z 1),x) by A19,A20,SEQ_1:def 5
+            = diff( ( #Z k) (#) ( #Z 1),x) by a2,A19,A20,SEQ_1:def 5
              .= ( #Z k).x *diff(( #Z 1),x)+diff(( #Z k),x)*( #Z 1).x
                 by A22,A23,A24,FDIFF_1:24
               .= ( #Z k).x*1 + diff( #Z k,x)*( #Z 1).x by A16

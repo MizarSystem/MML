@@ -6,18 +6,18 @@
 
 environ
 
- vocabulary FUNCT_1, PRE_TOPC, ORDINAL2, RELAT_1, ARYTM, PARTFUN3, SEQ_1,
+ vocabularies FUNCT_1, PRE_TOPC, ORDINAL2, RELAT_1, ARYTM, PARTFUN3, SEQ_1,
       ARYTM_1, ZF_LANG, PSCOMP_1, ARYTM_3, ZF_REFLE, BOOLE, SUBSET_1, ASYMPT_0,
       FUNCOP_1, TOPMETR, ABSVALUE, PARTFUN1, SQUARE_1, FUNCT_2, PRALG_1,
-      XREAL_0, FINSEQ_1;
- notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, COMPLEX1, SQUARE_1, RELAT_1,
-      RELSET_1, FUNCT_1, PARTFUN1, FUNCT_2, PSCOMP_1, SEQ_1, RFUNCT_1, NUMBERS,
-      XCMPLX_0, XREAL_0, REAL_1, FUNCOP_1, RCOMP_1, STRUCT_0, PRE_TOPC,
-      BORSUK_1, TOPALG_2;
+      XREAL_0, FINSEQ_1, MEMBERED;
+ notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, COMPLEX1, MEMBERED, SQUARE_1,
+      RELAT_1, RELSET_1, FUNCT_1, PARTFUN1, FUNCT_2, PSCOMP_1, SEQ_1, RFUNCT_1,
+      NUMBERS, XCMPLX_0, XREAL_0, REAL_1, FUNCOP_1, RCOMP_1, STRUCT_0,
+      PRE_TOPC, BORSUK_1, TOPALG_2;
  constructors REAL_1, SQUARE_1, PSCOMP_1, RCOMP_1, COMPLEX1, TOPREALA,
       RFUNCT_1;
  registrations STRUCT_0, RELSET_1, ARYTM_3, XREAL_0, REAL_1, XCMPLX_0, FUNCT_1,
-      BORSUK_2, TOPS_1, TOPMETR, RELAT_1, PSCOMP_1, FUNCOP_1;
+      BORSUK_2, TOPS_1, TOPMETR, RELAT_1, PSCOMP_1, FUNCOP_1, SEQ_1, MEMBERED;
  requirements NUMERALS, BOOLE, SUBSET, REAL, ARITHM;
 
 
@@ -105,8 +105,12 @@ registration
   cluster positive-yielding Function of X,REAL;
 end;
 
+registration
+  cluster non-empty real-yielding Function;
+end;
+
 theorem :: PARTFUN3:2
-  for X being non empty set, f being non-empty PartFunc of X,REAL holds
+  for f being non-empty real-yielding Function holds
   dom(f^) = dom f;
 
 theorem :: PARTFUN3:3
@@ -490,11 +494,21 @@ registration
 end;
 
 definition
-  let C be set, f be PartFunc of C,REAL;
-  func sqrt f -> PartFunc of C,REAL means
+  let f be real-yielding Function;
+  func sqrt f -> Function means
 :: PARTFUN3:def 5
   dom it = dom f &
   for x being set st x in dom it holds it.x = sqrt(f.x);
+end;
+
+registration
+  let f be real-yielding Function;
+  cluster sqrt f -> real-yielding;
+end;
+
+definition
+  let C be set, D be real-membered set, f be PartFunc of C,D;
+  redefine func sqrt f -> PartFunc of C,REAL;
 end;
 
 registration
@@ -509,40 +523,39 @@ registration
   cluster sqrt f -> positive-yielding;
 end;
 
-registration
+definition
   let X be set,
-      f, g be Function of X, REAL;
-  cluster f+g -> quasi_total;
-  cluster f-g -> quasi_total;
-  cluster f(#)g -> quasi_total;
+  f, g be Function of X, REAL;
+  redefine func f+g -> Function of X,REAL;
+  redefine func f-g -> Function of X,REAL;
+  redefine func f(#)g -> Function of X,REAL;
 end;
 
-registration
+definition
   let X be set,
       f be Function of X, REAL;
-  cluster -f -> quasi_total;
-  cluster abs f -> quasi_total;
-  cluster sqrt f -> quasi_total;
+  redefine func -f -> Function of X,REAL;
+  redefine func abs f -> Function of X,REAL;
+  redefine func sqrt f -> Function of X,REAL;
 end;
 
-registration
+definition
   let X be set,
       f be Function of X, REAL,
       r be real number;
-  cluster r(#)f -> quasi_total;
+  redefine func  r(#)f -> Function of X,REAL;
 end;
 
-registration
-  let X be non empty set,
-      f be non-empty Function of X, REAL;
-  cluster f^ -> quasi_total;
+definition
+  let X be set, f be non-empty Function of X, REAL;
+  redefine func f^ -> Function of X,REAL;
 end;
 
-registration
+definition
   let X be non empty set,
       f be Function of X, REAL,
       g be non-empty Function of X, REAL;
-  cluster f/g -> quasi_total;
+  redefine func f/g -> Function of X,REAL;
 end;
 
 reserve
@@ -550,21 +563,21 @@ reserve
   f, g for continuous RealMap of T,
   r for real number;
 
-registration
+definition
   let T, f, g;
-  cluster f+g -> continuous;
-  cluster f-g -> continuous;
-  cluster f(#)g -> continuous;
+  redefine func f+g -> continuous RealMap of T;
+  redefine func f-g -> continuous RealMap of T;
+  redefine func f(#)g -> continuous RealMap of T;
 end;
 
-registration
+definition
   let T, f;
-  cluster -f -> continuous;
+  redefine func -f -> continuous RealMap of T;
 end;
 
-registration
+definition
   let T, f;
-  cluster abs f -> continuous;
+  redefine func abs f -> continuous RealMap of T;
 end;
 
 registration
@@ -573,22 +586,22 @@ registration
   cluster negative-yielding continuous RealMap of T;
 end;
 
-registration
+definition
   let T; let f be nonnegative-yielding continuous RealMap of T;
-  cluster sqrt f -> continuous;
+  redefine func sqrt f -> continuous RealMap of T;
 end;
 
-registration
+definition
   let T, f, r;
-  cluster r(#)f -> continuous;
+  redefine func r(#)f -> continuous RealMap of T;
 end;
 
-registration
+definition
   let T; let f be non-empty continuous RealMap of T;
-  cluster f^ -> continuous;
+  redefine func f^ -> continuous RealMap of T;
 end;
 
-registration
+definition
   let T, f; let g be non-empty continuous RealMap of T;
-  cluster f/g -> continuous;
+  redefine func f/g -> continuous RealMap of T;
 end;

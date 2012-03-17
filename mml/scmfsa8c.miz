@@ -6,10 +6,10 @@
 
 environ
 
- vocabulary AMI_1, SCMFSA_2, BOOLE, SCMFSA8A, SCMFSA6A, CAT_1, FUNCT_4, AMI_3,
-      FUNCT_1, RELAT_1, CARD_1, AMI_5, UNIALG_2, SCMFSA7B, SCM_1, FUNCT_7,
-      RELOC, ARYTM_1, SCMFSA6C, SCMFSA6B, SF_MASTR, SCMFSA_4, FUNCOP_1,
-      SCMFSA8B, AMI_2, SCMFSA8C, CARD_3;
+ vocabularies AMI_1, SCMFSA_2, BOOLE, SCMFSA8A, SCMFSA6A, CAT_1, FUNCT_4,
+      AMI_3, FUNCT_1, RELAT_1, CARD_1, AMI_5, UNIALG_2, SCMFSA7B, SCM_1,
+      FUNCT_7, RELOC, ARYTM_1, SCMFSA6C, SCMFSA6B, SF_MASTR, SCMFSA_4,
+      FUNCOP_1, SCMFSA8B, AMI_2, SCMFSA8C, CARD_3;
  notations TARSKI, XBOOLE_0, ENUMSET1, XCMPLX_0, XREAL_0, NAT_1, CQC_LANG,
       RELAT_1, FUNCT_1, FUNCT_4, FUNCT_7, CARD_1, STRUCT_0, AMI_1, AMI_3,
       AMI_5, SCMFSA_2, SCMFSA_4, SCMFSA_5, SCM_1, SF_MASTR, SCMFSA6A, SCMFSA6B,
@@ -30,8 +30,6 @@ environ
 begin :: Preliminaries
 
 reserve m for Nat;
-set A = the Instruction-Locations of SCM+FSA;
-set D = Int-Locations \/ FinSeq-Locations;
 
 registration
  cluster pseudo-paraclosed Macro-Instruction;
@@ -65,16 +63,14 @@ theorem Th2: ::T4425 ** n.t
 ,P) in
        dom ProgramPart P by SCMFSA6A:15;
 then A3: not IC (Computation (s +* (P +* Start-At insloc 0))).pseudo-LifeSpan(s
-,P)
-in
-       dom P by AMI_5:73;
+,P) in dom P by AMI_5:73;
    assume pseudo-LifeSpan(s,P) <= k;
    hence contradiction by A2,A3;
  end;
 
 canceled 3;
 
-theorem Th6: ::T210837
+theorem Th6:
  for f be Function, x be set st x in dom f holds
      f +* (x .--> f.x) = f
  proof
@@ -85,7 +81,7 @@ theorem Th6: ::T210837
    .= f by FUNCT_7:37;
  end;
 
-theorem Th7: ::TMP12
+theorem Th7:
  for l being Instruction-Location of SCM+FSA holds
      l + 0 = l
  proof
@@ -95,7 +91,7 @@ A1: l = insloc m & l + 0 = insloc (m + 0) by SCMFSA_4:def 1;
    thus l + 0 = l by A1;
  end;
 
-theorem Th8: ::TMP19
+theorem Th8:
  for i being Instruction of SCM+FSA holds
      IncAddr(i,0) = i
  proof
@@ -169,7 +165,7 @@ A4: InsCode i <= 8+1 implies InsCode i <= 7+1 or InsCode i = 9 by NAT_1:26;
  end;
  end;
 
-theorem Th9: ::TMP13
+theorem Th9:
  for P being programmed FinPartState of SCM+FSA holds
      ProgramPart Relocated(P,0) = P
  proof
@@ -226,10 +222,11 @@ n;
    hence ProgramPart Relocated(P,0) = P by A4,A9,FUNCT_1:9;
  end;
 
-theorem Th10: ::TMP15'
+theorem Th10:
  for P,Q being FinPartState of SCM+FSA st P c= Q holds
      ProgramPart P c= ProgramPart Q
  proof
+   set A = the Instruction-Locations of SCM+FSA;
    let P,Q be FinPartState of SCM+FSA;
    assume A1: P c= Q;
 then A2: dom P c= dom Q by GRFUNC_1:8;
@@ -247,7 +244,7 @@ then A5: dom ProgramPart P c= dom ProgramPart Q by A2,XBOOLE_1:26;
    hence ProgramPart P c= ProgramPart Q by A5,GRFUNC_1:8;
  end;
 
-theorem Th11: ::TMP18
+theorem Th11:
  for P,Q being programmed FinPartState of SCM+FSA, k being Nat st P c= Q holds
      Shift(P,k) c= Shift(Q,k)
  proof
@@ -278,7 +275,7 @@ then A6: dom Shift(P,k) c= dom Shift(Q,k) by TARSKI:def 3;
    hence Shift(P,k) c= Shift(Q,k) by A6,GRFUNC_1:8;
  end;
 
-theorem Th12: ::TMP15
+theorem Th12:
  for P,Q being FinPartState of SCM+FSA, k being Nat st P c= Q holds
      ProgramPart Relocated(P,k) c= ProgramPart Relocated(Q,k)
  proof
@@ -330,7 +327,7 @@ SCMFSA_4:def 6
    hence ProgramPart rP c= ProgramPart rQ by A9,GRFUNC_1:8;
  end;
 
-theorem Th13: ::TMP16
+theorem Th13:
  for I,J being Macro-Instruction, k being Nat st
      card I <= k & k < card I + card J holds
  for i being Instruction of SCM+FSA st i = J.insloc (k -' card I) holds
@@ -360,7 +357,7 @@ then A9: insloc k in dom ProgramPart Relocated(J, card I) by SCMFSA_5:3;
    .= IncAddr(i,card I) by A3,A6,A8,SCMFSA_5:7;
  end;
 
-theorem Th14: ::T22246 ---???
+theorem Th14:
  for s being State of SCM+FSA st s.intloc 0 = 1 & IC s = insloc 0 holds
      Initialize s = s
  proof
@@ -376,7 +373,7 @@ A3: intloc 0 in dom s & IC SCM+FSA in dom s by AMI_5:25,SCMFSA_2:66;
    .= s by A2,A3,Th6;
  end;
 
-theorem Th15: ::T200922
+theorem Th15:
  for s being State of SCM+FSA holds
      Initialize Initialize s = Initialize s
  proof
@@ -385,7 +382,7 @@ theorem Th15: ::T200922
    hence Initialize Initialize s = Initialize s by Th14;
  end;
 
-theorem Th16: ::TMP6
+theorem Th16:
  for s being State of SCM+FSA, I being Macro-Instruction holds
      s +* (Initialized I +* Start-At insloc 0) =
          Initialize s +* (I +* Start-At insloc 0)
@@ -398,10 +395,12 @@ theorem Th16: ::TMP6
    .= Initialize s +* (I +* Start-At insloc 0) by SCMFSA8A:13;
  end;
 
-theorem Th17: ::T200938
+theorem Th17:
  for s being State of SCM+FSA, I being Macro-Instruction holds
      IExec(I,s) = IExec(I,Initialize s)
  proof
+   set D = Int-Locations \/ FinSeq-Locations;
+   set A = the Instruction-Locations of SCM+FSA;
    let s be State of SCM+FSA;
    let I be Macro-Instruction;
       dom s = D \/ {IC SCM+FSA} \/ A by SCMFSA6A:34;
@@ -415,7 +414,7 @@ then A2: A c= dom Initialize s by XBOOLE_1:7;
    .= IExec(I,Initialize s) by A3,SCMFSA6B:def 1;
  end;
 
-theorem Th18: ::T26401 --- ???
+theorem Th18:
  for s being State of SCM+FSA, I being Macro-Instruction
  st s.intloc 0 = 1 holds
      s +* (I +* Start-At insloc 0) = s +* Initialized I
@@ -435,7 +434,7 @@ then A2: s = s +* (intloc 0 .--> 1) by A1,Th6;
    .= s +* (I +* Start-At insloc 0) by FUNCT_4:15;
  end;
 
-theorem Th19: ::T24634 --- ???
+theorem Th19:
  for I being Macro-Instruction holds
      I +* Start-At insloc 0 c= Initialized I
  proof
@@ -445,7 +444,7 @@ theorem Th19: ::T24634 --- ???
    hence I +* Start-At insloc 0 c= Initialized I by SCMFSA6A:6;
  end;
 
-theorem Th20: ::TMP10
+theorem Th20:
  for l being Instruction-Location of SCM+FSA, I being Macro-Instruction holds
      l in dom I iff l in dom Initialized I
  proof
@@ -491,7 +490,7 @@ in
    hence Initialized I is_closed_on s by SCMFSA7B:def 7;
  end;
 
-theorem Th22: ::TMP5
+theorem Th22:
  for s being State of SCM+FSA, I being Macro-Instruction holds
  Initialized I is_halting_on s iff I is_halting_on Initialize s
  proof
@@ -528,7 +527,7 @@ theorem
    hence Initialized I is halting by AMI_1:def 26;
  end;
 
-theorem Th24: ::TMP3'
+theorem Th24:
  for I being Macro-Instruction holds
  (for s being State of SCM+FSA holds Initialized I is_halting_on s) implies
      Initialized I is halting
@@ -548,7 +547,7 @@ SCMFSA7B:def 8;
    hence Initialized I is halting by AMI_1:def 26;
  end;
 
-theorem Th25: ::TMP9
+theorem Th25:
  for I being Macro-Instruction holds
      ProgramPart Initialized I = I
  proof
@@ -558,7 +557,7 @@ theorem Th25: ::TMP9
     .= I by SCMFSA6A:33;
  end;
 
-theorem Th26: ::T18750
+theorem Th26:
  for s being State of SCM+FSA, I being Macro-Instruction,
      l being Instruction-Location of SCM+FSA, x being set holds
  x in dom I implies I.x = (s +* (I +* Start-At l)).x
@@ -576,7 +575,7 @@ A2: not y in dom Start-At l by SCMFSA6B:11;
    .= I.x by A2,FUNCT_4:12;
  end;
 
-theorem Th27: ::T22246' ---???
+theorem Th27:
  for s being State of SCM+FSA st s.intloc 0 = 1 holds
      (Initialize s) | (Int-Locations \/ FinSeq-Locations) =
          s | (Int-Locations \/ FinSeq-Locations)
@@ -590,7 +589,7 @@ A2: intloc 0 in dom s & IC SCM+FSA in dom s by AMI_5:25,SCMFSA_2:66;
    hence thesis by SCMFSA8A:10;
  end;
 
-theorem Th28: ::T210615
+theorem Th28:
  for s being State of SCM+FSA, I being Macro-Instruction,
      a being Int-Location, l being Instruction-Location of SCM+FSA holds
  (s +* (I +* Start-At l)).a = s.a
@@ -629,7 +628,7 @@ then A1: IC SCM+FSA in dom Start-At l by TARSKI:def 1;
    hence (I +* Start-At l).IC SCM+FSA = l by A1,FUNCT_4:14;
  end;
 
-theorem Th31: ::T4633 -- ??
+theorem Th31:
  for s being State of SCM+FSA, P being FinPartState of SCM+FSA,
      l being Instruction-Location of SCM+FSA holds
  IC (s +* (P +* Start-At l)) = l
@@ -642,7 +641,7 @@ theorem Th31: ::T4633 -- ??
    .= l by AMI_5:79;
  end;
 
-theorem Th32: ::T30408
+theorem Th32:
  for s being State of SCM+FSA, i being Instruction of SCM+FSA st
      InsCode i in {0,6,7,8} holds
  Exec(i,s) | (Int-Locations \/ FinSeq-Locations) =
@@ -682,7 +681,7 @@ Int-Location
    hence thesis by SCMFSA6A:38;
 end;
 
-theorem Th33: ::T271245 --- ???
+theorem Th33:
  for s1,s2 being State of SCM+FSA st
      s1.intloc 0 = s2.intloc 0 &
      ((for a being read-write Int-Location holds s1.a = s2.a) &
@@ -690,6 +689,7 @@ theorem Th33: ::T271245 --- ???
  s1 | (Int-Locations \/ FinSeq-Locations) =
      s2 | (Int-Locations \/ FinSeq-Locations)
  proof
+   set D = Int-Locations \/ FinSeq-Locations;
    let s1,s2 be State of SCM+FSA;
    assume A1: s1.intloc 0 = s2.intloc 0;
    assume A2: for a being read-write Int-Location holds s1.a = s2.a;
@@ -743,6 +743,8 @@ holds
      (s +* P) | (Int-Locations \/ FinSeq-Locations) =
          s | (Int-Locations \/ FinSeq-Locations)
  proof
+   set A = the Instruction-Locations of SCM+FSA;
+   set D = Int-Locations \/ FinSeq-Locations;
    let s be State of SCM+FSA;
    let P be programmed FinPartState of SCM+FSA;
 A1: dom P c= A by AMI_3:def 13;
@@ -751,12 +753,14 @@ A1: dom P c= A by AMI_3:def 13;
    hence thesis by FUNCT_4:76;
  end;
 
-theorem Th35: ::T1643 --- ??
+theorem Th35:
  for s,ss being State of SCM+FSA holds
      (s +* ss | the Instruction-Locations of SCM+FSA) |
          (Int-Locations \/ FinSeq-Locations) =
      s | (Int-Locations \/ FinSeq-Locations)
  proof
+  set A = the Instruction-Locations of SCM+FSA;
+  set D = Int-Locations \/ FinSeq-Locations;
    let s,ss be State of SCM+FSA;
     dom (ss | A) = dom ss /\ A by RELAT_1:90
    .= (Int-Locations \/ FinSeq-Locations \/ {IC SCM+FSA} \/ A) /\
@@ -766,11 +770,12 @@ theorem Th35: ::T1643 --- ??
    hence thesis by FUNCT_4:76;
  end;
 
-theorem Th36: ::T27643 --- ???
+theorem Th36:
  for s being State of SCM+FSA holds
  (Initialize s) | the Instruction-Locations of SCM+FSA =
      s | the Instruction-Locations of SCM+FSA
  proof
+   set A = the Instruction-Locations of SCM+FSA;
    let s be State of SCM+FSA;
 A1: Initialize s
     = s +* (intloc 0 .--> 1) +* Start-At insloc 0 by SCMFSA6C:def 3
@@ -790,23 +795,26 @@ A1: Initialize s
    hence thesis by A1,SCMFSA8A:2;
  end;
 
-theorem Th37: ::T26530 --- ???
+theorem Th37:
  for s,ss being State of SCM+FSA, I being Macro-Instruction holds
      (ss +* (s | (the Instruction-Locations of SCM+FSA))) |
          (Int-Locations \/ FinSeq-Locations) =
              ss | (Int-Locations \/ FinSeq-Locations)
  proof
+set A = the Instruction-Locations of SCM+FSA;
+set D = Int-Locations \/ FinSeq-Locations;
    let s,ss be State of SCM+FSA;
    let I be Macro-Instruction;
-      dom (s | A) = A & A misses D by SCMFSA8A:3,SCMFSA_2:13,14,XBOOLE_1:70
-;
+   dom (s | A) = A & A misses D by SCMFSA8A:3,SCMFSA_2:13,14,XBOOLE_1:70;
    hence thesis by SCMFSA8A:2;
  end;
 
-theorem Th38: ::T27500 ue
- for s being State of SCM+FSA holds
+theorem Th38:
+  for s being State of SCM+FSA holds
      IExec(SCM+FSA-Stop,s) = Initialize s +* Start-At insloc 0
  proof
+set A = the Instruction-Locations of SCM+FSA;
+set D = Int-Locations \/ FinSeq-Locations;
    let s be State of SCM+FSA;
    set s1 = Initialize s +* (SCM+FSA-Stop +* Start-At insloc 0);
 A1: s +* Initialized SCM+FSA-Stop = s1 by SCMFSA8A:13;
@@ -870,7 +878,7 @@ then A6: IExec(SCM+FSA-Stop,s) | D = s1 | D by Th37
      end;
  end;
 
-theorem Th39: ::T9x
+theorem Th39:
  for s being State of SCM+FSA,I being Macro-Instruction
  st I is_closed_on s holds insloc 0 in dom I
  proof
@@ -910,7 +918,7 @@ A1: Macro i = (insloc 0,insloc 1) --> (i,halt SCM+FSA) by SCMFSA6A:def 2;
    hence rng Macro i = {i,halt SCM+FSA} by A1,FUNCT_4:67;
  end;
 
-theorem Th42: ::T0x
+theorem Th42:
  for s1,s2 being State of SCM+FSA,I being Macro-Instruction st
      I is_closed_on s1 & I +* Start-At insloc 0 c= s1
  for n being Nat st ProgramPart Relocated(I,n) c= s2 &
@@ -1026,7 +1034,7 @@ then A21: dom J c= dom JAt by GRFUNC_1:8;
    hence thesis;
  end;
 
-theorem Th43: ::T24441
+theorem Th43:
  for s1,s2 being State of SCM+FSA,I being Macro-Instruction st
      I is_closed_on s1 &
      I +* Start-At insloc 0 c= s1 & I +* Start-At insloc 0 c= s2 &
@@ -1063,7 +1071,7 @@ A5: IncAddr(CurInstr (Computation s1).i,0) = CurInstr (Computation s1).i
        by A1,A2,A4,A5,Th42;
  end;
 
-theorem Th44: ::T24441'
+theorem Th44:
  for s1,s2 being State of SCM+FSA,I being Macro-Instruction st
      I is_closed_on s1 & I is_halting_on s1 &
      I +* Start-At insloc 0 c= s1 & I +* Start-At insloc 0 c= s2 &
@@ -1092,7 +1100,7 @@ then A4: s2 is halting by AMI_1:def 20;
    hence LifeSpan s1 = LifeSpan s2 by A3,A4,SCM_1:def 2;
  end;
 
-theorem Th45: ::T27835
+theorem Th45:
  for s1,s2 being State of SCM+FSA,I being Macro-Instruction st
      s1.intloc 0 = 1 & I is_closed_on s1 & I is_halting_on s1 &
      ((for a being read-write Int-Location holds s1.a = s2.a) &
@@ -1100,6 +1108,7 @@ theorem Th45: ::T27835
  IExec(I,s1) | (Int-Locations \/ FinSeq-Locations) =
      IExec(I,s2) | (Int-Locations \/ FinSeq-Locations)
  proof
+set D = Int-Locations \/ FinSeq-Locations;
    let s1,s2 be State of SCM+FSA;
    let I be Macro-Instruction;
    set s11 = s1 +* Initialized I;
@@ -1149,7 +1158,7 @@ then A17: s21 is halting by AMI_1:def 20;
    .= IExec(I,s2) | (Int-Locations \/ FinSeq-Locations) by SCMFSA8B:35;
  end;
 
-theorem Th46: ::T27835'
+theorem Th46:
  for s1,s2 being State of SCM+FSA,I being Macro-Instruction st
      s1.intloc 0 = 1 & I is_closed_on s1 & I is_halting_on s1 &
      s1 | (Int-Locations \/ FinSeq-Locations) =
@@ -1157,6 +1166,7 @@ theorem Th46: ::T27835'
  IExec(I,s1) | (Int-Locations \/ FinSeq-Locations) =
      IExec(I,s2) | (Int-Locations \/ FinSeq-Locations)
  proof
+ set D = Int-Locations \/ FinSeq-Locations;
    let s1,s2 be State of SCM+FSA;
    let I be Macro-Instruction;
    set s11 = s1 +* Initialized I;
@@ -1269,7 +1279,7 @@ then A9: for n be Nat st not IC (Computation (s +* (Initialized I +*
        by A7,A9,SCMFSA8A:def 5;
  end;
 
-theorem  ::TMP8
+theorem
    for s being State of SCM+FSA, I being Macro-Instruction holds
  Initialized I is_pseudo-closed_on s iff I is_pseudo-closed_on Initialize s
  by Lm1;
@@ -1286,7 +1296,7 @@ theorem
       pseudo-LifeSpan(s,Initialized I) = pseudo-LifeSpan(Initialize s,I)
  by Lm1;
 
-theorem Th50: ::TMP14
+theorem Th50:
  for s being State of SCM+FSA, I being initial FinPartState of SCM+FSA
  st I is_pseudo-closed_on s holds
       I is_pseudo-closed_on s +* (I +* Start-At insloc 0) &
@@ -1311,7 +1321,7 @@ then A3: IC (Computation s2).pseudo-LifeSpan(s,I) = insloc card ProgramPart I &
        pseudo-LifeSpan(s +* (I +* Start-At insloc 0),I) by A3,SCMFSA8A:def 5;
  end;
 
-theorem Th51: ::P'115'
+theorem Th51:
  for s1,s2 being State of SCM+FSA, I being Macro-Instruction
  st I +* Start-At insloc 0 c= s1 & I is_pseudo-closed_on s1
  for n being Nat st ProgramPart Relocated(I,n) c= s2 &
@@ -1478,12 +1488,13 @@ A35: for k being Nat st P[k] holds P[k + 1]
    hence thesis by A32;
  end;
 
-theorem Th52: ::TMP11
+theorem Th52:
  for s1,s2 being State of SCM+FSA, I being Macro-Instruction st
      s1 | (Int-Locations \/ FinSeq-Locations) =
          s2 | (Int-Locations \/ FinSeq-Locations) holds
      I is_pseudo-closed_on s1 implies I is_pseudo-closed_on s2
  proof
+   set D = Int-Locations \/ FinSeq-Locations;
    let s1,s2 be State of SCM+FSA;
    let I be Macro-Instruction;
    set C1 = Computation (s1 +* (I +* Start-At insloc 0));
@@ -1520,12 +1531,13 @@ A9: IC C2.pseudo-LifeSpan(s1,I)
    hence I is_pseudo-closed_on s2 by A3,A9,SCMFSA8A:def 3;
  end;
 
-theorem Th53: ::T1702
+theorem Th53:
  for s being State of SCM+FSA, I being Macro-Instruction
      st s.intloc 0 = 1 holds
  I is_pseudo-closed_on s iff I is_pseudo-closed_on Initialize s
  proof
-   let s be State of SCM+FSA;
+  set D = Int-Locations \/ FinSeq-Locations;
+  let s be State of SCM+FSA;
    let I be Macro-Instruction;
    assume s.intloc 0 = 1;
    then s | D = (Initialize s) | D by Th27;
@@ -1719,7 +1731,7 @@ then A4: dom Directed J1 c= dom if>0(a,I,J) &
    hence if>0(a,I,J).insloc n <> halt SCM+FSA by A4,SCMFSA7B:def 6;
  end;
 
-theorem Th58: ::T29502
+theorem Th58:
  for s being State of SCM+FSA, I being Macro-Instruction st
      Directed I is_pseudo-closed_on s holds
  I ';' SCM+FSA-Stop is_closed_on s &
@@ -1730,9 +1742,13 @@ theorem Th58: ::T29502
      IC (Computation (s +* (I +* Start-At insloc 0))).n =
          IC (Computation (s +* (I ';' SCM+FSA-Stop +* Start-At insloc 0))).n) &
  for n being Nat st n <= pseudo-LifeSpan(s,Directed I) holds
-     (Computation (s +* (I +* Start-At insloc 0))).n | D =
-         (Computation (s +* (I ';' SCM+FSA-Stop +* Start-At insloc 0))).n | D
+     (Computation (s +* (I +* Start-At insloc 0))).n |
+     (Int-Locations \/ FinSeq-Locations) =
+         (Computation (s +* (I ';' SCM+FSA-Stop +* Start-At insloc 0))).n |
+         (Int-Locations \/ FinSeq-Locations)
  proof
+  set A = the Instruction-Locations of SCM+FSA;
+  set D = Int-Locations \/ FinSeq-Locations;
    let s be State of SCM+FSA;
    let I be Macro-Instruction;
    set I0 = Directed I;
@@ -2021,13 +2037,15 @@ l0
  end;
  end;
 
-theorem Th59: ::T29502'
+theorem Th59:
  for s being State of SCM+FSA, I being Macro-Instruction st
      Directed I is_pseudo-closed_on s holds
- (Result (s +* (I ';' SCM+FSA-Stop +* Start-At insloc 0))) | D =
+ (Result (s +* (I ';' SCM+FSA-Stop +* Start-At insloc 0))) |
+   (Int-Locations \/ FinSeq-Locations) =
      (Computation (s +* (I +* Start-At insloc 0))).
-         pseudo-LifeSpan(s,Directed I) | D
+         pseudo-LifeSpan(s,Directed I) | (Int-Locations \/ FinSeq-Locations)
  proof
+   set D = Int-Locations \/ FinSeq-Locations;
    let s be State of SCM+FSA;
    let I be Macro-Instruction;
    set I0 = Directed I;
@@ -2045,10 +2063,12 @@ then A1: I1 is_halting_on s & LifeSpan s10 = k &
 theorem
     for s being State of SCM+FSA, I being Macro-Instruction st
      s.intloc 0 = 1 & Directed I is_pseudo-closed_on s holds
- IExec(I ';' SCM+FSA-Stop,s) | D =
+ IExec(I ';' SCM+FSA-Stop,s) | (Int-Locations \/ FinSeq-Locations) =
      (Computation (s +* (I +* Start-At insloc 0))).
-         pseudo-LifeSpan(s,Directed I) | D
+         pseudo-LifeSpan(s,Directed I) | (Int-Locations \/ FinSeq-Locations)
  proof
+   set D = Int-Locations \/ FinSeq-Locations;
+   set A = the Instruction-Locations of SCM+FSA;
    let s be State of SCM+FSA;
    let I be Macro-Instruction;
    set I0 = Directed I;
@@ -2250,7 +2270,7 @@ then A8: insloc (card J + 3) in dom J4 by SCMFSA6A:15;
     = goto insloc (card J + 5) by A1;
   end;
 
-theorem Th66: ::TMP71
+theorem Th66:
  for s being State of SCM+FSA, I,J being Macro-Instruction,
      a being read-write Int-Location
  st s.a = 0 & Directed I is_pseudo-closed_on s holds
@@ -2258,6 +2278,8 @@ theorem Th66: ::TMP71
      LifeSpan (s +* (if=0(a,I,J) +* Start-At insloc 0)) =
          LifeSpan (s +* (I ';' SCM+FSA-Stop +* Start-At insloc 0)) + 1
  proof
+   set A = the Instruction-Locations of SCM+FSA;
+   set D = Int-Locations \/ FinSeq-Locations;
    let s be State of SCM+FSA;
    let I,J be Macro-Instruction;
    let a be read-write Int-Location;
@@ -2467,6 +2489,8 @@ theorem
      IExec(if=0(a,I,J),s) | (Int-Locations \/ FinSeq-Locations) =
          IExec(I ';' SCM+FSA-Stop,s) | (Int-Locations \/ FinSeq-Locations)
  proof
+   set D = Int-Locations \/ FinSeq-Locations;
+   set A = the Instruction-Locations of SCM+FSA;
    let ss be State of SCM+FSA;
    let I,J be Macro-Instruction;
    let a be read-write Int-Location;
@@ -2659,7 +2683,7 @@ then A46: (Computation s00).pseudo-LifeSpan(s,I0) | D =
    .= IExec(I1,ss) | D by Th17;
   end;
 
-theorem Th68: ::TMP71'
+theorem Th68:
  for s being State of SCM+FSA, I,J being Macro-Instruction,
      a being read-write Int-Location
  st s.a > 0 & Directed I is_pseudo-closed_on s holds
@@ -2667,6 +2691,8 @@ theorem Th68: ::TMP71'
      LifeSpan (s +* (if>0(a,I,J) +* Start-At insloc 0)) =
          LifeSpan (s +* (I ';' SCM+FSA-Stop +* Start-At insloc 0)) + 1
  proof
+   set D = Int-Locations \/ FinSeq-Locations;
+   set A = the Instruction-Locations of SCM+FSA;
    let s be State of SCM+FSA;
    let I,J be Macro-Instruction;
    let a be read-write Int-Location;
@@ -2870,13 +2896,15 @@ then A48: LifeSpan s3 = pseudo-LifeSpan(s00,I0) + 1 by A25,A26,SCM_1:def 2;
        by A2,A48,Th50;
   end;
 
-theorem Th69: ::TMP7'
+theorem Th69:
  for s being State of SCM+FSA, I,J being Macro-Instruction,
      a being read-write Int-Location
  st s.intloc 0 = 1 & s.a > 0 & Directed I is_pseudo-closed_on s holds
      IExec(if>0(a,I,J),s) | (Int-Locations \/ FinSeq-Locations) =
          IExec(I ';' SCM+FSA-Stop,s) | (Int-Locations \/ FinSeq-Locations)
  proof
+   set D = Int-Locations \/ FinSeq-Locations;
+   set A = the Instruction-Locations of SCM+FSA;
    let ss be State of SCM+FSA;
    let I,J be Macro-Instruction;
    let a be read-write Int-Location;
@@ -3069,7 +3097,7 @@ then A46: (Computation s00).pseudo-LifeSpan(s,I0) | D =
    .= IExec(I1,ss) | D by Th17;
   end;
 
-theorem Th70: ::TMP171
+theorem Th70:
  for s being State of SCM+FSA, I,J being Macro-Instruction,
      a being read-write Int-Location
  st s.a <> 0 & Directed J is_pseudo-closed_on s holds
@@ -3077,6 +3105,8 @@ theorem Th70: ::TMP171
      LifeSpan (s +* (if=0(a,I,J) +* Start-At insloc 0)) =
          LifeSpan (s +* (J ';' SCM+FSA-Stop +* Start-At insloc 0)) + 3
  proof
+   set D = Int-Locations \/ FinSeq-Locations;
+   set A = the Instruction-Locations of SCM+FSA;
    let s be State of SCM+FSA;
    let I,J be Macro-Instruction;
    let a be read-write Int-Location;
@@ -3326,6 +3356,8 @@ theorem
      IExec(if=0(a,I,J),s) | (Int-Locations \/ FinSeq-Locations) =
          IExec(J ';' SCM+FSA-Stop,s) | (Int-Locations \/ FinSeq-Locations)
  proof
+   set A = the Instruction-Locations of SCM+FSA;
+   set D = Int-Locations \/ FinSeq-Locations;
    let ss be State of SCM+FSA;
    let I,J be Macro-Instruction;
    let a be read-write Int-Location;
@@ -3554,7 +3586,7 @@ then A58: s9 | D = Exec(CurInstr s9,s9) | D by Th32
    .= IExec(J ';' SCM+FSA-Stop,ss) | D by Th17;
   end;
 
-theorem Th72: ::TMP171'
+theorem Th72:
  for s being State of SCM+FSA, I,J being Macro-Instruction,
      a being read-write Int-Location
  st s.a <= 0 & Directed J is_pseudo-closed_on s holds
@@ -3562,6 +3594,8 @@ theorem Th72: ::TMP171'
      LifeSpan (s +* (if>0(a,I,J) +* Start-At insloc 0)) =
          LifeSpan (s +* (J ';' SCM+FSA-Stop +* Start-At insloc 0)) + 3
  proof
+   set A = the Instruction-Locations of SCM+FSA;
+   set D = Int-Locations \/ FinSeq-Locations;
    let s be State of SCM+FSA;
    let I,J be Macro-Instruction;
    let a be read-write Int-Location;
@@ -3803,13 +3837,15 @@ then A59: LifeSpan s3 = pseudo-LifeSpan(s00,J0) + 3 by A36,A37,SCM_1:def 2;
    by A3,A59,Th50;
   end;
 
-theorem Th73: ::TMP17'
+theorem Th73:
  for s being State of SCM+FSA, I,J being Macro-Instruction,
      a being read-write Int-Location
  st s.intloc 0 = 1 & s.a <= 0 & Directed J is_pseudo-closed_on s holds
      IExec(if>0(a,I,J),s) | (Int-Locations \/ FinSeq-Locations) =
          IExec(J ';' SCM+FSA-Stop,s) | (Int-Locations \/ FinSeq-Locations)
  proof
+   set A = the Instruction-Locations of SCM+FSA;
+   set D = Int-Locations \/ FinSeq-Locations;
    let ss be State of SCM+FSA;
    let I,J be Macro-Instruction;
    let a be read-write Int-Location;
@@ -4086,7 +4122,7 @@ theorem
      end;
  end;
 
-theorem Th76: ::TG8'
+theorem Th76:
  for I being Macro-Instruction, a being Int-Location holds
      I does_not_destroy a implies Directed I does_not_destroy a
  proof
@@ -4113,7 +4149,7 @@ A2: rng Macro i = {i,halt SCM+FSA} by Th41;
    hence Macro i does_not_destroy a by SCMFSA7B:def 4;
  end;
 
-theorem Th78: ::R0'
+theorem Th78:
  for a being Int-Location holds
      halt SCM+FSA does_not_refer a
  proof
@@ -4180,7 +4216,7 @@ A2: rng Macro i = {i,halt SCM+FSA} by Th41;
    hence Macro i does_not_refer a by SCMFSA7B:def 2;
  end;
 
-theorem Th81: ::TG9'
+theorem Th81:
  for I,J being Macro-Instruction, a being Int-Location holds
      I does_not_destroy a & J does_not_destroy a implies
          I ';' J does_not_destroy a
@@ -4194,7 +4230,7 @@ A3: Directed I does_not_destroy a by A1,Th76;
    hence I ';' J does_not_destroy a by A2,A3,SCMFSA8A:25;
  end;
 
-theorem Th82: ::T281220
+theorem Th82:
  for J being Macro-Instruction, i being Instruction of SCM+FSA,
      a being Int-Location st i does_not_destroy a & J does_not_destroy a holds
  i ';' J does_not_destroy a
@@ -4235,7 +4271,7 @@ then A1: Macro i does_not_destroy a & Macro j does_not_destroy a by Th77;
    hence i ';' j does_not_destroy a by A1,Th81;
  end;
 
-theorem Th85: ::TQ7'
+theorem Th85:
  for a being Int-Location holds
      SCM+FSA-Stop does_not_destroy a
  proof
@@ -4249,7 +4285,7 @@ theorem Th85: ::TQ7'
    hence thesis by SCMFSA7B:def 4;
  end;
 
-theorem Th86: ::T27749
+theorem Th86:
  for a being Int-Location, l being Instruction-Location of SCM+FSA holds
      Goto l does_not_destroy a
  proof
@@ -4265,7 +4301,7 @@ theorem Th86: ::T27749
    hence thesis by SCMFSA7B:def 4;
  end;
 
-theorem Th87: ::T200724'
+theorem Th87:
  for s being State of SCM+FSA, I being Macro-Instruction
      st I is_halting_on Initialize s holds
  (for a being read-write Int-Location holds
@@ -4275,6 +4311,7 @@ theorem Th87: ::T200724'
      IExec(I,s).f = (Computation (Initialize s +* (I +* Start-At insloc 0))).
          (LifeSpan (Initialize s +* (I +* Start-At insloc 0))).f
  proof
+   set A = the Instruction-Locations of SCM+FSA;
    let s be State of SCM+FSA;
    let I be Macro-Instruction;
    set s0 = Initialize s;
@@ -4300,7 +4337,7 @@ then A3: f in dom Result s1 & not f in dom (s | A) by RELAT_1:90,SCMFSA_2:67;
    .= (Computation s1).(LifeSpan s1).f by A1,SCMFSA6B:16;
  end;
 
-theorem Th88: ::T200724
+theorem Th88:
  for s being State of SCM+FSA, I being parahalting Macro-Instruction,
      a being read-write Int-Location holds
  IExec(I,s).a = (Computation (Initialize s +* (I +* Start-At insloc 0))).
@@ -4313,13 +4350,14 @@ theorem Th88: ::T200724
    hence thesis by Th87;
  end;
 
-theorem Th89: ::TMP29'
+theorem Th89:
  for s being State of SCM+FSA, I being Macro-Instruction,
      a being Int-Location,k being Nat st
      I is_closed_on Initialize s & I is_halting_on Initialize s &
      I does_not_destroy a holds
  IExec(I,s).a = (Computation (Initialize s +* (I +* Start-At insloc 0))).k.a
  proof
+   set A = the Instruction-Locations of SCM+FSA;
    let s be State of SCM+FSA;
    let I be Macro-Instruction;
    let a be Int-Location;
@@ -4341,7 +4379,7 @@ then A5: a in dom Result s1 & not a in dom (s | A) by RELAT_1:90,SCMFSA_2:66;
    .= (Computation (s0 +* (I +* Start-At insloc 0))).k.a by A1,A3,SCMFSA7B:27;
  end;
 
-theorem Th90: ::TMP29
+theorem Th90:
  for s being State of SCM+FSA, I being parahalting Macro-Instruction,
      a being Int-Location,k being Nat st I does_not_destroy a holds
  IExec(I,s).a = (Computation (Initialize s +* (I +* Start-At insloc 0))).k.a
@@ -4360,11 +4398,12 @@ A2: I is_closed_on s0 by SCMFSA7B:24;
    hence thesis by A1,A2,Th89;
  end;
 
-theorem Th91: ::TMP29''
+theorem Th91:
  for s being State of SCM+FSA, I being parahalting Macro-Instruction,
      a being Int-Location st I does_not_destroy a holds
  IExec(I,s).a = (Initialize s).a
  proof
+   set D = Int-Locations \/ FinSeq-Locations;
    let s be State of SCM+FSA;
    let I be parahalting Macro-Instruction;
    let a be Int-Location;
@@ -4377,13 +4416,15 @@ A2: (Initialize s) | D = (Initialize s +* (I +* Start-At insloc 0)) | D
    .= (Initialize s).a by A2,SCMFSA6A:38;
  end;
 
-theorem Th92: ::T200724''
+theorem Th92:
  for s being State of SCM+FSA, I being keeping_0 Macro-Instruction st
      I is_halting_on Initialize s holds
  IExec(I,s).intloc 0 = 1 &
  for k being Nat holds
      (Computation (Initialize s +* (I +* Start-At insloc 0))).k.intloc 0 = 1
  proof
+   set A = the Instruction-Locations of SCM+FSA;
+   set D = Int-Locations \/ FinSeq-Locations;
    let s be State of SCM+FSA;
    let I be keeping_0 Macro-Instruction;
    set s0 = Initialize s;
@@ -4410,7 +4451,7 @@ A5: now let k be Nat;
    thus (Computation s1).k.a = 1 by A5;
  end;
 
-theorem Th93: ::TQ9
+theorem Th93:
  for s being State of SCM+FSA, I being Macro-Instruction, a being Int-Location
      st I does_not_destroy a holds
  for k being Nat st IC (Computation (s +* (I +* Start-At insloc 0))).k in dom I
@@ -4440,7 +4481,7 @@ then A5: s1.l does_not_destroy a by A1,SCMFSA7B:def 4;
    .= (Computation s1).k.a by A5,SCMFSA7B:26;
  end;
 
-theorem Th94: ::TQ9'
+theorem Th94:
  for s being State of SCM+FSA, I being Macro-Instruction, a being Int-Location
      st I does_not_destroy a holds
  for m being Nat st (for n being Nat st n < m holds
@@ -4477,7 +4518,7 @@ A5: for k being Nat st P[k] holds P[k + 1]
    hence (Computation (s +* (I +* Start-At insloc 0))).n.a = s.a by A3;
  end;
 
-theorem Th95: ::T210921
+theorem Th95:
  for s being State of SCM+FSA, I being good Macro-Instruction
  for m being Nat st (for n being Nat st n < m holds
      IC (Computation (s +* (I +* Start-At insloc 0))).n in dom I) holds
@@ -4496,13 +4537,14 @@ theorem Th95: ::T210921
        s.intloc 0 by A1,A2,Th94;
  end;
 
-theorem Th96: ::T22842
+theorem Th96:
  for s being State of SCM+FSA, I being good Macro-Instruction st
      I is_halting_on Initialize s & I is_closed_on Initialize s holds
  IExec(I,s).intloc 0 = 1 &
  for k being Nat holds
      (Computation (Initialize s +* (I +* Start-At insloc 0))).k.intloc 0 = 1
  proof
+   set A = the Instruction-Locations of SCM+FSA;
    let s be State of SCM+FSA;
    let I be good Macro-Instruction;
    set s0 = Initialize s;
@@ -4563,7 +4605,7 @@ theorem
        by A1,SCMFSA7B:27;
  end;
 
-theorem Th98: ::TMP27
+theorem Th98:
  for s being State of SCM+FSA, I being keeping_0 parahalting Macro-Instruction,
      a being read-write Int-Location st I does_not_destroy a holds
  (Computation (Initialize s +* (I ';' SubFrom(a,intloc 0) +*
@@ -4590,7 +4632,7 @@ A2: a in dom s0 & not a in dom (I +* Start-At insloc 0)
    .= s.a - 1 by SCMFSA6C:3;
  end;
 
-theorem Th99: ::T211205
+theorem Th99:
  for i being Instruction of SCM+FSA st i does_not_destroy intloc 0 holds
      Macro i is good
  proof
@@ -4602,7 +4644,9 @@ theorem Th99: ::T211205
 
 theorem Th100: ::T13'   6B
  for s1,s2 being State of SCM+FSA,I being Macro-Instruction
-     st I is_closed_on s1 & I is_halting_on s1 & s1 | D = s2 | D holds
+     st I is_closed_on s1 & I is_halting_on s1 &
+     s1 | (Int-Locations \/ FinSeq-Locations) =
+     s2 | (Int-Locations \/ FinSeq-Locations) holds
  for k being Nat holds
      (Computation (s1 +* (I +* Start-At insloc 0))).k,
          (Computation (s2 +* (I +* Start-At insloc 0))).k
@@ -4610,6 +4654,7 @@ theorem Th100: ::T13'   6B
      CurInstr (Computation (s1 +* (I +* Start-At insloc 0))).k =
          CurInstr (Computation (s2 +* (I +* Start-At insloc 0))).k
  proof
+   set D = Int-Locations \/ FinSeq-Locations;
    let s1,s2 be State of SCM+FSA;
    let I be Macro-Instruction;
    assume A1: I is_closed_on s1;
@@ -4647,13 +4692,16 @@ then A5: I c= ss2 by XBOOLE_1:1;
 
 theorem Th101: ::T14'   6B
  for s1,s2 being State of SCM+FSA,I being Macro-Instruction
-     st I is_closed_on s1 & I is_halting_on s1 & s1 | D = s2 | D holds
+     st I is_closed_on s1 & I is_halting_on s1 &
+     s1 | (Int-Locations \/ FinSeq-Locations) =
+     s2 | (Int-Locations \/ FinSeq-Locations) holds
  LifeSpan (s1 +* (I +* Start-At insloc 0)) =
      LifeSpan (s2 +* (I +* Start-At insloc 0)) &
  Result (s1 +* (I +* Start-At insloc 0)),
      Result (s2 +* (I +* Start-At insloc 0)) equal_outside
          the Instruction-Locations of SCM+FSA
  proof
+   set D = Int-Locations \/ FinSeq-Locations;
    let s1,s2 be State of SCM+FSA;
    let I be Macro-Instruction;
    assume A1: I is_closed_on s1;
@@ -4682,7 +4730,7 @@ then A9: Result ss2 = (Computation ss2).LifeSpan ss1 by A8,SCMFSA6B:16;
 
 canceled;
 
-theorem Th103: ::T3829
+theorem Th103:
  for s1,s2 being State of SCM+FSA,I being Macro-Instruction
      st I is_closed_on s1 & I is_halting_on s1 &
      I +* Start-At insloc 0 c= s1 & I +* Start-At insloc 0 c= s2 &
@@ -4690,6 +4738,8 @@ theorem Th103: ::T3829
      equal_outside the Instruction-Locations of SCM+FSA holds
  Result s1,Result s2 equal_outside the Instruction-Locations of SCM+FSA
  proof
+   set D = Int-Locations \/ FinSeq-Locations;
+   set A = the Instruction-Locations of SCM+FSA;
    let s1,s2 be State of SCM+FSA;
    let I be Macro-Instruction;
    assume A1: I is_closed_on s1;
@@ -4758,8 +4808,7 @@ definition
  let I be Macro-Instruction;
  canceled 3;
 
- func loop I -> halt-free Macro-Instruction equals
-:Def4: ::D17
+ func loop I -> halt-free Macro-Instruction equals :Def4:
  ((id the Instructions of SCM+FSA) +* (halt SCM+FSA .--> goto insloc 0)) * I;
  coherence
   proof
@@ -4768,7 +4817,7 @@ definition
   end;
 end;
 
-theorem Th104: ::T1
+theorem Th104:
  for I being Macro-Instruction holds
      loop I = Directed(I,insloc 0)
  proof
@@ -4841,7 +4890,7 @@ A2: rng I c= the Instructions of SCM+FSA by SCMFSA_4:1;
    .= I.x by A1,FUNCT_4:12;
  end;
 
-theorem Th109: ::TMP24
+theorem Th109:
  for s being State of SCM+FSA, I being Macro-Instruction
      st I is_closed_on s & I is_halting_on s
  for m being Nat st m <= LifeSpan (s +* (I +* Start-At insloc 0))
@@ -4849,6 +4898,7 @@ theorem Th109: ::TMP24
          (Computation(s +* (loop I +* Start-At insloc 0))).m
          equal_outside the Instruction-Locations of SCM+FSA
  proof
+   set A = the Instruction-Locations of SCM+FSA;
    let s be State of SCM+FSA;
    let I be Macro-Instruction;
    set s1 = s +* (I +* Start-At insloc 0);
@@ -4906,7 +4956,7 @@ A11:    C2.(m + 1) = Following C2.m by AMI_1:def 19
    thus for m being Nat holds X[m] from NAT_1:sch 1(A3,A6);
  end;
 
-theorem Th110: ::TMP25
+theorem Th110:
  for s being State of SCM+FSA, I being Macro-Instruction
      st I is_closed_on s & I is_halting_on s
  for m being Nat st m < LifeSpan (s +* (I +* Start-At insloc 0)) holds
@@ -4954,6 +5004,7 @@ Lm6:
      CurInstr (Computation (s +* (loop I +* Start-At insloc 0))).m <>
      halt SCM+FSA)
  proof
+   set A = the Instruction-Locations of SCM+FSA;
    let s be State of SCM+FSA;
    let I be Macro-Instruction;
    set s1 = s +* (I +* Start-At insloc 0);
@@ -5012,13 +5063,13 @@ theorem
   CurInstr (Computation (s +* (loop I +* Start-At insloc 0))).m <> halt SCM+FSA
  by Lm6;
 
-theorem  ::TMP26
+theorem
    for s being State of SCM+FSA, I being Macro-Instruction
      st I is_closed_on s & I is_halting_on s holds
  CurInstr (Computation (s +* (loop I +* Start-At insloc 0))).
       LifeSpan (s +* (I +* Start-At insloc 0)) = goto insloc 0 by Lm6;
 
-theorem Th113: ::MAI1
+theorem Th113:
  for s being State of SCM+FSA, I being paraclosed Macro-Instruction
      st I +* Start-At insloc 0 c= s & s is halting
  for m being Nat st m <= LifeSpan s
@@ -5110,8 +5161,7 @@ begin :: Times
 definition
  let a be Int-Location;
  let I be Macro-Instruction;
- func Times(a,I) -> Macro-Instruction equals
-:Def5: ::D13
+ func Times(a,I) -> Macro-Instruction equals :Def5:
   if>0(a,loop if=0(a,Goto insloc 2,I ';' SubFrom(a,intloc 0)),
      SCM+FSA-Stop);
  correctness;
@@ -5184,12 +5234,13 @@ then A8: insloc (card I1 + 3) in dom J4 by SCMFSA6A:15;
     = goto insloc (card I1 + 5) by SCMFSA8B:def 1;
   end;
 
-theorem Th117: ::TMP22
+theorem Th117:
  for s being State of SCM+FSA, I being good parahalting Macro-Instruction,
      a being read-write Int-Location st
      I does_not_destroy a & s.intloc 0 = 1 & s.a > 0 holds
  loop if=0(a,Goto insloc 2,I ';' SubFrom(a,intloc 0)) is_pseudo-closed_on s
  proof
+   set A = the Instruction-Locations of SCM+FSA;
    let s be State of SCM+FSA;
    let I be good parahalting Macro-Instruction;
    let a be read-write Int-Location;
@@ -5243,8 +5294,7 @@ A5: for k being Nat holds P[k] implies P[k + 1]
            .= Macro i ';' (I1 ';' Goto insloc (card Goto insloc 2 + 1) ';'
                Goto insloc 2 ';' SCM+FSA-Stop) by SCMFSA6A:def 5;
            end;
-            InsCode i = 7 & InsCode halt SCM+FSA = 0 by SCMFSA_2:48,124
-;
+            InsCode i = 7 & InsCode halt SCM+FSA = 0 by SCMFSA_2:48,124;
          then insloc 0 in dom Macro i &
          (Macro i).insloc 0 <> halt SCM+FSA by SCMFSA6B:32,33;
          hence
@@ -5437,8 +5487,7 @@ FUNCT_4:36
        hence IC C2.m = insloc card ProgramPart loop P by A38,A40,AMI_1:51;
        hereby let n be Nat;
           assume A48: n < m;
-             I1 is_closed_on ss & I1 is_halting_on ss by SCMFSA7B:24,25
-;
+             I1 is_closed_on ss & I1 is_halting_on ss by SCMFSA7B:24,25;
       then A49: P is_closed_on ss & P is_halting_on ss by A9,SCMFSA8B:18;
           per cases by NAT_1:38;
           suppose n <= LifeSpan s1;
@@ -5549,8 +5598,7 @@ A2: Times(a,I) = if>0(a,loop if=0(a,Goto insloc 2,I ';' SubFrom(a,intloc 0)),
       suppose s.a <= 0;
     then A4: (Initialize s).a <= 0 by SCMFSA6C:3;
           SCM+FSA-Stop is_closed_on Initialize s &
-           SCM+FSA-Stop is_halting_on Initialize s by SCMFSA7B:24,25
-;
+           SCM+FSA-Stop is_halting_on Initialize s by SCMFSA7B:24,25;
        then Times(a,I) is_halting_on Initialize s by A2,A4,SCMFSA8B:24;
        hence Initialized Times(a,I) is_halting_on s by Th22;
     end;
@@ -5591,7 +5639,7 @@ A8: SCM+FSA-Stop does_not_destroy c by Th85;
    hence if>0(a,I,J) does_not_destroy c by A7,A8,Th81;
  end;
 
-theorem Th122: ::TMP22'
+theorem Th122:
  for s being State of SCM+FSA, I being good parahalting Macro-Instruction,
      a being read-write Int-Location st I does_not_destroy a &
      s.intloc 0 = 1 & s.a > 0 holds
@@ -5610,6 +5658,7 @@ theorem Th122: ::TMP22'
        IC (Computation s2).n in
            dom loop if=0(a,Goto insloc 2,I ';' SubFrom(a,intloc 0))
  proof
+   set A = the Instruction-Locations of SCM+FSA;
    let s be State of SCM+FSA;
    let I be good parahalting Macro-Instruction;
    let a be read-write Int-Location;
@@ -5728,12 +5777,13 @@ SCMFSA6A:31
      end;
  end;
 
-theorem Th123: ::T1
+theorem Th123:
  for s being State of SCM+FSA, I being good parahalting Macro-Instruction,
      a being read-write Int-Location st s.intloc 0 = 1 & s.a <= 0 holds
  IExec(Times(a,I),s) | (Int-Locations \/ FinSeq-Locations) =
      s | (Int-Locations \/ FinSeq-Locations)
  proof
+   set D = Int-Locations \/ FinSeq-Locations;
    let s be State of SCM+FSA;
    let I be good parahalting Macro-Instruction;
    let a be read-write Int-Location;
@@ -5769,7 +5819,7 @@ A9: IExec(SCM+FSA-Stop,s0) | D
    .= s | D by A1,A9,Th27;
  end;
 
-theorem Th124: ::T2
+theorem Th124:
  for s being State of SCM+FSA, I being good parahalting Macro-Instruction,
      a being read-write Int-Location st I does_not_destroy a & s.a > 0 holds
  IExec(I ';' SubFrom(a,intloc 0),s).a = s.a - 1 &
@@ -5777,6 +5827,8 @@ theorem Th124: ::T2
      IExec(Times(a,I),IExec(I ';' SubFrom(a,intloc 0),s)) |
          (Int-Locations \/ FinSeq-Locations)
  proof
+   set D = Int-Locations \/ FinSeq-Locations;
+   set A = the Instruction-Locations of SCM+FSA;
    let s be State of SCM+FSA;
    let I be good parahalting Macro-Instruction;
    let a be read-write Int-Location;
@@ -5974,13 +6026,14 @@ then A54: Result s21,Result s31 equal_outside A by A53,Th103;
  end;
  end;
 
-begin ::example
+begin :: Example
 
 theorem
-    for s being State of SCM+FSA, a,b,c being read-write Int-Location
+  for s being State of SCM+FSA, a,b,c being read-write Int-Location
  st a <> b & a <> c & b <> c & s.a >= 0 holds
      IExec(Times(a,Macro AddTo(b,c)),s).b = s.b + s.c * s.a
  proof
+   set D = Int-Locations \/ FinSeq-Locations;
    let s be State of SCM+FSA;
    let a,b,c be read-write Int-Location;
    assume A1: a <> b & a <> c & b <> c;
@@ -6028,8 +6081,7 @@ A6: for k being Nat st P[k] holds P[k + 1]
       then I does_not_destroy a by Th77;
   then A12: IExec(I ';' SubFrom(a,intloc 0),s).a = s.a - 1 &
           IExec(Times(a,I),s) | D =
-      IExec(Times(a,I),IExec(I ';' SubFrom(a,intloc 0),s)) | D by A11,Th124
-;
+      IExec(Times(a,I),IExec(I ';' SubFrom(a,intloc 0),s)) | D by A11,Th124;
       then IExec(Times(a,I),IExec(I ';' SubFrom(a,intloc 0),s)).b
        = s.b + s.c + s.c * (s.a - 1) by A7,A8,A9,A10
       .= s.b + s.c * s.a;
@@ -6037,7 +6089,7 @@ A6: for k being Nat st P[k] holds P[k + 1]
      end;
 A13: for k being Nat holds P[k] from NAT_1:sch 1(A3,A6);
    reconsider sa = s.a as Nat by A2,INT_1:16;
-      P[sa] by A13;
+   P[sa] by A13;
    hence IExec(Times(a,Macro AddTo(b,c)),s).b = s.b + s.c * s.a;
  end;
 

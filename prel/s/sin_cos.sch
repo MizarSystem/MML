@@ -15,6 +15,7 @@
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="XCMPLX_0"/>
 <ArticleID name="XREAL_0"/>
+<ArticleID name="MEMBERED"/>
 <ArticleID name="SEQ_1"/>
 <ArticleID name="COMSEQ_1"/>
 </Signature>
@@ -60,7 +61,7 @@
 </Pred>
 <Not>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="94">
+<Func kind="K" nr="106">
 <Var nr="2"/>
 <Var nr="3"/>
 </Func>
@@ -82,7 +83,7 @@
 </Not>
 <Not>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="94">
+<Func kind="K" nr="106">
 <Var nr="2"/>
 <Var nr="3"/>
 </Func>
@@ -143,6 +144,7 @@
 <Pred kind="R" nr="1">
 <Func kind="K" nr="85">
 <Func kind="K" nr="56"/>
+<Func kind="K" nr="52"/>
 <Var nr="2"/>
 <Var nr="3"/>
 </Func>
@@ -166,6 +168,7 @@
 <Pred kind="R" nr="1">
 <Func kind="K" nr="85">
 <Func kind="K" nr="56"/>
+<Func kind="K" nr="52"/>
 <Var nr="2"/>
 <Var nr="3"/>
 </Func>

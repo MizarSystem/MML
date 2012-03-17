@@ -288,6 +288,9 @@
 </Func>
 <Cluster>
 <Adjective nr="1" value="false"/>
+<Adjective nr="17"/>
+<Adjective nr="19"/>
+<Adjective nr="20"/>
 <Adjective nr="30"/>
 <Adjective nr="46"/>
 </Cluster>

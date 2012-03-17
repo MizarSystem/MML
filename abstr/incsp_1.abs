@@ -6,7 +6,7 @@
 
 environ
 
- vocabulary RELAT_1, BOOLE, INCSP_1;
+ vocabularies RELAT_1, BOOLE, INCSP_1;
  notations TARSKI, XBOOLE_0, ENUMSET1, ZFMISC_1, SUBSET_1, DOMAIN_1, RELSET_1;
  constructors DOMAIN_1, RELSET_1, MEMBERED, XBOOLE_0;
  registrations SUBSET_1, XBOOLE_0;
@@ -21,20 +21,20 @@ definition
 end;
 
 definition
- struct (IncProjStr) IncStruct (# Points, Lines, Planes -> non empty set,
+  struct (IncProjStr) IncStruct (# Points, Lines, Planes -> non empty set,
                     Inc -> Relation of the Points,the Lines,
                     Inc2 -> Relation of the Points,the Planes,
                     Inc3 -> Relation of the Lines,the Planes #);
 end;
 
- definition let S be IncProjStr;
+definition let S be IncProjStr;
   mode POINT of S is Element of the Points of S;
   mode LINE of S is Element of the Lines of S;
- end;
+end;
 
- definition let S be IncStruct;
+definition let S be IncStruct;
   mode PLANE of S is Element of the Planes of S;
- end;
+end;
 
  reserve S for IncStruct;
  reserve A,B,C,D for POINT of S;
@@ -44,52 +44,52 @@ end;
 
 ::    Definitions of predicates: on, is_collinear, is_coplanar
 
- definition let S be IncProjStr; let A be POINT of S, L be LINE of S;
+definition let S be IncProjStr; let A be POINT of S, L be LINE of S;
   pred A on L means
 :: INCSP_1:def 1
     [A,L] in the Inc of S;
- end;
+end;
 
- definition let S; let A be POINT of S, P be PLANE of S;
+definition let S; let A be POINT of S, P be PLANE of S;
   pred A on P means
 :: INCSP_1:def 2
     [A,P] in the Inc2 of S;
- end;
+end;
 
- definition let S; let L be LINE of S, P be PLANE of S;
+definition let S; let L be LINE of S, P be PLANE of S;
   pred L on P means
 :: INCSP_1:def 3
     [L,P] in the Inc3 of S;
- end;
+end;
 
- definition let S be IncProjStr;
-   let F be Subset of the Points of S, L be LINE of S;
+definition let S be IncProjStr;
+  let F be Subset of the Points of S, L be LINE of S;
   pred F on L means
 :: INCSP_1:def 4
     for A being POINT of S st A in F holds A on L;
- end;
+end;
 
- definition let S; let F be Subset of the Points of S, P be PLANE of S;
+definition let S; let F be Subset of the Points of S, P be PLANE of S;
   pred F on P means
 :: INCSP_1:def 5
     for A st A in F holds A on P;
- end;
+end;
 
- definition let S be IncProjStr; let F be Subset of the Points of S;
+definition let S be IncProjStr; let F be Subset of the Points of S;
   attr F is linear means
 :: INCSP_1:def 6
     ex L being LINE of S st F on L;
-  end;
+end;
 
 notation let S be IncProjStr; let F be Subset of the Points of S;
   synonym F is_collinear for F is linear;
 end;
 
- definition let S be IncStruct; let F be Subset of the Points of S;
+definition let S be IncStruct; let F be Subset of the Points of S;
   attr F is planar means
 :: INCSP_1:def 7
     ex P be PLANE of S st F on P;
-  end;
+end;
 
 notation let S be IncStruct; let F be Subset of the Points of S;
   synonym F is_coplanar for F is planar;
@@ -100,72 +100,76 @@ end;
 canceled 10;
 
 theorem :: INCSP_1:11
- {A,B} on L iff A on L & B on L;
+  {A,B} on L iff A on L & B on L;
 
 theorem :: INCSP_1:12
- {A,B,C} on L iff A on L & B on L & C on L;
+  {A,B,C} on L iff A on L & B on L & C on L;
 
 theorem :: INCSP_1:13
- {A,B} on P iff A on P & B on P;
+  {A,B} on P iff A on P & B on P;
 
 theorem :: INCSP_1:14
- {A,B,C} on P iff A on P & B on P & C on P;
+  {A,B,C} on P iff A on P & B on P & C on P;
 
 theorem :: INCSP_1:15
- {A,B,C,D} on P iff A on P & B on P & C on P & D on P;
+  {A,B,C,D} on P iff A on P & B on P & C on P & D on P;
 
 theorem :: INCSP_1:16
- G c= F & F on L implies G on L;
+  G c= F & F on L implies G on L;
 
 theorem :: INCSP_1:17
- G c= F & F on P implies G on P;
+  G c= F & F on P implies G on P;
 
 theorem :: INCSP_1:18
- F on L & A on L iff F \/ {A} on L;
+  F on L & A on L iff F \/ {A} on L;
 
 theorem :: INCSP_1:19
- F on P & A on P iff F \/ {A} on P;
+  F on P & A on P iff F \/ {A} on P;
 
 theorem :: INCSP_1:20
- F \/ G on L iff F on L & G on L;
+  F \/ G on L iff F on L & G on L;
 
 theorem :: INCSP_1:21
- F \/ G on P iff F on P & G on P;
+  F \/ G on P iff F on P & G on P;
 
 theorem :: INCSP_1:22
-      G c= F & F is_collinear implies G is_collinear;
+  G c= F & F is_collinear implies G is_collinear;
 
 theorem :: INCSP_1:23
-      G c= F & F is_coplanar implies G is_coplanar;
- reserve a,b,c for Element of Po;
- reserve k,l for Element of Li;
- reserve p,q for Element of Pl;
+  G c= F & F is_coplanar implies G is_coplanar;
 
- definition let IT be IncStruct;
+registration let x, y, z, w be set;
+  cluster {x,y,z,w} -> non empty;
+end;
+
+::    Introduction of mode IncSpace
+
+definition let IT be IncStruct;
   attr IT is IncSpace-like means
 :: INCSP_1:def 8
-
     (for L being LINE of IT ex A,B being POINT of IT st A <> B & {A,B} on L) &
     (for A,B being POINT of IT ex L being LINE of IT st {A,B} on L) &
-    (for A,B being (POINT of IT), K,L being LINE of IT
+    (for A,B being POINT of IT, K,L being LINE of IT
       st A <> B & {A,B} on K & {A,B} on L holds K = L) &
     (for P being PLANE of IT ex A being POINT of IT st A on P) &
     (for A,B,C being POINT of IT ex P being PLANE of IT st {A,B,C} on P) &
-    (for A,B,C being (POINT of IT), P,Q being PLANE of IT
+    (for A,B,C being POINT of IT, P,Q being PLANE of IT
       st not {A,B,C} is_collinear & {A,B,C} on P & {A,B,C} on Q
        holds P = Q) &
-    (for L being (LINE of IT), P being PLANE of IT
+    (for L being LINE of IT, P being PLANE of IT
       st ex A,B being POINT of IT st A <> B & {A,B} on L & {A,B} on P
        holds L on P) &
-    (for A being (POINT of IT), P,Q being PLANE of IT
+    (for A being POINT of IT, P,Q being PLANE of IT
       st A on P & A on Q ex B being POINT of IT st A <> B & B on P & B on Q) &
     (ex A,B,C,D being POINT of IT st not {A,B,C,D} is_coplanar) &
-    (for A being (POINT of IT), L being (LINE of IT), P being PLANE of IT
+    (for A being POINT of IT, L being LINE of IT, P being PLANE of IT
       st A on L & L on P holds A on P);
- end;
+end;
+
+ reserve a,b,c for Element of {0,1,2,3};
 
 registration
- cluster strict IncSpace-like IncStruct;
+  cluster strict IncSpace-like IncStruct;
 end;
 
 definition
@@ -183,57 +187,56 @@ end;
 canceled 11;
 
 theorem :: INCSP_1:35
- F on L & L on P implies F on P;
+  F on L & L on P implies F on P;
 
-::     Collinearity of points & coplanariy of points & lines
+::     Collinearity of points & coplanarity of points & lines
 
 theorem :: INCSP_1:36
- {A,A,B} is_collinear;
+  {A,A,B} is_collinear;
 
 theorem :: INCSP_1:37
- {A,A,B,C} is_coplanar;
+  {A,A,B,C} is_coplanar;
 
 theorem :: INCSP_1:38
- {A,B,C} is_collinear implies {A,B,C,D} is_coplanar;
+  {A,B,C} is_collinear implies {A,B,C,D} is_coplanar;
 
 theorem :: INCSP_1:39
- A <> B & {A,B} on L & not C on L implies not {A,B,C} is_collinear;
+  A <> B & {A,B} on L & not C on L implies not {A,B,C} is_collinear;
 
 theorem :: INCSP_1:40
- not {A,B,C} is_collinear & {A,B,C} on P & not D on P implies
-  not {A,B,C,D} is_coplanar;
+  not {A,B,C} is_collinear & {A,B,C} on P & not D on P implies
+    not {A,B,C,D} is_coplanar;
 
 theorem :: INCSP_1:41
-      not(ex P st K on P & L on P) implies K <> L;
+  not(ex P st K on P & L on P) implies K <> L;
 
 theorem :: INCSP_1:42
-      not(ex P st L on P & L1 on P & L2 on P) &
+  not(ex P st L on P & L1 on P & L2 on P) &
   (ex A st A on L & A on L1 & A on L2) implies L <> L1;
 
 theorem :: INCSP_1:43
-      L1 on P & L2 on P & not L on P & L1 <> L2 implies
-  not(ex Q st L on Q & L1 on Q & L2 on Q);
+  L1 on P & L2 on P & not L on P & L1 <> L2 implies
+    not(ex Q st L on Q & L1 on Q & L2 on Q);
 
 ::     Lines & planes
 
 theorem :: INCSP_1:44
- ex P st A on P & L on P;
+  ex P st A on P & L on P;
 
 theorem :: INCSP_1:45
- (ex A st A on K & A on L) implies (ex P st K on P & L on P);
+  (ex A st A on K & A on L) implies (ex P st K on P & L on P);
 
 theorem :: INCSP_1:46
-      A <> B implies ex L st for K holds {A,B} on K iff K = L;
+  A <> B implies ex L st for K holds {A,B} on K iff K = L;
 
 theorem :: INCSP_1:47
-      not {A,B,C} is_collinear implies ex P st for Q holds {A,B,C} on Q iff P =
-Q;
+  not {A,B,C} is_collinear implies ex P st for Q holds {A,B,C} on Q iff P = Q;
 
 theorem :: INCSP_1:48
- not A on L implies ex P st for Q holds A on Q & L on Q iff P = Q;
+  not A on L implies ex P st for Q holds A on Q & L on Q iff P = Q;
 
 theorem :: INCSP_1:49
- K <>L & (ex A st A on K & A on L) implies
+  K <>L & (ex A st A on K & A on L) implies
   ex P st for Q holds K on Q & L on Q iff P = Q;
 
 ::    Definitions of functions: Line, Plane
@@ -271,61 +274,59 @@ end;
 canceled 7;
 
 theorem :: INCSP_1:57
-      A <> B implies Line(A,B) = Line(B,A);
+  A <> B implies Line(A,B) = Line(B,A);
 
 theorem :: INCSP_1:58
- not {A,B,C} is_collinear implies Plane(A,B,C) = Plane(A,C,B);
+  not {A,B,C} is_collinear implies Plane(A,B,C) = Plane(A,C,B);
 
 theorem :: INCSP_1:59
- not {A,B,C} is_collinear implies Plane(A,B,C) = Plane(B,A,C);
+  not {A,B,C} is_collinear implies Plane(A,B,C) = Plane(B,A,C);
 
 theorem :: INCSP_1:60
-      not {A,B,C} is_collinear implies Plane(A,B,C) = Plane(B,C,A);
+  not {A,B,C} is_collinear implies Plane(A,B,C) = Plane(B,C,A);
 
 theorem :: INCSP_1:61
- not {A,B,C} is_collinear implies Plane(A,B,C) = Plane(C,A,B);
+  not {A,B,C} is_collinear implies Plane(A,B,C) = Plane(C,A,B);
 
 theorem :: INCSP_1:62
-      not {A,B,C} is_collinear implies Plane(A,B,C) = Plane(C,B,A);
+  not {A,B,C} is_collinear implies Plane(A,B,C) = Plane(C,B,A);
 
 canceled;
 
 theorem :: INCSP_1:64
-      K <> L & (ex A st A on K & A on L) implies
+  K <> L & (ex A st A on K & A on L) implies
   Plane(K,L) = Plane(L,K);
 
 theorem :: INCSP_1:65
- A <> B & C on Line(A,B) implies {A,B,C} is_collinear;
+  A <> B & C on Line(A,B) implies {A,B,C} is_collinear;
 
 theorem :: INCSP_1:66
-      A <> B & A <> C & {A,B,C} is_collinear implies Line(A,B) = Line(A,C);
+  A <> B & A <> C & {A,B,C} is_collinear implies Line(A,B) = Line(A,C);
 
 theorem :: INCSP_1:67
-      not {A,B,C} is_collinear implies Plane(A,B,C) = Plane(C,Line(A,B));
+  not {A,B,C} is_collinear implies Plane(A,B,C) = Plane(C,Line(A,B));
 
 theorem :: INCSP_1:68
-      not {A,B,C} is_collinear & D on Plane(A,B,C) implies {A,B,C,D}
-is_coplanar;
+  not {A,B,C} is_collinear & D on Plane(A,B,C) implies {A,B,C,D} is_coplanar;
 
 theorem :: INCSP_1:69
-      not C on L & {A,B} on L & A <> B implies Plane(C,L) = Plane(A,B,C);
+  not C on L & {A,B} on L & A <> B implies Plane(C,L) = Plane(A,B,C);
 
 theorem :: INCSP_1:70
-      not {A,B,C} is_collinear implies Plane(A,B,C) = Plane(Line(A,B),Line(A,C)
-);
+  not {A,B,C} is_collinear implies Plane(A,B,C) = Plane(Line(A,B),Line(A,C));
 
 ::   The fourth axiom of incidency
 
 theorem :: INCSP_1:71
- ex A,B,C st {A,B,C} on P & not {A,B,C} is_collinear;
+  ex A,B,C st {A,B,C} on P & not {A,B,C} is_collinear;
 
 ::    Fundamental existence theorems
 
 theorem :: INCSP_1:72
-      ex A,B,C,D st A on P & not {A,B,C,D} is_coplanar;
+  ex A,B,C,D st A on P & not {A,B,C,D} is_coplanar;
 
 theorem :: INCSP_1:73
-      ex B st A <> B & B on L;
+  ex B st A <> B & B on L;
 
 theorem :: INCSP_1:74
  A <> B implies ex C st C on P & not {A,B,C} is_collinear;
@@ -337,41 +338,41 @@ theorem :: INCSP_1:76
  ex B,C st {B,C} on P & not {A,B,C} is_collinear;
 
 theorem :: INCSP_1:77
- A <> B implies (ex C,D st not {A,B,C,D} is_coplanar);
+  A <> B implies (ex C,D st not {A,B,C,D} is_coplanar);
 
 theorem :: INCSP_1:78
-      ex B,C,D st not {A,B,C,D} is_coplanar;
+  ex B,C,D st not {A,B,C,D} is_coplanar;
 
 theorem :: INCSP_1:79
-      ex L st not A on L & L on P;
+  ex L st not A on L & L on P;
 
 theorem :: INCSP_1:80
  A on P implies (ex L,L1,L2 st L1 <> L2 & L1 on P & L2 on P &
                   not L on P & A on L & A on L1 & A on L2);
 
 theorem :: INCSP_1:81
-      ex L,L1,L2 st A on L & A on L1 & A on L2 &
+  ex L,L1,L2 st A on L & A on L1 & A on L2 &
   not(ex P st L on P & L1 on P & L2 on P);
 
 theorem :: INCSP_1:82
-      ex P st A on P & not L on P;
+  ex P st A on P & not L on P;
 
 theorem :: INCSP_1:83
-      ex A st A on P & not A on L;
+  ex A st A on P & not A on L;
 
 theorem :: INCSP_1:84
-      ex K st not(ex P st L on P & K on P);
+  ex K st not(ex P st L on P & K on P);
 
 theorem :: INCSP_1:85
-      ex P,Q st P <> Q & L on P & L on Q;
+  ex P,Q st P <> Q & L on P & L on Q;
 
 ::  Intersection of lines and planes
 
 canceled;
 
 theorem :: INCSP_1:87
-      not L on P & {A,B} on L & {A,B} on P implies A = B;
+  not L on P & {A,B} on L & {A,B} on P implies A = B;
 
 theorem :: INCSP_1:88
-      P <> Q implies not(ex A st A on P & A on Q) or
+  P <> Q implies not(ex A st A on P & A on Q) or
   (ex L st for B holds B on P & B on Q iff B on L);

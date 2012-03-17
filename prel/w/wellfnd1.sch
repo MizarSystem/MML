@@ -22,10 +22,11 @@
 <ArticleID name="XREAL_0"/>
 <ArticleID name="FUNCOP_1"/>
 <ArticleID name="FUNCT_3"/>
+<ArticleID name="MEMBERED"/>
+<ArticleID name="SEQ_1"/>
 <ArticleID name="RFUNCT_1"/>
 <ArticleID name="SQUARE_1"/>
 <ArticleID name="RFINSEQ"/>
-<ArticleID name="SEQ_1"/>
 <ArticleID name="PARTFUN1"/>
 <ArticleID name="RFUNCT_3"/>
 <ArticleID name="ORDERS_1"/>
@@ -46,7 +47,7 @@
 <Typ kind="M" nr="3">
 <Cluster/>
 <Func kind="K" nr="40">
-<Func kind="K" nr="182">
+<Func kind="K" nr="196">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 </Func>
@@ -158,7 +159,7 @@
 <Pred kind="P" nr="1">
 <Func kind="F" nr="2"/>
 </Pred>
-<Pred kind="V" nr="45">
+<Pred kind="V" nr="50">
 <Func kind="F" nr="1"/>
 </Pred>
 </Scheme>
@@ -230,7 +231,7 @@
 </And>
 </Not>
 </For>
-<Pred kind="V" nr="45">
+<Pred kind="V" nr="50">
 <Func kind="F" nr="1"/>
 </Pred>
 </Scheme>

@@ -6,7 +6,7 @@
 
 environ
 
- vocabulary ARYTM_1, ARYTM, SQUARE_1, ARYTM_3, FINSEQ_1, RELAT_1, FUNCT_1,
+ vocabularies ARYTM_1, ARYTM, SQUARE_1, ARYTM_3, FINSEQ_1, RELAT_1, FUNCT_1,
       RLVECT_1, BOOLE, FINSEQ_2, FINSEQ_4, HAHNBAN1, COMPLEX1, BINOP_1,
       VECTSP_1, NORMSP_1, COMPLFLD, GROUP_1, REALSET1, POWER, POLYNOM1, INT_1,
       INT_2, NAT_1, RAT_1, TARSKI, CARD_1, CARD_3, ALGSEQ_1, POLYNOM3,
@@ -116,14 +116,14 @@ proof let f be FinSequence, n, i be Nat; assume i <= n;
   hence (f|Seg n)|Seg i = f|Seg i by RELAT_1:103;
 end;
 
-   set FC = F_Complex;
-   set cFC = the carrier of F_Complex;
-
 theorem Th3:
 for f being FinSequence of F_Complex, g being FinSequence of REAL
  st len f = len g & for i being Nat st i in dom f holds |. f/.i .| = g.i
   holds |. Product f .| = Product g
-proof let f be FinSequence of F_Complex, g be FinSequence of REAL such that
+proof
+set FC = F_Complex;
+set cFC = the carrier of F_Complex;
+let f be FinSequence of F_Complex, g be FinSequence of REAL such that
 A1: len f = len g and
 A2: for i being Nat st i in dom f holds |. f/.i .| = g.i;
    defpred P[Nat] means
@@ -191,7 +191,10 @@ for s being non empty finite Subset of F_Complex,
  for i being Nat, c being Element of F_Complex
   st i in dom r & c = (canFS(s)).i holds r.i = |.x-c.|
   holds |.eval(poly_with_roots((s,1)-bag),x).| = Product(r)
-proof let s be non empty finite Subset of FC, x being Element of FC,
+proof
+set FC = F_Complex;
+set cFC = the carrier of F_Complex;
+let s be non empty finite Subset of FC, x being Element of FC,
           r being FinSequence of REAL such that
 A1: len r = card s and
 A2: for i being Nat, c being Element of FC
@@ -213,7 +216,7 @@ A5: for k being Nat st k in Seg card s ex y being Element of FC st P[k,y]
 A7: dom f = Seg card s and
 A8: for k being Nat st k in Seg card s holds P[k,f/.k] from POLYNOM2:sch 1(A5)
 ;
-A9: now let i being Nat, c be Element of cFC such that
+A9: now let i being Nat, c be Element of FC such that
    A10: i in dom f and
    A11: c = (canFS(s)).i;
        consider c1 being Element of FC such that
@@ -289,16 +292,7 @@ canceled;
 
 theorem Th7:
 for x, y being Element of F_Complex, r1, r2 being Real
- st r1=x & r2=y holds r1*r2 = x*y & r1+r2=x+y
-proof let x,y be Element of F_Complex;  let r1,r2 be Real such that
-A1: r1=x & r2=y;
-    reconsider z1=x, z2=y as Element of COMPLEX by COMPLFLD:def 1;
-A2: Re z1 = r1 & Im z1 = 0 by A1,COMPLEX1:def 2,def 3;
-A3: Re z2 = r2 & Im z2 = 0 by A1,COMPLEX1:def 2,def 3;
-A4: z1*z2 = r1*r2 - 0*0+(r1*0 + r2*0)*<i> by A1;
-    z1+z2 = r1+r2+(0+0)*<i> by A2,A3,COMPLEX1:def 9;
-  hence thesis by A4,COMPLFLD:3,6;
-end;
+ st r1=x & r2=y holds r1*r2 = x*y & r1+r2=x+y by COMPLFLD:3,6;
 
 theorem Th8:
 for q being Real st q is Integer & q > 0
@@ -760,17 +754,10 @@ end;
 
 theorem
   for R being Skew-Field holds the carrier of MultGroup R c= the carrier of R
-proof let R be Skew-Field, s be set; assume
-        s in the carrier of MultGroup R;
+proof let R be Skew-Field, s be set; assume s in the carrier of MultGroup R;
     then s in (the carrier of R) \ {0.R} by Def1;
   hence thesis by XBOOLE_0:def 4;
 end;
-
-   set FC = F_Complex;
-   set cFC = the carrier of F_Complex;
-   set cPRFC = the carrier of Polynom-Ring F_Complex;
-   set cMGFC = the carrier of MultGroup F_Complex;
-   set MGFC = MultGroup F_Complex;
 
 begin :: Roots of 1
 
@@ -1111,7 +1098,11 @@ end;
 theorem Th33:
 for n being non empty Nat, x being Element of MultGroup F_Complex
  st x in n-roots_of_1 holds x is_not_of_order_0
-proof let n be non empty Nat, x be Element of cMGFC such that
+proof
+ set FC = F_Complex;
+ set cMGFC = the carrier of MultGroup F_Complex;
+ set MGFC = MultGroup F_Complex;
+let n be non empty Nat, x be Element of cMGFC such that
 A1:  x in n-roots_of_1;
         n-roots_of_1 = { a where a is Element of F_Complex
        : a is CRoot of n,1.F_Complex } by Def2;
@@ -1227,7 +1218,11 @@ end;
 theorem Th35:
 for n being non empty Nat
  holds n-roots_of_1 c= the carrier of MultGroup F_Complex
-proof let n be non empty Nat;
+proof
+ set FC = F_Complex;
+ set cFC = the carrier of F_Complex;
+ set cMGFC = the carrier of MultGroup F_Complex;
+let n be non empty Nat;
 A1: n-roots_of_1 = { a where a is Element of F_Complex
        : a is CRoot of n,1.F_Complex } by Def2;
  let a be set; assume a in n-roots_of_1;
@@ -1260,6 +1255,8 @@ theorem Th37:
 for n being non empty Nat, x being Element of MultGroup F_Complex
  holds ord x divides n iff x in n-roots_of_1
 proof let n be non empty Nat, x be Element of MultGroup F_Complex;
+ set FC = F_Complex;
+ set MGFC = MultGroup F_Complex;
 A1: n-roots_of_1 = { a where a is Element of F_Complex
        : a is CRoot of n,1.F_Complex } by Def2;
    reconsider c = x as Element of FC by Th22;
@@ -1290,15 +1287,17 @@ n-roots_of_1 = { x where x is Element of MultGroup F_Complex : ord x divides n}
 proof let n be non empty Nat;
  set R = { a where a is Element of F_Complex : a is CRoot of n,1.F_Complex };
  set S = {x where x is Element of MultGroup F_Complex : ord x divides n};
+ set MGFC = MultGroup F_Complex;
+ set cMGFC = the carrier of MultGroup F_Complex;
 A1: n-roots_of_1 = R by Def2;
 then A2: R c= cMGFC by Th35;
       now let a be set;
    hereby assume
    A3: a in R; then reconsider x = a as Element of MGFC by A2;
-           ord x divides n by A1,A3,Th37;
+    ord x divides n by A1,A3,Th37;
     hence a in S;
    end;
-   assume a in S; then ex x being Element of cMGFC st a = x & ord x
+   assume a in S; then ex x being Element of MGFC st a = x & ord x
 divides n;
     hence a in R by A1,Th37;
   end;
@@ -1310,6 +1309,8 @@ for n being non empty Nat, x being set
  holds x in n-roots_of_1
    iff ex y being Element of MultGroup F_Complex st x = y & ord y divides n
 proof let n be non empty Nat, x be set;
+  set cMGFC = the carrier of MultGroup F_Complex;
+  set MGFC = MultGroup F_Complex;
 A1: n-roots_of_1 c= cMGFC by Th35;
   hereby assume
   A2: x in n-roots_of_1; then reconsider a = x as Element of MGFC by A1;
@@ -1477,7 +1478,10 @@ theorem
     for n being non empty Nat
  holds n-th_roots_of_1 is Subgroup of MultGroup F_Complex
 proof let n be non empty Nat;
-   set nth = n-th_roots_of_1; set cnth = the carrier of nth;
+  set nth = n-th_roots_of_1; set cnth = the carrier of nth;
+  set FC = F_Complex;
+  set cMGFC = the carrier of MultGroup F_Complex;
+  set MGFC = MultGroup F_Complex;
 A1: the carrier of nth = n-roots_of_1 by Def3;
 then A2: the carrier of nth c= the carrier of MGFC by Th35;
 A3: the mult of nth =
@@ -1886,10 +1890,11 @@ definition let d be non empty Nat;
     st s = { y where y is Element of MultGroup F_Complex : ord y = d } &
        it = poly_with_roots((s,1)-bag);
  existence proof
+   set cMGFC = the carrier of MultGroup F_Complex;
    defpred P[Element of cMGFC] means ord $1 = d;
    set s = { y where y is Element of cMGFC : P[y]};
    set x = [** cos((2*PI*1)/d), sin((2*PI*1)/d) **];
-A1: cMGFC = cFC \ {0.F_Complex} by Def1;
+A1: cMGFC = (the carrier of F_Complex) \ {0.F_Complex} by Def1;
        x <> 0.F_Complex proof assume  x = 0.F_Complex;
         then 0+0*<i> = x by COMPLFLD:9
               .= cos((2*PI*1)/d)+(sin((2*PI*1)/d))*<i> by HAHNBAN1:def 1;
@@ -1909,7 +1914,7 @@ A4: d-roots_of_1 = {y where y is Element of cMGFC : ord y divides d} by Th38;
    A6: ord y = d;
      thus a in d-roots_of_1 by A4,A5,A6;
    end;
-   then reconsider s as non empty finite Subset of cFC
+   then reconsider s as non empty finite Subset of F_Complex
   by A3,FINSET_1:13,XBOOLE_1:1;
    take poly_with_roots((s,1)-bag);
    thus thesis;
@@ -1919,7 +1924,9 @@ end;
 
 theorem Th52:
 cyclotomic_poly(1) = <%-1.F_Complex, 1.F_Complex %>
-proof consider s being non empty finite Subset of cFC such that
+proof
+ set cMGFC = the carrier of MultGroup F_Complex;
+consider s being non empty finite Subset of F_Complex such that
 A1: s = { y where y is Element of cMGFC : ord y = 1 } and
 A2: cyclotomic_poly(1) = poly_with_roots((s,1)-bag) by Def5;
 A3: 1-roots_of_1 = {x where x is Element of cMGFC : ord x divides 1} by Th38;
@@ -1932,11 +1939,10 @@ that
      thus x in 1-roots_of_1 by A3,A4,A5;
     end;
     assume x in 1-roots_of_1; then consider x1 being Element of cMGFC
-such
-that
+such that
    A6: x = x1 and
    A7: ord x1 divides 1 by A3;
-           ord x1 = 1 by A7,WSIERP_1:20;
+    ord x1 = 1 by A7,WSIERP_1:20;
     hence x in s by A1,A6;
    end;
 then s = 1-roots_of_1 by TARSKI:2;
@@ -1978,17 +1984,18 @@ A6: now let i being Nat; assume i in Seg len f;
 A7: for i being Nat st i in Seg len f holds P[i,F.i] from FINSEQ_1:sch 5(A6);
    deffunc MG(Nat) =
    {y where y is Element of MultGroup F_Complex : y in nr1 & ord y <= $1 };
+  set cMGFC = the carrier of MultGroup F_Complex;
 A8: now let i be Nat;
       MG(i) c= nr1 proof let x be set; assume x in MG(i);
          then ex y being Element of cMGFC st x = y & y in nr1 & ord y <= i;
         hence x in nr1;
        end;
-    hence MG(i) is finite Subset of cFC by FINSET_1:13,XBOOLE_1:1;
+    hence MG(i) is finite Subset of F_Complex by FINSET_1:13,XBOOLE_1:1;
    end;
    defpred R[Nat] means
-   ex t being finite Subset of cFC
+   ex t being finite Subset of F_Complex
      st t =  MG($1) & F.$1 = poly_with_roots((t,1)-bag);
-A9: R[1] proof   reconsider t = MG(1) as finite Subset of cFC by A8;
+A9: R[1] proof   reconsider t = MG(1) as finite Subset of F_Complex by A8;
           take t; thus t = MG(1);
           set b = (t,1)-bag;
     A10: 1 in Seg len f by A1,A4,FINSEQ_1:3;
@@ -2002,7 +2009,7 @@ A9: R[1] proof   reconsider t = MG(1) as finite Subset of cFC by A8;
     A13: 1 divides n by NAT_1:53;
             F.1 = Product <*fd1*> by A7,A10,A12 .= fd1 by FVSUM_1:99
            .= cyclotomic_poly(1) by A2,A11,A13;
-        then consider sB being non empty finite Subset of cFC such that
+        then consider sB being non empty finite Subset of F_Complex such that
     A14: sB = { y where y is Element of cMGFC : ord y = 1 } and
     A15: F.1 = poly_with_roots((sB,1)-bag) by Def5;
             now let x be set;
@@ -2034,11 +2041,11 @@ A21: for i being Nat st 1 <= i & i < len f holds R[i] implies R[i+1] proof
     A25: 1 <= i+1 & i+1 <= len f by A22,NAT_1:38;
     then A26: i+1 in Seg len f by FINSEQ_1:3;
     then A27: i+1 in dom f by FINSEQ_1:def 3;
-        consider sb being finite Subset of cFC such that
+        consider sb being finite Subset of F_Complex such that
     A28: sb = MG(i) and
     A29: F.i = poly_with_roots((sb,1)-bag) by A23;
         set b = (sb, 1)-bag;
-        reconsider sB = MG(i+1) as finite Subset of cFC by A8;
+        reconsider sB = MG(i+1) as finite Subset of F_Complex by A8;
         take sB; thus sB = MG(i+1);
         set B = (sB,1)-bag;
         reconsider fi = f|Seg i as
@@ -2060,7 +2067,7 @@ A21: for i being Nat st 1 <= i & i < len f holds R[i] implies R[i+1] proof
            .= (poly_with_roots b) *' fi1d1p by A29,A30,POLYNOM3:def 12;
         per cases;
         suppose A35: not (i+1) divides n;
-            set eb = EmptyBag cFC;
+            set eb = EmptyBag the carrier of F_Complex;
                 now let x be set;
              hereby assume x in sB; then consider y being
                Element of MultGroup F_Complex such that
@@ -2087,7 +2094,7 @@ that
    .= poly_with_roots(B) by A42,POLYNOM1:57;
         end;
         suppose A43: i+1 divides n;
-           consider scb being non empty finite Subset of cFC  such that
+           consider scb being non empty finite Subset of F_Complex such that
         A44: scb = {y where y is Element of cMGFC : ord y = i+1 } and
         A45: cyclotomic_poly(i+1) = poly_with_roots((scb,1)-bag) by Def5;
             set cb = (scb,1)-bag;
@@ -2105,8 +2112,7 @@ that
               assume A50: x in sb \/ scb;
               per cases by A50,XBOOLE_0:def 2;
               suppose x in sb; then consider y being Element of cMGFC
-such
-that
+such that
             A51: x = y and
             A52: y in nr1 and
             A53: ord y <= i by A28;
@@ -2142,7 +2148,7 @@ such that
      end;
 A64: for i being Nat st 1 <= i & i <= len f holds R[i] from POLYNOM2:sch 4
 (A9,A21);
-    reconsider sB = MG(n) as finite Subset of cFC by A8;
+    reconsider sB = MG(n) as finite Subset of F_Complex by A8;
     set B = (sB,1)-bag;
        now let x be set;
     hereby assume A65: x in nr1;
@@ -2152,14 +2158,12 @@ A64: for i being Nat st 1 <= i & i <= len f holds R[i] from POLYNOM2:sch 4
             ord y <= n by A3,A67,NAT_1:54;
      hence x in sB by A65,A66;
     end;
-    assume x in sB; then ex y being Element of MultGroup
-F_Complex
-st
+    assume x in sB; then ex y being Element of MultGroup F_Complex st
         y = x & y in nr1 & ord y <= n;
     hence x in nr1;
    end;
 then A68: nr1 = sB by TARSKI:2;
-     consider t being finite Subset of cFC such that
+     consider t being finite Subset of F_Complex such that
 A69: t = MG(len f) and
 A70: F.len f = poly_with_roots((t,1)-bag) by A1,A4,A64;
 A71: f = f|Seg len f by FINSEQ_3:55;   A72: len f in Seg len f by A1,FINSEQ_1:5
@@ -2177,7 +2181,8 @@ for n being non empty Nat
        (not i divides n or i = n implies f.i = <%1.F_Complex%>) &
        (i divides n & i <> n implies f.i = cyclotomic_poly(i)))  &
      unital_poly(F_Complex,n) = (cyclotomic_poly n)*'p
-proof let n being non empty Nat;
+proof let n be non empty Nat;
+ set cPRFC = the carrier of Polynom-Ring F_Complex;
 A1: 1 <= n by UPROOTS:1;
   defpred P[set,set] means
    ex i being non empty Nat st i = $1 &
@@ -2251,8 +2256,7 @@ A20:  f = fn by A9,FINSEQ_2:23
                           by A6,A8,A10,A21,A23,A24,NAT_1:38;
        end;
        suppose not i in Seg m;
-           then not (1 <= i & i <= m) & 1 <= i & i <= n by A21,FINSEQ_1:3
-;
+           then not (1 <= i & i <= m) & 1 <= i & i <= n by A21,FINSEQ_1:3;
            then A25: n <= i & i <= n by A8,NAT_1:38;
                1 in Seg 1 by FINSEQ_1:3;
            then 1 in dom <* <%1.F_Complex %> *> by FINSEQ_1:55;
@@ -2309,7 +2313,7 @@ A2: now let k be non empty Nat such that
     A8: dom f = Seg k and
     A9: for i being non empty Nat st i in Seg k holds
           (not i divides k or i = k implies f.i = <%1.F_Complex%>) &
-          (i divides k & i <> k implies f.i = cp(i))  and
+          (i divides k & i <> k implies f.i = cp(i)) and
     A10: unital_poly(F_Complex,k) = (cyclotomic_poly k)*'p by Th54;
     A11:  k = len f by A8,FINSEQ_1:def 3;
     then A12:  k in Seg len f by FINSEQ_1:5;
@@ -2668,7 +2672,9 @@ for n, ni being non empty Nat,
    (i divides n & not i divides ni & i <> n implies f.i = cyclotomic_poly(i))
  holds Product(f) = poly_with_roots((s,1)-bag)
 proof let n, ni be non empty Nat;
-      let f be FinSequence of cPRFC, s be finite Subset of cFC such that
+  set cPRFC = the carrier of Polynom-Ring F_Complex;
+  set cMGFC = the carrier of MultGroup F_Complex;
+      let f be FinSequence of cPRFC, s be finite Subset of F_Complex such that
 A1: s = {y where y is Element of cMGFC:
               ord y divides n & not ord y divides ni & ord y <> n} and
 A2: dom f = Seg n and
@@ -2695,13 +2701,13 @@ A9: now let i be Nat;
          then ex y being Element of cMGFC st x = y & y in s & ord y <= i;
         hence x in s;
        end;
-    hence MG(i) is finite Subset of cFC by FINSET_1:13,XBOOLE_1:1;
+    hence MG(i) is finite Subset of F_Complex by FINSET_1:13,XBOOLE_1:1;
    end;
    defpred R[Nat] means
-   ex t being finite Subset of cFC
+   ex t being finite Subset of F_Complex
     st t = MG($1) & F.$1 = poly_with_roots((t,1)-bag);
 A10: R[1] proof
-         reconsider t = MG(1) as finite Subset of cFC by A9;
+         reconsider t = MG(1) as finite Subset of F_Complex by A9;
      take t;
      thus t = MG(1);
     A11: 1 in Seg len f by A4,A6,FINSEQ_1:3;
@@ -2728,7 +2734,7 @@ that
             then 0+1 <= ord y1 by NAT_1:38;
          hence contradiction by A14,A17,A18,A19,AXIOMS:21;
         end;
-        then A21: (t,1)-bag = EmptyBag cFC by UPROOTS:11;
+        then A21: (t,1)-bag = EmptyBag the carrier of F_Complex by UPROOTS:11;
              F.1 = Product <*fd1*> by A8,A11,A13 .= fd1 by FVSUM_1:99
            .= <%1.F_Complex%> by A3,A12,A14;
      hence thesis by A21,UPROOTS:62;
@@ -2758,13 +2764,13 @@ A22: for i being Nat st 1 <= i & i < len f holds R[i] implies R[i+1] proof
       reconsider fi1d1p = fi1d1 as Polynomial of F_Complex by POLYNOM3:def 12;
             fi1 = fi ^ <* fi1d1 *> by A31,A32,FINSEQ_3:61;
     then A34: Product fi1 = Product fi * fi1d1 by FVSUM_1:100;
-        consider sb being finite Subset of cFC such that
+        consider sb being finite Subset of F_Complex such that
     A35: sb = MG(i) and
     A36: F.i = poly_with_roots((sb,1)-bag) by A24;
         set b = (sb, 1)-bag;
     A37: Product fi1=(poly_with_roots b)*' fi1d1p by A29,A34,A36,
 POLYNOM3:def 12;
-      reconsider sB = MG(i+1) as finite Subset of cFC by A9;
+      reconsider sB = MG(i+1) as finite Subset of F_Complex by A9;
       take sB;   thus sB = MG(i+1);
       set B = (sB, 1)-bag;
     per cases;
@@ -2795,7 +2801,7 @@ n
             hence thesis;
         end;
         suppose A46: (i+1) divides n & not (i+1) divides ni & (i+1) <> n;
-         consider scb being non empty finite Subset of cFC such that
+        consider scb being non empty finite Subset of F_Complex such that
         A47: scb = { y where y is Element of cMGFC : ord y = i+1 } and
         A48: cyclotomic_poly(i+1) = poly_with_roots((scb,1)-bag) by Def5;
              set cb = (scb,1)-bag;
@@ -2811,8 +2817,7 @@ n
               assume A53: x in sb \/ scb;
               per cases by A53,XBOOLE_0:def 2;
               suppose x in sb; then consider y being Element of cMGFC
-such
-that
+such that
             A54: x = y and A55: y in s and A56: ord y <= i by A35;
                     ord y <= i+1 by A56,NAT_1:37;
                hence x in sB by A54,A55;
@@ -2845,7 +2850,7 @@ such that
      end;
 A67: for i being Nat st 1 <= i & i <= len f holds R[i] from POLYNOM2:sch 4
 (A10,A22);
-   reconsider sB = MG(n) as finite Subset of cFC by A9;
+   reconsider sB = MG(n) as finite Subset of F_Complex by A9;
    set B = (sB,1)-bag;
        now let x be set;
     hereby assume A68: x in s;
@@ -2862,7 +2867,7 @@ A67: for i being Nat st 1 <= i & i <= len f holds R[i] from POLYNOM2:sch 4
    end;
 then A71: s = sB by TARSKI:2;
 A72: f = f|Seg len f by FINSEQ_3:55;
-   consider S being finite Subset of cFC such that
+   consider S being finite Subset of F_Complex such that
 A73: S = MG(len f) and
 A74: F.len f = poly_with_roots((S,1)-bag) by A4,A6,A67;
        len f in Seg len f by A4,FINSEQ_1:5;
@@ -2881,6 +2886,8 @@ ex f being FinSequence of (the carrier of Polynom-Ring F_Complex),
 proof let n, ni being non empty Nat such that
 A1: ni < n and
 A2: ni divides n;
+   set cPRFC = the carrier of Polynom-Ring F_Complex;
+   set cMGFC = the carrier of MultGroup F_Complex;
    defpred P[set,set] means
    ex d being non empty Nat st $1 = d &
    (not d divides n or d divides ni or d = n implies $2 = <%1.F_Complex%>) &
@@ -2923,7 +2930,7 @@ A11: rbp c= n-roots_of_1 proof let x be set; assume x in rbp;
     end;
 A12: ni-roots_of_1 c= n-roots_of_1 by A2,Th31;
 A13: n-roots_of_1 c= cMGFC by Th35;
-   reconsider rbp as finite Subset of cFC by A11,FINSET_1:13,XBOOLE_1:1;
+   reconsider rbp as finite Subset of F_Complex by A11,FINSET_1:13,XBOOLE_1:1;
    set bp = (rbp,1)-bag;
     Product(f) = poly_with_roots(bp) by A8,A10,Th57;
    then reconsider p = Product(f) as Polynomial of F_Complex;
@@ -2936,12 +2943,12 @@ A13: n-roots_of_1 c= cMGFC by Th35;
          (i divides n & not i divides ni & i <> n
            implies f.i = cyclotomic_poly(i)) by A10;
    set b = (n-roots_of_1, 1)-bag, bi = (ni-roots_of_1, 1)-bag;
-   consider rbn being non empty finite Subset of cFC such that
+   consider rbn being non empty finite Subset of F_Complex such that
 A14: rbn = {y where y is Element of cMGFC: ord y = n } and
 A15: cyclotomic_poly(n) = poly_with_roots((rbn,1)-bag) by Def5;
    set bn = (rbn,1)-bag;
    set rbibn = (ni-roots_of_1) \/ rbn;
-    reconsider rbibn as finite Subset of cFC;
+    reconsider rbibn as finite Subset of F_Complex;
     set bibn = (rbibn, 1)-bag;
         ni-roots_of_1 misses rbn proof assume ni-roots_of_1 /\ rbn <>
 {};
@@ -3030,7 +3037,7 @@ for i being Integer, c being Element of F_Complex,
     for i being non empty Nat st i in dom f
      holds f.i = <%1.F_Complex%> or f.i = cyclotomic_poly(i)
   holds eval(p,c) is integer
-proof let i be Integer, c be Element of cFC,
+proof let i be Integer, c be Element of F_Complex,
       f being FinSequence of (the carrier of Polynom-Ring F_Complex),
       p being Polynomial of F_Complex such that
 A1: p = Product(f) and
@@ -3151,7 +3158,7 @@ for n being non empty Nat, j, k, q being Integer, qc being Element of F_Complex
     j = eval(cyclotomic_poly(n),qc) & k = eval(unital_poly(F_Complex, n),qc)
   holds j divides k
 proof let n be non empty Nat, j,k,q being Integer,
-          qc being Element of cFC such that
+          qc being Element of F_Complex such that
 A1: qc = q and
 A2: j = eval(cyclotomic_poly(n),qc) and
 A3: k = eval(unital_poly(F_Complex, n),qc);
@@ -3203,7 +3210,7 @@ end;
 
 theorem Th61:
 for n,ni being non empty Nat, q being Integer st ni < n & ni divides n
-for qc being Element of cFC st qc = q
+for qc being Element of F_Complex st qc = q
 for j,k,l being Integer
  st j = eval(cyclotomic_poly(n),qc) &
     k = eval(unital_poly(F_Complex, n),qc) &
@@ -3211,7 +3218,7 @@ for j,k,l being Integer
   holds j divides (k div l)
 proof let n,ni be non empty Nat, q being Integer such that
 A1: ni < n & ni divides n;
-    let qc be Element of cFC such that A2: qc = q;
+    let qc be Element of F_Complex such that A2: qc = q;
     let j,k,l be Integer such that
 A3: j = eval(cyclotomic_poly(n),qc) and
 A4:k = eval(unital_poly(F_Complex,n),qc) and
@@ -3269,11 +3276,11 @@ theorem
 for j being Integer st j = eval(cyclotomic_poly(n),qc)
  holds j divides (q |^ n - 1)
 proof let n,q be non empty Nat;
-    let qc be Element of cFC such that A1: qc = q;
+    let qc be Element of F_Complex such that A1: qc = q;
     let j be Integer such that A2: j = eval(cyclotomic_poly(n),qc);
     reconsider ni=n as non empty Nat;
     consider k,l being Integer;
-    consider y1 being Element of cFC such that
+    consider y1 being Element of F_Complex such that
 A3: y1 = q & eval(unital_poly(F_Complex,n),y1) = (q |^ n) - 1 by Th48;
   thus thesis by A1,A2,A3,Th60;
 end;
@@ -3285,42 +3292,45 @@ for j being Integer st j = eval(cyclotomic_poly(n),qc)
   holds j divides ((q |^ n - 1) div (q |^ ni - 1))
 proof
     let n,ni,q be non empty Nat such that A1: ni < n & ni divides n;
-    let qc be Element of cFC such that A2: qc = q;
+    let qc be Element of F_Complex such that A2: qc = q;
     let j be Integer such that A3: j = eval(cyclotomic_poly(n),qc);
     consider k,l being Integer;
-    consider y1 being Element of cFC such that
+    consider y1 being Element of F_Complex such that
 A4: y1 = q & eval(unital_poly(F_Complex,n),y1) = (q |^ n) - 1 by Th48;
-    consider y2 being Element of cFC such that
+    consider y2 being Element of F_Complex such that
 A5: y2=q & eval(unital_poly(F_Complex,ni),y2) = (q |^ ni) - 1 by Th48;
   thus thesis by A1,A2,A3,A4,A5,Th61;
 end;
 
 theorem
-    for n being non empty Nat st 1 < n
+  for n being non empty Nat st 1 < n
 for q being Nat st 1 < q
 for qc being Element of F_Complex st qc = q
 for i being Integer st i = eval(cyclotomic_poly(n),qc) holds abs(i) > q - 1
 proof let n be non empty Nat such that A1: 1 < n;
+   set cMGFC = the carrier of MultGroup F_Complex;
+   set MGFC = MultGroup F_Complex;
     let q be Nat such that A2: 1 < q;
-    let qc be Element of cFC such that A3: qc = q;
+    let qc be Element of F_Complex such that A3: qc = q;
     let i be Integer such that A4: i = eval(cyclotomic_poly(n),qc);
 A5: 0 < q by A2;
     reconsider qi=q as Integer;
         1+1 <= qi by A2,INT_1:20; then A6: 1+1+-1 <= qi +-1 by REAL_1:55;
     q in COMPLEX by XCMPLX_0:def 2;
-    then reconsider qc1=q+0*<i> as Element of cFC by COMPLFLD:def 1;
+    then reconsider qc1=q+0*<i> as Element of F_Complex by COMPLFLD:def 1;
 A8: qc1 = [**q,0**] by HAHNBAN1:def 1;
         i is Real by XREAL_0:def 1;
     then consider ir being Real such that A9: ir = i;
 A10: ir = ir+0*<i>;
     ir in COMPLEX by XCMPLX_0:def 2;
-   then reconsider qc2=ir+0*<i> as Element of cFC by COMPLFLD:def 1;
+   then reconsider qc2=ir+0*<i> as Element of F_Complex by COMPLFLD:def 1;
 A11: [**ir,0**] = eval(cyclotomic_poly(n),qc) by A4,A9,A10,HAHNBAN1:def 1;
-    consider S being non empty finite Subset of cFC such that
+    consider S being non empty finite Subset of F_Complex such that
 A12: S = {y where y is Element of cMGFC : ord y = n} and
 A13: cyclotomic_poly(n) = poly_with_roots((S,1)-bag) by Def5;
         rng canFS(S) = S by UPROOTS:5;
-    then reconsider fs = canFS(S) as FinSequence of cFC by FINSEQ_1:def 4;
+    then reconsider fs = canFS(S) as FinSequence of F_Complex
+      by FINSEQ_1:def 4;
 A14: rng fs = S by UPROOTS:5;
 A15: len fs = card S by UPROOTS:def 1;
     consider nth being Element of MGFC;        fs <> {} by A14,FINSEQ_1:27;
@@ -3329,9 +3339,9 @@ then A16: len fs <> 0 by FINSEQ_1:25;
     consider p1 being FinSequence such that
 A17: len p1 = len fs &
 for i being Nat st i in Seg len fs holds p1.i = F(i) from FINSEQ_1:sch 2;
-A18: for i being Nat, c being Element of cFC
+A18: for i being Nat, c being Element of F_Complex
       st i in dom p1 & c = (canFS(S)).i holds p1.i = |.qc - c.|
-    proof let i be Nat, c being Element of cFC such that
+    proof let i be Nat, c being Element of F_Complex such that
     A19: i in dom p1 and
     A20: c = (canFS(S)).i;
             i in dom fs by A17,A19,FINSEQ_3:31;
@@ -3362,7 +3372,6 @@ FINSEQ_4:def 4;
         then consider y being Element of MGFC such that
     A29: fs/.i = y and
     A30: ord y = n by A12,A14;
-
             fs/.i in n-roots_of_1 by A29,A30,Th37;
     then A31: |.fs/.i.| = 1 by Th26;
            now assume A32: fs/.i = [**1,0**];

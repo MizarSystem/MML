@@ -17,6 +17,7 @@
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="XREAL_0"/>
+<ArticleID name="MEMBERED"/>
 <ArticleID name="SEQ_1"/>
 </Signature>
 <Scheme>
@@ -58,6 +59,7 @@
 <Func kind="U" nr="1">
 <Func kind="F" nr="1"/>
 </Func>
+<Func kind="K" nr="52"/>
 <Var nr="1"/>
 <Var nr="2"/>
 </Func>
@@ -136,6 +138,7 @@
 <Func kind="U" nr="1">
 <Func kind="F" nr="1"/>
 </Func>
+<Func kind="K" nr="52"/>
 <Var nr="1"/>
 <Var nr="2"/>
 </Func>

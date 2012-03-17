@@ -34,6 +34,7 @@
 <ArticleID name="IDEAL_1"/>
 <ArticleID name="FUNCOP_1"/>
 <ArticleID name="FUNCT_3"/>
+<ArticleID name="MEMBERED"/>
 <ArticleID name="SEQ_1"/>
 <ArticleID name="PARTFUN1"/>
 <ArticleID name="FRAENKEL"/>
@@ -67,7 +68,7 @@
 <Adjective nr="44"/>
 <Adjective nr="45"/>
 <Adjective nr="46"/>
-<Adjective nr="105" value="false"/>
+<Adjective nr="110" value="false"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="3">
@@ -109,19 +110,19 @@
 <Cluster>
 <Adjective nr="5"/>
 <Adjective nr="27">
-<Func kind="K" nr="461">
+<Func kind="K" nr="473">
 <LocusVar nr="1"/>
 </Func>
 <Func kind="U" nr="1">
 <LocusVar nr="2"/>
 </Func>
 </Adjective>
-<Adjective nr="137">
+<Adjective nr="142">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Adjective>
 </Cluster>
-<Func kind="K" nr="461">
+<Func kind="K" nr="473">
 <LocusVar nr="1"/>
 </Func>
 <Func kind="U" nr="1">
@@ -135,7 +136,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="482">
+<Func kind="K" nr="494">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
@@ -145,20 +146,20 @@
 <Adjective nr="2"/>
 <Adjective nr="5"/>
 <Adjective nr="27">
-<Func kind="K" nr="461">
+<Func kind="K" nr="473">
 <LocusVar nr="1"/>
 </Func>
 <Func kind="U" nr="1">
 <LocusVar nr="2"/>
 </Func>
 </Adjective>
-<Adjective nr="134">
-<Func kind="K" nr="461">
+<Adjective nr="139">
+<Func kind="K" nr="473">
 <LocusVar nr="1"/>
 </Func>
 <LocusVar nr="2"/>
 </Adjective>
-<Adjective nr="137">
+<Adjective nr="142">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Adjective>
@@ -177,33 +178,33 @@
 <Adjective nr="55"/>
 <Adjective nr="63"/>
 <Adjective nr="64"/>
-<Adjective nr="105" value="false"/>
-<Adjective nr="140"/>
+<Adjective nr="110" value="false"/>
+<Adjective nr="145"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="5">
 <Cluster>
 <Adjective nr="5"/>
 <Adjective nr="27">
-<Func kind="K" nr="461">
+<Func kind="K" nr="473">
 <LocusVar nr="1"/>
 </Func>
 <Func kind="U" nr="1">
 <LocusVar nr="2"/>
 </Func>
 </Adjective>
-<Adjective nr="134">
-<Func kind="K" nr="461">
+<Adjective nr="139">
+<Func kind="K" nr="473">
 <LocusVar nr="1"/>
 </Func>
 <LocusVar nr="2"/>
 </Adjective>
-<Adjective nr="135">
+<Adjective nr="140">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Adjective>
 </Cluster>
-<Func kind="K" nr="461">
+<Func kind="K" nr="473">
 <LocusVar nr="1"/>
 </Func>
 <Func kind="U" nr="1">
@@ -221,7 +222,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="482">
+<Func kind="K" nr="494">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
@@ -231,20 +232,20 @@
 <Adjective nr="2"/>
 <Adjective nr="5"/>
 <Adjective nr="27">
-<Func kind="K" nr="461">
+<Func kind="K" nr="473">
 <LocusVar nr="1"/>
 </Func>
 <Func kind="U" nr="1">
 <LocusVar nr="2"/>
 </Func>
 </Adjective>
-<Adjective nr="134">
-<Func kind="K" nr="461">
+<Adjective nr="139">
+<Func kind="K" nr="473">
 <LocusVar nr="1"/>
 </Func>
 <LocusVar nr="2"/>
 </Adjective>
-<Adjective nr="135">
+<Adjective nr="140">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Adjective>
@@ -259,23 +260,23 @@
 </Typ>
 <Typ kind="M" nr="5">
 <Cluster>
-<Adjective nr="87">
-<Func kind="K" nr="461">
+<Adjective nr="92">
+<Func kind="K" nr="473">
 <LocusVar nr="1"/>
 </Func>
-<Func kind="K" nr="461">
+<Func kind="K" nr="473">
 <LocusVar nr="1"/>
 </Func>
 </Adjective>
-<Adjective nr="93"/>
-<Adjective nr="96"/>
 <Adjective nr="98"/>
-<Adjective nr="100"/>
+<Adjective nr="101"/>
+<Adjective nr="103"/>
+<Adjective nr="105"/>
 </Cluster>
-<Func kind="K" nr="461">
+<Func kind="K" nr="473">
 <LocusVar nr="1"/>
 </Func>
-<Func kind="K" nr="461">
+<Func kind="K" nr="473">
 <LocusVar nr="1"/>
 </Func>
 </Typ>
@@ -289,7 +290,7 @@
 <Adjective nr="46"/>
 <Adjective nr="55"/>
 <Adjective nr="57"/>
-<Adjective nr="105" value="false"/>
+<Adjective nr="110" value="false"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="3">
@@ -298,7 +299,7 @@
 </Cluster>
 <Func kind="K" nr="40">
 <Func kind="U" nr="1">
-<Func kind="K" nr="477">
+<Func kind="K" nr="489">
 <LocusVar nr="1"/>
 <LocusVar nr="3"/>
 </Func>
@@ -306,7 +307,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="496">
+<Func kind="K" nr="508">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>

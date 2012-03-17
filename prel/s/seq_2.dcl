@@ -14,6 +14,7 @@
 <ArticleID name="XREAL_0"/>
 <ArticleID name="RELSET_1"/>
 <ArticleID name="FUNCT_2"/>
+<ArticleID name="MEMBERED"/>
 <ArticleID name="SEQ_1"/>
 <ArticleID name="SEQ_2"/>
 </Signature>
@@ -22,8 +23,8 @@
 <Cluster>
 <Adjective nr="2"/>
 <Adjective nr="5"/>
-<Adjective nr="23"/>
-<Adjective nr="26"/>
+<Adjective nr="28"/>
+<Adjective nr="31"/>
 </Cluster>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -31,9 +32,9 @@
 <Cluster>
 <Adjective nr="2"/>
 <Adjective nr="5"/>
-<Adjective nr="23"/>
-<Adjective nr="24"/>
-<Adjective nr="25"/>
+<Adjective nr="28"/>
+<Adjective nr="29"/>
+<Adjective nr="30"/>
 </Cluster>
 </CCluster>
 <CCluster>
@@ -41,9 +42,9 @@
 <Cluster>
 <Adjective nr="2"/>
 <Adjective nr="5"/>
-<Adjective nr="23"/>
-<Adjective nr="24"/>
-<Adjective nr="25"/>
+<Adjective nr="28"/>
+<Adjective nr="29"/>
+<Adjective nr="30"/>
 </Cluster>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -51,8 +52,8 @@
 <Cluster>
 <Adjective nr="2"/>
 <Adjective nr="5"/>
-<Adjective nr="23"/>
-<Adjective nr="26"/>
+<Adjective nr="28"/>
+<Adjective nr="31"/>
 </Cluster>
 </CCluster>
 </Registrations>

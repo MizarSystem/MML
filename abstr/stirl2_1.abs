@@ -1,0 +1,524 @@
+:: Stirling Numbers of the Second Kind
+::  by Karol P\c{a}k
+:: 
+:: Received March 15, 2005
+:: Copyright (c) 2005 Association of Mizar Users
+
+environ
+
+ vocabularies FUNCT_1, BOOLE, FINSEQ_1, FINSET_1, RELAT_1, ORDINAL2, CARD_1,
+      TARSKI, ALGSEQ_1, ARYTM_1, AFINSQ_1, FUNCT_2, HENMODEL, INT_1, STIRL2_1,
+      SGRAPH1, SQUARE_1, BINOP_1, RLVECT_1, MONOID_0, SETWISEO, FINSOP_1,
+      ARYTM_3, GROUP_1, NEWTON, QC_LANG1;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, XREAL_0, RELAT_1,
+      FUNCT_1, RELSET_1, ORDINAL1, ORDINAL2, REAL_1, NAT_1, PARTFUN1, FINSET_1,
+      CARD_1, AFINSQ_1, XCMPLX_0, FUNCT_2, CQC_SIM1, INT_1, WELLORD2, ENUMSET1,
+      SQUARE_1, HENMODEL, BINOP_1, BINOP_2, CARD_2, NEWTON, PREPOWER, SETWISEO;
+ constructors REAL_1, NAT_1, WELLORD2, FUNCT_7, XREAL_0, MEMBERED, AFINSQ_1,
+      RELAT_1, CQC_SIM1, PARTFUN1, FUNCT_2, FUNCT_1, CARD_1, ORDINAL2,
+      XBOOLE_0, ZFMISC_1, ORDINAL1, TARSKI, SQUARE_1, RELAT_2, HENMODEL,
+      BINOP_1, SETWISEO, FINSOP_1, BINOP_2, CARD_2, PREPOWER, POWER;
+ registrations FUNCT_1, RELAT_1, RELSET_1, CARD_1, SUBSET_1, NAT_1, XREAL_0,
+      MEMBERED, NUMBERS, ORDINAL2, AFINSQ_1, BINOP_2, XBOOLE_0, FINSET_1,
+      INT_1, CHAIN_1, FUNCT_2;
+ requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
+
+
+begin
+
+ reserve k, l, m, n, i, j for Nat,
+         K, N for non empty Subset of NAT,
+         Ke, Ne, Me for Subset of NAT,
+         X,Y for set;
+
+definition let k;
+  redefine func {k} -> Subset of NAT;
+  let l;
+  redefine func {k,l} -> Subset of NAT;
+  let m;
+  redefine func {k,l,m} -> non empty Subset of NAT;
+end;
+
+theorem :: STIRL2_1:1
+  min N = min* N;
+
+theorem :: STIRL2_1:2
+  min(min K,min N) = min(K\/N);
+
+theorem :: STIRL2_1:3
+  min(min* Ke,min* Ne) <= min* (Ke\/Ne);
+
+theorem :: STIRL2_1:4
+  not min* Ne in Ne/\Ke implies min* Ne = min* (Ne\Ke);
+
+theorem :: STIRL2_1:5
+  min* {n} = n & min {n} = n;
+
+theorem :: STIRL2_1:6
+  min* {n,k} = min(n,k) & min {n,k} = min(n,k);
+
+theorem :: STIRL2_1:7
+  min* {n,k,l} = min(n,min(k,l));
+
+theorem :: STIRL2_1:8
+  n is Subset of NAT;
+
+registration
+  let n;
+  cluster -> natural Element of n;
+end;
+
+theorem :: STIRL2_1:9
+  N c= n implies n-1 is Nat;
+
+theorem :: STIRL2_1:10
+  k in n implies k<=n-1 & n-1 is Nat;
+
+theorem :: STIRL2_1:11
+  min* n = 0;
+
+theorem :: STIRL2_1:12
+  N c= n implies min* N <= n-1;
+
+theorem :: STIRL2_1:13
+  N c= n & N <> {n-1} implies min* N < n-1;
+
+theorem :: STIRL2_1:14
+  Ne c= n & n>0 implies min* Ne <= n-1;
+
+reserve f,g for Function of n,k;
+
+definition let n,X; let f be Function of n,X; let x be set;
+  redefine func f"x -> Subset of NAT;
+end;
+
+definition let X,k; let f be Function of X,k; let x be set;
+  redefine func f.x -> Element of k;
+end;
+
+registration
+  let X,Ne;
+  let f be Function of X,Ne,x be set;
+  cluster f.x -> natural;
+end;
+
+definition
+  let n,k;let f be Function of n,k;
+  attr f is "increasing means
+:: STIRL2_1:def 1
+   (n = 0 iff k = 0) &
+   for l,m st l in rng f & m in rng f & l < m holds min* f"{l} < min* f"{m};
+end;
+
+theorem :: STIRL2_1:15
+  n=0 & k=0 implies f is onto "increasing;
+
+theorem :: STIRL2_1:16
+  n>0 implies min* f"{m} <= n-1;
+
+theorem :: STIRL2_1:17
+  f is onto implies n>=k;
+
+theorem :: STIRL2_1:18
+  f is onto "increasing implies
+    for m st m < k holds m <= min* f"{m};
+
+theorem :: STIRL2_1:19
+  f is onto "increasing implies
+    for m st m < k holds min* f"{m} <= n-k+m;
+
+theorem :: STIRL2_1:20
+  f is onto "increasing & n = k implies f = id n;
+
+theorem :: STIRL2_1:21
+  f = id n & n > 0 implies f is "increasing;
+
+theorem :: STIRL2_1:22
+  (n=0 iff k=0) implies
+    ex f be Function of n,k st f is "increasing;
+
+theorem :: STIRL2_1:23
+  (n=0 iff k=0) & n>=k implies
+    ex f be Function of n,k st f is onto "increasing;
+
+scheme :: STIRL2_1:sch 1
+ Sch1{n,k() -> Nat,P[set]}:
+  {f where f is Function of n(),k():P[f]} is finite;
+
+theorem :: STIRL2_1:24
+  for n,k holds
+    {f where f is Function of n,k:f is onto "increasing} is finite;
+
+theorem :: STIRL2_1:25
+  for n,k holds
+     Card {f where f is Function of n,k:f is onto "increasing} is Nat;
+
+:::::::::::::::::::::::::::::::::::::
+::   Number Stirling second kind   ::
+:::::::::::::::::::::::::::::::::::::
+
+definition
+  let n,k;
+  func n block k -> Nat equals
+:: STIRL2_1:def 2
+    Card {f where f is Function of n,k:f is onto "increasing};
+end;
+
+theorem :: STIRL2_1:26
+  n block n = one;
+
+theorem :: STIRL2_1:27
+  k<>0 implies 0 block k = 0;
+
+theorem :: STIRL2_1:28
+  0 block k = one iff k=0;
+
+theorem :: STIRL2_1:29
+  n<k implies n block k = 0;
+
+theorem :: STIRL2_1:30
+  n block 0 = one iff n=0;
+
+theorem :: STIRL2_1:31
+  n<>0 implies n block 0 = 0;
+
+theorem :: STIRL2_1:32
+  n<>0 implies n block 1 = one;
+
+theorem :: STIRL2_1:33
+  (1<=k & k <=n) or k=n iff n block k > 0;
+
+reserve x,y for set;
+
+scheme :: STIRL2_1:sch 2
+ Sch2{X,Y,X1,Y1()->set,f()->Function of X(),Y(),F(set)->set}:
+  ex h be Function of X1(),Y1() st
+   h|X() = f() & for x st x in X1()\X() holds h.x = F(x)
+provided
+for x st x in X1()\X() holds F(x) in Y1() and
+X() c= X1() & Y() c= Y1() and
+Y() is empty implies X() is empty;
+
+scheme :: STIRL2_1:sch 3
+ Sch3{X,Y,X1,Y1()->set,F(set)->set,P[set,set,set]}:
+  Card{f where f is Function of X(),Y():
+                P[f,X(),Y()]}=
+  Card{f where f is Function of X1(),Y1():
+                P[f,X1(),Y1()]&
+                rng (f|X()) c=Y()&
+                (for x st x in X1()\X() holds f.x=F(x))}
+provided
+for x st x in X1()\X() holds F(x) in Y1() and
+X() c= X1() & Y() c= Y1() and
+Y() is empty implies X() is empty and
+for f be Function of X1(),Y1() st
+     (for x st x in X1()\X() holds F(x)=f.x)
+  holds
+    P[f,X1(),Y1()] iff P[f|X(),X(),Y()];
+
+scheme :: STIRL2_1:sch 4
+ Sch4{X,Y,x,y()->set,P[set,set,set]}:
+  Card{f where f is Function of X(),Y():
+                P[f,X(),Y()]}=
+  Card{f where f is Function of (X()\/{x()}),(Y()\/{y()}):
+                P[f,X()\/{x()},Y()\/{y()}]&
+                rng (f|X()) c=Y() &
+                f.x()=y()}
+provided
+Y() is empty implies X() is empty and
+not x() in X() and
+for f be Function of X()\/{x()},Y()\/{y()}
+st f.x()=y()
+  holds
+    P[f,X()\/{x()},Y()\/{y()}] iff P[f|X(),X(),Y()];
+
+theorem :: STIRL2_1:34
+  for f be Function of n+1,k+1 st
+    f is onto "increasing & f"{f.n}={n} holds f.n=k;
+
+theorem :: STIRL2_1:35
+  for f be Function of n+1,k st
+    k<>0 & f"{f.n}<>{n} holds
+      ex m st m in f"{f.n} & m<>n;
+
+theorem :: STIRL2_1:36
+  for f be Function of n,k, g be Function of n+m,k+l
+    st g is "increasing & f=g|n
+    holds
+      for i,j st i in rng f & j in rng f & i<j holds min* f"{i} < min* f"{j};
+
+theorem :: STIRL2_1:37
+  for f be Function of n+1,k+1 st
+    f is onto "increasing & f"{f.n}={n} holds
+      rng (f|n) c= k &
+      for g be Function of n,k st g=f|n
+        holds g is onto "increasing;
+
+theorem :: STIRL2_1:38
+  for f be Function of n+1,k,g be Function of n,k st
+    f is onto "increasing & f"{f.n}<>{n} & f|n =g
+    holds g is onto "increasing;
+
+theorem :: STIRL2_1:39
+  for f be Function of n,k, g be Function of n+1,k+m
+    st f is onto "increasing & f=g|n
+    holds
+      for i,j st i in rng g & j in rng g & i<j holds min* g"{i} < min* g"{j};
+
+theorem :: STIRL2_1:40
+  for f be Function of n,k, g be Function of n+1,k+1
+      st f is onto "increasing & f=g|n & g.n = k
+    holds
+      g is onto "increasing & g"{g.n}={n};
+
+theorem :: STIRL2_1:41
+  for f be Function of n,k, g be Function of n+1,k
+      st f is onto "increasing & f=g|n & g.n < k
+    holds
+      g is onto "increasing & g"{g.n}<>{n};
+
+theorem :: STIRL2_1:42
+  Card{f where f is Function of n+1,k+1:
+    f is onto "increasing & f"{f.n}={n}}=
+  Card{f where f is Function of n,k: f is onto "increasing};
+
+theorem :: STIRL2_1:43
+  for l st l<k holds
+    Card{f where f is Function of n+1,k:
+      f is onto "increasing & f"{f.n}<>{n} & f.n=l}=
+    Card{f where f is Function of n,k: f is onto "increasing};
+
+reserve D for non empty set,
+        F,G,H for XFinSequence of D,
+        Fn for XFinSequence of NAT,
+        b for BinOp of D,
+        d,d1,d2 for Element of D;
+
+definition let D,F,b;
+ assume b has_a_unity or len F >= 1;
+ func b "**" F -> Element of D means
+:: STIRL2_1:def 3
+   it = the_unity_wrt b if b has_a_unity & len F = 0 otherwise
+    ex f be Function of NAT,D st f.0 = F.0 &
+     (for n st n+1 < len F holds
+     f.(n + 1) = b.(f.n,F.(n + 1))) & it = f.(len F-1);
+end;
+
+theorem :: STIRL2_1:44
+  b "**" <%d%> = d;
+
+theorem :: STIRL2_1:45
+  b has_a_unity or len F > 0 implies b "**" (F ^ <% d %>) = b.(b "**" F,d);
+
+theorem :: STIRL2_1:46
+  F <> <%>D implies ex G,d st F = G^<%d%>;
+
+scheme :: STIRL2_1:sch 5
+ Sch5{D()->non empty set, P[set]}:
+  for F be XFinSequence of D() holds P[F]
+ provided
+   P[<%>D()] and
+   for F be XFinSequence of D(),d be Element of D()
+      st P[F] holds P[F^<%d%>];
+
+theorem :: STIRL2_1:47
+ b is associative & (b has_a_unity or len F >= 1 & len G >= 1) implies
+   b "**" (F ^ G) = b.(b "**" F,b "**" G);
+
+definition let D; let d,d1;
+  redefine func <%d,d1%> -> XFinSequence of D;
+  let d2;
+  redefine func <%d,d1,d2%> -> XFinSequence of D;
+end;
+
+theorem :: STIRL2_1:48
+  b "**" <%d1,d2%> = b.(d1,d2);
+
+theorem :: STIRL2_1:49
+  b "**" <%d,d1,d2%> = b.(b.(d,d1),d2);
+
+definition let Fn;
+  func Sum(Fn) -> Nat equals
+:: STIRL2_1:def 4
+    addnat "**" Fn;
+end;
+
+definition let Fn,x;
+  redefine func Fn.x -> Nat;
+  end;
+
+theorem :: STIRL2_1:50
+  (for n st n in dom Fn holds Fn.n <= k)
+    implies
+      Sum (Fn)<=len Fn * k;
+
+theorem :: STIRL2_1:51
+  (for n st n in dom Fn holds Fn.n >= k)
+    implies
+      Sum (Fn) >= len Fn * k;
+
+theorem :: STIRL2_1:52
+  (len Fn > 0 & ex x st x in dom Fn & Fn.x = k)
+    implies
+      Sum Fn >= k;
+
+theorem :: STIRL2_1:53
+  Sum Fn=0 iff (len Fn=0 or for n st n in dom Fn holds Fn.n=0);
+
+theorem :: STIRL2_1:54
+  for f be Function, n holds
+    union (rng (f|n)) \/ f.n=union rng (f|(n+1));
+
+scheme :: STIRL2_1:sch 6
+ Sch6{D()->non empty set,n()->Nat,P[set,set]}:
+  ex p be XFinSequence of D() st dom p = n() &
+                     for k st k in n() holds P[k,p.k]
+ provided
+  for k st k in n() ex x be Element of D() st P[k,x];
+
+scheme :: STIRL2_1:sch 7
+ Sch7{D()->non empty set,F()-> XFinSequence of D()}:
+    ex CardF be XFinSequence of NAT st
+      dom CardF = dom F()
+      & (for i st i in dom CardF holds CardF.i=Card (F().i))
+      & Card union rng F() = Sum(CardF)
+provided
+  for i st i in dom F() holds F().i is finite and
+  for i,j st i in dom F() & j in dom F() & i<>j holds F().i misses F().j;
+
+scheme :: STIRL2_1:sch 8
+ Sch8{X,Y()->finite set,x()->set,P[set],f()->Function of card Y(),Y()}:
+    ex F be XFinSequence of NAT st
+      dom F = card Y() &
+      Card{g where g is Function of X(),Y():P[g]} = Sum(F) &
+      for i st i in dom F holds F.i = Card{g where g is Function of X(),Y():
+                                         P[g] & g.x()=f().i}
+provided
+  f() is onto one-to-one and
+  Y() is non empty and
+  x() in X();
+
+theorem :: STIRL2_1:55
+  k * (n block k)=
+  Card{f where f is Function of n+1,k: f is onto "increasing & f"{f.n}<>{n}};
+
+:::::::::::::::::::::::::::::::::::
+::     Recursive dependence      ::
+::  number Stirling second kind  ::
+:::::::::::::::::::::::::::::::::::
+
+theorem :: STIRL2_1:56
+  (n+1) block (k+1) = (k+1)*(n block (k+1)) + (n block k);
+
+theorem :: STIRL2_1:57
+  n>=1 implies n block 2 = 1/2 * (2 |^ n - 2);
+
+theorem :: STIRL2_1:58
+  n >= 2 implies n block 3 = 1/6 * ( 3 |^ n - 3 * 2 |^ n + 3 );
+
+theorem :: STIRL2_1:59
+  n >= 3 implies n block 4 = 1/24 * ( 4 |^ n - 4 * 3 |^ n + 6* 2|^ n - 4 );
+
+theorem :: STIRL2_1:60
+  3! = 6 & 4! = 24;
+
+theorem :: STIRL2_1:61
+  n choose 1=n &
+  n choose 2=n*(n-1)/2 &
+  n choose 3=n*(n-1)*(n-2)/6 &
+  n choose 4=n*(n-1)*(n-2)*(n-3)/24;
+
+theorem :: STIRL2_1:62
+  (n + 1) block n = (n + 1) choose 2;
+
+theorem :: STIRL2_1:63
+  (n + 2) block n = 3*((n + 2) choose 4) + ((n + 2) choose 3);
+
+theorem :: STIRL2_1:64
+  for F be Function,y holds
+    rng (F|(dom F\F"{y}))=rng F\{y} &
+    for x st x<>y holds (F|(dom F\F"{y}))"{x}=F"{x};
+
+theorem :: STIRL2_1:65
+  Card X=k+1 & x in X implies Card (X\{x})=k;
+
+scheme :: STIRL2_1:sch 9
+ Sch9{P[set],Q[set,Function]}:
+  for F be Function st rng F is finite holds P[F]
+provided
+P[{}] and
+for F be Function st
+     for x st x in rng F & Q[x,F] holds P[F|(dom F\F"{x})] holds P[F];
+
+theorem :: STIRL2_1:66
+  for N be Subset of NAT st N is finite
+    ex k st for n st n in N holds n<=k;
+
+theorem :: STIRL2_1:67
+  for X,Y,x,y st (Y is empty implies X is empty) & not x in X
+    for F be Function of X,Y ex G be Function of X\/{x},Y\/{y} st
+      G|X = F & G.x=y;
+
+theorem :: STIRL2_1:68
+  for X,Y,x,y st (Y is empty implies X is empty)
+    for F be Function of X,Y,G be Function of X\/{x},Y\/{y} st
+      G|X=F & G.x=y holds
+        ( F is onto implies G is onto) &
+        ( not y in Y & F is one-to-one implies G is one-to-one);
+
+theorem :: STIRL2_1:69
+  for N be finite Subset of NAT holds
+    ex Order be Function of N,card N st
+      Order is bijective &
+      for n,k st n in dom Order & k in dom Order & n<k holds Order.n < Order.k;
+
+theorem :: STIRL2_1:70
+  for X,Y be finite set,F be Function of X,Y st card X=card Y holds
+  F is onto iff F is one-to-one;
+
+theorem :: STIRL2_1:71
+  for F,G be Function,y st y in rng (G*F) & G is one-to-one holds
+    ex x st x in dom G & x in rng F & G"{y}={x} & F"{x}=(G*F)"{y};
+
+::::::::::::::::::::::::::::::::::::
+::   Generalization "increasing   ::
+::::::::::::::::::::::::::::::::::::
+
+definition
+  let Ne,Ke;let f be Function of Ne,Ke;
+  attr f is "increasing means
+:: STIRL2_1:def 5
+  for l,m st l in rng f & m in rng f & l < m holds min* f"{l} < min* f"{m};
+end;
+
+theorem :: STIRL2_1:72
+  for F be Function of Ne,Ke st F is "increasing
+    holds min* rng F=F.min* dom F;
+
+:: existence of an expansion
+
+theorem :: STIRL2_1:73
+  for F be Function of Ne,Ke st rng F is finite
+    ex I be Function of Ne,Ke,P be Permutation of rng F st
+      F=P*I & rng F=rng I & I is "increasing;
+
+:: uniqueness of expansion
+
+theorem :: STIRL2_1:74
+  for F be Function of Ne,Ke st rng F is finite
+    for I1,I2 be Function of Ne,Me,P1,P2 be Function st
+      P1 is one-to-one & P2 is one-to-one &
+      rng I1=rng I2 & rng I1=dom P1 & dom P1=dom P2 &
+      F=P1*I1 & F=P2*I2 &
+      I1 is "increasing & I2 is "increasing
+    holds
+      P1=P2 & I1=I2;
+
+theorem :: STIRL2_1:75
+  for F be Function of Ne,Ke st rng F is finite
+    for I1,I2 be Function of Ne,Ke, P1,P2 be Permutation of rng F st
+      F=P1*I1 & F=P2*I2 & rng F=rng I1 & rng F=rng I2 &
+      I1 is "increasing & I2 is "increasing
+    holds
+      P1=P2 & I1=I2;
+

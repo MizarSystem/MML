@@ -1,6 +1,6 @@
 ;;; mizar.el --- mizar.el -- Mizar Mode for Emacs
 ;;
-;; $Revision: 1.102 $
+;; $Revision: 1.105 $
 ;;
 ;;; License:     GPL (GNU GENERAL PUBLIC LICENSE)
 ;;
@@ -391,7 +391,7 @@ MoMM should be installed for this."
 (defcustom mizar-main-keywords 
 (list "theorem" "scheme" "definition" "registration" 
       "notation" "schemes" "constructors" "definitions" 
-      "theorems" "vocabulary" "requirements" "registrations" 
+      "theorems" "vocabularies" "requirements" "registrations" 
       "notations")
 "*Keywords starting main mizar text items. 
 Now also the environmental declarations."
@@ -679,7 +679,7 @@ Used for exact completion.")
     (cond
      ((looking-at "::::::") 0)		;Large comment starts
      ((looking-at "::") (current-column)) ;Small comment starts
-     ((looking-at "\\b\\(theorem\\|scheme\\|definition\\|registration\\|registrations\\|environ\\|vocabulary\\|constructors\\|requirements\\|notation\\|notations\\|reserve\\|begin\\)\\b") 0)
+     ((looking-at "\\b\\(theorem\\|scheme\\|definition\\|registration\\|registrations\\|environ\\|vocabularies\\|constructors\\|requirements\\|notation\\|notations\\|reserve\\|begin\\)\\b") 0)
      ((bobp) 0)				;Beginning of buffer
      (t
       (let ((empty t) ind more less res)
@@ -711,7 +711,7 @@ Used for exact completion.")
 	  ;; Real mizar code
 	  (cond ((looking-at "\\b\\(proof\\|now\\|hereby\\|case\\|suppose\\)\\b")
 		 (setq res (+ ind mizar-indent-width)))
-		((looking-at "\\b\\(definition\\|scheme\\|theorem\\|registration\\|registrations\\|vocabulary\\|constructors\\|requirements\\|notation\\|notations\\|reserve\\|begin\\)\\b")
+		((looking-at "\\b\\(definition\\|scheme\\|theorem\\|registration\\|registrations\\|vocabularies\\|constructors\\|requirements\\|notation\\|notations\\|reserve\\|begin\\)\\b")
 		 (setq res (+ ind 2)))
  		(t (setq res ind)))
 	  (if less (max (- ind mizar-indent-width) 0)
@@ -2362,8 +2362,8 @@ The clusters inside FRM must already be expanded here."
 (frmrepr-abs (frmrepr prop) cstronly))
 
 (defun mizar-getbys (aname)
-  "Get constructor repr of propositions from the .pre file for ANAME."
-  (let ((prename (concat aname ".pre")))
+  "Get constructor repr of propositions from the .xml file for ANAME."
+  (let ((prename (concat aname ".xml")))
     (or (file-readable-p prename)
 	(error "File unreadable: %s" prename))
     (let (res)
@@ -2382,8 +2382,8 @@ The clusters inside FRM must already be expanded here."
 
 ;; kill after debugging, old pre-xml version
 (defun mizar-getbys-old (aname)
-  "Get constructor repr of bys from the .pre file for ANAME."
-  (let ((prename (concat aname ".pre")))
+  "Get constructor repr of bys from the .xml file for ANAME."
+  (let ((prename (concat aname ".xml")))
     (or (file-readable-p prename)
 	(error "File unreadable: %s" prename))
     (let (res)
@@ -2420,8 +2420,8 @@ The clusters inside FRM must already be expanded here."
 into the mizar buffer ANAME.
 Underlines and mouse-highlites the places."
 (save-excursion
-; check at least for the .pre file, not to exit with error below
-(if (not (file-readable-p (concat aname ".pre")))
+; check at least for the .xml file, not to exit with error below
+(if (not (file-readable-p (concat aname ".xml")))
     (message "Cannot explain constructors, verifying was incomplete")
   (get-sgl-table aname)
 ;  (parse-cluster-table aname)
@@ -4564,9 +4564,10 @@ Nil iff nothing is processed right now, serves also as a state variable.")
 "Simple precheck if verifier can be run on BUFFER."
 (string-match "[.]miz$" (buffer-file-name buffer)))
 
-(defun mizar-it-noqr (&optional util forceacc)
+(defun mizar-it-noqr (&optional options util forceacc)
 "Run mizar in terminal on the text in the current .miz buffer.
 Show the result in buffer *mizar-output*.
+If OPTIONS are given, pass them to the verifier.
 If UTIL is given, run it instead of verifier.
 If `mizar-use-momm', run tptpver instead.
 If FORCEACC, run makeenv with the -a option."
@@ -4601,7 +4602,9 @@ If FORCEACC, run makeenv with the -a option."
 		   (if (and (numberp excode) (= 0 excode))
 		       (progn
 			 (mizar-new-term-output noqr)
-			 (term-exec "*mizar-output*" util util nil (list name))
+			 (term-exec "*mizar-output*" util util nil 
+				    (if options (list name options)
+				      (list name)))
 			 (let ((proc (get-buffer-process "*mizar-output*")))
 			   (setq mizar-noqr-data (cons filename proc))
 			   (set-process-sentinel proc 'mizar-noqr-sentinel))
@@ -4610,21 +4613,28 @@ If FORCEACC, run makeenv with the -a option."
 	       (if old-dir (setq default-directory old-dir)))
 	     )))))
 
-(defun mizar-it (&optional util noqr compil silent forceacc)
+(defun mizar-it (&optional util noqr compil silent forceacc options)
 "Run mizar verifier on the text in the current .miz buffer.
 Show the result in buffer *mizar-output*.
+In interactive use, a prefix argument directs this command
+to read verifier options from the minibuffer.
+
+If OPTIONS are given, pass them to the verifier.
 If UTIL is given, run it instead of verifier.
 If `mizar-use-momm', run tptpver instead.
 If NOQR, does not use quick run.
 If COMPIL, emulate compilation-like behavior for error messages.
 If SILENT, just run UTIL without messaging and errorflagging.
 If FORCEACC, run makeenv with the -a option."
-  (interactive)
+  (interactive (if current-prefix-arg
+		   (list nil nil nil nil nil 
+			 (read-string "Verifier options: "))))
   (if (or noqr (not mizar-quick-run)) 
-      (mizar-it-noqr util forceacc)
+      (mizar-it-noqr options util forceacc)
   (let ((util (or util (if mizar-use-momm mizar-momm-verifier
 			 mizar-verifier)))
-	(makeenv makeenv))
+	(makeenv makeenv)
+	(options (or options "")))
     (if (eq mizar-emacs 'winemacs)
 	(progn
 	  (setq util (concat mizfiles util)
@@ -4674,7 +4684,7 @@ If FORCEACC, run makeenv with the -a option."
 		       (if (and (numberp excode) (= 0 excode))
 			   (shell-command (concat 
 					   util (if mizar-allow-long-lines " -q -l " 
-						  " -q ")
+						  " -q ") options " "
 					   (shell-quote-argument name))
 					  mizout)
 			 (display-buffer mizout)))

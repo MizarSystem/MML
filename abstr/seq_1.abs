@@ -6,10 +6,11 @@
 
 environ
 
- vocabulary FUNCT_1, ARYTM, RELAT_1, PARTFUN1, BOOLE, ARYTM_1, ABSVALUE,
-      ARYTM_3, SEQ_1, ZF_REFLE;
+ vocabularies FUNCT_1, ARYTM, RELAT_1, PARTFUN1, BOOLE, ARYTM_1, ABSVALUE,
+      ARYTM_3, SEQ_1, ZF_REFLE, MEMBERED;
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0,
-      NAT_1, REAL_1, RELAT_1, FUNCT_1, COMPLEX1, RELSET_1, PARTFUN1, FUNCT_2;
+      MEMBERED, NAT_1, REAL_1, RELAT_1, FUNCT_1, COMPLEX1, RELSET_1, PARTFUN1,
+      FUNCT_2;
  constructors REAL_1, ABSVALUE, FUNCT_2, PARTFUN1, MEMBERED, XBOOLE_0,
       COMPLEX1;
  registrations XREAL_0, RELSET_1, FUNCT_2, MEMBERED, ORDINAL2;
@@ -43,8 +44,8 @@ definition let f be Relation;
  rng f c= REAL;
 end;
 
-registration let C be set;
- cluster -> real-yielding PartFunc of C, REAL;
+registration let C be set, D be real-membered set;
+ cluster -> real-yielding PartFunc of C, D;
 end;
 
 registration
@@ -59,13 +60,18 @@ definition let f be real-yielding Function, x be set;
  redefine func f.x -> Real;
 end;
 
-definition let C be set, f be PartFunc of C, REAL, x be set;
- redefine func f.x -> Real;
+definition
+  let C be set, D be real-membered set, f be PartFunc of C, D, x be set;
+  redefine func f.x -> Real;
+end;
+
+registration let F be real-yielding Relation, X be set;
+  cluster F | X -> real-yielding;
 end;
 
 notation
- let f be PartFunc of NAT, REAL;
- synonym f is being_not_0 for f is non-empty;
+  let f be PartFunc of NAT, REAL;
+  synonym f is being_not_0 for f is non-empty;
   synonym f is_not_0 for f is non-empty;
 end;
 
@@ -120,22 +126,37 @@ scheme :: SEQ_1:sch 4
    (dom g=X() & for c be Element of C() st c in dom g holds g.c = F(c))
   holds f = g;
 
-definition let C be :::non empty
-  set; let f1,f2 be PartFunc of C,REAL;
-func f1+f2 -> PartFunc of C,REAL means
+definition
+  let f1, f2 be real-yielding Function;
+  func f1+f2 -> Function means
 :: SEQ_1:def 3
- dom it = dom f1 /\ dom f2 &
-  for c being Element of C st c in dom it holds it.c = f1.c + f2.c;
+  dom it = dom f1 /\ dom f2 &
+  for c being set st c in dom it holds it.c = f1.c + f2.c;
   commutativity;
-func f1-f2 -> PartFunc of C,REAL means
+  func f1-f2 -> Function means
 :: SEQ_1:def 4
-dom it = dom f1 /\ dom f2 &
- for c being Element of C st c in dom it holds it.c = f1.c - f2.c;
-func f1(#)f2 -> PartFunc of C,REAL means
+  dom it = dom f1 /\ dom f2 &
+  for c being set st c in dom it holds it.c = f1.c - f2.c;
+  func f1(#)f2 -> Function means
 :: SEQ_1:def 5
-dom it = dom f1 /\ dom f2 &
-   for c being Element of C st c in dom it holds it.c = f1.c * f2.c;
+  dom it = dom f1 /\ dom f2 &
+  for c being set st c in dom it holds it.c = f1.c * f2.c;
   commutativity;
+end;
+
+registration
+  let f1, f2 be real-yielding Function;
+  cluster f1+f2 -> real-yielding;
+  cluster f1-f2 -> real-yielding;
+  cluster f1(#)f2 -> real-yielding;
+end;
+
+definition
+  let C be set, D be real-membered set;
+  let f1, f2 be PartFunc of C,D;
+  redefine func f1+f2 -> PartFunc of C,REAL;
+  redefine func f1-f2 -> PartFunc of C,REAL;
+  redefine func f1(#)f2 -> PartFunc of C,REAL;
 end;
 
 theorem :: SEQ_1:11
@@ -144,45 +165,64 @@ theorem :: SEQ_1:11
 theorem :: SEQ_1:12
  seq = seq1 (#) seq2 iff for n holds seq.n =seq1.n * seq2.n;
 
-registration
+definition
   let seq1,seq2;
-  cluster seq1+seq2 -> total;
-  cluster seq1(#)seq2 -> total;
+  redefine func seq1+seq2 -> Real_Sequence;
+  redefine func seq1-seq2 -> Real_Sequence;
+  redefine func seq1(#)seq2 -> Real_Sequence;
 end;
 
-definition let C be set; let f be PartFunc of C,REAL;
-   let r be real number;
-func r(#)f -> PartFunc of C,REAL means
+definition
+  let f be real-yielding Function;
+  let r be real number;
+  func r(#)f -> Function means
 :: SEQ_1:def 6
- dom it = dom f & for c being Element of C st c in dom it holds it.c = r * f.c;
+  dom it = dom f & for c being set st c in dom it holds it.c = r * f.c;
 end;
 
 registration
- let r,seq;
- cluster r(#)seq -> total;
+  let r be real number; let f be real-yielding Function;
+  cluster r(#)f -> real-yielding;
+end;
+
+definition
+  let C be set, D be real-membered set, f be PartFunc of C,D;
+  let r be real number;
+  redefine func r(#)f -> PartFunc of C,REAL;
+end;
+
+definition
+  let seq,r;
+  redefine func r(#)seq -> Real_Sequence;
 end;
 
 theorem :: SEQ_1:13
   seq1 = r(#)seq2 iff for n holds seq1.n=r*seq2.n;
 
-definition let C be set; let f be PartFunc of C,REAL;
-func -f ->PartFunc of C,REAL means
+definition
+  let f be real-yielding Function;
+  func -f -> Function means
 :: SEQ_1:def 7
- dom it = dom f & for c being Element of C st c in dom it holds it.c = -(f.c);
+  dom it = dom f & for c being set st c in dom it holds it.c = -(f.c);
 end;
 
 registration
- let seq;
- cluster - seq -> total;
+  let f be real-yielding Function;
+  cluster -f -> real-yielding;
+end;
+
+definition
+  let C be set, D be real-membered set, f be PartFunc of C,D;
+  redefine func -f -> PartFunc of C,REAL;
+end;
+
+definition
+  let seq;
+  redefine func -seq -> Real_Sequence;
 end;
 
 theorem :: SEQ_1:14
   seq1 = -seq2 iff for n holds seq1.n= -seq2.n;
-
-registration
- let seq1,seq2;
- cluster seq1-seq2 -> total;
-end;
 
 theorem :: SEQ_1:15
  seq1 - seq2 = seq1 +- seq2;
@@ -201,15 +241,26 @@ func seq1 /" seq ->Real_Sequence equals
 seq1(#)(seq");
 end;
 
-definition let C be set; let f be PartFunc of C,REAL;
-func abs f -> PartFunc of C,REAL means
+definition
+  let f be real-yielding Function;
+  func abs f -> Function means
 :: SEQ_1:def 10
- dom it = dom f & for c being Element of C st c in dom it holds
-   it.c = abs(f.c);
+  dom it = dom f & for c being set st c in dom it holds it.c = abs(f.c);
 end;
 
-registration let seq;
-  cluster abs seq -> total;
+registration
+  let f be real-yielding Function;
+  cluster abs f -> real-yielding;
+end;
+
+definition
+  let C be set, D be real-membered set, f be PartFunc of C,D;
+  redefine func abs f -> PartFunc of C,REAL;
+end;
+
+definition
+  let seq;
+  redefine func abs seq -> Real_Sequence;
 end;
 
 theorem :: SEQ_1:16

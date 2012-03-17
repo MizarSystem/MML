@@ -6,18 +6,19 @@
 
 environ
 
- vocabulary FUNCT_1, ARYTM, RELAT_1, PARTFUN1, BOOLE, ARYTM_1, ABSVALUE,
-      ARYTM_3, SEQ_1, ZF_REFLE;
+ vocabularies FUNCT_1, ARYTM, RELAT_1, PARTFUN1, BOOLE, ARYTM_1, ABSVALUE,
+      ARYTM_3, SEQ_1, ZF_REFLE, MEMBERED;
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0,
-      NAT_1, REAL_1, RELAT_1, FUNCT_1, COMPLEX1, RELSET_1, PARTFUN1, FUNCT_2;
+      MEMBERED, NAT_1, REAL_1, RELAT_1, FUNCT_1, COMPLEX1, RELSET_1, PARTFUN1,
+      FUNCT_2;
  constructors REAL_1, ABSVALUE, FUNCT_2, PARTFUN1, MEMBERED, XBOOLE_0,
       COMPLEX1;
  registrations XREAL_0, RELSET_1, FUNCT_2, MEMBERED, ORDINAL2;
  requirements NUMERALS, SUBSET, BOOLE, ARITHM;
- definitions XREAL_0, PARTFUN1, RELAT_1;
+ definitions TARSKI, XREAL_0, PARTFUN1, RELAT_1;
  theorems FUNCT_1, TARSKI, ABSVALUE, FUNCT_2, SUBSET_1, PARTFUN1, RELSET_1,
       RELAT_1, CARD_1, XREAL_0, ZFMISC_1, XBOOLE_0, XBOOLE_1, XCMPLX_0,
-      XCMPLX_1;
+      XCMPLX_1, MEMBERED;
  schemes FUNCT_1, FUNCT_2, XBOOLE_0;
 
 begin
@@ -81,11 +82,11 @@ definition let f be Relation;
 :Def1: rng f c= REAL;
 end;
 
-registration let C be set;
- cluster -> real-yielding PartFunc of C, REAL;
+registration let C be set, D be real-membered set;
+ cluster -> real-yielding PartFunc of C, D;
  coherence
-  proof let f be PartFunc of C, REAL;
-   thus rng f c= REAL;
+  proof let f be PartFunc of C, D;
+    thus rng f c= REAL by MEMBERED:2;
   end;
 end;
 
@@ -119,14 +120,25 @@ definition let f be real-yielding Function, x be set;
   coherence by XREAL_0:def 1;
 end;
 
-definition let C be set, f be PartFunc of C, REAL, x be set;
- redefine func f.x -> Real;
+definition
+  let C be set, D be real-membered set, f be PartFunc of C, D, x be set;
+  redefine func f.x -> Real;
   coherence by XREAL_0:def 1;
 end;
 
+registration let F be real-yielding Relation, X be set;
+  cluster F | X -> real-yielding;
+  coherence proof
+A1: rng F c= REAL by Def1;
+    rng (F | X) c= rng F by RELAT_1:99; then
+    rng (F | X) c= REAL by A1, XBOOLE_1:1;
+    hence thesis by Def1;
+  end;
+end;  
+
 notation
- let f be PartFunc of NAT, REAL;
- synonym f is being_not_0 for f is non-empty;
+  let f be PartFunc of NAT, REAL;
+  synonym f is being_not_0 for f is non-empty;
   synonym f is_not_0 for f is non-empty;
 end;
 
@@ -339,115 +351,154 @@ A2: dom g=X() & for c be Element of C() st c in dom g holds g.c = F(c);
  hence thesis by A1,A2,PARTFUN1:34;
 end;
 
-definition let C be :::non empty
-  set; let f1,f2 be PartFunc of C,REAL;
-func f1+f2 -> PartFunc of C,REAL means :Def3:
- dom it = dom f1 /\ dom f2 &
-  for c being Element of C st c in dom it holds it.c = f1.c + f2.c;
-existence
-proof per cases;
- suppose
-A1: C is empty;
-  reconsider F = {} as PartFunc of C,REAL by PARTFUN1:56;
-  take F;
-  thus dom F = dom f1 /\ dom f2 by A1,RELAT_1:60,XBOOLE_1:3;
-  thus thesis by RELAT_1:60;
- end;
- suppose C is non empty;
-  then reconsider C' = C as non empty set;
-  defpred X[set] means $1 in dom f1 /\ dom f2;
-  deffunc U(Element of C') = f1.$1 + f2.$1;
-  consider F be PartFunc of C',REAL such that
-A2: for c being Element of C' holds c in dom F iff X[c] and
-A3: for c being Element of C' st c in dom F holds F.c = U(c)
-                  from LambdaPFD';
-  reconsider F as PartFunc of C,REAL;
- take F;
- thus dom F = dom f1 /\ (dom f2 qua Subset of C) by A2,SUBSET_1:8;
- thus thesis by A3;
-end;
-end;
+definition
+  let f1, f2 be real-yielding Function;
+  func f1+f2 -> Function means :Def3:
+  dom it = dom f1 /\ dom f2 &
+  for c being set st c in dom it holds it.c = f1.c + f2.c;
+  existence
+  proof
+    deffunc F(set) = f1.$1 + f2.$1;
+    ex f being Function st dom f = dom f1 /\ dom f2 &
+    for x st x in dom f1 /\ dom f2 holds f.x = F(x) from FUNCT_1:sch 3;
+    hence thesis;
+  end;
   uniqueness
-   proof deffunc U(Element of C) = f1.$1 + f2.$1;
-    thus for f,g being PartFunc of C,REAL st
-   (dom f=dom f1 /\ dom f2 &
-      for c be Element of C st c in dom f holds f.c = U(c)) &
-   (dom g=dom f1 /\ dom f2 &
-      for c be Element of C st c in dom g holds g.c = U(c))
-  holds f = g from UnPartFuncD';
-   end;
+  proof
+  let f, g be Function such that
+a1: dom f = dom f1 /\ dom f2 and
+a2: for c being set st c in dom f holds f.c = f1.c + f2.c and
+a3: dom g = dom f1 /\ dom f2 and
+a4: for c being set st c in dom g holds g.c = f1.c + f2.c;
+    now let x;
+      assume
+a5:   x in dom f;
+      hence f.x = f1.x + f2.x by a2 .= g.x by a1,a3,a4,a5;
+    end;
+    hence f = g by a1,a3,FUNCT_1:9;
+  end;
   commutativity;
-func f1-f2 -> PartFunc of C,REAL means :Def4:
-dom it = dom f1 /\ dom f2 &
- for c being Element of C st c in dom it holds it.c = f1.c - f2.c;
-existence
-proof per cases;
- suppose
-A4: C is empty;
-  reconsider F = {} as PartFunc of C,REAL by PARTFUN1:56;
-  take F;
-  thus dom F = dom f1 /\ dom f2 by A4,RELAT_1:60,XBOOLE_1:3;
-  thus thesis by RELAT_1:60;
- end;
- suppose C is non empty;
-  then reconsider C' = C as non empty set;
-  defpred X[set] means $1 in dom f1 /\ dom f2;
-  deffunc U(Element of C') = f1.$1 - f2.$1;
-  consider F be PartFunc of C',REAL such that
-A5: for c being Element of C' holds c in dom F iff X[c] and
-A6: for c being Element of C' st c in dom F holds F.c = U(c)
-                  from LambdaPFD';
-  reconsider F as PartFunc of C,REAL;
- take F;
- thus dom F = dom f1 /\ (dom f2 qua Subset of C) by A5,SUBSET_1:8;
- thus thesis by A6;
-end;
-end;
-uniqueness
-   proof deffunc U(Element of C) = f1.$1 - f2.$1;
-    thus for f,g being PartFunc of C,REAL st
-   (dom f=dom f1 /\ dom f2 &
-      for c be Element of C st c in dom f holds f.c = U(c)) &
-   (dom g=dom f1 /\ dom f2 &
-      for c be Element of C st c in dom g holds g.c = U(c))
-  holds f = g from UnPartFuncD';
-   end;
-func f1(#)f2 -> PartFunc of C,REAL means :Def5:
-dom it = dom f1 /\ dom f2 &
-   for c being Element of C st c in dom it holds it.c = f1.c * f2.c;
-existence
-proof per cases;
- suppose
-A7: C is empty;
-  reconsider F = {} as PartFunc of C,REAL by PARTFUN1:56;
-  take F;
-  thus dom F = dom f1 /\ dom f2 by A7,RELAT_1:60,XBOOLE_1:3;
-  thus thesis by RELAT_1:60;
- end;
- suppose C is non empty;
-  then reconsider C' = C as non empty set;
-  defpred X[set] means $1 in dom f1 /\ dom f2;
-  deffunc U(Element of C') = f1.$1 * f2.$1;
-  consider F be PartFunc of C',REAL such that
-A8: for c being Element of C' holds c in dom F iff X[c] and
-A9: for c being Element of C' st c in dom F holds F.c = U(c)
-                  from LambdaPFD';
-  reconsider F as PartFunc of C,REAL;
- take F;
- thus dom F = dom f1 /\ (dom f2 qua Subset of C) by A8,SUBSET_1:8;
- thus thesis by A9;
-end;
-end;
-uniqueness
-   proof deffunc U(Element of C) = f1.$1 * f2.$1;
-    thus for f,g being PartFunc of C,REAL st
-   (dom f=dom f1 /\ dom f2 &
-      for c be Element of C st c in dom f holds f.c = U(c)) &
-   (dom g=dom f1 /\ dom f2 &
-      for c be Element of C st c in dom g holds g.c = U(c))
-  holds f = g from UnPartFuncD';
-   end;
+  func f1-f2 -> Function means :Def4:
+  dom it = dom f1 /\ dom f2 &
+  for c being set st c in dom it holds it.c = f1.c - f2.c;
+  existence
+  proof
+    deffunc F(set) = f1.$1 - f2.$1;
+    ex f being Function st dom f = dom f1 /\ dom f2 &
+    for x st x in dom f1 /\ dom f2 holds f.x = F(x) from FUNCT_1:sch 3;
+    hence thesis;
+  end;
+  uniqueness
+  proof
+  let f, g be Function such that
+a1: dom f = dom f1 /\ dom f2 and
+a2: for c being set st c in dom f holds f.c = f1.c - f2.c and
+a3: dom g = dom f1 /\ dom f2 and
+a4: for c being set st c in dom g holds g.c = f1.c - f2.c;
+    now let x;
+      assume
+a5:   x in dom f;
+      hence f.x = f1.x - f2.x by a2 .= g.x by a1,a3,a4,a5;
+    end;
+    hence f = g by a1,a3,FUNCT_1:9;
+  end;
+  func f1(#)f2 -> Function means :Def5:
+  dom it = dom f1 /\ dom f2 &
+  for c being set st c in dom it holds it.c = f1.c * f2.c;
+  existence
+  proof
+    deffunc F(set) = f1.$1 * f2.$1;
+    ex f being Function st dom f = dom f1 /\ dom f2 &
+    for x st x in dom f1 /\ dom f2 holds f.x = F(x) from FUNCT_1:sch 3;
+    hence thesis;
+  end;
+  uniqueness
+  proof
+  let f, g be Function such that
+a1: dom f = dom f1 /\ dom f2 and
+a2: for c being set st c in dom f holds f.c = f1.c * f2.c and
+a3: dom g = dom f1 /\ dom f2 and
+a4: for c being set st c in dom g holds g.c = f1.c * f2.c;
+    now let x;
+      assume
+a5:   x in dom f;
+      hence f.x = f1.x * f2.x by a2 .= g.x by a1,a3,a4,a5;
+    end;
+    hence f = g by a1,a3,FUNCT_1:9;
+  end;
   commutativity;
+end;
+
+registration
+  let f1, f2 be real-yielding Function;
+  cluster f1+f2 -> real-yielding;
+  coherence
+  proof
+    set F = f1+f2;
+    let y be set;
+    assume y in rng F;
+    then consider x being set such that
+a1: x in dom F and
+a2: F.x = y by FUNCT_1:def 5;
+    F.x = f1.x + f2.x by a1,Def3;
+    hence thesis by a2;
+  end;
+  cluster f1-f2 -> real-yielding;
+  coherence
+  proof
+    set F = f1-f2;
+    let y be set;
+    assume y in rng F;
+    then consider x being set such that
+a1: x in dom F and
+a2: F.x = y by FUNCT_1:def 5;
+    F.x = f1.x - f2.x by a1,Def4;
+    hence thesis by a2;
+  end;
+  cluster f1(#)f2 -> real-yielding;
+  coherence
+  proof
+    set F = f1(#)f2;
+    let y be set;
+    assume y in rng F;
+    then consider x being set such that
+a1: x in dom F and
+a2: F.x = y by FUNCT_1:def 5;
+    F.x = f1.x * f2.x by a1,Def5;
+    hence thesis by a2;
+  end;
+end;
+
+definition
+  let C be set, D be real-membered set;
+  let f1, f2 be PartFunc of C,D;
+  redefine func f1+f2 -> PartFunc of C,REAL;
+  coherence
+  proof
+    set F = f1+f2;
+a2: dom F = dom f1 /\ dom f2 by Def3;
+    rng F c= REAL by Def1;
+    then F is PartFunc of dom F, REAL by PARTFUN1:25;
+    hence thesis by a2,PARTFUN1:28;
+  end;
+  redefine func f1-f2 -> PartFunc of C,REAL;
+  coherence
+  proof
+    set F = f1-f2;
+a2: dom F = dom f1 /\ dom f2 by Def4;
+    rng F c= REAL by Def1;
+    then F is PartFunc of dom F, REAL by PARTFUN1:25;
+    hence thesis by a2,PARTFUN1:28;
+  end;
+  redefine func f1(#)f2 -> PartFunc of C,REAL;
+  coherence
+  proof
+    set F = f1(#)f2;
+a2: dom F = dom f1 /\ dom f2 by Def5;
+    rng F c= REAL by Def1;
+    then F is PartFunc of dom F, REAL by PARTFUN1:25;
+    hence thesis by a2,PARTFUN1:28;
+  end;
 end;
 
 theorem Th11:
@@ -465,7 +516,7 @@ A2:  for n holds seq.n =seq1.n + seq2.n;
 A3:  dom seq = NAT /\ NAT by FUNCT_2:def 1
         .= NAT /\ dom seq2 by FUNCT_2:def 1
         .= dom seq1 /\ dom seq2 by FUNCT_2:def 1;
-       for n st n in dom seq holds seq.n = seq1.n + seq2.n by A2;
+   for n being set st n in dom seq holds seq.n = seq1.n + seq2.n by A2;
    hence thesis by A3,Def3;
   end;
 
@@ -484,73 +535,101 @@ A2:  for n holds seq.n =seq1.n * seq2.n;
 A3:  dom seq = NAT /\ NAT by FUNCT_2:def 1
         .= NAT /\ dom seq2 by FUNCT_2:def 1
         .= dom seq1 /\ dom seq2 by FUNCT_2:def 1;
-       for n st n in dom seq holds seq.n = seq1.n * seq2.n by A2;
+   for n being set st n in dom seq holds seq.n = seq1.n * seq2.n by A2;
    hence thesis by A3,Def5;
   end;
 
-registration
+definition
   let seq1,seq2;
-  cluster seq1+seq2 -> total;
+  redefine func seq1+seq2 -> Real_Sequence;
   coherence
-   proof
-        dom seq1 = NAT & dom seq2 = NAT by FUNCT_2:def 1;
-    hence dom(seq1 + seq2) = NAT /\ NAT by Def3 .= NAT;
-   end;
-  cluster seq1(#)seq2 -> total;
+  proof
+    dom seq1 = NAT & dom seq2 = NAT by FUNCT_2:def 1;
+    then dom(seq1+seq2) = NAT /\ NAT by Def3;
+    hence thesis by FUNCT_2:130;
+  end;
+  redefine func seq1-seq2 -> Real_Sequence;
   coherence
-   proof
-        dom seq1 = NAT & dom seq2 = NAT by FUNCT_2:def 1;
-    hence dom(seq1 (#) seq2) = NAT /\ NAT by Def5 .= NAT;
-   end;
+  proof
+    dom seq1 = NAT & dom seq2 = NAT by FUNCT_2:def 1;
+    then dom(seq1-seq2) = NAT /\ NAT by Def4;
+    hence thesis by FUNCT_2:130;
+  end;
+  redefine func seq1(#)seq2 -> Real_Sequence;
+  coherence
+  proof
+    dom seq1 = NAT & dom seq2 = NAT by FUNCT_2:def 1;
+    then dom(seq1(#)seq2) = NAT /\ NAT by Def5;
+    hence thesis by FUNCT_2:130;
+  end;
 end;
 
-definition let C be set; let f be PartFunc of C,REAL;
-   let r be real number;
-func r(#)f -> PartFunc of C,REAL means :Def6:
- dom it = dom f & for c being Element of C st c in dom it holds it.c = r * f.c;
+definition
+  let f be real-yielding Function;
+  let r be real number;
+  func r(#)f -> Function means :Def6:
+  dom it = dom f & for c being set st c in dom it holds it.c = r * f.c;
 existence
-proof per cases;
- suppose
-A1: C is empty;
-  reconsider F = {} as PartFunc of C,REAL by PARTFUN1:56;
-  take F;
-  thus dom F = dom f by A1,RELAT_1:60,XBOOLE_1:3;
-  thus thesis by RELAT_1:60;
- end;
- suppose C is non empty;
-  then reconsider C' = C as non empty set;
- reconsider r1 = r as Element of REAL by XREAL_0:def 1;
-  defpred X[set] means $1 in dom f;
-  deffunc U(Element of C') = r1 * f.$1;
-  consider F be PartFunc of C',REAL such that
-A2: for c being Element of C' holds c in dom F iff X[c] and
-A3: for c being Element of C' st c in dom F holds F.c = U(c)
-                  from LambdaPFD';
-  reconsider F as PartFunc of C,REAL;
- take F;
- thus dom F = dom f by A2,SUBSET_1:8;
- thus thesis by A3;
-end;
-end;
-uniqueness
- proof
-   reconsider r1 = r as Element of REAL by XREAL_0:def 1;
-   deffunc U(Element of C) = r1 * f.$1;
-     for f1, f2 be PartFunc of C,REAL st
-   (dom f1 = dom f & for c being Element of C st c in dom f1 holds
-      f1.c = U(c)) &
-   (dom f2 = dom f & for c being Element of C st c in dom f2 holds
-      f2.c = U(c)) holds f1 = f2 from UnPartFuncD';
-  hence thesis;
- end;
+  proof
+    deffunc F(set) = r * f.$1;
+    ex h being Function st dom h = dom f &
+    for x st x in dom f holds h.x = F(x) from FUNCT_1:sch 3;
+    hence thesis;
+  end;
+  uniqueness
+  proof
+  let h, g be Function such that
+a1: dom h = dom f and
+a2: for c being set st c in dom h holds h.c = r * f.c and
+a3: dom g = dom f and
+a4: for c being set st c in dom g holds g.c = r * f.c;
+    now let x;
+      assume
+a5:   x in dom h;
+      hence h.x = r * f.x by a2 .= g.x by a1,a3,a4,a5;
+    end;
+    hence h = g by a1,a3,FUNCT_1:9;
+  end;
 end;
 
 registration
- let r,seq;
- cluster r(#)seq -> total;
- coherence
+  let r be real number; let f be real-yielding Function;
+  cluster r(#)f -> real-yielding;
+  coherence
   proof
-   thus dom(r(#)seq) = dom seq by Def6 .= NAT by FUNCT_2:def 1;
+    set F = r(#)f;
+    let y be set;
+    assume y in rng F;
+    then consider x being set such that
+a1: x in dom F and
+a2: F.x = y by FUNCT_1:def 5;
+    F.x = r * f.x by a1,Def6;
+    hence thesis by a2,XREAL_0:def 1;
+  end;
+end;
+
+definition
+  let C be set, D be real-membered set, f be PartFunc of C,D;
+  let r be real number;
+  redefine func r(#)f -> PartFunc of C,REAL;
+  coherence
+  proof
+    set F = r(#)f;
+a2: dom F = dom f by Def6;
+    rng F c= REAL by Def1;
+    then F is PartFunc of dom F, REAL by PARTFUN1:25;
+    hence thesis by a2,PARTFUN1:28;
+  end;
+end;
+
+definition
+  let seq,r;
+  redefine func r(#)seq -> Real_Sequence;
+  coherence
+  proof
+    dom seq = NAT  by FUNCT_2:def 1;
+    then dom(r(#)seq) = NAT by Def6;
+    hence thesis by FUNCT_2:130;
   end;
 end;
 
@@ -567,53 +646,74 @@ A1:   seq1 = r(#)seq2;
   assume
 A2: for n holds seq1.n=r*seq2.n;
 A3: dom seq1 = NAT by FUNCT_2:def 1 .= dom seq2 by FUNCT_2:def 1;
-      for n st n in dom seq1 holds seq1.n = r * seq2.n by A2;
+  for n being set st n in dom seq1 holds seq1.n = r * seq2.n by A2;
   hence thesis by A3,Def6;
  end;
 
-definition let C be set; let f be PartFunc of C,REAL;
-func -f ->PartFunc of C,REAL means :Def7:
- dom it = dom f & for c being Element of C st c in dom it holds it.c = -(f.c);
+definition
+  let f be real-yielding Function;
+  func -f -> Function means :Def7:
+  dom it = dom f & for c being set st c in dom it holds it.c = -(f.c);
 existence
-proof per cases;
- suppose
-A1: C is empty;
-  reconsider F = {} as PartFunc of C,REAL by PARTFUN1:56;
-  take F;
-  thus dom F = dom f by A1,RELAT_1:60,XBOOLE_1:3;
-  thus thesis by RELAT_1:60;
- end;
- suppose C is non empty;
-  then reconsider C' = C as non empty set;
-  defpred X[set] means $1 in dom f;
-  deffunc U(Element of C') = -(f.$1);
-  consider F be PartFunc of C',REAL such that
-A2: for c being Element of C' holds c in dom F iff X[c] and
-A3: for c being Element of C' st c in dom F holds F.c = U(c)
-                  from LambdaPFD';
-  reconsider F as PartFunc of C,REAL;
- take F;
- thus dom F = dom f by A2,SUBSET_1:8;
- thus thesis by A3;
-end;
-end;
-uniqueness
- proof deffunc U(Element of C) = -(f.$1);
-     for f1, f2 be PartFunc of C,REAL st
-   (dom f1 = dom f & for c being Element of C st c in dom f1 holds
-      f1.c = U(c)) &
-   (dom f2 = dom f & for c being Element of C st c in dom f2 holds
-      f2.c = U(c)) holds f1 = f2 from UnPartFuncD';
-  hence thesis;
- end;
+  proof
+    deffunc F(set) = -f.$1;
+    ex h being Function st dom h = dom f &
+    for x st x in dom f holds h.x = F(x) from FUNCT_1:sch 3;
+    hence thesis;
+  end;
+  uniqueness
+  proof
+  let h, g be Function such that
+a1: dom h = dom f and
+a2: for c being set st c in dom h holds h.c = -f.c and
+a3: dom g = dom f and
+a4: for c being set st c in dom g holds g.c = -f.c;
+    now let x;
+      assume
+a5:   x in dom h;
+      hence h.x = -f.x by a2 .= g.x by a1,a3,a4,a5;
+    end;
+    hence h = g by a1,a3,FUNCT_1:9;
+  end;
 end;
 
 registration
- let seq;
- cluster - seq -> total;
- coherence
+  let f be real-yielding Function;
+  cluster -f -> real-yielding;
+  coherence
   proof
-   thus dom -seq = dom seq by Def7 .= NAT by FUNCT_2:def 1;
+    set F = -f;
+    let y be set;
+    assume y in rng F;
+    then consider x being set such that
+a1: x in dom F and
+a2: F.x = y by FUNCT_1:def 5;
+    F.x = -f.x by a1,Def7;
+    hence thesis by a2;
+  end;
+end;
+
+definition
+  let C be set, D be real-membered set, f be PartFunc of C,D;
+  redefine func -f -> PartFunc of C,REAL;
+  coherence
+  proof
+    set F = -f;
+a2: dom F = dom f by Def7;
+    rng F c= REAL by Def1;
+    then F is PartFunc of dom F, REAL by PARTFUN1:25;
+    hence thesis by a2,PARTFUN1:28;
+  end;
+end;
+
+definition
+  let seq;
+  redefine func -seq -> Real_Sequence;
+  coherence
+  proof
+    dom seq = NAT  by FUNCT_2:def 1;
+    then dom(-seq) = NAT by Def7;
+    hence thesis by FUNCT_2:130;
   end;
 end;
 
@@ -630,19 +730,9 @@ A1:   seq1 = -seq2;
   assume
 A2: for n holds seq1.n= -seq2.n;
 A3: dom seq1 = NAT by FUNCT_2:def 1 .= dom seq2 by FUNCT_2:def 1;
-      for n st n in dom seq1 holds seq1.n = - seq2.n by A2;
+    for n being set st n in dom seq1 holds seq1.n = - seq2.n by A2;
   hence thesis by A3,Def7;
  end;
-
-registration
- let seq1,seq2;
- cluster seq1-seq2 -> total;
- coherence
-  proof
-       dom seq1 = NAT & dom seq2 = NAT by FUNCT_2:def 1;
-   hence dom(seq1 - seq2) = NAT /\ NAT by Def4 .= NAT;
-  end;
-end;
 
 theorem Th15:
  seq1 - seq2 = seq1 +- seq2
@@ -650,12 +740,13 @@ theorem Th15:
 A1: dom(seq1 +- seq2) = NAT /\ NAT by FUNCT_2:def 1
       .= NAT /\ dom seq2 by FUNCT_2:def 1
       .= dom seq1 /\ dom seq2 by FUNCT_2:def 1;
-     for c being Element of NAT st c in dom(seq1 +- seq2)
+     for c being set st c in dom(seq1 +- seq2)
      holds (seq1 +- seq2).c = seq1.c - seq2.c
-  proof let c be Element of NAT;
-   assume c in dom(seq1 +- seq2);
-   thus (seq1 +- seq2).c = seq1.c + (-seq2).c by Th11
-         .= seq1.c + -seq2.c by Th14
+  proof let c be set;
+   assume
+A2: c in dom(seq1 +- seq2);
+   hence (seq1 +- seq2).c = seq1.c + (-seq2).c by Th11
+         .= seq1.c + -seq2.c by A2,Th14
          .= seq1.c - seq2.c;
   end;
   hence thesis by A1,Def4;
@@ -688,49 +779,70 @@ func seq1 /" seq ->Real_Sequence equals :Def9: seq1(#)(seq");
  correctness;
 end;
 
-definition let C be set; let f be PartFunc of C,REAL;
-func abs f -> PartFunc of C,REAL means :Def10:
- dom it = dom f & for c being Element of C st c in dom it holds
-   it.c = abs(f.c);
+definition
+  let f be real-yielding Function;
+  func abs f -> Function means :Def10:
+  dom it = dom f & for c being set st c in dom it holds it.c = abs(f.c);
 existence
-proof per cases;
- suppose
-A1: C is empty;
-  reconsider F = {} as PartFunc of C,REAL by PARTFUN1:56;
-  take F;
-  thus dom F = dom f by A1,RELAT_1:60,XBOOLE_1:3;
-  thus thesis by RELAT_1:60;
- end;
- suppose C is non empty;
-  then reconsider C' = C as non empty set;
-  defpred X[set] means $1 in dom f;
-  deffunc U(Element of C') = abs(f.$1);
-  consider F be PartFunc of C',REAL such that
-A2: for c being Element of C' holds c in dom F iff X[c] and
-A3: for c being Element of C' st c in dom F holds F.c = U(c)
-                  from LambdaPFD';
-  reconsider F as PartFunc of C,REAL;
- take F;
- thus dom F = dom f by A2,SUBSET_1:8;
- thus thesis by A3;
-end;
-end;
-uniqueness
- proof deffunc U(Element of C) = abs(f.$1);
-     for f1, f2 be PartFunc of C,REAL st
-   (dom f1 = dom f & for c being Element of C st c in dom f1 holds
-      f1.c = U(c)) &
-   (dom f2 = dom f & for c being Element of C st c in dom f2 holds
-      f2.c = U(c)) holds f1 = f2 from UnPartFuncD';
-  hence thesis;
- end;
+  proof
+    deffunc F(set) = abs(f.$1);
+    ex h being Function st dom h = dom f &
+    for x st x in dom f holds h.x = F(x) from FUNCT_1:sch 3;
+    hence thesis;
+  end;
+  uniqueness
+  proof
+  let h, g be Function such that
+a1: dom h = dom f and
+a2: for c being set st c in dom h holds h.c = abs(f.c) and
+a3: dom g = dom f and
+a4: for c being set st c in dom g holds g.c = abs(f.c);
+    now let x;
+      assume
+a5:   x in dom h;
+      hence h.x = abs(f.x) by a2 .= g.x by a1,a3,a4,a5;
+    end;
+    hence h = g by a1,a3,FUNCT_1:9;
+  end;
 end;
 
-registration let seq;
-  cluster abs seq -> total;
- coherence
+registration
+  let f be real-yielding Function;
+  cluster abs f -> real-yielding;
+  coherence
   proof
-   thus dom abs seq = dom seq by Def10 .= NAT by FUNCT_2:def 1;
+    set F = abs f;
+    let y be set;
+    assume y in rng F;
+    then consider x being set such that
+a1: x in dom F and
+a2: F.x = y by FUNCT_1:def 5;
+    F.x = abs(f.x) by a1,Def10;
+    hence thesis by a2;
+  end;
+end;
+
+definition
+  let C be set, D be real-membered set, f be PartFunc of C,D;
+  redefine func abs f -> PartFunc of C,REAL;
+  coherence
+  proof
+    set F = abs f;
+a2: dom F = dom f by Def10;
+    rng F c= REAL by Def1;
+    then F is PartFunc of dom F, REAL by PARTFUN1:25;
+    hence thesis by a2,PARTFUN1:28;
+  end;
+end;
+
+definition
+  let seq;
+  redefine func abs seq -> Real_Sequence;
+  coherence
+  proof
+    dom seq = NAT  by FUNCT_2:def 1;
+    then dom(abs seq) = NAT by Def10;
+    hence thesis by FUNCT_2:130;
   end;
 end;
 
@@ -747,7 +859,7 @@ A1:   seq1 = abs(seq);
   assume
 A2: for n holds seq1.n= abs(seq.n);
 A3: dom seq1 = NAT by FUNCT_2:def 1 .= dom seq by FUNCT_2:def 1;
-      for n st n in dom seq1 holds seq1.n = abs(seq.n) by A2;
+    for n being set st n in dom seq1 holds seq1.n = abs(seq.n) by A2;
   hence thesis by A3,Def10;
  end;
 

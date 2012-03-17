@@ -40,9 +40,9 @@
 <ArticleID name="GROUP_1"/>
 <ArticleID name="TOPREAL1"/>
 <ArticleID name="JORDAN1"/>
+<ArticleID name="MEMBERED"/>
 <ArticleID name="SEQ_1"/>
 <ArticleID name="SEQ_2"/>
-<ArticleID name="MEMBERED"/>
 <ArticleID name="SEQ_4"/>
 <ArticleID name="PCOMPS_1"/>
 <ArticleID name="PSCOMP_1"/>
@@ -105,8 +105,8 @@
 <Adjective nr="1" value="false"/>
 <Adjective nr="22"/>
 <Adjective nr="50"/>
-<Adjective nr="90"/>
-<Adjective nr="91"/>
+<Adjective nr="85"/>
+<Adjective nr="86"/>
 <Adjective nr="95"/>
 <Adjective nr="96"/>
 <Adjective nr="97"/>
@@ -200,13 +200,13 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="300">
+<Func kind="K" nr="312">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="90"/>
-<Adjective nr="91"/>
+<Adjective nr="85"/>
+<Adjective nr="86"/>
 <Adjective nr="112"/>
 </Cluster>
 </FCluster>
@@ -221,12 +221,12 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="300">
+<Func kind="K" nr="312">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="90"/>
-<Adjective nr="91"/>
+<Adjective nr="85"/>
+<Adjective nr="86"/>
 <Adjective nr="96"/>
 <Adjective nr="112"/>
 </Cluster>
@@ -242,19 +242,19 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="300">
+<Func kind="K" nr="312">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="90"/>
-<Adjective nr="91"/>
+<Adjective nr="85"/>
+<Adjective nr="86"/>
 <Adjective nr="95"/>
 <Adjective nr="112"/>
 </Cluster>
 </FCluster>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="364"/>
+<Func kind="K" nr="376"/>
 <Cluster>
 <Adjective nr="30" value="false"/>
 <Adjective nr="31"/>
@@ -275,13 +275,13 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="331">
+<Func kind="K" nr="343">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="90"/>
-<Adjective nr="91"/>
+<Adjective nr="85"/>
+<Adjective nr="86"/>
 <Adjective nr="95"/>
 <Adjective nr="96"/>
 <Adjective nr="97"/>
@@ -530,8 +530,8 @@
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="90"/>
-<Adjective nr="91"/>
+<Adjective nr="85"/>
+<Adjective nr="86"/>
 <Adjective nr="111"/>
 </Cluster>
 </CCluster>

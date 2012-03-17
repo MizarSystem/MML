@@ -1,0 +1,1822 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<grammar xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns="http://relaxng.org/ns/structure/1.0" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
+  <define name="Constructors">
+    <a:documentation>Constructors, either imported from other articles ( after accommodation)
+- the signature is implicit in that case, or exported from the current 
+article - then the signature has to be specified.
+aid optionally specifies its article's name in uppercase.      </a:documentation>
+    <element name="Constructors">
+      <optional>
+        <attribute name="aid">
+          <data type="string"/>
+        </attribute>
+      </optional>
+      <optional>
+        <choice>
+          <element name="SignatureWithCounts">
+            <zeroOrMore>
+              <ref name="ConstrCounts"/>
+            </zeroOrMore>
+          </element>
+          <group>
+            <ref name="Signature"/>
+            <ref name="ConstrCounts"/>
+          </group>
+        </choice>
+      </optional>
+      <zeroOrMore>
+        <ref name="Constructor"/>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="Notations">
+    <a:documentation>Notations, either imported from other articles ( after accommodation)
+- the signature is implicit in that case, or exported from the current 
+article - then the signature and vocabularies have to be specified.
+aid optionally specifies article's name in uppercase.   </a:documentation>
+    <element name="Notations">
+      <optional>
+        <attribute name="aid">
+          <data type="string"/>
+        </attribute>
+      </optional>
+      <optional>
+        <ref name="Signature"/>
+        <ref name="Vocabularies"/>
+      </optional>
+      <zeroOrMore>
+        <ref name="Pattern"/>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="Registrations">
+    <a:documentation>Registrations, either imported from other articles ( after accommodation)
+- the signature is implicit in that case, or exported from the current 
+article - then the signature has to be specified.
+aid optionally specifies its article's name in uppercase.   </a:documentation>
+    <element name="Registrations">
+      <optional>
+        <attribute name="aid">
+          <data type="string"/>
+        </attribute>
+      </optional>
+      <optional>
+        <ref name="Signature"/>
+      </optional>
+      <zeroOrMore>
+        <choice>
+          <ref name="RCluster"/>
+          <ref name="CCluster"/>
+          <ref name="FCluster"/>
+        </choice>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="Definientia">
+    <a:documentation>Definientia, either imported from other articles ( after accommodation)
+- the signature is implicit in that case, or exported from the current 
+article - then the signature has to be specified.
+aid optionally specifies article's name in uppercase.</a:documentation>
+    <element name="Definientia">
+      <optional>
+        <attribute name="aid">
+          <data type="string"/>
+        </attribute>
+      </optional>
+      <optional>
+        <ref name="Signature"/>
+      </optional>
+      <zeroOrMore>
+        <ref name="Definiens"/>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="Theorems">
+    <a:documentation>Theorems, either imported from other articles ( after accommodation)
+- the signature is implicit in that case, or exported from the current 
+article - then the signature has to be specified.
+They can be either ordinary or definitional.   
+The article number and order in article can be given,
+otherwise it belongs to the current article and order is implicit.
+Optional aid attribute specifies article name.</a:documentation>
+    <element name="Theorems">
+      <optional>
+        <attribute name="aid">
+          <data type="string"/>
+        </attribute>
+      </optional>
+      <optional>
+        <ref name="Signature"/>
+      </optional>
+      <zeroOrMore>
+        <element name="Theorem">
+          <optional>
+            <attribute name="articlenr">
+              <data type="integer"/>
+            </attribute>
+            <attribute name="nr">
+              <data type="integer"/>
+            </attribute>
+          </optional>
+          <optional>
+            <attribute name="aid">
+              <data type="string"/>
+            </attribute>
+          </optional>
+          <attribute name="kind">
+            <choice>
+              <value>T</value>
+              <value>D</value>
+            </choice>
+          </attribute>
+          <ref name="Formula"/>
+        </element>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="Schemes">
+    <a:documentation>Schemes, either imported from other articles ( after accommodation)
+- the signature is implicit in that case, or exported from the current 
+article - then the signature has to be specified.
+aid optionally specifies article's name in uppercase.</a:documentation>
+    <element name="Schemes">
+      <optional>
+        <attribute name="aid">
+          <data type="string"/>
+        </attribute>
+      </optional>
+      <optional>
+        <ref name="Signature"/>
+      </optional>
+      <zeroOrMore>
+        <ref name="Scheme"/>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="Format">
+    <a:documentation>Format keeps the kind of a given symbol and arities.
+For bracket formats (K) this keeps both symbols.   
+Optionally a nr (of the format) is kept, to which patterns may refer,
+This implementation might change in some time.</a:documentation>
+    <element name="Format">
+      <attribute name="kind">
+        <choice>
+          <value>G</value>
+          <value>K</value>
+          <value>J</value>
+          <value>L</value>
+          <value>M</value>
+          <value>O</value>
+          <value>R</value>
+          <value>U</value>
+          <value>V</value>
+        </choice>
+      </attribute>
+      <optional>
+        <attribute name="nr">
+          <data type="integer"/>
+        </attribute>
+      </optional>
+      <attribute name="symbolnr">
+        <data type="integer"/>
+      </attribute>
+      <attribute name="argnr">
+        <data type="integer"/>
+      </attribute>
+      <optional>
+        <attribute name="leftargnr">
+          <data type="integer"/>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="rightsymbolnr">
+          <data type="integer"/>
+        </attribute>
+      </optional>
+    </element>
+  </define>
+  <define name="Formats">
+    <a:documentation>Format info contains symbol formats and priorities.
+Priorities are used only for functor symbols.
+This implementation might change in some time.</a:documentation>
+    <element name="Formats">
+      <zeroOrMore>
+        <ref name="Format"/>
+      </zeroOrMore>
+      <zeroOrMore>
+        <element name="Priority">
+          <attribute name="kind">
+            <choice>
+              <value>O</value>
+              <value>K</value>
+              <value>L</value>
+            </choice>
+          </attribute>
+          <attribute name="symbolnr">
+            <data type="integer"/>
+          </attribute>
+          <attribute name="value">
+            <data type="integer"/>
+          </attribute>
+        </element>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="DefMeaning">
+    <a:documentation>DefMeaning consists of the formulas and terms defining a constructor.
+It can be either defined by _equals_ (terms) or
+by _means_ (formulas). It may contain several
+partial (case) definitions - first in them comes the
+definition (term or formula) valid in that case and second comes
+the case formula. The final term or formula specifies the default
+case, it is mandatory if no partial definitions are given.
+If no default is given, the disjunction of all case formulas must 
+be true (this have to be proved using the _consistency_ condition).</a:documentation>
+    <element name="DefMeaning">
+      <attribute name="kind">
+        <choice>
+          <value>e</value>
+          <value>m</value>
+        </choice>
+      </attribute>
+      <zeroOrMore>
+        <element name="PartialDef">
+          <choice>
+            <ref name="Formula"/>
+            <ref name="Term"/>
+          </choice>
+          <ref name="Formula"/>
+        </element>
+      </zeroOrMore>
+      <optional>
+        <choice>
+          <ref name="Formula"/>
+          <ref name="Term"/>
+        </choice>
+      </optional>
+    </element>
+  </define>
+  <define name="Definiens">
+    <a:documentation>Definiens of a constructor. This overlaps a bit with Constructor.
+First come the argument types and possibly also the result type.
+The optional formula is conjunction of all assumptions if any given.
+If this is a redefinition, essentials are indeces of arguments
+corresponding to the arguments of original, otherwise it is just
+identity. This could be now encode with just one number like the
+superfluous does for Constructor.</a:documentation>
+    <element name="Definiens">
+      <attribute name="constrkind">
+        <choice>
+          <value>M</value>
+          <value>L</value>
+          <value>V</value>
+          <value>R</value>
+          <value>K</value>
+          <value>U</value>
+          <value>G</value>
+        </choice>
+      </attribute>
+      <attribute name="constrnr">
+        <data type="integer"/>
+      </attribute>
+      <zeroOrMore>
+        <ref name="Typ"/>
+      </zeroOrMore>
+      <element name="Essentials">
+        <zeroOrMore>
+          <ref name="Int"/>
+        </zeroOrMore>
+      </element>
+      <optional>
+        <ref name="Formula"/>
+      </optional>
+      <ref name="DefMeaning"/>
+    </element>
+  </define>
+  <define name="Requirements">
+    <a:documentation>Requirements (now only the exported form).
+The second number specifies the requirement -
+this could be changed to enumerated types for better understanding.</a:documentation>
+    <element name="Requirements">
+      <ref name="Signature"/>
+      <zeroOrMore>
+        <element name="Requirement">
+          <attribute name="constrkind">
+            <choice>
+              <value>M</value>
+              <value>L</value>
+              <value>V</value>
+              <value>R</value>
+              <value>K</value>
+              <value>U</value>
+              <value>G</value>
+            </choice>
+          </attribute>
+          <attribute name="constrnr">
+            <data type="integer"/>
+          </attribute>
+          <attribute name="nr">
+            <data type="integer"/>
+          </attribute>
+        </element>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="Adjective">
+    <a:documentation>Adjective is a possibly negated (and paramaterized) attribute</a:documentation>
+    <element name="Adjective">
+      <attribute name="nr">
+        <data type="integer"/>
+      </attribute>
+      <optional>
+        <attribute name="value">
+          <data type="boolean"/>
+        </attribute>
+      </optional>
+      <zeroOrMore>
+        <ref name="Term"/>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="Cluster">
+    <a:documentation>Cluster of adjectives</a:documentation>
+    <element name="Cluster">
+      <zeroOrMore>
+        <ref name="Adjective"/>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="Typ">
+    <a:documentation>Parameterized type - either mode or structure
+First goes the LowerCluster, than UpperCluster</a:documentation>
+    <element name="Typ">
+      <attribute name="kind">
+        <choice>
+          <value>M</value>
+          <value>G</value>
+          <value>errortyp</value>
+        </choice>
+      </attribute>
+      <optional>
+        <attribute name="nr">
+          <data type="integer"/>
+        </attribute>
+      </optional>
+      <zeroOrMore>
+        <ref name="Cluster"/>
+      </zeroOrMore>
+      <zeroOrMore>
+        <ref name="Term"/>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="Is">
+    <a:documentation>Qualification formula (claims that a term has certaing type)</a:documentation>
+    <element name="Is">
+      <ref name="Term"/>
+      <ref name="Typ"/>
+    </element>
+  </define>
+  <define name="For">
+    <a:documentation>Universally quantified formula</a:documentation>
+    <element name="For">
+      <ref name="Typ"/>
+      <ref name="Formula"/>
+    </element>
+  </define>
+  <define name="And">
+    <a:documentation>Conjunctive formula</a:documentation>
+    <element name="And">
+      <zeroOrMore>
+        <ref name="Formula"/>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="Not">
+    <a:documentation>Negation</a:documentation>
+    <element name="Not">
+      <ref name="Formula"/>
+    </element>
+  </define>
+  <define name="Pred">
+    <a:documentation>Atomic predicate formulas - schematic, attributive and normal</a:documentation>
+    <element name="Pred">
+      <attribute name="kind">
+        <choice>
+          <value>P</value>
+          <value>V</value>
+          <value>R</value>
+        </choice>
+      </attribute>
+      <attribute name="nr">
+        <data type="integer"/>
+      </attribute>
+      <zeroOrMore>
+        <ref name="Term"/>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="PrivPred">
+    <a:documentation>Private predicate with arguments is a shorthand for another formula</a:documentation>
+    <element name="PrivPred">
+      <attribute name="nr">
+        <data type="integer"/>
+      </attribute>
+      <zeroOrMore>
+        <ref name="Term"/>
+      </zeroOrMore>
+      <ref name="Formula"/>
+    </element>
+  </define>
+  <define name="Verum">
+    <a:documentation>Verum (true formula)</a:documentation>
+    <element name="Verum">
+      <empty/>
+    </element>
+  </define>
+  <define name="ErrorFrm">
+    <a:documentation>Incorrect (erroneous formula) - e.g. containing undefined symbols</a:documentation>
+    <element name="ErrorFrm">
+      <empty/>
+    </element>
+  </define>
+  <define name="Formula">
+    <choice>
+      <ref name="Not"/>
+      <ref name="And"/>
+      <ref name="For"/>
+      <ref name="Pred"/>
+      <ref name="PrivPred"/>
+      <ref name="Is"/>
+      <ref name="Verum"/>
+      <ref name="ErrorFrm"/>
+    </choice>
+  </define>
+  <define name="Var">
+    <a:documentation>Normal bound variable (deBruijn index).
+Their types are given in quantification - see For, Fraenkel   </a:documentation>
+    <element name="Var">
+      <attribute name="nr">
+        <data type="integer"/>
+      </attribute>
+    </element>
+  </define>
+  <define name="LocusVar">
+    <a:documentation>Locus variable used usually for pattern matching.
+Their types are given elsewhere in data using them - see e.g. Constructor</a:documentation>
+    <element name="LocusVar">
+      <attribute name="nr">
+        <data type="integer"/>
+      </attribute>
+    </element>
+  </define>
+  <define name="FreeVar">
+    <a:documentation>Free variable - used only internally in checker</a:documentation>
+    <element name="FreeVar">
+      <attribute name="nr">
+        <data type="integer"/>
+      </attribute>
+    </element>
+  </define>
+  <define name="LambdaVar">
+    <a:documentation>Lambda variable - unused now</a:documentation>
+    <element name="LambdaVar">
+      <attribute name="nr">
+        <data type="integer"/>
+      </attribute>
+    </element>
+  </define>
+  <define name="Const">
+    <a:documentation>Normal local constant introduced e.g. by Let or Consider</a:documentation>
+    <element name="Const">
+      <attribute name="nr">
+        <data type="integer"/>
+      </attribute>
+    </element>
+  </define>
+  <define name="InfConst">
+    <a:documentation>Inference constant - used for internal term sharing</a:documentation>
+    <element name="InfConst">
+      <attribute name="nr">
+        <data type="integer"/>
+      </attribute>
+    </element>
+  </define>
+  <define name="Num">
+    <a:documentation>Numeral</a:documentation>
+    <element name="Num">
+      <attribute name="nr">
+        <data type="integer"/>
+      </attribute>
+    </element>
+  </define>
+  <define name="Func">
+    <a:documentation>Functor terms - schematic, aggregates, normal and selectors</a:documentation>
+    <element name="Func">
+      <attribute name="kind">
+        <choice>
+          <value>F</value>
+          <value>G</value>
+          <value>K</value>
+          <value>U</value>
+        </choice>
+      </attribute>
+      <attribute name="nr">
+        <data type="integer"/>
+      </attribute>
+      <zeroOrMore>
+        <ref name="Term"/>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="PrivFunc">
+    <a:documentation>Private functor with arguments is a shorthand for another term.
+The first (mandatory) term is the expansion, arguments follow.</a:documentation>
+    <element name="PrivFunc">
+      <attribute name="nr">
+        <data type="integer"/>
+      </attribute>
+      <oneOrMore>
+        <ref name="Term"/>
+      </oneOrMore>
+    </element>
+  </define>
+  <define name="Fraenkel">
+    <a:documentation>Fraenkel term is defined by the types of its lambda arguments,
+its lambda term and the separating formula.</a:documentation>
+    <element name="Fraenkel">
+      <zeroOrMore>
+        <ref name="Typ"/>
+      </zeroOrMore>
+      <ref name="Term"/>
+      <ref name="Formula"/>
+    </element>
+  </define>
+  <define name="QuaTrm">
+    <a:documentation>Qua terms capture the retyping term qua type construct,
+but they are probably no longer used on this level.</a:documentation>
+    <element name="QuaTrm">
+      <ref name="Term"/>
+      <ref name="Typ"/>
+    </element>
+  </define>
+  <define name="It">
+    <a:documentation>_It_ is a special term used in definitions.
+ Probably no longer used on this level.</a:documentation>
+    <element name="It">
+      <empty/>
+    </element>
+  </define>
+  <define name="ErrorTrm">
+    <a:documentation>Incorrect (erroneous term) - e.g. containing undefined symbols</a:documentation>
+    <element name="ErrorTrm">
+      <empty/>
+    </element>
+  </define>
+  <define name="Term">
+    <choice>
+      <ref name="Var"/>
+      <ref name="LocusVar"/>
+      <ref name="FreeVar"/>
+      <ref name="LambdaVar"/>
+      <ref name="Const"/>
+      <ref name="InfConst"/>
+      <ref name="Num"/>
+      <ref name="Func"/>
+      <ref name="PrivFunc"/>
+      <ref name="Fraenkel"/>
+      <ref name="QuaTrm"/>
+      <ref name="It"/>
+      <ref name="ErrorTrm"/>
+    </choice>
+  </define>
+  <define name="Position">
+    <attribute name="line">
+      <data type="integer"/>
+    </attribute>
+    <attribute name="col">
+      <data type="integer"/>
+    </attribute>
+  </define>
+  <define name="Proposition">
+    <a:documentation>Proposition is a sentence with position and possible label</a:documentation>
+    <element name="Proposition">
+      <ref name="Position"/>
+      <optional>
+        <attribute name="nr">
+          <data type="integer"/>
+        </attribute>
+      </optional>
+      <ref name="Formula"/>
+    </element>
+  </define>
+  <define name="ArgTypes">
+    <a:documentation>Argument types of constructors, patterns, clusters, etc.</a:documentation>
+    <element name="ArgTypes">
+      <zeroOrMore>
+        <ref name="Typ"/>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="ErrorCluster">
+    <a:documentation>This encodes error during cluster processing</a:documentation>
+    <element name="ErrorCluster">
+      <empty/>
+    </element>
+  </define>
+  <define name="RCluster">
+    <a:documentation>Existential (registration) cluster.
+This says that exists Typ with Cluster.</a:documentation>
+    <element name="RCluster">
+      <choice>
+        <ref name="ErrorCluster"/>
+        <group>
+          <ref name="ArgTypes"/>
+          <ref name="Typ"/>
+          <ref name="Cluster"/>
+        </group>
+      </choice>
+    </element>
+  </define>
+  <define name="CCluster">
+    <a:documentation>Conditional cluster.
+This says that Typ with the first cluster has also the second.</a:documentation>
+    <element name="CCluster">
+      <choice>
+        <ref name="ErrorCluster"/>
+        <group>
+          <ref name="ArgTypes"/>
+          <ref name="Cluster"/>
+          <ref name="Typ"/>
+          <ref name="Cluster"/>
+        </group>
+      </choice>
+    </element>
+  </define>
+  <define name="FCluster">
+    <a:documentation>Functor (term) cluster.
+This says that exists Term with Cluster.</a:documentation>
+    <element name="FCluster">
+      <choice>
+        <ref name="ErrorCluster"/>
+        <group>
+          <ref name="ArgTypes"/>
+          <ref name="Term"/>
+          <ref name="Cluster"/>
+        </group>
+      </choice>
+    </element>
+  </define>
+  <define name="Scheme">
+    <a:documentation>Schemes keep types of their second-order variables.
+First comes the scheme thesis, then the premises.   
+The article number and order in article can be given,
+otherwise it belongs to the current article and order is implicit.
+Optional aid attribute specifies article name.</a:documentation>
+    <element name="Scheme">
+      <optional>
+        <attribute name="articlenr">
+          <data type="integer"/>
+        </attribute>
+        <attribute name="nr">
+          <data type="integer"/>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="aid">
+          <data type="string"/>
+        </attribute>
+      </optional>
+      <ref name="ArgTypes"/>
+      <ref name="Formula"/>
+      <zeroOrMore>
+        <ref name="Formula"/>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="ArticleID">
+    <a:documentation>This is now only the unique name of an article.</a:documentation>
+    <element name="ArticleID">
+      <attribute name="name">
+        <data type="string"/>
+      </attribute>
+    </element>
+  </define>
+  <define name="Signature">
+    <a:documentation>Signature is a list of articles from which we import constructors.</a:documentation>
+    <element name="Signature">
+      <zeroOrMore>
+        <ref name="ArticleID"/>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="ConstrCounts">
+    <a:documentation>Constructor counts are used probably for renumerating.
+The article named can be given if not implicit.   
+This implementation might change in some time.</a:documentation>
+    <element name="ConstrCounts">
+      <optional>
+        <attribute name="name">
+          <data type="string"/>
+        </attribute>
+      </optional>
+      <zeroOrMore>
+        <element name="ConstrCount">
+          <attribute name="kind">
+            <choice>
+              <value>M</value>
+              <value>L</value>
+              <value>V</value>
+              <value>R</value>
+              <value>K</value>
+              <value>U</value>
+              <value>G</value>
+            </choice>
+          </attribute>
+          <attribute name="nr">
+            <data type="integer"/>
+          </attribute>
+        </element>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="Vocabularies">
+    <a:documentation>Vocabularies keep for each article its symbol numbers.
+This implementation might change in some time.</a:documentation>
+    <element name="Vocabularies">
+      <zeroOrMore>
+        <element name="Vocabulary">
+          <ref name="ArticleID"/>
+          <zeroOrMore>
+            <element name="SymbolCount">
+              <attribute name="kind">
+                <choice>
+                  <value>G</value>
+                  <value>K</value>
+                  <value>L</value>
+                  <value>M</value>
+                  <value>O</value>
+                  <value>R</value>
+                  <value>U</value>
+                  <value>V</value>
+                </choice>
+              </attribute>
+              <attribute name="nr">
+                <data type="integer"/>
+              </attribute>
+            </element>
+          </zeroOrMore>
+        </element>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="Int">
+    <a:documentation>Single integer</a:documentation>
+    <element name="Int">
+      <attribute name="x">
+        <data type="integer"/>
+      </attribute>
+    </element>
+  </define>
+  <define name="Pair">
+    <a:documentation>This is a pair of integers</a:documentation>
+    <element name="Pair">
+      <attribute name="x">
+        <data type="integer"/>
+      </attribute>
+      <attribute name="y">
+        <data type="integer"/>
+      </attribute>
+    </element>
+  </define>
+  <define name="StructLoci">
+    <a:documentation>Structural loci are not used yet (that is all I know about them).</a:documentation>
+    <element name="StructLoci">
+      <zeroOrMore>
+        <ref name="Pair"/>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="Fields">
+    <a:documentation>Specify numbers of fields of aggregates and structmodes.</a:documentation>
+    <element name="Fields">
+      <zeroOrMore>
+        <ref name="Int"/>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="Property">
+    <choice>
+      <element name="UnexpectedProp">
+        <empty/>
+      </element>
+      <element name="Symmetry">
+        <empty/>
+      </element>
+      <element name="Reflexivity">
+        <empty/>
+      </element>
+      <element name="Irreflexivity">
+        <empty/>
+      </element>
+      <element name="Associativity">
+        <empty/>
+      </element>
+      <element name="Transitivity">
+        <empty/>
+      </element>
+      <element name="Commutativity">
+        <empty/>
+      </element>
+      <element name="Connectedness">
+        <empty/>
+      </element>
+      <element name="Antisymmetry">
+        <empty/>
+      </element>
+      <element name="Idempotence">
+        <empty/>
+      </element>
+      <element name="Involutiveness">
+        <empty/>
+      </element>
+      <element name="Projectivity">
+        <empty/>
+      </element>
+      <element name="Abstractness">
+        <empty/>
+      </element>
+    </choice>
+  </define>
+  <define name="Properties">
+    <a:documentation>Properties of constructors; if some given, the first and the   
+second argument to which they apply must be specified.</a:documentation>
+    <element name="Properties">
+      <attribute name="propertyarg1">
+        <data type="integer"/>
+      </attribute>
+      <attribute name="propertyarg2">
+        <data type="integer"/>
+      </attribute>
+      <oneOrMore>
+        <ref name="Property"/>
+      </oneOrMore>
+    </element>
+  </define>
+  <define name="Constructor">
+    <a:documentation>Constructors are functors, predicates, attributes, etc.
+nr, kind and aid (article id) determine the constructor
+absolutely in MML, relnr optionally gives its serial number
+in environment for a particular article (it is not in prels).   
+All have  (possibly empty) properties, argtypes
+and some have one or more mother types.
+The optional final NatFunc are fields for agrregates and structmodes.
+aggregbase is for aggregates (maybe OVER-arguments),
+structmodeaggrnr is for structmodes (nr of corresponding aggregate)</a:documentation>
+    <element name="Constructor">
+      <attribute name="kind">
+        <choice>
+          <value>M</value>
+          <value>L</value>
+          <value>V</value>
+          <value>R</value>
+          <value>K</value>
+          <value>U</value>
+          <value>G</value>
+        </choice>
+      </attribute>
+      <attribute name="nr">
+        <data type="integer"/>
+      </attribute>
+      <attribute name="aid">
+        <data type="string"/>
+      </attribute>
+      <optional>
+        <attribute name="relnr">
+          <data type="integer"/>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="redefnr">
+          <data type="integer"/>
+        </attribute>
+        <attribute name="superfluous">
+          <data type="integer"/>
+        </attribute>
+      </optional>
+      <optional>
+        <choice>
+          <attribute name="structmodeaggrnr">
+            <data type="integer"/>
+          </attribute>
+          <attribute name="aggregbase">
+            <data type="integer"/>
+          </attribute>
+        </choice>
+      </optional>
+      <optional>
+        <ref name="Properties"/>
+      </optional>
+      <ref name="ArgTypes"/>
+      <optional>
+        <ref name="StructLoci"/>
+      </optional>
+      <zeroOrMore>
+        <ref name="Typ"/>
+      </zeroOrMore>
+      <optional>
+        <ref name="Fields"/>
+      </optional>
+    </element>
+  </define>
+  <define name="EndPosition">
+    <a:documentation>Ending position (e.g. of blocks).</a:documentation>
+    <element name="EndPosition">
+      <ref name="Position"/>
+    </element>
+  </define>
+  <define name="Pattern">
+    <a:documentation>Patterns map formats with argtypes to constructors.
+The format is either specified as a number (then it must
+be available in some table), or is given explicitely.
+Visible are indeces of visible (nonhidden) arguments.
+If antonymic, its constructor has to be negated. Mode patterns
+can have expansion instead of just a constructor - this might
+be done for other patterns too, or replaced by the _equals_
+mechanism. The J (forgetful functor) patterns are actually
+an example of another expanded patterns, but the expansion 
+is uniform for all of them, so it does not have to be given.
+The invalid ConstrKind J is now used for forgetful functors,
+this should be changed.   </a:documentation>
+    <element name="Pattern">
+      <attribute name="kind">
+        <choice>
+          <value>M</value>
+          <value>L</value>
+          <value>V</value>
+          <value>R</value>
+          <value>K</value>
+          <value>U</value>
+          <value>G</value>
+          <value>J</value>
+        </choice>
+      </attribute>
+      <choice>
+        <attribute name="formatnr">
+          <data type="integer"/>
+        </attribute>
+        <ref name="Format"/>
+      </choice>
+      <attribute name="constrkind">
+        <choice>
+          <value>M</value>
+          <value>L</value>
+          <value>V</value>
+          <value>R</value>
+          <value>K</value>
+          <value>U</value>
+          <value>G</value>
+          <value>J</value>
+        </choice>
+      </attribute>
+      <attribute name="constrnr">
+        <data type="integer"/>
+      </attribute>
+      <optional>
+        <attribute name="antonymic">
+          <data type="boolean"/>
+        </attribute>
+      </optional>
+      <ref name="ArgTypes"/>
+      <element name="Visible">
+        <zeroOrMore>
+          <ref name="Int"/>
+        </zeroOrMore>
+      </element>
+      <optional>
+        <element name="Expansion">
+          <ref name="Typ"/>
+        </element>
+      </optional>
+    </element>
+  </define>
+  <define name="Ref">
+    <a:documentation>Reference can be either private (coming from the current article)
+- their number is the position at the stack of accessible 
+references (so it is not unique), or library - these additionally
+contain their kind (theorem or definition) and article nr.
+The position in the inference is kept for error messaging.</a:documentation>
+    <element name="Ref">
+      <attribute name="nr">
+        <data type="integer"/>
+      </attribute>
+      <optional>
+        <attribute name="articlenr">
+          <data type="integer"/>
+        </attribute>
+        <attribute name="kind">
+          <choice>
+            <value>T</value>
+            <value>D</value>
+          </choice>
+        </attribute>
+      </optional>
+      <ref name="Position"/>
+    </element>
+  </define>
+  <define name="Inference">
+    <choice>
+      <ref name="By"/>
+      <ref name="From"/>
+      <element name="ErrorInf">
+        <empty/>
+      </element>
+    </choice>
+  </define>
+  <define name="By">
+    <a:documentation>By encodes one simple justification.</a:documentation>
+    <element name="By">
+      <ref name="Position"/>
+      <optional>
+        <attribute name="linked">
+          <data type="boolean"/>
+        </attribute>
+      </optional>
+      <zeroOrMore>
+        <ref name="Ref"/>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="From">
+    <a:documentation>From encodes one scheme justification, it cannot be linked.</a:documentation>
+    <element name="From">
+      <ref name="Position"/>
+      <attribute name="articlenr">
+        <data type="integer"/>
+      </attribute>
+      <attribute name="nr">
+        <data type="integer"/>
+      </attribute>
+      <zeroOrMore>
+        <ref name="Ref"/>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="IterStep">
+    <a:documentation>This is one step in an iterative equation.</a:documentation>
+    <element name="IterStep">
+      <ref name="Term"/>
+      <ref name="Inference"/>
+    </element>
+  </define>
+  <define name="Symbols">
+    <a:documentation>Local dictionary for an article.
+The symbol kinds still use very internal notation.   </a:documentation>
+    <optional>
+      <attribute name="aid">
+        <data type="string"/>
+      </attribute>
+    </optional>
+    <element name="Symbols">
+      <zeroOrMore>
+        <element name="Symbol">
+          <attribute name="kind">
+            <data type="string"/>
+          </attribute>
+          <attribute name="nr">
+            <data type="integer"/>
+          </attribute>
+          <attribute name="name">
+            <data type="integer"/>
+          </attribute>
+        </element>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="Article">
+    <a:documentation>The complete article after analyzer.
+aid specifies its name in uppercase.</a:documentation>
+    <element name="Article">
+      <attribute name="aid">
+        <data type="string"/>
+      </attribute>
+      <zeroOrMore>
+        <choice>
+          <ref name="DefinitionBlock"/>
+          <ref name="RegistrationBlock"/>
+          <ref name="NotationBlock"/>
+          <ref name="Reservation"/>
+          <ref name="SchemeBlock"/>
+          <ref name="JustifiedTheorem"/>
+          <ref name="DefTheorem"/>
+          <ref name="Definiens"/>
+          <ref name="Canceled"/>
+          <ref name="Pattern"/>
+          <ref name="AuxiliaryItem"/>
+        </choice>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="ThesisExpansions">
+    <a:documentation>Numbers of Definiens used in expanding the thesis,
+together with their counts.</a:documentation>
+    <element name="ThesisExpansions">
+      <zeroOrMore>
+        <ref name="Pair"/>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="Let">
+    <a:documentation>Introduction of local constants, the numbering is automatic,
+so only types are needed.
+For easier presentation, nr optionally contains the number   
+of the first local constant created here.</a:documentation>
+    <element name="Let">
+      <optional>
+        <attribute name="nr">
+          <data type="integer"/>
+        </attribute>
+      </optional>
+      <oneOrMore>
+        <ref name="Typ"/>
+      </oneOrMore>
+    </element>
+  </define>
+  <define name="Assume">
+    <a:documentation>One assumption may consist of several propositions.</a:documentation>
+    <element name="Assume">
+      <oneOrMore>
+        <ref name="Proposition"/>
+      </oneOrMore>
+    </element>
+  </define>
+  <define name="Given">
+    <a:documentation>This is existential assumption, it may be used when the normal
+assumption starts with existential quantifier. In that case,
+the existential variables are introduced as local constants.
+For easier presentation, nr optionally contains the number   
+of the first local constant created here.   </a:documentation>
+    <element name="Given">
+      <optional>
+        <attribute name="nr">
+          <data type="integer"/>
+        </attribute>
+      </optional>
+      <oneOrMore>
+        <ref name="Typ"/>
+      </oneOrMore>
+      <oneOrMore>
+        <ref name="Proposition"/>
+      </oneOrMore>
+    </element>
+  </define>
+  <define name="Take">
+    <a:documentation>Take without equality. This does not introduce a new local constant,
+just changes the thesis.</a:documentation>
+    <element name="Take">
+      <ref name="Term"/>
+    </element>
+  </define>
+  <define name="TakeAsVar">
+    <a:documentation>Take with equality. This introduces a new local constant, 
+whose type is given here.
+For easier presentation, nr optionally contains the number   
+of the first local constant created here.      </a:documentation>
+    <element name="TakeAsVar">
+      <optional>
+        <attribute name="nr">
+          <data type="integer"/>
+        </attribute>
+      </optional>
+      <ref name="Typ"/>
+      <ref name="Term"/>
+    </element>
+  </define>
+  <define name="Conclusion">
+    <a:documentation>Justified conclusion. In text, this can appear as _hence_,
+_thus_ or _hereby_ (which starts diffuse conclusion).</a:documentation>
+    <element name="Conclusion">
+      <ref name="JustifiedProposition"/>
+    </element>
+  </define>
+  <define name="Consider">
+    <a:documentation>First comes the reconstructed existential statement
+and its justification, then the new local constants
+and zero or more propositions about them.
+For easier presentation, nr optionally contains the number   
+of the first local constant created here.      </a:documentation>
+    <element name="Consider">
+      <optional>
+        <attribute name="nr">
+          <data type="integer"/>
+        </attribute>
+      </optional>
+      <ref name="Proposition"/>
+      <ref name="Justification"/>
+      <oneOrMore>
+        <ref name="Typ"/>
+      </oneOrMore>
+      <zeroOrMore>
+        <ref name="Proposition"/>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="Reconsider">
+    <a:documentation>First comes the target type, then the reconsidered terms.
+For all these terms a new local variable with the target type 
+is created, and its equality to the corresponding term is remembered.
+Finally the proposition about the typing is given and justified.
+For easier presentation, nr optionally contains the number   
+of the first local constant created here.   </a:documentation>
+    <element name="Reconsider">
+      <optional>
+        <attribute name="nr">
+          <data type="integer"/>
+        </attribute>
+      </optional>
+      <ref name="Typ"/>
+      <oneOrMore>
+        <ref name="Term"/>
+      </oneOrMore>
+      <ref name="Proposition"/>
+      <ref name="Justification"/>
+    </element>
+  </define>
+  <define name="Set">
+    <a:documentation>This is e.g.: set a = f(b); . The type of the new local constant
+is given. This local constant is now always expanded to its
+definition, and should not directly appear in any expression,
+but it is now needed for some implementation reasons.
+For easier presentation, nr optionally contains the number   
+of the first local constant created here.      </a:documentation>
+    <element name="Set">
+      <optional>
+        <attribute name="nr">
+          <data type="integer"/>
+        </attribute>
+      </optional>
+      <ref name="Term"/>
+      <ref name="Typ"/>
+    </element>
+  </define>
+  <define name="DefFunc">
+    <a:documentation>Private functor. First come the types of arguments, then
+its definition and the result type.</a:documentation>
+    <element name="DefFunc">
+      <ref name="ArgTypes"/>
+      <ref name="Term"/>
+      <ref name="Typ"/>
+    </element>
+  </define>
+  <define name="DefPred">
+    <a:documentation>Private predicate. First come the types of arguments, then
+its definition.</a:documentation>
+    <element name="DefPred">
+      <ref name="ArgTypes"/>
+      <ref name="Formula"/>
+    </element>
+  </define>
+  <define name="Thesis">
+    <a:documentation>The changed thesis is printed after skeleton items in proofs,
+together with the numbers of definientia used for its expansion.</a:documentation>
+    <element name="Thesis">
+      <ref name="Formula"/>
+      <ref name="ThesisExpansions"/>
+    </element>
+  </define>
+  <define name="Case">
+    <a:documentation>Case of one or more propositions.</a:documentation>
+    <element name="Case">
+      <oneOrMore>
+        <ref name="Proposition"/>
+      </oneOrMore>
+    </element>
+  </define>
+  <define name="Suppose">
+    <a:documentation>Supposition of one or more propositions.</a:documentation>
+    <element name="Suppose">
+      <oneOrMore>
+        <ref name="Proposition"/>
+      </oneOrMore>
+    </element>
+  </define>
+  <define name="BlockThesis">
+    <a:documentation>The block thesis is printed for proofs in the beginning and
+for diffuse reasoning in the end.</a:documentation>
+    <element name="BlockThesis">
+      <ref name="Formula"/>
+    </element>
+  </define>
+  <define name="CaseBlock">
+    <a:documentation>Block starting with one case, the direct and diffuse version
+(this depends on the kind of its parent block).
+The block thesis is printed for proofs in the beginning and
+for diffuse reasoning in the end.</a:documentation>
+    <element name="CaseBlock">
+      <ref name="Position"/>
+      <choice>
+        <group>
+          <ref name="BlockThesis"/>
+          <ref name="Case"/>
+          <ref name="Thesis"/>
+          <ref name="Reasoning"/>
+        </group>
+        <group>
+          <ref name="Case"/>
+          <ref name="Reasoning"/>
+          <ref name="BlockThesis"/>
+        </group>
+      </choice>
+    </element>
+  </define>
+  <define name="SupposeBlock">
+    <a:documentation>Block starting with one supposition, the direct and diffuse version
+(this depends on the kind of its parent block).
+The block thesis is printed for proofs in the beginning and
+for diffuse reasoning in the end.</a:documentation>
+    <element name="SupposeBlock">
+      <ref name="Position"/>
+      <choice>
+        <group>
+          <ref name="BlockThesis"/>
+          <ref name="Suppose"/>
+          <ref name="Thesis"/>
+          <ref name="Reasoning"/>
+        </group>
+        <group>
+          <ref name="Suppose"/>
+          <ref name="Reasoning"/>
+          <ref name="BlockThesis"/>
+        </group>
+      </choice>
+    </element>
+  </define>
+  <define name="SkippedProof">
+    <a:documentation>This means that the author has skipped the proof.
+Articles with such items are not yet fully completed.</a:documentation>
+    <element name="SkippedProof">
+      <empty/>
+    </element>
+  </define>
+  <define name="PerCases">
+    <a:documentation>This justifies the case split (the disjunction of all Suppose 
+or Case items in direct subblocks) in PerCasesReasoning.
+The case split is only known after all subblocks are known,
+so this is the last item in its block, not like in the Mizar text.</a:documentation>
+    <element name="PerCases">
+      <ref name="Proposition"/>
+      <ref name="Inference"/>
+    </element>
+  </define>
+  <define name="PerCasesReasoning">
+    <a:documentation>Reasoning per cases. It only contains CaseBlock or 
+SupposeBlock subblocks, with the exception of the mandatory 
+last PerCases justifying the case split.
+Direct and diffuse versions are possible
+(this depends on the kind of its parent block).
+The block thesis is printed for proofs in the beginning and
+for diffuse reasoning in the end.</a:documentation>
+    <element name="PerCasesReasoning">
+      <ref name="Position"/>
+      <choice>
+        <group>
+          <ref name="BlockThesis"/>
+          <choice>
+            <oneOrMore>
+              <ref name="CaseBlock"/>
+            </oneOrMore>
+            <oneOrMore>
+              <ref name="SupposeBlock"/>
+            </oneOrMore>
+          </choice>
+          <ref name="PerCases"/>
+          <ref name="Thesis"/>
+          <ref name="EndPosition"/>
+        </group>
+        <group>
+          <choice>
+            <oneOrMore>
+              <ref name="CaseBlock"/>
+            </oneOrMore>
+            <oneOrMore>
+              <ref name="SupposeBlock"/>
+            </oneOrMore>
+          </choice>
+          <ref name="PerCases"/>
+          <ref name="EndPosition"/>
+          <ref name="BlockThesis"/>
+        </group>
+      </choice>
+    </element>
+  </define>
+  <define name="SkeletonItem">
+    <a:documentation>Skeleton items change the current thesis, for Proof the
+changed Thesis together with used expansions is printed
+explicitely after them.   
+PerCasesReasoning is not included here.</a:documentation>
+    <choice>
+      <ref name="Let"/>
+      <ref name="Conclusion"/>
+      <ref name="Assume"/>
+      <ref name="Given"/>
+      <ref name="Take"/>
+      <ref name="TakeAsVar"/>
+    </choice>
+    <optional>
+      <ref name="Thesis"/>
+    </optional>
+  </define>
+  <define name="Reasoning">
+    <a:documentation>Reasoning is a series of skeleton and auxiliary items,
+finished by optional per cases reasoning.</a:documentation>
+    <zeroOrMore>
+      <choice>
+        <ref name="SkeletonItem"/>
+        <ref name="AuxiliaryItem"/>
+      </choice>
+    </zeroOrMore>
+    <optional>
+      <ref name="PerCasesReasoning"/>
+    </optional>
+    <ref name="EndPosition"/>
+  </define>
+  <define name="Proof">
+    <a:documentation>Direct proof of some proposition (which is the proof's thesis).
+Label (nr) of proof (if any) is label of its thesis.</a:documentation>
+    <element name="Proof">
+      <optional>
+        <attribute name="nr">
+          <data type="integer"/>
+        </attribute>
+      </optional>
+      <ref name="Position"/>
+      <ref name="BlockThesis"/>
+      <ref name="Reasoning"/>
+    </element>
+  </define>
+  <define name="Now">
+    <a:documentation>Diffuse statement - its thesis is reconstructed in the end.
+Label (nr) of diffuse statement (if any) is label of its thesis.</a:documentation>
+    <element name="Now">
+      <optional>
+        <attribute name="nr">
+          <data type="integer"/>
+        </attribute>
+      </optional>
+      <ref name="Position"/>
+      <ref name="Reasoning"/>
+      <ref name="BlockThesis"/>
+    </element>
+  </define>
+  <define name="Justification">
+    <a:documentation>Direct justification.   </a:documentation>
+    <choice>
+      <ref name="Inference"/>
+      <ref name="Proof"/>
+      <ref name="SkippedProof"/>
+    </choice>
+  </define>
+  <define name="IterEquality">
+    <a:documentation>Iterative equality. The ptional number is label.</a:documentation>
+    <element name="IterEquality">
+      <optional>
+        <attribute name="nr">
+          <data type="integer"/>
+        </attribute>
+      </optional>
+      <ref name="Position"/>
+      <ref name="Term"/>
+      <oneOrMore>
+        <ref name="IterStep"/>
+      </oneOrMore>
+    </element>
+  </define>
+  <define name="JustifiedProposition">
+    <choice>
+      <ref name="Now"/>
+      <ref name="IterEquality"/>
+      <group>
+        <ref name="Proposition"/>
+        <ref name="Justification"/>
+      </group>
+    </choice>
+  </define>
+  <define name="AuxiliaryItem">
+    <a:documentation>Auxiliary items are items which do not change thesis.</a:documentation>
+    <choice>
+      <ref name="JustifiedProposition"/>
+      <ref name="Consider"/>
+      <ref name="Set"/>
+      <ref name="Reconsider"/>
+      <ref name="DefFunc"/>
+      <ref name="DefPred"/>
+    </choice>
+  </define>
+  <define name="Reservation">
+    <a:documentation>Reservation of a new variable for a type.</a:documentation>
+    <element name="Reservation">
+      <ref name="Typ"/>
+    </element>
+  </define>
+  <define name="JustifiedTheorem">
+    <a:documentation>Theorem as a proposition with justification.</a:documentation>
+    <element name="JustifiedTheorem">
+      <ref name="Proposition"/>
+      <ref name="Justification"/>
+    </element>
+  </define>
+  <define name="DefTheorem">
+    <a:documentation>Theorems created from definitions are now printed
+as separate top-level items after definitional blocks,</a:documentation>
+    <element name="DefTheorem">
+      <ref name="Proposition"/>
+    </element>
+  </define>
+  <define name="JustifiedProperty">
+    <a:documentation>A property of a constructor, the proposition expreesing it,
+and its justification.</a:documentation>
+    <element name="JustifiedProperty">
+      <ref name="Property"/>
+      <ref name="Proposition"/>
+      <ref name="Justification"/>
+    </element>
+  </define>
+  <define name="CorrectnessCondition">
+    <a:documentation>The possible correctness conditions are following.
+They can either be only stated in the Correctness,
+which conjugates them and proves them all, or come
+separately as a proposition with a justification.</a:documentation>
+    <choice>
+      <ref name="UnknownCorrCond"/>
+      <ref name="Coherence"/>
+      <ref name="Compatibility"/>
+      <ref name="Consistency"/>
+      <ref name="Existence"/>
+      <ref name="Uniqueness"/>
+    </choice>
+  </define>
+  <define name="UnknownCorrCond">
+    <element name="UnknownCorrCond">
+      <choice>
+        <ref name="Formula"/>
+        <group>
+          <ref name="Proposition"/>
+          <ref name="Justification"/>
+        </group>
+      </choice>
+    </element>
+  </define>
+  <define name="Coherence">
+    <element name="Coherence">
+      <choice>
+        <ref name="Formula"/>
+        <group>
+          <ref name="Proposition"/>
+          <ref name="Justification"/>
+        </group>
+      </choice>
+    </element>
+  </define>
+  <define name="Compatibility">
+    <element name="Compatibility">
+      <choice>
+        <ref name="Formula"/>
+        <group>
+          <ref name="Proposition"/>
+          <ref name="Justification"/>
+        </group>
+      </choice>
+    </element>
+  </define>
+  <define name="Consistency">
+    <element name="Consistency">
+      <choice>
+        <ref name="Formula"/>
+        <group>
+          <ref name="Proposition"/>
+          <ref name="Justification"/>
+        </group>
+      </choice>
+    </element>
+  </define>
+  <define name="Existence">
+    <element name="Existence">
+      <choice>
+        <ref name="Formula"/>
+        <group>
+          <ref name="Proposition"/>
+          <ref name="Justification"/>
+        </group>
+      </choice>
+    </element>
+  </define>
+  <define name="Uniqueness">
+    <element name="Uniqueness">
+      <choice>
+        <ref name="Formula"/>
+        <group>
+          <ref name="Proposition"/>
+          <ref name="Justification"/>
+        </group>
+      </choice>
+    </element>
+  </define>
+  <define name="Correctness">
+    <a:documentation>This is a way how to state all correctness conditions in one keyword.
+The relevant conditions are computed by the analyzer and printed
+here, their conjunction has to be justified.</a:documentation>
+    <element name="Correctness">
+      <zeroOrMore>
+        <ref name="CorrectnessCondition"/>
+      </zeroOrMore>
+      <ref name="Proposition"/>
+      <ref name="Justification"/>
+    </element>
+  </define>
+  <define name="Canceled">
+    <a:documentation>Canceled theorem ( if on top-level), definition or registration
+(if inside such blocks). We should add to this the number
+of canceled items as an attribute.</a:documentation>
+    <element name="Canceled">
+      <empty/>
+    </element>
+  </define>
+  <define name="SchemeFuncDecl">
+    <a:documentation>Declaration of a scheme functor.</a:documentation>
+    <element name="SchemeFuncDecl">
+      <attribute name="nr">
+        <data type="integer"/>
+      </attribute>
+      <ref name="ArgTypes"/>
+      <ref name="Typ"/>
+    </element>
+  </define>
+  <define name="SchemePredDecl">
+    <a:documentation>Declaration of a scheme predicate.</a:documentation>
+    <element name="SchemePredDecl">
+      <attribute name="nr">
+        <data type="integer"/>
+      </attribute>
+      <ref name="ArgTypes"/>
+    </element>
+  </define>
+  <define name="SchemeBlock">
+    <a:documentation>Scheme blocks are used for declaring the types of second-order
+variables appearing in a scheme, and for its justification.
+This could be a bit unified with Scheme later.</a:documentation>
+    <element name="SchemeBlock">
+      <attribute name="schemenr">
+        <data type="integer"/>
+      </attribute>
+      <ref name="Position"/>
+      <zeroOrMore>
+        <choice>
+          <ref name="SchemeFuncDecl"/>
+          <ref name="SchemePredDecl"/>
+        </choice>
+      </zeroOrMore>
+      <element name="SchemePremises">
+        <zeroOrMore>
+          <ref name="Proposition"/>
+        </zeroOrMore>
+      </element>
+      <ref name="Proposition"/>
+      <ref name="Justification"/>
+      <ref name="EndPosition"/>
+    </element>
+  </define>
+  <define name="Definition">
+    <a:documentation>Definition of a functor, predicate, mode, attribute or structure.
+with optional label, properties and correctness conditions.
+Sometimes no constructor is created (e.g. for expandable modes).   
+The second optional form creating three or more constructors
+is for structure definitions, which define the aggregate functor,
+the structure mode, the strict attribute and zero or more selectors.
+If any definientia and definitional theorems are created,
+they follow immediately after the enclosing definitional block
+(this might be changed in the future).      </a:documentation>
+    <element name="Definition">
+      <attribute name="kind">
+        <choice>
+          <value>M</value>
+          <value>V</value>
+          <value>R</value>
+          <value>K</value>
+          <value>G</value>
+        </choice>
+      </attribute>
+      <optional>
+        <attribute name="redefinition">
+          <data type="boolean"/>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="expandable">
+          <data type="boolean"/>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="nr">
+          <data type="integer"/>
+        </attribute>
+        <ref name="Position"/>
+      </optional>
+      <choice>
+        <group>
+          <zeroOrMore>
+            <ref name="CorrectnessCondition"/>
+          </zeroOrMore>
+          <optional>
+            <ref name="Correctness"/>
+          </optional>
+          <zeroOrMore>
+            <ref name="JustifiedProperty"/>
+          </zeroOrMore>
+          <optional>
+            <ref name="Constructor"/>
+          </optional>
+        </group>
+        <group>
+          <ref name="Constructor"/>
+          <ref name="Constructor"/>
+          <oneOrMore>
+            <ref name="Constructor"/>
+          </oneOrMore>
+          <zeroOrMore>
+            <ref name="CorrectnessCondition"/>
+          </zeroOrMore>
+          <optional>
+            <ref name="Correctness"/>
+          </optional>
+        </group>
+      </choice>
+    </element>
+  </define>
+  <define name="DefinitionBlock">
+    <a:documentation>A block of one or more (possibly canceled) (re)definitions,
+possibly with assumptions. If any definientia and 
+definitional theorems are created, they follow immediately 
+after this block.   </a:documentation>
+    <element name="DefinitionBlock">
+      <ref name="Position"/>
+      <zeroOrMore>
+        <choice>
+          <ref name="Let"/>
+          <ref name="Assume"/>
+          <ref name="Given"/>
+          <ref name="AuxiliaryItem"/>
+          <ref name="Canceled"/>
+          <ref name="Definition"/>
+        </choice>
+      </zeroOrMore>
+      <ref name="EndPosition"/>
+    </element>
+  </define>
+  <define name="Registration">
+    <a:documentation>One justified cluster registration. The correctness conditions
+could be made more specific for each.</a:documentation>
+    <element name="Registration">
+      <choice>
+        <ref name="RCluster"/>
+        <ref name="FCluster"/>
+        <ref name="CCluster"/>
+      </choice>
+      <zeroOrMore>
+        <ref name="CorrectnessCondition"/>
+      </zeroOrMore>
+      <optional>
+        <ref name="Correctness"/>
+      </optional>
+    </element>
+  </define>
+  <define name="RegistrationBlock">
+    <a:documentation>Block of cluster registrations.
+</a:documentation>
+    <element name="RegistrationBlock">
+      <ref name="Position"/>
+      <oneOrMore>
+        <choice>
+          <ref name="Let"/>
+          <ref name="AuxiliaryItem"/>
+          <ref name="Registration"/>
+          <ref name="Canceled"/>
+        </choice>
+      </oneOrMore>
+      <ref name="EndPosition"/>
+    </element>
+  </define>
+  <define name="NotationBlock">
+    <a:documentation>Block of synonyms or antonyms. The patterns are
+semantically irrelevant and are not printed yet - fix this.</a:documentation>
+    <element name="NotationBlock">
+      <ref name="Position"/>
+      <zeroOrMore>
+        <choice>
+          <ref name="Let"/>
+          <ref name="AuxiliaryItem"/>
+        </choice>
+      </zeroOrMore>
+      <ref name="EndPosition"/>
+    </element>
+  </define>
+</grammar>

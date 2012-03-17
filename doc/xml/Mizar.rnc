@@ -1,0 +1,903 @@
+
+## Constructors, either imported from other articles ( after accommodation)
+## - the signature is implicit in that case, or exported from the current 
+## article - then the signature has to be specified.
+## aid optionally specifies its article's name in uppercase.      
+Constructors = 
+ element Constructors { 
+   attribute aid { xsd:string }?,
+   ( element SignatureWithCounts { ConstrCounts* }
+   | ( Signature, ConstrCounts ) )?,
+   Constructor*
+   }
+
+## Notations, either imported from other articles ( after accommodation)
+## - the signature is implicit in that case, or exported from the current 
+## article - then the signature and vocabularies have to be specified.
+## aid optionally specifies article's name in uppercase.   
+Notations = 
+ element Notations {
+   attribute aid { xsd:string }?,
+   (Signature, Vocabularies)?, Pattern* }
+
+## Registrations, either imported from other articles ( after accommodation)
+## - the signature is implicit in that case, or exported from the current 
+## article - then the signature has to be specified.
+## aid optionally specifies its article's name in uppercase.   
+Registrations = 
+ element Registrations {
+   attribute aid { xsd:string }?,
+   Signature?,
+   ( RCluster | CCluster | FCluster )*
+   }
+
+## Definientia, either imported from other articles ( after accommodation)
+## - the signature is implicit in that case, or exported from the current 
+## article - then the signature has to be specified.
+## aid optionally specifies article's name in uppercase.
+Definientia = 
+ element Definientia {
+   attribute aid { xsd:string }?,
+   Signature?, Definiens* }
+
+## Theorems, either imported from other articles ( after accommodation)
+## - the signature is implicit in that case, or exported from the current 
+## article - then the signature has to be specified.
+## They can be either ordinary or definitional.   
+## The article number and order in article can be given,
+## otherwise it belongs to the current article and order is implicit.
+## Optional aid attribute specifies article name.
+Theorems = 
+ element Theorems { 
+   attribute aid { xsd:string }?,
+   Signature?,
+   element Theorem {
+   ( attribute articlenr { xsd:integer },
+     attribute nr { xsd:integer } )?,
+    attribute aid { xsd:string }?,
+    attribute kind { 'T' | 'D' },
+    Formula
+   }*
+ }
+
+## Schemes, either imported from other articles ( after accommodation)
+## - the signature is implicit in that case, or exported from the current 
+## article - then the signature has to be specified.
+## aid optionally specifies article's name in uppercase.
+Schemes = 
+ element Schemes {
+   attribute aid { xsd:string }?,
+   Signature?, Scheme* }
+
+## Format keeps the kind of a given symbol and arities.
+## For bracket formats (K) this keeps both symbols.   
+## Optionally a nr (of the format) is kept, to which patterns may refer,
+## This implementation might change in some time.
+Format = 
+ element Format {
+   attribute kind {'G'|'K'|'J'|'L'|'M'|'O'|'R'|'U'|'V'},
+   attribute nr { xsd:integer }?,
+   attribute symbolnr { xsd:integer },
+   attribute argnr { xsd:integer },
+   attribute leftargnr { xsd:integer }?,
+   attribute rightsymbolnr { xsd:integer }?
+ }
+
+## Format info contains symbol formats and priorities.
+## Priorities are used only for functor symbols.
+## This implementation might change in some time.
+Formats = 
+ element Formats {
+   Format*,
+   element Priority { 
+    attribute kind { 'O' | 'K' | 'L' },
+    attribute symbolnr { xsd:integer },
+    attribute value { xsd:integer }
+   }*
+ }
+
+## DefMeaning consists of the formulas and terms defining a constructor.
+## It can be either defined by _equals_ (terms) or
+## by _means_ (formulas). It may contain several
+## partial (case) definitions - first in them comes the
+## definition (term or formula) valid in that case and second comes
+## the case formula. The final term or formula specifies the default
+## case, it is mandatory if no partial definitions are given.
+## If no default is given, the disjunction of all case formulas must 
+## be true (this have to be proved using the _consistency_ condition).
+DefMeaning =   
+ element DefMeaning {
+   attribute kind { 'e' | 'm' },
+   element PartialDef { ( Formula | Term ), Formula }*,
+   (Formula | Term)?
+ }
+
+## Definiens of a constructor. This overlaps a bit with Constructor.
+## First come the argument types and possibly also the result type.
+## The optional formula is conjunction of all assumptions if any given.
+## If this is a redefinition, essentials are indeces of arguments
+## corresponding to the arguments of original, otherwise it is just
+## identity. This could be now encode with just one number like the
+## superfluous does for Constructor.
+Definiens =
+ element Definiens {
+   attribute constrkind { 'M' | 'L' | 'V' | 'R' | 'K' | 'U' | 'G' },
+   attribute constrnr { xsd:integer},
+   Typ*,
+   element Essentials { Int*},
+   Formula?,
+   DefMeaning
+  }
+
+## Requirements (now only the exported form).
+## The second number specifies the requirement -
+## this could be changed to enumerated types for better understanding.
+Requirements = 
+ element Requirements {
+   Signature,
+   element Requirement {
+    attribute constrkind { 'M' | 'L' | 'V' | 'R' | 'K' | 'U' | 'G' },
+    attribute constrnr { xsd:integer },
+    attribute nr { xsd:integer }
+   }*
+ }
+
+## Adjective is a possibly negated (and paramaterized) attribute
+Adjective =
+ element Adjective {
+   attribute nr { xsd:integer },
+   attribute value { xsd:boolean }?,
+   Term*
+ }
+
+## Cluster of adjectives
+Cluster =   
+ element Cluster {
+   Adjective*
+}
+
+## Parameterized type - either mode or structure
+## First goes the LowerCluster, than UpperCluster
+Typ =
+ element Typ {
+   attribute kind { "M" | "G" | "errortyp" },
+   attribute nr { xsd:integer }?,
+   Cluster*,
+   Term*
+ }
+
+## Qualification formula (claims that a term has certaing type)
+Is =
+ element Is {
+   Term, Typ
+ }
+
+## Universally quantified formula
+For =
+ element For {
+   Typ, Formula
+ }
+
+## Conjunctive formula
+And =
+ element And {
+   Formula*
+ }
+
+## Negation
+Not =
+ element Not {
+   Formula
+ }
+
+## Atomic predicate formulas - schematic, attributive and normal
+Pred =
+ element Pred {
+   attribute kind { "P" | "V" | "R" },
+   attribute nr { xsd:integer },
+   Term*
+ }
+
+## Private predicate with arguments is a shorthand for another formula
+PrivPred =
+ element PrivPred {
+   attribute nr { xsd:integer },
+   Term*,
+   Formula
+ }
+
+## Verum (true formula)
+Verum =
+ element Verum { empty }
+      
+## Incorrect (erroneous formula) - e.g. containing undefined symbols
+ErrorFrm =
+ element ErrorFrm { empty }
+
+Formula =
+   ( Not | And | For | Pred | PrivPred | Is
+   | Verum | ErrorFrm )
+
+## Normal bound variable (deBruijn index).
+## Their types are given in quantification - see For, Fraenkel   
+Var =
+ element Var { attribute nr { xsd:integer } }
+   
+## Locus variable used usually for pattern matching.
+## Their types are given elsewhere in data using them - see e.g. Constructor
+LocusVar =
+ element LocusVar { attribute nr { xsd:integer } }
+   
+## Free variable - used only internally in checker
+FreeVar =
+ element FreeVar { attribute nr { xsd:integer } }
+   
+## Lambda variable - unused now
+LambdaVar =
+ element LambdaVar { attribute nr { xsd:integer } }
+   
+## Normal local constant introduced e.g. by Let or Consider
+Const =
+ element Const { attribute nr { xsd:integer } }
+   
+## Inference constant - used for internal term sharing
+InfConst =
+ element InfConst { attribute nr { xsd:integer } }
+   
+## Numeral
+Num =
+ element Num { attribute nr { xsd:integer } }
+
+## Functor terms - schematic, aggregates, normal and selectors
+Func =
+ element Func {
+   attribute kind { "F" | "G" | "K" | "U" },
+   attribute nr { xsd:integer },
+   Term*
+ }
+
+## Private functor with arguments is a shorthand for another term.
+## The first (mandatory) term is the expansion, arguments follow.
+PrivFunc =
+ element PrivFunc {
+   attribute nr { xsd:integer },
+   Term+
+ }
+
+## Fraenkel term is defined by the types of its lambda arguments,
+## its lambda term and the separating formula.
+Fraenkel =
+ element Fraenkel {
+   Typ*, Term, Formula
+ }
+
+## Qua terms capture the retyping term qua type construct,
+## but they are probably no longer used on this level.
+QuaTrm =
+ element QuaTrm {
+   Term, Typ
+ }
+
+## _It_ is a special term used in definitions.
+##  Probably no longer used on this level.
+It =
+ element It { empty }
+   
+## Incorrect (erroneous term) - e.g. containing undefined symbols
+ErrorTrm =
+ element ErrorTrm { empty }   
+
+Term =
+   ( Var | LocusVar | FreeVar | LambdaVar
+   | Const | InfConst | Num
+   | Func | PrivFunc | Fraenkel
+   | QuaTrm | It | ErrorTrm)
+
+Position = 
+   attribute line { xsd:integer},
+   attribute col { xsd:integer}
+
+## Proposition is a sentence with position and possible label
+Proposition =
+ element Proposition {
+   Position,
+   attribute nr { xsd:integer}?,
+   Formula
+ }
+
+## Argument types of constructors, patterns, clusters, etc.
+ArgTypes =   
+ element ArgTypes { Typ* }
+
+## This encodes error during cluster processing
+ErrorCluster =   
+ element ErrorCluster { empty }   
+   
+## Existential (registration) cluster.
+## This says that exists Typ with Cluster.
+RCluster =   
+ element RCluster {
+   ErrorCluster | (ArgTypes, Typ, Cluster)
+   }
+
+## Conditional cluster.
+## This says that Typ with the first cluster has also the second.
+CCluster =   
+ element CCluster {
+   ErrorCluster | (ArgTypes, Cluster, Typ, Cluster)
+   }
+
+## Functor (term) cluster.
+## This says that exists Term with Cluster.
+FCluster =   
+ element FCluster {
+   ErrorCluster | (ArgTypes, Term, Cluster)
+   }
+
+## Schemes keep types of their second-order variables.
+## First comes the scheme thesis, then the premises.   
+## The article number and order in article can be given,
+## otherwise it belongs to the current article and order is implicit.
+## Optional aid attribute specifies article name.
+Scheme =   
+ element Scheme {
+   ( attribute articlenr { xsd:integer },
+     attribute nr { xsd:integer } )?,
+   attribute aid { xsd:string }?,
+   ArgTypes, Formula, Formula*
+   }
+
+## This is now only the unique name of an article.
+ArticleID =   
+ element ArticleID { 
+    attribute name { xsd:string }
+   }
+
+## Signature is a list of articles from which we import constructors.
+Signature =   
+ element Signature { ArticleID* }
+
+## Constructor counts are used probably for renumerating.
+## The article named can be given if not implicit.   
+## This implementation might change in some time.
+ConstrCounts = 
+ element ConstrCounts {
+   attribute name { xsd:string }?,
+   element ConstrCount {
+    attribute kind { 'M' | 'L' | 'V' | 'R' | 'K' | 'U' | 'G' },
+    attribute nr { xsd:integer }
+   }*
+  }   
+
+## Vocabularies keep for each article its symbol numbers.
+## This implementation might change in some time.
+Vocabularies = 
+ element Vocabularies {
+   element Vocabulary {
+    ArticleID,
+    element SymbolCount {
+     attribute kind {'G'|'K'|'L'|'M'|'O'|'R'|'U'|'V'},
+     attribute nr { xsd:integer }
+    }*
+   }*
+  }
+
+## Single integer
+Int =
+ element Int {
+   attribute x { xsd:integer }
+  }
+
+## This is a pair of integers
+Pair =
+ element Pair {
+   attribute x { xsd:integer },
+   attribute y { xsd:integer }
+  }
+   
+## Structural loci are not used yet (that is all I know about them).
+StructLoci = 
+ element StructLoci { Pair* }
+
+## Specify numbers of fields of aggregates and structmodes.
+Fields = 
+ element Fields { Int* }
+   
+Property = 
+   ( element UnexpectedProp { empty }
+   | element Symmetry { empty }
+   | element Reflexivity { empty }
+   | element Irreflexivity { empty }
+   | element Associativity { empty }
+   | element Transitivity { empty }
+   | element Commutativity { empty }
+   | element Connectedness { empty }
+   | element Antisymmetry { empty }
+   | element Idempotence { empty }
+   | element Involutiveness { empty }
+   | element Projectivity { empty }
+   | element Abstractness { empty } )
+   
+## Properties of constructors; if some given, the first and the   
+## second argument to which they apply must be specified.
+Properties =   
+ element Properties {
+   attribute propertyarg1 { xsd:integer},
+   attribute propertyarg2 { xsd:integer},
+   Property+
+ }
+   
+## Constructors are functors, predicates, attributes, etc.
+## nr, kind and aid (article id) determine the constructor
+## absolutely in MML, relnr optionally gives its serial number
+## in environment for a particular article (it is not in prels).   
+## All have  (possibly empty) properties, argtypes
+## and some have one or more mother types.
+## The optional final NatFunc are fields for agrregates and structmodes.
+## aggregbase is for aggregates (maybe OVER-arguments),
+## structmodeaggrnr is for structmodes (nr of corresponding aggregate)
+Constructor =
+ element Constructor {
+   attribute kind { 'M' | 'L' | 'V' | 'R' | 'K' | 'U' | 'G' },
+   attribute nr { xsd:integer},
+   attribute aid { xsd:string},
+   attribute relnr { xsd:integer}?,
+   ( attribute redefnr { xsd:integer},
+     attribute superfluous { xsd:integer})?,
+   ( attribute structmodeaggrnr { xsd:integer}
+   | attribute aggregbase { xsd:integer})?,
+   Properties?, ArgTypes, StructLoci?, Typ*, Fields?
+ }
+   
+## Ending position (e.g. of blocks).
+EndPosition = 
+ element EndPosition { Position }
+
+## Patterns map formats with argtypes to constructors.
+## The format is either specified as a number (then it must
+## be available in some table), or is given explicitely.
+## Visible are indeces of visible (nonhidden) arguments.
+## If antonymic, its constructor has to be negated. Mode patterns
+## can have expansion instead of just a constructor - this might
+## be done for other patterns too, or replaced by the _equals_
+## mechanism. The J (forgetful functor) patterns are actually
+## an example of another expanded patterns, but the expansion 
+## is uniform for all of them, so it does not have to be given.
+## The invalid ConstrKind J is now used for forgetful functors,
+## this should be changed.   
+Pattern =
+ element Pattern {
+   attribute kind { 'M' | 'L' | 'V' | 'R' | 'K' | 'U' | 'G' | 'J' },
+   ( attribute formatnr { xsd:integer}
+   | Format ),
+   attribute constrkind { 'M' | 'L' | 'V' | 'R' | 'K' | 'U' | 'G' | 'J' },
+   attribute constrnr { xsd:integer},
+   attribute antonymic { xsd:boolean }?,
+   ArgTypes,
+   element Visible { Int*},
+   element Expansion { Typ }?
+ }
+
+## Reference can be either private (coming from the current article)
+## - their number is the position at the stack of accessible 
+## references (so it is not unique), or library - these additionally
+## contain their kind (theorem or definition) and article nr.
+## The position in the inference is kept for error messaging.
+Ref =
+ element Ref {
+   attribute nr { xsd:integer },
+   ( attribute articlenr { xsd:integer},
+     attribute kind { 'T' | 'D' } )?,
+   Position
+ }
+   
+Inference = ( By | From | element ErrorInf { empty } )
+   
+## By encodes one simple justification.
+By = 
+ element By {
+   Position,
+   attribute linked { xsd:boolean}?,
+   Ref*
+ }
+   
+## From encodes one scheme justification, it cannot be linked.
+From = 
+ element From {
+   Position,
+   attribute articlenr { xsd:integer},
+   attribute nr { xsd:integer},
+   Ref*
+ }
+
+## This is one step in an iterative equation.
+IterStep =
+ element IterStep { Term, Inference }
+
+## Local dictionary for an article.
+## The symbol kinds still use very internal notation.   
+Symbols = 
+ attribute aid { xsd:string }?,  
+ element Symbols {
+   element Symbol { 
+    attribute kind { xsd:string },
+    attribute nr { xsd:integer },
+    attribute name { xsd:integer }
+   }*
+ }
+
+## The complete article after analyzer.
+## aid specifies its name in uppercase.
+Article = 
+ element Article {
+   attribute aid { xsd:string },
+   ( DefinitionBlock | RegistrationBlock |
+     NotationBlock | Reservation | SchemeBlock |
+     JustifiedTheorem | DefTheorem | Definiens |
+     Canceled | Pattern | AuxiliaryItem )*
+ }
+
+## Numbers of Definiens used in expanding the thesis,
+## together with their counts.
+ThesisExpansions = 
+ element ThesisExpansions { Pair* }
+
+## Introduction of local constants, the numbering is automatic,
+## so only types are needed.
+## For easier presentation, nr optionally contains the number   
+## of the first local constant created here.
+Let = 
+ element Let {
+   attribute nr { xsd:integer }?,   
+   Typ+ }
+
+## One assumption may consist of several propositions.
+Assume = 
+ element Assume { Proposition+ }
+
+## This is existential assumption, it may be used when the normal
+## assumption starts with existential quantifier. In that case,
+## the existential variables are introduced as local constants.
+## For easier presentation, nr optionally contains the number   
+## of the first local constant created here.   
+Given = 
+ element Given {
+   attribute nr { xsd:integer }?,
+   Typ+, Proposition+ }
+
+## Take without equality. This does not introduce a new local constant,
+## just changes the thesis.
+Take = 
+ element Take { Term }
+
+## Take with equality. This introduces a new local constant, 
+## whose type is given here.
+## For easier presentation, nr optionally contains the number   
+## of the first local constant created here.      
+TakeAsVar = 
+ element TakeAsVar {
+   attribute nr { xsd:integer }?,
+   Typ, Term }
+
+## Justified conclusion. In text, this can appear as _hence_,
+## _thus_ or _hereby_ (which starts diffuse conclusion).
+Conclusion = 
+ element Conclusion { JustifiedProposition }
+
+## First comes the reconstructed existential statement
+## and its justification, then the new local constants
+## and zero or more propositions about them.
+## For easier presentation, nr optionally contains the number   
+## of the first local constant created here.      
+Consider =
+ element Consider { 
+   attribute nr { xsd:integer }?,
+   Proposition, Justification,
+   Typ+, Proposition*
+ }
+
+## First comes the target type, then the reconsidered terms.
+## For all these terms a new local variable with the target type 
+## is created, and its equality to the corresponding term is remembered.
+## Finally the proposition about the typing is given and justified.
+## For easier presentation, nr optionally contains the number   
+## of the first local constant created here.   
+Reconsider =
+ element Reconsider { 
+   attribute nr { xsd:integer }?,
+   Typ, Term+,
+   Proposition, Justification
+ }
+
+## This is e.g.: set a = f(b); . The type of the new local constant
+## is given. This local constant is now always expanded to its
+## definition, and should not directly appear in any expression,
+## but it is now needed for some implementation reasons.
+## For easier presentation, nr optionally contains the number   
+## of the first local constant created here.      
+Set =
+ element Set { 
+   attribute nr { xsd:integer }?,
+   Term, Typ
+ }
+
+## Private functor. First come the types of arguments, then
+## its definition and the result type.
+DefFunc =
+ element DefFunc { 
+   ArgTypes, Term, Typ
+ }
+
+## Private predicate. First come the types of arguments, then
+## its definition.
+DefPred =
+ element DefPred { 
+   ArgTypes, Formula
+ }
+
+## The changed thesis is printed after skeleton items in proofs,
+## together with the numbers of definientia used for its expansion.
+Thesis =
+ element Thesis { 
+   Formula, ThesisExpansions
+ }
+
+## Case of one or more propositions.
+Case =
+ element Case { Proposition+ }
+
+## Supposition of one or more propositions.
+Suppose =
+ element Suppose { Proposition+ }
+
+## The block thesis is printed for proofs in the beginning and
+## for diffuse reasoning in the end.
+BlockThesis =
+ element BlockThesis { Formula }
+
+## Block starting with one case, the direct and diffuse version
+## (this depends on the kind of its parent block).
+## The block thesis is printed for proofs in the beginning and
+## for diffuse reasoning in the end.
+CaseBlock =
+ element CaseBlock {
+   Position,
+   (  ( BlockThesis, Case, Thesis, Reasoning )
+   |  ( Case, Reasoning, BlockThesis ) )
+ }
+   
+## Block starting with one supposition, the direct and diffuse version
+## (this depends on the kind of its parent block).
+## The block thesis is printed for proofs in the beginning and
+## for diffuse reasoning in the end.
+SupposeBlock =
+ element SupposeBlock {
+   Position,
+   (  ( BlockThesis, Suppose, Thesis, Reasoning )
+   |  ( Suppose, Reasoning, BlockThesis ) )
+ }
+
+## This means that the author has skipped the proof.
+## Articles with such items are not yet fully completed.
+SkippedProof =
+ element SkippedProof { empty }
+
+## This justifies the case split (the disjunction of all Suppose 
+## or Case items in direct subblocks) in PerCasesReasoning.
+## The case split is only known after all subblocks are known,
+## so this is the last item in its block, not like in the Mizar text.
+PerCases =
+ element PerCases {
+   Proposition, Inference
+ }
+
+## Reasoning per cases. It only contains CaseBlock or 
+## SupposeBlock subblocks, with the exception of the mandatory 
+## last PerCases justifying the case split.
+## Direct and diffuse versions are possible
+## (this depends on the kind of its parent block).
+## The block thesis is printed for proofs in the beginning and
+## for diffuse reasoning in the end.
+PerCasesReasoning =
+ element PerCasesReasoning {
+   Position,
+   (  ( BlockThesis, ( CaseBlock+ | SupposeBlock+ ),
+        PerCases, Thesis, EndPosition  )
+   |  ( ( CaseBlock+ | SupposeBlock+ ),
+        PerCases, EndPosition, BlockThesis ) )
+ }
+
+## Skeleton items change the current thesis, for Proof the
+## changed Thesis together with used expansions is printed
+## explicitely after them.   
+## PerCasesReasoning is not included here.
+SkeletonItem =   
+   ( ( Let | Conclusion | Assume | Given
+       | Take | TakeAsVar ), Thesis? )
+   
+## Reasoning is a series of skeleton and auxiliary items,
+## finished by optional per cases reasoning.
+Reasoning = 
+   ( ( SkeletonItem | AuxiliaryItem )*,
+     PerCasesReasoning?, EndPosition )
+
+## Direct proof of some proposition (which is the proof's thesis).
+## Label (nr) of proof (if any) is label of its thesis.
+Proof = 
+ element Proof {
+   attribute nr { xsd:integer }?,
+   Position,
+   BlockThesis, Reasoning 
+ }
+
+## Diffuse statement - its thesis is reconstructed in the end.
+## Label (nr) of diffuse statement (if any) is label of its thesis.
+Now = 
+ element Now {
+   attribute nr { xsd:integer }?,
+   Position,
+   Reasoning, BlockThesis 
+ }
+   
+## Direct justification.   
+Justification = ( Inference | Proof | SkippedProof )
+
+## Iterative equality. The ptional number is label.
+IterEquality =
+ element IterEquality {
+   attribute nr { xsd:integer }?,
+   Position,
+   Term, IterStep+
+ }
+
+JustifiedProposition =
+   ( Now | IterEquality | ( Proposition, Justification ) )
+
+## Auxiliary items are items which do not change thesis.
+AuxiliaryItem =
+   ( JustifiedProposition | Consider | 
+     Set | Reconsider | DefFunc | DefPred )
+
+## Reservation of a new variable for a type.
+Reservation = 
+ element Reservation { Typ }
+
+## Theorem as a proposition with justification.
+JustifiedTheorem = 
+ element JustifiedTheorem {
+   Proposition, Justification
+ }
+
+## Theorems created from definitions are now printed
+## as separate top-level items after definitional blocks,
+DefTheorem = 
+ element DefTheorem { Proposition }
+
+## A property of a constructor, the proposition expreesing it,
+## and its justification.
+JustifiedProperty = 
+ element JustifiedProperty {
+   Property, Proposition, Justification
+ }
+
+## The possible correctness conditions are following.
+## They can either be only stated in the Correctness,
+## which conjugates them and proves them all, or come
+## separately as a proposition with a justification.
+CorrectnessCondition =
+   ( UnknownCorrCond | Coherence | Compatibility |
+     Consistency | Existence | Uniqueness )
+   
+UnknownCorrCond = 
+ element UnknownCorrCond { Formula | ( Proposition, Justification ) }
+Coherence = 
+ element Coherence { Formula | ( Proposition, Justification ) }
+Compatibility = 
+ element Compatibility { Formula | ( Proposition, Justification ) }
+Consistency = 
+ element Consistency { Formula | ( Proposition, Justification ) }
+Existence = 
+ element Existence { Formula | ( Proposition, Justification ) }
+Uniqueness = 
+ element Uniqueness { Formula | ( Proposition, Justification ) }
+
+## This is a way how to state all correctness conditions in one keyword.
+## The relevant conditions are computed by the analyzer and printed
+## here, their conjunction has to be justified.
+Correctness = 
+ element Correctness {
+   CorrectnessCondition*,
+   Proposition, Justification
+ }
+
+## Canceled theorem ( if on top-level), definition or registration
+## (if inside such blocks). We should add to this the number
+## of canceled items as an attribute.
+Canceled = 
+ element Canceled { empty }
+
+## Declaration of a scheme functor.
+SchemeFuncDecl =   
+ element SchemeFuncDecl {
+   attribute nr { xsd:integer},
+   ArgTypes, Typ
+ }
+   
+## Declaration of a scheme predicate.
+SchemePredDecl =   
+ element SchemePredDecl {
+   attribute nr { xsd:integer},
+   ArgTypes
+ }
+
+## Scheme blocks are used for declaring the types of second-order
+## variables appearing in a scheme, and for its justification.
+## This could be a bit unified with Scheme later.
+SchemeBlock =   
+ element SchemeBlock {
+   attribute schemenr { xsd:integer },
+   Position,
+   ( SchemeFuncDecl | SchemePredDecl )*,
+   element SchemePremises { Proposition* },
+   Proposition, Justification,
+   EndPosition
+   }
+
+## Definition of a functor, predicate, mode, attribute or structure.
+## with optional label, properties and correctness conditions.
+## Sometimes no constructor is created (e.g. for expandable modes).   
+## The second optional form creating three or more constructors
+## is for structure definitions, which define the aggregate functor,
+## the structure mode, the strict attribute and zero or more selectors.
+## If any definientia and definitional theorems are created,
+## they follow immediately after the enclosing definitional block
+## (this might be changed in the future).      
+Definition = 
+ element Definition {
+   attribute kind { 'M' | 'V' | 'R' | 'K' | 'G' },
+   attribute redefinition { xsd:boolean }?,
+   attribute expandable { xsd:boolean }?,
+   ( attribute nr { xsd:integer }, Position )?,
+   ( ( CorrectnessCondition*, Correctness?,
+       JustifiedProperty*, Constructor? )
+   | ( Constructor, Constructor, Constructor+,
+       CorrectnessCondition*, Correctness? ))
+ }
+
+## A block of one or more (possibly canceled) (re)definitions,
+## possibly with assumptions. If any definientia and 
+## definitional theorems are created, they follow immediately 
+## after this block.   
+DefinitionBlock = 
+ element DefinitionBlock {
+   Position,
+   ( Let | Assume | Given | AuxiliaryItem |
+     Canceled | Definition )*,
+   EndPosition
+ }
+
+## One justified cluster registration. The correctness conditions
+## could be made more specific for each.
+Registration = 
+ element Registration {
+   ( RCluster | FCluster | CCluster ),
+   CorrectnessCondition*, Correctness?
+ }
+
+## Block of cluster registrations.
+## 
+RegistrationBlock = 
+ element RegistrationBlock {
+   Position,
+   ( Let | AuxiliaryItem | Registration | Canceled )+,
+   EndPosition
+ }
+
+## Block of synonyms or antonyms. The patterns are
+## semantically irrelevant and are not printed yet - fix this.
+NotationBlock = 
+ element NotationBlock {
+   Position,
+   ( Let | AuxiliaryItem )*,
+   EndPosition
+ }

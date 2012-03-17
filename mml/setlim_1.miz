@@ -1,0 +1,1995 @@
+:: Limit of Sequence of Subsets
+::  by Bo Zhang , Hiroshi Yamazaki and Yatsuka Nakamura
+:: 
+:: Received March 15, 2005
+:: Copyright (c) 2005 Association of Mizar Users
+
+environ
+
+ vocabularies RELAT_1, SEQ_2, FUNCT_1, ORDINAL2, BOOLE, SUBSET_1, PROB_2,
+      SETLIM_1, SETFAM_1, TARSKI, SEQM_3, PROB_1, YELLOW_6;
+ notations ORDINAL1, NUMBERS, XREAL_0, NAT_1, FUNCT_1, TARSKI, XBOOLE_0,
+      SEQM_3, YELLOW_6, ZFMISC_1, SUBSET_1, RELSET_1, SETFAM_1, FUNCOP_1,
+      PROB_1, FUNCT_2, KURATO_2;
+ constructors NAT_1, XBOOLE_0, SETFAM_1, FUNCT_1, SUPINF_2, PROB_1, KURATO_2,
+      SEQM_3, YELLOW_6;
+ registrations SUBSET_1, XREAL_0, RELSET_1, ARYTM_3, ZFMISC_1, PROB_1,
+      STRUCT_0, XBOOLE_0, ORDINAL2, SETFAM_1, FUNCT_1;
+ requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
+ definitions TARSKI, XBOOLE_0, PROB_1;
+ theorems FUNCT_1, FUNCT_2, SUBSET_1, PROB_1, NAT_1, TARSKI, XBOOLE_0,
+      XBOOLE_1, XCMPLX_1, RELAT_1, SETFAM_1, AXIOMS, ZFMISC_1, CARD_3,
+      KURATO_2, SEQM_3, YELLOW_6, PROB_2;
+ schemes FUNCT_2, NAT_1;
+
+begin
+
+ reserve n,m,k,k1,k2,i,j for Nat;
+ reserve x,y,z,X,Y,Z for set;
+ reserve A for Subset of X;
+ reserve A1,A2,A3 for SetSequence of X;
+ reserve Si for SigmaField of X;
+ reserve S,S1,S2,S3 for SetSequence of Si;
+
+LM1:
+i <= j implies i = j or i + 1 <= j
+proof
+ assume i<=j;
+ then i + 1 <= j + 1 by AXIOMS:24;
+ then i + 1 <= j or i + 1 = j + 1 by NAT_1:26;
+ hence thesis by XCMPLX_1:2;
+end;
+
+theorem Th180:
+  (X <> {} & for x st x in X holds x = y) implies union X = y
+proof assume that
+A0: X <> {} and
+A1: for x st x in X holds x = y;
+    for x st x in X holds x c= y by A1;then
+A2: union X c= y by ZFMISC_1:94;
+    y c= union X 
+    proof 
+     consider x such that
+     B1: x in X by A0,XBOOLE_0:def 1;
+     x = y by A1,B1;
+     hence thesis by B1,ZFMISC_1:92;
+    end;
+ hence thesis by A2,XBOOLE_0:def 10;
+end;
+
+theorem Th181:
+  (X <> {} & for x st x in X holds x = y) implies meet X = y
+proof assume that
+A0: X <> {} and
+A1: for x st x in X holds x = y;
+    for x st x in X holds y c= x by A1;then
+A2: y c= meet X by A0,SETFAM_1:6;
+    meet X c= union X & union X c= y by A0,A1,Th180,SETFAM_1:3;then
+    meet X c= y by XBOOLE_1:1;
+ hence thesis by A2,XBOOLE_0:def 10;
+end;
+
+theorem Th4:
+  for f be Function of NAT,Y for n holds {f.k: n <= k} <> {}
+proof
+  let f be Function of NAT,Y;
+  let n;
+  f.n in {f.k: n <= k};
+  hence thesis;
+end;
+
+theorem Th5:
+  for f be Function of NAT,Y holds f.(n + m) in {f.k : n <= k}
+proof
+  n <= n + m by NAT_1:29;
+  hence thesis;
+end;
+
+theorem Th6:
+  for f being Function of NAT,Y holds
+    {f.k1: n <= k1} = {f.k2 : n+1 <=k2} \/ {f.n}
+proof
+    let f be Function of NAT,Y;
+    set Z1 = {f.k1:n <= k1};
+    set Z2 = {f.k2:(n+1) <= k2};
+A00: {f.k1: n <= k1} c= {f.k2 : n+1 <= k2} \/ {f.n}
+   proof 
+    let x;
+    assume x in Z1;
+    then consider z such that
+     B0: x=z & z in Z1;
+    consider k such that
+     B1: z = f.k & n <= k by B0;
+     z = f.k & n+1 <= k or z = f.k & n = k by B1,LM1;
+     then z in Z2 or z in {f.n} by TARSKI:def 1;
+    hence x in (Z2 \/ {f.n}) by B0, XBOOLE_0:def 2; 
+   end;
+   Z2 \/ {f.n} c= Z1
+    proof
+     let x; assume 
+         C0:x in Z2 \/ {f.n};
+         now per cases by C0,XBOOLE_0:def 2; 
+          case x in Z2;
+           then consider z such that
+           CA2: x = z & z in Z2;
+           consider k11 being Nat such that 
+           CA3: z=f.k11 & n+1 <= k11 by CA2;
+           n <= k11 by CA3,NAT_1:38;
+          hence x in Z1 by CA2,CA3;
+          end;
+          case x in {f.n};
+           then x = f.n by TARSKI:def 1; 
+           hence x in Z1;
+          end;
+         end;
+        hence thesis;
+    end;
+ hence thesis by A00,XBOOLE_0:def 10;
+end;
+
+theorem Th7:
+  for f be Function of NAT,Y holds
+    (for k1 holds x in f.(n+k1)) iff
+    (for Z st Z in {f.k2 : n <= k2} holds x in Z)
+proof
+ let f be Function of NAT,Y;
+ set Z = {f.k2 : n <= k2};
+A00: now assume 
+     B0: for k1 holds x in f.(n+k1);
+     now let Z1 be set;
+      assume Z1 in Z;
+      then consider k1 being Nat such that
+      B1: Z1=f.k1 & n <= k1;
+      ex m st k1 = n + m by B1,NAT_1:28;
+      then consider k2 being Nat such that
+      B2: Z1=f.(n + k2) by B1;
+      thus x in Z1 by B0,B2;
+     end;
+     hence for Z1 being set st Z1 in {f.k2 : n <= k2} holds x in Z1;
+    end;
+   now assume 
+     C0: for Z1 being set st Z1 in {f.k2 : n <= k2} holds x in Z1;
+     now let k;
+      f.(n + k) in Z by Th5;
+      hence x in f.(n + k) by C0;
+     end;
+     hence for k1 holds x in f.(n+k1);
+    end;
+ hence thesis by A00;
+ end;
+
+theorem Th8:
+  for Y being non empty set for f being Function of NAT,Y holds
+    x in rng f iff ex n st x = f.n
+proof
+let Y be non empty set;
+let f be Function of NAT,Y;
+A0: dom f = NAT by FUNCT_2:def 1;
+  thus x in rng f implies ex n st x = f.n
+   proof assume x in rng f;
+    then consider y such that 
+    A1: y in dom f & x = f.y by FUNCT_1:def 5;
+    reconsider m=y as Nat by A1;
+    take m; 
+   thus thesis by A1;
+   end;
+  given n such that 
+  A2: x = f.n;
+ thus thesis by A0,A2,FUNCT_1:def 5;
+end;
+
+theorem Th9:
+  for X, Y being non empty set for f being Function of X,Y holds
+    rng f <> {} & f <> {}
+ proof
+  let X, Y be non empty set;
+  let f be Function of X,Y;
+  dom f <> {} by FUNCT_2:def 1;then
+  consider x1 being set such that
+  AA0: x1 in dom f by XBOOLE_0:def 1;
+  consider y1 being set such that
+  AA1:[x1,y1] in f by AA0, RELAT_1:def 4;
+  thus thesis by AA1,RELAT_1:def 5;
+ end;
+
+theorem Th10:
+  for Y be non empty set for f being Function of NAT,Y holds
+    rng f = {f.k : 0 <= k}
+proof
+  let Y be non empty set;
+  let f be Function of NAT,Y;
+A1: dom f = NAT by FUNCT_2:def 1;
+ set Z = {f.k : 0 <= k};
+A00: Z c= rng f
+   proof let x;
+    assume x in Z;
+    then consider n1 being Nat such that
+     AA0: x=f.n1 & 0 <= n1;
+    thus x in rng f by AA0,FUNCT_2:6;
+   end;
+  rng f c= Z
+   proof let y;
+    assume y in rng f;
+    then consider n be set such that
+    AA1: n in NAT & y = f.n by A1,FUNCT_1:def 5;
+    reconsider n as Nat by AA1;
+    0 <= n by NAT_1:18;
+    hence y in Z by AA1;
+   end;
+ hence rng f = Z by A00,XBOOLE_0:def 10;
+end;
+
+theorem Th11:
+  for Y being non empty set for f being Function of NAT,Y holds
+    rng (f ^\ k) = {f.n: k <= n}
+  proof
+  let Y be non empty set;
+  let f be Function of NAT,Y;
+   reconsider f1 = f ^\ k as Function of NAT,Y; 
+   rng f1 = {f.m: k <= m}
+    proof
+    C1: dom f1 = NAT by FUNCT_2:def 1;
+    set Z = {f.m : k <= m};
+    C00: Z c= rng f1
+     proof let x;
+      assume x in Z;
+      then consider k1 being Nat such that
+      CC0: x=f.k1 & k <= k1;
+      consider k2 being Nat such that
+      CC1: k1 = k + k2 by CC0,NAT_1:28;
+      x = f1.k2 by CC0,CC1,KURATO_2:def 2;
+      hence x in rng f1 by FUNCT_2:6;
+     end;
+   rng f1 c= Z
+    proof let y;
+    assume y in rng f1;
+    then consider m1 be set such that 
+    DD1: m1 in NAT & y = f1.m1 by C1,FUNCT_1:def 5;
+    reconsider m1 as Nat by DD1;
+    y = f.(k+m1) by DD1,KURATO_2:def 2;
+    hence y in Z by Th5;
+   end;
+  hence thesis by C00,XBOOLE_0:def 10;
+ end;
+ hence thesis;
+ end;
+
+theorem
+  meet rng A1 is Subset of X
+proof
+ A0:  meet rng A1 c= union rng A1 by SETFAM_1:3;
+ A1:  union rng A1 is Subset of X by PROB_1:23;
+  now let x;
+   assume x in meet rng A1;
+   then x in union rng A1 by A0;
+   hence x in X by A1;   
+  end;
+  hence thesis by TARSKI:def 3;
+ end;
+
+theorem Th15:
+  x in meet rng A1 iff for n holds x in A1.n
+ proof
+ A0: rng A1 <> {} by Th9;
+ A1: dom A1 = NAT by FUNCT_2:def 1; 
+A00: now let x; assume 
+      AA0: x in meet rng A1; 
+       now let k;
+        A1.k in rng A1 by FUNCT_2:6;
+        hence x in A1.k by AA0,SETFAM_1:def 1;
+       end;
+      hence for n holds x in A1.n;
+     end;
+   now let x;
+      assume AA0: for n holds x in A1.n;
+       now let Y;
+        assume Y in rng A1;
+        then consider n be set such that 
+        AA2: n in NAT & Y = A1.n by A1,FUNCT_1:def 5;
+        reconsider n as Nat by AA2;
+        thus x in Y by AA0,AA2;
+       end;
+     hence x in meet rng A1 by A0,SETFAM_1:def 1;
+    end;
+   hence thesis by A00;
+ end;
+
+theorem Th16:
+  Intersection A1 = meet rng A1
+ proof
+  A00: Intersection A1 c= meet rng A1
+  proof let x;
+   assume x in Intersection A1;
+   then for n holds x in A1.n by PROB_1:29;
+   hence x in meet rng A1 by Th15;
+  end;
+  now let x;
+   assume x in meet rng A1;
+     then for n holds x in A1.n by Th15;
+     hence x in Intersection A1 by PROB_1:29;
+   end;
+  then meet rng A1 c= Intersection A1 by TARSKI:def 3;
+ hence thesis by A00,XBOOLE_0:def 10;
+end;
+
+theorem
+  Intersection A1 c= Union A1
+proof
+ meet rng A1 c= union rng A1 by SETFAM_1:3;
+ then Intersection A1 c= union rng A1 by Th16;
+ hence thesis by CARD_3:def 4;
+end;
+
+theorem Th185:
+  (for n holds A1.n = A) implies Union A1 = A
+proof assume
+ A0: for n holds A1.n = A;
+ A1:  rng A1 <> {} by Th9;
+ now let x; assume 
+  x in rng A1;then 
+  consider n such that
+  B1: x = A1.n by Th8;
+  thus x = A by B1,A0;  
+ end;
+ then union rng A1 = A by A1,Th180;
+ hence thesis by CARD_3:def 4;
+end;
+
+theorem Th186:
+  (for n holds A1.n = A) implies Intersection A1 = A
+proof assume
+ A0: for n holds A1.n = A;
+ A1: rng A1 <> {} by Th9;
+ now let x; assume
+  x in rng A1;then
+  consider n such that
+  B1: x = A1.n by Th8;
+  thus x = A by B1,A0;
+ end;
+ then meet rng A1 = A by A1,Th181;
+ hence thesis by Th16;
+end;
+
+theorem
+  A1 is constant implies Union A1 = Intersection A1
+proof assume A1 is constant;then
+   consider A being Subset of X such that
+A1: for n holds A1.n = A by KURATO_2:def 8;
+    Union A1 = A & Intersection A1 = A by A1,Th185,Th186;
+ hence thesis;
+end;
+
+Th188:
+  A1 is constant & the_value_of A1 = A implies
+    for n holds A1.n = A & Union A1 = A & Intersection A1 = A
+proof
+A0: A1 <> {} by Th9;assume that 
+A1: A1 is constant and
+A2: the_value_of A1 = A;
+consider x being set such that
+A3: x in dom A1 & A = A1.x by A0,A1,A2,YELLOW_6:def 1;
+A4: dom A1 = NAT by FUNCT_2:def 1;
+reconsider x as Nat by A3;
+  for n holds A1.n = A by A3,A4,A1,SEQM_3:def 5;
+hence thesis by Th185,Th186;
+end;
+
+theorem Th190:
+  A1 is constant & the_value_of A1 = A implies
+    for n holds union {A1.k : n <= k} = A
+proof assume 
+ A0: A1 is constant & the_value_of A1 = A;
+ let n;
+ set Y = {A1.k : n <= k};
+ A2: Y <> {} by Th4;
+ now let x; assume 
+  x in Y;then
+  consider k such that
+  B1: x = A1.k & n <= k;
+  thus x = A by A0,B1,Th188;
+ end;
+ hence thesis by A2,Th180;
+end;
+
+theorem Th191:
+  A1 is constant & the_value_of A1 = A implies
+    for n holds meet {A1.k : n <= k} = A
+proof assume 
+ A0: A1 is constant & the_value_of A1 = A;
+ let n;
+ set Y = {A1.k : n <= k};
+ A2: Y <> {} by Th4;
+ now let x; assume 
+  x in Y;then
+  consider k such that
+  B1: x = A1.k & n <= k;
+  thus x = A by B1,A0,Th188;
+ end;
+ hence thesis by A2,Th181;
+end;
+
+theorem Th17:
+for X being set, A1 being SetSequence of X holds
+ ex f being Function of NAT,bool X st
+  for n,Y st Y = {A1.k: n <= k} holds f.n = meet Y
+ proof
+  let X be set, A1 be SetSequence of X;
+  defpred P[Element of NAT, Element of bool X] means 
+    for Y st Y = {A1.k: $1 <= k} holds $2 = meet Y;
+  A1: for n being Element of NAT ex y being Element of bool X st P[n,y]
+    proof
+     let n be Element of NAT;
+     set Y = {A1.k: n <= k};
+     set y = meet Y;
+     y is Subset of X
+     proof
+ A00:  now assume Y<>{};
+      then consider Z1 being set such that 
+       A2: Z1 in Y by XBOOLE_0:def 1;
+       consider k1 being Nat such that 
+       A3: Z1 = A1.k1 & n <= k1 by A2;
+       now let z;assume z in y;then
+        z in Z1 by A2,SETFAM_1:def 1;
+        hence z in X by A3;
+       end;
+      hence y is Subset of X by TARSKI:def 3;
+      end;
+    now assume Y = {};
+       then y = {} by SETFAM_1:def 1;
+       hence y is Subset of X by XBOOLE_1:2;
+       end;
+      hence thesis by A00;
+     end;
+   then reconsider y as Element of bool X;
+   for Y st Y = {A1.k: n <= k} holds y = meet Y;
+   hence thesis;
+  end;
+  ex f being Function of NAT,bool X st
+   for n being Nat holds P[n, f.n] from FUNCT_2:sch 3(A1);
+  hence thesis;
+ end;
+
+theorem Th18:
+  for X being set,A1 being SetSequence of X holds
+    ex f being Function of NAT,bool X st
+      for n,Y st Y = {A1.k: n <= k} holds f.n = union Y
+ proof
+  let X be set, A1 be SetSequence of X;
+  defpred P[Element of NAT, Element of bool X] means 
+    for Y st Y = {A1.k: $1 <= k} holds $2 = union Y;
+A1: for n being Element of NAT ex y being Element of bool X st P[n,y]
+    proof
+     let n be Element of NAT;
+     set Y = {A1.k: n <= k};
+     set y = union Y;
+     y is Subset of X
+     proof
+      now let z;
+       assume z in y;
+       then ex Z st z in Z & Z in Y by TARSKI:def 4;
+       then consider Z1 be set such that 
+       AA2: Z1 in Y & z in Z1;
+       consider k1 being Nat such that 
+       AA3: Z1 = A1.k1 & n <= k1 by AA2;
+       thus z in X by AA2,AA3;
+      end;
+      hence thesis by TARSKI:def 3;
+     end;
+    then reconsider y as Element of bool X;
+    for Y st Y = {A1.k: n <= k} holds y = union Y;
+   hence thesis;
+  end;
+  ex f being Function of NAT,bool X st
+   for n being Nat holds P[n, f.n] from FUNCT_2:sch 3(A1);
+  hence thesis;
+ end;
+
+definition let X,A1;
+  attr A1 is monotone means
+:def1:  A1 is non-decreasing or A1 is non-increasing;
+end;
+
+definition
+ let X be set, A1 be SetSequence of X;
+func inferior_setsequence A1 -> SetSequence of X means
+:def2: for n,Y st Y = {A1.k : n <= k} holds it.n = meet Y;
+ existence by Th17;
+ uniqueness
+ proof let BSeq,CSeq be SetSequence of X such that
+  A1: for n,Y st Y = {A1.k : n <= k} holds BSeq.n = meet Y and
+  A2: for m,Y st Y = {A1.k : m <= k} holds CSeq.m = meet Y;
+  A3: for y st y in NAT holds BSeq.y = CSeq.y
+  proof 
+   let y; 
+   assume y in NAT;
+   then reconsider y as Nat;
+   set Y = {A1.k: y <= k};
+   BSeq.y = meet Y by A1;
+  hence thesis by A2;
+  end;
+  NAT = dom BSeq & NAT = dom CSeq by FUNCT_2:def 1;
+ hence thesis by A3,FUNCT_1:9;
+ end;
+end;
+
+definition
+ let X be set, A1 be SetSequence of X;
+func superior_setsequence A1 -> SetSequence of X means
+:def3: for n,Y st Y = {A1.k : n <= k} holds it.n = union Y;
+ existence by Th18;
+ uniqueness
+ proof let B,C be SetSequence of X such that
+ A1: for n,Y st Y = {A1.k : n <= k} holds B.n = union Y and
+ A2: for m,Y st Y = {A1.k : m <= k} holds C.m = union Y;
+ A3: for y st y in NAT holds B.y = C.y
+  proof 
+   let y; 
+   assume y in NAT;
+   then reconsider y as Nat;
+   set Y = {A1.k: y <= k};
+   B.y = union Y by A1;
+   hence thesis by A2;
+  end;
+ NAT = dom B & NAT = dom C by FUNCT_2:def 1;
+ hence thesis by A3,FUNCT_1:9;
+ end;
+end;
+
+theorem Th19:
+  (inferior_setsequence A1).0 = Intersection A1
+proof
+  (inferior_setsequence A1).0 = meet {A1.k : 0 <= k} by def2
+                       .= meet rng A1 by Th10
+                       .= Intersection A1 by Th16;
+ hence thesis;
+end;
+
+theorem Th20:
+  (superior_setsequence A1).0 = Union A1
+proof 
+  (superior_setsequence A1).0 = union {A1.k : 0 <= k} by def3
+                      .= union rng A1 by Th10
+                      .= Union A1 by CARD_3:def 4;
+ hence thesis;
+end;
+
+theorem Th21:
+  x in (inferior_setsequence A1).n iff for k holds x in A1.(n+k)
+proof
+ A0: (inferior_setsequence A1).n = meet {A1.k : n <= k} by def2;
+ set Y = {A1.k : n <= k};
+ A1: Y <> {} by Th4;
+A00: now assume 
+     B1: x in (inferior_setsequence A1).n;
+       now let k;
+        A1.(n + k) in Y by Th5;
+        hence x in A1.(n + k) by A0,B1,SETFAM_1:def 1;
+       end;
+      hence for k holds x in A1.(n+k);
+     end;
+  now assume 
+     for k holds x in A1.(n+k);
+     then for Z st Z in Y holds x in Z by Th7;
+     hence x in (inferior_setsequence A1).n by A0,A1,SETFAM_1:def 1;
+    end;
+  hence thesis by A00;  
+end;
+
+theorem Th22:
+  x in (superior_setsequence A1).n iff ex k st x in A1.(n + k)
+proof
+ A0: (superior_setsequence A1).n = union {A1.k : n <= k} by def3;
+ set Y = {A1.k : n <= k};
+ thus x in (superior_setsequence A1).n implies ex k st x in A1.(n + k)
+ proof
+   assume x in (superior_setsequence A1).n;
+   then consider Y1 being set such that
+   AA1: x in Y1 & Y1 in Y by A0,TARSKI:def 4;
+   consider k11 being Nat such that
+   AA2: Y1=A1.k11 & n <= k11 by AA1;
+   ex k st k11 = n + k by AA2,NAT_1:28;
+   then consider k22 being Nat such that
+   AA3: Y1=A1.(n + k22) by AA2;
+   thus thesis by AA1,AA3;
+  end;
+  now assume ex k st x in A1.(n + k);
+   then consider k1 being Nat such that
+   C0: x in A1.(n + k1);
+   A1.(n + k1) in Y by Th5;
+   hence x in (superior_setsequence A1).n by A0,C0,TARSKI:def 4;
+  end;
+ hence thesis;
+end;
+
+theorem Th23:
+  (inferior_setsequence A1).n = (inferior_setsequence A1).(n+1) /\ A1.n
+proof
+ now let n;
+ A0: (inferior_setsequence A1).n = meet {A1.k1 : n <= k1} by def2;
+ A1: (inferior_setsequence A1).(n+1) = meet {A1.k2 : n+1 <= k2} by def2;
+ AB0:{A1.k1 : n <= k1} <> {} by Th4;
+ AB1:{A1.k2 : n+1 <= k2} <> {} by Th4;
+ {A1.k1: n <= k1} = {A1.k2 : n+1 <=k2} \/ {A1.n} by Th6;
+ then {A1.k2 : n+1 <=k2} c= {A1.k1: n <= k1} by XBOOLE_1:7;then
+ A2: (inferior_setsequence A1).(n)
+  c= (inferior_setsequence A1).(n+1) by A0,A1,AB1,SETFAM_1:7;
+A3: now let x;assume 
+      AA0: x in (inferior_setsequence A1).n;
+      A1.n in {A1.k1 : n <= k1};
+      hence x in (inferior_setsequence A1).(n+1) & x in A1.n
+        by A0,AA0,A2,SETFAM_1:def 1;
+     end;
+A4: now let x;
+      assume BB0: x in (inferior_setsequence A1).(n+1) & x in A1.n;
+      for Z st Z in {A1.k2 : n <= k2} holds x in Z
+      proof let Z;
+        assume Z in {A1.k1 : n <= k1};
+        then consider Z1 being set such that
+        CC0: Z=Z1 & Z1 in {A1.k1 : n <= k1};
+        consider k11 being Nat such that
+        CC1: Z1=A1.k11 & n <= k11 by CC0;
+          now per cases by CC1,LM1;
+           case Z1=A1.k11 & n = k11;
+            hence x in Z1 by BB0;
+           end;
+           case Z1=A1.k11 & n+1 <= k11;
+            then Z1 in {A1.k2 : n+1 <= k2};
+            hence x in Z1 by A1,BB0,SETFAM_1:def 1;
+           end;  
+          end;
+         hence x in Z by CC0;
+      end;
+     then x in meet {A1.k2 : n <= k2} by AB0,SETFAM_1:def 1;
+     hence x in (inferior_setsequence A1).n by def2;
+    end;
+  thus (inferior_setsequence A1).n
+    = (inferior_setsequence A1).(n+1) /\ A1.n
+      by A3,A4,XBOOLE_0:def 3;
+ end;
+hence thesis;
+end;
+
+theorem Th24:
+  (superior_setsequence A1).n = (superior_setsequence A1).(n+1) \/ A1.n
+proof
+ now let n;
+ {A1.k1: n <= k1} = {A1.k2 : n+1 <=k2} \/ {A1.n} by Th6;then 
+ {A1.k2 : n+1 <=k2} c= {A1.k1: n <= k1} by XBOOLE_1:7;then 
+ union {A1.k2 : n+1 <= k2} c= union {A1.k1 : n <= k1} by ZFMISC_1:95;then 
+ (superior_setsequence A1).(n+1)
+   c= union {A1.k1 : n <= k1} by def3;then
+A2:(superior_setsequence A1).(n+1)
+   c= (superior_setsequence A1).n by def3;
+A3: now let x;
+      assume x in (superior_setsequence A1).n;
+      then x in union {A1.k1 : n <= k1} by def3;
+      then consider Y1 being set such that 
+      AA1: x in Y1 & Y1 in {A1.k1 : n <= k1} by TARSKI:def 4;
+      consider k11 being Nat such that
+      AA2: Y1=A1.k11 & n <= k11 by AA1;
+        now per cases by AA2,LM1;
+          case Y1=A1.k11 & n = k11;
+           hence x in A1.n by AA1;
+          end;
+          case Y1=A1.k11 & n+1 <= k11;
+            then Y1 in {A1.k2 : n+1 <= k2};
+           hence x in union {A1.k2 : n+1 <= k2} by AA1,TARSKI:def 4;
+          end;
+          end;
+       hence x in A1.n or x in (superior_setsequence A1).(n+1) by def3;
+    end;
+A4: now let x;
+      assume BB0: x in (superior_setsequence A1).(n+1) or x in A1.n;
+      thus x in (superior_setsequence A1).n
+      proof
+       now per cases by BB0;
+          case x in (superior_setsequence A1).(n+1);
+           hence x in (superior_setsequence A1).n by A2;
+          end;
+          case CA2: x in A1.n;
+           A1.n in {A1.k1 : n <= k1};
+           then x in union {A1.k1 : n <= k1} by CA2,TARSKI:def 4;
+          hence x in (superior_setsequence A1).n by def3;
+          end;
+          end;
+       hence thesis;
+      end;
+    end;
+  x in (superior_setsequence A1).n iff
+  x in A1.n or x in (superior_setsequence A1).(n+1) by A3,A4;
+ hence (superior_setsequence A1).n = (superior_setsequence A1).(n+1) \/ A1.n
+      by XBOOLE_0:def 2;
+ end;
+hence thesis;
+end;
+
+theorem Th25:
+  inferior_setsequence A1 is non-decreasing
+proof
+  now let n be Nat;
+    (inferior_setsequence A1).n
+    = (inferior_setsequence A1).(n+1) /\ A1.n by Th23;
+   hence (inferior_setsequence A1).n
+    c= (inferior_setsequence A1).(n+1) by XBOOLE_1:17;
+  end;
+ hence thesis by PROB_2:15;
+end;
+
+theorem Th26:
+  superior_setsequence A1 is non-increasing
+proof
+  now let n be Nat;
+  (superior_setsequence A1).n
+    = (superior_setsequence A1).(n+1) \/ A1.n by Th24;
+   hence (superior_setsequence A1).(n+1)
+     c= (superior_setsequence A1).n by XBOOLE_1:7;
+  end;
+ hence thesis by PROB_2:14;
+end;
+
+theorem
+  inferior_setsequence A1 is monotone &
+    superior_setsequence A1 is monotone
+proof
+ thus inferior_setsequence A1 is monotone
+  proof
+   inferior_setsequence A1 is non-decreasing by Th25;
+   hence thesis by def1;
+  end;
+  superior_setsequence A1 is non-increasing by Th26;
+ hence thesis by def1;
+end;
+
+registration
+  let X be set, A be SetSequence of X;
+  cluster inferior_setsequence A -> non-decreasing;
+  coherence by Th25;
+end;
+
+registration
+  let X be set, A be SetSequence of X;
+  cluster superior_setsequence A -> non-increasing;
+  coherence by Th26;
+end;
+
+theorem
+  Intersection A1 c= (inferior_setsequence A1).n
+proof
+  A0: 0 <= n by NAT_1:18;
+  (inferior_setsequence A1).0 c= (inferior_setsequence A1).n
+    by A0,PROB_1:def 7;
+  hence thesis by Th19;
+end;
+
+theorem
+  (superior_setsequence A1).n c= Union A1
+proof
+ A0: 0 <= n by NAT_1:18;
+ (superior_setsequence A1).n c= (superior_setsequence A1).0
+   by A0,PROB_1:def 6;
+ hence thesis by Th20;
+end;
+
+theorem Th98:
+  for A1,n holds {A1.k: n <= k} is Subset of bool X
+proof
+ let A1,n;
+ set Y1 = {A1.k: n <= k};
+ Y1 c= bool X
+ proof 
+ let x;
+  assume x in Y1; then
+  consider k such that
+  B2: x = A1.k & n <= k;
+  thus x in bool X by B2;
+ end;
+hence thesis;
+end;
+
+theorem Th99:
+  for A1,n holds {A1.k: n <= k} is Subset-Family of X
+proof
+  let A1,n;
+  set Y1 = {A1.k: n <= k};
+  Y1 is Subset of bool X by Th98; 
+ hence thesis by SETFAM_1:def 7;
+end;
+
+theorem
+  Union A1 = (Intersection Complement A1)`
+proof
+  (Intersection Complement A1)`
+  = ((Union Complement Complement A1)`)` by PROB_1:def 5
+ .= ((Union A1)`)` by PROB_1:31
+ .= Union A1;
+ hence thesis;
+end;
+
+theorem Th101:
+  (inferior_setsequence A1).n = ((superior_setsequence Complement A1).n)`
+proof
+  set Y1 = {A1.k1: n <= k1};
+  set Y2 = {(Complement A1).k2 : n <= k2};
+  set Y3 = {(A1.k)`: n <= k};
+ A0: Y1 <> {} & Y2 <> {} by Th4;
+ A1: Y2 = Y3
+  proof
+   B01: Y2 c= Y3
+    proof let x;
+     assume x in Y2;then
+     consider k such that 
+     B1: x = (Complement A1).k & n <= k;
+     x = (A1.k)` & n <= k by B1,PROB_1:def 4;
+     hence thesis;
+    end;
+  Y3 c= Y2
+    proof let y;
+     assume y in Y3; then
+     consider k such that 
+     B2: y = (A1.k)` & n <= k;
+     y = (Complement A1).k & n <= k by B2,PROB_1:def 4;
+     hence thesis;
+    end;
+   hence thesis by B01,XBOOLE_0:def 10;
+  end;
+ reconsider Y1 as Subset-Family of X by Th99;
+ Y3 = COMPLEMENT Y1
+ proof
+  C01: Y3 c= COMPLEMENT Y1
+   proof let x;
+     assume x in Y3; then
+     consider k such that 
+     C1: x = (A1.k)` & n <= k;
+     reconsider z = A1.k as Subset of X;
+     (z`)` in Y1 by C1;
+     hence thesis by C1,SETFAM_1:def 8;
+    end;
+ COMPLEMENT Y1 c= Y3
+   proof let y; assume 
+     C3: y in COMPLEMENT Y1;then
+     reconsider y as Subset of X;     
+     y` in Y1 by C3,SETFAM_1:def 8;then
+     consider k such that 
+     C4: y` = A1.k & n <= k;
+     y = (A1.k)` & n <= k by C4;
+     hence thesis;
+    end;
+   hence thesis by C01,XBOOLE_0:def 10; 
+ end;
+ then (superior_setsequence(Complement A1)).n 
+            = union COMPLEMENT Y1 by A1,def3
+           .= [#] X \ meet Y1 by A0,SETFAM_1:48
+           .= X \ meet Y1 by SUBSET_1:def 4
+           .= (meet Y1)` by SUBSET_1:def 5;
+ hence thesis by def2;
+end;
+
+theorem 
+  (superior_setsequence A1).n = ((inferior_setsequence Complement A1).n)`
+proof
+  reconsider Y = (inferior_setsequence(Complement A1)).n as Subset of X;
+  Y = ((superior_setsequence(Complement Complement A1)).n)` by Th101
+   .= ((superior_setsequence A1).n)` by PROB_1:31;
+  hence thesis;
+end;
+
+theorem Th103:
+Complement (inferior_setsequence A1) = (superior_setsequence Complement A1)
+proof
+ reconsider A2 = inferior_setsequence A1 as SetSequence of X;
+ reconsider A3 = superior_setsequence Complement A1 as SetSequence of X;
+ now let n;
+  (A2.n)` = ((A3.n)`)` by Th101;
+  hence (Complement A2).n = A3.n by PROB_1:def 4;
+ end;
+ hence thesis by FUNCT_2:113;
+ end;
+
+theorem
+Complement superior_setsequence A1 = inferior_setsequence Complement A1
+proof
+ reconsider A2 = inferior_setsequence Complement A1 as SetSequence of X;
+ Complement A2 = superior_setsequence Complement Complement A1 by Th103
+              .= superior_setsequence A1 by PROB_1:31;
+ hence thesis by PROB_1:31;
+end;
+
+theorem
+  (for n holds A3.n = A1.n \/ A2.n) implies for n holds
+    (inferior_setsequence(A1)).n \/ (inferior_setsequence(A2)).n
+      c= (inferior_setsequence(A3)).n
+proof assume
+A1: for n holds A3.n = A1.n \/ A2.n;
+  reconsider X1 = (inferior_setsequence(A1)) as SetSequence of X;
+  reconsider X2 = (inferior_setsequence(A2)) as SetSequence of X;
+  reconsider X3 = (inferior_setsequence(A3)) as SetSequence of X;
+  let n;
+  X1.n \/ X2.n c= X3.n
+  proof
+   let x; assume
+    B1: x in (X1.n \/ X2.n);
+    B2: now per cases by B1,XBOOLE_0:def 2;
+     case BB0: x in X1.n;
+       now let k;
+        C1: x in A1.(n+k) by BB0,Th21;
+        A3.(n+k) = A1.(n+k) \/ A2.(n+k) by A1; hence
+        x in A3.(n+k) by C1,XBOOLE_0:def 2;
+       end;hence
+      x in X3.n by Th21;
+     end;
+     case BC0: x in X2.n;
+      now let k;
+        D1: x in A2.(n+k) by BC0,Th21;
+        A3.(n+k) = A1.(n+k) \/ A2.(n+k) by A1; hence
+        x in A3.(n+k) by D1,XBOOLE_0:def 2;
+       end;hence x in X3.n by Th21;
+     end;
+    end;
+   thus x in X3.n by B2;
+end;
+ hence thesis;
+end;
+
+theorem
+  (for n holds A3.n = A1.n /\ A2.n) implies for n holds
+    (inferior_setsequence A3).n
+      = (inferior_setsequence A1).n /\ (inferior_setsequence A2).n
+proof assume
+A1: for n holds A3.n = A1.n /\ A2.n;
+  reconsider X1 = inferior_setsequence A1 as SetSequence of X;
+  reconsider X2 = inferior_setsequence A2 as SetSequence of X;
+  reconsider X3 = inferior_setsequence A3 as SetSequence of X;
+  let n;
+A2: X3.n c= X1.n /\ X2.n
+  proof
+   let x; assume
+    B1: x in X3.n;
+     now let k;
+      x in A3.(n+k) by B1,Th21;then
+      x in (A1.(n+k) /\ A2.(n+k)) by A1;hence
+      x in A1.(n+k) & x in A2.(n+k) by XBOOLE_0:def 3;
+     end; 
+    then x in X1.n & x in X2.n by Th21;
+    hence x in X1.n /\ X2.n by XBOOLE_0:def 3;
+  end;
+ X1.n /\ X2.n c= X3.n
+  proof
+   let x;assume x in (X1.n /\ X2.n);then
+   C1: x in X1.n & x in X2.n by XBOOLE_0:def 3;
+    now let k;
+     x in A1.(n+k) & x in A2.(n+k) by C1,Th21; then
+     x in A1.(n+k) /\ A2.(n+k) by XBOOLE_0:def 3;
+     hence x in A3.(n+k) by A1;
+    end;
+   hence x in X3.n by Th21;
+ end;
+ hence thesis by A2,XBOOLE_0:def 10;
+end;
+
+theorem
+  (for n holds A3.n = A1.n  \/ A2.n) implies for n holds
+    (superior_setsequence(A3)).n
+     = (superior_setsequence(A1)).n \/ (superior_setsequence(A2)).n
+ proof assume
+A1: for n holds A3.n = A1.n \/ A2.n;
+  reconsider X1 = (superior_setsequence(A1)) as SetSequence of X;
+  reconsider X2 = (superior_setsequence(A2)) as SetSequence of X;
+  reconsider X3 = (superior_setsequence(A3)) as SetSequence of X;
+  let n;
+A2: X3.n c= X1.n \/ X2.n 
+  proof
+   let x;
+    assume x in X3.n;then
+    consider k such that
+    B1: x in A3.(n+k) by Th22;
+    B2: x in (A1.(n+k) \/ A2.(n+k)) by A1,B1;
+     x in X1.n or x in X2.n
+    proof
+      now per cases by B2,XBOOLE_0:def 2;
+      case x in A1.(n+k);
+       hence x in X1.n by Th22;
+      end;
+      case x in A2.(n+k);
+       hence x in X2.n by Th22;
+      end;
+      end;
+     hence thesis;
+    end;
+   hence x in X1.n \/ X2.n by XBOOLE_0:def 2;
+  end;
+ X1.n \/ X2.n c= X3.n
+  proof 
+   let x; assume
+    B1: x in (X1.n \/ X2.n);
+    B2: now per cases by B1,XBOOLE_0:def 2;
+     case x in X1.n;then
+      consider k such that
+       C1: x in A1.(n+k) by Th22;
+       A3.(n+k) = A1.(n+k) \/ A2.(n+k) by A1; then
+        x in A3.(n+k) by C1,XBOOLE_0:def 2;
+      hence x in X3.n by Th22;
+     end;
+     case x in X2.n;then 
+      consider k such that
+       D1: x in A2.(n+k) by Th22;
+       A3.(n+k) = A1.(n+k) \/ A2.(n+k) by A1; then
+        x in A3.(n+k) by D1,XBOOLE_0:def 2;
+      hence x in X3.n by Th22;
+     end;
+     end;
+    thus x in X3.n by B2;
+  end;
+hence thesis by A2,XBOOLE_0:def 10;
+end;
+
+theorem
+  (for n holds A3.n = A1.n /\ A2.n) implies for n holds
+    (superior_setsequence A3).n
+      c= (superior_setsequence A1).n /\ (superior_setsequence A2).n
+ proof assume
+A1: for n holds A3.n = A1.n /\ A2.n;
+  reconsider X1 = superior_setsequence A1 as SetSequence of X;
+  reconsider X2 = superior_setsequence A2 as SetSequence of X;
+  reconsider X3 = superior_setsequence A3 as SetSequence of X;
+  let n;
+  X3.n c= X1.n /\ X2.n
+  proof
+   let x;
+    assume x in X3.n;then
+    consider k such that
+    B1: x in A3.(n+k) by Th22;
+    A3.(n+k) = A1.(n+k) /\ A2.(n+k) by A1;then
+    x in A1.(n+k) & x in A2.(n+k) by B1,XBOOLE_0:def 3;then 
+    x in X1.n & x in X2.n by Th22;
+    hence x in X1.n /\ X2.n by XBOOLE_0:def 3;
+   end;
+ hence thesis;
+ end;
+
+theorem Th125:
+  A1 is constant & the_value_of A1 = A implies
+    for n holds (inferior_setsequence A1).n = A
+proof assume
+ A1: A1 is constant & the_value_of A1 = A;
+ let n;
+ (inferior_setsequence(A1)).n = meet {A1.k : n <= k} by def2;
+ hence thesis by A1,Th191;
+end;
+
+theorem Th126:
+  A1 is constant & the_value_of A1 = A implies
+    for n holds (superior_setsequence A1).n = A
+proof assume
+ A1: A1 is constant & the_value_of A1 = A;
+ let n;
+ (superior_setsequence(A1)).n = union {A1.k : n <= k} by def3;
+ hence thesis by A1,Th190;
+end;
+
+theorem Th29:
+  A1 is non-decreasing implies A1.n c= (superior_setsequence(A1)).(n+1)
+proof
+  assume A1 is non-decreasing;then 
+  A01: A1.n c= A1.(n+1) by PROB_2:15;
+  A1.n c= union {A1.k : n+1 <= k}
+  proof let x; assume
+   B0: x in A1.n;
+   A1.(n+1) in {A1.k : n+1 <= k};
+   hence x in union {A1.k : n+1 <= k} by B0,A01,TARSKI:def 4;
+  end;
+ hence thesis by def3;
+end;
+
+theorem Th30:
+  A1 is non-decreasing implies
+    (superior_setsequence A1).n = (superior_setsequence A1).(n+1)
+proof
+  assume A1 is non-decreasing;
+  then A1.n c= (superior_setsequence A1).(n+1) by Th29;
+  then (superior_setsequence A1).(n+1) \/ A1.n
+    = (superior_setsequence A1).(n+1) by XBOOLE_1:12;
+ hence thesis by Th24;
+end;
+
+theorem Th31:
+  A1 is non-decreasing implies (superior_setsequence A1).n = Union A1
+proof
+ assume A00: A1 is non-decreasing;
+ defpred P[Nat] means (superior_setsequence A1).$1 = Union A1;
+ for n being Nat holds (superior_setsequence A1).n = Union A1
+  proof
+   A01: P[0] by Th20;
+   A02: for k st P[k] holds P[k+1] by A00,Th30;
+   thus for k holds P[k] from NAT_1:sch 1(A01,A02);
+  end;
+ hence thesis;
+end;
+
+theorem Th32:
+A1 is non-decreasing implies Intersection superior_setsequence A1 = Union A1
+proof
+ assume A00: A1 is non-decreasing;
+  Intersection superior_setsequence A1 = Union A1
+   proof
+    now let x;assume
+     B0: x in Intersection superior_setsequence A1;
+     now let n;
+      (superior_setsequence A1).n = Union A1 by A00,Th31;
+      hence x in Union A1 by B0,PROB_1:29;
+     end;
+    hence x in Union A1;
+    end;
+    then BB0: Intersection superior_setsequence(A1) 
+     c= Union A1 by TARSKI:def 3;
+    now let y;
+     assume C0: y in Union A1;
+     for n holds y in (superior_setsequence(A1)).n by C0,A00,Th31;
+     hence y in Intersection superior_setsequence(A1) by PROB_1:29;
+    end;
+    then Union A1 c= Intersection superior_setsequence(A1) by TARSKI:def 3;
+    hence thesis by BB0,XBOOLE_0:def 10;
+   end; 
+ hence thesis;
+end;
+
+theorem Th33:
+  A1 is non-decreasing implies A1.n c= (inferior_setsequence A1).(n+1)
+proof
+  A00: (inferior_setsequence A1).(n+1) = meet {A1.k : n+1 <= k} by def2;
+  set Y = {A1.k : n+1 <= k};
+  AA0: Y <> {} by Th4;
+  assume A01: A1 is non-decreasing;
+  let x;
+   assume B00: x in A1.n;
+    now let y;
+     assume y in Y;
+     then consider k1 being Nat such that
+      C00: y=A1.k1 & n+1 <= k1;
+     n <= k1 by C00,NAT_1:38;
+     then A1.n c= A1.k1 by A01,PROB_1:def 7;
+     hence x in y by B00,C00;
+    end;
+   hence thesis by A00,AA0,SETFAM_1:def 1;
+end;
+
+theorem Th34:
+  A1 is non-decreasing implies (inferior_setsequence A1).n = A1.n
+proof
+  assume A1 is non-decreasing;
+  then A1.n c= (inferior_setsequence A1).(n+1) by Th33;
+  then (inferior_setsequence A1).(n+1) /\ A1.n = A1.n by XBOOLE_1:28;
+ hence thesis by Th23;
+end;
+
+theorem Th35:
+  A1 is non-decreasing implies inferior_setsequence A1 = A1
+proof
+ assume A1 is non-decreasing;
+ then (inferior_setsequence A1).n = A1.n by Th34;
+ hence inferior_setsequence A1 = A1 by FUNCT_2:113;
+end;
+
+theorem Th36:
+  A1 is non-increasing implies (superior_setsequence A1).(n+1) c= A1.n
+proof
+  assume A01: A1 is non-increasing;
+   let x;
+    assume x in (superior_setsequence(A1)).(n+1);
+    then consider k such that
+    B0: x in A1.(n +1+k) by Th22;
+    n+1 <= n+1+k by NAT_1:29;
+    then n <= n+1+k by NAT_1:38;
+    then A1.(n +1+k) c= A1.n by A01,PROB_1:def 6;
+   hence x in A1.n by B0;
+end;
+
+theorem Th37:
+  A1 is non-increasing implies (superior_setsequence(A1)).n = A1.n
+proof
+  assume A1 is non-increasing;
+  then (superior_setsequence(A1)).(n+1) c= A1.n by Th36;
+  then (superior_setsequence(A1)).(n+1) \/ A1.n = A1.n by XBOOLE_1:12;
+ hence thesis by Th24;
+end;
+
+theorem Th38:
+  A1 is non-increasing implies superior_setsequence(A1) = A1
+proof
+ assume A1 is non-increasing;
+ then (superior_setsequence(A1)).n = A1.n by Th37;
+ hence superior_setsequence(A1) = A1 by FUNCT_2:113;
+end;
+
+theorem Th39:
+  A1 is non-increasing implies (inferior_setsequence(A1)).(n+1) c= A1.n
+proof
+  A00: (inferior_setsequence(A1)).(n+1) = meet {A1.k : n+1 <= k} by def2;
+  set Y = {A1.k : n+1 <= k};
+  AA0:A1.(n+1) in Y;
+  assume A1 is non-increasing;
+  then A02: A1.(n+1) c= A1.n by PROB_2:14;
+   now let x;
+    assume x in meet Y;
+    then x in A1.(n+1) by AA0,SETFAM_1:def 1;
+    hence x in A1.n by A02;
+   end;
+ hence thesis by A00,TARSKI:def 3; 
+end;
+
+theorem Th40:
+  A1 is non-increasing implies
+   (inferior_setsequence(A1)).n = (inferior_setsequence(A1)).(n+1)
+proof
+  assume A1 is non-increasing;
+  then (inferior_setsequence(A1)).(n+1) c= A1.n by Th39;then 
+   (inferior_setsequence(A1)).(n+1) /\ A1.n 
+    = (inferior_setsequence(A1)).(n+1) by XBOOLE_1:28;
+ hence thesis by Th23;
+end;
+
+theorem Th41:
+A1 is non-increasing implies (inferior_setsequence(A1)).n = Intersection A1
+proof
+ assume A00: A1 is non-increasing;
+ defpred P[Nat] means (inferior_setsequence(A1)).$1 = Intersection A1;
+ for n being Nat holds (inferior_setsequence(A1)).n = Intersection A1
+  proof
+   A01: P[0] by Th19;
+   A02: for k st P[k] holds P[k+1] by A00,Th40;
+   thus for k holds P[k] from NAT_1:sch 1(A01,A02); 
+  end;
+ hence thesis;
+end;
+
+theorem Th42:
+A1 is non-increasing implies Union inferior_setsequence(A1) = Intersection A1
+proof
+ assume A00: A1 is non-increasing;
+  Union inferior_setsequence(A1) = Intersection A1
+  proof
+   now let x;
+    assume x in Union inferior_setsequence(A1);
+    then consider k such that
+    B0: x in (inferior_setsequence(A1)).k by PROB_1:25;
+   thus x in Intersection A1 by A00,B0,Th41;
+   end;
+   then BB0: Union inferior_setsequence(A1) c= Intersection A1 by TARSKI:def 3;
+   now let y;
+    assume y in Intersection A1;
+    then y in (inferior_setsequence(A1)).0 by Th19;
+    hence y in Union inferior_setsequence(A1) by PROB_1:25;
+   end;
+   then Intersection A1 c= Union inferior_setsequence(A1) by TARSKI:def 3;
+   hence thesis by BB0,XBOOLE_0:def 10;
+  end; 
+ hence thesis;
+end;
+
+definition
+  let X be set, A1 be SetSequence of X;
+  redefine func lim_inf A1 equals
+:def4: Union inferior_setsequence A1;
+  compatibility
+  proof
+    let F be Subset of X;
+    hereby assume A1: F = lim_inf A1;
+      for x being set holds
+        x in F iff x in Union inferior_setsequence A1
+      proof
+        let x be set;
+        hereby assume x in F; then
+          consider n being Nat such that
+A2:       for k being Nat holds x in A1.(n+k) by A1,KURATO_2:7;
+          x in (inferior_setsequence A1).n by A2,Th21;
+          hence x in Union inferior_setsequence A1 by PROB_1:25;
+        end;
+        assume x in Union inferior_setsequence A1; then
+        consider n being Nat such that
+B1:     x in (inferior_setsequence A1).n by PROB_1:25;
+        for k being Nat holds x in A1.(n + k) by Th21,B1;
+        hence thesis by A1,KURATO_2:7;
+      end;
+      hence F = Union inferior_setsequence A1 by TARSKI:2;
+    end;
+    assume A1: F = Union inferior_setsequence A1;
+    for x being set holds x in F iff x in lim_inf A1
+    proof
+      let x be set;
+      hereby assume x in F; then
+        consider n being Nat such that
+B1:     x in (inferior_setsequence A1).n by A1,PROB_1:25;
+        for k being Nat holds x in A1.(n + k) by Th21,B1;
+        hence x in lim_inf A1 by KURATO_2:7;
+      end;
+      assume x in lim_inf A1; then
+      consider n being Nat such that
+A2:   for k being Nat holds x in A1.(n+k) by KURATO_2:7;
+      x in (inferior_setsequence A1).n by A2,Th21;
+      hence x in F by A1,PROB_1:25;
+    end;
+    hence F = lim_inf A1 by TARSKI:2;
+  end;
+end;
+
+definition
+  let X be set, A1 be SetSequence of X;
+  redefine func lim_sup A1 equals
+:def5: Intersection superior_setsequence A1;
+  compatibility
+  proof
+    let F be Subset of X;
+    hereby assume A1: F = lim_sup A1;
+      for x being set holds
+        x in F iff x in Intersection superior_setsequence A1
+      proof
+        let x be set;
+        hereby assume x in F; then
+C00:      for n holds ex k st x in A1.(n+k) by A1,KURATO_2:8;
+          for m holds x in (superior_setsequence A1).m
+          proof
+            let m;
+            ex k st x in A1.(m+k) by C00;
+            hence thesis by Th22;
+          end;
+          hence x in Intersection superior_setsequence A1 by PROB_1:29;
+        end;
+        assume B01: x in Intersection superior_setsequence A1;
+        now let m;
+          x in (superior_setsequence A1).m by B01,PROB_1:29;
+          hence ex k st x in A1.(m + k) by Th22;
+        end;
+        hence thesis by A1,KURATO_2:8;
+      end;
+      hence F = Intersection superior_setsequence A1 by TARSKI:2;
+    end;
+    assume A1: F = Intersection superior_setsequence A1;
+    for x being set holds x in F iff x in lim_sup A1
+    proof
+      let x be set;
+      hereby assume A0: x in F;
+        now let m;
+          x in (superior_setsequence A1).m by A0,A1,PROB_1:29;
+          hence ex k st x in A1.(m + k) by Th22;
+        end;
+        hence x in lim_sup A1 by KURATO_2:8;
+      end;
+      assume x in lim_sup A1; then
+C00:  for n holds ex k st x in A1.(n+k) by KURATO_2:8;
+      for m holds x in (superior_setsequence A1).m
+      proof
+        let m;
+        ex k st x in A1.(m+k) by C00;
+        hence thesis by Th22;
+      end;
+      hence x in F by A1,PROB_1:29;
+    end;
+    hence F = lim_sup A1 by TARSKI:2;
+  end;
+end;
+
+definition
+  let X be set, A1 be SetSequence of X;
+  assume B1: A1 is convergent;
+  func lim A1 -> Subset of X means
+:def7: it = lim_sup A1 & it = lim_inf A1;
+ existence 
+ proof
+  lim_sup A1 = lim_inf A1 by B1,KURATO_2:def 7;
+  hence thesis; 
+ end;
+ uniqueness;
+end;
+
+theorem
+  Intersection A1 c= lim_inf A1
+proof
+  let x;
+  assume x in Intersection A1;
+  then for k being Nat holds x in A1.(0+k) by PROB_1:29;
+  hence thesis by KURATO_2:7;
+end;
+
+theorem
+  lim_inf A1 = lim inferior_setsequence(A1)
+proof
+  set A2 = inferior_setsequence(A1);
+  inferior_setsequence(A2) = A2 by Th35;then
+A1: lim_inf A2 = Union A2 by def4;
+  Intersection superior_setsequence(A2) = Union A2 by Th32;then
+A2: lim_sup A2 = Union A2 by def5;then
+  A2 is convergent by A1,KURATO_2:def 7;then
+  lim A2 = Union A2 by A2,def7;
+  hence thesis by def4;
+end;
+
+theorem
+  lim_sup A1 = lim superior_setsequence(A1)
+proof
+  set A2 = superior_setsequence(A1);
+  Union inferior_setsequence(A2) = Intersection A2 by Th42;then
+A1: lim_inf A2 = Intersection A2 by def4;
+  superior_setsequence(A2) = A2 by Th38;then
+A2: lim_sup A2 = Intersection A2 by def5;then
+  A2 is convergent by A1,KURATO_2:def 7;then
+  lim A2 = Intersection A2 by A2,def7;
+  hence thesis by def5;
+end;
+
+theorem
+  lim_sup A1 = (lim_inf Complement A1)`
+proof
+  lim_inf Complement A1 = (lim_sup Complement Complement A1)` by KURATO_2:12
+                      .= (lim_sup A1)` by PROB_1:31;
+  hence thesis;
+end;
+
+theorem Th215:
+  A1 is constant & the_value_of A1 = A implies
+    A1 is convergent & lim A1 = A & lim_inf A1 = A & lim_sup A1 = A
+proof assume
+ A0: A1 is constant & the_value_of A1 = A;then
+ A1: for n holds (inferior_setsequence(A1)).n = A by Th125;
+ A2: for n holds (superior_setsequence(A1)).n = A by A0,Th126;
+ A3: lim_inf A1 = Union (inferior_setsequence(A1)) by def4
+           .= A by A1,Th185;
+     lim_sup A1 = Intersection (superior_setsequence(A1)) by def5
+           .= A by A2,Th186;then
+ lim_inf A1 = lim_sup A1 & A1 is convergent by A3,KURATO_2:def 7;
+hence thesis by A3,def7;
+end;
+
+theorem Th48:
+  A1 is non-decreasing implies lim_sup A1 = Union A1
+proof
+  assume A1 is non-decreasing;
+  then Intersection superior_setsequence(A1) = Union A1 by Th32;
+  hence thesis by def5;
+end;
+
+theorem Th49:
+  A1 is non-decreasing implies lim_inf A1 = Union A1
+proof
+  assume A1 is non-decreasing;
+  then inferior_setsequence(A1) = A1 by Th35;
+  hence thesis by def4;
+end;
+
+theorem Th51:
+  A1 is non-increasing implies lim_sup A1 = Intersection A1
+proof
+  assume A1 is non-increasing;
+  then superior_setsequence(A1) = A1 by Th38;
+  hence thesis by def5;
+end;
+
+theorem Th52:
+  A1 is non-increasing implies lim_inf A1 = Intersection A1
+proof
+  assume A1 is non-increasing;
+  then Union inferior_setsequence(A1) = Intersection A1 by Th42;
+  hence thesis by def4;
+end;
+
+theorem Th50:
+  A1 is non-decreasing implies A1 is convergent & lim A1 = Union A1
+proof
+  assume A1 is non-decreasing;
+  then A0: lim_sup A1 = Union A1 & lim_inf A1 = Union A1 by Th48,Th49;
+  hence A1 is convergent by KURATO_2:def 7;
+  hence lim A1 = Union A1 by A0,def7;
+end;
+
+theorem Th53:
+  A1 is non-increasing implies A1 is convergent & lim A1 = Intersection A1
+proof
+  assume A1 is non-increasing;
+   then A0: lim_sup A1 = Intersection A1 & lim_inf A1 = Intersection A1
+     by Th51,Th52;
+   hence A1 is convergent by KURATO_2:def 7;
+   hence lim A1 = Intersection A1 by A0,def7;
+end;
+
+theorem 
+  A1 is monotone implies A1 is convergent
+proof assume 
+  A0: A1 is monotone; 
+  per cases by A0,def1;
+   suppose A1 is non-increasing;
+   hence A1 is convergent by Th53;
+   end;
+   suppose A1 is non-decreasing;
+   hence A1 is convergent by Th50;
+  end;
+end;
+
+definition
+ let X be set,
+     Si be SigmaField of X,
+     S be SetSequence of Si;
+ redefine attr S is constant means
+  ex A being Element of Si st for n holds S.n = A;
+ compatibility
+  proof
+A1:dom S = NAT by FUNCT_2:def 1;
+  hereby assume
+A2:   S is constant;
+    consider n0 being Nat;
+    reconsider B = S.n0 as Element of Si by PROB_1:def 9;
+    take B;
+    let n be Nat;
+    thus S.n = B by A1,A2,SEQM_3:def 5;
+   end;
+   given B being Element of Si such that
+A3:  for n holds S.n=B;
+   for n1, n2 being set st n1 in dom S
+    & n2 in dom S holds S.n1 = S.n2
+   proof let n1,n2 be set; assume
+A4:  n1 in dom S & n2 in dom S;
+   then S.n1 = B by A3
+            .= S.n2 by A3,A4;
+   hence thesis;
+  end;
+  hence thesis by SEQM_3:def 5;
+ end;
+end;
+
+definition
+ let X be set,
+     Si be SigmaField of X,
+     S be SetSequence of Si;
+ func @inferior_setsequence S -> SetSequence of Si equals
+:def8:    inferior_setsequence S;
+ coherence
+  proof
+   inferior_setsequence S is SetSequence of Si
+    proof
+     now let n;
+      reconsider DSeq = S ^\ n as SetSequence of X;
+      for m being Nat holds DSeq.m in Si
+       proof
+         let m;
+          DSeq.m = S.(m+n) by KURATO_2:def 2;
+          hence thesis by PROB_1:def 9;
+       end;
+      then B4: Intersection DSeq in Si by PROB_1:def 8;
+      Intersection DSeq = meet rng DSeq by Th16;
+      then Intersection DSeq =meet {S.k: n <= k} by Th11;
+      hence (inferior_setsequence S).n in Si by B4,def2;
+     end;
+  hence thesis by PROB_1:def 9;
+  end;
+ hence thesis;
+ end;
+end;
+
+definition
+  let X be set,
+      Si be SigmaField of X,
+      S be SetSequence of Si;
+  func @superior_setsequence S -> SetSequence of Si equals
+:def9: superior_setsequence S;
+  coherence
+  proof
+    superior_setsequence S is SetSequence of Si
+    proof
+      now let n;
+      reconsider DSeq = S ^\ n as SetSequence of X;
+      for m being Nat holds DSeq.m in Si
+      proof
+        let m;
+        DSeq.m = S.(m+n) by KURATO_2:def 2;
+        hence thesis by PROB_1:def 9;
+      end;
+      then DSeq is SetSequence of Si by PROB_1:def 9;
+      then B4: Union DSeq in Si by PROB_1:46;
+      Union DSeq = union rng DSeq by CARD_3:def 4;
+      then Union DSeq =union {S.k: n <= k} by Th11;
+      hence (superior_setsequence(S)).n in Si by B4,def3;
+    end;
+    hence thesis by PROB_1:def 9;
+  end;
+  hence thesis;
+end;
+end;
+
+theorem Th136:
+  @superior_setsequence S is non-increasing
+proof
+  @superior_setsequence S = superior_setsequence(S) by def9;
+  hence thesis;
+end;
+
+theorem Th137:
+  @inferior_setsequence(S) is non-decreasing
+proof
+  @inferior_setsequence(S) = inferior_setsequence(S) by def8;
+  hence thesis;
+end;
+
+registration
+  let X be set,
+      Si be SigmaField of X,
+      S be SetSequence of Si;
+  cluster @superior_setsequence(S) -> non-increasing;
+  coherence by Th136;
+end;
+
+registration
+  let X be set,
+      Si be SigmaField of X,
+      S be SetSequence of Si;
+  cluster @inferior_setsequence(S) -> non-decreasing;
+  coherence by Th137;
+end;
+
+definition
+  let X be set,
+      Si be SigmaField of X,
+      S be SetSequence of Si;
+  func lim_inf S -> Element of Si equals
+:def10:  Union @inferior_setsequence(S);
+  coherence by PROB_1:46;
+end;
+
+definition
+ let X be set,
+     Si be SigmaField of X,
+     S be SetSequence of Si;
+ func lim_sup S -> Element of Si equals
+:def11:  Intersection @superior_setsequence(S);
+ coherence 
+ proof
+   for n holds (@superior_setsequence(S)).n in Si by PROB_1:def 9;
+   hence thesis by PROB_1:32;
+ end;
+end;
+
+definition
+  let X be set,
+     Si be SigmaField of X,
+     S be SetSequence of Si;
+  attr S is convergent means
+:def12: lim_sup S = lim_inf S;
+end;
+
+definition
+  let X be set,
+      Si be SigmaField of X,
+      S be SetSequence of Si;
+  assume S: S is convergent;
+  func lim S -> Element of Si means
+:def13: it = lim_sup S & it = lim_inf S;
+  existence
+  proof
+    lim_sup S = lim_inf S by S,def12;
+    hence thesis;
+  end;
+  uniqueness;
+end;
+
+theorem Th55:
+  x in lim_sup S iff for n holds ex k st x in S.(n+k)
+proof
+A00: x in Intersection superior_setsequence A1 iff
+       for n holds ex k st x in A1.(n+k)
+   proof
+     lim_sup A1 = Intersection superior_setsequence A1 by def5;
+     hence thesis by KURATO_2:8;
+   end;
+   lim_sup S = Intersection @superior_setsequence S by def11
+            .= Intersection superior_setsequence S by def9;
+   hence thesis by A00;
+end;
+
+theorem Th56:
+  x in lim_inf S iff ex n st for k holds x in S.(n+k)
+proof
+A00: x in Union inferior_setsequence(A1) iff
+       ex n st for k holds x in A1.(n+k)
+  proof
+    lim_inf A1 = Union inferior_setsequence(A1) by def4;
+    hence thesis by KURATO_2:7;
+  end;
+  lim_inf S = Union @inferior_setsequence(S) by def10
+           .= Union inferior_setsequence(S) by def8;
+  hence thesis by A00;
+end;
+
+theorem
+  Intersection S c= lim_inf S
+proof
+ let x;
+ assume x in Intersection S;
+ then for k being Nat holds x in S.(0+k) by PROB_1:29;
+ hence thesis by Th56;
+end;
+
+theorem
+  lim_sup S c= Union S
+proof
+  let x;
+  assume x in lim_sup S;
+  then consider k being Nat such that
+A1: x in S.(0+k) by Th55;
+  thus thesis by A1,PROB_1:25;
+end;
+
+theorem 
+  lim_inf S c= lim_sup S
+proof
+ A00: Union inferior_setsequence A1
+  c= Intersection superior_setsequence A1
+  proof
+   B0: lim_inf A1 = Union inferior_setsequence(A1) by def4;
+   lim_sup A1 = Intersection superior_setsequence(A1) by def5;
+  hence thesis by B0,KURATO_2:9;
+  end;
+A01: lim_inf S = Union@inferior_setsequence(S) by def10
+            .= Union inferior_setsequence(S) by def8;
+A02: lim_sup S = Intersection@superior_setsequence(S) by def11
+            .= Intersection superior_setsequence(S) by def9;
+   thus thesis by A00,A01,A02;
+end;
+
+definition
+  let X be set,
+      Si be SigmaField of X,
+      S be SetSequence of Si;
+  func @Complement S -> SetSequence of Si equals
+:def14: Complement S;
+  coherence
+proof
+ now let n;
+  S.n in Si by PROB_1:def 9;then
+  A0: S.n is Event of Si by PROB_1:def 10;
+  (Complement S).n = (S.n)` by PROB_1:def 4;
+  then (Complement S).n is Event of Si by A0,PROB_1:50;
+   hence (Complement S).n in Si by PROB_1:def 10;
+   end; hence thesis by PROB_1:def 9;
+  end;
+end;
+
+Th204:
+  @Complement @Complement S = S
+proof
+ @Complement @Complement S = Complement @Complement S by def14
+                             .= Complement Complement S by def14
+                             .= S by PROB_1:31;
+ hence thesis;
+end;
+
+theorem Th205:
+  lim_inf S = (lim_sup @Complement S)`
+proof
+A1: lim_inf S = Union @inferior_setsequence(S) by def10
+            .= Union inferior_setsequence(S) by def8;
+A2: (lim_sup @Complement S)`
+       = (Intersection @superior_setsequence(@Complement S))` by def11
+      .= (Intersection superior_setsequence(@Complement S))` by def9
+      .= (Intersection superior_setsequence(Complement S))` by def14;
+ Union inferior_setsequence(A1) 
+   = (Intersection superior_setsequence(Complement A1))`
+   proof
+    B1: lim_inf A1 = Union inferior_setsequence(A1) by def4;
+    (lim_sup Complement A1)`
+      = (Intersection superior_setsequence(Complement A1))` by def5;
+    hence thesis by B1,KURATO_2:12;
+  end;
+ hence thesis by A1,A2;
+end;
+
+theorem
+  lim_sup S = (lim_inf @Complement S)`
+proof
+  lim_inf @Complement S = (lim_sup @Complement @Complement S)` by Th205
+                       .= (lim_sup S)` by Th204;
+  hence thesis;
+end;
+
+theorem
+  (for n holds S3.n = S1.n \/ S2.n) implies
+    lim_inf S1 \/ lim_inf S2 c= lim_inf S3
+proof assume
+A0: (for n holds S3.n = S1.n \/ S2.n);
+A1: lim_inf S1 = Union @inferior_setsequence(S1) by def10
+            .= Union inferior_setsequence(S1) by def8;
+A2: lim_inf S2 = Union @inferior_setsequence(S2) by def10
+            .= Union inferior_setsequence(S2) by def8;
+A3: lim_inf S3 = Union @inferior_setsequence(S3) by def10
+            .= Union inferior_setsequence(S3) by def8;
+ (for n holds A3.n = A1.n \/ A2.n) implies
+ Union inferior_setsequence(A1) \/ Union inferior_setsequence(A2)
+ c= Union inferior_setsequence(A3)
+ proof assume
+  B0: (for n holds A3.n = A1.n \/ A2.n);
+  B1: lim_inf A1 = Union inferior_setsequence(A1) by def4;
+  B2: lim_inf A2 = Union inferior_setsequence(A2) by def4;
+  lim_inf A3 = Union inferior_setsequence(A3) by def4;
+  hence thesis by B0,B1,B2,KURATO_2:15;
+ end;
+hence thesis by A0,A1,A2,A3;
+end; 
+
+theorem
+  (for n holds S3.n = S1.n /\ S2.n) implies
+    lim_inf S3 = lim_inf S1 /\ lim_inf S2
+proof assume
+A0: (for n holds S3.n = S1.n /\ S2.n);
+A1: lim_inf S1 = Union @inferior_setsequence(S1) by def10
+            .= Union inferior_setsequence(S1) by def8;
+A2: lim_inf S2 = Union @inferior_setsequence(S2) by def10
+            .= Union inferior_setsequence(S2) by def8;
+A3: lim_inf S3 = Union @inferior_setsequence(S3) by def10
+            .= Union inferior_setsequence(S3) by def8;
+ (for n holds A3.n = A1.n /\ A2.n) implies
+ Union inferior_setsequence(A1) /\ Union inferior_setsequence(A2)
+ = Union inferior_setsequence(A3)
+ proof assume
+  B0: (for n holds A3.n = A1.n /\ A2.n);
+  B1: lim_inf A1 = Union inferior_setsequence(A1) by def4;
+  B2: lim_inf A2 = Union inferior_setsequence(A2) by def4;
+ lim_inf A3 = Union inferior_setsequence(A3) by def4;
+  hence thesis by B0,B1,B2,KURATO_2:13;
+ end;
+hence thesis by A0,A1,A2,A3;
+end;
+
+theorem
+  (for n holds S3.n = S1.n \/ S2.n) implies
+    lim_sup S3 = lim_sup S1 \/ lim_sup S2
+proof assume
+A0: (for n holds S3.n = S1.n \/ S2.n);
+A1: lim_sup S1 = Intersection @superior_setsequence(S1) by def11
+            .= Intersection superior_setsequence(S1) by def9;
+A2: lim_sup S2 = Intersection @superior_setsequence(S2) by def11
+            .= Intersection superior_setsequence(S2) by def9;
+A3: lim_sup S3 = Intersection @superior_setsequence(S3) by def11
+            .= Intersection superior_setsequence(S3) by def9;
+ (for n holds A3.n = A1.n \/ A2.n) implies
+ Intersection superior_setsequence(A1) \/ Intersection superior_setsequence(A2)
+ = Intersection superior_setsequence(A3)
+ proof assume
+  B0: (for n holds A3.n = A1.n \/ A2.n);
+  B1: lim_sup A1 = Intersection superior_setsequence(A1) by def5;
+  B2: lim_sup A2 = Intersection superior_setsequence(A2) by def5;
+ lim_sup A3 = Intersection superior_setsequence(A3) by def5;
+  hence thesis by B0,B1,B2,KURATO_2:14;
+ end;
+hence thesis by A0,A1,A2,A3;
+end; 
+
+theorem
+  (for n holds S3.n = S1.n /\ S2.n) implies
+    lim_sup S3 c= lim_sup S1 /\ lim_sup S2
+proof assume
+A0: (for n holds S3.n = S1.n /\ S2.n);
+A1: lim_sup S1 = Intersection @superior_setsequence(S1) by def11
+            .= Intersection superior_setsequence(S1) by def9;
+A2: lim_sup S2 = Intersection @superior_setsequence(S2) by def11
+            .= Intersection superior_setsequence(S2) by def9;
+A3: lim_sup S3 = Intersection @superior_setsequence(S3) by def11
+            .= Intersection superior_setsequence(S3) by def9;
+ (for n holds A3.n = A1.n /\ A2.n) implies
+ Intersection superior_setsequence(A3) c=
+ Intersection superior_setsequence(A1) /\ Intersection superior_setsequence(A2)
+ proof assume
+  B0: (for n holds A3.n = A1.n /\ A2.n);
+  B1: lim_sup A1 = Intersection superior_setsequence(A1) by def5;
+  B2: lim_sup A2 = Intersection superior_setsequence(A2) by def5;
+ lim_sup A3 = Intersection superior_setsequence(A3) by def5;
+  hence thesis by B0,B1,B2,KURATO_2:16;
+ end;
+hence thesis by A0,A1,A2,A3;
+end; 
+
+theorem
+  S is constant & the_value_of S = A implies
+    S is convergent & lim S = A &
+    lim_inf S = A & lim_sup S = A
+proof assume
+A0: S is constant & the_value_of S = A;
+A1: lim_inf S = Union @inferior_setsequence(S) by def10
+            .= Union inferior_setsequence(S) by def8;
+A2: lim_sup S = Intersection @superior_setsequence(S) by def11
+            .= Intersection superior_setsequence(S) by def9;
+  A1 is constant & the_value_of A1 = A implies
+  Union inferior_setsequence(A1) = A & 
+   Intersection superior_setsequence(A1) = A
+  proof assume
+   B0: A1 is constant & the_value_of A1 = A;
+   B1: lim_inf A1 = Union inferior_setsequence(A1) by def4;
+   lim_sup A1 = Intersection superior_setsequence(A1) by def5;
+   hence thesis by B0,B1,Th215;
+  end;then
+A3: lim_inf S = A & lim_sup S = A by A0,A1,A2;then
+  S is convergent by def12;
+ hence thesis by A3,def13;
+end; 
+
+theorem Th61:
+  S is non-decreasing implies lim_sup S = Union S
+proof 
+A00: A1 is non-decreasing implies Intersection superior_setsequence(A1) 
+   = Union A1
+ proof
+   lim_sup A1 = Intersection superior_setsequence(A1) by def5;
+  hence thesis by Th48;
+ end;
+A01: lim_sup S = Intersection @superior_setsequence(S) by def11
+            .= Intersection superior_setsequence(S) by def9;
+ thus thesis by A00,A01;
+end;
+
+theorem Th62:
+  S is non-decreasing implies lim_inf S = Union S
+proof
+A00: A1 is non-decreasing implies Union inferior_setsequence(A1) = Union A1
+ proof
+   lim_inf A1 = Union inferior_setsequence(A1) by def4;
+  hence thesis by Th49;
+ end;
+A01: lim_inf S = Union @inferior_setsequence(S) by def10
+            .= Union inferior_setsequence(S) by def8;
+ thus thesis by A00,A01;
+end;
+
+theorem Th63:
+  S is non-decreasing implies S is convergent & lim S = Union S
+proof
+  assume S is non-decreasing;then
+  A0: lim_sup S = Union S & lim_inf S = Union S by Th61,Th62;
+  hence S is convergent by def12;
+  hence lim S = Union S by A0,def13;
+end;
+
+theorem Th64:
+  S is non-increasing implies lim_sup S = Intersection S
+proof
+A00: A1 is non-increasing implies Intersection superior_setsequence(A1) 
+ = Intersection A1
+ proof
+   lim_sup A1 = Intersection superior_setsequence(A1) by def5;
+  hence thesis by Th51;
+ end;
+A01: lim_sup S = Intersection @superior_setsequence(S) by def11
+            .= Intersection superior_setsequence(S) by def9;
+ thus thesis by A00,A01;
+end;
+
+theorem Th65:
+  S is non-increasing implies lim_inf S = Intersection S
+proof
+A00: A1 is non-increasing implies Union inferior_setsequence(A1) 
+  = Intersection A1
+ proof
+   lim_inf A1 = Union inferior_setsequence(A1) by def4;
+  hence thesis by Th52;
+ end;
+A01: lim_inf S = Union @inferior_setsequence(S) by def10
+            .= Union inferior_setsequence(S) by def8;
+ thus thesis by A00,A01;
+end;
+
+theorem Th66:
+  S is non-increasing implies S is convergent &
+    lim S = Intersection S
+proof
+  assume S is non-increasing;then
+  A0: lim_sup S = Intersection S & lim_inf S = Intersection S
+       by Th64,Th65;
+  hence S is convergent by def12;
+  hence lim S = Intersection S by A0,def13;
+end;
+
+theorem
+  S is monotone implies S is convergent
+proof
+  assume AA1: S is monotone;
+  per cases by AA1,def1;
+   suppose S is non-increasing;
+   hence S is convergent by Th66;
+   end;
+   suppose S is non-decreasing;
+   hence S is convergent by Th63;
+  end;
+end;

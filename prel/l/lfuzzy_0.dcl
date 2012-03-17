@@ -50,8 +50,8 @@
 <ArticleID name="YELLOW_1"/>
 <ArticleID name="YELLOW_2"/>
 <ArticleID name="WAYBEL_1"/>
-<ArticleID name="SEQ_1"/>
 <ArticleID name="MEMBERED"/>
+<ArticleID name="SEQ_1"/>
 <ArticleID name="CARD_3"/>
 <ArticleID name="WAYBEL_3"/>
 <ArticleID name="FUZZY_1"/>
@@ -83,7 +83,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="421">
+<Func kind="K" nr="433">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -100,13 +100,13 @@
 </Func>
 <Cluster>
 <Adjective nr="2" value="false"/>
+<Adjective nr="164"/>
 <Adjective nr="165"/>
-<Adjective nr="166"/>
 </Cluster>
 </FCluster>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="421">
+<Func kind="K" nr="433">
 <Func kind="K" nr="144">
 <Num nr="0"/>
 <Num nr="1"/>
@@ -184,7 +184,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="424">
+<Func kind="K" nr="436">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>

@@ -27,6 +27,22 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
+<Func kind="K" nr="6">
+<LocusVar nr="1"/>
+</Func>
+<Cluster>
+<Adjective nr="1" value="false"/>
+<Adjective nr="3"/>
+<Adjective nr="5"/>
+<Adjective nr="6"/>
+</Cluster>
+</FCluster>
+<FCluster>
+<ArgTypes>
+<Typ kind="M" nr="1">
+<Cluster/>
+</Typ>
+</ArgTypes>
 <Func kind="K" nr="22">
 <LocusVar nr="1"/>
 </Func>

@@ -6,25 +6,25 @@
 
 environ
 
- vocabulary FUNCT_1, PRE_TOPC, ORDINAL2, RELAT_1, ARYTM, PARTFUN3, SEQ_1,
+ vocabularies FUNCT_1, PRE_TOPC, ORDINAL2, RELAT_1, ARYTM, PARTFUN3, SEQ_1,
       ARYTM_1, ZF_LANG, PSCOMP_1, ARYTM_3, ZF_REFLE, BOOLE, SUBSET_1, ASYMPT_0,
       FUNCOP_1, TOPMETR, ABSVALUE, PARTFUN1, SQUARE_1, FUNCT_2, PRALG_1,
-      XREAL_0, FINSEQ_1;
- notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, COMPLEX1, SQUARE_1, RELAT_1,
-      RELSET_1, FUNCT_1, PARTFUN1, FUNCT_2, PSCOMP_1, SEQ_1, RFUNCT_1, NUMBERS,
-      XCMPLX_0, XREAL_0, REAL_1, FUNCOP_1, RCOMP_1, STRUCT_0, PRE_TOPC,
-      BORSUK_1, TOPALG_2;
+      XREAL_0, FINSEQ_1, MEMBERED;
+ notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, COMPLEX1, MEMBERED, SQUARE_1,
+      RELAT_1, RELSET_1, FUNCT_1, PARTFUN1, FUNCT_2, PSCOMP_1, SEQ_1, RFUNCT_1,
+      NUMBERS, XCMPLX_0, XREAL_0, REAL_1, FUNCOP_1, RCOMP_1, STRUCT_0,
+      PRE_TOPC, BORSUK_1, TOPALG_2;
  constructors REAL_1, SQUARE_1, PSCOMP_1, RCOMP_1, COMPLEX1, TOPREALA,
       RFUNCT_1;
  registrations STRUCT_0, RELSET_1, ARYTM_3, XREAL_0, REAL_1, XCMPLX_0, FUNCT_1,
-      BORSUK_2, TOPS_1, TOPMETR, RELAT_1, PSCOMP_1, FUNCOP_1;
+      BORSUK_2, TOPS_1, TOPMETR, RELAT_1, PSCOMP_1, FUNCOP_1, SEQ_1, MEMBERED;
  requirements NUMERALS, BOOLE, SUBSET, REAL, ARITHM;
- definitions PSCOMP_1, RELAT_1;
+ definitions TARSKI, PSCOMP_1, RELAT_1, SEQ_1;
  theorems JGRAPH_6, TARSKI, SUBSET_1, FUNCT_2, PRE_TOPC, RELAT_1, FUNCT_1,
       ZFMISC_1, JGRAPH_2, XBOOLE_1, XBOOLE_0, FUNCOP_1, TOPMETR, PARTFUN1,
       SEQ_1, RFUNCT_1, SQUARE_1, REAL_1, ABSVALUE, XCMPLX_0, REAL_2, JGRAPH_3,
       TOPREAL6, PSCOMP_1, JGRAPH_4;
- schemes SEQ_1;
+ schemes SEQ_1, FUNCT_1;
 
 begin
 
@@ -217,12 +217,21 @@ proof
 end;
 end;
 
+registration
+  cluster non-empty real-yielding Function;
+  existence
+  proof
+    consider f being non-empty Function of 0,REAL;
+    take f;
+    thus thesis;
+  end;
+end;
+
 theorem Tdd:
-  for X being non empty set, f being non-empty PartFunc of X,REAL holds
+  for f being non-empty real-yielding Function holds
   dom(f^) = dom f
 proof
-  let X be non empty set,
-      f be non-empty PartFunc of X,REAL;
+  let f be non-empty real-yielding Function;
   thus dom (f^) = dom f \ f"{0} by RFUNCT_1:def 8
   .= dom f;
 end;
@@ -1457,50 +1466,60 @@ end;
 end;
 
 definition
-  let C be set, f be PartFunc of C,REAL;
-  func sqrt f -> PartFunc of C,REAL means :dsqrt:
+  let f be real-yielding Function;
+  func sqrt f -> Function means :dsqrt:
   dom it = dom f &
   for x being set st x in dom it holds it.x = sqrt(f.x);
 existence
-proof
-  per cases;
-  suppose
-A1: C is empty;
-  reconsider F = {} as PartFunc of C,REAL by PARTFUN1:56;
-  take F;
-  thus dom F = dom f by A1,RELAT_1:60,XBOOLE_1:3;
-  thus thesis by RELAT_1:60;
+  proof
+    deffunc F(set) = sqrt (f.$1);
+    ex h being Function st dom h = dom f &
+    for x being set st x in dom f holds h.x = F(x) from FUNCT_1:sch 3;
+    hence thesis;
   end;
-  suppose C is non empty;
-  then reconsider C' = C as non empty set;
-  defpred X[set] means $1 in dom f;
-  deffunc U(Element of C') = sqrt(f.$1);
-  consider F be PartFunc of C',REAL such that
-A2: for c being Element of C' holds c in dom F iff X[c] and
-A3: for c being Element of C' st c in dom F holds F.c = U(c) from SEQ_1:sch 3;
-  reconsider F as PartFunc of C,REAL;
-  take F;
-  thus dom F = dom f by A2,SUBSET_1:8;
-  thus thesis by A3;
+  uniqueness
+  proof
+  let h, g be Function such that
+a1: dom h = dom f and
+a2: for c being set st c in dom h holds h.c = sqrt (f.c) and
+a3: dom g = dom f and
+a4: for c being set st c in dom g holds g.c = sqrt (f.c);
+    now let x be set;
+      assume
+a5:   x in dom h;
+      hence h.x = sqrt (f.x) by a2 .= g.x by a1,a3,a4,a5;
+    end;
+    hence h = g by a1,a3,FUNCT_1:9;
+  end;
 end;
+
+registration
+  let f be real-yielding Function;
+  cluster sqrt f -> real-yielding;
+  coherence
+  proof
+    set F = sqrt f;
+    let y be set;
+    assume y in rng F;
+    then consider x being set such that
+a1: x in dom F and
+a2: F.x = y by FUNCT_1:def 5;
+    F.x = sqrt(f.x) by a1,dsqrt;
+    hence thesis by a2;
+  end;
 end;
-uniqueness
-proof
-  deffunc U(Element of C) = sqrt(f.$1);
-  let f1, f2 be PartFunc of C,REAL such that
-a1: dom f1 = dom f and
-a2: for x being set st x in dom f1 holds f1.x = sqrt(f.x) and
-a3: dom f2 = dom f and
-a4: for x being set st x in dom f2 holds f2.x = sqrt(f.x);
-a5: for f1, f2 be PartFunc of C,REAL st
-   (dom f1 = dom f & for c being Element of C st c in dom f1 holds
-      f1.c = U(c)) &
-   (dom f2 = dom f & for c being Element of C st c in dom f2 holds
-      f2.c = U(c)) holds f1 = f2 from SEQ_1:sch 4;
-a6: for c being Element of C st c in dom f1 holds f1.c = U(c) by a2;
-  for c being Element of C st c in dom f2 holds f2.c = U(c) by a4;
-  hence thesis by a1,a3,a5,a6;
- end;
+
+definition
+  let C be set, D be real-membered set, f be PartFunc of C,D;
+  redefine func sqrt f -> PartFunc of C,REAL;
+  coherence
+  proof
+    set F = sqrt f;
+a2: dom F = dom f by dsqrt;
+    rng F c= REAL by SEQ_1:def 1;
+    then F is PartFunc of dom F, REAL by PARTFUN1:25;
+    hence thesis by a2,PARTFUN1:28;
+  end;
 end;
 
 registration
@@ -1543,10 +1562,10 @@ a3: R.x = r by FUNCT_1:def 5;
 end;
 end;
 
-registration
+definition
   let X be set,
-      f, g be Function of X, REAL;
-  cluster f+g -> quasi_total;
+  f, g be Function of X, REAL;
+  redefine func f+g -> Function of X,REAL;
 coherence
 proof
   dom (f+g) = dom f /\ dom g by SEQ_1:def 3
@@ -1554,7 +1573,7 @@ proof
   .= X /\ X by FUNCT_2:def 1;
   hence thesis by FUNCT_2:def 1;
 end;
-  cluster f-g -> quasi_total;
+  redefine func f-g -> Function of X,REAL;
 coherence
 proof
   dom (f-g) = dom f /\ dom g by SEQ_1:def 4
@@ -1562,7 +1581,7 @@ proof
   .= X /\ X by FUNCT_2:def 1;
   hence thesis by FUNCT_2:def 1;
 end;
-  cluster f(#)g -> quasi_total;
+  redefine func f(#)g -> Function of X,REAL;
 coherence
 proof
   dom (f(#)g) = dom f /\ dom g by SEQ_1:def 5
@@ -1572,24 +1591,24 @@ proof
 end;
 end;
   
-registration
+definition
   let X be set,
       f be Function of X, REAL;
-  cluster -f -> quasi_total;
+  redefine func -f -> Function of X,REAL;
 coherence
 proof
   dom -f = dom f by SEQ_1:def 7
   .= X by FUNCT_2:def 1;
   hence thesis by FUNCT_2:def 1;
 end;
-  cluster abs f -> quasi_total;
+  redefine func abs f -> Function of X,REAL;
 coherence
 proof
   dom abs f = dom f by SEQ_1:def 10
   .= X by FUNCT_2:def 1;
   hence thesis by FUNCT_2:def 1;
 end;
-  cluster sqrt f -> quasi_total;
+  redefine func sqrt f -> Function of X,REAL;
 coherence
 proof
   dom sqrt f = dom f by dsqrt
@@ -1598,11 +1617,11 @@ proof
 end;
 end;
 
-registration
+definition
   let X be set,
       f be Function of X, REAL,
       r be real number;
-  cluster r(#)f -> quasi_total;
+  redefine func  r(#)f -> Function of X,REAL;
 coherence
 proof
   dom (r(#)f) = dom f by SEQ_1:def 6
@@ -1611,10 +1630,9 @@ proof
 end;
 end;
 
-registration
-  let X be non empty set,
-      f be non-empty Function of X, REAL;
-  cluster f^ -> quasi_total;
+definition
+  let X be set, f be non-empty Function of X, REAL;
+  redefine func f^ -> Function of X,REAL;
 coherence
 proof
   dom (f^) = dom f by Tdd
@@ -1623,11 +1641,11 @@ proof
 end;
 end;
 
-registration
+definition
   let X be non empty set,
       f be Function of X, REAL,
       g be non-empty Function of X, REAL;
-  cluster f/g -> quasi_total;
+  redefine func f/g -> Function of X,REAL;
 coherence
 proof
   dom (f/g) = dom f /\ dom g by Tdd2
@@ -1642,13 +1660,13 @@ reserve
   f, g for continuous RealMap of T,
   r for real number;
 
-registration
+definition
   let T, f, g;
   set c = the carrier of T;
-  reconsider F = f, G = g as continuous map of T,R^1 by TOPMETR:24,TOPREAL6:83;
-  cluster f+g -> continuous;
+  redefine func f+g -> continuous RealMap of T;
 coherence
 proof
+  reconsider F = f, G = g as continuous map of T,R^1 by TOPMETR:24,TOPREAL6:83;
   consider H being map of T,R^1 such that
 a1: for p being Point of T, r1,r2 being real number st
      F.p = r1 & G.p = r2 holds H.p = r1+r2 and
@@ -1657,14 +1675,14 @@ a2: H is continuous by JGRAPH_2:29;
 a3: dom h = c /\ c by FUNCT_2:def 1
    .= c /\ dom g by FUNCT_2:def 1
    .= dom f /\ dom g by FUNCT_2:def 1;
-  for c being Element of the carrier of T st c in dom h holds h.c = f.c + g.c
-    by a1;
+  for c being set st c in dom h holds h.c = f.c + g.c by a1;
   then h = f+g by a3,SEQ_1:def 3;
   hence thesis by a2,TOPREAL6:83;
 end;
-  cluster f-g -> continuous;
+  redefine func f-g -> continuous RealMap of T;
 coherence
 proof
+  reconsider F = f, G = g as continuous map of T,R^1 by TOPMETR:24,TOPREAL6:83;
   consider H being map of T,R^1 such that
 a1: for p being Point of T, r1,r2 being real number st
      F.p = r1 & G.p = r2 holds H.p = r1-r2 and
@@ -1673,14 +1691,14 @@ a2: H is continuous by JGRAPH_2:31;
 a3: dom h = c /\ c by FUNCT_2:def 1
    .= c /\ dom g by FUNCT_2:def 1
    .= dom f /\ dom g by FUNCT_2:def 1;
-  for c being Element of the carrier of T st c in dom h holds h.c = f.c - g.c
-    by a1;
+  for c being set st c in dom h holds h.c = f.c - g.c by a1;
   then h = f-g by a3,SEQ_1:def 4;
   hence thesis by a2,TOPREAL6:83;
 end;
-  cluster f(#)g -> continuous;
+  redefine func f(#)g -> continuous RealMap of T;
 coherence
 proof
+  reconsider F = f, G = g as continuous map of T,R^1 by TOPMETR:24,TOPREAL6:83;
   consider H being map of T,R^1 such that
 a1: for p being Point of T, r1,r2 being real number st
      F.p = r1 & G.p = r2 holds H.p = r1*r2 and
@@ -1689,16 +1707,15 @@ a2: H is continuous by JGRAPH_2:35;
 a3: dom h = c /\ c by FUNCT_2:def 1
    .= c /\ dom g by FUNCT_2:def 1
    .= dom f /\ dom g by FUNCT_2:def 1;
-  for c being Element of the carrier of T st c in dom h holds h.c = f.c * g.c
-    by a1;
+  for c being set st c in dom h holds h.c = f.c * g.c by a1;
   then h = f(#)g by a3,SEQ_1:def 5;
   hence thesis by a2,TOPREAL6:83;
 end;
 end;
 
-registration
+definition
   let T, f;
-  cluster -f -> continuous;
+  redefine func -f -> continuous RealMap of T;
 coherence
 proof
   set c = the carrier of T;
@@ -1710,16 +1727,15 @@ a2: H is continuous by JGRAPH_4:13;
   reconsider h = H as RealMap of T by TOPMETR:24;
 a3: dom h = c by FUNCT_2:def 1
    .= dom f by FUNCT_2:def 1;
-  for c being Element of the carrier of T st c in dom h holds h.c = -f.c
-    by a1;
+  for c being set st c in dom h holds h.c = -f.c by a1;
   then h = -f by a3,SEQ_1:def 7;
   hence thesis by a2,TOPREAL6:83;
 end;
 end;
 
-registration
+definition
   let T, f;
-  cluster abs f -> continuous;
+  redefine func abs f -> continuous RealMap of T;
 coherence
 proof
   set c = the carrier of T;
@@ -1731,8 +1747,7 @@ a2: H is continuous by JGRAPH_4:12;
   reconsider h = H as RealMap of T by TOPMETR:24;
 a3: dom h = c by FUNCT_2:def 1
    .= dom f by FUNCT_2:def 1;
-  for c being Element of the carrier of T st c in dom h holds h.c = abs(f.c)
-    by a1;
+  for c being set st c in dom h holds h.c = abs(f.c) by a1;
   then h = abs f by a3,SEQ_1:def 10;
   hence thesis by a2,TOPREAL6:83;
 end;
@@ -1788,9 +1803,9 @@ proof
 end;
 end;
 
-registration
+definition
   let T; let f be nonnegative-yielding continuous RealMap of T;
-  cluster sqrt f -> continuous;
+  redefine func sqrt f -> continuous RealMap of T;
 coherence
 proof
   set c = the carrier of T;
@@ -1817,9 +1832,9 @@ a3: dom h = c by FUNCT_2:def 1
 end;
 end;
 
-registration
+definition
   let T, f, r;
-  cluster r(#)f -> continuous;
+  redefine func r(#)f -> continuous RealMap of T;
 coherence
 proof
   set c = the carrier of T;
@@ -1831,16 +1846,15 @@ a2: H is continuous by JGRAPH_2:33;
   reconsider h = H as RealMap of T by TOPMETR:24;
 a3: dom h = c by FUNCT_2:def 1
    .= dom f by FUNCT_2:def 1;
-  for c being Element of the carrier of T st c in dom h holds h.c = r * f.c
-    by a1;
+  for c being set st c in dom h holds h.c = r * f.c by a1;
   then h = r(#)f by a3,SEQ_1:def 6;
   hence thesis by a2,TOPREAL6:83;
 end;
 end;
 
-registration
+definition
   let T; let f be non-empty continuous RealMap of T;
-  cluster f^ -> continuous;
+  redefine func f^ -> continuous RealMap of T;
 coherence
 proof
   set c = the carrier of T;
@@ -1860,9 +1874,9 @@ a2: H is continuous by JGRAPH_2:36;
 a3: dom h = c by FUNCT_2:def 1
    .= dom f \ f"{0} by FUNCT_2:def 1;
   now
-    let a be Element of c;
+    let a be set;
     assume a in dom h;
-    thus h.a = 1/f.a by a1
+    hence h.a = 1/f.a by a1
     .= 1 * (f.a)" by XCMPLX_0:def 9
     .= (f.a)";
   end;
@@ -1871,9 +1885,9 @@ a3: dom h = c by FUNCT_2:def 1
 end;
 end;
 
-registration
+definition
   let T, f; let g be non-empty continuous RealMap of T;
-  cluster f/g -> continuous;
+  redefine func f/g -> continuous RealMap of T;
 coherence
 proof
   set c = the carrier of T;
@@ -1894,9 +1908,9 @@ a3: dom h = c /\ c by FUNCT_2:def 1
    .= c /\ dom g by FUNCT_2:def 1
    .= dom f /\ (dom g \ g"{0}) by FUNCT_2:def 1;
   now
-    let c be Element of the carrier of T;
+    let c be set;
     assume c in dom h;
-    thus h.c = f.c / g.c by a1
+    hence h.c = f.c / g.c by a1
     .= f.c * (g.c)" by  XCMPLX_0:def 9;
   end;
   then h = f/g by a3,RFUNCT_1:def 4;

@@ -6,7 +6,7 @@
 
 environ
 
- vocabulary FINSET_1, ARYTM, ZF_LANG, ARYTM_1, SEQ_1, FUNCT_1, SQUARE_1,
+ vocabularies FINSET_1, ARYTM, ZF_LANG, ARYTM_1, SEQ_1, FUNCT_1, SQUARE_1,
       ARYTM_3, RELAT_1, SEQ_2, ORDINAL2, ABSVALUE, LIMFUNC1, FRAENKEL, FUNCT_2,
       BOOLE, INT_1, POWER, GROUP_1, ASYMPT_0;
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0,
@@ -14,7 +14,8 @@ environ
       NEWTON, POWER, PRE_CIRC, FINSET_1, SQUARE_1, LIMFUNC1, SFMASTR3;
  constructors REAL_1, FRAENKEL, SEQ_2, POWER, PRE_CIRC, SFMASTR3, LIMFUNC1,
       CARD_4, PARTFUN1, ABSVALUE, NAT_1, ORDINAL2, COMPLEX1, NUMBERS;
- registrations XREAL_0, FRAENKEL, FINSET_1, INT_1, SEQ_1, MEMBERED, ORDINAL2;
+ registrations XREAL_0, FRAENKEL, FINSET_1, INT_1, SEQ_1, MEMBERED, ORDINAL2,
+      RELSET_1;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions TARSKI, FRAENKEL;
  theorems TARSKI, FUNCT_2, FRAENKEL, INT_1, NAT_1, AXIOMS, PRE_CIRC, REAL_1,
@@ -205,14 +206,16 @@ registration
   end;
 end;
 
-registration let f,g be eventually-nonnegative Real_Sequence;
- cluster f+g -> eventually-nonnegative;
+definition let f,g be eventually-nonnegative Real_Sequence;
+ redefine func f+g -> eventually-nonnegative Real_Sequence;
   coherence proof
      consider N such that
   A1: for n st n >= N holds f.n >= 0 by Def4;
      consider M such that
   A2: for n st n >= M holds g.n >= 0 by Def4;
    set a = max(N, M);
+   f+g is eventually-nonnegative
+   proof
    take a; let n; assume
   A3: n >= a;   a >= N by SQUARE_1:46;
       then n >= N by A3,AXIOMS:22;
@@ -221,6 +224,8 @@ registration let f,g be eventually-nonnegative Real_Sequence;
    then g.n >= 0 by A2;
       then 0 + 0 <= f.n + g.n by A4,REAL_1:55;
    hence (f + g).n >= 0 by SEQ_1:11;
+   end;
+   hence thesis;
   end;
 end;
 
@@ -246,15 +251,19 @@ notation let f be Real_Sequence, c be real number;
  synonym f+c for c+f;
 end;
 
-registration let f be eventually-nonnegative Real_Sequence, c be positive Real;
- cluster c(#)f -> eventually-nonnegative;
+definition let f be eventually-nonnegative Real_Sequence, c be positive Real;
+ redefine func c(#)f -> eventually-nonnegative Real_Sequence;
   coherence proof
      consider N such that
   A1: for n st n >= N holds f.n >= 0 by Def4;
+  c(#)f is eventually-nonnegative
+  proof
    take N; let n; assume n >= N;
   then f.n >= 0 by A1;
      then c*f.n >= c*0 by AXIOMS:25;
    hence thesis by SEQ_1:13;
+  end;
+  hence thesis;
   end;
 end;
 

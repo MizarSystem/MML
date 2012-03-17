@@ -6,7 +6,7 @@
 
 environ
 
- vocabulary FUNCT_2, FUNCT_4, FUNCT_1, RELAT_1, BOOLE, FINSET_1, SQUARE_1,
+ vocabularies FUNCT_2, FUNCT_4, FUNCT_1, RELAT_1, BOOLE, FINSET_1, SQUARE_1,
       FINSUB_1, SETWISEO, INT_1, FINSEQ_1, GRAPH_2, FINSEQ_4, ARYTM_1,
       RFUNCT_2, AMI_1, SCMFSA_2, SF_MASTR, SCMFSA6A, SCMFSA7B, AMI_3, UNIALG_2,
       SCMFSA6C, SCMFSA6B, SCMFSA_4, CAT_1, AMI_5, ABSVALUE, SCMFSA8B, SCMFSA_9,
@@ -121,17 +121,15 @@ begin :: SCM+FSA preliminaries
          Ig for good Macro-Instruction,
          i, k for Nat;
 
- :: set D = Int-Locations U FinSeq-Locations;
- :: set FL = FinSeq-Locations;
- :: set SAt = Start-At insloc 0;
-
 theorem :: SFMASTR3:7
  I is_closed_on Initialize s & I is_halting_on Initialize s &
  I does_not_destroy aa
   implies IExec(I,s).aa = (Initialize s).aa;
 
 theorem :: SFMASTR3:8
- s.intloc 0 = 1 implies IExec(SCM+FSA-Stop, s) | D = s | D;
+ s.intloc 0 = 1 implies
+   IExec(SCM+FSA-Stop, s) | (Int-Locations \/ FinSeq-Locations) =
+     s | (Int-Locations \/ FinSeq-Locations);
 
 theorem :: SFMASTR3:9
  SCM+FSA-Stop does_not_refer aa;
@@ -166,27 +164,28 @@ begin :: The for-up macro instruction
 definition
  let a, b, c be Int-Location, I be Macro-Instruction,
      s be State of SCM+FSA;
-::   set aux =  1-stRWNotIn ({a, b, c} U UsedIntLoc I);
  func StepForUp(a, b, c, I, s) -> Function of NAT,
-                                         product the Object-Kind of SCM+FSA
+                                     product the Object-Kind of SCM+FSA
   equals
 :: SFMASTR3:def 6
 
-  StepWhile>0(aux, I ';' AddTo(a, intloc 0) ';' SubFrom(aux, intloc 0),
-              s+*(aux, s.c-s.b+1)+*(a, s.b));
+  StepWhile>0(1-stRWNotIn ({a, b, c} \/ UsedIntLoc I),
+        I ';' AddTo(a, intloc 0) ';'
+        SubFrom(1-stRWNotIn ({a, b, c} \/ UsedIntLoc I), intloc 0),
+        s+*(1-stRWNotIn ({a, b, c} \/ UsedIntLoc I), s.c-s.b+1)+*(a, s.b));
 end;
 
 theorem :: SFMASTR3:16
  s.intloc 0 = 1 implies StepForUp(a, bb, cc, I, s).0.intloc 0 = 1;
 
 theorem :: SFMASTR3:17
- StepForUp(a, bb, cc, I, s).0.a = s.bb;
+  StepForUp(a, bb, cc, I, s).0.a = s.bb;
 
 theorem :: SFMASTR3:18
- a <> bb implies StepForUp(a, bb, cc, I, s).0.bb = s.bb;
+  a <> bb implies StepForUp(a, bb, cc, I, s).0.bb = s.bb;
 
 theorem :: SFMASTR3:19
- a <> cc implies StepForUp(a, bb, cc, I, s).0.cc = s.cc;
+  a <> cc implies StepForUp(a, bb, cc, I, s).0.cc = s.cc;
 
 theorem :: SFMASTR3:20
  a <> dd & dd in UsedIntLoc I implies StepForUp(a, bb, cc, I, s).0.dd = s.dd;
@@ -199,14 +198,14 @@ theorem :: SFMASTR3:22
   for aux being read-write Int-Location
     st aux = 1-stRWNotIn ({a, bb, cc} \/ UsedIntLoc I)
   holds IExec( aux := cc ';' SubFrom(aux, bb) ';' AddTo(aux, intloc 0) ';'
-              (a := bb), s) | D
-      = (s+*(aux, s.cc-s.bb+1)+*(a, s.bb)) | D;
+              (a := bb), s) | (Int-Locations \/ FinSeq-Locations)
+      = (s+*(aux, s.cc-s.bb+1)+*(a, s.bb)) |
+        (Int-Locations \/ FinSeq-Locations);
 
 definition
  let a, b, c be Int-Location, I be Macro-Instruction, s be State of SCM+FSA;
  pred ProperForUpBody a, b, c, I, s means
 :: SFMASTR3:def 7
-
   for i being Nat st i < s.c-s.b+1
    holds I is_closed_on StepForUp(a, b, c, I, s).i &
          I is_halting_on StepForUp(a, b, c, I, s).i;
@@ -241,13 +240,13 @@ iff k < s.cc-s.bb+1;
 
 theorem :: SFMASTR3:27
 s.intloc 0 = 1 & ProperForUpBody a, bb, cc, Ig, s & k < s.cc-s.bb+1 implies
-    StepForUp(a, bb, cc, Ig, s).(k+1) | (({a, bb, cc} \/ UsedIntLoc Ig) \/ FL)
+  StepForUp(a, bb, cc, Ig, s).(k+1) | (({a, bb, cc} \/ UsedIntLoc Ig) \/
+    FinSeq-Locations)
   = IExec(Ig ';' AddTo(a, intloc 0), StepForUp(a, bb, cc, Ig, s).k)
-                                      | (({a, bb, cc} \/ UsedIntLoc Ig) \/ FL);
+      | (({a, bb, cc} \/ UsedIntLoc Ig) \/ FinSeq-Locations);
 
 definition
  let a, b, c be Int-Location, I be Macro-Instruction;
-::   set aux = 1-stRWNotIn ({a, b, c} U UsedIntLoc I);
  func for-up(a, b, c, I) -> Macro-Instruction equals
 :: SFMASTR3:def 8
 
@@ -255,8 +254,7 @@ definition
     SubFrom(aux, b) ';'
     AddTo(aux, intloc 0) ';'
     (a := b) ';'
-    while>0( aux, I ';' AddTo(a, intloc 0) ';' SubFrom(aux, intloc 0)
-           );
+    while>0( aux, I ';' AddTo(a, intloc 0) ';' SubFrom(aux, intloc 0) );
 end;
 
 theorem :: SFMASTR3:28
@@ -282,8 +280,8 @@ theorem :: SFMASTR3:30
 theorem :: SFMASTR3:31
  s.intloc 0 = 1 &
  k = s.cc-s.bb+1 & (ProperForUpBody a, bb, cc, Ig, s or Ig is parahalting)
-implies IExec(for-up(a, bb, cc, Ig), s) | D = StepForUp(a, bb, cc, Ig, s).k | D
-;
+implies IExec(for-up(a, bb, cc, Ig), s) | (Int-Locations \/ FinSeq-Locations)
+ = StepForUp(a, bb, cc, Ig, s).k | (Int-Locations \/ FinSeq-Locations);
 
 theorem :: SFMASTR3:32
  s.intloc 0 = 1 & (ProperForUpBody a, bb, cc, Ig, s or Ig is parahalting)
@@ -365,7 +363,7 @@ theorem :: SFMASTR3:39
        = s.f+*(s.aa, s.f.(s.bb))+*(s.bb, s.f.(s.aa));
 
 theorem :: SFMASTR3:40
-    1 <= s.aa & s.aa <= len (s.f) & 1 <= s.bb & s.bb <= len (s.f) &
+  1 <= s.aa & s.aa <= len (s.f) & 1 <= s.bb & s.bb <= len (s.f) &
  s.intloc 0 = 1
  implies IExec(swap(f, aa, bb), s).f.(s.aa) = s.f.(s.bb) &
          IExec(swap(f, aa, bb), s).f.(s.bb) = s.f.(s.aa);
@@ -374,23 +372,19 @@ theorem :: SFMASTR3:41
  {aa, bb} c= UsedIntLoc swap(f, aa, bb);
 
 theorem :: SFMASTR3:42
-    UsedInt*Loc swap(f, aa, bb) = {f};
+  UsedInt*Loc swap(f, aa, bb) = {f};
 
 begin :: Selection sort
 
 definition
  let f be FinSeq-Location;
 
-::   set cv = 1-stRWNotIn {} Int-Locations;
-::   set min_pos = 2-ndRWNotIn {} Int-Locations;
-::   set finish = 1-stNotUsed swap(f, cv, min_pos);
-
  func Selection-sort f -> Macro-Instruction equals
 :: SFMASTR3:def 11
-
-  finish :=len f ';'
-  for-up ( cv, intloc 0, finish,
-           FinSeqMin(f, cv, finish, min_pos) ';' swap(f, cv, min_pos)
+  (1-stNotUsed swap(f, cv, min_pos)) :=len f ';'
+  for-up ( cv, intloc 0, (1-stNotUsed swap(f, cv, min_pos)),
+           FinSeqMin(f, cv, (1-stNotUsed swap(f, cv, min_pos)), min_pos) ';'
+           swap(f, cv, min_pos)
          );
 end;
 

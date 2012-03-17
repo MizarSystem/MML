@@ -6,7 +6,7 @@
 
 environ
 
- vocabulary MIDSP_3, MARGREL1, BINARITH, POWER, FINSEQ_1, CQC_LANG, FINSEQ_5,
+ vocabularies MIDSP_3, MARGREL1, BINARITH, POWER, FINSEQ_1, CQC_LANG, FINSEQ_5,
       EUCLID, FINSEQ_2, ZF_LANG, FUNCT_1, ARYTM_1, RELAT_1, BINARI_2, NAT_1,
       ARYTM_3, MATRIX_2, BINARI_3, FINSEQ_4, REALSET1;
  notations XBOOLE_0, SUBSET_1, XREAL_0, REAL_1, NAT_1, POWER, ABIAN, SERIES_1,
@@ -107,7 +107,7 @@ A8:  Absval T < 2 to_power n by A4;
               d2 be Element of BOOLEAN such that
       A11: F2 = T2^<*d2*> by FINSEQ_2:137;
      assume A12: Absval F1 = Absval F2;
-     A13: Absval T1 + IFEQ(d1,FALSE,0 qua Real,2 to_power k) = Absval F1
+     A13: Absval T1 + IFEQ(d1,FALSE,0,2 to_power k) = Absval F1
                                                             by A10,BINARITH:46
         .= Absval T2 + IFEQ(d2,FALSE,0,2 to_power k) by A11,A12,BINARITH:46;
      A14: d1 = d2
@@ -976,8 +976,7 @@ begin :: Binary Sequences
     hence thesis by FINSEQ_2:139;
    end;
 
-  theorem Th29:
-   for n be non empty Nat holds
+LmX:for n be non empty Nat holds
     (n+1)-BinarySequence 2 to_power n = 0*n^<*TRUE*>
    proof
     let n be non empty Nat;
@@ -1050,7 +1049,7 @@ POWER:32;
     hence thesis by FINSEQ_2:139;
    end;
 
-  theorem Th30:
+Lm30:
    for n be non empty Nat
    for k be Nat st 2 to_power n <= k & k < 2 to_power (n+1) holds
     ((n+1)-BinarySequence k).(n+1) = TRUE
@@ -1076,7 +1075,7 @@ POWER:32;
        .= TRUE by A4,CQC_LANG:def 1;
    end;
 
-  theorem Th31:
+Lm31:
    for n be non empty Nat
    for k be Nat st 2 to_power n <= k & k < 2 to_power (n+1) holds
     (n+1)-BinarySequence k = (n-BinarySequence (k -' 2 to_power n))^<*TRUE*>
@@ -1129,7 +1128,7 @@ POWER:32;
                                                        by A6,FINSEQ_1:def 7;
       end;
       suppose A15: i = n + 1;
-       hence ((n+1)-BinarySequence k).i = TRUE by A1,A2,Th30
+       hence ((n+1)-BinarySequence k).i = TRUE by A1,A2,Lm30
           .= ((n-BinarySequence (k -' 2 to_power n))^<*TRUE*>).i
                                                           by A15,FINSEQ_2:136;
      end;
@@ -1140,7 +1139,7 @@ POWER:32;
     hence thesis by FINSEQ_2:139;
    end;
 
-  theorem Th32:
+Lm32:
    for n be non empty Nat
    for k be Nat st k < 2 to_power n
    for x be Tuple of n,BOOLEAN st x = 0*n holds
@@ -1206,7 +1205,7 @@ POWER:32;
          .= TRUE by MARGREL1:41;
       then A22: k >= 2 to_power m by Th27,MARGREL1:38;
       then A23: (m+1)-BinarySequence k =
-       (m-BinarySequence (k -' 2 to_power m))^<*TRUE*> by A14,Th31;
+       (m-BinarySequence (k -' 2 to_power m))^<*TRUE*> by A14,Lm31;
          k < (2 to_power m) * (2 to_power 1) by A14,POWER:32;
       then k < 2 * (2 to_power m) by POWER:30;
       then k < 2 to_power m + 2 to_power m;
@@ -1239,7 +1238,7 @@ FALSE*>
      A29: len x = n by FINSEQ_2:109;
      A30: len 'not' x = n by FINSEQ_2:109;
      A31: 1 <= i & i <= n by A27,FINSEQ_1:3;
-     A32: (x).i = (n |-> (0 qua Real)).i by A2,EUCLID:def 4
+     A32: (x).i = (n |-> 0).i by A2,EUCLID:def 4
             .= FALSE by A27,FINSEQ_2:70,MARGREL1:36;
         2 to_power (i-'1) > 0 by POWER:39;
      then A33: 2 to_power (i-'1) >= 0 + 1 by NAT_1:38;
@@ -1272,6 +1271,45 @@ FALSE*>
     end;
     hence thesis by FINSEQ_2:139;
    end;
+
+theorem Th29:
+  for i being Nat holds (i+1)-BinarySequence 2 to_power i= 0*i^<*1*>
+  proof let i be Nat;
+    deffunc Bi(Nat) = ($1+1)-BinarySequence 2 to_power $1; set Bi = Bi(i);
+  per cases by NAT_1:19;
+   suppose A1: i = 0; reconsider i1 = i+1 as non empty Nat;
+   A2: 2 to_power i1 = 2 by A1,POWER:30;
+   then A3: 1 = (2 to_power i1) - 1;
+   A4: 0*i1 = 1 |-> 0 by A1,EUCLID:def 4
+           .= <*FALSE*> by FINSEQ_2:73,MARGREL1:def 13;
+       then reconsider x = 0*i1 as Tuple of i1, BOOLEAN by A1;
+   A5: 0*i = 0 |-> 0 by A1,EUCLID:def 4 .= 0 by FINSEQ_2:72;
+          i1-BinarySequence 1 = 'not' x by A2,A3,Lm32;
+    hence Bi = <*TRUE*> by A1,A4,Th15,POWER:29
+           .= 0*i^<*1*> by A5,FINSEQ_1:47,MARGREL1:def 14;
+   end;
+   suppose i > 0; then reconsider i' = i as non empty Nat;
+         Bi = 0*(i')^<*1*> by LmX,MARGREL1:def 14;
+    hence thesis;
+  end;
+  end;
+
+  theorem Th30:
+   for n be non empty Nat
+   for k be Nat st 2 to_power n <= k & k < 2 to_power (n+1) holds
+    ((n+1)-BinarySequence k).(n+1) = TRUE by Lm30;
+
+  theorem Th31:
+   for n be non empty Nat
+   for k be Nat st 2 to_power n <= k & k < 2 to_power (n+1) holds
+    (n+1)-BinarySequence k = (n-BinarySequence (k -' 2 to_power n))^<*TRUE*>
+      by Lm31;
+
+  theorem Th32:
+   for n be non empty Nat
+   for k be Nat st k < 2 to_power n
+   for x be Tuple of n,BOOLEAN st x = 0*n holds
+    n-BinarySequence k = 'not' x iff k = 2 to_power n - 1 by Lm32;
 
   theorem Th33:
    for n be non empty Nat
@@ -1374,7 +1412,8 @@ FALSE*>
        A21: k = 2 to_power n - 1 by A18,XCMPLX_1:26;
        then n-BinarySequence k = 'not' z by A19,Th32;
        then A22: add_ovfl(n-BinarySequence k,Bin1 n) = TRUE by Th24;
-       thus (n+1)-BinarySequence (k+1) = 0*n^<*TRUE*> by A18,Th29
+       thus (n+1)-BinarySequence (k+1) = 0*n^<*1*> by A18,Th29
+         .= 0*n^<*TRUE*> by MARGREL1:def 14
          .= ('not' z + Bin1 n)^<*TRUE*> by Th25
          .= (n-BinarySequence k + Bin1 n)^<*TRUE*> by A19,A21,Th32
          .= (n-BinarySequence k + Bin1 n)^<*FALSE 'xor'
@@ -1392,7 +1431,7 @@ FALSE*>
    end;
 
   theorem
-      for n,i be Nat holds
+   for n,i be Nat holds
     (n+1)-BinarySequence i = <*i mod 2*> ^ (n-BinarySequence (i div 2))
    proof
     let n,i be Nat;

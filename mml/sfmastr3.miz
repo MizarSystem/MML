@@ -6,7 +6,7 @@
 
 environ
 
- vocabulary FUNCT_2, FUNCT_4, FUNCT_1, RELAT_1, BOOLE, FINSET_1, SQUARE_1,
+ vocabularies FUNCT_2, FUNCT_4, FUNCT_1, RELAT_1, BOOLE, FINSET_1, SQUARE_1,
       FINSUB_1, SETWISEO, INT_1, FINSEQ_1, GRAPH_2, FINSEQ_4, ARYTM_1,
       RFUNCT_2, AMI_1, SCMFSA_2, SF_MASTR, SCMFSA6A, SCMFSA7B, AMI_3, UNIALG_2,
       SCMFSA6C, SCMFSA6B, SCMFSA_4, CAT_1, AMI_5, ABSVALUE, SCMFSA8B, SCMFSA_9,
@@ -650,19 +650,13 @@ begin :: SCM+FSA preliminaries
          Ig for good Macro-Instruction,
          i, k for Nat;
 
- set D = Int-Locations \/ FinSeq-Locations;
- set FL = FinSeq-Locations;
- set SAt = Start-At insloc 0;
-
- :: set D = Int-Locations U FinSeq-Locations;
- :: set FL = FinSeq-Locations;
- :: set SAt = Start-At insloc 0;
-
 theorem Th7:
  I is_closed_on Initialize s & I is_halting_on Initialize s &
  I does_not_destroy aa
   implies IExec(I,s).aa = (Initialize s).aa
-proof set a = aa; assume that
+proof
+ set D = Int-Locations \/ FinSeq-Locations;
+ set a = aa; assume that
 A1: I is_closed_on Initialize s & I is_halting_on Initialize s and
 A2: I does_not_destroy a;
 A3: (Initialize s) | D = (Initialize s +* (I +* Start-At insloc 0)) | D
@@ -675,8 +669,11 @@ SCMFSA8C:89
 end;
 
 theorem Th8:
- s.intloc 0 = 1 implies IExec(SCM+FSA-Stop, s) | D = s | D
-proof assume
+ s.intloc 0 = 1 implies
+   IExec(SCM+FSA-Stop, s) | (Int-Locations \/ FinSeq-Locations) =
+     s | (Int-Locations \/ FinSeq-Locations)
+proof
+ set D = Int-Locations \/ FinSeq-Locations; assume
 A1: s.intloc 0 = 1;
  thus IExec(SCM+FSA-Stop, s) | D
     = (Initialize s +* Start-At insloc 0) | D by SCMFSA8C:38
@@ -703,7 +700,6 @@ proof
       let f be FinSeq-Location;
    A2: 1 <> 2 & 1 <> 3 & 1 <> 4 & 1 <> 5 & 1 <> 7 & 1 <> 8 & 1 <> 9 & 1 <> 10
       & 1 <> 12 & InsCode (cc := bb) = 1 by SCMFSA_2:42;
-
       thus e := aa <> cc := bb by A1,SF_MASTR:5;
       thus AddTo(e,aa) <> cc := bb by A2,SCMFSA_2:43;
       thus SubFrom(e,aa) <> cc := bb by A2,SCMFSA_2:44;
@@ -790,14 +786,14 @@ begin :: The for-up macro instruction
 definition
  let a, b, c be Int-Location, I be Macro-Instruction,
      s be State of SCM+FSA;
- set aux = 1-stRWNotIn ({a, b, c} \/ UsedIntLoc I);
-::   set aux =  1-stRWNotIn ({a, b, c} U UsedIntLoc I);
  func StepForUp(a, b, c, I, s) -> Function of NAT,
-                                         product the Object-Kind of SCM+FSA
+                                     product the Object-Kind of SCM+FSA
   equals
 :Def6:
-  StepWhile>0(aux, I ';' AddTo(a, intloc 0) ';' SubFrom(aux, intloc 0),
-              s+*(aux, s.c-s.b+1)+*(a, s.b));
+  StepWhile>0(1-stRWNotIn ({a, b, c} \/ UsedIntLoc I),
+        I ';' AddTo(a, intloc 0) ';'
+        SubFrom(1-stRWNotIn ({a, b, c} \/ UsedIntLoc I), intloc 0),
+        s+*(1-stRWNotIn ({a, b, c} \/ UsedIntLoc I), s.c-s.b+1)+*(a, s.b));
  coherence;
 end;
 
@@ -815,7 +811,7 @@ A2: StepWhile>0(aux, I ';' AddTo(a, intloc 0) ';' SubFrom(aux, intloc 0), S).0
 end;
 
 theorem Th17:
- StepForUp(a, bb, cc, I, s).0.a = s.bb
+  StepForUp(a, bb, cc, I, s).0.a = s.bb
 proof
  set aux = 1-stRWNotIn ({a, bb, cc} \/ UsedIntLoc I);
  set S = s+*(aux, s.cc-s.bb+1)+*(a, s.bb);
@@ -829,7 +825,7 @@ A2: StepWhile>0(aux, I ';' AddTo(a, intloc 0) ';' SubFrom(aux, intloc 0), S).0
 end;
 
 theorem Th18:
- a <> bb implies StepForUp(a, bb, cc, I, s).0.bb = s.bb
+  a <> bb implies StepForUp(a, bb, cc, I, s).0.bb = s.bb
 proof assume
 A1: a <> bb;
  set aux = 1-stRWNotIn ({a, bb, cc} \/ UsedIntLoc I);
@@ -845,7 +841,7 @@ then A3: bb <> aux by SFMASTR1:21;
 end;
 
 theorem Th19:
- a <> cc implies StepForUp(a, bb, cc, I, s).0.cc = s.cc
+  a <> cc implies StepForUp(a, bb, cc, I, s).0.cc = s.cc
 proof assume
 A1: a <> cc;
  set aux = 1-stRWNotIn ({a, bb, cc} \/ UsedIntLoc I);
@@ -894,8 +890,9 @@ theorem Th22:
   for aux being read-write Int-Location
     st aux = 1-stRWNotIn ({a, bb, cc} \/ UsedIntLoc I)
   holds IExec( aux := cc ';' SubFrom(aux, bb) ';' AddTo(aux, intloc 0) ';'
-              (a := bb), s) | D
-      = (s+*(aux, s.cc-s.bb+1)+*(a, s.bb)) | D
+              (a := bb), s) | (Int-Locations \/ FinSeq-Locations)
+      = (s+*(aux, s.cc-s.bb+1)+*(a, s.bb)) |
+        (Int-Locations \/ FinSeq-Locations)
 proof assume
 A1: s.intloc 0 = 1;
 let aux be read-write Int-Location such that
@@ -982,13 +979,12 @@ A11:  s2.aux
                .= (s+*(aux, s.cc-s.bb+1)).x by A16,FUNCT_7:34
                .= s2.x by A16,FUNCT_7:34;
    end;
- hence s1 | D = s2 | D by SCMFSA6A:38;
+ hence thesis by SCMFSA6A:38;
 end;
 
 definition
  let a, b, c be Int-Location, I be Macro-Instruction, s be State of SCM+FSA;
- pred ProperForUpBody a, b, c, I, s means
-:Def7:
+ pred ProperForUpBody a, b, c, I, s means :Def7:
   for i being Nat st i < s.c-s.b+1
    holds I is_closed_on StepForUp(a, b, c, I, s).i &
          I is_halting_on StepForUp(a, b, c, I, s).i;
@@ -1008,7 +1004,9 @@ theorem Th24:
  Ig is_closed_on StepForUp(a, bb, cc, Ig, s).k &
  Ig is_halting_on StepForUp(a, bb, cc, Ig, s).k
   implies StepForUp(a, bb, cc, Ig, s).(k+1).intloc 0 = 1
-proof set I = Ig; assume that
+proof
+ set D = Int-Locations \/ FinSeq-Locations;
+set I = Ig; assume that
 A1: StepForUp(a, bb, cc, I, s).k.intloc 0 = 1 and
 A2: I is_closed_on StepForUp(a, bb, cc, I, s).k and
 A3: I is_halting_on StepForUp(a, bb, cc, I, s).k;
@@ -1056,7 +1054,9 @@ theorem Th25:
                    StepForUp(a, bb, cc, Ig, s).k.a <= s.cc+1) &
  StepForUp(a, bb, cc, Ig, s).k.(1-stRWNotIn ({a, bb, cc} \/ UsedIntLoc Ig)) + k
   = s.cc-s.bb+1
-proof set I = Ig; assume that
+proof
+ set D = Int-Locations \/ FinSeq-Locations;
+set I = Ig; assume that
 A1: s.intloc 0 = 1 and
 A2: ProperForUpBody a, bb, cc, I, s;
    set SF = StepForUp(a, bb, cc, I, s);
@@ -1180,7 +1180,9 @@ theorem Th26:
    StepForUp(a, bb, cc, Ig, s).k.(1-stRWNotIn({a, bb, cc} \/
  UsedIntLoc Ig)) > 0
 iff k < s.cc-s.bb+1
-proof set I = Ig; assume that
+proof
+ set D = Int-Locations \/ FinSeq-Locations;
+set I = Ig; assume that
 A1: s.intloc 0 = 1 and
 A2: ProperForUpBody a, bb, cc, I, s;
   set SF = StepForUp(a, bb, cc, I, s);
@@ -1232,10 +1234,14 @@ end;
 
 theorem Th27:
 s.intloc 0 = 1 & ProperForUpBody a, bb, cc, Ig, s & k < s.cc-s.bb+1 implies
-    StepForUp(a, bb, cc, Ig, s).(k+1) | (({a, bb, cc} \/ UsedIntLoc Ig) \/ FL)
+  StepForUp(a, bb, cc, Ig, s).(k+1) | (({a, bb, cc} \/ UsedIntLoc Ig) \/
+    FinSeq-Locations)
   = IExec(Ig ';' AddTo(a, intloc 0), StepForUp(a, bb, cc, Ig, s).k)
-                                      | (({a, bb, cc} \/ UsedIntLoc Ig) \/ FL)
-proof set I = Ig; assume that
+      | (({a, bb, cc} \/ UsedIntLoc Ig) \/ FinSeq-Locations)
+proof
+ set FL = FinSeq-Locations;
+ set D = Int-Locations \/ FinSeq-Locations;
+set I = Ig; assume that
 A1: s.intloc 0 = 1 and
 A2: ProperForUpBody a, bb, cc, I, s and
 A3: k < s.cc-s.bb+1;
@@ -1303,16 +1309,14 @@ end;
 
 definition
  let a, b, c be Int-Location, I be Macro-Instruction;
-   set aux = 1-stRWNotIn ({a, b, c} \/ UsedIntLoc I);
-::   set aux = 1-stRWNotIn ({a, b, c} U UsedIntLoc I);
+ set aux = 1-stRWNotIn ({a, b, c} \/ UsedIntLoc I);
  func for-up(a, b, c, I) -> Macro-Instruction equals
 :Def8:
     aux := c ';'
     SubFrom(aux, b) ';'
     AddTo(aux, intloc 0) ';'
     (a := b) ';'
-    while>0( aux, I ';' AddTo(a, intloc 0) ';' SubFrom(aux, intloc 0)
-           );
+    while>0( aux, I ';' AddTo(a, intloc 0) ';' SubFrom(aux, intloc 0) );
  coherence;
 end;
 
@@ -1428,7 +1432,9 @@ theorem Th30:
    implies (for x st x <> a & x in {bb, cc} \/ UsedIntLoc I
               holds IExec(for-up(a, bb, cc, I), s).x = s.x) &
            for f holds IExec(for-up(a, bb, cc, I), s).f = s.f
-proof assume that
+proof
+ set D = Int-Locations \/ FinSeq-Locations;
+assume that
 A1: s.intloc 0 = 1 and
 A2: s.bb > s.cc;
    set aux = 1-stRWNotIn ({a, bb, cc} \/ UsedIntLoc I);
@@ -1512,6 +1518,7 @@ end;
 
 Lm1:
 now let s, a, bb, cc;
+ set D = Int-Locations \/ FinSeq-Locations;
 let I be good Macro-Instruction such that
 A1: s.intloc 0 = 1 and
 A2: ProperForUpBody a, bb, cc, I, s or I is parahalting;
@@ -1614,8 +1621,12 @@ end;
 theorem Th31:
  s.intloc 0 = 1 &
  k = s.cc-s.bb+1 & (ProperForUpBody a, bb, cc, Ig, s or Ig is parahalting)
-implies IExec(for-up(a, bb, cc, Ig), s) | D = StepForUp(a, bb, cc, Ig, s).k | D
-proof set I = Ig; assume that
+implies IExec(for-up(a, bb, cc, Ig), s) | (Int-Locations \/ FinSeq-Locations)
+ = StepForUp(a, bb, cc, Ig, s).k | (Int-Locations \/ FinSeq-Locations)
+proof
+ set SAt = Start-At insloc 0;
+ set D = Int-Locations \/ FinSeq-Locations;
+set I = Ig; assume that
 A1: s.intloc 0 = 1 and
 A2: k = s.cc-s.bb+1 and
 A3: ProperForUpBody a, bb, cc, I, s or I is parahalting;
@@ -1866,7 +1877,9 @@ theorem Th36:
   implies IExec(FinSeqMin(f, aa, bb, c), s).f = s.f &
           IExec(FinSeqMin(f, aa, bb, c), s).aa = s.aa &
           IExec(FinSeqMin(f, aa, bb, c), s).bb = s.bb
-proof assume that
+proof
+set D = Int-Locations \/ FinSeq-Locations;
+  assume that
 A1: aa <> c and
 A2: bb <> c and
 A3: s.intloc 0 = 1;
@@ -1971,9 +1984,9 @@ A34: for n being Nat st P[n] holds P[n+1] proof let n be Nat such that
        hence SF.n.cv <= s1.b by A21,A23,A35,A36,A40,NAT_1:38,REAL_1:84;
      end;
      end;
- A41:  SF.(n+1) | (({cv, a, b} \/ UsedIntLoc I1B) \/ FL)
+ A41:  SF.(n+1) | (({cv, a, b} \/ UsedIntLoc I1B) \/ FinSeq-Locations)
     = IExec(I1B ';' AddTo(cv, intloc 0), SF.n)
-       | (({cv, a, b} \/ UsedIntLoc I1B) \/ FL)
+       | (({cv, a, b} \/ UsedIntLoc I1B) \/ FinSeq-Locations)
           by A19,A21,A23,A32,A37,Th27;
 
    set S0 = Initialize (SF.n);
@@ -2184,7 +2197,9 @@ theorem Th37:
  s.intloc 0 = 1
   implies IExec(FinSeqMin(f, aa, bb, c), s).c
         = min_at(s.f, abs(s.aa), abs(s.bb))
-proof set a = aa, b = bb; assume that
+proof
+set D = Int-Locations \/ FinSeq-Locations;
+set a = aa, b = bb; assume that
 A1: 1 <= s.a and
 A2: s.a <= s.b and
 A3: s.b <= len (s.f) and
@@ -2281,9 +2296,9 @@ A33: for n being Nat st P[n] holds P[n+1] proof let n be Nat such that
        hence SF.n.cv <= s1.b by A24,A26,A34,A39,NAT_1:38,REAL_1:84;
      end;
      end;
- A40:  SF.(n+1) | ({cv, a, b} \/ (UsedIntLoc I1B) \/ FL)
+ A40:  SF.(n+1) | ({cv, a, b} \/ (UsedIntLoc I1B) \/ FinSeq-Locations)
       = IExec(I1B ';' AddTo(cv, intloc 0), SF.n)
-         | ({cv, a, b} \/ (UsedIntLoc I1B) \/ FL)
+         | ({cv, a, b} \/ (UsedIntLoc I1B) \/ FinSeq-Locations)
               by A22,A24,A26,A31,A36,Th27;
 
    set S0 = Initialize (SF.n);
@@ -2582,8 +2597,7 @@ A5: aux2 := (f,b) does_not_destroy cc by A2,SCMFSA7B:20;
 A6: (f,a) := aux2 does_not_destroy cc by SCMFSA7B:21;
 A7: (f,b) := aux1 does_not_destroy cc by SCMFSA7B:21;
       aux1 := (f,a) ';' (aux2 := (f,b)) does_not_destroy cc by A4,A5,
-SCMFSA8C:84
-;
+SCMFSA8C:84;
     then aux1 := (f,a) ';' (aux2 := (f,b)) ';' ((f,a) := aux2)
 does_not_destroy cc
          by A6,SCMFSA8C:83;
@@ -2645,7 +2659,7 @@ A25: s3.aux1 = Exec(i2, s2).aux1 by SCMFSA6C:7
 end;
 
 theorem
-    1 <= s.aa & s.aa <= len (s.f) & 1 <= s.bb & s.bb <= len (s.f) &
+  1 <= s.aa & s.aa <= len (s.f) & 1 <= s.bb & s.bb <= len (s.f) &
  s.intloc 0 = 1
  implies IExec(swap(f, aa, bb), s).f.(s.aa) = s.f.(s.bb) &
          IExec(swap(f, aa, bb), s).f.(s.bb) = s.f.(s.aa)
@@ -2706,7 +2720,7 @@ end;
 end;
 
 theorem
-    UsedInt*Loc swap(f, aa, bb) = {f}
+  UsedInt*Loc swap(f, aa, bb) = {f}
 proof set a = aa, b = bb;
       set aux1 = 1-stRWNotIn {a, b}; set aux2 = 2-ndRWNotIn {a, b};
 thus
@@ -2734,17 +2748,12 @@ definition
  let f be FinSeq-Location;
   set cv = 1-stRWNotIn {} Int-Locations;
   set min_pos = 2-ndRWNotIn {} Int-Locations;
-  set finish = 1-stNotUsed swap(f, cv, min_pos);
 
-::   set cv = 1-stRWNotIn {} Int-Locations;
-::   set min_pos = 2-ndRWNotIn {} Int-Locations;
-::   set finish = 1-stNotUsed swap(f, cv, min_pos);
-
- func Selection-sort f -> Macro-Instruction equals
-:Def11:
-  finish :=len f ';'
-  for-up ( cv, intloc 0, finish,
-           FinSeqMin(f, cv, finish, min_pos) ';' swap(f, cv, min_pos)
+ func Selection-sort f -> Macro-Instruction equals :Def11:
+  (1-stNotUsed swap(f, cv, min_pos)) :=len f ';'
+  for-up ( cv, intloc 0, (1-stNotUsed swap(f, cv, min_pos)),
+           FinSeqMin(f, cv, (1-stNotUsed swap(f, cv, min_pos)), min_pos) ';'
+           swap(f, cv, min_pos)
          );
  coherence;
 end;
@@ -2753,13 +2762,13 @@ theorem
     for S being State of SCM+FSA st S = IExec(Selection-sort f, s)
    holds S.f is_non_decreasing_on 1, len (S.f) &
          ex p being Permutation of dom(s.f) st S.f = (s.f) * p
-proof let S be State of SCM+FSA such that
+proof
+set D = Int-Locations \/ FinSeq-Locations;
+let S be State of SCM+FSA such that
 A1: S = IExec(Selection-sort f, s);
-
   set cv = 1-stRWNotIn {} Int-Locations;
   set min_pos = 2-ndRWNotIn {} Int-Locations;
   set finish = 1-stNotUsed swap(f, cv, min_pos);
-
   set i1 = finish :=len f;
   set I21 = FinSeqMin(f, cv, finish, min_pos);
   set I22 = swap(f, cv, min_pos);
@@ -2843,18 +2852,18 @@ A27: P[0] proof
      thus SF.0.cv = 0+s1.intloc 0 by Th17;
      thus SF.0.finish = s1.finish by A9,Th19;
      thus SF.0.f is_split_at 0 proof let i, j be Nat; assume
-           1 <= i & i <= 0 & 0 < j & j <= len (SF.0.f);
+      1 <= i & i <= 0 & 0 < j & j <= len (SF.0.f);
       hence thesis;
      end;
      thus SF.0.f is_non_decreasing_on 1, 0 proof let i, j be Nat; assume
-         1 <= i & i <= j & j <= 0;
+      1 <= i & i <= j & j <= 0;
       hence thesis;
      end;
    A28: SF.0.f = s1.f by Th21 .= (Initialize s).f by SCMFSA_2:100
              .= s.f by SCMFSA6C:3;
-          dom(s.f) = Seg len(s.f) by FINSEQ_1:def 3;
+       dom(s.f) = Seg len(s.f) by FINSEQ_1:def 3;
        then reconsider p = idseq len (s.f) as Permutation of dom(s.f)
-            by FINSEQ_2:65;
+        by FINSEQ_2:65;
      take p;
      thus SF.0.f = (s.f) * p by A28,FINSEQ_2:64;
     end;
@@ -2873,10 +2882,11 @@ A29: for k being Nat st P[k] holds P[k+1] proof let k be Nat such that
      thus SF.k.finish = s1.finish by A30,A32;
      thus SF.k.cv <= s1.finish by A5,A30,A32,NAT_1:38;
      thus
-         SF.(k+1) | ({cv, intloc 0, finish} \/ (UsedIntLoc I2B) \/ FL)
+         SF.(k+1) | ({cv, intloc 0, finish} \/ (UsedIntLoc I2B) \/
+         FinSeq-Locations)
     = IExec(I2B ';' AddTo(cv,intloc 0), SF.k)
-               | ({cv, intloc 0, finish} \/ (UsedIntLoc I2B) \/ FL)
-        by A5,A26,A32,Th27;
+               | ({cv, intloc 0, finish} \/ (UsedIntLoc I2B) \/
+                 FinSeq-Locations) by A5,A26,A32,Th27;
    end;
    assume
    A35: k+1 <= n;

@@ -20,10 +20,11 @@
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="XREAL_0"/>
 <ArticleID name="FUNCT_3"/>
+<ArticleID name="MEMBERED"/>
+<ArticleID name="SEQ_1"/>
 <ArticleID name="RFUNCT_1"/>
 <ArticleID name="SQUARE_1"/>
 <ArticleID name="RFINSEQ"/>
-<ArticleID name="SEQ_1"/>
 <ArticleID name="PARTFUN1"/>
 <ArticleID name="RFUNCT_3"/>
 <ArticleID name="REARRAN1"/>
@@ -48,9 +49,9 @@
 <Adjective nr="5"/>
 <Adjective nr="22"/>
 <Adjective nr="25"/>
-<Adjective nr="33"/>
-<Adjective nr="34"/>
-<Adjective nr="35">
+<Adjective nr="38"/>
+<Adjective nr="39"/>
+<Adjective nr="40">
 <Func kind="K" nr="10">
 <LocusVar nr="1"/>
 </Func>

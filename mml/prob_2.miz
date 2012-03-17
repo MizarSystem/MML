@@ -6,14 +6,14 @@
 
 environ
 
- vocabulary SEQ_1, PROB_1, ARYTM_3, RELAT_1, SEQ_2, FUNCT_1, ARYTM_1, ORDINAL2,
-      ARYTM, ABSVALUE, BOOLE, SUBSET_1, PROB_2;
+ vocabularies SEQ_1, PROB_1, ARYTM_3, RELAT_1, SEQ_2, FUNCT_1, ARYTM_1,
+      ORDINAL2, ARYTM, ABSVALUE, BOOLE, SUBSET_1, PROB_2;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0,
       XREAL_0, RELAT_1, REAL_1, FUNCT_1, FUNCT_2, COMPLEX1, SEQ_1, SEQ_2,
       PROB_1, NAT_1;
  constructors REAL_1, ABSVALUE, SEQ_2, PROB_1, NAT_1, MEMBERED, XBOOLE_0,
       COMPLEX1;
- registrations SUBSET_1, XREAL_0, RELSET_1, ARYTM_3, MEMBERED, ORDINAL2;
+ registrations SUBSET_1, XREAL_0, RELSET_1, ARYTM_3, MEMBERED, ORDINAL2, SEQ_1;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions PROB_1;
  theorems FUNCT_1, REAL_1, FUNCT_2, ABSVALUE, SEQ_1, SEQ_2, SUBSET_1, PROB_1,
@@ -221,67 +221,67 @@ Th13: (for A holds P.A = P1.A) implies P = P1
   end;
 
 theorem
-    for ASeq being SetSequence of Omega holds
-          ASeq is non-increasing iff for n holds ASeq.(n+1) c= ASeq.n
-  proof let ASeq be SetSequence of Omega;
-  thus ASeq is non-increasing implies for n holds ASeq.(n+1) c= ASeq.n
+  for X being set, S being SetSequence of X holds
+    S is non-increasing iff for n holds S.(n+1) c= S.n
+  proof let X be set, S be SetSequence of X;
+  thus S is non-increasing implies for n holds S.(n+1) c= S.n
    proof assume
-   A1: ASeq is non-increasing;
+   A1: S is non-increasing;
         now let n;
         n <= n+1 by NAT_1:29;
-     hence ASeq.(n+1) c= ASeq.n by A1,PROB_1:def 6;
+     hence S.(n+1) c= S.n by A1,PROB_1:def 6;
      end;
     hence thesis;
    end; assume
-  A2: for n holds ASeq.(n+1) c= ASeq.n;
+  A2: for n holds S.(n+1) c= S.n;
        now let n,m such that
     A3: n <= m;
     A4: now
-        defpred P[Nat] means ASeq.(n+$1) c= ASeq.n;
+        defpred P[Nat] means S.(n+$1) c= S.n;
         A5: P[0];
         A6: for k st P[k] holds P[k+1]
           proof let k such that
-          A7: ASeq.(n+k) c= ASeq.n;
-              ASeq.(n+k+1) c= ASeq.(n+k) by A2;
+          A7: S.(n+k) c= S.n;
+              S.(n+k+1) c= S.(n+k) by A2;
            hence thesis by A7,XBOOLE_1:1;
           end;
         thus for k holds P[k] from NAT_1:sch 1(A5,A6);
         end;
         ex k st m = n + k by A3,NAT_1:28;
-    hence ASeq.m c= ASeq.n by A4;
+    hence S.m c= S.n by A4;
     end;
   hence thesis by PROB_1:def 6;
   end;
 
 theorem
-    for ASeq being SetSequence of Omega holds
-      ASeq is non-decreasing iff for n holds ASeq.n c= ASeq.(n+1)
-  proof let ASeq be SetSequence of Omega;
-  thus ASeq is non-decreasing implies for n holds ASeq.n c= ASeq.(n+1)
+  for X being set, S being SetSequence of X holds
+      S is non-decreasing iff for n holds S.n c= S.(n+1)
+  proof let X be set, S be SetSequence of X;
+  thus S is non-decreasing implies for n holds S.n c= S.(n+1)
    proof assume
-   A1: ASeq is non-decreasing;
+   A1: S is non-decreasing;
         now let n;
         n <= n+1 by NAT_1:29;
-     hence ASeq.n c= ASeq.(n+1) by A1,PROB_1:def 7;
+     hence S.n c= S.(n+1) by A1,PROB_1:def 7;
      end;
     hence thesis;
    end; assume
-  A2: for n holds ASeq.n c= ASeq.(n+1);
+  A2: for n holds S.n c= S.(n+1);
        now let n,m such that
     A3: n <= m;
     A4: now
-        defpred P[Nat] means ASeq.n c= ASeq.(n+$1);
+        defpred P[Nat] means S.n c= S.(n+$1);
         A5: P[0];
         A6: for k st P[k] holds P[k+1]
           proof let k such that
-          A7: ASeq.n c= ASeq.(n+k);
-              ASeq.(n+k) c= ASeq.(n+k+1) by A2;
+          A7: S.n c= S.(n+k);
+              S.(n+k) c= S.(n+k+1) by A2;
            hence thesis by A7,XBOOLE_1:1;
           end;
         thus for k holds P[k] from NAT_1:sch 1(A5,A6);
         end;
         ex k st m = n + k by A3,NAT_1:28;
-    hence ASeq.n c= ASeq.m by A4;
+    hence S.n c= S.m by A4;
     end;
   hence thesis by PROB_1:def 7;
   end;
@@ -809,12 +809,14 @@ definition let Omega,Sigma,P,B;
     A9: BSeq is non-increasing by A7,A8,Th10;
 A10:   dom(f*ASeq) = NAT by FUNCT_2:def 1;
 A11:   dom(P*BSeq) = NAT by FUNCT_2:def 1;
-        now let n;
-      assume n in dom(f*ASeq);
-      thus (f*ASeq).n = f.(ASeq.n) by Th11
-                       .= P.(ASeq.n /\ B)/P.B by A5
+        now let n be set;
+      assume
+a1:   n in dom(f*ASeq);
+      then reconsider n1 = n as Nat by A10;
+      thus (f*ASeq).n = f.(ASeq.n) by a1,A10,Th11
+                       .= P.(ASeq.n1 /\ B)/P.B by A5
                        .= P.(BSeq.n)/P.B by A8
-                       .= (P*BSeq).n/P.B by Th11
+                       .= (P*BSeq).n/P.B by a1,A10,Th11
                        .= (P.B)" * (P*BSeq).n by XCMPLX_0:def 9;
      end;
     then A12: f*ASeq = (P.B)" (#) (P*BSeq) by A10,A11,SEQ_1:def 6;

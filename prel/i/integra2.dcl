@@ -33,6 +33,8 @@
 <ArticleID name="MATRIX_1"/>
 <ArticleID name="GOBOARD1"/>
 <ArticleID name="INTEGRA1"/>
+<ArticleID name="MEMBERED"/>
+<ArticleID name="SEQ_1"/>
 <ArticleID name="INTEGRA2"/>
 </Signature>
 <RCluster>
@@ -46,7 +48,8 @@
 <Adjective nr="5"/>
 <Adjective nr="20"/>
 <Adjective nr="23"/>
-<Adjective nr="89"/>
+<Adjective nr="94"/>
+<Adjective nr="95"/>
 </Cluster>
 </RCluster>
 </Registrations>

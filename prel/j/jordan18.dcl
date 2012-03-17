@@ -26,9 +26,9 @@
 <ArticleID name="METRIC_1"/>
 <ArticleID name="EUCLID"/>
 <ArticleID name="JORDAN1A"/>
+<ArticleID name="MEMBERED"/>
 <ArticleID name="SEQ_1"/>
 <ArticleID name="SEQ_2"/>
-<ArticleID name="MEMBERED"/>
 <ArticleID name="SEQ_4"/>
 <ArticleID name="PCOMPS_1"/>
 <ArticleID name="PSCOMP_1"/>
@@ -47,7 +47,7 @@
 </Typ>
 </ArgTypes>
 <Func kind="K" nr="18">
-<Func kind="K" nr="225"/>
+<Func kind="K" nr="237"/>
 <Func kind="K" nr="182">
 <LocusVar nr="1"/>
 </Func>
@@ -68,7 +68,7 @@
 </Typ>
 </ArgTypes>
 <Func kind="K" nr="18">
-<Func kind="K" nr="225"/>
+<Func kind="K" nr="237"/>
 <Func kind="K" nr="184">
 <LocusVar nr="1"/>
 </Func>
@@ -89,7 +89,7 @@
 </Typ>
 </ArgTypes>
 <Func kind="K" nr="18">
-<Func kind="K" nr="224"/>
+<Func kind="K" nr="236"/>
 <Func kind="K" nr="185">
 <LocusVar nr="1"/>
 </Func>
@@ -110,7 +110,7 @@
 </Typ>
 </ArgTypes>
 <Func kind="K" nr="18">
-<Func kind="K" nr="224"/>
+<Func kind="K" nr="236"/>
 <Func kind="K" nr="183">
 <LocusVar nr="1"/>
 </Func>

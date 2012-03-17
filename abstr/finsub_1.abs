@@ -6,7 +6,7 @@
 
 environ
 
- vocabulary BOOLE, FINSET_1, FINSUB_1;
+ vocabularies BOOLE, FINSET_1, FINSUB_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, FINSET_1;
  constructors TARSKI, SUBSET_1, FINSET_1, XBOOLE_0;
  registrations FINSET_1, SUBSET_1, XBOOLE_0, ZFMISC_1;
@@ -17,7 +17,7 @@ begin
 
 :::::::::::::: Auxiliary theorems :::::::::::::::::::
 
-reserve X,Y for set;
+ reserve X,Y,A,B,x for set;
 
 definition let IT be set;
   attr IT is cup-closed means
@@ -25,7 +25,7 @@ definition let IT be set;
    for X,Y being set st X in IT & Y in IT holds X \/ Y in IT;
   attr IT is cap-closed means
 :: FINSUB_1:def 2
-      for X,Y being set st X in IT & Y in IT holds X /\ Y in IT;
+   for X,Y being set st X in IT & Y in IT holds X /\ Y in IT;
   attr IT is diff-closed means
 :: FINSUB_1:def 3
    for X,Y being set st X in IT & Y in IT holds X \ Y in IT;
@@ -46,16 +46,16 @@ registration
  cluster non empty cup-closed cap-closed diff-closed set;
 end;
 
-reserve A for non empty preBoolean set;
-
 canceled 9;
 
 theorem :: FINSUB_1:10
  for A being set holds A is preBoolean iff
   for X,Y being set st X in A & Y in A holds X \/ Y in A & X \ Y in A;
 
+ reserve A for non empty preBoolean set;
+
 definition let A; let X,Y be Element of A;
- redefine func X \/ Y -> Element of A;
+  redefine func X \/ Y -> Element of A;
   func X \ Y -> Element of A;
 end;
 
@@ -68,22 +68,22 @@ theorem :: FINSUB_1:14
  X is Element of A & Y is Element of A implies X \+\ Y is Element of A;
 
 theorem :: FINSUB_1:15
-    for A being non empty set st
+  for A being non empty set st
    for X,Y being Element of A holds X \+\ Y in A & X \ Y in A
   holds A is preBoolean;
 
 theorem :: FINSUB_1:16
-    for A being non empty set st
+  for A being non empty set st
    for X,Y being Element of A holds X \+\ Y in A & X /\ Y in A
   holds A is preBoolean;
 
 theorem :: FINSUB_1:17
-    for A being non empty set st
+  for A being non empty set st
    for X,Y being Element of A holds X \+\ Y in A & X \/ Y in A
   holds A is preBoolean;
 
 definition let A; let X,Y be Element of A;
- redefine func X /\ Y -> Element of A;
+  redefine func X /\ Y -> Element of A;
   func X \+\ Y -> Element of A;
 end;
 
@@ -93,69 +93,72 @@ theorem :: FINSUB_1:18
 canceled;
 
 theorem :: FINSUB_1:20
-   for A being set holds bool A is preBoolean;
+  for A being set holds bool A is preBoolean;
+
+registration let A be set;
+  cluster bool A -> preBoolean;
+end;
 
 theorem :: FINSUB_1:21
-    for A,B being non empty preBoolean set holds A /\ B is non empty preBoolean
-;
-
- reserve A,B,P for set;
- reserve x for set;
+  for A,B being non empty preBoolean set holds A /\ B is non empty preBoolean;
 
 :::::::::::::: The set of all finite subsets of a set ::::::::::::::::
 
-definition let A;
+definition let A be set;
  func Fin A -> preBoolean set means
 :: FINSUB_1:def 5
    for X being set holds X in it iff X c= A & X is finite;
  end;
 
-registration let A;
- cluster Fin A -> non empty;
+registration let A be set;
+  cluster Fin A -> non empty;
 end;
 
-registration let A;
- cluster -> finite Element of Fin A;
+registration let A be set;
+  cluster -> finite Element of Fin A;
 end;
 
 canceled;
 
 theorem :: FINSUB_1:23
- A c= B implies Fin A c= Fin B;
+  for A, B being set st A c= B holds Fin A c= Fin B;
 
 theorem :: FINSUB_1:24
+  for A, B being set holds
     Fin (A /\ B) = Fin A /\ Fin B;
 
 theorem :: FINSUB_1:25
+  for A, B being set holds
     Fin A \/ Fin B c= Fin (A \/ B);
 
 theorem :: FINSUB_1:26
- Fin A c= bool A;
+  for A being set holds Fin A c= bool A;
 
 theorem :: FINSUB_1:27
- A is finite implies Fin A = bool A;
+  for A being set st A is finite holds Fin A = bool A;
 
 theorem :: FINSUB_1:28
-    Fin {} = { {} };
+  Fin {} = { {} };
 
 :::::::::::::: Finite subsets ::::::::::::::::
 
-definition let A;
+definition let A be set;
   mode Finite_Subset of A is Element of Fin A;
 end;
 
 canceled;
 
 theorem :: FINSUB_1:30
-    for X being Finite_Subset of A holds X is finite;
+  for A being set, X being Finite_Subset of A holds X is finite;
 
 canceled;
 
 theorem :: FINSUB_1:32
-    for X being Finite_Subset of A holds X is Subset of A;
+  for A being set, X being Finite_Subset of A holds
+    X is Subset of A;
 
 canceled;
 
 theorem :: FINSUB_1:34
-    A is finite implies
-  for X being Subset of A holds X is Finite_Subset of A;
+  for A being set, X being Subset of A st A is finite holds
+    X is Finite_Subset of A;

@@ -6,9 +6,9 @@
 
 environ
 
- vocabulary CLASSES2, ZF_REFLE, ORDINAL1, ORDINAL2, FINSUB_1, FUNCT_1, ZF_LANG,
-      SEQ_1, RELAT_1, MCART_1, CARD_1, FINSET_1, ZF_MODEL, FUNCT_2, BOOLE,
-      ORDINAL4, TARSKI, FUNCOP_1, ZF_FUND1;
+ vocabularies CLASSES2, ZF_REFLE, ORDINAL1, ORDINAL2, FINSUB_1, FUNCT_1,
+      ZF_LANG, SEQ_1, RELAT_1, MCART_1, CARD_1, FINSET_1, ZF_MODEL, FUNCT_2,
+      BOOLE, ORDINAL4, TARSKI, FUNCOP_1, ZF_FUND1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, XREAL_0, NAT_1, ORDINAL1,
       ORDINAL2, ORDINAL4, CARD_1, FINSET_1, RELAT_1, CLASSES2, ZF_REFLE,
       ZF_LANG, ZF_MODEL, FUNCT_1, FUNCT_2, MCART_1, FINSUB_1, FUNCOP_1;
@@ -32,7 +32,7 @@ begin
          o,p,q,r,s,t,u,a1,a2,a3,A,B,C,D for set,
          K,L,M for Ordinal,
          n for Element of omega,
-         fs for Finite_Subset of omega,
+         fs for finite Subset of omega,
          e,g,h for Function,
          E for non empty set,
          f for Function of VAR,E,
@@ -40,13 +40,12 @@ begin
          v1,v2,v3 for Element of VAR,
          H,H' for ZF-formula;
 
-defpred PAIR[set] means ex p,r st $1=[p,r];
-
 definition let A,B;
  func A(#)B -> set means
 :Def1:  p in it iff ex q,r,s st p=[q,s] & [q,r] in A & [r,s] in B;
    existence
     proof
+     defpred PAIR[set] means ex p,r st $1=[p,r];
      consider C such that A1:for o holds o in C
                            iff o in A & PAIR[o] from XBOOLE_0:sch 1;
      consider D such that A2:for o holds o in D
@@ -87,6 +86,7 @@ definition let V,x,y;
  redefine func x(#)y -> Element of V;
  coherence
   proof
+   defpred PAIR[set] means ex p,r st $1=[p,r];
    set Z=x(#)y;
    A1: Z c= V
     proof
@@ -147,16 +147,17 @@ definition let V,x,y;
 end;
 
 definition
-   deffunc F(Element of omega) = x.card $1;
  func decode -> Function of omega,VAR means
 :Def2: for p being Element of omega holds it.p = x.card p;
  existence
   proof
+   deffunc F(Element of omega) = x.card $1;
     thus ex f being Function of omega, VAR st
       for x being Element of omega holds f.x = F(x) from FUNCT_2:sch 4;
   end;
  uniqueness
   proof
+   deffunc F(Element of omega) = x.card $1;
     thus for f1,f2 being Function of omega,VAR st
     (for x being Element of omega holds f1.x = F(x)) &
     (for x being Element of omega holds f2.x = F(x))
@@ -168,7 +169,7 @@ definition let v1;
   func x".v1 -> Nat means :Def3: x.it=v1;
  existence
   proof
-      v1 in VAR;
+   v1 in VAR;
    then consider k such that A1:v1=k & k>=5 by ZF_LANG:def 1;
    consider m being Nat such that A2:k=5+m by A1,NAT_1:28;
    take m;
@@ -226,49 +227,29 @@ Lm1:
   end;
 
 definition
-  let A be Finite_Subset of VAR;
- func code A -> Finite_Subset of omega equals
+  let A be finite Subset of VAR;
+ func code A -> finite Subset of omega equals
 :Def4: (decode").:A;
- coherence
-  proof
-      (decode").:A c= omega by Lm1,RELAT_1:144;
-   hence thesis by FINSUB_1:def 5;
-  end;
+ coherence by Lm1,RELAT_1:144;
 end;
 
 definition let H;
- redefine func Free H -> Finite_Subset of VAR;
-   coherence
-    proof
-        Free H is finite by ZF_LANG1:85;
-     hence thesis by FINSUB_1:def 5;
-    end;
+  redefine func Free H -> finite Subset of VAR;
+  coherence by ZF_LANG1:85;
 end;
 
 definition let n;
- redefine func {n} -> Finite_Subset of omega;
-  coherence
-   proof
-       {n} c= omega by ZFMISC_1:37;
-    hence thesis by FINSUB_1:def 5;
-   end;
+ redefine func {n} -> finite Subset of omega;
+  coherence by ZFMISC_1:37;
 end;
 
 definition let v1;
-  redefine func {v1} -> Finite_Subset of VAR;
- coherence
-  proof
-      {v1} c= VAR by ZFMISC_1:37;
-   hence thesis by FINSUB_1:def 5;
-  end;
+  redefine func {v1} -> finite Subset of VAR;
+ coherence by ZFMISC_1:37;
 
  let v2;
-  func {v1,v2} -> Finite_Subset of VAR;
- coherence
-  proof
-      {v1,v2} c= VAR by ZFMISC_1:38;
-   hence thesis by FINSUB_1:def 5;
-  end;
+  func {v1,v2} -> finite Subset of VAR;
+ coherence by ZFMISC_1:38;
 end;
 
 definition let H,E;
@@ -291,8 +272,7 @@ definition let H,E;
              by FUNCT_2:def 1,RELSET_1:12;
        then A4:dom((f*decode)|code Free(H))=omega /\ code Free(H)
                                                             by RELAT_1:90;
-          code Free(H) c= omega by FINSUB_1:def 5;
-       then A5:dom((f*decode)|code Free(H))=code Free(H) by A4,XBOOLE_1:28;
+    A5:dom((f*decode)|code Free(H))=code Free(H) by A4,XBOOLE_1:28;
           rng((f*decode)|code Free(H)) c= rng (f*decode) by FUNCT_1:76;
        then rng((f*decode)|code Free(H)) c= E by A3,XBOOLE_1:1;
        then p in Funcs(code Free(H),E) by A2,A5,FUNCT_2:def 2;
@@ -363,8 +343,7 @@ Lm3:
  & rng(f*decode) c= E
   proof
    A1:dom(f*decode)=omega & rng(f*decode) c= E by FUNCT_2:def 1,RELSET_1:12;
-      fs c= omega by FINSUB_1:def 5;
-   hence A2:dom((f*decode)|fs)=fs by A1,RELAT_1:91;
+   hence A2:dom((f*decode)|fs)=fs by RELAT_1:91;
       rng((f*decode)|fs) c= rng(f*decode) by FUNCT_1:76;
    hence rng((f*decode)|fs) c= E by A1,XBOOLE_1:1;
    hence (f*decode)|fs in Funcs(fs,E) by A2,FUNCT_2:def 2;
@@ -384,21 +363,20 @@ Lm4:
    hence (f*decode).( x".v1)=f.v1 by A2,FUNCT_1:22;
   end;
 
-Lm5: for A being Finite_Subset of VAR holds
+Lm5: for A being finite Subset of VAR holds
   p in code A iff ex v1 st v1 in A & p= x".v1
  proof
-  let A be Finite_Subset of VAR;
+  let A be finite Subset of VAR;
 A1:  p in code A iff p in (decode").:A by Def4;
   then A2:p in code A iff ex q st q in dom(decode") & q in A & p=(decode").q
                                                      by FUNCT_1:def 12;
-  A3:A c= VAR & code A c= omega by FINSUB_1:def 5;
   thus p in code A implies ex v1 st v1 in A & p= x".v1
    proof
     assume A4:p in code A;
     then consider q such that
     A5:q in A & q in dom(decode") & p=(decode").q by A2;
-    reconsider p' = p as Element of omega by A3,A4;
-    reconsider q as Element of VAR by A3,A5;
+    reconsider p' = p as Element of omega by A4;
+    reconsider q as Element of VAR by A5;
 A6:    q=decode.p by A5,Lm1,FUNCT_1:57
     .=x.card p' by Def2;
     take q;
@@ -436,11 +414,11 @@ Lm7:
    let p such that A1:p in { x".v1 , x".v2};
        now per cases by A1,TARSKI:def 2;
      suppose A2:p= x".v1;
-         v1 in {v1,v2} by TARSKI:def 2;
+      v1 in {v1,v2} by TARSKI:def 2;
       hence p in code {v1,v2} by A2,Lm5;
      end;
      suppose A3:p= x".v2;
-         v2 in {v1,v2} by TARSKI:def 2;
+      v2 in {v1,v2} by TARSKI:def 2;
       hence p in code {v1,v2} by A3,Lm5;
     end;
     end;
@@ -448,23 +426,22 @@ Lm7:
   end;
 
 Lm8:
- for A being Finite_Subset of VAR holds A,code A are_equipotent
+ for A being finite Subset of VAR holds A,code A are_equipotent
   proof
-   let A be Finite_Subset of VAR;
-   A1:A c= VAR by FINSUB_1:def 5;
+   let A be finite Subset of VAR;
    A2:(decode")|A is one-to-one by Lm1,FUNCT_1:84;
    A3:dom((decode")|A)=dom(decode") /\ A by RELAT_1:90
-                    .=A by A1,Lm1,XBOOLE_1:28;
+                    .=A by Lm1,XBOOLE_1:28;
       rng((decode")|A)=(decode").:A by RELAT_1:148
                   .=code A by Def4;
    hence thesis by A2,A3,WELLORD2:def 4;
   end;
 
 Lm9:
- for A,B being Finite_Subset of VAR holds
+ for A,B being finite Subset of VAR holds
    code(A \/ B)=code A \/ code B & code(A\B)=(code A)\(code B)
   proof
-   let A,B be Finite_Subset of VAR;
+   let A,B be finite Subset of VAR;
    A1:code(A \/ B)=(decode").:(A \/ B) & code(A\B)=(decode").:(A\B)
     & code A=(decode").:A & code B=(decode").:B by Def4;
    hence code(A \/ B)=code A \/ code B by RELAT_1:153;
@@ -475,8 +452,8 @@ Lm10:
  v1 in Free H implies ((f*decode)|code Free H).( x".v1)=f.v1
   proof
    assume A1:v1 in Free H;
-   A2:dom((f*decode)|code Free H)=code Free H by Lm3;
-       x".v1 in code Free H by A1,Lm5;
+A2:dom((f*decode)|code Free H)=code Free H by Lm3;
+   x".v1 in code Free H by A1,Lm5;
    hence ((f*decode)|code Free H).( x".v1)=(f*decode).( x".v1)
                                                      by A2,FUNCT_1:70
                                            .=f.v1 by Lm4;
@@ -531,9 +508,8 @@ Lm12:
            .=f*decode by RELAT_1:55;
       g=h|fs
     proof
-     A6:fs c= omega by FINSUB_1:def 5;
-     then A7: dom g = dom h /\ fs by A1,A4,XBOOLE_1:28;
-        for p st p in dom g holds h.p=g.p by A1,A3,A6;
+     A7: dom g = dom h /\ fs by A1,A4,XBOOLE_1:28;
+        for p st p in dom g holds h.p=g.p by A1,A3;
      hence thesis by A7,FUNCT_1:68;
     end;
    hence thesis by A5;
@@ -729,8 +705,7 @@ theorem Th8:
      assume A7:o in fs & B c= fs & Funcs(B,omega) c= X;
         now
       let p such that A8: p in Funcs(B \/ {o},omega);
-         fs c= omega by FINSUB_1:def 5;
-      then A9:o in omega by A7;
+      A9:o in omega by A7;
       consider g such that
        A10: p=g & dom g = B \/ {o} & rng g c= omega by A8,FUNCT_2:def 2;
       set A=g|B; set C=g|{o};
@@ -778,8 +753,7 @@ theorem Th9:
         {} in X by A1,Th3;
      hence thesis by A1,A6,Th2;
     end;
-   A7:for o,B being set st o in fs & B c= fs & P[B]
-                                   holds P[B \/ {o}]
+   A7:for o,B being set st o in fs & B c= fs & P[B] holds P[B \/ {o}]
     proof
      let o,B be set such that A8:o in fs & B c= fs & Funcs(B,a) in X;
      per cases;
@@ -789,8 +763,7 @@ theorem Th9:
       end;
       suppose A9:B misses {o};
         A10:omega c= X by A1,Th7;
-           fs c= omega by FINSUB_1:def 5;
-        then A11: o in omega by A8;
+        A11: o in omega by A8;
         then A12:o in X by A10;
         A13:{o} in X by A1,A10,A11,Th2;
         set r = {o};
@@ -1169,8 +1142,7 @@ theorem Th14:
    then consider p,q such that A6:o=[p,q] by A2,RELAT_1:def 1;
     A7:p in dom g & q=g.p by A2,A5,A6,FUNCT_1:8;
     A8:omega c= X by A1,Th7;
-       fs c= omega by FINSUB_1:def 5;
-    then A9:p in omega by A2,A7;
+    A9:p in omega by A2,A7;
        q in rng g by A7,FUNCT_1:def 5;
     then q in A by A2;
     hence o in X by A1,A6,A8,A9,Th6;
@@ -1519,7 +1491,7 @@ Lm17:
   end;
 
 theorem Th18:
-     X is closed_wrt_A1-A7 & E in X implies
+  X is closed_wrt_A1-A7 & E in X implies
  for v1,v2 holds Diagram(v1 '=' v2,E) in X & Diagram(v1 'in' v2,E) in X
   proof
    assume A1:X is closed_wrt_A1-A7 & E in X;
@@ -1734,7 +1706,7 @@ by A45;
   end;
 
 theorem Th19:
-     X is closed_wrt_A1-A7 & E in X implies
+  X is closed_wrt_A1-A7 & E in X implies
  for H st Diagram(H,E) in X holds Diagram('not' H,E) in X
   proof
    assume A1:X is closed_wrt_A1-A7 & E in X;
@@ -1777,7 +1749,7 @@ theorem Th19:
   end;
 
 theorem Th20:
-     X is closed_wrt_A1-A7 & E in X implies
+  X is closed_wrt_A1-A7 & E in X implies
  for H,H' st Diagram(H,E) in X &
  Diagram(H',E) in X holds Diagram(H '&' H',E) in X
   proof
@@ -1863,8 +1835,7 @@ theorem Th20:
              .=((f*decode)|fs) \/ ((f*decode)|(fs'\fs)) by RELAT_1:107;
       A25:((f*decode)|fs) in D1 by A22,Def5;
       then reconsider x=((f*decode)|fs) as Element of V by A2,Th1;
-         fs'\fs c= omega by FINSUB_1:def 5;
-      then (f*decode)|(fs'\fs) is Function of fs'\fs,E by FUNCT_2:38;
+      (f*decode)|(fs'\fs) is Function of fs'\fs,E by FUNCT_2:38;
       then A26:((f*decode)|(fs'\fs)) in F1 by FUNCT_2:11;
       then reconsider y=((f*decode)|(fs'\fs)) as Element of V by A3,Th1;
          p=x \/ y by A24;
@@ -1874,8 +1845,7 @@ theorem Th20:
          .=((f*decode)|fs') \/ ((f*decode)|(fs\fs')) by RELAT_1:107;
       A29:((f*decode)|fs') in D2 by A22,Def5;
       then reconsider z=((f*decode)|fs') as Element of V by A2,Th1;
-         fs\fs' c= omega by FINSUB_1:def 5;
-      then (f*decode)|(fs\fs') is Function of fs\fs',E by FUNCT_2:38;
+      (f*decode)|(fs\fs') is Function of fs\fs',E by FUNCT_2:38;
       then A30:((f*decode)|(fs\fs')) in F2 by FUNCT_2:11;
       then reconsider t=((f*decode)|(fs\fs')) as Element of V by A4,Th1;
          p=z \/ t by A28;
@@ -1994,8 +1964,7 @@ p=(f*decode)|code Free('not' H) & f in St('not' H,E) by Def5;
                 & fs\{n}=dom((f*decode)|(fs\{n})) by Lm3;
               let q; assume A27:q in fs\{n};
               then A28:q in fs & not q in {n} by XBOOLE_0:def 4;
-                fs\{n} c= omega by FINSUB_1:def 5;
-              then reconsider p'' = q as Element of omega by A27;
+              reconsider p'' = q as Element of omega by A27;
               A29:q= x".x.card p'' by Lm2;
               then A30: x.card p'' <> v1 by A28,TARSKI:def 1;
               thus ((e*decode)|(fs\{n})).q=(e*decode).q by A26,A27,FUNCT_1:70
@@ -2057,7 +2026,7 @@ p=(f*decode)|code Free('not' H) & f in St('not' H,E) by Def5;
   end;
 
 theorem
-    X is closed_wrt_A1-A7 & E in X implies Diagram(H,E) in X
+  X is closed_wrt_A1-A7 & E in X implies Diagram(H,E) in X
   proof defpred P[ZF-formula] means Diagram($1,E) in X;
    assume A1:X is closed_wrt_A1-A7 & E in X;
    then A2:for v1,v2 holds P[v1 '=' v2] & P[v1 'in' v2] by Th18;
@@ -2071,59 +2040,59 @@ theorem
 :: Auxiliary theorems
 
 theorem
-    X is closed_wrt_A1-A7 implies
- n in X & 0-element_of(V) in X & 1-element_of(V) in X by Lm13,Lm14;
+  X is closed_wrt_A1-A7 implies
+    n in X & 0-element_of(V) in X & 1-element_of(V) in X by Lm13,Lm14;
 
 theorem
-    {[o,p],[p,p]}(#){[p,q]}={[o,q],[p,q]} by Lm15;
+  {[o,p],[p,p]}(#){[p,q]}={[o,q],[p,q]} by Lm15;
 
 theorem
-    p<>r implies {[o,p],[q,r]}(#){[p,s],[r,t]}={[o,s],[q,t]} by Lm16;
+  p<>r implies {[o,p],[q,r]}(#){[p,s],[r,t]}={[o,s],[q,t]} by Lm16;
 
 canceled;
 
 theorem
-    code {v1} = { x".v1} & code {v1,v2} = { x".v1 , x".v2} by Lm6,Lm7;
+  code {v1} = { x".v1} & code {v1,v2} = { x".v1 , x".v2} by Lm6,Lm7;
 
 theorem
-    for f being Function holds
-  dom f={o,q} iff f={[o,f.o],[q,f.q]} by Lm17;
+  for f being Function holds
+    dom f={o,q} iff f={[o,f.o],[q,f.q]} by Lm17;
 
 theorem
-    dom decode = omega & rng decode = VAR
- & decode is one-to-one & decode" is one-to-one
- & dom(decode") = VAR & rng(decode") = omega by Lm1;
+  dom decode = omega & rng decode = VAR
+    & decode is one-to-one & decode" is one-to-one
+    & dom(decode") = VAR & rng(decode") = omega by Lm1;
 
 theorem
-    for A being Finite_Subset of VAR holds A,code A are_equipotent by Lm8;
+  for A being finite Subset of VAR holds A,code A are_equipotent by Lm8;
 
 theorem
-    for A being Element of omega holds A = x".x.card A by Lm2;
+  for A being Element of omega holds A = x".x.card A by Lm2;
 
 theorem
-    dom((f*decode)|fs)=fs & rng((f*decode)|fs) c= E
- & (f*decode)|fs in Funcs(fs,E) & dom(f*decode)=omega
- & rng(f*decode) c= E by Lm3;
+  dom((f*decode)|fs)=fs & rng((f*decode)|fs) c= E
+    & (f*decode)|fs in Funcs(fs,E) & dom(f*decode)=omega
+    & rng(f*decode) c= E by Lm3;
 
 theorem
-    decode.(x".v1)=v1 & (decode").v1= x".v1
- & (f*decode).(x".v1)=f.v1 by Lm4;
+  decode.(x".v1)=v1 & (decode").v1= x".v1
+    & (f*decode).(x".v1)=f.v1 by Lm4;
 
 theorem
-    for A being Finite_Subset of VAR holds
-  p in code A iff ex v1 st v1 in A & p= x".v1 by Lm5;
+  for A being finite Subset of VAR holds
+    p in code A iff ex v1 st v1 in A & p= x".v1 by Lm5;
 
 theorem
-    for A,B being Finite_Subset of VAR holds
-   code(A \/ B)=code A \/ code B & code(A\B)=(code A)\(code B) by Lm9;
+  for A,B being finite Subset of VAR holds
+    code(A \/ B)=code A \/ code B & code(A\B)=(code A)\(code B) by Lm9;
 
 theorem
-    v1 in Free H implies ((f*decode)|code Free H).( x".v1)=f.v1 by Lm10;
+  v1 in Free H implies ((f*decode)|code Free H).( x".v1)=f.v1 by Lm10;
 
 theorem
-    for f,g being Function of VAR,E st
-  (f*decode)|code Free H=(g*decode)|code Free H &
-  f in St(H,E) holds g in St(H,E) by Lm11;
+  for f,g being Function of VAR,E st
+    (f*decode)|code Free H=(g*decode)|code Free H &
+    f in St(H,E) holds g in St(H,E) by Lm11;
 
 theorem
-    p in Funcs(fs,E) implies ex f st p=(f*decode)|fs by Lm12;
+  p in Funcs(fs,E) implies ex f st p=(f*decode)|fs by Lm12;

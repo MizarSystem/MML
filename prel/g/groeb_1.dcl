@@ -34,6 +34,7 @@
 <ArticleID name="DICKSON"/>
 <ArticleID name="FUNCOP_1"/>
 <ArticleID name="FUNCT_3"/>
+<ArticleID name="MEMBERED"/>
 <ArticleID name="SEQ_1"/>
 <ArticleID name="FRAENKEL"/>
 <ArticleID name="NAT_1"/>
@@ -64,10 +65,10 @@
 </Typ>
 </ArgTypes>
 <Func kind="G" nr="10">
-<Func kind="K" nr="418">
+<Func kind="K" nr="430">
 <LocusVar nr="1"/>
 </Func>
-<Func kind="K" nr="438">
+<Func kind="K" nr="450">
 <LocusVar nr="1"/>
 </Func>
 </Func>

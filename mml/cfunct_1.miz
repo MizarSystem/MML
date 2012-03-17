@@ -6,7 +6,7 @@
 
 environ
 
- vocabulary PARTFUN1, COMPLEX1, ARYTM, ARYTM_3, RELAT_1, BOOLE, FINSEQ_4,
+ vocabularies PARTFUN1, COMPLEX1, ARYTM, ARYTM_3, RELAT_1, BOOLE, FINSEQ_4,
       FINSEQ_1, FUNCT_1, ARYTM_1, SEQ_1, RFUNCT_1, ABSVALUE, PARTFUN2,
       CFUNCT_1;
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0,
@@ -14,7 +14,7 @@ environ
       COMSEQ_1, FINSEQ_4;
  constructors REAL_1, ABSVALUE, PARTFUN1, PARTFUN2, RFUNCT_1, SEQ_1, COMSEQ_1,
       FINSEQ_4, COMPLEX1, MEMBERED, BINOP_2;
- registrations XREAL_0, RELSET_1, COMPLEX1, MEMBERED, XCMPLX_0;
+ registrations XREAL_0, RELSET_1, COMPLEX1, MEMBERED, XCMPLX_0, SEQ_1;
  requirements NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions TARSKI, PARTFUN1, RFUNCT_1, XBOOLE_0;
  theorems TARSKI, AXIOMS, SUBSET_1, FUNCT_1, REAL_1, PARTFUN1, PARTFUN2,
@@ -767,17 +767,7 @@ theorem
     1r<>0 by COMPLEX1:def 7;
 
 theorem Th48:
-(-1r)"=-1r
-proof
-   (-1r)"=(-1r)"*1r by COMPLEX1:def 7
-    .=(-1r)"*((-1r)"*(-1r)) by COMPLEX1:def 7
-    .=(-1r)"*(-1r)"*(-1r)
-   .=((-1r)*(-1r))"*(-1r) by XCMPLX_1:205
-   .=(-(1r*(-1r)))"*(-1r)
-   .=(-(-1r))"*(-1r) by COMPLEX1:def 7
-   .=-1r by COMPLEX1:def 7;
- hence thesis;
-end;
+(-1r)"=-1r by COMPLEX1:def 7;
 
 theorem Th49:
 (-f)^ = (-1r)(#)(f^)
@@ -1501,7 +1491,8 @@ proof
      f is_bounded_on Y;
       then |.f.| is_bounded_on Y by Def3;
    then consider p be real number such that
-     A1: for c st c in Y /\ dom |.f.| holds abs(|.f.|.c) <= p by RFUNCT_1:90;
+     A1: for c being set st c in Y /\ dom |.f.| holds abs(|.f.|.c) <= p
+     by RFUNCT_1:90;
      A2:dom |.f.| = dom f by COMSEQ_1:def 13;
         now let c such that
          A3: c in Y /\ dom f;
@@ -1516,12 +1507,13 @@ A4:       Y /\ dom f c= dom f by XBOOLE_1:17;
    given p be real number such that
        A6: for c st c in Y /\ dom f holds |.(f/.c).| <= p;
 A7:dom |.f.| = dom f by COMSEQ_1:def 13;
-      now let
-         c such that
+      now let c be set such that
          A8: c in Y /\ dom |.f.|;
 A9:       Y /\ dom |.f.| c= dom |.f.| by XBOOLE_1:17;
+a1:       c in dom |.f.| by A8,XBOOLE_0:def 3;
+          then
           A10: |.(f/.c).| <= p by A6,A7,A8;
-          abs(|.f.|.c)= abs(|.(f/.c).|) by A8,A9,COMSEQ_1:def 13;
+          abs(|.f.|.c)= abs(|.(f/.c).|) by a1,COMSEQ_1:def 13;
           hence abs(|.f.|.c) <= p by A10;
      end;
        then |.f.| is_bounded_on Y by RFUNCT_1:90;
@@ -1557,9 +1549,8 @@ end;
 theorem
    |.f.| is_bounded_below_on X
 proof
- take 0; let c; assume c in X /\ dom (|.f.|);
-then A1: c in dom (|.f.|) by XBOOLE_0:def 3;  0 <= |. (f/.c) .| by COMPLEX1:132
-;
+ take 0; let c be set; assume c in X /\ dom (|.f.|);
+then A1: c in dom (|.f.|) by XBOOLE_0:def 3;  0 <= |. f/.c .| by COMPLEX1:132;
  hence 0 <= (|.f.|).c by A1,COMSEQ_1:def 13;
 end;
 
@@ -1573,8 +1564,8 @@ assume A1: f is_bounded_on Y;
 end;
 
 theorem Th87:
-(f1 is_bounded_on X & f2 is_bounded_on Y) implies
-f1+f2 is_bounded_on (X /\ Y)
+f1 is_bounded_on X & f2 is_bounded_on Y implies
+f1+f2 is_bounded_on X /\ Y
 proof
 assume A1: f1 is_bounded_on X & f2 is_bounded_on Y;
 then consider r1 such that

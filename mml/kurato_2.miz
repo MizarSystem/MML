@@ -6,7 +6,7 @@
 
 environ
 
- vocabulary KURATO_2, WELLFND1, FRECHET2, REARRAN1, YELLOW_6, BOOLE, EUCLID,
+ vocabularies KURATO_2, WELLFND1, FRECHET2, REARRAN1, YELLOW_6, BOOLE, EUCLID,
       PRE_TOPC, COMPTS_1, SETFAM_1, METRIC_1, SUBSET_1, PCOMPS_1, RELAT_1,
       ORDINAL2, LATTICES, SEQ_2, PROB_1, SEQ_1, FUNCT_1, SEQM_3, FRECHET,
       ARYTM_3, CONNSP_2, ARYTM, TOPS_1, ARYTM_1, NEWTON, NORMSP_1, COMPLEX1,
@@ -65,12 +65,12 @@ A1: i in dom F;
   end;
 
 theorem Th3:
-  for T being non empty 1-sorted,
-      S1, S2 being SetSequence of the carrier of T holds
+  for T being set,
+      S1, S2 being SetSequence of T holds
     S1 = S2 iff for n being Nat holds S1.n = S2.n
   proof
-    let T be non empty 1-sorted,
-        S1, S2 be SetSequence of the carrier of T;
+    let T be set,
+        S1, S2 be SetSequence of T;
     thus S1 = S2 implies for n being Nat holds S1.n = S2.n;
     assume
 A1: for n being Nat holds S1.n = S2.n;
@@ -81,7 +81,7 @@ A2: dom S1 = NAT by FUNCT_2:def 1
       let x be set;
       assume x in dom S1;
       then reconsider n = x as Nat by FUNCT_2:def 1;
-        S1.x = S2.n by A1
+      S1.x = S2.n by A1
           .= S2.x;
       hence thesis;
     end;
@@ -105,18 +105,19 @@ A5: [x,y] in [: A, C :] by A3,A4,ZFMISC_1:106;
     hence thesis by A5,XBOOLE_0:3;
   end;
 
-registration let X be 1-sorted;
-  cluster -> non empty SetSequence of the carrier of X;
+registration let X be set;
+  cluster -> non empty SetSequence of X;
   coherence;
 end;
 
-registration let T be non empty 1-sorted;
-  cluster non-empty SetSequence of the carrier of T;
+registration let T be non empty set;
+  cluster non-empty SetSequence of T;
   existence
   proof
     consider a being Element of T;
-    set X = NAT --> {a};
-    reconsider X as SetSequence of the carrier of T;
+    reconsider A = {a} as Subset of T by ZFMISC_1:37;
+    set X = NAT --> A;
+    reconsider X as SetSequence of T;
     take X;
     rng X = {{a}} by FUNCOP_1:14;
     then not {} in rng X by TARSKI:def 1;
@@ -124,18 +125,18 @@ registration let T be non empty 1-sorted;
   end;
 end;
 
-definition let T be non empty 1-sorted;
+definition let T be 1-sorted;
   mode SetSequence of T is SetSequence of the carrier of T;
   canceled;
 end;
 
-scheme LambdaSSeq { X() -> non empty 1-sorted,
+scheme LambdaSSeq { X() -> set,
                     F(set) -> Subset of X() } :
   ex f being SetSequence of X() st
     for n being Nat holds f.n = F(n)
 proof
-    deffunc G(set)=F($1);
-    set Y = bool the carrier of X();
+    deffunc G(set) = F($1);
+    set Y = bool X();
 A1: for x be set st x in NAT holds G(x) in Y;
       ex f be Function of NAT, Y st for x be set st x in NAT holds f.x = G(x)
       from FUNCT_2:sch 2(A1);
@@ -144,37 +145,37 @@ A2: for x be set st x in NAT holds f.x = F(x);
     reconsider f as SetSequence of X();
     take f;
     thus thesis by A2;
-  end;
+end;
 
-scheme ExTopStrSeq { R() -> non empty TopSpace,
+scheme ExTopStrSeq { R() -> non empty set,
                      F(set) -> Subset of R() } :
-   ex S be SetSequence of the carrier of R() st
+   ex S be SetSequence of R() st
      for n be Nat holds S.n = F(n)
 proof
-    deffunc G(set)=F($1);
-    ex f being Function of NAT, bool the carrier of R() st
+    deffunc G(set) = F($1);
+    ex f being Function of NAT, bool R() st
     for x being Element of NAT holds f.x = G(x) from FUNCT_2:sch 4;
-    then consider f being Function of NAT, bool the carrier of R() such that
+    then consider f being Function of NAT, bool R() such that
 A1: for x being Element of NAT holds f.x = F(x);
     take f;
     thus thesis by A1;
-  end;
+end;
 
 canceled;
 
-definition let X be non empty 1-sorted,
-               F be SetSequence of the carrier of X;
+definition let X be set,
+               F be SetSequence of X;
   redefine func Union F -> Subset of X;
   coherence
   proof
-    Union F c= the carrier of X;
+    Union F c= X;
     hence thesis;
   end;
   redefine func meet F -> Subset of X;
   coherence
   proof
     reconsider G = rng F as Subset-Family of X by SETFAM_1:def 7;
-    meet G c= the carrier of X;
+    meet G c= X;
     hence thesis by FUNCT_6:def 4;
   end;
 end;
@@ -188,9 +189,9 @@ definition let X be non empty set;
   for n being Nat holds it.n = S.(n + k);
   existence
    proof
-     deffunc F(Nat)=S.($1 + k);
+     deffunc F(Nat) = S.($1 + k);
      thus ex IT being Function of NAT, X st
-  for n being Nat holds IT.n = F(n) from FUNCT_2:sch 4;
+     for n being Nat holds IT.n = F(n) from FUNCT_2:sch 4;
    end;
   uniqueness
    proof
@@ -201,8 +202,8 @@ definition let X be non empty set;
   end;
 end;
 
-definition let X be non empty 1-sorted,
-               F be SetSequence of the carrier of X;
+definition let X be set,
+               F be SetSequence of X;
   func lim_inf F -> Subset of X means :Def3:
     ex f being SetSequence of X st it = Union f &
       for n being Nat holds f.n = meet (F ^\ n);
@@ -224,7 +225,7 @@ A3: A2 = Union f2 & for n being Nat holds f2.n = meet (F ^\ n);
       for n being Nat holds f1.n = f2.n
     proof
       let n be Nat;
-        f1.n = meet (F ^\ n) by A2
+      f1.n = meet (F ^\ n) by A2
           .= f2.n by A3;
       hence thesis;
     end;
@@ -260,13 +261,13 @@ A6: A2 = meet f2 & for n being Nat holds f2.n = Union (F ^\ n);
 end;
 
 theorem Th6:
-  for X being non empty 1-sorted,
-      F being SetSequence of the carrier of X,
+  for X being set,
+      F being SetSequence of X,
       x being set holds
    x in meet F iff for z being Nat holds x in F.z
   proof
-    let X be non empty 1-sorted,
-        F be SetSequence of the carrier of X,
+    let X be set,
+        F be SetSequence of X,
         x be set;
     hereby assume
 A1:   x in meet F;
@@ -282,20 +283,20 @@ A2: for z being Nat holds x in F.z;
       let y be set;
       assume y in dom F;
       then reconsider n = y as Nat by FUNCT_2:def 1;
-        x in F.n by A2;
+      x in F.n by A2;
       hence thesis;
     end;
     hence thesis by FUNCT_6:37;
   end;
 
 theorem Th7:
-  for X being non empty 1-sorted,
-      F being SetSequence of the carrier of X,
+  for X being set,
+      F being SetSequence of X,
       x being set holds
    x in lim_inf F iff ex n being Nat st for k being Nat holds x in F.(n+k)
   proof
-    let X be non empty 1-sorted,
-        F be SetSequence of the carrier of X,
+    let X be set,
+        F be SetSequence of X,
         x be set;
     hereby assume
 A1:   x in lim_inf F;
@@ -329,13 +330,13 @@ A6: lim_inf F = Union f &
   end;
 
 theorem Th8:
-  for X being non empty 1-sorted,
-      F being SetSequence of the carrier of X,
+  for X being set,
+      F being SetSequence of X,
       x being set holds
    x in lim_sup F iff for n being Nat ex k being Nat st x in F.(n+k)
   proof
-    let X be non empty 1-sorted,
-        F be SetSequence of the carrier of X,
+    let X be set,
+        F be SetSequence of X,
         x be set;
     hereby assume
 A1:   x in lim_sup F;
@@ -370,12 +371,12 @@ A7:   x in F.(z+k) by A4;
   end;
 
 theorem
-  for X being non empty 1-sorted,
-      F being SetSequence of the carrier of X holds
+  for X being set,
+      F being SetSequence of X holds
    lim_inf F c= lim_sup F
   proof
-    let X be non empty 1-sorted,
-        F be SetSequence of the carrier of X;
+    let X be set,
+        F be SetSequence of X;
     let x be set;
     assume x in lim_inf F;
     then consider n be Nat such that
@@ -388,12 +389,12 @@ A1: for k being Nat holds x in F.(n+k) by Th7;
   end;
 
 theorem Th10:
-  for X being non empty 1-sorted,
-      F being SetSequence of the carrier of X holds
+  for X being set,
+      F being SetSequence of X holds
    meet F c= lim_inf F
   proof
-    let X be non empty 1-sorted,
-        F be SetSequence of the carrier of X;
+    let X be set,
+        F be SetSequence of X;
     let x be set;
     assume x in meet F;
     then for k being Nat holds x in F.(0+k) by Th6;
@@ -401,12 +402,12 @@ theorem Th10:
   end;
 
 theorem Th11:
-  for X being non empty 1-sorted,
-      F being SetSequence of the carrier of X holds
+  for X being set,
+      F being SetSequence of X holds
    lim_sup F c= Union F
   proof
-    let X be non empty 1-sorted,
-        F be SetSequence of the carrier of X;
+    let X be set,
+        F be SetSequence of X;
     let x be set;
     assume x in lim_sup F;
     then consider k being Nat such that
@@ -415,12 +416,12 @@ A1: x in F.(0+k) by Th8;
   end;
 
 theorem
-  for X being non empty 1-sorted,
-      F being SetSequence of the carrier of X holds
+  for X being set,
+      F being SetSequence of X holds
     lim_inf F = (lim_sup Complement F)`
   proof
-    let X be non empty 1-sorted,
-        F be SetSequence of the carrier of X;
+    let X be set,
+        F be SetSequence of X;
     set G = Complement F;
     thus lim_inf F c= (lim_sup Complement F)`
     proof
@@ -462,13 +463,13 @@ A5:   for k being Nat holds not x in G.(n+k) by Th8;
   end;
 
 theorem
-  for X being non empty 1-sorted,
-      A, B, C being SetSequence of the carrier of X st
+  for X being set,
+      A, B, C being SetSequence of X st
    (for n being Nat holds C.n = A.n /\ B.n) holds
      lim_inf C = lim_inf A /\ lim_inf B
   proof
-    let X be non empty 1-sorted,
-        A, B, C be SetSequence of the carrier of X;
+    let X be set,
+        A, B, C be SetSequence of X;
     assume
 A1: for n being Nat holds C.n = A.n /\ B.n;
     thus lim_inf C c= lim_inf A /\ lim_inf B
@@ -536,13 +537,13 @@ A13:    x in A.(n+k) by A9;
   end;
 
 theorem
-  for X being non empty 1-sorted,
-      A, B, C being SetSequence of the carrier of X st
+  for X being set,
+      A, B, C being SetSequence of X st
    (for n being Nat holds C.n = A.n \/ B.n) holds
      lim_sup C = lim_sup A \/ lim_sup B
   proof
-    let X be non empty 1-sorted,
-        A, B, C be SetSequence of the carrier of X;
+    let X be set,
+        A, B, C be SetSequence of X;
     assume
 A1: for n being Nat holds C.n = A.n \/ B.n;
     thus lim_sup C c= lim_sup A \/ lim_sup B
@@ -616,13 +617,13 @@ A13:    x in B.(n+k) by A12,Th8;
   end;
 
 theorem
-    for X being non empty 1-sorted,
-      A, B, C being SetSequence of the carrier of X st
+  for X being set,
+      A, B, C being SetSequence of X st
    (for n being Nat holds C.n = A.n \/ B.n) holds
      lim_inf A \/ lim_inf B c= lim_inf C
   proof
-    let X be non empty 1-sorted,
-        A, B, C be SetSequence of the carrier of X;
+    let X be set,
+        A, B, C be SetSequence of X;
     assume
 A1: for n being Nat holds C.n = A.n \/ B.n;
     let x be set;
@@ -656,13 +657,13 @@ A4: for k being Nat holds x in B.(n+k) by Th7;
   end;
 
 theorem
-    for X being non empty 1-sorted,
-      A, B, C being SetSequence of the carrier of X st
+  for X being set,
+      A, B, C being SetSequence of X st
    (for n being Nat holds C.n = A.n /\ B.n) holds
      lim_sup C c= lim_sup A /\ lim_sup B
   proof
-    let X be non empty 1-sorted,
-        A, B, C be SetSequence of the carrier of X;
+    let X be set,
+        A, B, C be SetSequence of X;
     assume
 A1: for n being Nat holds C.n = A.n /\ B.n;
     let x be set;
@@ -692,14 +693,14 @@ A5:   x in C.(n+k) by A2,Th8;
   end;
 
 theorem Th17:
-  for X being non empty 1-sorted,
-      A being SetSequence of the carrier of X,
+  for X being set,
+      A being SetSequence of X,
       B being Subset of X st
    (for n being Nat holds A.n = B) holds
      lim_sup A = B
   proof
-    let X be non empty 1-sorted,
-        A be SetSequence of the carrier of X,
+    let X be set,
+        A be SetSequence of X,
         B be Subset of X;
     assume
 A1: for n being Nat holds A.n = B;
@@ -727,14 +728,14 @@ A3:   x in B;
   end;
 
 theorem Th18:
-  for X being non empty 1-sorted,
-      A being SetSequence of the carrier of X,
+  for X being set,
+      A being SetSequence of X,
       B being Subset of X st
    (for n being Nat holds A.n = B) holds
      lim_inf A = B
   proof
-    let X be non empty 1-sorted,
-        A be SetSequence of the carrier of X,
+    let X be set,
+        A be SetSequence of X,
         B be Subset of X;
     assume
 A1: for n being Nat holds A.n = B;
@@ -763,14 +764,14 @@ A3:   x in B;
   end;
 
 theorem
-    for X being non empty 1-sorted,
-      A, B being SetSequence of the carrier of X,
+  for X being set,
+      A, B being SetSequence of X,
       C being Subset of X st
    (for n being Nat holds B.n = C \+\ A.n) holds
      C \+\ lim_inf A c= lim_sup B
   proof
-    let X be non empty 1-sorted,
-        A, B be SetSequence of the carrier of X,
+    let X be set,
+        A, B be SetSequence of X,
         C be Subset of X;
     assume
 A1: for n being Nat holds B.n = C \+\ A.n;
@@ -780,13 +781,13 @@ A2: x in C \+\ lim_inf A;
     per cases by A2,XBOOLE_0:1;
     suppose
 A3: x in C & not x in lim_inf A;
-      for n being Nat ex k being Nat st x in B.(n+k)
+    for n being Nat ex k being Nat st x in B.(n+k)
     proof
       let n be Nat;
       consider k being Nat such that
 A4:   not x in A.(n+k) by A3,Th7;
       take k;
-        x in C \+\ A.(n+k) by A3,A4,XBOOLE_0:1;
+      x in C \+\ A.(n+k) by A3,A4,XBOOLE_0:1;
       hence thesis by A1;
     end;
     hence thesis by Th8;
@@ -795,11 +796,11 @@ A4:   not x in A.(n+k) by A3,Th7;
 A5: not x in C & x in lim_inf A;
     then consider n being Nat such that
 A6: for k being Nat holds x in A.(n+k) by Th7;
-      for m being Nat ex k being Nat st x in B.(m+k)
+    for m being Nat ex k being Nat st x in B.(m+k)
     proof
       let m be Nat;
       take k = n;
-        x in A.(m+k) by A6;
+      x in A.(m+k) by A6;
       then x in C \+\ A.(m+k) by A5,XBOOLE_0:1;
       hence thesis by A1;
     end;
@@ -808,14 +809,14 @@ A6: for k being Nat holds x in A.(n+k) by Th7;
   end;
 
 theorem
-    for X being non empty 1-sorted,
-      A, B being SetSequence of the carrier of X,
+  for X being set,
+      A, B being SetSequence of X,
       C being Subset of X st
    (for n being Nat holds B.n = C \+\ A.n) holds
      C \+\ lim_sup A c= lim_sup B
   proof
-    let X be non empty 1-sorted,
-        A, B be SetSequence of the carrier of X,
+    let X be set,
+        A, B be SetSequence of X,
         C be Subset of X;
     assume
 A1: for n being Nat holds B.n = C \+\ A.n;
@@ -839,13 +840,13 @@ A4: for k being Nat holds not x in A.(n+k) by Th8;
     end;
     suppose
 A5: not x in C & x in lim_sup A;
-      for m being Nat ex k being Nat st x in B.(m+k)
+    for m being Nat ex k being Nat st x in B.(m+k)
     proof
       let m be Nat;
       consider k being Nat such that
 A6:   x in A.(m+k) by A5,Th8;
       take k;
-        x in C \+\ A.(m+k) by A5,A6,XBOOLE_0:1;
+      x in C \+\ A.(m+k) by A5,A6,XBOOLE_0:1;
       hence thesis by A1;
     end;
     hence thesis by Th8;
@@ -854,7 +855,7 @@ A6:   x in A.(m+k) by A5,Th8;
 
 begin :: Ascending and Descending Families of Subsets
 
-definition let T be non empty 1-sorted,
+definition let T be set,
                S be SetSequence of T;
   attr S is descending means :Def5:
     for i being Nat holds S.(i+1) c= S.i;
@@ -889,13 +890,13 @@ A8: i + k = j by A2,NAT_1:28;
   end;
 
 theorem Th22:
-  for T being non empty 1-sorted,
+  for T being set,
       C being SetSequence of T st
       C is descending holds
     for i, m being Nat st i >= m holds
       C.i c= C.m
   proof
-    let T be non empty 1-sorted,
+    let T be set,
         C be SetSequence of T;
     assume C is descending;
 then A1: for i being Nat holds C.(i+1) c= C.i by Def5;
@@ -905,13 +906,13 @@ then A1: for i being Nat holds C.(i+1) c= C.i by Def5;
   end;
 
 theorem Th23:
-  for T being non empty 1-sorted,
+  for T being set,
       C being SetSequence of T st
       C is ascending holds
     for i, m being Nat st i >= m holds
       C.m c= C.i
   proof
-    let T be non empty 1-sorted,
+    let T be set,
         C be SetSequence of T;
     assume C is ascending;
 then A1: for i being Nat holds C.i c= C.(i+1) by Def6;
@@ -921,14 +922,14 @@ then A1: for i being Nat holds C.i c= C.(i+1) by Def6;
   end;
 
 theorem Th24:
-  for T being non empty 1-sorted,
+  for T being set,
       F being SetSequence of T,
       x being set st
     F is descending &
     ex k being Nat st for n being Nat st n > k holds x in F.n holds
       x in meet F
   proof
-    let T be non empty 1-sorted,
+    let T be set,
         F be SetSequence of T,
         x be set;
     assume that
@@ -958,12 +959,12 @@ then A7: not x in F.k by A5,A6;
   end;
 
 theorem
-    for T being non empty 1-sorted,
+  for T being set,
       F being SetSequence of T st
     F is descending holds
       lim_inf F = meet F
   proof
-    let T be non empty 1-sorted,
+    let T be set,
         F be SetSequence of T;
     assume
 A1: F is descending;
@@ -988,12 +989,12 @@ A3:     n = k + h by NAT_1:28;
   end;
 
 theorem
-    for T being non empty 1-sorted,
+  for T being set,
       F being SetSequence of T st
     F is ascending holds
       lim_sup F = Union F
   proof
-    let T be non empty 1-sorted,
+    let T be set,
         F be SetSequence of T;
     assume
 A1: F is ascending;
@@ -1020,28 +1021,28 @@ A5: n = m + h by NAT_1:28;
 
 begin :: Constant and Convergent Sequences
 
-definition let T be non empty 1-sorted,
+definition let T be set,
                S be SetSequence of T;
   attr S is convergent means :Def7:
   lim_sup S = lim_inf S;
 end;
 
 theorem Th27:
-  for T being non empty 1-sorted,
+  for T being set,
       S being SetSequence of T st S is constant holds
     the_value_of S is Subset of T
   proof
-    let T be non empty 1-sorted,
+    let T be set,
         S be SetSequence of T;
     assume S is constant;
     then consider x being set such that
 A1: x in dom S & the_value_of S = S.x by YELLOW_6:def 1;
     reconsider n = x as Nat by A1,FUNCT_2:def 1;
-      S.n in bool the carrier of T;
+    S.n in bool T;
     hence thesis by A1;
   end;
 
-definition let T be non empty 1-sorted,
+definition let T be set,
                S be SetSequence of T;
   redefine attr S is constant means :Def8:
   ex A being Subset of T st for n being Nat holds S.n = A;
@@ -1073,7 +1074,7 @@ A4: for n being Nat holds S.n = A;
   end;
 end;
 
-registration let T be non empty 1-sorted;
+registration let T be set;
   cluster constant -> convergent ascending descending SetSequence of T;
   coherence
   proof
@@ -1095,19 +1096,19 @@ A4: now let n be Nat;
   end;
 end;
 
-registration let T be non empty 1-sorted;
+registration let T be set;
   cluster constant non empty SetSequence of T;
   existence
   proof
     consider A being Subset of T;
     set E = NAT --> A;
     reconsider E as SetSequence of T;
-      E is constant;
+    E is constant;
     hence thesis;
   end;
 end;
 
-definition let T be non empty 1-sorted,
+definition let T be set,
                S be convergent SetSequence of T;
   func Lim_K S -> Subset of T means :Def9:
   it = lim_sup S & it = lim_inf S;
@@ -1120,12 +1121,12 @@ definition let T be non empty 1-sorted,
 end;
 
 theorem
-    for X being non empty 1-sorted,
+  for X being set,
       F being convergent SetSequence of X,
       x being set holds
    x in Lim_K F iff ex n being Nat st for k being Nat holds x in F.(n+k)
   proof
-    let X be non empty 1-sorted,
+    let X be set,
         F be convergent SetSequence of X,
         x be set;
       Lim_K F = lim_inf F by Def9;
@@ -1520,13 +1521,13 @@ A4: x in B;
     hence x in A by A1,A4;
   end;
 
-definition let T be non empty TopStruct;
-           let S be SetSequence of the carrier of T;
+definition let T be non empty set;
+           let S be SetSequence of T;
            let i be Nat;
  redefine func S.i -> Subset of T;
  coherence
   proof
-      S.i in bool the carrier of T;
+    S.i in bool T;
     hence thesis;
   end;
 end;
@@ -1552,13 +1553,13 @@ then A3: dom (S * R) = NAT by A1,A2,RELAT_1:46;
 theorem Th43:
   id NAT is increasing Seq_of_Nat
   proof
-      id NAT is Function of NAT, REAL by FUNCT_2:9;
+    id NAT is Function of NAT, REAL by FUNCT_2:9;
     hence thesis by FRECHET2:2;
   end;
 
 registration
   cluster id NAT -> real-yielding;
-  coherence by Th43;
+  coherence;
 end;
 
 Lm1:
@@ -1596,7 +1597,7 @@ theorem Th44:
   end;
 
 theorem
-    for T being non empty 1-sorted,
+  for T being non empty 1-sorted,
       S being SetSequence of T,
       S1 being subsequence of S holds
     rng S1 c= rng S
@@ -1619,7 +1620,7 @@ then A4: NS.x in dom S by FUNCT_2:def 1;
   end;
 
 theorem
-    for T being non empty 1-sorted,
+  for T being non empty 1-sorted,
       S1 being SetSequence of the carrier of T,
       S2 being subsequence of S1,
       S3 being subsequence of S2 holds
@@ -1673,7 +1674,7 @@ A5: NAT = dom G & NAT = dom F by FUNCT_2:def 1;
   end;
 
 theorem
-    for T being non empty 1-sorted,
+  for T being non empty 1-sorted,
       A being constant SetSequence of T,
       B being subsequence of A holds
    A = B
@@ -1707,7 +1708,7 @@ then A2: n in dom NS by FUNCT_2:def 1;
   end;
 
 registration let T be non empty 1-sorted,
-               X be constant SetSequence of T;
+                 X be constant SetSequence of T;
   cluster -> constant subsequence of X;
   coherence
   proof
@@ -1852,7 +1853,7 @@ definition let T be non empty TopSpace;
 end;
 
 theorem Th50:
-   for S being SetSequence of the carrier of TOP-REAL n,
+  for S being SetSequence of the carrier of TOP-REAL n,
        p being Point of TOP-REAL n,
        p' being Point of Euclid n st p = p' holds
     p in Lim_inf S iff
@@ -1913,12 +1914,12 @@ A1:   x in Cl Lim_inf S;
       then reconsider x' = x as Point of T;
         now let G be a_neighborhood of x';
         set H = Int G;
-          H is open & x' in H by CONNSP_2:def 1;
+        H is open & x' in H by CONNSP_2:def 1;
         then Lim_inf S meets H by A1,PRE_TOPC:54;
         then consider z being set such that
 A2:     z in Lim_inf S & z in H by XBOOLE_0:3;
         reconsider z as Point of T by A2;
-          z in Int H by A2,TOPS_1:45;
+        z in Int H by A2,TOPS_1:45;
         then H is a_neighborhood of z by CONNSP_2:def 1;
         then consider k being Nat such that
 A3:     for m being Nat st m > k holds S.m meets H by A2,Def11;
@@ -2012,7 +2013,7 @@ then A4:   A.m1 meets G by A3;
   end;
 
 theorem
-    for T being non empty TopSpace,
+  for T being non empty TopSpace,
       A, B, C being SetSequence of the carrier of T st
     for i being Nat holds C.i = A.i \/ B.i holds
       Lim_inf A \/ Lim_inf B c= Lim_inf C
@@ -2067,7 +2068,7 @@ then A8:   B.m meets H by A7;
   end;
 
 theorem
-    for T being non empty TopSpace,
+  for T being non empty TopSpace,
       A, B, C being SetSequence of the carrier of T st
     for i being Nat holds C.i = A.i /\ B.i holds
       Lim_inf C c= Lim_inf A /\ Lim_inf B
@@ -2150,7 +2151,7 @@ A5:     y in G.m & y in H1 by XBOOLE_0:3;
           H1 is a_neighborhood of y by A3,A5,CONNSP_2:5;
         then consider H' being non empty Subset of T such that
 A6:     H' is a_neighborhood of y & H' is open & H' c= H1 by CONNSP_2:7;
-          y in Cl (F.m) by A1,A5;
+        y in Cl (F.m) by A1,A5;
         then H' meets F.m by A6,YELLOW_6:6;
         then H1 meets F.m by A6,XBOOLE_1:63;
         hence thesis by A3,XBOOLE_1:63;
@@ -2159,10 +2160,10 @@ A6:     H' is a_neighborhood of y & H' is open & H' c= H1 by CONNSP_2:7;
     end;
     thus Lim_inf F c= Lim_inf G
     proof
-        for i being Nat holds F.i c= G.i
+      for i being Nat holds F.i c= G.i
       proof
         let i be Nat;
-          G.i = Cl (F.i) by A1;
+        G.i = Cl (F.i) by A1;
         hence thesis by PRE_TOPC:48;
       end;
       hence thesis by Th54;
@@ -2170,7 +2171,7 @@ A6:     H' is a_neighborhood of y & H' is open & H' c= H1 by CONNSP_2:7;
   end;
 
 theorem
-    for S being SetSequence of the carrier of TOP-REAL n,
+  for S being SetSequence of the carrier of TOP-REAL n,
       p being Point of TOP-REAL n holds
      (ex s being Real_Sequence of n st s is convergent &
       (for x being Nat holds s.x in S.x) & p = lim s) implies
@@ -2192,7 +2193,7 @@ A3:  p = lim s;
     assume r > 0;
     then consider l being Nat such that
 A4: for m being Nat st l <= m holds |. s.m - p .| < r'
-       by A1,A3,TOPRNS_1:def 10;
+      by A1,A3,TOPRNS_1:def 10;
     take v = max (0, l);
     let m be Nat;
     assume v < m;
@@ -2206,9 +2207,9 @@ then A5: s.m in Ball (p', r) by Th33;
 end;
 
 theorem Th59:
-   for T being non empty TopSpace,
-       P being Subset of T,
-       s being SetSequence of the carrier of T st
+  for T being non empty TopSpace,
+      P being Subset of T,
+      s being SetSequence of the carrier of T st
    (for i being Nat holds s.i c= P) holds
    Lim_inf s c= Cl P
   proof
@@ -2275,7 +2276,7 @@ A2:   x in Cl A;
   end;
 
 theorem
-    for T being non empty TopSpace,
+  for T being non empty TopSpace,
       F being SetSequence of the carrier of T,
       A being closed Subset of T st
     for i being Nat holds F.i = A holds Lim_inf F = A
