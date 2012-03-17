@@ -59,6 +59,9 @@
 </Typ>
 <Cluster>
 <Adjective nr="8"/>
+<Adjective nr="11">
+<Func kind="K" nr="47"/>
+</Adjective>
 <Adjective nr="13"/>
 <Adjective nr="18" value="false"/>
 <Adjective nr="21"/>
@@ -74,6 +77,9 @@
 </Typ>
 <Cluster>
 <Adjective nr="8"/>
+<Adjective nr="11">
+<Func kind="K" nr="47"/>
+</Adjective>
 <Adjective nr="13"/>
 <Adjective nr="18" value="false"/>
 <Adjective nr="21"/>

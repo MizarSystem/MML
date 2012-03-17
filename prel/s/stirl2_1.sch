@@ -271,7 +271,6 @@
 </Pred>
 <Pred kind="R" nr="3">
 <Func kind="K" nr="181">
-<Func kind="F" nr="3"/>
 <Func kind="F" nr="4"/>
 <Func kind="K" nr="64">
 <Func kind="F" nr="3"/>
@@ -551,12 +550,6 @@
 </Pred>
 <Pred kind="R" nr="3">
 <Func kind="K" nr="181">
-<Func kind="K" nr="22">
-<Func kind="F" nr="1"/>
-<Func kind="K" nr="13">
-<Func kind="F" nr="3"/>
-</Func>
-</Func>
 <Func kind="K" nr="22">
 <Func kind="F" nr="2"/>
 <Func kind="K" nr="13">

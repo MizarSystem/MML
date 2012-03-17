@@ -40,7 +40,7 @@ registration
   let f be Function of n-tuples_on BOOLEAN, BOOLEAN;
   let p be FinSeqLen of n;
   cluster 1GateCircuit(p,f) -> Boolean;
-  coherence by CIRCCOMB:69;
+  coherence by CIRCCOMB:61;
 end;
 
 theorem Th1:
@@ -56,7 +56,7 @@ proof
   let o be OperSymbol of 1GateCircStr(p,f);
   let s be State of 1GateCircuit(p,f);
   o depends_on_in s = s * (the_arity_of o) by CIRCUIT1:def 3
-    .= s*p by CIRCCOMB:48;
+    .= s*p by CIRCCOMB:41;
   hence thesis;
 end;
 
@@ -71,25 +71,25 @@ proof
   set S = 1GateCircStr(p,f);
   let s be State of 1GateCircuit(p,f);
   set s1 = Following s, s2 = Following s1;
-A1: dom s1 = the carrier of S by CIRCUIT1:4;
+A1: dom s1 = the carrier of S by CIRCUIT1:3;
 A2: the carrier of S = rng p \/ {[p,f]} by CIRCCOMB:def 6;
-A3: InputVertices S = rng p by CIRCCOMB:49;
-A4: InnerVertices S = {[p,f]} by CIRCCOMB:49;
+A3: InputVertices S = rng p by CIRCCOMB:42;
+A4: InnerVertices S = {[p,f]} by CIRCCOMB:42;
 A5: now
     let a be set;
     assume a in the carrier of S;
     then reconsider v = a as Vertex of S;
-    dom s = the carrier of S by CIRCUIT1:4;
+    dom s = the carrier of S by CIRCUIT1:3;
     then
-A6: dom (s*p) = dom p by A2,RELAT_1:46,XBOOLE_1:7;
-A7: dom (s1*p) = dom p by A1,A2,RELAT_1:46,XBOOLE_1:7;
+A6: dom (s*p) = dom p by A2,RELAT_1:27,XBOOLE_1:7;
+A7: dom (s1*p) = dom p by A1,A2,RELAT_1:27,XBOOLE_1:7;
 A8: now
       let i be set;
       assume
 A9:   i in dom p;
       then
-A10:  p.i in rng p by FUNCT_1:12;
-      (s1*p).i = s1.(p.i) & (s*p).i = s.(p.i) by A7,A6,A9,FUNCT_1:22;
+A10:  p.i in rng p by FUNCT_1:3;
+      (s1*p).i = s1.(p.i) & (s*p).i = s.(p.i) by A7,A6,A9,FUNCT_1:12;
       hence (s1*p).i = (s*p).i by A3,A10,CIRCUIT2:def 5;
     end;
     v in rng p or v in {[p,f]} by A2,XBOOLE_0:def 3;
@@ -98,20 +98,20 @@ A10:  p.i in rng p by FUNCT_1:12;
 = (Den(action_at v, 1GateCircuit(p,f))). (action_at v depends_on_in s1) & s1.v
     = (Den(action_at v, 1GateCircuit(p,f))). (action_at v depends_on_in s) & (
     action_at v = [p,f] implies action_at v depends_on_in s = s*p & action_at v
-    depends_on_in s1 = s1*p) by A3,A4,Th1,CIRCCOMB:48,CIRCUIT2:def 5
+    depends_on_in s1 = s1*p) by A3,A4,Th1,CIRCCOMB:41,CIRCUIT2:def 5
 ,TARSKI:def 1;
-    hence s2.a = s1.a by A7,A6,A8,FUNCT_1:9;
+    hence s2.a = s1.a by A7,A6,A8,FUNCT_1:2;
   end;
-  dom s2 = the carrier of S by CIRCUIT1:4;
-  hence Following s = Following Following s by A1,A5,FUNCT_1:9;
+  dom s2 = the carrier of S by CIRCUIT1:3;
+  hence Following s = Following Following s by A1,A5,FUNCT_1:2;
 end;
 
 theorem Th3:
-  for S being non void Circuit-like (non empty ManySortedSign) for
+  for S being non void Circuit-like non empty ManySortedSign for
   A being non-empty Circuit of S for s being State of A st s is stable for n
   being Nat holds Following(s, n) = s
 proof
-  let S be non void Circuit-like (non empty ManySortedSign);
+  let S be non void Circuit-like non empty ManySortedSign;
   let A be non-empty Circuit of S;
   let s be State of A such that
 A1: s is stable;
@@ -127,11 +127,11 @@ A3: P[ 0 ] by FACIRC_1:11;
 end;
 
 theorem Th4:
-  for S being non void Circuit-like (non empty ManySortedSign) for
+  for S being non void Circuit-like non empty ManySortedSign for
   A being non-empty Circuit of S for s being State of A, n1, n2 being Nat st
 Following(s, n1) is stable & n1 <= n2 holds Following(s, n2) = Following(s, n1)
 proof
-  let S be non void Circuit-like (non empty ManySortedSign);
+  let S be non void Circuit-like non empty ManySortedSign;
   let A be non-empty Circuit of S;
   let s be State of A, n1, n2 be Nat such that
 A1: Following(s, n1) is stable and
@@ -166,7 +166,7 @@ A4: for n being set st n in NAT holds h.n = h(n) from PBOOLE:sch 4;
   hence f.0 = S0() & h.0 = o0() by A3,A4;
   let n be Nat, S be non empty ManySortedSign, x be set;
   set x = F.n;
-A5: n in NAT by ORDINAL1:def 13;
+A5: n in NAT by ORDINAL1:def 12;
   then
 A6: h.n = x`2 by A4;
   assume S = f.n;
@@ -428,8 +428,6 @@ end;
 
 begin
 
-canceled;
-
 theorem Th6:
   for S1,S2 being non empty ManySortedSign st S1 tolerates S2 holds
   InputVertices (S1+*S2) = ((InputVertices S1)\(InnerVertices S2)) \/ ((
@@ -446,7 +444,7 @@ A2: the ResultSort of S1 tolerates the ResultSort of S2 by CIRCCOMB:def 1;
     .= (the carrier of S1)\/(the carrier of S2) \ rng ((the ResultSort of S1
   ) +* (the ResultSort of S2)) by CIRCCOMB:def 2
     .= (the carrier of S1)\/(the carrier of S2) \ ((rng the ResultSort of S1
-  )\/rng the ResultSort of S2) by A2,FRECHET:39
+  )\/rng the ResultSort of S2) by A2,FRECHET:35
     .= ((the carrier of S1) \ ((rng the ResultSort of S1)\/(rng the
 ResultSort of S2)))\/ ((the carrier of S2) \ ((rng the ResultSort of S1)\/(rng
   the ResultSort of S2))) by XBOOLE_1:42;
@@ -538,7 +536,7 @@ A9: S2 = f(i+1) and
 A10: h().(i+1) in InnerVertices S2 and
 A11: InputVertices S2 is without_pairs and
 A12: InnerVertices S2 is Relation;
-A13: {h().(i+1)} c= InnerVertices S2 by A10,ZFMISC_1:37;
+A13: {h().(i+1)} c= InnerVertices S2 by A10,ZFMISC_1:31;
     take S2, S3 = S2+*S(h().(i+1),i+1);
     thus S2 = f(i+1) & S3 = f(i+1+1) by A6,A9;
 A14: InputVertices S(h().(i+1),i+1) \ {h().(i+1)} is without_pairs by A5;
@@ -547,7 +545,7 @@ A14: InputVertices S(h().(i+1),i+1) \ {h().(i+1)} is without_pairs by A5;
 A15: InnerVertices S(h().(i+1),i+1) is Relation by A4;
     thus InputVertices S3 = ((InputVertices S2)\(InnerVertices S(h().(i+1
     ),i+1))) \/ ((InputVertices S(h().(i+1),i+1))\(InnerVertices S2)) by Th6,
-CIRCCOMB:55
+CIRCCOMB:47
       .= InputVertices S2 \/ ((InputVertices S(h().(i+1),i+1))\(
     InnerVertices S2)) by A11,A15,Th7
       .= (InputVertices S2)\/((InputVertices S(h().(i+1),i+1)) \ {h().(i+1)}
@@ -558,15 +556,15 @@ A17: h().(i+1+1) = o(h().(i+1),i+1) & o(h().(i+1),i+1) in InnerVertices S(
     h().(i+ 1), i+1) by A6,A9;
     reconsider X1 = InnerVertices S2, X2 = InnerVertices S(h().(i+1), i+1) as
     Relation by A4,A12;
-    S2 tolerates S(h().(i+1),i+1) by CIRCCOMB:55;
-    then InnerVertices S3 = X1 \/ X2 by CIRCCOMB:15;
+    S2 tolerates S(h().(i+1),i+1) by CIRCCOMB:47;
+    then InnerVertices S3 = X1 \/ X2 by CIRCCOMB:11;
     hence thesis by A17,A16,XBOOLE_0:def 3;
   end;
   let n be Nat;
-A18: S0() tolerates S(h().0,0) by CIRCCOMB:55;
+A18: S0() tolerates S(h().0,0) by CIRCCOMB:47;
 A19: InputVertices (S0() +* S(h().0,0)) = ((InputVertices S0())\(
 InnerVertices S(h().0,0))) \/ ((InputVertices S(h().0,0))\(InnerVertices S0()))
-  by Th6,CIRCCOMB:55
+  by Th6,CIRCCOMB:47
     .= InputVertices S0() \/ ((InputVertices S(h().0,0))\(InnerVertices S0()
   )) by A2,A7,Th7;
 A20: P[ 0 ]
@@ -584,7 +582,7 @@ TARSKI:def 1;
 A21: InputVertices S1= B\/A by A1,A19,Th9;
     h().(0+1) = o(h().(0),0) & o(h().(0),0) in R2 by A3,A6;
     then h().(0+1) in R1 \/ R2 by XBOOLE_0:def 3;
-    hence thesis by A18,A21,CIRCCOMB:15;
+    hence thesis by A18,A21,CIRCCOMB:11;
   end;
 A22: for i being Nat holds P[i] from NAT_1:sch 2(A20,A8);
   then consider
@@ -683,12 +681,12 @@ A5: for n being set st n in NAT holds h.n = h(n) from PBOOLE:sch 4;
   consider g being ManySortedSet of NAT such that
 A6: for n being set st n in NAT holds g.n = g(n) from PBOOLE:sch 4;
   take f,g,h;
-  (F.0)`11 = S0() & (F.0)`12 = A0() by A1,MCART_1:89;
+  (F.0)`11 = S0() & (F.0)`12 = A0() by A1,MCART_1:85;
   hence f.0 = S0() & g.0 = A0() & h.0 = o0() by A4,A6,A5,A3;
   let n be Nat, S be non empty ManySortedSign, A be non-empty MSAlgebra over S
   , x be set;
   set x = F.n;
-A7: n in NAT by ORDINAL1:def 13;
+A7: n in NAT by ORDINAL1:def 12;
   then
 A8: h.n = x`2 by A5;
   assume that
@@ -700,7 +698,7 @@ A11: A = x`12 by A6,A7,A10;
 A12: F.(n+1) = [[S(S,h.n,n), A(S,A,h.n,n)], o(h.n,n)] by A2,A11,A8;
   then
 A13: (F.(n+1))`2 = o(h.n,n) by MCART_1:7;
-  (F.(n+1))`11 = S(S,h.n,n) & (F.(n+1))`12 = A(S,A,h.n,n) by A12,MCART_1:89;
+  (F.(n+1))`11 = S(S,h.n,n) & (F.(n+1))`12 = A(S,A,h.n,n) by A12,MCART_1:85;
   hence thesis by A4,A6,A5,A13;
 end;
 
@@ -1371,14 +1369,14 @@ end;
 begin :: Correctness of Many Cell Circuit
 
 theorem
-  for S1,S2,S being non void Circuit-like (non empty ManySortedSign) st
+  for S1,S2,S being non void Circuit-like non empty ManySortedSign st
   InnerVertices S1 misses InputVertices S2 & S = S1+*S2 for C1 being non-empty
   Circuit of S1, C2 being non-empty Circuit of S2 for C being non-empty Circuit
 of S st C1 tolerates C2 & C = C1+*C2 for s2 being State of C2 for s being State
 of C st s2 = s|the carrier of S2 holds Following s2 = (Following s)|the carrier
   of S2
 proof
-  let S1,S2,S be non void Circuit-like(non empty ManySortedSign) such that
+  let S1,S2,S be non void Circuit-likenon empty ManySortedSign such that
 A1: InnerVertices S1 misses InputVertices S2 & S = S1+*S2;
   let C1 be non-empty Circuit of S1;
   let C2 be non-empty Circuit of S2;
@@ -1389,21 +1387,21 @@ A3: C = C1+*C2;
   let s be State of C such that
 A4: s2 = s|the carrier of S2;
   the Sorts of C1 tolerates the Sorts of C2 by A2,CIRCCOMB:def 3;
-  then reconsider s1 = s|the carrier of S1 as State of C1 by A3,CIRCCOMB:33;
+  then reconsider s1 = s|the carrier of S1 as State of C1 by A3,CIRCCOMB:26;
   dom Following s2 = the carrier of S2 & Following s = (Following s1)+*(
-  Following s2) by A1,A2,A3,A4,CIRCCOMB:39,CIRCUIT1:4;
-  hence thesis by FUNCT_4:24;
+  Following s2) by A1,A2,A3,A4,CIRCCOMB:32,CIRCUIT1:3;
+  hence thesis by FUNCT_4:23;
 end;
 
 theorem Th11:
-  for S1,S2,S being non void Circuit-like (non empty
-ManySortedSign) st InputVertices S1 misses InnerVertices S2 & S = S1+*S2 for C1
+  for S1,S2,S being non void Circuit-like non empty
+ManySortedSign st InputVertices S1 misses InnerVertices S2 & S = S1+*S2 for C1
   being non-empty Circuit of S1, C2 being non-empty Circuit of S2 for C being
 non-empty Circuit of S st C1 tolerates C2 & C = C1+*C2 for s1 being State of C1
   for s being State of C st s1 = s|the carrier of S1 holds Following s1 = (
   Following s)|the carrier of S1
 proof
-  let S1,S2,S be non void Circuit-like(non empty ManySortedSign) such that
+  let S1,S2,S be non void Circuit-likenon empty ManySortedSign such that
 A1: InputVertices S1 misses InnerVertices S2 & S = S1+*S2;
   let C1 be non-empty Circuit of S1;
   let C2 be non-empty Circuit of S2;
@@ -1414,21 +1412,21 @@ A3: C = C1+*C2;
   let s be State of C such that
 A4: s1 = s|the carrier of S1;
   the Sorts of C1 tolerates the Sorts of C2 by A2,CIRCCOMB:def 3;
-  then reconsider s2 = s|the carrier of S2 as State of C2 by A3,CIRCCOMB:33;
+  then reconsider s2 = s|the carrier of S2 as State of C2 by A3,CIRCCOMB:26;
   dom Following s1 = the carrier of S1 & Following s = (Following s2)+*(
-  Following s1) by A1,A2,A3,A4,CIRCCOMB:40,CIRCUIT1:4;
-  hence thesis by FUNCT_4:24;
+  Following s1) by A1,A2,A3,A4,CIRCCOMB:33,CIRCUIT1:3;
+  hence thesis by FUNCT_4:23;
 end;
 
 theorem
-  for S1,S2,S being non void Circuit-like (non empty ManySortedSign) st
+  for S1,S2,S being non void Circuit-like non empty ManySortedSign st
   InnerVertices S1 misses InputVertices S2 & S = S1+*S2 for C1 being non-empty
   Circuit of S1, C2 being non-empty Circuit of S2 for C being non-empty Circuit
   of S st C1 tolerates C2 & C = C1+*C2 for s1 being State of C1 for s2 being
   State of C2 for s being State of C st s1 = s|the carrier of S1 & s2 = s|the
   carrier of S2 & s1 is stable & s2 is stable holds s is stable
 proof
-  let S1,S2,S be non void Circuit-like(non empty ManySortedSign) such that
+  let S1,S2,S be non void Circuit-likenon empty ManySortedSign such that
 A1: InnerVertices S1 misses InputVertices S2 and
 A2: S = S1+*S2;
   let C1 be non-empty Circuit of S1;
@@ -1442,23 +1440,23 @@ A4: s1 = s|the carrier of S1 & s2 = s|the carrier of S2 and
 A5: s1 is stable and
 A6: s2 is stable;
   dom s = the carrier of S & the carrier of S = (the carrier of S1) \/ the
-  carrier of S2 by A2,CIRCCOMB:def 2,CIRCUIT1:4;
-  then s = s1+*s2 by A4,FUNCT_4:74;
+  carrier of S2 by A2,CIRCCOMB:def 2,CIRCUIT1:3;
+  then s = s1+*s2 by A4,FUNCT_4:70;
   then s = (Following s1) +* s2 by A5,CIRCUIT2:def 6
     .= (Following s1) +* (Following s2) by A6,CIRCUIT2:def 6
-    .= Following s by A1,A2,A3,A4,CIRCCOMB:39;
+    .= Following s by A1,A2,A3,A4,CIRCCOMB:32;
   hence s = Following s;
 end;
 
 theorem
-  for S1,S2,S being non void Circuit-like (non empty ManySortedSign) st
+  for S1,S2,S being non void Circuit-like non empty ManySortedSign st
   InputVertices S1 misses InnerVertices S2 & S = S1+*S2 for C1 being non-empty
   Circuit of S1, C2 being non-empty Circuit of S2 for C being non-empty Circuit
   of S st C1 tolerates C2 & C = C1+*C2 for s1 being State of C1 for s2 being
   State of C2 for s being State of C st s1 = s|the carrier of S1 & s2 = s|the
   carrier of S2 & s1 is stable & s2 is stable holds s is stable
 proof
-  let S1,S2,S be non void Circuit-like(non empty ManySortedSign) such that
+  let S1,S2,S be non void Circuit-likenon empty ManySortedSign such that
 A1: InputVertices S1 misses InnerVertices S2 and
 A2: S = S1+*S2;
   let C1 be non-empty Circuit of S1;
@@ -1472,23 +1470,23 @@ A4: s1 = s|the carrier of S1 & s2 = s|the carrier of S2 and
 A5: s1 is stable and
 A6: s2 is stable;
   dom s = the carrier of S & the carrier of S = (the carrier of S1) \/ the
-  carrier of S2 by A2,CIRCCOMB:def 2,CIRCUIT1:4;
-  then s = s2+*s1 by A4,FUNCT_4:74;
+  carrier of S2 by A2,CIRCCOMB:def 2,CIRCUIT1:3;
+  then s = s2+*s1 by A4,FUNCT_4:70;
   then s = (Following s2) +* s1 by A6,CIRCUIT2:def 6
     .= (Following s2) +* (Following s1) by A5,CIRCUIT2:def 6
-    .= Following s by A1,A2,A3,A4,CIRCCOMB:40;
+    .= Following s by A1,A2,A3,A4,CIRCCOMB:33;
   hence s = Following s;
 end;
 
 theorem Th14:
-  for S1,S2,S being non void Circuit-like (non empty
-ManySortedSign) st InputVertices S1 misses InnerVertices S2 & S = S1+*S2 for A1
+  for S1,S2,S being non void Circuit-like non empty
+ManySortedSign st InputVertices S1 misses InnerVertices S2 & S = S1+*S2 for A1
   being non-empty Circuit of S1, A2 being non-empty Circuit of S2 for A being
 non-empty Circuit of S st A1 tolerates A2 & A = A1+*A2 for s being State of A,
 s1 be State of A1 st s1 = s|the carrier of S1 for n being Nat holds Following(s
   , n)|the carrier of S1 = Following(s1, n)
 proof
-  let S1,S2,S be non void Circuit-like (non empty ManySortedSign) such that
+  let S1,S2,S be non void Circuit-like non empty ManySortedSign such that
 A1: InputVertices S1 misses InnerVertices S2 & S = S1+*S2;
   let A1 be non-empty Circuit of S1, A2 be non-empty Circuit of S2;
   let A be non-empty Circuit of S such that
@@ -1511,14 +1509,14 @@ A6: P[ 0 ];
 end;
 
 theorem Th15:
-  for S1,S2,S being non void Circuit-like (non empty
-ManySortedSign) st InputVertices S2 misses InnerVertices S1 & S = S1+*S2 for A1
+  for S1,S2,S being non void Circuit-like non empty
+ManySortedSign st InputVertices S2 misses InnerVertices S1 & S = S1+*S2 for A1
   being non-empty Circuit of S1, A2 being non-empty Circuit of S2 for A being
 non-empty Circuit of S st A1 tolerates A2 & A = A1+*A2 for s being State of A,
 s2 be State of A2 st s2 = s|the carrier of S2 for n being Nat holds Following(s
   , n)|the carrier of S2 = Following(s2, n)
 proof
-  let S1,S2,S be non void Circuit-like (non empty ManySortedSign) such that
+  let S1,S2,S be non void Circuit-like non empty ManySortedSign such that
 A1: InputVertices S2 misses InnerVertices S1 and
 A2: S = S1+*S2;
   let A1 be non-empty Circuit of S1, A2 be non-empty Circuit of S2;
@@ -1527,21 +1525,21 @@ A3: A1 tolerates A2 and
 A4: A = A1+*A2;
   S1 tolerates S2 by A3,CIRCCOMB:def 3;
   then
-A5: S = S2+*S1 by A2,CIRCCOMB:9;
-  A = A2+*A1 by A3,A4,CIRCCOMB:26;
-  hence thesis by A1,A3,A5,Th14,CIRCCOMB:23;
+A5: S = S2+*S1 by A2,CIRCCOMB:5;
+  A = A2+*A1 by A3,A4,CIRCCOMB:22;
+  hence thesis by A1,A3,A5,Th14,CIRCCOMB:19;
 end;
 
 theorem Th16:
-  for S1,S2,S being non void Circuit-like (non empty
-ManySortedSign) st InputVertices S1 misses InnerVertices S2 & S = S1+*S2 for A1
+  for S1,S2,S being non void Circuit-like non empty
+ManySortedSign st InputVertices S1 misses InnerVertices S2 & S = S1+*S2 for A1
   being non-empty Circuit of S1, A2 being non-empty Circuit of S2 for A being
   non-empty Circuit of S st A1 tolerates A2 & A = A1+*A2 for s being State of A
   for s1 being State of A1 st s1 = s|the carrier of S1 & s1 is stable for s2
   being State of A2 st s2 = s|the carrier of S2 holds (Following s)|the carrier
   of S2 = Following s2
 proof
-  let S1,S2,S be non void Circuit-like (non empty ManySortedSign) such that
+  let S1,S2,S be non void Circuit-like non empty ManySortedSign such that
 A1: InputVertices S1 misses InnerVertices S2 and
 A2: S = S1+*S2;
 A3: the carrier of S = (the carrier of S1)\/the carrier of S2 by A2,
@@ -1569,10 +1567,10 @@ A12: now
 A13:  v in InputVertices S2 and
 A14:  v in InnerVertices S1;
       reconsider v1 = v as Vertex of S1 by A14;
-      thus (Following s).vv = (Following s1).vv by A2,A4,A5,A6,A14,CIRCCOMB:38
+      thus (Following s).vv = (Following s1).vv by A2,A4,A5,A6,A14,CIRCCOMB:31
         .= s1.v by A7,CIRCUIT2:def 6
-        .= s.v1 by A6,FUNCT_1:72
-        .= s2.v by A8,FUNCT_1:72
+        .= s.v1 by A6,FUNCT_1:49
+        .= s2.v by A8,FUNCT_1:49
         .= (Following s2).vv by A13,CIRCUIT2:def 5;
     end;
     the carrier of S2 = InnerVertices S2 \/ InputVertices S2 & (
@@ -1583,24 +1581,24 @@ InputVertices S1 )\InnerVertices S2 = InputVertices S1 by A1,XBOOLE_1:45,83;
     then
 A15: vv in InnerVertices S2 or v in InputVertices S or v in InputVertices
     S2 & v in InnerVertices S1 by A10,XBOOLE_0:def 3;
-    thus ((Following s)|the carrier of S2).a = (Following s).v by FUNCT_1:72
-      .= (Following s2).a by A2,A4,A5,A8,A12,A15,CIRCCOMB:38;
+    thus ((Following s)|the carrier of S2).a = (Following s).v by FUNCT_1:49
+      .= (Following s2).a by A2,A4,A5,A8,A12,A15,CIRCCOMB:31;
   end;
-  dom Following s = the carrier of S by CIRCUIT1:4;
+  dom Following s = the carrier of S by CIRCUIT1:3;
   then dom Following s2 = the carrier of S2 & dom ((Following s)|the carrier
-  of S2) = the carrier of S2 by A3,CIRCUIT1:4,RELAT_1:91,XBOOLE_1:7;
-  hence thesis by A9,FUNCT_1:9;
+  of S2) = the carrier of S2 by A3,CIRCUIT1:3,RELAT_1:62,XBOOLE_1:7;
+  hence thesis by A9,FUNCT_1:2;
 end;
 
 theorem
-  for S1,S2,S being non void Circuit-like (non empty ManySortedSign) st
+  for S1,S2,S being non void Circuit-like non empty ManySortedSign st
 S = S1+*S2 for A1 being non-empty Circuit of S1, A2 being non-empty Circuit of
   S2 for A being non-empty Circuit of S st A1 tolerates A2 & A = A1+*A2 for s
   being State of A for s1 being State of A1 st s1 = s|the carrier of S1 & s1 is
   stable for s2 being State of A2 st s2 = s|the carrier of S2 & s2 is stable
   holds s is stable
 proof
-  let S1,S2,S be non void Circuit-like (non empty ManySortedSign) such that
+  let S1,S2,S be non void Circuit-like non empty ManySortedSign such that
 A1: S = S1+*S2;
   let A1 be non-empty Circuit of S1, A2 be non-empty Circuit of S2;
   let A be non-empty Circuit of S such that
@@ -1608,7 +1606,7 @@ A2: A1 tolerates A2 and
 A3: A = A1+*A2;
   S1 tolerates S2 by A2,CIRCCOMB:def 3;
   then
-A4: InnerVertices S = (InnerVertices S1) \/ InnerVertices S2 by A1,CIRCCOMB:15;
+A4: InnerVertices S = (InnerVertices S1) \/ InnerVertices S2 by A1,CIRCCOMB:11;
   let s be State of A;
   let s1 be State of A1 such that
 A5: s1 = s|the carrier of S1 and
@@ -1629,22 +1627,22 @@ A10: now
 & v in the carrier of S2 or v in InnerVertices S1 or v in InnerVertices S2 by
 A4,A9,XBOOLE_0:def 3;
     then (Following s).v = s1.v & v in the carrier of S1 or (Following s).v =
-    s2.v & v in the carrier of S2 by A1,A2,A3,A5,A6,A7,A8,CIRCCOMB:38;
-    hence s.x = (Following s).x by A5,A7,FUNCT_1:72;
+    s2.v & v in the carrier of S2 by A1,A2,A3,A5,A6,A7,A8,CIRCCOMB:31;
+    hence s.x = (Following s).x by A5,A7,FUNCT_1:49;
   end;
-  dom Following s = the carrier of S & dom s = the carrier of S by CIRCUIT1:4;
-  hence s = Following s by A10,FUNCT_1:9;
+  dom Following s = the carrier of S & dom s = the carrier of S by CIRCUIT1:3;
+  hence s = Following s by A10,FUNCT_1:2;
 end;
 
 theorem Th18:
-  for S1,S2,S being non void Circuit-like (non empty
-  ManySortedSign) st S = S1+*S2 for A1 being non-empty Circuit of S1, A2 being
+  for S1,S2,S being non void Circuit-like non empty
+  ManySortedSign st S = S1+*S2 for A1 being non-empty Circuit of S1, A2 being
 non-empty Circuit of S2 for A being non-empty Circuit of S st A1 tolerates A2 &
   A = A1+*A2 for s being State of A st s is stable holds (for s1 being State of
 A1 st s1 = s|the carrier of S1 holds s1 is stable) & (for s2 being State of A2
   st s2 = s|the carrier of S2 holds s2 is stable)
 proof
-  let S1,S2,S be non void Circuit-like (non empty ManySortedSign) such that
+  let S1,S2,S be non void Circuit-like non empty ManySortedSign such that
 A1: S = S1+*S2;
 A2: the carrier of S = (the carrier of S1) \/ the carrier of S2 by A1,
 CIRCCOMB:def 2;
@@ -1665,12 +1663,12 @@ A6: now
 ;
       then v in InputVertices S1 or v9 in InnerVertices S1 by XBOOLE_0:def 3;
       then s1.v = (Following s1).v or s.v9 = (Following s1).v by A1,A3,A4,A5,
-CIRCCOMB:38,CIRCUIT2:def 5;
-      hence s1.x = (Following s1).x by A5,FUNCT_1:72;
+CIRCCOMB:31,CIRCUIT2:def 5;
+      hence s1.x = (Following s1).x by A5,FUNCT_1:49;
     end;
     dom s1 = the carrier of S1 & dom Following s1 = the carrier of S1 by
-CIRCUIT1:4;
-    then s1 = Following s1 by A6,FUNCT_1:9;
+CIRCUIT1:3;
+    then s1 = Following s1 by A6,FUNCT_1:2;
     hence s1 is stable by CIRCUIT2:def 6;
   end;
   let s2 be State of A2 such that
@@ -1683,24 +1681,24 @@ A8: now
     the carrier of S2 = (InputVertices S2) \/ InnerVertices S2 by XBOOLE_1:45;
     then v in InputVertices S2 or v9 in InnerVertices S2 by XBOOLE_0:def 3;
     then s2.v = (Following s2).v or s.v9 = (Following s2).v by A1,A3,A4,A7,
-CIRCCOMB:38,CIRCUIT2:def 5;
-    hence s2.x = (Following s2).x by A7,FUNCT_1:72;
+CIRCCOMB:31,CIRCUIT2:def 5;
+    hence s2.x = (Following s2).x by A7,FUNCT_1:49;
   end;
   dom s2 = the carrier of S2 & dom Following s2 = the carrier of S2 by
-CIRCUIT1:4;
-  hence s2 = Following s2 by A8,FUNCT_1:9;
+CIRCUIT1:3;
+  hence s2 = Following s2 by A8,FUNCT_1:2;
 end;
 
 theorem Th19:
-  for S1,S2,S being non void Circuit-like (non empty
-ManySortedSign) st InputVertices S1 misses InnerVertices S2 & S = S1+*S2 for A1
+  for S1,S2,S being non void Circuit-like non empty
+ManySortedSign st InputVertices S1 misses InnerVertices S2 & S = S1+*S2 for A1
   being non-empty Circuit of S1, A2 being non-empty Circuit of S2 for A being
 non-empty Circuit of S st A1 tolerates A2 & A = A1+*A2 for s1 being State of A1
 , s2 being State of A2, s being State of A st s1 = s|the carrier of S1 & s2 = s
   |the carrier of S2 & s1 is stable for n being Nat holds Following(s, n)|the
   carrier of S2 = Following(s2, n)
 proof
-  let S1,S2,S be non void Circuit-like (non empty ManySortedSign) such that
+  let S1,S2,S be non void Circuit-like non empty ManySortedSign such that
 A1: InputVertices S1 misses InnerVertices S2 & S = S1+*S2;
   let A1 be non-empty Circuit of S1, A2 be non-empty Circuit of S2;
   let A be non-empty Circuit of S such that
@@ -1717,7 +1715,7 @@ A8: Following(s, n+1) = Following Following(s, n) & Following Following(
     s2, n) = Following(s2, n+1) by FACIRC_1:12;
     the Sorts of A1 tolerates the Sorts of A2 by A2,CIRCCOMB:def 3;
     then reconsider
-    Fs1 = Following(s, n)|the carrier of S1 as State of A1 by A3,CIRCCOMB:33;
+    Fs1 = Following(s, n)|the carrier of S1 as State of A1 by A3,CIRCCOMB:26;
     Following(s1, n) = Fs1 by A1,A2,A3,A4,Th14;
     then
 A9: Fs1 is stable by A6,Th3;
@@ -1732,15 +1730,15 @@ A10: P[ 0 ];
 end;
 
 theorem Th20:
-  for S1,S2,S being non void Circuit-like (non empty
-ManySortedSign) st InputVertices S1 misses InnerVertices S2 & S = S1+*S2 for A1
+  for S1,S2,S being non void Circuit-like non empty
+ManySortedSign st InputVertices S1 misses InnerVertices S2 & S = S1+*S2 for A1
   being non-empty Circuit of S1, A2 being non-empty Circuit of S2 for A being
 non-empty Circuit of S st A1 tolerates A2 & A = A1+*A2 for n1,n2 being Nat for
 s being State of A for s1 being State of A1, s2 being State of A2 st s1 = s|the
 carrier of S1 & Following(s1, n1) is stable & s2 = Following(s, n1)|the carrier
   of S2 & Following(s2, n2) is stable holds Following(s, n1+n2) is stable
 proof
-  let S1,S2,S be non void Circuit-like (non empty ManySortedSign) such that
+  let S1,S2,S be non void Circuit-like non empty ManySortedSign such that
 A1: InputVertices S1 misses InnerVertices S2 and
 A2: S = S1+*S2;
   let A1 be non-empty Circuit of S1, A2 be non-empty Circuit of S2;
@@ -1754,14 +1752,14 @@ A6: s99 = Following(s, n1)|the carrier of S2 & Following(s99, n2) is stable;
 A7: the Sorts of A1 tolerates the Sorts of A2 by A3,CIRCCOMB:def 3;
   then reconsider
   s1 = Following(s, n1)|the carrier of S1, s0 = s|the carrier of S1
-  as State of A1 by A4,CIRCCOMB:33;
+  as State of A1 by A4,CIRCCOMB:26;
 A8: Following(Following(s, n1), n2) = Following(s, n1+n2) by FACIRC_1:13;
   then
 A9: Following(s, n1+n2)|the carrier of S1 = Following(s1, n2) by A1,A2,A3,A4
 ,Th14;
   reconsider s2 = Following(s, n1)|the carrier of S2 as State of A2 by A4,A7,
-CIRCCOMB:33;
-A10: dom Following(s, n1+n2) = the carrier of S by CIRCUIT1:4;
+CIRCCOMB:26;
+A10: dom Following(s, n1+n2) = the carrier of S by CIRCUIT1:3;
 A11: the carrier of S = (the carrier of S1)\/the carrier of S2 by A2,
 CIRCCOMB:def 2;
 A12: s1 = Following(s0, n1) by A1,A2,A3,A4,Th14;
@@ -1769,25 +1767,25 @@ A12: s1 = Following(s0, n1) by A1,A2,A3,A4,Th14;
 A13: Following(s, n1+n2)|the carrier of S2 = Following(s2, n2) by A1,A2,A3,A4
 ,A5,A8,Th19;
   then Following Following(s, n1+n2) = (Following Following(s2, n2))+*
-  Following Following(s1, n2) by A1,A2,A3,A4,A9,CIRCCOMB:40
+  Following Following(s1, n2) by A1,A2,A3,A4,A9,CIRCCOMB:33
     .= Following(s2, n2)+*Following Following(s1, n2) by A6,CIRCUIT2:def 6
     .= Following(s2, n2)+*Following(s1, n2+1) by FACIRC_1:12
     .= Following(s2, n2)+*s1 by A5,A12,Th3
     .= Following(s2, n2)+*Following(s1, n2) by A5,A12,Th3
-    .= Following(s, n1+n2) by A11,A10,A9,A13,FUNCT_4:74;
+    .= Following(s, n1+n2) by A11,A10,A9,A13,FUNCT_4:70;
   hence thesis by CIRCUIT2:def 6;
 end;
 
 theorem Th21:
-  for S1,S2,S being non void Circuit-like (non empty
-ManySortedSign) st InputVertices S1 misses InnerVertices S2 & S = S1+*S2 for A1
+  for S1,S2,S being non void Circuit-like non empty
+ManySortedSign st InputVertices S1 misses InnerVertices S2 & S = S1+*S2 for A1
   being non-empty Circuit of S1, A2 being non-empty Circuit of S2 for A being
 non-empty Circuit of S st A1 tolerates A2 & A = A1+*A2 for n1,n2 being Nat st (
 for s being State of A1 holds Following(s, n1) is stable) & (for s being State
 of A2 holds Following(s, n2) is stable) for s being State of A holds Following(
   s, n1+n2) is stable
 proof
-  let S1,S2,S be non void Circuit-like (non empty ManySortedSign) such that
+  let S1,S2,S be non void Circuit-like non empty ManySortedSign such that
 A1: InputVertices S1 misses InnerVertices S2 & S = S1+*S2;
   let A1 be non-empty Circuit of S1, A2 be non-empty Circuit of S2;
   let A be non-empty Circuit of S such that
@@ -1798,23 +1796,23 @@ A4: ( for s being State of A1 holds Following(s, n1) is stable)& for s
   being State of A2 holds Following(s, n2) is stable;
   let s be State of A;
 A5: the Sorts of A1 tolerates the Sorts of A2 by A2,CIRCCOMB:def 3;
-  then reconsider s1 = s|the carrier of S1 as State of A1 by A3,CIRCCOMB:33;
+  then reconsider s1 = s|the carrier of S1 as State of A1 by A3,CIRCCOMB:26;
   reconsider s2 = Following(s,n1)|the carrier of S2 as State of A2 by A3,A5,
-CIRCCOMB:33;
+CIRCCOMB:26;
   Following(s1,n1) is stable & Following(s2,n2) is stable by A4;
   hence thesis by A1,A2,A3,Th20;
 end;
 
 theorem Th22:
-  for S1,S2,S being non void Circuit-like (non empty
-ManySortedSign) st InputVertices S1 misses InnerVertices S2 & InputVertices S2
+  for S1,S2,S being non void Circuit-like non empty
+ManySortedSign st InputVertices S1 misses InnerVertices S2 & InputVertices S2
   misses InnerVertices S1 & S = S1+*S2 for A1 being non-empty Circuit of S1, A2
   being non-empty Circuit of S2 for A being non-empty Circuit of S st A1
 tolerates A2 & A = A1+*A2 for s being State of A for s1 being State of A1 st s1
 = s|the carrier of S1 for s2 being State of A2 st s2 = s|the carrier of S2 for
   n being Nat holds Following(s, n) = Following(s1, n)+*Following(s2, n)
 proof
-  let S1,S2,S be non void Circuit-like (non empty ManySortedSign) such that
+  let S1,S2,S be non void Circuit-like non empty ManySortedSign such that
 A1: InputVertices S1 misses InnerVertices S2 and
 A2: InputVertices S2 misses InnerVertices S1 and
 A3: S = S1+*S2;
@@ -1831,19 +1829,19 @@ A7: s2 = s|the carrier of S2;
 A8: Following(s, n)|the carrier of S1 = Following(s1, n) by A1,A3,A4,A5,A6,Th14
 ;
 A9: dom Following(s, n) = the carrier of S & the carrier of S = (the
-  carrier of S1) \/ the carrier of S2 by A3,CIRCCOMB:def 2,CIRCUIT1:4;
+  carrier of S1) \/ the carrier of S2 by A3,CIRCCOMB:def 2,CIRCUIT1:3;
   S1 tolerates S2 by A4,CIRCCOMB:def 3;
   then
-A10: S1+*S2 = S2+*S1 by CIRCCOMB:9;
-  A1+*A2 = A2+*A1 by A4,CIRCCOMB:26;
+A10: S1+*S2 = S2+*S1 by CIRCCOMB:5;
+  A1+*A2 = A2+*A1 by A4,CIRCCOMB:22;
   then Following(s, n)|the carrier of S2 = Following(s2, n) by A2,A3,A4,A5,A7
-,A10,Th14,CIRCCOMB:23;
-  hence thesis by A8,A9,FUNCT_4:74;
+,A10,Th14,CIRCCOMB:19;
+  hence thesis by A8,A9,FUNCT_4:70;
 end;
 
 theorem Th23:
-  for S1,S2,S being non void Circuit-like (non empty
-ManySortedSign) st InputVertices S1 misses InnerVertices S2 & InputVertices S2
+  for S1,S2,S being non void Circuit-like non empty
+ManySortedSign st InputVertices S1 misses InnerVertices S2 & InputVertices S2
   misses InnerVertices S1 & S = S1+*S2 for A1 being non-empty Circuit of S1, A2
   being non-empty Circuit of S2 for A being non-empty Circuit of S st A1
 tolerates A2 & A = A1+*A2 for n1,n2 being Nat, s being State of A for s1 being
@@ -1851,7 +1849,7 @@ State of A1 st s1 = s|the carrier of S1 for s2 being State of A2 st s2 = s|the
 carrier of S2 & Following(s1, n1) is stable & Following(s2, n2) is stable holds
   Following(s, max(n1,n2)) is stable
 proof
-  let S1,S2,S be non void Circuit-like (non empty ManySortedSign) such that
+  let S1,S2,S be non void Circuit-like non empty ManySortedSign such that
 A1: InputVertices S1 misses InnerVertices S2 and
 A2: InputVertices S2 misses InnerVertices S1 and
 A3: S = S1+*S2;
@@ -1868,15 +1866,15 @@ A7: Following(s, n)|the carrier of S1 = Following(s0, n) by A1,A3,A4,A5,A6,Th14
 ;
   S1 tolerates S2 by A4,CIRCCOMB:def 3;
   then
-A8: S1+*S2 = S2+*S1 by CIRCCOMB:9;
+A8: S1+*S2 = S2+*S1 by CIRCCOMB:5;
   let s3 be State of A2 such that
 A9: s3 = s|the carrier of S2 and
 A10: Following(s0, n1) is stable and
 A11: Following(s3, n2) is stable;
-  A1+*A2 = A2+*A1 by A4,CIRCCOMB:26;
+  A1+*A2 = A2+*A1 by A4,CIRCCOMB:22;
   then
 A12: Following(s, n)|the carrier of S2 = Following(s3, n) by A2,A3,A4,A5,A9,A8
-,Th14,CIRCCOMB:23;
+,Th14,CIRCCOMB:19;
 A13: Following(s3, n) is stable by A11,Th4,XXREAL_0:25;
 A14: Following(s0, n) is stable by A10,Th4,XXREAL_0:25;
   thus Following(s, max(n1,n2)) = Following(s0, n)+*Following(s3, n) by A1,A2
@@ -1884,11 +1882,11 @@ A14: Following(s0, n) is stable by A10,Th4,XXREAL_0:25;
     .= (Following Following(s0, n))+*Following(s3, n) by A14,CIRCUIT2:def 6
     .= (Following Following(s0, n))+*Following Following(s3, n) by A13,
 CIRCUIT2:def 6
-    .= Following Following(s, n) by A2,A3,A4,A5,A7,A12,CIRCCOMB:39;
+    .= Following Following(s, n) by A2,A3,A4,A5,A7,A12,CIRCCOMB:32;
 end;
 
 theorem
-  for S1,S2,S being non void Circuit-like (non empty ManySortedSign) st
+  for S1,S2,S being non void Circuit-like non empty ManySortedSign st
   InputVertices S1 misses InnerVertices S2 & InputVertices S2 misses
   InnerVertices S1 & S = S1+*S2 for A1 being non-empty Circuit of S1, A2 being
 non-empty Circuit of S2 for A being non-empty Circuit of S st A1 tolerates A2 &
@@ -1897,7 +1895,7 @@ A = A1+*A2 for n being Nat, s being State of A for s1 being State of A1 st s1 =
   Following(s1, n) is not stable or Following(s2, n) is not stable) holds
   Following(s, n) is not stable
 proof
-  let S1,S2,S be non void Circuit-like (non empty ManySortedSign) such that
+  let S1,S2,S be non void Circuit-like non empty ManySortedSign such that
 A1: InputVertices S1 misses InnerVertices S2 and
 A2: InputVertices S2 misses InnerVertices S1 and
 A3: S = S1+*S2;
@@ -1918,7 +1916,7 @@ A7: Following(s0, n) is not stable or Following(s3, n) is not stable;
 end;
 
 theorem
-  for S1,S2,S being non void Circuit-like (non empty ManySortedSign) st
+  for S1,S2,S being non void Circuit-like non empty ManySortedSign st
   InputVertices S1 misses InnerVertices S2 & InputVertices S2 misses
   InnerVertices S1 & S = S1+*S2 for A1 being non-empty Circuit of S1, A2 being
 non-empty Circuit of S2 for A being non-empty Circuit of S st A1 tolerates A2 &
@@ -1926,7 +1924,7 @@ non-empty Circuit of S2 for A being non-empty Circuit of S st A1 tolerates A2 &
 n1) is stable) & (for s being State of A2 holds Following(s, n2) is stable) for
   s being State of A holds Following(s, max(n1,n2)) is stable
 proof
-  let S1,S2,S be non void Circuit-like (non empty ManySortedSign) such that
+  let S1,S2,S be non void Circuit-like non empty ManySortedSign such that
 A1: InputVertices S1 misses InnerVertices S2 & InputVertices S2 misses
   InnerVertices S1 & S = S1+*S2;
   let A1 be non-empty Circuit of S1, A2 be non-empty Circuit of S2;
@@ -1938,8 +1936,8 @@ A4: ( for s being State of A1 holds Following(s, n1) is stable)& for s
   being State of A2 holds Following(s, n2) is stable;
   let s be State of A;
 A5: the Sorts of A1 tolerates the Sorts of A2 by A2,CIRCCOMB:def 3;
-  then reconsider s0 = s|the carrier of S1 as State of A1 by A3,CIRCCOMB:33;
-  reconsider s3 = s|the carrier of S2 as State of A2 by A3,A5,CIRCCOMB:33;
+  then reconsider s0 = s|the carrier of S1 as State of A1 by A3,CIRCCOMB:26;
+  reconsider s3 = s|the carrier of S2 as State of A2 by A3,A5,CIRCCOMB:26;
   Following(s0, n1) is stable & Following(s3, n2) is stable by A4;
   hence thesis by A1,A2,A3,Th23;
 end;
@@ -2062,7 +2060,7 @@ A30:  InputVertices S9 misses InnerVertices S(x,n) by A7,A16,A17,FACIRC_1:5;
       A2 = MSAlg(A(x,n),S(x,n)) & for s being State of A2 holds Following
       (s, n(1)) is stable by A3,A19,Def1;
       hence Following(s, n(0)+(n+1)*n(1)) is stable by A17,A18,A20,A30,A24,Th21
-,CIRCCOMB:68;
+,CIRCCOMB:60;
     end;
   end;
 A31: for S being non empty ManySortedSign, A being non-empty MSAlgebra over

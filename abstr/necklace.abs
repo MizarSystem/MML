@@ -27,7 +27,7 @@ environ
       ORDERS_3, WAYBEL_1, NAT_D, RELSET_1;
  registrations XBOOLE_0, SUBSET_1, FUNCT_1, ORDINAL1, RELSET_1, FUNCT_2,
       FUNCOP_1, FUNCT_4, FINSET_1, XXREAL_0, XREAL_0, SQUARE_1, REALSET1,
-      STRUCT_0, ORDERS_2, HILBERT3, CARD_1, RELAT_1;
+      STRUCT_0, ORDERS_2, HILBERT3, CARD_1, RELAT_1, ZFMISC_1;
  requirements BOOLE, SUBSET, NUMERALS, REAL, ARITHM;
 
 
@@ -36,19 +36,17 @@ begin :: Preliminaries
 reserve i,j,k,n for Nat;
 reserve x,x1,x2,x3,y1,y2,y3 for set;
 
-canceled;
-
-theorem :: NECKLACE:2
+theorem :: NECKLACE:1
   4 = {0,1,2,3};
 
-theorem :: NECKLACE:3
+theorem :: NECKLACE:2
   [:{x1,x2,x3},{y1,y2,y3}:] = {[x1,y1],[x1,y2],[x1,y3],[x2,y1],[x2,y2],[
   x2,y3],[x3,y1],[x3,y2],[x3,y3]};
 
-theorem :: NECKLACE:4
+theorem :: NECKLACE:3
   for x being set, n be Nat holds x in n implies x is Nat;
 
-theorem :: NECKLACE:5
+theorem :: NECKLACE:4
   for x be non empty Nat holds 0 in x;
 
 registration
@@ -56,28 +54,28 @@ registration
   cluster delta X -> one-to-one;
 end;
 
-theorem :: NECKLACE:6
+theorem :: NECKLACE:5
   for X being set holds card id X = card X;
 
 registration
-  cluster trivial -> one-to-one Function;
+  cluster trivial -> one-to-one for Function;
 end;
 
-theorem :: NECKLACE:7
+theorem :: NECKLACE:6
   for f,g be Function st dom f misses dom g holds rng(f +* g) = rng f \/
   rng g;
 
-theorem :: NECKLACE:8
+theorem :: NECKLACE:7
   for f,g be one-to-one Function st dom f misses dom g & rng f
   misses rng g holds (f+*g)" = f" +* g";
 
-theorem :: NECKLACE:9
+theorem :: NECKLACE:8
   for A,a,b being set holds (A --> a) +* (A --> b) = A --> b;
 
-theorem :: NECKLACE:10
+theorem :: NECKLACE:9
   for a,b being set holds (a .--> b)" = b .--> a;
 
-theorem :: NECKLACE:11
+theorem :: NECKLACE:10
   for a,b,c,d being set st a = b iff c = d holds (a,b) --> (c,d)"
   = (c,d) --> (a,b);
 
@@ -88,16 +86,16 @@ scheme :: NECKLACE:sch 1
 provided
  R() = {[G(x),F(x)] where x is Element of X(): P[x]};
 
-theorem :: NECKLACE:12
+theorem :: NECKLACE:11
   for i,j,n be Nat holds i < j & j in n implies i in n;
 
 begin   :: Auxiliary Concepts
 
 definition
   let R,S be RelStr;
-  canceled;
+
   pred S embeds R means
-:: NECKLACE:def 2
+:: NECKLACE:def 1
 
   ex f being Function of R,S st f is one-to-one &
 for x,y being Element of R holds [x,y] in the InternalRel of R iff [f.x,f.y] in
@@ -110,21 +108,21 @@ definition
   reflexivity;
 end;
 
-theorem :: NECKLACE:13
+theorem :: NECKLACE:12
   for R,S,T be non empty RelStr holds R embeds S & S embeds T
   implies R embeds T;
 
 definition
   let R,S be non empty RelStr;
   pred R is_equimorphic_to S means
-:: NECKLACE:def 3
+:: NECKLACE:def 2
 
   R embeds S & S embeds R;
   reflexivity;
   symmetry;
 end;
 
-theorem :: NECKLACE:14
+theorem :: NECKLACE:13
   for R,S,T be non empty RelStr holds R is_equimorphic_to S & S
   is_equimorphic_to T implies R is_equimorphic_to T;
 
@@ -136,7 +134,7 @@ end;
 definition
   let R be RelStr;
   attr R is symmetric means
-:: NECKLACE:def 4
+:: NECKLACE:def 3
 
   the InternalRel of R is_symmetric_in the carrier of R;
 end;
@@ -144,19 +142,19 @@ end;
 definition
   let R be RelStr;
   attr R is asymmetric means
-:: NECKLACE:def 5
+:: NECKLACE:def 4
 
   the InternalRel of R is asymmetric;
 end;
 
-theorem :: NECKLACE:15
+theorem :: NECKLACE:14
   for R be RelStr st R is asymmetric holds the InternalRel of R misses (
   the InternalRel of R)~;
 
 definition
   let R be RelStr;
   attr R is irreflexive means
-:: NECKLACE:def 6
+:: NECKLACE:def 5
   for x being set st x in the carrier of R holds
   not [x,x] in the InternalRel of R;
 end;
@@ -164,22 +162,22 @@ end;
 definition
   let n be Nat;
   func n-SuccRelStr -> strict RelStr means
-:: NECKLACE:def 7
+:: NECKLACE:def 6
 
   the carrier of it = n & the
   InternalRel of it = {[i,i+1] where i is Element of NAT:i+1 < n};
 end;
 
-theorem :: NECKLACE:16
+theorem :: NECKLACE:15
   for n be Nat holds n-SuccRelStr is asymmetric;
 
-theorem :: NECKLACE:17
+theorem :: NECKLACE:16
   n > 0 implies card the InternalRel of n-SuccRelStr = n-1;
 
 definition
   let R be RelStr;
   func SymRelStr R -> strict RelStr means
-:: NECKLACE:def 8
+:: NECKLACE:def 7
 
   the carrier of it = the
   carrier of R & the InternalRel of it = (the InternalRel of R) \/ (the
@@ -192,7 +190,7 @@ registration
 end;
 
 registration
-  cluster non empty symmetric RelStr;
+  cluster non empty symmetric for RelStr;
 end;
 
 registration
@@ -203,7 +201,7 @@ end;
 definition
   let R be RelStr;
   func ComplRelStr R -> strict RelStr means
-:: NECKLACE:def 9
+:: NECKLACE:def 8
 
   the carrier of it = the
   carrier of R & the InternalRel of it = (the InternalRel of R)` \ id (the
@@ -215,7 +213,7 @@ registration
   cluster ComplRelStr R -> non empty;
 end;
 
-theorem :: NECKLACE:18
+theorem :: NECKLACE:17
   for S,R being RelStr holds S,R are_isomorphic implies card the
   InternalRel of S = card the InternalRel of R;
 
@@ -224,7 +222,7 @@ begin   :: Necklace n
 definition
   let n be Nat;
   func Necklace n -> strict RelStr equals
-:: NECKLACE:def 10
+:: NECKLACE:def 9
   SymRelStr(n-SuccRelStr);
 end;
 
@@ -233,11 +231,11 @@ registration
   cluster Necklace n -> symmetric;
 end;
 
-theorem :: NECKLACE:19
+theorem :: NECKLACE:18
   the InternalRel of Necklace n = {[i,i+1] where i is Element of
   NAT:i+1 < n} \/ {[i+1,i] where i is Element of NAT:i+1 < n};
 
-theorem :: NECKLACE:20
+theorem :: NECKLACE:19
   for x be set holds x in the InternalRel of Necklace n iff ex i
   being Element of NAT st i+1 < n & (x = [i,i+1] or x = [i+1,i]);
 
@@ -246,7 +244,7 @@ registration
   cluster Necklace n -> irreflexive;
 end;
 
-theorem :: NECKLACE:21
+theorem :: NECKLACE:20
   for n be Nat holds the carrier of Necklace n = n;
 
 registration
@@ -259,36 +257,36 @@ registration
   cluster the carrier of Necklace n -> finite;
 end;
 
-theorem :: NECKLACE:22
+theorem :: NECKLACE:21
   for n,i be Nat st i+1 < n holds [i,i+1] in the InternalRel of Necklace n;
 
-theorem :: NECKLACE:23
+theorem :: NECKLACE:22
   for n be Nat, i being Nat st i in the carrier of Necklace n holds i < n;
 
-theorem :: NECKLACE:24
+theorem :: NECKLACE:23
   for n be non empty Nat holds Necklace n is connected;
 
-theorem :: NECKLACE:25
+theorem :: NECKLACE:24
   for i,j being Nat st [i,j] in the InternalRel of Necklace n
   holds i = j + 1 or j = i + 1;
 
-theorem :: NECKLACE:26
+theorem :: NECKLACE:25
   for i,j being Nat st (i = j + 1 or j = i + 1) & i in the carrier
   of Necklace n & j in the carrier of Necklace n holds [i,j] in the InternalRel
   of Necklace n;
 
-theorem :: NECKLACE:27
+theorem :: NECKLACE:26
   n > 0 implies card ({[i+1,i] where i is Element of NAT:i+1 < n}) = n-1;
 
-theorem :: NECKLACE:28
+theorem :: NECKLACE:27
   n > 0 implies card the InternalRel of Necklace n = 2*(n-1);
 
-theorem :: NECKLACE:29
+theorem :: NECKLACE:28
   Necklace 1, ComplRelStr Necklace 1 are_isomorphic;
 
-theorem :: NECKLACE:30
+theorem :: NECKLACE:29
   Necklace 4, ComplRelStr Necklace 4 are_isomorphic;
 
-theorem :: NECKLACE:31
+theorem :: NECKLACE:30
   Necklace n, ComplRelStr Necklace n are_isomorphic implies n = 0 or n =
   1 or n = 4;

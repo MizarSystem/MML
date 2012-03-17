@@ -36,7 +36,7 @@ environ
 begin
 
 definition
-  canceled 2;
+
   let n be Nat;
   func dyadic(n) -> Subset of REAL means
   :Def3:
@@ -76,7 +76,7 @@ A4:   a in A2;
       ex i being Element of NAT st i <= 2|^n & a = i/(2|^n) by A2,A4;
       hence thesis by A1;
     end;
-    hence thesis by TARSKI:2;
+    hence thesis by TARSKI:1;
   end;
 end;
 
@@ -120,7 +120,7 @@ A4:     a in A2;
         hence thesis by A1;
       end;
     end;
-    hence thesis by TARSKI:2;
+    hence thesis by TARSKI:1;
   end;
 end;
 
@@ -143,8 +143,6 @@ definition
   end;
 end;
 
-canceled 4;
-
 theorem Th5:
   for n being Element of NAT holds for x being Real st
   x in dyadic(n) holds 0 <= x & x <= 1
@@ -156,14 +154,14 @@ proof
 A1: i <= 2|^n and
 A2: x = i/(2|^n) by Def3;
   0 <= i by NAT_1:2;
-  then 0/(2|^n) <= i/(2|^n) & i/(2|^n) <= (2|^n)/(2|^n) by A1,XREAL_1:74;
+  then 0/(2|^n) <= i/(2|^n) & i/(2|^n) <= (2|^n)/(2|^n) by A1,XREAL_1:72;
   hence thesis by A2,XCMPLX_1:60;
 end;
 
 theorem Th6:
   dyadic(0) = {0,1}
 proof
-A1: 2|^0 = 1 by NEWTON:9;
+A1: 2|^0 = 1 by NEWTON:4;
 A2: for x being Real holds x in dyadic(0) iff ex i being Element of NAT st
     i <= 1 & x = i
   proof
@@ -209,13 +207,13 @@ A10:   0 <= i by NAT_1:2;
     end;
     hence thesis by A6;
   end;
-  hence thesis by TARSKI:2;
+  hence thesis by TARSKI:1;
 end;
 
 theorem
   dyadic(1) = {0,1/2,1}
 proof
-A1: 2|^1 = 2 by NEWTON:10;
+A1: 2|^1 = 2 by NEWTON:5;
   for x being set holds x in dyadic(1) iff x in {0,1/2,1}
   proof
     let x be set;
@@ -255,7 +253,7 @@ A8:   0 <= i by NAT_1:2;
     end;
     hence thesis by A2;
   end;
-  hence thesis by TARSKI:2;
+  hence thesis by TARSKI:1;
 end;
 
 registration
@@ -267,26 +265,10 @@ registration
     ex i being Element of NAT st 0 <= i & i <= (2|^n) & x = i/(2|^n)
     proof
       take 0;
-      thus thesis by NEWTON:102;
+      thus thesis by NEWTON:83;
     end;
     hence thesis by Def3;
   end;
-end;
-
-canceled 2;
-
-Lm1:
-  for n being Nat holds
-  ex FS being FinSequence st (dom FS = Seg ((2|^n)+1) &
-  for i being Element of NAT st i in dom FS holds FS.i = (i-1)/(2|^n))
-proof
-  let n be Nat;
-  deffunc F(Nat)=($1-1)/(2|^n);
-  consider FS being FinSequence such that
-A1: len FS = (2|^n)+1 & for i being Nat st i in dom FS holds FS.i = F(i)
-  from FINSEQ_1:sch 2;
-  take FS;
-  thus thesis by A1,FINSEQ_1:def 3;
 end;
 
 definition
@@ -295,7 +277,15 @@ definition
   :Def6:
   dom it = Seg((2|^n)+1) &
   for i being Element of NAT st i in dom it holds it.i = (i-1)/(2|^n);
-  existence by Lm1;
+  existence
+proof
+  deffunc F(Nat)=($1-1)/(2|^n);
+  consider FS being FinSequence such that
+A1: len FS = (2|^n)+1 & for i being Nat st i in dom FS holds FS.i = F(i)
+  from FINSEQ_1:sch 2;
+  take FS;
+  thus thesis by A1,FINSEQ_1:def 3;
+end;
   uniqueness
   proof
     let F1,F2 be FinSequence;
@@ -314,7 +304,7 @@ A6:   k in X;
       hence F1.k = (k-1)/(2|^n) by A2,A5
         .= F2.k by A1,A3,A4,A5,A6;
     end;
-    hence thesis by A1,A3,A5,FINSEQ_1:17;
+    hence thesis by A1,A3,A5,FINSEQ_1:13;
   end;
 end;
 
@@ -332,16 +322,16 @@ A2: x in rng dyad(n) implies x in dyadic(n)
       assume x in rng dyad(n);
       then consider y being set such that
 A3:   y in dom (dyad(n)) and
-A4:   x = (dyad(n)).y by FUNCT_1:def 5;
+A4:   x = (dyad(n)).y by FUNCT_1:def 3;
 A5:   y in Seg((2|^n)+1) by A3,Def6;
       reconsider y as Element of NAT by A3;
-A6:   1 <= y by A5,FINSEQ_1:3;
-      y <= (2|^n) + 1 by A5,FINSEQ_1:3;
+A6:   1 <= y by A5,FINSEQ_1:1;
+      y <= (2|^n) + 1 by A5,FINSEQ_1:1;
       then
-A7:   y - 1 <= (2|^n) + 1 - 1 by XREAL_1:15;
+A7:   y - 1 <= (2|^n) + 1 - 1 by XREAL_1:13;
       consider i being Nat such that
 A8:   1 + i = y by A6,NAT_1:10;
-      i in NAT & x = (y-1)/(2|^n) by A3,A4,Def6,ORDINAL1:def 13;
+      i in NAT & x = (y-1)/(2|^n) by A3,A4,Def6,ORDINAL1:def 12;
       hence thesis by A7,A8,Def3;
     end;
     x in dyadic(n) implies x in rng (dyad(n))
@@ -355,18 +345,18 @@ A11:  x = i/(2|^n) by A9,Def3;
       consider y being Element of NAT such that
 A12:  y = i + 1;
       0 <= i by NAT_1:2;
-      then 0 + 1 <= i + 1 & i + 1 <= (2|^n) + 1 by A10,XREAL_1:8;
+      then 0 + 1 <= i + 1 & i + 1 <= (2|^n) + 1 by A10,XREAL_1:6;
       then
-A13:  y in Seg((2|^n)+1) by A12,FINSEQ_1:3;
+A13:  y in Seg((2|^n)+1) by A12,FINSEQ_1:1;
       then
 A14:  y in dom (dyad(n)) by Def6;
       x = (y-1)/(2|^n) by A11,A12;
       then x = (dyad(n)).y by A1,A13,Def6;
-      hence thesis by A14,FUNCT_1:def 5;
+      hence thesis by A14,FUNCT_1:def 3;
     end;
     hence thesis by A2;
   end;
-  hence thesis by Def6,TARSKI:2;
+  hence thesis by Def6,TARSKI:1;
 end;
 
 registration
@@ -396,8 +386,8 @@ A1: x in dyadic(n);
     consider i being Element of NAT such that
 A2: i <= 2|^n & x = i/(2|^n) by A1,Def3;
     take i*2;
-    2|^(n+1) = (2|^n)*2 by NEWTON:11;
-    hence thesis by A2,XCMPLX_1:92,XREAL_1:66;
+    2|^(n+1) = (2|^n)*2 by NEWTON:6;
+    hence thesis by A2,XCMPLX_1:91,XREAL_1:64;
   end;
   hence thesis by Def3;
 end;
@@ -427,7 +417,7 @@ proof
   assume that
 A1: 0 < i and
 A2: i <= 2|^n;
-A3: 0*2 < i*2 by A1,XREAL_1:70;
+A3: 0*2 < i*2 by A1,XREAL_1:68;
   then consider k being Nat such that
 A4: i*2 = k + 1 by NAT_1:6;
 A5: not (i*2-1)/(2|^(n+1)) in dyadic(n)
@@ -436,21 +426,21 @@ A5: not (i*2-1)/(2|^(n+1)) in dyadic(n)
     then consider s being Element of NAT such that
     s <= 2|^n and
 A6: (i*2-1)/(2|^(n+1)) = s/(2|^n) by Def3;
-A7: 2|^n <> 0 by NEWTON:102;
-    2|^(n+1) <> 0 by NEWTON:102;
-    then (i*2-1)*(2|^n) = s*(2|^(n+1)) by A6,A7,XCMPLX_1:96;
-    then (i*2-1)*(2|^n) = s*((2|^n)*2) by NEWTON:11;
+A7: 2|^n <> 0 by NEWTON:83;
+    2|^(n+1) <> 0 by NEWTON:83;
+    then (i*2-1)*(2|^n) = s*(2|^(n+1)) by A6,A7,XCMPLX_1:95;
+    then (i*2-1)*(2|^n) = s*((2|^n)*2) by NEWTON:6;
     then (i*2-1)*(2|^n) = s*2*(2|^n);
-    then (i*2-1)/(2|^n) = s*2/(2|^n) by A7,XCMPLX_1:95;
+    then (i*2-1)/(2|^n) = s*2/(2|^n) by A7,XCMPLX_1:94;
     then i*2+(-1) = s*2 by A7,XCMPLX_1:53;
     then 2*i + 0 = 2*s + 1;
     hence thesis by NAT_1:18;
   end;
-  i*2 <= (2|^n)*2 by A2,XREAL_1:66;
-  then i*2 <= 2|^(n+1) by NEWTON:11;
+  i*2 <= (2|^n)*2 by A2,XREAL_1:64;
+  then i*2 <= 2|^(n+1) by NEWTON:6;
   then
 A8: k <= 2|^(n+1) by A4,NAT_1:13;
-  k in NAT & 0 <= k by A3,A4,NAT_1:13,ORDINAL1:def 13;
+  k in NAT & 0 <= k by A3,A4,NAT_1:13,ORDINAL1:def 12;
   then (i*2-1)/(2|^(n+1)) in dyadic(n+1) by A4,A8,Def3;
   hence thesis by A5,XBOOLE_0:def 5;
 end;
@@ -463,7 +453,7 @@ proof
   assume that
 A1: 0 <= i and
 A2: i < 2|^n;
-A3: 0 + 1 <= i + 1 by A1,XREAL_1:8;
+A3: 0 + 1 <= i + 1 by A1,XREAL_1:6;
   consider s being Element of NAT such that
 A4: s = i + 1;
 A5: s*2 - 1 = i*2 + (1 + 0) by A4;
@@ -475,7 +465,7 @@ theorem Th15:
   for n being Element of NAT holds 1/(2|^(n+1)) in dyadic(n+1) \ dyadic(n)
 proof
   let n be Element of NAT;
-  2*0 + 1 = 1 & 0 < 2|^n by NEWTON:102;
+  2*0 + 1 = 1 & 0 < 2|^n by NEWTON:83;
   hence thesis by Th14;
 end;
 
@@ -498,9 +488,9 @@ A1: x = i/(2|^n) by Def3;
     let i1,i2 be Element of NAT;
     assume
 A2: x = i1/(2|^n) & x = i2/(2|^n);
-A3: (2|^n) <> 0 by NEWTON:102;
-    then i1 = i1/(2|^n)*(2|^n) by XCMPLX_1:88
-      .= i2 by A2,A3,XCMPLX_1:88;
+A3: (2|^n) <> 0 by NEWTON:83;
+    then i1 = i1/(2|^n)*(2|^n) by XCMPLX_1:87
+      .= i2 by A2,A3,XCMPLX_1:87;
     hence thesis;
   end;
 end;
@@ -521,9 +511,9 @@ theorem
 proof
   let n be Element of NAT;
   let x be Element of dyadic(n);
-A1: 0 + axis(x) < 1 + axis(x) & 0 < 2|^n by NEWTON:102,XREAL_1:10;
-  x = axis(x)/(2|^n) & -1 + axis(x) < 0 + axis(x) by Def7,XREAL_1:10;
-  hence thesis by A1,XREAL_1:76;
+A1: 0 + axis(x) < 1 + axis(x) & 0 < 2|^n by NEWTON:83,XREAL_1:8;
+  x = axis(x)/(2|^n) & -1 + axis(x) < 0 + axis(x) by Def7,XREAL_1:8;
+  hence thesis by A1,XREAL_1:74;
 end;
 
 theorem Th18:
@@ -532,11 +522,9 @@ theorem Th18:
 proof
   let n be Element of NAT;
   let x be Element of dyadic(n);
-  -1 + axis(x) < 1 + axis(x) & 0 < 2|^n by NEWTON:102,XREAL_1:10;
-  hence thesis by XREAL_1:76;
+  -1 + axis(x) < 1 + axis(x) & 0 < 2|^n by NEWTON:83,XREAL_1:8;
+  hence thesis by XREAL_1:74;
 end;
-
-canceled;
 
 theorem Th20:
   for n being Element of NAT holds for x being Element of dyadic(n
@@ -562,25 +550,25 @@ A5:   s = 2 * k or s = 2 * k + 1 by SCHEME1:1;
         per cases by A5;
         case
 A6:       s = k * 2;
-          then x = (k * 2)/((2|^n)* 2) by A4,NEWTON:11;
+          then x = (k * 2)/((2|^n)* 2) by A4,NEWTON:6;
           then
-A7:       x = k/(2|^n) by XCMPLX_1:92;
-          k * 2 <= (2|^n)* 2 by A3,A6,NEWTON:11;
-          then k <= ((2|^n)* 2)/2 by XREAL_1:79;
+A7:       x = k/(2|^n) by XCMPLX_1:91;
+          k * 2 <= (2|^n)* 2 by A3,A6,NEWTON:6;
+          then k <= ((2|^n)* 2)/2 by XREAL_1:77;
           hence thesis by A1,A7,Def3;
         end;
         case
 A8:      s = k * 2 + 1;
-A9:      (2|^(n+1)) - 1 <= (2|^(n+1)) by XREAL_1:46;
-          k * 2 <= (2|^(n+1)) - 1 by A3,A8,XREAL_1:21;
+A9:      (2|^(n+1)) - 1 <= (2|^(n+1)) by XREAL_1:44;
+          k * 2 <= (2|^(n+1)) - 1 by A3,A8,XREAL_1:19;
           then k * 2 <= (2|^(n+1)) by A9,XXREAL_0:2;
-          then k * 2 <= (2|^n)* 2 by NEWTON:11;
+          then k * 2 <= (2|^n)* 2 by NEWTON:6;
           then
-A10:      k <= ((2|^n)* 2)/2 by XREAL_1:79;
+A10:      k <= ((2|^n)* 2)/2 by XREAL_1:77;
           take k;
           a = (k * 2 + 1-1)/(2|^(n+1)) by A2,A4,A8,Def7
-            .= k * 2 /((2|^n)* 2) by NEWTON:11
-            .= (k/(2|^n))*(2/2) by XCMPLX_1:77
+            .= k * 2 /((2|^n)* 2) by NEWTON:6
+            .= (k/(2|^n))*(2/2) by XCMPLX_1:76
             .= k/(2|^n);
           hence thesis by A10;
         end;
@@ -603,11 +591,11 @@ A13:  s = 2 * k or s = 2 * k + 1 by SCHEME1:1;
         per cases by A13;
         case
 A14:      s = k * 2;
-          then x = (k * 2)/((2|^n)* 2) by A12,NEWTON:11;
+          then x = (k * 2)/((2|^n)* 2) by A12,NEWTON:6;
           then
-A15:      x = k/(2|^n) by XCMPLX_1:92;
-          k * 2 <= (2|^n)* 2 by A11,A14,NEWTON:11;
-          then k <= ((2|^n)* 2)/2 by XREAL_1:79;
+A15:      x = k/(2|^n) by XCMPLX_1:91;
+          k * 2 <= (2|^n)* 2 by A11,A14,NEWTON:6;
+          then k <= ((2|^n)* 2)/2 by XREAL_1:77;
           hence thesis by A1,A15,Def3;
         end;
         case
@@ -616,20 +604,20 @@ A16:      s = k * 2 + 1;
 A17:      l = k + 1;
           s <> (2|^(n+1))
           proof
-A18:        2|^(n+1) <> 0 by NEWTON:102;
+A18:        2|^(n+1) <> 0 by NEWTON:83;
             assume s = (2|^(n+1));
             then x = 1 by A12,A18,XCMPLX_1:60;
             hence thesis by A1,Th12;
           end;
           then (k * 2 + 1 + 1) + (-1) < (2|^(n+1)) by A11,A16,XXREAL_0:1;
           then l * 2 <= (2|^(n+1)) by A17,NAT_1:13;
-          then l * 2 <= (2|^n)* 2 by NEWTON:11;
+          then l * 2 <= (2|^n)* 2 by NEWTON:6;
           then
-A19:      l <= ((2|^n)* 2)/2 by XREAL_1:79;
+A19:      l <= ((2|^n)* 2)/2 by XREAL_1:77;
           take l;
           a = (k * 2 + 1 + 1)/(2|^(n+1)) by A12,A16,Def7
-            .= (k + 1) * 2 /((2|^n)* 2) by NEWTON:11
-            .= ((k + 1)/(2|^n))*(2/2) by XCMPLX_1:77
+            .= (k + 1) * 2 /((2|^n)* 2) by NEWTON:6
+            .= ((k + 1)/(2|^n))*(2/2) by XCMPLX_1:76
             .= l/(2|^n) by A17;
           hence thesis by A19;
         end;
@@ -646,9 +634,9 @@ theorem Th21:
 proof
   let n be Element of NAT;
   let x1,x2 be Element of dyadic(n);
-A1: 0 < (2|^n) by NEWTON:102;
+A1: 0 < (2|^n) by NEWTON:83;
   x1 = axis(x1)/(2|^n) & x2 = axis(x2)/(2|^n) by Th16;
-  hence thesis by A1,XREAL_1:74;
+  hence thesis by A1,XREAL_1:72;
 end;
 
 theorem Th22:
@@ -666,12 +654,12 @@ A2: axis(x1) + 1 <= axis(x2) by NAT_1:13;
   axis(x1) < axis(x2) by A1,Th21;
   then axis(x1) + 1 <= axis(x2) by NAT_1:13;
   then
-A3: axis(x1) <= axis(x2) - 1 by XREAL_1:21;
-  0 < (2|^n) by NEWTON:102;
+A3: axis(x1) <= axis(x2) - 1 by XREAL_1:19;
+  0 < (2|^n) by NEWTON:83;
   then
-A4: (axis(x1)+ 1)/(2|^n) <= axis(x2)/(2|^n) by A2,XREAL_1:74;
-  0 < (2|^n) by NEWTON:102;
-  then axis(x1)/(2|^n) <= (axis(x2) - 1)/(2|^n) by A3,XREAL_1:74;
+A4: (axis(x1)+ 1)/(2|^n) <= axis(x2)/(2|^n) by A2,XREAL_1:72;
+  0 < (2|^n) by NEWTON:83;
+  then axis(x1)/(2|^n) <= (axis(x2) - 1)/(2|^n) by A3,XREAL_1:72;
   hence thesis by A4,Th16;
 end;
 
@@ -694,12 +682,12 @@ A5: axis(x2) <> k2 * 2
 A6: axis(x2) = k2 * 2;
     then x2 = (k2 * 2)/(2|^(n+1)) by Th16;
     then
-A7: x2 = (k2 * 2)/((2|^n) * 2) by NEWTON:11
-      .= (k2/(2|^n))*(2/2) by XCMPLX_1:77
+A7: x2 = (k2 * 2)/((2|^n) * 2) by NEWTON:6
+      .= (k2/(2|^n))*(2/2) by XCMPLX_1:76
       .= k2/(2|^n);
     k2 * 2 <= (2|^(n+1)) by A6,Th16;
-    then k2 * 2 <= (2|^n) * 2 by NEWTON:11;
-    then k2 <= ((2|^n)* 2)/2 by XREAL_1:79;
+    then k2 * 2 <= (2|^n) * 2 by NEWTON:6;
+    then k2 <= ((2|^n)* 2)/2 by XREAL_1:77;
     hence thesis by A3,A7,Def3;
   end;
   consider k1 being Element of NAT such that
@@ -710,20 +698,20 @@ A9: not axis(x1) = k1 * 2
 A10: axis(x1) = k1 * 2;
     then x1 = (k1 * 2)/(2|^(n+1)) by Th16;
     then
-A11: x1 = (k1 * 2)/((2|^n) * 2) by NEWTON:11
-      .= (k1/(2|^n))*(2/2) by XCMPLX_1:77
+A11: x1 = (k1 * 2)/((2|^n) * 2) by NEWTON:6
+      .= (k1/(2|^n))*(2/2) by XCMPLX_1:76
       .= k1/(2|^n);
     k1 * 2 <= (2|^(n+1)) by A10,Th16;
-    then k1 * 2 <= (2|^n) * 2 by NEWTON:11;
-    then k1 <= ((2|^n)* 2)/2 by XREAL_1:79;
+    then k1 * 2 <= (2|^n) * 2 by NEWTON:6;
+    then k1 <= ((2|^n)* 2)/2 by XREAL_1:77;
     hence thesis by A2,A11,Def3;
   end;
   then k1 * 2 + 1 < k2 * 2 + 1 by A1,A8,A4,A5,Th21;
-  then k1 * 2 + 1 + (-1) < k2 * 2 + 1 + (-1) by XREAL_1:8;
-  then (k1 * 2)/2 < (k2 * 2)/2 by XREAL_1:76;
+  then k1 * 2 + 1 + (-1) < k2 * 2 + 1 + (-1) by XREAL_1:6;
+  then (k1 * 2)/2 < (k2 * 2)/2 by XREAL_1:74;
   then k1 + 1 <= k2 by NAT_1:13;
-  then 0 < (2|^(n+1)) & (k1 + 1) * 2 <= k2 * 2 by NEWTON:102,XREAL_1:66;
-  hence thesis by A8,A4,A9,A5,XREAL_1:74;
+  then 0 < (2|^(n+1)) & (k1 + 1) * 2 <= k2 * 2 by NEWTON:83,XREAL_1:64;
+  hence thesis by A8,A4,A9,A5,XREAL_1:72;
 end;
 
 begin
@@ -752,10 +740,10 @@ A1:   S is a_neighborhood of x;
       take N = Int S;
       thus N is open;
       thus x in N by A1,CONNSP_2:def 1;
-      thus N c= S by TOPS_1:44;
+      thus N c= S by TOPS_1:16;
     end;
     assume ex A being Subset of T st A is open & x in A & A c= S;
-    hence x in Int S by TOPS_1:54;
+    hence x in Int S by TOPS_1:22;
   end;
 end;
 
@@ -774,7 +762,7 @@ A1: A is open;
     let x be Point of T;
     assume x in A;
     then ex B being Subset of T st B is a_neighborhood of x & B c= A by A1,
-CONNSP_2:9;
+CONNSP_2:7;
     hence thesis;
   end;
   assume
@@ -788,10 +776,8 @@ A2: for x being Point of T holds x in A implies ex B being Nbhd of x,T
     then ex B being Nbhd of x,T st B c= A by A2;
     hence thesis;
   end;
-  hence thesis by CONNSP_2:9;
+  hence thesis by CONNSP_2:7;
 end;
-
-canceled;
 
 theorem
   for T being non empty TopSpace holds for A being Subset of T holds (
@@ -837,9 +823,9 @@ A1:   T is T_1;
       let p,q being Point of T such that
 A2:   not p = q;
       consider G1 being Subset of T such that
-A3:   G1 is open & p in G1 & q in G1` by A1,A2,PRE_TOPC:def 15;
+A3:   G1 is open & p in G1 & q in G1` by A1,A2,PRE_TOPC:def 9;
       consider G2 being Subset of T such that
-A4:   G2 is open & q in G2 & p in G2` by A1,A2,PRE_TOPC:def 15;
+A4:   G2 is open & q in G2 & p in G2` by A1,A2,PRE_TOPC:def 9;
       take G1,G2;
       thus thesis by A3,A4,XBOOLE_0:def 5;
     end;
@@ -917,7 +903,7 @@ A9:     x in F;
         then reconsider x as Subset of T;
         ex q being Point of T st q in B & x is open & q in x & not p in x
         by A4,A9;
-        hence thesis by PRE_TOPC:def 5;
+        hence thesis by PRE_TOPC:def 2;
       end;
       then
 A10:  F c= the topology of T by TARSKI:def 3;
@@ -963,14 +949,14 @@ A17:    C in F by TARSKI:def 4;
         reconsider C as Subset of T by A17;
         ex q being Point of T st q in B & C is open & q in C & not p in C
         by A4,A17;
-        then C c= [#](T) \ {p} by ZFMISC_1:40;
+        then C c= [#](T) \ {p} by ZFMISC_1:34;
         hence thesis by A2,A16;
       end;
       then union F c= B by TARSKI:def 3;
       then B = union F by A15,XBOOLE_0:def 10;
       then B in the topology of T by A10,PRE_TOPC:def 1;
-      then {p}` = [#](T) \ {p} & B is open by PRE_TOPC:def 5;
-      hence thesis by A2,PRE_TOPC:def 6;
+      then {p}` = [#](T) \ {p} & B is open by PRE_TOPC:def 2;
+      hence thesis by A2,PRE_TOPC:def 3;
     end;
     hence thesis;
   end;
@@ -1025,10 +1011,10 @@ A5:   W <> {} & V <> {}
 A6:     [#](T) \ B <> {}
         proof
           assume [#](T) \ B = {};
-          then B = [#](T) \ {} by PRE_TOPC:22;
+          then B = [#](T) \ {} by PRE_TOPC:3;
           hence thesis by A4;
         end;
-        A c= Cl(A) by PRE_TOPC:48;
+        A c= Cl(A) by PRE_TOPC:18;
         hence thesis by A2,A6;
       end;
 A7:   W misses V
@@ -1039,26 +1025,26 @@ A8:     x in W /\ V by XBOOLE_0:4;
         x in Cl(A) & x in [#](T) \ B by A8,XBOOLE_0:def 4;
         hence thesis by A3,XBOOLE_0:def 5;
       end;
-      B = [#](T) \ V by PRE_TOPC:22;
-      then V is closed by PRE_TOPC:def 6;
+      B = [#](T) \ V by PRE_TOPC:3;
+      then V is closed by PRE_TOPC:def 3;
       then consider C,Q being Subset of T such that
 A9:   C is open and
 A10:  Q is open and
 A11:  W c= C and
 A12:  V c= Q and
-A13:  C misses Q by A1,A5,A7,COMPTS_1:def 6;
+A13:  C misses Q by A1,A5,A7,COMPTS_1:def 3;
       take C;
       C <> {} & Cl(A) c= C & Cl(C) c= B
       proof
         consider Q0,C0 being Subset of [#](T) such that
 A14:    Q0 = Q & C0 = C;
-        C0 c= Q0` by A13,A14,SUBSET_1:43;
-        then Cl(C) c= Q` by A10,A14,TOPS_1:31;
-        then Cl(C) misses Q by SUBSET_1:43;
+        C0 c= Q0` by A13,A14,SUBSET_1:23;
+        then Cl(C) c= Q` by A10,A14,TOPS_1:5;
+        then Cl(C) misses Q by SUBSET_1:23;
         then
 A15:    V misses Cl(C) by A12,XBOOLE_1:63;
         B`` = B;
-        hence thesis by A5,A11,A15,SUBSET_1:43;
+        hence thesis by A5,A11,A15,SUBSET_1:23;
       end;
       hence thesis by A9;
     end;
@@ -1106,23 +1092,23 @@ A4:         W is open and
 A5:         V is open and
 A6:         p in W and
 A7:         P c= V and
-A8:         W misses V by A1,A3,COMPTS_1:def 5;
+A8:         W misses V by A1,A3,COMPTS_1:def 2;
             W /\ V = {} by A8,XBOOLE_0:def 7;
-            then V /\ Cl(W) c= Cl({} T) by A5,TOPS_1:40;
-            then V /\ Cl(W) c= {} by PRE_TOPC:52;
+            then V /\ Cl(W) c= Cl({} T) by A5,TOPS_1:13;
+            then V /\ Cl(W) c= {} by PRE_TOPC:22;
             then V /\ Cl(W) = {};
             then V misses Cl(W) by XBOOLE_0:def 7;
             then
 A9:         P misses Cl(W) by A7,XBOOLE_1:63;
             take W;
             A`` = A;
-            then Cl(W) c= A by A9,SUBSET_1:43;
+            then Cl(W) c= A by A9,SUBSET_1:23;
             hence thesis by A4,A6;
           end;
           case
 A10:        P = {};
             take A;
-            A = [#](T) by A10,PRE_TOPC:23;
+            A = [#](T) by A10,PRE_TOPC:4;
             then Cl(A) c= A;
             hence thesis by A2;
           end;
@@ -1155,14 +1141,14 @@ A15:  C = [#](T) \ Cl(B);
       reconsider B,C as Subset of T;
       Cl(B) misses C by A15,XBOOLE_1:79;
       then
-A16:  B misses C by PRE_TOPC:48,XBOOLE_1:63;
+A16:  B misses C by PRE_TOPC:18,XBOOLE_1:63;
       take B;
       take C;
       (Cl(B))` is open & P`` = P;
       hence thesis by A13,A14,A15,A16,XBOOLE_1:34;
     end;
   end;
-  hence T is regular by COMPTS_1:def 5;
+  hence T is regular by COMPTS_1:def 2;
 end;
 
 theorem
@@ -1184,15 +1170,15 @@ A4:   A <> [#](T);
 A5:   [#](T) \ A <> {}
       proof
         assume [#](T) \ A = {};
-        then A = [#](T) \ {} by PRE_TOPC:22;
+        then A = [#](T) \ {} by PRE_TOPC:3;
         hence thesis by A4;
       end;
       reconsider V = [#](T) \ A as Subset of T;
       consider x being set such that
 A6:   x in A by A3,XBOOLE_0:def 1;
-      A = [#](T) \ V by PRE_TOPC:22;
+      A = [#](T) \ V by PRE_TOPC:3;
       then
-A7:   V is closed by PRE_TOPC:def 6;
+A7:   V is closed by PRE_TOPC:def 3;
       reconsider x as Point of T by A6;
       consider W being set such that
 A8:   W = {x};
@@ -1214,17 +1200,17 @@ A11:    z in A by A6,A8,TARSKI:def 1;
 A12:  Q is open and
 A13:  W c= B and
 A14:  V c= Q and
-A15:  B misses Q by A1,A8,A7,A5,A9,COMPTS_1:def 6;
+A15:  B misses Q by A1,A8,A7,A5,A9,COMPTS_1:def 3;
       take B;
       B <> {} & Cl(B) c= A
       proof
-        B c= Q` by A15,SUBSET_1:43;
-        then Cl(B) c= Q` by A12,TOPS_1:31;
-        then Cl(B) misses Q by SUBSET_1:43;
+        B c= Q` by A15,SUBSET_1:23;
+        then Cl(B) c= Q` by A12,TOPS_1:5;
+        then Cl(B) misses Q by SUBSET_1:23;
         then
 A16:    V misses Cl(B) by A14,XBOOLE_1:63;
         A`` = A;
-        hence thesis by A8,A13,A16,SUBSET_1:43;
+        hence thesis by A8,A13,A16,SUBSET_1:23;
       end;
       hence thesis;
     end;
@@ -1256,7 +1242,7 @@ A4: B c= A;
   suppose
 A5: A <> [#](T);
     reconsider V = [#](T) \ A as Subset of T;
-A6: A = [#](T) \ V by PRE_TOPC:22;
+A6: A = [#](T) \ V by PRE_TOPC:3;
     then
 A7: [#](T) \ A <> {} by A5;
 A8: B misses V
@@ -1267,22 +1253,22 @@ A9:   z in B /\ V by XBOOLE_0:def 1;
       z in B & z in V by A9,XBOOLE_0:def 4;
       hence thesis by A4,XBOOLE_0:def 5;
     end;
-    V is closed by A2,A6,PRE_TOPC:def 6;
+    V is closed by A2,A6,PRE_TOPC:def 3;
     then consider C,Q being Subset of T such that
 A10: C is open and
 A11: Q is open and
 A12: B c= C and
 A13: V c= Q and
-A14: C misses Q by A1,A3,A7,A8,COMPTS_1:def 6;
-    C c= Q` by A14,SUBSET_1:43;
-    then Cl(C) c= Q` by A11,TOPS_1:31;
-    then Q misses Cl(C) by SUBSET_1:43;
+A14: C misses Q by A1,A3,A7,A8,COMPTS_1:def 3;
+    C c= Q` by A14,SUBSET_1:23;
+    then Cl(C) c= Q` by A11,TOPS_1:5;
+    then Q misses Cl(C) by SUBSET_1:23;
     then
 A15: V misses Cl(C) by A13,XBOOLE_1:63;
     take C;
     thus C is open & B c= C by A10,A12;
     A`` = A;
-    hence thesis by A15,SUBSET_1:43;
+    hence thesis by A15,SUBSET_1:23;
   end;
   suppose
 A16: A = [#](T);
@@ -1339,8 +1325,8 @@ A6: for r being Element of dyadic(n) holds G.r <> {}
     suppose
 A7:   0 < r;
       reconsider q1 = 0 as Element of dyadic(n) by Th12;
-      G.q1 c= Cl(G.q1) & Cl(G.q1) c= G.r by A5,A7,PRE_TOPC:48;
-      hence thesis by A2,A3,XBOOLE_1:1;
+      G.q1 c= Cl(G.q1) & Cl(G.q1) c= G.r by A5,A7,PRE_TOPC:18;
+      hence thesis by A2,A3;
     end;
   end;
   reconsider S = dyadic(n+1) \ dyadic(n) as non empty set by Th15;
@@ -1435,7 +1421,7 @@ A31:    Cl(G.q1) c= F.r2 by A1,A28,A25,A29,A27,Def10;
           end;
           suppose
 A32:        r1 < q1;
-A33:        G.q1 c= Cl(G.q1) by PRE_TOPC:48;
+A33:        G.q1 c= Cl(G.q1) by PRE_TOPC:18;
             consider q0 being Element of dyadic(n) such that
 A34:        q0 = r1 by A21;
             Cl(G.q0) c= G.q1 by A5,A32,A34;
@@ -1479,7 +1465,7 @@ A48:    Cl(F.r1) c= G.q2 by A1,A45,A42,A46,A44,Def10;
           end;
           suppose
 A49:        q2 < r2;
-A50:        G.q2 c= Cl(G.q2) by PRE_TOPC:48;
+A50:        G.q2 c= Cl(G.q2) by PRE_TOPC:18;
             consider q3 being Element of dyadic(n) such that
 A51:        q3 = r2 by A38;
 A52:        G.q2 is open by A5,A49,A51;
@@ -1535,7 +1521,7 @@ A72:    q21 <= q12 by A18,A55,A57,A61,Th23;
           suppose
 A73:        q21 = q12;
             Cl(F.r1) c= G.q21 & G.q21 c= Cl(G.q21) by A1,A70,A58,A68,A60,A71
-,Def10,PRE_TOPC:48;
+,Def10,PRE_TOPC:18;
             then
 A74:        Cl(F.r1) c= Cl(G.q21) by XBOOLE_1:1;
             Cl(G.q21) c= F.r2 by A1,A60,A69,A63,A67,A66,A73,Def10;
@@ -1544,14 +1530,14 @@ A74:        Cl(F.r1) c= Cl(G.q21) by XBOOLE_1:1;
           suppose
 A75:        q21 < q12;
             Cl(F.r1) c= G.q21 & G.q21 c= Cl(G.q21) by A1,A70,A58,A68,A60,A71
-,Def10,PRE_TOPC:48;
+,Def10,PRE_TOPC:18;
             then
 A76:        Cl(F.r1) c= Cl(G.q21) by XBOOLE_1:1;
             Cl(G.q21) c= G.q12 by A5,A75;
             then
 A77:        Cl(F.r1) c= G.q12 by A76,XBOOLE_1:1;
             G.q12 c= Cl(G.q12) & Cl(G.q12) c= F.r2 by A1,A69,A63,A67,A65,A66
-,Def10,PRE_TOPC:48;
+,Def10,PRE_TOPC:18;
             then G.q12 c= F.r2 by XBOOLE_1:1;
             hence Cl(F.r1) c= F.r2 by A77,XBOOLE_1:1;
           end;

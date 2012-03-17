@@ -1,0 +1,5050 @@
+:: Differentiable Functions on Normed Linear Spaces
+::  by Yasunari Shidama
+:: 
+:: Received June 2, 2011
+:: Copyright (c) 2011 Association of Mizar Users
+::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
+:: This code can be distributed under the GNU General Public Licence
+:: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
+:: License version 3.0 or later, subject to the binding interpretation
+:: detailed in file COPYING.interpretation.
+:: See COPYING.GPL and COPYING.CC-BY-SA for the full text of these
+:: licenses, or see http://www.gnu.org/licenses/gpl.html and
+:: http://creativecommons.org/licenses/by-sa/3.0/.
+
+environ
+
+ vocabularies NUMBERS, REAL_1, ZFMISC_1, NORMSP_1, PRE_TOPC, PARTFUN1, FUNCT_1,
+      FUNCT_4, NAT_1, FDIFF_1, SUBSET_1, SEQ_4, RELAT_1, GLIB_000, LOPBAN_1,
+      ORDINAL4, RFINSEQ, RCOMP_1, TARSKI, SEQ_1, ARYTM_3, VALUED_1, FUNCT_2,
+      ARYTM_1, SEQ_2, ORDINAL2, SUPINF_2, FCONT_1, COMPLEX1, STRUCT_0, CARD_1,
+      VALUED_0, XXREAL_0, GROUP_2, FUNCOP_1, XREAL_0, ORDINAL1, MEMBERED,
+      FINSEQ_5, XXREAL_2, XBOOLE_0, CARD_3, FINSEQ_1, FINSEQ_2, AFINSQ_1,
+      RLVECT_1, SQUARE_1, RVSUM_1, XXREAL_1, PDIFF_1, PRVECT_1, PRVECT_2,
+      ALGSTR_0, EUCLID, CFCONT_1, RFINSEQ2, NORMSP_0, NFCONT_1, MONOID_0,
+      RLTOPSP1;
+ notations TARSKI, XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1, RELSET_1,
+      PARTFUN1, FUNCT_2, FUNCOP_1, FUNCT_4, CARD_1, NUMBERS, XXREAL_0, XREAL_0,
+      REAL_1, SQUARE_1, NAT_1, MEMBERED, VALUED_0, COMPLEX1, NAT_D, BINOP_2,
+      XXREAL_2, CARD_3, FINSEQ_1, VALUED_1, FINSEQ_2, SEQ_1, SEQ_2, RVSUM_1,
+      RFINSEQ, SEQ_4, RCOMP_1, FCONT_1, FDIFF_1, FINSEQ_5, FINSEQ_7, RFINSEQ2,
+      STRUCT_0, MONOID_0, ALGSTR_0, PRE_TOPC, RLVECT_1, NORMSP_0, NORMSP_1,
+      VFUNCT_1, EUCLID, LOPBAN_1, PRVECT_1, NFCONT_1, NDIFF_1, PRVECT_2,
+      NFCONT_3, NDIFF_3, RLTOPSP1, FUNCT_7;
+ constructors REAL_1, SQUARE_1, SEQ_2, FDIFF_1, NFCONT_1, RSSPACE, VFUNCT_1,
+      NDIFF_1, SEQ_1, RELSET_1, FINSEQ_7, FINSEQ_5, RVSUM_1, BINOP_2, PRVECT_2,
+      RLVECT_2, NAT_D, FINSEQOP, RFINSEQ, RFINSEQ2, SEQ_4, FCONT_1, NFCONT_3,
+      NDIFF_3, MONOID_0, RLTOPSP1, FUNCT_7;
+ registrations RELSET_1, STRUCT_0, ORDINAL1, XREAL_0, MEMBERED, FUNCT_1,
+      NDIFF_1, FUNCT_2, NUMBERS, XBOOLE_0, VALUED_0, PRVECT_2, FINSEQ_2,
+      FINSEQ_1, CARD_3, NORMSP_0, NORMSP_1, RELAT_1, XXREAL_0, LOPBAN_1,
+      LOPBAN_2, PRVECT_3, FUNCOP_1, NAT_1, FINSEQ_5, XXREAL_2, RCOMP_1,
+      VALUED_1, FDIFF_1, NFCONT_3, FINSET_1, XCMPLX_0, PARTFUN1, CARD_1,
+      MONOID_0;
+ requirements SUBSET, REAL, BOOLE, NUMERALS, ARITHM;
+ definitions TARSKI, FUNCT_2, RLVECT_1, LOPBAN_1, EUCLID, RFINSEQ2, FINSEQ_1,
+      FINSEQ_2, STRUCT_0, MONOID_0, ALGSTR_0, NORMSP_0, RCOMP_1, XCMPLX_0,
+      PRVECT_2;
+ theorems TARSKI, ABSVALUE, XBOOLE_0, XBOOLE_1, RLVECT_1, XCMPLX_0, XCMPLX_1,
+      ZFMISC_1, SEQ_1, SEQ_2, NAT_1, RELAT_1, FUNCT_1, VFUNCT_1, FUNCT_2,
+      FUNCT_3, FINSEQ_4, RLVECT_2, FINSEQ_3, ORDINAL1, FINSEQ_1, CARD_3,
+      FUNCT_4, SEQ_4, NORMSP_1, LOPBAN_1, PARTFUN1, PARTFUN2, NFCONT_1,
+      FDIFF_1, NDIFF_1, FUNCOP_1, XREAL_1, COMPLEX1, XXREAL_0, VALUED_1,
+      VALUED_0, GRCAT_1, NORMSP_0, XREAL_0, RCOMP_1, FINSEQ_2, FINSEQ_7,
+      RVSUM_1, SQUARE_1, PRVECT_1, PRVECT_2, PDIFF_7, EUCLID, TOPREAL7,
+      XXREAL_2, FINSEQ_5, NAT_D, RFINSEQ2, INTEGRA5, FCONT_1, NAT_2, NFCONT_3,
+      NDIFF_2, NDIFF_3, CARD_1, ROLLE, XXREAL_1, RLTOPSP1, FUNCT_7;
+ schemes FUNCT_2, SEQ_1, FINSEQ_1, NAT_1, FINSEQ_2;
+
+begin :: Preliminaries
+
+ reserve j for set;
+ reserve p,r for Real;
+ reserve S,T,F for non trivial RealNormSpace;
+ reserve x0 for Point of S;
+ reserve g for PartFunc of S,T;
+ reserve c for constant sequence of S;
+ reserve R for REST of S,T;
+ reserve G for RealNormSpace-Sequence;
+ reserve i for Element of dom G;
+ reserve f for PartFunc of product G,F;
+ reserve x for Element of product G;
+
+theorem NDIFF126:
+for R be Function of REAL,S
+  holds R is REST-like
+   iff for r be Real st r > 0 ex d be Real st d > 0 & for z be Real
+         st z <> 0 & |. z .| < d holds |.z.|"* ||. R/.z .|| < r
+proof
+   let R be Function of REAL,S;
+A1:dom R = REAL by PARTFUN1:def 2;
+A2:now assume
+A3:  R is REST-like;
+    assume not (for r be Real st r > 0 ex d be Real st d > 0 & for z be Real
+       st z <> 0 & |. z .| < d holds |. z .|"* ||. R/.z .|| < r); then
+    consider r be Real such that
+A4:  r > 0 and
+A5:  for d be Real st d > 0 holds ex z be Real st z <> 0 & |. z .| < d
+       & not |. z .|"* ||. R/.z .|| < r;
+    defpred P[Element of NAT,Real] means
+      $2 <> 0 & |. $2 .| < (1/($1+1)) & not |. $2 .|"* ||. R/.$2 .|| < r;
+A6: for n be Element of NAT ex z be Real st P[n,z]
+    proof
+     let n be Element of NAT;
+     1/(n + 1) is Real by XREAL_0:def 1;
+     hence thesis by A5;
+    end;
+    consider s be Real_Sequence such that
+A7:  for n being Element of NAT holds P[n,s.n] from FUNCT_2:sch 3(A6);
+A8: now let p be real number;
+     assume A9: 0<p;
+     consider n be Element of NAT such that
+A10:  p"<n by SEQ_4:3;
+     reconsider q0=0, q1=1 as real number;
+     p" + q0 < n + q1 by A10,XREAL_1:8; then
+B11: 1/(n+1) < 1/p" by A9,XREAL_1:76;
+     take n;
+     let m be Element of NAT;
+     assume n<=m; then
+     n + 1 <= m + 1 by XREAL_1:6; then
+     1/(m+1) <= 1/(n+1) by XREAL_1:118; then
+     |. s.m - 0 .| < 1/(n+1) by A7,XXREAL_0:2;
+     hence |. s.m - 0 .| <p by B11,XXREAL_0:2;
+    end; then
+A14:s is convergent by SEQ_2:def 6; then
+A15:lim s = 0 by A8,SEQ_2:def 7;
+    s is non-zero by A7,SEQ_1:5; then
+    reconsider s as convergent_to_0 Real_Sequence by A14,A15,FDIFF_1:def 1;
+    (s")(#)(R/*s) is convergent & lim( (s")(#)(R/*s) ) = 0.S
+        by A3,NDIFF_3:def 1; then
+    consider n0 be Element of NAT such that
+A16:  for m be Element of NAT st n0 <=m
+       holds ||. ((s")(#)(R/*s)).m - 0.S .|| < r by A4,NORMSP_1:def 7;
+A17: ||. ((s")(#)(R/*s)).n0- 0.S .|| < r by A16;
+A19: ||.(s.n0)"*(R/.(s.n0)).||
+         = abs((s.n0)") * ||. R/.(s.n0) .|| by NORMSP_1:def 1
+        .=|. s.n0 .|" * ||. R/.(s.n0) .|| by COMPLEX1:66;
+A20:rng s c= dom R by A1;
+    ||. ((s")(#)(R/*s)).n0 - 0.S .||
+      = ||. ((s")(#)(R/*s)).n0 .|| by RLVECT_1:13
+     .= ||. (s".n0)*((R/*s).n0) .|| by NDIFF_1:def 2
+     .= ||. (s.n0)"*((R/*s).n0) .|| by VALUED_1:10
+     .= ||. (s.n0)"*(R/.(s.n0)) .|| by A20,FUNCT_2:109;
+    hence
+     for r be Real st r > 0 ex d be Real st d > 0 & for z be Real st
+       z <> 0 & |. z .| < d holds |. z .|"* ||. R/.z .|| < r by A7,A17,A19;
+   end;
+   now assume
+A21:for r be Real st r > 0 ex d be Real st d > 0 & for z be Real
+     st z <> 0 & |. z .| < d holds |. z .|"* ||. R/.z .|| < r;
+    now let s be convergent_to_0 Real_Sequence;
+A23: s is convergent & lim s = 0 by FDIFF_1:def 1;
+A24: now let r be Real;
+      assume r > 0; then
+      consider d be Real such that
+A25:   d > 0 and
+A26:   for z be Real st z <> 0 & |.z.| < d
+          holds |.z.|"* ||. R/.z .|| < r by A21;
+      consider n0 be Element of NAT such that
+A27:   for m be Element of NAT st n0 <=m
+             holds |. s.m-0 .| < d by A23,A25,SEQ_2:def 7;
+      take n0;
+      thus for m be Element of NAT st n0 <=m
+           holds ||. ((s")(#)(R/*s)).m- 0.S .|| < r
+      proof
+A28:   rng s c= dom R by A1;
+       let m be Element of NAT;
+       assume n0 <=m; then
+B29:   |. s.m-0 .| < d by A27;
+       s is non-zero by FDIFF_1:def 1; then
+A30:   s.m <> 0 by SEQ_1:5;
+       |. s.m .|" * ||. R/.(s.m) .||
+         = abs((s.m)") * ||. R/.(s.m) .|| by COMPLEX1:66
+        .= ||. (s.m)"*(R/.(s.m)) .|| by NORMSP_1:def 1
+        .= ||. (s.m)"*((R/*s).m) .|| by A28,FUNCT_2:109
+        .= ||. (s".m)*((R/*s).m) .|| by VALUED_1:10
+        .= ||. ((s")(#)(R/*s)).m .|| by NDIFF_1:def 2
+        .= ||. ((s")(#)(R/*s)).m- 0.S .|| by RLVECT_1:13;
+       hence thesis by A26,B29,A30;
+      end;
+     end;
+     hence (s")(#)(R/*s) is convergent by NORMSP_1:def 6;
+     hence lim ((s")(#)(R/*s)) = 0.S by A24,NORMSP_1:def 7;
+    end;
+    hence R is REST-like by NDIFF_3:def 1;
+   end;
+   hence thesis by A2;
+end;
+
+theorem NDIFF27:
+  for R be REST of S st R/.0=0.S
+  for e be Real st e > 0 ex d be Real st
+    d > 0 & for h be Real st |.h.| < d holds ||.R/.h.|| <= e*|.h.|
+proof
+   let R be REST of S such that
+A1:  R/.0=0.S;
+   let e be Real such that
+A2:  e > 0;
+   R is total by NDIFF_3:def 1; then
+   consider d be Real such that
+A3:  d > 0 and
+A4:  for z be Real st z <> 0 & |.z.| < d
+       holds |.z.|"* ||. R/.z .|| < e by A2,NDIFF126;
+   take d;
+   now let h be Real such that
+A5: |.h.| < d;
+B1: 0 <= |.h.| by COMPLEX1:46;
+    per cases;
+    suppose A6: h <> 0; then
+     |.h.|"*||. R/.h .|| <= e by A4,A5; then
+     |.h.|*(|.h.|"*||. R/.h .||) <= |.h.|*e by B1,XREAL_1:64; then
+A7:  |.h.|*|.h.|"*||. R/.h .|| <= e * |.h.|;
+     |.h.| <> 0 by A6,COMPLEX1:45; then
+     1*||. R/.h .|| <= e * |.h.| by A7,XCMPLX_0:def 7;
+     hence ||. R/.h .|| <= e* |.h.|;
+    end;
+    suppose A8: h = 0;
+     reconsider p0=0 as Real;
+     p0* |.h.| <= e* |.h.| by A2,B1;
+     hence ||. R/.h .|| <= e* |.h.| by A1,A8;
+    end;
+   end;
+   hence thesis by A3;
+end;
+
+theorem NDIFF29:
+  for R be REST of S
+  for L be bounded LinearOperator of S,T holds
+    L*R is REST of T
+proof
+   let R be REST of S;
+   let L be bounded LinearOperator of S,T;
+   consider K be Real such that
+A1:  0 <= K and
+A2:  for z be Point of S holds ||. L.z .|| <= K * ||.z.|| by LOPBAN_1:def 8;
+   dom L = the carrier of S by FUNCT_2:def 1; then
+A3:rng R c= dom L;
+A4:R is total by NDIFF_3:def 1; then
+A5:dom R = REAL by PARTFUN1:def 2;
+   now let e be Real such that
+A8:  e > 0;
+     set e1 = e/2/(1 + K);
+     consider d be Real such that
+A10:   0 < d and
+A11:   for h be Real st h <> 0 & |.h.| < d holds |.h.|"* ||. R/.h .|| < e1
+         by A1,A4,A8,NDIFF126;
+A12: e/2 < e by A8,XREAL_1:216;
+     now let h be Real;
+       assume A13: h <> 0 & |.h.| < d; then
+       |.h.|"* ||.(R/.h).|| < e1 by A11; then
+       (K +1)*(|.h.|"* ||.R/.h.||) <= (K +1)*e1 by A1,XREAL_1:64; then
+A15:   (K +1)*(|.h.|"* ||.R/.h.||) <= e/2 by A1,XCMPLX_1:87;
+       |.h.| <> 0 by A13,COMPLEX1:45; then
+A16:   |.h.| > 0 by COMPLEX1:46;
+       reconsider p0=0, p1=1 as Real;
+       p0 + K < p1 + K by XREAL_1:8; then
+A17:   K * ||.R/.h.|| <= (K +1) * ||.R/.h.|| by XREAL_1:64;
+       ||.L.(R/.h).|| <= K * ||.R/.h.|| by A2; then
+       ||.L.(R/.h).|| <= (K +1) * ||.R/.h.|| by A17,XXREAL_0:2; then
+       |.h.|"* ||.L.(R/.h).|| <= |.h.|"*((K +1)*||. R/.h .||) by A16,XREAL_1:64
+; then
+A18:   |.h.|"* ||.L.(R/.h).|| <= e/2 by A15,XXREAL_0:2;
+       L.(R/.h) = L/.(R/.h); then
+       L.(R/.h) =(L*R)/.h by A5,A3,PARTFUN2:5;
+       hence |.h.|"* ||.(L*R)/.h.|| < e by A12,A18,XXREAL_0:2;
+     end;
+     hence ex d be Real st d > 0 & for h be Real st h <> 0 & |.h.| < d
+       holds |.h.|"* ||.(L*R)/.h.|| < e by A10;
+   end;
+   hence thesis by A4,NDIFF126;
+end;
+
+theorem NDIFF211:
+  for R1 be REST of S st R1/.0 = 0.S
+  for R2 be REST of S,T st R2/.(0.S) = 0.T
+  for L be LINEAR of S holds
+    R2*(L+R1) is REST of T
+proof
+   let R1 be REST of S;
+   assume R1/.0 = 0.S; then
+   consider d0 be Real such that
+A1:  0 < d0 and
+A2:  for h be Real st |.h.| < d0 holds ||.R1/.h.|| <= 1* |.h.| by NDIFF27;
+   let R2 be REST of S,T such that
+A3:R2/.(0.S) = 0.T;
+   let L be LINEAR of S;
+   consider r be Point of S such that
+A4:  for h be Real holds L.h = h*r by NDIFF_3:def 2;
+   reconsider K = ||.r.|| as Real;
+   R2 is total by NDIFF_1:def 5; then
+   dom R2 = the carrier of S by PARTFUN1:def 2; then
+A6:rng(L+R1) c= dom R2;
+   R1 is total by NDIFF_3:def 1; then
+   L+R1 is total by VFUNCT_1:32; then
+A8:dom(L+R1) = REAL by PARTFUN1:def 2; then
+   dom(R2*(L+R1)) = REAL by A6,RELAT_1:27; then
+A9:R2*(L+R1) is total by PARTFUN1:def 2;
+   now let e be Real such that
+A10: e > 0;
+A11: e/2 < e by A10,XREAL_1:216;
+     set e1 = e/2/(1 + K);
+     consider d be Real such that
+A12:   0 < d and
+A13:   for z be Point of S st ||.z.|| < d
+         holds ||.R2/.z.|| <= e1*||.z.|| by A3,A10,NDIFF_2:7;
+     set d1 = d/(1 + K);
+     set dd1 = min(d0,d1);
+A14: dd1 <= d1 & dd1 <= d0 by XXREAL_0:17;
+A16: now let h be Real such that
+A17:   h <> 0 and
+A18:   |.h.| < dd1;
+       |.h.| < d0 by A14,A18,XXREAL_0:2; then
+A19:   ||.R1/.h.|| <=1* |.h.| by A2;
+       reconsider p0=0 as Real;
+       L.h = h*r by A4; then
+       ||. L.h .|| - K * |.h.| + K * |.h.| <= p0 + K * |.h.|
+           by NORMSP_1:def 1; then
+       ||.L.h+R1/.h.|| <= ||.L.h.|| + ||.R1/.h.||
+        & ||.L.h.|| + ||. R1/.h .|| <= K * |.h.| + 1 * |.h.|
+           by A19,NORMSP_1:def 1,XREAL_1:7; then
+A20:   ||.L.h+R1/.h.|| <= ( K +1) * |.h.| by XXREAL_0:2; then
+A21:   e1 * ||. L.h+R1/.h .|| <= e1*((K +1)*|.h.|) by A10,XREAL_1:64;
+       |.h.| < d1 by A14,A18,XXREAL_0:2; then
+       (K +1) * |.h.| < (K +1) * d1 by XREAL_1:68; then
+       ||. L.h+R1/.h .|| < (K +1) * d1 by A20,XXREAL_0:2; then
+       ||. L.h+R1/.h.|| < d by XCMPLX_1:87; then
+       ||. R2/.(L.h+R1/.h) .|| <= e1 * ||. L.h+R1/.h .|| by A13; then
+A22:   ||. R2/.(L.h+R1/.h) .|| <= e1*((K +1)*|.h.|) by A21,XXREAL_0:2;
+A23:   R2/.(L.h+R1/.h) = R2/.(L/.h+R1/.h)
+        .=R2/.((L+R1)/.h) by A8,VFUNCT_1:def 1
+        .=(R2*(L+R1))/.h by A8,A6,PARTFUN2:5;
+A24:   |.h.| <> 0 by A17,COMPLEX1:45; then
+       |.h.| > 0 by COMPLEX1:46; then
+       |.h.|"* ||.(R2*(L+R1))/.h.|| <= |.h.|"* (e1* (K +1) * |.h.|)
+          by A23,A22,XREAL_1:64; then
+       |.h.|"* ||. (R2*(L+R1))/.h .|| <= |.h.|*|.h.|"*e1*(K +1); then
+       |.h.|"* ||. (R2*(L+R1))/.h .|| <= 1 * e1 * (K +1)
+          by A24,XCMPLX_0:def 7; then
+       |.h.|"* ||. (R2*(L+R1))/.h .|| <= e/2 by XCMPLX_1:87;
+       hence |.h.|"* ||.(R2*(L+R1))/.h.|| < e by A11,XXREAL_0:2;
+     end;
+     0 < dd1 by A1,A12,XXREAL_0:15;
+     hence
+       ex dd1 be Real st dd1 > 0 & for h be Real st h <> 0 & |.h.| < dd1
+         holds |.h.|"* ||. (R2*(L+R1))/.h .|| < e by A16;
+   end;
+   hence thesis by A9,NDIFF126;
+end;
+
+theorem NDIFF212:
+  for R1 be REST of S st R1/.0=0.S
+  for R2 be REST of S,T st R2/.(0.S)=0.T
+  for L1 be LINEAR of S
+  for L2 be bounded LinearOperator of S,T holds
+    L2*R1 + R2*(L1+R1) is REST of T
+proof
+   let R1 be REST of S such that
+A1:  R1/.0=0.S;
+   let R2 be REST of S,T such that
+A2:  R2/.(0.S)=0.T;
+   let L1 be LINEAR of S;
+   let L2 be bounded LinearOperator of S,T;
+   L2*R1 is REST of T & R2*(L1+R1) is REST of T by A1,A2,NDIFF211,NDIFF29;
+   hence thesis by NDIFF_3:7;
+end;
+
+theorem NDIFF213:
+  for x0 be Element of REAL
+  for g be PartFunc of REAL,the carrier of S st
+    g is_differentiable_in x0
+  for f be PartFunc of the carrier of S,the carrier of T st
+    f is_differentiable_in (g/.x0) holds
+  f*g is_differentiable_in x0 & diff(f*g,x0) = diff(f,g/.x0).diff(g,x0)
+proof
+   let x0 be Element of REAL;
+   let g be PartFunc of REAL,the carrier of S such that
+A1:  g is_differentiable_in x0;
+   consider N1 being Neighbourhood of x0 such that
+A2:  N1 c= dom g and
+A3:  ex L1 be LINEAR of S,R1 be REST of S st
+       diff(g,x0) = L1.1
+     & for x be Real st x in N1 holds g/.x-g/.x0 = L1.(x-x0) + R1/.(x-x0)
+         by A1,NDIFF_3:def 4;
+   let f be PartFunc of the carrier of S,the carrier of T;
+   assume f is_differentiable_in g/.x0; then
+   consider N2 being Neighbourhood of g/.x0 such that
+A4:  N2 c= dom f and
+A5:  ex R2 be REST of S,T
+      st R2/.(0.S) = 0.T
+       & R2 is_continuous_in 0.S
+       & for y be Point of S st y in N2
+           holds f/.y-f/.(g/.x0) = diff(f,g/.x0).(y-g/.x0) + R2/.(y-g/.x0)
+       by NDIFF_1:47;
+   consider R2 be REST of S,T such that
+A6:  R2/.0.S=0.T and
+A7:  for y be Point of S st y in N2
+       holds f/.y-f/.(g/.x0) = diff(f,g/.x0).(y-g/.x0) + R2/.(y-g/.x0) by A5;
+   reconsider L2 = diff(f,g/.x0) as bounded LinearOperator of S,T
+                                    by LOPBAN_1:def 9;
+   consider L1 be LINEAR of S,R1 be REST of S such that
+A9:  diff(g,x0) = L1.1
+   & for x be Real st x in N1 holds g/.x-g/.x0 = L1.(x-x0) + R1/.(x-x0) by A3;
+   consider r be Point of S such that
+B9:  for p be Real holds L1.p = p*r by NDIFF_3:def 2;
+   reconsider p0=0 as Element of REAL;
+   g/.x0-g/.x0 = L1.(x0-x0) + R1/.(x0-x0) by A9,RCOMP_1:16; then
+   0.S = L1.0 + R1/.0 by RLVECT_1:15; then
+   0.S = p0*r + R1/.0 by B9; then
+   0.S = 0.S + R1/.0 by RLVECT_1:10; then
+   R1/.0 = 0.S by RLVECT_1:4; then
+   reconsider R0=L2*R1+R2*(L1+R1) as REST of T by A6,NDIFF212;
+B11: dom(L2*L1) = REAL by FUNCT_2:def 1;
+   reconsider q = L2.r as Point of T;
+   now let p be Real;
+     L2.(L1.p) = L2.(p*r) by B9; then
+     L2.(L1.p) = p*q by LOPBAN_1:def 5;
+     hence (L2*L1).p = p*q by B11,FUNCT_1:12;
+   end; then
+   reconsider L0=L2*L1 as LINEAR of T by NDIFF_3:def 2;
+
+   g is_continuous_in x0 by A1,NDIFF_3:22; then
+   consider N3 be Neighbourhood of x0 such that
+A10: g.:N3 c= N2 by NFCONT_3:10;
+   consider N be Neighbourhood of x0 such that
+A11: N c= N1 and
+A12: N c= N3 by RCOMP_1:17;
+
+   now let x be set;
+     assume
+A14: x in N; then
+     reconsider x9 = x as Real;
+A15: x in N1 by A11,A14; then
+     g.x9 in g.:N3 by A2,A12,A14,FUNCT_1:def 6; then
+     g.x9 in N2 by A10;
+     hence x in dom(f*g) by A2,A4,A15,FUNCT_1:11;
+   end; then
+A13: N c= dom(f*g) by TARSKI:def 3;
+
+A17: now let x be Real such that
+A18: x in N;
+A19: g/.x-g/.x0 = L1.(x-x0) + R1/.(x-x0) by A9,A11,A18;
+A20: x in N1 by A11,A18; then
+     g.x in g.:N3 by A2,A12,A18,FUNCT_1:def 6; then
+     g.x in N2 by A10; then
+A21: g/.x in N2 by A2,A20,PARTFUN1:def 6;
+
+A23: x0 in N by RCOMP_1:16;
+A24: R1 is total by NDIFF_3:def 1; then
+A25: dom R1 = REAL by PARTFUN1:def 2;
+     dom L2 = the carrier of S by FUNCT_2:def 1; then
+A26: rng R1 c= dom L2;
+
+A27: dom(L2*R1) = REAL by A24,PARTFUN1:def 2;
+
+     L1+R1 is total by A24,VFUNCT_1:32; then
+A29: dom(L1+R1)=REAL by PARTFUN1:def 2;
+
+     R2 is total by NDIFF_1:def 5; then
+     dom R2 = the carrier of S by PARTFUN1:def 2; then
+A30: rng (L1+R1) c= dom R2; then
+     dom (R2*(L1+R1)) = dom(L1+R1) by RELAT_1:27; then
+A31: dom (L2*R1+R2*(L1+R1)) = REAL /\ REAL by A27,A29,VFUNCT_1:def 1;
+
+     L2.(R1/.(x-x0)) = L2/.(R1/.(x-x0)); then
+A32: L2.(R1/.(x-x0)) =(L2*R1)/.(x-x0) by A25,A26,PARTFUN2:5;
+
+A33: R2/.(L1.(x-x0)+R1/.(x-x0)) = R2/.(L1/.(x-x0)+R1/.(x-x0))
+      .=R2/.((L1+R1)/.(x-x0)) by A29,VFUNCT_1:def 1
+      .=(R2*(L1+R1))/.(x-x0) by A29,A30,PARTFUN2:5;
+
+B33: (L2*L1).(x-x0) = L2.(L1.(x-x0)) by B11,FUNCT_1:12;
+
+     thus (f*g)/.x-(f*g)/.x0 =f/.(g/.x) -(f*g)/.x0 by A13,A18,PARTFUN2:3
+      .=f/.(g/.x) -f/.(g/.x0) by A13,A23,PARTFUN2:3
+      .=diff(f,g/.x0).(g/.x-g/.x0) + R2/.(g/.x-g/.x0) by A7,A21
+      .=L2.(L1.(x-x0)) + L2.(R1/.(x-x0)) + (R2*(L1+R1))/.(x-x0) by A19,A33,
+GRCAT_1:def 8
+      .=L2.(L1.(x-x0)) + ((L2*R1)/.(x-x0) + (R2*(L1+R1))/.(x-x0)) by A32,
+RLVECT_1:def 3
+      .=L0.(x-x0) + R0/.(x-x0) by B33,A31,VFUNCT_1:def 1;
+   end;
+   hence A34: f*g is_differentiable_in x0 by A13,NDIFF_3:def 3;
+   (L2*L1).1 = diff(f,g/.x0).diff(g,x0) by A9,B11,FUNCT_1:12;
+   hence thesis by A34,A13,A17,NDIFF_3:def 4;
+end;
+
+theorem PDIFF617:
+for S be RealNormSpace,
+    xseq be FinSequence of S,
+    yseq be FinSequence of REAL st
+ len xseq = len yseq &
+ ( for i be Element of NAT st i in dom xseq holds
+    yseq.i = ||. xseq/.i .|| )
+  holds ||.Sum xseq.|| <= Sum yseq
+proof
+   let S be RealNormSpace,
+    xseq be FinSequence of S,
+    yseq be FinSequence of REAL;
+   assume that
+A1: len xseq = len yseq and
+A2: for i be Element of NAT st
+      i in dom xseq holds yseq.i = ||. xseq/.i .||;
+
+   defpred P[Nat] means
+     for xseq be FinSequence of S, yseq be FinSequence of REAL st
+      $1=len xseq & len xseq = len yseq &
+      ( for i be Element of NAT st i in dom xseq holds
+          yseq.i = ||. xseq/.i .|| )
+       holds ||.Sum xseq.|| <= Sum yseq;
+
+A3:P[0]
+   proof
+    let xseq be FinSequence of S, yseq be FinSequence of REAL;
+    assume
+B1:  0 = len xseq & len xseq = len yseq
+   & ( for i be Element of NAT st i in dom xseq holds
+        yseq.i = ||. xseq/.i .|| );
+    consider Sx be Function of NAT,the carrier of S such that
+B3:  Sum xseq = Sx.(len xseq)
+   & Sx.0 = 0.S
+   & for j be Element of NAT, v be Element of S st
+        j < len xseq & v = xseq.(j+1) holds Sx.(j+1) = Sx.j + v
+          by RLVECT_1:def 12;
+    yseq = {} by B1;
+    hence thesis by B1,B3,RVSUM_1:72;
+   end;
+
+A4:now let i be Element of NAT;
+    assume A4: P[i];
+    now let xseq be FinSequence of S, yseq be FinSequence of REAL;
+     set xseq0=xseq|i, yseq0=yseq|i;
+     assume
+A5:   i+1=len xseq & len xseq = len yseq &
+      ( for i be Element of NAT st i in dom xseq holds
+          yseq.i = ||. xseq/.i .|| );
+
+A6:  for k be Element of NAT st k in dom xseq0 holds yseq0.k = ||. xseq0/.k .||
+     proof
+      let k be Element of NAT;
+      assume
+A9:     k in dom xseq0; then
+A7:   k in Seg i & k in dom xseq by RELAT_1:57; then
+A8:   yseq.k = ||. xseq/.k .|| by A5;
+      xseq/.k = xseq.k by A7,PARTFUN1:def 6; then
+      xseq/.k = xseq0.k by A7,FUNCT_1:49; then
+      xseq/.k = xseq0/.k by A9,PARTFUN1:def 6;
+      hence thesis by A7,A8,FUNCT_1:49;
+     end;
+
+C1:  dom xseq = Seg(i+1) by A5,FINSEQ_1:def 3; then
+A9:  yseq.(i+1) = ||. xseq/.(i+1) .|| by A5,FINSEQ_1:4;
+A10: 1 <= i + 1 by NAT_1:11;
+     yseq = (yseq|i)^<*yseq/.(i+1) *> by A5,FINSEQ_5:21; then
+     yseq = yseq0 ^<*(yseq.(i+1))*> by A5,A10,FINSEQ_4:15; then
+A11: Sum yseq = Sum yseq0 + yseq.(i+1) by RVSUM_1:74;
+
+B1:  len xseq in dom xseq by C1,A5,FINSEQ_1:4; then
+     reconsider v = xseq.(len xseq) as Element of S by PARTFUN1:4;
+
+B2:  v = xseq/.(i+1) by A5,B1,PARTFUN1:def 6;
+
+A12: i=len xseq0 by A5,FINSEQ_1:59,NAT_1:11; then
+     xseq0 = xseq| (dom xseq0) by FINSEQ_1:def 3; then
+A13: Sum xseq = Sum xseq0 + v by A5,A12,RLVECT_1:38;
+
+A14: ||. Sum xseq0 + v.|| <= ||.Sum xseq0 .|| + ||. v .|| by NORMSP_1:def 1;
+     len xseq0 = len yseq0 by A5,A12,FINSEQ_1:59,NAT_1:11; then
+     ||. Sum xseq0 .|| <= Sum yseq0 by A4,A6,A12; then
+     ||. Sum xseq0 .|| + ||.v.|| <= Sum yseq0 + yseq.(i+1) by A9,B2,XREAL_1:6;
+     hence ||. Sum xseq .|| <= Sum yseq by A11,A13,A14,XXREAL_0:2;
+    end;
+    hence P[i+1];
+   end;
+   for i be Element of NAT holds P[i] from NAT_1:sch 1(A3,A4);
+   hence thesis by A1,A2;
+end;
+
+theorem Lm1:
+for S be RealNormSpace, x be Point of S, N1,N2 be Neighbourhood of x holds
+    N1/\ N2 is Neighbourhood of x
+proof
+   let S be RealNormSpace, x be Point of S,
+       N1,N2 be Neighbourhood of x;
+
+   consider N be Neighbourhood of x such that
+A1: N c= N1 & N c= N2 by NDIFF_1:1;
+A2:N c= N1/\ N2 by A1,XBOOLE_1:19;
+   consider g be Real such that
+A3: 0 < g and
+A4: {y where y is Point of S: ||.y-x .|| < g} c= N by NFCONT_1:def 1;
+   {y where y is Point of S: ||.y-x .|| < g} c= N1 /\ N2 by A2,A4,XBOOLE_1:1;
+   hence thesis by A3,NFCONT_1:def 1;
+end;
+
+theorem LMPROD1:
+for X be non-empty FinSequence,
+    x be set st x in product X holds x is FinSequence
+proof
+   let X be non-empty FinSequence, x be set;
+   assume x in product X; then
+   consider g be Function such that
+X1: x = g & dom g = dom X
+  & for i be set st i in dom X holds g.i in X.i by CARD_3:def 5;
+   dom g = Seg len X by X1,FINSEQ_1:def 3;
+   hence x is FinSequence by X1,FINSEQ_1:def 2;
+end;
+
+registration
+  let G be RealNormSpace-Sequence;
+  cluster product G -> constituted-FinSeqs;
+  coherence
+  proof
+    let a be Element of product G;
+    product G = NORMSTR(# product carr G,zeros G,[:addop G:],[:multop G:],
+    productnorm G #) by PRVECT_2:6;
+    hence thesis by LMPROD1;
+  end;
+end;
+
+ZE: now let G be RealLinearSpace-Sequence;
+  len carr G = len G by PRVECT_2:def 4;
+  hence dom carr G = Seg len G by FINSEQ_1:def 3
+             .= dom G by FINSEQ_1:def 3;
+end;
+
+definition
+  let G be RealLinearSpace-Sequence;
+  let z be Element of product carr G;
+  let j be Element of dom G;
+  redefine func z.j -> Element of G.j;
+correctness
+proof
+   reconsider zz=z as FinSequence by LMPROD1;
+   dom carr G = dom G by ZE; then
+   zz.j in carr G.j by CARD_3:9;
+   hence thesis by PRVECT_2:def 4;
+end;
+end;
+
+theorem LM001:
+  the carrier of product G = product carr G
+proof
+  product G = NORMSTR(# product carr G,zeros G,[:addop G:],[:multop G:],
+  productnorm G #) by PRVECT_2:6;
+  hence thesis;
+ end;
+
+theorem LM003:
+for i be Element of dom G, r be set, x be Function
+  st r in the carrier of (G.i) & x in product carr G
+holds x +* (i,r) in the carrier of product G
+proof
+   let i be Element of dom G, r be set, x be Function;
+   assume AS: r in the carrier of (G.i) & x in product carr G; then
+   consider g be Function such that
+P1:   x = g & dom g = dom carr G
+    & for i be set st i in dom carr G holds g.i in (carr G).i
+        by CARD_3:def 5;
+   set h = x +* (i,r);
+   set s = i .--> r;
+   s = {i} --> r by FUNCOP_1:def 9; then
+X2:dom s = {i} by FUNCOP_1:13;
+P2:dom h = dom carr G by P1,FUNCT_7:30;
+   for j be set st j in dom carr G holds h.j in (carr G).j
+   proof
+    let j be set;
+    assume A0: j in dom carr G;
+    per cases;
+    suppose not j in dom s; then
+     j <> i by X2,TARSKI:def 1; then
+     h.j = x.j by FUNCT_7:32;
+     hence h.j in (carr G).j by P1,A0;
+    end;
+    suppose j in dom s; then
+X4:  j = i by X2,TARSKI:def 1; then
+     h.j = r by A0,P1,FUNCT_7:31;
+     hence h.j in (carr G).j by AS,X4,PRVECT_2:def 4;
+    end;
+   end; then
+   x +* (i,r) in product carr G by P2,CARD_3:def 5;
+   hence thesis by LM001;
+end;
+
+definition
+  let G be RealNormSpace-Sequence;
+  attr G is non-trivial means :defTRV:
+  for j be Element of dom G holds G.j is non trivial;
+end;
+
+registration
+  cluster non-trivial for RealNormSpace-Sequence;
+correctness
+proof
+  take G = <* the non trivial RealNormSpace *>;
+  let j be Element of dom G;
+  dom G = Seg 1 by FINSEQ_1:38; then
+  j = 1 by FINSEQ_1:2,TARSKI:def 1;
+  hence thesis by FINSEQ_1:40;
+end;
+end;
+
+registration
+  let G be non-trivial RealNormSpace-Sequence;
+  let i be Element of dom G;
+  cluster G.i -> non trivial for RealNormSpace;
+  correctness by defTRV;
+end;
+
+registration
+  let G be non-trivial RealNormSpace-Sequence;
+  cluster product G -> non trivial;
+correctness
+proof
+X1:the carrier of product G = product carr G by LM001;
+   not
+    for x,y be set st x in product carr G & y in product carr G holds x = y
+   proof
+    assume
+A0:  for x,y be set st x in product carr G & y in product carr G holds x = y;
+    consider z be set such that
+P0:  z in product carr G by XBOOLE_0:def 1;
+    consider g be Function such that
+P1:  z = g & dom g = dom carr G
+   & for i be set st i in dom carr G holds g.i in (carr G).i
+        by P0,CARD_3:def 5;
+    set i = the Element of dom G;
+    now let r,s be set;
+     assume P2: r in the carrier of (G.i) & s in the carrier of (G.i);
+     g +* (i,r) in the carrier of product G &
+     g +* (i,s) in the carrier of product G by LM003,P0,P1,P2; then
+     g +* (i,r) in product carr G &
+     g +* (i,s) in product carr G by LM001; then
+KK:  g +* (i,r) = g +* (i,s) by A0;
+     i in dom G; then
+F1:  i in dom g by P1,ZE; then
+     (g +* (i,r)).i = r by FUNCT_7:31;
+     hence r=s by KK,F1,FUNCT_7:31;
+    end;
+    hence contradiction by ZFMISC_1:def 10;
+   end;
+   hence thesis by X1,ZFMISC_1:def 10;
+end;
+end;
+
+theorem ADD1:
+for G be RealNormSpace-Sequence, p,q be Point of product G,
+    r0,p0,q0 be Element of product carr G st p=p0 & q=q0
+holds p+q = r0
+  iff for i be Element of dom G holds r0.i = p0.i + q0.i
+proof
+   let G be RealNormSpace-Sequence, p,q be Point of product G,
+       r0,p0,q0 be Element of product carr G;
+   assume AS0: p=p0 & q=q0;
+   len carr G = len G by PRVECT_2:def 4; then
+B1:dom carr G = Seg len G by FINSEQ_1:def 3
+             .= dom G by FINSEQ_1:def 3;
+P1: product G = NORMSTR(# product carr G,zeros G,[:addop G:],[:multop G:],
+    productnorm G #) by PRVECT_2:6;
+   hereby assume AS1: p+q = r0;
+    hereby let i be Element of dom G;
+     reconsider i0=i as Element of dom carr G by B1;
+     (addop G).i0 = the addF of (G.i0) by PRVECT_2:def 5;
+     hence r0.i = p0.i + q0.i by AS0,AS1,P1,PRVECT_1:def 8;
+    end;
+   end;
+   assume AS: for i be Element of dom G holds r0.i = p0.i + q0.i;
+   reconsider pq=p+q as Element of product carr G by LM001;
+X1:ex g be Function st
+     pq = g & dom g = dom carr G
+   & for i be set st i in dom carr G holds g.i in (carr G).i
+         by CARD_3:def 5;
+X2:ex g be Function st
+     r0 = g & dom g = dom carr G
+   & for i be set st i in dom carr G holds g.i in (carr G).i
+         by CARD_3:def 5;
+   now let i0 be set;
+    assume AS1: i0 in dom pq; then
+    reconsider i1=i0 as Element of dom G by B1,X1;
+    reconsider i =i0 as Element of dom carr G by AS1,X1;
+    (addop G).i = the addF of (G.i) by PRVECT_2:def 5; then
+    pq.i0 = p0.i1 + q0.i1 by AS0,P1,PRVECT_1:def 8;
+    hence pq.i0 = r0.i0 by AS;
+   end;
+   hence p+q = r0 by X1,X2,FUNCT_1:2;
+end;
+
+theorem MLT1:
+for G be RealNormSpace-Sequence, p be Point of product G,
+    r be Real, r0,p0 be Element of product carr G
+  st p=p0
+holds r*p = r0
+  iff for i be Element of dom G holds r0.i = r*(p0.i)
+proof
+   let G be RealNormSpace-Sequence, p be Point of product G,
+       r be Real, r0,p0 be Element of product carr G;
+   assume AS0: p=p0;
+   hereby assume AS1: r*p = r0;
+    hereby let i be Element of dom G;
+     reconsider i0=i as Element of dom carr G by ZE;
+X1:  (multop G).i0 = the Mult of (G.i0) by PRVECT_2:def 8;
+     product G = NORMSTR(# product carr G,zeros G,[:addop G:],
+       [:multop G:], productnorm G #) by PRVECT_2:6;
+     hence r0.i = r*(p0.i) by AS0,AS1,X1,PRVECT_2:def 2;
+    end;
+   end;
+   assume AS2: for i be Element of dom G holds r0.i = r* (p0.i);
+   reconsider rp = r*p as Element of product carr G by LM001;
+X1:ex g be Function st
+      rp = g & dom g = dom carr G
+    & for i be set st i in dom carr G holds g.i in (carr G).i
+           by CARD_3:def 5;
+X2:ex g be Function st
+      r0 = g & dom g = dom carr G
+    & for i be set st i in dom carr G holds g.i in (carr G).i
+           by CARD_3:def 5;
+   now let i0 be set;
+    assume AS1: i0 in dom rp; then
+    reconsider i1=i0 as Element of dom G by ZE,X1;
+    reconsider i=i0 as Element of dom carr G by AS1,X1;
+P1: product G = NORMSTR(# product carr G,zeros G,[:addop G:],
+        [:multop G:], productnorm G #) by PRVECT_2:6;
+    (multop G).i = the Mult of (G.i) by PRVECT_2:def 8; then
+    rp.i0 = r*(p0.i1) by AS0,P1,PRVECT_2:def 2;
+    hence rp.i0 = r0.i0 by AS2;
+   end;
+   hence r*p = r0 by X1,X2,FUNCT_1:2;
+end;
+
+theorem ZR1:
+for G be RealNormSpace-Sequence, p0 be Element of product carr G
+holds 0.(product G)=p0
+  iff for i be Element of dom G holds p0.i = 0.(G.i)
+proof
+   let G be RealNormSpace-Sequence,
+       p0 be Element of product carr G;
+B1:dom carr G = dom G by ZE;
+P1:product G = NORMSTR(# product carr G,zeros G,[:addop G:]
+               ,[:multop G:], productnorm G #) by PRVECT_2:6;
+   hence 0.(product G) = p0 implies
+    for i be Element of dom G holds p0.i = 0.(G.i) by B1,PRVECT_2:def 7;
+   assume AS1:for i be Element of dom G holds p0.i = 0.(G.i);
+   now let i0 be Element of dom carr G;
+    reconsider i=i0 as Element of dom G by ZE;
+    p0.i0 = 0.(G.i) by AS1;
+    hence p0.i0 = the ZeroF of (G.i0);
+   end;
+   hence 0.(product G)=p0 by P1,PRVECT_2:def 7;
+end;
+
+theorem SUB1:
+for G be RealNormSpace-Sequence, p,q be Point of product G,
+    r0,p0,q0 be Element of product carr G
+  st p=p0 & q=q0
+holds p-q = r0
+  iff for i be Element of dom G holds r0.i = p0.i - q0.i
+proof
+   let G be RealNormSpace-Sequence, p,q be Point of product G,
+       r0,p0,q0 be Element of product carr G;
+   assume AS0: p=p0 & q=q0;
+   reconsider qq0=(-1)*q as Element of product carr G by LM001;
+X0:p-q = p+(-1)*q by RLVECT_1:16;
+   hereby assume AS1: p-q = r0;
+    thus for i be Element of dom G holds r0.i = p0.i - q0.i
+    proof
+     let i be Element of dom G;
+X1:  r0.i = p0.i + qq0.i by ADD1,AS1,AS0,X0;
+     -1 is Real by XREAL_0:def 1; then
+     qq0.i = (-1)*(q0.i) by AS0,MLT1;
+     hence thesis by X1,RLVECT_1:16;
+    end;
+   end;
+   assume AS2: for i be Element of dom G holds r0.i = p0.i - q0.i;
+   now let i be Element of dom G;
+    -1 is Real by XREAL_0:def 1; then
+X2: qq0.i = (-1)*(q0.i) by AS0,MLT1;
+    r0.i = p0.i - q0.i by AS2;
+    hence r0.i = p0.i +  qq0.i by X2,RLVECT_1:16;
+   end;
+   hence p-q = r0 by X0,ADD1,AS0;
+end;
+
+begin :: Mean value theorem for vector-valued functions
+
+definition
+  let S be RealLinearSpace;
+  let p,q be Point of S;
+  func ]. p,q .[ -> Subset of S equals
+    { p+t*(q-p) where t is Real : 0 < t & t < 1};
+correctness
+proof
+   now let x be set;
+    assume x in { p+t*(q-p) where t is Real : 0 < t & t < 1}; then
+    ex t be Real st x=p+t*(q-p) & 0 < t & t < 1;
+    hence x in the carrier of S;
+   end;
+   hence thesis by TARSKI:def 3;
+end;
+end;
+
+notation
+  let S be RealLinearSpace;
+  let p,q be Point of S;
+  synonym [.p,q.] for LSeg(p,q);
+end;
+
+LmX: now let S be RealLinearSpace; let p,q be Point of S; let z1 be Real;
+  thus p+z1*(q-p) = p+(z1*q + (z1*(-p))) by RLVECT_1:def 5
+     .= p+(z1*q+- z1*p) by RLVECT_1:25
+     .= p+-z1*p+z1*q by RLVECT_1:def 3
+     .= 1*p-z1*p + z1*q by RLVECT_1:def 8
+     .= (1-z1)*p + z1*q by RLVECT_1:35;
+  end;
+
+theorem LMDefCLS1:
+for S be RealLinearSpace, p,q be Point of S
+  holds ].p,q.[ c= [. p,q .]
+proof
+   let S be RealLinearSpace, p,q be Point of S;
+   now let z be set;
+    assume z in ].p,q.[; then
+    consider z1 be Real such that
+AA: z=p+z1*(q-p) & 0 < z1 & z1 < 1;
+    z = (1-z1)*p + z1*q by AA,LmX; then
+    z in {(1-r)*p + r*q where r is Real : 0 <= r & r <= 1 } by AA;
+    hence z in [. p,q .] by RLTOPSP1:def 2;
+   end;
+   hence ].p,q.[ c= [. p,q .] by TARSKI:def 3;
+end;
+
+LMFDAF10A:
+ for x be Real st for e be Real st 0 < e holds x <= e holds x <= 0
+proof
+   let x be Real;
+   assume A1: for e be Real st 0 < e holds x <= e;
+   assume A2: not x <= 0; then
+   x <= x/2 by A1; then
+   x - (x/2) <= (x/2) - (x/2) by XREAL_1:9;
+   hence contradiction by A2;
+end;
+
+theorem NDIFF126A:
+  for T be non trivial RealNormSpace, R be PartFunc of REAL,T
+   st R is total holds
+     R is REST-like
+  iff for r be Real st r > 0
+      ex d be Real st d > 0 & for z be Real
+        st z <> 0 & abs z < d holds ( ||. R/.z .||/ abs z ) < r
+proof
+   let T be non trivial RealNormSpace, R be PartFunc of REAL,T;
+   assume A1: R is total;
+A2:now assume A3: R is REST-like;
+    assume not (for r be Real st r > 0 ex d be Real st d > 0 & for z be Real
+    st z <> 0 & abs z < d holds ( ||. R/.z .||/ abs z) < r ); then
+    consider r be Real such that
+A4:  r > 0 and
+A5:  for d be Real st d > 0 holds ex z be Real st z <> 0 & abs z < d
+      & not (  ||. R/.z .||/ abs z ) < r;
+    defpred P[Element of NAT,Element of REAL]
+      means $2 <> 0 & abs($2) < (1/($1+1))
+     & not ( (||. R/.$2 .||/abs($2) ) < r );
+A6: now let n be Element of NAT;
+     1/(n + 1) is Real by XREAL_0:def 1;
+     hence ex z be Element of REAL st P[n,z] by A5;
+    end;
+    consider s be Real_Sequence such that
+A7:   for n being Element of NAT holds P[n,s.n] from FUNCT_2:sch 3(A6);
+A8: now let p be real number;
+     assume A9: 0<p;
+     consider n be Element of NAT such that
+A10:  p"<n by SEQ_4:3;
+     p" + (0 qua Real) < n + 1 by A10,XREAL_1:8; then
+A11: 1/(n+1) < 1/p" by A9,XREAL_1:76;
+     take n;
+     let m be Element of NAT;
+     assume n<=m; then
+     n + 1 <= m + 1 by XREAL_1:6; then
+     1/(m+1) <= 1/(n+1) by XREAL_1:118; then
+     abs(s.m - 0) < 1/(n+1) by A7,XXREAL_0:2;
+     hence abs(s.m - 0) <p by A11,XXREAL_0:2;
+    end; then
+A14:s is convergent by SEQ_2:def 6; then
+A15:lim s = 0 by A8,SEQ_2:def 7;
+    s is non-zero by A7,SEQ_1:5; then
+    reconsider s as convergent_to_0 Real_Sequence by A14,A15,FDIFF_1:def 1;
+
+    (s")(#)(R/*s) is convergent & lim ((s")(#)(R/*s)) = 0.T
+      by A3,NDIFF_3:def 1; then
+    consider n be Element of NAT such that
+A16: for m be Element of NAT st n <=m
+       holds ||. ((s")(#)(R/*s)).m - 0.T .|| < r by A4,NORMSP_1:def 7;
+A17: ||. ((s")(#)(R/*s)).n- 0.T.|| < r by A16;
+A19: ||.(s.n)"*(R/.(s.n)).||
+       = abs((s.n)") * ||. R/.(s.n) .|| by NORMSP_1:def 1
+      .= ||. R/.(s.n) .||/abs(s.n) by COMPLEX1:66;
+    dom R = REAL by A1,PARTFUN1:def 2; then
+A20:rng s c= dom R;
+    ||. ((s")(#)(R/*s)).n- 0.T.||
+       = ||. ((s")(#)(R/*s)).n .|| by RLVECT_1:13
+      .= ||. (s".n)*((R/*s).n) .|| by NDIFF_1:def 2
+      .= ||. (s.n)"*((R/*s).n) .|| by VALUED_1:10
+      .= ||. (s.n)"*(R/.(s.n)) .|| by A20,FUNCT_2:109;
+    hence
+      for r be Real st r > 0 ex d be Real st d > 0 & for z be Real st
+         z <> 0 & abs z < d holds ( ||. R/.z .||/abs z ) < r by A7,A17,A19;
+   end;
+
+   now assume
+A21: for r be Real st r > 0 ex d be Real st d > 0 & for z be Real
+    st z <> 0 & abs(z) < d holds ( ||. R/.z .||/abs z) < r;
+    now let s be convergent_to_0 Real_Sequence;
+A22: s is non-zero by FDIFF_1:def 1;
+A23: s is convergent & lim s = 0 by FDIFF_1:def 1;
+A24: now let r be Real;
+      assume r > 0; then
+      consider d be Real such that
+A25:   d > 0 and
+A26:   for z be Real st z <> 0 & abs z < d holds
+          ( ||. R/.z .||/abs z) < r by A21;
+      consider n be Element of NAT such that
+A27:   for m be Element of NAT st n <=m holds abs(s.m-0) < d
+         by A23,A25,SEQ_2:def 7;
+      take n;
+      thus for m be Element of NAT st n <=m
+        holds ||. ((s")(#)(R/*s)).m- 0.T.|| < r
+      proof
+       dom R = REAL by A1,PARTFUN1:def 2; then
+A28:   rng s c= dom R;
+       let m be Element of NAT;
+       assume n <=m; then
+A29:   abs(s.m-0) < d by A27;
+A30:   s.m <> 0 by A22,SEQ_1:5;
+       ||.(R/.(s.m)).|| / abs(s.m)
+          = abs((s.m)") * ||.(R/.(s.m)).|| by COMPLEX1:66
+         .= ||.(s.m)"*(R/.(s.m)).|| by NORMSP_1:def 1
+         .= ||.(s.m)"*((R/*s).m).|| by A28,FUNCT_2:109
+         .= ||.(s".m)*((R/*s).m).|| by VALUED_1:10
+         .= ||. ((s")(#)(R/*s)).m .|| by NDIFF_1:def 2
+         .= ||. ((s")(#)(R/*s)).m- 0.T.|| by RLVECT_1:13;
+       hence thesis by A26,A29,A30;
+      end;
+     end;
+     hence (s")(#)(R/*s) is convergent by NORMSP_1:def 6;
+     hence lim ((s")(#)(R/*s)) = 0.T by A24,NORMSP_1:def 7;
+    end;
+    hence R is REST-like by A1,NDIFF_3:def 1;
+   end;
+   hence thesis by A2;
+end;
+
+theorem NDIFF126B:
+  for R be Function of REAL,REAL holds R is REST-like iff
+  for r be Real st r > 0 ex d be Real st d > 0 & for z be Real
+     st z <> 0 & abs(z) < d holds (abs(R.z)/ abs(z)) < r
+proof
+  let R be Function of REAL,REAL;
+A2:now assume
+A3: R is REST-like;
+    assume not (for r be Real st r > 0 ex d be Real st d > 0 & for z be Real
+    st z <> 0 & abs z < d holds ( abs(R.z)/ abs z ) < r); then
+    consider r be Real such that
+A4:  r > 0 and
+A5:  for d be Real st d > 0 holds ex z be Real st z <> 0 & abs z < d
+    & not ( abs(R.z)/abs z) < r;
+    defpred P[Element of NAT,Element of REAL]
+     means $2 <> 0 & abs $2 < 1/($1+1) & not (abs(R.$2)/abs $2) < r;
+
+A6: now let n be Element of NAT;
+     1/(n + 1) is Real by XREAL_0:def 1;
+     hence ex z be Element of REAL st P[n,z] by A5;
+    end;
+    consider s be Real_Sequence such that
+A7:  for n being Element of NAT holds P[n,s.n] from FUNCT_2:sch 3(A6);
+A8: now let p be real number;
+     assume
+A9:   0<p;
+     consider n be Element of NAT such that
+A10:  p"<n by SEQ_4:3;
+     p" + (0 qua Real) < n + 1 by A10,XREAL_1:8; then
+A11: 1/(n+1) < 1/p" by A9,XREAL_1:76;
+     take n;
+     let m be Element of NAT;
+     assume n<=m; then
+     n + 1 <= m + 1 by XREAL_1:6; then
+     1/(m+1) <= 1/(n+1) by XREAL_1:118; then
+     abs(s.m - 0) < 1/(n+1) by A7,XXREAL_0:2;
+     hence abs(s.m - 0) < p by A11,XXREAL_0:2;
+    end; then
+A14:s is convergent by SEQ_2:def 6; then
+A15:lim s = 0 by A8,SEQ_2:def 7;
+    s is non-zero by A7,SEQ_1:5; then
+    reconsider s as convergent_to_0 Real_Sequence by A14,A15,FDIFF_1:def 1;
+    (s")(#)(R/*s) is convergent & lim ((s")(#)(R/*s)) = 0
+      by A3,FDIFF_1:def 2; then
+    consider n be Element of NAT such that
+A16: for m be Element of NAT st n <=m holds abs( ((s")(#)(R/*s)).m- 0 ) < r
+      by A4,SEQ_2:def 7;
+A17:abs( ((s")(#)(R/*s)).n - 0 ) < r by A16;
+A19:abs( (s.n)"*(R.(s.n)) ) = abs((s.n)") * abs(R.(s.n)) by COMPLEX1:65
+      .= abs(R.(s.n))/abs(s.n) by COMPLEX1:66;
+    abs( ((s")(#)(R/*s)).n- 0 )
+      = abs( (s".n)*((R/*s).n) ) by SEQ_1:8
+      .= abs( (s.n)"*((R/*s).n) ) by VALUED_1:10
+      .= abs( (s.n)"*(R.(s.n)) ) by FUNCT_2:115;
+    hence
+     for r be Real st r > 0 ex d be Real st d > 0 & for z be Real st
+      z <> 0 & abs z < d holds ( abs(R.z)/abs z ) < r by A7,A17,A19;
+   end;
+   now assume
+A21: for r be Real st r > 0 ex d be Real st d > 0 & for z be Real
+    st z <> 0 & abs z < d holds ( abs(R.z)/abs z ) < r;
+    now let s be convergent_to_0 Real_Sequence;
+A22: s is non-zero by FDIFF_1:def 1;
+A23: s is convergent & lim s = 0 by FDIFF_1:def 1;
+A24: now let r be real number;
+      assume D1: r > 0;
+      r is Real by XREAL_0:def 1; then
+      consider d be Real such that
+A25:   d > 0 and
+A26:   for z be Real st z <> 0 & abs z < d holds abs(R.z)/abs z < r by D1,A21;
+      consider n be Element of NAT such that
+A27:   for m be Element of NAT st n <= m holds abs(s.m-0) < d
+         by A23,A25,SEQ_2:def 7;
+      take n;
+      hereby let m be Element of NAT;
+       assume n <=m; then
+A29:   abs(s.m-0) < d by A27;
+A30:   s.m <> 0 by A22,SEQ_1:5;
+       abs(R.(s.m)) / abs(s.m)
+         = abs((s.m)") * abs(R.(s.m)) by COMPLEX1:66
+        .= abs((s.m)" * R.(s.m)) by COMPLEX1:65
+        .= abs((s.m)" * (R/*s).m) by FUNCT_2:115
+        .= abs(s".m * (R/*s).m) by VALUED_1:10
+        .= abs((s"(#)(R/*s)).m - 0) by SEQ_1:8;
+       hence abs( ((s")(#)(R/*s)).m- 0) < r by A26,A29,A30;
+      end;
+     end;
+     hence (s")(#)(R/*s) is convergent by SEQ_2:def 6;
+     hence lim((s")(#)(R/*s)) = 0 by A24,SEQ_2:def 7;
+    end;
+    hence R is REST-like by FDIFF_1:def 2;
+   end;
+   hence thesis by A2;
+end;
+
+LMFDAF10:
+for T be non trivial RealNormSpace,
+f be PartFunc of REAL,T,
+g be PartFunc of REAL,REAL
+  st dom f = [.0,1.] & dom g = [.0,1.]
+     & f| [.0,1.] is continuous
+     & g| [.0,1.] is continuous
+     & f is_differentiable_on ].0,1.[
+     & g is_differentiable_on ].0,1.[
+     & (for x be real number st x in ].0,1.[ holds
+        ||. diff(f,x) .|| <= diff(g,x))
+holds
+  ||. f/.1 -f/.0 .|| <= g/.1 - g/.0
+proof
+   let T be non trivial RealNormSpace,
+       f be PartFunc of REAL,T,
+       g be PartFunc of REAL,REAL;
+   assume A1: dom f = [.0,1.] & dom g = [.0,1.]
+     & f| [.0,1.] is continuous
+     & g| [.0,1.] is continuous
+     & f is_differentiable_on ].0,1.[
+     & g is_differentiable_on ].0,1.[
+     & (for x be real number st x in ].0,1.[ holds
+        ||. diff(f,x) .|| <= diff(g,x));
+   now let e be Real;
+    assume P1: 0 < e;
+    set e1=e/2;
+    set B = {x where x is Real : x in [.0,1.]
+               & ||. f/.x -f/.0 .|| - (g.x - g.0) - e1*x - e1 <= 0};
+    now let z be set;
+     assume z in B; then
+     ex x be Real st z=x & x in [.0,1.]
+          & ||. f/.x -f/.0 .|| - (g.x - g.0) - e1*x - e1 <= 0;
+     hence z in REAL;
+    end; then
+    reconsider B as Subset of REAL by TARSKI:def 3;
+    now let r be real number;
+     assume r in B; then
+     ex x be Real st r = x & x in [.0,1.]
+       & ||. f/.x -f/.0 .|| - (g.x - g.0) - e1*x - e1 <= 0; then
+P10: ex t be Real st r = t & 0<=t & t<=1; then
+     abs r = r by ABSVALUE:def 1;
+     hence abs r < 2 by P10,XXREAL_0:2;
+    end; then
+Q1: B is bounded by SEQ_4:4;
+
+    set s = upper_bound B;
+
+Q2: ex d be real number st 0 < d & d in B
+    proof
+     0 in [.0,1.]; then
+     consider d1 be real number such that
+Q21:  0 < d1 & for x1 be real number st x1 in [.0,1.] & abs(x1-0) < d1
+             holds ||. f/.x1 - f/.0 .|| < e1 by P1,A1,NFCONT_3:17;
+     set d2=d1/2;
+Q23: d2 < d1 by Q21,XREAL_1:216;
+     take d = min(d2,1);
+     thus Q26: 0 < d by Q21,XXREAL_0:21;
+Q24: d <= 1 by XXREAL_0:17; then
+Q27: d in [.0,1.] by Q26;
+V24: d <= d2 by XXREAL_0:17;
+     abs(d-0) = d by Q26,ABSVALUE:def 1; then
+     abs(d-0) < d1 by V24,Q23,XXREAL_0:2; then
+Q28: ||. f/.d - f/.0 .|| < e1 by Q21,Q27;
+
+Q35: [.0,d.] c= dom g by A1,Q24,XXREAL_1:34;
+
+Q30: g| [.0,d.] is continuous by A1,Q24,FCONT_1:16,XXREAL_1:34;
+
+Q31: ].0,d.[ c=].0,1.[ by Q24,XXREAL_1:46; then
+     consider x0 be Real such that
+Q33:  x0 in ].0,d.[
+     & diff(g,x0) =(g.d-g.0)/(d-0) by A1,Q26,Q35,Q30,FDIFF_1:26,ROLLE:3;
+
+     ||. diff(f,x0) .|| <= diff(g,x0) by A1,Q33,Q31; then
+     0 <= g.d-g.0 by Q26,Q33; then
+     (0 qua Real) + ||. f/.d - f/.0 .|| <= (g.d - g.0) + e1
+       by Q28,XREAL_1:7; then
+     (0 qua Real) + ||. f/.d - f/.0 .|| <= (g.d - g.0) + e1+ e1*d
+       by Q26,P1,XREAL_1:7; then
+     ||. f/.d - f/.0 .|| -( (g.d - g.0) + e1+ e1*d ) <= 0 by XREAL_1:47; then
+     ||. f/.d -f/.0 .|| - (g.d - g.0) - e1*d - e1 <= 0;
+     hence d in B by Q27;
+    end; then
+Q3: 0 < s by Q1,SEQ_4:def 1;
+    now let r be real number;
+     assume r in B; then
+     ex x be Real st r = x & x in [.0,1.]
+       & ||. f/.x -f/.0 .|| - (g.x - g.0 ) - e1*x - e1 <= 0; then
+     ex t be Real st r=t & 0<=t & t<=1;
+     hence r<=1;
+    end; then
+Q4: s <= 1 by Q2,SEQ_4:45;
+
+    defpred P[Element of NAT,Element of REAL]
+      means $2 in B & abs(s-$2) <= 1/($1+1);
+
+WQ0:now let x be Element of NAT;
+     reconsider t = 1/(1+x) as real number;
+     consider r be real number such that
+WQ3:  r in B & s-t < r by Q1,Q2,SEQ_4:def 1;
+     reconsider r as Element of REAL by XREAL_0:def 1;
+     take r;
+     s-t + t < r + t by WQ3,XREAL_1:8; then
+WQ4: s -r < t+r -r by XREAL_1:14;
+     r <= s by Q1,WQ3,SEQ_4:def 1; then
+     0 <= s - r by XREAL_1:48;
+     hence P[x,r] by WQ3,WQ4,SEQ_2:1;
+    end;
+    consider sq be Function of NAT,REAL such that
+WQ1: for x being Element of NAT holds P[x, sq.x] from FUNCT_2:sch 10(WQ0);
+    reconsider sq as Real_Sequence;
+XX: now let p1 be real number;
+     assume AS: 0 < p1;
+     set p = p1/2;
+     consider n be Element of NAT such that
+U10:  1/p < n by SEQ_4:3;
+
+     1/p + (0 qua Real) < n+1 by U10,XREAL_1:8; then
+U1:  1/(n+1) <= 1/(1/p) by AS,XREAL_1:118;
+     take n;
+     thus for m be Element of NAT st n<=m holds abs (sq.m-s) < p1
+     proof
+      let m be Element of NAT;
+      assume n<=m; then
+      0 < n+1 & n+1 <= m+1 by XREAL_1:6; then
+      1/(m+1) <= 1/(n+1) by XREAL_1:118; then
+U3:   1/(m+1) <= p by U1,XXREAL_0:2;
+
+      sq.m in B & abs(s-sq.m) <= 1/(m+1) by WQ1; then
+      abs(sq.m-s) <= 1/(1+m) by COMPLEX1:60; then
+U4:   abs(sq.m-s) <= p by U3,XXREAL_0:2;
+      p < p1 by AS,XREAL_1:216;
+      hence thesis by U4,XXREAL_0:2;
+     end;
+    end; then
+WQ2:sq is convergent by SEQ_2:def 6; then
+WQ2A:lim sq = s by XX,SEQ_2:def 7;
+    deffunc F(Real) = ||. f/.$1 -f/.0 .|| - (g.$1 - g.0) - e1*$1 - e1;
+WQ3:for x being Element of REAL holds F(x) in REAL;
+    consider Lg0 be Function of REAL,REAL such that
+WQ4: for x being Element of REAL holds Lg0.x = F(x) from FUNCT_2:sch 8(WQ3);
+
+    set Lg = Lg0| [.0,1.];
+W5: dom Lg0 = REAL by FUNCT_2:def 1; then
+WQ50A:
+    dom Lg = [.0,1.] by RELAT_1:62;
+
+    now let y be set;
+     assume y in rng sq; then
+     ex x be set st x in NAT & sq.x = y by FUNCT_2:11; then
+     y in B by WQ1; then
+     ex x be Real st y=x & x in [.0,1.]
+       & ||. f/.x -f/.0 .|| - (g.x - g.0) - e1*x - e1 <= 0;
+     hence y in [.0,1.];
+    end; then
+WQ50:
+    rng sq c= dom Lg by WQ50A,TARSKI:def 3;
+
+AQ2:s in [.0,1.] by Q4,Q3;
+
+    now let r be real number;
+     set r3=r/3;
+     assume AQ10: 0<r; then
+     consider t1 be real number such that
+AQ3:  0 < t1 & for x1 be real number st x1 in [.0,1.] & abs(x1-s) < t1
+             holds ||. f/.x1 - f/.s .|| < r3 by A1,AQ2,NFCONT_3:17;
+     consider t2 be real number such that
+AQ4:  0 < t2 & for x1 be real number st x1 in [.0,1.] & abs(x1-s) < t2
+             holds abs(g.x1 - g.s) < r3
+         by AQ10,AQ2,A1,FCONT_1:14;
+     set t30 = r3/e1;
+     set t3 = t30/2;
+     0 < t3 & t3 < t30 by P1,AQ10,XREAL_1:216; then
+     e1*t3 < (r3/e1)*e1 by P1,XREAL_1:97; then
+BQ5: e1*t3 < r3 by P1,XCMPLX_1:87;
+     take t = min(min(t1,t2),t3);
+W2:  min(t1,t2) <= t1 & min(t1,t2) <= t2 & 0 < min(t1,t2)
+       by AQ3,AQ4,XXREAL_0:17,21;
+     hence 0 < t by P1,AQ10,XXREAL_0:21;
+
+W4a: t <= t3 by XXREAL_0:17;
+W4:  t <= min(t1,t2) by XXREAL_0:17; then
+X4:  t <= t1 by W2,XXREAL_0:2;
+X4a: t <= t2 by W2,W4,XXREAL_0:2;
+
+     thus for x1 be real number st x1 in dom Lg & abs(x1-s) < t
+             holds abs(Lg.x1 - Lg.s) < r
+     proof
+      let x1 be real number;
+V1:   x1 is Element of REAL by XREAL_0:def 1;
+
+      assume that
+AQ10A: x1 in dom Lg and
+AQ10B: abs(x1-s) < t;
+      x1 in [.0,1.] by W5,AQ10A,RELAT_1:62; then
+AQ11: Lg.x1 = Lg0.x1 by FUNCT_1:49
+           .= ||. f/.x1 -f/.0 .|| - (g.x1 - g.0) - e1*x1 - e1 by WQ4,V1;
+      Lg.s = Lg0.s by AQ2,FUNCT_1:49; then
+      Lg.s = ||. f/.s -f/.0 .|| - (g.s - g.0) - e1*s - e1 by WQ4; then
+      (Lg.x1 - Lg.s)
+        = ||. f/.x1 -f/.0 .|| -||. f/.s -f/.0 .|| - (g.x1 - g.s) -e1*(x1-s)
+         by AQ11; then
+AQ13: abs(Lg.x1 - Lg.s)
+       <= abs(||. f/.x1 -f/.0 .|| - ||. f/.s -f/.0 .|| - (g.x1 - g.s))
+          +abs(e1*(x1-s)) by COMPLEX1:57;
+      abs(||. f/.x1 -f/.0 .|| - ||. f/.s -f/.0 .|| - (g.x1 - g.s))
+       <= abs(||. f/.x1 -f/.0 .|| - ||. f/.s -f/.0 .||) + abs(g.x1 - g.s)
+         by COMPLEX1:57; then
+      abs(||. f/.x1 -f/.0 .|| -||. f/.s -f/.0 .|| - (g.x1 - g.s))
+        + abs(e1*(x1-s))
+       <= abs(||. f/.x1 -f/.0 .|| -||. f/.s -f/.0 .||) +abs(g.x1 - g.s)
+        + abs(e1*(x1-s)) by XREAL_1:6; then
+AQ14: abs(Lg.x1 - Lg.s)
+       <= abs(||. f/.x1 -f/.0 .|| -||. f/.s -f/.0 .||) +abs(g.x1 - g.s)
+        + abs(e1*(x1-s)) by AQ13,XXREAL_0:2;
+AQ15: abs(||. f/.x1 -f/.0 .|| -||. f/.s -f/.0 .||)
+        <= ||. (f/.x1 -f/.0)- (f/.s -f/.0) .|| by NORMSP_1:9;
+      (f/.x1 -f/.0)- (f/.s -f/.0)
+        = f/.x1 -(f/.0 -(-(f/.s -f/.0))) by RLVECT_1:29
+       .= f/.x1 -(f/.0 + (f/.s -f/.0)) by RLVECT_1:17
+       .= f/.x1 -(f/.s- (f/.0 -f/.0)) by RLVECT_1:29
+       .= f/.x1 -(f/.s- 0.T) by RLVECT_1:5
+       .= f/.x1 -f/.s by RLVECT_1:13; then
+      abs(||. f/.x1 -f/.0 .|| -||. f/.s -f/.0 .||) +abs(g.x1 - g.s)
+       <= ||. f/.x1 -f/.s .|| + abs(g.x1 - g.s) by AQ15,XREAL_1:6; then
+      abs(||. f/.x1 -f/.0 .|| -||. f/.s -f/.0 .||) +abs(g.x1 - g.s)
+         + abs(e1*(x1-s))
+       <= ||. f/.x1 -f/.s .|| + abs(g.x1 - g.s) + abs(e1*(x1-s))
+          by XREAL_1:6; then
+AQ17: abs(Lg.x1 - Lg.s)
+       <= ||. f/.x1 -f/.s .|| + abs(g.x1 - g.s) + abs(e1*(x1-s))
+          by AQ14,XXREAL_0:2;
+      abs(x1-s) < t2 by AQ10B,X4a,XXREAL_0:2; then
+      abs(g.x1 -g.s) < r3 by AQ10A,WQ50A,AQ4; then
+AQ20: ||. f/.x1 -f/.s .|| + abs(g.x1 - g.s)
+        < ||. f/.x1 -f/.s .|| + r3 by XREAL_1:8;
+
+      abs(x1-s) < t3 by AQ10B,W4a,XXREAL_0:2; then
+      abs(x1-s)*e1 <= t3*e1 by P1,XREAL_1:64; then
+      abs(x1-s)*abs(e1) <= t3*e1 by P1,ABSVALUE:def 1; then
+      abs(e1*(x1-s)) <= t3*e1 by COMPLEX1:65; then
+AQ19: abs(e1*(x1-s)) < r3 by BQ5,XXREAL_0:2;
+      abs(x1-s) < t1 by AQ10B,X4,XXREAL_0:2; then
+      ||. f/.x1 -f/.s .|| < r3 by AQ10A,WQ50A,AQ3; then
+      ||. f/.x1 -f/.s .|| + r3 < r3 + r3 by XREAL_1:8; then
+      ||. f/.x1 -f/.s .|| + abs(g.x1 - g.s) < r3 + r3 by AQ20,XXREAL_0:2; then
+      ||. f/.x1 -f/.s .|| + abs(g.x1 - g.s)+ abs(e1*(x1-s))
+         < r3 + r3 + r3 by AQ19,XREAL_1:8;
+      hence abs(Lg.x1 - Lg.s) < r by AQ17,XXREAL_0:2;
+     end;
+    end; then
+    Lg is_continuous_in s by FCONT_1:3; then
+WQ6:Lg/*sq is convergent & Lg.s = lim (Lg/*sq) by WQ2,WQ2A,WQ50,FCONT_1:def 1;
+
+WQ8:for n be Element of NAT holds 0 <= (-(Lg/*sq)).n
+    proof
+     let n be Element of NAT;
+     (-(Lg/*sq)).n = - (Lg/*sq).n by SEQ_1:10; then
+G1:  (-(Lg/*sq)).n = - Lg.(sq.n) by WQ50,FUNCT_2:108;
+
+     P[n, sq.n] by WQ1; then
+XX1: ex x be Real st sq.n=x & x in [.0,1.]
+      & ||. f/.x -f/.0 .|| - (g.x - g.0) - e1*x - e1 <= 0; then
+     Lg0.(sq.n) <=0 by WQ4; then
+     Lg.(sq.n) <=0 by XX1,FUNCT_1:49;
+     hence 0 <= (-(Lg/*sq)).n by G1;
+    end;
+
+    -(Lg/*sq) is convergent by WQ6,SEQ_2:9; then
+    0 <= lim -(Lg/*sq) by WQ8,SEQ_2:17; then
+    0 <= - lim (Lg/*sq) by WQ6,SEQ_2:10; then
+    Lg.s <= 0 by WQ6; then
+    Lg0.s <= 0 by AQ2,FUNCT_1:49; then
+WQ7: ||. f/.s -f/.0 .|| - (g.s - g.0) - e1*s -  e1 <= 0 by WQ4;
+W5: s = 1
+    proof
+     assume s <> 1; then
+     s < 1 by Q4,XXREAL_0:1; then
+Q6:  s in ].0,1.[ by Q3; then
+     f is_differentiable_in s by A1,NDIFF_3:10; then
+     consider N1 being Neighbourhood of s such that
+Q9:   N1 c= dom f & ex L1 be LINEAR of T,R1 be REST of T
+        st diff(f,s)=L1.1
+       & for x be Real st x in N1 holds f/.x-f/.s = L1.(x-s) + R1/.(x-s)
+        by NDIFF_3:def 4;
+     consider L1 be LINEAR of T,R1 be REST of T such that
+Q10:  diff(f,s)=L1.1
+      & for x be Real st x in N1 holds
+          f/.x-f/.s = L1.(x-s) + R1/.(x-s) by Q9;
+
+     g is_differentiable_in s by A1,Q6,FDIFF_1:9; then
+     consider N2 being Neighbourhood of s such that
+Q11:  N2 c= dom g & ex L2 be LINEAR,R2 be REST
+       st diff(g,s)=L2.1
+        & for x be Real st x in N2 holds
+            g.x-g.s = L2.(x-s) + R2.(x-s) by FDIFF_1:def 5;
+     consider L2 be LINEAR,R2 be REST such that
+Q12:  diff(g,s)=L2.1
+      & for x be Real st x in N2 holds
+          g.x-g.s = L2.(x-s) + R2.(x-s) by Q11;
+     consider NN3 being Neighbourhood of s such that
+Q141: NN3 c= N1 & NN3 c= N2 by RCOMP_1:17;
+     consider g0 be real number such that
+Q140: 0 < g0 & ].s-g0,s+g0.[ c= ].0,1.[ by Q6,RCOMP_1:19;
+     reconsider NN4 = ].s-g0,s+g0.[ as Neighbourhood of s
+       by Q140,RCOMP_1:def 6;
+     consider N3 being Neighbourhood of s such that
+Q143: N3 c= NN3 & N3 c= NN4 by RCOMP_1:17;
+
+Q14: N3 c= N1 & N3 c= N2 & N3 c= ].0,1.[ by Q143,Q141,Q140,XBOOLE_1:1;
+
+     consider d1 be real number such that
+Q15:  0<d1 & N3 = ]. s-d1,s+d1.[ by RCOMP_1:def 6;
+
+     set e2=e1/2;
+     R1 is total & R1 is REST-like by NDIFF_3:def 1; then
+     consider d2 be Real such that
+Q17:  0<d2 & for t be Real st t <> 0 & abs t < d2
+        holds ||. (R1/.t) .|| / abs t < e2 by P1,NDIFF126A;
+
+     R2 is total & R2 is REST-like by FDIFF_1:def 2; then
+     consider d3 be Real such that
+Q18:  0<d3 & for t be Real st t <> 0 & abs t < d3
+        holds abs(R2.t)/abs t < e2 by P1,NDIFF126B;
+
+W2:  min(d1,d2) <= d1 & min(d1,d2) <= d2 & 0 < min(d1,d2)
+       by Q15,Q17,XXREAL_0:17,21;
+
+     set d40= min(min(d1,d2),d3);
+W3:  d40 <= min(d1,d2) & d40 <= d3 & 0 < d40 by Q18,W2,XXREAL_0:17,21;
+
+     set d4=d40/2;
+W5:  d40 <= d1 & d40 <= d2 by W2,W3,XXREAL_0:2;
+
+     d4 < d40 by W3,XREAL_1:216; then
+R19: 0 < d4 & d4 < d1 & d4 < d2 & d4 < d3 by W3,W5,XXREAL_0:2; then
+     s-d1< s+d4 & s+d4< s+d1 by XREAL_1:8; then
+Q20: s+d4 in N3 by Q15; then
+Q21: f/.(s+d4)-f/.s = L1.((s+d4)-s) + R1/.((s+d4)-s) by Q10,Q14;
+Q22: g.(s+d4)-g.s = L2.((s+d4)-s) + R2.((s+d4)-s) by Q14,Q20,Q12;
+
+     consider df1 be Point of T such that
+Y1:   for p be Real holds L1.p = p*df1 by NDIFF_3:def 2;
+
+     L1.1 = 1*df1 by Y1; then
+     L1.1 = df1 by RLVECT_1:def 8; then
+Q23: L1.d4 = d4*diff(f,s) by Q10,Y1;
+     consider df2 be Real such that
+Y3:   for p be Real holds L2.p = df2*p by FDIFF_1:def 3;
+
+     L2.1 = df2*1 by Y3; then
+Q24: L2.d4 = d4*diff(g,s) by Q12,Y3;
+
+Q25: ||. f/.(s+d4)-f/.s .|| <= ||. L1.d4 .|| + ||. R1/. d4 .||
+        by Q21,NORMSP_1:def 1;
+
+Q26: ||. L1.d4 .|| = (abs d4)*||. diff(f,s) .|| by Q23,NORMSP_1:def 1
+         .= ||. diff(f,s) .||*d4 by W3,ABSVALUE:def 1;
+
+X1:  0 < abs d4 by W3,ABSVALUE:def 1;
+
+     abs d4 < d2 by R19,ABSVALUE:def 1; then
+     ||. R1/.d4 .|| / (abs d4) < e2 by Q17,W3; then
+     ||. R1/.d4 .|| <= e2 * (abs d4) by X1,XREAL_1:81; then
+     ||. R1/.d4 .|| <= e2 * d4 by W3,ABSVALUE:def 1; then
+     ||. L1.d4 .|| + ||. R1/.d4 .||
+        <= ||. diff(f,s) .|| * d4 + e2 * d4 by Q26,XREAL_1:6; then
+Q27:  ||. f/.(s+d4)-f/.s .||
+        <= ||. diff(f,s) .|| * d4 + e2 * d4 by Q25,XXREAL_0:2;
+
+     ||. diff(f,s) .||*d4 <=diff(g,s)*d4 by Q6,A1,R19,XREAL_1:64; then
+     ||. diff(f,s) .||*d4 + e2*d4 <= diff(g,s)*d4 + e2*d4 by XREAL_1:6; then
+Q28: ||. f/.(s+d4)-f/.s .|| <= diff(g,s)*d4 + e2*d4 by Q27,XXREAL_0:2;
+
+     abs d4 < d3 by R19,ABSVALUE:def 1; then
+     abs(R2.d4)/ (abs d4) < e2 by Q18,W3; then
+     abs(R2.d4) <= e2* (abs d4) by X1,XREAL_1:81; then
+     abs(R2.d4) <= e2* d4 by W3,ABSVALUE:def 1; then
+       -(e2*d4) <= R2.d4 by ABSVALUE:5; then
+     d4*diff(g,s) -(e2*d4) <= g.(s+d4)-g.s by Q22,Q24,XREAL_1:6; then
+     d4*diff(g,s) <= g.(s+d4)-g.s + e2*d4 by XREAL_1:20; then
+     diff(g,s)*d4 + e2*d4
+      <= (g.(s+d4)-g.s + e2*d4) + e2*d4 by XREAL_1:6; then
+     ||. f/.(s+d4)-f/.s .|| <= g.(s+d4)-g.s + e1*d4 by Q28,XXREAL_0:2; then
+     ||. f/.(s+d4)-f/.s .|| - (g.(s+d4)-g.s + e1*d4) <= 0 by XREAL_1:47; then
+Q45: ||. f/.(s+d4)-f/.s .|| - g.(s+d4)+g.s - e1*d4
+       + (||. f/.s -f/.0 .|| - (g.s - g.0 ) - e1*s -  e1)
+       <= (0 qua Real)+ (0 qua Real) by WQ7;
+
+     ||. f/.(s+d4)-f/.0 .||
+       <= ||. f/.(s+d4)-f/.s .|| + ||. f/.s -f/.0 .|| by NORMSP_1:10; then
+     ||. f/.(s+d4)-f/.0 .|| - (g.(s+d4) -g.0 + e1*(d4+s) + e1)
+       <= ||. f/.(s+d4)-f/.s .|| + ||. f/.s -f/.0 .||
+         - (g.(s+d4) -g.0 + e1*(d4+s) + e1) by XREAL_1:9; then
+Q47: ||. f/.(s+d4)-f/.0 .|| - (g.(s+d4) -g.0) - e1*(s+d4) -e1 <= 0 by Q45;
+
+     abs((0 qua real number)+1-2*(s+d4))< 1 -(0 qua real number)
+        by Q20,Q14,RCOMP_1:3; then
+     s + d4 in [.0,1.] by RCOMP_1:2; then
+Q48: s+d4 in B by Q47;
+
+     s +(0 qua Real) < s + d4 by W3,XREAL_1:8;
+     hence contradiction by Q48,Q1,SEQ_4:def 1;
+    end;
+    0 in dom g & 1 in dom g by A1; then
+    g/.1 = g.1 & g/.0 = g.0 by PARTFUN1:def 6; then
+    ||. f/.1 -f/.0 .|| - (g/.1 - g/.0 ) - e + e <= (0 qua Real) + e
+     by W5,WQ7,XREAL_1:6;
+    hence ||. f/.1 -f/.0 .|| - (g/.1 - g/.0) <= e;
+   end; then
+   ||. f/.1 -f/.0 .|| - (g/.1 - g/.0) <= 0 by LMFDAF10A; then
+   ||. f/.1 -f/.0 .|| - (g/.1 - g/.0) + (g/.1 - g/.0)
+      <= (0 qua Real) + (g/.1 - g/.0) by XREAL_1:6;
+   hence thesis;
+end;
+
+theorem FDAF10:
+for S,T be non trivial RealNormSpace,
+    f be PartFunc of S,T, p,q be Point of S, M be Real
+  st [.p,q.] c= dom f
+   & (for x be Point of S st x in [.p,q.] holds f is_continuous_in x)
+   & (for x be Point of S st x in ].p,q.[ holds f is_differentiable_in x)
+   & (for x be Point of S st x in ].p,q.[ holds ||. diff(f,x) .|| <= M)
+holds ||. f/.q - f/.p .|| <= M*||. q-p .||
+proof
+   let S,T be non trivial RealNormSpace,
+       f be PartFunc of S,T, p,q be Point of S, M be Real;
+   assume AS1: [.p,q.] c= dom f
+    & (for x be Point of S st x in [.p,q.] holds f is_continuous_in x)
+    & (for x be Point of S st x in ].p,q.[ holds f is_differentiable_in x)
+    & (for x be Point of S st x in ].p,q.[ holds ||. diff(f,x) .|| <= M);
+
+   deffunc PP(Element of REAL) = $1*(q-p)+p;
+
+   consider pt0 be Function of REAL,the carrier of S such that
+D0: for t being Element of REAL holds pt0.t = PP(t) from FUNCT_2:sch 4;
+
+   set pt=pt0 | ([.0,1.]);
+D1:dom pt0 = REAL by FUNCT_2:def 1; then
+D3:dom pt = [.0,1.] by RELAT_1:62;
+
+   now let t be real number;
+    assume t in [.0,1.];
+
+D11:t is Element of REAL by XREAL_0:def 1; then
+    pt0/.t = pt0.t by D1,PARTFUN1:def 6;
+    hence pt0/.t = t*(q-p)+p by D0,D11;
+   end; then
+D2:pt is continuous by NFCONT_3:33;
+
+D4: ].0,1.[ c= [.0,1.] by XXREAL_1:25;
+
+D5:now let t be Real;
+    assume t in ].0,1.[;
+    hence pt/.t = pt0/.t by D3,D4,PARTFUN2:15
+               .= t*(q-p)+p by D0;
+   end; then
+D6:pt is_differentiable_on ].0,1.[
+    & for t be Real st t in ].0,1.[ holds (pt`|].0,1.[ ).t = (q-p)
+         by D3,D4,NDIFF_3:21;
+
+   reconsider phi = f*pt as PartFunc of REAL,T;
+
+D7:rng pt c= [.p,q.]
+   proof
+    let y be set;
+    assume y in rng pt; then
+    consider x be set such that
+X1:  x in dom pt & y = pt.x by FUNCT_1:def 3;
+X2: y = pt0.x by X1,FUNCT_1:47;
+    reconsider x as Element of REAL by X1;
+
+    consider r be Real such that
+X3: x=r & 0<=r & r<=1 by X1,D3;
+
+    y = p+ x*(q-p) by D0,X2 .= (1-x)*p + x*q by LmX; then
+    y in {(1-r1)*p + r1*q where r1 is Real : 0 <= r1 & r1 <= 1 } by X3;
+    hence y in [. p,q .] by RLTOPSP1:def 2;
+   end; then
+   rng pt c= dom f by AS1,XBOOLE_1:1; then
+P1A:
+   dom phi = [.0,1.] by D3,RELAT_1:27;
+
+P1B:
+   for t be real number st t in [.0,1.] holds phi/.t = f/.(p+t*(q-p))
+   proof
+    let t be real number;
+    assume X1: t in [.0,1.]; then
+X2: phi/.t =phi.t by P1A,PARTFUN1:def 6
+          .= f.(pt.t) by X1,P1A,FUNCT_1:12;
+    pt.t in rng pt by X1,D3,FUNCT_1:def 3; then
+X3: pt.t in [.p,q.] by D7;
+
+    pt.t = pt0.t by X1,D3,FUNCT_1:47
+        .= p+t*(q-p) by D0,X1;
+    hence thesis by X2,X3,AS1,PARTFUN1:def 6;
+   end;
+
+   now let x0 be real number;
+    assume X1: x0 in dom phi; then
+X3: pt is_continuous_in x0 by D3,D2,P1A,NFCONT_3:def 2;
+    pt.x0 in rng pt by D3,X1,P1A,FUNCT_1:def 3; then
+    pt.x0 in [.p,q.] by D7; then
+    pt/.x0 in [.p,q.] by X1,P1A,D3,PARTFUN1:def 6;
+    hence phi is_continuous_in x0 by AS1,X1,X3,NFCONT_3:15;
+   end; then
+   phi is continuous by NFCONT_3:def 2; then
+P2:phi| [.0,1.] is continuous;
+
+P40:
+   now let x be Real;
+    assume X1: x in ].0,1.[; then
+X2: pt is_differentiable_in x by D6,NDIFF_3:10;
+    (pt`|].0,1.[ ).x = (q-p) by X1,D5,D3,D4,NDIFF_3:21; then
+X3: diff(pt,x) = (q-p) by D6,X1,NDIFF_3:def 6;
+X5: pt.x = pt/.x by X1,D4,D3,PARTFUN1:def 6;
+
+Y3: ex r be Real st x=r & 0<r & r<1 by X1;
+Y4: pt.x= pt0.x by X1,D4,D3,FUNCT_1:47;
+
+Y5: pt0.x = p+ x*(q-p) by D0; then
+    pt.x in ].p,q.[ by Y3,Y4; then
+X6: f is_differentiable_in pt/.x by X5,AS1;
+    hence phi is_differentiable_in x by X2,NDIFF213;
+    thus diff(phi,x) = diff(f,p+ x*(q-p)).(q-p)
+      by X3,X5,Y4,Y5,X6,X2,NDIFF213;
+   end; then
+   ].0,1.[ c= dom phi & for x be Real st x in ].0,1.[ holds
+   phi is_differentiable_in x by P1A,XXREAL_1:25; then
+P3:phi is_differentiable_on ].0,1.[ by NDIFF_3:10;
+
+   deffunc GG(Element of REAL) = M*||. q-p .||*$1;
+
+   consider g0 be Function of REAL,REAL such that
+Q0: for t being Element of REAL holds g0.t = GG(t) from FUNCT_2:sch 4;
+
+   set g=g0 | ([.0,1.]);
+   for t be real number st t in [.0,1.] holds
+     g0.t = (M*||. q-p .||)*t + (0 qua real number) by Q0; then
+Q9:g is continuous by FCONT_1:41;
+
+   dom g0 = REAL by FUNCT_2:def 1; then
+Q3:dom g = [.0,1.] by RELAT_1:62; then
+Q2:g| [.0,1.] is continuous by Q9,RELAT_1:68;
+
+Q5:now let t be Real;
+    assume t in ].0,1.[;
+    hence g.t =g0.t by Q3,D4,FUNCT_1:47
+             .= M*||. q-p .||*t + (0 qua Real) by Q0;
+   end; then
+Q6:g is_differentiable_on ].0,1.[
+    & for t be Real st t in ].0,1.[ holds (g`|].0,1.[ ).t = M*||. q-p .||
+       by Q3,D4,FDIFF_1:23;
+   for t be real number st t in ].0,1.[ holds ||. diff(phi,t) .|| <= diff(g,t)
+   proof
+    let t be real number;
+    assume X1: t in ].0,1.[; then
+X2: ||.diff(phi,t).|| = ||. diff(f,p+ t*(q-p)).(q-p) .|| by P40;
+    reconsider L= diff(f,p+ t*(q-p)) as bounded LinearOperator of S,T
+        by LOPBAN_1:def 9;
+X3: ||.L.(q-p).|| <= ||.diff(f,p+ t*(q-p)).|| * ||.(q-p).|| by LOPBAN_1:32;
+    ex r be Real st t=r & 0<r & r<1 by X1; then
+    p+ t*(q-p) in ].p,q.[; then
+Y3: ||. diff(f,p+ t*(q-p)).|| * ||.q-p.|| <= M * ||.q-p.|| by AS1,XREAL_1:64;
+
+    diff(g,t) = (g`|].0,1.[ ).t by X1,Q6,FDIFF_1:def 7; then
+    diff(g,t) = M*||. q-p .|| by X1,Q5,Q3,D4,FDIFF_1:23;
+    hence thesis by Y3,X3,X2,XXREAL_0:2;
+   end; then
+R2:
+   ||. phi/.1 -phi/.0 .|| <= g/.1 - g/.0 by LMFDAF10,P1A,P2,P3,Q3,Q2,Q6;
+R31:
+   1 in [.0,1.] & 0 in [.0,1.]; then
+R3:g/.1 =g.1 by Q3,PARTFUN1:def 6
+       .=g0.1 by Q3,R31,FUNCT_1:47
+       .= M*||. q-p .||*1 by Q0;
+
+R4:g/.0 = g.0 by Q3,R31,PARTFUN1:def 6
+       .=g0.0 by Q3,R31,FUNCT_1:47
+       .= M*||. q-p .|| * ( 0 qua Real) by Q0;
+
+R5:phi/.1 = f/.(p+1*(q-p)) by P1B,R31
+         .= f/.(p+(q-p)) by RLVECT_1:def 8
+         .= f/.(q-(p-p)) by RLVECT_1:29
+         .= f/.(q-0.S) by RLVECT_1:15
+         .= f/.q by RLVECT_1:13;
+
+   phi/.0 = f/.(p+( 0 qua Real ) * (q-p)) by P1B,R31
+         .= f/.(p+0.S) by RLVECT_1:10
+         .= f/.p by RLVECT_1:4;
+   hence thesis by R2,R3,R4,R5;
+end;
+
+theorem FDAF20:
+for S,T be non trivial RealNormSpace, f be PartFunc of S,T,
+    p,q be Point of S, M be Real,
+    L be Point of R_NormSpace_of_BoundedLinearOperators(S,T)
+  st [.p,q.] c= dom f
+   & (for x be Point of S st x in [.p,q.] holds f is_continuous_in x)
+   & (for x be Point of S st x in ].p,q.[ holds f is_differentiable_in x)
+   & (for x be Point of S st x in ].p,q.[ holds ||. diff(f,x) - L .|| <= M)
+holds ||. f/.q - f/.p -L.(q-p).|| <= M*||. q-p .||
+proof
+   let S,T be non trivial RealNormSpace,
+       f be PartFunc of S,T,
+       p,q be Point of S,
+       M be Real,
+       L be Point of R_NormSpace_of_BoundedLinearOperators(S,T);
+
+   assume that
+A1: [.p,q.] c= dom f and
+A2: (for x be Point of S st x in [.p,q.] holds f is_continuous_in x)
+  & (for x be Point of S st x in ].p,q.[ holds f is_differentiable_in x)
+  & (for x be Point of S st x in ].p,q.[ holds ||. diff(f,x) - L .|| <= M);
+
+   reconsider LP=L as bounded LinearOperator of S,T by LOPBAN_1:def 9;
+
+   deffunc LL(Point of S) = L.($1-p);
+
+   consider L0 be Function of the carrier of S,the carrier of T such that
+P0: for t being Element of the carrier of S
+      holds L0.t = LL(t)  from FUNCT_2:sch 4;
+
+D1:dom L0 = the carrier of S by FUNCT_2:def 1;
+
+   now let x1,x2 be Point of S;
+    assume x1 in dom L0 & x2 in dom L0;
+
+A4: -1 is Real by XREAL_0:def 1;
+
+    L0/.x1=L.(x1-p) & L0/.x2=L.(x2-p) by P0; then
+    ||.L0/.x1-L0/.x2 .||
+      = ||.LP.(x1-p)+(-1)*LP.(x2-p) .|| by RLVECT_1:16
+     .= ||.LP.(x1-p)+LP.((-1)*(x2-p)) .|| by A4,LOPBAN_1:def 5
+     .= ||.LP.((x1-p)+(-1)*(x2-p)) .|| by GRCAT_1:def 8
+     .= ||.LP.((x1-p)-(x2-p)) .|| by RLVECT_1:16
+     .= ||. LP.(x1-((x2-p)+p)) .|| by RLVECT_1:27
+     .= ||. LP.(x1-(x2-(p-p))) .|| by RLVECT_1:29
+     .= ||. LP.(x1-(x2-0.S)) .|| by RLVECT_1:15
+     .= ||. LP.(x1-x2) .|| by RLVECT_1:13; then
+A5: ||.L0/.x1-L0/.x2 .|| <= ||.L.|| * ||.x1-x2.|| by LOPBAN_1:32;
+
+    (0 qua Real) + ||.L.|| < (1 qua Real) + ||.L.|| by XREAL_1:8; then
+    ||.L.|| * ||.x1-x2.|| <= (||.L.||+1) * ||.x1-x2.|| by XREAL_1:64;
+    hence
+      ||.L0/.x1-L0/.x2 .|| <= (||.L.||+1) * ||.x1-x2.|| by A5,XXREAL_0:2;
+   end; then
+   L0 is_Lipschitzian_on (dom L0) by NFCONT_1:def 9; then
+D3:L0 is_continuous_on (dom L0) by NFCONT_1:45;
+
+   reconsider R = (the carrier of S) --> 0.T as PartFunc of S,T;
+
+A6:dom R = the carrier of S by FUNCOP_1:13;
+
+   now let h be convergent_to_0 sequence of S;
+A7: now let n be Nat;
+A8:  R/.(h.n) =R.(h.n) by A6,PARTFUN1:def 6
+             .=0.T by FUNCOP_1:7;
+A9:  rng h c= dom R by A6;
+A10: n in NAT by ORDINAL1:def 12;
+     hence ((||.h.||")(#)(R/*h)).n = (||.h.||".n)*((R/*h).n)
+           by NDIFF_1:def 2
+        .=(||.h.||".n)*(R/.(h.n)) by A10,A9,FUNCT_2:109
+        .=0.T by A8,RLVECT_1:10;
+    end; then
+A11: (||.h.||")(#)(R/*h) is constant by VALUED_0:def 18;
+    hence (||.h.||")(#)(R/*h) is convergent by NDIFF_1:18;
+    ((||.h.||")(#)(R/*h)).0 = 0.T by A7;
+    hence lim ((||.h.||")(#)(R/*h)) = 0.T by A11,NDIFF_1:18;
+   end; then
+   reconsider R as REST of S,T by NDIFF_1:def 5;
+A12:
+   now let x0 be Point of S;
+    set N = the Neighbourhood of x0;
+A15:for x be Point of S st x in N holds L0/.x-L0/.x0=L.(x-x0)+R/.(x-x0)
+    proof
+     let x be Point of S;
+A16: R/.(x-x0) =R.(x-x0) by A6,PARTFUN1:def 6
+       .=0.T by FUNCOP_1:7;
+A40: -1 is Real by XREAL_0:def 1;
+     assume x in N;
+     thus L0/.x-L0/.x0 = L.(x-p)-L0.x0 by P0
+       .= L.(x-p)-L.(x0-p) by P0
+       .= LP.(x-p)+(-1)*LP.(x0-p) by RLVECT_1:16
+       .= LP.(x-p)+LP.((-1)*(x0-p)) by A40,LOPBAN_1:def 5
+       .= LP.((x-p)+(-1)*(x0-p)) by GRCAT_1:def 8
+       .= LP.((x-p)-(x0-p)) by RLVECT_1:16
+       .= LP.(x-((x0-p)+p)) by RLVECT_1:27
+       .= LP.(x-(x0-(p-p))) by RLVECT_1:29
+       .= LP.(x-(x0-0.S)) by RLVECT_1:15
+       .= LP.(x-x0) by RLVECT_1:13
+       .= L.(x-x0) + R/.(x-x0) by A16,RLVECT_1:4;
+    end;
+    hence L0 is_differentiable_in x0 by D1,NDIFF_1:def 6;
+    hence diff(L0,x0) = L by D1,A15,NDIFF_1:def 7;
+   end;
+
+   set g= f - L0;
+
+P1:dom g = dom f /\ dom L0 by VFUNCT_1:def 2
+        .= dom f by D1,XBOOLE_1:28;
+
+F0:for x be Point of S st x in dom g holds g/.x= f/.x - L.(x-p)
+   proof
+    let x be Point of S;
+    assume x in dom g;
+    hence g/.x= f/.x - L0/.x by VFUNCT_1:def 2
+             .=f/.x - L.(x-p) by P0;
+   end;
+
+P2:for x be Point of S st x in [.p,q.] holds g is_continuous_in x
+   proof
+    let x be Point of S;
+    assume x in [.p,q.]; then
+P20:f is_continuous_in x by A2;
+    L0 | (dom L0) is_continuous_in x by D1,D3,NFCONT_1:def 7; then
+    L0 is_continuous_in x by RELAT_1:68;
+    hence thesis by P20,NFCONT_1:15;
+   end;
+
+P3:for x be Point of S st x in ].p,q.[ holds g is_differentiable_in x
+   proof
+    let x be Point of S;
+    assume x in ].p,q.[; then
+    f is_differentiable_in x & L0 is_differentiable_in x by A2,A12;
+    hence g is_differentiable_in x by NDIFF_1:36;
+   end;
+
+   for x be Point of S st x in ].p,q.[ holds ||. diff(g,x) .|| <= M
+   proof
+    let x be Point of S;
+    assume P40: x in ].p,q.[; then
+Z1: f is_differentiable_in x by A2;
+    L0 is_differentiable_in x & diff(L0,x) = L by A12; then
+    diff(g,x) = diff(f,x) - L by Z1,NDIFF_1:36;
+    hence ||. diff(g,x) .|| <= M by A2,P40;
+   end; then
+P5:
+   ||. g/.q - g/.p .|| <= M*||. q-p .|| by FDAF10,A1,P1,P2,P3;
+   p in [.p,q.] by RLTOPSP1:68; then
+   g/.p= f/.p - L.(p-p) by A1,P1,F0; then
+H1:g/.p = f/.p - LP.(0.S) by RLVECT_1:15
+       .=f/.p - LP.( 0 *p ) by RLVECT_1:10
+       .=f/.p - 0 * LP.p by LOPBAN_1:def 5
+       .=f/.p - 0.T by RLVECT_1:10
+       .=f/.p by RLVECT_1:13;
+   q in [.p,q.] by RLTOPSP1:68; then
+   g/.q= f/.q - L.(q-p) by A1,P1,F0; then
+   f/.q - (L.(q-p) +f/.p ) = g/.q - g/.p by H1,RLVECT_1:27;
+   hence thesis by P5,RLVECT_1:27;
+end;
+
+begin :: Partial derivative of a function of several variables.
+
+definition
+  let G be RealNormSpace-Sequence;
+  let i be Element of dom G;
+  func proj i -> Function of product G,G.i means  :Def1:
+ for x be Element of product carr G holds it.x = x.i;
+existence
+proof
+   deffunc F(Element of product carr G) = $1.i;
+   consider f being Function of product carr G,G.i such that
+P1: for x being Element of product carr G holds f.x = F(x) from FUNCT_2:sch 4;
+   product G = NORMSTR(# product carr G,zeros G,[:addop G:]
+          ,[:multop G:], productnorm G #) by PRVECT_2:6; then
+   reconsider f as Function of product G,G.i;
+   take f;
+   thus thesis by P1;
+end;
+uniqueness
+proof
+   let f,g be Function of the carrier of (product G),the carrier of (G.i);
+   assume that
+A1: for x being Element of product carr G holds f.x = x.i and
+A2: for x being Element of product carr G holds g.x = x.i;
+A3:product G = NORMSTR(# product carr G,zeros G,[:addop G:]
+               ,[:multop G:], productnorm G #) by PRVECT_2:6;
+   now let x1 be Element of the carrier of product G;
+    reconsider x=x1 as Element of product carr G by A3;
+    f.x1 =x.i by A1;
+    hence f.x1 = g.x1 by A2;
+   end;
+   hence thesis by FUNCT_2:63;
+end;
+end;
+
+definition
+  let G be RealNormSpace-Sequence;
+  let i be Element of dom G;
+  let x be Element of product G;
+  func reproj(i,x) -> Function of G.i,product G means :Def5:
+  for r be Element of G.i holds it.r = x +* (i,r);
+existence
+proof
+   reconsider x1 = x as Element of product carr G by LM001;
+   defpred P[Element of G.i,
+             Element of the carrier of product G] means
+      $2 = x1 +* (i,$1);
+A1:for r being Element of G.i
+    ex y be Element of the carrier of product G st P[r,y]
+   proof
+    let r be Element of G.i;
+    x1 +* (i,r) is Element of the carrier of product G by LM003;
+    hence thesis;
+   end;
+   ex f being Function of the carrier of (G.i),the carrier of product G st
+    for r be Element of G.i
+      holds P[r,f.r] from FUNCT_2:sch 10(A1);
+   hence thesis;
+end;
+uniqueness
+proof
+   let f,g be Function of the carrier of (G.i),the carrier of product G;
+   assume that
+A30:for r be Element of G.i holds f.r = x +* (i,r) and
+A40:for r be Element of G.i holds g.r = x +* (i,r);
+    let r be Element of G.i;
+    f.r = x +* (i,r) by A30;
+    hence f.r = g.r by A40;
+end;
+end;
+
+definition
+  let G be non-trivial RealNormSpace-Sequence;
+  let j be set;
+  assume AS: j in dom G;
+  func modetrans(G,j) -> Element of dom G equals :Defmode:
+   j;
+  correctness by AS;
+end;
+
+definition
+  let G be non-trivial RealNormSpace-Sequence;
+  let F be non trivial RealNormSpace;
+  let i be set;
+  let f be PartFunc of product G,F;
+  let x being Element of product G;
+  pred f is_partial_differentiable_in x,i means :Def9:
+  f*reproj(modetrans(G,i),x) is_differentiable_in proj(modetrans(G,i)).x;
+end;
+
+definition
+  let G be non-trivial RealNormSpace-Sequence;
+  let F be non trivial RealNormSpace;
+  let i be set;
+  let f be PartFunc of product G,F;
+  let x be Point of product G;
+ func partdiff(f,x,i)
+       -> Point of R_NormSpace_of_BoundedLinearOperators(G.modetrans(G,i),F)
+    equals
+ diff(f*reproj(modetrans(G,i),x),proj(modetrans(G,i)).x);
+coherence;
+end;
+
+begin :: Linearity of Partial Differential Operator
+
+reserve G for non-trivial RealNormSpace-Sequence;
+reserve F for non trivial RealNormSpace;
+reserve i for Element of dom G;
+reserve f,f1,f2 for PartFunc of product G, F;
+reserve x for Point of product G;
+reserve X for set;
+
+definition
+  let G be non-trivial RealNormSpace-Sequence;
+  let F be non trivial RealNormSpace;
+  let i be set;
+  let f be PartFunc of product G,F;
+  let X be set;
+  pred f is_partial_differentiable_on X,i means :Def19:
+  X c= dom f & for x be Point of product G st x in X
+    holds f|X is_partial_differentiable_in x,i;
+end;
+
+theorem XTh5:
+for xi be Element of G.i
+  holds ||. reproj(i,0.(product G)).xi .|| = ||.xi.||
+proof
+   let xi be Element of G.i;
+   set j = len G;
+   reconsider i0 = i as Element of NAT;
+   Seg len G = dom G by FINSEQ_1:def 3; then
+A1:1 <= i0 & i0 <= j by FINSEQ_1:1;
+   set z = 0.(product G);
+B3: reproj(i,z).xi = z +* (i,xi) by Def5;
+ZZ: the carrier of (product G) = product carr G by LM001;
+   then reconsider w = z +* (i0,xi) as Element of product carr G by LM003;
+B4: ||. reproj(i,z).xi .|| = |. normsequence(G,w) .|
+         by B3,PRVECT_2:7;
+   set q = ||.xi.||;
+   set q1 = <*q*>;
+   set y = 0*j;
+C1:len normsequence(G,w) = j by PRVECT_2:def 11;
+C2:len y = j by CARD_1:def 7; then
+C4:(y| (i0-'1))^<*q*>^(y /^ i0) = Replace(y,i0,q) by A1,FINSEQ_7:def 1; then
+C3:len ((y| (i0-'1))^<*q*>^(y /^ i0)) = len y by FINSEQ_7:5;
+E2:len y = len Replace(y,i0,q) by FINSEQ_7:5;
+   for k be Nat st 1 <= k & k <= len normsequence(G,w) holds
+    normsequence(G,w).k = ((y| (i0-'1))^<*q*>^(y /^ i0)).k
+   proof
+    let k be Nat;
+    assume D0: 1 <= k & k <= len normsequence(G,w); then
+    reconsider k1 = k as Element of dom G by C1,FINSEQ_3:25;
+Y0: k1 in dom G;
+    z in the carrier of product G; then
+    z in product carr G by LM001; then
+    consider g being Function such that
+Y1: z = g & dom g = dom carr G &
+      for y being set st y in dom carr G holds g.y in (carr G).y
+        by CARD_3:def 5;
+Z2: k in dom z by Y0,Y1,ZE;
+F4: k in Seg len y by D0,C1,C2,FINSEQ_1:1;
+D1: (normsequence(G,w)).k
+      = (the normF of (G.k1)).(w.k1) by PRVECT_2:def 11;
+    per cases;
+    suppose D2: k = i0; then
+D3:  (normsequence(G,w)).k = ||. xi .|| by D1,Z2,FUNCT_7:31;
+     Replace(y,i0,q)/.k = q by D2,D0,C1,C2,FINSEQ_7:8;
+     hence normsequence(G,w).k = ((y| (i0-'1))^<*q*>^(y /^ i0)).k
+        by D3,C4,D0,C1,C2,E2,FINSEQ_4:15;
+    end;
+    suppose F1: k <> i0; then
+     w.k1 = z.k1 by FUNCT_7:32; then
+F2:  (normsequence(G,w)).k = ||. 0.(G.k1) .|| by D1,ZR1,ZZ;
+     Replace(y,i0,q)/.k = y/.k by F1,D0,C1,C2,FINSEQ_7:10; then
+     Replace(y,i0,q).k = y/.k by D0,C1,C2,E2,FINSEQ_4:15; then
+     Replace(y,i0,q).k = y.k by D0,C1,C2,FINSEQ_4:15;
+     hence normsequence(G,w).k = ((y| (i0-'1))^<*q*>^(y /^ i0)).k
+       by F2,C4,C2,F4,FINSEQ_2:57;
+    end;
+   end; then
+A4:normsequence(G,w) = (y| (i0-'1))^<*q*>^(y /^ i0)
+     by C1,C2,C3,FINSEQ_1:14;
+   sqrt Sum sqr(y| (i0-'1)) = |. 0*(i0-'1) .| by A1,PDIFF_7:2; then
+   sqrt Sum sqr(y| (i0-'1)) = 0 by EUCLID:7; then
+A5:Sum sqr(y| (i0-'1)) = 0 by RVSUM_1:86,SQUARE_1:24;
+   sqrt Sum sqr(y/^i0) = |. 0*(j-'i0) .| by PDIFF_7:3; then
+A6:sqrt Sum sqr(y/^i0) = 0 by EUCLID:7;
+   sqr((y| (i0-'1))^<*q*>^(y/^i0))
+     = sqr((y| (i0-'1))^<*q*>)^sqr(y/^i0) by TOPREAL7:10
+    .= sqr(y| (i0-'1))^sqr<*q*>^sqr(y/^i0) by TOPREAL7:10
+    .= sqr(y| (i0-'1))^<*q^2*>^sqr(y/^i0) by RVSUM_1:55; then
+   Sum sqr((y| (i0-'1))^<*q*>^(y/^i0))
+     = Sum(sqr(y| (i0-'1))^<*q^2*>) + Sum sqr(y/^i0) by RVSUM_1:75
+    .= Sum sqr(y| (i0-'1)) + q^2 + Sum sqr(y/^i0) by RVSUM_1:74
+    .= q^2 by A5,A6,RVSUM_1:86,SQUARE_1:24; then
+   ||. reproj(i,z).xi .|| = |. q .| by A4,B4,COMPLEX1:72;
+   hence thesis by COMPLEX1:43;
+end;
+
+theorem XTh6:
+for G be non-trivial RealNormSpace-Sequence,
+    i be Element of dom G,
+    x be Point of product G,
+    r be Point of G.i holds
+  reproj(i,x).r - x = reproj(i,0.(product G)).(r - proj(i).x) &
+  x - reproj(i,x).r = reproj(i,0.(product G)).(proj(i).x - r)
+proof
+   let G be non-trivial RealNormSpace-Sequence,
+       i be Element of dom G,
+       x be Point of product G,
+       r be Point of G.i;
+    set m=len G;
+   reconsider xf=x as Element of product carr G by LM001;
+X3:dom carr G = dom G by ZE;
+   reconsider Zr = 0.(product G) as Element of product carr G by LM001;
+   reconsider ixr = reproj(i,x).r as Element of product carr G by LM001;
+   reconsider p = reproj(i,x).r - x as Element of product carr G by LM001;
+X5:dom p = dom (carr G) by CARD_3:9;
+   reconsider q = reproj(i,0.(product G)).(r - proj(i).x)
+                    as Element of product carr G by LM001;
+X6:dom q = dom (carr G) by CARD_3:9;
+   reconsider s = x - reproj(i,x).r as Element of product carr G by LM001;
+X7:dom s = dom (carr G) by CARD_3:9;
+   reconsider t = reproj(i,0.(product G)).(proj(i).x - r)
+                   as Element of product carr G by LM001;
+X8:dom t = dom carr G by CARD_3:9;
+X9: reproj(i,x).r = x +* (i,r) by Def5;
+   reconsider xfi =xf.i as Point of G.i;
+   reproj(i,0.(product G)).(r - proj(i).x)
+              = 0.(product G) +* (i,(r - proj(i).x)) by Def5; then
+X11:
+   q = Zr +* (i,(r- xfi)) by Def1;
+   reproj(i,0.(product G)).(proj(i).x -r)
+            = 0.(product G) +* (i,(proj(i).x - r)) by Def5; then
+X12:
+   t = Zr +* (i,(xfi -r)) by Def1;
+   set ir= i .--> r;
+   set irx1= (i .--> (r- xfi));
+   set irx2= (i .--> (xfi - r));
+    x in the carrier of product G; then
+p0: x in product carr G by LM001;
+    consider g1 be Function such that
+p1:  x = g1 & dom g1 = dom carr G
+    & for i be set st i in dom carr G holds g1.i in (carr G).i
+        by p0,CARD_3:def 5;
+   for k be set st k in dom p holds p.k = q.k
+   proof
+    let k be set;
+    assume S1: k in dom p; then
+    reconsider k0=k as Element of dom G by X3,CARD_3:9;
+    consider g be Function such that
+P1:  Zr = g & dom g = dom carr G
+    & for i be set st i in dom carr G holds g.i in (carr G).i
+        by CARD_3:def 5;
+F1: k in dom Zr by P1,S1,CARD_3:9;
+F2: k in dom x by p1,S1,CARD_3:9;
+    per cases;
+    suppose not k in {i}; then
+Z:   k <> i by TARSKI:def 1; then
+XA3: q.k0 = Zr.k0 by X11,FUNCT_7:32;
+     p.k = ixr.k0 -xf.k0 by SUB1
+        .= xf.k0 -xf.k0 by Z,X9,FUNCT_7:32; then
+     p.k =0.(G.k0) by RLVECT_1:15;
+     hence p.k = q.k by XA3,ZR1;
+    end;
+    suppose k in {i}; then
+XA5: k=i by TARSKI:def 1; then
+XA6: q.k0 = r- xfi by X11,F1,FUNCT_7:31;
+     p.k=ixr.k0 -xf.k0 by SUB1;
+     hence p.k = q.k by XA6,X9,XA5,F2,FUNCT_7:31;
+    end;
+   end;
+   hence reproj(i,x).r - x = reproj(i,0.(product G)).(r - proj(i).x)
+     by X5,X6,FUNCT_1:2;
+   for k be set st k in dom s holds s.k = t.k
+   proof
+    let k be set;
+    assume P0: k in dom s; then
+    reconsider k0=k as Element of dom G by X3,CARD_3:9;
+    consider g be Function such that
+P1:   Zr = g & dom g = dom carr G
+    & for i be set st i in dom carr G holds g.i in (carr G).i
+        by CARD_3:def 5;
+F1: k in dom Zr by P1,P0,CARD_3:9;
+F2: k in dom x by p1,P0,CARD_3:9;
+    per cases;
+    suppose not k in {i}; then
+Z:   k <> i by TARSKI:def 1; then
+XA3: t.k0 = Zr.k0 by X12,FUNCT_7:32;
+     s.k= xf.k0 - ixr.k0 by SUB1
+       .=xf.k0 -xf.k0 by X9,Z,FUNCT_7:32; then
+     s.k =0.(G.k0) by RLVECT_1:15;
+     hence s.k = t.k by XA3,ZR1;
+    end;
+    suppose k in {i}; then
+XA5: k=i by TARSKI:def 1; then
+XA6: t.k0 = xfi-r by X12,F1,FUNCT_7:31;
+     s.k=xf.k0 - ixr.k0 by SUB1;
+     hence s.k = t.k by XA6,X9,XA5,F2,FUNCT_7:31;
+    end;
+   end;
+   hence thesis by X7,X8,FUNCT_1:2;
+end;
+
+theorem XLm5:
+for G be non-trivial RealNormSpace-Sequence,
+    i be Element of dom G,
+    x be Point of product G,
+    Z be Subset of product G
+      st Z is open & x in Z holds
+ex N be Neighbourhood of proj(i).x st
+  for z be Point of G.i st z in N holds (reproj(i,x)).z in Z
+proof
+   let G be non-trivial RealNormSpace-Sequence,
+       i be Element of dom G,
+       x be Point of product G,
+       Z be Subset of product G;
+   assume Z is open & x in Z; then
+   consider r be Real such that
+A4: 0 < r & {y where y is Point of product G : ||. y - x .|| < r} c= Z
+      by NDIFF_1:3;
+   set N = {y where y is Point of G.i : ||. y - proj(i).x .|| < r};
+   reconsider N as Neighbourhood of proj(i).x by A4,NFCONT_1:3;
+   take N;
+   thus for z be Point of G.i st z in N holds (reproj(i,x)).z in Z
+   proof
+    let z be Point of G.i;
+    assume z in N; then
+A5: ex y be Point of G.i st y = z & ||. y - proj(i).x .|| < r;
+    ||. (reproj(i,x)).z - x .||
+      = ||. reproj(i,0.(product G)).(z - proj(i).x) .|| by XTh6
+     .= ||. z - proj(i).x .|| by XTh5; then
+    (reproj(i,x)).z
+     in {y where y is Point of product G : ||. y - x .|| < r} by A5;
+    hence thesis by A4;
+   end;
+end;
+
+theorem XTh34:
+ for G be non-trivial RealNormSpace-Sequence,
+     T be non trivial RealNormSpace,
+     i be set,
+     f be PartFunc of product G, T,
+     Z be Subset of product G
+       st Z is open holds
+   f is_partial_differentiable_on Z,i
+iff
+   Z c=dom f &
+   for x be Point of product G st x in Z holds
+     f is_partial_differentiable_in x,i
+proof
+   let G be non-trivial RealNormSpace-Sequence,
+       T be non trivial RealNormSpace,
+       i be set,
+       f be PartFunc of product G, T,
+       Z be Subset of (product G);
+   assume
+A1: Z is open;
+
+   set i0=modetrans(G,i);
+   set S=G.i0;
+   set RNS= R_NormSpace_of_BoundedLinearOperators(S,T);
+
+   thus f is_partial_differentiable_on Z,i implies
+         Z c=dom f &
+         for x be Point of product G st x in Z holds
+           f is_partial_differentiable_in x,i
+   proof
+    assume A3: f is_partial_differentiable_on Z,i;
+    hence A4: Z c=dom f by Def19;
+    let nx0 be Point of product G;
+    reconsider x0=proj(i0).nx0 as Point of S;
+    assume A5: nx0 in Z; then
+    f|Z is_partial_differentiable_in nx0,i by A3,Def19; then
+    (f|Z)*reproj(i0,nx0) is_differentiable_in x0 by Def9; then
+    consider N0 being Neighbourhood of x0 such that
+A6:  N0 c= dom((f|Z)*reproj(i0,nx0)) and
+A7:  ex L be Point of RNS,R be REST of S,T st
+      for x be Point of S st x in N0 holds
+       ((f|Z)*reproj(i0,nx0))/.x-((f|Z)*reproj(i0,nx0))/.x0
+         = L .( x-x0)+R/.(x-x0) by NDIFF_1:def 6;
+    consider L be Point of RNS,R be REST of S,T such that
+A8:  for x be Point of S st x in N0 holds
+      ((f|Z)*reproj(i0,nx0))/.x - ((f|Z)*reproj(i0,nx0))/.x0
+        = L.(x-x0) + R/.(x-x0) by A7;
+    consider N1 being Neighbourhood of x0 such that
+A9:  for x be Point of S st x in N1 holds
+      (reproj(i0,nx0)).x in Z by A1,A5,XLm5;
+A10:now let x be Point of S;
+     assume x in N1; then
+     (reproj(i0,nx0)).x in Z by A9; then
+     (reproj(i0,nx0)).x in (dom f) /\ Z by A4,XBOOLE_0:def 4;
+     hence (reproj(i0,nx0)).x in dom(f|Z) by RELAT_1:61;
+    end;
+    reconsider N = N0 /\ N1 as Neighbourhood of x0 by Lm1;
+    (f|Z)*reproj(i0,nx0) c= f*reproj(i0,nx0) by RELAT_1:29,59; then
+A11:dom((f|Z)*reproj(i0,nx0)) c= dom(f*reproj(i0,nx0)) by RELAT_1:11;
+    N c= N0 by XBOOLE_1:17; then
+    N c= dom((f|Z)*reproj(i0,nx0)) by A6,XBOOLE_1:1; then
+A12:N c= dom(f*reproj(i0,nx0)) by A11,XBOOLE_1:1;
+    now let x be Point of S;
+     assume A13: x in N; then
+A14: x in N0 by XBOOLE_0:def 4;
+A15: dom(reproj(i0,nx0)) = the carrier of G.i0 by FUNCT_2:def 1;
+
+     x in N1 by A13,XBOOLE_0:def 4; then
+A16: (reproj(i0,nx0)).x in dom(f|Z) by A10; then
+A17: (reproj(i0,nx0)).x in dom f &
+      (reproj(i0,nx0)).x in Z by RELAT_1:57;
+A18: (reproj(i0,nx0)).x0 in dom(f|Z) by A10,NFCONT_1:4; then
+A19: (reproj(i0,nx0)).x0 in dom f &
+      (reproj(i0,nx0)).x0 in Z by RELAT_1:57;
+
+A20: ((f|Z)*reproj(i0,nx0))/.x
+       =(f|Z)/.(reproj(i0,nx0)/.x) by A16,A15,PARTFUN2:4
+      .= f/. (reproj(i0,nx0)/.x) by A17,PARTFUN2:17
+      .= (f*reproj(i0,nx0))/.x by A15,A17,PARTFUN2:4;
+     ((f|Z)*reproj(i0,nx0))/.x0
+       =(f|Z)/. (reproj(i0,nx0)/.x0 ) by A15,A18,PARTFUN2:4
+      .= f/. (reproj(i0,nx0)/.x0) by A19,PARTFUN2:17
+      .= (f*reproj(i0,nx0))/.x0 by A15,A19,PARTFUN2:4;
+     hence (f*reproj(i0,nx0))/.x-(f*reproj(i0,nx0))/.x0 =L.(x-x0)+R/.(x-x0)
+       by A8,A14,A20;
+    end; then
+    f*reproj(i0,nx0) is_differentiable_in x0 by A12,NDIFF_1:def 6;
+    hence f is_partial_differentiable_in nx0,i by Def9;
+   end;
+   assume that
+A21:Z c=dom f and
+A22:for nx be Point of product G st nx in Z holds
+     f is_partial_differentiable_in nx,i;
+    now let nx0 be Point of product G;
+    assume A23: nx0 in Z; then
+A24:f is_partial_differentiable_in nx0,i by A22;
+    reconsider x0=proj(i0).nx0 as Point of S;
+
+    f*reproj(i0,nx0) is_differentiable_in x0 by A24,Def9; then
+    consider N0 being Neighbourhood of x0 such that
+     N0 c= dom (f*reproj(i0,nx0)) and
+A25: ex L be Point of RNS,R be REST of S,T st
+      for x be Point of S st x in N0 holds
+       (f*reproj(i0,nx0))/.x-(f*reproj(i0,nx0))/.x0
+         = L.(x-x0)+R  /.(x-x0) by NDIFF_1:def 6;
+
+    consider N1 being Neighbourhood of x0 such that
+A26: for x be Point of S st x in N1 holds
+       (reproj(i0,nx0)).x in Z by A1,A23,XLm5;
+
+A27:now let x be Point of S;
+     assume x in N1; then
+     (reproj(i0,nx0)).x in Z by A26; then
+     (reproj(i0,nx0)).x in (dom f) /\ Z by A21,XBOOLE_0:def 4;
+     hence (reproj(i0,nx0)).x in dom(f|Z) by RELAT_1:61;
+    end;
+
+A28:N1 c= dom((f|Z)*reproj(i0,nx0))
+    proof
+     let z be set;
+     assume A29:z in N1; then
+A30: z in the carrier of S;
+     reconsider x=z as Point of S by A29;
+A31: (reproj(i0,nx0)).x in dom(f|Z) by A29,A27;
+     z in dom (reproj(i0,nx0)) by A30,FUNCT_2:def 1;
+     hence z in dom((f|Z)*reproj(i0,nx0)) by A31,FUNCT_1:11;
+    end;
+    reconsider N=N0 /\ N1 as Neighbourhood of x0 by Lm1;
+    N c= N1 by XBOOLE_1:17; then
+A32:N c= dom((f|Z)*reproj(i0,nx0)) by A28,XBOOLE_1:1;
+
+    consider L be Point of RNS,R be REST of S,T such that
+A33: for x be Point of S st x in N0 holds
+      (f*reproj(i0,nx0))/.x-(f*reproj(i0,nx0))/.x0=L.(x-x0)+R/.(x-x0) by A25;
+    now let x be Point of S;
+     assume A34: x in N; then
+A35: x in N0 by XBOOLE_0:def 4;
+A36: dom (reproj(i0,nx0)) = the carrier of G.i0 by FUNCT_2:def 1;
+     x in N1 by A34,XBOOLE_0:def 4; then
+A37: (reproj(i0,nx0)).x in dom(f|Z) by A27; then
+A38: (reproj(i0,nx0)).x in dom f /\ Z by RELAT_1:61; then
+A39: (reproj(i0,nx0)).x in dom f by XBOOLE_0:def 4;
+
+A40: (reproj(i0,nx0)).x0 in dom(f|Z) by A27,NFCONT_1:4; then
+A41: (reproj(i0,nx0)).x0 in dom f /\ Z by RELAT_1:61; then
+A42: (reproj(i0,nx0)).x0 in dom f by XBOOLE_0:def 4;
+
+A43: ((f|Z)*reproj(i0,nx0))/.x
+       = (f|Z)/.(reproj(i0,nx0)/.x) by A37,A36,PARTFUN2:4
+      .= f/.(reproj(i0,nx0)/.x) by A38,PARTFUN2:16
+      .= (f*reproj(i0,nx0))/.x by A36,A39,PARTFUN2:4;
+     ((f|Z)*reproj(i0,nx0))/.x0
+       = (f|Z)/. (reproj(i0,nx0)/.x0 ) by A36,A40,PARTFUN2:4
+      .= f/. (reproj(i0,nx0)/.x0) by A41,PARTFUN2:16
+      .= (f*reproj(i0,nx0))/.x0 by A36,A42,PARTFUN2:4;
+     hence ((f|Z)*reproj(i0,nx0))/.x -((f|Z)*reproj(i0,nx0))/.x0
+             = L.(x-x0)+R/.(x-x0) by A43,A35,A33;
+    end; then
+    (f|Z)*reproj(i0,nx0) is_differentiable_in x0 by A32,NDIFF_1:def 6;
+    hence (f|Z) is_partial_differentiable_in nx0,i by Def9;
+   end;
+   hence thesis by A21,Def19;
+end;
+
+theorem Th25:
+for i be set st i in dom G & f is_partial_differentiable_on X,i
+  holds X is Subset of product G
+proof
+   let i be set;
+   assume i in dom G & f is_partial_differentiable_on X,i; then
+   X c=dom f by Def19;
+   hence thesis by XBOOLE_1:1;
+end;
+
+definition
+  let G be non-trivial RealNormSpace-Sequence;
+  let S be non trivial RealNormSpace;
+  let i be set;
+  assume AS: i in dom G;
+  let f be PartFunc of product G, S;
+  let X be set;
+  assume A1: f is_partial_differentiable_on X,i;
+ func f `partial|(X,i) -> PartFunc of product G,
+  R_NormSpace_of_BoundedLinearOperators(G.modetrans(G,i),S) means
+:Def19f:
+  dom it = X &
+  for x be Point of product G st x in X holds it/.x = partdiff(f,x,i);
+existence
+proof
+   deffunc F(Element of product G) = partdiff(f,$1,i);
+   defpred P[Element of product G] means $1 in X;
+   consider F being PartFunc of product G,
+    R_NormSpace_of_BoundedLinearOperators(G.modetrans(G,i),S) such that
+A2: (for x be Point of product G holds x in dom F iff P[x]) & for x be
+    Point of product G st x in dom F holds F.x = F(x) from SEQ_1:sch 3;
+   take F;
+   now
+A3: X is Subset of product G by A1,AS,Th25;
+    let y be set;
+    assume y in X;
+    hence y in dom F by A2,A3;
+   end; then
+A4:X c= dom F by TARSKI:def 3;
+
+   for y be set st y in dom F holds y in X by A2; then
+   dom F c= X by TARSKI:def 3;
+   hence dom F = X by A4,XBOOLE_0:def 10;
+   hereby let x be Point of product G;
+    assume x in X; then
+A5: x in dom F by A2; then
+    F.x = partdiff(f,x,i) by A2;
+    hence F/.x = partdiff(f,x,i) by A5,PARTFUN1:def 6;
+   end;
+end;
+uniqueness
+proof
+   let F,H be PartFunc of product G,
+            R_NormSpace_of_BoundedLinearOperators(G.modetrans(G,i),S);
+   assume that
+A6: dom F = X and
+A7: for x be Point of product G st x in X holds F/.x = partdiff(f,x,i) and
+A8: dom H = X and
+A9: for x be Point of product G st x in X holds H/.x = partdiff(f,x,i);
+   now let x be Point of product G;
+    assume A10: x in dom F; then
+    F/.x = partdiff(f,x,i) by A6,A7;
+    hence F/.x=H/.x by A6,A9,A10;
+   end;
+   hence thesis by A6,A8,PARTFUN2:1;
+end;
+end;
+
+theorem Th26:
+for i be set st i in dom G holds
+  (f1+f2)*reproj(modetrans(G,i),x) = f1*reproj(modetrans(G,i),x)
+                                    +f2*reproj(modetrans(G,i),x)
+& (f1-f2)*reproj(modetrans(G,i),x) = f1*reproj(modetrans(G,i),x)
+                            -f2*reproj(modetrans(G,i),x)
+proof
+   let i0 be set;
+   assume i0 in dom G;
+   set i=modetrans(G,i0);
+
+A1:dom(reproj(i,x))=the carrier of G.i by FUNCT_2:def 1;
+A2:dom(f1+f2) = dom f1 /\ dom f2 by VFUNCT_1:def 1;
+   for s be Element of G.i holds s in dom((f1+f2)*reproj(i,x))
+    iff s in dom(f1*reproj(i,x)+f2*reproj(i,x))
+   proof
+    let s be Element of G.i;
+    s in dom((f1+f2)*reproj(i,x)) iff reproj(i,x).s in dom f1 /\ dom f2
+      by A2,A1,FUNCT_1:11; then
+    s in dom((f1+f2)*reproj(i,x))
+     iff reproj(i,x).s in dom f1 & reproj(i,x).s in dom f2
+       by XBOOLE_0:def 4; then
+    s in dom((f1+f2)*reproj(i,x))
+     iff s in dom(f1*reproj(i,x)) & s in dom(f2*reproj(i,x))
+       by A1,FUNCT_1:11; then
+    s in dom((f1+f2)*reproj(i,x))
+     iff s in dom(f1*reproj(i,x)) /\ dom(f2*reproj(i,x)) by XBOOLE_0:def 4;
+    hence thesis by VFUNCT_1:def 1;
+   end; then
+   for s be set holds s in dom((f1+f2)*reproj(i,x))
+     iff s in dom(f1*reproj(i,x) + f2*reproj(i,x)); then
+A3:dom((f1+f2)*reproj(i,x)) = dom(f1*reproj(i,x)+f2*reproj(i,x)) by TARSKI:1;
+A4:for z being Element of G.i st z in dom((f1+f2)*reproj(i,x)) holds
+    ((f1+f2)*reproj(i,x)).z = (f1*reproj(i,x)+f2*reproj(i,x)).z
+   proof
+    let z be Element of G.i;
+    assume A5: z in dom((f1+f2)*reproj(i,x)); then
+A6: reproj(i,x).z in dom(f1+f2) by FUNCT_1:11;
+
+    z in dom(f1*reproj(i,x)) /\ dom(f2*reproj(i,x))
+      by A3,A5,VFUNCT_1:def 1; then
+A9: z in dom(f1*reproj(i,x)) & z in dom(f2*reproj(i,x)) by XBOOLE_0:def 4;
+
+A7: reproj(i,x).z in dom f1 /\ dom f2 by A2,A5,FUNCT_1:11; then
+    reproj(i,x).z in dom f1 by XBOOLE_0:def 4; then
+A13:f1/.(reproj(i,x).z) = f1.(reproj(i,x).z) by PARTFUN1:def 6
+      .=(f1*reproj(i,x)).z by A9,FUNCT_1:12
+      .=(f1*reproj(i,x))/.z by A9,PARTFUN1:def 6;
+
+    reproj(i,x).z in dom f2 by A7,XBOOLE_0:def 4; then
+A12:f2/.(reproj(i,x).z) = f2.(reproj(i,x).z) by PARTFUN1:def 6
+      .=(f2*reproj(i,x)).z by A9,FUNCT_1:12
+      .=(f2*reproj(i,x))/.z by A9,PARTFUN1:def 6;
+
+    ((f1+f2)*reproj(i,x)).z = (f1+f2).(reproj(i,x).z) by A5,FUNCT_1:12
+      .=(f1+f2)/.(reproj(i,x).z) by A6,PARTFUN1:def 6
+      .= f1/.(reproj(i,x).z) +f2/.(reproj(i,x).z) by A6,VFUNCT_1:def 1
+      .=(f1*reproj(i,x)+ f2*reproj(i,x))/.z by A3,A5,A13,A12,VFUNCT_1:def 1;
+    hence thesis by A3,A5,PARTFUN1:def 6;
+   end;
+
+A14:
+   dom(f1-f2) = dom f1 /\ dom f2 by VFUNCT_1:def 2;
+   for s be Element of G.i holds s in dom((f1-f2)*reproj(i,x))
+     iff s in dom(f1*reproj(i,x)-f2*reproj(i,x))
+   proof
+    let s be Element of G.i;
+    s in dom((f1-f2)*reproj(i,x)) iff reproj(i,x).s in dom f1 /\ dom f2
+      by A14,A1,FUNCT_1:11; then
+    s in dom((f1-f2)*reproj(i,x))
+      iff reproj(i,x).s in dom f1 & reproj(i,x).s in dom f2
+        by XBOOLE_0:def 4; then
+    s in dom((f1-f2)*reproj(i,x))
+      iff s in dom(f1*reproj(i,x)) & s in dom(f2*reproj(i,x))
+        by A1,FUNCT_1:11; then
+    s in dom((f1-f2)*reproj(i,x))
+      iff s in dom(f1*reproj(i,x)) /\ dom(f2*reproj(i,x)) by XBOOLE_0:def 4;
+    hence thesis by VFUNCT_1:def 2;
+   end; then
+   for s be set holds s in dom((f1-f2)*reproj(i,x))
+     iff s in dom(f1*reproj(i,x) - f2*reproj(i,x)); then
+A15:
+   dom((f1-f2)*reproj(i,x)) = dom(f1*reproj(i,x)-f2*reproj(i,x)) by TARSKI:1;
+   for z being Element of G.i st z in dom((f1-f2)*reproj(i,x)) holds
+    ((f1-f2)*reproj(i,x)).z = (f1*reproj(i,x)-f2*reproj(i,x)).z
+   proof
+    let z be Element of G.i;
+    assume A16: z in dom((f1-f2)*reproj(i,x)); then
+A17:reproj(i,x).z in dom (f1-f2) by FUNCT_1:11;
+    z in dom(f1*reproj(i,x)) /\ dom(f2*reproj(i,x))
+      by A15,A16,VFUNCT_1:def 2; then
+A20:z in dom(f1*reproj(i,x)) & z in dom(f2*reproj(i,x)) by XBOOLE_0:def 4;
+A18:reproj(i,x).z in dom f1 /\ dom f2 by A14,A16,FUNCT_1:11; then
+    reproj(i,x).z in dom f1 by XBOOLE_0:def 4; then
+A24:f1/.(reproj(i,x).z) = f1.(reproj(i,x).z) by PARTFUN1:def 6
+      .=(f1*reproj(i,x)).z by A20,FUNCT_1:12
+      .=(f1*reproj(i,x))/.z by A20,PARTFUN1:def 6;
+
+    reproj(i,x).z in dom f2 by A18,XBOOLE_0:def 4; then
+A23:f2/.(reproj(i,x).z) = f2.(reproj(i,x).z) by PARTFUN1:def 6
+      .=(f2*reproj(i,x)).z by A20,FUNCT_1:12
+      .=(f2*reproj(i,x))/.z by A20,PARTFUN1:def 6;
+    thus ((f1-f2)*reproj(i,x)).z =(f1-f2).(reproj(i,x).z) by A16,FUNCT_1:12
+      .=(f1-f2)/.(reproj(i,x).z) by A17,PARTFUN1:def 6
+      .= f1/.(reproj(i,x).z) - f2/.(reproj(i,x).z) by A17,VFUNCT_1:def 2
+      .=(f1*reproj(i,x)- f2*reproj(i,x))/.z by A15,A16,A24,A23,VFUNCT_1:def 2
+      .=(f1*reproj(i,x)- f2*reproj(i,x)).z by A15,A16,PARTFUN1:def 6;
+   end;
+   hence thesis by A3,A15,A4,PARTFUN1:5;
+end;
+
+theorem Th27:
+for i be set st i in dom G holds
+  r(#)(f*reproj(modetrans(G,i),x)) = (r(#)f)*reproj(modetrans(G,i),x)
+proof
+   let i0 be set;
+   assume i0 in dom G;
+   set i=modetrans(G,i0);
+A1:dom(r(#)f) = dom f by VFUNCT_1:def 4;
+A2:dom(r(#)(f*reproj(i,x))) =dom(f*reproj(i,x)) by VFUNCT_1:def 4;
+A3:dom(reproj(i,x))=the carrier of G.i by FUNCT_2:def 1;
+   for s be Element of G.i holds s in dom((r(#)f)*reproj(i,x))
+     iff s in dom(f*reproj(i,x))
+   proof
+    let s be Element of G.i;
+    s in dom((r(#)f)*reproj(i,x)) iff reproj(i,x).s in dom(r(#)f)
+      by A3,FUNCT_1:11;
+    hence thesis by A1,A3,FUNCT_1:11;
+   end; then
+   for s be set holds s in dom(r(#)(f*reproj(i,x)))
+     iff s in dom((r(#)f)*reproj(i,x)) by A2; then
+A4:dom(r(#)(f*reproj(i,x))) =dom((r(#)f)*reproj(i,x)) by TARSKI:1;
+A5:for s be Element of G.i holds s in dom((r(#)f)*reproj(i,x))
+     iff reproj(i,x).s in dom(r(#)f)
+   proof
+    let s be Element of G.i;
+    dom(reproj(i,x))=the carrier of G.i by FUNCT_2:def 1;
+    hence thesis by FUNCT_1:11;
+   end;
+   for z being Element of G.i st z in dom(r(#)(f*reproj(i,x))) holds
+    (r(#)(f*reproj(i,x))).z = ((r(#)f)*reproj(i,x)).z
+   proof
+    let z be Element of G.i;
+    assume A6: z in dom(r(#)(f*reproj(i,x))); then
+A7: z in dom(f*reproj(i,x)) by VFUNCT_1:def 4;
+
+A8: reproj(i,x).z in dom f by A1,A5,A4,A6; then
+A9: f/.(reproj(i,x).z) = f.(reproj(i,x).z) by PARTFUN1:def 6
+      .= (f*reproj(i,x)).z by A7,FUNCT_1:12
+      .= (f*reproj(i,x))/.z by A7,PARTFUN1:def 6;
+
+A10:(r(#)(f*reproj(i,x))).z =(r(#)(f*reproj(i,x)))/.z by A6,PARTFUN1:def 6
+      .= r * f/.(reproj(i,x).z) by A6,A9,VFUNCT_1:def 4;
+    ((r(#)f)*reproj(i,x)).z = (r(#)f).(reproj(i,x).z) by A4,A6,FUNCT_1:12
+      .= (r(#)f)/.(reproj(i,x).z) by A1,A8,PARTFUN1:def 6
+      .= r * f/.(reproj(i,x).z) by A1,A8,VFUNCT_1:def 4;
+    hence thesis by A10;
+   end;
+   hence thesis by A4,PARTFUN1:5;
+end;
+
+theorem
+for i be set st i in dom G
+  & f1 is_partial_differentiable_in x,i
+  & f2 is_partial_differentiable_in x,i
+  holds f1+f2 is_partial_differentiable_in x,i
+   & partdiff(f1+f2,x,i)=partdiff(f1,x,i)+partdiff(f2,x,i)
+proof
+   let i0 be set;
+   set i=modetrans(G,i0);
+   assume AS: i0 in dom G; then
+A0:(f1+f2)*reproj(i,x) = f1*reproj(i,x)+f2*reproj(i,x) by Th26;
+   assume
+A1: f1 is_partial_differentiable_in x,i0 &
+    f2 is_partial_differentiable_in x,i0;
+A2:f1*reproj(i,x) is_differentiable_in proj(i).x &
+   f2*reproj(i,x) is_differentiable_in proj(i).x by A1,Def9; then
+   (f1+f2)*reproj(i,x) is_differentiable_in proj(i).x by A0,NDIFF_1:35;
+   hence f1+f2 is_partial_differentiable_in x,i0 by Def9;
+   thus
+    partdiff(f1,x,i0)+partdiff(f2,x,i0)
+    = diff(f1*reproj(i,x)+f2*reproj(i,x),proj(i).x) by A2,NDIFF_1:35
+    .= partdiff((f1+f2),x,i0) by AS,Th26;
+end;
+
+theorem
+for i be set st i in dom G
+  & f1 is_partial_differentiable_in x,i
+  & f2 is_partial_differentiable_in x,i
+ holds f1-f2 is_partial_differentiable_in x,i
+     & partdiff(f1-f2,x,i)=partdiff(f1,x,i)-partdiff(f2,x,i)
+proof
+   let i0 be set;
+   assume AS: i0 in dom G;
+   set i=modetrans(G,i0);
+   assume f1 is_partial_differentiable_in x,i0
+        & f2 is_partial_differentiable_in x,i0; then
+A3:f1*reproj(i,x) is_differentiable_in proj(i).x
+ & f2*reproj(i,x) is_differentiable_in proj(i).x by Def9;
+   (f1-f2)*reproj(i,x) = f1*reproj(i,x)-f2*reproj(i,x) by AS,Th26; then
+   (f1-f2)*reproj(i,x) is_differentiable_in proj(i).x by A3,NDIFF_1:36;
+   hence f1-f2 is_partial_differentiable_in x,i0 by Def9;
+   thus partdiff(f1,x,i0)-partdiff(f2,x,i0)
+     = diff(f1*reproj(i,x)-f2*reproj(i,x),proj(i).x) by A3,NDIFF_1:36
+     .= partdiff((f1-f2),x,i0) by AS,Th26;
+end;
+
+theorem
+for i be set st i in dom G
+  & f is_partial_differentiable_in x,i
+ holds r(#)f is_partial_differentiable_in x,i & partdiff((r(#)f),x,i)
+          = r*partdiff(f,x,i)
+proof
+   let i0 be set;
+   assume AS: i0 in dom G;
+   set i=modetrans(G,i0);
+   assume f is_partial_differentiable_in x,i0; then
+A1:f*reproj(i,x) is_differentiable_in proj(i).x by Def9;
+   r(#)(f*reproj(i,x)) = (r(#)f)*reproj(i,x) by AS,Th27; then
+   (r(#)f)*reproj(i,x) is_differentiable_in proj(i).x by A1,NDIFF_1:37;
+   hence r(#)f is_partial_differentiable_in x,i0 by Def9;
+   thus partdiff(r(#)f,x,i0) = diff(r(#)(f*reproj(i,x)),proj(i).x) by AS,Th27
+    .= r*partdiff(f,x,i0) by A1,NDIFF_1:37;
+end;
+
+begin :: Continuously differentiable and Partial derivative
+
+theorem XTh50:
+ ||. proj(i).x .|| <= ||.x.||
+proof
+   reconsider y= x as Element of product carr G by LM001;
+   proj(i).x = y.i by Def1;
+   hence thesis by PRVECT_2:10;
+end;
+
+registration
+  let G be non-trivial RealNormSpace-Sequence;
+  cluster -> (len G)-element for Point of product G;
+  coherence
+  proof
+    let x be Point of product G;
+X2: the carrier of (product G) = product carr G by LM001;
+X3: dom x = dom (carr G)
+    & for i be set st i in dom (carr G) holds x.i in carr G.i by X2,CARD_3:9;
+    len carr G = len G by PRVECT_2:def 4; then
+    dom x= Seg len G by X3,FINSEQ_1:def 3; then
+    len x = len G by FINSEQ_1:def 3;
+    hence thesis by CARD_1:def 7;
+  end;
+end;
+
+theorem XTh8:
+for G be non-trivial RealNormSpace-Sequence,
+    T be non trivial RealNormSpace,
+    i be set,
+    Z be Subset of product G,
+    f be PartFunc of product G,T
+      st Z is open holds
+  f is_partial_differentiable_on Z,i
+      iff
+  Z c=dom f &
+  for x be Point of product G st x in Z holds
+    f is_partial_differentiable_in x,i
+proof
+   let G be non-trivial RealNormSpace-Sequence,
+       T be non trivial RealNormSpace,
+       i0 be set,
+       Z be Subset of product G,
+       f be PartFunc of product G,T;
+   assume
+A1: Z is open;
+   set i = modetrans(G,i0);
+   set S=G.i;
+   set RNS= R_NormSpace_of_BoundedLinearOperators(S,T);
+   hereby
+    assume A3: f is_partial_differentiable_on Z,i0;
+    hence A4: Z c=dom f by Def19;
+    let nx0 be Point of product G;
+    reconsider x0=proj(i).nx0 as Point of S;
+    assume A5: nx0 in Z; then
+    f|Z is_partial_differentiable_in nx0,i0 by A3,Def19; then
+    (f|Z)*reproj(i,nx0) is_differentiable_in x0 by Def9; then
+    consider N0 being Neighbourhood of x0 such that
+A6:  N0 c= dom((f|Z)*reproj(i,nx0)) and
+A7:  ex L be Point of RNS,R be REST of S,T st
+      for x be Point of S st x in N0 holds
+       ((f|Z)*reproj(i,nx0))/.x-((f|Z)*reproj(i,nx0))/.x0
+         = L .( x-x0)+R/.(x-x0) by NDIFF_1:def 6;
+
+    consider L be Point of RNS,R be REST of S,T such that
+A8:  for x be Point of S st x in N0 holds
+      ((f|Z)*reproj(i,nx0))/.x - ((f|Z)*reproj(i,nx0))/.x0
+        = L.(x-x0) + R/.(x-x0) by A7;
+
+    consider N1 being Neighbourhood of x0 such that
+A9:  for x be Point of S st x in N1 holds
+      (reproj(i,nx0)).x in Z by A1,A5,XLm5;
+
+A10:now let x be Point of S;
+     assume x in N1; then
+     (reproj(i,nx0)).x in Z by A9; then
+     (reproj(i,nx0)).x in (dom f) /\ Z by A4,XBOOLE_0:def 4;
+     hence (reproj(i,nx0)).x in dom(f|Z) by RELAT_1:61;
+    end;
+    reconsider N = N0 /\ N1 as Neighbourhood of x0 by Lm1;
+    (f|Z)*reproj(i,nx0) c= f*reproj(i,nx0) by RELAT_1:29,59; then
+A11:dom((f|Z)*reproj(i,nx0)) c= dom(f*reproj(i,nx0)) by RELAT_1:11;
+    N c= N0 by XBOOLE_1:17; then
+    N c= dom((f|Z)*reproj(i,nx0)) by A6,XBOOLE_1:1; then
+A12:N c= dom(f*reproj(i,nx0)) by A11,XBOOLE_1:1;
+A15:dom(reproj(i,nx0)) = the carrier of G.i by FUNCT_2:def 1;
+    now let x be Point of S;
+     assume x in N; then
+A14: x in N0 & x in N1 by XBOOLE_0:def 4; then
+A16: (reproj(i,nx0)).x in dom(f|Z) by A10; then
+A17: (reproj(i,nx0)).x in dom f & (reproj(i,nx0)).x in Z by RELAT_1:57;
+
+A18: (reproj(i,nx0)).x0 in dom(f|Z) by A10,NFCONT_1:4; then
+A19: (reproj(i,nx0)).x0 in dom f & (reproj(i,nx0)).x0 in Z by RELAT_1:57;
+
+A20: ((f|Z)*reproj(i,nx0))/.x
+       = (f|Z)/.(reproj(i,nx0)/.x) by A16,A15,PARTFUN2:4
+      .= f/.(reproj(i,nx0)/.x) by A17,PARTFUN2:17
+      .= (f*reproj(i,nx0))/.x by A15,A17,PARTFUN2:4;
+
+      ((f|Z)*reproj(i,nx0))/.x0
+       = (f|Z)/.(reproj(i,nx0)/.x0) by A15,A18,PARTFUN2:4
+      .= f/.(reproj(i,nx0)/.x0) by A19,PARTFUN2:17
+      .= (f*reproj(i,nx0))/.x0 by A15,A19,PARTFUN2:4;
+     hence (f*reproj(i,nx0))/.x-(f*reproj(i,nx0))/.x0 =L.(x-x0)+R/.(x-x0)
+       by A8,A14,A20;
+    end; then
+    f*reproj(i,nx0) is_differentiable_in x0 by A12,NDIFF_1:def 6;
+    hence f is_partial_differentiable_in nx0,i0 by Def9;
+   end;
+
+   assume that
+A21:Z c=dom f and
+A22:for nx be Point of product G  st nx in Z holds
+      f is_partial_differentiable_in nx,i0;
+   now let nx0 be Point of product G;
+    assume A23: nx0 in Z; then
+A24:f is_partial_differentiable_in nx0,i0 by A22;
+    reconsider x0=proj(i).nx0 as Point of S;
+
+    f*reproj(i,nx0) is_differentiable_in x0 by A24,Def9; then
+    consider N0 being Neighbourhood of x0 such that
+     N0 c= dom (f*reproj(i,nx0)) and
+A25: ex L be Point of RNS,R be REST of S,T st
+      for x be Point of S st x in N0 holds
+       (f*reproj(i,nx0))/.x-(f*reproj(i,nx0))/.x0
+         = L.(x-x0)+R  /.(x-x0) by NDIFF_1:def 6;
+
+    consider N1 being Neighbourhood of x0 such that
+A26: for x be Point of S st x in N1 holds
+      (reproj(i,nx0)).x in Z by A1,A23,XLm5;
+
+A27:now let x be Point of S;
+     assume x in N1; then
+     (reproj(i,nx0)).x in Z by A26; then
+     (reproj(i,nx0)).x in (dom f) /\ Z by A21,XBOOLE_0:def 4;
+     hence (reproj(i,nx0)).x in dom(f|Z) by RELAT_1:61;
+    end;
+
+A28:N1 c= dom((f|Z)*reproj(i,nx0))
+    proof
+     let z be set;
+     assume A29:z in N1; then
+     z in the carrier of S; then
+A30: z in dom (reproj(i,nx0)) by FUNCT_2:def 1;
+
+     reconsider x=z as Point of S by A29;
+     (reproj(i,nx0)).x in dom(f|Z) by A29,A27;
+     hence z in dom((f|Z)*reproj(i,nx0)) by A30,FUNCT_1:11;
+    end;
+
+    reconsider N=N0 /\ N1 as Neighbourhood of x0 by Lm1;
+
+    N c= N1 by XBOOLE_1:17; then
+A32:N c= dom((f|Z)*reproj(i,nx0)) by A28,XBOOLE_1:1;
+
+    consider L be Point of RNS,R be REST of S,T such that
+A33: for x be Point of S st x in N0 holds
+      (f*reproj(i,nx0))/.x-(f*reproj(i,nx0))/.x0=L.(x-x0)+R/.(x-x0) by A25;
+
+    now let x be Point of S;
+     assume A34: x in N; then
+A35: x in N0 by XBOOLE_0:def 4;
+
+A36: dom (reproj(i,nx0)) = the carrier of G.i by FUNCT_2:def 1;
+
+     x in N1 by A34,XBOOLE_0:def 4; then
+A37: (reproj(i,nx0)).x in dom(f|Z) by A27; then
+A38: (reproj(i,nx0)).x in dom f /\ Z by RELAT_1:61; then
+A39: (reproj(i,nx0)).x in dom f by XBOOLE_0:def 4;
+
+A40: (reproj(i,nx0)).x0 in dom(f|Z) by A27,NFCONT_1:4; then
+A41: (reproj(i,nx0)).x0 in dom f /\ Z by RELAT_1:61; then
+A42: (reproj(i,nx0)).x0 in dom f by XBOOLE_0:def 4;
+
+A43: ((f|Z)*reproj(i,nx0))/.x
+       = (f|Z)/. (reproj(i,nx0)/.x ) by A37,A36,PARTFUN2:4
+      .= f/. (reproj(i,nx0)/.x) by A38,PARTFUN2:16
+      .= (f*reproj(i,nx0))/.x by A36,A39,PARTFUN2:4;
+     ((f|Z)*reproj(i,nx0))/.x0
+       = (f|Z)/. (reproj(i,nx0)/.x0 ) by A36,A40,PARTFUN2:4
+      .= f/. (reproj(i,nx0)/.x0) by A41,PARTFUN2:16
+      .= (f*reproj(i,nx0))/.x0 by A36,A42,PARTFUN2:4;
+     hence ((f|Z)*reproj(i,nx0))/.x -((f|Z)*reproj(i,nx0))/.x0
+             = L.(x-x0)+R/.(x-x0) by A43,A35,A33;
+    end; then
+    (f|Z)*reproj(i,nx0) is_differentiable_in x0 by A32,NDIFF_1:def 6;
+    hence (f|Z) is_partial_differentiable_in nx0,i0 by Def9;
+   end;
+   hence thesis by A21,Def19;
+end;
+
+theorem XLm7:
+ for i,j be Element of dom G,
+     x be Point of G.i,
+     z be Element of product carr G
+      st z= reproj(i,0.(product G)).x
+holds
+  (i = j implies z.j = x) & (i <> j implies z.j = 0.(G.j))
+proof
+   let i,j be Element of dom G,
+       x be Point of G.i,
+       z be Element of product carr G;
+   assume AS: z= reproj(i,0.(product G)).x;
+   reconsider Zr = 0.(product G) as Element of product carr G by LM001;
+   reconsider ixr = (reproj(i,0.(product G))).x
+             as Element of product carr G by LM001;
+X9:reproj(i,0.(product G)).x = 0.(product G) +* (i,x) by Def5;
+   set ix= i .--> x;
+   consider g be Function such that
+P1:   Zr = g & dom g = dom carr G
+    & for i be set st i in dom carr G holds g.i in (carr G).i
+        by CARD_3:def 5;
+S1:dom Zr = dom G by P1,ZE;
+   now assume i <> j; then
+    z.j = Zr.j by AS,X9,FUNCT_7:32;
+    hence z.j = 0.(G.j) by ZR1;
+   end;
+   hence thesis by AS,X9,S1,FUNCT_7:31;
+end;
+
+theorem XTh9:
+for x,y be Point of G.i
+ holds reproj(i,0.(product G)).(x+y)
+   = reproj(i,0.(product G)).x + reproj(i,0.(product G)).y
+proof
+   let x,y be Point of G.i;
+   reconsider v=reproj(i,0.(product G)).(x+y) as Element of product carr G
+     by LM001;
+   reconsider s=reproj(i,0.(product G)).x as Element of product carr G
+     by LM001;
+   reconsider t=reproj(i,0.(product G)).y as Element of product carr G
+     by LM001;
+   for j be Element of dom G holds v.j=s.j + t.j
+   proof
+    let j be Element of dom G;
+    per cases;
+    suppose A1: i= j; then
+     reconsider yy=y as Point of G.j;
+     v.j = x+y by XLm7,A1; then
+     v.j =s.j + yy by XLm7,A1;
+     hence v.j =s.j + t.j by XLm7,A1;
+    end;
+    suppose A2: i <> j; then
+     v.j = 0.(G.j) by XLm7; then
+     v.j = 0.(G.j) + 0.(G.j) by RLVECT_1:def 4; then
+     v.j =s.j + 0.(G.j) by XLm7,A2;
+     hence v.j =s.j + t.j by XLm7,A2;
+    end;
+   end;
+   hence thesis by ADD1;
+end;
+
+theorem YTh9:
+for x,y be Point of product G
+ holds proj(i).(x+y) = proj(i).x + proj(i).y
+proof
+   let x,y be Point of product G;
+   reconsider v=x+y as Element of product carr G by LM001;
+   reconsider s=x as Element of product carr G by LM001;
+   reconsider t=y as Element of product carr G by LM001;
+   proj(i).(x+y)= v.i & proj(i).x = s.i & proj(i).y = t.i by Def1;
+   hence thesis by ADD1;
+end;
+
+theorem
+for x,y be Point of G.i
+ holds reproj(i,0.(product G)).(x-y)
+   = reproj(i,0.(product G)).x - reproj(i,0.(product G)).y
+proof
+   let x,y  be Point of G.i;
+   reconsider v=reproj(i,0.(product G)).(x-y) as Element of product carr G
+     by LM001;
+   reconsider s=reproj(i,0.(product G)).x as Element of product carr G
+     by LM001;
+   reconsider t=reproj(i,0.(product G)).y as Element of product carr G
+     by LM001;
+
+   for j be Element of dom G holds v.j=s.j - t.j
+   proof
+    let j be Element of dom G;
+    per cases;
+    suppose A1: i= j; then
+     reconsider yy=y as Point of G.j;
+     v.j = x-y by XLm7,A1; then
+     v.j =s.j - yy by XLm7,A1;
+     hence v.j =s.j - t.j by XLm7,A1;
+    end;
+    suppose A2: i <> j; then
+     v.j = 0.(G.j) by XLm7; then
+     v.j = 0.(G.j) - 0.(G.j) by RLVECT_1:13; then
+     v.j =s.j - 0.(G.j) by XLm7,A2;
+     hence v.j =s.j - t.j by XLm7,A2;
+    end;
+   end;
+   hence thesis by SUB1;
+end;
+
+theorem YTh9M:
+for x,y be Point of product G
+ holds proj(i).(x-y) = proj(i).x - proj(i).y
+proof
+   let x,y be Point of product G;
+   reconsider v=x-y as Element of product carr G by LM001;
+   reconsider s=x as Element of product carr G by LM001;
+   reconsider t=y as Element of product carr G by LM001;
+   proj(i).(x-y)= v.i & proj(i).x = s.i & proj(i).y = t.i by Def1;
+   hence thesis by SUB1;
+end;
+
+theorem XTh11:
+for x be Point of G.i st x <> 0.(G.i)
+ holds reproj(i,0.(product G)).x <> 0.(product G)
+proof
+   let x be Point of G.i;
+   assume AS: x <> 0.(G.i);
+   assume AS1: reproj(i,0.(product G)).x = 0.(product G);
+   reconsider v=reproj(i,0.(product G)).x as Element of product carr G
+     by LM001;
+   x = v.i by XLm7;
+   hence contradiction by AS,ZR1,AS1;
+end;
+
+theorem XTh16:
+for x be Point of G.i, a be Element of REAL
+ holds reproj(i,0.(product G)).(a*x)
+   = a*(reproj(i,0.(product G)).x)
+proof
+   let x  be Point of G.i,a be Element of REAL;
+   reconsider v=reproj(i,0.(product G)).(a*x) as Element of product carr G
+     by LM001;
+   reconsider s=reproj(i,0.(product G)).x as Element of product carr G
+     by LM001;
+
+   for j be Element of dom G holds v.j=a*(s.j)
+   proof
+    let j be Element of dom G;
+    per cases;
+    suppose A1: i= j; then
+     v.j = a*x by XLm7;
+     hence v.j =a*(s.j) by XLm7,A1;
+    end;
+    suppose A2: i <> j; then
+     v.j = 0.(G.j) by XLm7; then
+     v.j = a*0.(G.j) by RLVECT_1:10;
+     hence v.j =a*(s.j) by XLm7,A2;
+    end;
+   end;
+   hence thesis by MLT1;
+end;
+
+theorem YTh16:
+for x be Point of product G,a be Element of REAL
+ holds proj(i).(a*x) = a*(proj(i).x)
+proof
+   let x be Point of product G,a  be Element of REAL;
+   reconsider v=a*x as Element of product carr G by LM001;
+   reconsider s=x as Element of product carr G by LM001;
+   proj(i).(a*x)= v.i & proj(i).x = s.i by Def1;
+   hence thesis by MLT1;
+end;
+
+theorem Th21X:
+ for G be non-trivial RealNormSpace-Sequence,
+      S be non trivial RealNormSpace,
+      f be PartFunc of product G, S,
+      x be Point of product G,
+      i be set
+  st f is_differentiable_in x holds
+    f is_partial_differentiable_in x,i
+  & partdiff(f,x,i) = diff(f,x) * reproj(modetrans(G,i),0.(product G))
+proof
+   let G be non-trivial RealNormSpace-Sequence,
+       S be non trivial RealNormSpace,
+       f be PartFunc of product G, S,
+       x be Point of product G,
+       i0 be set;
+   assume
+A1: f is_differentiable_in x;
+   set i=modetrans(G,i0);
+
+   consider N being Neighbourhood of x such that
+A3: N c= dom f &
+    ex R be REST of product G,S st
+     for y be Point of product G  st y in N holds
+      f/.y-f/.x = diff(f,x).(y-x) + R/.(y-x) by A1,NDIFF_1:def 7;
+
+   consider R be REST of product G,S such that
+A4: for y be Point of product G  st y in N holds
+     f/.y-f/.x = diff(f,x).(y-x) + R/.(y-x) by A3;
+
+   consider r0 be Real such that
+A5: 0 < r0 &
+    {z where z is Point of product G  : ||. z-x .|| < r0} c= N
+      by NFCONT_1:def 1;
+
+   set u = f*reproj(i,x);
+   reconsider x0 = proj(i).x as Point of G.i;
+   set Z=0.(product G);
+   set Nx0 = {z where z is Point of G.i: ||. z-x0 .|| < r0 };
+   now let s be set;
+    assume s in Nx0; then
+    ex z be Point of G.i st s=z & ||. z-x0 .|| < r0;
+    hence s in the carrier of G.i;
+   end; then
+   Nx0 is Subset of G.i by TARSKI:def 3; then
+   reconsider Nx0 as Neighbourhood of x0 by A5,NFCONT_1:def 1;
+
+A6:for xi be Element of G.i st xi in Nx0 holds reproj(i,x).xi in N
+   proof
+    let xi be Element of G.i;
+    assume xi in Nx0; then
+A7: ex z be Point of G.i st xi=z & ||. z-x0 .|| < r0;
+    reproj(i,x).xi-x = reproj(i,Z).(xi-x0) by XTh6; then
+    ||. reproj(i,x).xi-x .|| < r0 by XTh5,A7; then
+    reproj(i,x).xi in {z where z is Point of product G : ||. z-x .|| < r0 };
+    hence thesis by A5;
+   end;
+
+A8:R is total by NDIFF_1:def 5; then
+A9:dom R = the carrier of product G by PARTFUN1:def 2;
+   reconsider R1 = R*reproj(i,0.(product G)) as PartFunc of G.i,S;
+A10:
+   dom(reproj(i,0.(product G))) = the carrier of G.i by FUNCT_2:def 1;
+
+A11:
+   dom R1 = the carrier of G.i by A8,PARTFUN1:def 2;
+
+   for r be Real st r > 0
+    ex d be Real st d > 0 &
+     for z be Point of G.i st z <> 0.(G.i) & ||.z.|| < d
+      holds (||.z.||"  * ||. R1/.z .||) < r
+   proof
+    let r be Real;
+    assume r > 0; then
+    consider d be Real such that
+A12: d > 0 &
+     for z be Point of product G  st z <> 0.(product G ) & ||.z.|| < d
+      holds (||.z.||"  * ||. R/.z .||) < r by A8,NDIFF_1:23;
+    take d;
+    now let z be Point of G.i;
+     assume A13: z <> 0.(G.i) & ||.z.|| < d;
+A14: ||. reproj(i,Z).z .|| = ||.z.|| by XTh5;
+
+     R/.(reproj(i,Z).z) = R.(reproj(i,Z).z) by A9,PARTFUN1:def 6; then
+     R/.(reproj(i,Z).z) =R1.z by A10,FUNCT_1:13; then
+     R/.(reproj(i,Z).z) =R1/.z by A11,PARTFUN1:def 6;
+     hence ||.z.||" * ||. R1/.z .|| < r by A12,A14,A13,XTh11;
+    end;
+    hence thesis by A12;
+   end; then
+   reconsider R1 as REST of G.i,S by A8,NDIFF_1:23;
+
+   reconsider dfx = diff(f,x)
+      as bounded LinearOperator of product G,S by LOPBAN_1:def 9;
+   reconsider LD1 = dfx*reproj(i,0.(product G )) as Function of G.i,S;
+A15:
+   now let x,y be Element of G.i;
+    LD1.(x+y) = dfx.(reproj(i,Z).(x+y)) by FUNCT_2:15; then
+    LD1.(x+y) =dfx.(reproj(i,Z).x+reproj(i,Z).y) by XTh9; then
+    LD1.(x+y) =dfx.(reproj(i,Z).x)+dfx.(reproj(i,Z).y)
+      by GRCAT_1:def 8; then
+    LD1.(x+y) =LD1.x+dfx.(reproj(i,Z).y) by FUNCT_2:15;
+    hence LD1.(x+y) =LD1.x+LD1.y by FUNCT_2:15;
+   end;
+
+   now let x be Element of G.i, a be Real;
+    LD1.(a*x) = dfx.(reproj(i,Z).(a*x)) by FUNCT_2:15; then
+    LD1.(a*x) = dfx.(a*(reproj(i,Z).x)) by XTh16; then
+    LD1.(a*x) =a*dfx.(reproj(i,Z).x) by LOPBAN_1:def 5;
+    hence LD1.(a*x) =a*LD1.x by FUNCT_2:15;
+   end; then
+   reconsider LD1 as LinearOperator of G.i,S
+     by A15,GRCAT_1:def 8,LOPBAN_1:def 5;
+
+   consider K0 being Real such that
+KKK1:  0 <= K0 & for x being
+   VECTOR of product G holds ||. dfx.x .|| <= K0 * ||. x .||
+      by LOPBAN_1:def 8;
+
+   now let r being  VECTOR of G.i;
+    ||. dfx.(reproj(i,Z).r) .|| <= K0 * ||. reproj(i,Z).r .|| by KKK1; then
+    ||. dfx.(reproj(i,Z).r ) .|| <= K0 * ||.r.|| by XTh5;
+    hence ||. LD1.r .|| <= K0 * ||.r.|| by FUNCT_2:15;
+   end; then
+   LD1 is bounded by KKK1,LOPBAN_1:def 8; then
+   reconsider LD1 as Point of
+     R_NormSpace_of_BoundedLinearOperators(G.i,S) by LOPBAN_1:def 9;
+   now let s be set;
+    assume s in (reproj(i,x)).:Nx0; then
+    ex t being Element of G.i st
+      t in Nx0 & s = (reproj(i,x)).t by FUNCT_2:65; then
+    s in N by A6;
+    hence s in dom f by A3;
+   end; then
+A16:
+   (reproj(i,x)).:Nx0 c= dom f by TARSKI:def 3;
+   dom(reproj(i,x)) = the carrier of G.i by FUNCT_2:def 1; then
+A17:
+   Nx0 c= dom u by A16,FUNCT_3:3;
+A18:
+   for y be Point of G.i st y in Nx0 holds
+     u/.y-u/.x0 = LD1.(y-x0) + R1/.(y-x0)
+   proof
+    let y be Point of G.i;
+    assume A19: y in Nx0; then
+A20:reproj(i,x).y in N by A6;
+Z1:  reproj(i,x).x0 = x +* (i,x0) by Def5;
+ZZ:  the carrier of (product G) = product carr G by LM001;
+    x.i=x0 by Def1,ZZ; then
+A22:x= x +* (i,x0) by FUNCT_7:35;
+A24:reproj(i,x).x0 in N by A6,NFCONT_1:4;
+    u/.y = u.y by A19,A17,PARTFUN1:def 6; then
+    u/.y = f.(reproj(i,x).y) by FUNCT_2:15; then
+A25:u/.y = f/.(reproj(i,x).y) by A20,A3,PARTFUN1:def 6;
+    R/.(reproj(i,Z).(y-x0)) = R.(reproj(i,Z).(y-x0))
+       by A9,PARTFUN1:def 6; then
+    R/.(reproj(i,Z).(y-x0)) = R1.(y-x0) by A10,FUNCT_1:13; then
+A27:R/.(reproj(i,Z).(y-x0)) = R1/.(y-x0) by A11,PARTFUN1:def 6;
+    x0 in Nx0 by NFCONT_1:4; then
+    u/.x0 = u.x0 by A17,PARTFUN1:def 6; then
+    u/.x0 = f.(reproj(i,x).x0) by FUNCT_2:15; then
+    u/.y-u/.x0 = f/.(reproj(i,x).y) -f/.x
+       by A25,A22,A24,A3,Z1,PARTFUN1:def 6; then
+    u/.y-u/.x0 = diff(f,x).(reproj(i,x).y-x) + R/.(reproj(i,x).y-x)
+      by A4,A19,A6; then
+    u/.y-u/.x0 = dfx.(reproj(i,Z).(y-x0)) + R/.(reproj(i,x).y-x) by XTh6; then
+    u/.y-u/.x0 = dfx.(reproj(i,Z).(y-x0)) + R/.(reproj(i,Z).(y-x0)) by XTh6;
+    hence u/.y-u/.x0 = LD1.(y-x0) +  R1/.(y-x0) by A27,FUNCT_2:15;
+   end; then
+A28: u is_differentiable_in x0 by A17,NDIFF_1:def 6;
+   hence f is_partial_differentiable_in x,i0 by Def9;
+   thus thesis by A28,A17,A18,NDIFF_1:def 7;
+end;
+
+Lm8:
+for G be non-trivial RealNormSpace-Sequence,
+    S be non trivial RealNormSpace,
+    f be PartFunc of product G,S, x be Point of product G
+ ex L be bounded LinearOperator of product G,S
+    st
+  for h be Element of product G
+   ex w be FinSequence of S st
+     dom w = Seg len G
+   & (for i be Element of NAT st i in Seg len G  holds
+          w.i = partdiff(f,x,i).(proj(modetrans(G,i)).h) )
+   & L.h=Sum w
+proof
+   let G be non-trivial RealNormSpace-Sequence,
+       S be non trivial RealNormSpace,
+       f be PartFunc of product G,S,
+       x be Point of product G;
+   set m=len G;
+   defpred LX[set,set] means
+     ex w be FinSequence of S st
+       dom w = Seg m
+     & (for i be Element of NAT st i in Seg m holds
+          w.i = partdiff(f,x,i).(proj(modetrans(G,i)).$1) )
+     & $2=Sum w;
+
+A1:for v being Element of product G holds
+    ex y be Element of S st LX[v,y]
+   proof
+    let v being Element of product G;
+
+    defpred YX[set,set] means
+     ex i be Element of NAT st i=$1 &
+     $2 = partdiff(f,x,i).(proj(modetrans(G,i)).v);
+
+A2: for i be Nat st i in Seg m holds ex r being Element of S st YX[i,r]
+    proof
+     let i be Nat;
+     assume i in Seg m;
+     reconsider i0=i as Element of NAT by ORDINAL1:def 12;
+     partdiff(f,x,i0).(proj(modetrans(G,i0)).v) in the carrier of S;
+     hence thesis;
+    end;
+
+    consider w be FinSequence of S such that
+A3:  dom w = Seg m
+   & for i be Nat st i in Seg m holds YX[i,w.i] from FINSEQ_1:sch 5(A2);
+A4: now let i be Element of NAT;
+     assume i in Seg m; then
+     YX[i,w.i] by A3;
+     hence w.i = partdiff(f,x,i).(proj(modetrans(G,i)).v);
+    end;
+
+    reconsider w0 = Sum w as Element of S;
+    ex w be FinSequence of S st
+       dom w=Seg m
+     & (for i be Element of NAT st i in Seg m holds
+            w.i = partdiff(f,x,i).(proj(modetrans(G,i)).v))
+     & w0 = Sum w by A4,A3;
+    hence ex y0 be Element of S st LX[v,y0];
+   end;
+
+   consider L being Function of product G,S such that
+A5: for h being Element of product G holds LX[h,L.h] from FUNCT_2:sch 3(A1);
+
+A6:for s,t being Element of product G holds L.(s+t) = L.s + L.t
+   proof
+    let s,t being Element of product G;
+    consider w be FinSequence of S such that
+A7:  dom w=Seg m
+   & (for i be Element of NAT st i in Seg m holds
+          w.i = partdiff(f,x,i).(proj(modetrans(G,i)).s))
+   & L.s = Sum w by A5;
+    consider v be FinSequence of S such that
+A8:  dom v=Seg m
+   & (for i be Element of NAT st i in Seg m holds
+          v.i = partdiff(f,x,i).(proj(modetrans(G,i)).t ))
+   & L.t = Sum v by A5;
+    consider u be FinSequence of S such that
+A9:  dom u=Seg m
+   & (for i be Element of NAT st i in Seg m holds
+          u.i = partdiff(f,x,i).(proj(modetrans(G,i)).(s+t)))
+   & L.(s+t) = Sum u by A5;
+
+B1: len w = m by A7,FINSEQ_1:def 3;
+B2: len v = m by A8,FINSEQ_1:def 3;
+B3: len u = m by A9,FINSEQ_1:def 3;
+
+    now let i be Element of NAT;
+     assume A11: i in dom w; then
+A12: 1 <= i & i <= m by A7,FINSEQ_1:1; then
+     w/.i = w.i by B1,FINSEQ_4:15; then
+A13: w/.i = partdiff(f,x,i).(proj(modetrans(G,i)).s) by A7,A11;
+
+     v/.i = v.i by A12,B2,FINSEQ_4:15; then
+A14: v/.i = partdiff(f,x,i).(proj(modetrans(G,i)).t) by A7,A8,A11;
+
+F1:  partdiff(f,x,i) is bounded LinearOperator of G.(modetrans(G,i)),S
+        by LOPBAN_1:def 9;
+
+     u.i = partdiff(f,x,i).(proj(modetrans(G,i)).(s+t)) by A7,A9,A11; then
+     u.i = partdiff(f,x,i).(proj(modetrans(G,i)).s + proj(modetrans(G,i)).t)
+                 by YTh9;
+     hence u.i = w/.i + v/.i by A13,A14,F1,GRCAT_1:def 8;
+    end;
+    hence L.(s+t) = L.s + L.t by A9,A7,A8,B1,B2,B3,RLVECT_2:2;
+   end;
+
+   for s being Element of product G, r being Real holds L.(r*s) = r*(L.s)
+   proof
+    let s being Element of product G, r being Real;
+
+    consider w be FinSequence of S such that
+A15: dom w = Seg m
+   & (for i be Element of NAT st i in Seg m holds
+          w.i = partdiff(f,x,i).(proj(modetrans(G,i)).s))
+   & L.s = Sum w by A5;
+
+    consider u be FinSequence of S such that
+A16: dom u = Seg m
+   & (for i be Element of NAT st i in Seg m holds
+          u.i = partdiff(f,x,i).(proj(modetrans(G,i)).(r*s)) )
+   & L.(r*s) = Sum u by A5;
+
+B1: len w = m & len u = m by A15,A16,FINSEQ_1:def 3;
+    now let i be Element of NAT;
+     assume A17: i in dom w; then
+     1 <= i & i <= m by A15,FINSEQ_1:1; then
+     w/.i = w.i by B1,FINSEQ_4:15; then
+A19: w/.i = partdiff(f,x,i).(proj(modetrans(G,i)).s ) by A15,A17;
+
+F1:  partdiff(f,x,i) is bounded LinearOperator of G.(modetrans(G,i)),S
+         by LOPBAN_1:def 9;
+
+     u.i = partdiff(f,x,i).(proj(modetrans(G,i)).(r*s)) by A15,A16,A17; then
+     u.i = partdiff(f,x,i).(r*proj(modetrans(G,i)).s) by YTh16;
+     hence u.i = r*(w/.i) by A19,F1,LOPBAN_1:def 5;
+    end;
+    hence L.(r*s) = r * L.s by A15,A16,B1,RLVECT_2:3;
+   end; then
+   reconsider L as LinearOperator of product G,S
+       by A6,GRCAT_1:def 8,LOPBAN_1:def 5;
+
+   defpred YXL[set,set] means
+     ex i be Element of NAT st i=$1 & $2 = ||. partdiff(f,x,i) .||;
+
+XA2:
+   for i be Nat st i in Seg m holds ex r being Element of REAL st YXL[i,r]
+   proof
+    let i be Nat;
+    assume i in Seg m;
+    reconsider i0=i as Element of NAT by ORDINAL1:def 12;
+    reconsider r = ||. partdiff(f,x,i0) .|| as Element of REAL;
+    YXL[i,r];
+    hence thesis;
+   end;
+
+   consider Kw be FinSequence of REAL such that
+LK10: dom Kw=Seg m
+  & for i be Nat st i in Seg m holds YXL[i,Kw.i] from FINSEQ_1:sch 5(XA2);
+
+LK1:now let i be Element of NAT;
+     assume i in Seg m; then
+     YXL[i,Kw.i] by LK10;
+     hence Kw.i = ||. partdiff(f,x,i) .||;
+    end;
+
+LK20:
+   now let i be Nat;
+    assume i in dom Kw; then
+    Kw.i = ||. partdiff(f,x,i) .|| by LK1,LK10;
+    hence 0 <= Kw.i;
+   end;
+
+   set LK= Sum Kw;
+LK2:
+   0 <= LK by LK20,RVSUM_1:84;
+
+   for s being Element of product G holds ||. L.s .|| <= LK*||. s .||
+   proof
+    let s being Element of product G;
+    consider w be FinSequence of S such that
+H1:  dom w=Seg m
+   & (for i be Element of NAT st i in Seg m holds
+          w.i = partdiff(f,x,i).(proj(modetrans(G,i)).s))
+   & L.s = Sum w by A5;
+
+    defpred YXD[set,set] means
+     ex i be Element of NAT st i=$1 & $2 = ||.partdiff(f,x,i).|| * ||.s.||;
+
+XA3:for i be Nat st i in Seg m holds ex r being Element of REAL st YXD[i,r]
+    proof
+     let i be Nat;
+     assume i in Seg m;
+     reconsider i0=i as Element of NAT by ORDINAL1:def 12;
+     reconsider r = ||.partdiff(f,x,i0).|| * ||.s.|| as Element of REAL;
+     YXD[i,r];
+     hence thesis;
+    end;
+
+    consider Dw be FinSequence of REAL such that
+LK30:dom Dw=Seg m
+   & for i be Nat st i in Seg m holds YXD[i,Dw.i] from FINSEQ_1:sch 5(XA3);
+
+LK3:now let i be Element of NAT;
+     assume i in Seg m; then
+     YXD[i,Dw.i] by LK30;
+     hence Dw.i = ||.partdiff(f,x,i).|| * ||.s.||;
+    end;
+
+    defpred YXH[set,set] means
+     ex i be Element of NAT st i=$1 & $2 = ||. w/.i .||;
+
+XA4:for i be Nat st i in Seg m holds ex r being Element of REAL st YXH[i,r]
+    proof
+     let i be Nat;
+     assume i in Seg m;
+     reconsider i0=i as Element of NAT by ORDINAL1:def 12;
+     reconsider r = ||. w/.i0 .|| as Element of REAL;
+     YXH[i,r];
+     hence thesis;
+    end;
+
+    consider yseq be FinSequence of REAL such that
+H20: dom yseq=Seg m
+   & for i be Nat st i in Seg m holds YXH[i,yseq.i] from FINSEQ_1:sch 5(XA4);
+
+H2: now let i be Element of NAT;
+     assume i in Seg m; then
+     YXH[i,yseq.i] by H20;
+     hence yseq.i = ||. w/.i .||;
+    end;
+
+    len w = len yseq by H1,H20,FINSEQ_3:29; then
+H3: ||.L.s.|| <= Sum yseq by H1,H2,PDIFF617;
+
+    m = len yseq by H20,FINSEQ_1:def 3; then
+X1: yseq is Element of m-tuples_on REAL by FINSEQ_2:92;
+
+    len Dw = m by LK30,FINSEQ_1:def 3; then
+X1A:Dw is Element of m-tuples_on REAL by FINSEQ_2:92;
+
+    now let i be Nat;
+     assume H40: i in Seg m; then
+H41: yseq.i = ||. w/.i .|| by H2;
+
+     w/.i = w.i by H40,H1,PARTFUN1:def 6; then
+H5:  ||. w/.i .|| = ||.partdiff(f,x,i).(proj(modetrans(G,i)).s) .||
+         by H1,H40;
+
+     reconsider DF1=partdiff(f,x,i) as
+       bounded LinearOperator of G.(modetrans(G,i)),S by LOPBAN_1:def 9;
+
+H6:  ||. DF1.(proj(modetrans(G,i)).s) .||
+        <= ||.partdiff(f,x,i).|| * ||.(proj(modetrans(G,i)).s) .||
+            by LOPBAN_1:32;
+
+     product G = NORMSTR(# product carr G,zeros G,[:addop G:],[:multop
+       G:], productnorm G #) by PRVECT_2:6; then
+     reconsider ss= s as Element of product carr G;
+     reconsider xi = proj(modetrans(G,i)).s  as Point of G.(modetrans(G,i));
+     xi = ss.(modetrans(G,i)) by Def1; then
+     ||.partdiff(f,x,i).|| * ||.(proj(modetrans(G,i)).s) .||
+       <=||.partdiff(f,x,i).|| * ||.s.|| by PRVECT_2:10,XREAL_1:64; then
+     ||. w/.i .|| <= ||.partdiff(f,x,i).|| * ||.s.|| by H5,H6,XXREAL_0:2;
+     hence yseq.i <= Dw.i by LK3,H40,H41;
+    end; then
+H7: Sum yseq <= Sum Dw by X1,X1A,RVSUM_1:82;
+
+    len Kw = m by LK10,FINSEQ_1:def 3; then
+    reconsider KKw= Kw as Element of m-tuples_on REAL by FINSEQ_2:92;
+    (||.s.|| * KKw) in m-tuples_on REAL; then
+    ex t be Element of REAL* st t= (||.s.|| * KKw) & len t = m; then
+Z1: dom Dw = dom (||.s.|| * Kw) by LK30,FINSEQ_1:def 3;
+    now let k be Nat;
+     assume Z3: k in dom Dw; then
+     Dw.k = ||.partdiff(f,x,k).|| * ||.s.|| by LK3,LK30; then
+     Dw.k = ||.s.|| * Kw.k by LK1,Z3,LK30;
+     hence Dw.k = (||.s.|| * Kw).k by RVSUM_1:45;
+    end; then
+    Dw = ||.s.|| * Kw by Z1,FINSEQ_1:13; then
+    Sum Dw = (Sum Kw)* ||.s.|| by RVSUM_1:87;
+    hence thesis by H3,H7,XXREAL_0:2;
+   end; then
+   reconsider L as bounded LinearOperator of product G,S by LK2,LOPBAN_1:def 8;
+   take L;
+   thus thesis by A5;
+end;
+
+theorem Th26:
+for S be RealNormSpace, h,g be FinSequence of S
+    st  len h = len g + 1 &
+       (for i be Nat st i in dom g holds g/.i = h /.i - h/.(i+1)) holds
+   h /.1 - h/.(len h) = Sum g
+proof
+   let S be RealNormSpace, h,g be FinSequence of S;
+   assume that
+A1: len h = len g + 1 and
+A2: for i be Nat st i in dom g holds g/.i = h/.i - h/.(i+1);
+
+   consider F be Function of NAT, the carrier of S such that
+ADF1:  Sum g = F.(len g) & F.0 = 0.S
+  & for j be Element of NAT,v be Element of S
+    st j < len g & v = g.(j + 1) holds F.(j + 1) = F.j + v
+   by RLVECT_1:def 12;
+
+   per cases;
+   suppose len g = 0;
+    hence thesis by ADF1,A1,RLVECT_1:15;
+   end;
+   suppose A4:len g > 0;
+    defpred P[Nat] means $1 <= len g implies F.$1 = h/.1 - h/.($1+1);
+A6: P[1]
+    proof
+     assume A60: 1 <= len g; then
+     1 in Seg len g; then
+A7:  1 in dom g by FINSEQ_1:def 3;
+     reconsider zz0=0 as Element of NAT;
+     g/.1 = g.( zz0 + 1 ) by A7,PARTFUN1:def 6; then
+     F.(zz0 + 1) = F.0 + g/.1 by ADF1,A60
+                .= g/.1 by ADF1,RLVECT_1:4;
+     hence F.1 = h/.1 - h/.(1+1) by A7,A2;
+    end;
+
+A8: for j be Nat st 1 <= j holds P[j] implies P[j+1]
+    proof
+     let j be Nat;
+     assume 1 <= j;
+     assume A10: P[j];
+     assume A11:j+1 <= len g; then
+A12: j < len g by NAT_1:13;
+     1 <= j+1 by XREAL_1:38; then
+A13: j+1 in dom g by A11,FINSEQ_3:25; then
+A14: g.(j+1)=g/.(j+1) by PARTFUN1:def 6;
+     j is Element of NAT by ORDINAL1:def 12; then
+     F.(j+1) = F.j + g/.(j+1) by A14,A12,ADF1
+            .=F.j + (h/.(j+1) - h/.(j+1+1)) by A2,A13
+            .= h/.1 - h/.(j+1) + h/.(j+1) - h/.(j+1+1)
+                  by A10,A11,NAT_1:13,RLVECT_1:28
+            .= h/.1 -(h/.(j+1) - h/.(j+1)) - h/.(j+1+1) by RLVECT_1:29
+            .= h/.1 -0.S - h/.(j+1+1) by RLVECT_1:15;
+     hence thesis by RLVECT_1:13;
+    end;
+A16:1 <= len g by A4,NAT_1:14;
+    for i be Nat st 1 <= i holds P[i] from NAT_1:sch 8(A6,A8);
+    hence thesis by ADF1,A1,A16;
+   end;
+end;
+
+theorem
+for G be non-trivial RealNormSpace-Sequence,
+    x,y be Element of product carr G, Z be set
+ holds x +* (y|Z) is Element of product carr G by CARD_3:79;
+
+theorem LMPRT3:
+for G be non-trivial RealNormSpace-Sequence,
+    x,y be Point of product G,
+    Z,x0 be Element of product carr G,
+    X be set
+  st Z=0.(product G) & x0=x & y= Z +* (x0|X)
+ holds ||.y.|| <= ||.x.||
+proof
+   let G be non-trivial RealNormSpace-Sequence,
+       x,y be Point of product G,
+       Z,x0 be Element of product carr G,
+       X be set;
+   assume A1: Z=0.(product G) & x0=x & y= Z +* (x0|X);
+
+   reconsider y0 = y as Element of product carr G by LM001;
+
+A2: ||.y.|| = (productnorm G).y by PRVECT_2:def 13
+           .= |. normsequence(G,y0) .| by PRVECT_2:def 12;
+
+A3: ||.x.|| = (productnorm G).x by PRVECT_2:def 13
+           .= |. normsequence(G,x0) .| by A1,PRVECT_2:def 12;
+
+   reconsider Ny = normsequence(G,y0) as (len G)-element FinSequence of REAL;
+   reconsider Nx = normsequence(G,x0) as (len G)-element FinSequence of REAL;
+
+A4:len Nx = len G & len Ny = len G by CARD_1:def 7;
+
+   for k be Element of NAT st k in Seg len Ny holds 0 <= Ny.k & Ny.k <= Nx.k
+   proof
+    let k be Element of NAT;
+    assume A5: k in Seg len Ny; then
+    reconsider k1 = k as Element of dom G by A4,FINSEQ_1:def 3;
+
+    x0 is Element of the carrier of (product G) by LM001; then
+    reconsider xx = x0 as (len G)-element FinSequence;
+    dom xx = Seg len G by FINSEQ_1:89; then
+A6: k in dom x0 by A5,CARD_1:def 7;
+
+    reconsider yk = y0.k1, xk = x0.k1 as Element of the carrier of (G.k1);
+
+B2: Nx.k = (the normF of G.k1).(x0.k1) by PRVECT_2:def 11;
+C1: Ny.k = ||. yk .|| by PRVECT_2:def 11;
+    hence 0 <= Ny.k;
+
+C2: Nx.k = ||. xk .|| by PRVECT_2:def 11;
+
+    per cases;
+    suppose k1 in X; then
+A7:  k1 in dom(x0|X) by A6,RELAT_1:57; then
+     y0.k1 = (x0|X).k1 by A1,FUNCT_4:13; then
+     y0.k1 = x0.k1 by A7,FUNCT_1:47;
+     hence Ny.k <= Nx.k by B2,PRVECT_2:def 11;
+    end;
+    suppose not k1 in X; then
+     not k1 in dom(x0|X) by RELAT_1:57; then
+     y0.k1 = Z.k1 by A1,FUNCT_4:11; then
+     y0.k1 = 0.(G.k1) by A1,ZR1;
+     hence Ny.k <= Nx.k by C1,C2;
+    end;
+   end;
+   hence ||.y.|| <= ||.x.|| by A2,A3,A4,PRVECT_2:2;
+end;
+
+theorem Th28:
+for G be non-trivial RealNormSpace-Sequence,
+      S be non trivial RealNormSpace,
+      f be PartFunc of product G, S,
+      x,y be Point of product G
+ex h be FinSequence of product G, g be FinSequence of S,
+    Z,y0 be Element of product carr G st
+    y0=y & Z = 0.(product G)
+   & len h = len G + 1 & len g = len G  &
+  (for i be Nat st i in dom h holds h/.i = Z +* (y0| Seg (len G + 1-'i))) &
+  (for i be Nat st i in dom g holds g/.i = f/.(x+h/.i) - f/.(x+h/.(i+1))) &
+  (for i be Nat, hi be Point of product G st
+    i in dom h & h/.i= hi holds ||. hi .|| <=||. y .||) &
+  f /.(x+y) - f/.x = Sum g
+proof
+   let G be non-trivial RealNormSpace-Sequence,
+       S be non trivial RealNormSpace,
+       f be PartFunc of product G,S,
+       x,y be Point of product G;
+   set m= len G;
+CG1:
+   the carrier of (product G) = product carr G by LM001;
+   reconsider Z0 = 0.(product G) as Element of product carr G by LM001;
+   reconsider y0 = y as Element of product carr G by LM001;
+   reconsider y1=y as (len G)-element FinSequence;
+   reconsider Z1=0.(product G) as (len G)-element FinSequence;
+
+   len y1 = m by CARD_1:def 7; then
+B1:dom y1 = dom G by FINSEQ_3:29;
+
+   len Z1 = m by CARD_1:def 7; then
+B2:dom Z1 = dom G by FINSEQ_3:29;
+
+   defpred H[Nat,set] means $2=Z0 +* (y0| Seg (len G + 1-'$1));
+
+A2:for k be Nat st k in Seg(m+1) ex x being Element of product G st H[k,x]
+   proof
+    let k be Nat;
+    assume k in Seg(m+1);
+    Z0 +* (y0| Seg (len G + 1-'k)) is Element of product carr G by CARD_3:79;
+    hence thesis by CG1;
+   end;
+
+   consider h be FinSequence of product G such that
+A6: dom h = Seg(m+1) &
+    for j being Nat st j in Seg(m+1) holds H[j,h.j] from FINSEQ_1:sch 5(A2);
+
+A7:now let j being Nat;
+    assume A8: j in dom h; then
+    h/.j = h.j by PARTFUN1:def 6;
+    hence h/.j = Z0 +* (y0| Seg (len G + 1-'j)) by A8,A6;
+   end;
+
+   deffunc Z(Nat)=f/.(x+h/.$1);
+   consider z be FinSequence of S such that
+A9: len z = m+1 &
+    for j being Nat st j in dom z holds z.j = Z(j) from FINSEQ_2:sch 1;
+
+A10:now let j being Nat;
+    assume A11: j in dom z; then
+    z/.j = z.j by PARTFUN1:def 6;
+    hence z/.j = f/.(x+h/.j) by A11,A9;
+   end;
+
+   deffunc G(Nat) = z/.$1 - z/.($1+1);
+   consider g be FinSequence of S such that
+A12:len g = m &
+    for j being Nat st j in dom g holds g.j = G(j) from FINSEQ_2:sch 1;
+
+A13:now let j being Nat;
+    assume A14: j in dom g; then
+    g/.j = g.j by PARTFUN1:def 6;
+    hence g/.j = z/.j - z /.(j+1) by A14,A12;
+   end;
+
+A16:m+1-'1 = m+1-1 by NAT_1:11,XREAL_1:233;
+
+   reconsider zz0=0 as Element of NAT;
+   1 <= m+1 by NAT_1:11; then
+C2:1 in dom h by A6; then
+   h/.1 = Z0 +* (y0| Seg (len G + 1-'1)) by A7
+       .= Z0 +* (y0| dom G) by A16,FINSEQ_1:def 3
+       .= Z0 +* y0 by B1,RELAT_1:69; then
+A17:h/.1 = y by B1,B2,FUNCT_4:19;
+
+A19:m+1-'(len z) = m+1 - len z by A9,XREAL_1:233;
+
+   1 <= len z & len z <= m+1 by A9,NAT_1:14; then
+C3:len z in dom h by A6; then
+A21:h/.(len z) = Z0 +* (y0| Seg 0) by A7,A19,A9
+             .=0.(product G) by FUNCT_4:21;
+
+C1:dom h= dom z by A6,A9,FINSEQ_1:def 3; then
+A22:z/.1 = f/.(x+y) by A10,A17,C2;
+
+   z/.(len z) = f/. (x+h/.(len z)) by A10,C1,C3; then
+A23:z/.(len z) = f/.x by A21,RLVECT_1:def 4;
+
+   take h,g,Z0,y0;
+
+A24:now let i be Nat;
+    assume A25: i in dom g; then
+A26:i in Seg m by A12,FINSEQ_1:def 3; then
+    1 <= i & i <= m by FINSEQ_1:1; then
+A29:i+1 <= m+1 by XREAL_1:6;
+
+    m <= m+1 by NAT_1:11; then
+    Seg m c= Seg (m+1) by FINSEQ_1:5; then
+A28:z/.i =f/.(x+h/.i) by A10,A6,A26,C1;
+
+    1 <= i+1 by NAT_1:11; then
+    i+1 in Seg (m+1) by A29; then
+    i+1 in dom z by A9,FINSEQ_1:def 3; then
+    z/.(i+1) =f /. (x+h/.(i+1)) by A10;
+    hence g/.i = f /. (x+h/.i) - f /.(x+h/.(i+1)) by A13,A25,A28;
+   end;
+
+   now let i be Nat, hi be Element of product G;
+    assume ASD: i in dom h & h/.i= hi; then
+    h/.i = Z0 +* (y0| Seg (len G + 1-'i)) by A7;
+    hence ||. hi .|| <=||. y .|| by LMPRT3,ASD;
+   end;
+   hence thesis by A7,A22,A23,A24,A9,A13,Th26,A6,A12,FINSEQ_1:def 3;
+end;
+
+theorem XTh39:
+for G be non-trivial RealNormSpace-Sequence,
+    i be Element of dom G,
+    x,y be Point of product G,
+    xi be Point of G.i
+  st y = reproj(i,x).xi holds proj(i).y = xi
+proof
+   let G be non-trivial RealNormSpace-Sequence,
+       i be Element of dom G, x,y be Point of product G,
+       xi be Point of G.i;
+   assume A1: y = reproj(i,x).xi;
+A3:y = x +* (i,xi) by A1,Def5;
+   x in the carrier of product G; then
+   x in product carr G by LM001; then
+   consider g being Function such that
+AB:x = g & dom g = dom carr G &
+    for y be set st y in dom carr G holds g.y in (carr G).y by CARD_3:def 5;
+F1:i in dom G;
+AA:i in dom x by ZE,F1,AB;
+   y is Element of product carr G by LM001; then
+   proj(i).y = (x +* (i,xi)).i by A3,Def1;
+   hence proj(i).y = xi by FUNCT_7:31,AA;
+end;
+
+theorem XTh39A:
+for G be non-trivial RealNormSpace-Sequence, i be Element of dom G,
+    y be Point of product G, q be Point of G.i
+  st q = proj(i).y holds y = reproj(i,y).q
+proof
+   let G be non-trivial RealNormSpace-Sequence, i be Element of dom G,
+       y be Point of product G, q be Point of G.i;
+   assume A1: q = proj(i).y;
+   reconsider z1 = reproj(i,y).q as (len G)-element FinSequence;
+   reconsider z2 = y as (len G)-element FinSequence;
+B1:dom z1 = Seg len G by FINSEQ_1:89 .= dom z2 by FINSEQ_1:89;
+   for k be Nat st k in dom z1 holds z1.k = z2.k
+   proof
+    let k be Nat;
+    assume k in dom z1;
+    product G = NORMSTR(# product carr G,zeros G,[:addop G:],[:multop
+    G:], productnorm G #) by PRVECT_2:6; then
+A4: q = y.i by A1,Def1;
+    per cases;
+    suppose C1: k = i; then
+     (y +*(i,q)).k = q by A4,FUNCT_7:35;
+     hence z1.k = z2.k by C1,A4,Def5;
+    end;
+    suppose k <> i; then
+     (y +*(i,q)).k = y.k by FUNCT_7:32;
+     hence z1.k = z2.k by Def5;
+    end;
+   end;
+   hence thesis by B1,FINSEQ_1:13;
+end;
+
+theorem XTh40:
+for G be non-trivial RealNormSpace-Sequence,
+    i be Element of dom G, x,y be Point of product G,
+    xi be Point of G.i
+  st y = reproj(i,x).xi holds reproj(i,x)=reproj(i,y)
+proof
+   let G be non-trivial RealNormSpace-Sequence,
+       i be Element of dom G, x,y be Point of product G,
+       xi be Point of G.i;
+   assume A1: y = reproj(i,x).xi;
+   for v be Element of G.i holds reproj(i,x).v = reproj(i,y).v
+   proof
+    let v be Element of G.i;
+A4: reproj(i,x).v = x +* (i,v) & reproj(i,y).v = y +* (i,v) by Def5;
+    reconsider xv = reproj(i,x).v, yv = reproj(i,y).v
+       as (len G)-element FinSequence;
+A5: dom xv = Seg len G & dom yv = Seg len G by FINSEQ_1:89; then
+AA: dom xv = dom G by FINSEQ_1:def 3;
+
+    for k be Nat st k in dom xv holds xv.k = yv.k
+    proof
+     let k be Nat;
+     assume PA: k in dom xv;
+     x in the carrier of product G & y in the carrier of product G; then
+PP:  x in product carr G & y in product carr G by LM001; then
+     consider g be Function such that
+P1:   x = g & dom g = dom carr G
+      & for i be set st i in dom carr G holds g.i in (carr G).i
+        by CARD_3:def 5;
+     consider g1 be Function such that
+P2:   y = g1 & dom g1 = dom carr G
+      & for i be set st i in dom carr G holds g1.i in (carr G).i
+        by PP,CARD_3:def 5;
+Z1:  k in dom y & k in dom x by P1,P2,ZE,PA,AA;
+     per cases;
+     suppose k = i; then
+      (y +*(i,v)).k = v & (x +*(i,v)).k = v by Z1,FUNCT_7:31;
+      hence yv.k = xv.k by A4;
+     end;
+     suppose Z: k <> i;
+A8:   yv.k = y.k & xv.k = x.k by A4,Z,FUNCT_7:32;
+      y = x +* (i,xi) by A1,Def5;
+      hence yv.k = xv.k by A8,Z,FUNCT_7:32;
+      end;
+     end;
+     hence reproj(i,x).v = reproj(i,y).v by A5,FINSEQ_1:13;
+    end;
+    hence thesis by FUNCT_2:def 8;
+end;
+
+theorem XTh40a:
+for G be non-trivial RealNormSpace-Sequence,
+    i,j be Element of dom G, x,y be Point of product G,
+    xi be Point of G.i
+  st y = reproj(i,x).xi & i <> j holds proj(j).x = proj(j).y
+proof
+   let G be non-trivial RealNormSpace-Sequence,
+       i,j be Element of dom G, x,y be Point of product G,
+       xi be Point of G.i;
+   assume A1: y = reproj(i,x).xi & i <> j;
+   reconsider y1 = y as Element of product carr G by LM001;
+A3:y = x +* (i,xi) by A1,Def5;
+   set ix = i .--> xi;
+ZZ:  the carrier of (product G) = product carr G by LM001;
+   y1.j = x.j by A3,A1,FUNCT_7:32; then
+   proj(j).y = x.j by Def1;
+   hence thesis by ZZ,Def1;
+end;
+
+theorem
+for  G be non-trivial RealNormSpace-Sequence,
+     F be non trivial RealNormSpace,
+     i be Element of dom G,
+     x be Point of product G,
+     xi be Point of G.i,
+     f be PartFunc of product G,F,
+     g be PartFunc of G.i,F
+      st proj(i).x=xi & g=f*reproj(i,x)
+ holds
+    diff(g,xi) = partdiff(f,x,i)
+proof
+   let G be non-trivial RealNormSpace-Sequence,
+       F be non trivial RealNormSpace,
+       i be Element of dom G,
+       x be Point of product G,
+       xi be Point of G.i,
+       f be PartFunc of product G,F,
+       g be PartFunc of G.i,F;
+   i=modetrans(G,i) by Defmode;
+   hence thesis;
+end;
+
+theorem XTh42:
+for G be non-trivial RealNormSpace-Sequence,
+    F be non trivial RealNormSpace,
+    f be PartFunc of product G,F,
+    x be Point of product G,
+    i be set,
+    M be Real,
+    L be Point of R_NormSpace_of_BoundedLinearOperators
+             (G.(modetrans(G,i)),F),
+    p,q be Point of G.(modetrans(G,i))
+ st i in dom G
+  & (for h be Point of G.(modetrans(G,i)) st h in ]. p,q .[ holds
+       ||. partdiff(f,reproj(modetrans(G,i),x).h,i) - L  .|| <= M)
+  & (for h be Point of G.(modetrans(G,i)) st h in [. p,q .] holds
+       reproj(modetrans(G,i),x).h in dom f)
+  & (for h be Point of G.(modetrans(G,i)) st h in [. p,q .] holds
+       f is_partial_differentiable_in (reproj(modetrans(G,i),x).h),i)
+holds
+ ||.f/.(reproj(modetrans(G,i),x).q) - f/.(reproj(modetrans(G,i),x).p)
+     - L.(q-p) .|| <= M * ||.q-p.||
+proof
+   let G be non-trivial RealNormSpace-Sequence,
+       F be non trivial RealNormSpace,
+       f be PartFunc of product G,F,
+       x be Point of product G,
+       i be set,
+       M be Real,
+       L be Point of R_NormSpace_of_BoundedLinearOperators
+             (G.(modetrans(G,i)),F),
+       p,q be Point of G.(modetrans(G,i));
+   assume
+A1: i in dom G
+  & (for h be Point of G.(modetrans(G,i)) st h in ]. p,q .[ holds
+       ||. partdiff(f,reproj(modetrans(G,i),x).h,i) - L .|| <= M)
+  & (for h be Point of G.(modetrans(G,i)) st h in [. p,q .] holds
+       reproj(modetrans(G,i),x).h in dom f )
+  & (for h be Point of G.(modetrans(G,i)) st h in [. p,q .] holds
+       f is_partial_differentiable_in (reproj(modetrans(G,i),x).h),i );
+
+   set m=len G;
+   set S=G.(modetrans(G,i));
+   set g=f*reproj(modetrans(G,i),x);
+A6:now let h be set;
+    assume A2: h in [. p,q .]; then
+    reconsider h1=h as Point of S;
+A3: dom reproj(modetrans(G,i),x) = the carrier of S by FUNCT_2:def 1;
+    reproj(modetrans(G,i),x).h1 in dom f by A1,A2;
+    hence h in dom g by A3,FUNCT_1:11;
+   end; then
+A4:[. p,q .] c= dom g by TARSKI:def 3;
+A5:now let x0 be Point of S;
+    assume A6: x0 in [. p,q .];
+    set y=reproj(modetrans(G,i),x).x0;
+A7: proj(modetrans(G,i)).y = x0 by XTh39;
+    f is_partial_differentiable_in y,i by A1,A6; then
+    f*reproj(modetrans(G,i),y) is_differentiable_in x0 by A7,Def9;
+    hence g is_differentiable_in x0 by XTh40;
+   end;
+
+   now let z be set;
+    assume z in ].p,q.[; then
+    consider z1 be Real such that AB: z=p+z1*(q-p) & 0 < z1 & z1 < 1;
+    z = (1-z1)*p+z1*q by AB,LmX; then
+    z in {(1-r1)*p + r1*q where r1 is Real : 0 <= r1 & r1 <= 1 } by AB;
+    hence z in [. p,q .] by RLTOPSP1:def 2;
+   end; then
+   ].p,q.[ c= [. p,q .] by TARSKI:def 3; then
+A10:for x be Point of S st x in ].p,q.[ holds g is_differentiable_in x by A5;
+A11:for x be Point of S st x in [.p,q.] holds g is_continuous_in x
+      by A5,NDIFF_1:44;
+
+U0:now let h be Point of S;
+    set y=reproj(modetrans(G,i),x).h;
+    assume h in ]. p,q .[; then
+X1: ||. partdiff(f,y,i) - L .|| <= M by A1;
+    proj(modetrans(G,i)).y = h by XTh39;
+    hence ||. diff(g,h) - L .|| <= M by X1,XTh40;
+   end;
+U1:p in dom g & q in dom g by A6,RLTOPSP1:68;
+   f/.(reproj(modetrans(G,i),x).p) = f/.(reproj(modetrans(G,i),x)/.p) &
+   f/.(reproj(modetrans(G,i),x).q) = f/.(reproj(modetrans(G,i),x)/.q); then
+   f/.(reproj(modetrans(G,i),x).p) = g/.p &
+   f/.(reproj(modetrans(G,i),x).q) = g/.q by U1,PARTFUN2:3;
+   hence ||.f/.(reproj(modetrans(G,i),x).q)
+          - f/.(reproj(modetrans(G,i),x).p) - L.(q-p) .||
+     <= M * ||.q-p.|| by U0,FDAF20,A4,A10,A11;
+end;
+
+theorem XTh44:
+for G be non-trivial RealNormSpace-Sequence,
+    x,y,z,w be Point of product G,
+    i be Element of dom G,
+    d be Real,
+    p,q,r be Point of G.i
+  st ||. y-x .|| < d & ||. z-x .|| < d & p= proj(i).y & z=reproj(i,y).q
+   & r in [. p,q .] & w= reproj(i,y).r
+holds ||. w-x .|| < d
+proof
+   let G be non-trivial RealNormSpace-Sequence,
+       x,y,z,w be Point of product G,
+       i be Element of dom G,
+       d be Real,
+       p,q,r be Point of G.i;
+   assume that
+A2: ||. y-x .|| < d & ||. z-x .|| < d and
+A3: p= proj(i).y & z=reproj(i,y).q and
+A4: r in [. p,q .] and
+A5: w= reproj(i,y).r;
+   set wx = w-x;
+   set yx = y-x;
+   set zx = z-x;
+   reconsider xi = proj(i).x as Point of G.i;
+   r in {(1-t)*p + t*q where t is Real : 0 <= t & t <= 1 }
+     by A4,RLTOPSP1:def 2; then
+   consider t be Real such that
+a6: r = (1-t)*p + t*q & 0 <= t & t <= 1;
+A6: r = p + t*(q-p) & 0 <= t & t <= 1 by a6,LmX;
+   reconsider wx0 = wx, yx0 = yx, zx0 = zx
+      as Element of product carr G by LM001;
+   reconsider Nwx = normsequence(G,wx0) as (len G)-element FinSequence of REAL;
+   reconsider Nyx = normsequence(G,yx0) as (len G)-element FinSequence of REAL;
+   reconsider Nzx = normsequence(G,zx0) as (len G)-element FinSequence of REAL;
+   set tyz = (1-t)*yx + t*zx;
+   reconsider tyz0 = tyz as Element of product carr G by LM001;
+   reconsider Ntyz = normsequence(G,tyz0)
+      as (len G)-element FinSequence of REAL;
+
+A7:1 = 1-t+t;
+
+   r = p + (t*q - t*p) by A6,RLVECT_1:34
+    .= (p + -t*p) + t*q by RLVECT_1:def 3
+    .= (1*p - t*p) + t*q by RLVECT_1:def 8
+    .= (1-t)*p + t*q by RLVECT_1:35; then
+A8:r-xi = (1-t)*p + t*q - 1*xi by RLVECT_1:def 8
+    .= (1-t)*p + t*q - ((1-t)*xi + t*xi) by A7,RLVECT_1:def 6
+    .= (1-t)*p + t*q - t*xi - (1-t)*xi by RLVECT_1:27
+    .= (1-t)*p +(t*q - t*xi) - (1-t)*xi by RLVECT_1:28
+    .= (t*q - t*xi) + ((1-t)*p - (1-t)*xi) by RLVECT_1:def 3
+    .= t*(q-xi) + ((1-t)*p - (1-t)*xi) by RLVECT_1:34
+    .= t*(q-xi) + (1-t)*(p-xi) by RLVECT_1:34;
+
+   reconsider Swx = wx as (len G)-element FinSequence;
+   reconsider Syz = (1-t)*yx + t*zx as (len G)-element FinSequence;
+A9:dom Swx = Seg len G & dom Syz = Seg len G by FINSEQ_1:89;
+Q2:for k be Nat st k in dom Swx holds Swx.k = Syz.k
+   proof
+    let k be Nat;
+    assume k in dom Swx; then
+    reconsider k0 = k as Element of dom G by A9,FINSEQ_1:def 3;
+    per cases;
+    suppose B0: k = i; then
+     Swx.k = proj(i).wx0 by Def1; then
+B2:  Swx.k = proj(i).w - proj(i).x by YTh9M;
+
+B3:  proj(i).z = q by A3,XTh39;
+     Syz.k = proj(i).tyz0 by B0,Def1; then
+     Syz.k = proj(i).((1-t)*yx) + proj(i).(t*zx) by YTh9; then
+     Syz.k = (1-t)*(proj(i).yx) + proj(i).(t*zx) by YTh16; then
+     Syz.k = (1-t)*(proj(i).yx) + t*proj(i).zx by YTh16; then
+     Syz.k = (1-t)*(proj(i).y - proj(i).x) + t*proj(i).zx by YTh9M; then
+     Syz.k = (1-t)*(p-xi) + t*(q-xi) by A3,B3,YTh9M;
+     hence Swx.k = Syz.k by B2,A8,A5,XTh39;
+    end;
+    suppose k <> i; then
+B4:  proj(k0).y = proj(k0).w & proj(k0).z = proj(k0).y by A3,A5,XTh40a;
+
+     Swx.k = proj(k0).wx0 by Def1; then
+B5:  Swx.k = proj(k0).w - proj(k0).x by YTh9M;
+     Syz.k = proj(k0).tyz0 by Def1
+          .= proj(k0).((1-t)*yx) + proj(k0).(t*zx) by YTh9
+          .= (1-t)*(proj(k0).yx) + proj(k0).(t*zx) by YTh16
+          .= (1-t)*(proj(k0).yx) + t*proj(k0).zx by YTh16; then
+     Syz.k = (1-t)*(proj(k0).y - proj(k0).x) + t*proj(k0).zx by YTh9M; then
+     Syz.k = (1-t)*(proj(k0).y - proj(k0).x) + t*(proj(k0).y - proj(k0).x)
+        by B4,YTh9M; then
+     Syz.k = (1-t)*proj(k0).y - (1-t)*proj(k0).x
+             + t*(proj(k0).y - proj(k0).x) by RLVECT_1:34; then
+     Syz.k = (1-t)*proj(k0).y - (1-t)*proj(k0).x
+             + (t*proj(k0).y - t*proj(k0).x) by RLVECT_1:34; then
+     Syz.k = (1-t)*proj(k0).y - (1-t)*proj(k0).x
+             + t*proj(k0).y - t*proj(k0).x by RLVECT_1:def 3; then
+     Syz.k = (1-t)*proj(k0).y
+             - ((1-t)*proj(k0).x - t*proj(k0).y)
+             - t*proj(k0).x by RLVECT_1:29; then
+     Syz.k = (1-t)*proj(k0).y
+             + (t*proj(k0).y + - (1-t)*proj(k0).x)
+             - t*proj(k0).x by RLVECT_1:33; then
+     Syz.k = (1-t)*proj(k0).y
+             + t*proj(k0).y + - (1-t)*proj(k0).x
+             - t*proj(k0).x by RLVECT_1:def 3; then
+     Syz.k = ((1-t)+t)*proj(k0).y
+             + - (1-t)*proj(k0).x
+             - t*proj(k0).x by RLVECT_1:def 6; then
+     Syz.k = proj(k0).y
+             + - (1-t)*proj(k0).x
+             - t*proj(k0).x by RLVECT_1:def 8; then
+     Syz.k = proj(k0).y
+             + (- (1-t)*proj(k0).x - t*proj(k0).x) by RLVECT_1:28; then
+     Syz.k = proj(k0).y
+             + (- (t*proj(k0).x + (1-t)*proj(k0).x)) by RLVECT_1:30; then
+     Syz.k = proj(k0).y
+             + (- (t+(1-t))*proj(k0).x) by RLVECT_1:def 6;
+     hence Swx.k = Syz.k by B5,B4,RLVECT_1:def 8;
+    end;
+   end;
+P2:len Nwx = len G & len Ntyz = len G by CARD_1:def 7;
+   for k be Element of NAT st k in Seg len Nwx
+    holds 0 <= Nwx.k & Nwx.k <= Ntyz.k
+   proof
+    let k be Element of NAT;
+    assume Q3: k in Seg len Nwx; then
+    reconsider k1 = k as Element of dom G by P2,FINSEQ_1:def 3;
+    reconsider wxk = wx0.k1 as Element of (G.k1);
+Q1: Nwx.k = ||. wxk .|| by PRVECT_2:def 11;
+    wx0.k1 = Syz.k by Q2,Q3,P2,A9;
+    hence thesis by Q1,PRVECT_2:def 11;
+   end; then
+P3: |. Nwx .| <= |. Ntyz .| by P2,PRVECT_2:2;
+P4: ||. w-x .|| = (productnorm G).wx by PRVECT_2:def 13;
+    ||. (1-t)*yx + t*zx .|| = (productnorm G).tyz by PRVECT_2:def 13
+              .= |. normsequence(G,tyz0) .| by PRVECT_2:def 12; then
+P5: ||. w-x .|| <= ||. (1-t)*yx + t*zx .|| by P3,P4,PRVECT_2:def 12;
+P7: ||. (1-t)*yx + t*zx .|| <= abs(1-t)*||. y-x .|| + abs(t)*||. z-x .||
+       by NORMSP_1:5;
+   1-t >= 0 by A6,XREAL_1:48; then
+P8:abs(1-t) = 1-t & abs t = t by A6,ABSVALUE:def 1;
+   abs(1-t)*||. y-x .|| + abs(t)*||. z-x .|| < d
+   proof
+    per cases;
+    suppose t=1 or t=0;
+     hence thesis by A2,P8;
+    end;
+    suppose t<>1 & t<>0; then
+     0 < t & t < 1 by A6,XXREAL_0:1; then
+     0 < t & 1-t > 0 by XREAL_1:50; then
+     abs(1-t)*||. y-x .|| < (1-t)*d & abs(t)*||. z-x .|| < t*d
+       by A2,P8,XREAL_1:68; then
+     abs(1-t)*||. y-x .|| + abs(t)*||. z-x .|| < (1-t)*d + t*d by XREAL_1:8;
+     hence thesis;
+    end;
+   end; then
+   ||. (1-t)*yx + t*zx .|| < d by P7,XXREAL_0:2;
+   hence ||. w-x .|| < d by P5,XXREAL_0:2;
+end;
+
+theorem XTh45:
+for G be non-trivial RealNormSpace-Sequence,
+    S be non trivial RealNormSpace,
+    f be PartFunc of product G,S,
+    X be Subset of product G,
+    x,y,z be Point of product G,
+    i be set,
+    p,q be Point of G.(modetrans(G,i)),
+    d,r be Real
+ st i in dom G & X is open & x in X &
+    ||. y-x .|| < d & ||. z-x .|| < d & X c= dom f &
+    (for x be Point of product G st x in X holds
+      f is_partial_differentiable_in x,i) &
+    (for z be Point of product G st ||. z-x .|| < d holds z in X) &
+    (for z be Point of product G st ||. z-x .|| < d
+        holds ||. partdiff(f,z,i) - partdiff(f,x,i).|| <=r) &
+    z = reproj(modetrans(G,i),y).p & q = proj(modetrans(G,i)).y
+holds
+   ||. f/.z - f/.y - ((partdiff(f,x,i)).(p-q)) .|| <= ||. p-q .||*r
+proof
+   let G be non-trivial RealNormSpace-Sequence,
+       S be non trivial RealNormSpace,
+       f be PartFunc of product G,S,
+       X be Subset of product G,
+       x,y,z be Point of product G,
+       i0 be set,
+       p,q be Point of G.(modetrans(G,i0)),
+       d,r be Real;
+   assume
+A1: i0 in dom G & X is open & x in X &
+    ||. y-x .|| < d & ||. z-x .|| < d & X c= dom f &
+    (for x be Point of product G st x in X holds
+       f is_partial_differentiable_in x,i0) &
+    (for z be Point of product G st ||. z-x .|| < d holds z in X) &
+    (for z be Point of product G st ||. z-x .|| < d
+       holds ||. partdiff(f,z,i0) - partdiff(f,x,i0).|| <=r) &
+    z = reproj(modetrans(G,i0),y).p & q = proj(modetrans(G,i0)).y;
+   set i=modetrans(G,i0);
+A3:y = reproj(i,y).q by A1,XTh39A;
+A6:now let h be Point of G.i;
+    assume h in [. q,p .]; then
+    ||. reproj(i,y).h - x .|| < d by A1,XTh44; then
+    reproj(i,y).h in X by A1;
+    hence reproj(i,y).h in dom f by A1;
+   end;
+A7:now let h be Point of G.i;
+    assume h in [. q,p .]; then
+    ||. reproj(i,y).h - x .|| < d by A1,XTh44;
+    hence f is_partial_differentiable_in (reproj(i,y).h),i0 by A1;
+   end;
+   for h be Point of G.i st h in ]. q,p .[ holds
+     ||. partdiff(f,reproj(i,y).h,i0) - partdiff(f,x,i0) .|| <=r
+   proof
+    let h be Point of G.i;
+    assume X1: h in ]. q,p .[;
+    ].q,p.[ c= [. q,p .] by LMDefCLS1; then
+    ||. reproj(i,y).h - x .|| < d by A1,X1,XTh44;
+    hence ||. partdiff(f,reproj(i,y).h,i0) - partdiff(f,x,i0).|| <=r by A1;
+   end;
+   hence thesis by A3,A1,XTh42,A6,A7;
+end;
+
+theorem Th46:
+for G be non-trivial RealNormSpace-Sequence,
+    h be FinSequence of product G,
+    y,x be Point of product G,
+    y0,Z be Element of product carr G,
+     j be Element of NAT
+  st y=y0 & Z=0.(product G)
+    & len h = (len G)+1 & 1 <= j & j <= len G &
+  (for i be Nat st i in dom h holds h/.i=Z +* (y0| Seg (len G + 1-'i)))
+  holds x + h/.j = reproj(modetrans(G,(len G)+1-'j),(x+h/.(j+1)))
+         .(proj(modetrans(G,(len G)+1-'j)).(x+y))
+proof
+   let G be non-trivial RealNormSpace-Sequence,
+       h be FinSequence of product G,
+       y,x be Point of product G,
+       y0,Z be Element of product carr G,
+       j be Element of NAT;
+   assume that
+A1: y = y0 and
+A2: Z = 0.(product G) and
+A3: len h = len G + 1 and
+A4: 1 <= j & j <= len G and
+A5: for i be Nat st i in dom h holds h/.i = Z +* (y0| Seg(len G + 1-'i));
+
+   len G <= len h by A3,NAT_1:11; then
+   j <= len h by A4,XXREAL_0:2; then
+   j in Seg len h by A4; then
+   j in dom h by FINSEQ_1:def 3; then
+X1:h/.j = Z +* (y0| Seg(len G + 1 -'j)) by A5;
+
+   1 <= j+1 & j+1 <= len h by A3,A4,NAT_1:12,XREAL_1:6; then
+   j+1 in Seg len h; then
+   j+1 in dom h by FINSEQ_1:def 3; then
+X2:h/.(j+1) = Z +* (y0| Seg(len G + 1-'(j+1))) by A5;
+   j in Seg len G by A4; then
+   len G -'j + 1 in Seg len G by NAT_2:6; then
+   len G + 1 -' j in Seg len G by A4,NAT_D:38; then
+   len G + 1 -' j in dom G by FINSEQ_1:def 3; then
+A6:modetrans(G,(len G)+1-'j) = len G + 1 -' j by Defmode;
+   set xh = x+h/.(j+1);
+   reconsider x1 = x, y1 = y as Element of product carr G by LM001;
+   reconsider xy = x + y as Element of product carr G by LM001;
+   xh is Element of product carr G by LM001; then
+   consider g being Function such that
+H2:xh = g & dom g = dom carr G &
+    for y be set st y in dom carr G holds g.y in (carr G).y by CARD_3:def 5;
+PO:dom xh = dom G by H2,ZE;
+   proj(modetrans(G,(len G)+1-'j)).(x+y) = xy.(len G + 1 -' j) by A6,Def1; then
+A8:reproj(modetrans(G,(len G)+1-'j),(x+h/.(j+1)))
+     .(proj(modetrans(G,(len G)+1-'j)).(x+y))
+     = xh +* (modetrans(G,(len G)+1-'j), xy.(len G + 1 -' j)) by Def5
+    .= xh +* (modetrans(G,(len G)+1-'j) .--> xy.(len G + 1 -' j))
+       by FUNCT_7:def 3,PO
+    .= xh +* ({len G + 1 -'j} --> xy.(len G + 1 -' j)) by A6,FUNCOP_1:def 9;
+   reconsider F1 = x + h/.j as (len G)-element FinSequence;
+   reconsider F2 = reproj(modetrans(G,(len G)+1-'j),(x+h/.(j+1)))
+     .(proj(modetrans(G,(len G)+1-'j)).(x+y))
+        as (len G)-element FinSequence;
+   reconsider h1 = h/.j as Element of product carr G by LM001;
+   reconsider xh1 = x + h/.j as Element of product carr G by LM001;
+   reconsider h2 = h/.(j+1) as Element of product carr G by LM001;
+A9:len F1 = len G & len F2 = len G by CARD_1:def 7;
+   for k be Nat st 1 <= k & k <= len F1 holds F1.k = F2.k
+   proof
+    let k be Nat;
+    assume W1: 1 <= k & k <= len F1; then
+BB: k in Seg len F1 by FINSEQ_1:1; then
+    reconsider k1 = k as Element of dom G by A9,FINSEQ_1:def 3;
+    proj(k1).xh1 = proj(k1).x + proj(k1).(h/.j) by YTh9; then
+B2: F1.k = proj(k1).x + proj(k1).(h/.j) by Def1;
+    y0 is Element of the carrier of product G by LM001; then
+C0: dom y0 = Seg len G by FINSEQ_1:89;
+G0: proj(k1).(h/.j) = h1.k by Def1;
+G1: dom(y0|Seg(len G + 1-'j)) = dom y0 /\ Seg (len G + 1 -' j) by RELAT_1:61;
+ZZ:  the carrier of (product G) = product carr G by LM001;
+    per cases;
+    suppose H1: not k in Seg(len G + 1 -' j); then
+     not k in dom(y0|Seg(len G +1 -'j)) by G1,XBOOLE_0:def 4; then
+     proj(k1).(h/.j) = Z.k by G0,X1,FUNCT_4:11; then
+H4:  proj(k1).(h/.j) = proj(k1).(0.(product G)) by A2,Def1;
+     not 1 <= k or not k <= len G + 1 -' j by H1,FINSEQ_1:1; then
+     not k in dom ({len G + 1 -'j} --> xy.(len G + 1 -' j))
+       by W1,TARSKI:def 1; then
+     (xh +* ({len G + 1 -'j} --> xy.(len G + 1 -' j))).k1
+        = xh.k1 by FUNCT_4:11; then
+H3:  F2.k = proj(k1).(x+h/.(j+1)) by ZZ,A8,Def1;
+H2:  proj(k1).(h/.(j+1)) = h2.k by Def1;
+     len G + 1-'(j+1) <= len G +1-'j by NAT_1:11,NAT_D:41; then
+     Seg(len G +1-'(j+1)) c= Seg(len G +1-'j) by FINSEQ_1:5; then
+     not k in Seg(len G+1-'(j+1)) by H1; then
+     not k in dom y0 /\ Seg(len G +1-'(j+1)) by XBOOLE_0:def 4; then
+     not k in dom(y0|Seg(len G+1-'(j+1))) by RELAT_1:61; then
+     (Z +* (y0| Seg(len G + 1-'(j+1)))).k = Z.k by FUNCT_4:11; then
+     proj(k1).(h/.(j+1)) = proj(k1).(0.(product G)) by A2,H2,X2,Def1;
+     hence F1.k = F2.k by H4,B2,H3,YTh9;
+    end;
+    suppose G7: k in Seg(len G + 1 -' j); then
+G2:  k in dom(y0|Seg(len G +1 -' j)) by G1,BB,C0,A9,XBOOLE_0:def 4; then
+     proj(k1).(h/.j) = (y0|Seg(len G +1-'j)).k by G0,X1,FUNCT_4:13; then
+     proj(k1).(h/.j) = y0.k by G2,FUNCT_1:47; then
+G5:  proj(k1).(h/.j) = proj(k1).y by A1,Def1; then
+H5:  F1.k = proj(k1).(x+y) by B2,YTh9;
+     per cases;
+     suppose G4: k = len G + 1 -' j;
+G3:   k in {k} by TARSKI:def 1; then
+      k in dom({k} --> xy.k) by FUNCOP_1:13; then
+      ( xh +* ({k} --> xy.k)).k1 = ({k} --> xy.k).k by FUNCT_4:13; then
+      F2.k = xy.k by A8,G3,G4,FUNCOP_1:7;
+      hence F1.k = F2.k by H5,Def1;
+     end;
+     suppose G8: k <> len G + 1 -' j; then
+     not k in dom({len G + 1 -'j} --> xy.(len G +1 -'j)) by TARSKI:def 1; then
+      F2.k = xh.k by A8,FUNCT_4:11; then
+G6:   F2.k = proj(k1).(x+h/.(j+1)) by ZZ,Def1;
+      k <= len G + 1 -' j by G7,FINSEQ_1:1; then
+      k < len G + 1 -' j by G8,XXREAL_0:1; then
+      k <= len G + 1 -' j -' 1 by NAT_D:49; then
+      k <= len G + 1 -' (j+1) by NAT_2:30; then
+      k in Seg (len G+1-'(j+1)) by W1,FINSEQ_1:1; then
+W2:   k in dom(y0| Seg(len G + 1-'(j+1))) by BB,C0,A9,RELAT_1:57;
+      proj(k1).(h/.(j+1)) = h2.k by Def1; then
+      proj(k1).(h/.(j+1)) = (y0| Seg(len G + 1-'(j+1))).k1
+        by X2,W2,FUNCT_4:13; then
+      proj(k1).(h/.(j+1)) = y0.k by W2,FUNCT_1:47; then
+      proj(k1).(h/.(j+1)) = proj(k1).y by A1,Def1;
+      hence F1.k = F2.k by G5,B2,G6,YTh9;
+     end;
+    end;
+   end;
+   hence thesis by A9,FINSEQ_1:def 17;
+end;
+
+theorem Th46X:
+for G be non-trivial RealNormSpace-Sequence,
+    h be FinSequence of product G,
+    y,x be Point of product G,
+    y0,Z be Element of product carr G,
+    j be Element of NAT
+  st y=y0 & Z=0.(product G)
+    & len h = (len G)+1 & 1 <= j & j <= len G &
+  (for i be Nat st i in dom h holds h/.i=Z +* (y0| Seg (len G + 1-'i)))
+  holds
+ (proj(modetrans(G,(len G)+1-'j)).(x+y))
+- proj(modetrans(G,(len G)+1-'j)).(x+h/.(j+1))
+ = (proj(modetrans(G,(len G)+1-'j)).y)
+proof
+   let G be non-trivial RealNormSpace-Sequence,
+       h be FinSequence of product G,
+       y,x be Point of product G,
+       y0,Z be Element of product carr G,
+       j be Element of NAT;
+   assume that
+A1: y = y0 and
+A2: Z=0.(product G) and
+A3: len h = (len G)+1 & 1 <= j & j <= len G and
+A4: for i be Nat st i in dom h holds h/.i=Z +* (y0| Seg (len G + 1-'i));
+   x + h/.j = reproj(modetrans(G,(len G)+1-'j),(x+h/.(j+1)))
+           .(proj(modetrans(G,(len G)+1-'j)).(x+y)) by A1,A2,A3,A4,Th46; then
+   proj(modetrans(G,(len G)+1-'j)).(x+h/.j)
+     = proj(modetrans(G,(len G)+1-'j)).(x+y) by XTh39; then
+A6:proj(modetrans(G,(len G)+1-'j)).(x+y)
+        - proj(modetrans(G,(len G)+1-'j)).(x+h/.(j+1))
+     = proj(modetrans(G,(len G)+1-'j)).(x + h/.j - (x+h/.(j+1))) by YTh9M;
+   x + h/.j - (x + h/.(j+1))
+    = h/.j + x - x - h/.(j+1) by RLVECT_1:27
+   .= h/.j + (x - x) - h/.(j+1) by RLVECT_1:28
+   .= h/.j + 0.(product G) - h/.(j+1) by RLVECT_1:15
+   .= h/.j - h/.(j+1) by RLVECT_1:4; then
+A7:proj(modetrans(G,(len G)+1-'j)).(x+y)
+        - proj(modetrans(G,(len G)+1-'j)).(x+h/.(j+1))
+    = proj(modetrans(G,(len G)+1-'j)).(h/.j)
+     - proj(modetrans(G,(len G)+1-'j)).(h/.(j+1)) by A6,YTh9M;
+   y0 is Element of the carrier of product G by LM001; then
+B1:dom y0 = Seg len G by FINSEQ_1:89;
+   j in Seg len G by A3; then
+   len G -'j + 1 in Seg len G by NAT_2:6; then
+B2:len G + 1 -' j in Seg len G by A3,NAT_D:38;
+
+A8:j < len G +1 by A3,NAT_1:13; then
+   len G+1-'j in Seg(len G+1-'j) by FINSEQ_1:3,NAT_D:36; then
+B5:len G+1-'j in dom (y0|Seg(len G+1-'j)) by B1,B2,RELAT_1:57;
+   len G+1-'j = len G+1-'(j+1)+1 by A8,NAT_2:7; then
+C1:len G+1-'(j+1) < len G+1-'j by NAT_1:13;
+   dom (y0|Seg(len G+1-'(j+1))) c= Seg(len G+1-'(j+1)) by RELAT_1:58; then
+C3:not len G+1-'j in dom (y0|Seg(len G+1-'(j+1))) by C1,FINSEQ_1:1;
+
+   reconsider h1 = h/.j as Element of product carr G by LM001;
+   reconsider h2 = h/.(j+1) as Element of product carr G by LM001;
+   j in Seg len h by A3,A8; then
+   j in dom h by FINSEQ_1:def 3; then
+B6:h/.j = Z +* (y0|Seg(len G+1-'j)) by A4;
+   len G + 1 -' j in dom G by B2,FINSEQ_1:def 3; then
+B3:modetrans(G,(len G)+1-'j) = len G + 1 -' j by Defmode; then
+B7:proj(modetrans(G,(len G)+1-'j)).(h/.j)
+    = h1.(len G+1-'j) by Def1
+   .= (y0|Seg(len G+1-'j)).(len G+1-'j) by B5,B6,FUNCT_4:13
+   .= y0.(len G +1-'j) by B5,FUNCT_1:47
+   .= proj(modetrans(G,len G+1-'j)).y by A1,B3,Def1;
+
+   1 <= j+1 & j+1 <= len h by A3,NAT_1:12,XREAL_1:6; then
+   j+1 in Seg len h; then
+   j+1 in dom h by FINSEQ_1:def 3; then
+B8:h/.(j+1) = Z +* (y0|Seg(len G+1-'(j+1))) by A4;
+
+   proj(modetrans(G,(len G)+1-'j)).(h/.(j+1))
+    = h2.(len G+1-'j) by B3,Def1
+   .= Z.(len G+1-'j) by B8,C3,FUNCT_4:11
+   .= proj(modetrans(G,len G+1-'j)).(0.(product G)) by B3,A2,Def1;
+   hence proj(modetrans(G,(len G)+1-'j)).(x+y)
+        - proj(modetrans(G,(len G)+1-'j)).(x+h/.(j+1))
+    = proj(modetrans(G,len G+1-'j)).(y - 0.(product G)) by A7,B7,YTh9M
+   .= proj(modetrans(G,len G+1-'j)).y by RLVECT_1:13;
+end;
+
+theorem Th48X:
+for G be non-trivial RealNormSpace-Sequence,
+    S be non trivial RealNormSpace,
+    f be PartFunc of product G, S,
+    X be Subset of product G,
+    x be Point of product G
+ st X is open & x in X &
+    (for i be set st i in dom G holds
+      f is_partial_differentiable_on X,i & f`partial|(X,i) is_continuous_on X)
+ holds
+  f is_differentiable_in x & for h be Point of product G
+   ex w be FinSequence of S st
+    dom w = dom G &
+    (for i be set st i in dom G holds
+          w.i = partdiff(f,x,i).(proj(modetrans(G,i)).h))
+  & diff(f,x).h = Sum w
+proof
+   let G be non-trivial RealNormSpace-Sequence,
+       S be non trivial RealNormSpace,
+       f be PartFunc of product G, S,
+       X be Subset of product G,
+       x be Point of product G;
+   assume
+A1: X is open & x in X &
+    (for i be set st i in dom G holds
+      f is_partial_differentiable_on X,i &
+      f`partial|(X,i) is_continuous_on X);
+   set m = len G;
+CG2: dom G = Seg m by FINSEQ_1:def 3;
+   reconsider Z0 = 0.(product G) as Element of product carr G by LM001;
+   reconsider x0 = x as Element of product carr G by LM001;
+   reconsider x1 = x as (len G)-element FinSequence;
+   reconsider Z1=0.(product G) as (len G)-element FinSequence;
+   consider L be bounded LinearOperator of product G,S such that
+A2: for h be Point of product G
+     ex w be FinSequence of S st
+      dom w = Seg m &
+      (for i be Element of NAT st i in Seg m holds
+          w.i = partdiff(f,x,i).(proj(modetrans(G,i)).h))
+        & L.h = Sum w by Lm8;
+A200:
+   for h be Point of product G
+    ex w be FinSequence of S st
+      dom w = dom G
+    & (for i be set st i in dom G  holds
+          w.i = partdiff(f,x,i).(proj(modetrans(G,i)).h))
+    & L.h = Sum w
+   proof
+    let h be Point of product G;
+    consider w be FinSequence of S such that
+X1:  dom w = Seg m &
+     (for i be Element of NAT st i in Seg m holds
+          w.i = partdiff(f,x,i).(proj(modetrans(G,i)).h))
+   & L.h = Sum w by A2;
+    take w;
+    thus dom w = dom G by X1,FINSEQ_1:def 3;
+    thus thesis by X1,CG2;
+   end;
+   consider d0 be Real such that
+A3: d0 >0 and
+A4: {y where y is Element of product G: ||. y-x .|| < d0} c= X by A1,NDIFF_1:3;
+   set N = {y where y is Element of product G: ||. y-x .|| < d0};
+
+   N c= the carrier of product G by A4,XBOOLE_1:1; then
+A300:
+   N is Neighbourhood of x by A3,NFCONT_1:def 1;
+A301:
+   1 <= m by NAT_1:14; then
+   m in dom G by CG2; then
+   f is_partial_differentiable_on X,m by A1; then
+   X c= dom f by Def19; then
+A5:N c= dom f by A4,XBOOLE_1:1;
+
+   deffunc RF(Element of product G) = f/.(x+$1) - f/.x - L.$1;
+
+   consider R be Function of the carrier of product G,the carrier of S
+      such that
+A6:for h be Element of the carrier of product G holds R.h = RF(h)
+         from FUNCT_2:sch 4;
+
+   now let r0 be Real;
+    assume A9: r0 > 0;
+    set r1=r0/2;
+    set r=r1/m;
+    defpred DSQ[Nat, Element of REAL] means
+     ex k be Element of NAT st $1=k & 0 < $2 &
+      for q be Element of product G st q in X & ||. q-x .|| < $2 holds
+       ||. partdiff(f,q,k)- partdiff(f,x,k) .|| < r;
+
+A10:for k0 be Nat st k0 in Seg m holds ex d be Element of REAL st DSQ[k0,d]
+    proof
+     let k0 be Nat;
+     assume A11: k0 in Seg m;
+
+     reconsider k = k0 as Element of NAT by ORDINAL1:def 12;
+     f`partial|(X,k) is_continuous_on X by CG2,A11,A1; then
+     consider d be Real such that
+A13:  0 < d &
+      for q be Point of product G st q in X & ||. q- x .|| < d holds
+       ||. (f`partial|(X,k))/.q - (f`partial|(X,k))/.x .|| < r
+          by A9,A1,NFCONT_1:19;
+     take d;
+     for q be Point of product G st q in X & ||. q-x .|| < d holds
+       ||. partdiff(f,q,k) - partdiff(f,x,k) .|| < r
+     proof
+      let q be Point of product G;
+      assume A14:q in X & ||. q- x .|| < d; then
+A15:  ||. (f`partial|(X,k))/.q - (f`partial|(X,k))/.x .|| < r by A13;
+
+A16:  f is_partial_differentiable_on X,k by A1,A11,CG2; then
+      (f`partial|(X,k))/.q = partdiff(f,q,k) by A14,A11,CG2,Def19f;
+      hence ||. partdiff(f,q,k)- partdiff(f,x,k) .|| < r
+         by A15,A16,A1,A11,CG2,Def19f;
+     end;
+     hence ex k be Element of NAT st k0=k & 0 < d &
+      for q be Element of product G st q in X & ||. q-x .|| < d holds
+       ||. partdiff(f,q,k) - partdiff(f,x,k) .|| < r by A13;
+    end;
+
+    consider Dseq be FinSequence of REAL such that
+A17: dom Dseq = Seg m &
+     for i be Nat st i in Seg m holds DSQ[i,Dseq.i] from FINSEQ_1:sch 5(A10);
+
+    m in Seg m by A301; then
+    reconsider rDseq = rng Dseq as non empty ext-real-membered set
+      by A17,FUNCT_1:3;
+    reconsider rDseq as left_end right_end non empty ext-real-membered set;
+A19:min rDseq in rng Dseq by XXREAL_2:def 7; then
+    reconsider d1 = min rDseq as Real;
+
+    set d = min(d0,d1);
+B1: d <= d0 & d <= d1 by XXREAL_0:17;
+    consider i1 be set such that
+A20: i1 in dom Dseq & d1 = Dseq.i1 by A19,FUNCT_1:def 3;
+
+    reconsider i1 as Nat by A20;
+
+A21:ex k be Element of NAT st i1=k & 0 < Dseq.i1 &
+     for q be Element of product G st q in X & ||. q-x .|| < Dseq.i1 holds
+       ||. partdiff(f,q,k) - partdiff(f,x,k) .|| < r by A17,A20;
+
+A22:now let q be Element of product G;
+     assume ||. q-x .|| < d; then
+     ||. q-x .|| < d0 by B1,XXREAL_0:2; then
+     q in {y where y is Element of product G: ||. y-x .|| < d0};
+     hence q in X by A4;
+    end;
+
+A24:now let q be Element of product G, i be Element of NAT;
+     assume A25: ||. q-x .|| < d & i in Seg m;
+     reconsider i0=i as Nat;
+     consider k be Element of NAT such that
+A26:  i0 = k & 0 < Dseq.i0 &
+      for q be Element of product G st q in X & ||. q-x .|| < Dseq.i0 holds
+       ||. partdiff(f,q,k) - partdiff(f,x,k) .|| < r by A17,A25;
+     Dseq.i0 in rng Dseq by A17,A25,FUNCT_1:3; then
+     d1 <= Dseq.i0 by XXREAL_2:def 7; then
+     d <= Dseq.i0 by B1,XXREAL_0:2; then
+     ||. q-x .|| < Dseq.i0 by A25,XXREAL_0:2;
+     hence ||. partdiff(f,q,i) - partdiff(f,x,i) .|| < r by A22,A25,A26;
+    end;
+    take d;
+    thus 0 < d by A3,A20,A21,XXREAL_0:21;
+    thus for y be Point of product G st
+       y <> 0.(product G) & ||.y.|| < d holds ||.y.||"* ||. R/.y .|| < r0
+    proof
+     let y be Point of product G;
+     assume A28: y <> 0.(product G) & ||. y .||< d; then
+A280:0 <> ||. y .|| by NORMSP_0:def 5;
+     set z= R/.y;
+     consider h be FinSequence of product G, g be FinSequence of S,
+              Z,y0 be Element of product carr G such that
+A29:  y0=y & Z = 0.(product G)
+    & len h = len G + 1 & len g = len G
+    & (for i be Nat st i in dom h holds h/.i = Z +* (y0| Seg (len G + 1-'i)))
+    & (for i be Nat st i in dom g holds g/.i = f/.(x+h/.i) - f/.(x+h/.(i+1)))
+    & (for i be Nat, hi be Point of product G st
+          i in dom h & h/.i= hi holds ||. hi .|| <=||. y .||)
+    & f /.(x+y) - f/.x = Sum g by Th28;
+     consider w be FinSequence of S such that
+A31:  dom w = Seg m
+    & (for i be Element of NAT st i in Seg m holds
+           w.i = partdiff(f,x,i).(proj(modetrans(G,i)).y))
+    & L.y = Sum w by A2;
+
+A32: dom idseq m = Seg m & rng idseq m = Seg m by FUNCT_2:def 1,def 3; then
+A33: dom Rev idseq m = Seg m & rng Rev idseq m = Seg m by FINSEQ_5:57; then
+     reconsider Ri=Rev idseq m as Function of Seg m,Seg m by FUNCT_2:1;
+
+     Ri is one-to-one onto by A33,FUNCT_2:def 3; then
+     reconsider Ri=Rev idseq m as Permutation of dom w by A31;
+
+A39: len (idseq m) = m & len w = m by A31,A32,FINSEQ_1:def 3;
+
+     dom (w * Ri) = dom Ri by A33,RELAT_1:27; then
+A35: dom (w * Ri) = dom Rev w by A33,A31,FINSEQ_5:57;
+     reconsider wRi=w * Ri as FinSequence of S by FINSEQ_2:47;
+     now let k be Nat;
+      assume A36: k in dom Rev w; then
+A37:  k in dom Rev idseq m by A33,A31,FINSEQ_5:57; then
+A38:  1 <= k & k <= m by A33,FINSEQ_1:1; then
+      reconsider mk=m-k as Nat by NAT_1:21;
+      reconsider zr0=0 as Nat;
+      0 <= mk; then
+A40:  zr0 + 1 <= m - k + 1 by XREAL_1:6;
+      k-1 >= 1-1 by A38,XREAL_1:9; then
+      m-(k-1) <= m by XREAL_1:43; then
+A41:  mk+1 in Seg m by A40;
+      (Rev w).k = w.(len (idseq m) - k + 1) by A39,A36,FINSEQ_5:def 3
+        .= w.((idseq m).(len (idseq m) - k + 1)) by A41,A39,FINSEQ_2:49
+        .= w.((Rev idseq m).k) by A37,FINSEQ_5:def 3;
+      hence (Rev w).k = wRi.k by A36,A35,FUNCT_1:12;
+     end; then
+A42: Sum Rev w = Sum w by A35,FINSEQ_1:13,RLVECT_2:7;
+
+     deffunc GW(Nat) = g/.$1 - (Rev w)/.$1;
+     consider gw be FinSequence of S such that
+A43:  len gw =m &
+      for j being Nat st j in dom gw holds gw.j = GW(j) from FINSEQ_2:sch 1;
+A44: now let j be Element of NAT;
+      assume j in dom g; then
+      j in Seg m by A29,FINSEQ_1:def 3; then
+      j in dom gw by A43,FINSEQ_1:def 3;
+      hence gw.j = g/.j - (Rev w)/.j by A43;
+     end;
+    len Rev w = len g by A29,A39,FINSEQ_5:def 3; then
+     Sum gw = Sum g - Sum(Rev w) by A29,A43,A44,RLVECT_2:5; then
+A47: R/.y = Sum gw by A6,A29,A31,A42;
+A48: for j be Element of NAT st j in dom gw holds ||. gw/.j .|| <= ||. y .||*r
+     proof
+      let j be Element of NAT;
+      assume A49: j in dom gw; then
+A50:  j in Seg m by A43,FINSEQ_1:def 3; then
+A500: j in dom g by A29,FINSEQ_1:def 3; then
+A51:  g/.j = f/.(x+h/.j) - f/.(x+h/.(j+1)) by A29;
+A52:  1 <= j & j <=m by A50,FINSEQ_1:1; then
+A54:  m+1 <= m+j & j+1 <= m+1 by XREAL_1:6; then
+      m+1-j <= m & 1 <= m+1-j by XREAL_1:19,20; then
+      m+1-'j <= m & 1 <= m+1-'j by A52,NAT_D:37; then
+A56:  m+1-'j in Seg m; then
+      f is_partial_differentiable_on X,(m+1-'j) by A1,CG2; then
+A55:  X c=dom f &
+      for x be Element of product G st x in X holds
+       f is_partial_differentiable_in x,(m+1-'j) by XTh34,A1;
+      w/.(m+1-'j) = w.(m+1-'j) by A31,A56,PARTFUN1:def 6; then
+A57:  w/.(m+1-'j) = (partdiff(f,x,(m+1-'j))).(proj(modetrans(G,m+1-'j)).y)
+         by A56,A31;
+A58:  now let j be Element of NAT;
+       reconsider hj = h/.j as Element of product G;
+       assume 1 <= j & j <= m + 1; then
+       j in dom h by A29,FINSEQ_3:25; then
+A59:   ||. hj .|| <= ||. y .|| by A29;
+       (x+h/.j)-x = h/.j + (x-x) by RLVECT_1:28
+         .= h/.j + 0.(product G) by RLVECT_1:15; then
+       (x+h/.j)-x = h/.j by RLVECT_1:4;
+       hence ||. (x+h/.j)-x .|| < d by A59,A28,XXREAL_0:2;
+      end;
+      m <= m+1 by NAT_1:11; then
+      Seg m c= Seg(m+1) by FINSEQ_1:5; then
+      1 <= j & j <= m + 1 by A50,FINSEQ_1:1; then
+A62:  ||. (x+h/.j)-x .|| < d by A58;
+      1 <= j+1 by NAT_1:11; then
+A68:  ||. (x+h/.(j+1))-x .|| < d by A54,A58;
+A75:  x + h/.j = reproj(modetrans(G,m+1-'j),(x+h/.(j+1)) )
+                   .(proj(modetrans(G,m+1-'j)).(x+y)) by Th46,A29,A52;
+
+Y5:   (proj(modetrans(G,m+1-'j)).(x+y))
+         - proj(modetrans(G,m+1-'j)).(x+h/.(j+1))
+       = (proj(modetrans(G,m+1-'j)).y) by Th46X,A29,A52;
+
+      for z be Point of product G st ||. z-x .|| < d holds
+        ||. partdiff(f,z,(m+1-'j)) - partdiff(f,x,(m+1-'j)).||
+           <=r by A24,A56; then
+XXX:  ||. f/.(x+h/.j) - f/.(x+h/.(j+1))
+          - (partdiff(f,x,(m+1-'j))).(proj(modetrans(G,m+1-'j)).y).||
+        <= ||.(proj(modetrans(G,m+1-'j)).y).|| *r
+             by A1,A55,A56,CG2,A22,A62,A68,A75,Y5,XTh45;
+A89:  m+1-'j = m+1-j by A52,NAT_1:12,XREAL_1:233;
+      j in Seg len (Rev w) by A50,A39,FINSEQ_5:def 3; then
+A90:  j in dom Rev w by FINSEQ_1:def 3; then
+A901: (Rev w)/.j = (Rev w).j by PARTFUN1:def 6
+        .= w.(m-j+1) by A39,A90,FINSEQ_5:def 3
+        .= w/.(m+1-'j) by A89,A56,A31,PARTFUN1:def 6;
+A92:  gw/.j = gw.j by A49,PARTFUN1:def 6
+           .= f/.(x+h/.j) - f/.(x+h/.(j+1))
+               - (partdiff(f,x,(m+1-'j))).(proj(modetrans(G,m+1-'j)).y)
+                     by A57,A51,A901,A500,A44;
+      ||. (proj(modetrans(G,m+1-'j)).y).||*r <= ||. y .||*r
+         by A9,XTh50,XREAL_1:64;
+      hence ||. gw/.j .|| <= ||. y .||*r by A92,XXX,XXREAL_0:2;
+     end;
+     defpred YSQ[set,set] means $2 = ||. gw/.$1 .||;
+A93: for k be Nat st k in Seg m holds
+       ex x be Element of REAL st YSQ[k,x];
+     consider yseq be FinSequence of REAL such that
+A94:  dom yseq = Seg m &
+      for i be Nat st i in Seg m holds YSQ[i,yseq.i] from FINSEQ_1:sch 5(A93);
+A95: len gw = len yseq by A43,A94,FINSEQ_1:def 3;
+A96: now let i be Element of NAT;
+      assume i in dom gw; then
+      i in Seg m by A43,FINSEQ_1:def 3;
+      hence yseq.i = ||. gw/.i .|| by A94;
+     end;
+     reconsider yseq as Element of REAL m by A95,A43,FINSEQ_2:92;
+A97: ||. Sum gw .|| <= Sum yseq by A96,A95,PDIFF617;
+     for j be Nat st j in Seg m holds yseq.j <= (m |-> (||. y .||*r)).j
+     proof
+      let j be Nat;
+      assume A98: j in Seg m; then
+      j in dom gw by A43,FINSEQ_1:def 3; then
+A100: ||. gw/.j .|| <= ||. y .||*r by A48;
+      yseq.j = ||. gw/.j .|| by A94,A98;
+      hence yseq.j <= (m |-> (||. y .||*r)).j by A98,A100,FINSEQ_2:57;
+     end; then
+     Sum yseq <= Sum(m |-> (||. y .||*r)) by RVSUM_1:82; then
+     Sum yseq <= m*(||. y .||*r) by RVSUM_1:80; then
+     ||. z .|| <= m*(||. y .||*r) by A47,A97,XXREAL_0:2; then
+     ||. z .||*||.y.||" <= (m*||. y .||*r)*||.y.||" by XREAL_1:64; then
+     ||. z .||*||.y.||" <= m*((r*||. y .||)*||.y.||"); then
+     ||.y.||"* ||. z .|| <= m*r by A280,XCMPLX_1:203; then
+A101: ||.y.||"* ||. z .|| <= r1 by XCMPLX_1:87;
+     r1 < r0 by A9,XREAL_1:216;
+     hence (||.y.||"* ||. z .||) < r0 by A101,XXREAL_0:2;
+    end;
+   end; then
+   reconsider R as REST of product G,S by NDIFF_1:23;
+   reconsider L as Point of
+     R_NormSpace_of_BoundedLinearOperators(product G,S) by LOPBAN_1:def 9;
+
+AD0:
+   for y being Point of product G st y in N
+      holds f/.y - f/.x = L.(y-x) + R/.(y-x)
+   proof
+    let y be Point of product G;
+    assume y in N;
+    y-x in the carrier of (product G); then
+    y-x in dom R by PARTFUN1:def 2; then
+    R/.(y-x) = R.(y-x) by PARTFUN1:def 6; then
+    R/.(y-x) = f/.(x+(y-x)) - f/.x - L.(y-x) by A6;
+    hence L.(y-x) + R/.(y-x)
+          = f/.(x+(y-x)) - f/.x - (L.(y-x) - L.(y-x)) by RLVECT_1:29
+        .= f/.(x+(y-x)) - f/.x - 0.S by RLVECT_1:5
+        .= f/.(x+(y-x)) - f/.x by RLVECT_1:13
+        .= f/.(y-(x-x)) - f/.x by RLVECT_1:29
+        .= f/.(y-0.(product G)) - f/.x by RLVECT_1:5
+        .= f/.y - f/.x by RLVECT_1:13;
+   end; then
+   f is_differentiable_in x by A5,A300,NDIFF_1:def 6; then
+   diff(f,x) = L by A300,A5,AD0,NDIFF_1:def 7;
+   hence thesis by A200,AD0,A5,A300,NDIFF_1:def 6;
+end;
+
+theorem
+for G be non-trivial RealNormSpace-Sequence,
+    F be non trivial RealNormSpace,
+    f be PartFunc of product G, F,
+    X be Subset of product G
+ st X is open holds
+  (for i be set st i in dom G holds
+     f is_partial_differentiable_on X,i & f`partial|(X,i) is_continuous_on X)
+iff
+  f is_differentiable_on X & f`|X is_continuous_on X
+proof
+   let G be non-trivial RealNormSpace-Sequence,
+       F be non trivial RealNormSpace,
+       f be PartFunc of product G, F,
+       X be Subset of product G;
+   assume A1: X is open;
+   set m=len G;
+CG2: dom G = Seg m by FINSEQ_1:def 3;
+   hereby assume
+A2:  for i be set st i in dom G holds
+      f is_partial_differentiable_on X,i & f`partial|(X,i) is_continuous_on X;
+A3: now let i be Element of NAT;
+     assume 1 <=i & i <= m; then
+     i in Seg m; then
+     f`partial|(X,i) is_continuous_on X by A2,CG2;
+     hence X c= dom (f`partial|(X,i))
+        & for y0 be Point of product G, r be Real st y0 in X & 0<r
+            ex s be Real st 0<s &
+        for y1 be Point of product G st y1 in X & ||. y1- y0 .|| < s holds
+        ||. (f`partial|(X,i))/.y1-(f`partial|(X,i))/.y0 .||<r by NFCONT_1:19;
+    end;
+V1: 1 <= m by NAT_1:14; then
+    m in dom G by CG2; then
+    f is_partial_differentiable_on X,m by A2; then
+A4: X c= dom f by Def19;
+    for x be Point of product G st x in X holds
+      f is_differentiable_in x by A1,A2,Th48X;
+    hence
+A5:   f is_differentiable_on X by A1,A4,NDIFF_1:31; then
+A6: dom (f`|X) = X by NDIFF_1:def 9;
+    for y0 be Point of product G, r be Real st y0 in X & 0<r
+      ex s be Real st 0<s &
+       for y1 be Point of product G st y1 in X & ||. y1- y0 .|| < s holds
+        ||. (f`|X)/.y1-(f`|X)/.y0 .|| < r
+    proof
+     let y0 be Point of product G, r be Real;
+     assume A7: y0 in X & 0<r;
+     defpred P[Nat,Real] means
+       for i being Element of NAT st i=$1 holds
+        (0<$2 &
+        for y1 be Point of product G st y1 in X & ||. y1- y0 .|| < $2 holds
+        ||. (f`partial|(X,i))/.y1-(f`partial|(X,i))/.y0 .||<r/(2*m));
+A8:  now let i be Nat;
+      reconsider j=i as Element of NAT by ORDINAL1:def 12;
+      assume i in Seg m; then
+      1 <=j & j <= m by FINSEQ_1:1; then
+      consider s be Real such that
+A9:    0<s &
+       for y1 be Point of product G st y1 in X & ||. y1- y0 .|| < s holds
+        ||. (f`partial|(X,j))/.y1-(f`partial|(X,j))/.y0 .||<r/(2*m) by A7,A3;
+      reconsider s as Element of REAL;
+      take s;
+      thus P[i,s] by A9;
+     end;
+     consider S being FinSequence of REAL such that
+A10:  dom S = Seg m
+    & for i be Nat st i in Seg m holds P[i,S.i] from FINSEQ_1:sch 5(A8);
+     take s = min S;
+A11: len S = m by A10,FINSEQ_1:def 3; then
+     min_p S in dom S by RFINSEQ2:def 2;
+     hence s > 0 by A10;
+     let y1 be Point of product G;
+     assume A12: y1 in X & ||. y1- y0 .|| < s;
+     reconsider DD=diff(f,y1)-diff(f,y0) as bounded LinearOperator of
+          product G, F by LOPBAN_1:def 9;
+A13: upper_bound PreNorms(DD) = ||. diff(f,y1) - diff(f,y0) .|| by LOPBAN_1:30;
+     now let mt be real number;
+      assume mt in PreNorms(DD); then
+      consider t being VECTOR of product G such that
+A14:   mt=||.DD.t.|| & ||.t.|| <= 1;
+      consider w0 be FinSequence of F such that
+A15:   dom w0 = dom G &
+       (for i be set st i in dom G holds
+          w0.i = partdiff(f,y0,i).(proj(modetrans(G,i)).t)) &
+          diff(f,y0).t=Sum(w0) by A1,A2,Th48X,A7;
+      reconsider Sw0=Sum w0 as Point of F;
+      consider w1 be FinSequence of F such that
+A16:   dom w1 = dom G &
+       (for i be set st i in dom G holds
+          w1.i = partdiff(f,y1,i).(proj(modetrans(G,i)).t)) &
+        diff(f,y1).t=Sum(w1) by A1,A2,Th48X,A12;
+      reconsider Sw1=Sum w1 as Point of F;
+      deffunc F(set) = w1/.$1 - w0/.$1;
+      consider w2 being FinSequence of F such that
+A17:   len w2 = m & for i being Nat st i in dom w2 holds
+         w2.i = F(i) from FINSEQ_2:sch 1;
+A18:  len w1 = m & len w0 = m by CG2,A15,A16,FINSEQ_1:def 3;
+      now let i be Element of NAT;
+       assume i in dom w1; then
+       i in dom w2 by A17,CG2,A16,FINSEQ_1:def 3;
+       hence w2.i = F(i) by A17;
+      end; then
+      Sum w2 = Sum w1 - Sum w0 by A17,A18,RLVECT_2:5; then
+A21:  mt= ||. Sum w2 .|| by A14,A16,A15,LOPBAN_1:40;
+      deffunc F(Nat) = ||. (w2/.$1) .||;
+      consider ys being FinSequence of REAL such that
+A22:   len ys = m & for j being Nat st j in dom ys holds ys.j = F(j)
+          from FINSEQ_2:sch 1;
+A23:  now let i be Element of NAT;
+       assume i in dom w2; then
+       i in Seg m by A17,FINSEQ_1:def 3; then
+       i in dom ys by A22,FINSEQ_1:def 3;
+       hence ys.i = ||.w2/.i.|| by A22;
+      end; then
+A25:  ||. Sum w2 .|| <= Sum ys by A17,A22,PDIFF617;
+      reconsider rm=r/(2*m) as Element of REAL;
+      deffunc F(Nat) = rm;
+      consider rs being FinSequence of REAL such that
+A26:   len rs = m & for j being Nat st j in dom rs holds rs.j = F(j)
+          from FINSEQ_2:sch 1;
+A27:  dom rs = Seg m by A26,FINSEQ_1:def 3;
+      now let a be set;
+       assume a in rng rs; then
+       consider b being set such that
+A28:    b in dom rs & a=rs.b by FUNCT_1:def 3;
+       reconsider b as Nat by A28;
+       rs.b=rm by A28,A26;
+       hence a in {rm} by A28,TARSKI:def 1;
+      end; then
+A270: rng rs c= {rm} by TARSKI:def 3;
+      now let a be set;
+       assume a in {rm}; then
+A29:   a = rm by TARSKI:def 1;
+A30:   1 in dom rs by V1,A27; then
+       a = rs.1 by A29,A26;
+       hence a in rng rs by A30,FUNCT_1:3;
+      end; then
+      {rm} c= rng rs by TARSKI:def 3; then
+      {rm} = rng rs by A270,XBOOLE_0:def 10; then
+      rs = m |-> (r/(2*m)) by A27,FUNCOP_1:9; then
+      Sum rs = m*(r/(2*m)) by RVSUM_1:80
+            .= m*(r/2/m) by XCMPLX_1:78; then
+A31:  Sum rs = r/2 by XCMPLX_1:87;
+      now let i be Element of NAT;
+       assume i in dom ys; then
+A32:   i in Seg m by A22,FINSEQ_1:def 3; then
+A33:   i in dom w2 & i in dom w1 & i in dom w0
+            by A15,A16,A17,FINSEQ_1:def 3; then
+A34:   ys.i = ||. w2/.i .|| & w2/.i= w2.i by A23,PARTFUN1:def 6;
+A35:   i in dom rs by A26,A32,FINSEQ_1:def 3;
+       reconsider p1=partdiff(f,y1,i),p0 = partdiff(f,y0,i)
+        as bounded LinearOperator of G.(modetrans(G,i)), F by LOPBAN_1:def 9;
+       reconsider P1 = p1.(proj(modetrans(G,i)).t) as VECTOR of F;
+       reconsider P0=p0.(proj(modetrans(G,i)).t ) as VECTOR of F;
+       w0/.i = w0.i & w1/.i = w1.i by A33,PARTFUN1:def 6; then
+       w0/.i = P0 & w1/.i = P1 by CG2,A15,A16,A32; then
+A40:   w2.i = P1-P0 by A33,A17;
+       1 <= i & i <= len S by A11,A32,FINSEQ_1:1; then
+A41:   s <= S.i & f is_partial_differentiable_on X,i
+          by CG2,A32,A2,RFINSEQ2:2; then
+       ||. y1- y0 .|| < S.i by A12,XXREAL_0:2; then
+       ||. (f`partial|(X,i))/.y1-(f`partial|(X,i))/.y0 .||<r/(2*m)
+            by A10,A32,A12; then
+       ||. partdiff(f,y1,i)-(f`partial|(X,i))/.y0 .||<r/(2*m)
+            by Def19f,A12,A41,CG2,A32; then
+A42:   ||. partdiff(f,y1,i)-partdiff(f,y0,i) .||<r/(2*m)
+            by Def19f,A7,A41,CG2,A32;
+       reconsider PP=partdiff(f,y1,i)-partdiff(f,y0,i) as
+            bounded LinearOperator of G.(modetrans(G,i)),F by LOPBAN_1:def 9;
+A43:   upper_bound PreNorms(PP)
+        = ||. partdiff(f,y1,i)-partdiff(f,y0,i) .|| by LOPBAN_1:30;
+       reconsider pt=proj(modetrans(G,i)).t as VECTOR of G.(modetrans(G,i));
+A44:   PP.pt=P1-P0 by LOPBAN_1:40;
+       ||.pt.|| <= ||.t.|| by XTh50; then
+       ||.pt.|| <= 1 by A14,XXREAL_0:2; then
+       ||. PP.pt .|| in PreNorms(PP)
+         & PreNorms(PP) is non empty bounded_above by LOPBAN_1:27; then
+       ||. PP.pt .|| <= upper_bound PreNorms(PP) by SEQ_4:def 1; then
+       ||. P1-P0 .|| <= r/(2*m) by A44,A42,A43,XXREAL_0:2;
+       hence ys.i <= rs.i by A34,A26,A35,A40;
+      end; then
+      Sum ys <= r/2 by A31,A26,A22,INTEGRA5:3;
+      hence mt <= r/2 by A21,A25,XXREAL_0:2;
+     end; then
+     ||. diff(f,y1) - diff(f,y0) .|| <= r/2 & r/2 < r
+        by A13,A7,SEQ_4:45,XREAL_1:216; then
+     ||. diff(f,y1) - diff(f,y0) .|| < r by XXREAL_0:2; then
+     ||. diff(f,y1) -(f`|X)/.y0 .|| < r by A5,A7,NDIFF_1:def 9;
+     hence ||. (f`|X)/.y1-(f`|X)/.y0 .|| < r by A5,A12,NDIFF_1:def 9;
+    end;
+    hence f`|X is_continuous_on X by A6,NFCONT_1:19;
+   end;
+
+   assume
+A52:f is_differentiable_on X & f`|X is_continuous_on X; then
+A53:
+   X c= dom f & for x be Point of product G st x in X holds
+    f is_differentiable_in x by A1,NDIFF_1:31;
+   thus for i be set st i in dom G holds
+       f is_partial_differentiable_on X,i & f`partial|(X,i) is_continuous_on X
+   proof
+    let i be set;
+    assume A540:i in dom G; then
+    reconsider i0=i as Element of NAT;
+    now let x be Point of product G;
+     assume x in X; then
+     f is_differentiable_in x by A52,A1,NDIFF_1:31;
+     hence f is_partial_differentiable_in x,i &
+       partdiff(f,x,i) = diff(f,x) * reproj(modetrans(G,i),0.(product G))
+          by Th21X;
+    end; then
+    for x be Point of product G st x in X
+     holds f is_partial_differentiable_in x,i;
+    hence
+A55: f is_partial_differentiable_on X,i by A1,XTh8,A53; then
+A56:dom (f`partial|(X,i)) = X by Def19f,A540;
+    for y0 be Point of product G, r be Real st y0 in X & 0<r
+      ex s be Real st 0<s & for y1 be Point of product G
+        st y1 in X & ||. y1- y0 .|| < s holds
+         ||. (f`partial|(X,i))/.y1-(f`partial|(X,i))/.y0 .||<r
+    proof
+     let y0 be Point of product G, r be Real;
+     assume A57: y0 in X & 0<r; then
+     consider s be Real such that
+A58:  0<s & for y1 be Point of product G
+       st y1 in X & ||. y1- y0 .|| < s holds
+         ||. (f`|X)/.y1-(f`|X)/.y0 .||<r by A52,NFCONT_1:19;
+     take s;
+     thus 0<s by A58;
+     let y1 be Point of product G;
+     assume A59: y1 in X & ||. y1- y0 .|| < s; then
+     ||. (f`|X)/.y1-(f`|X)/.y0 .||<r by A58; then
+     ||. diff(f,y1) - (f`|X)/.y0 .||<r by A59,A52,NDIFF_1:def 9; then
+A60: ||. diff(f,y1) - diff(f,y0) .||<r by A57,A52,NDIFF_1:def 9;
+     f is_differentiable_in y1 & f is_differentiable_in y0 by A52,A1,A59,A57,
+NDIFF_1:31; then
+A61: partdiff(f,y1,i) = diff(f,y1)* reproj(modetrans(G,i),0.(product G))
+   & partdiff(f,y0,i) = diff(f,y0)* reproj(modetrans(G,i),0.(product G))
+          by Th21X;
+     reconsider PP=partdiff(f,y1,i)-partdiff(f,y0,i)
+       as bounded LinearOperator of G.(modetrans(G,i)),F by LOPBAN_1:def 9;
+     reconsider DD=diff(f,y1)-diff(f,y0)
+       as bounded LinearOperator of product G,F by LOPBAN_1:def 9;
+A62: upper_bound PreNorms(PP) = ||. partdiff(f,y1,i)-partdiff(f,y0,i) .||
+   & upper_bound PreNorms(DD) = ||. diff(f,y1) - diff(f,y0) .|| by LOPBAN_1:30;
+A64: PreNorms(PP) is bounded_above & PreNorms(DD) is bounded_above
+       by LOPBAN_1:28;
+     now let a be set;
+      assume a in PreNorms(PP); then
+      consider t being VECTOR of G.(modetrans(G,i)) such that
+A65:   a=||.PP.t.|| & ||.t.|| <= 1;
+A66:  dom reproj(modetrans(G,i),0.(product G))
+        = the carrier of G.(modetrans(G,i)) by FUNCT_2:def 1;
+      reconsider tm=reproj(modetrans(G,i),0.(product G)).t
+         as Point of product G;
+A67:  ||. tm .|| <= 1 by A65,XTh5;
+      partdiff(f,y1,i).t = diff(f,y1).tm &
+      partdiff(f,y0,i).t = diff(f,y0).tm by A66,A61,FUNCT_1:13; then
+      ||. PP.t .|| = ||. diff(f,y1).tm - diff(f,y0).tm.|| by LOPBAN_1:40; then
+      ||. PP.t .|| = ||. DD.tm .|| by LOPBAN_1:40;
+      hence a in PreNorms(DD) by A65,A67;
+     end; then
+     PreNorms(PP) c= PreNorms(DD) by TARSKI:def 3; then
+     ||. partdiff(f,y1,i)-partdiff(f,y0,i) .|| <=
+        ||. diff(f,y1) - diff(f,y0) .|| by A64,A62,SEQ_4:48; then
+     ||. partdiff(f,y1,i)-partdiff(f,y0,i) .||<r by A60,XXREAL_0:2; then
+     ||. partdiff(f,y1,i)-(f`partial|(X,i))/.y0 .||<r by Def19f,A57,A55,A540;
+     hence ||. (f`partial|(X,i))/.y1-(f`partial|(X,i))/.y0 .||<r
+        by Def19f,A59,A55,A540;
+    end;
+    hence f`partial|(X,i) is_continuous_on X by A56,NFCONT_1:19;
+   end;
+end;

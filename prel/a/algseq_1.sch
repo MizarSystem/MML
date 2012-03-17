@@ -49,7 +49,7 @@
 <Func kind="F" nr="1"/>
 </Func>
 </Adjective>
-<Adjective nr="47">
+<Adjective nr="48">
 <Func kind="F" nr="1"/>
 </Adjective>
 </Cluster>

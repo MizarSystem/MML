@@ -18,13 +18,16 @@ environ
       ZFMISC_1, XBOOLE_0, XREAL_0, ORDINAL1, RELAT_1, REAL_1, ARYTM_3,
       SUPINF_2, FUNCT_5, MCART_1, ARYTM_1, CARD_1, FINSEQ_1, ORDINAL4, CARD_3,
       TARSKI, XXREAL_0, FUNCOP_1, NAT_1, VALUED_0, RLVECT_1, PARTFUN1;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0,
-      XXREAL_0, XREAL_0, RELAT_1, FUNCT_1, FUNCT_2, BINOP_1, FUNCOP_1, REAL_1,
-      FINSEQ_1, NAT_1, FUNCT_3, FUNCT_5, STRUCT_0, ALGSTR_0;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, CARD_1, NUMBERS,
+      XCMPLX_0, XXREAL_0, XREAL_0, RELAT_1, FUNCT_1, FUNCT_2, BINOP_1,
+      FUNCOP_1, REAL_1, FINSEQ_1, NAT_1, FUNCT_3, FUNCT_5, FINSEQ_4,
+      STRUCT_0, ALGSTR_0;
  constructors BINOP_1, FUNCOP_1, XXREAL_0, REAL_1, NAT_1, FINSEQ_1, FUNCT_3,
-      FUNCT_5, ALGSTR_0, REALSET1;
+      FUNCT_5, ALGSTR_0, REALSET1, RELSET_1, FINSEQ_4,
+      VALUED_0;
  registrations XBOOLE_0, ORDINAL1, RELSET_1, NUMBERS, XXREAL_0, XREAL_0, NAT_1,
-      STRUCT_0, REAL_1, ALGSTR_0, FINSEQ_1, CARD_1, ZFMISC_1;
+      STRUCT_0, REAL_1, ALGSTR_0, FINSEQ_1, CARD_1, ZFMISC_1,
+      FUNCT_1, RELAT_1;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions FUNCT_1, TARSKI, STRUCT_0, RELAT_1, ALGSTR_0;
  theorems FUNCT_1, NAT_1, TARSKI, RELAT_1, STRUCT_0, XBOOLE_0, XBOOLE_1,
@@ -42,11 +45,11 @@ definition
 end;
 
 registration
-  cluster non empty RLSStruct;
+  cluster non empty for RLSStruct;
   existence
   proof
 
-set ZS =the  non empty set,O =the  Element of ZS,F =the  BinOp of ZS,G =the
+set ZS = the non empty set,O = the Element of ZS,F = the BinOp of ZS,G =the
 Function of [:REAL,ZS:],ZS;
     take RLSStruct(#ZS,O,F,G#);
     thus the carrier of RLSStruct(#ZS,O,F,G#) is non empty;
@@ -60,8 +63,6 @@ definition
   let V be RLSStruct;
   mode VECTOR of V is Element of V;
 end;
-
-canceled 2;
 
 theorem
   for V being non empty 1-sorted, v being Element of V holds v in V by
@@ -78,7 +79,7 @@ definition
   let V;
   let v;
   let a be real number;
-  canceled 3;
+
   func a * v -> Element of V equals
   (the Mult of V).(a,v);
   coherence
@@ -90,8 +91,6 @@ definition
 end;
 
 ::   Definitional theorems of zero element, addition, multiplication.
-
-canceled;
 
 theorem
   for V being non empty addMagma, v,w being Element of V holds
@@ -139,12 +138,16 @@ definition
 end;
 
 registration
-  cluster Trivial-RLSStruct -> trivial non empty;
-  coherence by CARD_1:87;
+  cluster Trivial-RLSStruct -> 1-element;
+  coherence
+   proof
+    the carrier of Trivial-RLSStruct = {{}} by CARD_1:49;
+    hence the carrier of Trivial-RLSStruct is 1-element;
+   end;
 end;
 
 registration
-  cluster strict Abelian add-associative non empty addMagma;
+  cluster strict Abelian add-associative non empty for addMagma;
   existence
   proof
     take S = Trivial-addMagma;
@@ -165,7 +168,7 @@ end;
 
 registration
   cluster strict Abelian add-associative right_zeroed right_complementable
-    non empty addLoopStr;
+    non empty for addLoopStr;
   existence
   proof
     take S = Trivial-addLoopStr;
@@ -192,7 +195,7 @@ end;
 registration
   cluster strict Abelian add-associative right_zeroed right_complementable
     scalar-distributive vector-distributive scalar-associative scalar-unital
-     (non empty RLSStruct);
+     for non empty RLSStruct;
   existence
   proof
     take S = Trivial-RLSStruct;
@@ -232,7 +235,7 @@ definition
   mode RealLinearSpace is Abelian add-associative right_zeroed
     right_complementable scalar-distributive vector-distributive
     scalar-associative scalar-unital
-     (non empty RLSStruct);
+     non empty RLSStruct;
 end;
 
 definition
@@ -241,18 +244,16 @@ definition
   commutativity by Def5;
 end;
 
-canceled 2;
-
 ::  Axioms of real linear space.
 
 reserve V for RealLinearSpace;
 reserve v,w for VECTOR of V;
 
-Lm1: for V being add-associative right_zeroed right_complementable (non empty
-addLoopStr), v,w being Element of V st v + w = 0.V holds w + v = 0.V
+Lm1: for V being add-associative right_zeroed right_complementable non empty
+addLoopStr, v,w being Element of V st v + w = 0.V holds w + v = 0.V
 proof
-  let V be add-associative right_zeroed right_complementable (non empty
-  addLoopStr), v,w be Element of V;
+  let V be add-associative right_zeroed right_complementable non empty
+  addLoopStr, v,w be Element of V;
   assume
 A1: v + w = 0.V;
   consider u being Element of V such that
@@ -263,8 +264,6 @@ A2: w + u = 0.V by ALGSTR_0:def 11;
     .= w + u by A1,Def7;
   hence thesis by A2;
 end;
-
-canceled;
 
 theorem Th9:
   for V being add-associative right_zeroed right_complementable
@@ -284,11 +283,11 @@ A2: u + v = w + v;
 end;
 
 theorem Th10:
-  for V being add-associative right_zeroed right_complementable (
-  non empty addLoopStr), v being Element of V holds v + 0.V = v & 0.V + v = v
+  for V being add-associative right_zeroed right_complementable
+  non empty addLoopStr, v being Element of V holds v + 0.V = v & 0.V + v = v
 proof
-  let V be add-associative right_zeroed right_complementable (non empty
-  addLoopStr), v be Element of V;
+  let V be add-associative right_zeroed right_complementable non empty
+  addLoopStr, v be Element of V;
   consider w being Element of V such that
 A1: v + w = 0.V by ALGSTR_0:def 11;
   thus
@@ -336,11 +335,11 @@ A5: v + IT = 0.V;
   end;
 end;
 
-Lm2: for V being add-associative right_zeroed right_complementable (non empty
-addLoopStr), v,u being Element of V ex w being Element of V st v + w = u
+Lm2: for V being add-associative right_zeroed right_complementable non empty
+addLoopStr, v,u being Element of V ex w being Element of V st v + w = u
 proof
-  let V be add-associative right_zeroed right_complementable (non empty
-  addLoopStr);
+  let V be add-associative right_zeroed right_complementable non empty
+  addLoopStr;
   let v,u be Element of V;
   take w = (- v) + u;
   thus v + w = (v + (- v)) + u by Def6
@@ -358,26 +357,22 @@ end;
 
 ::  Definitional theorems of reverse element and substraction.
 
-canceled 5;
-
 theorem Th16:
-  for V being add-associative right_zeroed right_complementable (
-  non empty addLoopStr), v being Element of V holds v + -v = 0.V & -v + v = 0.V
+  for V being add-associative right_zeroed right_complementable
+  non empty addLoopStr, v being Element of V holds v + -v = 0.V & -v + v = 0.V
 proof
-  let V be add-associative right_zeroed right_complementable (non empty
-  addLoopStr), v be Element of V;
+  let V be add-associative right_zeroed right_complementable non empty
+  addLoopStr, v be Element of V;
   thus v + -v = 0.V by Def13;
   hence thesis by Lm1;
 end;
 
-canceled 2;
-
 theorem Th19:
-  for V being add-associative right_zeroed right_complementable (
-non empty addLoopStr), v,w being Element of V holds v + w = 0.V implies v = - w
+  for V being add-associative right_zeroed right_complementable
+non empty addLoopStr, v,w being Element of V holds v + w = 0.V implies v = - w
 proof
-  let V be add-associative right_zeroed right_complementable (non empty
-  addLoopStr);
+  let V be add-associative right_zeroed right_complementable non empty
+  addLoopStr;
   let v,w be Element of V;
   assume v + w = 0.V;
   then w + v = 0.V by Lm1;
@@ -385,17 +380,17 @@ proof
 end;
 
 theorem
-  for V being add-associative right_zeroed right_complementable (non
-empty addLoopStr), v,u being Element of V ex w being Element of V st v + w = u
+  for V being add-associative right_zeroed right_complementable non
+empty addLoopStr, v,u being Element of V ex w being Element of V st v + w = u
   by Lm2;
 
 theorem Th21:
-  for V being add-associative right_zeroed right_complementable (
-non empty addLoopStr), w,u,v1,v2 being Element of V st w + v1 = w + v2 or v1 +
+  for V being add-associative right_zeroed right_complementable
+non empty addLoopStr, w,u,v1,v2 being Element of V st w + v1 = w + v2 or v1 +
   w = v2 + w holds v1 = v2
 proof
-  let V be add-associative right_zeroed right_complementable (non empty
-  addLoopStr);
+  let V be add-associative right_zeroed right_complementable non empty
+  addLoopStr;
   let w,u,v1,v2 be Element of V;
 A1: now
     assume
@@ -421,12 +416,12 @@ A3: w + v1 = w + v2;
 end;
 
 theorem
-  for V being add-associative right_zeroed right_complementable (non
-empty addLoopStr), v,w being Element of V holds v + w = v or w + v = v implies
+  for V being add-associative right_zeroed right_complementable non
+empty addLoopStr, v,w being Element of V holds v + w = v or w + v = v implies
   w = 0.V
 proof
-  let V be add-associative right_zeroed right_complementable (non empty
-  addLoopStr), v,w be Element of V;
+  let V be add-associative right_zeroed right_complementable non empty
+  addLoopStr, v,w be Element of V;
   assume v + w = v or w + v = v;
   then v + w = v + 0.V or w + v = 0.V + v by Th10;
   hence thesis by Th21;
@@ -471,33 +466,33 @@ A2: a <> 0;
 end;
 
 theorem Th25:
-  for V being add-associative right_zeroed right_complementable (
-  non empty addLoopStr) holds - 0.V = 0.V
+  for V being add-associative right_zeroed right_complementable
+  non empty addLoopStr holds - 0.V = 0.V
 proof
-  let V be add-associative right_zeroed right_complementable (non empty
-  addLoopStr);
+  let V be add-associative right_zeroed right_complementable non empty
+  addLoopStr;
   thus 0.V = 0.V + (- 0.V) by Def13
     .= - 0.V by Th10;
 end;
 
 theorem
-  for V being add-associative right_zeroed right_complementable (non
-  empty addLoopStr), v being Element of V holds v - 0.V = v
+  for V being add-associative right_zeroed right_complementable non
+  empty addLoopStr, v being Element of V holds v - 0.V = v
 proof
-  let V be add-associative right_zeroed right_complementable (non empty
-  addLoopStr);
+  let V be add-associative right_zeroed right_complementable non empty
+  addLoopStr;
   let v be Element of V;
   thus v - 0.V = v + 0.V by Th25
     .= v by Th10;
 end;
 
 theorem
-  for V being add-associative right_zeroed right_complementable (non
-  empty addLoopStr), v being Element of V holds 0.V - v = - v by Th10;
+  for V being add-associative right_zeroed right_complementable non
+  empty addLoopStr, v being Element of V holds 0.V - v = - v by Th10;
 
 theorem
-  for V being add-associative right_zeroed right_complementable (non
-  empty addLoopStr), v being Element of V holds v - v = 0.V by Def13;
+  for V being add-associative right_zeroed right_complementable non
+  empty addLoopStr, v being Element of V holds v - v = 0.V by Def13;
 
 theorem Th29:
   - v = (- 1) * v
@@ -512,29 +507,27 @@ proof
 end;
 
 theorem Th30:
-  for V being add-associative right_zeroed right_complementable (
-  non empty addLoopStr), v being Element of V holds - (- v) = v
+  for V being add-associative right_zeroed right_complementable
+  non empty addLoopStr, v being Element of V holds - (- v) = v
 proof
-  let V be add-associative right_zeroed right_complementable (non empty
-  addLoopStr);
+  let V be add-associative right_zeroed right_complementable non empty
+  addLoopStr;
   let v be Element of V;
   v + -v = 0.V by Def13;
   hence thesis by Th19;
 end;
 
 theorem Th31:
-  for V being add-associative right_zeroed right_complementable (
-  non empty addLoopStr), v,w being Element of V holds - v = - w implies v = w
+  for V being add-associative right_zeroed right_complementable
+  non empty addLoopStr, v,w being Element of V holds - v = - w implies v = w
 proof
-  let V be add-associative right_zeroed right_complementable (non empty
-  addLoopStr);
+  let V be add-associative right_zeroed right_complementable non empty
+  addLoopStr;
   let v,w be Element of V;
   assume - v = - w;
   hence v = - (- w) by Th30
     .= w by Th30;
 end;
-
-canceled;
 
 theorem Th33:
   v = - v implies v = 0.V
@@ -557,11 +550,11 @@ proof
 end;
 
 theorem Th35:
-  for V being add-associative right_zeroed right_complementable (
-  non empty addLoopStr), v,w being Element of V holds v - w = 0.V implies v = w
+  for V being add-associative right_zeroed right_complementable
+  non empty addLoopStr, v,w being Element of V holds v - w = 0.V implies v = w
 proof
-  let V be add-associative right_zeroed right_complementable (non empty
-  addLoopStr);
+  let V be add-associative right_zeroed right_complementable non empty
+  addLoopStr;
   let v,w be Element of V;
   assume v - w = 0.V;
   then - v = - w by Def13;
@@ -569,11 +562,11 @@ proof
 end;
 
 theorem
-  for V being add-associative right_zeroed right_complementable (non
-empty addLoopStr), u,v being Element of V ex w being Element of V st v - w = u
+  for V being add-associative right_zeroed right_complementable non
+empty addLoopStr, u,v being Element of V ex w being Element of V st v - w = u
 proof
-  let V be add-associative right_zeroed right_complementable (non empty
-  addLoopStr);
+  let V be add-associative right_zeroed right_complementable non empty
+  addLoopStr;
   let u,v be Element of V;
   consider w being Element of V such that
 A1: v + w = u by Lm2;
@@ -582,11 +575,11 @@ A1: v + w = u by Lm2;
 end;
 
 theorem
-  for V being add-associative right_zeroed right_complementable (non
-empty addLoopStr), w,v1,v2 being Element of V st w - v1 = w - v2 holds v1 = v2
+  for V being add-associative right_zeroed right_complementable non
+empty addLoopStr, w,v1,v2 being Element of V st w - v1 = w - v2 holds v1 = v2
 proof
-  let V be add-associative right_zeroed right_complementable (non empty
-  addLoopStr);
+  let V be add-associative right_zeroed right_complementable non empty
+  addLoopStr;
   let w,v1,v2 be Element of V;
   assume w - v1 = w - v2;
   then - v1 = - v2 by Th21;
@@ -617,11 +610,11 @@ proof
     .= a * v;
 end;
 
-Lm3: for V being add-associative right_zeroed right_complementable (non empty
-addLoopStr), u,w being Element of V holds - (u + w) = -w + -u
+Lm3: for V being add-associative right_zeroed right_complementable non empty
+addLoopStr, u,w being Element of V holds - (u + w) = -w + -u
 proof
-  let V be add-associative right_zeroed right_complementable (non empty
-  addLoopStr), u,w be Element of V;
+  let V be add-associative right_zeroed right_complementable non empty
+  addLoopStr, u,w be Element of V;
   u + w + (-w + -u) = u + (w + (-w + -u)) by Def6
     .= u + (w + -w + -u) by Def6
     .= u + (0.V + -u) by Def13
@@ -631,37 +624,37 @@ proof
 end;
 
 theorem Th41:
-  for V being add-associative right_zeroed right_complementable (
-non empty addLoopStr), v,u,w being Element of V holds v - (u + w) = (v - w) - u
+  for V being add-associative right_zeroed right_complementable
+non empty addLoopStr, v,u,w being Element of V holds v - (u + w) = (v - w) - u
 proof
-  let V be add-associative right_zeroed right_complementable (non empty
-  addLoopStr);
+  let V be add-associative right_zeroed right_complementable non empty
+  addLoopStr;
   let v,u,w be Element of V;
   thus v - (u + w) = v + (-w + -u) by Lm3
     .= (v - w) - u by Def6;
 end;
 
 theorem
-  for V being add-associative (non empty addLoopStr), v,u,w being
+  for V being add-associative non empty addLoopStr, v,u,w being
   Element of V holds (v + u) - w = v + (u - w) by Def6;
 
 theorem
   for V being Abelian add-associative right_zeroed right_complementable
-(non empty addLoopStr), v,u,w being Element of V holds v - (u - w) = (v -u) + w
+non empty addLoopStr, v,u,w being Element of V holds v - (u - w) = (v -u) + w
 proof
-  let V be Abelian add-associative right_zeroed right_complementable (non
-  empty addLoopStr);
+  let V be Abelian add-associative right_zeroed right_complementable non
+  empty addLoopStr;
   let v,u,w be Element of V;
   thus v - (u - w) = v - (u + - w) .= (v - u) - - w by Th41
     .= (v - u) + w by Th30;
 end;
 
 theorem Th44:
-  for V being add-associative right_zeroed right_complementable (
-  non empty addLoopStr), v,w being Element of V holds - (v + w) = (- w) - v
+  for V being add-associative right_zeroed right_complementable
+  non empty addLoopStr, v,w being Element of V holds - (v + w) = (- w) - v
 proof
-  let V be add-associative right_zeroed right_complementable (non empty
-  addLoopStr);
+  let V be add-associative right_zeroed right_complementable non empty
+  addLoopStr;
   let v,w be Element of V;
   thus - (v + w) = 0.V - (v + w) by Th10
     .= (0.V - w) - v by Th41
@@ -669,26 +662,26 @@ proof
 end;
 
 theorem Th45:
-  for V being add-associative right_zeroed right_complementable (non
-  empty addLoopStr), v,w being Element of V holds - (v + w) = -w + -v by Lm3;
+  for V being add-associative right_zeroed right_complementable non
+  empty addLoopStr, v,w being Element of V holds - (v + w) = -w + -v by Lm3;
 
 theorem
   for V being Abelian add-associative right_zeroed right_complementable
-  (non empty addLoopStr), v,w being Element of V holds (- v) - w = (- w) - v
+  non empty addLoopStr, v,w being Element of V holds (- v) - w = (- w) - v
 proof
-  let V be Abelian add-associative right_zeroed right_complementable (non
-  empty addLoopStr);
+  let V be Abelian add-associative right_zeroed right_complementable non
+  empty addLoopStr;
   let v,w be Element of V;
   thus (- v) - w = - (w + v) by Th44
     .= (- w) - v by Th44;
 end;
 
 theorem
-  for V being add-associative right_zeroed right_complementable (non
-  empty addLoopStr), v,w being Element of V holds - (v - w) = w + (- v)
+  for V being add-associative right_zeroed right_complementable non
+  empty addLoopStr, v,w being Element of V holds - (v - w) = w + (- v)
 proof
-  let V be add-associative right_zeroed right_complementable (non empty
-  addLoopStr);
+  let V be add-associative right_zeroed right_complementable non empty
+  addLoopStr;
   let v,w be Element of V;
   thus - (v - w) = --w + -v by Lm3
     .= w + -v by Th30;
@@ -735,28 +728,6 @@ end;
 
 ::  Definition of the sum of the finite sequence of vectors.
 
-definition
-  let V be non empty 1-sorted;
-  let v,u be Element of V;
-  redefine func <* v,u *> -> FinSequence of V;
-  coherence
-  proof
-    <* v,u *> = <* v *> ^ <* u *> by FINSEQ_1:def 9;
-    hence thesis;
-  end;
-end;
-
-definition
-  let V be non empty 1-sorted;
-  let v,u,w be Element of V;
-  redefine func <* v,u,w *> -> FinSequence of V;
-  coherence
-  proof
-    <* v,u,w *> = <* v,u *> ^ <* w *> by FINSEQ_1:60;
-    hence thesis;
-  end;
-end;
-
 reserve V for non empty addLoopStr;
 reserve F for FinSequence-like PartFunc of NAT,V;
 reserve f,f9,g for Function of NAT,V;
@@ -764,36 +735,40 @@ reserve v,u for Element of V;
 reserve j,k,n for Element of NAT;
 
 definition
-  let V; let F be FinSequence-like PartFunc of NAT,V;
+  let V; let F be (the carrier of V)-valued FinSequence;
   func Sum(F) -> Element of V means
   :Def15:
   ex f st it = f.(len F) & f.0 = 0.V
   & for j,v st j < len F & v = F.(j + 1) holds f.(j + 1) = f.j + v;
   existence
   proof
-    defpred P[set] means for F st len F = $1 ex u st ex f st u = f.(len F) & f
-    .0 = 0.V & for j,v st j < len F & v = F.(j + 1) holds f.(j + 1) = f.j + v;
-    now
+    defpred P[set] means
+    for F being (the carrier of V)-valued FinSequence
+     st len F = $1 ex u st ex f st u = f.(len F) & f.0 = 0.V &
+      for j,v st j < len F & v = F.(j + 1) holds f.(j + 1) = f.j + v;
+A23: for n be Element of NAT st P[n] holds P[n+1]
+    proof
       let n;
       assume
-A1:   for F st len F = n ex u st ex f st u = f.(len F) & f.0 = 0.V &
+A1:   for F being (the carrier of V)-valued FinSequence
+        st len F = n ex u st ex f st u = f.(len F) & f.0 = 0.V &
       for j,v st j < len F & v = F.(j + 1) holds f.(j + 1) = f.j + v;
-      let F;
+      let F be (the carrier of V)-valued FinSequence;
 A2:   rng F c= the carrier of V by RELAT_1:def 19;
       then reconsider F1 = F as FinSequence of V by FINSEQ_1:def 4;
-      reconsider G = F1 | Seg(n) as FinSequence of V by FINSEQ_1:23;
+      reconsider G = F1 | Seg(n) as FinSequence of V by FINSEQ_1:18;
       assume
 A3:   len F = n + 1;
       then dom F = Seg(n + 1) by FINSEQ_1:def 3;
-      then n + 1 in dom F by FINSEQ_1:6;
-      then F.(n + 1) in rng F by FUNCT_1:def 5;
+      then n + 1 in dom F by FINSEQ_1:4;
+      then F.(n + 1) in rng F by FUNCT_1:def 3;
       then reconsider u1 = F.(n + 1) as Element of V by A2;
 A4:   n < n + 1 by NAT_1:13;
       then consider u,f such that
       u = f.(len G) and
 A5:   f.0 = 0.V and
 A6:   for j,v st j < len G & v = G.(j + 1) holds f.(j + 1) = f.j + v
-      by A1,A3,FINSEQ_1:21;
+      by A1,A3,FINSEQ_1:17;
       defpred P[set,set] means for j st $1 = j holds (j < n + 1 implies $2 = f
 .$1) & (n + 1 <= j implies for u st u = F.(n + 1) holds $2 = f.(len G) + u);
 A7:   for k being Element of NAT qua non empty set ex v being Element of
@@ -837,7 +812,7 @@ A12:  for k being Element of NAT qua non empty set holds P[k,f9.k]
       assume that
 A13:  j < len F and
 A14:  v = F.(j + 1);
-A15:  len G = n by A3,A4,FINSEQ_1:21;
+A15:  len G = n by A3,A4,FINSEQ_1:17;
 A16:  now
         assume
 A17:    j = n;
@@ -848,12 +823,12 @@ A18:  now
         assume
 A19:    j < n;
         then
-A20:    j + 1 < n + 1 by XREAL_1:8;
+A20:    j + 1 < n + 1 by XREAL_1:6;
         1 <= 1 + j & j + 1 <= n by A19,NAT_1:11,13;
-        then j + 1 in Seg n by FINSEQ_1:3;
+        then j + 1 in Seg n by FINSEQ_1:1;
         then
-A21:    v = G.(j + 1) by A14,FUNCT_1:72;
-        j < len G by A3,A4,A19,FINSEQ_1:21;
+A21:    v = G.(j + 1) by A14,FUNCT_1:49;
+        j < len G by A3,A4,A19,FINSEQ_1:17;
         then
 A22:    f.(j + 1) = f.j + v by A6,A21;
         j < n + 1 by A19,NAT_1:13;
@@ -863,22 +838,19 @@ A22:    f.(j + 1) = f.j + v by A6,A21;
       j <= n by A3,A13,NAT_1:13;
       hence f99.(j + 1) = f99.j + v by A18,A16,XXREAL_0:1;
     end;
-    then
-A23: for n be Element of NAT st P[n] holds P[n+1];
-    now
+A25: P[0]
+    proof
       reconsider f = NAT --> 0.V as Function of NAT, the carrier of V;
-      let F;
+      let F be (the carrier of V)-valued FinSequence;
       assume
 A24:  len F = 0;
       take u = f.(len F);
       take f9 = f;
-      thus u = f9.(len F) & f9.0 = 0.V by FUNCOP_1:13;
+      thus u = f9.(len F) & f9.0 = 0.V by FUNCOP_1:7;
       let j;
       thus for v st j < len F & v = F.(j + 1) holds f9.(j + 1) = f9.j + v by
 A24;
     end;
-    then
-A25: P[0];
     for n holds P[n] from NAT_1:sch 1(A25,A23);
     hence thesis;
   end;
@@ -902,8 +874,8 @@ A33:  k <= len F implies f.k = f9.k;
       assume
 A34:  k + 1 <= len F;
       1 <= k + 1 & dom F = Seg(len F) by FINSEQ_1:def 3,NAT_1:11;
-      then k + 1 in dom F by A34,FINSEQ_1:3;
-      then F.(k + 1) in rng F by FUNCT_1:def 5;
+      then k + 1 in dom F by A34,FINSEQ_1:1;
+      then F.(k + 1) in rng F by FUNCT_1:def 3;
       then reconsider u1 = F.(k + 1) as Element of V by A32;
 A35:  k < len F by A34,NAT_1:13;
       then f.(k + 1) = f.k + u1 by A28;
@@ -931,8 +903,6 @@ proof
   then F = <*>(the carrier of V);
   hence thesis by Lm4;
 end;
-
-canceled 3;
 
 theorem Th55:
   for F,G being FinSequence of V holds
@@ -966,29 +936,29 @@ A11: len H = k + 1 and
 A12: H = F | (Seg (k + 1)) and
 A13: len H <= len G;
     1 <= k + 1 & k + 1 <= len F by A1,A11,A13,NAT_1:12;
-    then k + 1 in dom F by FINSEQ_3:27;
-    then reconsider v = F.(k + 1) as Element of V by FUNCT_1:172;
+    then k + 1 in dom F by FINSEQ_3:25;
+    then reconsider v = F.(k + 1) as Element of V by FUNCT_1:102;
     1 <= k + 1 by NAT_1:12;
-    then k + 1 in Seg(len G) by A11,A13,FINSEQ_1:3;
+    then k + 1 in Seg(len G) by A11,A13,FINSEQ_1:1;
     then k + 1 in dom G by FINSEQ_1:def 3;
     then
-A14: v = G.(k + 1) by A2,FUNCT_1:70;
+A14: v = G.(k + 1) by A2,FUNCT_1:47;
     reconsider H1 = H as FinSequence of V;
-    reconsider p = H1 | (Seg k) as FinSequence of V by FINSEQ_1:23;
+    reconsider p = H1 | (Seg k) as FinSequence of V by FINSEQ_1:18;
 A15: k <= len H by A11,NAT_1:12;
-    then Seg k c= Seg(k + 1) by A11,FINSEQ_1:7;
+    then Seg k c= Seg(k + 1) by A11,FINSEQ_1:5;
     then
-A16: p = F | (Seg k) by A12,FUNCT_1:82;
-    k < k + 1 by XREAL_1:31;
+A16: p = F | (Seg k) by A12,FUNCT_1:51;
+    k < k + 1 by XREAL_1:29;
     then k < len G by A11,A13,XXREAL_0:2;
     then
 A17: g.(k + 1) = g.k + v by A6,A14;
-A18: len G < len F by A1,XREAL_1:31;
+A18: len G < len F by A1,XREAL_1:29;
     k <= len G by A13,A15,XXREAL_0:2;
     then k < len F by A18,XXREAL_0:2;
     then
 A19: f.(k + 1) = f.k + v by A9;
-    len p = k by A15,FINSEQ_1:21;
+    len p = k by A15,FINSEQ_1:17;
     hence f.(len H) = g.(len H) by A10,A11,A13,A15,A16,A19,A17,XXREAL_0:2;
   end;
   then
@@ -1000,7 +970,7 @@ A22: P[0] by A8,A5;
 A23: G is FinSequence of V by FINSEQ_1:def 4;
   for k holds P[k] from NAT_1:sch 1(A22,A20);
   then f.(len G) = g.(len G) by A2,A21,A23;
-  hence thesis by A1,A3,A7,A9,A4,XREAL_1:31;
+  hence thesis by A1,A3,A7,A9,A4,XREAL_1:29;
 end;
 
 reserve V for RealLinearSpace;
@@ -1025,30 +995,30 @@ A3: len H = len I and
 A4: len H = n + 1 and
 A5: for k,v st k in Seg len H & v = I.k holds H.k = a * v;
     reconsider p = H | (Seg n),q = I | (Seg n) as FinSequence of the carrier
-    of V by FINSEQ_1:23;
+    of V by FINSEQ_1:18;
 A6: n <= n + 1 by NAT_1:12;
     then
-A7: len q = n by A3,A4,FINSEQ_1:21;
-A8: len p = n by A4,A6,FINSEQ_1:21;
+A7: len q = n by A3,A4,FINSEQ_1:17;
+A8: len p = n by A4,A6,FINSEQ_1:17;
 A9: now
-      len p <= len H by A4,A6,FINSEQ_1:21;
+      len p <= len H by A4,A6,FINSEQ_1:17;
       then
-A10:  Seg len p c= Seg len H by FINSEQ_1:7;
-A11:  dom p = Seg n by A4,A6,FINSEQ_1:21;
+A10:  Seg len p c= Seg len H by FINSEQ_1:5;
+A11:  dom p = Seg n by A4,A6,FINSEQ_1:17;
       let k,v;
       assume that
 A12:  k in Seg len p and
 A13:  v = q.k;
-      dom q = Seg n by A3,A4,A6,FINSEQ_1:21;
-      then I.k = q.k by A8,A12,FUNCT_1:70;
+      dom q = Seg n by A3,A4,A6,FINSEQ_1:17;
+      then I.k = q.k by A8,A12,FUNCT_1:47;
       then H.k = a * v by A5,A12,A13,A10;
-      hence p.k = a * v by A8,A12,A11,FUNCT_1:70;
+      hence p.k = a * v by A8,A12,A11,FUNCT_1:47;
     end;
     1 <= n + 1 by NAT_1:11;
-    then n + 1 in dom H & n + 1 in dom I by A3,A4,FINSEQ_3:27;
-    then reconsider v1 = H.(n + 1),v2 = I.(n + 1) as VECTOR of V by FUNCT_1:172
+    then n + 1 in dom H & n + 1 in dom I by A3,A4,FINSEQ_3:25;
+    then reconsider v1 = H.(n + 1),v2 = I.(n + 1) as VECTOR of V by FUNCT_1:102
 ;
-A14: v1 = a * v2 by A4,A5,FINSEQ_1:6;
+A14: v1 = a * v2 by A4,A5,FINSEQ_1:4;
 A15: dom q = Seg len q by FINSEQ_1:def 3;
     dom p = Seg len p by FINSEQ_1:def 3;
     hence Sum(H) = Sum(p) + v1 by A4,A8,Th55
@@ -1075,12 +1045,12 @@ end;
 
 theorem
   for V being Abelian add-associative right_zeroed right_complementable
-  (non empty addLoopStr), F,G being FinSequence of V st len F =
+  non empty addLoopStr, F,G being FinSequence of V st len F =
 len G & (for k for v being Element of V st k in dom F & v = G.k holds F.k = - v
   ) holds Sum(F) = - Sum(G)
 proof
-  let V be Abelian add-associative right_zeroed right_complementable (non
-  empty addLoopStr), F,G be FinSequence of V;
+  let V be Abelian add-associative right_zeroed right_complementable non
+  empty addLoopStr, F,G be FinSequence of V;
   defpred P[set] means for H,I being FinSequence of V st len H
 = len I & len H = $1 & (for k for v being Element of V st k in Seg len H & v =
   I.k holds H.k = - v) holds Sum(H) = - Sum(I);
@@ -1098,31 +1068,31 @@ A4: len H = n + 1 and
 A5: for k for v being Element of V st k in Seg(len H) & v = I.k holds
     H.k = - v;
     reconsider p = H | (Seg n),q = I | (Seg n) as FinSequence of the carrier
-    of V by FINSEQ_1:23;
+    of V by FINSEQ_1:18;
 A6: n <= n + 1 by NAT_1:12;
     then
-A7: len q = n by A3,A4,FINSEQ_1:21;
-A8: len p = n by A4,A6,FINSEQ_1:21;
+A7: len q = n by A3,A4,FINSEQ_1:17;
+A8: len p = n by A4,A6,FINSEQ_1:17;
 A9: now
-      len p <= len H by A4,A6,FINSEQ_1:21;
+      len p <= len H by A4,A6,FINSEQ_1:17;
       then
-A10:  Seg(len p) c= Seg(len H) by FINSEQ_1:7;
-A11:  dom p = Seg n by A4,A6,FINSEQ_1:21;
+A10:  Seg(len p) c= Seg(len H) by FINSEQ_1:5;
+A11:  dom p = Seg n by A4,A6,FINSEQ_1:17;
       let k;
       let v be Element of V;
       assume that
 A12:  k in Seg(len p) and
 A13:  v = q.k;
-      dom q = Seg n by A3,A4,A6,FINSEQ_1:21;
-      then I.k = q.k by A8,A12,FUNCT_1:70;
+      dom q = Seg n by A3,A4,A6,FINSEQ_1:17;
+      then I.k = q.k by A8,A12,FUNCT_1:47;
       then H.k = - v by A5,A12,A13,A10;
-      hence p.k = - v by A8,A12,A11,FUNCT_1:70;
+      hence p.k = - v by A8,A12,A11,FUNCT_1:47;
     end;
     1 <= n + 1 by NAT_1:11;
-    then n + 1 in dom H & n + 1 in dom I by A3,A4,FINSEQ_3:27;
+    then n + 1 in dom H & n + 1 in dom I by A3,A4,FINSEQ_3:25;
     then reconsider v1 = H.(n + 1),v2 = I.(n + 1) as Element of V by
-FUNCT_1:172;
-A14: v1 = - v2 by A4,A5,FINSEQ_1:6;
+FUNCT_1:102;
+A14: v1 = - v2 by A4,A5,FINSEQ_1:4;
 A15: dom q = Seg len q by FINSEQ_1:def 3;
     dom p = Seg len p by FINSEQ_1:def 3;
     hence Sum(H) = Sum(p) + v1 by A4,A8,Th55
@@ -1147,10 +1117,10 @@ A18: P[0];
 end;
 
 theorem Th58:
-  for V being add-associative right_zeroed (non empty addLoopStr),
+  for V being add-associative right_zeroed non empty addLoopStr,
   F,G being FinSequence of V holds Sum(F ^ G) = Sum(F) + Sum(G)
 proof
-  let V be add-associative right_zeroed (non empty addLoopStr), F,G be
+  let V be add-associative right_zeroed non empty addLoopStr, F,G be
   FinSequence of V;
   defpred P[set] means for G be FinSequence of V st len G = $1
   holds Sum(F ^ G) = Sum(F) + Sum(G);
@@ -1161,31 +1131,31 @@ A1: for k st P[k] holds P[k+1]
 A2: for G being FinSequence of V st len G = k holds Sum
     (F ^ G) = Sum(F) + Sum(G);
     let H be FinSequence of V;
-    reconsider p = H | (Seg k) as FinSequence of V by FINSEQ_1:23;
+    reconsider p = H | (Seg k) as FinSequence of V by FINSEQ_1:18;
 A3: rng H c= the carrier of V by FINSEQ_1:def 4;
     assume
 A4: len H = k + 1;
     then
 A5: dom H = Seg(k + 1) by FINSEQ_1:def 3;
     then
-A6: k + 1 in dom H by FINSEQ_1:6;
-    then H.(k + 1) in rng H by FUNCT_1:def 5;
+A6: k + 1 in dom H by FINSEQ_1:4;
+    then H.(k + 1) in rng H by FUNCT_1:def 3;
     then reconsider v = H.(k + 1) as Element of V by A3;
 A7: k <= k + 1 by NAT_1:12;
 A8: now
       let n be Nat;
       assume n in dom p;
-      then n in Seg k by A4,A7,FINSEQ_1:21;
-      hence p.n = H.n by FUNCT_1:72;
+      then n in Seg k by A4,A7,FINSEQ_1:17;
+      hence p.n = H.n by FUNCT_1:49;
     end;
 A9: dom p = Seg len p by FINSEQ_1:def 3;
-A10: Seg(len(F ^ p)) = Seg(len F + len p) by FINSEQ_1:35;
+A10: Seg(len(F ^ p)) = Seg(len F + len p) by FINSEQ_1:22;
 A11: dom(F ^ H) = Seg len(F ^ H) by FINSEQ_1:def 3
-      .= Seg(len F + len H) by FINSEQ_1:35;
+      .= Seg(len F + len H) by FINSEQ_1:22;
 A12: dom(F ^ p) = Seg len(F ^ p) by FINSEQ_1:def 3;
-    dom p = Seg k by A4,A7,FINSEQ_1:21;
+    dom p = Seg k by A4,A7,FINSEQ_1:17;
     then
-A13: dom p c= dom H by A5,A7,FINSEQ_1:7;
+A13: dom p c= dom H by A5,A7,FINSEQ_1:5;
 A14: now
       let x be set;
       assume
@@ -1195,25 +1165,25 @@ A16:  now
         assume not n in dom F;
         then
 A17:    not n in Seg(len F) by FINSEQ_1:def 3;
-A18:    1 <= n by A12,A15,FINSEQ_1:3;
-        then len F <= n by A17,FINSEQ_1:3;
+A18:    1 <= n by A12,A15,FINSEQ_1:1;
+        then len F <= n by A17,FINSEQ_1:1;
         then consider j being Nat such that
 A19:    n = len F + j by NAT_1:10;
 A20:    now
           assume not j <= k;
           then
-A21:      len F + k < n by A19,XREAL_1:8;
-          n <= len F + len p by A12,A10,A15,FINSEQ_1:3;
-          hence contradiction by A4,A7,A21,FINSEQ_1:21;
+A21:      len F + k < n by A19,XREAL_1:6;
+          n <= len F + len p by A12,A10,A15,FINSEQ_1:1;
+          hence contradiction by A4,A7,A21,FINSEQ_1:17;
         end;
         now
           assume not 1 <= j;
           then j = 0 by NAT_1:14;
-          hence contradiction by A17,A18,A19,FINSEQ_1:3;
+          hence contradiction by A17,A18,A19,FINSEQ_1:1;
         end;
-        then j in Seg k by A20,FINSEQ_1:3;
+        then j in Seg k by A20,FINSEQ_1:1;
         then
-A22:    j in dom p by A4,A7,FINSEQ_1:21;
+A22:    j in dom p by A4,A7,FINSEQ_1:17;
         then (F ^ p).n = p.j & (F ^ H).n = H.j by A13,A19,FINSEQ_1:def 7;
         hence (F ^ p).x = (F ^ H).x by A8,A22;
       end;
@@ -1225,28 +1195,28 @@ A23:    n in dom F;
       end;
       hence (F ^ p).x = (F ^ H).x by A16;
     end;
-A24: len p = k by A4,A7,FINSEQ_1:21;
-    then len F + len p <= len F + len H by A4,A7,XREAL_1:9;
-    then Seg len(F ^ p) c= dom(F ^ H) by A11,A10,FINSEQ_1:7;
+A24: len p = k by A4,A7,FINSEQ_1:17;
+    then len F + len p <= len F + len H by A4,A7,XREAL_1:7;
+    then Seg len(F ^ p) c= dom(F ^ H) by A11,A10,FINSEQ_1:5;
     then dom(F ^ p) = dom(F ^ H) /\ Seg(len(F ^ p)) by A12,XBOOLE_1:28;
     then
-A25: F ^ p = (F ^ H) | (Seg len (F ^ p)) by A14,FUNCT_1:68
+A25: F ^ p = (F ^ H) | (Seg len (F ^ p)) by A14,FUNCT_1:46
       .= (F ^ H) | (dom (F ^ p)) by FINSEQ_1:def 3;
 A26: now
       let n be Nat;
       assume n in dom<* v *>;
-      then n in {1} by FINSEQ_1:4,55;
+      then n in {1} by FINSEQ_1:2,38;
       then n = 1 by TARSKI:def 1;
       hence H.(len p + n) = <* v *>.n by A24,FINSEQ_1:def 8;
     end;
-    dom H = Seg(len p + len<* v *>) by A5,A24,FINSEQ_1:56;
+    dom H = Seg(len p + len<* v *>) by A5,A24,FINSEQ_1:39;
     then H = p ^ <* v *> by A8,A26,FINSEQ_1:def 7;
-    then F ^ H = (F ^ p) ^ <* v *> by FINSEQ_1:45;
-    then len(F ^ H) = len(F ^ p) + len<* v *> by FINSEQ_1:35;
+    then F ^ H = (F ^ p) ^ <* v *> by FINSEQ_1:32;
+    then len(F ^ H) = len(F ^ p) + len<* v *> by FINSEQ_1:22;
     then
-A27: len(F ^ H) = len(F ^ p) + 1 by FINSEQ_1:56;
+A27: len(F ^ H) = len(F ^ p) + 1 by FINSEQ_1:39;
     v = (F ^ H).(len F + len H) by A4,A6,FINSEQ_1:def 7
-      .= (F ^ H).(len(F ^ H)) by FINSEQ_1:35;
+      .= (F ^ H).(len(F ^ H)) by FINSEQ_1:22;
     hence Sum(F ^ H) = Sum(F ^ p) + v by A27,A25,Th55
       .= (Sum(F) + Sum(p)) + v by A2,A24
       .= Sum(F) + (Sum(p) + v) by Def6
@@ -1257,7 +1227,7 @@ A28: P[0]
     let G be FinSequence of V;
     assume len G = 0;
     then G = <*>(the carrier of V);
-    then F ^ G = F & Sum(G) = 0.V by Lm4,FINSEQ_1:47;
+    then F ^ G = F & Sum(G) = 0.V by Lm4,FINSEQ_1:34;
     hence thesis by Def7;
   end;
   for k holds P[k] from NAT_1:sch 1(A28,A1);
@@ -1265,17 +1235,17 @@ A28: P[0]
   hence thesis;
 end;
 
-reserve V for add-associative right_zeroed right_complementable (non empty
-  addLoopStr);
+reserve V for add-associative right_zeroed right_complementable non empty
+  addLoopStr;
 reserve F for FinSequence of V;
 reserve v,v1,v2,u,w for Element of V;
 reserve j,k for Element of NAT;
 
-Lm6: for V being add-associative right_zeroed right_complementable (non empty
-addLoopStr), v being Element of V holds Sum<* v *> = v
+Lm6: for V being add-associative right_zeroed right_complementable non empty
+addLoopStr, v being Element of V holds Sum<* v *> = v
 proof
-  let V be add-associative right_zeroed right_complementable (non empty
-  addLoopStr), v be Element of V;
+  let V be add-associative right_zeroed right_complementable non empty
+  addLoopStr, v be Element of V;
   set S = <* v *>;
   consider f being Function of NAT, the carrier of V such that
 A1: Sum(S) = f.(len S) and
@@ -1284,22 +1254,22 @@ A2: f.0 = 0.V & for j for v being Element of V st j < len S & v = S.(j +
   0 < 1;
   then consider j such that
 A3: j < len S;
-A4: len S = 1 by FINSEQ_1:56;
+A4: len S = 1 by FINSEQ_1:39;
   then
 A5: S.(j + 1) = S.(0 + 1) by A3,NAT_1:14
-    .= v by FINSEQ_1:57;
+    .= v by FINSEQ_1:40;
   j = 0 by A4,A3,NAT_1:14;
   then f.1 = 0.V + v by A2,A5
     .= v by Th10;
-  hence thesis by A1,FINSEQ_1:56;
+  hence thesis by A1,FINSEQ_1:39;
 end;
 
 theorem
-  for V being Abelian add-associative right_zeroed (non empty addLoopStr
-), F,G being FinSequence of V st rng F = rng G & F is one-to-one
+  for V being Abelian add-associative right_zeroed non empty addLoopStr
+, F,G being FinSequence of V st rng F = rng G & F is one-to-one
   & G is one-to-one holds Sum(F) = Sum(G)
 proof
-  let V be Abelian add-associative right_zeroed (non empty addLoopStr), F,G be
+  let V be Abelian add-associative right_zeroed non empty addLoopStr, F,G be
   FinSequence of V;
   defpred P[set] means for H,I being FinSequence of V st len H
 = $1 & rng H = rng I & H is one-to-one & I is one-to-one holds Sum(H) = Sum (I)
@@ -1316,24 +1286,24 @@ A3: len H = k + 1 and
 A4: rng H = rng I and
 A5: H is one-to-one and
 A6: I is one-to-one;
-    k + 1 in Seg(k + 1) by FINSEQ_1:6;
+    k + 1 in Seg(k + 1) by FINSEQ_1:4;
     then
 A7: k + 1 in dom H by A3,FINSEQ_1:def 3;
-    then H.(k + 1) in rng I by A4,FUNCT_1:def 5;
+    then H.(k + 1) in rng I by A4,FUNCT_1:def 3;
     then consider x such that
 A8: x in dom I and
-A9: H.(k + 1) = I.x by FUNCT_1:def 5;
-    reconsider v = H.(k + 1) as Element of V by A7,FUNCT_1:172;
+A9: H.(k + 1) = I.x by FUNCT_1:def 3;
+    reconsider v = H.(k + 1) as Element of V by A7,FUNCT_1:102;
     reconsider n = x as Element of NAT by A8;
-A10: len H = len I by A4,A5,A6,FINSEQ_1:65;
+A10: len H = len I by A4,A5,A6,FINSEQ_1:48;
     then
 A11: x in Seg(k + 1) by A3,A8,FINSEQ_1:def 3;
     then
-A12: n <= k + 1 by FINSEQ_1:3;
+A12: n <= k + 1 by FINSEQ_1:1;
     then consider m2 being Nat such that
 A13: n + m2 = k + 1 by NAT_1:10;
     defpred P[Nat,set] means $2 = I.(n + $1);
-    reconsider m2 as Element of NAT by ORDINAL1:def 13;
+    reconsider m2 as Element of NAT by ORDINAL1:def 12;
 A14: for j be Nat st j in Seg m2 ex x st P[j,x];
     consider q2 being FinSequence such that
 A15: dom q2 = Seg m2 and
@@ -1345,46 +1315,46 @@ A17: rng q2 c= the carrier of V
       assume x in rng q2;
       then consider y such that
 A18:  y in dom q2 and
-A19:  x = q2.y by FUNCT_1:def 5;
+A19:  x = q2.y by FUNCT_1:def 3;
       reconsider y as Element of NAT by A18;
-      1 <= y by A15,A18,FINSEQ_1:3;
+      1 <= y by A15,A18,FINSEQ_1:1;
       then
 A20:  1 <= n + y by NAT_1:12;
-      y <= m2 by A15,A18,FINSEQ_1:3;
-      then n + y <= len I by A3,A10,A13,XREAL_1:9;
-      then n + y in dom I by A20,FINSEQ_3:27;
-      then reconsider xx = I.(n + y) as Element of V by FUNCT_1:172;
+      y <= m2 by A15,A18,FINSEQ_1:1;
+      then n + y <= len I by A3,A10,A13,XREAL_1:7;
+      then n + y in dom I by A20,FINSEQ_3:25;
+      then reconsider xx = I.(n + y) as Element of V by FUNCT_1:102;
       xx in the carrier of V;
       hence thesis by A15,A16,A18,A19;
     end;
-    reconsider p = H | (Seg k) as FinSequence of V by FINSEQ_1:23;
-A21: p is one-to-one by A5,FUNCT_1:84;
-    Seg k = Seg(k + 1) \ {k + 1} by FINSEQ_1:12;
+    reconsider p = H | (Seg k) as FinSequence of V by FINSEQ_1:18;
+A21: p is one-to-one by A5,FUNCT_1:52;
+    Seg k = Seg(k + 1) \ {k + 1} by FINSEQ_1:10;
     then
-A22: H .: (Seg k) = H .: Seg(k + 1) \ Im(H,k + 1) by A5,FUNCT_1:123;
-A23: 1 <= n by A11,FINSEQ_1:3;
+A22: H .: (Seg k) = H .: Seg(k + 1) \ Im(H,k + 1) by A5,FUNCT_1:64;
+A23: 1 <= n by A11,FINSEQ_1:1;
     then consider m1 being Nat such that
 A24: 1 + m1 = n by NAT_1:10;
-    reconsider q1 = I | (Seg m1) as FinSequence of V by FINSEQ_1:23;
+    reconsider q1 = I | (Seg m1) as FinSequence of V by FINSEQ_1:18;
     reconsider q2 as FinSequence of V by A17,FINSEQ_1:def 4;
     m1 <= n by A24,NAT_1:11;
     then
 A25: m1 <= k + 1 by A12,XXREAL_0:2;
     then
-A26: len q1 = m1 by A3,A10,FINSEQ_1:21;
+A26: len q1 = m1 by A3,A10,FINSEQ_1:17;
 A27: now
       let j be Nat;
       assume
 A28:  j in dom q2;
-      len(q1 ^ <* v *>) = m1 + len<* v *> by A26,FINSEQ_1:35
-        .= n by A24,FINSEQ_1:56;
+      len(q1 ^ <* v *>) = m1 + len<* v *> by A26,FINSEQ_1:22
+        .= n by A24,FINSEQ_1:39;
       hence I.(len(q1 ^ <* v *>) + j) = q2.j by A15,A16,A28;
     end;
     set q = q1 ^ q2;
-A29: m1 < n by A24,XREAL_1:31;
+A29: m1 < n by A24,XREAL_1:29;
 A30: {v} misses rng q
     proof
-      set y =the  Element of {v} /\ rng q;
+      set y = the Element of {v} /\ rng q;
       assume not thesis;
       then
 A31:  {v} /\ rng q <> {} by XBOOLE_0:def 7;
@@ -1394,44 +1364,44 @@ A33:  now
         assume y in rng q1;
         then consider y1 such that
 A34:    y1 in dom q1 and
-A35:    y = q1.y1 by FUNCT_1:def 5;
-A36:    y1 in Seg m1 by A3,A10,A25,A34,FINSEQ_1:21;
+A35:    y = q1.y1 by FUNCT_1:def 3;
+A36:    y1 in Seg m1 by A3,A10,A25,A34,FINSEQ_1:17;
         reconsider y1 as Element of NAT by A34;
-        y1 <= m1 by A36,FINSEQ_1:3;
+        y1 <= m1 by A36,FINSEQ_1:1;
         then
 A37:    y1 <= k + 1 by A25,XXREAL_0:2;
-        1 <= y1 by A36,FINSEQ_1:3;
-        then y1 in Seg(k + 1) by A37,FINSEQ_1:3;
+        1 <= y1 by A36,FINSEQ_1:1;
+        then y1 in Seg(k + 1) by A37,FINSEQ_1:1;
         then
 A38:    y1 in dom I by A3,A10,FINSEQ_1:def 3;
-        q1.y1 = I.y1 by A34,FUNCT_1:70;
+        q1.y1 = I.y1 by A34,FUNCT_1:47;
         then
 A39:    I.y1 = I.n by A9,A32,A35,TARSKI:def 1;
-        y1 <> n by A29,A36,FINSEQ_1:3;
-        hence contradiction by A6,A8,A38,A39,FUNCT_1:def 8;
+        y1 <> n by A29,A36,FINSEQ_1:1;
+        hence contradiction by A6,A8,A38,A39,FUNCT_1:def 4;
       end;
 A40:  y = I.n by A9,A32,TARSKI:def 1;
 A41:  now
         assume y in rng q2;
         then consider y1 such that
 A42:    y1 in dom q2 and
-A43:    y = q2.y1 by FUNCT_1:def 5;
+A43:    y = q2.y1 by FUNCT_1:def 3;
         reconsider y1 as Element of NAT by A42;
-        y1 <= m2 by A15,A42,FINSEQ_1:3;
+        y1 <= m2 by A15,A42,FINSEQ_1:1;
         then
-A44:    n + y1 <= k + 1 by A13,XREAL_1:9;
+A44:    n + y1 <= k + 1 by A13,XREAL_1:7;
         1 <= n + y1 by A23,NAT_1:12;
-        then n + y1 in Seg(k + 1) by A44,FINSEQ_1:3;
+        then n + y1 in Seg(k + 1) by A44,FINSEQ_1:1;
         then
 A45:    n + y1 in dom I by A3,A10,FINSEQ_1:def 3;
         I.n = I.(n + y1) by A15,A16,A40,A42,A43;
         then
-A46:    n = n + y1 by A6,A8,A45,FUNCT_1:def 8;
-        y1 <> 0 by A15,A42,FINSEQ_1:3;
+A46:    n = n + y1 by A6,A8,A45,FUNCT_1:def 4;
+        y1 <> 0 by A15,A42,FINSEQ_1:1;
         hence contradiction by A46;
       end;
       y in rng q by A31,XBOOLE_0:def 4;
-      then y in rng q1 \/ rng q2 by FINSEQ_1:44;
+      then y in rng q1 \/ rng q2 by FINSEQ_1:31;
       hence thesis by A33,A41,XBOOLE_0:def 3;
     end;
 A47: q is one-to-one
@@ -1446,41 +1416,41 @@ A50:  now
 A51:    j1 in dom q2 and
 A52:    x1 = len q1 + j1;
 A53:    q2.j1 = I.(n + j1) by A15,A16,A51;
-        j1 <= m2 by A15,A51,FINSEQ_1:3;
+        j1 <= m2 by A15,A51,FINSEQ_1:1;
         then
-A54:    n + j1 <= k + 1 by A13,XREAL_1:9;
+A54:    n + j1 <= k + 1 by A13,XREAL_1:7;
         1 <= n + j1 by A23,NAT_1:12;
-        then n + j1 in Seg(k + 1) by A54,FINSEQ_1:3;
+        then n + j1 in Seg(k + 1) by A54,FINSEQ_1:1;
         then
 A55:    n + j1 in dom I by A3,A10,FINSEQ_1:def 3;
         given j2 being Nat such that
 A56:    j2 in dom q2 and
 A57:    x2 = len q1 + j2;
 A58:    q2.j2 = I.(n + j2) by A15,A16,A56;
-        j2 <= m2 by A15,A56,FINSEQ_1:3;
+        j2 <= m2 by A15,A56,FINSEQ_1:1;
         then
-A59:    n + j2 <= k + 1 by A13,XREAL_1:9;
+A59:    n + j2 <= k + 1 by A13,XREAL_1:7;
         1 <= n + j2 by A23,NAT_1:12;
-        then n + j2 in Seg(k + 1) by A59,FINSEQ_1:3;
+        then n + j2 in Seg(k + 1) by A59,FINSEQ_1:1;
         then
 A60:    n + j2 in dom I by A3,A10,FINSEQ_1:def 3;
         q2.j1 = q.(m1 + j2) by A26,A49,A51,A52,A57,FINSEQ_1:def 7
           .= q2.j2 by A26,A56,FINSEQ_1:def 7;
-        then n + j1 = n + j2 by A6,A53,A58,A55,A60,FUNCT_1:def 8;
+        then n + j1 = n + j2 by A6,A53,A58,A55,A60,FUNCT_1:def 4;
         hence thesis by A52,A57;
       end;
 A61:  now
         assume
 A62:    x2 in dom q1;
-        then q1.x2 = I.x2 by FUNCT_1:70;
+        then q1.x2 = I.x2 by FUNCT_1:47;
         then
 A63:    q.x2 = I.x2 by A62,FINSEQ_1:def 7;
-A64:    x2 in Seg m1 by A3,A10,A25,A62,FINSEQ_1:21;
+A64:    x2 in Seg m1 by A3,A10,A25,A62,FINSEQ_1:17;
         then
-A65:    1 <= x2 by FINSEQ_1:3;
-A66:    x2 <= m1 by A64,FINSEQ_1:3;
+A65:    1 <= x2 by FINSEQ_1:1;
+A66:    x2 <= m1 by A64,FINSEQ_1:1;
         then x2 <= k + 1 by A25,XXREAL_0:2;
-        then x2 in Seg(k + 1) by A65,FINSEQ_1:3;
+        then x2 in Seg(k + 1) by A65,FINSEQ_1:1;
         then
 A67:    x2 in dom I by A3,A10,FINSEQ_1:def 3;
         given j be Nat such that
@@ -1489,29 +1459,29 @@ A69:    x1 = len q1 + j;
         q2.j = I.(n + j) by A15,A16,A68;
         then
 A70:    I.x2 = I.(n + j) by A49,A68,A69,A63,FINSEQ_1:def 7;
-        j <= m2 by A15,A68,FINSEQ_1:3;
+        j <= m2 by A15,A68,FINSEQ_1:1;
         then
-A71:    n + j <= k + 1 by A13,XREAL_1:9;
+A71:    n + j <= k + 1 by A13,XREAL_1:7;
         1 <= n + j by A23,NAT_1:12;
-        then n + j in Seg(k + 1) by A71,FINSEQ_1:3;
+        then n + j in Seg(k + 1) by A71,FINSEQ_1:1;
         then
 A72:    n + j in dom I by A3,A10,FINSEQ_1:def 3;
 A73:    n <= n + j by NAT_1:12;
         x2 < n by A29,A66,XXREAL_0:2;
-        hence thesis by A6,A70,A67,A72,A73,FUNCT_1:def 8;
+        hence thesis by A6,A70,A67,A72,A73,FUNCT_1:def 4;
       end;
 A74:  now
         assume
 A75:    x1 in dom q1;
-        then q1.x1 = I.x1 by FUNCT_1:70;
+        then q1.x1 = I.x1 by FUNCT_1:47;
         then
 A76:    q.x1 = I.x1 by A75,FINSEQ_1:def 7;
-A77:    x1 in Seg m1 by A3,A10,A25,A75,FINSEQ_1:21;
+A77:    x1 in Seg m1 by A3,A10,A25,A75,FINSEQ_1:17;
         then
-A78:    1 <= x1 by FINSEQ_1:3;
-A79:    x1 <= m1 by A77,FINSEQ_1:3;
+A78:    1 <= x1 by FINSEQ_1:1;
+A79:    x1 <= m1 by A77,FINSEQ_1:1;
         then x1 <= k + 1 by A25,XXREAL_0:2;
-        then x1 in Seg(k + 1) by A78,FINSEQ_1:3;
+        then x1 in Seg(k + 1) by A78,FINSEQ_1:1;
         then
 A80:    x1 in dom I by A3,A10,FINSEQ_1:def 3;
         given j be Nat such that
@@ -1520,35 +1490,35 @@ A82:    x2 = len q1 + j;
         q2.j = I.(n + j) by A15,A16,A81;
         then
 A83:    I.x1 = I.(n + j) by A49,A81,A82,A76,FINSEQ_1:def 7;
-        j <= m2 by A15,A81,FINSEQ_1:3;
+        j <= m2 by A15,A81,FINSEQ_1:1;
         then
-A84:    n + j <= k + 1 by A13,XREAL_1:9;
+A84:    n + j <= k + 1 by A13,XREAL_1:7;
         1 <= n + j by A23,NAT_1:12;
-        then n + j in Seg(k + 1) by A84,FINSEQ_1:3;
+        then n + j in Seg(k + 1) by A84,FINSEQ_1:1;
         then
 A85:    n + j in dom I by A3,A10,FINSEQ_1:def 3;
 A86:    n <= n + j by NAT_1:12;
         x1 < n by A29,A79,XXREAL_0:2;
-        hence thesis by A6,A83,A80,A85,A86,FUNCT_1:def 8;
+        hence thesis by A6,A83,A80,A85,A86,FUNCT_1:def 4;
       end;
-A87:  q1 is one-to-one by A6,FUNCT_1:84;
+A87:  q1 is one-to-one by A6,FUNCT_1:52;
       now
         assume
 A88:    x1 in dom q1 & x2 in dom q1;
         then q1.x1 = q.x1 & q1.x2 = q.x2 by FINSEQ_1:def 7;
-        hence thesis by A49,A87,A88,FUNCT_1:def 8;
+        hence thesis by A49,A87,A88,FUNCT_1:def 4;
       end;
-      hence thesis by A48,A74,A61,A50,FINSEQ_1:38;
+      hence thesis by A48,A74,A61,A50,FINSEQ_1:25;
     end;
     k <= k + 1 by NAT_1:12;
     then
-A89: len p = k by A3,FINSEQ_1:21;
+A89: len p = k by A3,FINSEQ_1:17;
 A90: now
       let k be Nat;
       assume k in dom<* v *>;
-      then k in Seg 1 by FINSEQ_1:55;
-      then k = 1 by FINSEQ_1:4,TARSKI:def 1;
-      hence H.(len p + k) = <* v *>.k by A89,FINSEQ_1:57;
+      then k in Seg 1 by FINSEQ_1:38;
+      then k = 1 by FINSEQ_1:2,TARSKI:def 1;
+      hence H.(len p + k) = <* v *>.k by A89,FINSEQ_1:40;
     end;
 A91: now
       let j be Nat;
@@ -1557,44 +1527,44 @@ A92:  j in dom(q1 ^ <* v *>);
 A93:  now
         assume j in Seg m1;
         then
-A94:    j in dom q1 by A3,A10,A25,FINSEQ_1:21;
-        then q1.j = I.j by FUNCT_1:70;
+A94:    j in dom q1 by A3,A10,A25,FINSEQ_1:17;
+        then q1.j = I.j by FUNCT_1:47;
         hence I.j = (q1 ^ <* v *>).j by A94,FINSEQ_1:def 7;
       end;
 A95:  now
-        1 in Seg 1 & len<* v *> = 1 by FINSEQ_1:3,56;
+        1 in Seg 1 & len<* v *> = 1 by FINSEQ_1:1,39;
         then 1 in dom <* v *> by FINSEQ_1:def 3;
         then
 A96:    (q1 ^ <* v *>).(len q1 + 1) = <* v *>.1 by FINSEQ_1:def 7;
         assume j in {n};
         then j = n by TARSKI:def 1;
-        hence (q1 ^ <* v *>).j = I.j by A9,A24,A26,A96,FINSEQ_1:57;
+        hence (q1 ^ <* v *>).j = I.j by A9,A24,A26,A96,FINSEQ_1:40;
       end;
-      len(q1 ^ <* v *>) = m1 + len <* v *> by A26,FINSEQ_1:35
-        .= m1 + 1 by FINSEQ_1:57;
+      len(q1 ^ <* v *>) = m1 + len <* v *> by A26,FINSEQ_1:22
+        .= m1 + 1 by FINSEQ_1:40;
       then j in Seg(m1 + 1) by A92,FINSEQ_1:def 3;
-      then j in Seg m1 \/ {n} by A24,FINSEQ_1:11;
+      then j in Seg m1 \/ {n} by A24,FINSEQ_1:9;
       hence I.j = (q1 ^ <* v *>).j by A93,A95,XBOOLE_0:def 3;
     end;
     len q2 = m2 by A15,FINSEQ_1:def 3;
-    then len(q1 ^ <* v *>) + len q2 = len q1 + len<* v *> + m2 by FINSEQ_1:35
-      .= k + 1 by A24,A13,A26,FINSEQ_1:57;
+    then len(q1 ^ <* v *>) + len q2 = len q1 + len<* v *> + m2 by FINSEQ_1:22
+      .= k + 1 by A24,A13,A26,FINSEQ_1:40;
     then dom I = Seg(len(q1 ^ <* v *>) + len q2) by A3,A10,FINSEQ_1:def 3;
     then
 A97: I = q1 ^ <* v *> ^ q2 by A91,A27,FINSEQ_1:def 7;
-    then rng I = rng(q1 ^ <* v *>) \/ rng q2 by FINSEQ_1:44
-      .= rng <* v *> \/ rng q1 \/ rng q2 by FINSEQ_1:44
-      .= {v} \/ rng q1 \/ rng q2 by FINSEQ_1:56
+    then rng I = rng(q1 ^ <* v *>) \/ rng q2 by FINSEQ_1:31
+      .= rng <* v *> \/ rng q1 \/ rng q2 by FINSEQ_1:31
+      .= {v} \/ rng q1 \/ rng q2 by FINSEQ_1:39
       .= {v} \/ (rng q1 \/ rng q2) by XBOOLE_1:4
-      .= {v} \/ rng q by FINSEQ_1:44;
+      .= {v} \/ rng q by FINSEQ_1:31;
     then
 A98: rng q = rng I \ {v} by A30,XBOOLE_1:88;
 A99: Seg(k + 1) = dom H by A3,FINSEQ_1:def 3;
-    then rng p = H .: (Seg k) & rng H = H .: (Seg(k + 1)) by RELAT_1:146,148;
+    then rng p = H .: (Seg k) & rng H = H .: (Seg(k + 1)) by RELAT_1:113,115;
     then
-A100: rng p = rng q by A4,A98,A99,A22,FINSEQ_1:6,FUNCT_1:117;
-    len<* v *> = 1 & for k be Nat st k in dom p holds H.k=p.k by FINSEQ_1:56
-,FUNCT_1:70;
+A100: rng p = rng q by A4,A98,A99,A22,FINSEQ_1:4,FUNCT_1:59;
+    len<* v *> = 1 & for k be Nat st k in dom p holds H.k=p.k by FINSEQ_1:39
+,FUNCT_1:47;
     then H = p ^ <* v *> by A89,A99,A90,FINSEQ_1:def 7;
     then
 A101: Sum(H) = Sum(p) + Sum<* v *> by Th58;
@@ -1614,7 +1584,7 @@ A104: rng H = rng I and
     H is one-to-one and
     I is one-to-one;
     H = {} by A103;
-    then I = {} by A104,RELAT_1:60,64;
+    then I = {} by A104,RELAT_1:38,41;
     then
 A105: len I = 0;
     Sum(H) = 0.V by A103,Lm5;
@@ -1631,15 +1601,15 @@ theorem Th60:
   V by Lm4;
 
 theorem
-  for V being add-associative right_zeroed right_complementable (non
-  empty addLoopStr), v being Element of V holds Sum<* v *> = v by Lm6;
+  for V being add-associative right_zeroed right_complementable non
+  empty addLoopStr, v being Element of V holds Sum<* v *> = v by Lm6;
 
 theorem Th62:
-  for V being add-associative right_zeroed right_complementable (
-  non empty addLoopStr), v,u being Element of V holds Sum<* v,u *> = v + u
+  for V being add-associative right_zeroed right_complementable
+  non empty addLoopStr, v,u being Element of V holds Sum<* v,u *> = v + u
 proof
-  let V be add-associative right_zeroed right_complementable (non empty
-  addLoopStr), v,u be Element of V;
+  let V be add-associative right_zeroed right_complementable non empty
+  addLoopStr, v,u be Element of V;
   <* v,u *> = <* v *> ^ <* u *> by FINSEQ_1:def 9;
   hence Sum<* v,u *> = Sum<* v *> + Sum<* u *> by Th58
     .= v + Sum<* u *> by Lm6
@@ -1647,13 +1617,13 @@ proof
 end;
 
 theorem Th63:
-  for V being add-associative right_zeroed right_complementable (
-non empty addLoopStr), v,u,w being Element of V holds Sum<* v,u,w *> = v + u +
+  for V being add-associative right_zeroed right_complementable
+non empty addLoopStr, v,u,w being Element of V holds Sum<* v,u,w *> = v + u +
   w
 proof
-  let V be add-associative right_zeroed right_complementable (non empty
-  addLoopStr), v,u,w be Element of V;
-  <* v,u,w *> = <* v,u *> ^ <* w *> by FINSEQ_1:60;
+  let V be add-associative right_zeroed right_complementable non empty
+  addLoopStr, v,u,w be Element of V;
+  <* v,u,w *> = <* v,u *> ^ <* w *> by FINSEQ_1:43;
   hence Sum<* v,u,w *> = Sum<* v,u *> + Sum<* w *> by Th58
     .= Sum<* v,u *> + w by Lm6
     .= v + u + w by Th62;
@@ -1662,8 +1632,6 @@ end;
 theorem
   for V being RealLinearSpace, a being Real holds a * Sum(<*>(the
   carrier of V)) = 0.V by Lm4,Th23;
-
-canceled;
 
 theorem
   for V being RealLinearSpace, a being Real, v,u being VECTOR of V holds
@@ -1696,21 +1664,21 @@ theorem
 
 theorem
   for V being Abelian add-associative right_zeroed right_complementable
-(non empty addLoopStr), v,u being Element of V holds - Sum<* v,u *> = (- v) - u
+non empty addLoopStr, v,u being Element of V holds - Sum<* v,u *> = (- v) - u
 proof
-  let V be Abelian add-associative right_zeroed right_complementable (non
-  empty addLoopStr), v,u be Element of V;
+  let V be Abelian add-associative right_zeroed right_complementable non
+  empty addLoopStr, v,u be Element of V;
   thus - Sum<* v,u *> = - (v + u) by Th62
     .= (- v) - u by Th44;
 end;
 
 theorem
   for V being Abelian add-associative right_zeroed right_complementable
-(non empty addLoopStr), v,u,w being Element of V holds - Sum<* v,u,w *> = ((- v
+non empty addLoopStr, v,u,w being Element of V holds - Sum<* v,u,w *> = ((- v
   ) - u) - w
 proof
-  let V be Abelian add-associative right_zeroed right_complementable (non
-  empty addLoopStr), v,u,w be Element of V;
+  let V be Abelian add-associative right_zeroed right_complementable non
+  empty addLoopStr, v,u,w be Element of V;
   thus - Sum<* v,u,w *> = - (v + u + w) by Th63
     .= (- (v + u)) - w by Th44
     .= ((- v) - u) - w by Th44;
@@ -1718,11 +1686,11 @@ end;
 
 theorem Th72:
   for V being Abelian add-associative right_zeroed right_complementable
-  (non empty addLoopStr), v,w being Element of V holds Sum<* v,w *> = Sum<* w,v
+  non empty addLoopStr, v,w being Element of V holds Sum<* v,w *> = Sum<* w,v
   *>
 proof
-  let V be Abelian add-associative right_zeroed right_complementable (non
-  empty addLoopStr), v,w be Element of V;
+  let V be Abelian add-associative right_zeroed right_complementable non
+  empty addLoopStr, v,w be Element of V;
   thus Sum<* v,w *> = v + w by Th62
     .= Sum<* w,v *> by Th62;
 end;
@@ -1812,11 +1780,11 @@ end;
 
 theorem
   for V being Abelian add-associative right_zeroed right_complementable
-(non empty addLoopStr), v,u,w being Element of V holds Sum<* u,v,w *> = Sum<* v
+non empty addLoopStr, v,u,w being Element of V holds Sum<* u,v,w *> = Sum<* v
   ,w *> + u
 proof
-  let V be Abelian add-associative right_zeroed right_complementable (non
-  empty addLoopStr), v,u,w be Element of V;
+  let V be Abelian add-associative right_zeroed right_complementable non
+  empty addLoopStr, v,u,w be Element of V;
   thus Sum<* u,v,w *> = u + v + w by Th63
     .= u + (v + w) by Def6
     .= Sum<* v,w *> + u by Th62;
@@ -1824,11 +1792,11 @@ end;
 
 theorem Th84:
   for V being Abelian add-associative right_zeroed
-right_complementable (non empty addLoopStr), v,u,w being Element of V holds Sum
+right_complementable non empty addLoopStr, v,u,w being Element of V holds Sum
   <* u,v,w *> = Sum<* u,w *> + v
 proof
-  let V be Abelian add-associative right_zeroed right_complementable (non
-  empty addLoopStr), v,u,w be Element of V;
+  let V be Abelian add-associative right_zeroed right_complementable non
+  empty addLoopStr, v,u,w be Element of V;
   thus Sum<* u,v,w *> = u + v + w by Th63
     .= u + w + v by Def6
     .= Sum<* u,w *> + v by Th62;
@@ -1836,11 +1804,11 @@ end;
 
 theorem Th85:
   for V being Abelian add-associative right_zeroed
-right_complementable (non empty addLoopStr), v,u,w being Element of V holds Sum
+right_complementable non empty addLoopStr, v,u,w being Element of V holds Sum
   <* u,v,w *> = Sum<* u,w,v *>
 proof
-  let V be Abelian add-associative right_zeroed right_complementable (non
-  empty addLoopStr), v,u,w be Element of V;
+  let V be Abelian add-associative right_zeroed right_complementable non
+  empty addLoopStr, v,u,w be Element of V;
   thus Sum<* u,v,w *> = u + v + w by Th63
     .= u + w + v by Def6
     .= Sum<* u,w,v *> by Th63;
@@ -1848,35 +1816,33 @@ end;
 
 theorem Th86:
   for V being Abelian add-associative right_zeroed
-right_complementable (non empty addLoopStr), v,u,w being Element of V holds Sum
+right_complementable non empty addLoopStr, v,u,w being Element of V holds Sum
   <* u,v,w *> = Sum<* v,u,w *>
 proof
-  let V be Abelian add-associative right_zeroed right_complementable (non
-  empty addLoopStr), v,u,w be Element of V;
+  let V be Abelian add-associative right_zeroed right_complementable non
+  empty addLoopStr, v,u,w be Element of V;
   thus Sum<* u,v,w *> = u + v + w by Th63
     .= Sum<* v,u,w *> by Th63;
 end;
 
 theorem Th87:
   for V being Abelian add-associative right_zeroed
-right_complementable (non empty addLoopStr), v,u,w being Element of V holds Sum
+right_complementable non empty addLoopStr, v,u,w being Element of V holds Sum
   <* u,v,w *> = Sum<* v,w,u *>
 proof
-  let V be Abelian add-associative right_zeroed right_complementable (non
-  empty addLoopStr), v,u,w be Element of V;
+  let V be Abelian add-associative right_zeroed right_complementable non
+  empty addLoopStr, v,u,w be Element of V;
   thus Sum<* u,v,w *> = Sum<* v,u,w *> by Th86
     .= Sum<* v,w,u *> by Th85;
 end;
 
-canceled;
-
 theorem
   for V being Abelian add-associative right_zeroed right_complementable
-(non empty addLoopStr), v,u,w being Element of V holds Sum<* u,v,w *> = Sum<* w
+non empty addLoopStr, v,u,w being Element of V holds Sum<* u,v,w *> = Sum<* w
   ,v,u *>
 proof
-  let V be Abelian add-associative right_zeroed right_complementable (non
-  empty addLoopStr), v,u,w be Element of V;
+  let V be Abelian add-associative right_zeroed right_complementable non
+  empty addLoopStr, v,u,w be Element of V;
   thus Sum<* u,v,w *> = Sum<* w,u,v *> by Th87
     .= Sum<* w,v,u *> by Th85;
 end;
@@ -1934,13 +1900,13 @@ theorem
 proof
   assume
 A1: len F = 1;
-  then dom F = {1} by FINSEQ_1:4,def 3;
+  then dom F = {1} by FINSEQ_1:2,def 3;
   then 1 in dom F by TARSKI:def 1;
   then
-A2: F.1 in rng F by FUNCT_1:def 5;
+A2: F.1 in rng F by FUNCT_1:def 3;
   rng F c= the carrier of V by FINSEQ_1:def 4;
   then reconsider v = F.1 as Element of V by A2;
-  F = <* v *> by A1,FINSEQ_1:57;
+  F = <* v *> by A1,FINSEQ_1:40;
   hence thesis by Lm6;
 end;
 
@@ -1948,7 +1914,7 @@ theorem
   len F = 2 & v1 = F.1 & v2 = F.2 implies Sum(F) = v1 + v2
 proof
   assume len F = 2 & v1 = F.1 & v2 = F.2;
-  then F = <* v1,v2 *> by FINSEQ_1:61;
+  then F = <* v1,v2 *> by FINSEQ_1:44;
   hence thesis by Th62;
 end;
 
@@ -1956,7 +1922,7 @@ theorem
   len F = 3 & v1 = F.1 & v2 = F.2 & v = F.3 implies Sum(F) = v1 + v2 + v
 proof
   assume len F = 3 & v1 = F.1 & v2 = F.2 & v = F.3;
-  then F = <* v1,v2,v *> by FINSEQ_1:62;
+  then F = <* v1,v2,v *> by FINSEQ_1:45;
   hence thesis by Th63;
 end;
 
@@ -1970,7 +1936,7 @@ definition
 end;
 
 registration
-  cluster zeroed -> right_zeroed (non empty addLoopStr);
+  cluster zeroed -> right_zeroed for non empty addLoopStr;
   coherence
   proof
     let L be non empty addLoopStr;
@@ -1980,7 +1946,7 @@ registration
 end;
 
 registration
-  cluster Abelian right_zeroed -> zeroed (non empty addLoopStr);
+  cluster Abelian right_zeroed -> zeroed for non empty addLoopStr;
   coherence
   proof
     let L be non empty addLoopStr;
@@ -1990,8 +1956,8 @@ A1: L is Abelian right_zeroed;
     thus a+0.L = a by A1,Def7;
     hence thesis by A1,Def5;
   end;
-  cluster Abelian right_complementable -> left_complementable (non empty
-    addLoopStr);
+  cluster Abelian right_complementable -> left_complementable for non empty
+    addLoopStr;
   coherence
   proof
     let L be non empty addLoopStr;
@@ -2024,31 +1990,31 @@ reserve x,y for set,
 
 theorem
   for V being Abelian add-associative right_zeroed right_complementable
-  (non empty addLoopStr) holds - Sum(<*>(the carrier of V)) = 0.V
+  non empty addLoopStr holds - Sum(<*>(the carrier of V)) = 0.V
 proof
-  let V be Abelian add-associative right_zeroed right_complementable (non
-  empty addLoopStr);
+  let V be Abelian add-associative right_zeroed right_complementable non
+  empty addLoopStr;
   thus - Sum(<*>(the carrier of V)) = - 0.V by Th60
     .= 0.V by Th25;
 end;
 
 theorem
   for V being Abelian add-associative right_zeroed right_complementable
-(non empty addLoopStr), v,u being Element of V holds - Sum<* v,u *> = (- v) - u
+non empty addLoopStr, v,u being Element of V holds - Sum<* v,u *> = (- v) - u
 proof
-  let V be Abelian add-associative right_zeroed right_complementable (non
-  empty addLoopStr), v,u be Element of V;
+  let V be Abelian add-associative right_zeroed right_complementable non
+  empty addLoopStr, v,u be Element of V;
   thus - Sum<* v,u *> = - (v + u) by Th62
     .= (- v) - u by Th44;
 end;
 
 theorem
   for V being Abelian add-associative right_zeroed right_complementable
-    (non empty addLoopStr), v,u,w being Element of V holds
+    non empty addLoopStr, v,u,w being Element of V holds
   - Sum<* v,u,w *> = ((- v) - u) - w
 proof
-  let V be Abelian add-associative right_zeroed right_complementable (non
-  empty addLoopStr), v,u,w be Element of V;
+  let V be Abelian add-associative right_zeroed right_complementable non
+  empty addLoopStr, v,u,w be Element of V;
   thus - Sum<* v,u,w *> = - (v + u + w) by Th63
     .= (- (v + u)) - w by Th44
     .= ((- v) - u) - w by Th44;
@@ -2056,11 +2022,11 @@ end;
 
 theorem
   for V being Abelian add-associative right_zeroed right_complementable
-(non empty addLoopStr), v being Element of V holds
+non empty addLoopStr, v being Element of V holds
   Sum<* v,- v *> = 0.V & Sum<*- v,v *> = 0.V
 proof
-  let V be Abelian add-associative right_zeroed right_complementable (non
-  empty addLoopStr), v be Element of V;
+  let V be Abelian add-associative right_zeroed right_complementable non
+  empty addLoopStr, v be Element of V;
   thus Sum<* v,- v *> = v + (- v) by Th62
     .= 0.V by Th16;
   hence thesis by Th72;
@@ -2068,11 +2034,11 @@ end;
 
 theorem
   for V being Abelian add-associative right_zeroed right_complementable
-  (non empty addLoopStr), v,w being Element of V holds
+  non empty addLoopStr, v,w being Element of V holds
   Sum<* v,- w *> = v - w & Sum<* - w,v *> = v - w
 proof
-  let V be Abelian add-associative right_zeroed right_complementable (non
-  empty addLoopStr), v,w be Element of V;
+  let V be Abelian add-associative right_zeroed right_complementable non
+  empty addLoopStr, v,w be Element of V;
   thus Sum<* v,- w *> = v + (- w) by Th62
     .= v - w;
   hence thesis by Th72;
@@ -2080,11 +2046,11 @@ end;
 
 theorem
   for V being Abelian add-associative right_zeroed right_complementable
-  (non empty addLoopStr), v,w being Element of V holds
+  non empty addLoopStr, v,w being Element of V holds
   Sum<* - v,- w *> = - (v + w) & Sum<* - w,- v *> = - (v + w)
 proof
-  let V be Abelian add-associative right_zeroed right_complementable (non
-  empty addLoopStr), v,w be Element of V;
+  let V be Abelian add-associative right_zeroed right_complementable non
+  empty addLoopStr, v,w be Element of V;
   thus Sum<* - v,- w *> = (- v) + (- w) by Th62
     .= - (v + w) by Th45;
   hence thesis by Th72;

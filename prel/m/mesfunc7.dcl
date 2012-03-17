@@ -73,6 +73,9 @@
 </Typ>
 <Cluster>
 <Adjective nr="12"/>
+<Adjective nr="15">
+<Func kind="K" nr="32"/>
+</Adjective>
 <Adjective nr="17"/>
 <Adjective nr="30"/>
 <Adjective nr="37"/>
@@ -99,7 +102,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="196">
+<Func kind="K" nr="201">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -121,7 +124,7 @@
 </FCluster>
 <FCluster aid="MESFUNC7" nr="2">
 <ArgTypes/>
-<Func kind="K" nr="275"/>
+<Func kind="K" nr="278"/>
 <Cluster>
 <Adjective nr="17"/>
 <Adjective nr="23">
@@ -141,7 +144,7 @@
 </FCluster>
 <FCluster aid="MESFUNC7" nr="3">
 <ArgTypes/>
-<Func kind="K" nr="275"/>
+<Func kind="K" nr="278"/>
 <Cluster>
 <Adjective nr="17"/>
 <Adjective nr="23">

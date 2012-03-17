@@ -1,0 +1,303 @@
+:: On the Real Valued Functions
+::  by Artur Korni{\l}owicz
+::
+:: Received December 10, 2004
+:: Copyright (c) 2004-2011 Association of Mizar Users
+::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
+:: This code can be distributed under the GNU General Public Licence
+:: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
+:: License version 3.0 or later, subject to the binding interpretation
+:: detailed in file COPYING.interpretation.
+:: See COPYING.GPL and COPYING.CC-BY-SA for the full text of these
+:: licenses, or see http://www.gnu.org/licenses/gpl.html and
+:: http://creativecommons.org/licenses/by-sa/3.0/.
+
+environ
+
+ vocabularies NUMBERS, XREAL_0, ORDINAL1, ARYTM_3, XXREAL_0, CARD_1, RELAT_1,
+      SQUARE_1, FUNCT_1, TARSKI, XBOOLE_0, FUNCOP_1, ARYTM_1, SUBSET_1,
+      ORDINAL4, VALUED_1, COMPLEX1, PRE_TOPC, ORDINAL2, PSCOMP_1, STRUCT_0,
+      TOPMETR, REAL_1, RCOMP_1, PARTFUN3;
+ notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, COMPLEX1, MEMBERED, SQUARE_1,
+      RELAT_1, FUNCT_1, RELSET_1, PARTFUN1, FUNCT_2, MEASURE6, PSCOMP_1,
+      VALUED_0, VALUED_1, SEQ_1, RFUNCT_1, NUMBERS, XCMPLX_0, XXREAL_0,
+      XREAL_0, REAL_1, FUNCOP_1, RCOMP_1, STRUCT_0, PRE_TOPC, TOPALG_2,
+      PARTFUN3;
+ constructors REAL_1, SQUARE_1, COMPLEX1, RCOMP_1, RFUNCT_1, MEASURE6,
+      FUNCOP_1, TOPALG_2, SEQ_1, PSCOMP_1, PARTFUN3;
+ registrations XBOOLE_0, FUNCT_1, RELSET_1, FUNCOP_1, NUMBERS, XCMPLX_0,
+      XXREAL_0, XREAL_0, MEMBERED, STRUCT_0, PRE_TOPC, TOPMETR, MEASURE6,
+      VALUED_0, VALUED_1, FUNCT_2, PSCOMP_1, PARTFUN3;
+ requirements NUMERALS, BOOLE, SUBSET, REAL, ARITHM;
+ definitions MEASURE6, RELAT_1, VALUED_1, VALUED_0, STRUCT_0, PSCOMP_1;
+ theorems FUNCT_2, RELAT_1, FUNCT_1, ZFMISC_1, JGRAPH_2, XBOOLE_1, XBOOLE_0,
+      FUNCOP_1, TOPMETR, RFUNCT_1, XCMPLX_0, JGRAPH_3, TOPREAL6, JGRAPH_4,
+      VALUED_1, PARTFUN3;
+
+begin
+
+reserve T for non empty TopSpace,
+  f, g for continuous RealMap of T,
+  r for real number;
+
+registration
+  let T, f, g;
+  set c = the carrier of T;
+  reconsider F = f, G = g as continuous Function of T,R^1
+  by TOPMETR:17,TOPREAL6:74;
+  cluster f+g -> continuous for RealMap of T;
+  coherence
+  proof
+    consider H being Function of T,R^1 such that
+A1: for p being Point of T, r1,r2 being real number st F.p = r1 & G.p
+    = r2 holds H.p = r1+r2 and
+A2: H is continuous by JGRAPH_2:19;
+    reconsider h = H as RealMap of T by TOPMETR:17;
+A3: dom h = c /\ c by FUNCT_2:def 1
+      .= c /\ dom g by FUNCT_2:def 1
+      .= dom f /\ dom g by FUNCT_2:def 1;
+    for c being set st c in dom h holds h.c = f.c + g.c by A1;
+    then h = f+g by A3,VALUED_1:def 1;
+    hence thesis by A2,TOPREAL6:74;
+  end;
+  cluster f-g -> continuous for RealMap of T;
+  coherence
+  proof
+    consider H being Function of T,R^1 such that
+A4: for p being Point of T, r1,r2 being real number st F.p = r1 & G.p
+    = r2 holds H.p = r1-r2 and
+A5: H is continuous by JGRAPH_2:21;
+    reconsider h = H as RealMap of T by TOPMETR:17;
+A6: dom h = c /\ c by FUNCT_2:def 1
+      .= c /\ dom g by FUNCT_2:def 1
+      .= dom f /\ dom g by FUNCT_2:def 1;
+    dom (f-g) = dom f /\ dom g & for c being set st c in dom h holds h.c =
+    f.c - g.c by A4,VALUED_1:12;
+    then h = f-g by A6,VALUED_1:14;
+    hence thesis by A5,TOPREAL6:74;
+  end;
+  cluster f(#)g -> continuous for RealMap of T;
+  coherence
+  proof
+    consider H being Function of T,R^1 such that
+A7: for p being Point of T, r1,r2 being real number st F.p = r1 & G.p
+    = r2 holds H.p = r1*r2 and
+A8: H is continuous by JGRAPH_2:25;
+    reconsider h = H as RealMap of T by TOPMETR:17;
+A9: dom h = c /\ c by FUNCT_2:def 1
+      .= c /\ dom g by FUNCT_2:def 1
+      .= dom f /\ dom g by FUNCT_2:def 1;
+    for c being set st c in dom h holds h.c = f.c * g.c by A7;
+    then h = f(#)g by A9,VALUED_1:def 4;
+    hence thesis by A8,TOPREAL6:74;
+  end;
+end;
+
+registration
+  let T, f;
+  cluster -f -> continuous for RealMap of T;
+  coherence
+  proof
+    reconsider F = f as continuous Function of T,R^1 by TOPMETR:17,TOPREAL6:74;
+    set c = the carrier of T;
+    consider H being Function of T,R^1 such that
+A1: for p being Point of T, r1 being real number st F.p = r1 holds H.p
+    = -r1 and
+A2: H is continuous by JGRAPH_4:8;
+    reconsider h = H as RealMap of T by TOPMETR:17;
+A3: dom h = c by FUNCT_2:def 1
+      .= dom f by FUNCT_2:def 1;
+    for c being set st c in dom h holds h.c = -f.c by A1;
+    then h = -f by A3,VALUED_1:9;
+    hence thesis by A2,TOPREAL6:74;
+  end;
+end;
+
+registration
+  let T, f;
+  cluster abs f -> continuous for RealMap of T;
+  coherence
+  proof
+    reconsider F = f as continuous Function of T,R^1 by TOPMETR:17,TOPREAL6:74;
+    set c = the carrier of T;
+    consider H being Function of T,R^1 such that
+A1: for p being Point of T, r1 being real number st F.p = r1 holds H.p
+    = abs r1 and
+A2: H is continuous by JGRAPH_4:7;
+    reconsider h = H as RealMap of T by TOPMETR:17;
+A3: dom h = c by FUNCT_2:def 1
+      .= dom f by FUNCT_2:def 1;
+    for c being set st c in dom h holds h.c = abs(f.c) by A1;
+    then h = abs f by A3,VALUED_1:def 11;
+    hence thesis by A2,TOPREAL6:74;
+  end;
+end;
+
+Lm1: now
+  let T;
+  let a be Real;
+  set c = the carrier of T;
+  set f = c --> a;
+  thus f is continuous
+  proof
+    let Y be Subset of REAL;
+A1: dom f = c by FUNCT_2:def 1;
+    assume Y is closed;
+A2: rng f = {a} by FUNCOP_1:8;
+    per cases;
+    suppose
+      a in Y;
+      then
+A3:   rng f c= Y by A2,ZFMISC_1:31;
+      f"Y = f"(rng f /\ Y) by RELAT_1:133
+        .= f"rng f by A3,XBOOLE_1:28
+        .= c by A1,RELAT_1:134
+        .= [#]T;
+      hence thesis;
+    end;
+    suppose
+      not a in Y;
+      then
+A4:   rng f misses Y by A2,ZFMISC_1:50;
+      f"Y = f"(rng f /\ Y) by RELAT_1:133
+        .= f"{} by A4,XBOOLE_0:def 7
+        .= {}T by RELAT_1:136;
+      hence thesis;
+    end;
+  end;
+end;
+
+registration
+  let T;
+  cluster positive-yielding continuous for RealMap of T;
+  existence
+  proof
+    take f = (the carrier of T) --> (1 qua Real);
+    thus f is positive-yielding;
+    thus thesis by Lm1;
+  end;
+  cluster negative-yielding continuous for RealMap of T;
+  existence
+  proof
+    take f = (the carrier of T) --> -1;
+    thus f is negative-yielding;
+    thus thesis by Lm1;
+  end;
+end;
+
+registration
+  let T;
+  let f be nonnegative-yielding continuous RealMap of T;
+  cluster sqrt f -> continuous for RealMap of T;
+  coherence
+  proof
+    reconsider F = f as continuous Function of T,R^1 by TOPMETR:17,TOPREAL6:74;
+    set c = the carrier of T;
+    for q being Point of T ex r being real number st f.q = r & r >= 0
+    proof
+      let q be Point of T;
+      take f.q;
+      thus f.q = f.q;
+      dom f = c by FUNCT_2:def 1;
+      then f.q in rng f by FUNCT_1:def 3;
+      hence thesis by PARTFUN3:def 4;
+    end;
+    then consider H being Function of T,R^1 such that
+A1: for p being Point of T, r1 being real number st F.p = r1 holds H.p
+    = sqrt r1 and
+A2: H is continuous by JGRAPH_3:5;
+    reconsider h = H as RealMap of T by TOPMETR:17;
+A3: dom h = c by FUNCT_2:def 1
+      .= dom f by FUNCT_2:def 1;
+    for c being set st c in dom h holds h.c = sqrt(f.c) by A1;
+    then h = sqrt f by A3,PARTFUN3:def 5;
+    hence thesis by A2,TOPREAL6:74;
+  end;
+end;
+
+registration
+  let T, f, r;
+  cluster r(#)f -> continuous for RealMap of T;
+  coherence
+  proof
+    reconsider F = f as continuous Function of T,R^1 by TOPMETR:17,TOPREAL6:74;
+    set c = the carrier of T;
+    consider H being Function of T,R^1 such that
+A1: for p being Point of T, r1 being real number st F.p = r1 holds H.p
+    = r*r1 and
+A2: H is continuous by JGRAPH_2:23;
+    reconsider h = H as RealMap of T by TOPMETR:17;
+A3: dom h = c by FUNCT_2:def 1
+      .= dom f by FUNCT_2:def 1;
+    for c being set st c in dom h holds h.c = r * f.c by A1;
+    then h = r(#)f by A3,VALUED_1:def 5;
+    hence thesis by A2,TOPREAL6:74;
+  end;
+end;
+
+registration
+  let T;
+  let f be non-empty continuous RealMap of T;
+  cluster f^ -> continuous for RealMap of T;
+  coherence
+  proof
+    reconsider F = f as continuous Function of T,R^1 by TOPMETR:17,TOPREAL6:74;
+    set c = the carrier of T;
+    for q being Point of T holds f.q <> 0
+    proof
+      let q be Point of T;
+      dom f = c by FUNCT_2:def 1;
+      hence thesis;
+    end;
+    then consider H being Function of T,R^1 such that
+A1: for p being Point of T, r1 being real number st F.p = r1 holds H.p
+    = 1/r1 and
+A2: H is continuous by JGRAPH_2:26;
+    reconsider h = H as RealMap of T by TOPMETR:17;
+A3: now
+      let a be set;
+      assume a in dom h;
+      hence h.a = 1/f.a by A1
+        .= 1 * (f.a)" by XCMPLX_0:def 9
+        .= (f.a)";
+    end;
+    dom h = c by FUNCT_2:def 1
+      .= dom f \ f"{0} by FUNCT_2:def 1;
+    then h = f^ by A3,RFUNCT_1:def 2;
+    hence thesis by A2,TOPREAL6:74;
+  end;
+end;
+
+registration
+  let T, f;
+  let g be non-empty continuous RealMap of T;
+  cluster f/g -> continuous for RealMap of T;
+  coherence
+  proof
+    reconsider F = f, G = g as continuous Function of T,R^1 by TOPMETR:17
+,TOPREAL6:74;
+    set c = the carrier of T;
+    for q being Point of T holds g.q <> 0
+    proof
+      let q be Point of T;
+      dom g = c by FUNCT_2:def 1;
+      hence thesis;
+    end;
+    then consider H being Function of T,R^1 such that
+A1: for p being Point of T, r1,r2 being real number st F.p = r1 & G.p
+    = r2 holds H.p = r1/r2 and
+A2: H is continuous by JGRAPH_2:27;
+    reconsider h = H as RealMap of T by TOPMETR:17;
+A3: now
+      let c be set;
+      assume c in dom h;
+      hence h.c = f.c / g.c by A1
+        .= f.c * (g.c)" by XCMPLX_0:def 9;
+    end;
+    dom h = c /\ c by FUNCT_2:def 1
+      .= c /\ dom g by FUNCT_2:def 1
+      .= dom f /\ (dom g \ g"{0}) by FUNCT_2:def 1;
+    then h = f/g by A3,RFUNCT_1:def 1;
+    hence thesis by A2,TOPREAL6:74;
+  end;
+end;

@@ -17,14 +17,17 @@ environ
  vocabularies XBOOLE_0, STRUCT_0, ORDERS_2, SUBSET_1, XXREAL_0, RELAT_1,
       RELAT_2, REWRITE1, LATTICE3, ZFMISC_1, ORDERS_1, ARYTM_3, TARSKI,
       LATTICES, XXREAL_2, EQREL_1, FILTER_0, PBOOLE, ORDINAL2, FINSET_1, CAT_1,
-      WELLORD1, YELLOW_0;
+      WELLORD1, YELLOW_0, CARD_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_2, RELSET_1, FINSET_1,
-      TOLER_1, ORDERS_1, DOMAIN_1, STRUCT_0, LATTICES, ORDERS_2, LATTICE3;
+      TOLER_1, ORDERS_1, DOMAIN_1, CARD_1, STRUCT_0, LATTICES, ORDERS_2,
+      LATTICE3;
  constructors TOLER_1, REALSET2, LATTICE3;
- registrations XBOOLE_0, RELSET_1, FINSET_1, STRUCT_0, ORDERS_2, LATTICE3;
- requirements BOOLE, SUBSET;
+ registrations XBOOLE_0, RELSET_1, FINSET_1, STRUCT_0, ORDERS_2, LATTICE3,
+      CARD_1, ORDINAL1;
+ requirements BOOLE, SUBSET, NUMERALS;
  definitions STRUCT_0, RELAT_2, ORDERS_2, LATTICE3, WELLORD1;
- theorems TARSKI, ZFMISC_1, RELAT_2, ORDERS_2, LATTICE3, XBOOLE_0, XBOOLE_1;
+ theorems TARSKI, ZFMISC_1, RELAT_2, ORDERS_2, LATTICE3, XBOOLE_0, XBOOLE_1,
+      STRUCT_0;
  schemes FINSET_1, RELSET_1;
 
 begin :: Reexamination of poset concepts
@@ -39,7 +42,7 @@ A1: for a,b being Element of X() holds [a,b] in R iff P[a,b] from
   take L = RelStr(#X(),R#);
   thus the carrier of L = X();
   let a,b be Element of L;
-  a <= b iff [a,b] in R by ORDERS_2:def 9;
+  a <= b iff [a,b] in R by ORDERS_2:def 5;
   hence thesis by A1;
 end;
 
@@ -50,14 +53,14 @@ definition
   compatibility
   proof
     thus A is reflexive implies for x being Element of A holds x <= x by
-ORDERS_2:24;
+ORDERS_2:1;
     assume
 A1: for x being Element of A holds x <= x;
     let x be set;
     assume x in the carrier of A;
     then reconsider x as Element of A;
     x <= x by A1;
-    hence thesis by ORDERS_2:def 9;
+    hence thesis by ORDERS_2:def 5;
   end;
 end;
 
@@ -68,7 +71,7 @@ definition
   compatibility
   proof
     thus A is transitive implies for x,y,z being Element of A st x <= y & y <=
-    z holds x <= z by ORDERS_2:26;
+    z holds x <= z by ORDERS_2:3;
     assume
 A1: for x,y,z being Element of A st x <= y & y <= z holds x <= z;
     let x,y,z be set;
@@ -77,16 +80,16 @@ A2: x in the carrier of A & y in the carrier of A & z in the carrier of A;
     assume
 A3: [x,y] in the InternalRel of A & [y,z] in the InternalRel of A;
     reconsider x,y,z as Element of A by A2;
-    x <= y & y <= z by A3,ORDERS_2:def 9;
+    x <= y & y <= z by A3,ORDERS_2:def 5;
     then x <= z by A1;
-    hence thesis by ORDERS_2:def 9;
+    hence thesis by ORDERS_2:def 5;
   end;
   redefine attr A is antisymmetric means
   for x,y being Element of A st x <= y & y <= x holds x = y;
   compatibility
   proof
     thus A is antisymmetric implies for x,y being Element of A st x <= y & y
-    <= x holds x = y by ORDERS_2:25;
+    <= x holds x = y by ORDERS_2:2;
     assume
 A4: for x,y being Element of A st x <= y & y <= x holds x = y;
     let x,y be set;
@@ -95,22 +98,21 @@ A5: x in the carrier of A & y in the carrier of A;
     assume
 A6: [x,y] in the InternalRel of A & [y,x] in the InternalRel of A;
     reconsider x,y as Element of A by A5;
-    x <= y & y <= x by A6,ORDERS_2:def 9;
+    x <= y & y <= x by A6,ORDERS_2:def 5;
     hence thesis by A4;
   end;
 end;
 
 registration
-  cluster complete -> with_suprema with_infima (non empty RelStr);
+  cluster complete -> with_suprema with_infima for non empty RelStr;
   coherence by LATTICE3:12;
-  cluster trivial -> complete transitive antisymmetric (non empty reflexive
-    RelStr);
+  cluster -> complete transitive antisymmetric
+         for 1-element reflexive RelStr;
   coherence
   proof
-    let L be non empty reflexive RelStr;
-    set x =the  Element of L;
-    assume
-A1: for x,y being Element of L holds x = y;
+    let L be 1-element reflexive RelStr;
+    set x = the Element of L;
+A1: for x,y being Element of L holds x = y by STRUCT_0:def 10;
     thus L is complete
     proof
       let X be set;
@@ -118,7 +120,7 @@ A1: for x,y being Element of L holds x = y;
       thus for y be Element of L st y in X holds y <= x by A1;
       let y be Element of L;
       y = x by A1;
-      hence thesis by ORDERS_2:24;
+      hence thesis by ORDERS_2:1;
     end;
     thus L is transitive
     proof
@@ -133,20 +135,18 @@ end;
 registration
   let x be set;
   let R be Relation of {x};
-  cluster RelStr(#{x},R#) -> trivial;
+  cluster RelStr(#{x},R#) -> 1-element;
   coherence
   proof
-    let z1,z2 be Element of RelStr(#{x},R#);
-    z1 = x by TARSKI:def 1;
-    hence thesis by TARSKI:def 1;
+   thus the carrier of RelStr(#{x},R#) is 1-element;
   end;
 end;
 
 registration
-  cluster strict trivial non empty reflexive RelStr;
+  cluster strict 1-element reflexive for RelStr;
   existence
   proof
-    set O =the  Order of {{}};
+    set O = the Order of {{}};
     take RelStr(#{{}}, O#);
     thus thesis;
   end;
@@ -161,9 +161,9 @@ proof
 A1: the RelStr of P1 = the RelStr of P2;
   let a1,b1 be Element of P1;
   let a2,b2 be Element of P2;
-A2: a2 <= b2 iff [a2,b2] in the InternalRel of P2 by ORDERS_2:def 9;
-  a1 <= b1 iff [a1,b1] in the InternalRel of P1 by ORDERS_2:def 9;
-  hence thesis by A1,A2,ORDERS_2:def 10;
+A2: a2 <= b2 iff [a2,b2] in the InternalRel of P2 by ORDERS_2:def 5;
+  a1 <= b1 iff [a1,b1] in the InternalRel of P1 by ORDERS_2:def 5;
+  hence thesis by A1,A2,ORDERS_2:def 6;
 end;
 
 theorem Th2:
@@ -231,7 +231,7 @@ A2: y is_<=_than X;
       let z be Element of L;
       assume z in X;
       then z >= y by A2,LATTICE3:def 8;
-      hence thesis by A1,ORDERS_2:26;
+      hence thesis by A1,ORDERS_2:3;
     end;
   end;
   assume
@@ -239,7 +239,7 @@ A3: x is_>=_than X;
   let z be Element of L;
   assume z in X;
   then x >= z by A3,LATTICE3:def 9;
-  hence thesis by A1,ORDERS_2:26;
+  hence thesis by A1,ORDERS_2:3;
 end;
 
 theorem Th5:
@@ -402,7 +402,7 @@ A2: x <= y;
   let z be Element of L;
   assume z in X;
   then z <= x by A1;
-  hence thesis by A2,ORDERS_2:26;
+  hence thesis by A2,ORDERS_2:3;
 end;
 
 theorem Th12:
@@ -416,7 +416,7 @@ A2: x >= y;
   let z be Element of L;
   assume z in X;
   then z >= x by A1;
-  hence thesis by A2,ORDERS_2:26;
+  hence thesis by A2,ORDERS_2:3;
 end;
 
 registration
@@ -466,7 +466,7 @@ A3: x is_>=_than the carrier of P1;
 end;
 
 registration
-  cluster complete -> bounded (non empty RelStr);
+  cluster complete -> bounded for non empty RelStr;
   coherence
   proof
     let L be non empty RelStr;
@@ -492,14 +492,14 @@ A3: the carrier of L is_<=_than a1 and
     take a1;
     thus thesis by A3;
   end;
-  cluster bounded -> lower-bounded upper-bounded RelStr;
+  cluster bounded -> lower-bounded upper-bounded for RelStr;
   coherence
   proof
     let L be RelStr;
     assume L is lower-bounded upper-bounded;
     hence thesis;
   end;
-  cluster lower-bounded upper-bounded -> bounded RelStr;
+  cluster lower-bounded upper-bounded -> bounded for RelStr;
   coherence
   proof
     let L be RelStr;
@@ -509,10 +509,10 @@ A3: the carrier of L is_<=_than a1 and
 end;
 
 registration
-  cluster complete (non empty Poset);
+  cluster complete for non empty Poset;
   existence
   proof
-    set L =the  complete (non empty Poset);
+    set L = the complete non empty Poset;
     take L;
     thus thesis;
   end;
@@ -632,7 +632,7 @@ A1: X is_<=_than a & for b being Element of L st X is_<=_than b holds a <= b;
   assume
   X is_<=_than c & for b being Element of L st X is_<=_than b holds b >= c;
   then a <= c & c <= a by A1;
-  hence thesis by ORDERS_2:25;
+  hence thesis by ORDERS_2:2;
 end;
 
 theorem Th16:
@@ -659,7 +659,7 @@ A1: X is_>=_than a & for b being Element of L st X is_>=_than b holds a >= b;
   assume
   X is_>=_than c & for b being Element of L st X is_>=_than b holds c >= b;
   then a <= c & c <= a by A1;
-  hence thesis by ORDERS_2:25;
+  hence thesis by ORDERS_2:2;
 end;
 
 theorem Th17:
@@ -972,10 +972,10 @@ A4: now
 end;
 
 theorem
-  for L being complete (non empty Poset), X being set holds "\/"(X,L) =
+  for L being complete non empty Poset, X being set holds "\/"(X,L) =
   "\/"(X, latt L) & "/\"(X,L) = "/\"(X, latt L)
 proof
-  let L be complete (non empty Poset), X be set;
+  let L be complete non empty Poset, X be set;
 A1: the RelStr of L = LattPOSet latt L by LATTICE3:def 15;
   then reconsider x = "\/"(X,L) as Element of LattPOSet latt L;
   reconsider y = "/\"(X,latt L) as Element of L by A1;
@@ -1090,11 +1090,11 @@ proof
 end;
 
 theorem
-  for L being complete antisymmetric (non empty RelStr) for a being
+  for L being complete antisymmetric non empty RelStr for a being
 Element of L, X being set holds a = "/\"(X,L) iff a is_<=_than X & for b being
   Element of L st b is_<=_than X holds a >= b
 proof
-  let L be complete (non empty antisymmetric RelStr);
+  let L be complete non empty antisymmetric RelStr;
   let a be Element of L, X be set;
   ex_inf_of X,L by Th17;
   hence thesis by Th31;
@@ -1556,7 +1556,7 @@ A14:      "\/"(Y,L) <= c by A4,A5,Def9;
           then
 A15:      c >= a by A7,A14,Th18;
           a >= c by A9,A8,A13,Th10;
-          hence thesis by A15,ORDERS_2:25;
+          hence thesis by A15,ORDERS_2:2;
         end;
       end;
     end;
@@ -1634,7 +1634,7 @@ A14:      "/\"(Y,L) >= c by A4,A5,Def10;
           then
 A15:      c <= a by A7,A14,Th19;
           a <= c by A9,A8,A13,Th10;
-          hence thesis by A15,ORDERS_2:25;
+          hence thesis by A15,ORDERS_2:2;
         end;
       end;
     end;
@@ -1669,7 +1669,7 @@ end;
 
 registration
   let L be RelStr;
-  cluster strict full SubRelStr of L;
+  cluster strict full for SubRelStr of L;
   existence
   proof
     set S = RelStr(#the carrier of L, the InternalRel of L#);
@@ -1683,7 +1683,7 @@ end;
 
 registration
   let L be non empty RelStr;
-  cluster non empty full strict SubRelStr of L;
+  cluster non empty full strict for SubRelStr of L;
   existence
   proof
     set S = RelStr(#the carrier of L, the InternalRel of L#);
@@ -1695,8 +1695,6 @@ XBOOLE_1:28;
     thus thesis;
   end;
 end;
-
-canceled;
 
 theorem Th57:
   for L being RelStr, X being Subset of L holds RelStr(#X, (the
@@ -1766,7 +1764,7 @@ A1: x = a & y = b;
 A2: [a,b] in the InternalRel of L;
 A3: the InternalRel of S = (the InternalRel of L)|_2 the carrier of S by Def14;
   assume x in the carrier of S;
-  then [x,y] in [:the carrier of S,the carrier of S:] by ZFMISC_1:106;
+  then [x,y] in [:the carrier of S,the carrier of S:] by ZFMISC_1:87;
   hence [x,y] in the InternalRel of S by A1,A3,A2,XBOOLE_0:def 4;
 end;
 
@@ -1839,7 +1837,7 @@ end;
 
 registration
   let L be reflexive RelStr;
-  cluster -> reflexive (full SubRelStr of L);
+  cluster -> reflexive for full SubRelStr of L;
   coherence
   proof
     let S be full SubRelStr of L;
@@ -1847,9 +1845,9 @@ registration
     assume
 A1: x in the carrier of S;
     then
-A2: [x,x] in [:the carrier of S, the carrier of S :] by ZFMISC_1:106;
+A2: [x,x] in [:the carrier of S, the carrier of S :] by ZFMISC_1:87;
     the carrier of S c= the carrier of L & the InternalRel of L
-    is_reflexive_in the carrier of L by Def13,ORDERS_2:def 4;
+    is_reflexive_in the carrier of L by Def13,ORDERS_2:def 2;
     then
 A3: [x,x] in the InternalRel of L by A1,RELAT_2:def 1;
     the InternalRel of S = (the InternalRel of L)|_2 the carrier of S by Def14;
@@ -1859,7 +1857,7 @@ end;
 
 registration
   let L be transitive RelStr;
-  cluster -> transitive (full SubRelStr of L);
+  cluster -> transitive for full SubRelStr of L;
   coherence
   proof
     let S be full SubRelStr of L;
@@ -1868,22 +1866,22 @@ registration
 A1: x <= y and
 A2: y <= z;
 A3: the carrier of S c= the carrier of L by Def13;
-    [y,z] in the InternalRel of S by A2,ORDERS_2:def 9;
+    [y,z] in the InternalRel of S by A2,ORDERS_2:def 5;
     then
-A4: z in the carrier of S by ZFMISC_1:106;
-A5: [x,y] in the InternalRel of S by A1,ORDERS_2:def 9;
+A4: z in the carrier of S by ZFMISC_1:87;
+A5: [x,y] in the InternalRel of S by A1,ORDERS_2:def 5;
     then
-A6: x in the carrier of S by ZFMISC_1:106;
-    y in the carrier of S by A5,ZFMISC_1:106;
+A6: x in the carrier of S by ZFMISC_1:87;
+    y in the carrier of S by A5,ZFMISC_1:87;
     then reconsider a = x, b = y, c = z as Element of L by A6,A4,A3;
     a <= b & b <= c by A1,A2,Th60;
-    hence thesis by A6,Th61,ORDERS_2:26;
+    hence thesis by A6,Th61,ORDERS_2:3;
   end;
 end;
 
 registration
   let L be antisymmetric RelStr;
-  cluster -> antisymmetric (full SubRelStr of L);
+  cluster -> antisymmetric for full SubRelStr of L;
   coherence
   proof
     let S be full SubRelStr of L;
@@ -1892,11 +1890,11 @@ registration
 A1: x <= y and
 A2: y <= x;
 A3: the carrier of S c= the carrier of L by Def13;
-    [x,y] in the InternalRel of S by A1,ORDERS_2:def 9;
-    then x in the carrier of S & y in the carrier of S by ZFMISC_1:106;
+    [x,y] in the InternalRel of S by A1,ORDERS_2:def 5;
+    then x in the carrier of S & y in the carrier of S by ZFMISC_1:87;
     then reconsider a = x, b = y as Element of L by A3;
     a <= b & b <= a by A1,A2,Th60;
-    hence thesis by ORDERS_2:25;
+    hence thesis by ORDERS_2:2;
   end;
 end;
 
@@ -1926,7 +1924,7 @@ end;
 
 registration
   let L be non empty RelStr;
-  cluster infs-inheriting -> meet-inheriting SubRelStr of L;
+  cluster infs-inheriting -> meet-inheriting for SubRelStr of L;
   coherence
   proof
     let S be SubRelStr of L;
@@ -1935,10 +1933,10 @@ A1: for X being Subset of S st ex_inf_of X,L holds "/\"(X,L) in the
     carrier of S;
     let x,y be Element of L;
     assume x in the carrier of S & y in the carrier of S;
-    then {x,y} c= the carrier of S by ZFMISC_1:38;
+    then {x,y} c= the carrier of S by ZFMISC_1:32;
     hence thesis by A1;
   end;
-  cluster sups-inheriting -> join-inheriting SubRelStr of L;
+  cluster sups-inheriting -> join-inheriting for SubRelStr of L;
   coherence
   proof
     let S be SubRelStr of L;
@@ -1947,14 +1945,15 @@ A2: for X being Subset of S st ex_sup_of X,L holds "\/"(X,L) in the
     carrier of S;
     let x,y be Element of L;
     assume x in the carrier of S & y in the carrier of S;
-    then {x,y} c= the carrier of S by ZFMISC_1:38;
+    then {x,y} c= the carrier of S by ZFMISC_1:32;
     hence thesis by A2;
   end;
 end;
 
 registration
   let L be non empty RelStr;
-  cluster infs-inheriting sups-inheriting non empty full strict SubRelStr of L;
+  cluster infs-inheriting sups-inheriting non empty full strict for
+SubRelStr of L;
   existence
   proof
     the carrier of L c= the carrier of L & (the InternalRel of L)|_2 the
@@ -2024,7 +2023,7 @@ A8: a <= c by A3;
       then
 A9:   b <= a9 by A5;
       a9 <= c9 by A6,A8,Th60;
-      hence b <= c9 by A9,ORDERS_2:26;
+      hence b <= c9 by A9,ORDERS_2:3;
     end;
     hence thesis by A1,A7,Def10;
   end;
@@ -2078,7 +2077,7 @@ A8: a >= c by A3;
       then
 A9:   b >= a9 by A5;
       a9 >= c9 by A6,A8,Th60;
-      hence b >= c9 by A9,ORDERS_2:26;
+      hence b >= c9 by A9,ORDERS_2:3;
     end;
     hence thesis by A1,A7,Def9;
   end;
@@ -2099,7 +2098,7 @@ Th65;
 
 registration
   let L be with_infima antisymmetric transitive RelStr;
-  cluster -> with_infima (non empty meet-inheriting full SubRelStr of L);
+  cluster -> with_infima for non empty meet-inheriting full SubRelStr of L;
   coherence
   proof
     let S be non empty meet-inheriting full SubRelStr of L;
@@ -2116,7 +2115,7 @@ end;
 
 registration
   let L be with_suprema antisymmetric transitive RelStr;
-  cluster -> with_suprema (non empty join-inheriting full SubRelStr of L);
+  cluster -> with_suprema for non empty join-inheriting full SubRelStr of L;
   coherence
   proof
     let S be non empty join-inheriting full SubRelStr of L;
@@ -2132,11 +2131,11 @@ A1:   ex_sup_of {a,b}, L by Th20;
 end;
 
 theorem
-  for L being complete (non empty Poset) for S being non empty full
+  for L being complete non empty Poset for S being non empty full
   SubRelStr of L for X being Subset of S st "/\"(X,L) in the carrier of S holds
   "/\"(X,S) = "/\"(X,L)
 proof
-  let L be complete (non empty Poset);
+  let L be complete non empty Poset;
   let S be non empty full SubRelStr of L;
   let X be Subset of S such that
 A1: "/\"(X,L) in the carrier of S;
@@ -2145,11 +2144,11 @@ A1: "/\"(X,L) in the carrier of S;
 end;
 
 theorem
-  for L being complete (non empty Poset) for S being non empty full
+  for L being complete non empty Poset for S being non empty full
   SubRelStr of L for X being Subset of S st "\/"(X,L) in the carrier of S holds
   "\/"(X,S) = "\/"(X,L)
 proof
-  let L be complete (non empty Poset);
+  let L be complete non empty Poset;
   let S be non empty full SubRelStr of L;
   let X be Subset of S such that
 A1: "\/"(X,L) in the carrier of S;

@@ -21,6 +21,8 @@
 <ArticleID name="FUNCT_7"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="GRAPH_1"/>
+<ArticleID name="ARYTM_3"/>
+<ArticleID name="ARYTM_2"/>
 <ArticleID name="GRAPH_5"/>
 <ArticleID name="GRAPHSP"/>
 </Signature>
@@ -37,7 +39,7 @@
 <Func kind="K" nr="67"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="189">
+<Func kind="K" nr="211">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -58,7 +60,7 @@
 <Func kind="K" nr="67"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="183">
+<Func kind="K" nr="205">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>

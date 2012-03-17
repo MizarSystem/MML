@@ -17,9 +17,9 @@ environ
  vocabularies ZFMISC_1, XBOOLE_0, TARSKI, SUBSET_1;
  notations TARSKI, XBOOLE_0, ENUMSET1, ZFMISC_1;
  constructors TARSKI, XBOOLE_0, ENUMSET1, ZFMISC_1;
- registrations XBOOLE_0;
+ registrations XBOOLE_0, ZFMISC_1;
  requirements BOOLE;
- definitions TARSKI, XBOOLE_0;
+ definitions TARSKI, XBOOLE_0, ZFMISC_1;
  theorems XBOOLE_0, TARSKI, ENUMSET1, ZFMISC_1, XBOOLE_1;
  schemes XBOOLE_0;
 
@@ -62,12 +62,23 @@ end;
 
 definition
   let X;
-  canceled;
-  mode Element of X means
-    :Def2:
-    it in X if X is non empty otherwise it is empty;
+  mode Element of X means :Def2:
+  it in X if X is non empty otherwise it is empty;
   existence by XBOOLE_0:def 1;
   consistency;
+  sethood
+  proof
+   per cases;
+   case X is non empty;
+    take X;
+    thus thesis;
+   end;
+   case X is empty;
+    take {{}};
+    let y be set;
+    thus thesis by TARSKI:def 1;
+   end;  
+  end;
 end;
 
 definition
@@ -77,7 +88,7 @@ end;
 
 registration
   let X be non empty set;
-  cluster non empty Subset of X;
+  cluster non empty for Subset of X;
   existence
   proof
     X in bool X by ZFMISC_1:def 1;
@@ -103,29 +114,13 @@ end;
 registration
   let X1,X2,X3 be non empty set;
   cluster [: X1,X2,X3 :] -> non empty;
-  coherence
-  proof
-    consider x3 being set such that
-A1: x3 in X3 by XBOOLE_0:def 1;
-    consider x12 being set such that
-A2: x12 in [:X1,X2:] by XBOOLE_0:def 1;
-    [x12,x3] in [:[:X1,X2:],X3:] by A2,A1,ZFMISC_1:def 2;
-    hence thesis by ZFMISC_1:def 3;
-  end;
+  coherence;
 end;
 
 registration
   let X1,X2,X3,X4 be non empty set;
   cluster [: X1,X2,X3,X4 :] -> non empty;
-  coherence
-  proof
-    consider x4 being set such that
-A1: x4 in X4 by XBOOLE_0:def 1;
-    consider x123 being set such that
-A2: x123 in [:X1,X2,X3:] by XBOOLE_0:def 1;
-    [x123,x4] in [:[:X1,X2,X3:],X4:] by A2,A1,ZFMISC_1:def 2;
-    hence thesis by ZFMISC_1:def 4;
-  end;
+  coherence;
 end;
 
 definition
@@ -154,7 +149,7 @@ end;
 
 registration
   let E;
-  cluster empty Subset of E;
+  cluster empty for Subset of E;
   existence
   proof
     {} c= E by XBOOLE_1:2;
@@ -191,8 +186,6 @@ registration
   coherence;
 end;
 
-canceled 3;
-
 theorem
   {} is Subset of X
 proof
@@ -201,8 +194,6 @@ proof
 end;
 
 reserve A,B,C for Subset of E;
-
-canceled 2;
 
 theorem Th7:
   (for x being Element of E holds x in A implies x in B) implies A c= B
@@ -224,9 +215,7 @@ proof
   hence A c= B & B c= A by Th7;
 end;
 
-canceled;
-
-theorem
+theorem Th10:
   A <> {} implies ex x being Element of E st x in A
 proof
   assume A <> {};
@@ -335,8 +324,6 @@ definition
   end;
 end;
 
-canceled 4;
-
 theorem
   (for x being Element of E holds x in A iff x in B or x in C) implies A
   = B \/ C
@@ -427,12 +414,8 @@ A1: for x being Element of E holds x in A iff not(x in B iff x in C);
   hence thesis by Th7;
 end;
 
-canceled 3;
-
 theorem
   [#] E = ({} E)`;
-
-canceled 2;
 
 theorem Th25:
   A \/ A` = [#]E
@@ -442,8 +425,6 @@ proof
   hence thesis by XBOOLE_1:45;
 end;
 
-canceled 2;
-
 theorem
   A \/ [#]E = [#]E
 proof
@@ -451,8 +432,6 @@ proof
   then A c= E by ZFMISC_1:def 1;
   hence thesis by XBOOLE_1:12;
 end;
-
-canceled 2;
 
 theorem Th31:
   A c= B iff B` c= A`
@@ -509,8 +488,6 @@ proof
   then B` c= A`` by Th31;
   hence thesis;
 end;
-
-canceled;
 
 theorem
   A c= A` iff A = {}E
@@ -582,8 +559,6 @@ proof
   B``= B;
   hence thesis by Th43;
 end;
-
-canceled;
 
 theorem
   A misses B & A` misses B` implies A = B`
@@ -713,8 +688,6 @@ proof
 end;
 
 reserve x1,x2,x3,x4,x5,x6,x7,x8 for Element of X;
-
-canceled;
 
 theorem
   X <> {} implies {x1} is Subset of X
@@ -856,7 +829,7 @@ theorem
   x in X implies {x} is Subset of X
 proof
   assume x in X;
-  then {x} c= X by ZFMISC_1:37;
+  then {x} c= X by ZFMISC_1:31;
   then {x} in bool X by ZFMISC_1:def 1;
   hence thesis by Def2;
 end;
@@ -998,7 +971,7 @@ end;
 
 registration
   let X be empty set;
-  cluster -> empty Subset of X;
+  cluster -> empty for Subset of X;
   coherence
   proof
     let Y be Subset of X;
@@ -1028,7 +1001,7 @@ end;
 
 registration
   let E be set;
-  cluster non proper Subset of E;
+  cluster non proper for Subset of E;
   existence
   proof
     take [#]E;
@@ -1038,20 +1011,20 @@ end;
 
 registration
   let E be non empty set;
-  cluster non proper -> non empty Subset of E;
+  cluster non proper -> non empty for Subset of E;
   coherence
   proof
     let A be Subset of E;
     assume A = E;
     hence thesis;
   end;
-  cluster empty -> proper Subset of E;
+  cluster empty -> proper for Subset of E;
   coherence;
 end;
 
 registration
   let E be non empty set;
-  cluster proper Subset of E;
+  cluster proper for Subset of E;
   existence
   proof
     take {} E;
@@ -1061,7 +1034,7 @@ end;
 
 registration
   let E be empty set;
-  cluster -> non proper Subset of E;
+  cluster -> non proper for Subset of E;
   coherence
   proof
     let A be Subset of E;
@@ -1069,7 +1042,7 @@ registration
   end;
 end;
 
-:: fomr GRCAT_1, 2010.02.18, A.T.
+:: from GRCAT_1, 2010.02.18, A.T.
 
 theorem
   for X,Y,A being set, z being set st z in A & A c= [:X,Y:] ex x
@@ -1080,9 +1053,115 @@ proof
   then consider x,y being set such that
 A1: x in X and
 A2: y in Y and
-A3: z = [x,y] by ZFMISC_1:103;
+A3: z = [x,y] by ZFMISC_1:84;
   reconsider y as Element of Y by A2,Def2;
   reconsider x as Element of X by A1,Def2;
   take x,y;
   thus thesis by A3;
+end;
+
+:: from BORSUK_4, 2011.03.04, A.T.
+
+theorem
+  for X being non empty set, A, B being non empty Subset of X st A c< B
+   ex p being Element of X st p in B & A c= B \ {p}
+proof
+  let X be non empty set, A, B be non empty Subset of X;
+  assume
+A1: A c< B;
+  then consider p being Element of X such that
+A2: p in B \ A by Th10,XBOOLE_1:105;
+A3: not p in A by A2,XBOOLE_0:def 5;
+  take p;
+  A c= B by A1,XBOOLE_0:def 8;
+  hence thesis by A2,A3,XBOOLE_0:def 5,ZFMISC_1:34;
+end;
+
+definition
+  let X be non empty set;
+  redefine attr X is trivial means
+  for x,y being Element of X holds x = y;
+ compatibility
+  proof
+   thus X is trivial implies for x,y being Element of X holds x = y
+    proof assume
+Z:    X is trivial;
+     let x,y be Element of X;
+      x in X & y in X by Def2;
+     hence x = y by Z,ZFMISC_1:def 10;
+    end;
+   assume
+Z:  for x,y being Element of X holds x = y;
+   let x,y be set;
+    assume x in X & y in X;
+     then x is Element of X & y is Element of X by Def2;
+    hence thesis by Z;
+  end;
+end;
+
+registration let X be non empty set;
+ cluster non empty trivial for Subset of X;
+ existence
+  proof
+    the Element of X in X by Def2;
+    then {the Element of X} c= X by ZFMISC_1:31;
+    then {the Element of X} in bool X by ZFMISC_1:def 1;
+    then reconsider A = {the Element of X} as Subset of X by Def2;
+   take A;
+   thus A is non empty;
+   let x,y be set;
+   assume x in A & y in A;
+    then x = the Element of X & y = the Element of X by TARSKI:def 1;
+   hence thesis;
+  end;
+end;
+
+registration
+  let X be trivial set;
+  cluster -> trivial for Subset of X;
+  coherence
+  proof
+    let Y be Subset of X;
+    let x,y be set;
+    assume x in Y & y in Y;
+     then x in X & y in X by Lm1;
+    hence thesis by ZFMISC_1:def 10;
+  end;
+end;
+
+registration
+  let X be non trivial set;
+  cluster non trivial for Subset of X;
+  existence
+  proof
+    take [#]X;
+    thus thesis;
+  end;
+end;
+
+theorem
+  for D being set, A being Subset of D st A is non trivial
+    ex d1,d2 being Element of D st d1 in A & d2 in A & d1 <> d2
+proof
+  let D be set, A be Subset of D;
+   assume A is non trivial;
+    then consider d1,d2 being set such that
+A1: d1 in A & d2 in A and
+A2: d1 <> d2 by ZFMISC_1:def 10;
+    d1 in D & d2 in D by A1,Lm1;
+    then reconsider d1,d2 as Element of D by Def2;
+   take d1,d2;
+   thus d1 in A & d2 in A & d1 <> d2 by A1,A2;
+end;
+
+theorem
+ for X being trivial non empty set
+  ex x being Element of X st X = {x}
+proof let X be trivial non empty set;
+  consider x being set such that
+W:  X = {x} by ZFMISC_1:131;
+  x in X by W,TARSKI:def 1;
+  then reconsider x as Element of X by Def2;
+ take x;
+ thus X = {x} by W;
 end;

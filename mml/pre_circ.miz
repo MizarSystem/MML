@@ -20,9 +20,8 @@ environ
       TREES_3, TREES_2, ORDINAL4, TREES_A, XXREAL_0, TREES_4, ARYTM_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, XCMPLX_0, XREAL_0,
       MCART_1, CARD_1, RELAT_1, FUNCT_1, FINSET_1, PARTFUN1, FUNCT_2, XXREAL_0,
-      XXREAL_2, BINOP_1, FUNCOP_1, FUNCT_4, FUNCT_7,
-      CARD_3, TREES_2, TREES_1, TREES_3,
-      TREES_4, FUNCT_5, FUNCT_6, PBOOLE, FINSEQ_1, FINSEQ_2, NAT_1;
+      XXREAL_2, BINOP_1, FUNCOP_1, FUNCT_4, FUNCT_7, CARD_3, TREES_2, TREES_1,
+      TREES_3, TREES_4, FUNCT_5, FUNCT_6, PBOOLE, FINSEQ_1, FINSEQ_2, NAT_1;
  constructors WELLORD2, BINOP_1, FUNCT_4, SETWISEO, XXREAL_0, NAT_1, FUNCT_5,
       CARD_3, SEQ_4, PBOOLE, TREES_4, BINARITH, INT_1, SEQ_1, XXREAL_2,
       PARTFUN1, RELSET_1, FUNCT_7;
@@ -36,7 +35,7 @@ environ
       FUNCT_4, FUNCT_5, TREES_1, TREES_2, TREES_3, TREES_4, NAT_1, RELAT_1,
       CARD_3, FUNCOP_1, MCART_1, PBOOLE, CARD_2, CARD_1, FUNCT_6, FINSET_1,
       XBOOLE_0, XBOOLE_1, XCMPLX_1, ORDERS_1, XREAL_1, XXREAL_0, XXREAL_2,
-      XREAL_0, PARTFUN1, FUNCT_7;
+      XREAL_0, PARTFUN1, FUNCT_7, FINSEQ_2;
  schemes DOMAIN_1, PBOOLE, FUNCT_1, FRAENKEL, FINSEQ_1, NAT_1;
 
 begin
@@ -57,16 +56,14 @@ A2: A() is finite;
   hence thesis by A1;
 end;
 
-canceled;
-
 theorem
   for f being Function, x, y being set st dom f = {x} & rng f = {y}
   holds f = { [x,y] }
 proof
   let f be Function, x, y be set;
   assume dom f = {x} & rng f = {y};
-  then f = {x} --> y by FUNCOP_1:15;
-  hence thesis by ZFMISC_1:35;
+  then f = {x} --> y by FUNCOP_1:9;
+  hence thesis by ZFMISC_1:29;
 end;
 
 begin
@@ -75,15 +72,13 @@ begin
 :: Many Sorted Sets and Functions
 ::---------------------------------------------------------------------------
 
-canceled 2;
-
 theorem
   for I being set, MSS being ManySortedSet of I holds MSS#.<*>I = {{}}
 proof
   let I be set, MSS be ManySortedSet of I;
-  reconsider eI = <*>I as Element of I* by FINSEQ_1:66;
-  thus MSS#.<*>I = product (MSS*eI) by PBOOLE:def 19
-    .= {{}} by CARD_3:19;
+  reconsider eI = <*>I as Element of I* by FINSEQ_1:49;
+  thus MSS#.<*>I = product (MSS*eI) by FINSEQ_2:def 5
+    .= {{}} by CARD_3:10;
 end;
 
 reserve i,j,x,y for set,
@@ -121,7 +116,7 @@ end;
 
 registration
   let I be set;
-  cluster non-empty finite-yielding ManySortedSet of I;
+  cluster non-empty finite-yielding for ManySortedSet of I;
   existence
   proof
     reconsider f = I --> {{}} as Function;
@@ -132,20 +127,20 @@ registration
     proof
       let i be set;
       assume i in I;
-      hence thesis by FUNCOP_1:13;
+      hence thesis by FUNCOP_1:7;
     end;
   end;
 end;
 
 registration
   let I be set, M be ManySortedSet of I, A be Subset of I;
-  cluster M | A -> total (A-defined Function);
+  cluster M | A -> total for A-defined Function;
   coherence
   proof
     set B = M | A;
-    dom B = dom M /\ A & dom M = I by PARTFUN1:def 4,RELAT_1:90;
+    dom B = dom M /\ A & dom M = I by PARTFUN1:def 2,RELAT_1:61;
     then dom B = A by XBOOLE_1:28;
-    hence thesis by PARTFUN1:def 4;
+    hence thesis by PARTFUN1:def 2;
   end;
 end;
 
@@ -160,7 +155,7 @@ registration
   cluster M | A -> non-empty;
   coherence
   proof
-    rng(M|A) c= rng M by RELAT_1:99;
+    rng(M|A) c= rng M by RELAT_1:70;
     hence not {} in rng(M|A) by RELAT_1:def 9;
   end;
 end;
@@ -170,11 +165,11 @@ theorem Th6:
   holds union rng B is non empty
 proof
   let I be non empty set, B be non-empty ManySortedSet of I;
-  set i =the  Element of I;
+  set i = the Element of I;
   i in I;
-  then i in dom B by PARTFUN1:def 4;
-  then B.i in rng B by FUNCT_1:def 5;
-  hence thesis by ORDERS_1:91;
+  then i in dom B by PARTFUN1:def 2;
+  then B.i in rng B by FUNCT_1:def 3;
+  hence thesis by ORDERS_1:6;
 end;
 
 theorem Th7:
@@ -184,29 +179,27 @@ proof
   per cases;
   suppose
     I = {};
-    hence thesis by FUNCT_5:50;
+    hence thesis by FUNCT_5:43;
   end;
   suppose
     I <> {};
-    then rng (I --> {}) = {{}} by FUNCOP_1:14
-      .= Funcs({} qua set, {} qua set) by FUNCT_5:64;
-    then dom uncurry (I --> {}) = [:dom (I --> {}), {}:] by FUNCT_5:33
-      .= {} by ZFMISC_1:113;
+    then rng (I --> {}) = {{}} by FUNCOP_1:8
+      .= Funcs({} qua set, {} qua set) by FUNCT_5:57;
+    then dom uncurry (I --> {}) = [:dom (I --> {}), {}:] by FUNCT_5:26
+      .= {} by ZFMISC_1:90;
     hence thesis;
   end;
 end;
 
-
-
 theorem
   for I being non empty set, A being set, B being non-empty
-ManySortedSet of I, F being ManySortedFunction of (I --> A qua total(I-defined
-  Function)), B holds dom commute F = A
+ManySortedSet of I, F being ManySortedFunction of (I --> A qua total I-defined
+  Function), B holds dom commute F = A
 proof
   let I be non empty set, A be set, B be non-empty ManySortedSet of I, F be
   ManySortedFunction of (I --> A), B;
-A1: dom B = I by PARTFUN1:def 4;
-A2: dom F = I by PARTFUN1:def 4;
+A1: dom B = I by PARTFUN1:def 2;
+A2: dom F = I by PARTFUN1:def 2;
   per cases;
   suppose
 A3: A is empty;
@@ -215,17 +208,17 @@ A3: A is empty;
       let x be set;
       assume x in rng F;
       then consider i being set such that
-A4:   i in I & x = F.i by A2,FUNCT_1:def 5;
-      (I -->A).i = A & x is Function of (I -->A).i, B.i by A4,FUNCOP_1:13
-,PBOOLE:def 18;
+A4:   i in I & x = F.i by A2,FUNCT_1:def 3;
+      (I -->A).i = A & x is Function of (I -->A).i, B.i by A4,FUNCOP_1:7
+,PBOOLE:def 15;
       then x = {} by A3;
       hence thesis by TARSKI:def 1;
     end;
-    then rng F = {{}} by ZFMISC_1:39;
+    then rng F = {{}} by ZFMISC_1:33;
     then
-A5: F = I --> {} by A2,FUNCOP_1:15;
-    commute F = curry' uncurry F by FUNCT_6:def 12
-      .= {} by A5,Th7,FUNCT_5:49;
+A5: F = I --> {} by A2,FUNCOP_1:9;
+    commute F = curry' uncurry F by FUNCT_6:def 10
+      .= {} by A5,Th7,FUNCT_5:42;
     hence thesis by A3;
   end;
   suppose
@@ -236,22 +229,22 @@ A6: A is non empty;
       assume x in rng F;
       then consider i being set such that
 A7:   i in dom F and
-A8:   x = F.i by FUNCT_1:def 5;
-      (I -->A).i = A by A2,A7,FUNCOP_1:13;
-      then reconsider x9 = x as Function of A, B.i by A2,A7,A8,PBOOLE:def 18;
-      B.i in rng B by A1,A2,A7,FUNCT_1:def 5;
-      then rng x9 c= B.i & B.i c= union rng B by RELAT_1:def 19,ZFMISC_1:92;
+A8:   x = F.i by FUNCT_1:def 3;
+      (I -->A).i = A by A2,A7,FUNCOP_1:7;
+      then reconsider x9 = x as Function of A, B.i by A2,A7,A8,PBOOLE:def 15;
+      B.i in rng B by A1,A2,A7,FUNCT_1:def 3;
+      then rng x9 c= B.i & B.i c= union rng B by RELAT_1:def 19,ZFMISC_1:74;
       then
 A9:   rng x9 c= union rng B by XBOOLE_1:1;
       dom x9 = A by A2,A7,FUNCT_2:def 1;
       hence thesis by A9,FUNCT_2:def 2;
     end;
     then F in Funcs (I, Funcs(A, union rng B)) by A2,FUNCT_2:def 2;
-    then commute F in Funcs (A, Funcs(I, union rng B)) by A6,FUNCT_6:85;
+    then commute F in Funcs (A, Funcs(I, union rng B)) by A6,FUNCT_6:55;
     then
-A10: commute F is Function of A, Funcs(I, union rng B) by FUNCT_2:121;
+A10: commute F is Function of A, Funcs(I, union rng B) by FUNCT_2:66;
     union rng B is non empty by Th6;
-    then Funcs (I, union rng B) is non empty by FUNCT_2:11;
+    then Funcs (I, union rng B) is non empty by FUNCT_2:8;
     hence thesis by A10,FUNCT_2:def 1;
   end;
 end;
@@ -287,7 +280,7 @@ A2: for i st i in I() holds f.i = F(i) from PBOOLE:sch 4;
     let i;
     assume i in dom f;
     then
-A3: i in I() by PARTFUN1:def 4;
+A3: i in I() by PARTFUN1:def 2;
     then F(i) is Function by A1;
     hence thesis by A2,A3;
   end;
@@ -322,20 +315,20 @@ A4: x in dom f;
     per cases;
     suppose
 A5:   x in dom g;
-      then (s+*g).x = g.x by FUNCT_4:14;
+      then (s+*g).x = g.x by FUNCT_4:13;
       hence (s+*g).x in f.x by A2,A5;
     end;
     suppose
 A6:   not x in dom g;
 A7:   ex g9 being Function st s = g9 & dom g9 = dom f & for x being set
       st x in dom f holds g9.x in f.x by CARD_3:def 5;
-      (s+*g).x = s.x by A6,FUNCT_4:12;
+      (s+*g).x = s.x by A6,FUNCT_4:11;
       hence (s+*g).x in f.x by A4,A7;
     end;
   end;
-  dom (s+*g) = dom s \/ dom g & dom s = dom f by CARD_3:18,FUNCT_4:def 1;
+  dom (s+*g) = dom s \/ dom g & dom s = dom f by CARD_3:9,FUNCT_4:def 1;
   then dom (s+*g) = dom f by A1,XBOOLE_1:12;
-  hence thesis by A3,CARD_3:18;
+  hence thesis by A3,CARD_3:9;
 end;
 
 theorem
@@ -345,7 +338,7 @@ theorem
 proof
   let A, B be non empty set, C be non-empty ManySortedSet of A, InpFs be
   ManySortedFunction of A --> B, C, b be Element of B;
-A1: dom InpFs = A by PARTFUN1:def 4;
+A1: dom InpFs = A by PARTFUN1:def 2;
   dom(uncurry InpFs) = [:A,B:]
   proof
     thus dom(uncurry InpFs) c= [:A,B:]
@@ -356,11 +349,11 @@ A1: dom InpFs = A by PARTFUN1:def 4;
 A2:   i = [x,y] and
 A3:   x in dom InpFs and
 A4:   g = InpFs.x and
-A5:   y in dom g by FUNCT_5:def 4;
-      g is Function of (A-->B).x, C.x by A1,A3,A4,PBOOLE:def 18;
+A5:   y in dom g by FUNCT_5:def 2;
+      g is Function of (A-->B).x, C.x by A1,A3,A4,PBOOLE:def 15;
       then dom g = (A-->B).x by A1,A3,FUNCT_2:def 1;
-      then dom g = B by A1,A3,FUNCOP_1:13;
-      hence thesis by A1,A2,A3,A5,ZFMISC_1:106;
+      then dom g = B by A1,A3,FUNCOP_1:7;
+      hence thesis by A1,A2,A3,A5,ZFMISC_1:87;
     end;
     let i1,i2 be set;
     reconsider g = InpFs.[i1,i2]`1 as Function;
@@ -369,19 +362,19 @@ A6: [i1,i2] in [:A,B:];
     then
 A7: [i1,i2]`1 in dom InpFs by A1,MCART_1:10;
     g is Function of (A-->B).[i1,i2]`1, C.[i1,i2]`1 by A6,MCART_1:10
-,PBOOLE:def 18;
+,PBOOLE:def 15;
     then dom g = (A-->B).[i1,i2]`1 by A1,A7,FUNCT_2:def 1;
-    then dom g = B by A6,FUNCOP_1:13,MCART_1:10;
+    then dom g = B by A6,FUNCOP_1:7,MCART_1:10;
     then
 A8: [i1,i2]`2 in dom g by A6,MCART_1:10;
-    [i1,i2] = [[i1,i2]`1,[i1,i2]`2] by A6,MCART_1:23;
-    hence thesis by A7,A8,FUNCT_5:45;
+    [i1,i2] = [[i1,i2]`1,[i1,i2]`2] by A6,MCART_1:21;
+    hence thesis by A7,A8,FUNCT_5:38;
   end;
   then
 A9: commute InpFs = curry' uncurry InpFs & ex g being Function st (curry'
 uncurry InpFs).b = g & dom g = A & rng g c= rng uncurry InpFs & for i st i in A
-  holds g.i = (uncurry InpFs).(i,b) by FUNCT_5:39,FUNCT_6:def 12;
-  then reconsider c = (commute InpFs).b as ManySortedSet of A by PARTFUN1:def 4
+  holds g.i = (uncurry InpFs).(i,b) by FUNCT_5:32,FUNCT_6:def 10;
+  then reconsider c = (commute InpFs).b as ManySortedSet of A by PARTFUN1:def 2
 ,RELAT_1:def 18;
   take c;
   thus c = (commute InpFs).b;
@@ -389,17 +382,15 @@ uncurry InpFs).b = g & dom g = A & rng g c= rng uncurry InpFs & for i st i in A
   reconsider h = InpFs.i as Function;
   assume
 A10: i in A;
-  then (A-->B).i = B by FUNCOP_1:13;
+  then (A-->B).i = B by FUNCOP_1:7;
   then
-A11: h is Function of B, C.i by A10,PBOOLE:def 18;
+A11: h is Function of B, C.i by A10,PBOOLE:def 15;
   then
 A12: dom h = B by A10,FUNCT_2:def 1;
   c.i = (uncurry InpFs).(i,b) by A9,A10
-    .= h.b by A1,A10,A12,FUNCT_5:45;
-  hence thesis by A10,A11,FUNCT_2:7;
+    .= h.b by A1,A10,A12,FUNCT_5:38;
+  hence thesis by A10,A11,FUNCT_2:5;
 end;
-
-canceled;
 
 theorem
   for n being Element of NAT, a being set holds product ( n |-> {a} ) =
@@ -415,16 +406,16 @@ A1:   i = g and
 A2:   dom g = dom( n |-> {a} ) and
 A3:   for x st x in dom( n |-> {a} ) holds g.x in ( n |-> {a} ).x by
 CARD_3:def 5;
-A4:   dom g = Seg n by A2,FUNCOP_1:19;
+A4:   dom g = Seg n by A2,FUNCOP_1:13;
       now
         let x;
         assume
 A5:     x in dom g;
         then g.x in ( n |-> {a} ).x by A2,A3;
-        then g.x in {a} by A4,A5,FUNCOP_1:13;
+        then g.x in {a} by A4,A5,FUNCOP_1:7;
         hence g.x = a by TARSKI:def 1;
       end;
-      hence i = n |-> a by A1,A4,FUNCOP_1:17;
+      hence i = n |-> a by A1,A4,FUNCOP_1:11;
     end;
     assume
 A6: i = n |-> a;
@@ -432,13 +423,13 @@ A6: i = n |-> a;
 A7: now
       let x;
       assume x in dom( n |-> {a} );
-      then x in Seg n by FUNCOP_1:19;
-      then g.x = a & ( n |-> {a} ).x = {a} by A6,FUNCOP_1:13;
+      then x in Seg n by FUNCOP_1:13;
+      then g.x = a & ( n |-> {a} ).x = {a} by A6,FUNCOP_1:7;
       hence g.x in ( n |-> {a} ).x by TARSKI:def 1;
     end;
-    dom g = Seg n by A6,FUNCOP_1:19
-      .= dom( n |-> {a} ) by FUNCOP_1:19;
-    hence i in product ( n |-> {a} ) by A7,CARD_3:18;
+    dom g = Seg n by A6,FUNCOP_1:13
+      .= dom( n |-> {a} ) by FUNCOP_1:13;
+    hence i in product ( n |-> {a} ) by A7,CARD_3:9;
   end;
   hence thesis by TARSKI:def 1;
 end;
@@ -455,12 +446,12 @@ reserve T,T1 for finite Tree,
 
 registration
   let D be non empty set;
-  cluster -> finite Element of FinTrees D;
+  cluster -> finite for Element of FinTrees D;
   coherence
   proof
     let t be Element of FinTrees D;
     dom t is finite;
-    hence thesis by FINSET_1:29;
+    hence thesis by FINSET_1:10;
   end;
 end;
 
@@ -470,8 +461,8 @@ registration
   cluster T|t -> finite;
   coherence
   proof
-    dom(T|t) = (dom T)|t by TREES_2:def 11;
-    hence thesis by FINSET_1:29;
+    dom(T|t) = (dom T)|t by TREES_2:def 10;
+    hence thesis by FINSET_1:10;
   end;
 end;
 
@@ -492,7 +483,7 @@ A4: f.x = f.y;
     reconsider m = x, n = y as Element of T|p by A1,A3;
     p^m = f.n by A2,A4
       .= p^n by A2;
-    hence thesis by FINSEQ_1:46;
+    hence thesis by FINSEQ_1:33;
   end;
   thus dom f = T|p by A1;
   thus rng f c= X
@@ -501,10 +492,10 @@ A4: f.x = f.y;
     assume i in rng f;
     then consider n being set such that
 A5: n in dom f and
-A6: i = f.n by FUNCT_1:def 5;
+A6: i = f.n by FUNCT_1:def 3;
     reconsider n as Element of T|p by A1,A5;
-    reconsider t = p^n as Element of T by TREES_1:def 9;
-    f.n = p^n & p is_a_prefix_of t by A2,TREES_1:8;
+    reconsider t = p^n as Element of T by TREES_1:def 6;
+    f.n = p^n & p is_a_prefix_of t by A2,TREES_1:1;
     hence thesis by A6;
   end;
   let i;
@@ -512,11 +503,11 @@ A6: i = f.n by FUNCT_1:def 5;
   then
 A7: ex t being Element of T st i = t & p is_a_prefix_of t;
   then consider n being FinSequence such that
-A8: i = p^n by TREES_1:8;
-  n is FinSequence of NAT by A7,A8,FINSEQ_1:50;
-  then reconsider n as Element of T|p by A7,A8,TREES_1:def 9;
+A8: i = p^n by TREES_1:1;
+  n is FinSequence of NAT by A7,A8,FINSEQ_1:36;
+  then reconsider n as Element of T|p by A7,A8,TREES_1:def 6;
   i = f.n by A2,A8;
-  hence thesis by A1,FUNCT_1:def 5;
+  hence thesis by A1,FUNCT_1:def 3;
 end;
 
 registration
@@ -527,8 +518,8 @@ registration
   coherence
   proof
     dom (T with-replacement (t,T1)) = dom T with-replacement (t,dom T1) by
-TREES_2:def 12;
-    hence thesis by FINSET_1:29;
+TREES_2:def 11;
+    hence thesis by FINSET_1:10;
   end;
 end;
 
@@ -561,14 +552,14 @@ A4: t = p or not p is_a_prefix_of t;
   end;
   then
 A5: A = C \/ {p} by XBOOLE_0:def 3;
-  {} is Element of T1 & p^{} = p by FINSEQ_1:47,TREES_1:47;
+  {} is Element of T1 & p^{} = p by FINSEQ_1:34,TREES_1:22;
   then
 A6: p in D;
 A7: for t1 holds P1[t1] iff P2[t1];
   B = D from FRAENKEL:sch 3(A7);
-  hence T with-replacement (p,T1) = C \/ {p} \/ D by A5,TREES_1:64
+  hence T with-replacement (p,T1) = C \/ {p} \/ D by A5,TREES_1:32
     .= C \/ ({p} \/ D) by XBOOLE_1:4
-    .= C \/ D by A6,ZFMISC_1:46;
+    .= C \/ D by A6,ZFMISC_1:40;
 end;
 
 theorem Th15:
@@ -596,9 +587,9 @@ theorem Th16:
 proof
   let p be Tree-yielding FinSequence, k be Element of NAT;
   assume k+1 in dom p;
-  then k+1 <= len p by FINSEQ_3:27;
+  then k+1 <= len p by FINSEQ_3:25;
   then k < len p by NAT_1:13;
-  hence thesis by TREES_3:52;
+  hence thesis by TREES_3:49;
 end;
 
 theorem
@@ -606,19 +597,19 @@ theorem
   in dom q holds <*k*> in tree doms q
 proof
   let q be DTree-yielding FinSequence, k be Element of NAT;
-A1: k < k+1 by XREAL_1:31;
+A1: k < k+1 by XREAL_1:29;
 A2: dom q = Seg len q & Seg len doms q = dom doms q by FINSEQ_1:def 3;
   assume
 A3: k+1 in dom q;
-  then k+1 <= len q by FINSEQ_3:27;
+  then k+1 <= len q by FINSEQ_3:25;
   then k < len q by A1,XXREAL_0:2;
   then
-A4: k < len doms q by A2,FINSEQ_1:8,TREES_3:39;
-  dom doms q = dom q by TREES_3:39;
-  then (doms q).(k+1) is Tree by A3,TREES_3:24;
+A4: k < len doms q by A2,FINSEQ_1:6,TREES_3:37;
+  dom doms q = dom q by TREES_3:37;
+  then (doms q).(k+1) is Tree by A3,TREES_3:22;
   then
-A5: {} in (doms q).(k+1) by TREES_1:47;
-  <*k*> = <*k*>^{} by FINSEQ_1:47;
+A5: {} in (doms q).(k+1) by TREES_1:22;
+  <*k*> = <*k*>^{} by FINSEQ_1:34;
   hence thesis by A5,A4,TREES_3:def 15;
 end;
 
@@ -634,7 +625,7 @@ A2: k+1 in dom p and
 A3: for i being Element of NAT st i in dom p & i <> k+1 holds p.i = q.i;
   let t be Tree;
   set o = <*k*>;
-  k+1 <= len p by A2,FINSEQ_3:27;
+  k+1 <= len p by A2,FINSEQ_3:25;
   then
 A4: k < len p by NAT_1:13;
   assume
@@ -648,7 +639,7 @@ A7:   s in tree(q);
       suppose
         s = {};
         hence s in tree(p) & not o is_a_proper_prefix_of s or ex r being
-        FinSequence of NAT st r in t & s = o^r by TREES_1:47,XBOOLE_1:115;
+        FinSequence of NAT st r in t & s = o^r by TREES_1:22,XBOOLE_1:115;
       end;
       suppose
         ex n being Element of NAT, r being FinSequence st n < len q &
@@ -661,21 +652,21 @@ A10:    s = <*n*>^r;
           per cases;
           case
 A11:        n = k;
-            reconsider r as FinSequence of NAT by A10,FINSEQ_1:50;
+            reconsider r as FinSequence of NAT by A10,FINSEQ_1:36;
             take r;
             thus r in t & s = o^r by A5,A9,A10,A11;
           end;
           case
 A12:        n <> k;
             1 <= n+1 & n+1 <= len p by A1,A8,NAT_1:11,13;
-            then n+1 in dom p by FINSEQ_3:27;
+            then n+1 in dom p by FINSEQ_3:25;
             then q.(n+1) = p.(n+1) by A3,A12,XCMPLX_1:2;
             hence s in tree(p) by A1,A8,A9,A10,TREES_3:def 15;
             assume o is_a_proper_prefix_of s;
             then o is_a_prefix_of s by XBOOLE_0:def 8;
-            then ex s1 being FinSequence st s = o^s1 by TREES_1:8;
-            then k = s.1 by FINSEQ_1:58
-              .= n by A10,FINSEQ_1:58;
+            then ex s1 being FinSequence st s = o^s1 by TREES_1:1;
+            then k = s.1 by FINSEQ_1:41
+              .= n by A10,FINSEQ_1:41;
             hence contradiction by A12;
           end;
         end;
@@ -694,7 +685,7 @@ A15:  not o is_a_proper_prefix_of s;
         per cases by A14,TREES_3:def 15;
         suppose
           s = {};
-          hence s in tree(q) by TREES_1:47;
+          hence s in tree(q) by TREES_1:22;
         end;
         suppose
           ex n being Element of NAT, r being FinSequence st n < len p
@@ -708,21 +699,21 @@ A18:      s = <*n*>^r;
             suppose
 A19:          r = {};
               1 <= n+1 & n+1 <= len q by A1,A16,NAT_1:11,13;
-              then n+1 in dom q by FINSEQ_3:27;
-              then q.(n+1) is Tree by TREES_3:24;
-              then r in q.(n+1) by A19,TREES_1:47;
+              then n+1 in dom q by FINSEQ_3:25;
+              then q.(n+1) is Tree by TREES_3:22;
+              then r in q.(n+1) by A19,TREES_1:22;
               hence s in tree(q) by A1,A16,A18,TREES_3:def 15;
             end;
             suppose
 A20:          r <> {};
 A21:          now
                 assume n = k;
-                then o is_a_prefix_of s & not s = o by A18,A20,FINSEQ_1:108
-,TREES_1:8;
+                then o is_a_prefix_of s & not s = o by A18,A20,FINSEQ_1:87
+,TREES_1:1;
                 hence contradiction by A15,XBOOLE_0:def 8;
               end;
               1 <= n+1 & n+1 <= len p by A16,NAT_1:11,13;
-              then n+1 in dom p by FINSEQ_3:27;
+              then n+1 in dom p by FINSEQ_3:25;
               then q.(n+1) = p.(n+1) by A3,A21,XCMPLX_1:2;
               hence s in tree(q) by A1,A16,A17,A18,TREES_3:def 15;
             end;
@@ -737,12 +728,12 @@ A21:          now
       hence s in tree(q) by A1,A4,A5,TREES_3:def 15;
     end;
   end;
-  p.(k+1) is Tree by A2,TREES_3:24;
+  p.(k+1) is Tree by A2,TREES_3:22;
   then
-A22: {} in p.(k+1) by TREES_1:47;
-  o = o^{} by FINSEQ_1:47;
+A22: {} in p.(k+1) by TREES_1:22;
+  o = o^{} by FINSEQ_1:34;
   then o in tree(p) by A4,A22,TREES_3:def 15;
-  hence thesis by A6,TREES_1:def 12;
+  hence thesis by A6,TREES_1:def 9;
 end;
 
 theorem
@@ -764,14 +755,14 @@ A4: <*k*> = <*j*>^w by A1,A2,TREES_4:11;
   consider pp being DTree-yielding FinSequence such that
 A5: p = pp and
 A6: dom(x-tree p) = tree doms pp by TREES_4:def 4;
-A7: dom doms pp = dom p by A5,TREES_3:39;
+A7: dom doms pp = dom p by A5,TREES_3:37;
   deffunc F(Nat) = IFEQ($1,k+1,e2,p.$1);
   set o = <*k*>;
   consider q being FinSequence such that
 A8: len q = len p and
 A9: for i being Nat st i in dom q holds q.i = F(i) from FINSEQ_1:sch 2;
 A10: dom q = Seg len p by A8,FINSEQ_1:def 3;
-A11: dom q = dom p by A8,FINSEQ_3:31;
+A11: dom q = dom p by A8,FINSEQ_3:29;
   now
     let x;
     assume
@@ -780,14 +771,14 @@ A12: x in dom q;
 A13: i = k+1 or i <> k+1;
     q.i = IFEQ(i,k+1,e2,p.i) by A9,A12;
     then q.i = e2 or q.i = p.i by A13,FUNCOP_1:def 8;
-    hence q.x is DecoratedTree by A11,A12,TREES_3:26;
+    hence q.x is DecoratedTree by A11,A12,TREES_3:24;
   end;
-  then reconsider q as DTree-yielding FinSequence by TREES_3:26;
+  then reconsider q as DTree-yielding FinSequence by TREES_3:24;
   consider qq being DTree-yielding FinSequence such that
 A14: q = qq and
 A15: dom(x-tree q) = tree doms qq by TREES_4:def 4;
-A16: len doms pp = len p by A5,TREES_3:40
-    .= len doms qq by A8,A14,TREES_3:40;
+A16: len doms pp = len p by A5,TREES_3:38
+    .= len doms qq by A8,A14,TREES_3:38;
 A17: dom p = Seg len p by FINSEQ_1:def 3;
 A18: now
     let i be Element of NAT;
@@ -796,24 +787,24 @@ A19: i in dom doms pp and
 A20: i <> k+1;
 A21: q.i = IFEQ(i,k+1,e2,p.i) by A9,A10,A17,A7,A19
       .= p.i by A20,FUNCOP_1:def 8;
-    reconsider pii = p.i as DecoratedTree by A7,A19,TREES_3:26;
-    thus (doms pp).i = dom pii by A5,A7,A19,FUNCT_6:31
-      .= (doms qq).i by A11,A14,A7,A19,A21,FUNCT_6:31;
+    reconsider pii = p.i as DecoratedTree by A7,A19,TREES_3:24;
+    thus (doms pp).i = dom pii by A5,A7,A19,FUNCT_6:22
+      .= (doms qq).i by A11,A14,A7,A19,A21,FUNCT_6:22;
   end;
   reconsider dqq = doms qq as Tree-yielding FinSequence;
   take q;
-  <*j*> = <*k*> by A4,FINSEQ_1:109;
+  <*j*> = <*k*> by A4,FINSEQ_1:88;
   then
 A22: j = <*k*>.1 by FINSEQ_1:def 8
     .= k by FINSEQ_1:def 8;
   then 1 <= k+1 & k+1 <= len p by A3,NAT_1:11,13;
   then
-A23: k+1 in dom p by FINSEQ_3:27;
+A23: k+1 in dom p by FINSEQ_3:25;
   then k+1 in Seg len p by FINSEQ_1:def 3;
   then
 A24: q.(k+1) = IFEQ(k+1,k+1,e2,p.(k+1)) by A9,A10
     .= e2 by FUNCOP_1:def 8;
-  then (doms qq).(k+1) = dom e2 by A11,A23,A14,FUNCT_6:31;
+  then (doms qq).(k+1) = dom e2 by A11,A23,A14,FUNCT_6:22;
   then
 A25: dom(x-tree q) = dom e1 with-replacement (o, dom e2) by A2,A23,A15,A6,A16
 ,A7,A18,Th18;
@@ -843,30 +834,30 @@ A29:      f = {};
 A30:      w < len(doms q) and
 A31:      u in (doms q).(w+1) and
 A32:      f = <*w*>^u by A14;
-          reconsider u as FinSequence of NAT by A32,FINSEQ_1:50;
+          reconsider u as FinSequence of NAT by A32,FINSEQ_1:36;
           reconsider ww = <*w*> as FinSequence of NAT;
-A33:      w+1 <> k+1 by A27,A32,TREES_1:8;
+A33:      w+1 <> k+1 by A27,A32,TREES_1:1;
 A34:      ex pp being DTree-yielding FinSequence st p = pp & dom(x -tree p
           ) = tree doms pp by TREES_4:def 4;
-A35:      w < len q by A30,TREES_3:40;
+A35:      w < len q by A30,TREES_3:38;
           then
 A36:      (x-tree q)|<*w*> = q.(w+1) by TREES_4:def 4;
           1 <= w+1 & w+1 <= len p by A8,A35,NAT_1:11,13;
           then
-A37:      w+1 in dom p by FINSEQ_3:27;
-          then reconsider pw1 = p.(w+1) as DecoratedTree by TREES_3:26;
+A37:      w+1 in dom p by FINSEQ_3:25;
+          then reconsider pw1 = p.(w+1) as DecoratedTree by TREES_3:24;
 A38:      q.(w+1) = IFEQ(w+1,k+1,e2,p.(w+1)) by A9,A10,A17,A37
             .= p.(w+1) by A33,FUNCOP_1:def 8;
-          w+1 in dom doms p by A37,TREES_3:39;
+          w+1 in dom doms p by A37,TREES_3:37;
           then
 A39:      (dom(x-tree p))|<*w*> = (doms p).(w+1) by A34,Th16
-            .= dom pw1 by A37,FUNCT_6:31
-            .= (doms q).(w+1) by A11,A37,A38,FUNCT_6:31;
-          w+1 in dom doms q by A11,A37,TREES_3:39;
+            .= dom pw1 by A37,FUNCT_6:22
+            .= (doms q).(w+1) by A11,A37,A38,FUNCT_6:22;
+          w+1 in dom doms q by A11,A37,TREES_3:37;
           then (dom(x-tree q))|<*w*> = (doms q).(w+1) by A14,A15,Th16;
-          hence (x-tree q).f = ((x-tree q)|ww).u by A31,A32,TREES_2:def 11
+          hence (x-tree q).f = ((x-tree q)|ww).u by A31,A32,TREES_2:def 10
             .= ((x-tree p)|ww).u by A8,A35,A36,A38,TREES_4:def 4
-            .= e1.f by A2,A31,A32,A39,TREES_2:def 11;
+            .= e1.f by A2,A31,A32,A39,TREES_2:def 10;
         end;
       end;
       assume o is_a_prefix_of f or (x-tree q).f <> e1.f;
@@ -883,11 +874,11 @@ A41:  (x-tree q)|o = q.(k+1) by A8,A3,A22,TREES_4:def 4;
       thus
 A42:  r in dom e2;
       thus f = o^r by A40;
-      r in (dom(x-tree q))|o by A1,A25,A42,TREES_1:66;
-      hence thesis by A24,A40,A41,TREES_2:def 11;
+      r in (dom(x-tree q))|o by A1,A25,A42,TREES_1:33;
+      hence thesis by A24,A40,A41,TREES_2:def 10;
     end;
   end;
-  hence e1 with-replacement (o,e2) = x-tree q by A1,A25,TREES_2:def 12;
+  hence e1 with-replacement (o,e2) = x-tree q by A1,A25,TREES_2:def 11;
   thus len q = len p by A8;
   thus q.(k+1) = e2 by A24;
   let i be Element of NAT;
@@ -918,7 +909,7 @@ A5:   f.x = f.y;
       reconsider m = x, n = y as Element of T|p by A2,A4;
       p9^m = f.n by A3,A5
         .= p9^n by A3;
-      hence thesis by FINSEQ_1:46;
+      hence thesis by FINSEQ_1:33;
     end;
     thus dom f = T|p by A2;
     thus rng f c= X
@@ -927,8 +918,8 @@ A5:   f.x = f.y;
       assume i in rng f;
       then consider n being set such that
 A6:   n in dom f and
-A7:   i = f.n by FUNCT_1:def 5;
-      T|p c= NAT* by TREES_1:def 5;
+A7:   i = f.n by FUNCT_1:def 3;
+      T|p c= NAT* by TREES_1:def 3;
       then reconsider n as Element of NAT* by A2,A6;
       f.n = p9^n by A2,A3,A6;
       hence thesis by A2,A6,A7;
@@ -940,16 +931,16 @@ A8: i = p9^n and
 A9: n in T|p;
     reconsider n as Element of T|p by A9;
     i = f.n by A3,A8;
-    hence thesis by A2,FUNCT_1:def 5;
+    hence thesis by A2,FUNCT_1:def 3;
   end;
-  then reconsider X as finite set by CARD_1:68;
-A10: card X = card(T|p) by A1,CARD_1:21;
+  then reconsider X as finite set by CARD_1:38;
+A10: card X = card(T|p) by A1,CARD_1:5;
   assume
 A11: p <> {};
 A12: X <> T
   proof
     assume X = T;
-    then {} in X by TREES_1:47;
+    then {} in X by TREES_1:22;
     then ex n being Element of NAT* st {} = p9^n & n in T|p;
     hence contradiction by A11;
   end;
@@ -958,13 +949,11 @@ A12: X <> T
     let i;
     assume i in X;
     then ex n being Element of NAT* st i = p9^n & n in T|p;
-    hence thesis by TREES_1:def 9;
+    hence thesis by TREES_1:def 6;
   end;
   then X c< T by A12,XBOOLE_0:def 8;
-  hence thesis by A10,CARD_2:67;
+  hence thesis by A10,CARD_2:48;
 end;
-
-canceled;
 
 theorem Th22:
   for T, T1 being finite Tree, p being Element of T holds card(T
@@ -993,7 +982,7 @@ A7:   f.x = f.y;
       reconsider m = x, n = y as Element of T1 by A4,A6;
       p^m = f.n by A5,A7
         .= p^n by A5;
-      hence thesis by FINSEQ_1:46;
+      hence thesis by FINSEQ_1:33;
     end;
     thus dom f = T1 by A4;
     thus rng f c= C
@@ -1002,8 +991,8 @@ A7:   f.x = f.y;
       assume i in rng f;
       then consider n being set such that
 A8:   n in dom f and
-A9:   i = f.n by FUNCT_1:def 5;
-      T1 c= NAT* by TREES_1:def 5;
+A9:   i = f.n by FUNCT_1:def 3;
+      T1 c= NAT* by TREES_1:def 3;
       then reconsider n as Element of NAT* by A4,A8;
       f.n = p^n by A4,A5,A8;
       hence thesis by A4,A8,A9;
@@ -1013,7 +1002,7 @@ A9:   i = f.n by FUNCT_1:def 5;
     then consider n being Element of T1 such that
 A10: i = p^n;
     i = f.n by A5,A10;
-    hence thesis by A4,FUNCT_1:def 5;
+    hence thesis by A4,FUNCT_1:def 3;
   end;
   reconsider A,B as finite set by A1,A2;
   now
@@ -1039,7 +1028,7 @@ A13: x in A /\ C by XBOOLE_0:4;
 A14: ex t1 st x = p^t1;
     x in A by A13,XBOOLE_0:def 4;
     then ex t st x = t & not p is_a_prefix_of t;
-    hence contradiction by A14,TREES_1:8;
+    hence contradiction by A14,TREES_1:1;
   end;
 A15: A misses B
   proof
@@ -1054,15 +1043,15 @@ A17: ex t st x = t & p is_a_prefix_of t;
     hence contradiction by A17;
   end;
 A18: T with-replacement (p,T1) = A \/ C by Th14;
-  reconsider C as finite set by A3,CARD_1:68;
-A19: card T1 = card C by A3,CARD_1:21;
+  reconsider C as finite set by A3,CARD_1:38;
+A19: card T1 = card C by A3,CARD_1:5;
   T|p,B are_equipotent by Th13;
-  then card(T|p) = card B by CARD_1:21;
+  then card(T|p) = card B by CARD_1:5;
   hence
   card(T with-replacement (p,T1)) + card (T|p) = card A + card C + card B
-  by A18,A12,CARD_2:53
+  by A18,A12,CARD_2:40
     .= card A + card B + card C
-    .= card T + card T1 by A11,A15,A19,CARD_2:53;
+    .= card T + card T1 by A11,A15,A19,CARD_2:40;
 end;
 
 theorem
@@ -1070,11 +1059,11 @@ theorem
   card(T with-replacement (p,T1)) + card (T|p) = card T + card T1
 proof
   let T, T1 be finite DecoratedTree, p be Element of dom T;
-A1: card dom T = card T & card dom T1 = card T1 by CARD_1:104;
+A1: card dom T = card T & card dom T1 = card T1 by CARD_1:62;
 A2: card dom (T with-replacement(p,T1)) = card(T with-replacement (p,T1)) &
-  card dom (T|p) = card (T|p) by CARD_1:104;
+  card dom (T|p) = card (T|p) by CARD_1:62;
   dom (T with-replacement(p, T1)) = dom T with-replacement (p, dom T1) &
-  dom ( T|p) = (dom T)|p by TREES_2:def 11,def 12;
+  dom ( T|p) = (dom T)|p by TREES_2:def 10,def 11;
   hence thesis by A1,A2,Th22;
 end;
 
@@ -1093,7 +1082,7 @@ theorem
 proof
   let x be set;
   root-tree x = {[{},x]} by TREES_4:6;
-  hence thesis by CARD_1:50;
+  hence thesis by CARD_1:30;
 end;
 
 begin :: Addenda
@@ -1103,7 +1092,7 @@ theorem
   for F being non empty finite set holds card F - 1 = card F -' 1
 proof
   let F be non empty finite set;
-  card F - 1 >= 0 by NAT_1:14,XREAL_1:50;
+  card F - 1 >= 0 by NAT_1:14,XREAL_1:48;
   hence thesis by XREAL_0:def 2;
 end;
 
@@ -1114,15 +1103,15 @@ theorem
   are_equipotent
 proof
   let f, g be Function;
-A1: card f = card dom f & card g = card dom g by CARD_1:104;
+A1: card f = card dom f & card g = card dom g by CARD_1:62;
   hereby
     assume dom f,dom g are_equipotent;
-    then card dom f = card dom g by CARD_1:21;
-    hence f,g are_equipotent by A1,CARD_1:21;
+    then card dom f = card dom g by CARD_1:5;
+    hence f,g are_equipotent by A1,CARD_1:5;
   end;
   assume f,g are_equipotent;
-  then card f = card g by CARD_1:21;
-  hence thesis by A1,CARD_1:21;
+  then card f = card g by CARD_1:5;
+  hence thesis by A1,CARD_1:5;
 end;
 
 theorem
@@ -1131,16 +1120,14 @@ theorem
 proof
   let f, g be finite Function such that
 A1: dom f misses dom g;
-  thus card (f +* g) = card dom (f +* g) by CARD_1:104
+  thus card (f +* g) = card dom (f +* g) by CARD_1:62
     .= card (dom f \/ dom g) by FUNCT_4:def 1
-    .= card dom f + card dom g by A1,CARD_2:53
-    .= card dom f + card g by CARD_1:104
-    .= card f + card g by CARD_1:104;
+    .= card dom f + card dom g by A1,CARD_2:40
+    .= card dom f + card g by CARD_1:62
+    .= card f + card g by CARD_1:62;
 end;
 
 :: from SCMPDS_9. 2008.05.06, A.T.
-
-canceled;
 
 theorem
   for n being Nat holds
@@ -1155,7 +1142,7 @@ A1: X c= NAT
     then ex k being Element of NAT st x = k & k > n;
     hence thesis;
   end;
-  n+1 > n+0 by XREAL_1:10; then
+  n+1 > n+0 by XREAL_1:8; then
 A2: n+1 in X;
   assume X is finite;
   then reconsider X as non empty finite Subset of NAT by A1,A2;
@@ -1164,10 +1151,10 @@ A2: n+1 in X;
   then consider k being Element of NAT such that
 A3: m = k and
 A4: k > n;
-  k+1 > k+0 by XREAL_1:10;
+  k+1 > k+0 by XREAL_1:8;
   then k+1 > n by A4,XXREAL_0:2;
   then m+1 in X by A3;
   then m+1 <= m+0 by XXREAL_2:def 8;
-  hence contradiction by XREAL_1:10;
+  hence contradiction by XREAL_1:8;
 end;
 

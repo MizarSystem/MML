@@ -15,13 +15,13 @@
 environ
 
  vocabularies FUNCT_1, FUNCT_3, PARTFUN1, RELAT_1, ZFMISC_1, XBOOLE_0, TARSKI,
-      SUBSET_1, BINOP_1, MCART_1, FUNCOP_1, WELLORD1;
+      SUBSET_1, BINOP_1, MCART_1, FUNCOP_1, WELLORD1, MSUALG_4;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, MCART_1, RELAT_1, FUNCT_1,
       RELSET_1, PARTFUN1, FUNCT_2, FUNCT_3, BINOP_1, WELLORD1;
  constructors PARTFUN1, BINOP_1, FUNCT_3, RELSET_1, WELLORD1;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, FUNCT_2, RELSET_1;
  requirements SUBSET, BOOLE;
- definitions TARSKI, RELAT_1, BINOP_1, FUNCT_1, WELLORD1;
+ definitions TARSKI, RELAT_1, BINOP_1, FUNCT_1, WELLORD1, PARTFUN1;
  theorems ZFMISC_1, RELAT_1, RELSET_1, FUNCT_1, FUNCT_2, FUNCT_3, TARSKI,
       BINOP_1, MCART_1, XBOOLE_0, XBOOLE_1, GRFUNC_1;
  schemes FUNCT_1;
@@ -31,14 +31,12 @@ begin
 reserve f,g,h for Function,
   A for set;
 
-canceled;
-
 theorem Th2:
   delta A = <:id A, id A:>
 proof
-  thus delta A = id [:A,A:]*delta A by FUNCT_2:23
-    .= [:id A, id A:]*delta A by FUNCT_3:90
-    .= <:id A, id A:> by FUNCT_3:99;
+  thus delta A = id [:A,A:]*delta A by FUNCT_2:17
+    .= [:id A, id A:]*delta A by FUNCT_3:69
+    .= <:id A, id A:> by FUNCT_3:78;
 end;
 
 reserve F for Function,
@@ -70,8 +68,8 @@ A3:       f.x = [y,z];
             let y9,z9 be set;
             assume
 A4:         f.x = [y9,z9];
-            then z = z9 by A3,ZFMISC_1:33;
-            hence thesis by A3,A4,ZFMISC_1:33;
+            then z = z9 by A3,ZFMISC_1:27;
+            hence thesis by A3,A4,ZFMISC_1:27;
           end;
           thus f.x = y1 or ex y,z st f.x = [y,z] by A2;
         end;
@@ -139,7 +137,7 @@ A16:      not ex y,z st f.x = [y,z];
       end;
       hence g1.x = g2.x;
     end;
-    hence thesis by A10,A12,FUNCT_1:9;
+    hence thesis by A10,A12,FUNCT_1:2;
   end;
   involutiveness
   proof
@@ -162,8 +160,8 @@ A20:  g.x = [y,z];
         then consider y1,y2 such that
 A21:    f.x = [y1,y2];
 A22:    g.x = [y2,y1] by A17,A18,A19,A21;
-        then y = y2 by A20,ZFMISC_1:33;
-        hence thesis by A20,A21,A22,ZFMISC_1:33;
+        then y = y2 by A20,ZFMISC_1:27;
+        hence thesis by A20,A21,A22,ZFMISC_1:27;
       end;
       suppose
         not ex z,y st f.x =[z,y];
@@ -179,62 +177,58 @@ A23: f.x = [y,z] by A17,A18,A19;
   end;
 end;
 
-canceled 3;
-
 theorem Th6:
   <:f,g:> = <:g,f:>~
 proof
-A1: dom <:f,g:> = dom g /\ dom f by FUNCT_3:def 8
-    .= dom <:g,f:> by FUNCT_3:def 8;
+A1: dom <:f,g:> = dom g /\ dom f by FUNCT_3:def 7
+    .= dom <:g,f:> by FUNCT_3:def 7;
 A2: now
     let x;
     assume
 A3: x in dom <:f,g:>;
     then
-A4: <:g,f:>.x = [g.x, f.x] by A1,FUNCT_3:def 8;
-    thus <:f,g:>.x = [f.x, g.x] by A3,FUNCT_3:def 8
+A4: <:g,f:>.x = [g.x, f.x] by A1,FUNCT_3:def 7;
+    thus <:f,g:>.x = [f.x, g.x] by A3,FUNCT_3:def 7
       .= <:g,f:>~.x by A1,A3,A4,Def1;
   end;
   dom <:f,g:> = dom (<:g,f:>~) by A1,Def1;
-  hence thesis by A2,FUNCT_1:9;
+  hence thesis by A2,FUNCT_1:2;
 end;
 
 theorem Th7:
   (f|A)~ = f~|A
 proof
-A1: dom (f|A) = dom f /\ A by RELAT_1:90
+A1: dom (f|A) = dom f /\ A by RELAT_1:61
     .= dom (f~) /\ A by Def1
-    .= dom (f~|A) by RELAT_1:90;
+    .= dom (f~|A) by RELAT_1:61;
 A2: now
     let x such that
 A3: x in dom(f~|A);
-A4: dom (f|A) c= dom f by RELAT_1:89;
+A4: dom (f|A) c= dom f by RELAT_1:60;
     now
       per cases;
       suppose
         ex y,z st (f|A).x = [y,z];
         then consider y,z such that
 A5:     (f|A).x = [y,z];
-A6:     f.x = [y,z] by A1,A3,A5,FUNCT_1:70;
+A6:     f.x = [y,z] by A1,A3,A5,FUNCT_1:47;
         thus (f|A)~.x = [z,y] by A1,A3,A5,Def1
           .= f~.x by A1,A3,A4,A6,Def1
-          .= (f~|A).x by A3,FUNCT_1:70;
+          .= (f~|A).x by A3,FUNCT_1:47;
       end;
       suppose
 A7:     not ex y,z st (f|A).x = [y,z];
-A8:     (f|A).x = f.x by A1,A3,FUNCT_1:70;
+A8:     (f|A).x = f.x by A1,A3,FUNCT_1:47;
         (f|A)~.x = (f|A).x by A1,A3,A7,Def1;
         hence (f|A)~.x = f~.x by A1,A3,A4,A7,A8,Def1
-          .= (f~|A).x by A3,FUNCT_1:70;
+          .= (f~|A).x by A3,FUNCT_1:47;
       end;
     end;
     hence (f|A)~.x = (f~|A).x;
   end;
   dom ((f|A)~) = dom (f|A) by Def1;
-  hence thesis by A1,A2,FUNCT_1:9;
+  hence thesis by A1,A2,FUNCT_1:2;
 end;
-
-canceled;
 
 theorem
   (delta A)~ = delta A
@@ -247,20 +241,20 @@ end;
 theorem Th10:
   <:f,g:>|A = <:f|A,g:>
 proof
-A1: dom (<:f,g:>|A) = dom <:f,g:> /\ A by RELAT_1:90
-    .= dom f /\ dom g /\ A by FUNCT_3:def 8
+A1: dom (<:f,g:>|A) = dom <:f,g:> /\ A by RELAT_1:61
+    .= dom f /\ dom g /\ A by FUNCT_3:def 7
     .= dom f /\ A /\ dom g by XBOOLE_1:16
-    .= dom (f|A) /\ dom g by RELAT_1:90;
+    .= dom (f|A) /\ dom g by RELAT_1:61;
   now
-A2: dom (<:f,g:>|A) c= dom <:f,g:> by RELAT_1:89;
+A2: dom (<:f,g:>|A) c= dom <:f,g:> by RELAT_1:60;
     let x such that
 A3: x in dom (<:f,g:>|A);
 A4: x in dom (f|A) by A1,A3,XBOOLE_0:def 4;
-    thus (<:f,g:>|A).x = <:f,g:>.x by A3,FUNCT_1:70
-      .= [f.x, g.x] by A3,A2,FUNCT_3:def 8
-      .= [(f|A).x, g.x] by A4,FUNCT_1:70;
+    thus (<:f,g:>|A).x = <:f,g:>.x by A3,FUNCT_1:47
+      .= [f.x, g.x] by A3,A2,FUNCT_3:def 7
+      .= [(f|A).x, g.x] by A4,FUNCT_1:47;
   end;
-  hence thesis by A1,FUNCT_3:def 8;
+  hence thesis by A1,FUNCT_3:def 7;
 end;
 
 theorem Th11:
@@ -290,17 +284,15 @@ registration
       assume that
 A1:   [x,y1] in A --> z and
 A2:   [x,y2] in A --> z;
-      y1 in {z} by A1,ZFMISC_1:106;
+      y1 in {z} by A1,ZFMISC_1:87;
       then
 A3:   y1 = z by TARSKI:def 1;
-      y2 in {z} by A2,ZFMISC_1:106;
+      y2 in {z} by A2,ZFMISC_1:87;
       hence thesis by A3,TARSKI:def 1;
     end;
     thus for x st x in A --> z ex y1,y2 st [y1,y2] =x by RELAT_1:def 1;
   end;
 end;
-
-canceled;
 
 theorem Th13:
   x in A implies (A --> z).x = z
@@ -308,27 +300,27 @@ proof
   assume
 A1: x in A;
   z in {z} by TARSKI:def 1;
-  then [x,z] in (A --> z) by A1,ZFMISC_1:106;
-  hence thesis by FUNCT_1:8;
+  then [x,z] in (A --> z) by A1,ZFMISC_1:87;
+  hence thesis by FUNCT_1:1;
 end;
 
 theorem
-  A <> {} implies rng (A --> x) = {x} by RELAT_1:195;
+  A <> {} implies rng (A --> x) = {x} by RELAT_1:160;
 
 theorem Th15:
   rng f = {x} implies f = (dom f) --> x
 proof
   assume
 A1: rng f = {x};
-  then dom f <> {} by RELAT_1:65;
-  then dom((dom f) --> x) = dom f & rng((dom f) -->x) = {x} by RELAT_1:195;
-  hence thesis by A1,FUNCT_1:17;
+  then dom f <> {} by RELAT_1:42;
+  then dom((dom f) --> x) = dom f & rng((dom f) -->x) = {x} by RELAT_1:160;
+  hence thesis by A1,FUNCT_1:7;
 end;
 
 registration
   let x;
   cluster {} --> x -> empty;
-  coherence by ZFMISC_1:113;
+  coherence by ZFMISC_1:90;
 end;
 
 registration
@@ -362,7 +354,7 @@ A2:   dom f = {};
     end;
     suppose
 A3:   dom f <> {};
-      set z =the  Element of dom f;
+      set z = the Element of dom f;
       now
         let y;
         thus y in {x} implies ex y1 st y1 in dom f & y = f.y1
@@ -376,7 +368,7 @@ A3:   dom f <> {};
         then y = x by A1;
         hence y in {x} by TARSKI:def 1;
       end;
-      then rng f = {x} by FUNCT_1:def 5;
+      then rng f = {x} by FUNCT_1:def 3;
       hence thesis by Th15;
     end;
   end;
@@ -388,22 +380,22 @@ theorem Th18:
 proof
 A1: A = {} or A <> {};
 A2: A /\ B = {} or A /\ B <> {};
-A3: dom ((A --> x)|B) = dom (A --> x) /\ B by RELAT_1:90
-    .= A /\ B by A1,RELAT_1:195
-    .= dom (A /\ B --> x) by A2,RELAT_1:195;
+A3: dom ((A --> x)|B) = dom (A --> x) /\ B by RELAT_1:61
+    .= A /\ B by A1,RELAT_1:160
+    .= dom (A /\ B --> x) by A2,RELAT_1:160;
   now
     let z such that
 A4: z in dom (A /\ B --> x);
     A /\ B = {} or A /\ B <> {};
     then
-A5: z in A /\ B by A4,RELAT_1:195;
+A5: z in A /\ B by A4,RELAT_1:160;
     then
 A6: z in A by XBOOLE_0:def 4;
-    thus ((A --> x)|B).z = (A --> x).z by A3,A4,FUNCT_1:70
+    thus ((A --> x)|B).z = (A --> x).z by A3,A4,FUNCT_1:47
       .= x by A6,Th13
       .= (A /\ B --> x).z by A5,Th13;
   end;
-  hence thesis by A3,FUNCT_1:9;
+  hence thesis by A3,FUNCT_1:2;
 end;
 
 theorem Th19:
@@ -418,7 +410,7 @@ A1:   A = {};
     end;
     suppose
       A <> {};
-      hence thesis by RELAT_1:195;
+      hence thesis by RELAT_1:160;
     end;
   end;
   hence thesis;
@@ -436,16 +428,16 @@ A2:   A = {};
       rng ({} --> x) = {};
       then rng (A -->x) /\ B = {} by A2;
       then rng (A -->x) misses B by XBOOLE_0:def 7;
-      hence thesis by A2,RELAT_1:173;
+      hence thesis by A2,RELAT_1:138;
     end;
     suppose
       A <> {};
       then
-A3:   rng (A --> x) = {x} by RELAT_1:195;
-      {x} c= B by A1,ZFMISC_1:37;
+A3:   rng (A --> x) = {x} by RELAT_1:160;
+      {x} c= B by A1,ZFMISC_1:31;
       then {x} /\ B = {x} by XBOOLE_1:28;
-      hence (A --> x)"B = (A --> x)"{x} by A3,RELAT_1:168
-        .= dom (A -->x) by A3,RELAT_1:169
+      hence (A --> x)"B = (A --> x)"{x} by A3,RELAT_1:133
+        .= dom (A -->x) by A3,RELAT_1:134
         .= A by Th19;
     end;
   end;
@@ -465,8 +457,8 @@ proof
   assume
 A1: not x in B;
   rng (A --> x) c= {x} by Th19;
-  then rng (A --> x) misses B by A1,XBOOLE_1:63,ZFMISC_1:56;
-  hence thesis by RELAT_1:173;
+  then rng (A --> x) misses B by A1,XBOOLE_1:63,ZFMISC_1:50;
+  hence thesis by RELAT_1:138;
 end;
 
 theorem
@@ -478,17 +470,17 @@ A2: now
     let z;
     assume
 A3: z in dom (h*(A --> x));
-    then z in dom (A --> x) by FUNCT_1:21;
+    then z in dom (A --> x) by FUNCT_1:11;
     then
 A4: z in A by Th19;
-    thus (h*(A --> x)).z = h.((A --> x).z) by A3,FUNCT_1:22
+    thus (h*(A --> x)).z = h.((A --> x).z) by A3,FUNCT_1:12
       .= h.x by A4,Th13
       .= (A --> h.x).z by A4,Th13;
   end;
-  dom (h*(A --> x)) = (A --> x)"dom h by RELAT_1:182
+  dom (h*(A --> x)) = (A --> x)"dom h by RELAT_1:147
     .= A by A1,Th20
     .= dom (A --> h.x) by Th19;
-  hence thesis by A2,FUNCT_1:9;
+  hence thesis by A2,FUNCT_1:2;
 end;
 
 theorem
@@ -497,32 +489,32 @@ proof
   assume that
 A1: A <> {} and
 A2: x in dom h;
-  set y =the  Element of A;
+  set y = the Element of A;
   y in A by A1;
   then
 A3: y in dom (A -->x) by Th19;
   (A --> x).y = x by A1,Th13;
-  hence thesis by A2,A3,FUNCT_1:21;
+  hence thesis by A2,A3,FUNCT_1:11;
 end;
 
 theorem
   (A --> x)*h = h"A --> x
 proof
-A1: dom ((A --> x)*h) = h"dom(A --> x) by RELAT_1:182
+A1: dom ((A --> x)*h) = h"dom(A --> x) by RELAT_1:147
     .= h"A by Th19;
 A2: now
     let z;
     assume
 A3: z in dom ((A --> x)*h);
-    then h.z in dom (A --> x) by FUNCT_1:21;
+    then h.z in dom (A --> x) by FUNCT_1:11;
     then
 A4: h.z in A by Th19;
-    thus ((A --> x)*h).z = (A --> x).(h.z) by A3,FUNCT_1:22
+    thus ((A --> x)*h).z = (A --> x).(h.z) by A3,FUNCT_1:12
       .= x by A4,Th13
       .= (h"A --> x).z by A1,A3,Th13;
   end;
   dom ((A --> x)*h) = dom (h"A --> x) by A1,Th19;
-  hence thesis by A2,FUNCT_1:9;
+  hence thesis by A2,FUNCT_1:2;
 end;
 
 theorem
@@ -540,7 +532,7 @@ A4: z in dom ((A --> [x,y])~);
       .= (A --> [y,x]).z by A2,A4,Th13;
   end;
   dom ((A --> [x,y])~) = dom (A --> [y,x]) by A2,Th19;
-  hence thesis by A3,FUNCT_1:9;
+  hence thesis by A3,FUNCT_1:2;
 end;
 
 definition
@@ -561,9 +553,9 @@ proof
   assume
 A1: x in dom (F*<:f,g:>);
   then
-A2: x in dom <:f,g:> by FUNCT_1:21;
-  thus (F*<:f,g:>).x = F.(<:f,g:>.x) by A1,FUNCT_1:22
-    .= F.(f.x,g.x) by A2,FUNCT_3:def 8;
+A2: x in dom <:f,g:> by FUNCT_1:11;
+  thus (F*<:f,g:>).x = F.(<:f,g:>.x) by A1,FUNCT_1:12
+    .= F.(f.x,g.x) by A2,FUNCT_3:def 7;
 end;
 
 theorem
@@ -581,7 +573,7 @@ A3: z in dom (F.:(f,g));
     hence h.z = F.(f.z,g.z) by A2
       .= (F.:(f,g)).z by A3,Lm1;
   end;
-  hence thesis by A1,FUNCT_1:9;
+  hence thesis by A1,FUNCT_1:2;
 end;
 
 theorem
@@ -592,10 +584,10 @@ theorem Th29:
 proof
   assume
 A1: f|A = g|A;
-  thus (F.:(f,h))|A = F*<:f,h:>|A by RELAT_1:112
+  thus (F.:(f,h))|A = F*<:f,h:>|A by RELAT_1:83
     .= F*<:f|A,h:> by Th10
     .= F*<:g,h:>|A by A1,Th10
-    .= (F.:(g,h))|A by RELAT_1:112;
+    .= (F.:(g,h))|A by RELAT_1:83;
 end;
 
 theorem Th30:
@@ -603,17 +595,17 @@ theorem Th30:
 proof
   assume
 A1: f|A = g|A;
-  thus (F.:(h,f))|A = F*<:h,f:>|A by RELAT_1:112
+  thus (F.:(h,f))|A = F*<:h,f:>|A by RELAT_1:83
     .= F*<:h,f|A:> by Th11
     .= F*<:h,g:>|A by A1,Th11
-    .= (F.:(h,g))|A by RELAT_1:112;
+    .= (F.:(h,g))|A by RELAT_1:83;
 end;
 
 theorem Th31:
   F.:(f,g)*h = F.:(f*h, g*h)
 proof
-  thus F.:(f,g)*h = F*(<:f,g:>*h) by RELAT_1:55
-    .= F.:(f*h, g*h) by FUNCT_3:75;
+  thus F.:(f,g)*h = F*(<:f,g:>*h) by RELAT_1:36
+    .= F.:(f*h, g*h) by FUNCT_3:55;
 end;
 
 definition
@@ -629,18 +621,16 @@ registration
   coherence;
 end;
 
-canceled 2;
-
 theorem
   F[:](f,x) = F.:(f, dom f --> x);
 
 theorem Th35:
   x in dom (F[:](f,z)) implies (F[:](f,z)).x = F.(f.x,z)
 proof
-A1: dom <:f, dom f --> z:> = dom f /\ dom (dom f --> z) by FUNCT_3:def 8;
+A1: dom <:f, dom f --> z:> = dom f /\ dom (dom f --> z) by FUNCT_3:def 7;
   assume
 A2: x in dom (F[:](f,z));
-  then x in dom <:f, dom f --> z:> by FUNCT_1:21;
+  then x in dom <:f, dom f --> z:> by FUNCT_1:11;
   then
 A3: x in dom f by A1,XBOOLE_0:def 4;
   thus (F[:](f,z)).x = F.(f.x,(dom f --> z).x) by A2,Lm1
@@ -652,8 +642,8 @@ theorem
 proof
   assume
 A1: f|A = g|A;
-  dom f /\ A = dom (f|A) by RELAT_1:90
-    .= dom g /\ A by A1,RELAT_1:90;
+  dom f /\ A = dom (f|A) by RELAT_1:61
+    .= dom g /\ A by A1,RELAT_1:61;
   then
 A2: (dom f --> x)|A = dom g /\ A --> x by Th18
     .= (dom g -->x)|A by Th18;
@@ -668,14 +658,14 @@ theorem Th37:
 proof
 A1: dom (dom f -->x) = dom f by Th19;
   then
-A2: dom ((dom f --> x)*h) = dom (f*h) by RELAT_1:198;
+A2: dom ((dom f --> x)*h) = dom (f*h) by RELAT_1:163;
 A3: now
     let z;
     assume
 A4: z in dom ((dom f --> x)*h);
     then
-A5: h.z in dom(dom f -->x) by FUNCT_1:21;
-    thus ((dom f --> x)*h).z = (dom f --> x).(h.z) by A4,FUNCT_1:22
+A5: h.z in dom(dom f -->x) by FUNCT_1:11;
+    thus ((dom f --> x)*h).z = (dom f --> x).(h.z) by A4,FUNCT_1:12
       .= x by A1,A5,Th13;
   end;
   thus F[:](f,x)*h = F.:(f, dom f --> x)*h
@@ -683,13 +673,11 @@ A5: h.z in dom(dom f -->x) by FUNCT_1:21;
     .= F[:](f*h,x) by A2,A3,Th17;
 end;
 
-canceled;
-
 theorem
   F[:](f,x)*id A = F[:](f|A,x)
 proof
   thus F[:](f,x)*id A = F[:](f*id A, x) by Th37
-    .= F[:](f|A, x) by RELAT_1:94;
+    .= F[:](f|A, x) by RELAT_1:65;
 end;
 
 definition
@@ -705,18 +693,16 @@ registration
   coherence;
 end;
 
-canceled;
-
 theorem
   F[;](x,g) = F.:(dom g --> x, g);
 
 theorem Th42:
   x in dom (F[;](z,f)) implies (F[;](z,f)).x = F.(z,f.x)
 proof
-A1: dom <:dom f --> z, f:> = dom (dom f --> z) /\ dom f by FUNCT_3:def 8;
+A1: dom <:dom f --> z, f:> = dom (dom f --> z) /\ dom f by FUNCT_3:def 7;
   assume
 A2: x in dom (F[;](z,f));
-  then x in dom <:dom f --> z, f:> by FUNCT_1:21;
+  then x in dom <:dom f --> z, f:> by FUNCT_1:11;
   then
 A3: x in dom f by A1,XBOOLE_0:def 4;
   thus (F[;](z,f)).x = F.((dom f --> z).x, f.x) by A2,Lm1
@@ -728,8 +714,8 @@ theorem
 proof
   assume
 A1: f|A = g|A;
-  dom f /\ A = dom (f|A) by RELAT_1:90
-    .= dom g /\ A by A1,RELAT_1:90;
+  dom f /\ A = dom (f|A) by RELAT_1:61
+    .= dom g /\ A by A1,RELAT_1:61;
   then
 A2: (dom f --> x)|A = dom g /\ A --> x by Th18
     .= (dom g -->x)|A by Th18;
@@ -744,14 +730,14 @@ theorem Th44:
 proof
 A1: dom (dom f -->x) = dom f by Th19;
   then
-A2: dom ((dom f --> x)*h) = dom (f*h) by RELAT_1:198;
+A2: dom ((dom f --> x)*h) = dom (f*h) by RELAT_1:163;
 A3: now
     let z;
     assume
 A4: z in dom ((dom f --> x)*h);
     then
-A5: h.z in dom(dom f -->x) by FUNCT_1:21;
-    thus ((dom f --> x)*h).z = (dom f --> x).(h.z) by A4,FUNCT_1:22
+A5: h.z in dom(dom f -->x) by FUNCT_1:11;
+    thus ((dom f --> x)*h).z = (dom f --> x).(h.z) by A4,FUNCT_1:12
       .= x by A1,A5,Th13;
   end;
   thus F[;](x,f)*h = F.:(dom f --> x, f)*h
@@ -759,13 +745,11 @@ A5: h.z in dom(dom f -->x) by FUNCT_1:21;
     .= F[;](x,f*h) by A2,A3,Th17;
 end;
 
-canceled;
-
 theorem
   F[;](x,f)*id A = F[;](x,f|A)
 proof
   thus F[;](x,f)*id A = F[;](x,f*id A) by Th44
-    .= F[;](x,f|A) by RELAT_1:94;
+    .= F[;](x,f|A) by RELAT_1:65;
 end;
 
 reserve X for non empty set,
@@ -815,17 +799,15 @@ A1: for z being Element of Y holds h.z = F.(f.z,g.z);
     thus h.z = F.(f.z,g.z) by A1
       .= (F.:(f,g)).z by Th48;
   end;
-  hence thesis by FUNCT_2:113;
+  hence thesis by FUNCT_2:63;
 end;
-
-canceled;
 
 theorem
   for g being Function of X,X holds F.:(id X, g)*f = F.:(f,g*f)
 proof
   let g be Function of X,X;
   thus F.:(id X, g)*f = F.:(id X*f, g*f) by Th31
-    .= F.:(f,g*f) by FUNCT_2:23;
+    .= F.:(f,g*f) by FUNCT_2:17;
 end;
 
 theorem
@@ -833,15 +815,15 @@ theorem
 proof
   let g be Function of X,X;
   thus F.:(g, id X)*f = F.:(g*f, id X*f) by Th31
-    .= F.:(g*f, f) by FUNCT_2:23;
+    .= F.:(g*f, f) by FUNCT_2:17;
 end;
 
 theorem
   F.:(id X, id X)*f = F.:(f,f)
 proof
   thus F.:(id X, id X)*f = F.:(id X*f, id X*f) by Th31
-    .= F.:(id X*f, f) by FUNCT_2:23
-    .= F.:(f,f) by FUNCT_2:23;
+    .= F.:(id X*f, f) by FUNCT_2:17
+    .= F.:(f,f) by FUNCT_2:17;
 end;
 
 theorem
@@ -849,7 +831,7 @@ theorem
 proof
   let g be Function of X,X;
   thus F.:(id X, g).x = F.(id X.x, g.x) by Th48
-    .= F.(x,g.x) by FUNCT_1:35;
+    .= F.(x,g.x) by FUNCT_1:18;
 end;
 
 theorem
@@ -857,15 +839,15 @@ theorem
 proof
   let g be Function of X,X;
   thus F.:(g, id X).x = F.(g.x, id X.x) by Th48
-    .= F.(g.x, x) by FUNCT_1:35;
+    .= F.(g.x, x) by FUNCT_1:18;
 end;
 
 theorem
   F.:(id X, id X).x = F.(x,x)
 proof
   thus F.:(id X, id X).x = F.(id X.x, id X.x) by Th48
-    .= F.(id X.x, x) by FUNCT_1:35
-    .= F.(x,x) by FUNCT_1:35;
+    .= F.(id X.x, x) by FUNCT_1:18
+    .= F.(x,x) by FUNCT_1:18;
 end;
 
 theorem Th57:
@@ -878,9 +860,9 @@ A1: rng (A --> x) c= {x} by Th19;
 A2: dom (A --> x) = A by Th19;
   assume
 A3: x in B;
-  then {x} c= B by ZFMISC_1:37;
+  then {x} c= B by ZFMISC_1:31;
   then rng (A --> x) c= B by A1,XBOOLE_1:1;
-  hence thesis by A3,A2,FUNCT_2:def 1,RELSET_1:11;
+  hence thesis by A3,A2,FUNCT_2:def 1,RELSET_1:4;
 end;
 
 definition
@@ -889,7 +871,7 @@ definition
   coherence
   proof
     dom (I --> i) = I & rng (I --> i) c= {i} by Th19;
-    hence thesis by FUNCT_2:def 1,RELSET_1:11;
+    hence thesis by FUNCT_2:def 1,RELSET_1:4;
   end;
 end;
 
@@ -949,23 +931,21 @@ A1: for y being Element of Y holds g.y = F.(f.y,x);
     thus g.y = F.(f.y,x) by A1
       .= (F[:](f,x)).y by Th60;
   end;
-  hence thesis by FUNCT_2:113;
+  hence thesis by FUNCT_2:63;
 end;
-
-canceled;
 
 theorem
   F[:](id X, x)*f = F[:](f,x)
 proof
   thus F[:](id X, x)*f = F[:](id X*f, x) by Th37
-    .= F[:](f,x) by FUNCT_2:23;
+    .= F[:](f,x) by FUNCT_2:17;
 end;
 
 theorem
   F[:](id X, x).x = F.(x,x)
 proof
   thus F[:](id X, x).x = F.(id X.x, x) by Th60
-    .= F.(x,x) by FUNCT_1:35;
+    .= F.(x,x) by FUNCT_1:18;
 end;
 
 reserve Y for set,
@@ -1016,7 +996,7 @@ A1: for y being Element of Y holds g.y = F.(x,f.y);
     thus g.y = F.(x,f.y) by A1
       .= (F[;](x,f)).y by Th66;
   end;
-  hence thesis by FUNCT_2:113;
+  hence thesis by FUNCT_2:63;
 end;
 
 reserve Y for set,
@@ -1025,20 +1005,18 @@ reserve Y for set,
   of Y,X,
   x,x1,x2 for Element of X;
 
-canceled;
-
 theorem
   F[;](x, id X)*f = F[;](x,f)
 proof
   thus F[;](x, id X)*f = F[;](x, id X*f) by Th44
-    .= F[;](x,f) by FUNCT_2:23;
+    .= F[;](x,f) by FUNCT_2:17;
 end;
 
 theorem
   F[;](x, id X).x = F.(x,x)
 proof
   thus F[;](x, id X).x = F.(x, id X.x) by Th66
-    .= F.(x,x) by FUNCT_1:35;
+    .= F.(x,x) by FUNCT_1:18;
 end;
 
 theorem
@@ -1051,7 +1029,7 @@ proof
   x in X;
   then
 A1: x in dom f by FUNCT_2:def 1;
-  f.x = [(f.x)`1, (f.x)`2] by MCART_1:24;
+  f.x = [(f.x)`1, (f.x)`2] by MCART_1:22;
   hence thesis by A1,Def1;
 end;
 
@@ -1074,20 +1052,18 @@ A1: rng (f~) c= [:Z,Y:]
       assume x in rng (f~);
       then consider y being set such that
 A2:   y in dom (f~) and
-A3:   x = f~.y by FUNCT_1:def 5;
+A3:   x = f~.y by FUNCT_1:def 3;
 A4:   y in dom f by A2,Def1;
       then reconsider y as Element of X;
-A5:   f.y = [(f.y)`1,(f.y)`2] by MCART_1:23;
+A5:   f.y = [(f.y)`1,(f.y)`2] by MCART_1:21;
       then f~.y = [(f.y)`2,(f.y)`1] by A4,Def1;
-      hence thesis by A3,A5,ZFMISC_1:107;
+      hence thesis by A3,A5,ZFMISC_1:88;
     end;
     X = dom f by FUNCT_2:def 1
       .= dom (f~) by Def1;
-    hence thesis by A1,FUNCT_2:def 1,RELSET_1:11;
+    hence thesis by A1,FUNCT_2:def 1,RELSET_1:4;
   end;
 end;
-
-canceled;
 
 theorem
   for X,Y,Z being non empty set for f being Function of X, [:Y,Z:] holds
@@ -1101,19 +1077,19 @@ proof
     assume [x,y] in rng (f~);
     then consider z being set such that
 A1: z in dom (f~) and
-A2: [x,y] = f~.z by FUNCT_1:def 5;
+A2: [x,y] = f~.z by FUNCT_1:def 3;
 A3: z in dom f by A1,Def1;
     f.z = f~~.z
       .= [y,x] by A1,A2,Def1;
-    then [y,x] in rng f by A3,FUNCT_1:def 5;
+    then [y,x] in rng f by A3,FUNCT_1:def 3;
     hence thesis by RELAT_1:def 7;
   end;
   assume [x,y] in (rng f)~;
   then [y,x] in rng f by RELAT_1:def 7;
   then consider z being set such that
-A4: z in dom f & [y,x] = f.z by FUNCT_1:def 5;
+A4: z in dom f & [y,x] = f.z by FUNCT_1:def 3;
   z in dom (f~) & f~.z = [x,y] by A4,Def1;
-  hence thesis by FUNCT_1:def 5;
+  hence thesis by FUNCT_1:def 3;
 end;
 
 reserve y for Element of Y;
@@ -1132,7 +1108,7 @@ A1: F is associative;
 A2: Y <> {};
     now
       let y;
-      reconsider x3 = f.y as Element of X by A2,FUNCT_2:7;
+      reconsider x3 = f.y as Element of X by A2,FUNCT_2:5;
       thus (F[:](F[;](x1,f),x2)).y = F.((F[;](x1,f)).y,x2) by A2,Th60
         .= F.(F.(x1,x3),x2) by A2,Th66
         .= F.(x1,F.(x3,x2)) by A1,BINOP_1:def 3
@@ -1156,7 +1132,7 @@ A1: F is associative;
 A2: Y <> {};
     now
       let y;
-      reconsider x1 = f.y, x2 = g.y as Element of X by A2,FUNCT_2:7;
+      reconsider x1 = f.y, x2 = g.y as Element of X by A2,FUNCT_2:5;
       thus (F.:(F[:](f,x),g)).y = F.((F[:](f,x)).y,g.y) by A2,Th48
         .= F.(F.(x1,x),x2) by A2,Th60
         .= F.(x1,F.(x,x2)) by A1,BINOP_1:def 3
@@ -1180,7 +1156,7 @@ A1: F is associative;
 A2: Y <> {};
     now
       let y;
-      reconsider x1 = f.y, x2 = g.y, x3 = h.y as Element of X by A2,FUNCT_2:7;
+      reconsider x1 = f.y, x2 = g.y, x3 = h.y as Element of X by A2,FUNCT_2:5;
       thus (F.:(F.:(f,g),h)).y = F.((F.:(f,g)).y,h.y) by A2,Th48
         .= F.(F.(f.y,g.y),h.y) by A2,Th48
         .= F.(x1,F.(x2,x3)) by A1,BINOP_1:def 3
@@ -1204,7 +1180,7 @@ A1: F is associative;
 A2: Y <> {};
     now
       let y;
-      reconsider x3 = f.y as Element of X by A2,FUNCT_2:7;
+      reconsider x3 = f.y as Element of X by A2,FUNCT_2:5;
       thus (F[;](F.(x1,x2),f)).y = F.(F.(x1,x2),f.y) by A2,Th66
         .= F.(x1,F.(x2,x3)) by A1,BINOP_1:def 3
         .= F.(x1,(F[;](x2,f)).y) by A2,Th66;
@@ -1227,7 +1203,7 @@ A1: F is associative;
 A2: Y <> {};
     now
       let y;
-      reconsider x3 = f.y as Element of X by A2,FUNCT_2:7;
+      reconsider x3 = f.y as Element of X by A2,FUNCT_2:5;
       thus (F[:](f, F.(x1,x2))).y = F.(f.y, F.(x1,x2)) by A2,Th60
         .= F.(F.(x3,x1),x2) by A1,BINOP_1:def 3
         .= F.(F[:](f,x1).y,x2) by A2,Th60;
@@ -1250,7 +1226,7 @@ A1: F is commutative;
 A2: Y <> {};
     now
       let y;
-      reconsider x1 = f.y as Element of X by A2,FUNCT_2:7;
+      reconsider x1 = f.y as Element of X by A2,FUNCT_2:5;
       thus (F[;](x,f)).y = F.(x,x1) by A2,Th66
         .= F.(f.y,x) by A1,BINOP_1:def 2;
     end;
@@ -1272,7 +1248,7 @@ A1: F is commutative;
 A2: Y <> {};
     now
       let y;
-      reconsider x1 = f.y, x2 = g.y as Element of X by A2,FUNCT_2:7;
+      reconsider x1 = f.y, x2 = g.y as Element of X by A2,FUNCT_2:5;
       thus (F.:(f,g)).y = F.(x1,x2) by A2,Th48
         .= F.(g.y,f.y) by A1,BINOP_1:def 2;
     end;
@@ -1295,7 +1271,7 @@ A2: Y = {};
 A3: Y <> {};
     now
       let y;
-      reconsider x = f.y as Element of X by A3,FUNCT_2:7;
+      reconsider x = f.y as Element of X by A3,FUNCT_2:5;
       thus f.y = F.(x,x) by A1,BINOP_1:def 4
         .= F.(f.y,f.y);
     end;
@@ -1336,9 +1312,9 @@ theorem
 proof
   let F,f,g be Function such that
 A1: [:rng f, rng g:] c= dom F;
-  rng<:f,g:> c= [:rng f, rng g:] by FUNCT_3:71;
-  hence dom(F.:(f,g)) = dom<:f,g:> by A1,RELAT_1:46,XBOOLE_1:1
-    .= dom f /\ dom g by FUNCT_3:def 8;
+  rng<:f,g:> c= [:rng f, rng g:] by FUNCT_3:51;
+  hence dom(F.:(f,g)) = dom<:f,g:> by A1,RELAT_1:27,XBOOLE_1:1
+    .= dom f /\ dom g by FUNCT_3:def 7;
 end;
 
 :: from PRALG_1, 2004.07.23
@@ -1351,7 +1327,7 @@ definition
 end;
 
 registration
-  cluster Function-yielding Function;
+  cluster Function-yielding for Function;
   existence
   proof
     take the set --> the Function;
@@ -1372,7 +1348,7 @@ registration
     end;
     suppose
       not j in dom B;
-      hence thesis by FUNCT_1:def 4;
+      hence thesis by FUNCT_1:def 2;
     end;
   end;
 end;
@@ -1386,7 +1362,7 @@ registration
     proof
       let x be set;
       assume x in dom (F*f);
-      then (F*f).x = F.(f.x) by FUNCT_1:22;
+      then (F*f).x = F.(f.x) by FUNCT_1:12;
       hence thesis;
     end;
   end;
@@ -1410,7 +1386,7 @@ end;
 theorem
   ([:X,Y:] --> z).(x,y) = z
 proof
-  [x,y] in [:X,Y:] by ZFMISC_1:106;
+  [x,y] in [:X,Y:] by ZFMISC_1:87;
   hence thesis by Th13;
 end;
 
@@ -1503,9 +1479,9 @@ A2: a in dom(a.-->b) by TARSKI:def 1;
   hereby
     assume
 A3: a.-->b c= f;
-    then {a} c= dom f by A1,GRFUNC_1:8;
-    hence a in dom f by ZFMISC_1:37;
-    thus f.a = (a.-->b).a by A2,A3,GRFUNC_1:8
+    then {a} c= dom f by A1,GRFUNC_1:2;
+    hence a in dom f by ZFMISC_1:31;
+    thus f.a = (a.-->b).a by A2,A3,GRFUNC_1:2
       .= b by Th87;
   end;
   assume that
@@ -1517,8 +1493,8 @@ A6: now
     then x = a by A1,TARSKI:def 1;
     hence (a.-->b).x = f.x by A5,Th87;
   end;
-  dom(a.-->b) c= dom f by A1,A4,ZFMISC_1:37;
-  hence thesis by A6,GRFUNC_1:8;
+  dom(a.-->b) c= dom f by A1,A4,ZFMISC_1:31;
+  hence thesis by A6,GRFUNC_1:2;
 end;
 
 :: from FUNCT_2, 2007.11.22, A.T., :: from CAT_4
@@ -1532,7 +1508,7 @@ Lm2: for o,m,r be set holds (o,m) :-> r is Function of [:{o},{m}:],{r}
 proof
   let o,m,r be set;
   dom((o,m) :-> r) = {[o,m]} by Th19
-    .= [:{o},{m}:] by ZFMISC_1:35;
+    .= [:{o},{m}:] by ZFMISC_1:29;
   hence thesis by FUNCT_2:def 1;
 end;
 
@@ -1545,7 +1521,7 @@ definition
   proof
     let f be Function of [:{o},{m}:],{r};
     (o,m) .--> r is Function of [:{o},{m}:],{r} by Lm2;
-    hence thesis by FUNCT_2:66;
+    hence thesis by FUNCT_2:51;
   end;
 end;
 
@@ -1573,9 +1549,9 @@ theorem
   not x in A implies (x .--> y)|A = {}
 proof
   assume not x in A;
-  then {x} misses A by ZFMISC_1:56;
+  then {x} misses A by ZFMISC_1:50;
   then dom(x .--> y) misses A by Th19;
-  hence thesis by RELAT_1:95;
+  hence thesis by RELAT_1:66;
 end;
 
 :: from CAT_1, (new notation), 2008.06.30. A.T.
@@ -1604,7 +1580,7 @@ registration
   proof
     let i be set;
     f.i is Function;
-    hence thesis by FUNCT_1:70;
+    hence thesis by FUNCT_1:47;
   end;
 end;
 
@@ -1639,7 +1615,7 @@ end;
 :: from YELLOW_6, 2008.07.17, A.T.
 
 registration
-  cluster non empty constant Function;
+  cluster non empty constant for Function;
   existence
   proof
     take {{}} --> {};
@@ -1654,13 +1630,13 @@ registration
   coherence
   proof
     let x,y be set;
-A1: dom(f|X) c= dom f by RELAT_1:89;
+A1: dom(f|X) c= dom f by RELAT_1:60;
     assume that
 A2: x in dom(f|X) and
 A3: y in dom (f|X);
-    thus (f|X).x = f.x by A2,FUNCT_1:70
-      .= f.y by A1,A2,A3,FUNCT_1:def 16
-      .= (f|X).y by A3,FUNCT_1:70;
+    thus (f|X).x = f.x by A2,FUNCT_1:47
+      .= f.y by A1,A2,A3,FUNCT_1:def 10
+      .= (f|X).y by A3,FUNCT_1:47;
   end;
 end;
 :: missing, 2008.08.14, A.T.
@@ -1673,8 +1649,8 @@ proof
   consider y such that
 A1: y in rng f by XBOOLE_0:def 1;
   take y;
-  ex x0 being set st x0 in dom f & f.x0 = y by A1,FUNCT_1:def 5;
-  hence thesis by FUNCT_1:def 16;
+  ex x0 being set st x0 in dom f & f.x0 = y by A1,FUNCT_1:def 3;
+  hence thesis by FUNCT_1:def 10;
 end;
 :: from YELLOW_6, 2008.12.26, A.T.
 
@@ -1684,7 +1660,7 @@ theorem
 proof
   let X be non empty set, x be set;
   set f = X --> x;
-  ex i being set st i in dom f & the_value_of f = f.i by FUNCT_1:def 18;
+  ex i being set st i in dom f & the_value_of f = f.i by FUNCT_1:def 12;
   hence thesis by Th13;
 end;
 
@@ -1699,14 +1675,14 @@ proof
   assume
 A1: x in dom f;
   then f <> {} & ((dom f) --> the_value_of f).x = the_value_of f by Th13;
-  hence thesis by A1,FUNCT_1:def 18;
+  hence thesis by A1,FUNCT_1:def 12;
 end;
 
 :: missing, 2009.01.21, A.T.
 
 registration
   let X be set, Y be non empty set;
-  cluster total PartFunc of X,Y;
+  cluster total for PartFunc of X,Y;
   existence
   proof
     consider y being set such that
@@ -1745,7 +1721,7 @@ end;
 :: 2009.10.03, A.T.
 
 registration let I be set;
- cluster total (I-defined non-empty Function);
+ cluster total for I-defined non-empty Function;
  existence
   proof
    take I --> 1;
@@ -1759,17 +1735,17 @@ proof
   set F = x .--> y;
   set R = {[x,x]};
   set S = {[y,y]};
-A1: field R = {x} by RELAT_1:208;
+A1: field R = {x} by RELAT_1:173;
   hence dom F = field R by Th19;
-  field S = {y} by RELAT_1:208;
-  hence rng F = field S by RELAT_1:195;
+  field S = {y} by RELAT_1:173;
+  hence rng F = field S by RELAT_1:160;
   thus F is one-to-one;
   let a,b be set;
   hereby
     assume [a,b] in R;
     then [a,b] = [x,x] by TARSKI:def 1;
     then
-A2: a = x & b = x by ZFMISC_1:33;
+A2: a = x & b = x by ZFMISC_1:27;
     hence a in field R & b in field R by A1,TARSKI:def 1;
     F.x = y by Th87;
     hence [F.a,F.b] in S by A2,TARSKI:def 1;
@@ -1788,7 +1764,7 @@ end;
 
 registration
   let I, A be set;
-  cluster I --> A -> total (I-defined Function);
+  cluster I --> A -> total for I-defined Function;
   coherence;
 end;
 
@@ -1798,9 +1774,9 @@ theorem
 proof
   let f be Function;
   assume x in dom f;
-  then [x, f.x] in f by FUNCT_1:8;
-  then {[x, f.x]} c= f by ZFMISC_1:37;
-  hence thesis by ZFMISC_1:35;
+  then [x, f.x] in f by FUNCT_1:1;
+  then {[x, f.x]} c= f by ZFMISC_1:31;
+  hence thesis by ZFMISC_1:29;
 end;
 
 registration let A be non empty set;
@@ -1808,8 +1784,8 @@ registration let A be non empty set;
  cluster x .--> i -> A-valued;
  coherence
   proof
-    rng(x .--> i) = {i} by RELAT_1:195;
-   hence rng(x .--> i) c= A by ZFMISC_1:37;
+    rng(x .--> i) = {i} by RELAT_1:160;
+   hence rng(x .--> i) c= A by ZFMISC_1:31;
   end;
 end;
 
@@ -1834,7 +1810,7 @@ A1: F is associative;
 A2: Y <> {};
     now
       let y;
-      reconsider x1 = f.y, x2 = g.y as Element of X by A2,FUNCT_2:7;
+      reconsider x1 = f.y, x2 = g.y as Element of X by A2,FUNCT_2:5;
       thus (F[;](x,F.:(f,g))).y = F.(x,F.:(f,g).y) by A2,Th66
         .= F.(x,F.(x1,x2)) by A2,Th48
         .= F.(F.(x,x1),x2) by A1,BINOP_1:def 3
@@ -1854,7 +1830,7 @@ registration let A be non empty set, x be Element of A, y be set;
  coherence
   proof
      dom(x .--> y) = {x} by Th19;
-   hence dom(x .--> y) c= A by ZFMISC_1:37;
+   hence dom(x .--> y) c= A by ZFMISC_1:31;
   end;
 end;
 
@@ -1863,16 +1839,16 @@ theorem
  holds (x .--> y)|A = x .--> y
 proof let x,y,A be set;
   assume x in A;
-  then {x} c= A by ZFMISC_1:37;
+  then {x} c= A by ZFMISC_1:31;
   then dom(x .--> y) c= A by Th19;
-  hence thesis by RELAT_1:97;
+  hence thesis by RELAT_1:68;
 end;
 
 :: missing, 2011.02.06, A.K.
 
 registration
   let Y be functional set;
-  cluster Y-valued -> Function-yielding Function;
+  cluster Y-valued -> Function-yielding for Function;
   coherence
   proof
     let f be Function;
@@ -1882,3 +1858,68 @@ A1: f is Y-valued;
     thus thesis by A1;
   end;
 end;
+
+:: from MSUALG_4, 2011.04.16, A.T.
+
+definition
+  let IT be Function;
+  attr IT is Relation-yielding means
+  for x be set st x in dom IT holds IT.x is Relation;
+end;
+
+registration
+ cluster Function-yielding -> Relation-yielding for Function;
+ coherence
+  proof let f be Function;
+   assume
+Z:  f is Function-yielding;
+   let x be set;
+   thus thesis by Z;
+  end;
+end;
+
+registration
+ cluster empty -> Function-yielding for Function;
+ coherence
+  proof let f be Function;
+   assume
+Z:  f is empty;
+   let x be set; thus thesis by Z;
+  end;
+end;
+
+:: from CIRCCOMB, 2011.04.19, A.T.
+
+theorem
+  for X,Y,x,y being set holds X --> x tolerates Y --> y iff x = y or X misses Y
+proof
+  let X,Y,x,y be set;
+  set f = X --> x, g = Y --> y;
+A1: dom g = Y by Th19;
+A2: dom f = X by Th19;
+  thus f tolerates g implies x = y or X misses Y
+  proof
+    assume that
+A3: for z being set st z in dom f /\ dom g holds f.z = g.z and
+A4: x <> y;
+    assume X meets Y;
+    then consider z be set such that
+A5: z in X and
+A6: z in Y by XBOOLE_0:3;
+A7: f.z = x by A5,Th13;
+A8: g.z = y by A6,Th13;
+    z in X /\ Y by A5,A6,XBOOLE_0:def 4;
+    hence thesis by A2,A1,A3,A4,A7,A8;
+  end;
+  assume
+A9: x = y or X misses Y;
+  let z be set;
+  assume
+A10: z in dom f /\ dom g;
+  then
+A11: z in Y;
+A12: z in X by A2,A10,XBOOLE_0:def 4;
+  then f.z = x by Th13;
+  hence thesis by A9,A12,A11,Th13,XBOOLE_0:3;
+end;
+

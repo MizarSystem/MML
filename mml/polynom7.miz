@@ -29,7 +29,7 @@ environ
       POLYNOM2, ALGSTR_1, RELSET_1, FUNCT_7, FVSUM_1, VFUNCT_1;
  registrations XBOOLE_0, ORDINAL1, RELSET_1, FUNCOP_1, FINSET_1, XREAL_0,
       STRUCT_0, VECTSP_1, ALGSTR_1, POLYNOM1, POLYNOM2, ALGSTR_0, CARD_1,
-      SUBSET_1, PRE_POLY;
+      SUBSET_1, PRE_POLY, ZFMISC_1, FUNCT_1;
  requirements NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions FUNCOP_1, STRUCT_0;
  theorems TARSKI, FINSEQ_1, FUNCT_1, FUNCT_2, RELAT_1, ZFMISC_1, VECTSP_1,
@@ -44,10 +44,10 @@ begin
 registration
   cluster Abelian left_zeroed right_zeroed add-associative
     right_complementable well-unital associative commutative distributive
-    domRing-like (non trivial doubleLoopStr);
+    domRing-like for non trivial doubleLoopStr;
   existence
   proof
-    set R =the  domRing;
+    set R = the domRing;
     take R;
     thus thesis;
   end;
@@ -55,7 +55,7 @@ end;
 
 definition
   let X be set, R be non empty ZeroStr, p be Series of X,R;
-  canceled;
+
   attr p is non-zero means
   :Def2:
   p <> 0_(X,R);
@@ -63,10 +63,10 @@ end;
 
 registration
   let X be set, R be non trivial ZeroStr;
-  cluster non-zero Series of X,R;
+  cluster non-zero for Series of X,R;
   existence
   proof
-    set a =the  Element of NonZero R;
+    set a = the Element of NonZero R;
 A1: not a in {0.R} by XBOOLE_0:def 5;
     reconsider a as Element of R;
     set p = 0_(X,R)+*(EmptyBag X,a);
@@ -74,22 +74,22 @@ A1: not a in {0.R} by XBOOLE_0:def 5;
     reconsider p as Function of Bags X, R;
     reconsider p as Series of X,R;
     take p;
-    0_(X,R) = (Bags X --> 0.R) by POLYNOM1:def 24;
-    then dom 0_(X,R) = Bags X by FUNCOP_1:19;
+    0_(X,R) = (Bags X --> 0.R) by POLYNOM1:def 7;
+    then dom 0_(X,R) = Bags X by FUNCOP_1:13;
     then
-A2: p.(EmptyBag X) = a by FUNCT_7:33;
+A2: p.(EmptyBag X) = a by FUNCT_7:31;
     a <> 0.R by A1,TARSKI:def 1;
-    then p <> 0_(X,R) by A2,POLYNOM1:81;
+    then p <> 0_(X,R) by A2,POLYNOM1:22;
     hence thesis by Def2;
   end;
 end;
 
 registration
   let n be Ordinal, R be non trivial ZeroStr;
-  cluster non-zero Polynomial of n,R;
+  cluster non-zero for Polynomial of n,R;
   existence
   proof
-    set a =the  Element of NonZero R;
+    set a = the Element of NonZero R;
 A1: not a in {0.R} by XBOOLE_0:def 5;
     reconsider a as Element of R;
     set p = 0_(n,R)+*(EmptyBag n,a);
@@ -101,32 +101,33 @@ A2: now
       assume
 A3:   u in Support p;
       then
-A4:   u is Element of Bags n;
+   u is Element of Bags n;
+      then aa: u is bag of n;
       now
         assume u <> EmptyBag n;
-        then p.u = (0_(n,R)).u by FUNCT_7:34
-          .= 0.R by A4,POLYNOM1:81;
-        hence contradiction by A3,POLYNOM1:def 9;
+        then p.u = (0_(n,R)).u by FUNCT_7:32
+          .= 0.R by aa,POLYNOM1:22;
+        hence contradiction by A3,POLYNOM1:def 3;
       end;
       hence u in {EmptyBag n} by TARSKI:def 1;
     end;
-    0_(n,R) = (Bags n --> 0.R) by POLYNOM1:def 24;
-    then dom 0_(n,R) = Bags n by FUNCOP_1:19;
+    0_(n,R) = (Bags n --> 0.R) by POLYNOM1:def 7;
+    then dom 0_(n,R) = Bags n by FUNCOP_1:13;
     then
-A5: p.(EmptyBag n) = a by FUNCT_7:33;
+A5: p.(EmptyBag n) = a by FUNCT_7:31;
     now
       let u be set;
       assume u in {EmptyBag n};
       then
 A6:   u = EmptyBag n by TARSKI:def 1;
       a <> 0.R by A1,TARSKI:def 1;
-      hence u in Support p by A5,A6,POLYNOM1:def 9;
+      hence u in Support p by A5,A6,POLYNOM1:def 3;
     end;
-    then Support p = {EmptyBag n} by A2,TARSKI:2;
-    then reconsider p as Polynomial of n,R by POLYNOM1:def 10;
+    then Support p = {EmptyBag n} by A2,TARSKI:1;
+    then reconsider p as Polynomial of n,R by POLYNOM1:def 4;
     take p;
     a <> 0.R by A1,TARSKI:def 1;
-    then p <> 0_(n,R) by A5,POLYNOM1:81;
+    then p <> 0_(n,R) by A5,POLYNOM1:22;
     hence thesis by Def2;
   end;
 end;
@@ -135,7 +136,7 @@ theorem Th1:
   for X being set, R being non empty ZeroStr, s being Series of X,R
   holds s = 0_(X,R) iff Support s = {}
 proof
-  let X be set, R be (non empty ZeroStr), s be Series of X,R;
+  let X be set, R be non empty ZeroStr, s be Series of X,R;
 A1: now
     assume
 A2: Support s = {};
@@ -143,23 +144,23 @@ A3: now
       let x be set;
       assume x in Bags X;
       then reconsider x9 = x as Element of Bags X;
-      s.x9 = 0.R by A2,POLYNOM1:def 9;
-      hence s.x = (0_(X,R)).x by POLYNOM1:81;
+      s.x9 = 0.R by A2,POLYNOM1:def 3;
+      hence s.x = (0_(X,R)).x by POLYNOM1:22;
     end;
     dom s = Bags X & dom 0_(X,R) = Bags X by FUNCT_2:def 1;
-    hence s = 0_(X,R) by A3,FUNCT_1:9;
+    hence s = 0_(X,R) by A3,FUNCT_1:2;
   end;
   now
     assume
 A4: s = 0_(X,R);
     now
-      set x =the  Element of Support s;
+      set x = the Element of Support s;
       assume Support s <> {};
       then
 A5:   x in Support s;
       then reconsider x as bag of X;
-      s.x <> 0.R by A5,POLYNOM1:def 9;
-      hence contradiction by A4,POLYNOM1:81;
+      s.x <> 0.R by A5,POLYNOM1:def 3;
+      hence contradiction by A4,POLYNOM1:22;
     end;
     hence Support s = {};
   end;
@@ -188,9 +189,9 @@ A4:     now
           hence u in {0.R} by TARSKI:def 1;
         end;
         for u being set holds u in {0.R} implies u in the carrier of R;
-        hence thesis by A4,TARSKI:2;
+        hence thesis by A4,TARSKI:1;
       end;
-      hence contradiction by A2,REALSET1:def 4;
+      hence contradiction by A2;
     end;
     then consider a being Element of R such that
 A5: a <> 0.R;
@@ -199,15 +200,15 @@ A5: a <> 0.R;
     reconsider s as Function of Bags X,R;
     reconsider s as Series of X,R;
     take s;
-    s.x = a by FUNCOP_1:13;
-    then EmptyBag X in Support s by A5,POLYNOM1:def 9;
+    s.x = a by FUNCOP_1:7;
+    then EmptyBag X in Support s by A5,POLYNOM1:def 3;
     hence ex s being Series of X,R st Support(s) <> {};
   end;
   now
     assume ex s being Series of X,R st Support(s) <> {};
     then consider s being Series of X,R such that
 A6: Support(s) <> {};
-    set b =the  Element of Support s;
+    set b = the Element of Support s;
     b in Support s by A6;
     then reconsider b as Element of Bags X;
     now
@@ -216,9 +217,9 @@ A6: Support(s) <> {};
 A7:   the carrier of R = {x};
       0.R = x by A7,TARSKI:def 1
         .= s.b by A7,TARSKI:def 1;
-      hence contradiction by A6,POLYNOM1:def 9;
+      hence contradiction by A6,POLYNOM1:def 3;
     end;
-    hence R is non trivial by REALSET1:def 4;
+    hence R is non trivial by ZFMISC_1:131;
   end;
   hence thesis by A1;
 end;
@@ -232,16 +233,16 @@ end;
 
 registration
   let X be non empty set;
-  cluster univariate bag of X;
+  cluster univariate for bag of X;
   existence
   proof
-    set x =the  Element of X;
+    set x = the Element of X;
     set b = EmptyBag X +* (x,1);
     take b;
-A1: dom (EmptyBag X) = X by PARTFUN1:def 4;
+A1: dom (EmptyBag X) = X by PARTFUN1:def 2;
     then
 A2: b.x = ((EmptyBag X)+*(x.-->1)).x by FUNCT_7:def 3;
-A3: dom (x.-->1) = {x} by FUNCOP_1:19;
+A3: dom (x.-->1) = {x} by FUNCOP_1:13;
 A4: for u being set holds u in support b implies u in {x}
     proof
       let u be set;
@@ -252,7 +253,7 @@ A5:   u in support b;
         then
 A6:     not u in dom (x.-->1) by A3,TARSKI:def 1;
         b.u = ((EmptyBag X)+*(x.-->1)).u by A1,FUNCT_7:def 3;
-        then b.u = (EmptyBag X).u by A6,FUNCT_4:12
+        then b.u = (EmptyBag X).u by A6,FUNCT_4:11
           .= 0 by PRE_POLY:52;
         hence contradiction by A5,PRE_POLY:def 7;
       end;
@@ -260,8 +261,8 @@ A6:     not u in dom (x.-->1) by A3,TARSKI:def 1;
     end;
     x in dom (x.-->1) by A3,TARSKI:def 1;
     then
-A7: b.x = (x.-->1).x by A2,FUNCT_4:14
-      .= 1 by FUNCOP_1:87;
+A7: b.x = (x.-->1).x by A2,FUNCT_4:13
+      .= 1 by FUNCOP_1:72;
     for u being set holds u in {x} implies u in support b
     proof
       let u be set;
@@ -269,14 +270,14 @@ A7: b.x = (x.-->1).x by A2,FUNCT_4:14
       then u = x by TARSKI:def 1;
       hence thesis by A7,PRE_POLY:def 7;
     end;
-    then support b = {x} by A4,TARSKI:2;
+    then support b = {x} by A4,TARSKI:1;
     hence thesis by Def3;
   end;
 end;
 
 registration
   let X be non empty set;
-  cluster univariate -> non empty bag of X;
+  cluster univariate -> non empty for bag of X;
   coherence
   proof
     let b be bag of X;
@@ -307,11 +308,11 @@ A1: for b being bag of n holds b = {}
   hence thesis by A1;
 end;
 
-Lm1: for L being (non empty doubleLoopStr), p being Polynomial of {},L holds
+Lm1: for L being non empty doubleLoopStr, p being Polynomial of {},L holds
 ex a being Element of L st p = {EmptyBag {}} --> a
 proof
   set n = {};
-  let L be (non empty doubleLoopStr), p be Polynomial of {},L;
+  let L be non empty doubleLoopStr, p be Polynomial of {},L;
 A1: for b being bag of {} holds b = {}
   proof
     let b be bag of {};
@@ -333,8 +334,8 @@ A5: u = [p1,p2] by RELAT_1:def 1;
 A6: p1 in dom p by A4,A5,RELAT_1:def 4;
     then reconsider p1 as bag of n by A2;
 A7: p1 = {} by A1;
-    then p2 = p.{} by A4,A5,A6,FUNCT_1:def 4
-      .= p/.{} by A6,A7,PARTFUN1:def 8;
+    then p2 = p.{} by A4,A5,A6,FUNCT_1:def 2
+      .= p/.{} by A6,A7,PARTFUN1:def 6;
     then p2 in {a} by TARSKI:def 1;
     hence thesis by A2,A5,A6,ZFMISC_1:def 2;
   end;
@@ -350,20 +351,20 @@ A10: u2 in {a} and
 A11: u = [u1,u2] by ZFMISC_1:def 2;
 A12: u1 = {} by A8,A9,TARSKI:def 1;
     u2 = a by A10,TARSKI:def 1
-      .= p.{} by A2,A9,A12,PARTFUN1:def 8;
-    hence thesis by A2,A9,A11,A12,FUNCT_1:8;
+      .= p.{} by A2,A9,A12,PARTFUN1:def 6;
+    hence thesis by A2,A9,A11,A12,FUNCT_1:1;
   end;
-  hence thesis by A3,TARSKI:2;
+  hence thesis by A3,TARSKI:1;
 end;
 
 theorem
   for L being right_zeroed add-associative right_complementable
-well-unital distributive (non trivial doubleLoopStr), p being Polynomial of {},
+well-unital distributive non trivial doubleLoopStr, p being Polynomial of {},
   L, x being Function of {},L holds eval(p,x) = p.(EmptyBag{})
 proof
   set n = {};
   let L be right_zeroed add-associative right_complementable well-unital
-  distributive (non trivial doubleLoopStr), p be Polynomial of {},L, x be
+  distributive non trivial doubleLoopStr, p be Polynomial of {},L, x be
   Function of {},L;
 A1: for b being bag of n holds b = {}
   proof
@@ -377,20 +378,20 @@ A2: EmptyBag n = {};
 A3: p = {EmptyBag n} --> a by Lm1;
 A4: EmptyBag n in {EmptyBag n} by TARSKI:def 1;
   then
-A5: p.(EmptyBag n) = a by A3,FUNCOP_1:13;
-A6: dom p = {EmptyBag n} by A3,FUNCOP_1:19;
+A5: p.(EmptyBag n) = a by A3,FUNCOP_1:7;
+A6: dom p = {EmptyBag n} by A3,FUNCOP_1:13;
   now
     per cases;
     case
 A7:   a = 0.L;
       Support p = {}
       proof
-        set u =the  Element of Support p;
+        set u = the Element of Support p;
         assume
 A8:     Support p <> {};
         then u in Support p;
         then reconsider u as Element of Bags n;
-        p.u <> 0.L by A8,POLYNOM1:def 9;
+        p.u <> 0.L by A8,POLYNOM1:def 3;
         hence thesis by A1,A2,A5,A7;
       end;
       then reconsider Sp = Support p as empty Subset of Bags n;
@@ -400,15 +401,15 @@ A10:  eval(p,x) = Sum y and
       for i being Element of NAT st 1 <= i & i <= len y holds y/.i = (p *
 SgmX(BagOrder n, Support p))/.i * eval(((SgmX(BagOrder n, Support p))/.i)@,x)
       by POLYNOM2:def 4;
-      SgmX(BagOrder n, Sp) = {} by POLYNOM2:9,20;
+      SgmX(BagOrder n, Sp) = {} by POLYNOM2:7,18;
       then y = <*>(the carrier of L) by A9;
-      hence eval(p,x) = a by A7,A10,RLVECT_1:60;
+      hence eval(p,x) = a by A7,A10,RLVECT_1:43;
     end;
     case
 A11:  a <> 0.L;
       reconsider sp = Support p as finite Subset of Bags n;
       set sg = SgmX(BagOrder n, sp);
-A12:  BagOrder n linearly_orders sp by POLYNOM2:20;
+A12:  BagOrder n linearly_orders sp by POLYNOM2:18;
 A13:  for u being set holds u in Support p implies u in {{}}
       proof
         let u be set;
@@ -422,21 +423,21 @@ A13:  for u being set holds u in Support p implies u in {{}}
         let u be set;
         assume u in {{}};
         then u = EmptyBag n by A2,TARSKI:def 1;
-        hence thesis by A5,A11,POLYNOM1:def 9;
+        hence thesis by A5,A11,POLYNOM1:def 3;
       end;
-      then Support p = {{}} by A13,TARSKI:2;
+      then Support p = {{}} by A13,TARSKI:1;
       then
 A14:  rng sg = {{}} by A12,PRE_POLY:def 2;
       then
 A15:  {} in rng sg by TARSKI:def 1;
       then
-A16:  1 in dom sg by FINSEQ_3:33;
-      then sg.1 in dom p by A2,A6,A14,FUNCT_1:12;
-      then 1 in dom (p * sg) by A16,FUNCT_1:21;
+A16:  1 in dom sg by FINSEQ_3:31;
+      then sg.1 in dom p by A2,A6,A14,FUNCT_1:3;
+      then 1 in dom (p * sg) by A16,FUNCT_1:11;
       then
-A17:  (p * sg)/.1 = (p * sg).1 by PARTFUN1:def 8
-        .= p.(sg.1) by A16,FUNCT_1:23
-        .= a by A2,A3,A14,A16,FUNCOP_1:13,FUNCT_1:12;
+A17:  (p * sg)/.1 = (p * sg).1 by PARTFUN1:def 6
+        .= p.(sg.1) by A16,FUNCT_1:13
+        .= a by A2,A3,A14,A16,FUNCOP_1:7,FUNCT_1:3;
 A18:  for u being set holds u in dom sg implies u in {1}
       proof
         let u be set;
@@ -445,9 +446,9 @@ A19:    u in dom sg;
         assume
 A20:    not u in {1};
         reconsider u as Element of NAT by A19;
-        sg/.u = sg.u by A19,PARTFUN1:def 8;
+        sg/.u = sg.u by A19,PARTFUN1:def 6;
         then
-A21:    sg/.u in rng sg by A19,FUNCT_1:12;
+A21:    sg/.u in rng sg by A19,FUNCT_1:3;
 A22:    u <> 1 by A20,TARSKI:def 1;
 A23:    1 < u
         proof
@@ -459,14 +460,14 @@ FINSEQ_1:def 1;
           ex m9 being Element of NAT st m9 = u & 1 <= m9 & m9 <= k by A19,A24;
           hence thesis by A22,XXREAL_0:1;
         end;
-        sg/.1 = sg.1 by A15,A19,FINSEQ_3:33,PARTFUN1:def 8;
-        then sg/.1 in rng sg by A16,FUNCT_1:12;
+        sg/.1 = sg.1 by A15,A19,FINSEQ_3:31,PARTFUN1:def 6;
+        then sg/.1 in rng sg by A16,FUNCT_1:3;
         then sg/.1 = {} by A14,TARSKI:def 1
           .= sg/.u by A14,A21,TARSKI:def 1;
         hence thesis by A12,A16,A19,A23,PRE_POLY:def 2;
       end;
       for u being set holds u in {1} implies u in dom sg by A16,TARSKI:def 1;
-      then dom sg = Seg 1 by A18,FINSEQ_1:4,TARSKI:2;
+      then dom sg = Seg 1 by A18,FINSEQ_1:2,TARSKI:1;
       then
 A25:  len sg = 1 by FINSEQ_1:def 3;
       consider y being FinSequence of the carrier of L such that
@@ -476,30 +477,30 @@ A28:  for i being Element of NAT st 1 <= i & i <= len y holds y/.i =
       (p * sg)/.i * eval((sg/.i)@,x) by POLYNOM2:def 4;
       dom y = Seg(len y) by FINSEQ_1:def 3
         .= dom sg by A26,FINSEQ_1:def 3;
-      then y.1 = y/.1 by A15,FINSEQ_3:33,PARTFUN1:def 8
+      then y.1 = y/.1 by A15,FINSEQ_3:31,PARTFUN1:def 6
         .= (p * sg)/.1 * eval((sg/.1)@,x) by A25,A26,A28
         .= (p * sg)/.1 * eval(EmptyBag n,x) by A1,A2
-        .= (p * sg)/.1 * 1.L by POLYNOM2:16
-        .= a by A17,VECTSP_1:def 13;
-      then y = <* a *> by A25,A26,FINSEQ_1:57;
-      hence eval(p,x) = a by A27,RLVECT_1:61;
+        .= (p * sg)/.1 * 1.L by POLYNOM2:14
+        .= a by A17,VECTSP_1:def 4;
+      then y = <* a *> by A25,A26,FINSEQ_1:40;
+      hence eval(p,x) = a by A27,RLVECT_1:44;
     end;
   end;
-  hence thesis by A3,A4,FUNCOP_1:13;
+  hence thesis by A3,A4,FUNCOP_1:7;
 end;
 
 theorem
   for L being right_zeroed add-associative right_complementable Abelian
-  well-unital distributive associative non trivial (non trivial doubleLoopStr)
+  well-unital distributive associative non trivial non trivial doubleLoopStr
   holds Polynom-Ring({},L) is_ringisomorph_to L
 proof
   set n = {};
   let L be right_zeroed add-associative right_complementable Abelian
-  well-unital distributive associative non trivial (non trivial doubleLoopStr);
+  well-unital distributive associative non trivial non trivial doubleLoopStr;
   set PL = Polynom-Ring(n,L);
   defpred P[set,set] means ex p being Polynomial of n,L st p = $1 & p.{} = $2;
 A1: dom 0_(n,L) = Bags n by FUNCT_2:def 1;
-  dom(EmptyBag n .--> 1_L) = {EmptyBag n} by FUNCOP_1:19;
+  dom(EmptyBag n .--> 1_L) = {EmptyBag n} by FUNCOP_1:13;
   then
 A2: EmptyBag n in dom(EmptyBag n .--> 1_L) by TARSKI:def 1;
 A3: for b being bag of {} holds b = {}
@@ -514,11 +515,11 @@ A4: EmptyBag n = {};
 A5: for x being Element of PL ex y being Element of L st P[x,y]
   proof
     let x be Element of PL;
-    reconsider p = x as Polynomial of n,L by POLYNOM1:def 27;
+    reconsider p = x as Polynomial of n,L by POLYNOM1:def 10;
     take p.{};
     dom p = Bags n by FUNCT_2:def 1;
     then
-A6: p.{} in rng p by A4,FUNCT_1:12;
+A6: p.{} in rng p by A4,FUNCT_1:3;
     rng p c= the carrier of L by RELAT_1:def 19;
     hence thesis by A6;
   end;
@@ -529,8 +530,8 @@ A8: dom f = the carrier of PL by FUNCT_2:def 1;
   consider p being Polynomial of n,L such that
 A9: p = 1_PL and
 A10: p.{} = f.(1.PL) by A7;
-A11: p = 1_(n,L) by A9,POLYNOM1:90
-    .= 0_(n,L)+*(EmptyBag n,1_L) by POLYNOM1:def 25;
+A11: p = 1_(n,L) by A9,POLYNOM1:31
+    .= 0_(n,L)+*(EmptyBag n,1_L) by POLYNOM1:def 8;
   for x,y being Element of PL holds f.(x*y) = f.x * f.y
   proof
     let x,y be Element of PL;
@@ -542,32 +543,32 @@ A14: (p*'q).{} = p.i * q.i
     proof
 A15:  decomp EmptyBag n = <* <*EmptyBag n, EmptyBag n*> *> by PRE_POLY:73;
       then
-A16:  len decomp EmptyBag n = 1 by FINSEQ_1:56;
+A16:  len decomp EmptyBag n = 1 by FINSEQ_1:39;
       set z = p.i * q.i;
       consider s being FinSequence of the carrier of L such that
 A17:  (p*'q).(EmptyBag n) = Sum s and
 A18:  len s = len decomp EmptyBag n and
 A19:  for k being Element of NAT st k in dom s ex b1, b2 being bag of
-n st (decomp EmptyBag n)/.k = <*b1, b2*> & s/.k = p.b1*q.b2 by POLYNOM1:def 26;
-      len s = 1 by A15,A18,FINSEQ_1:56;
+n st (decomp EmptyBag n)/.k = <*b1, b2*> & s/.k = p.b1*q.b2 by POLYNOM1:def 9;
+      len s = 1 by A15,A18,FINSEQ_1:39;
       then Seg 1 = dom s by FINSEQ_1:def 3;
       then
-A20:  1 in dom s by FINSEQ_1:4,TARSKI:def 1;
+A20:  1 in dom s by FINSEQ_1:2,TARSKI:def 1;
       then consider b1,b2 being bag of n such that
       (decomp EmptyBag n)/.1 = <*b1, b2*> and
 A21:  s/.1 = p.b1*q.b2 by A19;
-      s.1 = p.b1 * q.b2 by A20,A21,PARTFUN1:def 8
+      s.1 = p.b1 * q.b2 by A20,A21,PARTFUN1:def 6
         .= p.i * q.b2 by A3
         .= p.i * q.i by A3;
-      then s = <* z *> by A16,A18,FINSEQ_1:57;
-      then Sum s = z by RLVECT_1:61;
+      then s = <* z *> by A16,A18,FINSEQ_1:40;
+      then Sum s = z by RLVECT_1:44;
       hence thesis by A3,A17;
     end;
     ex pq being Polynomial of n,L st pq = x * y & pq.{} = f.( x*y) by A7;
-    hence thesis by A12,A13,A14,POLYNOM1:def 27;
+    hence thesis by A12,A13,A14,POLYNOM1:def 10;
   end;
   then
-A22: f is multiplicative by GROUP_6:def 7;
+A22: f is multiplicative by GROUP_6:def 6;
   for x,y being Element of PL holds f.(x+y) = f.x + f.y
   proof
     let x,y be Element of PL;
@@ -584,22 +585,22 @@ A28: ex pq being Polynomial of n,L st pq = x + y & pq.{} = f.( x+y) by A7;
 A29: q = {EmptyBag n} --> b by Lm1;
 A30: EmptyBag n in {EmptyBag n} by TARSKI:def 1;
     then
-A31: p.{} = a by A4,A27,FUNCOP_1:13;
-A32: (p+q).{} = p.i + q.i by POLYNOM1:35
-      .= a + b by A4,A30,A31,A29,FUNCOP_1:13;
-    q.{} = b by A4,A30,A29,FUNCOP_1:13;
-    then f.x + f.y = a + b by A4,A24,A26,A27,A30,FUNCOP_1:13;
-    hence thesis by A23,A25,A28,A32,POLYNOM1:def 27;
+A31: p.{} = a by A4,A27,FUNCOP_1:7;
+A32: (p+q).{} = p.i + q.i by POLYNOM1:15
+      .= a + b by A4,A30,A31,A29,FUNCOP_1:7;
+    q.{} = b by A4,A30,A29,FUNCOP_1:7;
+    then f.x + f.y = a + b by A4,A24,A26,A27,A30,FUNCOP_1:7;
+    hence thesis by A23,A25,A28,A32,POLYNOM1:def 10;
   end;
   then
-A33: f is additive by GRCAT_1:def 13;
+A33: f is additive by GRCAT_1:def 8;
   p.i = p.(EmptyBag n) by A3
     .= (0_(n,L)+*(EmptyBag n .--> 1_L)).(EmptyBag n) by A11,A1,FUNCT_7:def 3
-    .= (EmptyBag n .--> 1_L).(EmptyBag n) by A2,FUNCT_4:14
-    .= 1_L by FUNCOP_1:87;
-  then f is unity-preserving by A9,A10,GROUP_1:def 17;
+    .= (EmptyBag n .--> 1_L).(EmptyBag n) by A2,FUNCT_4:13
+    .= 1_L by FUNCOP_1:72;
+  then f is unity-preserving by A9,A10,GROUP_1:def 13;
   then
-A34: f is RingHomomorphism by A33,A22,QUOFIELD:def 21;
+A34: f is RingHomomorphism by A33,A22,QUOFIELD:def 18;
 A35: for u being set holds u in the carrier of L implies u in rng f
   proof
     let u be set;
@@ -607,9 +608,9 @@ A35: for u being set holds u in the carrier of L implies u in rng f
     then reconsider u as Element of L;
     set p = EmptyBag n .--> u;
     reconsider p as Function;
-    dom p = {EmptyBag n} by FUNCOP_1:19;
-    then rng p = {u} & dom p = Bags n by FUNCOP_1:14,PRE_POLY:51,TARSKI:def 1;
-    then reconsider p as Function of Bags n, the carrier of L by FUNCT_2:4;
+    dom p = {EmptyBag n} by FUNCOP_1:13;
+    then rng p = {u} & dom p = Bags n by FUNCOP_1:8,PRE_POLY:51,TARSKI:def 1;
+    then reconsider p as Function of Bags n, the carrier of L by FUNCT_2:2;
     reconsider p as Function of Bags n, L;
     reconsider p as Series of n, L;
     now
@@ -618,14 +619,14 @@ A35: for u being set holds u in the carrier of L implies u in rng f
 A36:    u = 0.L;
         Support p = {}
         proof
-          set v =the  Element of Support p;
+          set v = the Element of Support p;
           assume Support p <> {};
           then
 A37:      v in Support p;
           then v is bag of n;
           then p.v = p.(EmptyBag n) by A3,A4
-            .= u by FUNCOP_1:87;
-          hence thesis by A36,A37,POLYNOM1:def 9;
+            .= u by FUNCOP_1:72;
+          hence thesis by A36,A37,POLYNOM1:def 3;
         end;
         hence Support p is finite;
       end;
@@ -638,8 +639,8 @@ A39:    for v being set holds v in {EmptyBag n} implies v in Support p
 A40:      v in {EmptyBag n};
           then reconsider v as Element of Bags n;
           p.v = p.(EmptyBag n) by A40,TARSKI:def 1
-            .= u by FUNCOP_1:87;
-          hence thesis by A38,POLYNOM1:def 9;
+            .= u by FUNCOP_1:72;
+          hence thesis by A38,POLYNOM1:def 3;
         end;
         for v being set holds v in Support p implies v in {EmptyBag n}
         proof
@@ -649,23 +650,23 @@ A40:      v in {EmptyBag n};
           v = EmptyBag n by A3,A4;
           hence thesis by TARSKI:def 1;
         end;
-        hence Support p is finite by A39,TARSKI:2;
+        hence Support p is finite by A39,TARSKI:1;
       end;
     end;
-    then reconsider p as Polynomial of n,L by POLYNOM1:def 10;
-    reconsider p9 = p as Element of PL by POLYNOM1:def 27;
+    then reconsider p as Polynomial of n,L by POLYNOM1:def 4;
+    reconsider p9 = p as Element of PL by POLYNOM1:def 10;
     consider q being Polynomial of n,L such that
 A41: q = p9 and
 A42: q.{} = f.p9 by A7;
     q.{} = p.(EmptyBag n) by A3,A41
-      .= u by FUNCOP_1:87;
-    hence thesis by A8,A42,FUNCT_1:12;
+      .= u by FUNCOP_1:72;
+    hence thesis by A8,A42,FUNCT_1:3;
   end;
   rng f c= the carrier of L by RELAT_1:def 19;
   then for u being set holds u in rng f implies u in the carrier of L;
-  then rng f = the carrier of L by A35,TARSKI:2;
+  then rng f = the carrier of L by A35,TARSKI:1;
   then
-A43: f is RingEpimorphism by A34,QUOFIELD:def 22;
+A43: f is RingEpimorphism by A34,QUOFIELD:def 19;
   for x1,x2 being set st x1 in dom f & x2 in dom f & f.x1 = f.x2 holds x1 = x2
   proof
     let x1,x2 be set;
@@ -681,17 +682,17 @@ A47: q = x2 & q.{} = f.x2 by A7;
 A48: q = {EmptyBag n} --> a2 by Lm1;
 A49: EmptyBag n in {EmptyBag n} by TARSKI:def 1;
     then
-A50: q.(EmptyBag n) = a2 by A48,FUNCOP_1:13;
+A50: q.(EmptyBag n) = a2 by A48,FUNCOP_1:7;
 A51: p.{} = p.(EmptyBag n) by A3;
     consider a1 being Element of L such that
 A52: p = {EmptyBag n} --> a1 by Lm1;
-    p.(EmptyBag n) = a1 by A52,A49,FUNCOP_1:13;
+    p.(EmptyBag n) = a1 by A52,A49,FUNCOP_1:7;
     hence thesis by A3,A45,A46,A47,A52,A48,A50,A51;
   end;
-  then f is one-to-one by FUNCT_1:def 8;
-  then f is RingMonomorphism by A34,QUOFIELD:def 23;
-  then f is RingIsomorphism by A43,QUOFIELD:def 24;
-  hence thesis by QUOFIELD:def 26;
+  then f is one-to-one by FUNCT_1:def 4;
+  then f is RingMonomorphism by A34,QUOFIELD:def 20;
+  then f is RingIsomorphism by A43,QUOFIELD:def 21;
+  hence thesis by QUOFIELD:def 23;
 end;
 
 begin :: Monomials
@@ -705,12 +706,12 @@ end;
 
 registration
   let X be set, L be non empty ZeroStr;
-  cluster monomial-like Series of X,L;
+  cluster monomial-like for Series of X,L;
   existence
   proof
     set p = 0_(X,L);
     take p;
-    for b9 being bag of X st b9 <> EmptyBag X holds p.b9 = 0.L by POLYNOM1:81;
+    for b9 being bag of X st b9 <> EmptyBag X holds p.b9 = 0.L by POLYNOM1:22;
     hence thesis by Def4;
   end;
 end;
@@ -722,7 +723,7 @@ end;
 
 registration
   let X be set, L be non empty ZeroStr;
-  cluster monomial-like -> finite-Support Series of X,L;
+  cluster monomial-like -> finite-Support for Series of X,L;
   coherence
   proof
     let s be Series of X,L;
@@ -735,11 +736,11 @@ A2:   s.b = 0.L;
       now
         assume Support s <> {};
         then reconsider sp = Support s as non empty Subset of Bags X;
-        set c =the  Element of sp;
-        s.c <> 0.L by POLYNOM1:def 9;
+        set c = the Element of sp;
+        s.c <> 0.L by POLYNOM1:def 3;
         hence contradiction by A1,A2;
       end;
-      hence thesis by POLYNOM1:def 10;
+      hence thesis by POLYNOM1:def 4;
     end;
     suppose
 A3:   s.b <> 0.L;
@@ -748,7 +749,7 @@ A4:   now
         assume
 A5:     u in Support s;
         then reconsider u9 = u as Element of Bags X;
-        s.u9 <> 0.L by A5,POLYNOM1:def 9;
+        s.u9 <> 0.L by A5,POLYNOM1:def 3;
         then u9 = b by A1;
         hence u in {b} by TARSKI:def 1;
       end;
@@ -758,11 +759,11 @@ A5:     u in Support s;
         then
 A6:     u = b by TARSKI:def 1;
         then reconsider u9 = u as Element of Bags X by PRE_POLY:def 12;
-        u9 in Support s by A3,A6,POLYNOM1:def 9;
+        u9 in Support s by A3,A6,POLYNOM1:def 3;
         hence u in Support s;
       end;
-      then Support s = {b} by A4,TARSKI:2;
-      hence thesis by POLYNOM1:def 10;
+      then Support s = {b} by A4,TARSKI:1;
+      hence thesis by POLYNOM1:def 4;
     end;
   end;
 end;
@@ -785,7 +786,7 @@ A3:   b9 <> b;
       assume
 A4:   p.b9 <> 0.L;
       reconsider b9 as Element of Bags n by PRE_POLY:def 12;
-      b9 in Support p by A4,POLYNOM1:def 9;
+      b9 in Support p by A4,POLYNOM1:def 3;
       hence thesis by A2,A3,TARSKI:def 1;
     end;
     hence p is Monomial of n,L by Def4;
@@ -806,7 +807,7 @@ A9:       u in {b};
           then u = b by TARSKI:def 1;
           then reconsider u9 = u as Element of Bags n by PRE_POLY:def 12;
           p.u9 <> 0.L by A7,A9,TARSKI:def 1;
-          hence thesis by POLYNOM1:def 9;
+          hence thesis by POLYNOM1:def 3;
         end;
         for u being set holds u in Support p implies u in {b}
         proof
@@ -814,11 +815,11 @@ A9:       u in {b};
           assume
 A10:      u in Support p;
           then reconsider u9 = u as bag of n;
-          p.u <> 0.L by A10,POLYNOM1:def 9;
+          p.u <> 0.L by A10,POLYNOM1:def 3;
           then u9 = b by A6;
           hence thesis by TARSKI:def 1;
         end;
-        then Support p = {b} by A8,TARSKI:2;
+        then Support p = {b} by A8,TARSKI:1;
         hence ex b being bag of n st Support p = {b};
       end;
       case
@@ -827,8 +828,8 @@ A11:    p.b = 0.L;
         proof
           assume Support p <> {};
           then reconsider sp = Support p as non empty Subset of Bags n;
-          set c =the  Element of sp;
-          p.c <> 0.L by POLYNOM1:def 9;
+          set c = the Element of sp;
+          p.c <> 0.L by POLYNOM1:def 3;
           hence thesis by A6,A11;
         end;
       end;
@@ -836,7 +837,7 @@ A11:    p.b = 0.L;
     hence Support p = {} or ex b being bag of n st Support p = {b};
   end;
   now
-    set b =the  bag of n;
+    set b = the bag of n;
     assume
 A12: Support p = {};
     for b9 being bag of n st b9 <> b holds p.b9 = 0.L
@@ -845,7 +846,7 @@ A12: Support p = {};
       assume b9 <> b;
       reconsider c = b9 as Element of Bags n by PRE_POLY:def 12;
       assume p.b9 <> 0.L;
-      then c in Support p by POLYNOM1:def 9;
+      then c in Support p by POLYNOM1:def 3;
       hence thesis by A12;
     end;
     hence p is Monomial of n,L by Def4;
@@ -859,7 +860,7 @@ definition
   0_(X,L)+*(b,a);
   coherence
   proof
-    dom(b .--> a) = {b} by FUNCOP_1:19;
+    dom(b .--> a) = {b} by FUNCOP_1:13;
     then
 A1: b in dom(b .--> a) by TARSKI:def 1;
     set m = 0_(X,L)+*(b,a);
@@ -867,13 +868,13 @@ A1: b in dom(b .--> a) by TARSKI:def 1;
     reconsider m as Function of Bags X, L;
     reconsider m as Series of X, L;
 A2: b in Bags X by PRE_POLY:def 12;
-A3: dom(0_(X,L)) = dom((Bags X) --> 0.L) by POLYNOM1:def 24
-      .= Bags X by FUNCOP_1:19;
+A3: dom(0_(X,L)) = dom((Bags X) --> 0.L) by POLYNOM1:def 7
+      .= Bags X by FUNCOP_1:13;
     then
 A4: m = 0_(X,L)+*(b .--> a) by A2,FUNCT_7:def 3;
 A5: m.b = (0_(X,L)+*(b .--> a)).b by A3,A2,FUNCT_7:def 3
-      .= (b .--> a).b by A1,FUNCT_4:14
-      .= a by FUNCOP_1:87;
+      .= (b .--> a).b by A1,FUNCT_4:13
+      .= a by FUNCOP_1:72;
     now
       per cases;
       case
@@ -885,16 +886,16 @@ A7:     for u being set holds u in Support m implies u in {b}
 A8:       u in Support m;
           assume not u in {b};
           then
-A9:       not u in dom(b .--> a) by FUNCOP_1:19;
+A9:       not u in dom(b .--> a) by FUNCOP_1:13;
           reconsider u as bag of X by A8;
-          m.u = (0_(X,L)).u by A4,A9,FUNCT_4:12
-            .= 0.L by POLYNOM1:81;
-          hence thesis by A8,POLYNOM1:def 9;
+          m.u = (0_(X,L)).u by A4,A9,FUNCT_4:11
+            .= 0.L by POLYNOM1:22;
+          hence thesis by A8,POLYNOM1:def 3;
         end;
-        b in Support m by A2,A5,A6,POLYNOM1:def 9;
+        b in Support m by A2,A5,A6,POLYNOM1:def 3;
         then for u being set holds u in {b} implies u in Support m by
 TARSKI:def 1;
-        then Support m = {b} by A7,TARSKI:2;
+        then Support m = {b} by A7,TARSKI:1;
         hence thesis by Th6;
       end;
       case
@@ -902,15 +903,15 @@ A10:    a = 0.L;
         now
           assume Support m <> {};
           then reconsider sm = Support m as non empty Subset of Bags X;
-          set c =the  Element of sm;
-          m.c <> 0.L by POLYNOM1:def 9;
+          set c = the Element of sm;
+          m.c <> 0.L by POLYNOM1:def 3;
           then not c in {b} by A5,A10,TARSKI:def 1;
           then
-A11:      not c in dom(b .--> a) by FUNCOP_1:19;
+A11:      not c in dom(b .--> a) by FUNCOP_1:13;
           reconsider c as bag of X;
-          m.c = (0_(X,L)).c by A4,A11,FUNCT_4:12
-            .= 0.L by POLYNOM1:81;
-          hence contradiction by POLYNOM1:def 9;
+          m.c = (0_(X,L)).c by A4,A11,FUNCT_4:11
+            .= 0.L by POLYNOM1:22;
+          hence contradiction by POLYNOM1:def 3;
         end;
         hence thesis by Th6;
       end;
@@ -940,8 +941,8 @@ A2:     m.b = 0.L;
         proof
           assume Support m <> {};
           then reconsider sm = Support m as non empty Subset of Bags X;
-          set c =the  Element of sm;
-          m.c <> 0.L by POLYNOM1:def 9;
+          set c = the Element of sm;
+          m.c <> 0.L by POLYNOM1:def 3;
           hence thesis by A1,A2;
         end;
         hence thesis;
@@ -963,7 +964,7 @@ A5: m.b2 <> 0.L or Support m = {} & b2 = EmptyBag X;
       case
 A6:     m.b1 <> 0.L;
         reconsider b19 = b1 as Element of Bags X by PRE_POLY:def 12;
-A7:     b19 in Support m by A6,POLYNOM1:def 9;
+A7:     b19 in Support m by A6,POLYNOM1:def 3;
         thus b1 = b by A4,A6
           .= b2 by A5,A4,A7;
       end;
@@ -974,7 +975,7 @@ A8:     m.b1 = 0.L;
           case
 A9:         m.b2 <> 0.L;
             reconsider b29 = b2 as Element of Bags X by PRE_POLY:def 12;
-            b29 in Support m by A9,POLYNOM1:def 9;
+            b29 in Support m by A9,POLYNOM1:def 3;
             hence thesis by A3,A8;
           end;
           case
@@ -1006,7 +1007,7 @@ A1: term(m) is Element of Bags X by PRE_POLY:def 12;
 A2: Support(m) <> {};
   then m.term(m) <> 0.L by Def6;
   then
-A3: term(m) in Support(m) by A1,POLYNOM1:def 9;
+A3: term(m) in Support(m) by A1,POLYNOM1:def 3;
   ex b being bag of X st Support(m) = {b} by A2,Th6;
   hence thesis by A3,TARSKI:def 1;
 end;
@@ -1021,16 +1022,16 @@ proof
   reconsider m as Function of Bags n, L;
   reconsider m as Series of n, L;
 A1: b in Bags n by PRE_POLY:def 12;
-A2: dom(0_(n,L)) = dom((Bags n) --> 0.L) by POLYNOM1:def 24
-    .= Bags n by FUNCOP_1:19;
+A2: dom(0_(n,L)) = dom((Bags n) --> 0.L) by POLYNOM1:def 7
+    .= Bags n by FUNCOP_1:13;
   then
 A3: m = 0_(n,L)+*(b .--> 0.L) by A1,FUNCT_7:def 3;
-A4: dom(b .--> 0.L) = {b} by FUNCOP_1:19;
+A4: dom(b .--> 0.L) = {b} by FUNCOP_1:13;
   then
 A5: b in dom(b .--> 0.L) by TARSKI:def 1;
 A6: m.b = (0_(n,L)+*(b .--> 0.L)).b by A2,A1,FUNCT_7:def 3
-    .= (b .--> 0.L).b by A5,FUNCT_4:14
-    .= 0.L by FUNCOP_1:87;
+    .= (b .--> 0.L).b by A5,FUNCT_4:13
+    .= 0.L by FUNCOP_1:72;
 A7: now
     let b9 be bag of n;
     now
@@ -1042,8 +1043,8 @@ A7: now
       case
         b9 <> b;
         then not b9 in dom(b .--> 0.L) by A4,TARSKI:def 1;
-        hence m.b9 = (0_(n,L)).b9 by A3,FUNCT_4:12
-          .= 0.L by POLYNOM1:81;
+        hence m.b9 = (0_(n,L)).b9 by A3,FUNCT_4:11
+          .= 0.L by POLYNOM1:22;
       end;
     end;
     hence m.b9 = 0.L;
@@ -1063,15 +1064,15 @@ proof
   reconsider m as Function of Bags n, L;
   reconsider m as Series of n, L;
 A1: b in Bags n by PRE_POLY:def 12;
-  dom(b .--> a) = {b} by FUNCOP_1:19;
+  dom(b .--> a) = {b} by FUNCOP_1:13;
   then
 A2: b in dom(b .--> a) by TARSKI:def 1;
-  dom(0_(n,L)) = dom((Bags n) --> 0.L) by POLYNOM1:def 24
-    .= Bags n by FUNCOP_1:19;
+  dom(0_(n,L)) = dom((Bags n) --> 0.L) by POLYNOM1:def 7
+    .= Bags n by FUNCOP_1:13;
   then
 A3: m.b = (0_(n,L)+*(b .--> a)).b by A1,FUNCT_7:def 3
-    .= (b .--> a).b by A2,FUNCT_4:14
-    .= a by FUNCOP_1:87;
+    .= (b .--> a).b by A2,FUNCT_4:13
+    .= a by FUNCOP_1:72;
   per cases;
   suppose
     m.b <> 0.L;
@@ -1087,21 +1088,21 @@ theorem Th10:
   for X being set, L being non trivial ZeroStr, a being non zero
   Element of L, b being bag of X holds term(Monom(a,b)) = b
 proof
-  let n be set, L be (non trivial ZeroStr), a be non zero Element of L, b be
+  let n be set, L be non trivial ZeroStr, a be non zero Element of L, b be
   bag of n;
   set m = 0_(n,L)+*(b,a);
   reconsider m as Function of Bags n, the carrier of L;
   reconsider m as Function of Bags n, L;
   reconsider m as Series of n, L;
 A1: b in Bags n by PRE_POLY:def 12;
-  dom(b .--> a) = {b} by FUNCOP_1:19;
+  dom(b .--> a) = {b} by FUNCOP_1:13;
   then
 A2: b in dom(b .--> a) by TARSKI:def 1;
-  dom(0_(n,L)) = dom((Bags n) --> 0.L) by POLYNOM1:def 24
-    .= Bags n by FUNCOP_1:19;
+  dom(0_(n,L)) = dom((Bags n) --> 0.L) by POLYNOM1:def 7
+    .= Bags n by FUNCOP_1:13;
   then m.b = (0_(n,L)+*(b .--> a)).b by A1,FUNCT_7:def 3
-    .= (b .--> a).b by A2,FUNCT_4:14
-    .= a by FUNCOP_1:87;
+    .= (b .--> a).b by A2,FUNCT_4:13
+    .= a by FUNCOP_1:72;
   then m.b <> 0.L;
   hence thesis by Def6;
 end;
@@ -1110,7 +1111,7 @@ theorem
   for X being set, L being non empty ZeroStr, m being Monomial of X,L
   holds Monom(coefficient(m),term(m)) = m
 proof
-  let X be set, L be (non empty ZeroStr), m be Monomial of X,L;
+  let X be set, L be non empty ZeroStr, m be Monomial of X,L;
 A1: dom m = Bags X & dom Monom(coefficient(m),term(m)) = Bags X by
 FUNCT_2:def 1;
   per cases by Th6;
@@ -1119,21 +1120,21 @@ A2: Support m = {};
 A3: now
 A4:   term(m) is Element of Bags X by PRE_POLY:def 12;
       assume coefficient(m) <> 0.L;
-      hence contradiction by A2,A4,POLYNOM1:def 9;
+      hence contradiction by A2,A4,POLYNOM1:def 3;
     end;
 A5: m = 0_(X,L) by A2,Th1;
     set m9 = Monom(coefficient(m),term(m));
-A6: dom(0_(X,L)) = dom((Bags X) --> 0.L) by POLYNOM1:def 24
-      .= Bags X by FUNCOP_1:19;
-A7: dom(EmptyBag X .--> 0.L) = {EmptyBag X} by FUNCOP_1:19;
+A6: dom(0_(X,L)) = dom((Bags X) --> 0.L) by POLYNOM1:def 7
+      .= Bags X by FUNCOP_1:13;
+A7: dom(EmptyBag X .--> 0.L) = {EmptyBag X} by FUNCOP_1:13;
     then
 A8: EmptyBag X in dom(EmptyBag X .--> 0.L) by TARSKI:def 1;
 A9: term(m) = EmptyBag X by A2,Def6;
     then
 A10: m9.EmptyBag X = (0_(X,L)+*(EmptyBag X .--> 0.L)).EmptyBag X by A3,A6,
 FUNCT_7:def 3
-      .= (EmptyBag X .--> 0.L).EmptyBag X by A8,FUNCT_4:14
-      .= 0.L by FUNCOP_1:87;
+      .= (EmptyBag X .--> 0.L).EmptyBag X by A8,FUNCT_4:13
+      .= 0.L by FUNCOP_1:72;
     now
       let x be set;
       assume x in Bags X;
@@ -1149,27 +1150,27 @@ FUNCT_7:def 3
           then
 A11:      not x9 in dom(EmptyBag X .--> 0.L) by A7,TARSKI:def 1;
           m9.x9 = (0_(X,L)+*(EmptyBag X .--> 0.L)).x9 by A9,A3,A6,FUNCT_7:def 3
-            .= 0_(X,L).x9 by A11,FUNCT_4:12;
-          hence m9.x9 = 0.L by POLYNOM1:81;
+            .= 0_(X,L).x9 by A11,FUNCT_4:11;
+          hence m9.x9 = 0.L by POLYNOM1:22;
         end;
       end;
-      hence m.x = m9.x by A5,POLYNOM1:81;
+      hence m.x = m9.x by A5,POLYNOM1:22;
     end;
-    hence thesis by A1,FUNCT_1:9;
+    hence thesis by A1,FUNCT_1:2;
   end;
   suppose
     ex b being bag of X st Support m = {b};
     then consider b being bag of X such that
 A12: Support m = {b};
     set a = m.b;
-    dom(b .--> a) = {b} by FUNCOP_1:19;
+    dom(b .--> a) = {b} by FUNCOP_1:13;
     then
 A13: b in dom(b .--> a) by TARSKI:def 1;
     set m9 = Monom(coefficient(m),term(m));
-A14: dom(0_(X,L)) = dom((Bags X) --> 0.L) by POLYNOM1:def 24
-      .= Bags X by FUNCOP_1:19;
+A14: dom(0_(X,L)) = dom((Bags X) --> 0.L) by POLYNOM1:def 7
+      .= Bags X by FUNCOP_1:13;
 A15: b in Support m by A12,TARSKI:def 1;
-    then a <> 0.L by POLYNOM1:def 9;
+    then a <> 0.L by POLYNOM1:def 3;
     then
 A16: term(m) = b by Def6;
 A17: now
@@ -1178,33 +1179,33 @@ A17: now
 A18:  u in Support(Monom(coefficient(m),term(m)));
       then reconsider u9 = u as Element of Bags X;
       now
-A19:    dom(b .--> a) = {b} by FUNCOP_1:19;
+A19:    dom(b .--> a) = {b} by FUNCOP_1:13;
         assume u <> b;
         then
 A20:    not u9 in dom(b .--> a) by A19,TARSKI:def 1;
         b in dom 0_(X,L) by A14,PRE_POLY:def 12;
         then m9.u9 = (0_(X,L)+*(b .--> a)).u9 by A16,FUNCT_7:def 3
-          .= 0_(X,L).u9 by A20,FUNCT_4:12;
-        hence m9.u9 = 0.L by POLYNOM1:81;
+          .= 0_(X,L).u9 by A20,FUNCT_4:11;
+        hence m9.u9 = 0.L by POLYNOM1:22;
       end;
-      hence u in {b} by A18,POLYNOM1:def 9,TARSKI:def 1;
+      hence u in {b} by A18,POLYNOM1:def 3,TARSKI:def 1;
     end;
     b in Bags X by PRE_POLY:def 12;
     then
 A21: m9.b = (0_(X,L)+*(b .--> a)).b by A16,A14,FUNCT_7:def 3
-      .= (b .--> a).b by A13,FUNCT_4:14
-      .= a by FUNCOP_1:87;
+      .= (b .--> a).b by A13,FUNCT_4:13
+      .= a by FUNCOP_1:72;
     now
       let u be set;
       assume u in {b};
       then
 A22:  u = b by TARSKI:def 1;
-      m9.b <> 0.L by A15,A21,POLYNOM1:def 9;
+      m9.b <> 0.L by A15,A21,POLYNOM1:def 3;
       hence u in Support(Monom(coefficient(m),term(m))) by A15,A22,
-POLYNOM1:def 9;
+POLYNOM1:def 3;
     end;
     then
-A23: Support(Monom(coefficient(m),term(m))) = {b} by A17,TARSKI:2;
+A23: Support(Monom(coefficient(m),term(m))) = {b} by A17,TARSKI:1;
     now
       let x be set;
       assume x in Bags X;
@@ -1220,24 +1221,24 @@ A24:      x <> b;
           then
 A25:      not x in Support(Monom(coefficient(m),term(m))) by A23,TARSKI:def 1;
           not x in Support m by A12,A24,TARSKI:def 1;
-          hence m.x9 = 0.L by POLYNOM1:def 9
-            .= Monom(coefficient(m),term(m)).x9 by A25,POLYNOM1:def 9;
+          hence m.x9 = 0.L by POLYNOM1:def 3
+            .= Monom(coefficient(m),term(m)).x9 by A25,POLYNOM1:def 3;
         end;
       end;
       hence m.x = Monom(coefficient(m),term(m)).x;
     end;
-    hence thesis by A1,FUNCT_1:9;
+    hence thesis by A1,FUNCT_1:2;
   end;
 end;
 
 theorem Th12:
   for n being Ordinal, L being right_zeroed add-associative
-  right_complementable well-unital distributive (non trivial doubleLoopStr), m
+  right_complementable well-unital distributive non trivial doubleLoopStr, m
 being Monomial of n,L, x being Function of n,L holds eval(m,x) = coefficient(m)
   * eval(term(m),x)
 proof
   let n be Ordinal, L be right_zeroed add-associative right_complementable
-  well-unital distributive (non trivial doubleLoopStr), m be Monomial of n,L, x
+  well-unital distributive non trivial doubleLoopStr, m be Monomial of n,L, x
   be Function of n,L;
   consider y being FinSequence of the carrier of L such that
 A1: len y = len SgmX(BagOrder n, Support m) and
@@ -1261,12 +1262,12 @@ A8:     not u in {b};
         reconsider u as Element of Bags n by A7;
         u <> b by A8,TARSKI:def 1;
         then m.u = 0.L by A4;
-        hence thesis by A7,POLYNOM1:def 9;
+        hence thesis by A7,POLYNOM1:def 3;
       end;
 A9:   b in Bags n & dom m = Bags n by FUNCT_2:def 1,PRE_POLY:def 12;
       reconsider sm = Support m as finite Subset of Bags n;
       set sg = SgmX(BagOrder n, sm);
-A10:  BagOrder n linearly_orders sm by POLYNOM2:20;
+A10:  BagOrder n linearly_orders sm by POLYNOM2:18;
       for u being set holds u in {b} implies u in Support m
       proof
         let u be set;
@@ -1275,22 +1276,22 @@ A11:    u in {b};
         then u = b by TARSKI:def 1;
         then reconsider u as Element of Bags n by PRE_POLY:def 12;
         m.u <> 0.L by A5,A11,TARSKI:def 1;
-        hence thesis by POLYNOM1:def 9;
+        hence thesis by POLYNOM1:def 3;
       end;
-      then Support m = {b} by A6,TARSKI:2;
+      then Support m = {b} by A6,TARSKI:1;
       then
 A12:  rng sg = {b} by A10,PRE_POLY:def 2;
       then
 A13:  b in rng sg by TARSKI:def 1;
       then
-A14:  1 in dom sg by FINSEQ_3:33;
+A14:  1 in dom sg by FINSEQ_3:31;
       then
-A15:  sg.1 in rng sg by FUNCT_1:12;
+A15:  sg.1 in rng sg by FUNCT_1:3;
       then sg.1 = b by A12,TARSKI:def 1;
-      then 1 in dom (m * sg) by A14,A9,FUNCT_1:21;
+      then 1 in dom (m * sg) by A14,A9,FUNCT_1:11;
       then
-A16:  (m * sg)/.1 = (m * sg).1 by PARTFUN1:def 8
-        .= m.(sg.1) by A14,FUNCT_1:23
+A16:  (m * sg)/.1 = (m * sg).1 by PARTFUN1:def 6
+        .= m.(sg.1) by A14,FUNCT_1:13
         .= m.b by A12,A15,TARSKI:def 1
         .= coefficient(m) by A5,Def6;
 A17:  for u being set holds u in dom sg implies u in {1}
@@ -1301,9 +1302,9 @@ A18:    u in dom sg;
         assume
 A19:    not u in {1};
         reconsider u as Element of NAT by A18;
-        sg/.u = sg.u by A18,PARTFUN1:def 8;
+        sg/.u = sg.u by A18,PARTFUN1:def 6;
         then
-A20:    sg/.u in rng sg by A18,FUNCT_1:12;
+A20:    sg/.u in rng sg by A18,FUNCT_1:3;
 A21:    u <> 1 by A19,TARSKI:def 1;
 A22:    1 < u
         proof
@@ -1315,29 +1316,29 @@ FINSEQ_1:def 1;
           ex m9 being Element of NAT st m9 = u & 1 <= m9 & m9 <= k by A18,A23;
           hence thesis by A21,XXREAL_0:1;
         end;
-        sg/.1 = sg.1 by A13,A18,FINSEQ_3:33,PARTFUN1:def 8;
-        then sg/.1 in rng sg by A14,FUNCT_1:12;
+        sg/.1 = sg.1 by A13,A18,FINSEQ_3:31,PARTFUN1:def 6;
+        then sg/.1 in rng sg by A14,FUNCT_1:3;
         then sg/.1 = b by A12,TARSKI:def 1
           .= sg/.u by A12,A20,TARSKI:def 1;
         hence thesis by A10,A14,A18,A22,PRE_POLY:def 2;
       end;
       for u being set holds u in {1} implies u in dom sg by A14,TARSKI:def 1;
       then
-A24:  dom sg = Seg 1 by A17,FINSEQ_1:4,TARSKI:2;
+A24:  dom sg = Seg 1 by A17,FINSEQ_1:2,TARSKI:1;
       then
-A25:  1 in dom sg by FINSEQ_1:4,TARSKI:def 1;
-      sg/.1 = sg.1 by A14,PARTFUN1:def 8;
-      then sg/.1 in rng sg by A25,FUNCT_1:12;
+A25:  1 in dom sg by FINSEQ_1:2,TARSKI:def 1;
+      sg/.1 = sg.1 by A14,PARTFUN1:def 6;
+      then sg/.1 in rng sg by A25,FUNCT_1:3;
       then
 A26:  sg/.1 = b by A12,TARSKI:def 1;
 A27:  len sg = 1 by A24,FINSEQ_1:def 3;
       dom y = Seg(len y) by FINSEQ_1:def 3
         .= dom sg by A1,FINSEQ_1:def 3;
-      then y.1 = y/.1 by A25,PARTFUN1:def 8
+      then y.1 = y/.1 by A25,PARTFUN1:def 6
         .= (m * sg)/.1 * eval((sg/.1)@,x) by A1,A3,A27
         .= (m * sg)/.1 * eval(b,x) by A26,POLYNOM2:def 3;
-      then y = <* coefficient(m) * eval(b,x) *> by A1,A27,A16,FINSEQ_1:57;
-      hence eval(m,x) = coefficient(m) * eval(b,x) by A2,RLVECT_1:61
+      then y = <* coefficient(m) * eval(b,x) *> by A1,A27,A16,FINSEQ_1:40;
+      hence eval(m,x) = coefficient(m) * eval(b,x) by A2,RLVECT_1:44
         .= coefficient(m) * eval(term(m),x) by A5,Def6;
     end;
     case
@@ -1346,24 +1347,24 @@ A29:  Support m = {}
       proof
         assume Support m <> {};
         then reconsider sm = Support m as non empty Subset of Bags n;
-        set c =the  Element of sm;
-        m.c <> 0.L by POLYNOM1:def 9;
+        set c = the Element of sm;
+        m.c <> 0.L by POLYNOM1:def 3;
         hence thesis by A4,A28;
       end;
-      then term(m) = EmptyBag n & m.(EmptyBag n) = 0.L by Def6,POLYNOM1:def 9;
+      then term(m) = EmptyBag n & m.(EmptyBag n) = 0.L by Def6,POLYNOM1:def 3;
       then
-A30:  coefficient(m) * eval(term(m),x) = 0.L by VECTSP_1:39;
+A30:  coefficient(m) * eval(term(m),x) = 0.L by VECTSP_1:7;
       consider y being FinSequence of the carrier of L such that
 A31:  len y = len SgmX(BagOrder n, Support m) and
 A32:  eval(m,x) = Sum y and
       for i being Element of NAT st 1 <= i & i <= len y holds y/.i = (m *
 SgmX(BagOrder n, Support m))/.i * eval(((SgmX(BagOrder n, Support m))/.i)@,x)
       by POLYNOM2:def 4;
-      BagOrder n linearly_orders Support m by POLYNOM2:20;
+      BagOrder n linearly_orders Support m by POLYNOM2:18;
       then rng SgmX(BagOrder n, Support m) = {} by A29,PRE_POLY:def 2;
-      then SgmX(BagOrder n, Support m) = {} by RELAT_1:64;
+      then SgmX(BagOrder n, Support m) = {} by RELAT_1:41;
       then y = <*>(the carrier of L) by A31;
-      hence thesis by A30,A32,RLVECT_1:60;
+      hence thesis by A30,A32,RLVECT_1:43;
     end;
   end;
   hence thesis;
@@ -1371,12 +1372,12 @@ end;
 
 theorem
   for n being Ordinal, L being right_zeroed add-associative
-  right_complementable well-unital distributive (non trivial doubleLoopStr), a
+  right_complementable well-unital distributive non trivial doubleLoopStr, a
 being Element of L, b being bag of n, x being Function of n,L holds eval(Monom(
   a,b),x) = a * eval(b,x)
 proof
   let n be Ordinal, L be right_zeroed add-associative right_complementable
-  well-unital distributive (non trivial doubleLoopStr), a be Element of L, b be
+  well-unital distributive non trivial doubleLoopStr, a be Element of L, b be
   bag of n, x be Function of n,L;
   set m = Monom(a,b);
   now
@@ -1399,19 +1400,19 @@ A2:   a = 0.L;
           case
 A3:         b9 = b;
 A4:         b in Bags n by PRE_POLY:def 12;
-            dom(b .--> a) = {b} by FUNCOP_1:19;
+            dom(b .--> a) = {b} by FUNCOP_1:13;
             then
 A5:         b in dom(b .--> a) by TARSKI:def 1;
-            dom(0_(n,L)) = dom((Bags n) --> 0.L) by POLYNOM1:def 24
-              .= Bags n by FUNCOP_1:19;
+            dom(0_(n,L)) = dom((Bags n) --> 0.L) by POLYNOM1:def 7
+              .= Bags n by FUNCOP_1:13;
             then m = 0_(n,L)+*(b .--> a) by A4,FUNCT_7:def 3;
-            hence m.b9 = (b .--> a).b by A3,A5,FUNCT_4:14
-              .= 0.L by A2,FUNCOP_1:87;
+            hence m.b9 = (b .--> a).b by A3,A5,FUNCT_4:13
+              .= 0.L by A2,FUNCOP_1:72;
           end;
           case
             b9 <> b;
-            hence m.b9 = 0_(n,L).b9 by FUNCT_7:34
-              .= 0.L by POLYNOM1:81;
+            hence m.b9 = 0_(n,L).b9 by FUNCT_7:32
+              .= 0.L by POLYNOM1:22;
           end;
         end;
         hence thesis;
@@ -1419,8 +1420,8 @@ A5:         b in dom(b .--> a) by TARSKI:def 1;
       then
 A6:   m.(term(m)) = 0.L;
       thus eval(m,x) = coefficient(m) * eval(term(m),x) by Th12
-        .= 0.L by A6,VECTSP_1:39
-        .= a * eval(b,x) by A2,VECTSP_1:39;
+        .= 0.L by A6,VECTSP_1:7
+        .= a * eval(b,x) by A2,VECTSP_1:7;
     end;
   end;
   hence thesis;
@@ -1437,12 +1438,12 @@ end;
 
 registration
   let X be set, L be non empty ZeroStr;
-  cluster Constant Series of X,L;
+  cluster Constant for Series of X,L;
   existence
   proof
     set c = 0_(X,L);
     take c;
-    for b being bag of X st b <> EmptyBag X holds c.b = 0.L by POLYNOM1:81;
+    for b being bag of X st b <> EmptyBag X holds c.b = 0.L by POLYNOM1:22;
     hence thesis by Def8;
   end;
 end;
@@ -1454,7 +1455,7 @@ end;
 
 registration
   let X be set, L be non empty ZeroStr;
-  cluster Constant -> monomial-like Series of X,L;
+  cluster Constant -> monomial-like for Series of X,L;
   coherence
   proof
     let p be Series of X,L;
@@ -1479,7 +1480,7 @@ A3: for u being set holds u in Support p implies u in {EmptyBag n}
 A4:   u in Support p;
       then reconsider u as Element of Bags n;
       reconsider u9 = u as bag of n;
-      p.u9 <> 0.L by A4,POLYNOM1:def 9;
+      p.u9 <> 0.L by A4,POLYNOM1:def 3;
       then u9 = EmptyBag n by A2,Def8;
       hence thesis by TARSKI:def 1;
     end;
@@ -1493,11 +1494,11 @@ A6:   not EmptyBag n in Support p
         then
         for u being set holds u in {EmptyBag n} implies u in Support p by
 TARSKI:def 1;
-        hence thesis by A3,A5,TARSKI:2;
+        hence thesis by A3,A5,TARSKI:1;
       end;
 A7:   Support p = {}
       proof
-        set v =the  Element of Support p;
+        set v = the Element of Support p;
         assume Support p <> {};
         then v in Support p & v in {EmptyBag n} by A3;
         hence thesis by A6,TARSKI:def 1;
@@ -1507,7 +1508,7 @@ A8:   for b being bag of n holds p.b = 0.L
         let b be bag of n;
 A9:     b is Element of Bags n by PRE_POLY:def 12;
         assume p.b <> 0.L;
-        hence thesis by A7,A9,POLYNOM1:def 9;
+        hence thesis by A7,A9,POLYNOM1:def 3;
       end;
 A10:  for u being set holds u in rng p implies u in {0.L}
       proof
@@ -1515,7 +1516,7 @@ A10:  for u being set holds u in rng p implies u in {0.L}
         assume u in rng p;
         then consider x being set such that
 A11:    x in dom p and
-A12:    p.x = u by FUNCT_1:def 5;
+A12:    p.x = u by FUNCT_1:def 3;
         x is bag of n by A11;
         then u = 0.L by A8,A12;
         hence thesis by TARSKI:def 1;
@@ -1523,18 +1524,18 @@ A12:    p.x = u by FUNCT_1:def 5;
 A13:  dom p = Bags n by FUNCT_2:def 1;
       for u being set holds u in {0.L} implies u in rng p
       proof
-        set b =the  bag of n;
+        set b = the bag of n;
         let u be set;
         assume u in {0.L};
         then u = 0.L by TARSKI:def 1;
         then
 A14:    p.b = u by A8;
         b in dom p by A13,PRE_POLY:def 12;
-        hence thesis by A14,FUNCT_1:def 5;
+        hence thesis by A14,FUNCT_1:def 3;
       end;
-      then rng p = {0.L} by A10,TARSKI:2;
-      then p = (Bags n) --> 0.L by A13,FUNCOP_1:15;
-      hence thesis by POLYNOM1:def 24;
+      then rng p = {0.L} by A10,TARSKI:1;
+      then p = (Bags n) --> 0.L by A13,FUNCOP_1:9;
+      hence thesis by POLYNOM1:def 7;
     end;
   end;
   now
@@ -1544,7 +1545,7 @@ A15: p = 0_(n,L) or Support p = {EmptyBag n};
     suppose
       p = 0_(n,L);
       then for b being bag of n st b <> EmptyBag n holds p.b = 0.L by
-POLYNOM1:81;
+POLYNOM1:22;
       hence p is ConstPoly of n,L by Def8;
     end;
     suppose
@@ -1556,7 +1557,7 @@ A16:  Support p = {EmptyBag n};
 A17:    b <> EmptyBag n;
         reconsider b as Element of Bags n by PRE_POLY:def 12;
         not b in Support p by A16,A17,TARSKI:def 1;
-        hence thesis by POLYNOM1:def 9;
+        hence thesis by POLYNOM1:def 3;
       end;
       hence p is ConstPoly of n,L by Def8;
     end;
@@ -1570,18 +1571,18 @@ registration
   coherence
   proof
     for b being bag of X st b <> EmptyBag X holds (0_(X,L)).b = 0.L by
-POLYNOM1:81;
+POLYNOM1:22;
     hence thesis by Def8;
   end;
 end;
 
 registration
-  let X be set, L be well-unital (non empty doubleLoopStr);
+  let X be set, L be well-unital non empty doubleLoopStr;
   cluster 1_(X,L) -> Constant;
   coherence
   proof
     for b being bag of X st b <> EmptyBag X holds (1_(X,L)).b = 0.L by
-POLYNOM1:84;
+POLYNOM1:25;
     hence thesis by Def8;
   end;
 end;
@@ -1601,12 +1602,12 @@ A1: now
 A2:   c.eb = 0.L;
       Support c = {}
       proof
-        set u =the  Element of Support c;
+        set u = the Element of Support c;
         assume
 A3:     Support c <> {};
         then u in Support c;
         then reconsider u as Element of Bags n;
-        c.u <> 0.L by A3,POLYNOM1:def 9;
+        c.u <> 0.L by A3,POLYNOM1:def 3;
         hence thesis by A2,Def8;
       end;
       hence term(c) = EmptyBag n by Def6;
@@ -1649,15 +1650,15 @@ registration
     reconsider O9 as Series of X,L;
     now
       let b be bag of X;
-A1:   dom(EmptyBag X .--> a) = {EmptyBag X} by FUNCOP_1:19;
-      dom(Z) = dom((Bags X) --> 0.L) by POLYNOM1:def 24
-        .= Bags X by FUNCOP_1:19;
+A1:   dom(EmptyBag X .--> a) = {EmptyBag X} by FUNCOP_1:13;
+      dom(Z) = dom((Bags X) --> 0.L) by POLYNOM1:def 7
+        .= Bags X by FUNCOP_1:13;
       then
 A2:   O9 = 0_(X,L)+*(EmptyBag X .--> a) by FUNCT_7:def 3;
       assume b <> EmptyBag X;
       then not b in dom(EmptyBag X .--> a) by A1,TARSKI:def 1;
-      hence (O9).b = (0_(X,L)).b by A2,FUNCT_4:12
-        .= 0.L by POLYNOM1:81;
+      hence (O9).b = (0_(X,L)).b by A2,FUNCT_4:11
+        .= 0.L by POLYNOM1:22;
     end;
     hence thesis by Def8;
   end;
@@ -1675,30 +1676,30 @@ A1: now
     reconsider m as Series of X, L;
     assume x in Bags X;
     then reconsider x9 = x as bag of X;
-A2: dom(0_(X,L)) = dom((Bags X) --> 0.L) by POLYNOM1:def 24
-      .= Bags X by FUNCOP_1:19;
+A2: dom(0_(X,L)) = dom((Bags X) --> 0.L) by POLYNOM1:def 7
+      .= Bags X by FUNCOP_1:13;
     then
 A3: m = 0_(X,L)+*(EmptyBag X .--> 0.L) by FUNCT_7:def 3;
-A4: dom(EmptyBag X .--> 0.L) = {EmptyBag X} by FUNCOP_1:19;
+A4: dom(EmptyBag X .--> 0.L) = {EmptyBag X} by FUNCOP_1:13;
     then
 A5: EmptyBag X in dom(EmptyBag X .--> 0.L) by TARSKI:def 1;
 A6: m.(EmptyBag X) = (0_(X,L)+*(EmptyBag X .--> 0.L)).(EmptyBag X) by A2,
 FUNCT_7:def 3
-      .= (EmptyBag X .--> 0.L).(EmptyBag X) by A5,FUNCT_4:14
-      .= 0.L by FUNCOP_1:87;
+      .= (EmptyBag X .--> 0.L).(EmptyBag X) by A5,FUNCT_4:13
+      .= 0.L by FUNCOP_1:72;
     per cases;
     suppose
       x9 = EmptyBag X;
-      hence o1.x = o2.x by A6,POLYNOM1:81;
+      hence o1.x = o2.x by A6,POLYNOM1:22;
     end;
     suppose
       x9 <> EmptyBag X;
       then not x9 in dom(EmptyBag X .--> 0.L) by A4,TARSKI:def 1;
-      hence o1.x = o2.x by A3,FUNCT_4:12;
+      hence o1.x = o2.x by A3,FUNCT_4:11;
     end;
   end;
   Bags X = dom o1 & Bags X = dom o2 by FUNCT_2:def 1;
-  hence thesis by A1,FUNCT_1:9;
+  hence thesis by A1,FUNCT_1:2;
 end;
 
 theorem
@@ -1723,17 +1724,17 @@ A3:     now
           let x be set;
           assume x in Bags X;
           then reconsider x9 = x as bag of X;
-A4:       dom(0_(X,L)) = dom((Bags X) --> 0.L) by POLYNOM1:def 24
-            .= Bags X by FUNCOP_1:19;
+A4:       dom(0_(X,L)) = dom((Bags X) --> 0.L) by POLYNOM1:def 7
+            .= Bags X by FUNCOP_1:13;
           then
 A5:       q = 0_(X,L)+*(EmptyBag X .--> p.(EmptyBag X)) by FUNCT_7:def 3;
-A6:       dom(EmptyBag X .--> p.(EmptyBag X)) = {EmptyBag X} by FUNCOP_1:19;
+A6:       dom(EmptyBag X .--> p.(EmptyBag X)) = {EmptyBag X} by FUNCOP_1:13;
           then
 A7:       EmptyBag X in dom(EmptyBag X .--> p.(EmptyBag X)) by TARSKI:def 1;
 A8:       q.(EmptyBag X) = (0_(X,L)+*(EmptyBag X .--> p.(EmptyBag X))).(
           EmptyBag X) by A4,FUNCT_7:def 3
-            .= (EmptyBag X .--> p.(EmptyBag X)).(EmptyBag X) by A7,FUNCT_4:14
-            .= p.(EmptyBag X) by FUNCOP_1:87;
+            .= (EmptyBag X .--> p.(EmptyBag X)).(EmptyBag X) by A7,FUNCT_4:13
+            .= p.(EmptyBag X) by FUNCOP_1:72;
           now
             per cases;
             case
@@ -1745,18 +1746,18 @@ A9:           x9 <> EmptyBag X;
 A10:          x9 is Element of Bags X by PRE_POLY:def 12;
               not x9 in Support p by A2,A9,TARSKI:def 1;
               then
-A11:          p.x9 = 0.L by A10,POLYNOM1:def 9;
+A11:          p.x9 = 0.L by A10,POLYNOM1:def 3;
               not x9 in dom(EmptyBag X .--> p.(EmptyBag X)) by A6,A9,
 TARSKI:def 1;
-              then q.x9 = (0_(X,L)).x9 by A5,FUNCT_4:12;
-              hence p.x = q.x by A11,POLYNOM1:81;
+              then q.x9 = (0_(X,L)).x9 by A5,FUNCT_4:11;
+              hence p.x = q.x by A11,POLYNOM1:22;
             end;
           end;
           hence p.x = q.x;
         end;
 A12:    Bags X = dom q by FUNCT_2:def 1;
         q = p.(EmptyBag X) |(X,L) & Bags X = dom p by FUNCT_2:def 1;
-        hence ex a being Element of L st p = a |(X,L) by A12,A3,FUNCT_1:9;
+        hence ex a being Element of L st p = a |(X,L) by A12,A3,FUNCT_1:2;
       end;
     end;
     hence ex a being Element of L st p = a |(X,L);
@@ -1771,24 +1772,24 @@ theorem Th18:
 proof
   let n be set, L be non empty multLoopStr_0, a be Element of L;
   set Z = 0_(n,L);
-A1: Z = (Bags n --> 0.L) by POLYNOM1:def 24;
-  then dom Z = Bags n by FUNCOP_1:19;
-  hence (a |(n,L)).EmptyBag n = a by FUNCT_7:33;
+A1: Z = (Bags n --> 0.L) by POLYNOM1:def 7;
+  then dom Z = Bags n by FUNCOP_1:13;
+  hence (a |(n,L)).EmptyBag n = a by FUNCT_7:31;
   let b be bag of n;
 A2: b in Bags n by PRE_POLY:def 12;
   assume b <> EmptyBag n;
-  hence (a |(n,L)).b = Z.b by FUNCT_7:34
-    .= 0.L by A1,A2,FUNCOP_1:13;
+  hence (a |(n,L)).b = Z.b by FUNCT_7:32
+    .= 0.L by A1,A2,FUNCOP_1:7;
 end;
 
 theorem
   for X being set, L being non empty ZeroStr holds 0.L |(X,L) = 0_(X,L) by Lm3;
 
 theorem
-  for X being set, L being well-unital (non empty multLoopStr_0) holds (
+  for X being set, L being well-unital non empty multLoopStr_0 holds (
   1.L) |(X,L) = 1_(X,L)
 proof
-  let X be set, L be well-unital (non empty multLoopStr_0);
+  let X be set, L be well-unital non empty multLoopStr_0;
   set o1 = (1.L) |(X,L), o2 = 1_(X,L);
 A1: now
     set m = 0_(X,L)+*(EmptyBag X,1.L);
@@ -1798,33 +1799,33 @@ A1: now
     reconsider m as Series of X, L;
     assume x in Bags X;
     then reconsider x9 = x as bag of X;
-A2: dom(0_(X,L)) = dom((Bags X) --> 0.L) by POLYNOM1:def 24
-      .= Bags X by FUNCOP_1:19;
+A2: dom(0_(X,L)) = dom((Bags X) --> 0.L) by POLYNOM1:def 7
+      .= Bags X by FUNCOP_1:13;
     then
 A3: m = 0_(X,L)+*(EmptyBag X .--> 1.L) by FUNCT_7:def 3;
-A4: dom(EmptyBag X .--> 1.L) = {EmptyBag X} by FUNCOP_1:19;
+A4: dom(EmptyBag X .--> 1.L) = {EmptyBag X} by FUNCOP_1:13;
     then
 A5: EmptyBag X in dom(EmptyBag X .--> 1.L) by TARSKI:def 1;
 A6: m.(EmptyBag X) = (0_(X,L)+*(EmptyBag X .--> 1.L)).(EmptyBag X) by A2,
 FUNCT_7:def 3
-      .= (EmptyBag X .--> 1.L).(EmptyBag X) by A5,FUNCT_4:14
-      .= 1.L by FUNCOP_1:87;
+      .= (EmptyBag X .--> 1.L).(EmptyBag X) by A5,FUNCT_4:13
+      .= 1.L by FUNCOP_1:72;
     per cases;
     suppose
       x9 = EmptyBag X;
-      hence o1.x = o2.x by A6,POLYNOM1:84;
+      hence o1.x = o2.x by A6,POLYNOM1:25;
     end;
     suppose
 A7:   x9 <> EmptyBag X;
       then not x9 in dom(EmptyBag X .--> 1.L) by A4,TARSKI:def 1;
-      then m.x9 = (0_(X,L)).x9 by A3,FUNCT_4:12
-        .= 0.L by POLYNOM1:81
-        .= o2.x9 by A7,POLYNOM1:84;
+      then m.x9 = (0_(X,L)).x9 by A3,FUNCT_4:11
+        .= 0.L by POLYNOM1:22
+        .= o2.x9 by A7,POLYNOM1:25;
       hence o1.x = o2.x;
     end;
   end;
   Bags X = dom o1 & Bags X = dom o2 by FUNCT_2:def 1;
-  hence thesis by A1,FUNCT_1:9;
+  hence thesis by A1,FUNCT_1:2;
 end;
 
 theorem
@@ -1840,25 +1841,25 @@ proof
   reconsider k as Function of Bags X, the carrier of L;
   reconsider k as Function of Bags X, L;
   reconsider k as Series of X, L;
-  dom(EmptyBag X .--> a) = {EmptyBag X} by FUNCOP_1:19;
+  dom(EmptyBag X .--> a) = {EmptyBag X} by FUNCOP_1:13;
   then
 A1: EmptyBag X in dom(EmptyBag X .--> a) by TARSKI:def 1;
-  dom(EmptyBag X .--> b) = {EmptyBag X} by FUNCOP_1:19;
+  dom(EmptyBag X .--> b) = {EmptyBag X} by FUNCOP_1:13;
   then
 A2: EmptyBag X in dom(EmptyBag X .--> b) by TARSKI:def 1;
-  dom(0_(X,L)) = dom((Bags X) --> 0.L) by POLYNOM1:def 24
-    .= Bags X by FUNCOP_1:19;
+  dom(0_(X,L)) = dom((Bags X) --> 0.L) by POLYNOM1:def 7
+    .= Bags X by FUNCOP_1:13;
   then
 A3: k.(EmptyBag X) = (0_(X,L)+*(EmptyBag X .--> b)).(EmptyBag X) by
 FUNCT_7:def 3
-    .= (EmptyBag X .--> b).(EmptyBag X) by A2,FUNCT_4:14
-    .= b by FUNCOP_1:87;
-  dom(0_(X,L)) = dom((Bags X) --> 0.L) by POLYNOM1:def 24
-    .= Bags X by FUNCOP_1:19;
+    .= (EmptyBag X .--> b).(EmptyBag X) by A2,FUNCT_4:13
+    .= b by FUNCOP_1:72;
+  dom(0_(X,L)) = dom((Bags X) --> 0.L) by POLYNOM1:def 7
+    .= Bags X by FUNCOP_1:13;
   then m.(EmptyBag X) = (0_(X,L)+*(EmptyBag X .--> a)).(EmptyBag X) by
 FUNCT_7:def 3
-    .= (EmptyBag X .--> a).(EmptyBag X) by A1,FUNCT_4:14
-    .= a by FUNCOP_1:87;
+    .= (EmptyBag X .--> a).(EmptyBag X) by A1,FUNCT_4:13
+    .= a by FUNCOP_1:72;
   hence thesis by A3;
 end;
 
@@ -1875,26 +1876,26 @@ proof
   reconsider m as Function of Bags X, the carrier of L;
   reconsider m as Function of Bags X, L;
   reconsider m as Series of X, L;
-  dom(EmptyBag X .--> a) = {EmptyBag X} by FUNCOP_1:19;
+  dom(EmptyBag X .--> a) = {EmptyBag X} by FUNCOP_1:13;
   then
 A1: EmptyBag X in dom(EmptyBag X .--> a) by TARSKI:def 1;
-  dom(0_(X,L)) = dom((Bags X) --> 0.L) by POLYNOM1:def 24
-    .= Bags X by FUNCOP_1:19;
+  dom(0_(X,L)) = dom((Bags X) --> 0.L) by POLYNOM1:def 7
+    .= Bags X by FUNCOP_1:13;
   then m.(EmptyBag X) = (0_(X,L)+*(EmptyBag X .--> a)).(EmptyBag X) by
 FUNCT_7:def 3
-    .= (EmptyBag X .--> a).(EmptyBag X) by A1,FUNCT_4:14
-    .= a by FUNCOP_1:87;
+    .= (EmptyBag X .--> a).(EmptyBag X) by A1,FUNCT_4:13
+    .= a by FUNCOP_1:72;
   hence thesis by Lm2;
 end;
 
 theorem Th24:
   for n being Ordinal, L being right_zeroed add-associative
-  right_complementable well-unital distributive (non trivial doubleLoopStr), c
+  right_complementable well-unital distributive non trivial doubleLoopStr, c
 being ConstPoly of n,L, x being Function of n,L holds eval(c,x) = coefficient(c
   )
 proof
   let n be Ordinal, L be right_zeroed add-associative right_complementable
-well-unital distributive (non trivial doubleLoopStr), c be ConstPoly of n,L, x
+well-unital distributive non trivial doubleLoopStr, c be ConstPoly of n,L, x
   be Function of n,L;
   consider y being FinSequence of the carrier of L such that
 A1: len y = len SgmX(BagOrder n, Support c) and
@@ -1908,26 +1909,26 @@ A3: for i being Element of NAT st 1 <= i & i <= len y holds y/.i = (c *
 A4:   coefficient(c) = 0.L;
       Support c = {}
       proof
-        set u =the  Element of Support c;
+        set u = the Element of Support c;
         assume
 A5:     Support c <> {};
         then u in Support c;
         then reconsider u as Element of Bags n;
-        c.u <> 0.L by A5,POLYNOM1:def 9;
+        c.u <> 0.L by A5,POLYNOM1:def 3;
         then u <> EmptyBag n by A4,Lm2;
         then c.u = 0.L by Def8;
-        hence thesis by A5,POLYNOM1:def 9;
+        hence thesis by A5,POLYNOM1:def 3;
       end;
       then reconsider Sc = Support c as empty Subset of Bags n;
-      SgmX(BagOrder n, Sc) = {} by POLYNOM2:9,20;
+      SgmX(BagOrder n, Sc) = {} by POLYNOM2:7,18;
       then y = <*>(the carrier of L) by A1;
-      hence thesis by A2,A4,RLVECT_1:60;
+      hence thesis by A2,A4,RLVECT_1:43;
     end;
     case
 A6:   coefficient(c) <> 0.L;
       reconsider sc = Support c as finite Subset of Bags n;
       set sg = SgmX(BagOrder n, sc);
-A7:   BagOrder n linearly_orders sc by POLYNOM2:20;
+A7:   BagOrder n linearly_orders sc by POLYNOM2:18;
 A8:   for u being set holds u in Support c implies u in {EmptyBag n}
       proof
         let u be set;
@@ -1938,7 +1939,7 @@ A10:    not u in {EmptyBag n};
         reconsider u as Element of Bags n by A9;
         u <> EmptyBag n by A10,TARSKI:def 1;
         then c.u = 0.L by Def8;
-        hence thesis by A9,POLYNOM1:def 9;
+        hence thesis by A9,POLYNOM1:def 3;
       end;
       for u being set holds u in {EmptyBag n} implies u in Support c
       proof
@@ -1949,17 +1950,17 @@ A11:    u in {EmptyBag n};
 A12:    u = EmptyBag n by TARSKI:def 1;
         reconsider u as Element of Bags n by A11;
         c.u <> 0.L by A6,A12,Lm2;
-        hence thesis by POLYNOM1:def 9;
+        hence thesis by POLYNOM1:def 3;
       end;
-      then Support c = {EmptyBag n} by A8,TARSKI:2;
+      then Support c = {EmptyBag n} by A8,TARSKI:1;
       then
 A13:  rng sg = {EmptyBag n} by A7,PRE_POLY:def 2;
       then
 A14:  EmptyBag n in rng sg by TARSKI:def 1;
       then
-A15:  1 in dom sg by FINSEQ_3:33;
+A15:  1 in dom sg by FINSEQ_3:31;
       then
-A16:  sg.1 in rng sg by FUNCT_1:12;
+A16:  sg.1 in rng sg by FUNCT_1:3;
 A17:  for u being set holds u in dom sg implies u in {1}
       proof
         let u be set;
@@ -1968,9 +1969,9 @@ A18:    u in dom sg;
         assume
 A19:    not u in {1};
         reconsider u as Element of NAT by A18;
-        sg/.u = sg.u by A18,PARTFUN1:def 8;
+        sg/.u = sg.u by A18,PARTFUN1:def 6;
         then
-A20:    sg/.u in rng sg by A18,FUNCT_1:12;
+A20:    sg/.u in rng sg by A18,FUNCT_1:3;
 A21:    u <> 1 by A19,TARSKI:def 1;
 A22:    1 < u
         proof
@@ -1982,38 +1983,38 @@ FINSEQ_1:def 1;
           ex m9 being Element of NAT st m9 = u & 1 <= m9 & m9 <= k by A18,A23;
           hence thesis by A21,XXREAL_0:1;
         end;
-        sg/.1 = sg.1 by A14,A18,FINSEQ_3:33,PARTFUN1:def 8;
-        then sg/.1 in rng sg by A15,FUNCT_1:12;
+        sg/.1 = sg.1 by A14,A18,FINSEQ_3:31,PARTFUN1:def 6;
+        then sg/.1 in rng sg by A15,FUNCT_1:3;
         then sg/.1 = EmptyBag n by A13,TARSKI:def 1
           .= sg/.u by A13,A20,TARSKI:def 1;
         hence thesis by A7,A15,A18,A22,PRE_POLY:def 2;
       end;
       for u being set holds u in {1} implies u in dom sg by A15,TARSKI:def 1;
       then
-A24:  dom sg = Seg 1 by A17,FINSEQ_1:4,TARSKI:2;
+A24:  dom sg = Seg 1 by A17,FINSEQ_1:2,TARSKI:1;
       then
-A25:  1 in dom sg by FINSEQ_1:4,TARSKI:def 1;
-      sg/.1 = sg.1 by A15,PARTFUN1:def 8;
-      then sg/.1 in rng sg by A25,FUNCT_1:12;
+A25:  1 in dom sg by FINSEQ_1:2,TARSKI:def 1;
+      sg/.1 = sg.1 by A15,PARTFUN1:def 6;
+      then sg/.1 in rng sg by A25,FUNCT_1:3;
       then
 A26:  sg/.1 = EmptyBag n by A13,TARSKI:def 1;
 A27:  len sg = 1 by A24,FINSEQ_1:def 3;
       dom c = Bags n by FUNCT_2:def 1;
-      then 1 in dom (c * sg) by A13,A15,A16,FUNCT_1:21;
+      then 1 in dom (c * sg) by A13,A15,A16,FUNCT_1:11;
       then
-A28:  (c * sg)/.1 = (c * sg).1 by PARTFUN1:def 8
-        .= c.(sg.1) by A15,FUNCT_1:23
+A28:  (c * sg)/.1 = (c * sg).1 by PARTFUN1:def 6
+        .= c.(sg.1) by A15,FUNCT_1:13
         .= c.(EmptyBag n) by A13,A16,TARSKI:def 1
         .= coefficient(c) by Lm2;
       dom y = Seg(len y) by FINSEQ_1:def 3
         .= dom sg by A1,FINSEQ_1:def 3;
-      then y.1 = y/.1 by A25,PARTFUN1:def 8
+      then y.1 = y/.1 by A25,PARTFUN1:def 6
         .= (c * sg)/.1 * eval((sg/.1)@,x) by A1,A3,A27
         .= coefficient(c) * eval(EmptyBag n,x) by A26,A28,POLYNOM2:def 3
-        .= coefficient(c) * 1.L by POLYNOM2:16
-        .= coefficient(c) by VECTSP_1:def 16;
-      then y = <* coefficient(c) *> by A1,A27,FINSEQ_1:57;
-      hence thesis by A2,RLVECT_1:61;
+        .= coefficient(c) * 1.L by POLYNOM2:14
+        .= coefficient(c) by VECTSP_1:def 6;
+      then y = <* coefficient(c) *> by A1,A27,FINSEQ_1:40;
+      hence thesis by A2,RLVECT_1:44;
     end;
   end;
   hence thesis;
@@ -2021,11 +2022,11 @@ end;
 
 theorem Th25:
   for n being Ordinal, L being right_zeroed add-associative
-  right_complementable well-unital distributive (non trivial doubleLoopStr), a
+  right_complementable well-unital distributive non trivial doubleLoopStr, a
   being Element of L, x being Function of n,L holds eval(a |(n,L),x) = a
 proof
   let n be Ordinal, L be right_zeroed add-associative right_complementable
-  well-unital distributive (non trivial doubleLoopStr), a be Element of L, x be
+  well-unital distributive non trivial doubleLoopStr, a be Element of L, x be
   Function of n,L;
   thus eval(a |(n,L),x) = coefficient(a |(n,L)) by Th24
     .= a by Th23;
@@ -2063,7 +2064,7 @@ A3: for b being bag of X holds p2.b = a * p.b;
       thus p1.b = a * p.b9 by A2
         .= p2.b by A3;
     end;
-    hence p1 = p2 by FUNCT_2:113;
+    hence p1 = p2 by FUNCT_2:63;
   end;
   func p * a -> Series of X,L means
   :Def11:
@@ -2092,13 +2093,13 @@ A6: for b being bag of X holds p2.b = p.b * a;
       thus p1.b = p.b9 * a by A5
         .= p2.b by A6;
     end;
-    hence p1 = p2 by FUNCT_2:113;
+    hence p1 = p2 by FUNCT_2:63;
   end;
 end;
 
 registration
-  let X be set, L be left_zeroed right_zeroed add-cancelable distributive (non
-  empty doubleLoopStr), p be finite-Support Series of X,L, a be Element of L;
+  let X be set, L be left_zeroed right_zeroed add-cancelable distributive non
+  empty doubleLoopStr, p be finite-Support Series of X,L, a be Element of L;
   cluster a * p -> finite-Support;
   coherence
   proof
@@ -2108,14 +2109,14 @@ registration
       assume
 A1:   u in Support ap;
       then reconsider u9 = u as Element of Bags X;
-      ap.u <> 0.L by A1,POLYNOM1:def 9;
+      ap.u <> 0.L by A1,POLYNOM1:def 3;
       then a * p.u9 <> 0.L by Def10;
       then p.u9 <> 0.L by BINOM:2;
-      hence u in Support p by POLYNOM1:def 9;
+      hence u in Support p by POLYNOM1:def 3;
     end;
-    then Support p is finite & Support ap c= Support p by POLYNOM1:def 10
+    then Support p is finite & Support ap c= Support p by POLYNOM1:def 4
 ,TARSKI:def 3;
-    hence thesis by POLYNOM1:def 10;
+    hence thesis by POLYNOM1:def 4;
   end;
   cluster p * a -> finite-Support;
   coherence
@@ -2126,22 +2127,22 @@ A1:   u in Support ap;
       assume
 A2:   u in Support ap;
       then reconsider u9 = u as Element of Bags X;
-      ap.u <> 0.L by A2,POLYNOM1:def 9;
+      ap.u <> 0.L by A2,POLYNOM1:def 3;
       then p.u9 * a <> 0.L by Def11;
       then p.u9 <> 0.L by BINOM:1;
-      hence u in Support p by POLYNOM1:def 9;
+      hence u in Support p by POLYNOM1:def 3;
     end;
-    then Support p is finite & Support ap c= Support p by POLYNOM1:def 10
+    then Support p is finite & Support ap c= Support p by POLYNOM1:def 4
 ,TARSKI:def 3;
-    hence thesis by POLYNOM1:def 10;
+    hence thesis by POLYNOM1:def 4;
   end;
 end;
 
 theorem
-  for X being set, L being commutative (non empty multLoopStr_0), p
+  for X being set, L being commutative non empty multLoopStr_0, p
   being Series of X,L, a being Element of L holds a * p = p * a
 proof
-  let n be set, L be commutative (non empty multLoopStr_0), p be Series of n,L
+  let n be set, L be commutative non empty multLoopStr_0, p be Series of n,L
   , a be Element of L;
   now
     let b be Element of Bags n;
@@ -2149,16 +2150,16 @@ proof
     thus (a * p).b = a * p.b9 by Def10
       .= (p * a).b by Def11;
   end;
-  hence thesis by FUNCT_2:113;
+  hence thesis by FUNCT_2:63;
 end;
 
 theorem Th27:
   for n being Ordinal, L being add-associative
-right_complementable right_zeroed left-distributive (non empty doubleLoopStr),
+right_complementable right_zeroed left-distributive non empty doubleLoopStr,
   p being Series of n,L, a being Element of L holds a * p = a |(n,L) *' p
 proof
   let n be Ordinal, L be add-associative right_complementable
-left-distributive right_zeroed (non empty doubleLoopStr), p be Series of n,L, a
+left-distributive right_zeroed non empty doubleLoopStr, p be Series of n,L, a
   be Element of L;
 A1: for x being set st x in Bags n holds (a * p).x = (a |(n,L) *' p).x
   proof
@@ -2173,51 +2174,51 @@ A2: for b being Element of Bags n holds (a |(n,L) *' p).b = a * p.b
 A3:   (O*'p).b = Sum s and
 A4:   len s = len decomp b and
 A5:   for k being Element of NAT st k in dom s ex b1,b2 being bag of n
-      st (decomp b)/.k = <*b1, b2*> & s/.k = (O.b1)*(p.b2) by POLYNOM1:def 26;
+      st (decomp b)/.k = <*b1, b2*> & s/.k = (O.b1)*(p.b2) by POLYNOM1:def 9;
       s is non empty by A4;
       then consider
       s1 being Element of cL, t being FinSequence of cL such that
 A6:   s1 = s.1 and
-A7:   s = <*s1*>^t by FINSEQ_3:111;
-A8:   Sum s = (Sum <*s1*>) + (Sum t) by A7,RLVECT_1:58;
+A7:   s = <*s1*>^t by FINSEQ_3:102;
+A8:   Sum s = (Sum <*s1*>) + (Sum t) by A7,RLVECT_1:41;
 A9:   now
         per cases;
         suppose
           t = <*>(cL);
-          hence (Sum t) = 0.L by RLVECT_1:60;
+          hence (Sum t) = 0.L by RLVECT_1:43;
         end;
         suppose
 A10:      t <> <*>(cL);
           now
             let k be Nat;
-A11:        len s = len t + len <*s1*> by A7,FINSEQ_1:35
-              .= len t +1 by FINSEQ_1:56;
+A11:        len s = len t + len <*s1*> by A7,FINSEQ_1:22
+              .= len t +1 by FINSEQ_1:39;
             assume
 A12:        k in dom t;
             then
-A13:        t/.k = t.k by PARTFUN1:def 8
-              .= s.(k+1) by A7,A12,FINSEQ_3:112;
-            1 <= k by A12,FINSEQ_3:27;
+A13:        t/.k = t.k by PARTFUN1:def 6
+              .= s.(k+1) by A7,A12,FINSEQ_3:103;
+            1 <= k by A12,FINSEQ_3:25;
             then
 A14:        1 < k+1 by NAT_1:13;
-            k <= len t by A12,FINSEQ_3:27;
+            k <= len t by A12,FINSEQ_3:25;
             then
-A15:        k+1 <= len s by A11,XREAL_1:8;
+A15:        k+1 <= len s by A11,XREAL_1:6;
             then
-A16:        k+1 in dom decomp b by A4,A14,FINSEQ_3:27;
-A17:        dom s = dom decomp b by A4,FINSEQ_3:31;
+A16:        k+1 in dom decomp b by A4,A14,FINSEQ_3:25;
+A17:        dom s = dom decomp b by A4,FINSEQ_3:29;
             then
-A18:        s/.(k+1) = s.(k+1) by A16,PARTFUN1:def 8;
+A18:        s/.(k+1) = s.(k+1) by A16,PARTFUN1:def 6;
             per cases by A15,XXREAL_0:1;
             suppose
 A19:          k+1 < len s;
-              reconsider k1=k as Element of NAT by ORDINAL1:def 13;
+              reconsider k1=k as Element of NAT by ORDINAL1:def 12;
               consider b1, b2 being bag of n such that
 A20:          (decomp b)/.(k1+1) = <*b1, b2*> and
 A21:          s/.(k1+1) = O.b1*p.b2 by A5,A17,A16;
               b1 <> EmptyBag n by A4,A14,A19,A20,PRE_POLY:72;
               hence t/.k = 0.L*p.b2 by A13,A18,A21,Th18
-                .= 0.L by VECTSP_1:39;
+                .= 0.L by VECTSP_1:7;
             end;
             suppose
 A22:          k+1 = len s;
@@ -2225,20 +2226,20 @@ A23:          now
                 assume b = EmptyBag n;
                 then decomp b = <* <*EmptyBag n, EmptyBag n*> *> by PRE_POLY:73
 ;
-                then len t +1 = 0+1 by A4,A11,FINSEQ_1:56;
+                then len t +1 = 0+1 by A4,A11,FINSEQ_1:39;
                 hence contradiction by A10;
               end;
               consider b1, b2 being bag of n such that
 A24:          (decomp b)/.(k+1) = <*b1, b2*> and
 A25:          s/.(k+1) = O.b1*p.b2 by A5,A17,A16;
               (decomp b)/.(len s) = <*b,EmptyBag n*> by A4,PRE_POLY:71;
-              then b2 = EmptyBag n & b1 = b by A22,A24,FINSEQ_1:98;
+              then b2 = EmptyBag n & b1 = b by A22,A24,FINSEQ_1:77;
               then s.(k+1) = 0.L*(p.EmptyBag n) by A18,A25,A23,Th18
-                .= 0.L by VECTSP_1:39;
+                .= 0.L by VECTSP_1:7;
               hence t/.k = 0.L by A13;
             end;
           end;
-          hence Sum t = 0.L by MATRLIN:15;
+          hence Sum t = 0.L by MATRLIN:11;
         end;
       end;
 A26:  s is non empty by A4;
@@ -2247,13 +2248,13 @@ A27:  (decomp b)/.1 = <*b1, b2*> and
 A28:  s/.1 = O.b1*p.b2 by A5,FINSEQ_5:6;
       1 in dom s by A26,FINSEQ_5:6;
       then
-A29:  s/.1 = s.1 by PARTFUN1:def 8;
+A29:  s/.1 = s.1 by PARTFUN1:def 6;
       (decomp b)/.1 = <*EmptyBag n, b*> by PRE_POLY:71;
       then
-A30:  b2 = b & b1 = EmptyBag n by A27,FINSEQ_1:98;
-      Sum <*s1*> = s1 by RLVECT_1:61
+A30:  b2 = b & b1 = EmptyBag n by A27,FINSEQ_1:77;
+      Sum <*s1*> = s1 by RLVECT_1:44
         .= a * p.b by A6,A28,A30,A29,Th18;
-      hence thesis by A3,A8,A9,RLVECT_1:10;
+      hence thesis by A3,A8,A9,RLVECT_1:4;
     end;
     b is Element of Bags n by PRE_POLY:def 12;
     then (O*'p).b = a * p.b by A2
@@ -2261,16 +2262,16 @@ A30:  b2 = b & b1 = EmptyBag n by A27,FINSEQ_1:98;
     hence thesis;
   end;
   Bags n = dom(a * p) & Bags n = dom(a |(n,L) *' p) by FUNCT_2:def 1;
-  hence thesis by A1,FUNCT_1:9;
+  hence thesis by A1,FUNCT_1:2;
 end;
 
 theorem Th28:
   for n being Ordinal, L being add-associative
-right_complementable right_zeroed right-distributive (non empty doubleLoopStr),
+right_complementable right_zeroed right-distributive non empty doubleLoopStr,
   p being Series of n,L, a being Element of L holds p * a = p *' (a |(n,L))
 proof
   let n be Ordinal, L be add-associative right_complementable
-right-distributive right_zeroed (non empty doubleLoopStr), p be Series of n,L,
+right-distributive right_zeroed non empty doubleLoopStr, p be Series of n,L,
   a be Element of L;
 A1: for x being set st x in Bags n holds (p * a).x = (p *' (a |(n,L))).x
   proof
@@ -2285,45 +2286,45 @@ A2: for b being Element of Bags n holds (p *' (a |(n,L))).b = p.b * a
 A3:   (p*'O).b = Sum s and
 A4:   len s = len decomp b and
 A5:   for k being Element of NAT st k in dom s ex b1,b2 being bag of n
-      st (decomp b)/.k = <*b1, b2*> & s/.k = (p.b1)*(O.b2) by POLYNOM1:def 26;
+      st (decomp b)/.k = <*b1, b2*> & s/.k = (p.b1)*(O.b2) by POLYNOM1:def 9;
       consider t being FinSequence of cL,s1 being Element of cL such that
-A6:   s = t^<*s1*> by A4,FINSEQ_2:22;
+A6:   s = t^<*s1*> by A4,FINSEQ_2:19;
 A7:   now
         per cases;
         suppose
           t = <*>(cL);
-          hence (Sum t) = 0.L by RLVECT_1:60;
+          hence (Sum t) = 0.L by RLVECT_1:43;
         end;
         suppose
 A8:       t <> <*>(cL);
           now
             let k be Nat;
-A9:         len s = len t + len <*s1*> by A6,FINSEQ_1:35
-              .= len t +1 by FINSEQ_1:56;
+A9:         len s = len t + len <*s1*> by A6,FINSEQ_1:22
+              .= len t +1 by FINSEQ_1:39;
             assume
 A10:        k in dom t;
             then
-A11:        t/.k = t.k by PARTFUN1:def 8
+A11:        t/.k = t.k by PARTFUN1:def 6
               .= s.k by A6,A10,FINSEQ_1:def 7;
-            k <= len t by A10,FINSEQ_3:27;
+            k <= len t by A10,FINSEQ_3:25;
             then
 A12:        k < len s by A9,NAT_1:13;
-A13:        1 <= k by A10,FINSEQ_3:27;
+A13:        1 <= k by A10,FINSEQ_3:25;
             then
-A14:        k in dom decomp b by A4,A12,FINSEQ_3:27;
-A15:        dom s = dom decomp b by A4,FINSEQ_3:31;
+A14:        k in dom decomp b by A4,A12,FINSEQ_3:25;
+A15:        dom s = dom decomp b by A4,FINSEQ_3:29;
             then
-A16:        s/.k = s.k by A14,PARTFUN1:def 8;
+A16:        s/.k = s.k by A14,PARTFUN1:def 6;
             per cases by A13,XXREAL_0:1;
             suppose
 A17:          1 < k;
-              reconsider k1=k as Element of NAT by ORDINAL1:def 13;
+              reconsider k1=k as Element of NAT by ORDINAL1:def 12;
               consider b1, b2 being bag of n such that
 A18:          (decomp b)/.k1 = <*b1, b2*> and
 A19:          s/.k1 = p.b1*O.b2 by A5,A15,A14;
               b2 <> EmptyBag n by A4,A12,A17,A18,PRE_POLY:72;
               hence t/.k = p.b1*0.L by A11,A16,A19,Th18
-                .= 0.L by VECTSP_1:36;
+                .= 0.L by VECTSP_1:6;
             end;
             suppose
 A20:          k = 1;
@@ -2331,38 +2332,38 @@ A21:          now
                 assume b = EmptyBag n;
                 then decomp b = <* <*EmptyBag n, EmptyBag n*> *> by PRE_POLY:73
 ;
-                then len t +1 = 0+1 by A4,A9,FINSEQ_1:56;
+                then len t +1 = 0+1 by A4,A9,FINSEQ_1:39;
                 hence contradiction by A8;
               end;
               consider b1, b2 being bag of n such that
 A22:          (decomp b)/.k = <*b1, b2*> and
 A23:          s/.k = p.b1*O.b2 by A5,A15,A14;
               (decomp b)/.1 = <*EmptyBag n, b*> by PRE_POLY:71;
-              then b1 = EmptyBag n & b2 = b by A20,A22,FINSEQ_1:98;
+              then b1 = EmptyBag n & b2 = b by A20,A22,FINSEQ_1:77;
               then s.k = (p.EmptyBag n)*0.L by A16,A23,A21,Th18
-                .= 0.L by VECTSP_1:36;
+                .= 0.L by VECTSP_1:6;
               hence t/.k = 0.L by A11;
             end;
           end;
-          hence Sum t = 0.L by MATRLIN:15;
+          hence Sum t = 0.L by MATRLIN:11;
         end;
       end;
-A24:  s.len s = (t^<*s1*>).(len t +1) by A6,FINSEQ_2:19
-        .= s1 by FINSEQ_1:59;
-A25:  Sum s = (Sum t) + (Sum <*s1*>) by A6,RLVECT_1:58;
+A24:  s.len s = (t^<*s1*>).(len t +1) by A6,FINSEQ_2:16
+        .= s1 by FINSEQ_1:42;
+A25:  Sum s = (Sum t) + (Sum <*s1*>) by A6,RLVECT_1:41;
       s is non empty by A4;
       then
 A26:  len s in dom s by FINSEQ_5:6;
       then consider b1, b2 being bag of n such that
 A27:  (decomp b)/.len s = <*b1, b2*> and
 A28:  s/.len s = p.b1*O.b2 by A5;
-A29:  s/.len s = s.len s by A26,PARTFUN1:def 8;
+A29:  s/.len s = s.len s by A26,PARTFUN1:def 6;
       (decomp b)/.len s = <*b,EmptyBag n*> by A4,PRE_POLY:71;
       then
-A30:  b1 = b & b2 = EmptyBag n by A27,FINSEQ_1:98;
-      Sum <*s1*> = s1 by RLVECT_1:61
+A30:  b1 = b & b2 = EmptyBag n by A27,FINSEQ_1:77;
+      Sum <*s1*> = s1 by RLVECT_1:44
         .= p.b * a by A28,A30,A29,A24,Th18;
-      hence thesis by A3,A25,A7,RLVECT_1:10;
+      hence thesis by A3,A25,A7,RLVECT_1:4;
     end;
     b is Element of Bags n by PRE_POLY:def 12;
     then (p*'O).b = p.b * a by A2
@@ -2370,46 +2371,46 @@ A30:  b1 = b & b2 = EmptyBag n by A27,FINSEQ_1:98;
     hence thesis;
   end;
   Bags n = dom(p * a) & Bags n = dom(p *' (a |(n,L))) by FUNCT_2:def 1;
-  hence thesis by A1,FUNCT_1:9;
+  hence thesis by A1,FUNCT_1:2;
 end;
 
 Lm4: for n being Ordinal, L being Abelian left_zeroed right_zeroed
 add-associative right_complementable well-unital associative commutative
-distributive (non trivial doubleLoopStr), p being Polynomial of n,L, a being
+distributive non trivial doubleLoopStr, p being Polynomial of n,L, a being
 Element of L, x being Function of n,L holds eval((a |(n,L))*'p,x) = a * eval(p,
 x)
 proof
   let n be Ordinal, L be left_zeroed right_zeroed add-associative
-right_complementable well-unital associative commutative Abelian distributive (
-non trivial doubleLoopStr), p be Polynomial of n,L, a be Element of L, x being
+right_complementable well-unital associative commutative Abelian distributive
+non trivial doubleLoopStr, p be Polynomial of n,L, a be Element of L, x being
   Function of n,L;
-  thus eval((a |(n,L))*'p,x) = eval(a |(n,L),x) * eval(p,x) by POLYNOM2:27
+  thus eval((a |(n,L))*'p,x) = eval(a |(n,L),x) * eval(p,x) by POLYNOM2:25
     .= a * eval(p,x) by Th25;
 end;
 
 Lm5: for n being Ordinal, L being Abelian left_zeroed right_zeroed
 add-associative right_complementable well-unital associative commutative
-distributive (non trivial doubleLoopStr), p being Polynomial of n,L, a being
+distributive non trivial doubleLoopStr, p being Polynomial of n,L, a being
 Element of L, x being Function of n,L holds eval(p*'(a |(n,L)),x) = eval(p,x) *
 a
 proof
   let n be Ordinal, L be left_zeroed right_zeroed add-associative
-right_complementable well-unital associative commutative Abelian distributive (
-non trivial doubleLoopStr), p be Polynomial of n,L, a be Element of L, x being
+right_complementable well-unital associative commutative Abelian distributive
+non trivial doubleLoopStr, p be Polynomial of n,L, a be Element of L, x being
   Function of n,L;
-  thus eval(p*'(a |(n,L)),x) = eval(p,x) * eval(a |(n,L),x) by POLYNOM2:27
+  thus eval(p*'(a |(n,L)),x) = eval(p,x) * eval(a |(n,L),x) by POLYNOM2:25
     .= eval(p,x) * a by Th25;
 end;
 
 theorem
   for n being Ordinal, L being Abelian left_zeroed right_zeroed
   add-associative right_complementable well-unital associative commutative
-  distributive (non trivial doubleLoopStr), p being Polynomial of n,L, a being
+  distributive non trivial doubleLoopStr, p being Polynomial of n,L, a being
   Element of L, x being Function of n,L holds eval(a*p,x) = a * eval(p,x)
 proof
   let n be Ordinal, L be Abelian left_zeroed right_zeroed add-associative
-  right_complementable well-unital associative commutative distributive (non
-  trivial doubleLoopStr), p be Polynomial of n,L, a be Element of L, x be
+  right_complementable well-unital associative commutative distributive non
+  trivial doubleLoopStr, p be Polynomial of n,L, a be Element of L, x be
   Function of n,L;
   thus eval(a*p,x) = eval((a |(n,L)) *' p,x) by Th27
     .= a * eval(p,x) by Lm4;
@@ -2418,13 +2419,13 @@ end;
 theorem
   for n being Ordinal, L being left_zeroed right_zeroed
   left_add-cancelable add-associative right_complementable well-unital
-  associative domRing-like distributive (non trivial doubleLoopStr), p being
+  associative domRing-like distributive non trivial doubleLoopStr, p being
 Polynomial of n,L, a being Element of L, x being Function of n,L holds eval(a*p
   ,x) = a * eval(p,x)
 proof
   let n be Ordinal, L be left_zeroed right_zeroed left_add-cancelable
   add-associative right_complementable well-unital associative domRing-like
-distributive (non trivial doubleLoopStr), p be Polynomial of n,L, a be Element
+distributive non trivial doubleLoopStr, p be Polynomial of n,L, a be Element
   of L, x be Function of n,L;
   consider y being FinSequence of the carrier of L such that
 A1: len y = len SgmX(BagOrder n, Support(a*p)) and
@@ -2432,7 +2433,7 @@ A2: eval(a*p,x) = Sum y and
 A3: for i being Element of NAT st 1 <= i & i <= len y holds y/.i = ((a*p
 ) * SgmX(BagOrder n, Support(a*p)))/.i * eval(((SgmX(BagOrder n, Support(a*p)))
   /.i)@,x) by POLYNOM2:def 4;
-A4: BagOrder n linearly_orders Support(a*p) by POLYNOM2:20;
+A4: BagOrder n linearly_orders Support(a*p) by POLYNOM2:18;
   consider z being FinSequence of the carrier of L such that
 A5: len z = len SgmX(BagOrder n, Support p) and
 A6: eval(p,x) = Sum z and
@@ -2450,14 +2451,14 @@ A9: now
     now
       assume Support(a*p) <> {};
       then reconsider sp = Support(a*p) as non empty Subset of Bags n;
-      set c =the  Element of sp;
-      (a*p).c <> 0.L by POLYNOM1:def 9;
+      set c = the Element of sp;
+      (a*p).c <> 0.L by POLYNOM1:def 3;
       hence contradiction by A9;
     end;
     then rng(SgmX(BagOrder n, Support(a*p))) = {} by A4,PRE_POLY:def 2;
-    then SgmX(BagOrder n, Support(a*p)) = {} by RELAT_1:64;
+    then SgmX(BagOrder n, Support(a*p)) = {} by RELAT_1:41;
     then y = <*>(the carrier of L) by A1;
-    then Sum y = 0.L by RLVECT_1:60
+    then Sum y = 0.L by RLVECT_1:43
       .= a * Sum z by A8,BINOM:1;
     hence thesis by A2,A6;
   end;
@@ -2469,10 +2470,10 @@ A11: for u being set holds u in Support(a*p) implies u in Support p
       assume
 A12:  u in Support(a*p);
       then reconsider u9 = u as Element of Bags n;
-      (a*p).u <> 0.L by A12,POLYNOM1:def 9;
+      (a*p).u <> 0.L by A12,POLYNOM1:def 3;
       then a * p.u9 <> 0.L by Def10;
       then p.u9 <> 0.L by BINOM:2;
-      hence thesis by POLYNOM1:def 9;
+      hence thesis by POLYNOM1:def 3;
     end;
 A13: for u being set holds u in Support p implies u in Support(a*p)
     proof
@@ -2480,17 +2481,17 @@ A13: for u being set holds u in Support p implies u in Support(a*p)
       assume
 A14:  u in Support p;
       then reconsider u9 = u as Element of Bags n;
-      p.u <> 0.L by A14,POLYNOM1:def 9;
-      then a * p.u9 <> 0.L by A10,VECTSP_2:def 5;
+      p.u <> 0.L by A14,POLYNOM1:def 3;
+      then a * p.u9 <> 0.L by A10,VECTSP_2:def 1;
       then (a * p).u9 <> 0.L by Def10;
-      hence thesis by POLYNOM1:def 9;
+      hence thesis by POLYNOM1:def 3;
     end;
     then
-A15: len z = len y by A1,A5,A11,TARSKI:2;
+A15: len z = len y by A1,A5,A11,TARSKI:1;
     then
 A16: dom z = Seg(len y) by FINSEQ_1:def 3
       .= dom y by FINSEQ_1:def 3;
-A17: Support(a*p) = Support(p) by A13,A11,TARSKI:2;
+A17: Support(a*p) = Support(p) by A13,A11,TARSKI:1;
     now
 A18:  dom(a*p) = Bags n by FUNCT_2:def 1;
       now
@@ -2501,13 +2502,13 @@ A18:  dom(a*p) = Bags n by FUNCT_2:def 1;
       end;
       then rng SgmX(BagOrder n, Support(a*p)) c= dom(a*p) by TARSKI:def 3;
       then reconsider
-      r = (a*p) * SgmX(BagOrder n, Support(a*p)) as FinSequence by FINSEQ_1:20;
+      r = (a*p) * SgmX(BagOrder n, Support(a*p)) as FinSequence by FINSEQ_1:16;
       for u being set holds u in rng r implies u in the carrier of L
       proof
         let u be set;
         assume u in rng r;
         then
-A19:    u in rng(a*p) by FUNCT_1:25;
+A19:    u in rng(a*p) by FUNCT_1:14;
         rng(a*p) c= the carrier of L by RELAT_1:def 19;
         hence thesis by A19;
       end;
@@ -2522,13 +2523,13 @@ A21:  dom p = Bags n by FUNCT_2:def 1;
       end;
       then rng SgmX(BagOrder n, Support(a*p)) c= dom p by TARSKI:def 3;
       then reconsider
-      q = p * SgmX(BagOrder n, Support(a*p)) as FinSequence by FINSEQ_1:20;
+      q = p * SgmX(BagOrder n, Support(a*p)) as FinSequence by FINSEQ_1:16;
       for u being set holds u in rng q implies u in the carrier of L
       proof
         let u be set;
         assume u in rng q;
         then
-A22:    u in rng p by FUNCT_1:25;
+A22:    u in rng p by FUNCT_1:14;
         rng p c= the carrier of L by RELAT_1:def 19;
         hence thesis by A22;
       end;
@@ -2549,30 +2550,30 @@ A27:  dom z = Seg(len SgmX(BagOrder n, Support(a*p))) by A1,A16,FINSEQ_1:def 3
         .= dom(SgmX(BagOrder n, Support(a*p))) by FINSEQ_1:def 3;
       then
       (SgmX(BagOrder n, Support(a*p))).k = (SgmX(BagOrder n, Support(a*p)
-      ))/.k by A24,A25,PARTFUN1:def 8;
-      then k in dom q by A24,A25,A27,A21,FUNCT_1:21;
+      ))/.k by A24,A25,PARTFUN1:def 6;
+      then k in dom q by A24,A25,A27,A21,FUNCT_1:11;
       then
-A28:  (p * SgmX(BagOrder n, Support(a*p)))/.k = q.k by PARTFUN1:def 8
-        .= p.(SgmX(BagOrder n, Support(a*p)).k) by A24,A25,A27,FUNCT_1:23
-        .= p.(SgmX(BagOrder n, Support(a*p))/.k) by A24,A25,A27,PARTFUN1:def 8;
+A28:  (p * SgmX(BagOrder n, Support(a*p)))/.k = q.k by PARTFUN1:def 6
+        .= p.(SgmX(BagOrder n, Support(a*p)).k) by A24,A25,A27,FUNCT_1:13
+        .= p.(SgmX(BagOrder n, Support(a*p))/.k) by A24,A25,A27,PARTFUN1:def 6;
       reconsider c = SgmX(BagOrder n, Support(a*p))/.k as Element of Bags n;
       reconsider c as bag of n;
 A29:  a * z/.k = a * ((p * SgmX(BagOrder n, Support p))/.k * eval(((SgmX(
       BagOrder n, Support p))/.k)@,x)) by A7,A26
         .= (a * (p * SgmX(BagOrder n, Support(a*p)))/.k) * eval(((SgmX(
-      BagOrder n, Support(a*p)))/.k)@,x) by A17,GROUP_1:def 4;
+      BagOrder n, Support(a*p)))/.k)@,x) by A17,GROUP_1:def 3;
 A30:  (a*p).(SgmX(BagOrder n, Support(a*p))/.k) = (a*p).c
         .= a * (p * SgmX(BagOrder n, Support(a*p)))/.k by A28,Def10;
       (SgmX(BagOrder n, Support(a*p))).k = (SgmX(BagOrder n, Support(a*p)
-      ))/.k by A24,A25,A27,PARTFUN1:def 8;
-      then k in dom r by A24,A25,A27,A18,FUNCT_1:21;
-      then ((a*p) * SgmX(BagOrder n, Support(a*p)))/.k = r.k by PARTFUN1:def 8
-        .= (a*p).(SgmX(BagOrder n, Support(a*p)).k) by A24,A25,A27,FUNCT_1:23
+      ))/.k by A24,A25,A27,PARTFUN1:def 6;
+      then k in dom r by A24,A25,A27,A18,FUNCT_1:11;
+      then ((a*p) * SgmX(BagOrder n, Support(a*p)))/.k = r.k by PARTFUN1:def 6
+        .= (a*p).(SgmX(BagOrder n, Support(a*p)).k) by A24,A25,A27,FUNCT_1:13
         .= a * (p * SgmX(BagOrder n, Support(a*p)))/.k by A24,A25,A27,A30,
-PARTFUN1:def 8;
+PARTFUN1:def 6;
       hence y/.i = a * z/.i by A3,A15,A25,A26,A29;
     end;
-    then y = a * z by A16,POLYNOM1:def 2;
+    then y = a * z by A16,POLYNOM1:def 1;
     hence thesis by A2,A6,BINOM:4;
   end;
 end;
@@ -2580,12 +2581,12 @@ end;
 theorem
   for n being Ordinal, L being Abelian left_zeroed right_zeroed
   add-associative right_complementable well-unital associative commutative
-  distributive (non trivial doubleLoopStr), p being Polynomial of n,L, a being
+  distributive non trivial doubleLoopStr, p being Polynomial of n,L, a being
   Element of L, x being Function of n,L holds eval(p*a,x) = eval(p,x) * a
 proof
   let n be Ordinal, L be Abelian left_zeroed right_zeroed add-associative
-  right_complementable well-unital associative commutative distributive (non
-  trivial doubleLoopStr), p be Polynomial of n,L, a be Element of L, x be
+  right_complementable well-unital associative commutative distributive non
+  trivial doubleLoopStr, p be Polynomial of n,L, a be Element of L, x be
   Function of n,L;
   thus eval(p*a,x) = eval(p*'(a |(n,L)),x) by Th28
     .= eval(p,x) * a by Lm5;
@@ -2594,13 +2595,13 @@ end;
 theorem
   for n being Ordinal, L being left_zeroed right_zeroed
   left_add-cancelable add-associative right_complementable well-unital
-associative commutative distributive domRing-like (non trivial doubleLoopStr),
+associative commutative distributive domRing-like non trivial doubleLoopStr,
 p being Polynomial of n,L, a being Element of L, x being Function of n,L holds
   eval(p*a,x) = eval(p,x) * a
 proof
   let n be Ordinal, L be left_zeroed right_zeroed left_add-cancelable
   add-associative right_complementable well-unital associative commutative
-distributive domRing-like (non trivial doubleLoopStr), p be Polynomial of n,L,
+distributive domRing-like non trivial doubleLoopStr, p be Polynomial of n,L,
   a be Element of L, x be Function of n,L;
   consider y being FinSequence of the carrier of L such that
 A1: len y = len SgmX(BagOrder n, Support(p*a)) and
@@ -2626,15 +2627,15 @@ A8:   now
 A9:   now
         assume Support(p*a) <> {};
         then reconsider sp = Support(p*a) as non empty Subset of Bags n;
-        set c =the  Element of sp;
-        (p*a).c <> 0.L by POLYNOM1:def 9;
+        set c = the Element of sp;
+        (p*a).c <> 0.L by POLYNOM1:def 3;
         hence contradiction by A8;
       end;
-      BagOrder n linearly_orders Support(p*a) by POLYNOM2:20;
+      BagOrder n linearly_orders Support(p*a) by POLYNOM2:18;
       then rng(SgmX(BagOrder n, Support(p*a))) = {} by A9,PRE_POLY:def 2;
-      then SgmX(BagOrder n, Support(p*a)) = {} by RELAT_1:64;
+      then SgmX(BagOrder n, Support(p*a)) = {} by RELAT_1:41;
       then y = <*>(the carrier of L) by A1;
-      then Sum y = 0.L by RLVECT_1:60
+      then Sum y = 0.L by RLVECT_1:43
         .= Sum z * a by A7,BINOM:2;
       hence thesis by A2,A5;
     end;
@@ -2646,10 +2647,10 @@ A11:  for u being set holds u in Support(p*a) implies u in Support p
         assume
 A12:    u in Support(p*a);
         then reconsider u9 = u as Element of Bags n;
-        (p*a).u <> 0.L by A12,POLYNOM1:def 9;
+        (p*a).u <> 0.L by A12,POLYNOM1:def 3;
         then p.u9 * a <> 0.L by Def11;
         then p.u9 <> 0.L by BINOM:1;
-        hence thesis by POLYNOM1:def 9;
+        hence thesis by POLYNOM1:def 3;
       end;
 A13:  for u being set holds u in Support p implies u in Support(p*a)
       proof
@@ -2657,18 +2658,18 @@ A13:  for u being set holds u in Support p implies u in Support(p*a)
         assume
 A14:    u in Support p;
         then reconsider u9 = u as Element of Bags n;
-        p.u <> 0.L by A14,POLYNOM1:def 9;
-        then p.u9 * a <> 0.L by A10,VECTSP_2:def 5;
+        p.u <> 0.L by A14,POLYNOM1:def 3;
+        then p.u9 * a <> 0.L by A10,VECTSP_2:def 1;
         then (p *a).u9 <> 0.L by Def11;
-        hence thesis by POLYNOM1:def 9;
+        hence thesis by POLYNOM1:def 3;
       end;
       then
-A15:  len z = len y by A1,A4,A11,TARSKI:2;
+A15:  len z = len y by A1,A4,A11,TARSKI:1;
       then
 A16:  dom z = Seg(len y) by FINSEQ_1:def 3
         .= dom y by FINSEQ_1:def 3;
-A17:  BagOrder n linearly_orders Support(p*a) by POLYNOM2:20;
-A18:  Support(p*a) = Support(p) by A13,A11,TARSKI:2;
+A17:  BagOrder n linearly_orders Support(p*a) by POLYNOM2:18;
+A18:  Support(p*a) = Support(p) by A13,A11,TARSKI:1;
       now
 A19:    dom(p*a) = Bags n by FUNCT_2:def 1;
         now
@@ -2680,13 +2681,13 @@ A19:    dom(p*a) = Bags n by FUNCT_2:def 1;
         then rng SgmX(BagOrder n, Support(p*a)) c= dom(p*a) by TARSKI:def 3;
         then reconsider
         r = (p*a) * SgmX(BagOrder n, Support(p*a)) as FinSequence
-        by FINSEQ_1:20;
+        by FINSEQ_1:16;
         for u being set holds u in rng r implies u in the carrier of L
         proof
           let u be set;
           assume u in rng r;
           then
-A20:      u in rng(p*a) by FUNCT_1:25;
+A20:      u in rng(p*a) by FUNCT_1:14;
           rng(p*a) c= the carrier of L by RELAT_1:def 19;
           hence thesis by A20;
         end;
@@ -2701,13 +2702,13 @@ A22:    dom p = Bags n by FUNCT_2:def 1;
         end;
         then rng SgmX(BagOrder n, Support(p*a)) c= dom p by TARSKI:def 3;
         then reconsider
-        q = p * SgmX(BagOrder n, Support(p*a)) as FinSequence by FINSEQ_1:20;
+        q = p * SgmX(BagOrder n, Support(p*a)) as FinSequence by FINSEQ_1:16;
         for u being set holds u in rng q implies u in the carrier of L
         proof
           let u be set;
           assume u in rng q;
           then
-A23:      u in rng p by FUNCT_1:25;
+A23:      u in rng p by FUNCT_1:14;
           rng p c= the carrier of L by RELAT_1:def 19;
           hence thesis by A23;
         end;
@@ -2729,32 +2730,32 @@ FINSEQ_1:def 3
           .= dom(SgmX(BagOrder n, Support(p*a))) by FINSEQ_1:def 3;
         then
         (SgmX(BagOrder n, Support(p*a))).k = (SgmX(BagOrder n, Support(p*
-        a)))/.k by A25,A26,PARTFUN1:def 8;
-        then k in dom q by A25,A26,A28,A22,FUNCT_1:21;
+        a)))/.k by A25,A26,PARTFUN1:def 6;
+        then k in dom q by A25,A26,A28,A22,FUNCT_1:11;
         then
-A29:    (p * SgmX(BagOrder n, Support(p*a)))/.k = q.k by PARTFUN1:def 8
-          .= p.(SgmX(BagOrder n, Support(p*a)).k) by A25,A26,A28,FUNCT_1:23
+A29:    (p * SgmX(BagOrder n, Support(p*a)))/.k = q.k by PARTFUN1:def 6
+          .= p.(SgmX(BagOrder n, Support(p*a)).k) by A25,A26,A28,FUNCT_1:13
           .= p.(SgmX(BagOrder n, Support(p*a))/.k) by A25,A26,A28,
-PARTFUN1:def 8;
+PARTFUN1:def 6;
         reconsider c = SgmX(BagOrder n, Support(p*a))/.k as Element of Bags n;
         reconsider c as bag of n;
 A30:    z/.k * a = (p * SgmX(BagOrder n, Support(p*a)))/.k * (eval(((SgmX
         (BagOrder n, Support(p*a)))/.k)@,x)) * a by A6,A18,A27
           .= ((p * SgmX(BagOrder n, Support(p*a)))/.k * a) * eval(((SgmX(
-        BagOrder n, Support(p*a)))/.k)@,x) by GROUP_1:def 4;
+        BagOrder n, Support(p*a)))/.k)@,x) by GROUP_1:def 3;
 A31:    (p*a).(SgmX(BagOrder n, Support(p*a))/.k) = (p*a).c
           .= (p * SgmX(BagOrder n, Support(p*a)))/.k * a by A29,Def11;
         (SgmX(BagOrder n, Support(p*a))).k = (SgmX(BagOrder n, Support(p*
-        a)))/.k by A25,A26,A28,PARTFUN1:def 8;
-        then k in dom r by A25,A26,A28,A19,FUNCT_1:21;
+        a)))/.k by A25,A26,A28,PARTFUN1:def 6;
+        then k in dom r by A25,A26,A28,A19,FUNCT_1:11;
         then ((p*a) * SgmX(BagOrder n, Support(p*a)))/.k = r.k by
-PARTFUN1:def 8
-          .= (p*a).(SgmX(BagOrder n, Support(p*a)).k) by A25,A26,A28,FUNCT_1:23
+PARTFUN1:def 6
+          .= (p*a).(SgmX(BagOrder n, Support(p*a)).k) by A25,A26,A28,FUNCT_1:13
           .= (p * SgmX(BagOrder n, Support(p*a)))/.k * a by A25,A26,A28,A31,
-PARTFUN1:def 8;
+PARTFUN1:def 6;
         hence y/.i = z/.i * a by A3,A15,A26,A27,A30;
       end;
-      then y = z * a by A16,POLYNOM1:def 3;
+      then y = z * a by A16,POLYNOM1:def 2;
       hence thesis by A2,A5,BINOM:5;
     end;
   end;
@@ -2764,21 +2765,21 @@ end;
 theorem
   for n being Ordinal, L being Abelian left_zeroed right_zeroed
   add-associative right_complementable well-unital associative commutative
-  distributive (non trivial doubleLoopStr), p being Polynomial of n,L, a being
+  distributive non trivial doubleLoopStr, p being Polynomial of n,L, a being
 Element of L, x being Function of n,L holds eval((a |(n,L))*'p,x) = a * eval(p,
   x) by Lm4;
 
 theorem
   for n being Ordinal, L being Abelian left_zeroed right_zeroed
   add-associative right_complementable well-unital associative commutative
-  distributive (non trivial doubleLoopStr), p being Polynomial of n,L, a being
+  distributive non trivial doubleLoopStr, p being Polynomial of n,L, a being
 Element of L, x being Function of n,L holds eval(p*'(a |(n,L)),x) = eval(p,x) *
   a
 proof
   let n be Ordinal, L be left_zeroed right_zeroed add-associative
-right_complementable well-unital associative commutative Abelian distributive (
-non trivial doubleLoopStr), p be Polynomial of n,L, a be Element of L, x being
+right_complementable well-unital associative commutative Abelian distributive
+non trivial doubleLoopStr, p be Polynomial of n,L, a be Element of L, x being
   Function of n,L;
-  thus eval(p*'(a |(n,L)),x) = eval(p,x) * eval(a |(n,L),x) by POLYNOM2:27
+  thus eval(p*'(a |(n,L)),x) = eval(p,x) * eval(a |(n,L),x) by POLYNOM2:25
     .= eval(p,x) * a by Th25;
 end;

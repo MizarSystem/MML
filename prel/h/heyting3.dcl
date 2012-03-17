@@ -87,8 +87,8 @@
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="86"/>
 <Adjective nr="87"/>
+<Adjective nr="88"/>
 </Cluster>
 </FCluster>
 <FCluster aid="HEYTING3" nr="3">
@@ -105,9 +105,9 @@
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="57"/>
 <Adjective nr="58"/>
 <Adjective nr="59"/>
+<Adjective nr="60"/>
 </Cluster>
 </FCluster>
 <FCluster aid="HEYTING3" nr="4">
@@ -197,7 +197,7 @@
 </Func>
 </Func>
 <Cluster>
-<Adjective nr="88" value="false"/>
+<Adjective nr="89" value="false"/>
 </Cluster>
 </FCluster>
 <FCluster aid="HEYTING3" nr="9">
@@ -215,8 +215,8 @@
 </Func>
 </Func>
 <Cluster>
-<Adjective nr="63"/>
-<Adjective nr="89" value="false"/>
+<Adjective nr="64"/>
+<Adjective nr="90" value="false"/>
 </Cluster>
 </FCluster>
 </Registrations>

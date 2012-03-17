@@ -94,7 +94,7 @@
 </RCluster>
 <RCluster aid="SEQM_3" nr="3">
 <ArgTypes/>
-<Typ kind="M" nr="7">
+<Typ kind="M" nr="8">
 <Cluster/>
 <Func kind="K" nr="80"/>
 </Typ>
@@ -119,7 +119,7 @@
 </RCluster>
 <RCluster aid="SEQM_3" nr="4">
 <ArgTypes/>
-<Typ kind="M" nr="7">
+<Typ kind="M" nr="8">
 <Cluster/>
 <Func kind="K" nr="80"/>
 </Typ>
@@ -165,18 +165,59 @@
 </Typ>
 </ArgTypes>
 <Func kind="K" nr="100">
-<Func kind="K" nr="84"/>
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="6"/>
-<Adjective nr="15">
+<Adjective nr="1"/>
+<Adjective nr="4">
 <Func kind="K" nr="84"/>
+</Adjective>
+<Adjective nr="6"/>
+<Adjective nr="14">
 <Func kind="K" nr="84"/>
 </Adjective>
 <Adjective nr="31"/>
 <Adjective nr="32"/>
+</Cluster>
+</FCluster>
+<FCluster aid="SEQM_3" nr="2">
+<ArgTypes>
+<Typ kind="M" nr="2">
+<Cluster>
+<Adjective nr="6"/>
+<Adjective nr="15">
+<Func kind="K" nr="84"/>
+<Func kind="K" nr="80"/>
+</Adjective>
+</Cluster>
+<Func kind="K" nr="21">
+<Func kind="K" nr="22">
+<Func kind="K" nr="84"/>
+<Func kind="K" nr="80"/>
+</Func>
+</Func>
+</Typ>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="24"/>
+</Cluster>
+</Typ>
+</ArgTypes>
+<Func kind="K" nr="100">
+<LocusVar nr="1"/>
+<LocusVar nr="2"/>
+</Func>
+<Cluster>
+<Adjective nr="1"/>
+<Adjective nr="4">
+<Func kind="K" nr="84"/>
+</Adjective>
+<Adjective nr="6"/>
+<Adjective nr="14">
+<Func kind="K" nr="84"/>
+</Adjective>
+<Adjective nr="28"/>
 </Cluster>
 </FCluster>
 <CCluster aid="SEQM_3" nr="1">
@@ -224,7 +265,7 @@
 <CCluster aid="SEQM_3" nr="3">
 <ArgTypes/>
 <Cluster/>
-<Typ kind="M" nr="7">
+<Typ kind="M" nr="8">
 <Cluster/>
 <Func kind="K" nr="84"/>
 </Typ>
@@ -235,7 +276,7 @@
 <CCluster aid="SEQM_3" nr="4">
 <ArgTypes/>
 <Cluster/>
-<Typ kind="M" nr="7">
+<Typ kind="M" nr="8">
 <Cluster/>
 <Func kind="K" nr="80"/>
 </Typ>

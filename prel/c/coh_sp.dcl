@@ -31,7 +31,7 @@
 <Cluster>
 <Adjective nr="11" value="false"/>
 <Adjective nr="33"/>
-<Adjective nr="76"/>
+<Adjective nr="77"/>
 </Cluster>
 </RCluster>
 <FCluster aid="COH_SP" nr="1">
@@ -196,7 +196,7 @@
 <Cluster>
 <Adjective nr="11" value="false"/>
 <Adjective nr="33"/>
-<Adjective nr="76"/>
+<Adjective nr="77"/>
 </Cluster>
 </CCluster>
 </Registrations>

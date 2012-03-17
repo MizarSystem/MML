@@ -1,6 +1,6 @@
 :: Representation Theorem for Stacks
 ::  by Grzegorz Bancerek
-:: 
+::
 :: Received February 22, 2011
 :: Copyright (c) 2011 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
@@ -39,7 +39,7 @@ environ
       FILTER_1, FUNCT_4, REWRITE1, XXREAL_0, MSUALG_8, HILBERT2, RLVECT_3,
       FINSEQOP, FINSEQ_2;
  schemes XBOOLE_0, RELSET_1, NAT_1, FUNCT_2, BINOP_1, RECDEF_1, ALTCAT_1,
-      WELLORD2, FINSEQ_1, FINSEQ_2;
+      FUNCT_1, FINSEQ_1, FINSEQ_2;
 
 begin :: Preliminaries
 
@@ -64,7 +64,7 @@ definition
   redefine func Del(s,i) -> Element of A*;
   coherence
   proof
-    rng Del(s,i) c= rng s & rng s c= A by FINSEQ_3:115; then
+    rng Del(s,i) c= rng s & rng s c= A by FINSEQ_3:106; then
     rng Del(s,i) c= A by XBOOLE_1:1; then
     Del(s,i) is FinSequence of A by FINSEQ_1:def 4;
     hence thesis by FINSEQ_1:def 11;
@@ -74,45 +74,7 @@ end;
 theorem Lem1:
   Del({},i) = {}
   proof
-    dom Del({},i) c= dom {} by WSIERP_1:47;
-    hence thesis;
-  end;
-
-theorem FINSEQp2150:
-  for D being non empty set
-  for s being FinSequence of D st s <> {}
-  ex w being FinSequence of D, n being Element of D st s = <*n*>^w
-  proof
-    let D be non empty set;
-    let s be FinSequence of D;
-    defpred P[FinSequence] means $1 <> {} implies
-    ex w being FinSequence of D, n being Element of D st $1 = <*n*>^w;
-A1: for s being FinSequence of D
-    for m being Element of D st P[s] holds P[s^<*m*>]
-    proof
-      let s be FinSequence of D;
-      let m be Element of D such that
-A2:   s <> {} implies
-      ex w being FinSequence of D, n being Element of D st s = <*n*>^w;
-      assume s^<*m*> <> {};
-      per cases;
-      suppose
-A3:     s = {};
-        reconsider w = <*> D as FinSequence of D;
-        take w, n = m;
-        thus s^<*m*> = <*m*> by A3,FINSEQ_1:47
-        .= <*n*>^w by FINSEQ_1:47;
-      end;
-      suppose
-        s <> {};
-        then consider w being FinSequence of D, n being Element of D such that
-A4:     s = <*n*>^w by A2;
-        take w^<*m*>,n;
-        thus thesis by A4,FINSEQ_1:45;
-      end;
-    end;
-A5: P[<*> D];
-    for p being FinSequence of D holds P[p] from FINSEQ_2:sch 2(A5,A1);
+    dom Del({},i) c= dom {} by WSIERP_1:39;
     hence thesis;
   end;
 
@@ -134,7 +96,7 @@ A4:   for p being FinSequence of D() st len p = i holds P[p];
 A5:   len p = i + 1;
       then p <> {}; then
       consider q being FinSequence of D(), x being Element of D() such that
-A6:   p = <*x*>^q by FINSEQp2150;
+A6:   p = <*x*>^q by FINSEQ_2:130;
       len p = len q + 1 by A6,FINSEQ_5:8;
       hence thesis by A2,A4,A5,A6;
     end;
@@ -161,8 +123,8 @@ Def2:
   proof
     take f = pr2(C,D);
     let x be Element of C,y1,y2 be Element of D;
-    f.(x,y1) = y1 by FUNCT_3:def 6;
-    hence thesis by FUNCT_3:def 6;
+    f.(x,y1) = y1 by FUNCT_3:def 5;
+    hence thesis by FUNCT_3:def 5;
   end;
 end;
 
@@ -173,17 +135,17 @@ scheme LambdaD2{ A,B,C() -> non empty set, F(set,set) -> Element of C() }:
     consider M being ManySortedSet of [:A(),B():] such that
 A1: for i being Element of A(), j being Element of B() holds M.(i,j) = F(i,j)
     from ALTCAT_1:sch 2;
-A2: dom M = [:A(),B():] by PARTFUN1:def 4;
+A2: dom M = [:A(),B():] by PARTFUN1:def 2;
     rng M c= C()
     proof let y; assume y in rng M; then
       consider x such that
-A3:   x in dom M & y = M.x by FUNCT_1:def 5;
+A3:   x in dom M & y = M.x by FUNCT_1:def 3;
       consider x1,x2 being set such that
 A4:   x1 in A() & x2 in B() & x = [x1,x2] by A2,A3,ZFMISC_1:def 2;
       y = M.(x1,x2) by A3,A4 .= F(x1,x2) by A1,A4;
       hence thesis;
     end; then
-    reconsider M as Function of [:A(),B():],C() by A2,FUNCT_2:4;
+    reconsider M as Function of [:A(),B():],C() by A2,FUNCT_2:2;
     take M; thus thesis by A1;
   end;
 
@@ -202,26 +164,26 @@ A1: b is BinOp of C,D,R;
     now
       let X be set;
       assume X in Class R;
-      then ex x being set st x in D & X = Class(R,x) by EQREL_1:def 5;
-      hence X <> {} by EQREL_1:28;
+      then ex x being set st x in D & X = Class(R,x) by EQREL_1:def 3;
+      hence X <> {} by EQREL_1:20;
     end;
     then consider g being Function such that
 A2: dom g = Class R and
-A3: for X being set st X in Class R holds g.X in X by WELLORD2:28;
+A3: for X being set st X in Class R holds g.X in X by FUNCT_1:111;
 A4: rng g c= D
     proof
       let x be set;
       assume x in rng g;
       then consider y being set such that
 A5:   y in dom g and
-A6:   x = g.y by FUNCT_1:def 5;
+A6:   x = g.y by FUNCT_1:def 3;
       x in y by A2,A3,A5,A6;
       hence thesis by A2,A5;
     end;
     deffunc F(Element of D) = EqClass(R,$1);
     consider f being Function of D, Class R such that
 A7: for x being Element of D holds f.x = F(x) from FUNCT_2:sch 4;
-    reconsider g as Function of Class R, D by A2,A4,FUNCT_2:def 1,RELSET_1:11;
+    reconsider g as Function of Class R, D by A2,A4,FUNCT_2:def 1,RELSET_1:4;
     deffunc F(Element of C,Element of Class R) = f.(b.($1,g.$2));
     consider bR being Function of [:C, Class R:], Class R such that
 A8: for x being Element of C,y being Element of Class R holds bR.(x,y) = F(x,y)
@@ -235,15 +197,15 @@ A12: y1 in y;
     reconsider x9 = x as Element of C by A9;
     reconsider y9 = y as Element of Class R by A10;
     reconsider y19 = y1 as Element of D by A10,A12;
-A13: ex y2 being set st y2 in D & y9 = Class(R,y2) by EQREL_1:def 5;
+A13: ex y2 being set st y2 in D & y9 = Class(R,y2) by EQREL_1:def 3;
     g.y9 in y by A3;
-    then [g.y9,y19] in R by A12,A13,EQREL_1:30;
+    then [g.y9,y19] in R by A12,A13,EQREL_1:22;
     then [b.(x9,g.y9),b.(x9,y19)] in R by A1,Def2;
     then
-A16: b.(x9,g.y9) in EqClass(R,b.(x9,y19)) by EQREL_1:27;
+A16: b.(x9,g.y9) in EqClass(R,b.(x9,y19)) by EQREL_1:19;
 A17: f.(b.(x9,g.y9)) = EqClass(R,b.(x9,g.y9)) by A7;
     bR.(x9,y9) = f.(b.(x9,g.y9)) by A8;
-    hence thesis by A16,A17,EQREL_1:31;
+    hence thesis by A16,A17,EQREL_1:23;
   end;
   uniqueness
   proof
@@ -256,9 +218,9 @@ A19: for x,y,y1 being set st x in C & y in Class R & y1 in y
       let x be Element of C,y be Element of Class R;
       consider y1 being set such that
 A22:  y1 in D and
-A23:  y = Class(R,y1) by EQREL_1:def 5;
-      b1.(x,y) = Class(R,b.(x,y1)) by A18,A22,A23,EQREL_1:28;
-      hence b1.(x,y) = b2.(x,y) by A19,A22,A23,EQREL_1:28;
+A23:  y = Class(R,y1) by EQREL_1:def 3;
+      b1.(x,y) = Class(R,b.(x,y1)) by A18,A22,A23,EQREL_1:20;
+      hence b1.(x,y) = b2.(x,y) by A19,A22,A23,EQREL_1:20;
     end;
     hence thesis by BINOP_1:2;
   end;
@@ -275,16 +237,16 @@ definition
   proof per cases;
     suppose D = {}; then
       g = {};
-      hence thesis by FUNCT_4:22;
+      hence thesis by FUNCT_4:21;
     end;
     suppose
 A0:   D <> {};
 A1:   dom(f+*g) = dom f \/ dom g by FUNCT_4:def 1
       .= A \/ dom g by FUNCT_2:def 1
       .= A \/ C by A0,FUNCT_2:def 1 .= A by XBOOLE_1:12;
-A2:   rng(f+*g) c= rng f \/ rng g by FUNCT_4:18;
+A2:   rng(f+*g) c= rng f \/ rng g by FUNCT_4:17;
       rng f \/ rng g c= B \/ D & B \/ D = B by XBOOLE_1:12,13;
-      hence thesis by A1,A2,XBOOLE_1:1,FUNCT_2:4;
+      hence thesis by A1,A2,FUNCT_2:2,XBOOLE_1:1;
     end;
   end;
 end;
@@ -321,7 +283,7 @@ registration
 end;
 
 registration
-  cluster non empty non void strict StackSystem;
+  cluster non empty non void strict for StackSystem;
   existence
   proof
     set a1 = the non empty set, a2 = a1;
@@ -340,14 +302,24 @@ definition
 end;
 
 definition
-  let X be non empty non void StackSystem;
+  let X be StackSystem;
   let s be stack of X;
   pred emp s means:
 EMP: s in the s_empty of X;
+end;
+
+definition
+  let X be non void StackSystem;
+  let s be stack of X;
   func pop s -> stack of X equals (the s_pop of X).s;
   coherence;
   func top s -> Element of X equals (the s_top of X).s;
   coherence;
+end;
+
+definition
+  let X be non empty non void StackSystem;
+  let s be stack of X;
   let e be Element of X;
   func push(e,s) -> stack of X equals (the s_push of X).(e,s);
   coherence;
@@ -393,7 +365,7 @@ A1: g = s; then
 A5:   not emp s; then
 A3:   1 in dom h by A0,A1,FINSEQ_5:6;
       thus top s = IFEQ(s,{}, the Element of A, h/.1) by F3,A1
-      .= h/.1 by A0,A5,FUNCOP_1:def 8 .= g.1 by A3,PARTFUN1:def 8;
+      .= h/.1 by A0,A5,FUNCOP_1:def 8 .= g.1 by A3,PARTFUN1:def 6;
       thus pop s = Del(g,1) by A1,F2;
     end;
     hereby assume
@@ -458,7 +430,7 @@ D2:     emp s2 by C2;
         .= (the s_pop of X2).x;
       end;
     end; then
-A4: the s_pop of X1 = the s_pop of X2 by B1,B2,FUNCT_2:113;
+A4: the s_pop of X1 = the s_pop of X2 by B1,B2,FUNCT_2:63;
 K1: now
       let x be Element of A*;
       reconsider s1 = x as stack of X1 by B1;
@@ -503,7 +475,7 @@ A6:   x in the s_empty of X2; then
       emp s1 by C1;
       hence thesis by EMP;
     end;
-    hence thesis by A1,B1,A2,B2,A3,A4,K1,FUNCT_2:113;
+    hence thesis by A1,B1,A2,B2,A3,A4,K1,FUNCT_2:63;
   end;
 end;
 
@@ -513,7 +485,7 @@ reserve m for stack of StandardStackSystem A;
 
 registration
   let A;
-  cluster -> Relation-like Function-like stack of StandardStackSystem A;
+  cluster the carrier' of StandardStackSystem A -> functional;
   coherence
   proof
     the carrier' of StandardStackSystem A = A* by EXAM;
@@ -523,18 +495,13 @@ end;
 
 registration
   let A;
-  cluster -> FinSequence-like stack of StandardStackSystem A;
+  cluster -> FinSequence-like for stack of StandardStackSystem A;
   coherence
   proof
     the carrier' of StandardStackSystem A = A* by EXAM;
     hence thesis;
   end;
 end;
-
-::$H+
-  emp m iff m = {} by EXAM;
-  push(c,m) = <*c*>^m by EXAM;
-  not emp m implies pop m = Del(m,1) by EXAM;
 ::$H-
 
 reserve X for non empty non void StackSystem;
@@ -595,7 +562,7 @@ E8:   s is non empty by E4,E5; then
       not emp s by EXAM; then
 E6:   f.(i+1) = pop s & h = Del(g,1) by E1,E5,EXAM;
       1 in dom g by E8,FINSEQ_5:6; then
-      n0 = n by E7,E5,E6,FINSEQ_3:118;
+      n0 = n by E7,E5,E6,FINSEQ_3:109;
       hence thesis by E7,E6,NAT_1:13;
     end;
     P[0] from NAT_1:sch 7(E2,E3); then
@@ -616,7 +583,7 @@ A2: s is non empty by EXAM; then
 A1: g = <*g.1*>^Del(g,1) by POLYALG1:4;
     reconsider h = Del(g,1) as stack of X by EXAM;
     1 in dom g by A2,FINSEQ_5:6; then
-    g.1 in A by FUNCT_1:172; then
+    g.1 in A by FUNCT_1:102; then
     reconsider x = g.1 as Element of X by EXAM;
     thus s = push(x, h) by A1,EXAM .= push(top s, h) by A0,EXAM
     .= push(top s, pop s) by A0,EXAM;
@@ -630,7 +597,7 @@ A1: g = <*g.1*>^Del(g,1) by POLYALG1:4;
     reconsider h = push(e,s) as Element of A* by EXAM;
 A1: h = <*e*>^g by EXAM; then
 A2: not emp push(e,s) by EXAM;
-    thus e = h.1 by A1,FINSEQ_1:58 .= top push(e,s) by A2,EXAM;
+    thus e = h.1 by A1,FINSEQ_1:41 .= top push(e,s) by A2,EXAM;
   end;
   cluster StandardStackSystem A -> pop-push;
   coherence
@@ -641,7 +608,7 @@ A2: not emp push(e,s) by EXAM;
     reconsider h = push(e,s) as Element of A* by EXAM;
 A1: h = <*e*>^g by EXAM; then
 A2: not emp push(e,s) by EXAM;
-    thus s = Del(<*e*>^g,1) by WSIERP_1:48 .= pop push(e,s) by A1,A2,EXAM;
+    thus s = Del(<*e*>^g,1) by WSIERP_1:40 .= pop push(e,s) by A1,A2,EXAM;
   end;
   cluster StandardStackSystem A -> push-non-empty;
   coherence
@@ -656,17 +623,16 @@ end;
 
 registration
   cluster pop-finite push-pop top-push pop-push push-non-empty
-  strict (non empty non void StackSystem);
+  strict for non empty non void StackSystem;
   existence
   proof
-    set A = the non empty set;
-    take StandardStackSystem A; thus thesis;
+    take StandardStackSystem the non empty set; thus thesis;
   end;
 end;
 
 definition
   mode StackAlgebra is pop-finite push-pop top-push pop-push push-non-empty
-  (non empty non void StackSystem);
+  non empty non void StackSystem;
 end;
 
 theorem Th1:
@@ -685,12 +651,12 @@ A2: f.0 = s1 & for n being Element of NAT holds P[n,f.n,f.(n+1)]
     consider i being Nat, s being stack of X such that
 A3: f.i = s & (not emp s implies f.(i+1) <> pop s) by A0,POPFIN;
     take s;
-    i is Element of NAT by ORDINAL1:def 13;
+    i is Element of NAT by ORDINAL1:def 12;
     hence thesis by A2,A3;
   end;
 
 registration
-  let X be pop-finite (non empty non void StackSystem);
+  let X be pop-finite non empty non void StackSystem;
   cluster the s_empty of X -> non empty;
   coherence
   proof
@@ -741,10 +707,10 @@ A3: f.i = s & (not emp s implies f.(i+1) <> pop s) by POPFIN;
 A5: R[0] by A3,A2,P1;
 A6: now let j be Nat; assume
 B1:   R[j];
-B2:   i-'(j+1) = i-'j-'1 by NAT_2:32;
+B2:   i-'(j+1) = i-'j-'1 by NAT_2:30;
       per cases;
       suppose i-'j >= 1; then
-        i-'(j+1)+1 = i-'j by B2,XREAL_1:237; then
+        i-'(j+1)+1 = i-'j by B2,XREAL_1:235; then
         f.(i-'j) = pop (f.(i-'(j+1))) by A2; then
         not emp f.(i-'(j+1)) implies
         f.(i-'(j+1)) = push(top(f.(i-'(j+1))),f.(i-'j)) by PUSHPOP;
@@ -754,13 +720,13 @@ B2:   i-'(j+1) = i-'j-'1 by NAT_2:32;
 B7:     i-'j < 0+1; then
 B6:     i-'j <= 0 by NAT_1:13;
 B4:     i-'j = 0 by B7,NAT_1:13;
-        i-'(j+1) = 0-'1 by B4,NAT_2:32 .= 0 by NAT_2:10;
+        i-'(j+1) = 0-'1 by B4,NAT_2:30 .= 0 by NAT_2:8;
         hence R[j+1] by B1,B6;
       end;
     end;
     for j being Nat holds R[j] from NAT_1:sch 2(A5,A6); then
     R[i];
-    hence thesis by A2,XREAL_1:234;
+    hence thesis by A2,XREAL_1:232;
   end;
 
 scheme
@@ -787,7 +753,7 @@ B1: G[[:the carrier' of X(),A():]] & [:the carrier' of X(),A():] in
 A2: [:the carrier' of X(),A():] in M by A1;
     reconsider M as non empty set by A1,B1;
     set F = meet M;
-    reconsider F as Subset of [:the carrier' of X(),A():] by A2,SETFAM_1:4;
+    reconsider F as Subset of [:the carrier' of X(),A():] by A2,SETFAM_1:3;
     defpred P[stack of X()] means
     for y1,y2 being set st [$1,y1] in F & [$1,y2] in F holds y1 = y2;
 A8: G[F]
@@ -819,7 +785,7 @@ A7: for s being stack of X(), e being Element of X() st Q[s] holds Q[push(e,s)]
       let s be stack of X(), e be Element of X();
       given y being set such that
 M1:   [s,y] in F;
-      reconsider y as Element of A() by M1,ZFMISC_1:106;
+      reconsider y as Element of A() by M1,ZFMISC_1:87;
       take z = d(e,y);
       now let Y be set; assume
 M2:     Y in M; then
@@ -840,7 +806,7 @@ B4:     y1 <> e();
         proof
           hereby let s1 be stack of X(); assume emp s1; then
 B5:         [s1,e()] in F by A8;
-            [s,y1] <> [s1,e()] by B4,ZFMISC_1:33; then
+            [s,y1] <> [s1,e()] by B4,ZFMISC_1:27; then
             [s1,e()] nin {[s,y1]} by TARSKI:def 1;
             hence [s1,e()] in Y1 by B5,XBOOLE_0:def 5;
           end;
@@ -849,12 +815,12 @@ B5:         [s1,e()] in F by A8;
           [s1,v] in F by XBOOLE_0:def 5; then
 B6:       [push(a,s1),d(a,v)] in F by A8;
           push(a,s1) <> s by B1,PUSHNE; then
-          [s,y1] <> [push(a,s1),d(a,v)] by ZFMISC_1:33; then
+          [s,y1] <> [push(a,s1),d(a,v)] by ZFMISC_1:27; then
           [push(a,s1),d(a,v)] nin {[s,y1]} by TARSKI:def 1;
           hence [push(a,s1),d(a,v)] in Y1 by B6,XBOOLE_0:def 5;
         end; then
         Y1 in M by A1; then
-        F c= Y1 by SETFAM_1:4; then
+        F c= Y1 by SETFAM_1:3; then
         [s,y1] in Y1 & [s,y1] in {[s,y1]} by B2,TARSKI:def 1;
         hence contradiction by XBOOLE_0:def 5;
       end;
@@ -864,7 +830,7 @@ B4:     y2 <> e();
         proof
           hereby let s1 be stack of X(); assume emp s1; then
 B5:         [s1,e()] in F by A8;
-            [s,y2] <> [s1,e()] by B4,ZFMISC_1:33; then
+            [s,y2] <> [s1,e()] by B4,ZFMISC_1:27; then
             [s1,e()] nin {[s,y2]} by TARSKI:def 1;
             hence [s1,e()] in Y2 by B5,XBOOLE_0:def 5;
           end;
@@ -873,12 +839,12 @@ B5:         [s1,e()] in F by A8;
           [s1,v] in F by XBOOLE_0:def 5; then
 B6:       [push(a,s1),d(a,v)] in F by A8;
           push(a,s1) <> s by B1,PUSHNE; then
-          [s,y2] <> [push(a,s1),d(a,v)] by ZFMISC_1:33; then
+          [s,y2] <> [push(a,s1),d(a,v)] by ZFMISC_1:27; then
           [push(a,s1),d(a,v)] nin {[s,y2]} by TARSKI:def 1;
           hence [push(a,s1),d(a,v)] in Y2 by B6,XBOOLE_0:def 5;
         end; then
         Y2 in M by A1; then
-        F c= Y2 by SETFAM_1:4; then
+        F c= Y2 by SETFAM_1:3; then
         [s,y2] in Y2 & [s,y2] in {[s,y2]} by B2,TARSKI:def 1;
         hence contradiction by XBOOLE_0:def 5;
       end;
@@ -892,7 +858,7 @@ C2:   [push(e,s),y1] in F & [push(e,s),y2] in F;
       Q[s] from INDsch(A6,A7); then
       consider y being set such that
 C9:   [s,y] in F;
-      reconsider y as Element of A() by C9,ZFMISC_1:106;
+      reconsider y as Element of A() by C9,ZFMISC_1:87;
       set Y1 = F \ {[push(e,s),y1]}, Y2 = F \ {[push(e,s),y2]};
 C8:   now assume
 C4:     y1 <> d(e,y);
@@ -902,7 +868,7 @@ C4:     y1 <> d(e,y);
 C11:        emp s1; then
 C5:         [s1,e()] in F by A8;
             not emp push(e,s) by PUSHNE; then
-            [push(e,s),y1] <> [s1,e()] by C11,ZFMISC_1:33; then
+            [push(e,s),y1] <> [s1,e()] by C11,ZFMISC_1:27; then
             [s1,e()] nin {[push(e,s),y1]} by TARSKI:def 1;
             hence [s1,e()] in Y1 by C5,XBOOLE_0:def 5;
           end;
@@ -911,7 +877,7 @@ C5:         [s1,e()] in F by A8;
 C10:      [s1,v] in F by XBOOLE_0:def 5; then
 C6:       [push(a,s1),d(a,v)] in F by A8;
           now assume [push(e,s),y1] = [push(a,s1),d(a,v)]; then
-C12:        push(e,s) = push(a,s1) & y1 = d(a,v) by ZFMISC_1:33; then
+C12:        push(e,s) = push(a,s1) & y1 = d(a,v) by ZFMISC_1:27; then
             e = a & s = s1 by Th2;
             hence contradiction by C1,C9,C10,C4,C12;
           end; then
@@ -919,7 +885,7 @@ C12:        push(e,s) = push(a,s1) & y1 = d(a,v) by ZFMISC_1:33; then
           hence [push(a,s1),d(a,v)] in Y1 by C6,XBOOLE_0:def 5;
         end; then
         Y1 in M by A1; then
-        F c= Y1 by SETFAM_1:4; then
+        F c= Y1 by SETFAM_1:3; then
         [push(e,s),y1] in Y1 & [push(e,s),y1] in {[push(e,s),y1]}
         by C2,TARSKI:def 1;
         hence contradiction by XBOOLE_0:def 5;
@@ -932,7 +898,7 @@ C4:     y2 <> d(e,y);
 C11:        emp s1; then
 C5:         [s1,e()] in F by A8;
             not emp push(e,s) by PUSHNE; then
-            [push(e,s),y2] <> [s1,e()] by C11,ZFMISC_1:33; then
+            [push(e,s),y2] <> [s1,e()] by C11,ZFMISC_1:27; then
             [s1,e()] nin {[push(e,s),y2]} by TARSKI:def 1;
             hence [s1,e()] in Y2 by C5,XBOOLE_0:def 5;
           end;
@@ -941,7 +907,7 @@ C5:         [s1,e()] in F by A8;
 C10:      [s1,v] in F by XBOOLE_0:def 5; then
 C6:       [push(a,s1),d(a,v)] in F by A8;
           now assume [push(e,s),y2] = [push(a,s1),d(a,v)]; then
-C12:        push(e,s) = push(a,s1) & y2 = d(a,v) by ZFMISC_1:33; then
+C12:        push(e,s) = push(a,s1) & y2 = d(a,v) by ZFMISC_1:27; then
             e = a & s = s1 by Th2;
             hence contradiction by C1,C9,C10,C4,C12;
           end; then
@@ -949,7 +915,7 @@ C12:        push(e,s) = push(a,s1) & y2 = d(a,v) by ZFMISC_1:33; then
           hence [push(a,s1),d(a,v)] in Y2 by C6,XBOOLE_0:def 5;
         end; then
         Y2 in M by A1; then
-        F c= Y2 by SETFAM_1:4; then
+        F c= Y2 by SETFAM_1:3; then
         [push(e,s),y2] in Y2 & [push(e,s),y2] in {[push(e,s),y2]}
         by C2,TARSKI:def 1;
         hence contradiction by XBOOLE_0:def 5;
@@ -960,7 +926,7 @@ A5: F is Function-like
     proof
       let x,y1,y2 be set; assume
 B1:   [x,y1] in F & [x,y2] in F; then
-      reconsider x as stack of X() by ZFMISC_1:106;
+      reconsider x as stack of X() by ZFMISC_1:87;
       P[x] from INDsch(A3,A4);
       hence thesis by B1;
     end;
@@ -986,13 +952,13 @@ B1:   [x,y1] in F & [x,y2] in F; then
     thus a = F.s();
     hereby let s1 be stack of X(); assume emp s1; then
       [s1,e()] in F by A8;
-      hence F.s1 = e() by FUNCT_1:8;
+      hence F.s1 = e() by FUNCT_1:1;
     end;
     let s1 be stack of X(), e be Element of X();
     dom F = the carrier' of X() by FUNCT_2:def 1; then
-    [s1,F.s1] in F by FUNCT_1:def 4; then
+    [s1,F.s1] in F by FUNCT_1:def 2; then
     [push(e,s1),d(e,F.s1)] in F by A8;
-    hence F.push(e,s1) = d(e,F.s1) by FUNCT_1:8;
+    hence F.push(e,s1) = d(e,F.s1) by FUNCT_1:1;
   end;
 
 scheme
@@ -1107,7 +1073,7 @@ theorem Th33:
   proof
     assume not emp s; then
     |.s.| = <*top s*>^|.pop s.| by Th32;
-    hence thesis by WSIERP_1:48;
+    hence thesis by WSIERP_1:40;
   end;
 
 theorem Th34:
@@ -1124,7 +1090,7 @@ theorem Th35:
   proof
     assume not emp s; then
     |.s.| = <*top s*>^|.pop s.| by Th32;
-    hence top s = |.s.|.1 by FINSEQ_1:58;
+    hence top s = |.s.|.1 by FINSEQ_1:41;
   end;
 
 theorem Th351:
@@ -1320,7 +1286,7 @@ Z0: emp s;
       let x; assume
 Z1:   x in Class(==_X, s); then
       reconsider s1 = x as stack of X;
-      [s,s1] in ==_X by Z1,EQREL_1:26; then
+      [s,s1] in ==_X by Z1,EQREL_1:18; then
       s == s1 by REL; then
       emp s1 by Z0,Th42;
       hence thesis by EMP;
@@ -1331,7 +1297,7 @@ Z2: x in the s_empty of X; then
     emp s1 by Z2,EMP; then
     s == s1 by Z0,Th43; then
     [s,s1] in ==_X by REL;
-    hence thesis by EQREL_1:26;
+    hence thesis by EQREL_1:18;
   end;
 
 definition
@@ -1358,7 +1324,7 @@ A1: x in Y iff x in bool the carrier' of X & P[x] from XBOOLE_0:sch 1;
 B1: P[the carrier' of X] & S in bool S by ZFMISC_1:def 1; then
 A2: the carrier' of X in Y by A1;
     reconsider Y as non empty set by B1,A1;
-    reconsider C = meet Y as Subset of S by A2,SETFAM_1:4;
+    reconsider C = meet Y as Subset of S by A2,SETFAM_1:3;
     take C;
     for x st x in Y holds s in x by A1;
     hence s in C by SETFAM_1:def 1;
@@ -1383,7 +1349,7 @@ A5:     x in Y; then
     let A be Subset of the carrier' of X;
     assume P[A]; then
     A in Y by A1;
-    hence C c= A by SETFAM_1:4;
+    hence C c= A by SETFAM_1:3;
   end;
   uniqueness
   proof let C1,C2 be Subset of the carrier' of X;
@@ -1431,7 +1397,7 @@ A1: f.0 = s & for i being Element of NAT holds P[i,f.i,f.(i+1)]
 A2: Q[0] by A1,COSET;
 A3: now let i; assume
 B1:   Q[i];
-      i in NAT by ORDINAL1:def 13; then
+      i in NAT by ORDINAL1:def 12; then
       f.(i+1) = IFIN(f.i,the s_empty of X,s,pop(f.i)) by A1; then
       (f.i in the s_empty of X implies f.(i+1) = s) &
       (f.i nin the s_empty of X implies f.(i+1) = pop(f.i))
@@ -1443,7 +1409,7 @@ A4: Q[i] from NAT_1:sch 2(A2,A3);
     consider i,s1 such that
 A5: f.i = s1 & (not emp s1 implies f.(i+1) <> pop s1) by POPFIN;
     take s1;
-    i in NAT by ORDINAL1:def 13; then
+    i in NAT by ORDINAL1:def 12; then
     f.(i+1) = IFIN(f.i,the s_empty of X,s,pop(f.i)) by A1; then
     (f.i in the s_empty of X implies f.(i+1) = s) &
     (f.i nin the s_empty of X implies f.(i+1) = pop(f.i))
@@ -1454,11 +1420,11 @@ A5: f.i = s1 & (not emp s1 implies f.(i+1) <> pop s1) by POPFIN;
 registration
   let A;
   let R be Relation of A;
-  cluster A-valued RedSequence of R;
+  cluster A-valued for RedSequence of R;
   existence
   proof
     set a = the Element of A;
-    reconsider t = <*a*> as RedSequence of R by REWRITE1:7;
+    reconsider t = <*a*> as RedSequence of R by REWRITE1:6;
     take t; thus thesis;
   end;
 end;
@@ -1493,13 +1459,13 @@ theorem Lem2:
     let R be Relation of A;
     let t be RedSequence of R;
     rng t <> {}; then
-    1 in dom t by FINSEQ_3:34; then
-A2: t.1 in rng t by FUNCT_1:def 5;
+    1 in dom t by FINSEQ_3:32; then
+A2: t.1 in rng t by FUNCT_1:def 3;
     hereby
       assume
 Z0:   t.1 in A;
       defpred P[Nat] means $1 in dom t implies t.$1 in A;
-A3:   P[0] by FINSEQ_3:26;
+A3:   P[0] by FINSEQ_3:24;
 A4:   P[i] implies P[i+1]
       proof assume
         P[i]; assume
@@ -1507,18 +1473,18 @@ B1:     i+1 in dom t & t.(i+1) nin A;
         i = 0 or i >= 0+1 by NAT_1:13; then
         consider j being Nat such that
 B2:     i = j+1 by Z0,B1,NAT_1:6;
-        i <= i+1 & i+1 <= len t by B1,NAT_1:11,FINSEQ_3:27; then
-        1 <= i & i <= len t by B2,XXREAL_0:2,NAT_1:11; then
-        i in dom t by FINSEQ_3:27; then
+        i <= i+1 & i+1 <= len t by B1,FINSEQ_3:25,NAT_1:11; then
+        1 <= i & i <= len t by B2,NAT_1:11,XXREAL_0:2; then
+        i in dom t by FINSEQ_3:25; then
         [t.i, t.(i+1)] in R by B1,REWRITE1:def 2;
-        hence thesis by B1,ZFMISC_1:106;
+        hence thesis by B1,ZFMISC_1:87;
       end;
 A5:   P[i] from NAT_1:sch 2(A3,A4);
       thus t is A-valued
       proof
         let x; assume x in rng t; then
         consider y such that
-C1:     y in dom t & x = t.y by FUNCT_1:def 5;
+C1:     y in dom t & x = t.y by FUNCT_1:def 3;
         reconsider y as Nat by C1;
         thus thesis by C1,A5;
       end;
@@ -1540,7 +1506,7 @@ W3: for x,y being Element of X() st R() reduces x1(),x & [x,y] in R() &
 A1: t.1 = x1() & t.len t = x2() by W2,REWRITE1:def 3;
     reconsider t as X()-valued RedSequence of R() by A1,Lem2;
     defpred Q[Nat] means $1 in dom t implies P[t.$1];
-A2: Q[0] by FINSEQ_3:26;
+A2: Q[0] by FINSEQ_3:24;
 A3: now let i; assume
 A4:   Q[i];
       thus Q[i+1]
@@ -1549,12 +1515,12 @@ A5:     i+1 in dom t & not P[t.(i+1)];
         i = 0 or i >= 0+1 by NAT_1:13; then
         consider j being Nat such that
 A6:     i = j+1 by W1,A1,A5,NAT_1:6;
-        i <= i+1 & i+1 <= len t by A5,NAT_1:11,FINSEQ_3:27; then
-A9:     1 <= i & i <= len t & rng t <> {} by A6,XXREAL_0:2,NAT_1:11; then
-A7:     i in dom t & 1 in dom t by FINSEQ_3:27,34;
-A8:     t.i = t/.i & t.(i+1) = t/.(i+1) by A5,A7,PARTFUN1:def 8; then
+        i <= i+1 & i+1 <= len t by A5,FINSEQ_3:25,NAT_1:11; then
+A9:     1 <= i & i <= len t & rng t <> {} by A6,NAT_1:11,XXREAL_0:2; then
+A7:     i in dom t & 1 in dom t by FINSEQ_3:25,32;
+A8:     t.i = t/.i & t.(i+1) = t/.(i+1) by A5,A7,PARTFUN1:def 6; then
         [t/.i,t/.(i+1)] in R() by A5,A7,REWRITE1:def 2;
-        hence thesis by W3,A4,A5,A7,A1,A9,A8,REWRITE1:18;
+        hence thesis by W3,A4,A5,A7,A1,A9,A8,REWRITE1:17;
       end;
     end;
 BB: Q[i] from NAT_1:sch 2(A2,A3);
@@ -1571,7 +1537,7 @@ theorem Th57:
 Z0: s = t.1; then
     reconsider u = t as the carrier' of X-valued RedSequence of R by Lem2;
     defpred Q[Nat] means $1 in dom t implies t.$1 in coset s;
-A2: Q[0] by FINSEQ_3:26;
+A2: Q[0] by FINSEQ_3:24;
 A3: now let i; assume
 A4:   Q[i];
       thus Q[i+1]
@@ -1580,19 +1546,19 @@ A5:     i+1 in dom t & t.(i+1) nin coset s;
         i = 0 or i >= 0+1 by NAT_1:13; then
         consider j being Nat such that
 A6:     i = j+1 by Z0,A5,COSET,NAT_1:6;
-        i <= i+1 & i+1 <= len t by A5,NAT_1:11,FINSEQ_3:27; then
-A9:     1 <= i & i <= len t & rng t <> {} by A6,XXREAL_0:2,NAT_1:11; then
-A7:     i in dom t & 1 in dom t by FINSEQ_3:27,34; then
-A8:     t.i = u/.i & t.(i+1) = u/.(i+1) by A5,PARTFUN1:def 8; then
+        i <= i+1 & i+1 <= len t by A5,FINSEQ_3:25,NAT_1:11; then
+A9:     1 <= i & i <= len t & rng t <> {} by A6,NAT_1:11,XXREAL_0:2; then
+A7:     i in dom t & 1 in dom t by FINSEQ_3:25,32; then
+A8:     t.i = u/.i & t.(i+1) = u/.(i+1) by A5,PARTFUN1:def 6; then
         [u/.i,u/.(i+1)] in R by A5,A7,REWRITE1:def 2; then
         (not emp u/.i & u/.(i+1) = pop(u/.i)) or
         ex e st u/.(i+1) = push(e,u/.i) by CRED;
-        hence thesis by A4,A5,A9,A8,COSET,FINSEQ_3:27;
+        hence thesis by A4,A5,A9,A8,COSET,FINSEQ_3:25;
       end;
     end;
 BB: Q[i] from NAT_1:sch 2(A2,A3);
     let x; assume x in rng t; then
-    ex y st y in dom t & x = t.y by FUNCT_1:def 5;
+    ex y st y in dom t & x = t.y by FUNCT_1:def 3;
     hence thesis by BB;
   end;
 
@@ -1605,19 +1571,19 @@ A0: {s1: R reduces s,s1} c= the carrier' of X
       ex s1 st x = s1 & R reduces s,s1;
       hence thesis;
     end;
-    R reduces s,s by REWRITE1:13; then
+    R reduces s,s by REWRITE1:12; then
 A1: s in {s1: R reduces s,s1};
     now let e,s2; assume
       s2 in {s1: R reduces s,s1}; then
 A2:   ex s1 st s2 = s1 & R reduces s,s1;
       [s2, push(e,s2)] in R by CRED; then
-      R reduces s2, push(e,s2) by REWRITE1:16; then
-      R reduces s, push(e,s2) by A2,REWRITE1:17;
+      R reduces s2, push(e,s2) by REWRITE1:15; then
+      R reduces s, push(e,s2) by A2,REWRITE1:16;
       hence push(e,s2) in {s1: R reduces s,s1};
       assume not emp s2; then
       [s2, pop s2] in R by CRED; then
-      R reduces s2, pop s2 by REWRITE1:16; then
-      R reduces s, pop s2 by A2,REWRITE1:17;
+      R reduces s2, pop s2 by REWRITE1:15; then
+      R reduces s, pop s2 by A2,REWRITE1:16;
       hence pop s2 in {s1: R reduces s,s1};
     end;
     hence coset s c= {s1: R reduces s,s1} by A0,A1,COSET;
@@ -1627,7 +1593,7 @@ A3: x = s1 & R reduces s,s1;
     consider t being RedSequence of R such that
 A4: s = t.1 & s1 = t.len t by A3,REWRITE1:def 3;
     len t in dom t by FINSEQ_5:6; then
-    x in rng t & rng t c= coset s by A3,A4,Th57,FUNCT_1:def 5;
+    x in rng t & rng t c= coset s by A3,A4,Th57,FUNCT_1:def 3;
     hence thesis;
   end;
 
@@ -1661,7 +1627,7 @@ A7: len t = i+1 & for j being Nat st j in dom t holds t.j = F(j)
     consider s1 such that
 A8: f.i = s1 & (not emp s1 implies f.(i+1) <> pop s1) by A6;
     take s1;
-    i in NAT by ORDINAL1:def 13; then
+    i in NAT by ORDINAL1:def 12; then
     f.(i+1) = IFIN(f.i,the s_empty of X,s,pop(f.i)) by A1; then
     (f.i in the s_empty of X implies f.(i+1) = s) &
     (f.i nin the s_empty of X implies f.(i+1) = pop(f.i))
@@ -1672,8 +1638,8 @@ A9: t is RedSequence of R
       thus len t > 0 by A7;
       let j being Element of NAT; assume
 B1:   j in dom t & j+1 in dom t; then
-      j >= 1 & j <= i+1 & j+1 <= i+1 by A7,FINSEQ_3:27; then
-B2:   j-'1+1 = j & j+1-'1 = j & j <= i by NAT_D:34,XREAL_1:8,237;
+      j >= 1 & j <= i+1 & j+1 <= i+1 by A7,FINSEQ_3:25; then
+B2:   j-'1+1 = j & j+1-'1 = j & j <= i by NAT_D:34,XREAL_1:6,235;
       j-'1 < i by B2,NAT_1:13; then
 B7:   not emp f.(j-'1) by A6; then
 B4:   f.(j-'1) nin the s_empty of X by EMP;
@@ -1683,7 +1649,7 @@ B5:   t.j = f.(j-'1) & t.(j+1) = f.j by A7,B1,B2; then
       hence [t.j, t.(j+1)] in R by B5,B7,CRED;
     end; then
     1 in dom t by FINSEQ_5:6; then
-C1: t.1 = f.(1-'1) by A7 .= s by A1,XREAL_1:234; then
+C1: t.1 = f.(1-'1) by A7 .= s by A1,XREAL_1:232; then
     reconsider t as the carrier' of X-valued RedSequence of R by A9,Lem2;
     take t;
     thus t.1 = s by C1;
@@ -1691,13 +1657,13 @@ C1: t.1 = f.(1-'1) by A7 .= s by A1,XREAL_1:234; then
     hence t.len t = f.(i+1-'1) by A7 .= s1 by A8,NAT_D:34;
     let k be Nat; assume
 C2: 1 <= k & k < len t; then
-    k in dom t by FINSEQ_3:27; then
-C3: t.k = f.(k-'1) & t.k = t/.k by A7,PARTFUN1:def 8;
+    k in dom t by FINSEQ_3:25; then
+C3: t.k = f.(k-'1) & t.k = t/.k by A7,PARTFUN1:def 6;
     1 <= k+1 & k+1 <= len t by C2,NAT_1:13; then
-    k+1 in dom t by FINSEQ_3:27; then
-C4: t.(k+1) = f.(k+1-'1) & t.(k+1) = t/.(k+1) by A7,PARTFUN1:def 8;
-C6: k-'1+1 = k & k+1-'1 = k by C2,NAT_D:34,XREAL_1:237; then
-    k-'1 < i by A7,C2,XREAL_1:8;
+    k+1 in dom t by FINSEQ_3:25; then
+C4: t.(k+1) = f.(k+1-'1) & t.(k+1) = t/.(k+1) by A7,PARTFUN1:def 6;
+C6: k-'1+1 = k & k+1-'1 = k by C2,NAT_D:34,XREAL_1:235; then
+    k-'1 < i by A7,C2,XREAL_1:6;
     hence not emp t/.k by A6,C3; then
 C5: t/.k nin the s_empty of X by EMP;
     f.k = IFIN(f.(k-'1),the s_empty of X,s,pop(f.(k-'1))) by A1,C6;
@@ -1720,7 +1686,7 @@ A4: len t1 in dom t1 & len t2 in dom t2 & 1 in dom t1 & 1 in dom t2
     by FINSEQ_5:6;
     defpred P[Nat] means ($1 in dom t1 iff $1 in dom t2) &
     ($1 in dom t1 implies t1.$1 = t2.$1);
-I1: P[0] by FINSEQ_3:26;
+I1: P[0] by FINSEQ_3:24;
 I2: P[i] implies P[i+1]
     proof assume
 J1:   P[i];
@@ -1735,34 +1701,34 @@ J4:     i >= 1 by J2,NAT_1:11;
         thus
 JJ:     now assume
           i+1 in dom t1; then
-          i+1 <= len t1 by FINSEQ_3:27; then
+          i+1 <= len t1 by FINSEQ_3:25; then
           i < len t1 by NAT_1:13; then
-          i in dom t1 & not emp t1/.i by A3,J4,FINSEQ_3:27; then
+          i in dom t1 & not emp t1/.i by A3,J4,FINSEQ_3:25; then
           len t2 <> i & i <= len t2
-          by B1,B2,J1,PARTFUN1:def 8,FINSEQ_3:27; then
+          by B1,B2,J1,FINSEQ_3:25,PARTFUN1:def 6; then
           i < len t2 by XXREAL_0:1; then
           1 <= i+1 & i+1 <= len t2 by NAT_1:11,13;
-          hence i+1 in dom t2 by FINSEQ_3:27;
+          hence i+1 in dom t2 by FINSEQ_3:25;
         end;
         hereby assume
           i+1 in dom t2; then
-          i+1 <= len t2 by FINSEQ_3:27; then
+          i+1 <= len t2 by FINSEQ_3:25; then
           i < len t2 by NAT_1:13; then
-          i in dom t2 & not emp t2/.i by B3,J4,FINSEQ_3:27; then
+          i in dom t2 & not emp t2/.i by B3,J4,FINSEQ_3:25; then
           len t1 <> i & i <= len t1
-          by A1,A2,J1,PARTFUN1:def 8,FINSEQ_3:27; then
+          by A1,A2,J1,FINSEQ_3:25,PARTFUN1:def 6; then
           i < len t1 by XXREAL_0:1; then
           1 <= i+1 & i+1 <= len t1 by NAT_1:11,13;
-          hence i+1 in dom t1 by FINSEQ_3:27;
+          hence i+1 in dom t1 by FINSEQ_3:25;
         end;
         assume
 J3:     i+1 in dom t1; then
-        i+1 <= len t1 & i+1 <= len t2 by JJ,FINSEQ_3:27; then
+        i+1 <= len t1 & i+1 <= len t2 by JJ,FINSEQ_3:25; then
         i < len t1 & i < len t2 by NAT_1:13; then
 J5:     i in dom t1 & t1/.(i+1) = pop(t1/.i) & i in dom t2 &
-        t2/.(i+1) = pop(t2/.i) by A3,B3,J4,FINSEQ_3:27; then
+        t2/.(i+1) = pop(t2/.i) by A3,B3,J4,FINSEQ_3:25; then
         t1/.i = t1.i & t2/.i = t2.i & t1/.(i+1) = t1.(i+1) &
-        t2/.(i+1) = t2.(i+1) by J3,JJ,PARTFUN1:def 8;
+        t2/.(i+1) = t2.(i+1) by J3,JJ,PARTFUN1:def 6;
         hence thesis by J1,J5;
       end;
     end;
@@ -1775,7 +1741,7 @@ II: P[i] from NAT_1:sch 2(I1,I2);
       end;
       let x; thus thesis by II;
     end; then
-    len t1 = len t2 by FINSEQ_3:31;
+    len t1 = len t2 by FINSEQ_3:29;
     hence thesis by A2,B2,A4,II;
   end;
 end;
@@ -1790,8 +1756,8 @@ A1: t.1 = s & t.len t = core s and
 A2: for i st 1 <= i & i < len t holds not emp t/.i & t/.(i+1) = pop(t/.i)
     by CORE;
 A3: 1 in dom t by FINSEQ_5:6; then
-    t/.1 = t.1 by PARTFUN1:def 8; then
-    1 <= len t & len t <= 1 by A0,A1,A2,A3,FINSEQ_3:27;
+    t/.1 = t.1 by PARTFUN1:def 6; then
+    1 <= len t & len t <= 1 by A0,A1,A2,A3,FINSEQ_3:25;
     hence thesis by A1,XXREAL_0:1;
   end;
 
@@ -1806,24 +1772,24 @@ A2: for i st 1 <= i & i < len t holds not emp t/.i & t/.(i+1) = pop(t/.i)
     by CORE;
     not emp push(e,s) & pop push(e,s) = s by POPPUSH,PUSHNE; then
     [push(e,s),s] in R by CRED; then
-    reconsider u = <*push(e,s), s*> as RedSequence of R by REWRITE1:8;
-    u.2 = s & len u = 2 by FINSEQ_1:61; then
-    reconsider v = u$^t as RedSequence of R by A1,REWRITE1:9;
+    reconsider u = <*push(e,s), s*> as RedSequence of R by REWRITE1:7;
+    u.2 = s & len u = 2 by FINSEQ_1:44; then
+    reconsider v = u$^t as RedSequence of R by A1,REWRITE1:8;
 A3: v = <*push(e,s)*>^t by REWRITE1:2; then
-A4: v.1 = push(e,s) by FINSEQ_1:58; then
+A4: v.1 = push(e,s) by FINSEQ_1:41; then
     reconsider v as A-valued RedSequence of R by Lem2;
-A7: len <*push(e,s)*> = 1 by FINSEQ_1:57; then
-A5: len v = 1 + len t by A3,FINSEQ_1:35;
+A7: len <*push(e,s)*> = 1 by FINSEQ_1:40; then
+A5: len v = 1 + len t by A3,FINSEQ_1:22;
     len t in dom t by FINSEQ_5:6; then
 A6: v.len v = t.len t by A3,A7,A5,FINSEQ_1:def 7;
     now let i; assume
 B1:   1 <= i & i < len v;
-      i in NAT by ORDINAL1:def 13; then
+      i in NAT by ORDINAL1:def 12; then
       i in dom v & i+1 in dom v by B1,MSUALG_8:1; then
-B3:   v/.i = v.i & v/.(i+1) = v.(i+1) by PARTFUN1:def 8;
+B3:   v/.i = v.i & v/.(i+1) = v.(i+1) by PARTFUN1:def 6;
       consider j such that
 B4:   i = 1+j by B1,NAT_1:10;
-B5:   j < len t by A5,B1,B4,XREAL_1:8;
+B5:   j < len t by A5,B1,B4,XREAL_1:6;
       per cases by B1,XXREAL_0:1;
       suppose
 C1:     i = 1;
@@ -1833,10 +1799,10 @@ C1:     i = 1;
         .= pop(v/.i) by C1,A1,A4,B3,POPPUSH;
       end;
       suppose i > 1; then
-B6:     j >= 1 & j in NAT by B4,NAT_1:13,ORDINAL1:def 13; then
+B6:     j >= 1 & j in NAT by B4,NAT_1:13,ORDINAL1:def 12; then
         j in dom t & i in dom t by B4,B5,MSUALG_8:1; then
         t.j = v.i & t/.j = t.j & t.i = v.(i+1) & t/.i = t.i
-        by A3,A7,B4,FINSEQ_1:def 7,PARTFUN1:def 8;
+        by A3,A7,B4,FINSEQ_1:def 7,PARTFUN1:def 6;
         hence not emp v/.i & v/.(i+1) = pop(v/.i) by A2,B3,B4,B5,B6;
       end;
     end;
@@ -1855,37 +1821,37 @@ A1: t.1 = pop s & t.len t = core pop s and
 A2: for i st 1 <= i & i < len t holds not emp t/.i & t/.(i+1) = pop(t/.i)
     by CORE;
     [s,pop s] in R by AA,CRED; then
-    reconsider u = <*s, pop s*> as RedSequence of R by REWRITE1:8;
-    u.2 = pop s & len u = 2 by FINSEQ_1:61; then
-    reconsider v = u$^t as RedSequence of R by A1,REWRITE1:9;
+    reconsider u = <*s, pop s*> as RedSequence of R by REWRITE1:7;
+    u.2 = pop s & len u = 2 by FINSEQ_1:44; then
+    reconsider v = u$^t as RedSequence of R by A1,REWRITE1:8;
 A3: v = <*s*>^t by REWRITE1:2; then
-A4: v.1 = s by FINSEQ_1:58; then
+A4: v.1 = s by FINSEQ_1:41; then
     reconsider v as A-valued RedSequence of R by Lem2;
-A7: len <*s*> = 1 by FINSEQ_1:57; then
-A5: len v = 1 + len t by A3,FINSEQ_1:35;
+A7: len <*s*> = 1 by FINSEQ_1:40; then
+A5: len v = 1 + len t by A3,FINSEQ_1:22;
     len t in dom t by FINSEQ_5:6; then
 A6: v.len v = t.len t by A3,A7,A5,FINSEQ_1:def 7;
     now let i; assume
 B1:   1 <= i & i < len v;
-      i in NAT by ORDINAL1:def 13; then
+      i in NAT by ORDINAL1:def 12; then
       i in dom v & i+1 in dom v by B1,MSUALG_8:1; then
-B3:   v/.i = v.i & v/.(i+1) = v.(i+1) by PARTFUN1:def 8;
+B3:   v/.i = v.i & v/.(i+1) = v.(i+1) by PARTFUN1:def 6;
       consider j such that
 B4:   i = 1+j by B1,NAT_1:10;
-B5:   j < len t by A5,B1,B4,XREAL_1:8;
+B5:   j < len t by A5,B1,B4,XREAL_1:6;
       per cases by B1,XXREAL_0:1;
       suppose
 C1:     i = 1;
-        hence not emp v/.i by AA,A3,B3,FINSEQ_1:58;
+        hence not emp v/.i by AA,A3,B3,FINSEQ_1:41;
         1 in dom t by FINSEQ_5:6;
         hence v/.(i+1) = t.1 by A3,A7,B3,C1,FINSEQ_1:def 7
-        .= pop(v/.i) by C1,A1,A3,B3,FINSEQ_1:58;
+        .= pop(v/.i) by C1,A1,A3,B3,FINSEQ_1:41;
       end;
       suppose i > 1; then
-B6:     j >= 1 & j in NAT by B4,NAT_1:13,ORDINAL1:def 13; then
+B6:     j >= 1 & j in NAT by B4,NAT_1:13,ORDINAL1:def 12; then
         j in dom t & i in dom t by B4,B5,MSUALG_8:1; then
         t.j = v.i & t/.j = t.j & t.i = v.(i+1) & t/.i = t.i
-        by A3,A7,B4,FINSEQ_1:def 7,PARTFUN1:def 8;
+        by A3,A7,B4,FINSEQ_1:def 7,PARTFUN1:def 6;
         hence not emp v/.i & v/.(i+1) = pop(v/.i) by A2,B3,B4,B5,B6;
       end;
     end;
@@ -1975,7 +1941,7 @@ A7:     s2 = push(top s2, pop s2) by PUSHPOP; then
 A9:     s1 in coset s & pop s2 in coset s by A6,Th53;
         |.s2.| = <*top s2*>^|.pop s2.| by A7,Th34; then
         e = |.s2.|.1 & |.s2.|.1 = top s2 & |.s1.| = |.pop s2.|
-        by A8,FINSEQ_1:58,HILBERT2:2;
+        by A8,FINSEQ_1:41,HILBERT2:2;
         hence thesis by A5,A7,A9;
       end;
     end;
@@ -1994,7 +1960,7 @@ A1: |.s.| = |.s2.| & s in coset s1 by Th17;
 A3:   x in (coset s1)/\Class(==_X, s2); then
 A2:   x in coset s1 & x in Class(==_X, s2) by XBOOLE_0:def 4;
       reconsider x as stack of X by A3;
-      [s2,x] in ==_X by A2,EQREL_1:26; then
+      [s2,x] in ==_X by A2,EQREL_1:18; then
       s2 == x by REL; then
       |.s2.| = |.x.| by CONG; then
       s = x by A1,A2,Th15;
@@ -2002,8 +1968,8 @@ A2:   x in coset s1 & x in Class(==_X, s2) by XBOOLE_0:def 4;
     end;
     s == s2 by A1,CONG; then
     [s2,s] in ==_X by REL; then
-    s in Class(==_X, s2) by EQREL_1:26; then
-    {s} c= Class(==_X, s2) & {s} c= coset s1 by A1,ZFMISC_1:37;
+    s in Class(==_X, s2) by EQREL_1:18; then
+    {s} c= Class(==_X, s2) & {s} c= coset s1 by A1,ZFMISC_1:31;
     hence thesis by XBOOLE_1:19;
   end;
 
@@ -2046,12 +2012,12 @@ A4: for f being Choice_Function of Class(==_X) holds the s_top of X2
   existence
   proof
     set f = the Choice_Function of Class(==_X);
-A0: union Class(==_X) = the carrier' of X by EQREL_1:def 6; then
+A0: union Class(==_X) = the carrier' of X by EQREL_1:def 4; then
     reconsider f as Function of Class(==_X), the carrier' of X;
     consider s such that
 A1: emp s by Th1;
 A2: Class(==_X, s) = the s_empty of X by A1,Th50;
-    reconsider E = Class(==_X, s) as Element of Class(==_X) by EQREL_1:def 5;
+    reconsider E = Class(==_X, s) as Element of Class(==_X) by EQREL_1:def 3;
     set g = (the s_top of X)*f;
     take X1 = StackSystem(#the carrier of X, Class(==_X), {E},
     (the s_push of X)/\/==_X,
@@ -2067,40 +2033,40 @@ A2: Class(==_X, s) = the s_empty of X by A1,Th50;
     reconsider h0 = h as Function of Class(==_X), the carrier' of X by A0;
     now let a be Element of Class(==_X);
       consider s1 such that
-A3:   a = Class(==_X, s1) by EQREL_1:45;
+A3:   a = Class(==_X, s1) by EQREL_1:36;
       per cases;
       suppose
         emp s1; then
         s1 in the s_empty of X & dom g = Class(==_X) &
         dom((the s_top of X)*h0) = Class(==_X) by EMP,FUNCT_2:def 1; then
 A6:     a = E & E in dom g & E in dom((the s_top of X)*h0)
-        by A2,A3,EQREL_1:31; then
+        by A2,A3,EQREL_1:23; then
         g+*(the s_empty of X,the Element of the carrier of X).a =
-        the Element of the carrier of X by A2,FUNCT_7:33;
+        the Element of the carrier of X by A2,FUNCT_7:31;
         hence g+*(the s_empty of X,the Element of the carrier of X).a =
         ((the s_top of X)*h0+*(the s_empty of X,the Element of the carrier
-        of X)).a by A2,A6,FUNCT_7:33;
+        of X)).a by A2,A6,FUNCT_7:31;
       end;
       suppose
 A4:     not emp s1; then s1 nin E by A2,EMP; then
-A5:     a <> E by A3,EQREL_1:31;
-        {} nin Class(==_X) by SETFAM_1:def 9; then
+A5:     a <> E by A3,EQREL_1:23;
+        {} nin Class(==_X) by SETFAM_1:def 8; then
         f.a in a & h.a in a by ORDERS_1:def 1; then
-        [s1,f.a] in ==_X & [s1,h.a] in ==_X by A3,EQREL_1:26; then
+        [s1,f.a] in ==_X & [s1,h.a] in ==_X by A3,EQREL_1:18; then
         s1 == f.a & s1 == h0.a by REL; then
         f.a == h0.a & not emp f.a by A4,Th41,Th42; then
         top(f.a) = top(h0.a) by Th46; then
-        g.a = top(h0.a) by FUNCT_2:21; then
-        g.a = ((the s_top of X)*h0).a by FUNCT_2:21; then
+        g.a = top(h0.a) by FUNCT_2:15; then
+        g.a = ((the s_top of X)*h0).a by FUNCT_2:15; then
         g+*(the s_empty of X,the Element of the carrier of X).a =
-        ((the s_top of X)*h0).a by A2,A5,FUNCT_7:34;
+        ((the s_top of X)*h0).a by A2,A5,FUNCT_7:32;
         hence g+*(the s_empty of X,the Element of the carrier of X).a =
         ((the s_top of X)*h0+*(the s_empty of X,the Element of the carrier
-        of X)).a by A2,A5,FUNCT_7:34;
+        of X)).a by A2,A5,FUNCT_7:32;
       end;
     end;
     hence the s_top of X1 = (the s_top of X)*h+*(the s_empty of X,the Element
-    of the carrier of X) by FUNCT_2:113;
+    of the carrier of X) by FUNCT_2:63;
   end;
 end;
 
@@ -2121,7 +2087,7 @@ theorem Th70:
     let S be stack of X/==;
     the carrier' of X/== = Class(==_X)by QUOT; then
     S in Class(==_X); then
-    ex x st x in the carrier' of X & S = Class(==_X,x) by EQREL_1:def 5;
+    ex x st x in the carrier' of X & S = Class(==_X,x) by EQREL_1:def 3;
     hence thesis;
   end;
 
@@ -2129,7 +2095,7 @@ theorem Th70a:
   Class(==_X, s) is stack of X/==
   proof
     the carrier' of X/== = Class(==_X)by QUOT;
-    hence thesis by EQREL_1:def 5;
+    hence thesis by EQREL_1:def 3;
   end;
 
 theorem Th71:
@@ -2143,7 +2109,7 @@ A2: emp s1 by Th1;
     emp S iff S in {the s_empty of X} by QUOT; then
     emp S iff S = the s_empty of X by TARSKI:def 1; then
     emp S iff S = Class(==_X, s1) by A2,Th50; then
-    emp S iff [s,s1] in ==_X by A1,EQREL_1:44; then
+    emp S iff [s,s1] in ==_X by A1,EQREL_1:35; then
     emp S iff s == s1 by REL;
     hence emp s iff emp S by A2,Th42,Th43;
   end;
@@ -2154,7 +2120,7 @@ theorem Th71a:
     the carrier' of X/== = Class(==_X)by QUOT; then
     S in Class(==_X); then
     consider x such that
-A1: x in the carrier' of X & S = Class(==_X,x) by EQREL_1:def 5;
+A1: x in the carrier' of X & S = Class(==_X,x) by EQREL_1:def 3;
     reconsider x as stack of X by A1;
     hereby assume
       emp S; then
@@ -2162,7 +2128,7 @@ A1: x in the carrier' of X & S = Class(==_X,x) by EQREL_1:def 5;
       hence S = the s_empty of X by A1,Th50;
     end;
     assume S = the s_empty of X; then
-    x in the s_empty of X by A1,EQREL_1:28;then
+    x in the s_empty of X by A1,EQREL_1:20;then
     emp x by EMP;
     hence thesis by A1,Th71;
   end;
@@ -2176,8 +2142,8 @@ theorem Th72:
     let E be Element of X/==;
     assume Z0: S = Class(==_X, s);
     assume Z1: E = e;
-A1: s in S by Z0,EQREL_1:28;
-A2: S in Class(==_X) by Z0,EQREL_1:def 5;
+A1: s in S by Z0,EQREL_1:20;
+A2: S in Class(==_X) by Z0,EQREL_1:def 3;
 A3: the s_push of X is BinOp of the carrier of X,the carrier' of X, ==_X
     proof
       let x be Element of X,y1,y2 be stack of X;
@@ -2189,7 +2155,7 @@ A3: the s_push of X is BinOp of the carrier of X,the carrier' of X, ==_X
     end;
     push(E,S) = ((the s_push of X)/\/==_X).(E,S) by QUOT
     .= Class(==_X, push(e, s)) by Z1,A1,A2,A3,Def4;
-    hence thesis by EQREL_1:28;
+    hence thesis by EQREL_1:20;
   end;
 
 theorem Th73:
@@ -2202,9 +2168,9 @@ theorem Th73:
 Z0: S = Class(==_X, s);
     assume
 Z1: not emp s;
-A1: s in S by Z0,EQREL_1:28;
-A2: S in Class(==_X) by Z0,EQREL_1:def 5;
-A6: dom i = the s_empty of X by RELAT_1:71;
+A1: s in S by Z0,EQREL_1:20;
+A2: S in Class(==_X) by Z0,EQREL_1:def 3;
+A6: dom i = the s_empty of X by RELAT_1:45;
 A3: p+*i is UnOp of the carrier' of X, ==_X
     proof
       let y1,y2 be stack of X;
@@ -2216,7 +2182,7 @@ A4:   y1 == y2 by REL;
 A5:     not emp y1; then
         not emp y2 by A4,Th42; then
         y1 nin the s_empty of X & y2 nin the s_empty of X by A5,EMP; then
-A7:     (p+*i).y1 = p.y1 & (p+*i).y2 = p.y2 by A6,FUNCT_4:12;
+A7:     (p+*i).y1 = p.y1 & (p+*i).y2 = p.y2 by A6,FUNCT_4:11;
         pop y1 == pop y2 by A4,A5,Th45;
         hence [(p+*i).y1,(p+*i).y2] in ==_X by A7,REL;
       end;
@@ -2225,15 +2191,15 @@ A5:     emp y1; then
         emp y2 by A4,Th42; then
         y1 in the s_empty of X & y2 in the s_empty of X by A5,EMP; then
         (p+*i).y1 = i.y1 & i.y1 = y1 & (p+*i).y2 = i.y2 & i.y2 = y2
-        by A6,FUNCT_1:35,FUNCT_4:14;
+        by A6,FUNCT_1:18,FUNCT_4:13;
         hence thesis by B1;
       end;
     end;
 A8: s nin the s_empty of X by Z1,EMP;
     pop S = ((p+*i)/\/==_X).S by QUOT
     .= Class(==_X, (p+*i).s) by A1,A2,A3,FILTER_1:def 3
-    .= Class(==_X, pop s) by A6,A8,FUNCT_4:12;
-    hence thesis by EQREL_1:28;
+    .= Class(==_X, pop s) by A6,A8,FUNCT_4:11;
+    hence thesis by EQREL_1:20;
   end;
 
 theorem Th74:
@@ -2251,15 +2217,15 @@ Z1: not emp s; then
 A2: S <> A by Th71a;
     set f = the Choice_Function of Class(==_X);
 A4: S in Class(==_X) & {} nin Class(==_X)
-    by Z0,SETFAM_1:def 9,EQREL_1:def 5; then
+    by Z0,EQREL_1:def 3,SETFAM_1:def 8; then
 A3: f.S in S by ORDERS_1:def 1; then
     reconsider x = f.S as stack of X by Z0;
-    [s,x] in ==_X by Z0,A3,EQREL_1:26; then
+    [s,x] in ==_X by Z0,A3,EQREL_1:18; then
 A6: s == x by REL;
-A5: dom f = Class(==_X) by A4,RLVECT_3:35;
+A5: dom f = Class(==_X) by A4,RLVECT_3:28;
     the s_top of X/== = (t*f)+*(A,e) by QUOT;
-    hence top S = (t*f).S by A2,FUNCT_7:34
-    .= top x by A4,A5,FUNCT_1:23
+    hence top S = (t*f).S by A2,FUNCT_7:32
+    .= top x by A4,A5,FUNCT_1:13
     .= top s by A6,Z1,Th46;
   end;
 
@@ -2275,7 +2241,7 @@ A1: for x st x in Class(==_X) ex y st y in the carrier' of X & P[x,y]
     proof let x; assume
       x in Class(==_X); then
       consider s2 such that
-B2:   x = Class(==_X, s2) by EQREL_1:45;
+B2:   x = Class(==_X, s2) by EQREL_1:36;
       consider s such that
 B3:   (coset s1)/\Class(==_X, s2) = {s} by Th60;
       take s;
@@ -2284,21 +2250,21 @@ B3:   (coset s1)/\Class(==_X, s2) = {s} by Th60;
     end;
     consider g being Function such that
 A2: dom g = Class(==_X) & rng g c= the carrier' of X &
-    for x st x in Class(==_X) holds P[x,g.x] from WELLORD2:sch 1(A1);
+    for x st x in Class(==_X) holds P[x,g.x] from FUNCT_1:sch 5(A1);
 A4: the carrier' of X/== = Class(==_X) by QUOT; then
     reconsider g as Function of the carrier' of X/==, the carrier' of X
-    by A2,FUNCT_2:4;
+    by A2,FUNCT_2:2;
     consider i,s such that
 A3: (g*f).i = s & (not emp s implies (g*f).(i+1) <> pop s) by POPFIN;
-    reconsider S = Class(==_X,s) as stack of X/== by A4,EQREL_1:def 5;
+    reconsider S = Class(==_X,s) as stack of X/== by A4,EQREL_1:def 3;
     take i,S;
     consider s2 such that
-A5: f.i = Class(==_X, s2) by A4,EQREL_1:45;
-    i in NAT by ORDINAL1:def 13; then
-    s = g.(f.i) by A3,FUNCT_2:21; then
+A5: f.i = Class(==_X, s2) by A4,EQREL_1:36;
+    i in NAT by ORDINAL1:def 12; then
+    s = g.(f.i) by A3,FUNCT_2:15; then
     s in (coset s1)/\(f.i) by A2,A4; then
 A6: s in coset s1 & s in f.i by XBOOLE_0:def 4;
-    hence f.i = S by A5,EQREL_1:31;
+    hence f.i = S by A5,EQREL_1:23;
     assume
 B2: not emp S; then
 A8: not emp s by Th71;
@@ -2313,7 +2279,7 @@ A10: (coset s1)/\(f.(i+1)) = {s4} by A9,Th60;
 A11: pop s in {s4} by A10,XBOOLE_0:def 4;
     s3 in (coset s1)/\(f.(i+1)) by A2,A4; then
     s3 = s4 & pop s = s4 by A10,A11,TARSKI:def 1;
-    hence thesis by A3,B2,Th71,FUNCT_2:21;
+    hence thesis by A3,B2,Th71,FUNCT_2:15;
   end;
   cluster X/== -> push-pop;
   coherence
@@ -2412,13 +2378,13 @@ A2: S2 = Class(==_X, s2) by Th70;
     |.s1.| = |.S2.| by A1,Th80 .= |.s2.| by A2,Th80; then
     s1 == s2 by CONG; then
     [s1,s2] in ==_X by REL; then
-    s2 in S1 by A1,EQREL_1:26;
-    hence thesis by A1,A2,EQREL_1:31;
+    s2 in S1 by A1,EQREL_1:18;
+    hence thesis by A1,A2,EQREL_1:23;
   end;
 end;
 
 registration
-  cluster proper-for-identity StackAlgebra;
+  cluster proper-for-identity for StackAlgebra;
   existence
   proof
     take (the StackAlgebra)/==;
@@ -2450,18 +2416,18 @@ theorem ThI1:
   proof
     set F = id the carrier of X, G = id the carrier' of X;
     thus dom F = the carrier of X & rng F = the carrier of X & F is one-to-one
-    by RELAT_1:71;
+    by RELAT_1:45;
     thus dom G = the carrier' of X & rng G = the carrier' of X &
-    G is one-to-one by RELAT_1:71;
+    G is one-to-one by RELAT_1:45;
     let s1 be stack of X, s2 be stack of X; assume
 A0: s2 = G.s1; then
-A1: s2 = s1 by FUNCT_1:34;
-    thus emp s1 iff emp s2 by A0,FUNCT_1:34;
+A1: s2 = s1 by FUNCT_1:17;
+    thus emp s1 iff emp s2 by A0,FUNCT_1:17;
     thus not emp s1 implies pop s2 = G.pop s1 & top s2 = F.top s1
-    by A1,FUNCT_1:34;
+    by A1,FUNCT_1:17;
     let e1 be Element of X, e2 be Element of X; assume e2 = F.e1; then
-    e2 = e1 by FUNCT_1:34;
-    hence push(e2,s2) = G.push(e1,s1) by A1,FUNCT_1:34;
+    e2 = e1 by FUNCT_1:17;
+    hence push(e2,s2) = G.push(e1,s1) by A1,FUNCT_1:17;
 end;
 
 theorem ThI2:
@@ -2477,22 +2443,22 @@ A3: for s1 being stack of X1, s2 being stack of X2 st s2 = G.s1
     for e1 being Element of X1, e2 being Element of X2 st e2 = F.e1
     holds push(e2,s2) = G.push(e1,s1);
     thus dom(F") = the carrier of X2 & rng(F") = the carrier of X1 &
-    F" is one-to-one by A1,FUNCT_1:55;
+    F" is one-to-one by A1,FUNCT_1:33;
     thus dom(G") = the carrier' of X2 & rng(G") = the carrier' of X1 &
-    G" is one-to-one by A2,FUNCT_1:55;
+    G" is one-to-one by A2,FUNCT_1:33;
     let s1 be stack of X2, s2 be stack of X1; assume
     s2 = G".s1; then
-A6: G.s2 = s1 by A2,FUNCT_1:57;
+A6: G.s2 = s1 by A2,FUNCT_1:35;
     hence
 A5: emp s1 iff emp s2 by A3;
     hereby assume not emp s1; then
       pop s1 = G.pop s2 & top s1 = F.top s2 by A3,A5,A6;
-      hence pop s2 = G".pop s1 & top s2 = F".top s1 by A1,A2,FUNCT_1:56;
+      hence pop s2 = G".pop s1 & top s2 = F".top s1 by A1,A2,FUNCT_1:34;
     end;
     let e1 be Element of X2, e2 be Element of X1; assume e2 = F".e1; then
-    F.e2 = e1 by A1,FUNCT_1:57; then
+    F.e2 = e1 by A1,FUNCT_1:35; then
     G.push(e2,s2) = push(e1,s1) by A3,A6;
-    hence thesis by A2,FUNCT_1:56;
+    hence thesis by A2,FUNCT_1:34;
   end;
 
 theorem Th90:
@@ -2519,28 +2485,28 @@ A6: for s1 being stack of X2, s2 being stack of X3 st s2 = G2.s1
     for e1 being Element of X2, e2 being Element of X3 st e2 = F2.e1
     holds push(e2,s2) = G2.push(e1,s1);
     thus dom(F2*F1) = the carrier of X1 & rng (F2*F1) = the carrier of X3 &
-    (F2*F1) is one-to-one by A1,A4,RELAT_1:46,47;
+    (F2*F1) is one-to-one by A1,A4,RELAT_1:27,28;
     thus dom (G2*G1) = the carrier' of X1 & rng (G2*G1) = the carrier' of X3 &
-    (G2*G1) is one-to-one by A2,A5,RELAT_1:46,47;
+    (G2*G1) is one-to-one by A2,A5,RELAT_1:27,28;
     let s1 be stack of X1, s2 be stack of X3;
-    reconsider s3 = G1.s1 as stack of X2 by A2,FUNCT_1:def 5;
+    reconsider s3 = G1.s1 as stack of X2 by A2,FUNCT_1:def 3;
     assume s2 = (G2*G1).s1; then
-A7: s2 = G2.s3 by A2,FUNCT_1:23;
+A7: s2 = G2.s3 by A2,FUNCT_1:13;
     emp s1 iff emp s3 by A3;
     hence emp s1 iff emp s2 by A6,A7;
     hereby assume not emp s1; then
       pop s3 = G1.pop s1 & top s3 = F1.top s1 & not emp s3 by A3; then
       pop s2 = G2.(G1.pop s1) & top s2 = F2.(F1.top s1) by A6,A7;
       hence pop s2 = (G2*G1).pop s1 & top s2 = (F2*F1).top s1
-      by A1,A2,FUNCT_1:23;
+      by A1,A2,FUNCT_1:13;
     end;
     let e1 be Element of X1, e2 be Element of X3;
-    reconsider e3 = F1.e1 as Element of X2 by A1,FUNCT_1:def 5;
+    reconsider e3 = F1.e1 as Element of X2 by A1,FUNCT_1:def 3;
     assume e2 = (F2*F1).e1; then
-A8: e2 = F2.e3 by A1,FUNCT_1:23;
+A8: e2 = F2.e3 by A1,FUNCT_1:13;
     push(e3,s3) = G1.push(e1,s1) by A3; then
     push(e2,s2) = G2.(G1.push(e1,s1)) by A7,A8,A6;
-    hence push(e2,s2) = (G2*G1).push(e1,s1) by A2,FUNCT_1:23;
+    hence push(e2,s2) = (G2*G1).push(e1,s1) by A2,FUNCT_1:13;
   end;
 
 theorem Th97:
@@ -2559,9 +2525,9 @@ A3: for s1 being stack of X1, s2 being stack of X2 st s2 = G.s1
     for e1 being Element of X1, e2 being Element of X2 st e2 = F.e1
     holds push(e2,s2) = G.push(e1,s1);
     reconsider F1 = F as Function of the carrier of X1, the carrier of X2
-    by A1,FUNCT_2:4;
+    by A1,FUNCT_2:2;
     reconsider G1 = G as Function of the carrier' of X1, the carrier' of X2
-    by A2,FUNCT_2:4;
+    by A2,FUNCT_2:2;
     let s1 be stack of X1;
     defpred P[stack of X1] means
     for s2 being stack of X2 st s2 = G.$1 holds |.s2.| = F*|.$1.|;
@@ -2584,11 +2550,11 @@ A5: for s1 being stack of X1, e being Element of X1 st P[s1]
 Z1:   P[s1];
       let s2 be stack of X2;
 Z2:   |.G1.s1.| = F*|.s1.| by Z1;
-Z3:   <*F1.e*> = F*<*e*> by A1,FINSEQ_2:38;
+Z3:   <*F1.e*> = F*<*e*> by A1,FINSEQ_2:34;
       assume s2 = G.push(e,s1); then
       s2 = push(F1.e,G1.s1) by A3;
       hence |.s2.| = <*F1.e*>^|.G1.s1.| by Th34
-      .= F*(<*e*>^|.s1.|) by Z2,Z3,FINSEQOP:10
+      .= F*(<*e*>^|.s1.|) by Z2,Z3,FINSEQOP:9
       .= F*|.push(e,s1).| by Th34;
     end;
     thus P[s1] from INDsch(A4,A5);
@@ -2634,9 +2600,9 @@ A2: X1 is proper-for-identity;
     let s1,s2 be stack of X2;
 A3: dom G = the carrier' of X1 & rng G = the carrier' of X2 by A1,ISO; then
     consider q1 being set such that
-A4: q1 in dom G & s1 = G.q1 by FUNCT_1:def 5;
+A4: q1 in dom G & s1 = G.q1 by FUNCT_1:def 3;
     consider q2 being set such that
-A5: q2 in dom G & s2 = G.q2 by A3,FUNCT_1:def 5;
+A5: q2 in dom G & s2 = G.q2 by A3,FUNCT_1:def 3;
     reconsider q1,q2 as stack of X1 by A1,ISO,A4,A5;
 A6: dom F = the carrier of X1 & rng F = the carrier of X2 &
     F is one-to-one by A1,ISO;
@@ -2644,8 +2610,8 @@ A7: rng |.q1.| c= the carrier of X1 & rng |.q2.| c= the carrier of X1;
     assume |.s1.| = |.s2.|; then
 A8: F*|.q1.| = |.s2.| by A1,A4,Th97 .= F*|.q2.| by A1,A5,Th97;
     dom (F*|.q1.|) = dom |.q1.| & dom (F*|.q2.|) = dom |.q2.|
-    by A6,A7,RELAT_1:46; then
-    |.q1.| = |.q2.| by A6,A7,A8,FUNCT_1:49; then
+    by A6,A7,RELAT_1:27; then
+    |.q1.| = |.q2.| by A6,A7,A8,FUNCT_1:27; then
     q1 == q2 by CONG;
     hence thesis by A2,A4,A5,PROP;
   end;
@@ -2675,7 +2641,7 @@ A2: the carrier of X2 = A &
     (emp s implies top s = the Element of X2 & pop s = {}) &
     for e being Element of X2 holds push(e,s) = <*e*>^g by EXAM;
     thus dom F = the carrier of X & rng F = the carrier of X2 & F is one-to-one
-    by A2,RELAT_1:71;
+    by A2,RELAT_1:45;
     thus
 A4: dom G = the carrier' of X by FUNCT_2:def 1;
     thus rng G = the carrier' of X2
@@ -2686,7 +2652,7 @@ A4: dom G = the carrier' of X by FUNCT_2:def 1;
       consider s being stack of X such that
 A3:   |.s.| = x by Th36;
       x = G.s by A1,A3;
-      hence thesis by A4,FUNCT_1:def 5;
+      hence thesis by A4,FUNCT_1:def 3;
     end;
     thus G is one-to-one
     proof
@@ -2714,10 +2680,10 @@ A7:   not emp s1;
       thus pop s2 = Del(s2,1) by A7,A8,EXAM
       .= |.pop s1.| by A6,A7,Th33 .= G.pop s1 by A1;
       thus top s2 = s2.1 by A7,A8,EXAM
-      .= top s1 by A6,A7,Th35 .= F.top s1 by FUNCT_1:35;
+      .= top s1 by A6,A7,Th35 .= F.top s1 by FUNCT_1:18;
     end;
     let e1 be Element of X, e2 be Element of X2; assume e2 = F.e1;
-    hence push(e2,s2) = <*F.e1*>^s2 by EXAM .= <*e1*>^s2 by FUNCT_1:35
+    hence push(e2,s2) = <*F.e1*>^s2 by EXAM .= <*e1*>^s2 by FUNCT_1:18
     .= |.push(e1,s1).| by A6,Th34 .= G.push(e1,s1) by A1;
   end;
 

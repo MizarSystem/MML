@@ -39,7 +39,7 @@ definition
 end;
 
 registration
-  cluster non empty strict typealg;
+  cluster non empty strict for typealg;
 end;
 
 definition
@@ -75,9 +75,9 @@ reserve Tr for PreProof of s;
 definition
   let s, Tr;
   let v be Element of dom Tr;
-  canceled;
+
   attr v is correct means
-:: PRELAMB:def 5
+:: PRELAMB:def 4
 
   branchdeg v = 0 & ex x st (Tr.v)`1 = [<*x*>,x] if (Tr.v)`2 = 0,
   branchdeg v = 1 & ex T,x,y st (Tr.v)`1 = [T,x/"y] & (Tr.(v^<*0*>))`1 =
@@ -101,13 +101,13 @@ definition
   let s;
   let IT be type of s;
   attr IT is left means
-:: PRELAMB:def 6
+:: PRELAMB:def 5
   ex x,y st IT = x\y;
   attr IT is right means
-:: PRELAMB:def 7
+:: PRELAMB:def 6
   ex x,y st IT = x/"y;
   attr IT is middle means
-:: PRELAMB:def 8
+:: PRELAMB:def 7
   ex x,y st IT = x*y;
 end;
 
@@ -115,7 +115,7 @@ definition
   let s;
   let IT be type of s;
   attr IT is primitive means
-:: PRELAMB:def 9
+:: PRELAMB:def 8
   not (IT is left or IT is right or IT is middle);
 end;
 
@@ -130,7 +130,7 @@ definition
   let s;
   let Tr be finite DecoratedTree of the carrier of s, x;
   pred Tr represents x means
-:: PRELAMB:def 10
+:: PRELAMB:def 9
   dom Tr is finite &
   for v being Element of dom Tr holds (branchdeg v = 0 or branchdeg v = 2)
   & (branchdeg v = 0 implies Tr.v is primitive) & (branchdeg v = 2 implies
@@ -147,7 +147,7 @@ end;
 definition
   let IT be non empty typealg;
   attr IT is free means
-:: PRELAMB:def 11
+:: PRELAMB:def 10
 
   not (ex x being type of IT st x is left right
   or x is left middle or x is right middle) & for x being type of IT ex Tr
@@ -160,7 +160,7 @@ definition
   let s,x such that
  s is free;
   func repr_of x -> finite DecoratedTree of the carrier of s means
-:: PRELAMB:def 12
+:: PRELAMB:def 11
   for Tr being finite DecoratedTree of the carrier of s holds
     Tr represents x iff it = Tr;
 end;
@@ -175,7 +175,7 @@ end;
 definition
   let s;
   mode Proof of s -> PreProof of s means
-:: PRELAMB:def 13
+:: PRELAMB:def 12
 
     dom it is finite & for v being Element of dom it holds v is correct;
 end;
@@ -231,14 +231,14 @@ definition
   let s;
   let IT be PreProof of s;
   attr IT is cut-free means
-:: PRELAMB:def 14
+:: PRELAMB:def 13
   for v being Element of dom IT holds (IT.v)`2 <> 7;
 end;
 
 definition
   let s;
   func size_w.r.t. s -> Function of the carrier of s, NAT means
-:: PRELAMB:def 15
+:: PRELAMB:def 14
   for x holds it.x = card dom repr_of x;
 end;
 
@@ -251,7 +251,7 @@ definition
   let s;
   let p be Proof of s;
   func cutdeg p -> Nat means
-:: PRELAMB:def 16
+:: PRELAMB:def 15
   ex T,X,Y,y,z st (p.{})`1 = [X^T^Y,z] & (p.<*0*>)`1 = [T,y] &
   (p.<*1*>)`1 = [X^<*y*>^Y,z] & it = (size_w.r.t. s).y + (size_w.r.t. s).z
   + Sum((size_w.r.t. s)*(X^T^Y)) if (p.{})`2 = 7 otherwise it = 0;
@@ -265,7 +265,7 @@ reserve A for non empty set,
 definition
   let s,A;
   mode Model of s,A -> Function of the carrier of s, bool (A*) means
-:: PRELAMB:def 17
+:: PRELAMB:def 16
     for x,y holds it.(x*y) = { a ^ b : a in it.x & b in it.y } &
     it.(x/"y) = { a1 : for b st b in it.y holds a1 ^ b in it.x } &
     it.(y\x) = {a2: for b st b in it.y holds b ^ a2 in it.x };
@@ -280,7 +280,7 @@ definition
 end;
 
 registration
-  cluster non empty strict typestr;
+  cluster non empty strict for typestr;
 end;
 
 reserve s for non empty typestr,
@@ -290,7 +290,7 @@ definition
   let s;
   let f be FinSequence of s, x;
   pred f ==>. x means
-:: PRELAMB:def 18
+:: PRELAMB:def 17
 
   [f,x] in the derivability of s;
 end;
@@ -298,7 +298,7 @@ end;
 definition
   let IT be non empty typestr;
   attr IT is SynTypes_Calculus-like means
-:: PRELAMB:def 19
+:: PRELAMB:def 18
 
   (for x being type of IT holds <*x*> ==>. x) &
   (for T being FinSequence of IT, x,y being type of IT
@@ -316,11 +316,11 @@ definition
 end;
 
 registration
-  cluster SynTypes_Calculus-like (non empty typestr);
+  cluster SynTypes_Calculus-like for non empty typestr;
 end;
 
 definition
-  mode SynTypes_Calculus is SynTypes_Calculus-like (non empty typestr);
+  mode SynTypes_Calculus is SynTypes_Calculus-like non empty typestr;
 end;
 
 reserve s for SynTypes_Calculus,
@@ -373,26 +373,24 @@ theorem :: PRELAMB:24
 definition
   let s,x,y;
   pred x <==>. y means
-:: PRELAMB:def 20
+:: PRELAMB:def 19
 
   <*x*> ==>. y & <*y*> ==>. x;
   reflexivity;
   symmetry;
 end;
 
-canceled;
-
-theorem :: PRELAMB:26
+theorem :: PRELAMB:25
   x/"y <==>. x/"((x/"y)\x);
 
-theorem :: PRELAMB:27
+theorem :: PRELAMB:26
   x/"(z*y) <==>. (x/"y)/"z;
 
-theorem :: PRELAMB:28
+theorem :: PRELAMB:27
   <*x*(y/"z)*> ==>. (x*y)/"z;
 
-theorem :: PRELAMB:29
+theorem :: PRELAMB:28
   <*x*> ==>. (x*y)/"y & <*x*> ==>. y\(y*x);
 
-theorem :: PRELAMB:30
+theorem :: PRELAMB:29
   x*y*z <==>. x*(y*z);

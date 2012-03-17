@@ -1,0 +1,637 @@
+:: Differentiable Functions on Normed Linear Spaces
+::  by Yasunari Shidama
+:: 
+:: Received June 2, 2011
+:: Copyright (c) 2011 Association of Mizar Users
+::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
+:: This code can be distributed under the GNU General Public Licence
+:: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
+:: License version 3.0 or later, subject to the binding interpretation
+:: detailed in file COPYING.interpretation.
+:: See COPYING.GPL and COPYING.CC-BY-SA for the full text of these
+:: licenses, or see http://www.gnu.org/licenses/gpl.html and
+:: http://creativecommons.org/licenses/by-sa/3.0/.
+
+environ
+
+ vocabularies NUMBERS, REAL_1, ZFMISC_1, NORMSP_1, PRE_TOPC, PARTFUN1, FUNCT_1,
+      FUNCT_4, NAT_1, FDIFF_1, SUBSET_1, SEQ_4, RELAT_1, GLIB_000, LOPBAN_1,
+      ORDINAL4, RFINSEQ, RCOMP_1, TARSKI, SEQ_1, ARYTM_3, VALUED_1, FUNCT_2,
+      ARYTM_1, SEQ_2, ORDINAL2, SUPINF_2, FCONT_1, COMPLEX1, STRUCT_0, CARD_1,
+      VALUED_0, XXREAL_0, GROUP_2, FUNCOP_1, XREAL_0, ORDINAL1, MEMBERED,
+      FINSEQ_5, XXREAL_2, XBOOLE_0, CARD_3, FINSEQ_1, FINSEQ_2, AFINSQ_1,
+      RLVECT_1, SQUARE_1, RVSUM_1, XXREAL_1, PDIFF_1, PRVECT_1, PRVECT_2,
+      ALGSTR_0, EUCLID, CFCONT_1, RFINSEQ2, NORMSP_0, NFCONT_1, MONOID_0,
+      RLTOPSP1;
+ notations TARSKI, XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1, RELSET_1,
+      PARTFUN1, FUNCT_2, FUNCOP_1, FUNCT_4, CARD_1, NUMBERS, XXREAL_0, XREAL_0,
+      REAL_1, SQUARE_1, NAT_1, MEMBERED, VALUED_0, COMPLEX1, NAT_D, BINOP_2,
+      XXREAL_2, CARD_3, FINSEQ_1, VALUED_1, FINSEQ_2, SEQ_1, SEQ_2, RVSUM_1,
+      RFINSEQ, SEQ_4, RCOMP_1, FCONT_1, FDIFF_1, FINSEQ_5, FINSEQ_7, RFINSEQ2,
+      STRUCT_0, MONOID_0, ALGSTR_0, PRE_TOPC, RLVECT_1, NORMSP_0, NORMSP_1,
+      VFUNCT_1, EUCLID, LOPBAN_1, PRVECT_1, NFCONT_1, NDIFF_1, PRVECT_2,
+      NFCONT_3, NDIFF_3, RLTOPSP1, FUNCT_7;
+ constructors REAL_1, SQUARE_1, SEQ_2, FDIFF_1, NFCONT_1, RSSPACE, VFUNCT_1,
+      NDIFF_1, SEQ_1, RELSET_1, FINSEQ_7, FINSEQ_5, RVSUM_1, BINOP_2, PRVECT_2,
+      RLVECT_2, NAT_D, FINSEQOP, RFINSEQ, RFINSEQ2, SEQ_4, FCONT_1, NFCONT_3,
+      NDIFF_3, MONOID_0, RLTOPSP1, FUNCT_7;
+ registrations RELSET_1, STRUCT_0, ORDINAL1, XREAL_0, MEMBERED, FUNCT_1,
+      NDIFF_1, FUNCT_2, NUMBERS, XBOOLE_0, VALUED_0, PRVECT_2, FINSEQ_2,
+      FINSEQ_1, CARD_3, NORMSP_0, NORMSP_1, RELAT_1, XXREAL_0, LOPBAN_1,
+      LOPBAN_2, PRVECT_3, FUNCOP_1, NAT_1, FINSEQ_5, XXREAL_2, RCOMP_1,
+      VALUED_1, FDIFF_1, NFCONT_3, FINSET_1, XCMPLX_0, PARTFUN1, CARD_1,
+      MONOID_0;
+ requirements SUBSET, REAL, BOOLE, NUMERALS, ARITHM;
+
+
+begin :: Preliminaries
+
+ reserve j for set;
+ reserve p,r for Real;
+ reserve S,T,F for non trivial RealNormSpace;
+ reserve x0 for Point of S;
+ reserve g for PartFunc of S,T;
+ reserve c for constant sequence of S;
+ reserve R for REST of S,T;
+ reserve G for RealNormSpace-Sequence;
+ reserve i for Element of dom G;
+ reserve f for PartFunc of product G,F;
+ reserve x for Element of product G;
+
+theorem :: NDIFF_5:1
+for R be Function of REAL,S
+  holds R is REST-like
+   iff for r be Real st r > 0 ex d be Real st d > 0 & for z be Real
+         st z <> 0 & |. z .| < d holds |.z.|"* ||. R/.z .|| < r;
+
+theorem :: NDIFF_5:2
+  for R be REST of S st R/.0=0.S
+  for e be Real st e > 0 ex d be Real st
+    d > 0 & for h be Real st |.h.| < d holds ||.R/.h.|| <= e*|.h.|;
+
+theorem :: NDIFF_5:3
+  for R be REST of S
+  for L be bounded LinearOperator of S,T holds
+    L*R is REST of T;
+
+theorem :: NDIFF_5:4
+  for R1 be REST of S st R1/.0 = 0.S
+  for R2 be REST of S,T st R2/.(0.S) = 0.T
+  for L be LINEAR of S holds
+    R2*(L+R1) is REST of T;
+
+theorem :: NDIFF_5:5
+  for R1 be REST of S st R1/.0=0.S
+  for R2 be REST of S,T st R2/.(0.S)=0.T
+  for L1 be LINEAR of S
+  for L2 be bounded LinearOperator of S,T holds
+    L2*R1 + R2*(L1+R1) is REST of T;
+
+theorem :: NDIFF_5:6
+  for x0 be Element of REAL
+  for g be PartFunc of REAL,the carrier of S st
+    g is_differentiable_in x0
+  for f be PartFunc of the carrier of S,the carrier of T st
+    f is_differentiable_in (g/.x0) holds
+  f*g is_differentiable_in x0 & diff(f*g,x0) = diff(f,g/.x0).diff(g,x0);
+
+theorem :: NDIFF_5:7
+for S be RealNormSpace,
+    xseq be FinSequence of S,
+    yseq be FinSequence of REAL st
+ len xseq = len yseq &
+ ( for i be Element of NAT st i in dom xseq holds
+    yseq.i = ||. xseq/.i .|| )
+  holds ||.Sum xseq.|| <= Sum yseq;
+
+theorem :: NDIFF_5:8
+for S be RealNormSpace, x be Point of S, N1,N2 be Neighbourhood of x holds
+    N1/\ N2 is Neighbourhood of x;
+
+theorem :: NDIFF_5:9
+for X be non-empty FinSequence,
+    x be set st x in product X holds x is FinSequence;
+
+registration
+  let G be RealNormSpace-Sequence;
+  cluster product G -> constituted-FinSeqs;
+end;
+
+definition
+  let G be RealLinearSpace-Sequence;
+  let z be Element of product carr G;
+  let j be Element of dom G;
+  redefine func z.j -> Element of G.j;
+end;
+
+theorem :: NDIFF_5:10
+  the carrier of product G = product carr G;
+
+theorem :: NDIFF_5:11
+for i be Element of dom G, r be set, x be Function
+  st r in the carrier of (G.i) & x in product carr G
+holds x +* (i,r) in the carrier of product G;
+
+definition
+  let G be RealNormSpace-Sequence;
+  attr G is non-trivial means
+:: NDIFF_5:def 1
+  for j be Element of dom G holds G.j is non trivial;
+end;
+
+registration
+  cluster non-trivial for RealNormSpace-Sequence;
+end;
+
+registration
+  let G be non-trivial RealNormSpace-Sequence;
+  let i be Element of dom G;
+  cluster G.i -> non trivial for RealNormSpace;
+end;
+
+registration
+  let G be non-trivial RealNormSpace-Sequence;
+  cluster product G -> non trivial;
+end;
+
+theorem :: NDIFF_5:12
+for G be RealNormSpace-Sequence, p,q be Point of product G,
+    r0,p0,q0 be Element of product carr G st p=p0 & q=q0
+holds p+q = r0
+  iff for i be Element of dom G holds r0.i = p0.i + q0.i;
+
+theorem :: NDIFF_5:13
+for G be RealNormSpace-Sequence, p be Point of product G,
+    r be Real, r0,p0 be Element of product carr G
+  st p=p0
+holds r*p = r0
+  iff for i be Element of dom G holds r0.i = r*(p0.i);
+
+theorem :: NDIFF_5:14
+for G be RealNormSpace-Sequence, p0 be Element of product carr G
+holds 0.(product G)=p0
+  iff for i be Element of dom G holds p0.i = 0.(G.i);
+
+theorem :: NDIFF_5:15
+for G be RealNormSpace-Sequence, p,q be Point of product G,
+    r0,p0,q0 be Element of product carr G
+  st p=p0 & q=q0
+holds p-q = r0
+  iff for i be Element of dom G holds r0.i = p0.i - q0.i;
+
+begin :: Mean value theorem for vector-valued functions
+
+definition
+  let S be RealLinearSpace;
+  let p,q be Point of S;
+  func ]. p,q .[ -> Subset of S equals
+:: NDIFF_5:def 2
+    { p+t*(q-p) where t is Real : 0 < t & t < 1};
+end;
+
+notation
+  let S be RealLinearSpace;
+  let p,q be Point of S;
+  synonym [.p,q.] for LSeg(p,q);
+end;
+
+theorem :: NDIFF_5:16
+for S be RealLinearSpace, p,q be Point of S
+  holds ].p,q.[ c= [. p,q .];
+
+theorem :: NDIFF_5:17
+  for T be non trivial RealNormSpace, R be PartFunc of REAL,T
+   st R is total holds
+     R is REST-like
+  iff for r be Real st r > 0
+      ex d be Real st d > 0 & for z be Real
+        st z <> 0 & abs z < d holds ( ||. R/.z .||/ abs z ) < r;
+
+theorem :: NDIFF_5:18
+  for R be Function of REAL,REAL holds R is REST-like iff
+  for r be Real st r > 0 ex d be Real st d > 0 & for z be Real
+     st z <> 0 & abs(z) < d holds (abs(R.z)/ abs(z)) < r;
+
+theorem :: NDIFF_5:19
+for S,T be non trivial RealNormSpace,
+    f be PartFunc of S,T, p,q be Point of S, M be Real
+  st [.p,q.] c= dom f
+   & (for x be Point of S st x in [.p,q.] holds f is_continuous_in x)
+   & (for x be Point of S st x in ].p,q.[ holds f is_differentiable_in x)
+   & (for x be Point of S st x in ].p,q.[ holds ||. diff(f,x) .|| <= M)
+holds ||. f/.q - f/.p .|| <= M*||. q-p .||;
+
+theorem :: NDIFF_5:20
+for S,T be non trivial RealNormSpace, f be PartFunc of S,T,
+    p,q be Point of S, M be Real,
+    L be Point of R_NormSpace_of_BoundedLinearOperators(S,T)
+  st [.p,q.] c= dom f
+   & (for x be Point of S st x in [.p,q.] holds f is_continuous_in x)
+   & (for x be Point of S st x in ].p,q.[ holds f is_differentiable_in x)
+   & (for x be Point of S st x in ].p,q.[ holds ||. diff(f,x) - L .|| <= M)
+holds ||. f/.q - f/.p -L.(q-p).|| <= M*||. q-p .||;
+
+begin :: Partial derivative of a function of several variables.
+
+definition
+  let G be RealNormSpace-Sequence;
+  let i be Element of dom G;
+  func proj i -> Function of product G,G.i means
+:: NDIFF_5:def 3
+ for x be Element of product carr G holds it.x = x.i;
+end;
+
+definition
+  let G be RealNormSpace-Sequence;
+  let i be Element of dom G;
+  let x be Element of product G;
+  func reproj(i,x) -> Function of G.i,product G means
+:: NDIFF_5:def 4
+  for r be Element of G.i holds it.r = x +* (i,r);
+end;
+
+definition
+  let G be non-trivial RealNormSpace-Sequence;
+  let j be set;
+  assume  j in dom G;
+  func modetrans(G,j) -> Element of dom G equals
+:: NDIFF_5:def 5
+   j;
+end;
+
+definition
+  let G be non-trivial RealNormSpace-Sequence;
+  let F be non trivial RealNormSpace;
+  let i be set;
+  let f be PartFunc of product G,F;
+  let x being Element of product G;
+  pred f is_partial_differentiable_in x,i means
+:: NDIFF_5:def 6
+  f*reproj(modetrans(G,i),x) is_differentiable_in proj(modetrans(G,i)).x;
+end;
+
+definition
+  let G be non-trivial RealNormSpace-Sequence;
+  let F be non trivial RealNormSpace;
+  let i be set;
+  let f be PartFunc of product G,F;
+  let x be Point of product G;
+ func partdiff(f,x,i)
+       -> Point of R_NormSpace_of_BoundedLinearOperators(G.modetrans(G,i),F)
+    equals
+:: NDIFF_5:def 7
+ diff(f*reproj(modetrans(G,i),x),proj(modetrans(G,i)).x);
+end;
+
+begin :: Linearity of Partial Differential Operator
+
+reserve G for non-trivial RealNormSpace-Sequence;
+reserve F for non trivial RealNormSpace;
+reserve i for Element of dom G;
+reserve f,f1,f2 for PartFunc of product G, F;
+reserve x for Point of product G;
+reserve X for set;
+
+definition
+  let G be non-trivial RealNormSpace-Sequence;
+  let F be non trivial RealNormSpace;
+  let i be set;
+  let f be PartFunc of product G,F;
+  let X be set;
+  pred f is_partial_differentiable_on X,i means
+:: NDIFF_5:def 8
+  X c= dom f & for x be Point of product G st x in X
+    holds f|X is_partial_differentiable_in x,i;
+end;
+
+theorem :: NDIFF_5:21
+for xi be Element of G.i
+  holds ||. reproj(i,0.(product G)).xi .|| = ||.xi.||;
+
+theorem :: NDIFF_5:22
+for G be non-trivial RealNormSpace-Sequence,
+    i be Element of dom G,
+    x be Point of product G,
+    r be Point of G.i holds
+  reproj(i,x).r - x = reproj(i,0.(product G)).(r - proj(i).x) &
+  x - reproj(i,x).r = reproj(i,0.(product G)).(proj(i).x - r);
+
+theorem :: NDIFF_5:23
+for G be non-trivial RealNormSpace-Sequence,
+    i be Element of dom G,
+    x be Point of product G,
+    Z be Subset of product G
+      st Z is open & x in Z holds
+ex N be Neighbourhood of proj(i).x st
+  for z be Point of G.i st z in N holds (reproj(i,x)).z in Z;
+
+theorem :: NDIFF_5:24
+ for G be non-trivial RealNormSpace-Sequence,
+     T be non trivial RealNormSpace,
+     i be set,
+     f be PartFunc of product G, T,
+     Z be Subset of product G
+       st Z is open holds
+   f is_partial_differentiable_on Z,i
+iff
+   Z c=dom f &
+   for x be Point of product G st x in Z holds
+     f is_partial_differentiable_in x,i;
+
+theorem :: NDIFF_5:25
+for i be set st i in dom G & f is_partial_differentiable_on X,i
+  holds X is Subset of product G;
+
+definition
+  let G be non-trivial RealNormSpace-Sequence;
+  let S be non trivial RealNormSpace;
+  let i be set;
+  assume  i in dom G;
+  let f be PartFunc of product G, S;
+  let X be set;
+  assume  f is_partial_differentiable_on X,i;
+ func f `partial|(X,i) -> PartFunc of product G,
+  R_NormSpace_of_BoundedLinearOperators(G.modetrans(G,i),S) means
+:: NDIFF_5:def 9
+
+  dom it = X &
+  for x be Point of product G st x in X holds it/.x = partdiff(f,x,i);
+end;
+
+theorem :: NDIFF_5:26
+for i be set st i in dom G holds
+  (f1+f2)*reproj(modetrans(G,i),x) = f1*reproj(modetrans(G,i),x)
+                                    +f2*reproj(modetrans(G,i),x)
+& (f1-f2)*reproj(modetrans(G,i),x) = f1*reproj(modetrans(G,i),x)
+                            -f2*reproj(modetrans(G,i),x);
+
+theorem :: NDIFF_5:27
+for i be set st i in dom G holds
+  r(#)(f*reproj(modetrans(G,i),x)) = (r(#)f)*reproj(modetrans(G,i),x);
+
+theorem :: NDIFF_5:28
+for i be set st i in dom G
+  & f1 is_partial_differentiable_in x,i
+  & f2 is_partial_differentiable_in x,i
+  holds f1+f2 is_partial_differentiable_in x,i
+   & partdiff(f1+f2,x,i)=partdiff(f1,x,i)+partdiff(f2,x,i);
+
+theorem :: NDIFF_5:29
+for i be set st i in dom G
+  & f1 is_partial_differentiable_in x,i
+  & f2 is_partial_differentiable_in x,i
+ holds f1-f2 is_partial_differentiable_in x,i
+     & partdiff(f1-f2,x,i)=partdiff(f1,x,i)-partdiff(f2,x,i);
+
+theorem :: NDIFF_5:30
+for i be set st i in dom G
+  & f is_partial_differentiable_in x,i
+ holds r(#)f is_partial_differentiable_in x,i & partdiff((r(#)f),x,i)
+          = r*partdiff(f,x,i);
+
+begin :: Continuously differentiable and Partial derivative
+
+theorem :: NDIFF_5:31
+ ||. proj(i).x .|| <= ||.x.||;
+
+registration
+  let G be non-trivial RealNormSpace-Sequence;
+  cluster -> (len G)-element for Point of product G;
+end;
+
+theorem :: NDIFF_5:32
+for G be non-trivial RealNormSpace-Sequence,
+    T be non trivial RealNormSpace,
+    i be set,
+    Z be Subset of product G,
+    f be PartFunc of product G,T
+      st Z is open holds
+  f is_partial_differentiable_on Z,i
+      iff
+  Z c=dom f &
+  for x be Point of product G st x in Z holds
+    f is_partial_differentiable_in x,i;
+
+theorem :: NDIFF_5:33
+ for i,j be Element of dom G,
+     x be Point of G.i,
+     z be Element of product carr G
+      st z= reproj(i,0.(product G)).x
+holds
+  (i = j implies z.j = x) & (i <> j implies z.j = 0.(G.j));
+
+theorem :: NDIFF_5:34
+for x,y be Point of G.i
+ holds reproj(i,0.(product G)).(x+y)
+   = reproj(i,0.(product G)).x + reproj(i,0.(product G)).y;
+
+theorem :: NDIFF_5:35
+for x,y be Point of product G
+ holds proj(i).(x+y) = proj(i).x + proj(i).y;
+
+theorem :: NDIFF_5:36
+for x,y be Point of G.i
+ holds reproj(i,0.(product G)).(x-y)
+   = reproj(i,0.(product G)).x - reproj(i,0.(product G)).y;
+
+theorem :: NDIFF_5:37
+for x,y be Point of product G
+ holds proj(i).(x-y) = proj(i).x - proj(i).y;
+
+theorem :: NDIFF_5:38
+for x be Point of G.i st x <> 0.(G.i)
+ holds reproj(i,0.(product G)).x <> 0.(product G);
+
+theorem :: NDIFF_5:39
+for x be Point of G.i, a be Element of REAL
+ holds reproj(i,0.(product G)).(a*x)
+   = a*(reproj(i,0.(product G)).x);
+
+theorem :: NDIFF_5:40
+for x be Point of product G,a be Element of REAL
+ holds proj(i).(a*x) = a*(proj(i).x);
+
+theorem :: NDIFF_5:41
+ for G be non-trivial RealNormSpace-Sequence,
+      S be non trivial RealNormSpace,
+      f be PartFunc of product G, S,
+      x be Point of product G,
+      i be set
+  st f is_differentiable_in x holds
+    f is_partial_differentiable_in x,i
+  & partdiff(f,x,i) = diff(f,x) * reproj(modetrans(G,i),0.(product G));
+
+theorem :: NDIFF_5:42
+for S be RealNormSpace, h,g be FinSequence of S
+    st  len h = len g + 1 &
+       (for i be Nat st i in dom g holds g/.i = h /.i - h/.(i+1)) holds
+   h /.1 - h/.(len h) = Sum g;
+
+theorem :: NDIFF_5:43
+for G be non-trivial RealNormSpace-Sequence,
+    x,y be Element of product carr G, Z be set
+ holds x +* (y|Z) is Element of product carr G;
+
+theorem :: NDIFF_5:44
+for G be non-trivial RealNormSpace-Sequence,
+    x,y be Point of product G,
+    Z,x0 be Element of product carr G,
+    X be set
+  st Z=0.(product G) & x0=x & y= Z +* (x0|X)
+ holds ||.y.|| <= ||.x.||;
+
+theorem :: NDIFF_5:45
+for G be non-trivial RealNormSpace-Sequence,
+      S be non trivial RealNormSpace,
+      f be PartFunc of product G, S,
+      x,y be Point of product G
+ex h be FinSequence of product G, g be FinSequence of S,
+    Z,y0 be Element of product carr G st
+    y0=y & Z = 0.(product G)
+   & len h = len G + 1 & len g = len G  &
+  (for i be Nat st i in dom h holds h/.i = Z +* (y0| Seg (len G + 1-'i))) &
+  (for i be Nat st i in dom g holds g/.i = f/.(x+h/.i) - f/.(x+h/.(i+1))) &
+  (for i be Nat, hi be Point of product G st
+    i in dom h & h/.i= hi holds ||. hi .|| <=||. y .||) &
+  f /.(x+y) - f/.x = Sum g;
+
+theorem :: NDIFF_5:46
+for G be non-trivial RealNormSpace-Sequence,
+    i be Element of dom G,
+    x,y be Point of product G,
+    xi be Point of G.i
+  st y = reproj(i,x).xi holds proj(i).y = xi;
+
+theorem :: NDIFF_5:47
+for G be non-trivial RealNormSpace-Sequence, i be Element of dom G,
+    y be Point of product G, q be Point of G.i
+  st q = proj(i).y holds y = reproj(i,y).q;
+
+theorem :: NDIFF_5:48
+for G be non-trivial RealNormSpace-Sequence,
+    i be Element of dom G, x,y be Point of product G,
+    xi be Point of G.i
+  st y = reproj(i,x).xi holds reproj(i,x)=reproj(i,y);
+
+theorem :: NDIFF_5:49
+for G be non-trivial RealNormSpace-Sequence,
+    i,j be Element of dom G, x,y be Point of product G,
+    xi be Point of G.i
+  st y = reproj(i,x).xi & i <> j holds proj(j).x = proj(j).y;
+
+theorem :: NDIFF_5:50
+for  G be non-trivial RealNormSpace-Sequence,
+     F be non trivial RealNormSpace,
+     i be Element of dom G,
+     x be Point of product G,
+     xi be Point of G.i,
+     f be PartFunc of product G,F,
+     g be PartFunc of G.i,F
+      st proj(i).x=xi & g=f*reproj(i,x)
+ holds
+    diff(g,xi) = partdiff(f,x,i);
+
+theorem :: NDIFF_5:51
+for G be non-trivial RealNormSpace-Sequence,
+    F be non trivial RealNormSpace,
+    f be PartFunc of product G,F,
+    x be Point of product G,
+    i be set,
+    M be Real,
+    L be Point of R_NormSpace_of_BoundedLinearOperators
+             (G.(modetrans(G,i)),F),
+    p,q be Point of G.(modetrans(G,i))
+ st i in dom G
+  & (for h be Point of G.(modetrans(G,i)) st h in ]. p,q .[ holds
+       ||. partdiff(f,reproj(modetrans(G,i),x).h,i) - L  .|| <= M)
+  & (for h be Point of G.(modetrans(G,i)) st h in [. p,q .] holds
+       reproj(modetrans(G,i),x).h in dom f)
+  & (for h be Point of G.(modetrans(G,i)) st h in [. p,q .] holds
+       f is_partial_differentiable_in (reproj(modetrans(G,i),x).h),i)
+holds
+ ||.f/.(reproj(modetrans(G,i),x).q) - f/.(reproj(modetrans(G,i),x).p)
+     - L.(q-p) .|| <= M * ||.q-p.||;
+
+theorem :: NDIFF_5:52
+for G be non-trivial RealNormSpace-Sequence,
+    x,y,z,w be Point of product G,
+    i be Element of dom G,
+    d be Real,
+    p,q,r be Point of G.i
+  st ||. y-x .|| < d & ||. z-x .|| < d & p= proj(i).y & z=reproj(i,y).q
+   & r in [. p,q .] & w= reproj(i,y).r
+holds ||. w-x .|| < d;
+
+theorem :: NDIFF_5:53
+for G be non-trivial RealNormSpace-Sequence,
+    S be non trivial RealNormSpace,
+    f be PartFunc of product G,S,
+    X be Subset of product G,
+    x,y,z be Point of product G,
+    i be set,
+    p,q be Point of G.(modetrans(G,i)),
+    d,r be Real
+ st i in dom G & X is open & x in X &
+    ||. y-x .|| < d & ||. z-x .|| < d & X c= dom f &
+    (for x be Point of product G st x in X holds
+      f is_partial_differentiable_in x,i) &
+    (for z be Point of product G st ||. z-x .|| < d holds z in X) &
+    (for z be Point of product G st ||. z-x .|| < d
+        holds ||. partdiff(f,z,i) - partdiff(f,x,i).|| <=r) &
+    z = reproj(modetrans(G,i),y).p & q = proj(modetrans(G,i)).y
+holds
+   ||. f/.z - f/.y - ((partdiff(f,x,i)).(p-q)) .|| <= ||. p-q .||*r;
+
+theorem :: NDIFF_5:54
+for G be non-trivial RealNormSpace-Sequence,
+    h be FinSequence of product G,
+    y,x be Point of product G,
+    y0,Z be Element of product carr G,
+     j be Element of NAT
+  st y=y0 & Z=0.(product G)
+    & len h = (len G)+1 & 1 <= j & j <= len G &
+  (for i be Nat st i in dom h holds h/.i=Z +* (y0| Seg (len G + 1-'i)))
+  holds x + h/.j = reproj(modetrans(G,(len G)+1-'j),(x+h/.(j+1)))
+         .(proj(modetrans(G,(len G)+1-'j)).(x+y));
+
+theorem :: NDIFF_5:55
+for G be non-trivial RealNormSpace-Sequence,
+    h be FinSequence of product G,
+    y,x be Point of product G,
+    y0,Z be Element of product carr G,
+    j be Element of NAT
+  st y=y0 & Z=0.(product G)
+    & len h = (len G)+1 & 1 <= j & j <= len G &
+  (for i be Nat st i in dom h holds h/.i=Z +* (y0| Seg (len G + 1-'i)))
+  holds
+ (proj(modetrans(G,(len G)+1-'j)).(x+y))
+- proj(modetrans(G,(len G)+1-'j)).(x+h/.(j+1))
+ = (proj(modetrans(G,(len G)+1-'j)).y);
+
+theorem :: NDIFF_5:56
+for G be non-trivial RealNormSpace-Sequence,
+    S be non trivial RealNormSpace,
+    f be PartFunc of product G, S,
+    X be Subset of product G,
+    x be Point of product G
+ st X is open & x in X &
+    (for i be set st i in dom G holds
+      f is_partial_differentiable_on X,i & f`partial|(X,i) is_continuous_on X)
+ holds
+  f is_differentiable_in x & for h be Point of product G
+   ex w be FinSequence of S st
+    dom w = dom G &
+    (for i be set st i in dom G holds
+          w.i = partdiff(f,x,i).(proj(modetrans(G,i)).h))
+  & diff(f,x).h = Sum w;
+
+theorem :: NDIFF_5:57
+for G be non-trivial RealNormSpace-Sequence,
+    F be non trivial RealNormSpace,
+    f be PartFunc of product G, F,
+    X be Subset of product G
+ st X is open holds
+  (for i be set st i in dom G holds
+     f is_partial_differentiable_on X,i & f`partial|(X,i) is_continuous_on X)
+iff
+  f is_differentiable_on X & f`|X is_continuous_on X;

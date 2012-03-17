@@ -30,7 +30,7 @@
 <Typ kind="G" nr="7">
 <Cluster>
 <Adjective nr="40" value="false"/>
-<Adjective nr="102"/>
+<Adjective nr="103"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -64,7 +64,7 @@
 <Typ kind="G" nr="7">
 <Cluster>
 <Adjective nr="40" value="false"/>
-<Adjective nr="103"/>
+<Adjective nr="104"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -98,7 +98,7 @@
 <Typ kind="G" nr="8">
 <Cluster>
 <Adjective nr="40" value="false"/>
-<Adjective nr="99"/>
+<Adjective nr="100"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -131,15 +131,15 @@
 <ArgTypes/>
 <Cluster>
 <Adjective nr="40" value="false"/>
-<Adjective nr="102"/>
-<Adjective nr="104"/>
+<Adjective nr="103"/>
+<Adjective nr="105"/>
 </Cluster>
 <Typ kind="G" nr="7">
 <Cluster/>
 </Typ>
 <Cluster>
 <Adjective nr="40" value="false"/>
-<Adjective nr="87"/>
+<Adjective nr="88"/>
 </Cluster>
 </CCluster>
 </Registrations>

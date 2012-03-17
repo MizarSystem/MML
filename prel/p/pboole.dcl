@@ -12,13 +12,6 @@
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="FUNCOP_1"/>
-<ArticleID name="ORDINAL1"/>
-<ArticleID name="NUMBERS"/>
-<ArticleID name="FINSET_1"/>
-<ArticleID name="CARD_1"/>
-<ArticleID name="FINSEQ_1"/>
-<ArticleID name="FINSEQ_2"/>
-<ArticleID name="CARD_3"/>
 <ArticleID name="PBOOLE"/>
 </Signature>
 <RCluster aid="PBOOLE" nr="1">
@@ -123,7 +116,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Typ kind="M" nr="12">
+<Typ kind="M" nr="8">
 <Cluster/>
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
@@ -211,45 +204,6 @@
 </Typ>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="4"/>
-<Adjective nr="5"/>
-<Adjective nr="7">
-<LocusVar nr="1"/>
-</Adjective>
-<Adjective nr="9"/>
-<Adjective nr="14">
-<LocusVar nr="1"/>
-</Adjective>
-</Cluster>
-</Typ>
-</ArgTypes>
-<Func kind="K" nr="152">
-<LocusVar nr="1"/>
-<LocusVar nr="2"/>
-</Func>
-<Cluster>
-<Adjective nr="4"/>
-<Adjective nr="5"/>
-<Adjective nr="7">
-<Func kind="K" nr="132">
-<LocusVar nr="1"/>
-</Func>
-</Adjective>
-<Adjective nr="9"/>
-<Adjective nr="14">
-<Func kind="K" nr="132">
-<LocusVar nr="1"/>
-</Func>
-</Adjective>
-</Cluster>
-</FCluster>
-<FCluster aid="PBOOLE" nr="2">
-<ArgTypes>
-<Typ kind="M" nr="1">
-<Cluster/>
-</Typ>
-<Typ kind="M" nr="1">
-<Cluster>
 <Adjective nr="1" value="false"/>
 </Cluster>
 </Typ>
@@ -305,7 +259,7 @@
 </Cluster>
 </Typ>
 </FCluster>
-<FCluster aid="PBOOLE" nr="3">
+<FCluster aid="PBOOLE" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -338,13 +292,40 @@
 <Adjective nr="1" value="false"/>
 </Cluster>
 </FCluster>
+<FCluster aid="PBOOLE" nr="3">
+<ArgTypes>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="4"/>
+<Adjective nr="9"/>
+<Adjective nr="18"/>
+</Cluster>
+</Typ>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="4"/>
+<Adjective nr="9"/>
+<Adjective nr="18"/>
+</Cluster>
+</Typ>
+</ArgTypes>
+<Func kind="K" nr="101">
+<LocusVar nr="1"/>
+<LocusVar nr="2"/>
+</Func>
+<Cluster>
+<Adjective nr="4"/>
+<Adjective nr="9"/>
+<Adjective nr="18"/>
+</Cluster>
+</FCluster>
 <FCluster aid="PBOOLE" nr="4">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="147">
+<Func kind="K" nr="94">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -458,7 +439,7 @@
 </Typ>
 </ArgTypes>
 <Cluster/>
-<Typ kind="M" nr="11">
+<Typ kind="M" nr="7">
 <Cluster/>
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
@@ -530,38 +511,6 @@
 <LocusVar nr="1"/>
 </Adjective>
 <Adjective nr="9"/>
-<Adjective nr="14">
-<LocusVar nr="1"/>
-</Adjective>
-</Cluster>
-</CCluster>
-<CCluster aid="PBOOLE" nr="6">
-<ArgTypes>
-<Typ kind="M" nr="1">
-<Cluster/>
-</Typ>
-<Typ kind="M" nr="1">
-<Cluster>
-<Adjective nr="4"/>
-<Adjective nr="5"/>
-<Adjective nr="7">
-<LocusVar nr="1"/>
-</Adjective>
-<Adjective nr="9"/>
-<Adjective nr="14">
-<LocusVar nr="1"/>
-</Adjective>
-</Cluster>
-</Typ>
-</ArgTypes>
-<Cluster/>
-<Typ kind="M" nr="2">
-<Cluster/>
-<Func kind="K" nr="138">
-<LocusVar nr="2"/>
-</Func>
-</Typ>
-<Cluster>
 <Adjective nr="14">
 <LocusVar nr="1"/>
 </Adjective>

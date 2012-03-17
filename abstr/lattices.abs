@@ -15,11 +15,11 @@
 environ
 
  vocabularies STRUCT_0, BINOP_1, XBOOLE_0, ZFMISC_1, SUBSET_1, EQREL_1,
-      FUNCT_1, PBOOLE, XXREAL_2, CAT_1, LATTICES;
- notations XBOOLE_0, ZFMISC_1, STRUCT_0, BINOP_1;
+      FUNCT_1, PBOOLE, XXREAL_2, CAT_1, LATTICES, CARD_1;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, CARD_1, STRUCT_0, BINOP_1;
  constructors BINOP_1, STRUCT_0;
- registrations XBOOLE_0, SUBSET_1, STRUCT_0;
- requirements SUBSET, BOOLE;
+ registrations XBOOLE_0, SUBSET_1, CARD_1, ORDINAL1, STRUCT_0;
+ requirements SUBSET, BOOLE, NUMERALS;
 
 
 begin
@@ -51,9 +51,9 @@ registration
 end;
 
 registration
-  cluster strict non empty \/-SemiLattStr;
-  cluster strict non empty /\-SemiLattStr;
-  cluster strict non empty LattStr;
+  cluster 1-element strict for \/-SemiLattStr;
+  cluster 1-element strict for /\-SemiLattStr;
+  cluster 1-element strict for LattStr;
 end;
 
 definition
@@ -126,29 +126,31 @@ end;
 
 registration
   cluster Lattice-like -> join-commutative join-associative meet-absorbing
-    meet-commutative meet-associative join-absorbing (non empty LattStr);
+    meet-commutative meet-associative join-absorbing for non empty LattStr;
   cluster join-commutative join-associative meet-absorbing meet-commutative
-    meet-associative join-absorbing -> Lattice-like (non empty LattStr);
+    meet-associative join-absorbing -> Lattice-like for non empty LattStr;
 end;
 
 registration
-  cluster strict join-commutative join-associative (non empty \/-SemiLattStr);
-  cluster strict meet-commutative meet-associative (non empty /\-SemiLattStr);
-  cluster strict Lattice-like (non empty LattStr);
+  cluster strict join-commutative join-associative for
+non empty \/-SemiLattStr;
+  cluster strict meet-commutative meet-associative for
+non empty /\-SemiLattStr;
+  cluster strict Lattice-like for non empty LattStr;
 end;
 
 definition
-  mode Lattice is Lattice-like (non empty LattStr);
+  mode Lattice is Lattice-like non empty LattStr;
 end;
 
 definition
-  let L be join-commutative (non empty \/-SemiLattStr), a, b be Element of L;
+  let L be join-commutative non empty \/-SemiLattStr, a, b be Element of L;
   redefine func a"\/"b;
   commutativity;
 end;
 
 definition
-  let L be meet-commutative (non empty /\-SemiLattStr), a, b be Element of L;
+  let L be meet-commutative non empty /\-SemiLattStr, a, b be Element of L;
   redefine func a"/\"b;
   commutativity;
 end;
@@ -188,7 +190,7 @@ definition
 end;
 
 registration
-  cluster strict distributive lower-bounded upper-bounded modular Lattice;
+  cluster strict distributive lower-bounded upper-bounded modular for Lattice;
 end;
 
 definition
@@ -207,12 +209,12 @@ definition
 end;
 
 registration
-  cluster lower-bounded upper-bounded -> bounded (non empty LattStr);
-  cluster bounded -> lower-bounded upper-bounded (non empty LattStr);
+  cluster lower-bounded upper-bounded -> bounded for non empty LattStr;
+  cluster bounded -> lower-bounded upper-bounded for non empty LattStr;
 end;
 
 registration
-  cluster bounded strict Lattice;
+  cluster bounded strict for Lattice;
 end;
 
 definition
@@ -256,7 +258,7 @@ definition
 end;
 
 registration
-  cluster bounded complemented strict Lattice;
+  cluster bounded complemented strict for Lattice;
 end;
 
 definition
@@ -272,73 +274,64 @@ definition
 end;
 
 registration
-  cluster Boolean -> bounded complemented distributive (non empty LattStr);
-  cluster bounded complemented distributive -> Boolean (non empty LattStr);
+  cluster Boolean -> bounded complemented distributive for non empty LattStr;
+  cluster bounded complemented distributive -> Boolean for non empty LattStr;
 end;
 
 registration
-  cluster Boolean strict Lattice;
+  cluster Boolean strict for Lattice;
 end;
 
 definition
   mode B_Lattice is Boolean Lattice;
 end;
 
-canceled 16;
+theorem :: LATTICES:1
+  for L being meet-absorbing join-absorbing meet-commutative non
+  empty LattStr, a being Element of L holds a "\/" a = a;
 
-theorem :: LATTICES:17
-  for L being meet-absorbing join-absorbing meet-commutative (non
-  empty LattStr), a being Element of L holds a "\/" a = a;
+theorem :: LATTICES:2
+  for L being meet-absorbing join-absorbing meet-commutative non empty
+  LattStr, a being Element of L holds a "/\" a = a;
 
-theorem :: LATTICES:18
-  for L being meet-absorbing join-absorbing meet-commutative (non empty
-  LattStr), a being Element of L holds a "/\" a = a;
-
-theorem :: LATTICES:19
+theorem :: LATTICES:3
   for L being Lattice holds (for a,b,c being Element of L holds a
   "/\"(b"\/"c) = (a"/\"b)"\/"(a"/\"c)) iff for a,b,c being Element of L holds a
   "\/"(b"/\"c) = (a"\/"b)"/\"(a"\/"c);
 
-canceled;
-
-theorem :: LATTICES:21
-  for L being meet-absorbing join-absorbing (non empty LattStr), a
+theorem :: LATTICES:4
+  for L being meet-absorbing join-absorbing non empty LattStr, a
   , b being Element of L holds a [= b iff a"/\"b = a;
 
-theorem :: LATTICES:22
+theorem :: LATTICES:5
   for L being meet-absorbing join-absorbing join-associative
-meet-commutative (non empty LattStr), a, b being Element of L holds a [= a"\/"b
-;
+meet-commutative non empty LattStr, a, b being Element of L holds a [= a"\/"b;
 
-theorem :: LATTICES:23
-  for L being meet-absorbing meet-commutative (non empty LattStr),
+theorem :: LATTICES:6
+  for L being meet-absorbing meet-commutative non empty LattStr,
   a, b being Element of L holds a"/\"b [= a;
 
 definition
-  let L be meet-absorbing join-absorbing meet-commutative (non empty LattStr),
+  let L be meet-absorbing join-absorbing meet-commutative non empty LattStr,
   a, b be Element of L;
   redefine pred a [= b;
   reflexivity;
 end;
 
-canceled;
-
-theorem :: LATTICES:25
-  for L being join-associative (non empty \/-SemiLattStr), a, b, c being
+theorem :: LATTICES:7
+  for L being join-associative non empty \/-SemiLattStr, a, b, c being
   Element of L holds a [= b & b [= c implies a [= c;
 
-theorem :: LATTICES:26
-  for L being join-commutative (non empty \/-SemiLattStr), a, b
+theorem :: LATTICES:8
+  for L being join-commutative non empty \/-SemiLattStr, a, b
   being Element of L holds a [= b & b [= a implies a=b;
 
-theorem :: LATTICES:27
-  for L being meet-absorbing join-absorbing meet-associative (non
-empty LattStr), a, b, c being Element of L holds a [= b implies a"/\"c [= b"/\"
+theorem :: LATTICES:9
+  for L being meet-absorbing join-absorbing meet-associative non
+empty LattStr, a, b, c being Element of L holds a [= b implies a"/\"c [= b"/\"
   c;
 
-canceled;
-
-theorem :: LATTICES:29
+theorem :: LATTICES:10
   for L being Lattice holds (for a,b,c being Element of L holds (a"/\"b)
   "\/"(b"/\"c)"\/"(c"/\"a) = (a"\/"b)"/\"(b"\/"c)"/\"(c"\/"a)) implies L is
   distributive;
@@ -346,44 +339,36 @@ theorem :: LATTICES:29
 reserve L for D_Lattice;
 reserve a, b, c for Element of L;
 
-canceled;
-
-theorem :: LATTICES:31
+theorem :: LATTICES:11
   a"\/"(b"/\"c) = (a"\/"b)"/\"(a"\/"c);
 
-theorem :: LATTICES:32
+theorem :: LATTICES:12
   c"/\"a = c"/\"b & c"\/"a = c"\/"b implies a=b;
 
-canceled;
-
-theorem :: LATTICES:34
+theorem :: LATTICES:13
   (a"\/"b)"/\"(b"\/"c)"/\"(c"\/"a) = (a"/\"b)"\/"(b"/\"c)"\/"(c"/\"a);
 
 registration
-  cluster distributive -> modular Lattice;
+  cluster distributive -> modular for Lattice;
 end;
 
-canceled 4;
-
-theorem :: LATTICES:39
+theorem :: LATTICES:14
   for L being 0_Lattice, a being Element of L holds Bottom L "\/" a = a;
 
-theorem :: LATTICES:40
+theorem :: LATTICES:15
   for L being 0_Lattice, a being Element of L holds Bottom L "/\" a =
   Bottom L;
 
-theorem :: LATTICES:41
+theorem :: LATTICES:16
   for L being 0_Lattice, a being Element of L holds Bottom L [= a;
 
-canceled;
-
-theorem :: LATTICES:43
+theorem :: LATTICES:17
   for L being 1_Lattice, a being Element of L holds Top L"/\"a = a;
 
-theorem :: LATTICES:44
+theorem :: LATTICES:18
   for L being 1_Lattice, a being Element of L holds Top L"\/"a = Top L;
 
-theorem :: LATTICES:45
+theorem :: LATTICES:19
   for L being 1_Lattice, a being Element of L holds a [= Top L;
 
 definition
@@ -399,27 +384,25 @@ end;
 reserve L for B_Lattice;
 reserve a, b for Element of L;
 
-canceled;
-
-theorem :: LATTICES:47
+theorem :: LATTICES:20
   a`"/\"a = Bottom L;
 
-theorem :: LATTICES:48
+theorem :: LATTICES:21
   a`"\/"a = Top L;
 
-theorem :: LATTICES:49
+theorem :: LATTICES:22
   a`` = a;
 
-theorem :: LATTICES:50
+theorem :: LATTICES:23
   ( a"/\"b )` = a`"\/" b`;
 
-theorem :: LATTICES:51
+theorem :: LATTICES:24
   ( a"\/"b )` = a`"/\" b`;
 
-theorem :: LATTICES:52
+theorem :: LATTICES:25
   b"/\"a = Bottom L iff b [= a`;
 
-theorem :: LATTICES:53
+theorem :: LATTICES:26
   a [= b implies b` [= a`;
 
 begin :: Addenda
@@ -445,12 +428,12 @@ registration let L be Lattice;
 end;
 
 registration let L be Lattice;
- cluster initial final non empty Subset of L;
- cluster empty -> initial final Subset of L;
- cluster initial -> meet-closed Subset of L;
- cluster final -> join-closed Subset of L;
+ cluster initial final non empty for Subset of L;
+ cluster empty -> initial final for Subset of L;
+ cluster initial -> meet-closed for Subset of L;
+ cluster final -> join-closed for Subset of L;
 end;
 
-theorem :: LATTICES:54
+theorem :: LATTICES:27
  for L being Lattice, S being initial final non empty Subset of L
    holds S = [#]L;

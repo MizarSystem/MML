@@ -18,94 +18,57 @@ environ
       GRAPHSP, XXREAL_0, CIRCUIT2, ARYTM_3, CARD_1, FUNCT_1, SCMFSA6B,
       MSUALG_1, FUNCT_4, SCMFSA6A, FUNCOP_1, TARSKI, AMISTD_2, SCMNORM, AMI_3,
       SCMFSA7B, VALUED_1, CAT_1, NAT_1, TURING_1, UNIALG_2, SCMFSA8A, PARTFUN1,
-      RELOC, SCMFSA6C, AFINSQ_1, FRECHET, ORDINAL1, PBOOLE;
+      RELOC, SCMFSA6C, AFINSQ_1, FRECHET, ORDINAL1, PBOOLE, COMPOS_1;
  notations TARSKI, XBOOLE_0, SUBSET_1, CARD_1, NUMBERS, NAT_1, FUNCOP_1,
       RELAT_1, FUNCT_1, PARTFUN1, AFINSQ_1, FUNCT_4, FUNCT_7, FINSEQ_1,
-      VALUED_1, PBOOLE, STRUCT_0, COMPOS_1, EXTPRO_1, AMISTD_1, AMISTD_2,
-      SCMFSA_2, SCMFSA10, SCMFSA_7, SCMFSA6A, SCMFSA6B, SCMFSA6C, SCMFSA7B,
-      XXREAL_0;
+      VALUED_1, PBOOLE, STRUCT_0, MEMSTR_0, COMPOS_1, EXTPRO_1, AMISTD_1,
+      AMISTD_2, SCMFSA_2, SCMFSA10, SCMFSA_7, SCMFSA6A, SCMFSA6B, SCMFSA6C,
+      SCMFSA7B, XXREAL_0;
  constructors DOMAIN_1, XXREAL_0, SCMFSA_7, SCMFSA6A, SF_MASTR, SCMFSA6B,
       SCMFSA6C, SCMFSA7B, AMISTD_2, RELSET_1, PRE_POLY, SCMFSA10, AMISTD_1,
-      PBOOLE, AMISTD_5;
+      PBOOLE, AMISTD_5, MEMSTR_0;
  registrations XBOOLE_0, SETFAM_1, FUNCT_1, FUNCOP_1, NUMBERS, XXREAL_0,
       MEMBERED, SCMFSA_2, SCMFSA6A, SF_MASTR, AFINSQ_1, SCMFSA7B, FINSET_1,
       FINSEQ_1, SCMFSA10, AMISTD_2, VALUED_1, SCMFSA_4, SCMFSA6C, COMPOS_1,
-      RELAT_1, EXTPRO_1, FUNCT_4, PBOOLE, ORDINAL1, STRUCT_0;
+      RELAT_1, EXTPRO_1, FUNCT_4, PBOOLE, ORDINAL1, STRUCT_0, MEMSTR_0;
  requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
 
 
 begin
 
 reserve m for Element of NAT;
-reserve P for (the Instructions of SCM+FSA)-valued ManySortedSet of NAT;
-
-canceled 3;
-
-theorem :: SCMFSA8A:4
-  for s being State of SCM+FSA st P halts_on s for k being Element
-  of NAT st LifeSpan(P,s) <= k holds
-  CurInstr(P,Comput(P,s,k))= halt SCM+FSA;
-
-theorem :: SCMFSA8A:5
-  for s being State of SCM+FSA st P halts_on s for k being Element
-of NAT st LifeSpan(P,s) <= k holds IC Comput(P,s,k) =
-IC Comput(P,s,LifeSpan(P, s));
-
-theorem :: SCMFSA8A:6
-  for s1,s2 being State of SCM+FSA holds NPP s1 = NPP s2
-  iff IC s1 = IC s2 & DataPart s1 = DataPart s2;
-
-theorem :: SCMFSA8A:7
-  for s being State of SCM+FSA, I being Program of SCM+FSA holds
-   IC IExec(I,P,s) = IC Result(P +* I,s +* Initialize((intloc 0).-->1));
-
-canceled 2;
-
-theorem :: SCMFSA8A:10
-  for s being State of SCM+FSA, l being Element of NAT
-   holds DataPart s = DataPart(s +* Start-At(l,SCM+FSA));
-
-canceled 2;
-
-theorem :: SCMFSA8A:13
-  for s being State of SCM+FSA, I being Program of SCM+FSA holds
-  s +* Initialize((intloc 0).-->1) = Initialize Initialized s;
-
-theorem :: SCMFSA8A:14
-  for s being State of SCM+FSA, I1,I2 being Program of SCM+FSA, l
-  being Element of NAT holds NPP(s +* NPP(I1 +* Start-At(l,SCM+FSA)))
-   = NPP(s +* NPP(I2 +* Start-At(l,SCM+FSA)));
+reserve P for Instruction-Sequence of SCM+FSA;
 
 canceled 6;
 
-theorem :: SCMFSA8A:21
+theorem :: SCMFSA8A:7
   for P being preProgram of SCM+FSA, l being Element of NAT
 , x being set st x in dom P holds (P.x = halt SCM+FSA implies Directed(P
   ,l).x = goto l) & (P.x <> halt SCM+FSA implies Directed(P,l).x = P.x);
 
-theorem :: SCMFSA8A:22
+theorem :: SCMFSA8A:8
   for i being Instruction of SCM+FSA, a being Int-Location, n
   being Element of NAT holds i does not destroy a implies IncAddr(i,n)
   does not destroy a;
 
-theorem :: SCMFSA8A:23
+theorem :: SCMFSA8A:9
   for P being preProgram of SCM+FSA, n being Element of NAT, a
 being Int-Location holds P does not destroy a implies Reloc(P,
   n) does not destroy a;
 
-theorem :: SCMFSA8A:24
+theorem :: SCMFSA8A:10
   for P being good preProgram of SCM+FSA, n being Element of NAT
   holds Reloc(P,n) is good;
 
-theorem :: SCMFSA8A:25
+theorem :: SCMFSA8A:11
   for I,J being preProgram of SCM+FSA, a being Int-Location holds
   I does not destroy a & J does not destroy a implies I +* J does not destroy a
 ;
 
-theorem :: SCMFSA8A:26
+theorem :: SCMFSA8A:12
   for I,J being good preProgram of SCM+FSA holds I +* J is good;
 
-theorem :: SCMFSA8A:27
+theorem :: SCMFSA8A:13
   for I being preProgram of SCM+FSA, l being Element of NAT
 , a being Int-Location holds I does not destroy a implies Directed(I,
   l) does not destroy a;
@@ -132,10 +95,9 @@ registration
 end;
 
 definition
-  canceled;
   let l be Element of NAT;
   func Goto l -> Program of SCM+FSA equals
-:: SCMFSA8A:def 2
+:: SCMFSA8A:def 1
    0 .--> goto l;
 end;
 
@@ -145,119 +107,97 @@ registration
 end;
 
 registration
- cluster halt-free good Program of SCM+FSA;
+ cluster halt-free good for Program of SCM+FSA;
 end;
 
 definition
   let s be State of SCM+FSA;
-  let P be (the Instructions of SCM+FSA)-valued ManySortedSet of NAT;
+  let P be Instruction-Sequence of SCM+FSA;
   let I be initial Program of SCM+FSA;
   pred I is_pseudo-closed_on s,P means
-:: SCMFSA8A:def 3
+:: SCMFSA8A:def 2
 
   ex k being Element of NAT st
-   IC Comput(P +* ProgramPart I, Initialize s,k)
-    = card ProgramPart I &
+   IC Comput(P +* I, Initialize s,k) = card I &
   for n being Element of NAT st n < k
-   holds IC Comput(P +* ProgramPart I,Initialize s,n) in dom I;
-     :: nie mozna uproscic, bo za I jest podstawiane
-     :: Initialized I
-end;
-
-definition
-  let I be initial Program of SCM+FSA;
-  attr I is pseudo-paraclosed means
-:: SCMFSA8A:def 4
-
-  for s being State of SCM+FSA,
-      P being (the Instructions of SCM+FSA)-valued ManySortedSet of NAT
-      holds
-  I is_pseudo-closed_on s,P;
+   holds IC Comput(P +* I,Initialize s,n) in dom I;
 end;
 
 registration
- cluster sequential Instruction of SCM+FSA;
-end;
-
-registration let i be sequential Instruction of SCM+FSA;
- cluster <%i%> -> pseudo-paraclosed;
-end;
-
-registration
-  cluster pseudo-paraclosed Program of SCM+FSA;
+ cluster sequential for Instruction of SCM+FSA;
 end;
 
 definition
+ canceled;
   let s be State of SCM+FSA,
-      P be (the Instructions of SCM+FSA)-valued ManySortedSet of NAT,
+      P be Instruction-Sequence of SCM+FSA,
       I be initial Program of SCM+FSA such that
  I is_pseudo-closed_on s,P;
   func pseudo-LifeSpan(s,P,I) -> Element of NAT means
-:: SCMFSA8A:def 5
+:: SCMFSA8A:def 4
 
-  IC Comput(P +* ProgramPart I,Initialize s,it)
-   =  card ProgramPart I &
+  IC Comput(P +* I,Initialize s,it) =  card I &
    for n being Element of NAT
-    st not IC Comput(P +* ProgramPart I, Initialize s,n) in dom I
+    st not IC Comput(P +* I, Initialize s,n) in dom I
      holds it <= n;
 end;
 
-theorem :: SCMFSA8A:28
+theorem :: SCMFSA8A:14
   for I,J being Program of SCM+FSA, x being set holds x in dom I
   implies (I ';' J).x = (Directed I).x;
 
-theorem :: SCMFSA8A:29
+theorem :: SCMFSA8A:15
   for l being Element of NAT holds card Goto l = 1;
 
-theorem :: SCMFSA8A:30
+theorem :: SCMFSA8A:16
   for P being preProgram of SCM+FSA, x being set st x in dom P holds (P.
   x = halt SCM+FSA implies (Directed P).x = goto  card P) & (P.x <> halt
   SCM+FSA implies (Directed P).x = P.x);
 
-theorem :: SCMFSA8A:31
+theorem :: SCMFSA8A:17
   for s being State of SCM+FSA,
-  P being (the Instructions of SCM+FSA)-valued ManySortedSet of NAT,
+  P being Instruction-Sequence of SCM+FSA,
   I being initial Program of
   SCM+FSA st I is_pseudo-closed_on s,P
    holds for n being Element of NAT st n < pseudo-LifeSpan(s,P,I)
-    holds IC ( Comput(P+* ProgramPart I,
+    holds IC ( Comput(P+* I,
        Initialize s,n)) in dom I &
-  CurInstr(P+*ProgramPart I,Comput(P+*ProgramPart I,
+  CurInstr(P+*I,Comput(P+*I,
      Initialize s,n)) <>
           halt SCM+FSA;
 
-theorem :: SCMFSA8A:32
+theorem :: SCMFSA8A:18
   for s being State of SCM+FSA,
-  P being (the Instructions of SCM+FSA)-valued ManySortedSet of NAT,
+  P being Instruction-Sequence of SCM+FSA,
   I,J being Program of SCM+FSA st I
   is_pseudo-closed_on s,P for k being Element of NAT st
    k <= pseudo-LifeSpan(s,P,I)
-  holds NPP Comput(P+*I, (Initialize s),k)
-   = NPP Comput(P+*(I ';' J), Initialize s,k);
+  holds  Comput(P+*I, Initialize s,k)
+   =  Comput(P+*(I ';' J), Initialize s,k);
 
-theorem :: SCMFSA8A:33
+theorem :: SCMFSA8A:19
   for I being preProgram of SCM+FSA, l being Element of NAT
   holds card Directed(I,l) = card I;
 
-theorem :: SCMFSA8A:34
+theorem :: SCMFSA8A:20
   for I being Program of SCM+FSA holds card Directed I = card I;
 
-theorem :: SCMFSA8A:35
+theorem :: SCMFSA8A:21
   for s being State of SCM+FSA
-  for P being (the Instructions of SCM+FSA)-valued ManySortedSet of NAT,
+  for P being Instruction-Sequence of SCM+FSA,
   I being Program of SCM+FSA st I
   is_closed_on s,P & I is_halting_on s,P
   for k being Element of NAT
   st k <= LifeSpan(P+*I,Initialize s)
-   holds NPP Comput(P+*I, (Initialize s),k)
-    = NPP Comput(P+*Directed I, (Initialize s),k) &
+   holds  Comput(P+*I, (Initialize s),k)
+    =  Comput(P+*Directed I, (Initialize s),k) &
    CurInstr(P+*Directed I,
      Comput(P+*Directed I, (Initialize s),k))
       <> halt SCM+FSA;
 
-theorem :: SCMFSA8A:36
+theorem :: SCMFSA8A:22
   for s being State of SCM+FSA
-  for P being (the Instructions of SCM+FSA)-valued ManySortedSet of NAT,
+  for P being Instruction-Sequence of SCM+FSA,
   I being Program of SCM+FSA
    st I is_closed_on s,P & I is_halting_on s,P
   holds
@@ -268,27 +208,27 @@ theorem :: SCMFSA8A:36
    DataPart Comput(P+*Directed I, Initialize s,
    (LifeSpan(P+*I,Initialize s) + 1));
 
-theorem :: SCMFSA8A:37
+theorem :: SCMFSA8A:23
   for s being State of SCM+FSA
-  for P being (the Instructions of SCM+FSA)-valued ManySortedSet of NAT,
+  for P being Instruction-Sequence of SCM+FSA,
   I being Program of SCM+FSA st I is_closed_on s,P & I is_halting_on s,P
    holds Directed I is_pseudo-closed_on s,P;
 
-theorem :: SCMFSA8A:38
+theorem :: SCMFSA8A:24
   for s being State of SCM+FSA
-  for P being (the Instructions of SCM+FSA)-valued ManySortedSet of NAT,
+  for P being Instruction-Sequence of SCM+FSA,
   I being Program of SCM+FSA st I is_closed_on s,P & I is_halting_on s,P
   holds pseudo-LifeSpan(s,P,Directed I) =
    LifeSpan(P +* I,Initialize s) + 1;
 
-canceled 2;
 
-theorem :: SCMFSA8A:41
+
+theorem :: SCMFSA8A:25
   for I,J being Program of SCM+FSA holds Directed I ';' J = I ';' J;
 
-theorem :: SCMFSA8A:42
+theorem :: SCMFSA8A:26
   for s being State of SCM+FSA
-  for P being (the Instructions of SCM+FSA)-valued ManySortedSet of NAT,
+  for P being Instruction-Sequence of SCM+FSA,
   I,J being Program of SCM+FSA st I
   is_closed_on s,P & I is_halting_on s,P holds
   (for k being Element of NAT st
@@ -308,9 +248,9 @@ DataPart Comput(P+*Directed I, Initialize s,
  = IC Comput(P+*(I ';' J), Initialize s,
      (LifeSpan(P+*I,Initialize s) + 1));
 
-theorem :: SCMFSA8A:43
+theorem :: SCMFSA8A:27
   for s being State of SCM+FSA
-  for P being (the Instructions of SCM+FSA)-valued ManySortedSet of NAT,
+  for P being Instruction-Sequence of SCM+FSA,
   I,J being Program of SCM+FSA st I
   is_closed_on Initialized s,P & I is_halting_on Initialized s,P
    holds (for k being
@@ -337,23 +277,23 @@ theorem :: SCMFSA8A:43
           s +* Initialize((intloc 0).-->1),
            LifeSpan(P+*I,s +* Initialize((intloc 0).-->1)) + 1);
 
-theorem :: SCMFSA8A:44
+theorem :: SCMFSA8A:28
   for s being State of SCM+FSA
-  for P being (the Instructions of SCM+FSA)-valued ManySortedSet of NAT,
+  for P being Instruction-Sequence of SCM+FSA,
   I being Program of SCM+FSA st I
   is_closed_on Initialized s,P & I is_halting_on Initialized s,P
    holds for k being
   Element of NAT st k <= LifeSpan(P+*I,s +* Initialize((intloc 0).-->1)) holds
-     NPP Comput(P+*I,s +* Initialize((intloc 0).-->1),k)
-     = NPP Comput(P+*Directed I, s +* Initialize((intloc 0).-->1),k)
+      Comput(P+*I,s +* Initialize((intloc 0).-->1),k)
+     =  Comput(P+*Directed I, s +* Initialize((intloc 0).-->1),k)
 &
   CurInstr(P+*Directed I,
   Comput(P+*Directed I,s +* Initialize((intloc 0).-->1),k))
    <> halt SCM+FSA;
 
-theorem :: SCMFSA8A:45
+theorem :: SCMFSA8A:29
   for s being State of SCM+FSA
-  for P being (the Instructions of SCM+FSA)-valued ManySortedSet of NAT,
+  for P being Instruction-Sequence of SCM+FSA,
   I being Program of SCM+FSA st I
 is_closed_on Initialized s,P & I is_halting_on Initialized s,P
  holds IC Comput(P+*Directed I,
@@ -364,32 +304,32 @@ card I & DataPart Comput(P+*I, s +* Initialize((intloc 0).-->1),
      = DataPart Comput(P+*Directed I, s +* Initialize((intloc 0).-->1),
       (LifeSpan(P+*I,s +* Initialize((intloc 0).-->1)) + 1));
 
-theorem :: SCMFSA8A:46
+theorem :: SCMFSA8A:30
   for I being Program of SCM+FSA
-  for P being (the Instructions of SCM+FSA)-valued ManySortedSet of NAT,
+  for P being Instruction-Sequence of SCM+FSA,
   s being State of SCM+FSA st I
 is_closed_on s,P & I is_halting_on s,P
 holds I ';' Stop SCM+FSA is_closed_on s,P & I
   ';' Stop SCM+FSA is_halting_on s,P;
 
-theorem :: SCMFSA8A:47
+theorem :: SCMFSA8A:31
   for l being Element of NAT holds  0 in dom Goto
   l & (Goto l). 0 = goto l;
 
-canceled 5;
 
-theorem :: SCMFSA8A:53
+
+theorem :: SCMFSA8A:32
   for I being Program of SCM+FSA, s being State of SCM+FSA
-  for P being (the Instructions of SCM+FSA)-valued ManySortedSet of NAT
+  for P being Instruction-Sequence of SCM+FSA
   st I
 is_closed_on Initialized s,P & I is_halting_on Initialized s,P
 holds IC Comput(P +* (I ';' Stop SCM+FSA),
 (s +* Initialize((intloc 0).-->1)),
   (LifeSpan(P+*I,s +* Initialize((intloc 0).-->1)) + 1)) = card I;
 
-theorem :: SCMFSA8A:54
+theorem :: SCMFSA8A:33
   for I being Program of SCM+FSA, s being State of SCM+FSA
-  for P being (the Instructions of SCM+FSA)-valued ManySortedSet of NAT
+  for P being Instruction-Sequence of SCM+FSA
   st I is_closed_on Initialized s,P & I is_halting_on Initialized s,P
    holds DataPart Comput(P+*I, (s +* Initialize((intloc 0).-->1)),
    LifeSpan(P+*I,s
@@ -398,59 +338,58 @@ theorem :: SCMFSA8A:54
 Initialize((intloc 0).-->1)),
 (LifeSpan(P+*I,s +* Initialize((intloc 0).-->1)) + 1));
 
-theorem :: SCMFSA8A:55
+theorem :: SCMFSA8A:34
   for I being Program of SCM+FSA, s being State of SCM+FSA
-  for P being (the Instructions of SCM+FSA)-valued ManySortedSet of NAT
+  for P being Instruction-Sequence of SCM+FSA
   st I is_closed_on Initialized s,P & I is_halting_on Initialized s,P
  holds P+*(I ';' Stop SCM+FSA)
   halts_on s +* Initialize((intloc 0).-->1);
 
-theorem :: SCMFSA8A:56
+theorem :: SCMFSA8A:35
   for I being Program of SCM+FSA, s being State of SCM+FSA
-  for P being (the Instructions of SCM+FSA)-valued ManySortedSet of NAT
+  for P being Instruction-Sequence of SCM+FSA
   st I is_closed_on Initialized s,P & I is_halting_on Initialized s,P
    holds LifeSpan(P+*(I ';' Stop SCM+FSA),
    s +* Initialize((intloc 0).-->1)) = LifeSpan(P+*I,
 s +* Initialize((intloc 0).-->1)) + 1;
 
-theorem :: SCMFSA8A:57
+theorem :: SCMFSA8A:36
   for s being State of SCM+FSA
-  for P being (the Instructions of SCM+FSA)-valued ManySortedSet of NAT,
+  for P being Instruction-Sequence of SCM+FSA,
   I being Program of SCM+FSA st I
 is_closed_on Initialized s,P & I is_halting_on Initialized s,P
 holds IExec(I ';' Stop SCM+FSA,P,s) = IExec(I,P,s) +* Start-At(card I,SCM+FSA);
 
-theorem :: SCMFSA8A:58
+theorem :: SCMFSA8A:37
   for I,J being Program of SCM+FSA,s being State of SCM+FSA
    st I is_closed_on s,P & I is_halting_on s,P
    holds I ';' Goto  (card J + 1) ';' J ';' Stop SCM+FSA is_closed_on s,P &
      I ';' Goto  (card J + 1) ';' J ';' Stop SCM+FSA is_halting_on s,P;
 
-theorem :: SCMFSA8A:59
+theorem :: SCMFSA8A:38
   for I,J being Program of SCM+FSA, s being State of SCM+FSA
-  for P being (the Instructions of SCM+FSA)-valued ManySortedSet of NAT
+  for P being Instruction-Sequence of SCM+FSA
   st I is_closed_on s,P & I is_halting_on s,P
    holds
     P+*(I ';' Goto  (card J + 1) ';' J ';' Stop SCM+FSA)
    halts_on Initialize s;
 
-theorem :: SCMFSA8A:60
+theorem :: SCMFSA8A:39
   for I,J being Program of SCM+FSA, s being State of SCM+FSA st I
 is_closed_on Initialized s,P & I is_halting_on Initialized s,P
  holds P +* (I ';' Goto  (card J + 1) ';' J ';' Stop SCM+FSA)
    halts_on s +* Initialize((intloc 0).-->1);
 
-theorem :: SCMFSA8A:61
+theorem :: SCMFSA8A:40
   for I,J being Program of SCM+FSA, s being State of SCM+FSA st I
   is_closed_on Initialized s,P & I is_halting_on Initialized s,P
   holds IC IExec(I ';'
 Goto  (card J + 1) ';' J ';' Stop SCM+FSA,P,s) =  (card I + card J +
   1);
 
-theorem :: SCMFSA8A:62
+theorem :: SCMFSA8A:41
   for I,J being Program of SCM+FSA, s being State of SCM+FSA st I
 is_closed_on Initialized s,P & I is_halting_on Initialized s,P
-holds IExec(I ';' Goto
- (card J + 1) ';' J ';' Stop SCM+FSA,P,s) = IExec(I,P,s) +*
- Start-At(( card I + card J + 1),SCM+FSA);
+holds IExec(I ';' Goto(card J + 1) ';' J ';' Stop SCM+FSA,P,s)
+ = IExec(I,P,s) +* Start-At(card I + card J + 1,SCM+FSA);
 

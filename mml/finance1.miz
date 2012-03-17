@@ -1,0 +1,1347 @@
+:: Elementary Introduction to Stochastic Finance in Discrete Time
+::  by Peter Jaeger
+::
+:: Received March 22, 2011
+:: Copyright (c) 2011 Association of Mizar Users
+::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
+:: This code can be distributed under the GNU General Public Licence
+:: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
+:: License version 3.0 or later, subject to the binding interpretation
+:: detailed in file COPYING.interpretation.
+:: See COPYING.GPL and COPYING.CC-BY-SA for the full text of these
+:: licenses, or see http://www.gnu.org/licenses/gpl.html and
+:: http://creativecommons.org/licenses/by-sa/3.0/.
+
+environ
+
+ vocabularies FINANCE1, NUMBERS, XBOOLE_0, PROB_1, SUBSET_1, FUNCT_1, TARSKI,
+      RELAT_1, CARD_1, ARYTM_1, CARD_3, PROB_3, NAT_1, ARYTM_3, XREAL_0,
+      ORDINAL1, XXREAL_0, SERIES_1, EQREL_1, MEASURE6, SEQ_1, XXREAL_1,
+      MESFUNC1, RANDOM_1, RANDOM_2, FUNCOP_1, VALUED_1;
+ notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, XXREAL_0, NAT_1, XREAL_0,
+      NUMBERS, FUNCT_1, RELSET_1, FUNCT_2, PROB_3, SERIES_1, PROB_1, MEASURE6,
+      SEQ_1, BINOP_2, MESFUNC1, MESFUNC6, RANDOM_1, INT_1, KOLMOG01, XXREAL_1,
+      RCOMP_1, FUNCOP_1, VALUED_1, RANDOM_2;
+ constructors REAL_1, SEQ_1, PROB_3, SERIES_1, BINOP_2, RELSET_1, MEASURE6,
+      RCOMP_1, MESFUNC1, MESFUNC6, KOLMOG01, RANDOM_2, FUNCOP_1;
+ registrations XBOOLE_0, SUBSET_1, ORDINAL1, RELSET_1, NUMBERS, XREAL_0,
+      MEMBERED, PROB_1, VALUED_0, XXREAL_0, NAT_1, XCMPLX_0, VALUED_1, FUNCT_2;
+ requirements SUBSET, NUMERALS, BOOLE, ARITHM, REAL;
+ definitions XXREAL_0, PROB_1, SUBSET_1, TARSKI, FUNCT_2;
+ theorems SERIES_1, PROB_1, PROB_3, XBOOLE_0, NAT_1, FUNCT_2, XXREAL_0,
+      ORDINAL1, TARSKI, XREAL_1, XXREAL_1, MESFUNC1, MEASURE6, FINSUB_1,
+      MESFUNC6, XREAL_0, RANDOM_1, RANDOM_2, FUNCOP_1, VALUED_1, FRECHET,
+      XBOOLE_1;
+ schemes NAT_1, FUNCT_2, RECDEF_1;
+
+begin
+
+ reserve Omega, Omega2 for non empty set;
+ reserve Sigma, F for SigmaField of Omega;
+ reserve Sigma2, F2 for SigmaField of Omega2;
+
+notation
+  let a,r be real number;
+  synonym halfline_fin(a,r) for [.a,r.[;
+end;
+
+definition
+  let a,r be real number;
+  redefine func halfline_fin(a,r) -> Subset of REAL;
+  coherence
+  proof
+    halfline_fin(a,r) = [.a,r.[;
+    hence thesis;
+  end;
+end;
+
+theorem
+  for k being real number holds REAL \ [.k,+infty.[ = ].-infty,k.[
+ proof
+ let k be real number;
+L: k in REAL by XREAL_0:def 1;
+ for x being set holds x in REAL \ [.k,+infty.[ iff x in ].-infty,k.[
+ proof
+  let x be set;
+  hereby assume AP0: x in REAL \ [.k,+infty.[;
+ A0: x in ].-infty,+infty.[ & not x in [.k,+infty.[
+      by AP0,XBOOLE_0:def 5,XXREAL_1:224;
+     consider y being Element of REAL such that A01:x=y by AP0;
+     y in ].-infty,+infty.[ & not y>= k by A01,A0,XXREAL_1:236;
+     hence x in ].-infty,k.[ by A01,XXREAL_1:233;
+     end;
+  assume B00: x in ].-infty,k.[; then
+     k in REAL & x in ].-infty,k.[ &
+     x in {a where a is Element of ExtREAL:
+       -infty < a & a < k} by XREAL_0:def 1,XXREAL_1:def 4; then
+     consider a being Element of ExtREAL such that
+ B2: a=x & -infty < a & a < k;
+     consider y being Element of ExtREAL such that B20: x=y by B2;
+     reconsider y as Element of REAL by L,B2,B20,XXREAL_0:47;
+     y < k by B00,B20,XXREAL_1:233;
+     then y in REAL & not y in [.k,+infty.[ by XXREAL_1:236;
+     hence thesis by B20,XBOOLE_0:def 5;
+  end;
+ hence thesis by TARSKI:1;
+ end;
+
+theorem AJF0:
+  for k being real number holds REAL \ ].-infty,k.[ = [.k,+infty.[
+ proof
+ let k be real number;
+L: k in REAL by XREAL_0:def 1;
+ for x being set holds x in REAL \ ].-infty,k.[ iff x in [.k,+infty.[
+ proof
+  let x be set;
+  hereby assume AP0: x in REAL \ ].-infty,k.[;
+ A0: x in ].-infty,+infty.[ & not x in ].-infty,k.[
+      by AP0,XBOOLE_0:def 5,XXREAL_1:224;
+     consider y being Element of REAL such that A01:x=y by AP0;
+ A1: y in ].-infty,+infty.[ & not y< k by A01,A0,XXREAL_1:233;
+     thus x in [.k,+infty.[ by A1,A01,XXREAL_1:236;
+     end;
+  assume B00: x in [.k,+infty.[;
+     then k in REAL & x in [.k,+infty.[ &
+       x in {a where a is Element of ExtREAL:
+         k <= a & a < +infty} by XREAL_0:def 1,XXREAL_1:def 2; then
+     consider a being Element of ExtREAL such that
+ B2: a=x & k <= a & a < +infty;
+     consider y being Element of ExtREAL such that B20: x=y by B2;
+     reconsider y as Element of REAL by B2,B20,L,XXREAL_0:46;
+     y >= k by B00,B20,XXREAL_1:236; then
+     y in REAL & not y in ].-infty,k.[ by XXREAL_1:233;
+     hence thesis by B20,XBOOLE_0:def 5;
+  end;
+ hence thesis by TARSKI:1;
+ end;
+
+definition
+  let a,b be real number;
+  func half_open_sets(a,b) -> SetSequence of REAL means  :Def3:
+  it.0 = halfline_fin(a,b+1) &
+  for n being Element of NAT holds it.(n+1) = halfline_fin(a,b+1/(n+1));
+existence
+proof
+  defpred P[set,set,set] means for x,y being Subset of REAL,s being Nat holds
+  s = $1 & x = $2 & y = $3 implies y = halfline_fin(a,b+1/(s+1));
+A1: for n being Element of NAT for x being Subset of REAL
+  ex y being Subset of REAL st P[n,x,y]
+  proof
+    let n be Element of NAT;
+    let x be Subset of REAL;
+    take halfline_fin(a,b+1/(n+1));
+    thus thesis;
+  end;
+  consider F being SetSequence of REAL such that
+A2: F.0 = halfline_fin(a,b+1) and
+A3: for n being Element of NAT holds P[n,F.n,F.(n+1)] from RECDEF_1:sch 2(A1);
+  take F;
+  thus F.0 = halfline_fin(a,b+1) by A2;
+  let n be Nat;
+  reconsider n as Element of NAT by ORDINAL1:def 12;
+  P[n,F.n,F.(n+1)] by A3;
+  hence thesis;
+end;
+uniqueness
+proof
+  let S1,S2 be SetSequence of REAL such that
+A1: S1.0 = halfline_fin(a,b+1) & for n being Element of NAT holds
+    S1.(n+1) = halfline_fin(a,b+1/(n+1)) and
+A2: S2.0 = halfline_fin(a,b+1) & for n being Element of NAT holds
+    S2.(n+1) = halfline_fin(a,b+1/(n+1));
+    defpred P[set] means S1.$1 = S2.$1;
+    for n being set holds n in NAT implies P[n]
+    proof
+      let n be set;
+      assume n in NAT;
+      then reconsider n as Element of NAT;
+A3:   P[0] by A1,A2;
+A4:   for k being Element of NAT st P[k] holds P[k+1]
+      proof
+        let k be Element of NAT;
+        assume S1.k = S2.k;
+        thus S1.(k+1) = halfline_fin(a,b+1/(k+1)) by A1
+          .= S2.(k+1) by A2;
+      end;
+      for k being Element of NAT holds P[k] from NAT_1:sch 1(A3,A4);
+      then S1.n = S2.n;
+      hence thesis;
+    end;
+    hence thesis by FUNCT_2:12;
+end;
+end;
+
+definition
+  mode pricefunction -> Real_Sequence means :Def4:
+  it.0 = 1 & for n being Element of NAT holds it.n >= 0;
+existence
+proof
+  reconsider j = 1 as Element of REAL;
+  take NAT --> j;
+  thus thesis by FUNCOP_1:7;
+end;
+end;
+
+notation
+  let phi,jpi be Real_Sequence;
+  synonym ElementsOfBuyPortfolio(phi,jpi) for phi (#) jpi;
+end;
+
+definition
+  let phi,jpi be Real_Sequence;
+  redefine func ElementsOfBuyPortfolio(phi,jpi) -> Real_Sequence;
+  coherence
+  proof
+    ElementsOfBuyPortfolio(phi,jpi) = phi (#) jpi;
+    hence thesis;
+  end;
+end;
+
+definition
+  let d be natural number;
+  let phi,jpi be Real_Sequence;
+  func BuyPortfolioExt(phi,jpi,d) -> Element of REAL equals
+  Partial_Sums(ElementsOfBuyPortfolio(phi,jpi)).d;
+  coherence;
+
+  func BuyPortfolio(phi,jpi,d) -> Element of REAL equals
+  Partial_Sums(ElementsOfBuyPortfolio(phi,jpi)^\1).(d-1);
+  coherence;
+end;
+
+definition
+  let Omega, Omega2 be set;
+  let Sigma be SigmaField of Omega;
+  let Sigma2 be SigmaField of Omega2;
+  let X be Function;
+  pred X is_random_variable_on Sigma,Sigma2 means :Def8:
+  for x being Element of Sigma2 holds
+  {y where y is Element of Omega: X.y is Element of x} is Element of Sigma;
+end;
+
+definition
+  let Omega, Omega2 be set;
+  let F be SigmaField of Omega;
+  let F2 be SigmaField of Omega2;
+  func set_of_random_variables_on (F,F2) equals
+  {f where f is Function of Omega,Omega2: f is_random_variable_on F,F2};
+  coherence;
+end;
+
+registration
+  let Omega,Omega2,F,F2;
+  cluster set_of_random_variables_on(F,F2) -> non empty;
+coherence
+proof
+  set X = set_of_random_variables_on(F,F2);
+  ex z being Function of Omega,Omega2 st z is_random_variable_on F,F2
+  proof
+   set k = the Element of Omega2;
+   set z = Omega --> k;
+BJ2: z is_random_variable_on F,F2 iff
+   (for x being Element of F2 holds
+    {y where y is Element of Omega: z.y is Element of x}
+     is Element of F) by Def8;
+   for x being Element of F2 holds
+    {y where y is Element of Omega: z.y is Element of x} is Element of F
+   proof
+    let x be Element of F2;
+    set K={y where y is Element of Omega: z.y is Element of x};
+     per cases;
+     suppose CJ00: k is Element of x;
+       for s being set holds s in K iff s in Omega
+       proof
+         let s be set;
+         hereby assume s in K; then
+           ex y being Element of Omega st y=s & z.y is Element of x;
+           hence s in Omega;
+         end;
+         assume s in Omega; then
+         s in Omega & z.s is Element of x by CJ00,FUNCOP_1:7;
+         hence thesis;
+       end; then
+       K = Omega by TARSKI:1;
+       hence thesis by PROB_1:23;
+     end;
+     suppose DD0: not k is Element of x;
+       for r being set holds not r in K
+       proof
+         let r be set;
+         assume r in K; then
+         ex y being Element of Omega st y=r & z.y is Element of x;
+         hence thesis by DD0,FUNCOP_1:7;
+       end;
+       then K={} by XBOOLE_0:def 1;
+       hence thesis by PROB_1:4;
+     end;
+   end;
+  hence thesis by BJ2;
+  end;
+  then consider z being Function of Omega,Omega2 such that
+AJ1: z is_random_variable_on F,F2;
+  z in X by AJ1;
+  hence thesis;
+end;
+end;
+
+definition
+  let Omega, Omega2 be non empty set;
+  let F be SigmaField of Omega;
+  let F2 be SigmaField of Omega2;
+  let X be set such that
+T1:X = set_of_random_variables_on(F,F2);
+  let k be Element of X;
+  func Change_Element_to_Func(F,F2,k) -> Function of Omega,Omega2 equals
+  :Def10:
+  k;
+  coherence
+  proof
+    k in X by T1; then
+    ex f being Function of Omega,Omega2 st f=k & f is_random_variable_on F,F2
+      by T1;
+    hence thesis;
+  end;
+end;
+
+definition
+  let Omega be non empty set;
+  let F be SigmaField of Omega;
+  let X be non empty set;
+  let k be Element of X;
+  func ElementsOfPortfolioValueProb_fut(F,k) -> Function of Omega,REAL means
+  :Def11:
+  for w being Element of Omega holds
+  it.w = Change_Element_to_Func(F,Borel_Sets,k).w;
+existence
+proof
+  deffunc U(Element of Omega) =
+  Change_Element_to_Func(F,Borel_Sets,k).$1;
+  ex f being Function of Omega,REAL st
+  for d be Element of Omega holds f.d = U(d) from FUNCT_2:sch 4;
+  hence thesis;
+end;
+uniqueness
+proof
+  let f1,f2 be Function of Omega,REAL;
+  assume that
+A0: for w being Element of Omega holds
+   f1.w = Change_Element_to_Func(F,Borel_Sets,k).w and
+A1: for w being Element of Omega holds
+   f2.w = Change_Element_to_Func(F,Borel_Sets,k).w;
+   let w be Element of Omega;
+   f1.w = Change_Element_to_Func(F,Borel_Sets,k).w &
+   f2.w = Change_Element_to_Func(F,Borel_Sets,k).w by A0,A1;
+   hence thesis;
+end;
+end;
+
+definition
+  let p be Nat;
+  let Omega, Omega2 be non empty set;
+  let F be SigmaField of Omega;
+  let F2 be SigmaField of Omega2;
+  let X be set such that
+T1: X = set_of_random_variables_on(F,F2);
+  let G be Function of NAT,X;
+  func Element_Of(F,F2,G,p) -> Function of Omega,Omega2 equals  :Def13:
+  G.p;
+  coherence
+proof
+ reconsider p as Element of NAT by ORDINAL1:def 12;
+ G.p in {f where f is Function of Omega,Omega2: f is_random_variable_on F,F2}
+   by T1;
+ then ex f being Function of Omega,Omega2 st
+   f=G.p & f is_random_variable_on F,F2;
+ hence thesis;
+end;
+end;
+
+definition
+  let r be real number;
+  let Omega be non empty set;
+  let F be SigmaField of Omega;
+  let X be non empty set;
+  let w be Element of Omega;
+  let G be Function of NAT,X;
+  let phi be Real_Sequence;
+  func ElementsOfPortfolioValue_fut(r,phi,F,w,G) -> Real_Sequence means
+    :Def14:
+  for n being Element of NAT holds
+   it.n = ElementsOfPortfolioValueProb_fut(F,G.n).w * phi.n;
+existence
+proof
+  deffunc U(Element of NAT) =
+    ElementsOfPortfolioValueProb_fut(F,G.$1).w * phi.$1;
+  ex f being Real_Sequence st
+  for d be Element of NAT holds f.d = U(d) from FUNCT_2:sch 4;
+  hence thesis;
+end;
+uniqueness
+proof
+  let f1,f2 be Real_Sequence;
+  assume that
+A0: for d being Element of NAT holds f1.d =
+  ElementsOfPortfolioValueProb_fut(F,G.d).w * phi.d and
+A1: for d being Element of NAT holds f2.d =
+  ElementsOfPortfolioValueProb_fut(F,G.d).w * phi.d;
+  let d be Element of NAT;
+  f1.d = ElementsOfPortfolioValueProb_fut(F,G.d).w * phi.d &
+  f2.d = ElementsOfPortfolioValueProb_fut(F,G.d).w * phi.d by A0,A1;
+  hence thesis;
+end;
+end;
+
+definition
+  let r be real number;
+  let d be natural number;
+  let phi be Real_Sequence;
+  let Omega be non empty set;
+  let F be SigmaField of Omega;
+  let X be non empty set;
+  let G be Function of NAT,X;
+  let w be Element of Omega;
+  func PortfolioValueFutExt(r,d,phi,F,G,w) -> Element of REAL equals
+  Partial_Sums(ElementsOfPortfolioValue_fut(r,phi,F,w,G)).d;
+  coherence;
+
+  func PortfolioValueFut(r,d,phi,F,G,w) -> Element of REAL equals
+  Partial_Sums(ElementsOfPortfolioValue_fut(r,phi,F,w,G)^\1).(d-1);
+  coherence;
+end;
+
+registration
+  cluster non empty for Element of Borel_Sets;
+  existence
+  proof
+    consider m being real number such that J0: m>-infty;
+    set L = halfline(m);
+    set LL = Family_of_halflines;
+Q30: L is non empty by J0,XXREAL_1:33;
+    m in REAL by XREAL_0:def 1; then
+Q0: L in LL;
+    Family_of_halflines is Subset of Borel_Sets by PROB_1:def 9;
+    hence thesis by Q0,Q30;
+  end;
+end;
+
+theorem BJ1:
+  for k being real number holds
+  [.k,+infty.[ is Element of Borel_Sets &
+  ].-infty,k.[ is Element of Borel_Sets
+proof
+ let k be real number;
+A: k in REAL by XREAL_0:def 1;
+ set R = ].-infty,k.[;
+ FJ20: ].-infty,k.[ in Borel_Sets
+ proof
+  set L = halfline(k);
+FG2: L in Family_of_halflines & L=].-infty,k.[ by A;
+  Family_of_halflines c= sigma(Family_of_halflines) by PROB_1:def 9;
+  hence thesis by FG2;
+ end; then
+ R` in Borel_Sets by PROB_1:def 1;
+ hence thesis by AJF0,FJ20;
+end;
+
+theorem BJ2:
+  for k1,k2 being real number holds
+  [.k2,k1.[ is Element of Borel_Sets
+proof
+ let k1,k2 be real number;
+ set R = ].-infty,k2.[;
+ k1 in REAL & k2 in REAL by XREAL_0:def 1; then
+J31: -infty<k2 & k1<+infty by XXREAL_0:9,12;
+J4: REAL \ ].-infty,k2.[=[.k2,+infty.[ by AJF0;
+ R` is Element of Borel_Sets &
+     ].-infty,k1.[ is Element of Borel_Sets &
+     [.k1,+infty.[ is Element of Borel_Sets by BJ1,J4; then
+ ].-infty,k1.[ /\ R` is Element of Borel_Sets by FINSUB_1:def 2; then
+ ].-infty,k1.[ /\ [.k2,+infty.[ is Element of Borel_Sets by AJF0;
+ hence thesis by J31,XXREAL_1:154;
+end;
+
+theorem BJ4:
+  for a,b being real number holds
+   Intersection half_open_sets(a,b) is Element of Borel_Sets
+ proof
+  let a,b be real number;
+  for n being Element of NAT holds
+    (Complement half_open_sets(a,b)).n is Element of Borel_Sets
+  proof
+   let n be Element of NAT;
+   (half_open_sets(a,b).n)` is Element of Borel_Sets
+   proof
+     half_open_sets(a,b).n is Element of Borel_Sets
+     proof
+      per cases by NAT_1:6;
+      suppose CJ00: n=0;
+        half_open_sets(a,b).0=halfline_fin(a,b+1) by Def3;
+        hence thesis by CJ00,BJ2;
+      end;
+      suppose ex k being Nat st n = k + 1; then
+        consider k being Nat such that CJ00: n=k+1;
+        reconsider k as Element of NAT by ORDINAL1:def 12;
+        half_open_sets(a,b).(k+1) =
+          halfline_fin(a,b+(1/(k+1))) by Def3;
+        hence thesis by CJ00,BJ2;
+      end;
+      end;
+     hence thesis by PROB_1:def 1;
+     end;
+     hence thesis by PROB_1:def 2;
+  end; then
+  Complement half_open_sets(a,b)
+    is SetSequence of Borel_Sets by PROB_1:25; then
+  Union Complement half_open_sets(a,b)
+    is Element of Borel_Sets by PROB_1:26;
+  hence thesis by PROB_1:def 1;
+end;
+
+theorem SP2:
+  for a,b being real number holds
+  Intersection half_open_sets(a,b) = [.a,b.]
+proof
+  let a,b be real number;
+SP1: for c be set holds
+  not c in [.a,b.] implies not c in Intersection half_open_sets(a,b)
+  proof
+    let c be set;
+    assume
+J0: not c in [.a,b.];
+    per cases by J0;
+    suppose not c in REAL;
+      hence thesis;
+    end;
+    suppose
+SJ0:  c in REAL & not c in [.a,b.];
+      then reconsider c as Element of REAL;
+SJ2:  not c in {q where q is Element of ExtREAL:
+          a <= q & q <= b} by SJ0,XXREAL_1:def 1;
+SJ3:  a > c or c > b
+      proof
+        reconsider q = c as Element of ExtREAL by XXREAL_0:def 1;
+        not (c = q & a <= c & c <= b) by SJ2;
+        hence thesis;
+      end;
+      per cases by SJ3;
+      suppose QQ0: a > c;
+        not for n being Element of NAT holds c in half_open_sets(a,b).n
+        proof
+          take n = 0;
+          c in half_open_sets(a,b).0 implies
+          c in halfline_fin(a,b+1) by Def3; then
+          c in half_open_sets(a,b).0 implies
+          c in {q where q is Element of ExtREAL:
+            a <= q & q < b+1} by XXREAL_1:def 2; then
+        ex q being Element of ExtREAL st c in half_open_sets(a,b).0 implies
+            c = q & a <= q & q < b+1;
+          hence thesis by QQ0;
+        end;
+        hence thesis by PROB_1:13;
+      end;
+      suppose c > b;
+        then consider n being Element of NAT such that
+   FF1: 1/n<(c-b) & n > 0 by FRECHET:36,XREAL_1:50;
+   FF2: (1/n)+b<(c-b)+b by FF1,XREAL_1:6;
+        c in Intersection half_open_sets(a,b) implies not b+1/n<c
+        proof
+          assume c in Intersection half_open_sets(a,b); then
+          c in half_open_sets(a,b).(n+1) by PROB_1:13; then
+          c in [.a,b+1/(n+1).[ by Def3; then
+          c in {q where q is Element of ExtREAL:
+          a<=q & q<b+1/(n+1)} by XXREAL_1:def 2; then
+          consider q being Element of ExtREAL such that
+QQ0: c = q & a<=q & q < b+1/(n+1);
+  reconsider a=1 as Element of NAT;
+  n*1<(n+1)*1 by NAT_1:13; then
+QQ2: a/(n+1)<a/n by FF1,XREAL_1:106;
+  b+1/(n+1)<b+1/n by QQ2,XREAL_1:6;
+  hence thesis by QQ0,XXREAL_0:2;
+end;
+hence thesis by FF2;
+end;
+end;
+end;
+SP0:for c be set holds c in [.a,b.] implies
+c in Intersection half_open_sets(a,b)
+proof
+  let c be set;
+  c in [.a,b.] implies
+    for n being Element of NAT holds c in half_open_sets(a,b).n
+ proof
+  assume AJ0: c in [.a,b.];
+  let n be Element of NAT;
+AAJ1: b<b+1 by XREAL_1:29;
+  [.a,b.] c= half_open_sets(a,b).n
+  proof
+   per cases;
+   suppose AT0: n=0;
+    half_open_sets(a,b).0=halfline_fin(a,b+1) by Def3;
+    hence thesis by AT0,AAJ1,XXREAL_1:43;
+    end;
+   suppose n>0; then
+     consider k being Nat such that
+TT0: n=k+1 by NAT_1:6;
+     reconsider k as Element of NAT by ORDINAL1:def 12;
+TT2: half_open_sets(a,b).(k+1) = halfline_fin(a,b+1/(k+1)) by Def3;
+     b<b+1/n by TT0,XREAL_1:29;
+    hence thesis by TT2,TT0,XXREAL_1:43;
+    end;
+  end;
+  hence thesis by AJ0;
+ end;
+ hence thesis by PROB_1:13;
+ end;
+ for c being set holds
+   c in Intersection half_open_sets(a,b) iff c in [.a,b.] by SP0,SP1;
+ hence thesis by TARSKI:1;
+end;
+
+theorem
+  for a,b being real number, n being natural number holds
+  (Partial_Intersection half_open_sets(a,b)).n is Element of Borel_Sets
+proof
+ let a,b be real number;
+ defpred J[Nat] means
+  (Partial_Intersection half_open_sets(a,b)).$1 is Element of Borel_Sets;
+AJ0: J[0]
+proof
+  (Partial_Intersection half_open_sets(a,b)).0 =
+    half_open_sets(a,b).0 by PROB_3:def 1; then
+  (Partial_Intersection half_open_sets(a,b)).0 =
+    halfline_fin(a,(b+1)) by Def3;
+  hence thesis by BJ2;
+end;
+AJ1: for k being Nat st J[k] holds J[k+1]
+proof
+ let k be Nat;
+ assume IA0: (Partial_Intersection half_open_sets(a,b)).k
+   is Element of Borel_Sets;
+ reconsider k as Element of NAT by ORDINAL1:def 12;
+(Partial_Intersection half_open_sets(a,b)).(k+1) =
+(Partial_Intersection half_open_sets(a,b)).k /\
+half_open_sets(a,b).(k+1) by PROB_3:def 1; then
+ia: (Partial_Intersection half_open_sets(a,b)).(k+1) =
+(Partial_Intersection half_open_sets(a,b)).k /\
+halfline_fin(a,(b+1/(k+1))) by Def3;
+[.a,b+1/(k+1).[ is Element of Borel_Sets &
+(Partial_Intersection half_open_sets(a,b)).k
+  is Element of Borel_Sets by BJ2,IA0;
+hence thesis by ia,FINSUB_1:def 2;
+end;
+for k being Nat holds J[k] from NAT_1:sch 2(AJ0,AJ1);
+hence thesis;
+end;
+
+theorem Th3:
+for k1,k2 being real number holds [.k2,k1.] is Element of Borel_Sets
+proof
+  let a,b be real number;
+  Intersection half_open_sets(b,a) = [.b,a.] by SP2;
+  hence thesis by BJ4;
+end;
+
+theorem Th4:
+for X being Function of Omega,REAL st
+   X is_random_variable_on Sigma,Borel_Sets holds
+(for k being real number holds
+{w where w is Element of Omega: X.w >=k} is Element of Sigma &
+{w where w is Element of Omega: X.w <k} is Element of Sigma) &
+(for k1,k2 being real number st k1<k2 holds
+{w where w is Element of Omega: k1 <= X.w & X.w < k2} is Element of Sigma)
+             &
+(for k1,k2 being real number st k1<=k2 holds
+{w where w is Element of Omega: k1 <= X.w & X.w <= k2} is Element of Sigma)
+             &
+(for r being real number holds
+       less_dom(X,r) = {w where w is Element of Omega: X.w <r}) &
+(for r being real number holds
+       great_eq_dom(X,r) = {w where w is Element of Omega: X.w >=r}) &
+(for r being real number holds
+       eq_dom(X,r) = {w where w is Element of Omega: X.w =r}) &
+(for r being real number holds eq_dom(X,r) is Element of Sigma)
+proof
+ let X be Function of Omega,REAL;
+ assume A0: X is_random_variable_on Sigma,Borel_Sets;
+Fin0: for k being real number holds
+ {w where w is Element of Omega: X.w >=k} is Element of Sigma &
+ {w where w is Element of Omega: X.w <k} is Element of Sigma
+proof
+ let k be real number;
+ CJ1: for q being set holds
+ (ex w being Element of Omega st q=w & X.w >=k) iff
+ (ex w being Element of Omega st q=w & X.w in [.k,+infty.])
+ proof
+ let q be set;
+ now assume ex w being Element of Omega st q=w & X.w in [.k,+infty.]; then
+  consider w being Element of Omega such that
+  T0: q=w & X.w in [.k,+infty.];
+  X.w in {z where z is Element of ExtREAL: k<=z & z<=+infty}
+   by T0,XXREAL_1:def 1; then
+  ex z being Element of ExtREAL st X.w=z & k<=z & z<=+infty;
+  hence ex w being Element of Omega st q=w & X.w >=k by T0;
+  end;
+  hence thesis by XXREAL_1:219;
+  end;
+GG:for x being set holds
+   x in {w where w is Element of Omega:X.w >=k} iff
+   x in {w where w is Element of Omega:X.w in [.k,+infty.[}
+  proof
+   let x be set;
+   x in {w where w is Element of Omega:X.w >=k} iff
+   ex w being Element of Omega st x=w & X.w >=k; then
+H00: x in {w where w is Element of Omega:X.w >=k} iff
+   ex w being Element of Omega st x=w & X.w in [.k,+infty.] by CJ1;
+   x in {w where w is Element of Omega:X.w in [.k,+infty.]} iff
+   x in {w where w is Element of Omega:X.w in [.k,+infty.[}
+   proof
+    hereby assume
+    x in {w where w is Element of Omega:X.w in [.k,+infty.]};
+    then consider w being Element of Omega such that
+    EJ0: w=x & X.w in [.k,+infty.];
+    X.w in {a where a is Element of ExtREAL: k<=a & a<=+infty}
+     by EJ0,XXREAL_1:def 1; then
+    consider a being Element of ExtREAL such that
+    EJ1: X.w = a & k<=a & a<=+infty;
+    EJ2: X.w = a & k<=a & a<+infty by EJ1,XXREAL_0:9;
+    {z where z is Element of ExtREAL: k<=z & z <+infty} =
+      [.k,+infty.[ by XXREAL_1:def 2; then
+    X.w in [.k,+infty.[ by EJ2;
+    hence x in {g where g is Element of Omega:X.g in [.k,+infty.[} by EJ0;
+    end;
+    assume x in {w where w is Element of Omega:X.w in [.k,+infty.[}; then
+    consider w being Element of Omega such that
+     II0: w=x & X.w in [.k,+infty.[;
+    w=x & X.w in {u where u is Element of ExtREAL: k<=u &
+      u<+infty} by II0,XXREAL_1:def 2; then
+    w=x & ex u being Element of ExtREAL st u=X.w & k<=u & u<+infty;
+    then w=x & X.w in {u where u is Element of ExtREAL: k<=u & u<=+infty};
+    then w=x & X.w in [.k,+infty.] by XXREAL_1:def 1;
+    hence thesis;
+   end;
+   hence thesis by H00;
+  end;
+  k in REAL by XREAL_0:def 1; then
+QQ: [.k,+infty.[ is non empty by XXREAL_0:9,XXREAL_1:31;
+UUU: {w where w is Element of Omega:X.w >=k} =
+  {w where w is Element of Omega:X.w is Element of [.k,+infty.[}
+  proof
+   {w where w is Element of Omega:X.w in [.k,+infty.[} =
+   {w where w is Element of Omega:X.w is Element of [.k,+infty.[}
+   proof
+    for x being set holds
+     x in {w where w is Element of Omega:X.w in [.k,+infty.[} iff
+     x in {w where w is Element of Omega:X.w is Element of [.k,+infty.[}
+    proof
+     let x be set;
+     hereby assume
+       x in {w where w is Element of Omega:X.w in [.k,+infty.[}; then
+       ex w being Element of Omega st w = x & X.w in [.k,+infty.[;
+       hence
+x in {w where w is Element of Omega:X.w is Element of [.k,+infty.[};
+     end;
+     assume
+    x in {w where w is Element of Omega:X.w is Element of [.k,+infty.[};
+    then consider w being Element of Omega such that
+ K0: w = x & X.w is Element of [.k,+infty.[;
+    thus thesis by K0,QQ;
+    end;
+   hence thesis by TARSKI:1;
+   end;
+   hence thesis by GG,TARSKI:1;
+ end;
+ff: [.k,+infty.[ is Element of Borel_Sets &
+    ].-infty,k.[ is Element of Borel_Sets by BJ1;
+CJ4: for q being set holds
+ (ex w being Element of Omega st q=w & X.w <k) iff
+ (ex w being Element of Omega st q=w & X.w in [.-infty,k.[)
+ proof
+ let q be set;
+  now assume ex w being Element of Omega st q=w & X.w in [.-infty,k.[; then
+  consider w being Element of Omega such that
+  T0: q=w & X.w in [.-infty,k.[;
+  X.w in {z where z is Element of ExtREAL:-infty<=z & z<k}
+    by T0,XXREAL_1:def 2; then
+  ex z being Element of ExtREAL st X.w=z & -infty<=z & z<k;
+  hence ex w being Element of Omega st q=w & X.w <k by T0;
+  end;
+  hence thesis by XXREAL_1:221;
+  end;
+   for x being set holds
+   x in {w where w is Element of Omega:X.w <k} iff
+   x in {w where w is Element of Omega:X.w in ].-infty,k.[}
+  proof
+   let x be set;
+   x in {w where w is Element of Omega:X.w <k} iff
+   ex w being Element of Omega st x=w & X.w <k; then
+   H00: x in {w where w is Element of Omega:X.w <k} iff
+   ex w being Element of Omega st x=w & X.w in [.-infty,k.[ by CJ4;
+   x in {w where w is Element of Omega:X.w in [.-infty,k.[} iff
+   x in {w where w is Element of Omega:X.w in ].-infty,k.[}
+   proof
+    hereby assume
+    x in {w where w is Element of Omega:X.w in [.-infty,k.[}; then
+    consider w being Element of Omega such that
+EJ0: w=x & X.w in [.-infty,k.[;
+    X.w in {a where a is Element of ExtREAL: -infty<=a & a<k}
+     by EJ0,XXREAL_1:def 2; then
+    consider a being Element of ExtREAL such that
+    EJ1: X.w = a & -infty<=a & a<k;
+    EJ2: X.w = a & -infty<a & a<k by EJ1,XXREAL_0:12;
+    {z where z is Element of ExtREAL: -infty<z & z<k} =
+       ].-infty,k.[ by XXREAL_1:def 4; then
+    X.w in ].-infty,k.[ by EJ2;
+    hence x in {g where g is Element of Omega:X.g in ].-infty,k.[} by EJ0;
+    end;
+    assume x in {w where w is Element of Omega:X.w in ].-infty,k.[}; then
+    consider w being Element of Omega such that
+    II0: w=x & X.w in ].-infty,k.[;
+    w=x & X.w in {u where u is Element of ExtREAL: -infty<u & u<k}
+      by II0,XXREAL_1:def 4; then
+    w=x & ex u being Element of ExtREAL st u=X.w & -infty<u & u<k;
+    then w=x &
+    X.w in {u where u is Element of ExtREAL: -infty<=u & u<k}; then
+    w=x & X.w in [.-infty,k.[ by XXREAL_1:def 2;
+    hence thesis;
+   end;
+   hence thesis by H00;
+  end; then
+GGG: {w where w is Element of Omega:X.w <k} =
+  {w where w is Element of Omega:X.w in ].-infty,k.[} by TARSKI:1;
+ {w where w is Element of Omega:X.w <k} is Element of Sigma
+ proof
+FJ30: [.k,+infty.[ is Element of Borel_Sets &
+  ].-infty,k.[ is Element of Borel_Sets by BJ1;
+  k in REAL by XREAL_0:def 1; then
+QQ: ].-infty,k.[ is non empty by XXREAL_0:12,XXREAL_1:33;
+    for x being set holds
+     x in {w where w is Element of Omega: X.w in ].-infty,k.[} iff
+     x in {w where w is Element of Omega: X.w is Element of ].-infty,k.[}
+    proof
+     let x be set;
+     hereby assume
+       x in {w where w is Element of Omega:X.w in ].-infty,k.[}; then
+       ex w being Element of Omega st w = x & X.w in ].-infty,k.[;
+       hence
+       x in {w where w is Element of Omega:X.w is Element of ].-infty,k.[};
+     end;
+     assume
+     x in {w where w is Element of Omega:X.w is Element of ].-infty,k.[};
+     then consider w being Element of Omega such that
+ K0: w = x & X.w is Element of ].-infty,k.[;
+     thus thesis by K0,QQ;
+    end; then
+  {w where w is Element of Omega:X.w <k} =
+  {w where w is Element of Omega:X.w is Element of ].-infty,k.[}
+    by GGG,TARSKI:1;
+  hence thesis by FJ30,A0,Def8;
+ end;
+hence thesis by ff,A0,Def8,UUU;
+end;
+
+Fin1: for k1,k2 being real number st k1<k2 holds
+{w where w is Element of Omega: k1 <= X.w & X.w < k2} is Element of Sigma
+proof
+ let k1,k2 be real number;
+ assume A1: k1<k2;
+ {w where w is Element of Omega:k1 <= X.w & X.w < k2} is Element of Sigma
+ proof
+   for x being set holds
+   x in {w where w is Element of Omega:k1 <= X.w & X.w < k2} iff
+   x in {w where w is Element of Omega:X.w is Element of [.k1,k2.[}
+  proof
+   let x be set;
+   hereby assume x in {w where w is Element of Omega:k1 <= X.w & X.w < k2};
+      then consider w being Element of Omega such that
+ GJ0: x=w & k1 <= X.w & X.w < k2;
+      consider a being Element of ExtREAL such that GJ02: a=R_EAL X.w;
+      a=X.w by GJ02,MEASURE6:def 1; then
+      X.w in {z where z is Element of ExtREAL: k1 <= z & z < k2} by GJ0; then
+      X.w is Element of [.k1,k2.[ by XXREAL_1:def 2;
+      hence x in {w1 where w1 is Element of Omega:
+           X.w1 is Element of [.k1,k2.[} by GJ0;
+      end;
+      assume x in {w where w is Element of Omega:
+        X.w is Element of [.k1,k2.[}; then
+      consider w being Element of Omega such that
+     GJ0: x=w & X.w is Element of [.k1,k2.[;
+      GJ2: [.k1,k2.[ is non empty by A1,XXREAL_1:31;
+      X.w in [.k1,k2.[ by GJ0,GJ2; then
+      X.w in {a where a is Element of ExtREAL:
+              k1 <=a & a <k2} by XXREAL_1:def 2; then
+      ex a being Element of ExtREAL st a=X.w & k1 <=a & a <k2;
+      hence thesis by GJ0;
+  end; then
+  GGG: {w where w is Element of Omega:k1 <= X.w & X.w < k2} =
+  {w where w is Element of Omega:X.w is Element of [.k1,k2.[} by TARSKI:1;
+  [.k2,k1.[ is Element of Borel_Sets &
+  [.k1,k2.[ is Element of Borel_Sets by BJ2;
+  hence thesis by A0,Def8,GGG;
+end;
+hence thesis;
+end;
+Fin2: for k1,k2 being real number st k1<=k2 holds
+  {w where w is Element of Omega: k1 <= X.w & X.w <= k2} is Element of Sigma
+proof
+  let k1,k2 be real number;
+  assume AA0: k1<=k2;
+  for x being set holds
+   (x in {w where w is Element of Omega:k1 <= X.w & X.w <= k2} iff
+   x in {w where w is Element of Omega:X.w is Element of [.k1,k2.]})
+  proof
+   let x be set;
+   hereby assume x in {w where w is Element of Omega:k1 <= X.w & X.w <= k2};
+      then consider w being Element of Omega such that
+GJ0:  x=w & k1 <= X.w & X.w <= k2;
+      consider a being Element of ExtREAL such that GJ02: a=(R_EAL X.w);
+      a=X.w by GJ02,MEASURE6:def 1; then
+      X.w in {z where z is Element of ExtREAL:
+         k1 <= z & z <= k2} by GJ0; then
+      X.w is Element of [.k1,k2.] by XXREAL_1:def 1;
+      hence x in {w1 where w1 is Element of Omega:
+         X.w1 is Element of [.k1,k2.]} by GJ0;
+      end;
+      assume x in {w where w is Element of Omega:
+        X.w is Element of [.k1,k2.]}; then
+      consider w being Element of Omega such that
+       GJ0: x=w & X.w is Element of [.k1,k2.];
+      GJ2: [.k1,k2.] is non empty by AA0,XXREAL_1:30;
+      X.w in [.k1,k2.] by GJ0,GJ2; then
+      X.w in {a where a is Element of ExtREAL:
+              k1 <=a & a <=k2} by XXREAL_1:def 1; then
+      ex a being Element of ExtREAL st a=X.w & k1 <=a & a <=k2;
+      hence thesis by GJ0;
+  end; then
+  GGG: {w where w is Element of Omega:k1 <= X.w & X.w <= k2} =
+  {w where w is Element of Omega:X.w is Element of [.k1,k2.]} by TARSKI:1;
+  [.k1,k2.[ is Element of Borel_Sets &
+  [.k1,k2.] is Element of Borel_Sets by Th3,BJ2;
+  hence thesis by A0,Def8,GGG;
+end;
+Fin3: for r being real number holds
+       less_dom(X,r) = {w where w is Element of Omega: X.w <r}
+  proof
+   let r be real number;
+   for x being set holds
+    x in less_dom(X,r) iff x in {w where w is Element of Omega:X.w <r}
+   proof
+    let x be set;
+     x in less_dom(X,r) iff x in dom X & X.x < r by MESFUNC1:def 11; then
+    x in less_dom(X,r) iff x in Omega & X.x < r by FUNCT_2:def 1; then
+    x in less_dom(X,r) iff ex q being Element of Omega st q=x & X.q<r;
+    hence thesis;
+   end;
+  hence thesis by TARSKI:1;
+end;
+
+Fin4: for r being real number holds
+  great_eq_dom(X,r) = {w where w is Element of Omega: X.w >=r}
+  proof
+   let r be real number;
+   for x being set holds x in great_eq_dom(X,r) iff
+    x in {w where w is Element of Omega:X.w >=r}
+   proof
+    let x be set;
+    x in great_eq_dom(X,r) iff x in dom X & X.x >= r by MESFUNC1:def 14; then
+    x in great_eq_dom(X,r) iff x in Omega & X.x >= r by FUNCT_2:def 1; then
+    x in great_eq_dom(X,r) iff ex q being Element of Omega st q=x & X.q>=r;
+    hence thesis;
+   end;
+   hence thesis by TARSKI:1;
+end;
+
+Fin5: for r being real number holds
+       eq_dom(X,r) = {w where w is Element of Omega: X.w = r}
+  proof
+   let r be real number;
+   for x being set holds x in eq_dom(X,r) iff
+    x in {w where w is Element of Omega:X.w =r}
+   proof
+    let x be set;
+    x in eq_dom(X,r) iff x in dom X & X.x = r by MESFUNC1:def 15; then
+    x in eq_dom(X,r) iff x in Omega & X.x = r by FUNCT_2:def 1; then
+    x in eq_dom(X,r) iff (ex q being Element of Omega st q=x & X.q=r);
+    hence thesis;
+   end;
+   hence thesis by TARSKI:1;
+end;
+  for r being real number holds eq_dom(X,r) is Element of Sigma
+  proof
+    let r be real number;
+    for x being set holds
+      x in {w where w is Element of Omega: r <= X.w & X.w <= r} iff
+       x in {w where w is Element of Omega: X.w=r}
+    proof
+      let x be set;
+      x in {w where w is Element of Omega: r <= X.w & X.w <= r} iff
+      ex q being Element of Omega st x=q & r<=X.q & X.q<=r; then
+      x in {w where w is Element of Omega: r <= X.w & X.w <= r} iff
+      ex q being Element of Omega st x=q & X.q=r by XXREAL_0:1;
+      hence thesis;
+    end; then
+    {w where w is Element of Omega: r <= X.w & X.w <= r} =
+    {w where w is Element of Omega: X.w=r} by TARSKI:1; then
+    {w where w is Element of Omega: X.w=r} is Element of Sigma by Fin2;
+    hence thesis by Fin5;
+  end;
+  hence thesis by Fin0,Fin1,Fin2,Fin3,Fin4,Fin5;
+end;
+
+theorem
+  for s being real number holds
+    Omega --> s is_random_variable_on Sigma,Borel_Sets
+proof
+ let s be real number;
+ set X = Omega --> s;
+ X is_random_variable_on Sigma,Borel_Sets
+ proof
+   let x be Element of Borel_Sets;
+   per cases;
+   suppose
+SJ0: s is Element of x;
+ for q being set holds
+    q in {w where w is Element of Omega: X.w is Element of x} iff q in Omega
+ proof
+  let q be set;
+  hereby assume
+    q in {w where w is Element of Omega: X.w is Element of x}; then
+    ex w being Element of Omega st w=q & X.w is Element of x;
+    hence q in Omega;
+  end;
+  assume q in Omega;
+  then reconsider w = q as Element of Omega;
+  X.w is Element of x by SJ0,FUNCOP_1:7;
+  hence thesis;
+ end; then
+ {w where w is Element of Omega: X.w is Element of x}=Omega by TARSKI:1;
+  hence thesis by PROB_1:23;
+   end;
+   suppose
+IIII: not s is Element of x;
+for q being set holds
+q in {w where w is Element of Omega: X.w is Element of x} iff q in {}
+ proof
+  let q be set;
+  now assume q in {w where w is Element of Omega: X.w is Element of x};
+    then consider w being Element of Omega such that
+TTJ0: w=q & X.w is Element of x;
+    thus q in {} by IIII,TTJ0,FUNCOP_1:7;
+  end;
+  hence thesis;
+ end; then
+ {w where w is Element of Omega: X.w is Element of x}={} by TARSKI:1;
+ hence thesis by PROB_1:22;
+ end;
+  end;
+  hence thesis;
+ end;
+
+theorem Th6:
+  for phi being Real_Sequence, jpi being pricefunction,
+      d being natural number st d>0 holds
+  BuyPortfolioExt(phi,jpi,d) = phi.0 + BuyPortfolio(phi,jpi,d)
+proof
+ let phi be Real_Sequence, jpi be pricefunction,
+     d be natural number;
+ assume d>0; then
+ A1: d-1 is Element of NAT by NAT_1:20;
+ defpred J[Nat] means
+      Partial_Sums(ElementsOfBuyPortfolio(phi,jpi)).($1+1) =
+       phi.0 + Partial_Sums(ElementsOfBuyPortfolio(phi,jpi)^\1).$1;
+ Partial_Sums(ElementsOfBuyPortfolio(phi,jpi)).(0+1) =
+   phi.0 + Partial_Sums(ElementsOfBuyPortfolio(phi,jpi)^\1).0
+ proof
+   Partial_Sums(ElementsOfBuyPortfolio(phi,jpi)).(0+1) =
+     Partial_Sums(ElementsOfBuyPortfolio(phi,jpi)).0+
+     ElementsOfBuyPortfolio(phi,jpi).1 by SERIES_1:def 1; then
+   Partial_Sums(ElementsOfBuyPortfolio(phi,jpi)).(0+1) =
+     ElementsOfBuyPortfolio(phi,jpi).0+
+     ElementsOfBuyPortfolio(phi,jpi).1 by SERIES_1:def 1; then
+   Partial_Sums(ElementsOfBuyPortfolio(phi,jpi)).(0+1) =
+     ElementsOfBuyPortfolio(phi,jpi).0+
+     (ElementsOfBuyPortfolio(phi,jpi)^\1).0 by NAT_1:def 3; then
+   Partial_Sums(ElementsOfBuyPortfolio(phi,jpi)).(0+1) =
+     ElementsOfBuyPortfolio(phi,jpi).0+
+     Partial_Sums(ElementsOfBuyPortfolio(phi,jpi)^\1).0
+       by SERIES_1:def 1; then
+   Partial_Sums(ElementsOfBuyPortfolio(phi,jpi)).(0+1) =
+     (phi.0 * jpi.0)+
+     Partial_Sums(ElementsOfBuyPortfolio(phi,jpi)^\1).0 by VALUED_1:5; then
+   Partial_Sums(ElementsOfBuyPortfolio(phi,jpi)).(0+1) =
+     (phi.0 * 1)+
+     Partial_Sums(ElementsOfBuyPortfolio(phi,jpi)^\1).0 by Def4;
+   hence thesis;
+ end; then
+TT0: J[0];
+TT1: for k being Nat st J[k] holds J[k+1]
+ proof
+   let k be Nat;
+   assume T0: Partial_Sums(ElementsOfBuyPortfolio(phi,jpi)).(k+1) =
+   phi.0 + Partial_Sums(ElementsOfBuyPortfolio(phi,jpi)^\1).k;
+   reconsider k as Element of NAT by ORDINAL1:def 12;
+   Partial_Sums(ElementsOfBuyPortfolio(phi,jpi)).((k+1)+1) =
+   (phi.0 + Partial_Sums(ElementsOfBuyPortfolio(phi,jpi)^\1).k) +
+   ElementsOfBuyPortfolio(phi,jpi).((k+1)+1) by T0,SERIES_1:def 1; then
+   Partial_Sums(ElementsOfBuyPortfolio(phi,jpi)).((k+1)+1) =
+   (phi.0 + Partial_Sums(ElementsOfBuyPortfolio(phi,jpi)^\1).k) +
+   (ElementsOfBuyPortfolio(phi,jpi)^\1).(k+1) by NAT_1:def 3; then
+   Partial_Sums(ElementsOfBuyPortfolio(phi,jpi)).((k+1)+1) =
+     phi.0 + (Partial_Sums(ElementsOfBuyPortfolio(phi,jpi)^\1).k +
+     (ElementsOfBuyPortfolio(phi,jpi)^\1).(k+1));
+   hence thesis by SERIES_1:def 1;
+ end;
+ for k being Nat holds J[k] from NAT_1:sch 2(TT0,TT1); then
+ Partial_Sums(ElementsOfBuyPortfolio(phi,jpi)).((d-1)+1) =
+  phi.0 + BuyPortfolio(phi,jpi,d) by A1;
+ hence thesis;
+end;
+
+theorem Th7:
+for d being natural number st d>0 holds
+for r being real number
+for phi being Real_Sequence
+for G being Function of NAT,set_of_random_variables_on(F,Borel_Sets) st
+ Element_Of(F,Borel_Sets,G,0) = Omega-->1+r holds
+ for w being Element of Omega holds
+PortfolioValueFutExt(r,d,phi,F,G,w)
+       = ((1+r) * phi.0) + PortfolioValueFut(r,d,phi,F,G,w)
+proof
+ let d be natural number;
+ assume A0: d>0;
+ let r be real number;
+ let phi be Real_Sequence;
+ set X = set_of_random_variables_on(F,Borel_Sets);
+ let G be Function of NAT,X;
+ assume A3: Element_Of(F,Borel_Sets,G,0) = Omega-->1+r;
+ let w be Element of Omega;
+ A4: (d-1) is Element of NAT by A0,NAT_1:20;
+ defpred J[Nat] means
+Partial_Sums(ElementsOfPortfolioValue_fut(r,phi,F,w,G)).($1+1) =
+((1+r) * phi.0) +
+ Partial_Sums(ElementsOfPortfolioValue_fut(r,phi,F,w,G)^\1).$1;
+Partial_Sums(ElementsOfPortfolioValue_fut(r,phi,F,w,G)).(0+1) =
+((1+r) * phi.0) +
+   Partial_Sums(ElementsOfPortfolioValue_fut(r,phi,F,w,G)^\1).0
+      proof
+Partial_Sums(ElementsOfPortfolioValue_fut(r,phi,F,w,G)).(0+1) =
+Partial_Sums(ElementsOfPortfolioValue_fut(r,phi,F,w,G)).0 +
+             ElementsOfPortfolioValue_fut(r,phi,F,w,G).1
+ by SERIES_1:def 1; then
+Partial_Sums(ElementsOfPortfolioValue_fut(r,phi,F,w,G)).(0+1) =
+       ElementsOfPortfolioValue_fut(r,phi,F,w,G).0 +
+             ElementsOfPortfolioValue_fut(r,phi,F,w,G).1
+       by SERIES_1:def 1; then
+Partial_Sums(ElementsOfPortfolioValue_fut(r,phi,F,w,G)).(0+1) =
+       ElementsOfPortfolioValue_fut(r,phi,F,w,G).0 +
+        (ElementsOfPortfolioValue_fut(r,phi,F,w,G)^\1).0
+        by NAT_1:def 3; then
+Partial_Sums(ElementsOfPortfolioValue_fut(r,phi,F,w,G)).(0+1) =
+       ElementsOfPortfolioValue_fut(r,phi,F,w,G).0 +
+   Partial_Sums((ElementsOfPortfolioValue_fut(r,phi,F,w,G)^\1)).0
+       by SERIES_1:def 1; then
+consider d being Element of NAT such that
+AJ0: d=0 & Partial_Sums(
+      ElementsOfPortfolioValue_fut(r,phi,F,w,G)).(d+1) =
+       ElementsOfPortfolioValue_fut(r,phi,F,w,G).d +
+   Partial_Sums((ElementsOfPortfolioValue_fut(r,phi,F,w,G)^\1)).d;
+AJ1: Partial_Sums(ElementsOfPortfolioValue_fut(r,phi,F,w,G)).(d+1) =
+   (ElementsOfPortfolioValueProb_fut(F,G.d).w * phi.d) +
+   Partial_Sums((ElementsOfPortfolioValue_fut(r,phi,F,w,G)^\1)).d
+   by AJ0,Def14;
+   set g = G.d;
+   set g2=Change_Element_to_Func(F,Borel_Sets,g);
+g2.w=1+r
+proof
+  Element_Of(F,Borel_Sets,G,0) = G.0 & g2=G.0 &
+  Element_Of(F,Borel_Sets,G,0) = Omega-->1+r by A3,Def13,Def10,AJ0;
+ hence thesis by FUNCOP_1:7;
+end;
+hence thesis by AJ0,AJ1,Def11;
+   end; then
+   TT0: J[0];
+   TT1: for k being Nat st J[k] holds J[k+1]
+      proof
+       let k be Nat;
+       assume T0:
+  Partial_Sums(ElementsOfPortfolioValue_fut(r,phi,F,w,G)).(k+1) =
+  ((1+r) * phi.0) +
+   Partial_Sums(ElementsOfPortfolioValue_fut(r,phi,F,w,G)^\1).k;
+       reconsider k as Element of NAT by ORDINAL1:def 12;
+Partial_Sums(ElementsOfPortfolioValue_fut(r,phi,F,w,G)).((k+1)+1)
+   = ((1+r) * phi.0) +
+   Partial_Sums(ElementsOfPortfolioValue_fut(r,phi,F,w,G)^\1).k
+    + ElementsOfPortfolioValue_fut(r,phi,F,w,G).((k+1)+1)
+   by T0,SERIES_1:def 1; then
+Partial_Sums(ElementsOfPortfolioValue_fut(r,phi,F,w,G)).((k+1)+1)
+   = ((1+r) * phi.0) +
+   Partial_Sums(ElementsOfPortfolioValue_fut(r,phi,F,w,G)^\1).k
+    + (ElementsOfPortfolioValue_fut(r,phi,F,w,G)^\1).(k+1)
+     by NAT_1:def 3; then
+Partial_Sums(ElementsOfPortfolioValue_fut(r,phi,F,w,G)).((k+1)+1)
+   = ((1+r) * phi.0) +
+   (Partial_Sums(ElementsOfPortfolioValue_fut(r,phi,F,w,G)^\1).k
+    + (ElementsOfPortfolioValue_fut(r,phi,F,w,G)^\1).(k+1));
+   hence thesis by SERIES_1:def 1;
+      end;
+      for k being Nat holds J[k] from NAT_1:sch 2(TT0,TT1); then
+  Partial_Sums(ElementsOfPortfolioValue_fut(r,phi,F,w,G)).(d-1+1) =
+  ((1+r) * phi.0) +
+   Partial_Sums(ElementsOfPortfolioValue_fut(r,phi,F,w,G)^\1).((d-1)) by A4;
+  hence thesis;
+end;
+
+theorem Th8:
+for d being natural number st d>0 holds
+for r being real number st r>-1 holds
+for phi being Real_Sequence,
+    jpi being pricefunction holds
+for G being Function of NAT,set_of_random_variables_on(F,Borel_Sets) st
+ Element_Of(F,Borel_Sets,G,0) = Omega-->1+r holds
+for w being Element of Omega holds
+ BuyPortfolioExt(phi,jpi,d)<=0 implies
+(PortfolioValueFutExt(r,d,phi,F,G,w) <=
+ PortfolioValueFut(r,d,phi,F,G,w) - (1+r)*BuyPortfolio(phi,jpi,d))
+proof
+ let d be natural number;
+ assume A0: d>0;
+ let r be real number;
+ assume A1: r>-1;
+ let phi be Real_Sequence, jpi be pricefunction;
+ set X = set_of_random_variables_on(F,Borel_Sets);
+ let G be Function of NAT,X;
+ assume A3: Element_Of(F,Borel_Sets,G,0) = Omega-->1+r;
+ let w be Element of Omega;
+ assume A4: BuyPortfolioExt(phi,jpi,d)<=0;
+A5: (1+r)*BuyPortfolioExt(phi,jpi,d) <= 0
+ proof
+   1+r>0 by A1,XREAL_1:62;
+   hence thesis by A4;
+ end;
+ ((1+r)*BuyPortfolioExt(phi,jpi,d)) + (PortfolioValueFut(r,d,phi,F,G,w) -
+((1+r)*BuyPortfolioExt(phi,jpi,d))) <=
+ (PortfolioValueFut(r,d,phi,F,G,w) -
+((1+r)*BuyPortfolioExt(phi,jpi,d))) by A5,XREAL_1:32; then
+ PortfolioValueFut(r,d,phi,F,G,w) <= (PortfolioValueFut(r,d,phi,F,G,w) -
+(1+r)*(phi.0 + BuyPortfolio(phi,jpi,d))) by A0,Th6; then
+ PortfolioValueFut(r,d,phi,F,G,w) <= ((PortfolioValueFut(r,d,phi,F,G,w) -
+ (1+r)*BuyPortfolio(phi,jpi,d))) - (1+r)*phi.0; then
+ PortfolioValueFut(r,d,phi,F,G,w) + (1+r)*phi.0 <=
+ ((PortfolioValueFut(r,d,phi,F,G,w) -
+ (1+r)*BuyPortfolio(phi,jpi,d))) by XREAL_1:19;
+hence thesis by A0,A3,Th7;
+end;
+
+theorem
+for d being natural number st d>0 holds
+for r being real number st r>-1 holds
+for phi being Real_Sequence,
+    jpi being pricefunction holds
+for G being Function of NAT,set_of_random_variables_on (F,Borel_Sets) st
+ Element_Of(F,Borel_Sets,G,0) = Omega-->1+r holds
+(BuyPortfolioExt(phi,jpi,d)<=0 implies
+({w where w is Element of Omega:
+      PortfolioValueFutExt(r,d,phi,F,G,w) >= 0} c=
+     {w where w is Element of Omega:
+      PortfolioValueFut(r,d,phi,F,G,w)
+                    >= (1+r)*BuyPortfolio(phi,jpi,d)} &
+{w where w is Element of Omega: PortfolioValueFutExt(r,d,phi,F,G,w) > 0} c=
+{w where w is Element of Omega: PortfolioValueFut(r,d,phi,F,G,w)
+                    > (1+r)*BuyPortfolio(phi,jpi,d)}))
+proof
+ let d be natural number;
+ assume A0: d>0;
+ let r be real number;
+ assume A1:r>-1;
+ let phi be Real_Sequence,
+     jpi be pricefunction;
+ set X = set_of_random_variables_on (F,Borel_Sets);
+ let G be Function of NAT,X;
+ assume A3: Element_Of(F,Borel_Sets,G,0) = Omega-->1+r;
+ assume J0: BuyPortfolioExt(phi,jpi,d)<=0;
+ J3: {w where w is Element of Omega:
+      PortfolioValueFutExt(r,d,phi,F,G,w) >= 0} c=
+     {w where w is Element of Omega:
+      PortfolioValueFut(r,d,phi,F,G,w)
+                    >= (1+r)*BuyPortfolio(phi,jpi,d)}
+ proof
+   let x be set;
+   assume x in {w where w is Element of Omega:
+     PortfolioValueFutExt(r,d,phi,F,G,w) >= 0}; then
+   consider w being Element of Omega such that
+AJ0: x=w & PortfolioValueFutExt(r,d,phi,F,G,w) >= 0;
+   0<= PortfolioValueFut(r,d,phi,F,G,w) -
+   ((1+r)*BuyPortfolio(phi,jpi,d)) by A0,A1,A3,J0,Th8,AJ0; then
+   0+ ((1+r)*BuyPortfolio(phi,jpi,d))
+     <= PortfolioValueFut(r,d,phi,F,G,w) by XREAL_1:19;
+   hence thesis by AJ0;
+ end;
+ {w where w is Element of Omega:
+      PortfolioValueFutExt(r,d,phi,F,G,w) > 0} c=
+   {w where w is Element of Omega:
+   PortfolioValueFut(r,d,phi,F,G,w) > (1+r)*BuyPortfolio(phi,jpi,d)}
+ proof
+   let x be set;
+   assume x in {w where w is Element of Omega:
+      PortfolioValueFutExt(r,d,phi,F,G,w) > 0}; then
+   consider w being Element of Omega such that
+   AJ0: x=w & PortfolioValueFutExt(r,d,phi,F,G,w) > 0;
+   PortfolioValueFutExt(r,d,phi,F,G,w) <= (PortfolioValueFut(r,d,phi,F,G,w) -
+   (1+r)*BuyPortfolio(phi,jpi,d)) by A0,A1,A3,J0,Th8; then
+   0+((1+r)*BuyPortfolio(phi,jpi,d))
+      < (PortfolioValueFut(r,d,phi,F,G,w) - (1+r)*BuyPortfolio(phi,jpi,d))
+     +((1+r)*BuyPortfolio(phi,jpi,d)) by AJ0,XREAL_1:6;
+   hence thesis by AJ0;
+ end;
+ hence thesis by J3;
+end;
+
+theorem Th10:
+for f being Function of Omega,REAL st
+    f is_random_variable_on Sigma,Borel_Sets holds
+          f is_measurable_on [#]Sigma &
+          f is Real-Valued-Random-Variable of Sigma
+proof
+ let f be Function of Omega,REAL;
+ assume A0: f is_random_variable_on Sigma,Borel_Sets;
+J0: for r being Element of REAL holds Omega /\ less_dom(f,r) in Sigma
+ proof
+  let r be Element of REAL;
+  less_dom(f,r) = {w where w is Element of Omega: f.w <r} by A0,Th4;
+  then less_dom(f,r) is Element of Sigma by A0,Th4; then
+  less_dom(f,r) in Sigma;
+  hence thesis by XBOOLE_1:28;
+ end;
+Fin0: for r being real number holds [#]Sigma /\ less_dom(f,r) in Sigma
+proof
+ let r be real number;
+ reconsider r as Element of REAL by XREAL_0:def 1;
+ [#]Sigma /\ less_dom(f,r) in Sigma by J0;
+ hence thesis;
+end;
+f is Real-Valued-Random-Variable of Sigma
+proof
+ ex X be Element of Sigma st X = Omega & f is_measurable_on X
+ proof
+   reconsider X=[#]Sigma as Element of Sigma;
+   f is_measurable_on X by Fin0,MESFUNC6:12;
+   hence thesis;
+ end;
+ hence thesis by RANDOM_1:def 2;
+end;
+hence thesis by Fin0,MESFUNC6:12;
+end;
+
+theorem
+  set_of_random_variables_on (Sigma,Borel_Sets) c=
+    Real-Valued-Random-Variables-Set Sigma
+proof
+  let x be set;
+  assume x in set_of_random_variables_on (Sigma,Borel_Sets); then
+  consider f being Function of Omega,REAL such that
+J0: x=f & f is_random_variable_on Sigma,Borel_Sets;
+J1: f is_random_variable_on Sigma,Borel_Sets implies
+      f is Real-Valued-Random-Variable of Sigma by Th10;
+  x in {q where q is Real-Valued-Random-Variable of Sigma:
+       not contradiction} by J1,J0;
+  hence thesis by RANDOM_2:def 3;
+end;

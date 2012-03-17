@@ -50,9 +50,9 @@
 <Cluster>
 <Adjective nr="39" value="false"/>
 <Adjective nr="48" value="false"/>
-<Adjective nr="59"/>
 <Adjective nr="60"/>
-<Adjective nr="69"/>
+<Adjective nr="61"/>
+<Adjective nr="70"/>
 </Cluster>
 </Typ>
 <Not>
@@ -514,9 +514,9 @@
 <Cluster>
 <Adjective nr="39" value="false"/>
 <Adjective nr="48" value="false"/>
-<Adjective nr="59"/>
 <Adjective nr="60"/>
-<Adjective nr="69"/>
+<Adjective nr="61"/>
+<Adjective nr="70"/>
 </Cluster>
 </Typ>
 <For>
@@ -524,9 +524,9 @@
 <Cluster>
 <Adjective nr="39" value="false"/>
 <Adjective nr="48" value="false"/>
-<Adjective nr="59"/>
 <Adjective nr="60"/>
-<Adjective nr="69"/>
+<Adjective nr="61"/>
+<Adjective nr="70"/>
 </Cluster>
 </Typ>
 <Not>
@@ -1053,14 +1053,14 @@
 <Cluster>
 <Adjective nr="39" value="false"/>
 <Adjective nr="48" value="false"/>
-<Adjective nr="60"/>
+<Adjective nr="61"/>
 </Cluster>
 </Typ>
 <Typ kind="G" nr="7">
 <Cluster>
 <Adjective nr="39" value="false"/>
 <Adjective nr="48" value="false"/>
-<Adjective nr="60"/>
+<Adjective nr="61"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="2">

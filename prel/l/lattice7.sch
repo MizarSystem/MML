@@ -30,11 +30,11 @@
 <Typ kind="G" nr="6">
 <Cluster>
 <Adjective nr="47"/>
-<Adjective nr="57"/>
 <Adjective nr="58"/>
 <Adjective nr="59"/>
-<Adjective nr="86"/>
+<Adjective nr="60"/>
 <Adjective nr="87"/>
+<Adjective nr="88"/>
 </Cluster>
 </Typ>
 </ArgTypes>

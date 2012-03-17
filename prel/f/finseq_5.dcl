@@ -24,6 +24,9 @@
 <Cluster>
 <Adjective nr="1" value="false"/>
 <Adjective nr="11"/>
+<Adjective nr="14">
+<Func kind="K" nr="32"/>
+</Adjective>
 <Adjective nr="16"/>
 <Adjective nr="17"/>
 <Adjective nr="21"/>
@@ -46,6 +49,9 @@
 <Cluster>
 <Adjective nr="1" value="false"/>
 <Adjective nr="11"/>
+<Adjective nr="14">
+<Func kind="K" nr="32"/>
+</Adjective>
 <Adjective nr="15">
 <LocusVar nr="1"/>
 </Adjective>
@@ -64,6 +70,9 @@
 <Cluster>
 <Adjective nr="2" value="false"/>
 <Adjective nr="11"/>
+<Adjective nr="14">
+<Func kind="K" nr="32"/>
+</Adjective>
 <Adjective nr="16"/>
 <Adjective nr="21"/>
 <Adjective nr="28"/>

@@ -46,7 +46,7 @@
 <Func kind="K" nr="70"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="230">
+<Func kind="K" nr="233">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
@@ -62,7 +62,7 @@
 </FCluster>
 <FCluster aid="ASYMPT_1" nr="2">
 <ArgTypes/>
-<Func kind="K" nr="231"/>
+<Func kind="K" nr="234"/>
 <Cluster>
 <Adjective nr="6"/>
 <Adjective nr="27">
@@ -79,7 +79,7 @@
 <Func kind="K" nr="70"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="232">
+<Func kind="K" nr="235">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -93,7 +93,7 @@
 </FCluster>
 <FCluster aid="ASYMPT_1" nr="4">
 <ArgTypes/>
-<Func kind="K" nr="233">
+<Func kind="K" nr="236">
 <Num nr="1"/>
 </Func>
 <Cluster>
@@ -112,7 +112,7 @@
 <Func kind="K" nr="74"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="234">
+<Func kind="K" nr="237">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>

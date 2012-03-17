@@ -22,11 +22,11 @@ environ
       XXREAL_0, NAT_1, PARTFUN1, MSUALG_6, PRELAMB;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, DOMAIN_1, RELAT_1, FUNCT_1,
       RELSET_1, STRUCT_0, NUMBERS, NAT_1, MCART_1, FINSET_1, CARD_3, FINSEQ_1,
-      TREES_1, TREES_2, FUNCT_6, TREES_3, TREES_4, DTCONSTR, LANG1, PBOOLE,
-      TREES_9, MSUALG_1, MSUALG_2, MSAFREE, FUNCOP_1, MSUALG_3, EQUATION,
-      MSATERM, MSUALG_6, CATALG_1, XXREAL_0;
+      FINSEQ_2, TREES_1, TREES_2, FUNCT_6, TREES_3, TREES_4, DTCONSTR, LANG1,
+      PBOOLE, TREES_9, MSUALG_1, MSUALG_2, MSAFREE, FUNCOP_1, MSUALG_3,
+      EQUATION, MSATERM, MSUALG_6, CATALG_1, XXREAL_0;
  constructors DOMAIN_1, XXREAL_0, NAT_1, TREES_9, MSSUBFAM, MSUALG_3, MSATERM,
-      MSUALG_6, CATALG_1, EQUATION, SEQ_4, RELSET_1;
+      MSUALG_6, CATALG_1, EQUATION, SEQ_4, RELSET_1, FINSEQ_2;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1, FUNCOP_1,
       XREAL_0, FINSEQ_1, TREES_2, TREES_3, TREES_9, STRUCT_0, RELSET_1,
       MSUALG_1, MSUALG_2, MSUALG_3, MSAFREE, MSATERM, INDEX_1, MSUALG_6,
@@ -37,7 +37,7 @@ environ
       MCART_1, PBOOLE, RELAT_1, CARD_3, CARD_5, FUNCT_6, TREES_3, MSUALG_1,
       INSTALG1, TREES_4, PRE_CIRC, TREES_1, TREES_2, MSUALG_2, MSUALG_3,
       MSAFREE, MSATERM, EQUATION, MSUALG_6, XBOOLE_0, XBOOLE_1, ORDINAL1,
-      PARTFUN1, TREES_9;
+      PARTFUN1, TREES_9, FINSEQ_2;
  schemes PBOOLE, MSATERM;
 
 begin
@@ -50,13 +50,13 @@ registration
   cluster Union the Sorts of A -> non empty;
   coherence
   proof
-A1: dom the Sorts of A = the carrier of S by PARTFUN1:def 4;
+A1: dom the Sorts of A = the carrier of S by PARTFUN1:def 2;
     consider i being set such that
 A2: i in the carrier of S and
-A3: (the Sorts of A).i is non empty by PBOOLE:def 15;
-    set x =the  Element of (the Sorts of A).i;
+A3: (the Sorts of A).i is non empty by PBOOLE:def 12;
+    set x = the Element of (the Sorts of A).i;
     x in (the Sorts of A).i by A3;
-    hence thesis by A2,A1,CARD_5:10;
+    hence thesis by A2,A1,CARD_5:2;
   end;
 end;
 
@@ -66,8 +66,6 @@ definition
   mode Element of A is Element of Union the Sorts of A;
 end;
 
-canceled;
-
 theorem
   for I being set, A being ManySortedSet of I for F being
   ManySortedFunction of I st F is "1-1" & A c= doms F holds F""(F.:.:A) = A
@@ -76,19 +74,19 @@ proof
   let F be ManySortedFunction of I such that
 A1: F is "1-1" and
 A2: A c= doms F;
-A3: dom F = I by PARTFUN1:def 4;
+A3: dom F = I by PARTFUN1:def 2;
   now
     let i be set;
     assume
 A4: i in I;
     then
 A5: F.i is one-to-one by A1,A3,MSUALG_3:def 2;
-    A.i c= (doms F).i by A2,A4,PBOOLE:def 5;
+    A.i c= (doms F).i by A2,A4,PBOOLE:def 2;
     then
-A6: A.i c= dom (F.i) by A3,A4,FUNCT_6:31;
+A6: A.i c= dom (F.i) by A3,A4,FUNCT_6:22;
     thus (F""(F.:.:A)).i = (F.i)"((F.:.:A).i) by A4,EQUATION:def 1
-      .= (F.i)"((F.i).:(A.i)) by A4,PBOOLE:def 25
-      .= A.i by A6,A5,FUNCT_1:164;
+      .= (F.i)"((F.i).:(A.i)) by A4,PBOOLE:def 20
+      .= A.i by A6,A5,FUNCT_1:94;
   end;
   hence thesis by PBOOLE:3;
 end;
@@ -96,7 +94,7 @@ end;
 definition
   let S be non void Signature;
   let X be ManySortedSet of the carrier of S;
-  canceled;
+
   func Free(S, X) -> strict MSAlgebra over S means
   :Def2:
   ex A being MSSubset
@@ -107,12 +105,12 @@ definition
   proof
     set I = the carrier of S, Y = X \/ (I --> {0});
     set R = Reverse Y;
-    R""X is ManySortedSubset of FreeGen Y by EQUATION:9;
+    R""X is ManySortedSubset of FreeGen Y by EQUATION:8;
     then
-A1: R""X c= FreeGen Y by PBOOLE:def 23;
-    FreeGen Y c= the Sorts of FreeMSA Y by PBOOLE:def 23;
-    then R""X c= the Sorts of FreeMSA Y by A1,PBOOLE:15;
-    then reconsider Z = R""X as MSSubset of FreeMSA Y by PBOOLE:def 23;
+A1: R""X c= FreeGen Y by PBOOLE:def 18;
+    FreeGen Y c= the Sorts of FreeMSA Y by PBOOLE:def 18;
+    then R""X c= the Sorts of FreeMSA Y by A1,PBOOLE:13;
+    then reconsider Z = R""X as MSSubset of FreeMSA Y by PBOOLE:def 18;
     take GenMSAlg Z, Z;
     thus thesis;
   end;
@@ -127,30 +125,30 @@ proof
   let X be ManySortedSet of the carrier of S;
   let s be SortSymbol of S;
 A1: DTConMSA X = DTConstrStr (# [:the carrier' of S,{the carrier of S}:] \/
-    Union coprod X, REL(X) #) by MSAFREE:def 10;
-A2: dom coprod X = the carrier of S by PARTFUN1:def 4;
+    Union coprod X, REL(X) #) by MSAFREE:def 8;
+A2: dom coprod X = the carrier of S by PARTFUN1:def 2;
   s in the carrier of S;
   then s <> the carrier of S;
   then not s in {the carrier of S} by TARSKI:def 1;
   then
-A3: not [x,s] in [:the carrier' of S,{the carrier of S}:] by ZFMISC_1:106;
+A3: not [x,s] in [:the carrier' of S,{the carrier of S}:] by ZFMISC_1:87;
   hereby
     assume [x,s] in the carrier of DTConMSA X;
     then [x,s] in Union coprod X by A1,A3,XBOOLE_0:def 3;
     then consider y such that
 A4: y in dom coprod X and
-A5: [x,s] in (coprod X).y by CARD_5:10;
+A5: [x,s] in (coprod X).y by CARD_5:2;
     (coprod X).y = coprod(y,X) by A2,A4,MSAFREE:def 3;
     then consider z such that
 A6: z in X.y and
 A7: [x,s] = [z,y] by A2,A4,A5,MSAFREE:def 2;
-    x = z by A7,ZFMISC_1:33;
-    hence x in X.s by A6,A7,ZFMISC_1:33;
+    x = z by A7,ZFMISC_1:27;
+    hence x in X.s by A6,A7,ZFMISC_1:27;
   end;
   assume x in X.s;
   then [x,s] in coprod(s,X) by MSAFREE:def 2;
   then [x,s] in (coprod X).s by MSAFREE:def 3;
-  then [x,s] in Union coprod X by A2,CARD_5:10;
+  then [x,s] in Union coprod X by A2,CARD_5:2;
   hence thesis by A1,XBOOLE_0:def 3;
 end;
 
@@ -164,17 +162,17 @@ proof
   let Y be non-empty ManySortedSet of the carrier of S;
   let X be ManySortedSet of the carrier of S;
   let s be SortSymbol of S;
-A1: (Reverse Y).s = Reverse (s, Y) by MSAFREE:def 20;
+A1: (Reverse Y).s = Reverse (s, Y) by MSAFREE:def 18;
 A2: dom Reverse (s, Y) = FreeGen(s,Y) by FUNCT_2:def 1;
   hereby
     assume that
 A3: x in X.s and
 A4: x in Y.s;
-A5: root-tree [x,s] in FreeGen(s,Y) by A4,MSAFREE:def 17;
+A5: root-tree [x,s] in FreeGen(s,Y) by A4,MSAFREE:def 15;
     [x,s] in the carrier of DTConMSA Y by A4,Th3;
-    then (Reverse Y).s.root-tree [x,s] = [x,s]`1 by A1,A5,MSAFREE:def 19
+    then (Reverse Y).s.root-tree [x,s] = [x,s]`1 by A1,A5,MSAFREE:def 17
       .= x by MCART_1:7;
-    then root-tree [x,s] in ((Reverse Y).s)"(X.s) by A1,A2,A3,A5,FUNCT_1:def 13
+    then root-tree [x,s] in ((Reverse Y).s)"(X.s) by A1,A2,A3,A5,FUNCT_1:def 7
 ;
     hence root-tree [x,s] in ((Reverse Y)""X).s by EQUATION:def 1;
   end;
@@ -182,15 +180,15 @@ A5: root-tree [x,s] in FreeGen(s,Y) by A4,MSAFREE:def 17;
   then
 A6: root-tree [x,s] in ((Reverse Y).s)"(X.s) by EQUATION:def 1;
   then
-A7: Reverse(s,Y).root-tree [x,s] in X. s by A1,FUNCT_1:def 13;
-A8: root-tree [x,s] in FreeGen(s,Y) by A1,A2,A6,FUNCT_1:def 13;
+A7: Reverse(s,Y).root-tree [x,s] in X. s by A1,FUNCT_1:def 7;
+A8: root-tree [x,s] in FreeGen(s,Y) by A1,A2,A6,FUNCT_1:def 7;
   then consider z such that
 A9: z in Y.s and
-A10: root-tree [x,s] = root-tree [z,s] by MSAFREE:def 17;
+A10: root-tree [x,s] = root-tree [z,s] by MSAFREE:def 15;
 A11: [x,s] = [z,s] by A10,TREES_4:4;
   then [x,s] in the carrier of DTConMSA Y by A9,Th3;
-  then [x,s]`1 in X.s by A8,A7,MSAFREE:def 19;
-  hence thesis by A9,A11,MCART_1:7,ZFMISC_1:33;
+  then [x,s]`1 in X.s by A8,A7,MSAFREE:def 17;
+  hence thesis by A9,A11,MCART_1:7,ZFMISC_1:27;
 end;
 
 theorem Th5:
@@ -206,12 +204,12 @@ A1: x in X.s;
   consider A being MSSubset of FreeMSA Y such that
 A2: Free(S, X) = GenMSAlg A and
 A3: A = (Reverse Y)""X by Def2;
-  A is MSSubset of Free(S,X) by A2,MSUALG_2:def 18;
-  then A c= the Sorts of Free(S,X) by PBOOLE:def 23;
+  A is MSSubset of Free(S,X) by A2,MSUALG_2:def 17;
+  then A c= the Sorts of Free(S,X) by PBOOLE:def 18;
   then
-A4: A.s c= (the Sorts of Free(S,X)).s by PBOOLE:def 5;
-  X c= Y by PBOOLE:16;
-  then X.s c= Y.s by PBOOLE:def 5;
+A4: A.s c= (the Sorts of Free(S,X)).s by PBOOLE:def 2;
+  X c= Y by PBOOLE:14;
+  then X.s c= Y.s by PBOOLE:def 2;
   then root-tree [x,s] in A.s by A1,A3,Th4;
   hence thesis by A4;
 end;
@@ -227,37 +225,37 @@ proof
 A1: the_arity_of o = {};
   set Y = X \/ ((the carrier of S) --> {0});
 A2: Args(o, FreeMSA Y) = ((the Sorts of FreeMSA Y)# * the Arity of S).o by
-MSUALG_1:def 9
-    .= (the Sorts of FreeMSA Y)#.((the Arity of S).o) by FUNCT_2:21
-    .= (the Sorts of FreeMSA Y)#.<*>the carrier of S by A1,MSUALG_1:def 6
-    .= {{}} by PRE_CIRC:5;
+MSUALG_1:def 4
+    .= (the Sorts of FreeMSA Y)#.((the Arity of S).o) by FUNCT_2:15
+    .= (the Sorts of FreeMSA Y)#.<*>the carrier of S by A1,MSUALG_1:def 1
+    .= {{}} by PRE_CIRC:2;
   then
 A3: dom Den(o,FreeMSA Y) c= {{}};
 A4: ex A being MSSubset of FreeMSA Y st Free(S, X) = GenMSAlg A & A = (
   Reverse Y)""X by Def2;
   then reconsider FX = the Sorts of Free(S,X) as MSSubset of FreeMSA Y by
-MSUALG_2:def 10;
-  (FX# * the Arity of S).o = FX#.((the Arity of S).o) by FUNCT_2:21
-    .= FX#.<*>the carrier of S by A1,MSUALG_1:def 6
-    .= {{}} by PRE_CIRC:5;
+MSUALG_2:def 9;
+  (FX# * the Arity of S).o = FX#.((the Arity of S).o) by FUNCT_2:15
+    .= FX#.<*>the carrier of S by A1,MSUALG_1:def 1
+    .= {{}} by PRE_CIRC:2;
   then
 A5: (Den(o,FreeMSA Y))|((FX# * the Arity of S).o) = Den(o,FreeMSA Y) by A3,
-RELAT_1:97;
-  set a =the  ArgumentSeq of Sym(o, Y);
-  reconsider a as Element of Args(o, FreeMSA Y) by INSTALG1:2;
+RELAT_1:68;
+  set a = the ArgumentSeq of Sym(o, Y);
+  reconsider a as Element of Args(o, FreeMSA Y) by INSTALG1:1;
   a = {} by A2,TARSKI:def 1;
   then root-tree [o, the carrier of S] = [o, the carrier of S]-tree a by
 TREES_4:20;
-  then Den(o,FreeMSA Y).a = root-tree [o, the carrier of S] by INSTALG1:4;
+  then Den(o,FreeMSA Y).a = root-tree [o, the carrier of S] by INSTALG1:3;
   then
-A6: root-tree [o, the carrier of S] in rng Den(o,FreeMSA Y) by FUNCT_2:6;
-  FX is opers_closed by A4,MSUALG_2:def 10;
-  then FX is_closed_on o by MSUALG_2:def 7;
+A6: root-tree [o, the carrier of S] in rng Den(o,FreeMSA Y) by FUNCT_2:4;
+  FX is opers_closed by A4,MSUALG_2:def 9;
+  then FX is_closed_on o by MSUALG_2:def 6;
   then
 A7: rng ((Den(o,FreeMSA Y))|((FX# * the Arity of S).o)) c= (FX * the
-  ResultSort of S).o by MSUALG_2:def 6;
-  (FX * the ResultSort of S).o = FX.((the ResultSort of S).o) by FUNCT_2:21
-    .= FX.the_result_sort_of o by MSUALG_1:def 7;
+  ResultSort of S).o by MSUALG_2:def 5;
+  (FX * the ResultSort of S).o = FX.((the ResultSort of S).o) by FUNCT_2:15
+    .= FX.the_result_sort_of o by MSUALG_1:def 2;
   hence thesis by A7,A5,A6;
 end;
 
@@ -269,11 +267,11 @@ registration
   proof
     consider s being set such that
 A1: s in the carrier of S and
-A2: X.s is non empty by PBOOLE:def 15;
+A2: X.s is non empty by PBOOLE:def 12;
     reconsider s as SortSymbol of S by A1;
-    set x =the  Element of X.s;
+    set x = the Element of X.s;
     root-tree [x,s] in (the Sorts of Free(S,X)).s by A2,Th5;
-    hence the Sorts of Free(S, X) is not empty-yielding by PBOOLE:def 15;
+    hence the Sorts of Free(S, X) is not empty-yielding by PBOOLE:def 12;
   end;
 end;
 
@@ -284,9 +282,9 @@ proof
   let S be non void Signature;
   let X be non-empty ManySortedSet of the carrier of S;
 A1: S-Terms X = TS DTConMSA X by MSATERM:def 1
-    .= union rng FreeSort X by MSAFREE:12
+    .= union rng FreeSort X by MSAFREE:11
     .= Union FreeSort X by CARD_3:def 4;
-  FreeMSA X = MSAlgebra(# FreeSort X, FreeOper X #) by MSAFREE:def 16;
+  FreeMSA X = MSAlgebra(# FreeSort X, FreeOper X #) by MSAFREE:def 14;
   hence thesis by A1;
 end;
 
@@ -298,8 +296,8 @@ proof
   let S be non void Signature;
   let X be non-empty ManySortedSet of the carrier of S;
   let s be SortSymbol of S;
-  FreeMSA X = MSAlgebra(# FreeSort X, FreeOper X #) by MSAFREE:def 16;
-  then (the Sorts of FreeMSA X).s = FreeSort(X, s) by MSAFREE:def 13;
+  FreeMSA X = MSAlgebra(# FreeSort X, FreeOper X #) by MSAFREE:def 14;
+  then (the Sorts of FreeMSA X).s = FreeSort(X, s) by MSAFREE:def 11;
   hence thesis by MSATERM:def 5;
 end;
 
@@ -313,47 +311,47 @@ proof
   set Y = X \/ ((the carrier of S) --> {0});
   let x be Element of Free(S, X);
 A1: S -Terms Y = TS DTConMSA Y by MSATERM:def 1
-    .= union rng FreeSort Y by MSAFREE:12
+    .= union rng FreeSort Y by MSAFREE:11
     .= Union FreeSort Y by CARD_3:def 4;
-A2: dom the Sorts of Free(S, X) = the carrier of S by PARTFUN1:def 4;
+A2: dom the Sorts of Free(S, X) = the carrier of S by PARTFUN1:def 2;
 A3: FreeMSA Y = MSAlgebra(# FreeSort Y, FreeOper Y #) & dom the Sorts of
-  FreeMSA Y = the carrier of S by MSAFREE:def 16,PARTFUN1:def 4;
+  FreeMSA Y = the carrier of S by MSAFREE:def 14,PARTFUN1:def 2;
   consider y such that
 A4: y in dom the Sorts of Free(S, X) and
-A5: x in (the Sorts of Free(S,X)).y by CARD_5:10;
+A5: x in (the Sorts of Free(S,X)).y by CARD_5:2;
   ex A being MSSubset of FreeMSA Y st Free(S, X) = GenMSAlg A & A = (
   Reverse Y)""X by Def2;
-  then the Sorts of Free(S, X) is MSSubset of FreeMSA Y by MSUALG_2:def 10;
-  then the Sorts of Free(S, X) c= the Sorts of FreeMSA Y by PBOOLE:def 23;
+  then the Sorts of Free(S, X) is MSSubset of FreeMSA Y by MSUALG_2:def 9;
+  then the Sorts of Free(S, X) c= the Sorts of FreeMSA Y by PBOOLE:def 18;
   then (the Sorts of Free(S,X)).y c= (the Sorts of FreeMSA Y).y by A4,A2,
-PBOOLE:def 5;
-  hence thesis by A1,A4,A5,A2,A3,CARD_5:10;
+PBOOLE:def 2;
+  hence thesis by A1,A4,A5,A2,A3,CARD_5:2;
 end;
 
 registration
   let S be non empty non void ManySortedSign;
   let X be non empty-yielding ManySortedSet of the carrier of S;
-  cluster -> Relation-like Function-like Element of Free(S, X);
+  cluster -> Relation-like Function-like for Element of Free(S, X);
   coherence by Th9;
 end;
 
 registration
   let S be non empty non void ManySortedSign;
   let X be non empty-yielding ManySortedSet of the carrier of S;
-  cluster -> finite DecoratedTree-like Element of Free(S, X);
+  cluster -> finite DecoratedTree-like for Element of Free(S, X);
   coherence by Th9;
 end;
 
 registration
   let S be non empty non void ManySortedSign;
   let X be non empty-yielding ManySortedSet of the carrier of S;
-  cluster -> finite-branching Element of Free(S, X);
+  cluster -> finite-branching for Element of Free(S, X);
   coherence;
 end;
 
 registration
-  cluster -> non empty DecoratedTree;
-  coherence by RELAT_1:60;
+  cluster -> non empty for DecoratedTree;
+  coherence by RELAT_1:38;
 end;
 
 definition
@@ -398,7 +396,7 @@ definition
   );
   coherence
   proof
-    thus X /\ (S variables_in t) c= X by PBOOLE:17;
+    thus X /\ (S variables_in t) c= X by PBOOLE:15;
   end;
 end;
 
@@ -416,7 +414,7 @@ A1: V = X variables_in t;
     let s be set;
     assume
 A2: s in the carrier of S;
-    then V.s = (X.s) /\ ((S variables_in t).s) by A1,PBOOLE:def 8;
+    then V.s = (X.s) /\ ((S variables_in t).s) by A1,PBOOLE:def 5;
     hence V.s = (X.s) /\ {a`1 where a is Element of rng t: a`2 = s} by A2,Def3;
   end;
   assume
@@ -429,7 +427,7 @@ A4: s in the carrier of S;
     hence V.s = (X.s) /\ {a`1 where a is Element of rng t: a`2 = s} by A3
       .= (X.s) /\ ((S variables_in t).s) by A4,Def3;
   end;
-  hence thesis by PBOOLE:def 8;
+  hence thesis by PBOOLE:def 5;
 end;
 
 theorem Th11:
@@ -443,7 +441,7 @@ proof
 A1: [x,s]`2 = s by MCART_1:7;
   t = {[{},[x,s]]} by TREES_4:6;
   then
-A2: rng t = {[x,s]} by RELAT_1:23;
+A2: rng t = {[x,s]} by RELAT_1:9;
 A3: [x,s]`1 = x by MCART_1:7;
   hereby
     assume s in the carrier of S;
@@ -462,19 +460,19 @@ A5:     y = a`1 and
       end;
       [x,s] in rng t by A2,TARSKI:def 1;
       then x in {a`1 where a is Element of rng t: a`2 = s} by A3,A1;
-      hence thesis by A4,ZFMISC_1:37;
+      hence thesis by A4,ZFMISC_1:31;
     end;
   end;
   let s9 be set such that
 A6: s9 <> s or not s in the carrier of S;
-  set y =the  Element of (S variables_in root-tree [x,s]).s9;
+  set y = the Element of (S variables_in root-tree [x,s]).s9;
   assume
 A7: (S variables_in root-tree [x,s]).s9 <> {};
   then
 A8: y in (S variables_in t).s9;
-  dom (S variables_in t) = the carrier of S by PARTFUN1:def 4;
+  dom (S variables_in t) = the carrier of S by PARTFUN1:def 2;
   then
-A9: s9 in the carrier of S by A7,FUNCT_1:def 4;
+A9: s9 in the carrier of S by A7,FUNCT_1:def 2;
   then (S variables_in t).s9 = {a`1 where a is Element of rng t:a`2 = s9} by
 Def3;
   then ex a being Element of rng t st y = a`1 & a`2 = s9 by A8;
@@ -494,9 +492,9 @@ A1: s in the carrier of S;
 A2: (S variables_in q).s = {a`1 where a is Element of rng q: a`2 = s} by A1
 ,Def3;
 A3: dom q = tree doms p by TREES_4:10;
-A4: dom doms p = dom p by TREES_3:39;
+A4: dom doms p = dom p by TREES_3:37;
   then
-A5: len p = len doms p by FINSEQ_3:31;
+A5: len p = len doms p by FINSEQ_3:29;
   hereby
     assume x in (S variables_in ([z, the carrier of S]-tree p)).s;
     then consider a being Element of rng q such that
@@ -504,7 +502,7 @@ A6: x = a`1 and
 A7: a`2 = s by A2;
     consider y such that
 A8: y in dom q and
-A9: a = q.y by FUNCT_1:def 5;
+A9: a = q.y by FUNCT_1:def 3;
     reconsider y as Element of dom q by A8;
     q.{} = [z, the carrier of S] & s <> the carrier of S by A1,TREES_4:def 4;
     then y <> {} by A7,A9,MCART_1:7;
@@ -514,16 +512,16 @@ A11: r in (doms p).(n+1) and
 A12: y = <*n*>^r by A3,TREES_3:def 15;
     1 <= n+1 & n+1 <= len doms p by A10,NAT_1:11,13;
     then
-A13: n+1 in dom doms p by FINSEQ_3:27;
-    then reconsider t = p.(n+1) as DecoratedTree by A4,TREES_3:26;
-    reconsider r as FinSequence of NAT by A12,FINSEQ_1:50;
+A13: n+1 in dom doms p by FINSEQ_3:25;
+    then reconsider t = p.(n+1) as DecoratedTree by A4,TREES_3:24;
+    reconsider r as FinSequence of NAT by A12,FINSEQ_1:36;
     take t;
-    thus t in rng p by A4,A13,FUNCT_1:def 5;
-A14: (doms p).(n+1) = dom t by A4,A13,FUNCT_6:31;
+    thus t in rng p by A4,A13,FUNCT_1:def 3;
+A14: (doms p).(n+1) = dom t by A4,A13,FUNCT_6:22;
 A15: t = q|<*n*> by A5,A10,TREES_4:def 4;
-    then dom t = (dom q)|<*n*> by TREES_2:def 11;
-    then a = t.r by A9,A11,A12,A15,A14,TREES_2:def 11;
-    then a in rng t by A11,A14,FUNCT_1:def 5;
+    then dom t = (dom q)|<*n*> by TREES_2:def 10;
+    then a = t.r by A9,A11,A12,A15,A14,TREES_2:def 10;
+    then a in rng t by A11,A14,FUNCT_1:def 3;
     then x in {b`1 where b is Element of rng t: b`2 = s} by A6,A7;
     hence x in (S variables_in t).s by A1,Def3;
   end;
@@ -532,22 +530,22 @@ A16: t in rng p and
 A17: x in (S variables_in t).s;
   consider y such that
 A18: y in dom p and
-A19: t = p.y by A16,FUNCT_1:def 5;
+A19: t = p.y by A16,FUNCT_1:def 3;
   reconsider y as Element of NAT by A18;
-  y >= 1 by A18,FINSEQ_3:27;
+  y >= 1 by A18,FINSEQ_3:25;
   then consider n being Nat such that
 A20: y = 1+n by NAT_1:10;
-  reconsider n as Element of NAT by ORDINAL1:def 13;
-  y <= len p by A18,FINSEQ_3:27;
+  reconsider n as Element of NAT by ORDINAL1:def 12;
+  y <= len p by A18,FINSEQ_3:25;
   then
 A21: n < len p by A20,NAT_1:13;
   then
 A22: t = q|<*n*> by A19,A20,TREES_4:def 4;
-A23: {} in dom t & <*n*>^{} = <*n*> by FINSEQ_1:47,TREES_1:47;
-  dom t = (doms p).(n+1) by A18,A19,A20,FUNCT_6:31;
+A23: {} in dom t & <*n*>^{} = <*n*> by FINSEQ_1:34,TREES_1:22;
+  dom t = (doms p).(n+1) by A18,A19,A20,FUNCT_6:22;
   then <*n*> in dom q by A3,A5,A21,A23,TREES_3:def 15;
   then
-A24: rng t c= rng q by A22,TREES_2:34;
+A24: rng t c= rng q by A22,TREES_2:32;
   x in {b`1 where b is Element of rng t: b`2 = s} by A1,A17,Def3;
   then consider b being Element of rng t such that
 A25: x = b`1 & b`2 = s;
@@ -569,21 +567,21 @@ A1: [x,s]`1 = x & [x,s]`2 = s by MCART_1:7;
     assume
 A2: x in X.s;
     then
-A3: {x} c= X.s by ZFMISC_1:37;
-    dom X = the carrier of S by PARTFUN1:def 4;
+A3: {x} c= X.s by ZFMISC_1:31;
+    dom X = the carrier of S by PARTFUN1:def 2;
     then
-A4: s in the carrier of S by A2,FUNCT_1:def 4;
+A4: s in the carrier of S by A2,FUNCT_1:def 2;
     then (S variables_in root-tree [x,s]).s = {x} by Th11;
     then (X.s) /\ ((S variables_in root-tree [x,s]).s) = {x} by A3,XBOOLE_1:28;
-    hence (X variables_in root-tree [x,s]).s = {x} by A4,PBOOLE:def 8;
+    hence (X variables_in root-tree [x,s]).s = {x} by A4,PBOOLE:def 5;
   end;
   let s9 be set such that
 A5: s9 <> s or not x in X.s;
-  set y =the  Element of (X variables_in root-tree [x,s]).s9;
+  set y = the Element of (X variables_in root-tree [x,s]).s9;
   assume
 A6: (X variables_in root-tree [x,s]).s9 <> {};
-  dom (X variables_in t) = the carrier of S by PARTFUN1:def 4;
-  then s9 in the carrier of S by A6,FUNCT_1:def 4;
+  dom (X variables_in t) = the carrier of S by PARTFUN1:def 2;
+  then s9 in the carrier of S by A6,FUNCT_1:def 2;
   then
 A7: (X variables_in t).s9 = (X.s9) /\ {a`1 where a is Element of rng t:a`2
   = s9} by Th10;
@@ -591,7 +589,7 @@ A7: (X variables_in t).s9 = (X.s9) /\ {a`1 where a is Element of rng t:a`2
   then consider a being Element of rng t such that
 A8: y = a`1 & a`2 = s9;
   t = {[{},[x,s]]} by TREES_4:6;
-  then rng t = {[x,s]} by RELAT_1:23;
+  then rng t = {[x,s]} by RELAT_1:9;
   then a = [x,s] by TARSKI:def 1;
   hence thesis by A1,A5,A6,A7,A8,XBOOLE_0:def 4;
 end;
@@ -608,7 +606,7 @@ proof
 A1: s in the carrier of S;
   let p be DTree-yielding FinSequence;
   reconsider q = [z, the carrier of S]-tree p as DecoratedTree;
-  (X variables_in q).s = (X.s) /\ ((S variables_in q).s) by A1,PBOOLE:def 8;
+  (X variables_in q).s = (X.s) /\ ((S variables_in q).s) by A1,PBOOLE:def 5;
   then
 A2: x in (X variables_in ([z, the carrier of S]-tree p)).s iff x in X.s & x
   in (S variables_in ([z, the carrier of S]-tree p)).s by XBOOLE_0:def 4;
@@ -623,12 +621,12 @@ A5: x in X.s & x in (S variables_in t).s by A3;
     take t;
     thus t in rng p by A4;
     x in (X.s) /\ ((S variables_in t).s) by A5,XBOOLE_0:def 4;
-    hence x in (X variables_in t).s by A1,PBOOLE:def 8;
+    hence x in (X variables_in t).s by A1,PBOOLE:def 5;
   end;
   given t being DecoratedTree such that
 A6: t in rng p and
 A7: x in (X variables_in t).s;
-A8: (X variables_in t).s = (X.s) /\ ((S variables_in t).s) by A1,PBOOLE:def 8;
+A8: (X variables_in t).s = (X.s) /\ ((S variables_in t).s) by A1,PBOOLE:def 5;
   then x in (S variables_in t).s by A7,XBOOLE_0:def 4;
   hence thesis by A1,A2,A6,A7,A8,Th12,XBOOLE_0:def 4;
 end;
@@ -659,11 +657,11 @@ A3:   t in rng p and
 A4:   x in (S variables_in t).z by Th12;
       consider i being set such that
 A5:   i in dom p and
-A6:   t = p.i by A3,FUNCT_1:def 5;
+A6:   t = p.i by A3,FUNCT_1:def 3;
       reconsider i as Nat by A5;
       reconsider t = p.i as Term of S,X by A5,MSATERM:22;
       S variables_in t c= X by A2,A3,A6;
-      then (S variables_in t).z c= X.z by PBOOLE:def 5;
+      then (S variables_in t).z c= X.z by PBOOLE:def 2;
       hence thesis by A4,A6;
     end;
   end;
@@ -698,7 +696,7 @@ definition
   correctness
   proof
     S variables_in t c= X by Th15;
-    then S variables_in t = X variables_in t by PBOOLE:25;
+    then S variables_in t = X variables_in t by PBOOLE:23;
     hence thesis;
   end;
 end;
@@ -712,7 +710,7 @@ proof
   let X be non-empty ManySortedSet of the carrier of S;
   let t be Term of S, X;
   S variables_in t c= X by Th15;
-  hence thesis by PBOOLE:25;
+  hence thesis by PBOOLE:23;
 end;
 
 definition
@@ -745,7 +743,7 @@ A2:   x in T.s;
       t c= X by A2;
       hence thesis by Th8;
     end;
-    then reconsider T as MSSubset of FreeMSA Y by PBOOLE:def 23;
+    then reconsider T as MSSubset of FreeMSA Y by PBOOLE:def 18;
     take T;
     thus thesis by A1;
   end;
@@ -827,14 +825,14 @@ A4: t.{} = [x,s] by A2,TREES_4:3;
     s in the carrier of S;
     then s <> the carrier of S;
     then not s in {the carrier of S} by TARSKI:def 1;
-    then not t.{} in [:the carrier' of S,{the carrier of S}:] by A4,
-ZFMISC_1:106;
+    then not t.{} in [:the carrier' of S,{the carrier of S}:] by A4,ZFMISC_1:87
+;
     then consider s9 being SortSymbol of S, v being Element of Y.s9 such that
 A5: t.{} = [v,s9] by MSATERM:2;
-A6: s = s9 & x = v by A4,A5,ZFMISC_1:33;
+A6: s = s9 & x = v by A4,A5,ZFMISC_1:27;
     (S variables_in t).s = {x} & (variables_in t).s c= X.s by A2,A3,Th11,
-PBOOLE:def 5;
-    hence x in X.s & x in Y.s by A6,ZFMISC_1:37;
+PBOOLE:def 2;
+    hence x in X.s & x in Y.s by A6,ZFMISC_1:31;
   end;
   assume that
 A7: x in X.s and
@@ -846,7 +844,7 @@ A9: variables_in t c= X
     assume i in the carrier of S;
 A10: (S variables_in t).s = { x } by Th11;
     i <> s implies (S variables_in t).i = {} by Th11;
-    hence thesis by A7,A10,XBOOLE_1:2,ZFMISC_1:37;
+    hence thesis by A7,A10,XBOOLE_1:2,ZFMISC_1:31;
   end;
   the_sort_of t = s by A8,MSATERM:14;
   hence thesis by A1,A9;
@@ -865,8 +863,8 @@ proof
   let o be OperSymbol of S;
   let p be ArgumentSeq of Sym(o,Y);
   set s = the_result_sort_of o;
-A1: dom (S-Terms(X,Y)) = the carrier of S by PARTFUN1:def 4;
-A2: Sym(o,Y) = [o,the carrier of S] by MSAFREE:def 11;
+A1: dom (S-Terms(X,Y)) = the carrier of S by PARTFUN1:def 2;
+A2: Sym(o,Y) = [o,the carrier of S] by MSAFREE:def 9;
 A3: (S-Terms(X,Y)).s = {t where t is Term of S,Y: the_sort_of t = s &
   variables_in t c= X} by Def6;
   hereby
@@ -882,7 +880,7 @@ A5: variables_in t c= X by A3,A2;
 A6:   y in rng p;
       then consider x such that
 A7:   x in dom p and
-A8:   y = p.x by FUNCT_1:def 5;
+A8:   y = p.x by FUNCT_1:def 3;
       reconsider x as Nat by A7;
       reconsider q = p.x as Term of S,Y by A7,MSATERM:22;
 A9:   variables_in q c= X
@@ -894,14 +892,14 @@ A10:    z in the carrier of S;
         assume a in (variables_in q).z;
         then
 A11:    a in (variables_in t).z by A4,A6,A8,A10,Th12;
-        (variables_in t).z c= X.z by A5,A10,PBOOLE:def 5;
+        (variables_in t).z c= X.z by A5,A10,PBOOLE:def 2;
         hence thesis by A11;
       end;
       set sq = the_sort_of q;
       (S-Terms(X,Y)).sq = {t9 where t9 is Term of S,Y: the_sort_of t9 =
       sq & variables_in t9 c= X} by Def6;
       then q in (S-Terms(X,Y)).sq by A9;
-      hence thesis by A1,A8,CARD_5:10;
+      hence thesis by A1,A8,CARD_5:2;
     end;
   end;
   set t = Sym(o,Y)-tree p;
@@ -919,14 +917,14 @@ A15: q in rng p and
 A16: x in (S variables_in q).z by A2,A14,Th12;
     consider y such that
 A17: y in the carrier of S and
-A18: q in (S-Terms(X,Y)).y by A1,A12,A15,CARD_5:10;
+A18: q in (S-Terms(X,Y)).y by A1,A12,A15,CARD_5:2;
     (S-Terms(X,Y)).y = {t9 where t9 is Term of S,Y: the_sort_of t9 = y &
     variables_in t9 c= X} by A17,Def6;
     then consider t9 being Term of S,Y such that
 A19: q = t9 and
     the_sort_of t9 = y and
 A20: variables_in t9 c= X by A18;
-    (variables_in t9).z c= X.z by A14,A20,PBOOLE:def 5;
+    (variables_in t9).z c= X.z by A14,A20,PBOOLE:def 2;
     hence thesis by A16,A19;
   end;
   the_sort_of t = s by MSATERM:20;
@@ -947,13 +945,13 @@ proof
     assume
 A1: T is opers_closed;
     let o be OperSymbol of S, p be ArgumentSeq of Sym(o,X);
-    T is_closed_on o by A1,MSUALG_2:def 7;
+    T is_closed_on o by A1,MSUALG_2:def 6;
     then
 A2: rng ((Den(o,A))|((T# * the Arity of S).o)) c= (T * the ResultSort of S
-    ).o by MSUALG_2:def 6;
-A3: p is Element of Args(o, A) by INSTALG1:2;
+    ).o by MSUALG_2:def 5;
+A3: p is Element of Args(o, A) by INSTALG1:1;
 A4: dom p = dom the_arity_of o by MSATERM:22;
-A5: dom T = the carrier of S by PARTFUN1:def 4;
+A5: dom T = the carrier of S by PARTFUN1:def 2;
     assume
 A6: rng p c= Union T;
 A7: now
@@ -963,75 +961,76 @@ A8:   x in dom the_arity_of o;
       then reconsider i = x as Nat;
       reconsider t = p.i as Term of S,X by A4,A8,MSATERM:22;
 A9:   the_sort_of t = (the_arity_of o).x & (T*the_arity_of o).x = T.((
-      the_arity_of o).x) by A4,A8,FUNCT_1:23,MSATERM:23;
-      p.x in rng p by A4,A8,FUNCT_1:def 5;
+      the_arity_of o).x) by A4,A8,FUNCT_1:13,MSATERM:23;
+      p.x in rng p by A4,A8,FUNCT_1:def 3;
       then consider y such that
 A10:  y in dom T and
-A11:  p.x in T.y by A6,CARD_5:10;
-      T c= the Sorts of A by PBOOLE:def 23;
-      then T.y c= (the Sorts of A).y by A5,A10,PBOOLE:def 5;
+A11:  p.x in T.y by A6,CARD_5:2;
+      T c= the Sorts of A by PBOOLE:def 18;
+      then T.y c= (the Sorts of A).y by A5,A10,PBOOLE:def 2;
       hence p.x in (T*the_arity_of o).x by A5,A10,A11,A9,Th8;
     end;
     rng the_arity_of o c= dom T by A5;
-    then dom (T*the_arity_of o) = dom the_arity_of o by RELAT_1:46;
+    then dom (T*the_arity_of o) = dom the_arity_of o by RELAT_1:27;
     then
-A12: p in product (T*the_arity_of o) by A4,A7,CARD_3:18;
-A13: (T# * the Arity of S).o = T#.((the Arity of S).o) by FUNCT_2:21
-      .= T#.the_arity_of o by MSUALG_1:def 6
-      .= product (T*the_arity_of o) by PBOOLE:def 19;
+A12: p in product (T*the_arity_of o) by A4,A7,CARD_3:9;
+A13: (T# * the Arity of S).o = T#.((the Arity of S).o) by FUNCT_2:15
+      .= T#.the_arity_of o by MSUALG_1:def 1
+      .= product (T*the_arity_of o) by FINSEQ_2:def 5;
     then
-A14: ((Den(o,A))|((T# * the Arity of S).o)).p = Den(o,A).p by A12,FUNCT_1:72;
+A14: ((Den(o,A))|((T# * the Arity of S).o)).p = Den(o,A).p by A12,FUNCT_1:49;
     dom Den(o,A) = Args(o, A) by FUNCT_2:def 1;
     then p in dom ((Den(o,A))|((T# * the Arity of S).o)) by A13,A3,A12,
-RELAT_1:86;
+RELAT_1:57;
     then
 A15: Den(o,A).p in rng ((Den(o,A))|((T# * the Arity of S).o)) by A14,
-FUNCT_1:def 5;
-    (T * the ResultSort of S).o = T.((the ResultSort of S).o) by FUNCT_2:21
-      .= T.the_result_sort_of o by MSUALG_1:def 7;
+FUNCT_1:def 3;
+    (T * the ResultSort of S).o = T.((the ResultSort of S).o) by FUNCT_2:15
+      .= T.the_result_sort_of o by MSUALG_1:def 2;
     then
     [o,the carrier of S] = Sym(o, X) & Den(o,A).p in T.the_result_sort_of
-    o by A2,A15,MSAFREE:def 11;
-    hence Sym(o,X)-tree p in T.the_result_sort_of o by A3,INSTALG1:4;
+    o by A2,A15,MSAFREE:def 9;
+    hence Sym(o,X)-tree p in T.the_result_sort_of o by A3,INSTALG1:3;
   end;
   assume
 A16: for o being OperSymbol of S, p being ArgumentSeq of Sym(o,X) st rng
   p c= Union T holds Sym(o,X)-tree p in T.the_result_sort_of o;
   let o be OperSymbol of S;
   let x be set;
-A17: (T * the ResultSort of S).o = T.((the ResultSort of S).o) by FUNCT_2:21
-    .= T.the_result_sort_of o by MSUALG_1:def 7;
+A17: (T * the ResultSort of S).o = T.((the ResultSort of S).o) by FUNCT_2:15
+    .= T.the_result_sort_of o by MSUALG_1:def 2;
   assume x in rng ((Den(o,A))|((T# * the Arity of S).o));
   then consider y such that
 A18: y in dom ((Den(o,A))|((T# * the Arity of S).o)) and
-A19: x = ((Den(o,A))|((T# * the Arity of S).o)).y by FUNCT_1:def 5;
-  reconsider y as Element of Args(o, A) by A18;
-  reconsider p = y as ArgumentSeq of Sym(o, X) by INSTALG1:2;
+A19: x = ((Den(o,A))|((T# * the Arity of S).o)).y by FUNCT_1:def 3;
+  y in dom Den(o,A) by A18,RELAT_1:57;
+  then reconsider y as Element of Args(o, A) by A18;
+  reconsider p = y as ArgumentSeq of Sym(o, X) by INSTALG1:1;
 A20: dom ((Den(o,A))|((T# * the Arity of S).o)) c= (T# * the Arity of S) .o
-  by RELAT_1:87;
-A21: (T# * the Arity of S).o = T#.((the Arity of S).o) by FUNCT_2:21
-    .= T#.the_arity_of o by MSUALG_1:def 6
-    .= product (T*the_arity_of o) by PBOOLE:def 19;
+  by RELAT_1:58;
+A21: (T# * the Arity of S).o = T#.((the Arity of S).o) by FUNCT_2:15
+    .= T#.the_arity_of o by MSUALG_1:def 1
+    .= product (T*the_arity_of o) by FINSEQ_2:def 5;
 A22: rng p c= Union T
   proof
     let z;
-A23: dom T = the carrier of S by PARTFUN1:def 4;
+A23: dom T = the carrier of S by PARTFUN1:def 2;
     assume z in rng p;
     then consider a being set such that
 A24: a in dom p and
-A25: z = p.a by FUNCT_1:def 5;
-A26: dom p = dom (T*the_arity_of o) by A18,A21,A20,CARD_3:18;
+A25: z = p.a by FUNCT_1:def 3;
+A26: dom p = dom (T*the_arity_of o) by A18,A21,A20,CARD_3:9;
     then
 A27: z in (T*the_arity_of o).a & (T*the_arity_of o).a = T.((the_arity_of o
-    ).a) by A18,A21,A20,A24,A25,CARD_3:18,FUNCT_1:22;
+    ).a) by A18,A21,A20,A24,A25,CARD_3:9,FUNCT_1:12;
     rng the_arity_of o c= the carrier of S;
-    then dom (T*the_arity_of o) = dom the_arity_of o by A23,RELAT_1:46;
-    then (the_arity_of o).a in rng the_arity_of o by A24,A26,FUNCT_1:def 5;
-    hence thesis by A23,A27,CARD_5:10;
+    then dom (T*the_arity_of o) = dom the_arity_of o by A23,RELAT_1:27;
+    then (the_arity_of o).a in rng the_arity_of o by A24,A26,FUNCT_1:def 3;
+    hence thesis by A23,A27,CARD_5:2;
   end;
-  x = Den(o, A).y by A18,A19,FUNCT_1:70
-    .= [o,the carrier of S]-tree y by INSTALG1:4
-    .= Sym(o, X)-tree p by MSAFREE:def 11;
+  x = Den(o, A).y by A18,A19,FUNCT_1:47
+    .= [o,the carrier of S]-tree y by INSTALG1:3
+    .= Sym(o, X)-tree p by MSAFREE:def 9;
   hence thesis by A16,A17,A22;
 end;
 
@@ -1065,21 +1064,21 @@ proof
   then
 A1: x in ((Reverse Y).s9)"(X.s9) by EQUATION:def 1;
   then
-A2: x in dom ((Reverse Y).s) by FUNCT_1:def 13;
-A3: ((Reverse Y).s).x in X.s by A1,FUNCT_1:def 13;
-A4: (Reverse Y).s = Reverse(s9, Y) by MSAFREE:def 20;
+A2: x in dom ((Reverse Y).s) by FUNCT_1:def 7;
+A3: ((Reverse Y).s).x in X.s by A1,FUNCT_1:def 7;
+A4: (Reverse Y).s = Reverse(s9, Y) by MSAFREE:def 18;
   then
 A5: dom ((Reverse Y).s) = FreeGen(s9, Y) by FUNCT_2:def 1;
   then consider b being set such that
 A6: b in Y.s9 and
-A7: x = root-tree [b,s9] by A2,MSAFREE:def 17;
+A7: x = root-tree [b,s9] by A2,MSAFREE:def 15;
   FreeGen(s9, Y) = {root-tree t where t is Symbol of DTConMSA(Y): t in
-  Terminals DTConMSA(Y) & t`2 = s} by MSAFREE:14;
+  Terminals DTConMSA(Y) & t`2 = s} by MSAFREE:13;
   then consider a being Symbol of DTConMSA(Y) such that
 A8: x = root-tree a and
   a in Terminals DTConMSA(Y) and
   a`2 = s by A2,A5;
-  Reverse(s9, Y).x = a`1 by A2,A5,A8,MSAFREE:def 19
+  Reverse(s9, Y).x = a`1 by A2,A5,A8,MSAFREE:def 17
     .= [b,s]`1 by A8,A7,TREES_4:4
     .= b by MCART_1:7;
   hence thesis by A3,A4,A6,A7,Th19;
@@ -1099,7 +1098,7 @@ proof
   holds $1 in T.s;
 A1: ex A being MSSubset of FreeMSA Y st Free(S, X) = GenMSAlg A & A = (
   Reverse Y)""X by Def2;
-  then reconsider TT = T as MSSubset of FreeMSA Y by MSUALG_2:def 10;
+  then reconsider TT = T as MSSubset of FreeMSA Y by MSUALG_2:def 9;
 A2: now
     let o be OperSymbol of S, p be ArgumentSeq of Sym(o,Y) such that
 A3: for t being Term of S,Y st t in rng p holds P[t];
@@ -1108,7 +1107,7 @@ A3: for t being Term of S,Y st t in rng p holds P[t];
       let s be SortSymbol of S;
       assume
 A4:   [o, the carrier of S]-tree p in S-Terms(X, Y).s;
-A5:   Sym(o,Y) = [o, the carrier of S] by MSAFREE:def 11;
+A5:   Sym(o,Y) = [o, the carrier of S] by MSAFREE:def 9;
       the_sort_of (Sym(o,Y)-tree p) = the_result_sort_of o by MSATERM:20;
       then
 A6:   s = the_result_sort_of o by A4,A5,Th18;
@@ -1121,18 +1120,18 @@ A8:   rng p c= Union TT
 A9:     x in rng p;
         then consider y such that
 A10:    y in dom (S-Terms(X,Y)) and
-A11:    x in (S-Terms(X,Y)).y by A7,CARD_5:10;
-        reconsider y as SortSymbol of S by A10,PARTFUN1:def 4;
+A11:    x in (S-Terms(X,Y)).y by A7,CARD_5:2;
+        reconsider y as SortSymbol of S by A10,PARTFUN1:def 2;
         S-Terms(X, Y).y = S-Terms(X, Y).y;
         then reconsider x as Term of S,Y by A11,Th17;
-        dom T = the carrier of S & x in T.y by A3,A9,A11,PARTFUN1:def 4;
-        hence thesis by CARD_5:10;
+        dom T = the carrier of S & x in T.y by A3,A9,A11,PARTFUN1:def 2;
+        hence thesis by CARD_5:2;
       end;
-      TT is opers_closed by A1,MSUALG_2:def 10;
+      TT is opers_closed by A1,MSUALG_2:def 9;
       hence thesis by A5,A6,A8,Th21;
     end;
   end;
-A12: S-Terms(X, Y) c= the Sorts of FreeMSA Y by PBOOLE:def 23;
+A12: S-Terms(X, Y) c= the Sorts of FreeMSA Y by PBOOLE:def 18;
 A13: now
     let s1 be SortSymbol of S, v be Element of Y.s1;
     thus P[root-tree [v,s1]]
@@ -1141,7 +1140,7 @@ A13: now
       let s be SortSymbol of S;
       assume
 A14:  root-tree [v,s1] in S-Terms(X, Y).s;
-      S-Terms(X, Y).s c= (the Sorts of FreeMSA Y).s by A12,PBOOLE:def 5;
+      S-Terms(X, Y).s c= (the Sorts of FreeMSA Y).s by A12,PBOOLE:def 2;
       then
 A15:  the_sort_of t = s by A14,Th8;
 A16:  the_sort_of t = s1 by MSATERM:14;
@@ -1163,26 +1162,26 @@ proof
   set B = MSAlgebra(# S-Terms(X, Y), Opers(FreeMSA Y, S-Terms(X, Y)) #);
   for Z being MSSubset of FreeMSA Y st Z = the Sorts of B holds Z is
   opers_closed & the Charact of B = Opers(FreeMSA Y, Z) by Th22;
-  then reconsider B as MSSubAlgebra of FreeMSA Y by MSUALG_2:def 10;
+  then reconsider B as MSSubAlgebra of FreeMSA Y by MSUALG_2:def 9;
 A1: FreeMSA Y = MSAlgebra(#FreeSort Y, FreeOper Y#) & dom FreeSort Y = the
-  carrier of S by MSAFREE:def 16,PARTFUN1:def 4;
+  carrier of S by MSAFREE:def 14,PARTFUN1:def 2;
   (Reverse Y)""X c= S-Terms(X, Y) by Th23;
   then
-A2: (Reverse Y)""X is MSSubset of B by PBOOLE:def 23;
+A2: (Reverse Y)""X is MSSubset of B by PBOOLE:def 18;
   ex A being MSSubset of FreeMSA Y st Free(S, X) = GenMSAlg A & A = (
   Reverse Y)""X by Def2;
-  then Free(S, X) is MSSubAlgebra of B by A2,MSUALG_2:def 18;
-  then the Sorts of Free(S, X) is MSSubset of B by MSUALG_2:def 10;
-  hence the Sorts of Free(S, X) c= S-Terms(X, Y) by PBOOLE:def 23;
+  then Free(S, X) is MSSubAlgebra of B by A2,MSUALG_2:def 17;
+  then the Sorts of Free(S, X) is MSSubset of B by MSUALG_2:def 9;
+  hence the Sorts of Free(S, X) c= S-Terms(X, Y) by PBOOLE:def 18;
   let s be set;
   assume
 A3: s in the carrier of S;
   let x;
   assume
 A4: x in S-Terms(X, Y).s;
-  S-Terms(X, Y) c= the Sorts of FreeMSA Y by PBOOLE:def 23;
-  then (S-Terms(X, Y)).s c= (the Sorts of FreeMSA Y).s by A3,PBOOLE:def 5;
-  then x in Union FreeSort Y by A3,A4,A1,CARD_5:10;
+  S-Terms(X, Y) c= the Sorts of FreeMSA Y by PBOOLE:def 18;
+  then (S-Terms(X, Y)).s c= (the Sorts of FreeMSA Y).s by A3,PBOOLE:def 2;
+  then x in Union FreeSort Y by A3,A4,A1,CARD_5:2;
   then x is Term of S,Y by MSATERM:13;
   hence thesis by A3,A4,Th24;
 end;
@@ -1197,8 +1196,8 @@ proof
   set Y = X \/ ((the carrier of S)-->{0});
   (FreeMSA Y)|(S-Terms(X, Y)) = MSAlgebra(#S-Terms(X, Y), Opers(FreeMSA Y,
 S -Terms(X, Y))#) & ex A being MSSubset of FreeMSA Y st Free(S, X) = GenMSAlg A
-  & A = (Reverse Y)""X by Def2,Th22,MSUALG_2:def 16;
-  hence thesis by Th25,MSUALG_2:10;
+  & A = (Reverse Y)""X by Def2,Th22,MSUALG_2:def 15;
+  hence thesis by Th25,MSUALG_2:9;
 end;
 
 theorem Th27:
@@ -1212,60 +1211,60 @@ proof
   let A be MSSubAlgebra of FreeMSA X;
   let B be MSSubAlgebra of FreeMSA Y such that
 A1: the Sorts of A = the Sorts of B;
-  reconsider SB = the Sorts of B as MSSubset of FreeMSA Y by MSUALG_2:def 10;
-  reconsider SA = the Sorts of A as MSSubset of FreeMSA X by MSUALG_2:def 10;
-A2: SA is opers_closed by MSUALG_2:def 10;
-A3: SB is opers_closed by MSUALG_2:def 10;
+  reconsider SB = the Sorts of B as MSSubset of FreeMSA Y by MSUALG_2:def 9;
+  reconsider SA = the Sorts of A as MSSubset of FreeMSA X by MSUALG_2:def 9;
+A2: SA is opers_closed by MSUALG_2:def 9;
+A3: SB is opers_closed by MSUALG_2:def 9;
   now
     let x;
 A4: SA c= the Sorts of FreeMSA X & the Sorts of FreeMSA X is MSSubset of
-    FreeMSA X by PBOOLE:def 23;
+    FreeMSA X by PBOOLE:def 18;
     assume x in the carrier' of S;
     then reconsider o = x as OperSymbol of S;
-A5: SA is_closed_on o by A2,MSUALG_2:def 7;
-A6: (the Charact of A).o = Opers(FreeMSA X, SA).o by MSUALG_2:def 10
-      .= o /. SA by MSUALG_2:def 9
-      .= (Den(o, FreeMSA X))|((SA# * the Arity of S).o) by A5,MSUALG_2:def 8;
+A5: SA is_closed_on o by A2,MSUALG_2:def 6;
+A6: (the Charact of A).o = Opers(FreeMSA X, SA).o by MSUALG_2:def 9
+      .= o /. SA by MSUALG_2:def 8
+      .= (Den(o, FreeMSA X))|((SA# * the Arity of S).o) by A5,MSUALG_2:def 7;
     Args(o, FreeMSA X) = ((the Sorts of FreeMSA X)#*the Arity of S).o by
-MSUALG_1:def 9;
+MSUALG_1:def 4;
     then dom Den(o,FreeMSA X) = ((the Sorts of FreeMSA X)#*the Arity of S).o
     by FUNCT_2:def 1;
     then
-A7: dom ((the Charact of A).o) = (SA#*the Arity of S).o by A6,A4,MSUALG_2:3
-,RELAT_1:91;
+A7: dom ((the Charact of A).o) = (SA#*the Arity of S).o by A6,A4,MSUALG_2:2
+,RELAT_1:62;
 A8: SB c= the Sorts of FreeMSA Y & the Sorts of FreeMSA Y is MSSubset of
-    FreeMSA Y by PBOOLE:def 23;
+    FreeMSA Y by PBOOLE:def 18;
     then
 A9: (SB#*the Arity of S).o c= ((the Sorts of FreeMSA Y)#*the Arity of S).
-    o by MSUALG_2:3;
-A10: SB is_closed_on o by A3,MSUALG_2:def 7;
-A11: (the Charact of B).o = Opers(FreeMSA Y, SB).o by MSUALG_2:def 10
-      .= o /. SB by MSUALG_2:def 9
-      .= (Den(o, FreeMSA Y))|((SB# * the Arity of S).o) by A10,MSUALG_2:def 8;
+    o by MSUALG_2:2;
+A10: SB is_closed_on o by A3,MSUALG_2:def 6;
+A11: (the Charact of B).o = Opers(FreeMSA Y, SB).o by MSUALG_2:def 9
+      .= o /. SB by MSUALG_2:def 8
+      .= (Den(o, FreeMSA Y))|((SB# * the Arity of S).o) by A10,MSUALG_2:def 7;
     Args(o, FreeMSA Y) = ((the Sorts of FreeMSA Y)#*the Arity of S).o by
-MSUALG_1:def 9;
+MSUALG_1:def 4;
     then dom Den(o,FreeMSA Y) = ((the Sorts of FreeMSA Y)#*the Arity of S).o
     by FUNCT_2:def 1;
     then
-A12: dom ((the Charact of B).o) = (SB#*the Arity of S).o by A11,A8,MSUALG_2:3
-,RELAT_1:91;
+A12: dom ((the Charact of B).o) = (SB#*the Arity of S).o by A11,A8,MSUALG_2:2
+,RELAT_1:62;
 A13: (SA#*the Arity of S).o c= ((the Sorts of FreeMSA X)#*the Arity of S)
-    .o by A4,MSUALG_2:3;
+    .o by A4,MSUALG_2:2;
     now
       let x;
       assume
 A14:  x in (SA#*the Arity of S).o;
       then reconsider p1 = x as Element of Args(o, FreeMSA X) by A13,
-MSUALG_1:def 9;
+MSUALG_1:def 4;
       reconsider p2 = x as Element of Args(o, FreeMSA Y) by A1,A9,A14,
-MSUALG_1:def 9;
+MSUALG_1:def 4;
       thus ((the Charact of A).o).x = Den(o, FreeMSA X).p1 by A6,A7,A14,
-FUNCT_1:70
-        .= [o, the carrier of S]-tree p1 by INSTALG1:4
-        .= Den(o, FreeMSA Y).p2 by INSTALG1:4
-        .= ((the Charact of B).o).x by A1,A11,A12,A14,FUNCT_1:70;
+FUNCT_1:47
+        .= [o, the carrier of S]-tree p1 by INSTALG1:3
+        .= Den(o, FreeMSA Y).p2 by INSTALG1:3
+        .= ((the Charact of B).o).x by A1,A11,A12,A14,FUNCT_1:47;
     end;
-    hence (the Charact of A).x = (the Charact of B).x by A1,A7,A12,FUNCT_1:9;
+    hence (the Charact of A).x = (the Charact of B).x by A1,A7,A12,FUNCT_1:2;
   end;
   hence thesis by A1,PBOOLE:3;
 end;
@@ -1284,9 +1283,9 @@ proof
   t in Union the Sorts of Free(S, X);
   then
 A1: t in Union (S-Terms(X,Z)) by Th25;
-  dom (S-Terms(X,Z)) = the carrier of S by PARTFUN1:def 4;
+  dom (S-Terms(X,Z)) = the carrier of S by PARTFUN1:def 2;
   then ex s being set st s in the carrier of S & t in S-Terms(X,Z).s by A1,
-CARD_5:10;
+CARD_5:2;
   then variables_in t c= X by Th18;
   hence thesis;
 end;
@@ -1317,11 +1316,11 @@ A4:   t in rng p and
 A5:   x in (S variables_in t).s by A3,Th12;
       consider i being set such that
 A6:   i in dom p and
-A7:   t = p.i by A4,FUNCT_1:def 5;
+A7:   t = p.i by A4,FUNCT_1:def 3;
       reconsider i as Nat by A6;
       reconsider t = p.i as Term of S,X by A6,MSATERM:22;
       S variables_in t c= X by A2,A4,A7;
-      then (S variables_in t).s c= X.s by A3,PBOOLE:def 5;
+      then (S variables_in t).s c= X.s by A3,PBOOLE:def 2;
       hence thesis by A5,A7;
     end;
   end;
@@ -1359,7 +1358,7 @@ A2: t1.{} = [x,s];
     s in the carrier of S;
     then s <> the carrier of S;
     then not s in {the carrier of S} by TARSKI:def 1;
-    then not [x,s] in [:the carrier' of S, {the carrier of S}:] by ZFMISC_1:106
+    then not [x,s] in [:the carrier' of S, {the carrier of S}:] by ZFMISC_1:87
 ;
     then consider s9 being SortSymbol of S, y be Element of Y.s9 such that
 A3: t2.{} = [y,s9] by A1,A2,MSATERM:2;
@@ -1368,7 +1367,7 @@ A3: t2.{} = [y,s9] by A1,A2,MSATERM:2;
 A4: the_sort_of t1 = s by MSATERM:14;
     t2 = root-tree [y,s9] by A3,MSATERM:5;
     then the_sort_of t2 = s9 by MSATERM:14;
-    hence thesis by A1,A2,A3,A4,ZFMISC_1:33;
+    hence thesis by A1,A2,A3,A4,ZFMISC_1:27;
   end;
   suppose
     t1.{} in [:the carrier' of S,{the carrier of S}:];
@@ -1406,7 +1405,7 @@ A4: now
       assume
 A5:   i in dom p;
       then reconsider t = p.i as Term of S,Y by MSATERM:22;
-A6:   t in rng p by A5,FUNCT_1:def 5;
+A6:   t in rng p by A5,FUNCT_1:def 3;
       Y variables_in t c= X
       proof
         let y;
@@ -1417,7 +1416,7 @@ A6:   t in rng p by A5,FUNCT_1:def 5;
         then
 A7:     x in (Y variables_in ([o, the carrier of S]-tree p)).s by A6,Th14;
         (Y variables_in ([o, the carrier of S]-tree p)).s c= X.s by A3,
-PBOOLE:def 5;
+PBOOLE:def 2;
         hence thesis by A7;
       end;
       then reconsider t9 = t as Term of S,X by A2,A6;
@@ -1429,7 +1428,7 @@ PBOOLE:def 5;
     len p = len the_arity_of o by MSATERM:22;
     then reconsider p as ArgumentSeq of Sym(o,X) by A4,MSATERM:24;
     Sym(o,X)-tree p is Term of S,X;
-    hence thesis by MSAFREE:def 11;
+    hence thesis by MSAFREE:def 9;
   end;
   assume variables_in t c= X;
   then
@@ -1440,9 +1439,9 @@ A9: for s being SortSymbol of S, x being Element of Y.s holds P[root-tree [x
     let s be SortSymbol of S, x be Element of Y.s;
     assume Y variables_in root-tree [x,s] c= X;
     then
-A10: (Y variables_in root-tree [x,s]).s c= X.s by PBOOLE:def 5;
+A10: (Y variables_in root-tree [x,s]).s c= X.s by PBOOLE:def 2;
     (Y variables_in root-tree [x,s]).s = {x} by Th13;
-    then x in X.s by A10,ZFMISC_1:37;
+    then x in X.s by A10,ZFMISC_1:31;
     hence thesis by MSATERM:4;
   end;
   for t being Term of S,Y holds P[t] from MSATERM:sch 1(A9,A1);
@@ -1457,7 +1456,7 @@ proof
   let X be non-empty ManySortedSet of the carrier of S;
   set Y = X \/ ((the carrier of S)-->{0});
 A1: the Sorts of Free(S, X) = S-Terms(X,Y) by Th25;
-A2: FreeMSA X = MSAlgebra(#FreeSort X, FreeOper X#) by MSAFREE:def 16;
+A2: FreeMSA X = MSAlgebra(#FreeSort X, FreeOper X#) by MSAFREE:def 14;
 A3: the Sorts of Free(S, X) = the Sorts of FreeMSA X
   proof
     hereby
@@ -1476,7 +1475,7 @@ A5:     x in (the Sorts of Free(S, X)).s;
         the_sort_of t = s by A1,A4,A5,Th18;
         then the_sort_of t9 = s by Th30;
         then x in FreeSort(X, s9) by MSATERM:def 5;
-        hence thesis by A2,MSAFREE:def 13;
+        hence thesis by A2,MSAFREE:def 11;
       end;
     end;
     thus the Sorts of FreeMSA X c= the Sorts of Free(S, X)
@@ -1487,10 +1486,10 @@ A5:     x in (the Sorts of Free(S, X)).s;
       let x;
       assume x in (the Sorts of FreeMSA X).s;
       then
-A6:   x in FreeSort(X, s9) by A2,MSAFREE:def 13;
+A6:   x in FreeSort(X, s9) by A2,MSAFREE:def 11;
       FreeSort(X, s9) c= S-Terms X by MSATERM:12;
       then reconsider t = x as Term of S,X by A6;
-      X c= Y by PBOOLE:16;
+      X c= Y by PBOOLE:14;
       then reconsider t9 = t as Term of S,Y by MSATERM:26;
       variables_in t = S variables_in t;
       then
@@ -1504,7 +1503,7 @@ A7:   variables_in t9 c= X by Th29;
     end;
   end;
   FreeMSA X is MSSubAlgebra of FreeMSA X & ex A being MSSubset of FreeMSA
-  Y st Free(S, X) = GenMSAlg A & A = (Reverse Y)""X by Def2,MSUALG_2:6;
+  Y st Free(S, X) = GenMSAlg A & A = (Reverse Y)""X by Def2,MSUALG_2:5;
   hence thesis by A3,Th27;
 end;
 
@@ -1526,7 +1525,7 @@ A1: s in the carrier of S;
   then x in {a`1 where a is Element of rng q: a`2 = s} by A1,Def3;
   then consider a being Element of rng (t|p) such that
 A2: x = a`1 & a`2 = s;
-  rng (t|p) c= rng t & a in rng (t|p) by TREES_2:34;
+  rng (t|p) c= rng t & a in rng (t|p) by TREES_2:32;
   then x in {b`1 where b is Element of rng t: b`2 = s} by A2;
   hence thesis by A1,Def3;
 end;
@@ -1545,14 +1544,14 @@ proof
   reconsider p as Element of dom t;
 A1: variables_in (t|p) c= variables_in t by Th33;
 A2: the Sorts of Free(S, X) = S-Terms(X, Y) & dom (S-Terms(X, Y)) = the
-  carrier of S by Th25,PARTFUN1:def 4;
-  then ex x st x in the carrier of S & t in (S-Terms(X, Y)).x by CARD_5:10;
+  carrier of S by Th25,PARTFUN1:def 2;
+  then ex x st x in the carrier of S & t in (S-Terms(X, Y)).x by CARD_5:2;
   then variables_in t c= X by Th18;
-  then variables_in (t|p) c= X by A1,PBOOLE:15;
+  then variables_in (t|p) c= X by A1,PBOOLE:13;
   then t|p in {q where q is Term of S,Y: the_sort_of q = the_sort_of (t|p) &
   variables_in q c= X};
   then t|p in S-Terms(X,Y).the_sort_of (t|p) by Def6;
-  hence thesis by A2,CARD_5:10;
+  hence thesis by A2,CARD_5:2;
 end;
 
 theorem Th35:
@@ -1566,12 +1565,12 @@ proof
   let a be Element of rng t;
   consider x such that
 A1: x in dom t and
-A2: a = t.x by FUNCT_1:def 5;
+A2: a = t.x by FUNCT_1:def 3;
   reconsider x as Element of dom t by A1;
-  a = (t|x).{} by A2,TREES_9:36;
+  a = (t|x).{} by A2,TREES_9:35;
   then (ex s being SortSymbol of S, v being Element of X.s st a = [v,s]) or a
   in [:the carrier' of S,{the carrier of S}:] by MSATERM:2;
-  hence thesis by MCART_1:23;
+  hence thesis by MCART_1:21;
 end;
 
 theorem
@@ -1597,10 +1596,10 @@ A1: x = a`1 & a`2 = s;
 A2: [x,s] in rng t;
   then consider z such that
 A3: z in dom t and
-A4: [x,s] = t.z by FUNCT_1:def 5;
+A4: [x,s] = t.z by FUNCT_1:def 3;
   reconsider z as Element of dom t by A3;
   reconsider q = t|z as Element of Free(S, X) by Th34;
-A5: [x,s] = q.{} by A4,TREES_9:36;
+A5: [x,s] = q.{} by A4,TREES_9:35;
   [x,s]`1 = x & [x,s]`2 = s by MCART_1:7;
   then
 A6: x in {a`1 where a is Element of rng t: a`2 = s} by A2;
@@ -1608,18 +1607,18 @@ A7: q is Term of S,Y by Th9;
   s in the carrier of S;
   then s <> the carrier of S;
   then not s in {the carrier of S} by TARSKI:def 1;
-  then not [x,s] in [:the carrier' of S,{the carrier of S}:] by ZFMISC_1:106;
+  then not [x,s] in [:the carrier' of S,{the carrier of S}:] by ZFMISC_1:87;
   then consider s9 being SortSymbol of S, v being Element of Y.s9 such that
 A8: [x,s] = [v,s9] by A5,A7,MSATERM:2;
   S variables_in q c= X by Th28;
   then
-A9: (S variables_in q).s9 c= X.s9 by PBOOLE:def 5;
+A9: (S variables_in q).s9 c= X.s9 by PBOOLE:def 2;
   q = root-tree [v,s9] by A5,A7,A8,MSATERM:5;
   then (S variables_in q).s9 = {v} by Th11;
   then
-A10: v in X.s9 by A9,ZFMISC_1:37;
-  x = v by A8,ZFMISC_1:33;
-  hence thesis by A8,A10,A6,Def3,ZFMISC_1:33;
+A10: v in X.s9 by A9,ZFMISC_1:31;
+  x = v by A8,ZFMISC_1:27;
+  hence thesis by A8,A10,A6,Def3,ZFMISC_1:27;
 end;
 
 theorem
@@ -1636,9 +1635,9 @@ A1: for s being SortSymbol of C st X.s = {} ex o being OperSymbol of C
     assume {} in rng the Sorts of Free(C, X);
     then consider s being set such that
 A2: s in dom the Sorts of Free(C, X) and
-A3: {} = (the Sorts of Free(C, X)).s by FUNCT_1:def 5;
-    reconsider s as SortSymbol of C by A2,PARTFUN1:def 4;
-    set x =the  Element of X.s;
+A3: {} = (the Sorts of Free(C, X)).s by FUNCT_1:def 3;
+    reconsider s as SortSymbol of C by A2,PARTFUN1:def 2;
+    set x = the Element of X.s;
     per cases;
     suppose
       X.s = {};
@@ -1654,7 +1653,7 @@ A3: {} = (the Sorts of Free(C, X)).s by FUNCT_1:def 5;
     end;
   end;
   then the Sorts of Free(C, X) is non-empty by RELAT_1:def 9;
-  hence thesis by MSUALG_1:def 8;
+  hence thesis by MSUALG_1:def 3;
 end;
 
 theorem Th38:
@@ -1665,13 +1664,13 @@ proof
   let S be non void non empty ManySortedSign;
   let A be MSAlgebra over S;
   let B be MSSubAlgebra of A;
-  reconsider SB = the Sorts of B as MSSubset of A by MSUALG_2:def 10;
+  reconsider SB = the Sorts of B as MSSubset of A by MSUALG_2:def 9;
   let o be OperSymbol of S;
-  reconsider SA = the Sorts of A as MSSubset of A by PBOOLE:def 23;
-A1: Args(o,B) = (SB# * the Arity of S).o by MSUALG_1:def 9;
-  SB c= SA & Args(o,A) = (SA# * the Arity of S).o by MSUALG_1:def 9
-,PBOOLE:def 23;
-  hence thesis by A1,MSUALG_2:3;
+  reconsider SA = the Sorts of A as MSSubset of A by PBOOLE:def 18;
+A1: Args(o,B) = (SB# * the Arity of S).o by MSUALG_1:def 4;
+  SB c= SA & Args(o,A) = (SA# * the Arity of S).o by MSUALG_1:def 4
+,PBOOLE:def 18;
+  hence thesis by A1,MSUALG_2:2;
 end;
 
 theorem Th39:
@@ -1681,30 +1680,30 @@ proof
   let S be non void Signature;
   let A be feasible MSAlgebra over S;
   let B be MSSubAlgebra of A;
-  reconsider SB = the Sorts of B as MSSubset of A by MSUALG_2:def 10;
+  reconsider SB = the Sorts of B as MSSubset of A by MSUALG_2:def 9;
   let o be OperSymbol of S;
-  set a =the  Element of Args(o,B);
+  set a = the Element of Args(o,B);
   assume Args(o,B) <> {};
   then
 A1: a in Args(o,B);
 A2: Args(o,B) c= Args(o,A) by Th38;
   then Result(o,A) <> {} by A1,MSUALG_6:def 1;
   then dom Den(o,A) = Args(o,A) by FUNCT_2:def 1;
-  then a in dom (Den(o,A)|Args(o,B)) by A1,A2,RELAT_1:86;
+  then a in dom (Den(o,A)|Args(o,B)) by A1,A2,RELAT_1:57;
   then
 A3: Result(o,B) = (SB * the ResultSort of S).o & (Den(o,A)|Args(o,B)).a in
-  rng ( Den(o,A)|Args(o,B)) by FUNCT_1:def 5,MSUALG_1:def 10;
-  SB is opers_closed by MSUALG_2:def 10;
-  then SB is_closed_on o by MSUALG_2:def 7;
+  rng ( Den(o,A)|Args(o,B)) by FUNCT_1:def 3,MSUALG_1:def 5;
+  SB is opers_closed by MSUALG_2:def 9;
+  then SB is_closed_on o by MSUALG_2:def 6;
   then
   rng ((Den(o,A))|((SB# * the Arity of S).o)) c= (SB * the ResultSort of S
-  ).o by MSUALG_2:def 6;
-  hence thesis by A3,MSUALG_1:def 9;
+  ).o by MSUALG_2:def 5;
+  hence thesis by A3,MSUALG_1:def 4;
 end;
 
 registration
   let S be non void Signature, A be feasible MSAlgebra over S;
-  cluster -> feasible MSSubAlgebra of A;
+  cluster -> feasible for MSSubAlgebra of A;
   coherence by Th39;
 end;
 
@@ -1719,9 +1718,9 @@ proof
 A1: Free(S, X) = GenMSAlg A and
 A2: A = (Reverse Y)"" X by Def2;
   thus Free(S, X) is feasible by A1;
-  A is ManySortedSubset of FreeGen Y by A2,EQUATION:9;
-  then A c= FreeGen Y by PBOOLE:def 23;
-  hence thesis by A1,EQUATION:30;
+  A is ManySortedSubset of FreeGen Y by A2,EQUATION:8;
+  then A c= FreeGen Y by PBOOLE:def 18;
+  hence thesis by A1,EQUATION:28;
 end;
 
 registration

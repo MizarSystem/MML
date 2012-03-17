@@ -19,8 +19,8 @@
 <ArticleID name="FUNCOP_1"/>
 <ArticleID name="FUNCT_6"/>
 <ArticleID name="CARD_3"/>
-<ArticleID name="FINSEQ_2"/>
 <ArticleID name="STRUCT_0"/>
+<ArticleID name="FINSEQ_2"/>
 <ArticleID name="UNIALG_1"/>
 <ArticleID name="PBOOLE"/>
 <ArticleID name="MSUALG_1"/>
@@ -40,13 +40,13 @@
 <ArgTypes>
 <Typ kind="G" nr="7">
 <Cluster>
-<Adjective nr="42" value="false"/>
-<Adjective nr="51" value="false"/>
+<Adjective nr="43" value="false"/>
+<Adjective nr="52" value="false"/>
 </Cluster>
 </Typ>
 <Typ kind="G" nr="9">
 <Cluster>
-<Adjective nr="62">
+<Adjective nr="64">
 <Func kind="F" nr="1"/>
 </Adjective>
 </Cluster>

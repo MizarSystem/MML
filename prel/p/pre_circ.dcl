@@ -158,7 +158,7 @@
 <Adjective nr="1"/>
 <Adjective nr="13"/>
 <Adjective nr="25"/>
-<Adjective nr="40"/>
+<Adjective nr="41"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="2">
@@ -176,7 +176,7 @@
 <Adjective nr="1"/>
 <Adjective nr="13"/>
 <Adjective nr="25"/>
-<Adjective nr="40"/>
+<Adjective nr="41"/>
 </Cluster>
 </FCluster>
 <FCluster aid="PRE_CIRC" nr="5">
@@ -186,7 +186,7 @@
 <Adjective nr="1"/>
 <Adjective nr="13"/>
 <Adjective nr="25"/>
-<Adjective nr="40"/>
+<Adjective nr="41"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="2">
@@ -200,7 +200,7 @@
 <Adjective nr="1"/>
 <Adjective nr="13"/>
 <Adjective nr="25"/>
-<Adjective nr="40"/>
+<Adjective nr="41"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -213,7 +213,7 @@
 <Adjective nr="1"/>
 <Adjective nr="13"/>
 <Adjective nr="25"/>
-<Adjective nr="40"/>
+<Adjective nr="41"/>
 </Cluster>
 </FCluster>
 <FCluster aid="PRE_CIRC" nr="6">
@@ -229,7 +229,7 @@
 <Adjective nr="1"/>
 <Adjective nr="13"/>
 <Adjective nr="25"/>
-<Adjective nr="40"/>
+<Adjective nr="41"/>
 </Cluster>
 </FCluster>
 <CCluster aid="PRE_CIRC" nr="1">

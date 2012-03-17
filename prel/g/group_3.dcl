@@ -28,8 +28,8 @@
 <Typ kind="G" nr="8">
 <Cluster>
 <Adjective nr="35" value="false"/>
-<Adjective nr="83"/>
 <Adjective nr="84"/>
+<Adjective nr="85"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -39,11 +39,11 @@
 </Typ>
 <Cluster>
 <Adjective nr="35" value="false"/>
-<Adjective nr="60"/>
-<Adjective nr="82"/>
+<Adjective nr="61"/>
 <Adjective nr="83"/>
 <Adjective nr="84"/>
-<Adjective nr="88">
+<Adjective nr="85"/>
+<Adjective nr="89">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -53,8 +53,8 @@
 <Typ kind="G" nr="8">
 <Cluster>
 <Adjective nr="35" value="false"/>
-<Adjective nr="83"/>
 <Adjective nr="84"/>
+<Adjective nr="85"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -70,8 +70,8 @@
 <Typ kind="G" nr="8">
 <Cluster>
 <Adjective nr="35" value="false"/>
-<Adjective nr="83"/>
 <Adjective nr="84"/>
+<Adjective nr="85"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="2">
@@ -94,7 +94,7 @@
 </Func>
 <Cluster>
 <Adjective nr="41"/>
-<Adjective nr="60"/>
+<Adjective nr="61"/>
 </Cluster>
 </FCluster>
 </Registrations>

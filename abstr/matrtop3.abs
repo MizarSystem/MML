@@ -1,0 +1,379 @@
+:: The Rotation Group
+::  by Karol P\kak
+:: 
+:: Received May 30, 2011
+:: Copyright (c) 2011 Association of Mizar Users
+::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
+:: This code can be distributed under the GNU General Public Licence
+:: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
+:: License version 3.0 or later, subject to the binding interpretation
+:: detailed in file COPYING.interpretation.
+:: See COPYING.GPL and COPYING.CC-BY-SA for the full text of these
+:: licenses, or see http://www.gnu.org/licenses/gpl.html and
+:: http://creativecommons.org/licenses/by-sa/3.0/.
+
+environ
+
+ vocabularies NUMBERS, SUBSET_1, XREAL_0, ORDINAL1, PRE_TOPC, EUCLID, ARYTM_1,
+      ARYTM_3, SUPINF_2, XBOOLE_0, RELAT_1, CARD_1, VALUED_0, FINSEQ_1,
+      COMPLEX1, SQUARE_1, CARD_3, RVSUM_1, XXREAL_0, NAT_1, TARSKI, STRUCT_0,
+      REAL_1, FUNCT_1, UNIALG_1, MSSUBFAM, FUNCOP_1, FINSEQ_2, ALGSTR_0,
+      FUNCT_2, FVSUM_1, INCSP_1, MATRIX_1, MATRIX_3, MATRIX13, MATRLIN,
+      MATRLIN2, MESFUNC1, ORDINAL4, PARTFUN1, PRVECT_1, QC_LANG1, RLVECT_2,
+      RLVECT_3, TREES_1, VALUED_1, VECTSP_1, MATRIXJ1, ZFMISC_1, BINOP_1,
+      GROUP_1, ABIAN, MATRIX_2, XXREAL_1, SIN_COS, FINSOP_1, FUNCT_4, MATRIX_6,
+      PRE_POLY, TOPS_2, RFINSEQ, MONOID_0, MATRIXR2, MATRTOP3;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1, PARTFUN1,
+      FUNCT_2, ORDINAL1, NUMBERS, XCMPLX_0, XXREAL_0, XREAL_0, COMPLEX1,
+      REAL_1, NAT_1, NAT_D, FUNCOP_1, FINSEQ_1, PRE_POLY, RFINSEQ, FINSEQ_2,
+      RVSUM_1, VALUED_0, SQUARE_1, STRUCT_0, PRE_TOPC, TOPS_2, RLVECT_1,
+      EUCLID, GRCAT_1, TOPREAL9, CARD_1, VECTSP_1, MATRIX_1, MATRIX_2,
+      MATRIX_3, MATRIX_6, GROUP_1, MATRIX11, MATRTOP1, SIN_COS, ALGSTR_0,
+      MATRIX_7, BINOP_1, FVSUM_1, RCOMP_1, SEQ_1, MONOID_0, GROUP_4, PRVECT_1,
+      RLVECT_2, RLVECT_3, FUNCT_7, MATRIX13, MATRIXR2, FINSOP_1, MATRLIN,
+      MATRLIN2, MOD_2, MATRIXJ1, TMAP_1;
+ constructors REAL_1, SQUARE_1, BORSUK_1, MONOID_0, CONVEX1, TOPREAL9,
+      BINARITH, FVSUM_1, LAPLACE, MATRIX_6, MATRIX11, TOPS_2, MATRIX13,
+      MATRLIN2, MATRTOP1, REALSET1, RLVECT_3, SEQ_1, MATRIXJ1, RCOMP_1, ABIAN,
+      SIN_COS, MATRIX_7, SETWISEO, GROUP_4, TMAP_1, FINSOP_1, MATRIXR2, SEQ_4;
+ registrations XBOOLE_0, XXREAL_0, XREAL_0, SQUARE_1, NAT_1, MEMBERED,
+      STRUCT_0, MONOID_0, EUCLID, VALUED_0, FINSEQ_1, FUNCT_1, RELAT_1,
+      TOPREAL9, CARD_1, FINSEQ_2, FINSET_1, FUNCT_2, MATRIX13, MATRIX_2,
+      MATRTOP1, NUMBERS, PRVECT_1, RELSET_1, RLVECT_2, VECTSP_1, XCMPLX_0,
+      SIN_COS, MATRIX11, MATRIXJ1, GRCAT_1, BORSUK_3, FUNCOP_1, MATRIX_1,
+      INT_1, FUNCT_7, PRE_POLY, SUBSET_1;
+ requirements NUMERALS, BOOLE, SUBSET, ARITHM, REAL;
+
+
+begin :: Preliminaries
+
+reserve x,X for set,
+        r,r1,r2,s for real number,
+        i,j,k,m,n for Nat;
+
+theorem :: MATRTOP3:1
+  for K be Field,M be Matrix of n,K
+    for P be Permutation of Seg n holds
+      Det((M*P)@*P)@ = Det M &
+      for i,j st [i,j] in Indices M holds ((M*P)@*P)@*(i,j) = M*(P.i,P.j);
+
+theorem :: MATRTOP3:2
+  for K be Field for M be diagonal Matrix of n,K holds M@ = M;
+
+theorem :: MATRTOP3:3
+  for f be real-valued FinSequence
+    for i st i in dom f holds Sum sqr(f+*(i,r)) = (Sum sqr f)-(f.i)^2+r^2;
+
+definition
+  let X;
+  let F be Function-yielding Function;
+  attr F is X -support-yielding means
+:: MATRTOP3:def 1
+    for f be Function,x st f in dom F & F.f.x <> f.x holds x in X;
+end;
+
+registration
+  let X;
+  cluster X-support-yielding for Function-yielding Function;
+end;
+
+registration
+  let X;
+  let Y be Subset of X;
+  cluster Y-support-yielding -> X-support-yielding
+    for Function-yielding Function;
+end;
+
+registration
+  let X,Y be set;
+  cluster X-support-yielding Y-support-yielding ->
+             X/\Y-support-yielding for Function-yielding Function;
+  let f be X-support-yielding Function-yielding Function;
+  let g be Y-support-yielding Function-yielding Function;
+  cluster f*g -> (X\/Y)-support-yielding;
+end;
+
+registration
+  let n;
+  cluster homogeneous for Function of TOP-REAL n,TOP-REAL n;
+end;
+
+registration
+  let n,m;
+  cluster -> FinSequence-yielding for Function of TOP-REAL n,TOP-REAL m;
+end;
+
+registration
+  let n,m;
+  let A be Matrix of n,m,F_Real;
+  cluster Mx2Tran A -> additive;
+end;
+
+registration
+  let n;
+  let A be Matrix of n,F_Real;
+  cluster Mx2Tran A -> homogeneous;
+end;
+
+registration
+  let n;
+  let f,g be homogeneous Function of TOP-REAL n,TOP-REAL n;
+  cluster f*g -> homogeneous for Function of TOP-REAL n,TOP-REAL n;
+end;
+
+begin :: Improper Rotation
+
+reserve p,q for Point of TOP-REAL n;
+
+definition
+  let n,i such that
+   i in Seg n;
+  func AxialSymmetry(i,n) -> invertible Matrix of n,F_Real means
+:: MATRTOP3:def 2
+   it*(i,i) = -1.F_Real &
+   for k,m st[k,m] in Indices it holds
+    (k = m & k <> i implies it*(k,k) = 1.F_Real) &
+    (k <> m         implies it*(k,m) = 0.F_Real);
+end;
+
+theorem :: MATRTOP3:4
+  i in Seg n implies Det AxialSymmetry(i,n) = -1.F_Real;
+
+theorem :: MATRTOP3:5
+  i in Seg n & j in Seg n & i<>j implies @p"*"Col(AxialSymmetry(i,n),j)=p.j;
+
+theorem :: MATRTOP3:6
+  i in Seg n implies @p"*"Col(AxialSymmetry(i,n),i) = -p.i;
+
+theorem :: MATRTOP3:7
+ i in Seg n implies AxialSymmetry(i,n) is diagonal &
+   AxialSymmetry(i,n)~ = AxialSymmetry(i,n);
+
+theorem :: MATRTOP3:8
+  i in Seg n & i <> j implies (Mx2Tran AxialSymmetry(i,n)).p.j = p.j;
+
+theorem :: MATRTOP3:9
+  i in Seg n implies (Mx2Tran AxialSymmetry(i,n)).p.i = -p.i;
+
+theorem :: MATRTOP3:10
+  i in Seg n implies (Mx2Tran AxialSymmetry(i,n)).p = p+*(i,-p.i);
+
+theorem :: MATRTOP3:11
+  i in Seg n implies Mx2Tran AxialSymmetry(i,n) is {i}-support-yielding;
+
+theorem :: MATRTOP3:12
+  for a,b be Element of F_Real st a = cos r & b = sin r holds
+    Det block_diagonal(<*(a,b)][(-b,a),1.(F_Real,n)*>,0.F_Real) = 1.F_Real;
+
+begin :: Proper Rotation
+
+definition
+  let n,r;
+  let i,j such that
+   1 <= i & i < j & j <= n;
+  func Rotation(i,j,n,r) -> invertible Matrix of n,F_Real means
+:: MATRTOP3:def 3
+    it*(i,i) = cos r & it*(j,j) = cos r &
+    it*(i,j) = sin r & it*(j,i) =-sin r &
+    for k,m st [k,m] in Indices it holds
+       (k = m & k <> i & k <> j implies it*(k,k) = 1.F_Real) &
+       (k <> m & {k,m} <> {i,j} implies it*(k,m) = 0.F_Real);
+end;
+
+theorem :: MATRTOP3:13
+  1 <= i & i < j & j <= n implies Det Rotation(i,j,n,r)=1.F_Real;
+
+theorem :: MATRTOP3:14
+  1 <= i & i < j & j <= n & k in Seg n & k <> i & k <> j implies
+    @p"*"Col(Rotation(i,j,n,r),k) = p.k;
+
+theorem :: MATRTOP3:15
+  1 <= i & i < j & j <= n implies
+    @p"*"Col(Rotation(i,j,n,r),i) = p.i*(cos r)+p.j*(-sin r);
+
+theorem :: MATRTOP3:16
+  1 <= i & i < j & j <= n implies
+    @p"*"Col(Rotation(i,j,n,r),j) = p.i*(sin r)+p.j*(cos r);
+
+theorem :: MATRTOP3:17
+ 1 <= i & i < j & j <= n implies
+   Rotation(i,j,n,r1)*Rotation(i,j,n,r2) = Rotation(i,j,n,r1+r2);
+
+theorem :: MATRTOP3:18
+ 1 <= i & i < j & j <= n implies Rotation(i,j,n,0) = 1.(F_Real,n);
+
+theorem :: MATRTOP3:19
+  1 <= i & i < j & j <= n implies
+    Rotation(i,j,n,r) is Orthogonal &
+    Rotation(i,j,n,r)~ = Rotation(i,j,n,-r);
+
+theorem :: MATRTOP3:20
+  1 <= i & i < j & j <= n & k <> i & k <> j implies
+   (Mx2Tran Rotation(i,j,n,r)).p.k=p.k;
+
+theorem :: MATRTOP3:21
+  1 <= i & i < j & j <= n implies
+    (Mx2Tran Rotation(i,j,n,r)).p.i=p.i*(cos r)+p.j*(-sin r);
+
+theorem :: MATRTOP3:22
+  1 <= i & i < j & j <= n implies
+    (Mx2Tran Rotation(i,j,n,r)).p.j=p.i*(sin r)+p.j*(cos r);
+
+theorem :: MATRTOP3:23
+ 1 <= i & i < j & j <= n implies
+   (Mx2Tran Rotation(i,j,n,r)).p=
+     (p| (i-' 1)) ^ <*p.i*(cos r)+p.j*(-sin r)*> ^
+     ((p/^i) | (j-' i-' 1)) ^ <*p.i*(sin r)+p.j*(cos r)*> ^ (p/^j);
+
+theorem :: MATRTOP3:24
+  1 <= i & i < j & j <= n & s^2 <= (p.i)^2+(p.j)^2 implies
+    ex r st (Mx2Tran Rotation(i,j,n,r)).p.i = s;
+
+theorem :: MATRTOP3:25
+  1 <= i & i < j & j <= n & s^2 <= (p.i)^2+(p.j)^2 implies
+    ex r st (Mx2Tran Rotation(i,j,n,r)).p.j = s;
+
+theorem :: MATRTOP3:26
+ 1 <= i & i < j & j <= n implies
+   Mx2Tran Rotation(i,j,n,r) is {i,j}-support-yielding;
+
+begin :: Length-Preserving Linear Transformations
+
+definition
+  let n;
+  let f be Function of TOP-REAL n,TOP-REAL n;
+  attr f is rotation means
+:: MATRTOP3:def 4
+    |.p.| = |.f.p.|;
+end;
+
+theorem :: MATRTOP3:27
+  i in Seg n implies Mx2Tran AxialSymmetry(i,n) is rotation;
+
+definition
+  let n;
+  let f be Function of TOP-REAL n,TOP-REAL n;
+  attr f is base_rotation means
+:: MATRTOP3:def 5
+    ex F be FinSequence of GFuncs the carrier of TOP-REAL n st
+    f = Product F &
+    for k st k in dom F ex i,j,r st
+      1 <= i & i < j & j <= n & F.k = Mx2Tran Rotation(i,j,n,r);
+end;
+
+registration
+  let n;
+  cluster id TOP-REAL n -> base_rotation;
+end;
+
+registration
+  let n;
+  cluster base_rotation for Function of TOP-REAL n,TOP-REAL n;
+end;
+
+registration
+  let n;
+  let f,g be base_rotation Function of TOP-REAL n,TOP-REAL n;
+  cluster f*g -> base_rotation for Function of TOP-REAL n,TOP-REAL n;
+end;
+
+theorem :: MATRTOP3:28
+ 1 <= i & i < j & j <= n implies Mx2Tran Rotation(i,j,n,r) is base_rotation;
+
+registration
+  let n;
+  cluster base_rotation -> homogeneous additive rotation being_homeomorphism
+                             for Function of TOP-REAL n,TOP-REAL n;
+end;
+
+registration
+  let n;
+  let f be base_rotation Function of TOP-REAL n,TOP-REAL n;
+  cluster f" -> base_rotation;
+end;
+
+registration
+  let n;
+  let f,g be rotation Function of TOP-REAL n,TOP-REAL n;
+  cluster f*g -> rotation for Function of TOP-REAL n,TOP-REAL n;
+end;
+
+reserve f,f1,f2 for homogeneous additive Function of TOP-REAL n,TOP-REAL n;
+
+definition
+  let n;
+  let f;
+  func AutMt f -> Matrix of n,F_Real means
+:: MATRTOP3:def 6
+    f = Mx2Tran it;
+end;
+
+theorem :: MATRTOP3:29
+  AutMt (f1*f2) = (AutMt f2) * (AutMt f1);
+
+theorem :: MATRTOP3:30
+  k in X & k in Seg n implies
+    ex f st f is X-support-yielding base_rotation &
+           (card (X/\Seg n) > 1 implies f.p.k>=0) &
+           for i st i in X/\Seg n & i <> k holds f.p.i = 0;
+
+theorem :: MATRTOP3:31
+  for A be Subset of TOP-REAL n st f|A = id A holds f|Lin A = id Lin A;
+
+theorem :: MATRTOP3:32
+  for A be Subset of TOP-REAL n st f is rotation & f|A = id A
+    for i st i in Seg n & Base_FinSeq(n,i) in Lin A holds f.p.i = p.i;
+
+theorem :: MATRTOP3:33
+  for f be rotation Function of TOP-REAL n,TOP-REAL n st
+      f is X-support-yielding &
+      for i st i in X/\Seg n holds p.i = 0
+    holds f.p = p;
+
+theorem :: MATRTOP3:34
+  i in Seg n & n >= 2 implies ex f st f is base_rotation & f.p = p+*(i,-p.i);
+
+theorem :: MATRTOP3:35
+  f is {i}-support-yielding rotation implies
+    AutMt f = AxialSymmetry(i,n) or AutMt f = 1.(F_Real,n);
+
+theorem :: MATRTOP3:36
+  f1 is rotation implies
+    ex f2 st f2 is base_rotation & f2*f1 is {n}-support-yielding;
+
+begin :: Rotation Matrix Classification
+
+theorem :: MATRTOP3:37
+  f is rotation implies
+   (Det AutMt f = 1.F_Real iff f is base_rotation);
+
+theorem :: MATRTOP3:38
+  f is rotation implies
+   (Det AutMt f = 1.F_Real or Det AutMt f = -1.F_Real);
+
+theorem :: MATRTOP3:39
+  f1 is rotation & Det AutMt f1 = -1.F_Real & i in Seg n &
+  AutMt f2 = AxialSymmetry(i,n) implies f1*f2 is base_rotation;
+
+registration
+  let n;
+  let f be rotation homogeneous additive Function of TOP-REAL n,TOP-REAL n;
+  cluster AutMt f -> Orthogonal;
+end;
+
+registration
+  let n;
+  cluster homogeneous additive rotation -> being_homeomorphism for
+    Function of TOP-REAL n,TOP-REAL n;
+end;
+
+begin :: The Rotation Mapping a Given Point to Another Point
+
+theorem :: MATRTOP3:40
+  n = 1 & |.p.| = |.q.| implies
+    ex f st f is rotation & f.p=q &
+           (AutMt f = AxialSymmetry(n,n) or AutMt f = 1.(F_Real,n));
+
+theorem :: MATRTOP3:41
+  n <> 1 & |.p.| = |.q.| implies ex f st f is base_rotation & f.p = q;
+

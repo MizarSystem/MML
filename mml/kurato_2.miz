@@ -22,19 +22,19 @@ environ
       XXREAL_2, VALUED_0, MCART_1, TOPREAL2, JORDAN9, GOBOARD9, WAYBEL_7,
       KURATO_2;
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, ZFMISC_1,
-      XXREAL_0, XREAL_0, REAL_1, NAT_1, SETFAM_1, MCART_1, DOMAIN_1, STRUCT_0,
-      PRE_TOPC, TOPS_1, TOPS_2, COMPTS_1, RELAT_1, FUNCT_1, INT_1, FINSEQ_1,
-      TBSP_1, RELSET_1, FUNCT_2, METRIC_1, PCOMPS_1, RLVECT_1, EUCLID,
-      FUNCOP_1, BORSUK_1, CARD_3, PROB_1, LIMFUNC1, CONNSP_2, TOPREAL1,
+      XXREAL_0, XREAL_0, REAL_1, NAT_1, SETFAM_1, MCART_1, DOMAIN_1, KURATO_0,
+      STRUCT_0, PRE_TOPC, TOPS_1, TOPS_2, COMPTS_1, RELAT_1, FUNCT_1, INT_1,
+      FINSEQ_1, TBSP_1, RELSET_1, FUNCT_2, METRIC_1, PCOMPS_1, RLVECT_1,
+      EUCLID, FUNCOP_1, BORSUK_1, CARD_3, PROB_1, LIMFUNC1, CONNSP_2, TOPREAL1,
       TOPREAL2, JORDAN2C, VALUED_0, GOBOARD9, YELLOW_8, FRECHET, FRECHET2,
       TOPRNS_1, JORDAN9, FUNCT_6;
  constructors SETFAM_1, REAL_1, PROB_1, LIMFUNC1, FUNCT_6, TOPS_1, BORSUK_1,
       TBSP_1, MONOID_0, TOPRNS_1, TOPREAL2, GOBOARD9, FUNCSDOM, FRECHET,
-      JORDAN2C, FRECHET2, JORDAN9, YELLOW_8, TOPS_2;
+      JORDAN2C, FRECHET2, JORDAN9, YELLOW_8, TOPS_2, KURATO_0;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, ORDINAL1, FUNCT_2, XXREAL_0,
       XREAL_0, NAT_1, INT_1, MEMBERED, STRUCT_0, TOPS_1, METRIC_1, PCOMPS_1,
       BORSUK_1, MONOID_0, EUCLID, TOPREAL2, TOPREAL5, JORDAN2C, FUNCOP_1,
-      VALUED_0, PRE_TOPC, FRECHET, SPPOL_1;
+      VALUED_0, PRE_TOPC, FRECHET, SPPOL_1, KURATO_0, RELSET_1;
  requirements REAL, SUBSET, BOOLE, NUMERALS, ARITHM;
  definitions XBOOLE_0, TARSKI, SUBSET_1, STRUCT_0, XCMPLX_0, FRECHET, YELLOW_8;
  theorems SETFAM_1, FRECHET, METRIC_1, TOPREAL3, TOPMETR, CONNSP_2, GOBOARD6,
@@ -42,944 +42,14 @@ environ
       XBOOLE_0, FUNCT_1, INT_1, XREAL_0, SPPOL_1, TOPS_1, TOPREAL6, JORDAN2C,
       TBSP_1, METRIC_6, ZFMISC_1, RELAT_1, GOBRD14, FUNCT_6, SEQM_3, MCART_1,
       BORSUK_1, PROB_1, FRECHET2, MEASURE2, XREAL_1, XXREAL_0, ORDINAL1,
-      VALUED_0, EUCLID, YELLOW_8, TOPS_2;
- schemes XBOOLE_0, WELLORD2, FUNCT_2, NAT_1, SUBSET_1;
+      VALUED_0, EUCLID, YELLOW_8, TOPS_2, KURATO_0;
+ schemes XBOOLE_0, FUNCT_1, FUNCT_2, NAT_1, SUBSET_1;
 
 begin
-
-canceled;
-
-theorem
-  for F being Function, i being set st i in dom F holds meet F c= F.i
-proof
-  let F be Function, i be set;
-  assume
-A1: i in dom F;
-  meet F c= F.i
-  proof
-    let x be set;
-    assume x in meet F;
-    hence thesis by A1,FUNCT_6:37,RELAT_1:60;
-  end;
-  hence thesis;
-end;
-
-canceled;
-
-theorem Th4:
-  for A, B, C, D being set st A meets B & C meets D holds [: A, C
-  :] meets [: B, D :]
-proof
-  let A, B, C, D be set;
-  assume that
-A1: A meets B and
-A2: C meets D;
-  consider x being set such that
-A3: x in A & x in B by A1,XBOOLE_0:3;
-  consider y being set such that
-A4: y in C & y in D by A2,XBOOLE_0:3;
-  [x,y] in [: A, C :] & [x,y] in [: B, D :] by A3,A4,ZFMISC_1:106;
-  hence thesis by XBOOLE_0:3;
-end;
-
-registration
-  let X be set;
-  cluster -> non empty SetSequence of X;
-  coherence;
-end;
-
-registration
-  let T be non empty set;
-  cluster non-empty SetSequence of T;
-  existence
-  proof
-    set a =the  Element of T;
-    reconsider A = {a} as Subset of T;
-    set X = NAT --> A;
-    reconsider X as SetSequence of T;
-    take X;
-    thus thesis;
-  end;
-end;
 
 definition
   let T be 1-sorted;
   mode SetSequence of T is SetSequence of the carrier of T;
-end;
-
-definition
-  let X be set, F be SetSequence of X;
-  redefine func Union F -> Subset of X;
-  coherence
-  proof
-    Union F c= X;
-    hence thesis;
-  end;
-  redefine func meet F -> Subset of X;
-  coherence
-  proof
-    reconsider G = rng F as Subset-Family of X;
-    meet G c= X;
-    hence thesis by FUNCT_6:def 4;
-  end;
-end;
-
-begin :: Lower and Upper Limit of Sequences of Subsets
-
-definition
-  let X be set, F be SetSequence of X;
-  canceled 2;
-  func lim_inf F -> Subset of X means
-  :Def3:
-  ex f being SetSequence of X st it
-  = Union f & for n being Element of NAT holds f.n = meet (F ^\ n);
-  existence
-  proof
-    deffunc F(Element of NAT) = meet (F ^\ $1);
-    consider f being SetSequence of X such that
-A1: for n being Element of NAT holds f.n = F(n) from FUNCT_2:sch 4;
-    take Union f;
-    thus thesis by A1;
-  end;
-  uniqueness
-  proof
-    let A1, A2 be Subset of X;
-    given f1 being SetSequence of X such that
-A2: A1 = Union f1 and
-A3: for n being Element of NAT holds f1.n = meet (F ^\ n);
-    given f2 being SetSequence of X such that
-A4: A2 = Union f2 and
-A5: for n being Element of NAT holds f2.n = meet (F ^\ n);
-    for n being Element of NAT holds f1.n = f2.n
-    proof
-      let n be Element of NAT;
-      f1.n = meet (F ^\ n) by A3
-        .= f2.n by A5;
-      hence thesis;
-    end;
-    hence thesis by A2,A4,FUNCT_2:113;
-  end;
-  func lim_sup F -> Subset of X means
-  :Def4:
-  ex f being SetSequence of X st it
-  = meet f & for n being Element of NAT holds f.n = Union (F ^\ n);
-  existence
-  proof
-    deffunc F(Element of NAT) = Union (F ^\ $1);
-    consider f being SetSequence of X such that
-A6: for n being Element of NAT holds f.n = F(n) from FUNCT_2:sch 4;
-    take meet f;
-    thus thesis by A6;
-  end;
-  uniqueness
-  proof
-    let A1, A2 be Subset of X;
-    given f1 being SetSequence of X such that
-A7: A1 = meet f1 and
-A8: for n being Element of NAT holds f1.n = Union (F ^\ n);
-    given f2 being SetSequence of X such that
-A9: A2 = meet f2 and
-A10: for n being Element of NAT holds f2.n = Union (F ^\ n);
-    for n being Element of NAT holds f1.n = f2.n
-    proof
-      let n be Element of NAT;
-      f1.n = Union (F ^\ n) by A8
-        .= f2.n by A10;
-      hence thesis;
-    end;
-    hence thesis by A7,A9,FUNCT_2:113;
-  end;
-end;
-
-canceled;
-
-theorem Th6:
-  for X being set, F being SetSequence of X, x being set holds x in
-  meet F iff for z being Element of NAT holds x in F.z
-proof
-  let X be set, F be SetSequence of X, x be set;
-  hereby
-    assume
-A1: x in meet F;
-    let z be Element of NAT;
-    z in NAT;
-    then z in dom F by FUNCT_2:def 1;
-    hence x in F.z by A1,FUNCT_6:37;
-  end;
-  assume for z being Element of NAT holds x in F.z;
-  then for y being set st y in dom F holds x in F.y;
-  hence thesis by FUNCT_6:37;
-end;
-
-theorem Th7:
-  for X being set, F being SetSequence of X, x being set holds x in
-  lim_inf F iff ex n being Element of NAT st for k being Element of NAT holds x
-  in F.(n+k)
-proof
-  let X be set, F be SetSequence of X, x be set;
-  consider f being SetSequence of X such that
-A1: lim_inf F = Union f and
-A2: for n being Element of NAT holds f.n = meet (F ^\ n) by Def3;
-  hereby
-    consider f being SetSequence of X such that
-A3: lim_inf F = Union f and
-A4: for n being Element of NAT holds f.n = meet (F ^\ n) by Def3;
-    assume x in lim_inf F;
-    then consider n being Element of NAT such that
-A5: x in f.n by A3,PROB_1:25;
-    set G = F ^\ n;
-    take n;
-    let k be Element of NAT;
-A6: G.k = F.(n + k) by NAT_1:def 3;
-    x in meet (F ^\ n) by A4,A5;
-    hence x in F.(n+k) by A6,Th6;
-  end;
-  given n being Element of NAT such that
-A7: for k being Element of NAT holds x in F.(n+k);
-  set G = F ^\ n;
-  for z being Element of NAT holds x in G.z
-  proof
-    let z be Element of NAT;
-    G.z = F.(n + z) by NAT_1:def 3;
-    hence thesis by A7;
-  end;
-  then x in meet G by Th6;
-  then x in f.n by A2;
-  hence thesis by A1,PROB_1:25;
-end;
-
-theorem Th8:
-  for X being set, F being SetSequence of X, x being set holds x in
-lim_sup F iff for n being Element of NAT ex k being Element of NAT st x in F.(n
-  +k)
-proof
-  let X be set, F be SetSequence of X, x be set;
-  consider f being SetSequence of X such that
-A1: lim_sup F = meet f and
-A2: for n being Element of NAT holds f.n = Union (F ^\ n) by Def4;
-  hereby
-    assume
-A3: x in lim_sup F;
-    let n be Element of NAT;
-    set G = F ^\ n;
-    consider f being SetSequence of X such that
-A4: lim_sup F = meet f and
-A5: for n being Element of NAT holds f.n = Union (F ^\ n) by Def4;
-    f.n = Union G by A5;
-    then x in Union G by A3,A4,Th6;
-    then consider k being Element of NAT such that
-A6: x in G.k by PROB_1:25;
-    take k;
-    thus x in F.(n+k) by A6,NAT_1:def 3;
-  end;
-  assume
-A7: for n being Element of NAT ex k being Element of NAT st x in F.(n+k);
-  for z being Element of NAT holds x in f.z
-  proof
-    let z be Element of NAT;
-    set G = F ^\ z;
-    consider k being Element of NAT such that
-A8: x in F.(z+k) by A7;
-    f.z = Union G & G.k = F.(z + k) by A2,NAT_1:def 3;
-    hence thesis by A8,PROB_1:25;
-  end;
-  hence thesis by A1,Th6;
-end;
-
-theorem
-  for X being set, F being SetSequence of X holds lim_inf F c= lim_sup F
-proof
-  let X be set, F be SetSequence of X;
-  let x be set;
-  assume x in lim_inf F;
-  then consider n be Element of NAT such that
-A1: for k being Element of NAT holds x in F.(n+k) by Th7;
-  now
-    let k be Element of NAT;
-    x in F.(n+k) by A1;
-    hence ex n being Element of NAT st x in F.(k+n);
-  end;
-  hence thesis by Th8;
-end;
-
-theorem Th10:
-  for X being set, F being SetSequence of X holds meet F c= lim_inf F
-proof
-  let X be set, F be SetSequence of X;
-  let x be set;
-  assume x in meet F;
-  then for k being Element of NAT holds x in F.(0 qua Nat+k) by Th6;
-  hence thesis by Th7;
-end;
-
-theorem Th11:
-  for X being set, F being SetSequence of X holds lim_sup F c= Union F
-proof
-  let X be set, F be SetSequence of X;
-  let x be set;
-  assume x in lim_sup F;
-  then ex k being Element of NAT st x in F.(0 qua Nat+k) by Th8;
-  hence thesis by PROB_1:25;
-end;
-
-theorem
-  for X being set, F being SetSequence of X holds lim_inf F = (lim_sup
-  Complement F)`
-proof
-  let X be set, F be SetSequence of X;
-  set G = Complement F;
-  thus lim_inf F c= (lim_sup Complement F)`
-  proof
-    let x be set;
-    assume
-A1: x in lim_inf F;
-    then consider n being Element of NAT such that
-A2: for k being Element of NAT holds x in F.(n+k) by Th7;
-    for k being Element of NAT holds not x in G.(n+k)
-    proof
-      let k be Element of NAT;
-A3:   G.(n+k) = (F.(n+k))` by PROB_1:def 4;
-      assume x in G.(n+k);
-      then not x in F.(n+k) by A3,XBOOLE_0:def 5;
-      hence thesis by A2;
-    end;
-    then not x in lim_sup G by Th8;
-    hence thesis by A1,XBOOLE_0:def 5;
-  end;
-  thus (lim_sup Complement F)` c= lim_inf F
-  proof
-    let x be set;
-    assume
-A4: x in (lim_sup Complement F)`;
-    then not x in lim_sup Complement F by XBOOLE_0:def 5;
-    then consider n being Element of NAT such that
-A5: for k being Element of NAT holds not x in G.(n+k) by Th8;
-    for k being Element of NAT holds x in F.(n+k)
-    proof
-      let k be Element of NAT;
-      assume not x in F.(n+k);
-      then x in (F.(n+k))` by A4,XBOOLE_0:def 5;
-      then x in G.(n+k) by PROB_1:def 4;
-      hence thesis by A5;
-    end;
-    hence thesis by Th7;
-  end;
-end;
-
-theorem
-  for X being set, A, B, C being SetSequence of X st (for n being
-Element of NAT holds C.n = A.n /\ B.n) holds lim_inf C = lim_inf A /\ lim_inf B
-proof
-  let X be set, A, B, C be SetSequence of X;
-  assume
-A1: for n being Element of NAT holds C.n = A.n /\ B.n;
-  thus lim_inf C c= lim_inf A /\ lim_inf B
-  proof
-    let x be set;
-    assume x in lim_inf C;
-    then consider n being Element of NAT such that
-A2: for k being Element of NAT holds x in C.(n+k) by Th7;
-    for k being Element of NAT holds x in B.(n+k)
-    proof
-      let k be Element of NAT;
-      C.(n+k) = A.(n+k) /\ B.(n+k) & x in C.(n+k) by A1,A2;
-      hence thesis by XBOOLE_0:def 4;
-    end;
-    then
-A3: x in lim_inf B by Th7;
-    for k being Element of NAT holds x in A.(n+k)
-    proof
-      let k be Element of NAT;
-      C.(n+k) = A.(n+k) /\ B.(n+k) & x in C.(n+k) by A1,A2;
-      hence thesis by XBOOLE_0:def 4;
-    end;
-    then x in lim_inf A by Th7;
-    hence thesis by A3,XBOOLE_0:def 4;
-  end;
-  thus lim_inf A /\ lim_inf B c= lim_inf C
-  proof
-    let x be set;
-    assume
-A4: x in lim_inf A /\ lim_inf B;
-    then x in lim_inf A by XBOOLE_0:def 4;
-    then consider n1 being Element of NAT such that
-A5: for k being Element of NAT holds x in A.(n1+k) by Th7;
-    x in lim_inf B by A4,XBOOLE_0:def 4;
-    then consider n2 being Element of NAT such that
-A6: for k being Element of NAT holds x in B.(n2+k) by Th7;
-    set n = max (n1, n2);
-A7: for k being Element of NAT holds x in B.(n+k)
-    proof
-      let k be Element of NAT;
-      consider g being Nat such that
-A8:   n = n2 + g by NAT_1:10,XXREAL_0:25;
-      reconsider g as Element of NAT by ORDINAL1:def 13;
-      x in B.(n2+(g+k)) by A6;
-      hence thesis by A8;
-    end;
-A9: for k being Element of NAT holds x in A.(n+k)
-    proof
-      let k be Element of NAT;
-      consider g being Nat such that
-A10:  n = n1 + g by NAT_1:10,XXREAL_0:25;
-      reconsider g as Element of NAT by ORDINAL1:def 13;
-      x in A.(n1+(g+k)) by A5;
-      hence thesis by A10;
-    end;
-    for k being Element of NAT holds x in C.(n+k)
-    proof
-      let k be Element of NAT;
-      x in A.(n+k) & x in B.(n+k) by A9,A7;
-      then x in A.(n+k) /\ B.(n+k) by XBOOLE_0:def 4;
-      hence thesis by A1;
-    end;
-    hence thesis by Th7;
-  end;
-end;
-
-theorem
-  for X being set, A, B, C being SetSequence of X st (for n being
-Element of NAT holds C.n = A.n \/ B.n) holds lim_sup C = lim_sup A \/ lim_sup B
-proof
-  let X be set, A, B, C be SetSequence of X;
-  assume
-A1: for n being Element of NAT holds C.n = A.n \/ B.n;
-  thus lim_sup C c= lim_sup A \/ lim_sup B
-  proof
-    let x be set;
-    assume
-A2: x in lim_sup C;
-    (for n being Element of NAT ex k being Element of NAT st x in A.(n+k))
-    or for n being Element of NAT ex k being Element of NAT st x in B.(n+k)
-    proof
-      given n1 being Element of NAT such that
-A3:   for k being Element of NAT holds not x in A.(n1+k);
-      given n2 being Element of NAT such that
-A4:   for k being Element of NAT holds not x in B.(n2+k);
-      set n = max (n1, n2);
-      consider g being Nat such that
-A5:   n = n1 + g by NAT_1:10,XXREAL_0:25;
-      consider h being Nat such that
-A6:   n = n2 + h by NAT_1:10,XXREAL_0:25;
-      reconsider g, h as Element of NAT by ORDINAL1:def 13;
-      consider k being Element of NAT such that
-A7:   x in C.(n+k) by A2,Th8;
-A8:   x in A.(n+k) \/ B.(n+k) by A1,A7;
-      per cases by A8,XBOOLE_0:def 3;
-      suppose
-        x in A.(n+k);
-        then x in A.(n1+(g+k)) by A5;
-        hence thesis by A3;
-      end;
-      suppose
-        x in B.(n+k);
-        then x in B.(n2+(h+k)) by A6;
-        hence thesis by A4;
-      end;
-    end;
-    then x in lim_sup A or x in lim_sup B by Th8;
-    hence thesis by XBOOLE_0:def 3;
-  end;
-  thus lim_sup A \/ lim_sup B c= lim_sup C
-  proof
-    let x be set;
-    assume
-A9: x in lim_sup A \/ lim_sup B;
-    per cases by A9,XBOOLE_0:def 3;
-    suppose
-A10:  x in lim_sup A;
-      for n being Element of NAT ex k being Element of NAT st x in C.(n+k )
-      proof
-        let n be Element of NAT;
-        consider k being Element of NAT such that
-A11:    x in A.(n+k) by A10,Th8;
-        take k;
-        x in A.(n+k) \/ B.(n+k) by A11,XBOOLE_0:def 3;
-        hence thesis by A1;
-      end;
-      hence thesis by Th8;
-    end;
-    suppose
-A12:  x in lim_sup B;
-      for n being Element of NAT ex k being Element of NAT st x in C.(n+k )
-      proof
-        let n be Element of NAT;
-        consider k being Element of NAT such that
-A13:    x in B.(n+k) by A12,Th8;
-        take k;
-        x in A.(n+k) \/ B.(n+k) by A13,XBOOLE_0:def 3;
-        hence thesis by A1;
-      end;
-      hence thesis by Th8;
-    end;
-  end;
-end;
-
-theorem
-  for X being set, A, B, C being SetSequence of X st (for n being
-Element of NAT holds C.n = A.n \/ B.n) holds lim_inf A \/ lim_inf B c= lim_inf
-  C
-proof
-  let X be set, A, B, C be SetSequence of X;
-  assume
-A1: for n being Element of NAT holds C.n = A.n \/ B.n;
-  let x be set;
-  assume
-A2: x in lim_inf A \/ lim_inf B;
-  per cases by A2,XBOOLE_0:def 3;
-  suppose
-    x in lim_inf A;
-    then consider n being Element of NAT such that
-A3: for k being Element of NAT holds x in A.(n+k) by Th7;
-    for k being Element of NAT holds x in C.(n+k)
-    proof
-      let k be Element of NAT;
-      x in A.(n+k) by A3;
-      then x in A.(n+k) \/ B.(n+k) by XBOOLE_0:def 3;
-      hence thesis by A1;
-    end;
-    hence thesis by Th7;
-  end;
-  suppose
-    x in lim_inf B;
-    then consider n being Element of NAT such that
-A4: for k being Element of NAT holds x in B.(n+k) by Th7;
-    for k being Element of NAT holds x in C.(n+k)
-    proof
-      let k be Element of NAT;
-      x in B.(n+k) by A4;
-      then x in A.(n+k) \/ B.(n+k) by XBOOLE_0:def 3;
-      hence thesis by A1;
-    end;
-    hence thesis by Th7;
-  end;
-end;
-
-theorem
-  for X being set, A, B, C being SetSequence of X st (for n being
-Element of NAT holds C.n = A.n /\ B.n) holds lim_sup C c= lim_sup A /\ lim_sup
-  B
-proof
-  let X be set, A, B, C be SetSequence of X;
-  assume
-A1: for n being Element of NAT holds C.n = A.n /\ B.n;
-  let x be set;
-  assume
-A2: x in lim_sup C;
-  for n being Element of NAT ex k being Element of NAT st x in B.(n+k)
-  proof
-    let n be Element of NAT;
-    consider k being Element of NAT such that
-A3: x in C.(n+k) by A2,Th8;
-    take k;
-    x in A.(n+k) /\ B.(n+k) by A1,A3;
-    hence thesis by XBOOLE_0:def 4;
-  end;
-  then
-A4: x in lim_sup B by Th8;
-  for n being Element of NAT ex k being Element of NAT st x in A.(n+k)
-  proof
-    let n be Element of NAT;
-    consider k being Element of NAT such that
-A5: x in C.(n+k) by A2,Th8;
-    take k;
-    x in A.(n+k) /\ B.(n+k) by A1,A5;
-    hence thesis by XBOOLE_0:def 4;
-  end;
-  then x in lim_sup A by Th8;
-  hence thesis by A4,XBOOLE_0:def 4;
-end;
-
-theorem Th17:
-  for X being set, A being SetSequence of X, B being Subset of X
-  st (for n being Nat holds A.n = B) holds lim_sup A = B
-proof
-  let X be set, A be SetSequence of X, B be Subset of X;
-  assume
-A1: for n being Nat holds A.n = B;
-  thus lim_sup A c= B
-  proof
-    let x be set;
-    assume x in lim_sup A;
-    then ex k being Element of NAT st x in A.(0 qua Nat+k) by Th8;
-    hence thesis by A1;
-  end;
-  thus B c= lim_sup A
-  proof
-    let x be set;
-    assume
-A2: x in B;
-    for m being Element of NAT ex k being Element of NAT st x in A.(m+k)
-    proof
-      let m be Element of NAT;
-      take 0;
-      thus thesis by A1,A2;
-    end;
-    hence thesis by Th8;
-  end;
-end;
-
-theorem Th18:
-  for X being set, A being SetSequence of X, B being Subset of X
-  st (for n being Nat holds A.n = B) holds lim_inf A = B
-proof
-  let X be set, A be SetSequence of X, B be Subset of X;
-  assume
-A1: for n being Nat holds A.n = B;
-  thus lim_inf A c= B
-  proof
-    let x be set;
-    assume x in lim_inf A;
-    then consider m being Element of NAT such that
-A2: for k being Element of NAT holds x in A.(m+k) by Th7;
-    x in A.(m+(0 qua Nat)) by A2;
-    hence thesis by A1;
-  end;
-  thus B c= lim_inf A
-  proof
-    let x be set;
-    assume
-A3: x in B;
-    ex m being Element of NAT st for k being Element of NAT holds x in A.( m+k)
-    proof
-      take 0;
-      let k be Element of NAT;
-      thus thesis by A1,A3;
-    end;
-    hence thesis by Th7;
-  end;
-end;
-
-theorem
-  for X being set, A, B being SetSequence of X, C being Subset of X st (
-  for n being Element of NAT holds B.n = C \+\ A.n) holds C \+\ lim_inf A c=
-  lim_sup B
-proof
-  let X be set, A, B be SetSequence of X, C be Subset of X;
-  assume
-A1: for n being Element of NAT holds B.n = C \+\ A.n;
-  let x be set;
-  assume
-A2: x in C \+\ lim_inf A;
-  per cases by A2,XBOOLE_0:1;
-  suppose
-A3: x in C & not x in lim_inf A;
-    for n being Element of NAT ex k being Element of NAT st x in B.(n+k)
-    proof
-      let n be Element of NAT;
-      consider k being Element of NAT such that
-A4:   not x in A.(n+k) by A3,Th7;
-      take k;
-      x in C \+\ A.(n+k) by A3,A4,XBOOLE_0:1;
-      hence thesis by A1;
-    end;
-    hence thesis by Th8;
-  end;
-  suppose
-A5: not x in C & x in lim_inf A;
-    then consider n being Element of NAT such that
-A6: for k being Element of NAT holds x in A.(n+k) by Th7;
-    for m being Element of NAT ex k being Element of NAT st x in B.(m+k)
-    proof
-      let m be Element of NAT;
-      take k = n;
-      x in A.(m+k) by A6;
-      then x in C \+\ A.(m+k) by A5,XBOOLE_0:1;
-      hence thesis by A1;
-    end;
-    hence thesis by Th8;
-  end;
-end;
-
-theorem
-  for X being set, A, B being SetSequence of X, C being Subset of X st (
-  for n being Element of NAT holds B.n = C \+\ A.n) holds C \+\ lim_sup A c=
-  lim_sup B
-proof
-  let X be set, A, B be SetSequence of X, C be Subset of X;
-  assume
-A1: for n being Element of NAT holds B.n = C \+\ A.n;
-  let x be set;
-  assume
-A2: x in C \+\ lim_sup A;
-  per cases by A2,XBOOLE_0:1;
-  suppose
-A3: x in C & not x in lim_sup A;
-    then consider n being Element of NAT such that
-A4: for k being Element of NAT holds not x in A.(n+k) by Th8;
-    for m being Element of NAT ex k being Element of NAT st x in B.(m+k)
-    proof
-      let m be Element of NAT;
-      take k = n;
-      not x in A.(m+k) by A4;
-      then x in C \+\ A.(m+k) by A3,XBOOLE_0:1;
-      hence thesis by A1;
-    end;
-    hence thesis by Th8;
-  end;
-  suppose
-A5: not x in C & x in lim_sup A;
-    for m being Element of NAT ex k being Element of NAT st x in B.(m+k)
-    proof
-      let m be Element of NAT;
-      consider k being Element of NAT such that
-A6:   x in A.(m+k) by A5,Th8;
-      take k;
-      x in C \+\ A.(m+k) by A5,A6,XBOOLE_0:1;
-      hence thesis by A1;
-    end;
-    hence thesis by Th8;
-  end;
-end;
-
-begin :: Ascending and Descending Families of Subsets
-
-theorem Th21:
-  for f being Function st (for i being Element of NAT holds f.(i+1
-  ) c= f.i) for i, j being Element of NAT st i <= j holds f.j c= f.i
-proof
-  let f be Function;
-  assume
-A1: for i being Element of NAT holds f.(i+1) c= f.i;
-  let i, j be Element of NAT;
-  defpred P[Element of NAT] means i + $1 <= j implies f.(i + $1) c= f.i;
-A2: now
-    let k be Element of NAT;
-    assume
-A3: P[k];
-A4: i + k + 1 = i + (k + 1);
-    then f.(i + (k + 1)) c= f.(i + k) by A1;
-    hence P[k+1] by A4,A3,NAT_1:13,XBOOLE_1:1;
-  end;
-A5: P[0];
-A6: for k being Element of NAT holds P[k] from NAT_1:sch 1(A5,A2);
-  assume i <= j;
-  then consider k be Nat such that
-A7: i + k = j by NAT_1:10;
-  k in NAT by ORDINAL1:def 13;
-  hence thesis by A6,A7;
-end;
-
-definition
-  let T be set, S be SetSequence of T;
-  redefine attr S is non-ascending means
-  :Def5:
-  for i being Element of NAT holds S.(i+1) c= S.i;
-  compatibility
-  proof
-    thus S is non-ascending implies for i being Element of NAT holds S.(i+1)
-    c= S.i
-    proof
-      assume
-A1:   S is non-ascending;
-      let i be Element of NAT;
-      i <=i+1 by NAT_1:13;
-      hence thesis by A1,PROB_1:def 6;
-    end;
-    assume for i being Element of NAT holds S.(i+1) c= S.i;
-    then for i, j being Element of NAT st i <= j holds S.j c= S.i by Th21;
-    hence thesis by PROB_1:def 6;
-  end;
-  redefine attr S is non-descending means
-  :Def6:
-  for i being Element of NAT holds S.i c= S.(i+1);
-  compatibility
-  proof
-    thus S is non-descending implies for i being Element of NAT holds S.i c= S
-    .(i+1)
-    proof
-      assume
-A2:   S is non-descending;
-      let i be Element of NAT;
-      i <=i+1 by NAT_1:13;
-      hence thesis by A2,PROB_1:def 7;
-    end;
-    assume for i being Element of NAT holds S.i c= S.(i+1);
-    then for i, j being Element of NAT st i <= j holds S.i c= S.j by
-MEASURE2:22;
-    hence thesis by PROB_1:def 7;
-  end;
-end;
-
-canceled 2;
-
-theorem Th24:
-  for T being set, F being SetSequence of T, x being set st F is
-non-ascending & ex k being Element of NAT st for n being Element of NAT st n >
-  k holds x in F.n holds x in meet F
-proof
-  let T be set, F be SetSequence of T, x be set;
-  assume
-A1: F is non-ascending;
-  given k being Element of NAT such that
-A2: for n being Element of NAT st n > k holds x in F.n;
-  k + 1 > k by NAT_1:13;
-  then
-A3: x in F.(k + 1) by A2;
-  assume not x in meet F;
-  then not x in meet rng F by FUNCT_6:def 4;
-  then consider Y being set such that
-A4: Y in rng F and
-A5: not x in Y by SETFAM_1:def 1;
-  consider y being set such that
-A6: y in dom F and
-A7: Y = F.y by A4,FUNCT_1:def 5;
-  reconsider y as Element of NAT by A6;
-  per cases;
-  suppose
-    y > k;
-    hence thesis by A2,A5,A7;
-  end;
-  suppose
-    y <= k;
-    then F.k c= F.y by A1,PROB_1:def 6;
-    then
-A8: not x in F.k by A5,A7;
-    F.(k + 1) c= F.k by A1,Def5;
-    hence thesis by A3,A8;
-  end;
-end;
-
-theorem
-  for T being set, F being SetSequence of T st F is non-ascending holds
-  lim_inf F = meet F
-proof
-  let T be set, F be SetSequence of T;
-  assume
-A1: F is non-ascending;
-  thus lim_inf F c= meet F
-  proof
-    let x be set;
-    assume x in lim_inf F;
-    then consider n being Element of NAT such that
-A2: for k being Element of NAT holds x in F.(n+k) by Th7;
-    ex k being Element of NAT st for n being Element of NAT st n > k holds
-    x in F.n
-    proof
-      take k = n;
-      let n be Element of NAT;
-      assume n > k;
-      then consider h being Nat such that
-A3:   n = k + h by NAT_1:10;
-      h in NAT by ORDINAL1:def 13;
-      hence thesis by A2,A3;
-    end;
-    hence thesis by A1,Th24;
-  end;
-  thus thesis by Th10;
-end;
-
-theorem
-  for T being set, F being SetSequence of T st F is non-descending holds
-  lim_sup F = Union F
-proof
-  let T be set, F be SetSequence of T;
-  assume
-A1: F is non-descending;
-  thus lim_sup F c= Union F by Th11;
-  let x be set;
-  assume x in Union F;
-  then consider n being Element of NAT such that
-A2: x in F.n by PROB_1:25;
-  assume not x in lim_sup F;
-  then consider m being Element of NAT such that
-A3: for k being Element of NAT holds not x in F.(m+k) by Th8;
-A4: not x in F.(m+(0 qua Nat)) by A3;
-  per cases;
-  suppose
-    n <= m;
-    then F.n c= F.m by A1,PROB_1:def 7;
-    hence thesis by A2,A4;
-  end;
-  suppose
-    n > m;
-    then consider h being Nat such that
-A5: n = m + h by NAT_1:10;
-    h in NAT by ORDINAL1:def 13;
-    hence thesis by A2,A3,A5;
-  end;
-end;
-
-begin :: Constant and Convergent Sequences
-
-definition
-  let T be set, S be SetSequence of T;
-  attr S is convergent means
-  :Def7:
-  lim_sup S = lim_inf S;
-end;
-
-theorem
-  for T being set, S being SetSequence of T st S is constant holds
-  the_value_of S is Subset of T
-proof
-  let T be set, S be SetSequence of T;
-  assume S is constant;
-  then consider x being set such that
-A1: x in dom S and
-A2: the_value_of S = S.x by FUNCT_1:def 18;
-  reconsider n = x as Element of NAT by A1;
-  S.n in bool T;
-  hence thesis by A2;
-end;
-
-registration
-  let T be set;
-  cluster constant -> convergent non-descending non-ascending SetSequence of T;
-  coherence
-  proof
-    let S be SetSequence of T;
-    assume S is constant;
-    then consider A being Subset of T such that
-A1: for n being Nat holds S.n = A by VALUED_0:def 18;
-A2: now
-      let n be Element of NAT;
-      S.n = A by A1;
-      hence S.(n+1) c= S.n by A1;
-    end;
-A3: now
-      let n be Element of NAT;
-      S.n = A by A1;
-      hence S.n c= S.(n+1) by A1;
-    end;
-    lim_sup S = A & lim_inf S = A by A1,Th17,Th18;
-    hence thesis by A3,A2,Def5,Def6,Def7;
-  end;
-end;
-
-registration
-  let T be set;
-  cluster constant non empty SetSequence of T;
-  existence
-  proof
-    reconsider E = NAT --> {}T as SetSequence of T;
-    E is constant;
-    hence thesis;
-  end;
-end;
-
-definition
-  canceled;
-  let T be set, S be convergent SetSequence of T;
-  func Lim_K S -> Subset of T means
-  :Def9:
-  it = lim_sup S & it = lim_inf S;
-  existence
-  proof
-    take lim_sup S;
-    thus thesis by Def7;
-  end;
-  uniqueness;
-end;
-
-theorem
-  for X being set, F being convergent SetSequence of X, x being set
-holds x in Lim_K F iff ex n being Element of NAT st for k being Element of NAT
-  holds x in F.(n+k)
-proof
-  let X be set, F be convergent SetSequence of X, x be set;
-  Lim_K F = lim_inf F by Def9;
-  hence thesis by Th7;
 end;
 
 begin :: Topological Lemmas
@@ -992,33 +62,29 @@ registration
   coherence;
 end;
 
-canceled;
-
 theorem Th30:
   for x being Point of Euclid n, r being real number holds Ball (x
   , r) is open Subset of TOP-REAL n
 proof
   let x be Point of Euclid n, r be real number;
-  reconsider A = Ball (x, r) as Subset of TOP-REAL n by TOPREAL3:13;
+  reconsider A = Ball (x, r) as Subset of TOP-REAL n by TOPREAL3:8;
   reconsider A as Subset of TOP-REAL n;
   r is Real by XREAL_0:def 1;
-  then A is open by GOBOARD6:6;
+  then A is open by GOBOARD6:3;
   hence thesis;
 end;
-
-canceled;
 
 theorem Th32:
   for p being Point of Euclid n, x, p9 being Point of TOP-REAL n,
   r being real number st p = p9 & x in Ball (p, r) holds |. x - p9 .| < r
 proof
   let p be Point of Euclid n, x, p9 be Point of TOP-REAL n, r be real number;
-  reconsider x9 = x as Point of Euclid n by TOPREAL3:13;
+  reconsider x9 = x as Point of Euclid n by TOPREAL3:8;
   assume that
 A1: p = p9 and
 A2: x in Ball (p, r);
-  dist (x9, p) < r by A2,METRIC_1:12;
-  hence thesis by A1,SPPOL_1:62;
+  dist (x9, p) < r by A2,METRIC_1:11;
+  hence thesis by A1,SPPOL_1:39;
 end;
 
 theorem Th33:
@@ -1026,10 +92,10 @@ theorem Th33:
   r being real number st p = p9 & |. x - p9 .| < r holds x in Ball (p, r)
 proof
   let p be Point of Euclid n, x, p9 be Point of TOP-REAL n, r be real number;
-  reconsider x9 = x as Point of Euclid n by TOPREAL3:13;
+  reconsider x9 = x as Point of Euclid n by TOPREAL3:8;
   assume p = p9 & |. x - p9 .| < r;
-  then dist (x9, p) < r by SPPOL_1:62;
-  hence thesis by METRIC_1:12;
+  then dist (x9, p) < r by SPPOL_1:39;
+  hence thesis by METRIC_1:11;
 end;
 
 theorem
@@ -1038,7 +104,7 @@ Subset of TOP-REAL n st r in Cl X holds ex seq being Real_Sequence of n st rng
   seq c= X & seq is convergent & lim seq = r
 proof
   let n be Element of NAT, r be Point of TOP-REAL n, X be Subset of TOP-REAL n;
-  reconsider r9 = r as Point of Euclid n by TOPREAL3:13;
+  reconsider r9 = r as Point of Euclid n by TOPREAL3:8;
   defpred P[set,set] means ex z being Element of NAT st $1 = z & $2 = choose (
   X /\ Ball (r9, 1/(z+1)));
   assume
@@ -1053,8 +119,8 @@ A2: now
     reconsider u = choose (X /\ oi) as set;
     take u;
     dist (r9,r9) < 1/n1 by METRIC_1:1;
-    then r in oi by METRIC_1:12;
-    then X meets oi by A1,PRE_TOPC:54;
+    then r in oi by METRIC_1:11;
+    then X meets oi by A1,PRE_TOPC:24;
     then X /\ oi is non empty by XBOOLE_0:def 7;
     then u in X /\ oi;
     hence u in the carrier of TOP-REAL n;
@@ -1062,9 +128,8 @@ A2: now
   end;
   consider seq being Function such that
 A3: dom seq = NAT & rng seq c= the carrier of TOP-REAL n and
-A4: for x being set st x in NAT holds P[x,seq.x] from WELLORD2:sch 1(A2
-  );
-  reconsider seq as Real_Sequence of n by A3,FUNCT_2:def 1,RELSET_1:11;
+A4: for x being set st x in NAT holds P[x,seq.x] from FUNCT_1:sch 5(A2);
+  reconsider seq as Real_Sequence of n by A3,FUNCT_2:def 1,RELSET_1:4;
   take seq;
   thus rng seq c= X
   proof
@@ -1072,15 +137,15 @@ A4: for x being set st x in NAT holds P[x,seq.x] from WELLORD2:sch 1(A2
     assume y in rng seq;
     then consider x being set such that
 A5: x in dom seq and
-A6: seq.x = y by FUNCT_1:def 5;
+A6: seq.x = y by FUNCT_1:def 3;
     consider k being Element of NAT such that
     x = k and
 A7: seq.x = choose (X /\ Ball (r9,1/(k+1))) by A4,A5;
     set n1 = k+1;
     reconsider oi = Ball (r9,1/n1) as open Subset of TOP-REAL n by Th30;
     dist (r9,r9) < 1/n1 by METRIC_1:1;
-    then r in oi by METRIC_1:12;
-    then X meets oi by A1,PRE_TOPC:54;
+    then r in oi by METRIC_1:11;
+    then X meets oi by A1,PRE_TOPC:24;
     then X /\ oi is non empty by XBOOLE_0:def 7;
     hence thesis by A6,A7,XBOOLE_0:def 4;
   end;
@@ -1092,27 +157,27 @@ A9: 1/p <= cp by INT_1:def 7;
 A10: 0 < p;
     then
 A11: 0 < cp by INT_1:def 7;
-    then reconsider cp as Element of NAT by INT_1:16;
+    then reconsider cp as Element of NAT by INT_1:3;
     take k = cp;
     k < k+1 by NAT_1:13;
     then
-A12: 1/(k+1) < 1/k by A11,XREAL_1:90;
-    1/(1/p) >= 1/cp by A10,A9,XREAL_1:87;
+A12: 1/(k+1) < 1/k by A11,XREAL_1:88;
+    1/(1/p) >= 1/cp by A10,A9,XREAL_1:85;
     then
 A13: 1/(k+1) < p by A12,XXREAL_0:2;
     let m be Element of NAT;
     assume k <= m;
     then
-A14: k+1 <= m+1 by XREAL_1:8;
+A14: k+1 <= m+1 by XREAL_1:6;
     set m1 = m+1;
-    1/m1 <= 1/(k+1) by A14,XREAL_1:87;
+    1/m1 <= 1/(k+1) by A14,XREAL_1:85;
     then
 A15: 1/m1 < p by A13,XXREAL_0:2;
     set oi = Ball (r9,1/m1);
     reconsider oi as open Subset of TOP-REAL n by Th30;
     dist (r9,r9) < 1/m1 by METRIC_1:1;
-    then r in oi by METRIC_1:12;
-    then X meets oi by A1,PRE_TOPC:54;
+    then r in oi by METRIC_1:11;
+    then X meets oi by A1,PRE_TOPC:24;
     then
 A16: X /\ oi is non empty by XBOOLE_0:def 7;
     ex m9 being Element of NAT st m9 = m & seq.m = choose (X /\ Ball (r9,1
@@ -1120,14 +185,14 @@ A16: X /\ oi is non empty by XBOOLE_0:def 7;
     then seq.m in oi by A16,XBOOLE_0:def 4;
     hence |. seq.m - r .| < p by A15,Th32,XXREAL_0:2;
   end;
-  hence seq is convergent by TOPRNS_1:def 9;
-  hence thesis by A8,TOPRNS_1:def 10;
+  hence seq is convergent by TOPRNS_1:def 8;
+  hence thesis by A8,TOPRNS_1:def 9;
 end;
 
 registration
   let M be non empty MetrSpace;
   cluster TopSpaceMetr M -> first-countable;
-  coherence by FRECHET:21;
+  coherence by FRECHET:20;
 end;
 
 Lm1: for T being non empty TopSpace, x being Point of T, y being Point of the
@@ -1143,20 +208,20 @@ A2: A is Basis of x;
     then reconsider A as Subset-Family of the TopStruct of T;
     A is Basis of y
     proof
-      A c= the topology of the TopStruct of T by A2,TOPS_2:78;
+      A c= the topology of the TopStruct of T by A2,TOPS_2:64;
       then
-A3:  A is open by TOPS_2:78;
+A3:  A is open by TOPS_2:64;
       A is y-quasi_basis
       proof
-      thus y in Intersect A by A1,A2,YELLOW_8:def 2;
+      thus y in Intersect A by A1,A2,YELLOW_8:def 1;
       let S be Subset of the TopStruct of T;
       reconsider SS=S as Subset of T;
       assume that
 A4:   S is open and
 A5:   y in S;
-      SS is open by A4,PRE_TOPC:60;
+      SS is open by A4,PRE_TOPC:30;
       then consider W being Subset of T such that
-A6:   W in A & W c= SS by A1,A2,A5,YELLOW_8:def 2;
+A6:   W in A & W c= SS by A1,A2,A5,YELLOW_8:def 1;
       reconsider V=W as Subset of the TopStruct of T;
       take V;
       thus V in A & V c= S by A6;
@@ -1170,20 +235,20 @@ A7: A is Basis of y;
   then reconsider A as Subset-Family of T;
   A is Basis of x
   proof
-    A c= the topology of T by A7,TOPS_2:78;
+    A c= the topology of T by A7,TOPS_2:64;
     then
-A8: A is open by TOPS_2:78;
+A8: A is open by TOPS_2:64;
     A is x-quasi_basis
     proof
-    thus x in Intersect A by A1,A7,YELLOW_8:def 2;
+    thus x in Intersect A by A1,A7,YELLOW_8:def 1;
     let S be Subset of T;
     reconsider SS=S as Subset of the TopStruct of T;
     assume that
 A9: S is open and
 A10: x in S;
-    SS is open by A9,PRE_TOPC:60;
+    SS is open by A9,PRE_TOPC:30;
     then consider W being Subset of the TopStruct of T such that
-A11: W in A & W c= SS by A1,A7,A10,YELLOW_8:def 2;
+A11: W in A & W c= SS by A1,A7,A10,YELLOW_8:def 1;
     reconsider V=W as Subset of T;
     take V;
     thus V in A & V c= S by A11;
@@ -1244,10 +309,10 @@ A1: p = p9;
     assume
 A2: p in Cl A;
     let r be real number;
-    reconsider B = Ball (p9, r) as Subset of TOP-REAL n by TOPREAL3:13;
+    reconsider B = Ball (p9, r) as Subset of TOP-REAL n by TOPREAL3:8;
     assume r > 0;
-    then B is a_neighborhood of p by A1,GOBOARD6:5;
-    hence Ball (p9, r) meets A by A2,CONNSP_2:34;
+    then B is a_neighborhood of p by A1,GOBOARD6:2;
+    hence Ball (p9, r) meets A by A2,CONNSP_2:27;
   end;
   assume
 A3: for r being real number st r > 0 holds Ball (p9, r) meets A;
@@ -1255,10 +320,10 @@ A3: for r being real number st r > 0 holds Ball (p9, r) meets A;
   proof
     let G be a_neighborhood of p;
     p in Int G by CONNSP_2:def 1;
-    then ex r being real number st r > 0 & Ball (p9, r) c= G by A1,GOBOARD6:8;
+    then ex r being real number st r > 0 & Ball (p9, r) c= G by A1,GOBOARD6:5;
     hence thesis by A3,XBOOLE_1:63;
   end;
-  hence thesis by CONNSP_2:34;
+  hence thesis by CONNSP_2:27;
 end;
 
 theorem
@@ -1266,15 +331,15 @@ theorem
   x & x <> y ex r being Real st not y in Ball (x9, r)
 proof
   let x, y be Point of TOP-REAL n, x9 be Point of Euclid n;
-  reconsider y9 = y as Point of Euclid n by TOPREAL3:13;
+  reconsider y9 = y as Point of Euclid n by TOPREAL3:8;
   reconsider r = dist (x9, y9)/2 as Real;
   assume x9 = x & x <> y;
   then
 A1: dist (x9, y9) <> 0 by METRIC_1:2;
   take r;
   dist (x9, y9) >= 0 by METRIC_1:5;
-  then dist (x9, y9) > r by A1,XREAL_1:218;
-  hence thesis by METRIC_1:12;
+  then dist (x9, y9) > r by A1,XREAL_1:216;
+  hence thesis by METRIC_1:11;
 end;
 
 theorem Th38:
@@ -1283,13 +348,13 @@ r being Real st r > 0 holds ex x, y being Point of Euclid n st x in S & y in S
   & dist (x, y) > r
 proof
   let S be Subset of TOP-REAL n;
-  reconsider S9 = S as Subset of Euclid n by TOPREAL3:13;
+  reconsider S9 = S as Subset of Euclid n by TOPREAL3:8;
   hereby
     assume S is non Bounded;
-    then S9 is non bounded by JORDAN2C:def 2;
+    then S9 is non bounded by JORDAN2C:def 1;
     hence
     for r being Real st r > 0 ex x, y being Point of Euclid n st x in S &
-    y in S & dist (x, y) > r by TBSP_1:def 9;
+    y in S & dist (x, y) > r by TBSP_1:def 7;
   end;
   assume
 A1: for r being Real st r > 0 ex x, y being Point of Euclid n st x in S
@@ -1297,8 +362,8 @@ A1: for r being Real st r > 0 ex x, y being Point of Euclid n st x in S
   S is non Bounded
   proof
     assume S is Bounded;
-    then S is bounded Subset of Euclid n by JORDAN2C:def 2;
-    hence thesis by A1,TBSP_1:def 9;
+    then S is bounded Subset of Euclid n by JORDAN2C:def 1;
+    hence thesis by A1,TBSP_1:def 7;
   end;
   hence thesis;
 end;
@@ -1313,12 +378,12 @@ proof
 A1: z in Ball (x, a) and
 A2: z in Ball (y, b) by XBOOLE_0:3;
   reconsider z as Point of Euclid n by A1;
-  dist (y, z) < b by A2,METRIC_1:12;
+  dist (y, z) < b by A2,METRIC_1:11;
   then
-A3: dist (x, z) + dist (y, z) < dist (x, z) + b by XREAL_1:10;
+A3: dist (x, z) + dist (y, z) < dist (x, z) + b by XREAL_1:8;
 A4: dist (x, z) + dist (y, z) >= dist (x, y) by METRIC_1:4;
-  dist (x, z) < a by A1,METRIC_1:12;
-  then dist (x, z) + b < a + b by XREAL_1:10;
+  dist (x, z) < a by A1,METRIC_1:11;
+  then dist (x, z) + b < a + b by XREAL_1:8;
   then dist (x, z) + dist (y, z) < a + b by A3,XXREAL_0:2;
   hence thesis by A4,XXREAL_0:2;
 end;
@@ -1332,7 +397,7 @@ proof
   assume Ball (x, a) meets Ball (z, c) & Ball (z, c) meets Ball (y, b);
   then
   dist (x, z) + dist (z, y) < (a + c) + dist (z, y) & (a + c) + dist (z, y
-  ) < (a + c) + (c + b) by Th39,XREAL_1:10;
+  ) < (a + c) + (c + b) by Th39,XREAL_1:8;
   then
 A1: dist (x, z) + dist (z, y) < (a + c) + (c + b) by XXREAL_0:2;
   dist (x, y) <= dist (x, z) + dist (z, y) by METRIC_1:4;
@@ -1348,17 +413,15 @@ proof
   Subset of [: X, Y :];
   hereby
     assume V is a_neighborhood of [: {x}, {y} :];
-    then V is a_neighborhood of { [x, y] } by ZFMISC_1:35;
-    hence V is a_neighborhood of [ x, y ] by CONNSP_2:10;
+    then V is a_neighborhood of { [x, y] } by ZFMISC_1:29;
+    hence V is a_neighborhood of [ x, y ] by CONNSP_2:8;
   end;
   assume V is a_neighborhood of [ x, y ];
-  then V is a_neighborhood of { [ x, y ] } by CONNSP_2:10;
-  hence thesis by ZFMISC_1:35;
+  then V is a_neighborhood of { [ x, y ] } by CONNSP_2:8;
+  hence thesis by ZFMISC_1:29;
 end;
 
 begin :: Subsequences
-
-canceled 3;
 
 theorem Th45:
   for T being non empty 1-sorted, F, G being SetSequence of the
@@ -1376,7 +439,7 @@ A3: G = F * NS by A1,VALUED_0:def 17;
   proof
     let i be Element of NAT;
     dom NS = NAT by FUNCT_2:def 1;
-    then G.i = F.(NS.i) by A3,FUNCT_1:23
+    then G.i = F.(NS.i) by A3,FUNCT_1:13
       .= A by A2
       .= F.i by A2;
     hence thesis;
@@ -1384,10 +447,8 @@ A3: G = F * NS by A1,VALUED_0:def 17;
   then
 A4: for x being set st x in dom F holds F.x = G.x;
   NAT = dom G & NAT = dom F by FUNCT_2:def 1;
-  hence thesis by A4,FUNCT_1:9;
+  hence thesis by A4,FUNCT_1:2;
 end;
-
-canceled;
 
 theorem
   for T being non empty 1-sorted, S being SetSequence of the carrier of
@@ -1399,18 +460,18 @@ proof
   consider NS being increasing sequence of NAT such that
 A1: R = S * NS by VALUED_0:def 17;
   take m = NS.n;
-  thus m >= n by SEQM_3:33;
+  thus m >= n by SEQM_3:14;
   n in NAT;
   then n in dom NS by FUNCT_2:def 1;
-  hence thesis by A1,FUNCT_1:23;
+  hence thesis by A1,FUNCT_1:13;
 end;
 
 begin :: Lower Topological Limit
 
 definition
+
   let T be non empty TopSpace;
   let S be SetSequence of the carrier of T;
-  canceled;
   func Lim_inf S -> Subset of T means
   :Def11:
   for p being Point of T holds p
@@ -1449,7 +510,7 @@ A1: p = p9;
 A2: p in Lim_inf S;
     let r be real number;
     assume r > 0;
-    then reconsider G = Ball (p9, r) as a_neighborhood of p by A1,GOBOARD6:5;
+    then reconsider G = Ball (p9, r) as a_neighborhood of p by A1,GOBOARD6:2;
     ex k being Element of NAT st for m being Element of NAT st m > k holds
     S.m meets G by A2,Def11;
     hence ex k being Element of NAT st for m being Element of NAT st m > k
@@ -1463,16 +524,16 @@ A3: for r being real number st r > 0 ex k being Element of NAT st for m
 A4: the TopStruct of TOP-REAL n = TopSpaceMetr Euclid n by EUCLID:def 8;
     then reconsider G9 = Int G as Subset of TopSpaceMetr Euclid n;
 A5: p9 in G9 by A1,CONNSP_2:def 1;
-    G9 is open by A4,PRE_TOPC:60;
+    G9 is open by A4,PRE_TOPC:30;
     then consider r being real number such that
 A6: r > 0 and
-A7: Ball (p9, r) c= G9 by A5,TOPMETR:22;
+A7: Ball (p9, r) c= G9 by A5,TOPMETR:15;
     consider k being Element of NAT such that
 A8: for m being Element of NAT st m > k holds S.m meets Ball (p9, r) by A3,A6;
     take k;
     let m be Element of NAT;
     assume m > k;
-    then G9 c= G & S.m meets Ball (p9, r) by A8,TOPS_1:44;
+    then G9 c= G & S.m meets Ball (p9, r) by A8,TOPS_1:16;
     hence S.m meets G by A7,XBOOLE_1:1,63;
   end;
   hence thesis by Def11;
@@ -1494,7 +555,7 @@ A1: x in Cl Lim_inf S;
       let G be a_neighborhood of x9;
       set H = Int G;
       x9 in H by CONNSP_2:def 1;
-      then Lim_inf S meets H by A1,PRE_TOPC:54;
+      then Lim_inf S meets H by A1,PRE_TOPC:24;
       then consider z being set such that
 A2:   z in Lim_inf S and
 A3:   z in H by XBOOLE_0:3;
@@ -1507,14 +568,12 @@ A4:   for m being Element of NAT st m > k holds S.m meets H by A2,Def11;
       let m be Element of NAT;
       assume m > k;
       then S.m meets H by A4;
-      hence S.m meets G by TOPS_1:44,XBOOLE_1:63;
+      hence S.m meets G by TOPS_1:16,XBOOLE_1:63;
     end;
     hence thesis by Def11;
   end;
-  thus thesis by PRE_TOPC:48;
+  thus thesis by PRE_TOPC:18;
 end;
-
-canceled;
 
 registration
   let T be non empty TopSpace, S be SetSequence of the carrier of T;
@@ -1546,12 +605,12 @@ A2: x in Lim_inf S;
 A3: for m being Element of NAT st m > k holds S.m meets G by A2,Def11;
     take k;
     let m1 be Element of NAT;
-A4: m1 <= Nseq.m1 by SEQM_3:33;
+A4: m1 <= Nseq.m1 by SEQM_3:14;
     assume m1 > k;
     then
 A5: Nseq.m1 > k by A4,XXREAL_0:2;
     dom Nseq = NAT by FUNCT_2:def 1;
-    then R.m1 = S.(Nseq.m1) by A1,FUNCT_1:23;
+    then R.m1 = S.(Nseq.m1) by A1,FUNCT_1:13;
     hence thesis by A3,A5;
   end;
   hence thesis by Def11;
@@ -1702,7 +761,7 @@ A2: x in Lim_inf G;
       consider H1 being non empty Subset of T such that
 A3:   H1 is a_neighborhood of p and
 A4:   H1 is open and
-A5:   H1 c= H by CONNSP_2:7;
+A5:   H1 c= H by CONNSP_2:5;
       consider k being Element of NAT such that
 A6:   for m being Element of NAT st m > k holds G.m meets H1 by A2,A3,Def11;
       take k;
@@ -1713,13 +772,13 @@ A6:   for m being Element of NAT st m > k holds G.m meets H1 by A2,A3,Def11;
 A7:   y in G.m and
 A8:   y in H1 by XBOOLE_0:3;
       reconsider y as Point of T by A7;
-      H1 is a_neighborhood of y by A4,A8,CONNSP_2:5;
+      H1 is a_neighborhood of y by A4,A8,CONNSP_2:3;
       then consider H9 being non empty Subset of T such that
 A9:   H9 is a_neighborhood of y and
       H9 is open and
-A10:  H9 c= H1 by CONNSP_2:7;
+A10:  H9 c= H1 by CONNSP_2:5;
       y in Cl (F.m) by A1,A7;
-      then H9 meets F.m by A9,CONNSP_2:34;
+      then H9 meets F.m by A9,CONNSP_2:27;
       then H1 meets F.m by A10,XBOOLE_1:63;
       hence thesis by A5,XBOOLE_1:63;
     end;
@@ -1729,7 +788,7 @@ A10:  H9 c= H1 by CONNSP_2:7;
   proof
     let i be Element of NAT;
     G.i = Cl (F.i) by A1;
-    hence thesis by PRE_TOPC:48;
+    hence thesis by PRE_TOPC:18;
   end;
   hence Lim_inf F c= Lim_inf G by Th52;
 end;
@@ -1740,7 +799,7 @@ theorem
   being Element of NAT holds s.x in S.x) & p = lim s) implies p in Lim_inf S
 proof
   let S be SetSequence of the carrier of TOP-REAL n, p be Point of TOP-REAL n;
-  reconsider p9 = p as Point of Euclid n by TOPREAL3:13;
+  reconsider p9 = p as Point of Euclid n by TOPREAL3:8;
   given s being Real_Sequence of n such that
 A1: s is convergent and
 A2: for x being Element of NAT holds s.x in S.x and
@@ -1753,7 +812,7 @@ A3: p = lim s;
     assume r > 0;
     then consider l being Element of NAT such that
 A4: for m being Element of NAT st l <= m holds |. s.m - p .| < r9 by A1,A3,
-TOPRNS_1:def 10;
+TOPRNS_1:def 9;
     take v = max (0, l);
     let m be Element of NAT;
     assume v < m;
@@ -1786,7 +845,7 @@ A2: x in Lim_inf s;
     assume
 A3: G is open;
     assume p in G;
-    then reconsider G9 = G as a_neighborhood of p by A3,CONNSP_2:5;
+    then reconsider G9 = G as a_neighborhood of p by A3,CONNSP_2:3;
     consider k being Element of NAT such that
 A4: for m being Element of NAT st m > k holds s.m meets G9 by A2,Def11;
     set m = k + 1;
@@ -1794,7 +853,7 @@ A4: for m being Element of NAT st m > k holds s.m meets G9 by A2,Def11;
     then s.m meets G9 by A4;
     hence thesis by A1,XBOOLE_1:63;
   end;
-  hence thesis by PRE_TOPC:def 13;
+  hence thesis by PRE_TOPC:def 7;
 end;
 
 theorem Th58:
@@ -1822,7 +881,7 @@ A2: x in Cl A;
       let m be Element of NAT;
       assume m > k;
       F.m = A by A1;
-      hence thesis by A2,CONNSP_2:34;
+      hence thesis by A2,CONNSP_2:27;
     end;
     hence thesis by Def11;
   end;
@@ -1837,7 +896,7 @@ proof
   closed Subset of T;
   assume for i being Nat holds F.i = A;
   then Lim_inf F = Cl A by Th58;
-  hence thesis by PRE_TOPC:52;
+  hence thesis by PRE_TOPC:22;
 end;
 
 theorem Th60:
@@ -1850,10 +909,10 @@ proof
   assume that
 A1: P is Bounded and
 A2: for i being Element of NAT holds S.i c= P;
-  reconsider P9= P as bounded Subset of Euclid n by A1,JORDAN2C:def 2;
+  reconsider P9= P as bounded Subset of Euclid n by A1,JORDAN2C:def 1;
   consider t being Real, z being Point of Euclid n such that
 A3: 0 < t and
-A4: P9 c= Ball (z,t) by METRIC_6:def 10;
+A4: P9 c= Ball (z,t) by METRIC_6:def 3;
   set r = 1, R = r + r + 3*t;
   assume Lim_inf S is non Bounded;
   then consider x, y being Point of Euclid n such that
@@ -1870,9 +929,9 @@ A9: for m being Element of NAT st m > k2 holds S.m meets Ball (y, r) by A6,Th48
   S.k c= P9 by A2;
   then
 A10: S.k c= Ball (z,t) by A4,XBOOLE_1:1;
-  2*t < 3*t by A3,XREAL_1:70;
+  2*t < 3*t by A3,XREAL_1:68;
   then
-A11: r + r + 2*t < r + r + 3*t by XREAL_1:10;
+A11: r + r + 2*t < r + r + 3*t by XREAL_1:8;
   max (k1,k2) >= k2 by XXREAL_0:25;
   then k > k2 by NAT_1:13;
   then
@@ -1891,7 +950,7 @@ proof
   let S be SetSequence of the carrier of TOP-REAL 2, P be Subset of TOP-REAL 2;
   assume P is Bounded & for i being Element of NAT holds S.i c= P;
   then Lim_inf S is Bounded by Th60;
-  hence thesis by TOPREAL6:88;
+  hence thesis by TOPREAL6:79;
 end;
 
 theorem Th62:
@@ -1923,10 +982,10 @@ A5: x = [x1,x2] by ZFMISC_1:def 2;
       then consider
       V being a_neighborhood of {x1}, W being a_neighborhood of x2
       such that
-A6:   [:V,W:] c= G by BORSUK_1:67;
+A6:   [:V,W:] c= G by BORSUK_1:25;
       consider k2 being Element of NAT such that
 A7:   for m being Element of NAT st m > k2 holds B.m meets W by A4,Def11;
-      V is a_neighborhood of x1 by CONNSP_2:10;
+      V is a_neighborhood of x1 by CONNSP_2:8;
       then consider k1 being Element of NAT such that
 A8:   for m being Element of NAT st m > k1 holds A.m meets V by A3,Def11;
       take k = max (k1, k2);
@@ -1940,7 +999,7 @@ A10:  B.m meets W by A7;
       k >= k1 by XXREAL_0:25;
       then m > k1 by A9,XXREAL_0:2;
       then A.m meets V by A8;
-      then [: A.m, B.m :] meets [: V, W :] by A10,Th4;
+      then [: A.m, B.m :] meets [: V, W :] by A10,KURATO_0:2;
       then C.m meets [: V, W :] by A1;
       hence thesis by A6,XBOOLE_1:63;
     end;
@@ -1954,11 +1013,11 @@ A11: x in Lim_inf C;
     then x in the carrier of [: TOP-REAL n, TOP-REAL n :];
     then
 A12: x in [: the carrier of TOP-REAL n, the carrier of TOP-REAL n :] by
-BORSUK_1:def 5;
+BORSUK_1:def 2;
     then reconsider p1 = x`1, p2 = x`2 as Point of TOP-REAL n by MCART_1:10;
-    set H =the  a_neighborhood of p2;
-    set F =the  a_neighborhood of p1;
-A13: x = [p1,p2] by A12,MCART_1:23;
+    set H = the a_neighborhood of p2;
+    set F = the a_neighborhood of p1;
+A13: x = [p1,p2] by A12,MCART_1:21;
     for G being a_neighborhood of p2 ex k being Element of NAT st for m
     being Element of NAT st m > k holds B.m meets G
     proof
@@ -2002,7 +1061,7 @@ A22:  y`1 in A.m by MCART_1:10;
       hence thesis by A22,XBOOLE_0:3;
     end;
     then p1 in Lim_inf A by Def11;
-    hence thesis by A13,A18,ZFMISC_1:106;
+    hence thesis by A13,A18,ZFMISC_1:87;
   end;
 end;
 
@@ -2013,23 +1072,23 @@ proof
   let x be set;
   assume
 A1: x in lim_inf S;
-  then reconsider p = x as Point of Euclid 2 by TOPREAL3:13;
+  then reconsider p = x as Point of Euclid 2 by TOPREAL3:8;
   reconsider y = x as Point of TOP-REAL 2 by A1;
   consider k being Element of NAT such that
-A2: for n being Element of NAT holds x in S.(k+n) by A1,Th7;
+A2: for n being Element of NAT holds x in S.(k+n) by A1,KURATO_0:4;
   for r being real number st r > 0 ex k being Element of NAT st for m
   being Element of NAT st m > k holds S.m meets Ball (p, r)
   proof
     let r be real number;
     assume r > 0;
     then
-A3: x in Ball (p, r) by GOBOARD6:4;
+A3: x in Ball (p, r) by GOBOARD6:1;
     take k;
     let m be Element of NAT;
     assume m > k;
     then consider h being Nat such that
 A4: m = k + h by NAT_1:10;
-    h in NAT by ORDINAL1:def 13;
+    h in NAT by ORDINAL1:def 12;
     then x in S.m by A2,A4;
     hence thesis by A3,XBOOLE_0:3;
   end;
@@ -2044,32 +1103,32 @@ proof
   let C be Simple_closed_curve, i be Element of NAT;
   set K = (UBD L~Cage (C,i))`;
   set R = L~Cage (C,i);
-A1: (BDD R) \/ (BDD R)` = [#] TOP-REAL 2 by PRE_TOPC:18;
-  UBD R c= R` by JORDAN2C:30;
+A1: (BDD R) \/ (BDD R)` = [#] TOP-REAL 2 by PRE_TOPC:2;
+  UBD R c= R` by JORDAN2C:26;
   then
-A2: UBD R misses R by SUBSET_1:43;
-  UBD R misses BDD R by JORDAN2C:28;
+A2: UBD R misses R by SUBSET_1:23;
+  UBD R misses BDD R by JORDAN2C:24;
   then
 A3: UBD R misses (BDD R) \/ R by A2,XBOOLE_1:70;
-  [#] TOP-REAL 2 = R` \/ R by PRE_TOPC:18
-    .= (BDD R) \/ (UBD R) \/ R by JORDAN2C:31;
+  [#] TOP-REAL 2 = R` \/ R by PRE_TOPC:2
+    .= (BDD R) \/ (UBD R) \/ R by JORDAN2C:27;
   then
 A4: K = ((UBD R) \/ ((BDD R) \/ R)) \ UBD R by XBOOLE_1:4
     .= R \/ BDD R by A3,XBOOLE_1:88;
-  ((BDD R) \/ (UBD R))` = R`` by JORDAN2C:31;
+  ((BDD R) \/ (UBD R))` = R`` by JORDAN2C:27;
   then (BDD R)` /\ (UBD R)` = R by XBOOLE_1:53;
   then (BDD R) \/ R = ((BDD R) \/ (BDD R)`) /\ ((BDD R) \/ K) by XBOOLE_1:24
     .= (BDD R) \/ K by A1,XBOOLE_1:28
     .= K by A4,XBOOLE_1:7,12;
   then
-A5: Cl K = (BDD L~Cage (C,i)) \/ L~Cage (C,i) by PRE_TOPC:52;
-A6: K` = LeftComp Cage (C,i) by GOBRD14:46;
-  BDD L~Cage (C,i) misses UBD L~Cage (C,i) by JORDAN2C:28;
+A5: Cl K = (BDD L~Cage (C,i)) \/ L~Cage (C,i) by PRE_TOPC:22;
+A6: K` = LeftComp Cage (C,i) by GOBRD14:36;
+  BDD L~Cage (C,i) misses UBD L~Cage (C,i) by JORDAN2C:24;
   then
 A7: (BDD L~Cage (C,i)) /\ (UBD L~Cage (C,i)) = {} by XBOOLE_0:def 7;
   Fr K = Cl K /\ Cl K` by TOPS_1:def 2
     .= ((BDD L~Cage (C,i)) \/ L~Cage (C,i)) /\ ((UBD L~Cage (C,i)) \/ L~Cage
-  (C,i)) by A5,A6,GOBRD14:32
+  (C,i)) by A5,A6,GOBRD14:22
     .= ((BDD L~Cage (C,i)) /\ (UBD L~Cage (C,i))) \/ L~Cage (C,i) by
 XBOOLE_1:24
     .= L~Cage (C,i) by A7;
@@ -2129,9 +1188,9 @@ A2: x is_a_cluster_point_of F;
     let r be real number, n be Element of NAT;
     reconsider O = Ball (x9, r) as open Subset of TOP-REAL N by Th30;
     assume r > 0;
-    then x in O by A1,GOBOARD6:4;
+    then x in O by A1,GOBOARD6:1;
     then consider m being Element of NAT such that
-A3: n <= m & F.m in O by A2,FRECHET2:def 4;
+A3: n <= m & F.m in O by A2,FRECHET2:def 3;
     reconsider m as Element of NAT;
     take m;
     thus n <= m & F.m in Ball (x9, r) by A3;
@@ -2149,16 +1208,16 @@ A6: x in O;
     reconsider n9=n as Element of NAT;
 A7: the TopStruct of TOP-REAL N = TopSpaceMetr Euclid N by EUCLID:def 8;
     then reconsider G9 = O as Subset of TopSpaceMetr Euclid N;
-    G9 is open by A5,A7,PRE_TOPC:60;
+    G9 is open by A5,A7,PRE_TOPC:30;
     then consider r being real number such that
 A8: r > 0 and
-A9: Ball (x9, r) c= G9 by A1,A6,TOPMETR:22;
+A9: Ball (x9, r) c= G9 by A1,A6,TOPMETR:15;
     consider m being Element of NAT such that
 A10: n9 <= m & F.m in Ball (x9, r) by A4,A8;
     take m;
     thus thesis by A9,A10;
   end;
-  hence thesis by FRECHET2:def 4;
+  hence thesis by FRECHET2:def 3;
 end;
 
 theorem Th66:
@@ -2202,10 +1261,10 @@ A4: dom NS = NAT by FUNCT_2:def 1;
       let x be set;
       assume x in C.i;
       then
-A5:   x in A.(NS.i) by A3,A4,FUNCT_1:23;
+A5:   x in A.(NS.i) by A3,A4,FUNCT_1:13;
       A.(NS.i) c= B.(NS.i) by A1;
       then x in B.(NS.i) by A5;
-      hence thesis by A4,FUNCT_1:23;
+      hence thesis by A4,FUNCT_1:13;
     end;
     hence thesis;
   end;
@@ -2236,10 +1295,10 @@ A4: dom NS = NAT by FUNCT_2:def 1;
       let x be set;
       assume x in D.i;
       then
-A5:   x in A.(NS.i) by A4,FUNCT_1:23;
+A5:   x in A.(NS.i) by A4,FUNCT_1:13;
       A.(NS.i) c= B.(NS.i) by A1;
       then x in B.(NS.i) by A5;
-      hence thesis by A3,A4,FUNCT_1:23;
+      hence thesis by A3,A4,FUNCT_1:13;
     end;
     hence thesis;
   end;
@@ -2375,8 +1434,8 @@ A3: C1 = C * NS by A2,VALUED_0:def 17;
     let i be Element of NAT;
 A4: dom NS = NAT by FUNCT_2:def 1;
     then
-A5: A1.i = A.(NS.i) & B1.i = B.(NS.i) by FUNCT_1:23;
-    C1.i = C.(NS.i) by A3,A4,FUNCT_1:23
+A5: A1.i = A.(NS.i) & B1.i = B.(NS.i) by FUNCT_1:13;
+    C1.i = C.(NS.i) by A3,A4,FUNCT_1:13
       .= [: A1.i, B1.i :] by A1,A5;
     hence thesis;
   end;
@@ -2399,7 +1458,7 @@ A1: for i being Element of NAT holds C.i = [: A.i, B.i :];
 A2: x in Lim_inf C1 by Def12;
   x in the carrier of [: TOP-REAL 2, TOP-REAL 2 :] by A2;
   then x in [: the carrier of TOP-REAL 2, the carrier of TOP-REAL 2 :] by
-BORSUK_1:def 5;
+BORSUK_1:def 2;
   then consider x1, x2 being set such that
 A3: x = [x1, x2] by RELAT_1:def 1;
   consider A1, B1 being SetSequence of the carrier of TOP-REAL 2 such that
@@ -2407,12 +1466,12 @@ A4: A1 is subsequence of A and
 A5: B1 is subsequence of B and
 A6: for i being Element of NAT holds C1.i = [: A1.i, B1.i :] by A1,Th72;
 A7: x in [: Lim_inf A1, Lim_inf B1 :] by A2,A6,Th62;
-  then x2 in Lim_inf B1 by A3,ZFMISC_1:106;
+  then x2 in Lim_inf B1 by A3,ZFMISC_1:87;
   then
 A8: x2 in Lim_sup B by A5,Def12;
-  x1 in Lim_inf A1 by A3,A7,ZFMISC_1:106;
+  x1 in Lim_inf A1 by A3,A7,ZFMISC_1:87;
   then x1 in Lim_sup A by A4,Def12;
-  hence thesis by A3,A8,ZFMISC_1:106;
+  hence thesis by A3,A8,ZFMISC_1:87;
 end;
 
 ::$N Kuratowski convergence
@@ -2468,9 +1527,9 @@ A3: H = G * NS by VALUED_0:def 17;
     proof
       let i be Element of NAT;
 A4:   dom NS = NAT by FUNCT_2:def 1;
-      then H.i = G.(NS.i) by A3,FUNCT_1:23
+      then H.i = G.(NS.i) by A3,FUNCT_1:13
         .= Cl (F.(NS.i)) by A1
-        .= Cl (P.i) by A4,FUNCT_1:23;
+        .= Cl (P.i) by A4,FUNCT_1:13;
       hence thesis;
     end;
     then Lim_inf H = Lim_inf P by Th55;
@@ -2480,7 +1539,7 @@ A4:   dom NS = NAT by FUNCT_2:def 1;
   proof
     let i be Element of NAT;
     G.i = Cl (F.i) by A1;
-    hence thesis by PRE_TOPC:48;
+    hence thesis by PRE_TOPC:18;
   end;
   hence thesis by Th69;
 end;

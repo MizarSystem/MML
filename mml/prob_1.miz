@@ -34,15 +34,13 @@ environ
 
 begin
 
-reserve Omega for non empty set;
+reserve Omega for set;
 reserve X, Y, Z, p,x,y,z for set;
 reserve D, E for Subset of Omega;
 reserve f for Function;
 reserve m,n for Element of NAT;
 reserve r,r1 for real number;
 reserve seq for Real_Sequence;
-
-canceled 2;
 
 theorem Th3:
   for r,seq st (ex n st for m st n <= m holds seq.m = r) holds seq
@@ -60,7 +58,7 @@ A4: 0 < r1;
     let m;
     assume n <= m;
     then seq.m = r by A3;
-    hence thesis by A4,ABSVALUE:7;
+    hence thesis by A4,ABSVALUE:2;
   end;
   then seq is convergent by SEQ_2:def 6;
   hence thesis by A2,SEQ_2:def 7;
@@ -93,7 +91,7 @@ end;
 
 registration
   let X be set;
-  cluster bool X -> compl-closed Subset-Family of X;
+  cluster bool X -> compl-closed for Subset-Family of X;
   coherence
   proof
     bool X is compl-closed
@@ -107,7 +105,7 @@ end;
 
 registration
   let X be set;
-  cluster non empty compl-closed cap-closed Subset-Family of X;
+  cluster non empty compl-closed cap-closed for Subset-Family of X;
   existence
   proof
     take bool X;
@@ -138,8 +136,6 @@ proof
   hence thesis;
 end;
 
-canceled 4;
-
 theorem Th9:
   for A, B being set st A in F & B in F holds A \/ B in F
 proof
@@ -158,7 +154,7 @@ theorem Th10:
   {} in F
 proof
   consider A being Subset of X such that
-A1: A in F by SUBSET_1:10;
+A1: A in F by SUBSET_1:4;
   A misses A` by XBOOLE_1:79;
   then
 A2: A /\ A` = {} by XBOOLE_0:def 7;
@@ -170,8 +166,8 @@ theorem Th11:
   X in F
 proof
   consider A being Subset of X such that
-A1: A in F by SUBSET_1:10;
-A2: A \/ A` = [#] X by SUBSET_1:25
+A1: A in F by SUBSET_1:4;
+A2: A \/ A` = [#] X by SUBSET_1:10
     .= X;
   A` in F by A1,Def1;
   hence thesis by A1,A2,Th9;
@@ -186,7 +182,7 @@ A1: A in F;
   assume B in F;
   then B` in F by Def1;
   then A /\ B` in F by A1,FINSUB_1:def 2;
-  hence thesis by SUBSET_1:32;
+  hence thesis by SUBSET_1:13;
 end;
 
 theorem
@@ -234,22 +230,6 @@ proof
   hence thesis by TARSKI:def 3;
 end;
 
-canceled;
-
-theorem
-  for x,y,z st [x,y] in [:NAT,{X}:] & [x,z] in [:NAT,{X}:] holds y=z
-proof
-  let x,y,z;
-  assume that
-A1: [x,y] in [:NAT,{X}:] and
-A2: [x,z] in [:NAT,{X}:];
-  y in {X} by A1,ZFMISC_1:106;
-  then
-A3: y = X by TARSKI:def 1;
-  z in {X} by A2,ZFMISC_1:106;
-  hence thesis by A3,TARSKI:def 1;
-end;
-
 definition
   let X be set;
   mode SetSequence of X is sequence of bool X;
@@ -257,8 +237,6 @@ end;
 
 reserve ASeq,BSeq for SetSequence of Omega;
 reserve A1 for SetSequence of X;
-
-canceled 4;
 
 theorem Th23:
   union rng A1 is Subset of X
@@ -269,12 +247,12 @@ proof
     assume Y in rng A1;
     then consider y such that
 A1: y in dom A1 and
-A2: Y = A1.y by FUNCT_1:def 5;
+A2: Y = A1.y by FUNCT_1:def 3;
     reconsider y as Element of NAT by A1,FUNCT_2:def 1;
     Y = A1.y by A2;
     hence thesis;
   end;
-  hence thesis by ZFMISC_1:94;
+  hence thesis by ZFMISC_1:76;
 end;
 
 definition
@@ -282,8 +260,6 @@ definition
   redefine func Union A1 -> Subset of X;
   coherence by Th23;
 end;
-
-canceled;
 
 theorem Th25:
   x in Union A1 iff ex n st x in A1.n
@@ -300,7 +276,7 @@ A1:   x in Y and
 A2:   Y in rng A1 by TARSKI:def 4;
       consider p such that
 A3:   p in dom A1 and
-A4:   Y = A1.p by A2,FUNCT_1:def 5;
+A4:   Y = A1.p by A2,FUNCT_1:def 3;
       p in NAT by A3,FUNCT_2:def 1;
       hence thesis by A1,A4;
     end;
@@ -310,15 +286,20 @@ A4:   Y = A1.p by A2,FUNCT_1:def 5;
 A5:   x in A1.n;
       n in NAT;
       then n in dom A1 by FUNCT_2:def 1;
-      then A1.n in rng A1 by FUNCT_1:def 5;
+      then A1.n in rng A1 by FUNCT_1:def 3;
       hence thesis by A5,TARSKI:def 4;
     end;
   end;
   hence thesis;
 end;
 
-theorem Th26:
-  ex B1 being SetSequence of X st for n holds B1.n = (A1.n)`
+definition
+  let X be set, A1 be SetSequence of X;
+
+  func Complement A1 -> SetSequence of X means
+  :Def4:
+  for n holds it.n = (A1.n )`;
+  existence
 proof
   deffunc F(Element of NAT) = (A1.$1)`;
   ex f being Function of NAT,bool X st for x being Element of NAT holds f.
@@ -328,14 +309,6 @@ A1: for x being Element of NAT holds f.x = (A1.x)`;
   take f;
   thus thesis by A1;
 end;
-
-definition
-  let X be set, A1 be SetSequence of X;
-  canceled 2;
-  func Complement A1 -> SetSequence of X means
-  :Def4:
-  for n holds it.n = (A1.n )`;
-  existence by Th26;
   uniqueness
   proof
     let BSeq,CSeq be SetSequence of X such that
@@ -351,7 +324,7 @@ A3: for x st x in NAT holds BSeq.x = CSeq.x
       hence thesis;
     end;
     NAT = dom BSeq & NAT = dom CSeq by FUNCT_2:def 1;
-    hence thesis by A3,FUNCT_1:9;
+    hence thesis by A3,FUNCT_1:2;
   end;
   involutiveness
   proof
@@ -369,8 +342,6 @@ definition
   (Union Complement A1)`;
   correctness;
 end;
-
-canceled 2;
 
 theorem Th29:
   x in Intersection A1 iff for n holds x in A1.n
@@ -416,14 +387,14 @@ proof
   suppose
 A1: n=0;
     thus (Complement (A followed_by B)).n = ((A followed_by B).n)` by Def4
-      .= A` by A1,FUNCT_7:121
-      .= (A` followed_by B`).n by A1,FUNCT_7:121;
+      .= A` by A1,FUNCT_7:119
+      .= (A` followed_by B`).n by A1,FUNCT_7:119;
   end;
   suppose
 A2: n>0;
     thus (Complement (A followed_by B)).n = ((A followed_by B).n)` by Def4
-      .= B` by A2,FUNCT_7:122
-      .= (A` followed_by B`).n by A2,FUNCT_7:122;
+      .= B` by A2,FUNCT_7:120
+      .= (A` followed_by B`).n by A2,FUNCT_7:120;
   end;
 end;
 
@@ -433,8 +404,8 @@ proof
   let A, B be Subset of X;
   set A1 = A followed_by B;
   Complement A1= A` followed_by B` by Lm2;
-  then rng Complement A1 = {A`,B`} by FUNCT_7:128;
-  then Union Complement A1 = A` \/ B` by ZFMISC_1:93;
+  then rng Complement A1 = {A`,B`} by FUNCT_7:126;
+  then Union Complement A1 = A` \/ B` by ZFMISC_1:75;
   then (Union Complement A1)` = A`` /\ B`` by XBOOLE_1:53;
   hence thesis;
 end;
@@ -457,7 +428,7 @@ end;
 
 registration
   let X be set;
-  cluster bool X -> sigma-multiplicative Subset-Family of X;
+  cluster bool X -> sigma-multiplicative for Subset-Family of X;
   coherence
   proof
     for BSeq be SetSequence of X st rng BSeq c= bool X
@@ -468,7 +439,7 @@ end;
 
 registration
   let X be set;
-  cluster compl-closed sigma-multiplicative non empty Subset-Family of X;
+  cluster compl-closed sigma-multiplicative non empty for Subset-Family of X;
   existence
   proof
     take bool X;
@@ -482,14 +453,10 @@ definition
     Subset-Family of X;
 end;
 
-canceled;
-
 theorem
   for S being non empty set holds S is SigmaField of X iff S c= bool X &
   (for A1 being SetSequence of X st rng A1 c= S holds Intersection A1 in S) &
   for A being Subset of X st A in S holds A` in S by Def1,Def8;
-
-canceled 2;
 
 theorem Th35:
   Y is SigmaField of X implies Y is Field_Subset of X
@@ -503,9 +470,9 @@ A1: Y is SigmaField of X;
 A2: A in Y & B in Y;
     then reconsider A9 = A, B9 = B as Subset of X by A1;
     set A1 = A9 followed_by B9;
-    rng A1 = {A9,B9} by FUNCT_7:128;
+    rng A1 = {A9,B9} by FUNCT_7:126;
     then
-A3: rng A1 c= Y by A2,ZFMISC_1:38;
+A3: rng A1 c= Y by A2,ZFMISC_1:32;
     Intersection A1 = A /\ B by Th30;
     hence thesis by A1,A3,Def8;
   end;
@@ -514,7 +481,7 @@ end;
 
 registration
   let X be set;
-  cluster -> cap-closed compl-closed SigmaField of X;
+  cluster -> cap-closed compl-closed for SigmaField of X;
   coherence by Th35;
 end;
 
@@ -527,26 +494,21 @@ reserve Si for SigmaField of X;
 :: these notions.
 
 registration
-  let X be set, Si be SigmaField of X;
-  cluster Si-valued SetSequence of X;
+  let X be set, F be non empty Subset-Family of X;
+  cluster F-valued for SetSequence of X;
   existence
   proof
-    set A1 = NAT --> X;
-    X in bool X by ZFMISC_1:def 1;
-    then reconsider A1 as SetSequence of X by FUNCOP_1:57;
+    set A1 = NAT --> the Element of F;
+    reconsider A1 as SetSequence of X by FUNCOP_1:45;
     take A1;
-    X in Si & rng A1 = {X} by Th11,FUNCOP_1:14;
-    then rng A1 c= Si by ZFMISC_1:37;
-    hence thesis by RELAT_1:def 19;
+    thus thesis;
   end;
 end;
 
 definition
-  let X be set, Si be SigmaField of X;
-  mode SetSequence of Si is Si-valued SetSequence of X;
+  let X be set, F be non empty Subset-Family of X;
+  mode SetSequence of F is F-valued SetSequence of X;
 end;
-
-canceled 10;
 
 theorem Th46:
   for ASeq being SetSequence of Si holds Union ASeq in Si
@@ -557,15 +519,15 @@ A1: rng A1 c= Si implies for n being Nat holds (Complement A1).n in Si
     assume
 A2: rng A1 c= Si;
     let n be Nat;
-    A1.n in rng A1 by NAT_1:52;
-    then n in NAT & (A1.n)` in Si by A2,Def1,ORDINAL1:def 13;
+    A1.n in rng A1 by NAT_1:51;
+    then n in NAT & (A1.n)` in Si by A2,Def1,ORDINAL1:def 12;
     hence thesis by Def4;
   end;
 A3: rng A1 c= Si implies Union Complement Complement A1 in Si
   proof
     assume rng A1 c= Si;
     then for n being Nat holds (Complement A1).n in Si by A1;
-    then rng Complement A1 c= Si by NAT_1:53;
+    then rng Complement A1 c= Si by NAT_1:52;
     then Intersection Complement A1 in Si by Def8;
     then (Union Complement Complement A1)`` in Si by Def1;
     hence thesis;
@@ -597,8 +559,6 @@ definition
   end;
 end;
 
-canceled;
-
 theorem
   x in Si implies x is Event of Si;
 
@@ -622,7 +582,7 @@ theorem
 
 registration
   let X,Si;
-  cluster empty Event of Si;
+  cluster empty for Event of Si;
   existence
   proof
     {} is Event of Si by Th10;
@@ -631,9 +591,9 @@ registration
 end;
 
 definition
-  canceled;
+
   let X,Si;
-  canceled;
+
   func [#] Si -> Event of Si equals
   X;
   coherence by Th11;
@@ -650,35 +610,33 @@ definition
   coherence by Th12;
 end;
 
-canceled 2;
-
 theorem
-  ASeq is SetSequence of Sigma iff for n holds ASeq.n is Event of Sigma
+  A1 is SetSequence of Si iff for n holds A1.n is Event of Si
 proof
-  thus ASeq is SetSequence of Sigma implies for n holds ASeq.n is Event of
-  Sigma
+  thus A1 is SetSequence of Si implies for n holds A1.n is Event of
+  Si
   proof
-    assume ASeq is SetSequence of Sigma;
+    assume A1 is SetSequence of Si;
     then
-A1: rng ASeq c= Sigma by RELAT_1:def 19;
-    for n holds ASeq.n is Event of Sigma
+A1: rng A1 c= Si by RELAT_1:def 19;
+    for n holds A1.n is Event of Si
     proof
       let n;
-      ASeq.n in rng ASeq by NAT_1:52;
+      A1.n in rng A1 by NAT_1:51;
       hence thesis by A1;
     end;
     hence thesis;
   end;
   assume
-A2: for n holds ASeq.n is Event of Sigma;
-  for n be Nat holds ASeq.n in Sigma
+A2: for n holds A1.n is Event of Si;
+  for n be Nat holds A1.n in Si
   proof
     let n be Nat;
-    n in NAT by ORDINAL1:def 13;
-    then ASeq.n is Event of Sigma by A2;
+    n in NAT by ORDINAL1:def 12;
+    then A1.n is Event of Si by A2;
     hence thesis;
   end;
-  then rng ASeq c= Sigma by NAT_1:53;
+  then rng A1 c= Si by NAT_1:52;
   hence thesis by RELAT_1:def 19;
 end;
 
@@ -730,18 +688,16 @@ A2: for D st D in Sigma holds (p in D implies f.D = 1) & (not p in D
     assume y in rng f;
     then consider x such that
 A3: x in dom f and
-A4: y = f.x by FUNCT_1:def 5;
+A4: y = f.x by FUNCT_1:def 3;
     reconsider x as Subset of Omega by A1,A3;
 A5: not p in x implies y = 0 by A1,A2,A3,A4;
     p in x implies y = 1 by A1,A2,A3,A4;
     hence thesis by A5;
   end;
-  then reconsider f as Function of Sigma,REAL by A1,FUNCT_2:def 1,RELSET_1:11;
+  then reconsider f as Function of Sigma,REAL by A1,FUNCT_2:def 1,RELSET_1:4;
   take f;
   thus thesis by A2;
 end;
-
-canceled;
 
 theorem Th62:
   P * ASeq is Real_Sequence
@@ -749,10 +705,10 @@ proof
   rng ASeq c= Sigma by RELAT_1:def 19;
   then rng ASeq c= dom P by FUNCT_2:def 1;
   then
-A1: dom (P * ASeq) = dom ASeq by RELAT_1:46
+A1: dom (P * ASeq) = dom ASeq by RELAT_1:27
     .= NAT by FUNCT_2:def 1;
   rng (P * ASeq) c= REAL by RELAT_1:def 19;
-  hence thesis by A1,FUNCT_2:def 1,RELSET_1:11;
+  hence thesis by A1,FUNCT_2:def 1,RELSET_1:4;
 end;
 
 definition
@@ -761,9 +717,17 @@ definition
   coherence by Th62;
 end;
 
+reserve Omega for non empty set;
+reserve Sigma for SigmaField of Omega;
+reserve A, B for Event of Sigma,
+  ASeq for SetSequence of Sigma;
+reserve P for Function of Sigma,REAL;
+reserve D, E for Subset of Omega;
+reserve BSeq for SetSequence of Omega;
+
 definition
   let Omega,Sigma;
-  canceled;
+
   mode Probability of Sigma -> Function of Sigma,REAL means
   :Def13:
   (for A holds 0 <= it.A) & it.Omega = 1 &
@@ -772,19 +736,32 @@ definition
     lim (it * ASeq) = it.Intersection ASeq;
   existence
   proof
-    set p =the  Element of Omega;
+    set p = the Element of Omega;
     consider P such that
 A1: for D st D in Sigma holds (p in D implies P.D = 1) & (not p in D
     implies P.D = 0) by Th60;
-A2: for ASeq st ASeq is non-ascending holds P * ASeq is convergent & lim
-    (P * ASeq) = P.Intersection ASeq
+    take P;
+    thus for A holds 0 <= P.A by A1;
+     [#]Sigma in Sigma;
+    hence P.Omega = 1 by A1;
+    thus for A,B st A misses B holds P.(A \/ B) = P.A + P.B
     proof
-      let ASeq;
+      let A,B such that
+A20:  A misses B;
+A21:  p in A & not p in B implies p in A \/ B by XBOOLE_0:def 3;
+A22:  not p in A & p in B implies P.A = 0 & P.B = 1 by A1;
+A23:  not p in A & p in B implies p in A \/ B by XBOOLE_0:def 3;
+A24:  not p in A & not p in B implies P.A = 0 & P.B = 0 by A1;
+A25:  not p in A & not p in B implies not p in (A \/ B) by XBOOLE_0:def 3;
+      p in A & not p in B implies P.A = 1 & P.B = 0 by A1;
+      hence thesis by A1,A20,A21,A22,A23,A24,A25,XBOOLE_0:3;
+    end;
+    let ASeq;
 A3:   for n holds (P * ASeq).n = P.(ASeq.n)
       proof
         let n;
         dom (P * ASeq) = NAT by FUNCT_2:def 1;
-        hence thesis by FUNCT_1:22;
+        hence thesis by FUNCT_1:12;
       end;
 A4:   (for n holds p in ASeq.n) implies for n holds (P * ASeq).n = 1
       proof
@@ -793,7 +770,7 @@ A5:     for n holds p in ASeq.n;
         for n holds (P * ASeq).n = 1
         proof
           let n;
-A6:       rng ASeq c= Sigma & ASeq.n in rng ASeq by NAT_1:52,RELAT_1:def 19;
+A6:       rng ASeq c= Sigma & ASeq.n in rng ASeq by NAT_1:51,RELAT_1:def 19;
           p in ASeq.n by A5;
           then P.(ASeq.n) = 1 by A1,A6;
           hence thesis by A3;
@@ -816,7 +793,7 @@ A9:     not p in ASeq.m;
           then ASeq.n c= ASeq.m by A7,Def6;
           then
 A10:      not p in ASeq.n by A9;
-          rng ASeq c= Sigma & ASeq.n in rng ASeq by NAT_1:52,RELAT_1:def 19;
+          rng ASeq c= Sigma & ASeq.n in rng ASeq by NAT_1:51,RELAT_1:def 19;
           then P.(ASeq.n) = 0 by A1,A10;
           hence thesis by A3;
         end;
@@ -824,21 +801,13 @@ A10:      not p in ASeq.n by A9;
       end;
 A11:  (ex m st (for n st m <= n holds (P * ASeq).n = 0)) implies P * ASeq
       is convergent & lim (P * ASeq) = 0 by Th3;
-A12:  not (for n holds p in ASeq.n) implies P * ASeq is convergent & lim
-      (P * ASeq) = P.Intersection ASeq
-      proof
         rng ASeq c= Sigma by RELAT_1:def 19;
         then
 A13:    Intersection ASeq in Sigma by Def8;
-        assume
-A14:    not (for n holds p in ASeq.n);
-        then not p in Intersection ASeq by Th29;
-        hence thesis by A1,A8,A11,A14,A13;
-      end;
+        reconsider r = 1 as Real;
 A15:  (for n holds (P * ASeq).n = 1) implies P * ASeq is convergent & lim
       (P * ASeq) = 1
       proof
-        reconsider r = 1 as Real;
         assume
 A16:    for n holds (P * ASeq).n = 1;
         ex m st for n st m <= n holds (P * ASeq).n = r
@@ -848,39 +817,17 @@ A16:    for n holds (P * ASeq).n = 1;
         end;
         hence thesis by Th3;
       end;
-      (for n holds p in ASeq.n) implies P * ASeq is convergent & lim (P *
-      ASeq) = P.Intersection ASeq
-      proof
-        rng ASeq c= Sigma by RELAT_1:def 19;
-        then
-A17:    Intersection ASeq in Sigma by Def8;
-        assume
+      per cases;
+      suppose
+A14:    not (for n holds p in ASeq.n);
+        then not p in Intersection ASeq by Th29;
+        hence thesis by A1,A8,A11,A14,A13;
+      end;
+      suppose
 A18:    for n holds p in ASeq.n;
         then p in Intersection ASeq by Th29;
-        hence thesis by A1,A4,A15,A18,A17;
+        hence thesis by A1,A4,A15,A18,A13;
       end;
-      hence thesis by A12;
-    end;
-A19: for A,B st A misses B holds P.(A \/ B) = P.A + P.B
-    proof
-      let A,B such that
-A20:  A misses B;
-A21:  p in A & not p in B implies p in A \/ B by XBOOLE_0:def 3;
-A22:  not p in A & p in B implies P.A = 0 & P.B = 1 by A1;
-A23:  not p in A & p in B implies p in A \/ B by XBOOLE_0:def 3;
-A24:  not p in A & not p in B implies P.A = 0 & P.B = 0 by A1;
-A25:  not p in A & not p in B implies not p in (A \/ B) by XBOOLE_0:def 3;
-      p in A & not p in B implies P.A = 1 & P.B = 0 by A1;
-      hence thesis by A1,A20,A21,A22,A23,A24,A25,XBOOLE_0:3;
-    end;
-    take P;
-A26: P.Omega = 1
-    proof
-      [#]Sigma in Sigma;
-      hence thesis by A1;
-    end;
-    for A holds 0 <= P.A by A1;
-    hence thesis by A26,A19,A2;
   end;
 end;
 
@@ -888,7 +835,7 @@ reserve P for Probability of Sigma;
 
 registration
   let Omega,Sigma;
-  cluster -> zeroed Probability of Sigma;
+  cluster -> zeroed for Probability of Sigma;
   coherence
   proof
     reconsider E = {} as Event of Sigma by Th10;
@@ -900,15 +847,13 @@ A1: {} misses ([#] Sigma) & {} \/ ([#] Sigma) = [#] Sigma by XBOOLE_1:65;
   end;
 end;
 
-canceled 3;
-
 theorem
   P.([#] Sigma) = 1 by Def13;
 
 theorem Th67:
   P.(([#] Sigma) \ A) + P.A = 1
 proof
-A1: (([#] Sigma) \ A) \/ A = A` \/ A .= [#] Omega by SUBSET_1:25
+A1: (([#] Sigma) \ A) \/ A = A` \/ A .= [#] Omega by SUBSET_1:10
     .= Omega;
   (([#] Sigma) \ A) misses A by XBOOLE_1:79;
   then P.(([#] Sigma) \ A) + P.A = P.Omega by A1,Def13
@@ -940,7 +885,7 @@ proof
   assume A c= B;
   then P.(B \ A) = P.B - P.A by Th69;
   then 0 <= P.B - P.A by Def13;
-  then 0 + P.A <= P.B by XREAL_1:21;
+  then 0 + P.A <= P.B by XREAL_1:19;
   hence thesis;
 end;
 
@@ -979,7 +924,7 @@ theorem
   P.(A \/ B) <= P.A + P.B
 proof
   0 <= P.(A /\ B) & P.(A \/ B) = P.A + P.B - P.(A /\ B) by Def13,Th74;
-  hence thesis by XREAL_1:45;
+  hence thesis by XREAL_1:43;
 end;
 
 ::  definition of sigma-field generated by families
@@ -991,10 +936,13 @@ reserve S for Subset-Family of Omega;
 theorem
   bool X is SigmaField of X;
 
-Lm3: for X being Subset-Family of Omega ex Y being SigmaField of Omega st X c=
-Y & for Z st X c= Z & Z is SigmaField of Omega holds Y c= Z
-proof
+definition
+  let Omega;
   let X be Subset-Family of Omega;
+  func sigma(X) -> SigmaField of Omega means
+  X c= it & for Z st X c= Z & Z is SigmaField of Omega holds it c= Z;
+  existence
+proof
   set V = { S : X c= S & S is SigmaField of Omega};
   set Y = meet V;
 A1: now
@@ -1027,11 +975,11 @@ A6: rng BSeq c= Y;
 A7:   Z in V;
       now
         let n be Nat;
-        BSeq.n in rng BSeq by NAT_1:52;
+        BSeq.n in rng BSeq by NAT_1:51;
         hence BSeq.n in Z by A6,A7,SETFAM_1:def 1;
       end;
       then
-A8:   rng BSeq c= Z by NAT_1:53;
+A8:   rng BSeq c= Z by NAT_1:52;
       ex S st Z = S & X c= S & S is SigmaField of Omega by A7;
       hence Intersection BSeq in Z by A8,Def8;
     end;
@@ -1043,7 +991,7 @@ A8:   rng BSeq c= Z by NAT_1:53;
     then ex S st Z = S & X c= S & S is SigmaField of Omega;
     hence {} in Z by Th10;
   end;
-  then reconsider Y as SigmaField of Omega by A2,A5,A3,Def1,Def8,SETFAM_1:4
+  then reconsider Y as SigmaField of Omega by A2,A5,A3,Def1,Def8,SETFAM_1:3
 ,def 1;
   take Y;
   for Z st X c= Z & Z is SigmaField of Omega holds Y c= Z
@@ -1054,17 +1002,10 @@ A9: X c= Z and
 A10: Z is SigmaField of Omega;
     reconsider Z as Subset-Family of Omega by A10;
     Z in V by A9,A10;
-    hence thesis by SETFAM_1:4;
+    hence thesis by SETFAM_1:3;
   end;
-  hence thesis by A2,A1,SETFAM_1:6;
+  hence thesis by A2,A1,SETFAM_1:5;
 end;
-
-definition
-  let Omega;
-  let X be Subset-Family of Omega;
-  func sigma(X) -> SigmaField of Omega means
-  X c= it & for Z st X c= Z & Z is SigmaField of Omega holds it c= Z;
-  existence by Lm3;
   uniqueness
   proof
     let R1,R2 be SigmaField of Omega;
@@ -1118,3 +1059,29 @@ end;
 theorem
   for A, B being Subset of X holds Complement (A followed_by B) = A`
   followed_by B` by Lm2;
+
+definition
+  let X, Y be set;
+  let A be Subset-Family of X;
+  let F be Function of Y, bool A;
+  let x be set;
+  redefine func F.x -> Subset-Family of X;
+  coherence
+  proof
+    per cases;
+    suppose
+A1:   x in dom F;
+A2:   rng F c= bool A by RELAT_1:def 19;
+A3:   bool A c= bool bool X by ZFMISC_1:67;
+      F.x in rng F by A1,FUNCT_1:def 3;
+      then F.x in bool A by A2;
+      hence thesis by A3;
+    end;
+    suppose
+      not x in dom F;
+      then F.x = {} by FUNCT_1:def 2;
+      hence thesis by XBOOLE_1:2;
+    end;
+  end;
+end;
+

@@ -26,14 +26,14 @@
 </Signature>
 <FCluster aid="LTLAXIO1" nr="1">
 <ArgTypes/>
-<Func kind="K" nr="195"/>
+<Func kind="K" nr="198"/>
 <Cluster>
-<Adjective nr="54"/>
+<Adjective nr="55"/>
 </Cluster>
 </FCluster>
 <FCluster aid="LTLAXIO1" nr="2">
 <ArgTypes/>
-<Func kind="K" nr="195"/>
+<Func kind="K" nr="198"/>
 <Cluster>
 <Adjective nr="1" value="false"/>
 </Cluster>

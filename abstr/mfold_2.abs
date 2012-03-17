@@ -1,0 +1,276 @@
+:: Planes and Spheres as Topological Manifolds. Stereographic Projection
+::  by Marco Riccardi
+:: 
+:: Received June 6, 2011
+:: Copyright (c) 2011 Association of Mizar Users
+::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
+:: This code can be distributed under the GNU General Public Licence
+:: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
+:: License version 3.0 or later, subject to the binding interpretation
+:: detailed in file COPYING.interpretation.
+:: See COPYING.GPL and COPYING.CC-BY-SA for the full text of these
+:: licenses, or see http://www.gnu.org/licenses/gpl.html and
+:: http://creativecommons.org/licenses/by-sa/3.0/.
+
+environ
+
+ vocabularies NUMBERS, SUBSET_1, XREAL_0, ORDINAL1, PRE_TOPC, EUCLID, ARYTM_1,
+      ARYTM_3, SUPINF_2, XBOOLE_0, PRVECT_1, FUNCOP_1, XXREAL_0, RLSUB_2,
+      ORDINAL2, METRIC_1, TARSKI, STRUCT_0, REAL_1, MATRIXR2, FINSEQ_1,
+      FINSEQ_2, COMPTS_1, BINOP_2, TOPS_2, T_0TOPSP, CONNSP_2, FUNCT_1,
+      RELAT_1, CARD_1, FUNCT_2, VALUED_1, WAYBEL23, RLVECT_3, FINSET_1, NAT_1,
+      PARTFUN1, SETFAM_1, ORDINAL4, ALGSTR_0, EUCLID_7, CARD_3, RCOMP_1,
+      TOPREALB, RVSUM_1, RLSUB_1, RLVECT_2, FUNCSDOM, RLVECT_1, RLTOPSP1,
+      VECTSP_1, MATRIX_1, MATRLIN2, RLVECT_5, ZFMISC_1, PCOMPS_1, COMPLEX1,
+      SQUARE_1, TOPMETR, INCSP_1, MFOLD_1, MFOLD_2;
+ notations TARSKI, XBOOLE_0, SUBSET_1, SETFAM_1, FUNCOP_1, FUNCT_1, TOPS_2,
+      RELAT_1, CANTOR_1, RELSET_1, PARTFUN1, FUNCT_2, ORDINAL1, NAT_1, NUMBERS,
+      VALUED_0, VALUED_1, XCMPLX_0, XREAL_0, XXREAL_0, COMPLEX1, REAL_1,
+      RVSUM_1, PRE_TOPC, METRIC_1, TOPREAL9, ALGSTR_0, CONNSP_2, TSEP_1,
+      METRIZTS, COMPTS_1, EUCLID, SQUARE_1, TOPMETR, TMAP_1, MEMBERED,
+      XXREAL_2, TOPREAL6, WAYBEL23, CARD_1, TOPREALB, RLSUB_1, RLVECT_3,
+      RLTOPSP1, PRVECT_1, VECTSP_1, MATRIX_1, MATRIX_6, MATRTOP1, RLVECT_2,
+      RLVECT_5, FUNCSDOM, FINSEQ_1, FINSET_1, FINSEQ_2, EUCLID_7, STRUCT_0,
+      RLVECT_1, FVSUM_1, RLSUB_2, CARD_3, T_0TOPSP, BORSUK_3, BINOP_2,
+      ZFMISC_1, SEQ_1, NAT_D, PCOMPS_1, BINOP_1, RUSUB_4, CONVEX1, MONOID_0,
+      MFOLD_1;
+ constructors MONOID_0, TOPREAL9, TOPREALB, SQUARE_1, FUNCSDOM, TOPS_1, TSEP_1,
+      METRIZTS, PCOMPS_1, RLVECT_1, COMPLEX1, COMPTS_1, XCMPLX_0, NAT_1,
+      EUCLID, BINOP_2, TOPMETR, TMAP_1, MEMBERED, XXREAL_2, TOPREAL6, WAYBEL23,
+      RLSUB_1, RLVECT_3, RLTOPSP1, PRVECT_1, VECTSP_1, VECTSP_4, MATRIX_1,
+      MATRIX_6, MATRTOP1, STRUCT_0, RLVECT_2, RLVECT_5, FINSEQ_1, FINSET_1,
+      FINSEQ_2, EUCLID_7, FVSUM_1, RLSUB_2, CANTOR_1, CARD_3, BORSUK_3, SEQ_1,
+      NAT_D, RELAT_1, RUSUB_4, CONVEX1, NUMBERS, MFOLD_1;
+ registrations XBOOLE_0, XXREAL_0, XREAL_0, XCMPLX_0, SQUARE_1, NAT_1,
+      MEMBERED, STRUCT_0, METRIC_1, MONOID_0, EUCLID, TOPALG_2, VALUED_0,
+      FINSEQ_1, FUNCT_1, RELAT_1, PRE_TOPC, TOPS_1, CARD_1, TSEP_1, TOPREAL9,
+      PCOMPS_1, RLVECT_1, COMPLEX1, TMAP_1, COMPTS_1, TOPMETR, XXREAL_2,
+      TOPREAL6, SPPOL_1, WAYBEL23, METRIZTS, RLVECT_3, TOPREAL1, YELLOW13,
+      YELLOW_8, KURATO_2, SUBSET_1, TOPREALB, PRVECT_1, VECTSP_1, RLVECT_2,
+      RLVECT_5, EUCLID_7, FUNCSDOM, FINSET_1, FUNCT_2, FINSEQ_2, FUNCOP_1,
+      FVSUM_1, RLSUB_1, REAL_1, ORDINAL1, ALGSTR_0, RLSUB_2, MATRTOP1,
+      CANTOR_1, CARD_3, BORSUK_3, RVSUM_1, NUMBERS, RLTOPSP1, PARTFUN1,
+      RELSET_1, GRFUNC_1, MFOLD_1, RLAFFIN3;
+ requirements NUMERALS, BOOLE, SUBSET, ARITHM, REAL;
+
+
+begin :: Preliminaries
+
+registration
+  cluster {} -> {}-valued;
+  cluster {} -> onto;
+end;
+
+theorem :: MFOLD_2:1
+  for f being Function, Y being set holds dom(Y|f) = f"Y;
+
+theorem :: MFOLD_2:2
+  for f being Function, Y1,Y2 being set st Y2 c= Y1 holds (Y1|f)"Y2 = f"Y2;
+
+:: generalization TOPS_2 Th70
+
+theorem :: MFOLD_2:3
+  for S,T being TopStruct, f being Function of S,T holds
+  f is being_homeomorphism implies f" is being_homeomorphism;
+
+definition
+  let S,T be TopStruct;
+  redefine pred S,T are_homeomorphic;
+  symmetry;
+end;
+
+reserve T1,T2,T3 for TopSpace,
+  A1 for Subset of T1, A2 for Subset of T2, A3 for Subset of T3;
+
+:: like METRIZTS
+
+theorem :: MFOLD_2:4
+  for f be Function of T1,T2 st f is being_homeomorphism
+  for g be Function of T1|f"A2,T2|A2 st g = A2|f
+  holds g is being_homeomorphism;
+
+theorem :: MFOLD_2:5
+  for f be Function of T1,T2 st f is being_homeomorphism holds
+  f"A2,A2 are_homeomorphic;
+
+theorem :: MFOLD_2:6
+  A1,A2 are_homeomorphic implies A2,A1 are_homeomorphic;
+
+theorem :: MFOLD_2:7
+  A1,A2 are_homeomorphic implies (A1 is empty iff A2 is empty);
+
+theorem :: MFOLD_2:8
+  A1,A2 are_homeomorphic & A2,A3 are_homeomorphic
+  implies A1,A3 are_homeomorphic;
+
+theorem :: MFOLD_2:9
+  T1 is second-countable & T1,T2 are_homeomorphic
+  implies T2 is second-countable;
+
+reserve n,k for natural number;
+reserve M,N for non empty TopSpace;
+
+theorem :: MFOLD_2:10
+  M is Hausdorff & M,N are_homeomorphic implies N is Hausdorff;
+
+theorem :: MFOLD_2:11
+  M is n-locally_euclidean & M,N are_homeomorphic implies
+  N is n-locally_euclidean;
+
+theorem :: MFOLD_2:12
+  M is n-manifold & M,N are_homeomorphic implies N is n-manifold;
+
+:: like MATRIX14
+
+theorem :: MFOLD_2:13
+  for x1,x2 being FinSequence of REAL,i being Element of NAT
+  st i in dom mlt(x1,x2)
+  holds mlt(x1,x2).i = (x1/.i)*(x2/.i) & (mlt(x1,x2))/.i=(x1/.i)*(x2/.i);
+
+theorem :: MFOLD_2:14
+  for x1,x2,y1,y2 being FinSequence of REAL st len x1=len x2 & len y1=len y2
+  holds mlt(x1^y1,x2^y2)=(mlt(x1,x2))^(mlt(y1,y2));
+
+theorem :: MFOLD_2:15
+  for x1,x2,y1,y2 being FinSequence of REAL st len x1=len x2 & len y1=len y2
+  holds |( x1^y1, x2^y2 )| = |(x1,x2)| + |(y1,y2)|;
+
+reserve p,q,p1,p2 for Point of TOP-REAL n;
+reserve r for real number;
+
+theorem :: MFOLD_2:16
+  k in Seg n implies (p1+p2).k = p1.k + p2.k;
+
+:: like MATRTOP_2
+
+theorem :: MFOLD_2:17
+  for X being set holds
+  X is Linear_Combination of RealVectSpace(Seg n)
+iff
+  X is Linear_Combination of TOP-REAL n;
+
+theorem :: MFOLD_2:18
+  for F be FinSequence of TOP-REAL n,
+      fr be Function of TOP-REAL n,REAL,
+      Fv be FinSequence of RealVectSpace(Seg n),
+      fv be Function of RealVectSpace(Seg n),REAL st fr = fv & F = Fv
+  holds fr(#)F = fv(#)Fv;
+
+theorem :: MFOLD_2:19
+  for F be FinSequence of TOP-REAL n,
+      Fv be FinSequence of RealVectSpace(Seg n) st Fv = F
+  holds Sum F = Sum Fv;
+
+theorem :: MFOLD_2:20
+  for Lv be Linear_Combination of RealVectSpace(Seg n),
+      Lr be Linear_Combination of TOP-REAL n st Lr = Lv
+  holds Sum Lr = Sum Lv;
+
+theorem :: MFOLD_2:21
+  for Af be Subset of RealVectSpace(Seg n),
+      Ar be Subset of TOP-REAL n st Af = Ar
+  holds Af is linearly-independent iff Ar is linearly-independent;
+
+theorem :: MFOLD_2:22
+  for V being Subset of TOP-REAL n st V = RN_Base n holds
+  ex l being Linear_Combination of V st p = Sum l;
+
+theorem :: MFOLD_2:23
+  RN_Base n is Basis of TOP-REAL n;
+
+theorem :: MFOLD_2:24
+  for V being Subset of TOP-REAL n holds
+  V in the topology of TOP-REAL n iff
+  for p st p in V ex r st r > 0 & Ball(p,r) c= V;
+
+definition
+  let n be Nat;
+  let p be Point of TOP-REAL n;
+  func InnerProduct(p) -> Function of TOP-REAL n,R^1 means
+:: MFOLD_2:def 1
+  for q being Point of TOP-REAL n holds it.q = |(p,q)|;
+end;
+
+registration
+  let n,p;
+  cluster InnerProduct(p) -> continuous;
+end;
+
+begin :: Planes
+
+definition
+  let n;
+  let p,q;
+  func Plane(p,q) -> Subset of TOP-REAL n equals
+:: MFOLD_2:def 2
+  {y where y is Point of TOP-REAL n: |( p,y-q )| = 0 };
+end;
+
+theorem :: MFOLD_2:25
+  transl(p1,TOP-REAL n) .: Plane(p,p2) = Plane(p,p1+p2);
+
+theorem :: MFOLD_2:26
+  p <> 0.TOP-REAL n implies
+  ex A being linearly-independent Subset of TOP-REAL n
+  st card A = n - 1 & [#]Lin(A) = Plane(p,0.TOP-REAL n);
+
+theorem :: MFOLD_2:27
+  p1<>0.TOP-REAL n & p2<>0.TOP-REAL n implies
+  ex R being Function of TOP-REAL n, TOP-REAL n st R is being_homeomorphism &
+  R .: Plane(p1,0.TOP-REAL n) = Plane(p2,0.TOP-REAL n);
+
+definition
+  let n;
+  let p,q;
+  func TPlane(p,q) -> non empty SubSpace of TOP-REAL n equals
+:: MFOLD_2:def 3
+   (TOP-REAL n) | Plane(p,q);
+end;
+
+theorem :: MFOLD_2:28
+  Base_FinSeq(n+1,n+1) = (0.TOP-REAL n) ^ <* 1 *>;
+
+theorem :: MFOLD_2:29
+  for p,q being Point of TOP-REAL(n+1) st p<>0.TOP-REAL(n+1)
+  holds TOP-REAL n, TPlane(p,q) are_homeomorphic;
+
+theorem :: MFOLD_2:30
+  for p,q being Point of TOP-REAL(n+1) st p<>0.TOP-REAL(n+1)
+  holds TPlane(p,q) is n-manifold;
+
+begin :: Spheres
+
+definition
+  let n;
+  func TUnitSphere(n) -> TopSpace equals
+:: MFOLD_2:def 4
+  Tunit_circle(n+1);
+end;
+
+registration
+  let n;
+  cluster TUnitSphere(n) -> non empty;
+end;
+
+:: stereographic projection
+definition
+  let n,p;
+  let S be SubSpace of TOP-REAL n;
+  assume  p in Sphere(0.TOP-REAL n,1);
+  func stereographic_projection(S,p) ->
+    Function of S, TPlane(p,0.TOP-REAL n) means
+:: MFOLD_2:def 5
+    for q st q in S holds it.q = 1/(1-|(q,p)|)*(q - |(q,p)|*p);
+end;
+
+theorem :: MFOLD_2:31
+  for S being SubSpace of TOP-REAL n
+  st [#]S = Sphere(0.TOP-REAL n,1) \ {p} & p in Sphere(0.TOP-REAL n,1)
+  holds stereographic_projection(S,p) is being_homeomorphism;
+
+registration
+  let n;
+  cluster TUnitSphere(n) -> second-countable;
+  cluster TUnitSphere(n) -> n-locally_euclidean;
+  cluster TUnitSphere(n) -> n-manifold;
+end;

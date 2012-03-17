@@ -34,23 +34,23 @@
 <Typ kind="G" nr="17">
 <Cluster>
 <Adjective nr="34" value="false"/>
-<Adjective nr="72"/>
-<Adjective nr="97"/>
+<Adjective nr="73"/>
 <Adjective nr="98"/>
 <Adjective nr="99"/>
 <Adjective nr="100"/>
 <Adjective nr="101"/>
 <Adjective nr="102"/>
 <Adjective nr="103"/>
-<Adjective nr="114"/>
+<Adjective nr="104"/>
+<Adjective nr="115"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="174">
+<Func kind="K" nr="172">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="46"/>
+<Adjective nr="47"/>
 </Cluster>
 </FCluster>
 <FCluster aid="RUSUB_5" nr="2">
@@ -58,19 +58,19 @@
 <Typ kind="G" nr="17">
 <Cluster>
 <Adjective nr="34" value="false"/>
-<Adjective nr="72"/>
-<Adjective nr="97"/>
+<Adjective nr="73"/>
 <Adjective nr="98"/>
 <Adjective nr="99"/>
 <Adjective nr="100"/>
 <Adjective nr="101"/>
 <Adjective nr="102"/>
 <Adjective nr="103"/>
-<Adjective nr="114"/>
+<Adjective nr="104"/>
+<Adjective nr="115"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="174">
+<Func kind="K" nr="172">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>

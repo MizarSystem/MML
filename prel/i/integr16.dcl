@@ -22,10 +22,10 @@
 <ArticleID name="FINSEQ_2"/>
 <ArticleID name="NAT_1"/>
 <ArticleID name="VALUED_0"/>
+<ArticleID name="MEMBERED"/>
 <ArticleID name="XXREAL_0"/>
 <ArticleID name="XXREAL_1"/>
-<ArticleID name="RCOMP_1"/>
-<ArticleID name="INTEGRA1"/>
+<ArticleID name="MEASURE5"/>
 <ArticleID name="COMPLEX1"/>
 <ArticleID name="INT_2"/>
 <ArticleID name="NEWTON"/>
@@ -38,7 +38,7 @@
 <Func kind="K" nr="29"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="205">
+<Func kind="K" nr="192">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -54,7 +54,7 @@
 <Func kind="K" nr="29"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="206">
+<Func kind="K" nr="193">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -67,7 +67,8 @@
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster>
-<Adjective nr="56"/>
+<Adjective nr="1" value="false"/>
+<Adjective nr="61"/>
 </Cluster>
 <Func kind="K" nr="6">
 <Func kind="K" nr="28"/>
@@ -89,7 +90,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="205">
+<Func kind="K" nr="192">
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
@@ -115,7 +116,8 @@
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster>
-<Adjective nr="56"/>
+<Adjective nr="1" value="false"/>
+<Adjective nr="61"/>
 </Cluster>
 <Func kind="K" nr="6">
 <Func kind="K" nr="28"/>
@@ -137,7 +139,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="206">
+<Func kind="K" nr="193">
 <LocusVar nr="2"/>
 </Func>
 <Cluster>

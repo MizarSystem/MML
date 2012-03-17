@@ -4,20 +4,13 @@
 <ArticleID name="HIDDEN"/>
 <ArticleID name="RELAT_1"/>
 <ArticleID name="TARSKI"/>
-<ArticleID name="ORDINAL1"/>
 <ArticleID name="XBOOLE_0"/>
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
-<ArticleID name="NUMBERS"/>
 <ArticleID name="FUNCT_1"/>
 <ArticleID name="PARTFUN1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
-<ArticleID name="FINSET_1"/>
-<ArticleID name="CARD_1"/>
-<ArticleID name="FINSEQ_1"/>
-<ArticleID name="FINSEQ_2"/>
-<ArticleID name="CARD_3"/>
 <ArticleID name="FUNCOP_1"/>
 <ArticleID name="PBOOLE"/>
 </Signature>
@@ -25,7 +18,7 @@
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="13" value="false"/>
+<Adjective nr="6" value="false"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
@@ -35,8 +28,8 @@
 <Adjective nr="4">
 <Func kind="F" nr="1"/>
 </Adjective>
-<Adjective nr="16"/>
-<Adjective nr="21">
+<Adjective nr="9"/>
+<Adjective nr="14">
 <Func kind="F" nr="1"/>
 </Adjective>
 </Cluster>
@@ -48,8 +41,8 @@
 <Adjective nr="4">
 <Func kind="F" nr="1"/>
 </Adjective>
-<Adjective nr="16"/>
-<Adjective nr="21">
+<Adjective nr="9"/>
+<Adjective nr="14">
 <Func kind="F" nr="1"/>
 </Adjective>
 </Cluster>
@@ -57,7 +50,7 @@
 </ArgTypes>
 <Not>
 <For>
-<Typ kind="M" nr="11">
+<Typ kind="M" nr="7">
 <Cluster/>
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
@@ -72,7 +65,7 @@
 <For>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="47">
+<Func kind="K" nr="36">
 <Func kind="F" nr="2"/>
 <Var nr="2"/>
 </Func>
@@ -80,8 +73,8 @@
 <Pred kind="P" nr="1">
 <Var nr="2"/>
 <Var nr="3"/>
-<Func kind="K" nr="47">
-<Func kind="K" nr="47">
+<Func kind="K" nr="36">
+<Func kind="K" nr="36">
 <Var nr="1"/>
 <Var nr="2"/>
 </Func>
@@ -101,7 +94,7 @@
 <For>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="47">
+<Func kind="K" nr="36">
 <Func kind="F" nr="2"/>
 <Var nr="1"/>
 </Func>
@@ -110,7 +103,7 @@
 <For>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="47">
+<Func kind="K" nr="36">
 <Func kind="F" nr="3"/>
 <Var nr="1"/>
 </Func>

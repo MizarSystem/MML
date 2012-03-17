@@ -19,7 +19,7 @@ environ
       TARSKI, FUNCT_2, FINSET_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, RELAT_1, FUNCT_1, FUNCT_2, FINSET_1,
       FUNCT_4, FUNCOP_1, PBOOLE;
- constructors FUNCT_4, PBOOLE;
+ constructors FUNCT_4, PBOOLE, FINSET_1, RELSET_1;
  registrations XBOOLE_0, SUBSET_1, FUNCOP_1, PRE_CIRC;
  requirements SUBSET, BOOLE;
  definitions PBOOLE, FUNCOP_1;
@@ -77,9 +77,9 @@ proof
   let i, I, X be set, M be ManySortedSet of I such that
 A1: i in I;
   thus dom (M +* (i .--> X)) = dom M \/ dom (i .--> X) by FUNCT_4:def 1
-    .= I \/ dom (i .--> X) by PARTFUN1:def 4
-    .= I \/ {i} by FUNCOP_1:19
-    .= I by A1,ZFMISC_1:46;
+    .= I \/ dom (i .--> X) by PARTFUN1:def 2
+    .= I \/ {i} by FUNCOP_1:13
+    .= I by A1,ZFMISC_1:40;
 end;
 
 Lm2: for i be set st i in I holds (bool (A \/ B)).i = bool (A.i \/ B.i)
@@ -88,7 +88,7 @@ proof
   assume
 A1: i in I;
   hence (bool (A \/ B)).i = bool ((A \/ B).i) by Def1
-    .= bool (A.i \/ B.i) by A1,PBOOLE:def 7;
+    .= bool (A.i \/ B.i) by A1,PBOOLE:def 4;
 end;
 
 Lm3: for i be set st i in I holds (bool (A /\ B)).i = bool (A.i /\ B.i)
@@ -97,7 +97,7 @@ proof
   assume
 A1: i in I;
   hence (bool (A /\ B)).i = bool ((A /\ B).i) by Def1
-    .= bool (A.i /\ B.i) by A1,PBOOLE:def 8;
+    .= bool (A.i /\ B.i) by A1,PBOOLE:def 5;
 end;
 
 Lm4: for i be set st i in I holds (bool (A \ B)).i = bool (A.i \ B.i)
@@ -106,7 +106,7 @@ proof
   assume
 A1: i in I;
   hence (bool (A \ B)).i = bool ((A \ B).i) by Def1
-    .= bool (A.i \ B.i) by A1,PBOOLE:def 9;
+    .= bool (A.i \ B.i) by A1,PBOOLE:def 6;
 end;
 
 Lm5: for i be set st i in I holds (bool (A \+\ B)).i = bool (A.i \+\ B.i)
@@ -134,7 +134,7 @@ A2:   A in X;
       assume
 A3:   i in I;
       then
-A4:   A.i in X.i by A2,PBOOLE:def 4;
+A4:   A.i in X.i by A2,PBOOLE:def 1;
       X.i = bool (Y.i) by A1,A3,Def1;
       hence thesis by A4;
     end;
@@ -144,7 +144,7 @@ A5: A c= Y;
     assume
 A6: i in I;
     then
-A7: A.i c= Y.i by A5,PBOOLE:def 5;
+A7: A.i c= Y.i by A5,PBOOLE:def 2;
     X.i = bool (Y.i) by A1,A6,Def1;
     hence thesis by A7;
   end;
@@ -153,20 +153,20 @@ A8: for A holds A in X iff A c= Y;
   now
     let i be set such that
 A9: i in I;
-    [[0]]I c= Y by PBOOLE:49;
+    [[0]]I c= Y by PBOOLE:43;
     then
 A10: [[0]]I in X by A8;
     for A9 be set holds A9 in X.i iff A9 c= Y.i
     proof
       let A9 be set;
-A11:  dom (i .--> A9) = {i} by FUNCOP_1:19;
+A11:  dom (i .--> A9) = {i} by FUNCOP_1:13;
       dom ([[0]]I +* (i .--> A9)) = I by A9,Lm1;
       then reconsider K = [[0]]I +* (i .--> A9) as ManySortedSet of I by
-PARTFUN1:def 4,RELAT_1:def 18;
+PARTFUN1:def 2,RELAT_1:def 18;
       i in {i} by TARSKI:def 1;
       then
-A12:  K.i = (i .--> A9).i by A11,FUNCT_4:14
-        .= A9 by FUNCOP_1:87;
+A12:  K.i = (i .--> A9).i by A11,FUNCT_4:13
+        .= A9 by FUNCOP_1:72;
       thus A9 in X.i implies A9 c= Y.i
       proof
         assume
@@ -184,14 +184,14 @@ A14:      j in I;
             case
               j <> i;
               then not j in dom (i .--> A9) by A11,TARSKI:def 1;
-              then K.j = [[0]]I.j by FUNCT_4:12;
-              hence thesis by A10,A14,PBOOLE:def 4;
+              then K.j = [[0]]I.j by FUNCT_4:11;
+              hence thesis by A10,A14,PBOOLE:def 1;
             end;
           end;
           hence thesis;
         end;
         then K c= Y by A8;
-        hence thesis by A9,A12,PBOOLE:def 5;
+        hence thesis by A9,A12,PBOOLE:def 2;
       end;
       assume
 A15:  A9 c= Y.i;
@@ -209,15 +209,15 @@ A16:    j in I;
             j <> i;
             then not j in dom (i .--> A9) by A11,TARSKI:def 1;
             then
-A17:        K.j = [[0]]I.j by FUNCT_4:12;
-            [[0]]I c= Y by PBOOLE:49;
-            hence thesis by A16,A17,PBOOLE:def 5;
+A17:        K.j = [[0]]I.j by FUNCT_4:11;
+            [[0]]I c= Y by PBOOLE:43;
+            hence thesis by A16,A17,PBOOLE:def 2;
           end;
         end;
         hence thesis;
       end;
       then K in X by A8;
-      hence thesis by A9,A12,PBOOLE:def 4;
+      hence thesis by A9,A12,PBOOLE:def 1;
     end;
     then X.i = bool (Y.i) by ZFMISC_1:def 1;
     hence X.i = (bool Y).i by A9,Def1;
@@ -234,7 +234,7 @@ proof
 A1: i in I;
     then (bool [[0]]I).i = bool ([[0]]I.i) by Def1
       .= {{}} by PBOOLE:5,ZFMISC_1:1;
-    hence (bool [[0]]I).i = (I --> {{}}).i by A1,FUNCOP_1:13;
+    hence (bool [[0]]I).i = (I --> {{}}).i by A1,FUNCOP_1:7;
   end;
   hence thesis by PBOOLE:3;
 end;
@@ -247,8 +247,8 @@ proof
     assume
 A1: i in I;
     hence (bool (I --> x)).i = bool ((I --> x).i) by Def1
-      .= bool x by A1,FUNCOP_1:13
-      .= (I --> bool x).i by A1,FUNCOP_1:13;
+      .= bool x by A1,FUNCOP_1:7
+      .= (I --> bool x).i by A1,FUNCOP_1:7;
   end;
   hence thesis by PBOOLE:3;
 end;
@@ -261,9 +261,9 @@ proof
     assume
 A1: i in I;
     hence (bool (I --> {x})).i = bool ((I --> {x}).i) by Def1
-      .= bool {x} by A1,FUNCOP_1:13
-      .= { {} , {x} } by ZFMISC_1:30
-      .= (I --> { {} , {x} }).i by A1,FUNCOP_1:13;
+      .= bool {x} by A1,FUNCOP_1:7
+      .= { {} , {x} } by ZFMISC_1:24
+      .= (I --> { {} , {x} }).i by A1,FUNCOP_1:7;
   end;
   hence thesis by PBOOLE:3;
 end;
@@ -286,9 +286,9 @@ A1: A c= B;
   assume
 A2: i in I;
   then
-A3: A.i c= B.i by A1,PBOOLE:def 5;
+A3: A.i c= B.i by A1,PBOOLE:def 2;
   (bool A).i = bool (A.i) & (bool B).i = bool (B.i) by A2,Def1;
-  hence thesis by A3,ZFMISC_1:79;
+  hence thesis by A3,ZFMISC_1:67;
 end;
 
 theorem :: ZFMISC_1:81
@@ -299,10 +299,10 @@ proof
 A1: i in I;
   then
 A2: (bool (A \/ B)).i = bool (A.i \/ B.i) by Lm2;
-  (bool A \/ bool B).i = (bool A).i \/ (bool B).i by A1,PBOOLE:def 7
+  (bool A \/ bool B).i = (bool A).i \/ (bool B).i by A1,PBOOLE:def 4
     .= bool (A.i) \/ (bool B).i by A1,Def1
     .= bool (A.i) \/ bool (B.i) by A1,Def1;
-  hence thesis by A2,ZFMISC_1:81;
+  hence thesis by A2,ZFMISC_1:69;
 end;
 
 theorem :: ZFMISC_1:82
@@ -314,10 +314,10 @@ A1: bool A \/ bool B = bool (A \/ B);
   let i be set such that
 A2: i in I;
   bool (A.i \/ B.i) = (bool A \/ bool B).i by A1,A2,Lm2
-    .= (bool A).i \/ (bool B).i by A2,PBOOLE:def 7
+    .= (bool A).i \/ (bool B).i by A2,PBOOLE:def 4
     .= (bool A).i \/ (bool (B.i)) by A2,Def1
     .= (bool (A.i)) \/ (bool (B.i)) by A2,Def1;
-  hence thesis by ZFMISC_1:82;
+  hence thesis by ZFMISC_1:70;
 end;
 
 theorem :: ZFMISC_1:83
@@ -328,10 +328,10 @@ proof
     assume
 A1: i in I;
     hence bool (A /\ B).i = bool (A.i /\ B.i) by Lm3
-      .= (bool (A.i)) /\ (bool (B.i)) by ZFMISC_1:83
+      .= (bool (A.i)) /\ (bool (B.i)) by ZFMISC_1:71
       .= (bool (A.i)) /\ (bool B.i) by A1,Def1
       .= (bool A).i /\ (bool B.i) by A1,Def1
-      .= (bool A /\ bool B).i by A1,PBOOLE:def 8;
+      .= (bool A /\ bool B).i by A1,PBOOLE:def 5;
   end;
   hence thesis by PBOOLE:3;
 end;
@@ -345,12 +345,12 @@ A1: i in I;
   then
 A2: (bool (A \ B)).i = bool (A.i \ B.i) by Lm4;
   ((I --> {{}}) \/ (bool A \ bool B)).i = (I --> {{}}).i \/ (bool A \ bool
-  B).i by A1,PBOOLE:def 7
-    .= {{}} \/ (bool A \ bool B).i by A1,FUNCOP_1:13
-    .= {{}} \/ ((bool A).i \ (bool B).i) by A1,PBOOLE:def 9
+  B).i by A1,PBOOLE:def 4
+    .= {{}} \/ (bool A \ bool B).i by A1,FUNCOP_1:7
+    .= {{}} \/ ((bool A).i \ (bool B).i) by A1,PBOOLE:def 6
     .= {{}} \/ ((bool (A.i)) \ (bool B).i) by A1,Def1
     .= {{}} \/ (bool (A.i) \ bool (B.i)) by A1,Def1;
-  hence thesis by A2,ZFMISC_1:84;
+  hence thesis by A2,ZFMISC_1:72;
 end;
 
 theorem
@@ -366,14 +366,14 @@ A1: X in bool (A \ B) by Th1;
       let i be set;
       assume
 A2:   i in I;
-      then X.i in (bool (A \ B)).i by A1,PBOOLE:def 4;
+      then X.i in (bool (A \ B)).i by A1,PBOOLE:def 1;
       then X.i in bool (A.i \ B.i) by A2,Lm4;
       hence thesis by XBOOLE_1:106;
     end;
     let i be set;
     assume
 A3: i in I;
-    then X.i in (bool (A \ B)).i by A1,PBOOLE:def 4;
+    then X.i in (bool (A \ B)).i by A1,PBOOLE:def 1;
     then X.i in bool (A.i \ B.i) by A3,Lm4;
     hence thesis by XBOOLE_1:106;
   end;
@@ -382,9 +382,9 @@ A4: X c= A & X misses B;
   let i be set;
   assume
 A5: i in I;
-  then X.i c= A.i & X.i misses B.i by A4,PBOOLE:def 5,def 11;
+  then X.i c= A.i & X.i misses B.i by A4,PBOOLE:def 2,def 8;
   then X.i c= A.i \ B.i by XBOOLE_1:86;
-  hence thesis by A5,PBOOLE:def 9;
+  hence thesis by A5,PBOOLE:def 6;
 end;
 
 theorem :: ZFMISC_1:86
@@ -396,10 +396,10 @@ A1: i in I;
   then
 A2: bool (A \+\ B).i = bool (A.i \+\ B.i) by Lm5;
   (bool (A \ B) \/ bool (B \ A)).i = (bool (A \ B)).i \/ (bool (B \ A) ).i
-  by A1,PBOOLE:def 7
+  by A1,PBOOLE:def 4
     .= (bool (A.i \ B.i)) \/ (bool (B \ A)).i by A1,Lm4
     .= (bool (A.i \ B.i)) \/ (bool (B.i \ A.i)) by A1,Lm4;
-  hence thesis by A2,ZFMISC_1:86;
+  hence thesis by A2,ZFMISC_1:73;
 end;
 
 theorem :: ZFMISC_1:87
@@ -415,18 +415,18 @@ A1: X in bool (A \+\ B) by Th1;
       let i be set;
       assume
 A2:   i in I;
-      then X.i in (bool (A \+\ B)).i by A1,PBOOLE:def 4;
+      then X.i in (bool (A \+\ B)).i by A1,PBOOLE:def 1;
       then X.i in bool (A.i \+\ B.i) by A2,Lm5;
       then X.i c= A.i \/ B.i by XBOOLE_1:107;
-      hence thesis by A2,PBOOLE:def 7;
+      hence thesis by A2,PBOOLE:def 4;
     end;
     let i be set;
     assume
 A3: i in I;
-    then X.i in (bool (A \+\ B)).i by A1,PBOOLE:def 4;
+    then X.i in (bool (A \+\ B)).i by A1,PBOOLE:def 1;
     then X.i in bool (A.i \+\ B.i) by A3,Lm5;
     then X.i misses A.i /\ B.i by XBOOLE_1:107;
-    hence thesis by A3,PBOOLE:def 8;
+    hence thesis by A3,PBOOLE:def 5;
   end;
   assume that
 A4: X c= A \/ B and
@@ -434,16 +434,14 @@ A5: X misses A /\ B;
   let i be set;
   assume
 A6: i in I;
-  then X.i misses (A /\ B).i by A5,PBOOLE:def 11;
+  then X.i misses (A /\ B).i by A5,PBOOLE:def 8;
   then
-A7: X.i misses A.i /\ B.i by A6,PBOOLE:def 8;
-  X.i c= (A \/ B).i by A4,A6,PBOOLE:def 5;
-  then X.i c= A.i \/ B.i by A6,PBOOLE:def 7;
+A7: X.i misses A.i /\ B.i by A6,PBOOLE:def 5;
+  X.i c= (A \/ B).i by A4,A6,PBOOLE:def 2;
+  then X.i c= A.i \/ B.i by A6,PBOOLE:def 4;
   then X.i c= A.i \+\ B.i by A7,XBOOLE_1:107;
   hence thesis by A6,PBOOLE:4;
 end;
-
-canceled;
 
 theorem :: ZFMISC_1:89
   X c= A or Y c= A implies X /\ Y c= A
@@ -456,18 +454,18 @@ A2: X c= A;
     let i be set;
     assume
 A3: i in I;
-    then X.i c= A.i by A2,PBOOLE:def 5;
+    then X.i c= A.i by A2,PBOOLE:def 2;
     then X.i /\ Y.i c= A.i by XBOOLE_1:108;
-    hence thesis by A3,PBOOLE:def 8;
+    hence thesis by A3,PBOOLE:def 5;
   end;
   suppose
 A4: Y c= A;
     let i be set;
     assume
 A5: i in I;
-    then Y.i c= A.i by A4,PBOOLE:def 5;
+    then Y.i c= A.i by A4,PBOOLE:def 2;
     then X.i /\ Y.i c= A.i by XBOOLE_1:108;
-    hence thesis by A5,PBOOLE:def 8;
+    hence thesis by A5,PBOOLE:def 5;
   end;
 end;
 
@@ -479,9 +477,9 @@ A1: X c= A;
   let i be set;
   assume
 A2: i in I;
-  then X.i c= A.i by A1,PBOOLE:def 5;
+  then X.i c= A.i by A1,PBOOLE:def 2;
   then X.i \ Y.i c= A.i by XBOOLE_1:109;
-  hence thesis by A2,PBOOLE:def 9;
+  hence thesis by A2,PBOOLE:def 6;
 end;
 
 theorem :: ZFMISC_1:91
@@ -492,7 +490,7 @@ A1: X c= A & Y c= A;
   let i be set;
   assume
 A2: i in I;
-  then X.i c= A.i & Y.i c= A.i by A1,PBOOLE:def 5;
+  then X.i c= A.i & Y.i c= A.i by A1,PBOOLE:def 2;
   then X.i \+\ Y.i c= A.i by XBOOLE_1:110;
   then X.i \+\ Y.i in bool (A.i);
   then (X \+\ Y).i in bool (A.i) by A2,PBOOLE:4;
@@ -506,10 +504,10 @@ proof
   assume
 A1: i in I;
   then
-A2: [|X, Y|].i = [:X.i, Y.i:] by PBOOLE:def 21;
+A2: [|X, Y|].i = [:X.i, Y.i:] by PBOOLE:def 16;
   (bool bool (X \/ Y)).i = bool ((bool (X \/ Y)).i) by A1,Def1
     .= bool bool (X.i \/ Y.i) by A1,Lm2;
-  hence thesis by A2,ZFMISC_1:105;
+  hence thesis by A2,ZFMISC_1:86;
 end;
 
 theorem :: FIN_TOPO:4
@@ -522,7 +520,7 @@ A1: X c= A;
     let i be set;
     assume
 A2: i in I;
-    then X.i c= A.i by A1,PBOOLE:def 5;
+    then X.i c= A.i by A1,PBOOLE:def 2;
     then X.i in bool (A.i);
     hence thesis by A2,Def1;
   end;
@@ -531,7 +529,7 @@ A3: X in bool A;
   let i be set;
   assume
 A4: i in I;
-  then X.i in (bool A).i by A3,PBOOLE:def 4;
+  then X.i in (bool A).i by A3,PBOOLE:def 1;
   then X.i in bool (A.i) by A4,Def1;
   hence thesis;
 end;
@@ -543,10 +541,10 @@ proof
   assume
 A1: i in I;
   then
-A2: (MSFuncs (A, B)).i = Funcs (A.i, B.i) by PBOOLE:def 22;
+A2: (MSFuncs (A, B)).i = Funcs (A.i, B.i) by PBOOLE:def 17;
   (bool [|A, B|]).i = bool ([|A, B|].i) by A1,Def1
-    .= bool [:A.i, B.i:] by A1,PBOOLE:def 21;
-  hence thesis by A2,FRAENKEL:5;
+    .= bool [:A.i, B.i:] by A1,PBOOLE:def 16;
+  hence thesis by A2,FRAENKEL:2;
 end;
 
 begin :: Union of Many Sorted Sets
@@ -596,7 +594,7 @@ proof
   assume
 A1: i in I;
   hence (union (A \/ B)).i = union ((A \/ B).i) by Def2
-    .= union (A.i \/ B.i) by A1,PBOOLE:def 7;
+    .= union (A.i \/ B.i) by A1,PBOOLE:def 4;
 end;
 
 Lm7: for i be set st i in I holds (union (A /\ B)).i = union (A.i /\ B.i)
@@ -605,7 +603,7 @@ proof
   assume
 A1: i in I;
   hence (union (A /\ B)).i = union ((A /\ B).i) by Def2
-    .= union (A.i /\ B.i) by A1,PBOOLE:def 8;
+    .= union (A.i /\ B.i) by A1,PBOOLE:def 5;
 end;
 
 theorem :: Tarski:def 4
@@ -621,7 +619,7 @@ A2: for i being set st i in I ex Y being set st P[i,Y]
       let i be set;
       assume
 A3:   i in I;
-      then A.i in (union X).i by A1,PBOOLE:def 4;
+      then A.i in (union X).i by A1,PBOOLE:def 1;
       then A.i in union (X.i) by A3,Def2;
       hence thesis by TARSKI:def 4;
     end;
@@ -646,7 +644,7 @@ A5: A in Y & Y in X;
   let i be set;
   assume
 A6: i in I;
-  then A.i in Y.i & Y.i in X.i by A5,PBOOLE:def 4;
+  then A.i in Y.i & Y.i in X.i by A5,PBOOLE:def 1;
   then A.i in union (X.i) by TARSKI:def 4;
   hence thesis by A6,Def2;
 end;
@@ -672,8 +670,8 @@ proof
     assume
 A1: i in I;
     hence (union (I --> x)).i = union ((I --> x).i) by Def2
-      .= union x by A1,FUNCOP_1:13
-      .= (I --> union x).i by A1,FUNCOP_1:13;
+      .= union x by A1,FUNCOP_1:7
+      .= (I --> union x).i by A1,FUNCOP_1:7;
   end;
   hence thesis by PBOOLE:3;
 end;
@@ -686,9 +684,9 @@ proof
     assume
 A1: i in I;
     hence (union (I --> {x})).i = union ((I --> {x}).i) by Def2
-      .= union {x} by A1,FUNCOP_1:13
-      .= x by ZFMISC_1:31
-      .= (I --> x).i by A1,FUNCOP_1:13;
+      .= union {x} by A1,FUNCOP_1:7
+      .= x by ZFMISC_1:25
+      .= (I --> x).i by A1,FUNCOP_1:7;
   end;
   hence thesis by PBOOLE:3;
 end;
@@ -701,9 +699,9 @@ proof
     assume
 A1: i in I;
     hence (union (I --> {{x},{y}})).i = union ((I --> {{x},{y}}).i) by Def2
-      .= union {{x},{y}} by A1,FUNCOP_1:13
-      .= {x,y} by ZFMISC_1:32
-      .= (I --> {x,y}).i by A1,FUNCOP_1:13;
+      .= union {{x},{y}} by A1,FUNCOP_1:7
+      .= {x,y} by ZFMISC_1:26
+      .= (I --> {x,y}).i by A1,FUNCOP_1:7;
   end;
   hence thesis by PBOOLE:3;
 end;
@@ -716,8 +714,8 @@ A1: X in A;
   let i be set;
   assume
 A2: i in I;
-  then X.i in A.i by A1,PBOOLE:def 4;
-  then X.i c= union (A.i) by ZFMISC_1:92;
+  then X.i in A.i by A1,PBOOLE:def 1;
+  then X.i c= union (A.i) by ZFMISC_1:74;
   hence thesis by A2,Def2;
 end;
 
@@ -729,8 +727,8 @@ A1: A c= B;
   let i be set;
   assume
 A2: i in I;
-  then A.i c= B.i by A1,PBOOLE:def 5;
-  then union (A.i) c= union (B.i) by ZFMISC_1:95;
+  then A.i c= B.i by A1,PBOOLE:def 2;
+  then union (A.i) c= union (B.i) by ZFMISC_1:77;
   then (union A).i c= union (B.i) by A2,Def2;
   hence thesis by A2,Def2;
 end;
@@ -743,10 +741,10 @@ proof
     assume
 A1: i in I;
     hence (union (A \/ B)).i = union (A.i \/ B.i) by Lm6
-      .= union (A.i) \/ union (B.i) by ZFMISC_1:96
+      .= union (A.i) \/ union (B.i) by ZFMISC_1:78
       .= (union A).i \/ union (B.i) by A1,Def2
       .= (union A).i \/ (union B).i by A1,Def2
-      .= (union A \/ union B).i by A1,PBOOLE:def 7;
+      .= (union A \/ union B).i by A1,PBOOLE:def 4;
   end;
   hence thesis by PBOOLE:3;
 end;
@@ -759,10 +757,10 @@ proof
 A1: i in I;
   then
 A2: (union (A /\ B)).i = union (A.i /\ B.i) by Lm7;
-  (union A /\ union B).i = (union A).i /\ (union B).i by A1,PBOOLE:def 8
+  (union A /\ union B).i = (union A).i /\ (union B).i by A1,PBOOLE:def 5
     .= union (A.i) /\ (union B).i by A1,Def2
     .= union (A.i) /\ union (B.i) by A1,Def2;
-  hence thesis by A2,ZFMISC_1:97;
+  hence thesis by A2,ZFMISC_1:79;
 end;
 
 theorem :: ZFMISC_1:99
@@ -774,7 +772,7 @@ proof
 A1: i in I;
     hence (union bool A).i = union ((bool A).i) by Def2
       .= union bool (A.i) by A1,Def1
-      .= A.i by ZFMISC_1:99;
+      .= A.i by ZFMISC_1:81;
   end;
   hence thesis by PBOOLE:3;
 end;
@@ -787,7 +785,7 @@ proof
 A1: i in I;
   then (bool union A).i = bool ((union A).i) by Def1
     .= bool union (A.i) by A1,Def2;
-  hence thesis by ZFMISC_1:100;
+  hence thesis by ZFMISC_1:82;
 end;
 
 theorem :: LATTICE4:1
@@ -799,11 +797,11 @@ A2: X in Y;
   let i be set;
   assume
 A3: i in I;
-  then (union Y).i c= A.i by A1,PBOOLE:def 5;
+  then (union Y).i c= A.i by A1,PBOOLE:def 2;
   then
 A4: union (Y.i) c= A.i by A3,Def2;
-  X.i in Y.i by A2,A3,PBOOLE:def 4;
-  hence thesis by A4,SETFAM_1:56;
+  X.i in Y.i by A2,A3,PBOOLE:def 1;
+  hence thesis by A4,SETFAM_1:41;
 end;
 
 theorem :: ZFMISC_1:94
@@ -818,17 +816,17 @@ A2: i in I;
   for X9 be set st X9 in A.i holds X9 c= Z.i
   proof
     consider M be ManySortedSet of I such that
-A3: M in A by PBOOLE:146;
+A3: M in A by PBOOLE:134;
     let X9 be set such that
 A4: X9 in A.i;
     dom (M +* (i .--> X9)) = I by A2,Lm1;
     then reconsider K = M +* (i .--> X9) as ManySortedSet of I by
-PARTFUN1:def 4,RELAT_1:def 18;
-A5: dom (i .--> X9) = {i} by FUNCOP_1:19;
+PARTFUN1:def 2,RELAT_1:def 18;
+A5: dom (i .--> X9) = {i} by FUNCOP_1:13;
     i in {i} by TARSKI:def 1;
     then
-A6: K.i = (i .--> X9).i by A5,FUNCT_4:14
-      .= X9 by FUNCOP_1:87;
+A6: K.i = (i .--> X9).i by A5,FUNCT_4:13
+      .= X9 by FUNCOP_1:72;
     K in A
     proof
       let j be set such that
@@ -842,16 +840,16 @@ A7:   j in I;
         case
           j <> i;
           then not j in dom (i .--> X9) by A5,TARSKI:def 1;
-          then K.j = M.j by FUNCT_4:12;
-          hence thesis by A3,A7,PBOOLE:def 4;
+          then K.j = M.j by FUNCT_4:11;
+          hence thesis by A3,A7,PBOOLE:def 1;
         end;
       end;
       hence thesis;
     end;
     then K c= Z by A1;
-    hence thesis by A2,A6,PBOOLE:def 5;
+    hence thesis by A2,A6,PBOOLE:def 2;
   end;
-  then union (A.i) c= Z.i by ZFMISC_1:94;
+  then union (A.i) c= Z.i by ZFMISC_1:76;
   hence thesis by A2,Def2;
 end;
 
@@ -870,17 +868,17 @@ A2: i in I;
     for X9 be set st X9 in A.i holds X9 misses (B.i)
     proof
       consider M be ManySortedSet of I such that
-A3:   M in A by PBOOLE:146;
+A3:   M in A by PBOOLE:134;
       let X9 be set such that
 A4:   X9 in A.i;
       dom (M +* (i .--> X9)) = I by A2,Lm1;
       then reconsider K = M +* (i .--> X9) as ManySortedSet of I by
-PARTFUN1:def 4,RELAT_1:def 18;
-A5:   dom (i .--> X9) = {i} by FUNCOP_1:19;
+PARTFUN1:def 2,RELAT_1:def 18;
+A5:   dom (i .--> X9) = {i} by FUNCOP_1:13;
       i in {i} by TARSKI:def 1;
       then
-A6:   K.i = (i .--> X9).i by A5,FUNCT_4:14
-        .= X9 by FUNCOP_1:87;
+A6:   K.i = (i .--> X9).i by A5,FUNCT_4:13
+        .= X9 by FUNCOP_1:72;
       K in A
       proof
         let j be set such that
@@ -894,21 +892,21 @@ A7:     j in I;
           case
             j <> i;
             then not j in dom (i .--> X9) by A5,TARSKI:def 1;
-            then K.j = M.j by FUNCT_4:12;
-            hence thesis by A3,A7,PBOOLE:def 4;
+            then K.j = M.j by FUNCT_4:11;
+            hence thesis by A3,A7,PBOOLE:def 1;
           end;
         end;
         hence thesis;
       end;
       then K /\ B = [[0]]I by A1;
-      then K.i /\ B.i = [[0]]I.i by A2,PBOOLE:def 8;
+      then K.i /\ B.i = [[0]]I.i by A2,PBOOLE:def 5;
       then X9 /\ B.i = {} by A6,PBOOLE:5;
       hence thesis by XBOOLE_0:def 7;
     end;
-    then union (A.i) misses (B.i) by ZFMISC_1:98;
+    then union (A.i) misses (B.i) by ZFMISC_1:80;
     then union (A.i) /\ (B.i) = {} by XBOOLE_0:def 7;
     then (union A).i /\ B.i = {} by A2,Def2;
-    then (union A /\ B).i = {} by A2,PBOOLE:def 8;
+    then (union A /\ B).i = {} by A2,PBOOLE:def 5;
     hence (union(A) /\ B).i = [[0]]I.i by PBOOLE:5;
   end;
   hence thesis by PBOOLE:3;
@@ -932,7 +930,7 @@ A3: i in I;
     holds X9 misses Y9
     proof
       consider M be ManySortedSet of I such that
-A4:   M in A \/ B by A1,PBOOLE:146;
+A4:   M in A \/ B by A1,PBOOLE:134;
 A5:   i in {i} by TARSKI:def 1;
       let X9, Y9 be set such that
 A6:   X9 <> Y9 and
@@ -941,11 +939,11 @@ A8:   Y9 in A.i \/ B.i;
       dom (M +* (i .--> X9)) = I & dom (M +* (i .--> Y9)) = I by A3,Lm1;
       then reconsider
       Kx = M +* (i.-->X9), Ky = M +* (i.-->Y9) as ManySortedSet of
-      I by PARTFUN1:def 4,RELAT_1:def 18;
-A9:   dom (i .--> Y9) = {i} by FUNCOP_1:19;
+      I by PARTFUN1:def 2,RELAT_1:def 18;
+A9:   dom (i .--> Y9) = {i} by FUNCOP_1:13;
       then
-A10:  Ky.i = (i .--> Y9).i by A5,FUNCT_4:14
-        .= Y9 by FUNCOP_1:87;
+A10:  Ky.i = (i .--> Y9).i by A5,FUNCT_4:13
+        .= Y9 by FUNCOP_1:72;
 A11:  Ky in A \/ B
       proof
         let j be set such that
@@ -954,21 +952,21 @@ A12:    j in I;
           per cases;
           suppose
             j = i;
-            hence thesis by A8,A10,A12,PBOOLE:def 7;
+            hence thesis by A8,A10,A12,PBOOLE:def 4;
           end;
           suppose
             j <> i;
             then not j in dom (i .--> Y9) by A9,TARSKI:def 1;
-            then Ky.j = M.j by FUNCT_4:12;
-            hence thesis by A4,A12,PBOOLE:def 4;
+            then Ky.j = M.j by FUNCT_4:11;
+            hence thesis by A4,A12,PBOOLE:def 1;
           end;
         end;
         hence thesis;
       end;
-A13:  dom (i .--> X9) = {i} by FUNCOP_1:19;
+A13:  dom (i .--> X9) = {i} by FUNCOP_1:13;
       then
-A14:  Kx.i = (i .--> X9).i by A5,FUNCT_4:14
-        .= X9 by FUNCOP_1:87;
+A14:  Kx.i = (i .--> X9).i by A5,FUNCT_4:13
+        .= X9 by FUNCOP_1:72;
       Kx in A \/ B
       proof
         let j be set such that
@@ -977,26 +975,26 @@ A15:    j in I;
           per cases;
           case
             j = i;
-            hence thesis by A7,A14,A15,PBOOLE:def 7;
+            hence thesis by A7,A14,A15,PBOOLE:def 4;
           end;
           case
             j <> i;
             then not j in dom (i .--> X9) by A13,TARSKI:def 1;
-            then Kx.j = M.j by FUNCT_4:12;
-            hence thesis by A4,A15,PBOOLE:def 4;
+            then Kx.j = M.j by FUNCT_4:11;
+            hence thesis by A4,A15,PBOOLE:def 1;
           end;
         end;
         hence thesis;
       end;
       then Kx /\ Ky = [[0]]I by A2,A6,A14,A10,A11;
       then (Kx /\ Ky).i = {} by PBOOLE:5;
-      then X9 /\ Y9 = {} by A3,A14,A10,PBOOLE:def 8;
+      then X9 /\ Y9 = {} by A3,A14,A10,PBOOLE:def 5;
       hence thesis by XBOOLE_0:def 7;
     end;
-    then union(A.i /\ B.i) = union(A.i) /\ union(B.i) by ZFMISC_1:101;
+    then union(A.i /\ B.i) = union(A.i) /\ union(B.i) by ZFMISC_1:83;
     then union(A.i /\ B.i) = (union A).i /\ union(B.i) by A3,Def2;
     then union(A.i /\ B.i) = (union A).i /\ (union B).i by A3,Def2;
-    then union(A.i /\ B.i) = (union A /\ union B).i by A3,PBOOLE:def 8;
+    then union(A.i /\ B.i) = (union A /\ union B).i by A3,PBOOLE:def 5;
     hence (union(A /\ B).i) = (union A /\ union B).i by A3,Lm7;
   end;
   hence thesis by PBOOLE:3;
@@ -1017,17 +1015,17 @@ A3: i in I;
 A4: for Y9 be set st Y9 in B.i holds Y9 misses X.i
   proof
     consider M be ManySortedSet of I such that
-A5: M in B by PBOOLE:146;
+A5: M in B by PBOOLE:134;
     let Y9 be set such that
 A6: Y9 in B.i;
     dom (M +* (i .--> Y9)) = I by A3,Lm1;
     then reconsider K = M +* (i .--> Y9) as ManySortedSet of I by
-PARTFUN1:def 4,RELAT_1:def 18;
-A7: dom (i .--> Y9) = {i} by FUNCOP_1:19;
+PARTFUN1:def 2,RELAT_1:def 18;
+A7: dom (i .--> Y9) = {i} by FUNCOP_1:13;
     i in {i} by TARSKI:def 1;
     then
-A8: K.i = (i .--> Y9).i by A7,FUNCT_4:14
-      .= Y9 by FUNCOP_1:87;
+A8: K.i = (i .--> Y9).i by A7,FUNCT_4:13
+      .= Y9 by FUNCOP_1:72;
     K in B
     proof
       let j be set such that
@@ -1041,20 +1039,20 @@ A9:   j in I;
         case
           j <> i;
           then not j in dom (i .--> Y9) by A7,TARSKI:def 1;
-          then K.j = M.j by FUNCT_4:12;
-          hence thesis by A5,A9,PBOOLE:def 4;
+          then K.j = M.j by FUNCT_4:11;
+          hence thesis by A5,A9,PBOOLE:def 1;
         end;
       end;
       hence thesis;
     end;
     then K /\ X = [[0]]I by A2;
     then (K /\ X).i = {} by PBOOLE:5;
-    then Y9 /\ X.i = {} by A3,A8,PBOOLE:def 8;
+    then Y9 /\ X.i = {} by A3,A8,PBOOLE:def 5;
     hence thesis by XBOOLE_0:def 7;
   end;
-  X.i c= (union (A \/ B)).i by A1,A3,PBOOLE:def 5;
+  X.i c= (union (A \/ B)).i by A1,A3,PBOOLE:def 2;
   then X.i c= union (A.i \/ B.i) by A3,Lm6;
-  then X.i c= union (A.i) by A4,SETFAM_1:57;
+  then X.i c= union (A.i) by A4,SETFAM_1:42;
   hence thesis by A3,Def2;
 end;
 
@@ -1068,8 +1066,8 @@ A1: for X, Y be ManySortedSet of I st X in A & Y in A holds X c= Y or Y c= X;
   let i be set;
   assume
 A2: i in I;
-  then i in dom A by PARTFUN1:def 4;
-  then A.i in rng A by FUNCT_1:12;
+  then i in dom A by PARTFUN1:def 2;
+  then A.i in rng A by FUNCT_1:3;
   then
 A3: A.i is finite by FINSET_1:def 2;
 A4: for X9, Y9 be set st X9 in A.i & Y9 in A.i holds X9 c= Y9 or Y9 c= X9
@@ -1078,18 +1076,18 @@ A4: for X9, Y9 be set st X9 in A.i & Y9 in A.i holds X9 c= Y9 or Y9 c= X9
 A5: X9 in A.i and
 A6: Y9 in A.i;
     consider M be ManySortedSet of I such that
-A7: M in A by PBOOLE:146;
+A7: M in A by PBOOLE:134;
     dom (M +* (i .--> Y9)) = I & dom (M +* (i .--> X9)) = I by A2,Lm1;
     then reconsider
     K1 = M +* (i.-->X9), K2 = M +* (i.-->Y9) as ManySortedSet of I
-    by PARTFUN1:def 4,RELAT_1:def 18;
+    by PARTFUN1:def 2,RELAT_1:def 18;
     assume
 A8: not X9 c= Y9;
 A9: i in {i} by TARSKI:def 1;
-A10: dom (i .--> Y9) = {i} by FUNCOP_1:19;
+A10: dom (i .--> Y9) = {i} by FUNCOP_1:13;
     then
-A11: K2.i = (i .--> Y9).i by A9,FUNCT_4:14
-      .= Y9 by FUNCOP_1:87;
+A11: K2.i = (i .--> Y9).i by A9,FUNCT_4:13
+      .= Y9 by FUNCOP_1:72;
 A12: K2 in A
     proof
       let j be set such that
@@ -1103,16 +1101,16 @@ A13:  j in I;
         case
           j <> i;
           then not j in dom (i .--> Y9) by A10,TARSKI:def 1;
-          then K2.j = M.j by FUNCT_4:12;
-          hence thesis by A7,A13,PBOOLE:def 4;
+          then K2.j = M.j by FUNCT_4:11;
+          hence thesis by A7,A13,PBOOLE:def 1;
         end;
       end;
       hence thesis;
     end;
-A14: dom (i .--> X9) = {i} by FUNCOP_1:19;
+A14: dom (i .--> X9) = {i} by FUNCOP_1:13;
     then
-A15: K1.i = (i .--> X9).i by A9,FUNCT_4:14
-      .= X9 by FUNCOP_1:87;
+A15: K1.i = (i .--> X9).i by A9,FUNCT_4:13
+      .= X9 by FUNCOP_1:72;
     K1 in A
     proof
       let j be set such that
@@ -1126,16 +1124,16 @@ A16:  j in I;
         case
           j <> i;
           then not j in dom (i .--> X9) by A14,TARSKI:def 1;
-          then K1.j = M.j by FUNCT_4:12;
-          hence thesis by A7,A16,PBOOLE:def 4;
+          then K1.j = M.j by FUNCT_4:11;
+          hence thesis by A7,A16,PBOOLE:def 1;
         end;
       end;
       hence thesis;
     end;
     then K1 c= K2 or K2 c= K1 by A1,A12;
-    hence thesis by A2,A8,A15,A11,PBOOLE:def 5;
+    hence thesis by A2,A8,A15,A11,PBOOLE:def 2;
   end;
-  A.i <> {} by A2,PBOOLE:def 16;
-  then union (A.i) in A.i by A3,A4,CARD_2:81;
+  A.i <> {} by A2,PBOOLE:def 13;
+  then union (A.i) in A.i by A3,A4,CARD_2:62;
   hence thesis by A2,Def2;
 end;

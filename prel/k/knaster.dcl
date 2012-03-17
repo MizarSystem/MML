@@ -72,7 +72,7 @@
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Adjective>
-<Adjective nr="191"/>
+<Adjective nr="192"/>
 </Cluster>
 </RCluster>
 <RCluster aid="KNASTER" nr="2">
@@ -80,7 +80,7 @@
 <Typ kind="G" nr="8">
 <Cluster>
 <Adjective nr="49" value="false"/>
-<Adjective nr="69"/>
+<Adjective nr="70"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -94,10 +94,10 @@
 </Typ>
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="197">
+<Adjective nr="198">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="198">
+<Adjective nr="199">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -106,16 +106,16 @@
 <ArgTypes/>
 <Cluster>
 <Adjective nr="49" value="false"/>
-<Adjective nr="69"/>
-<Adjective nr="136"/>
+<Adjective nr="70"/>
+<Adjective nr="137"/>
 </Cluster>
 <Typ kind="G" nr="8">
 <Cluster/>
 </Typ>
 <Cluster>
 <Adjective nr="49" value="false"/>
-<Adjective nr="69"/>
-<Adjective nr="74"/>
+<Adjective nr="70"/>
+<Adjective nr="75"/>
 </Cluster>
 </CCluster>
 </Registrations>

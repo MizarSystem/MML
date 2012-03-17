@@ -38,7 +38,7 @@
 <Typ kind="G" nr="8">
 <Cluster>
 <Adjective nr="49" value="false"/>
-<Adjective nr="97"/>
+<Adjective nr="98"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="2">
@@ -71,7 +71,7 @@
 <Func kind="F" nr="1"/>
 </Func>
 </Adjective>
-<Adjective nr="103">
+<Adjective nr="104">
 <Func kind="F" nr="2"/>
 <Func kind="F" nr="1"/>
 </Adjective>

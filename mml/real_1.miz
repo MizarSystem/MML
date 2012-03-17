@@ -15,20 +15,19 @@
 environ
 
  vocabularies NUMBERS, XREAL_0, ORDINAL1, SUBSET_1, XXREAL_0, ARYTM_1, RELAT_1,
-      ARYTM_3, REAL_1;
- notations SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0, XXREAL_0;
- constructors NUMBERS, XCMPLX_0, XXREAL_0, XREAL_0;
- registrations NUMBERS, XREAL_0;
+      ARYTM_3, REAL_1, ARYTM_2, CARD_1, TARSKI, XBOOLE_0, ZFMISC_1;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1,
+      ARYTM_3, ARYTM_2, ARYTM_1, NUMBERS, XCMPLX_0, XREAL_0, XXREAL_0;
+ constructors NUMBERS, XCMPLX_0, XXREAL_0, XREAL_0, ARYTM_2, ARYTM_1;
+ registrations NUMBERS, XREAL_0, XXREAL_0, ORDINAL1;
  requirements REAL, SUBSET, BOOLE, NUMERALS, ARITHM;
- definitions TARSKI, XREAL_0;
- theorems XREAL_0;
+ definitions TARSKI, XBOOLE_0, XREAL_0;
+ theorems XREAL_0, XBOOLE_0, ARYTM_0, ARYTM_1, ARYTM_2, XXREAL_0;
 
 begin
 
-
-
 registration
-  cluster -> real Element of REAL;
+  cluster -> real for Element of REAL;
   coherence
   proof
     let r be Element of REAL;
@@ -41,7 +40,7 @@ definition
 end;
 
 registration
-  cluster positive Real;
+  cluster positive for Real;
   existence
   proof
     take 1;
@@ -80,3 +79,28 @@ definition
   redefine func x/y -> Real;
   coherence by XREAL_0:def 1;
 end;
+
+:: 2011.05.09, A.T
+
+reserve s,t for Element of RAT+;
+
+theorem
+  REAL+ = { r where r is Real: 0 <= r}
+ proof set RP = { r where r is Real: 0 <= r};
+  thus REAL+ c= RP
+   proof let e be set;
+    assume
+Z:     e in REAL+;
+      then reconsider r = e as Real by ARYTM_0:1;
+      reconsider o = 0, s = r as Element of REAL+ by ARYTM_2:20,Z;
+      o <=' s by ARYTM_1:6;
+      then 0 <= r by ARYTM_2:20,XXREAL_0:def 5;
+      hence e in RP;
+   end;
+  let e be set;
+  assume e in RP;
+   then
+A:   ex r being Real st e = r & 0 <= r;
+   not 0 in [:{0},REAL+:] by ARYTM_0:5,XBOOLE_0:3,ARYTM_2:20;
+  hence e in REAL+ by A,XXREAL_0:def 5;
+ end;

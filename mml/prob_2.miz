@@ -34,17 +34,14 @@ environ
 
 begin
 
-reserve Omega for non empty set;
+reserve Omega for set;
 reserve m,n,k for Element of NAT;
 reserve x,y for set;
 reserve r,r1,r2,r3 for Real;
 reserve seq,seq1 for Real_Sequence;
 reserve Sigma for SigmaField of Omega;
 reserve ASeq,BSeq for SetSequence of Sigma;
-reserve P,P1,P2 for Probability of Sigma;
 reserve A, B, C, A1, A2, A3 for Event of Sigma;
-
-canceled 3;
 
 theorem Th4:
   for r,r1,r2,r3 st r <> 0 & r1 <> 0 holds (r3/r1 = r2/r iff r3 * r = r2 * r1)
@@ -57,9 +54,9 @@ A2: r1 <> 0;
   proof
     assume
 A3: r3/r1 = r2/r;
-    r3 * r = r3/r1 * r1 * r by A2,XCMPLX_1:88
+    r3 * r = r3/r1 * r1 * r by A2,XCMPLX_1:87
       .= r2/r * r * r1 by A3
-      .= r2 * r1 by A1,XCMPLX_1:88;
+      .= r2 * r1 by A1,XCMPLX_1:87;
     hence thesis;
   end;
   assume
@@ -94,7 +91,7 @@ A5: for m st n <= m holds abs(seq.m - r1) < r2 by A3;
     now
       let m such that
 A6:   n <= m;
-      abs(seq.m - r1) = abs(-(seq.m - r1)) by COMPLEX1:138
+      abs(seq.m - r1) = abs(-(seq.m - r1)) by COMPLEX1:52
         .= abs(r1 - r + (r - seq.m))
         .= abs(seq1.m + - (-(r1 - r))) by A2
         .= abs(seq1.m - (r - r1));
@@ -111,21 +108,20 @@ end;
 definition
   let Omega,Sigma,ASeq,n;
   redefine func ASeq.n -> Event of Sigma;
-  coherence by PROB_1:57;
+  coherence by PROB_1:25;
 end;
 
 definition
   let Omega,Sigma,ASeq;
   func @Intersection ASeq -> Event of Sigma equals
+   :: nie mozna zastapic przez redefinicje - przeplot
   Intersection ASeq;
   coherence
   proof
     rng ASeq c= Sigma by RELAT_1:def 19;
-    hence thesis by PROB_1:def 8;
+    hence thesis by PROB_1:def 6;
   end;
 end;
-
-canceled 3;
 
 theorem Th9:
   ex BSeq st for n holds BSeq.n = ASeq.n /\ B
@@ -139,14 +135,14 @@ A1: dom f = NAT & for n holds f.n = F(n) from FUNCT_1:sch 4;
     hence f.m in bool Omega by A1;
   end;
   then for x being set st x in NAT holds f.x in bool Omega;
-  then reconsider f as SetSequence of Omega by A1,FUNCT_2:5;
+  then reconsider f as SetSequence of Omega by A1,FUNCT_2:3;
   now
     let m be Nat;
-    reconsider m1 = m as Element of NAT by ORDINAL1:def 13;
+    reconsider m1 = m as Element of NAT by ORDINAL1:def 12;
     ASeq.m1 /\ B in Sigma;
     hence f.m in Sigma by A1;
   end;
-  then rng f c= Sigma by NAT_1:53;
+  then rng f c= Sigma by NAT_1:52;
   then reconsider f as SetSequence of Sigma by RELAT_1:def 19;
   take f;
   thus thesis by A1;
@@ -163,14 +159,12 @@ A2: for n holds BSeq.n = ASeq.n /\ B;
   proof
     let m,n;
     assume m<=n;
-    then ASeq.n c= ASeq.m by A1,PROB_1:def 6;
+    then ASeq.n c= ASeq.m by A1,PROB_1:def 4;
     then ASeq.n /\ B c= ASeq.m /\ B by XBOOLE_1:26;
     then BSeq.n c= ASeq.m /\ B by A2;
     hence BSeq.n c= BSeq.m by A2;
   end;
 end;
-
-canceled;
 
 theorem Th12:
   (for n holds BSeq.n = ASeq.n /\ B) implies (Intersection ASeq)
@@ -185,7 +179,7 @@ A3: x in (Intersection BSeq);
 A4: for n holds x in ASeq.n /\ B
     proof
       let n;
-      x in BSeq.n by A3,PROB_1:29;
+      x in BSeq.n by A3,PROB_1:13;
       hence thesis by A1;
     end;
 A5: for n holds x in ASeq.n & x in B
@@ -194,7 +188,7 @@ A5: for n holds x in ASeq.n & x in B
       x in ASeq.n /\ B by A4;
       hence thesis by XBOOLE_0:def 4;
     end;
-    then x in (Intersection ASeq) by PROB_1:29;
+    then x in (Intersection ASeq) by PROB_1:13;
     hence x in (Intersection ASeq) /\ B by A5,XBOOLE_0:def 4;
   end;
   now
@@ -206,7 +200,7 @@ A7: x in (Intersection ASeq) by XBOOLE_0:def 4;
 A8: for n holds x in ASeq.n /\ B
     proof
       let n;
-      x in ASeq.n & x in B by A6,A7,PROB_1:29,XBOOLE_0:def 4;
+      x in ASeq.n & x in B by A6,A7,PROB_1:13,XBOOLE_0:def 4;
       hence thesis by XBOOLE_0:def 4;
     end;
     for n holds x in BSeq.n
@@ -215,17 +209,26 @@ A8: for n holds x in ASeq.n /\ B
       x in ASeq.n /\ B by A8;
       hence thesis by A1;
     end;
-    hence x in (Intersection BSeq) by PROB_1:29;
+    hence x in (Intersection BSeq) by PROB_1:13;
   end;
-  hence thesis by A2,TARSKI:2;
+  hence thesis by A2,TARSKI:1;
 end;
 
-theorem Th13:
-  (for A holds P.A = P1.A) implies P = P1
-proof
-  assume for A holds P.A = P1.A;
-  then for x st x in Sigma holds P.x = P1.x;
-  hence thesis by FUNCT_2:18;
+registration
+  let Omega,Sigma,ASeq;
+  cluster Complement ASeq -> Sigma-valued;
+  coherence
+  proof
+    now
+      let n be Nat;
+      reconsider n1=n as Element of NAT by ORDINAL1:def 12;
+      (Complement ASeq).n1 = (ASeq.n1)` by PROB_1:def 2;
+      then (Complement ASeq).n1 is Event of Sigma by PROB_1:20;
+      hence (Complement ASeq).n in Sigma;
+    end;
+    then rng Complement ASeq c= Sigma by NAT_1:52;
+    hence thesis by RELAT_1:def 19;
+  end;
 end;
 
 theorem
@@ -240,7 +243,7 @@ A1: S is non-ascending;
     now
       let n;
       n <= n+1 by NAT_1:11;
-      hence S.(n+1) c= S.n by A1,PROB_1:def 6;
+      hence S.(n+1) c= S.n by A1,PROB_1:def 4;
     end;
     hence thesis;
   end;
@@ -263,10 +266,10 @@ A7:   P[0];
     end;
     consider k being Nat such that
 A8: m = n + k by A3,NAT_1:10;
-    k in NAT by ORDINAL1:def 13;
+    k in NAT by ORDINAL1:def 12;
     hence S.m c= S.n by A4,A8;
   end;
-  hence thesis by PROB_1:def 6;
+  hence thesis by PROB_1:def 4;
 end;
 
 theorem
@@ -281,7 +284,7 @@ A1: S is non-descending;
     now
       let n;
       n <= n+1 by NAT_1:11;
-      hence S.n c= S.(n+1) by A1,PROB_1:def 7;
+      hence S.n c= S.(n+1) by A1,PROB_1:def 5;
     end;
     hence thesis;
   end;
@@ -304,13 +307,11 @@ A7:   P[0];
     end;
     consider k being Nat such that
 A8: m = n + k by A3,NAT_1:10;
-    k in NAT by ORDINAL1:def 13;
+    k in NAT by ORDINAL1:def 12;
     hence S.n c= S.m by A4,A8;
   end;
-  hence thesis by PROB_1:def 7;
+  hence thesis by PROB_1:def 5;
 end;
-
-canceled;
 
 theorem Th17:
   for ASeq being SetSequence of Omega holds (ASeq is non-ascending
@@ -324,24 +325,24 @@ A1: ASeq is non-ascending;
     now
       let n,m;
       assume n <= m;
-      then ASeq.m c= ASeq.n by A1,PROB_1:def 6;
-      then (ASeq.n)` c= (ASeq.m)` by SUBSET_1:31;
-      then (Complement ASeq).n c= (ASeq.m)` by PROB_1:def 4;
-      hence (Complement ASeq).n c= (Complement ASeq).m by PROB_1:def 4;
+      then ASeq.m c= ASeq.n by A1,PROB_1:def 4;
+      then (ASeq.n)` c= (ASeq.m)` by SUBSET_1:12;
+      then (Complement ASeq).n c= (ASeq.m)` by PROB_1:def 2;
+      hence (Complement ASeq).n c= (Complement ASeq).m by PROB_1:def 2;
     end;
-    hence thesis by PROB_1:def 7;
+    hence thesis by PROB_1:def 5;
   end;
   assume
 A2: Complement ASeq is non-descending;
   now
     let n,m;
     assume n <= m;
-    then (Complement ASeq).n c= (Complement ASeq).m by A2,PROB_1:def 7;
-    then (ASeq.n)` c= (Complement ASeq).m by PROB_1:def 4;
-    then (ASeq.n)` c= (ASeq.m)` by PROB_1:def 4;
-    hence ASeq.m c= ASeq.n by SUBSET_1:31;
+    then (Complement ASeq).n c= (Complement ASeq).m by A2,PROB_1:def 5;
+    then (ASeq.n)` c= (Complement ASeq).m by PROB_1:def 2;
+    then (ASeq.n)` c= (ASeq.m)` by PROB_1:def 2;
+    hence ASeq.m c= ASeq.n by SUBSET_1:12;
   end;
-  hence thesis by PROB_1:def 6;
+  hence thesis by PROB_1:def 4;
 end;
 
 Lm1: for ASeq being SetSequence of Omega holds (ASeq is non-descending iff
@@ -355,45 +356,28 @@ A1: ASeq is non-descending;
     now
       let n,m;
       assume n <= m;
-      then ASeq.n c= ASeq.m by A1,PROB_1:def 7;
-      then (ASeq.m)` c= (ASeq.n)` by SUBSET_1:31;
-      then (Complement ASeq).m c= (ASeq.n)` by PROB_1:def 4;
-      hence (Complement ASeq).m c= (Complement ASeq).n by PROB_1:def 4;
+      then ASeq.n c= ASeq.m by A1,PROB_1:def 5;
+      then (ASeq.m)` c= (ASeq.n)` by SUBSET_1:12;
+      then (Complement ASeq).m c= (ASeq.n)` by PROB_1:def 2;
+      hence (Complement ASeq).m c= (Complement ASeq).n by PROB_1:def 2;
     end;
-    hence thesis by PROB_1:def 6;
+    hence thesis by PROB_1:def 4;
   end;
   assume
 A2: Complement ASeq is non-ascending;
   now
     let n,m;
     assume n <= m;
-    then (Complement ASeq).m c= (Complement ASeq).n by A2,PROB_1:def 6;
-    then (ASeq.m)` c= (Complement ASeq).n by PROB_1:def 4;
-    then (ASeq.m)` c= (ASeq.n)` by PROB_1:def 4;
-    hence ASeq.n c= ASeq.m by SUBSET_1:31;
+    then (Complement ASeq).m c= (Complement ASeq).n by A2,PROB_1:def 4;
+    then (ASeq.m)` c= (Complement ASeq).n by PROB_1:def 2;
+    then (ASeq.m)` c= (ASeq.n)` by PROB_1:def 2;
+    hence ASeq.n c= ASeq.m by SUBSET_1:12;
   end;
-  hence thesis by PROB_1:def 7;
+  hence thesis by PROB_1:def 5;
 end;
 
 definition
-  let Omega,Sigma,ASeq;
-  func @Complement ASeq -> SetSequence of Sigma equals
-  Complement ASeq;
-  coherence
-  proof
-    now
-      let n be Nat;
-      reconsider n1=n as Element of NAT by ORDINAL1:def 13;
-      (Complement ASeq).n1 = (ASeq.n1)` by PROB_1:def 4;
-      then (Complement ASeq).n1 is Event of Sigma by PROB_1:50;
-      hence (Complement ASeq).n in Sigma;
-    end;
-    then rng Complement ASeq c= Sigma by NAT_1:53;
-    hence thesis by RELAT_1:def 19;
-  end;
-end;
 
-definition
   let F be Function;
   attr F is disjoint_valued means
   :Def3:
@@ -421,46 +405,58 @@ A3: x <> y;
     end;
     suppose
       not (x in dom ASeq & y in dom ASeq);
-      then ASeq.x = {} or ASeq.y = {} by FUNCT_1:def 4;
+      then ASeq.x = {} or ASeq.y = {} by FUNCT_1:def 2;
       hence thesis by XBOOLE_1:65;
     end;
   end;
-end;
-
-Lm2: for P,ASeq st ASeq is non-descending holds P * ASeq is convergent & lim (
-P * ASeq) = P.Union ASeq
-proof
-  let P,ASeq such that
-A1: ASeq is non-descending;
-  set BSeq = @Complement ASeq;
-A2: BSeq is non-ascending by A1,Lm1;
-  then
-A3: P * BSeq is convergent by PROB_1:def 13;
-A4: now
-    let n;
-    (P * BSeq).n = P.(BSeq.n) by FUNCT_2:21
-      .= P.((ASeq.n)`) by PROB_1:def 4
-      .= P.([#] Sigma \ ASeq.n)
-      .= 1 - P.(ASeq.n) by PROB_1:68
-      .= 1 - (P * ASeq).n by FUNCT_2:21
-      .= 1 + - (P * ASeq).n;
-    hence (P * ASeq).n = 1 - (P * BSeq).n;
-  end;
-  hence P * ASeq is convergent by A3,Th5;
-  reconsider V = Union ASeq as Event of Sigma by PROB_1:58;
-  Intersection BSeq = [#] Sigma \ Union ASeq;
-  then
-A5: P.Intersection BSeq = 1 - P.V by PROB_1:68;
-  thus lim (P * ASeq) = 1 - lim (P * BSeq) by A3,A4,Th5
-    .= 1 - (1 - P.V) by A2,A5,PROB_1:def 13
-    .= P.(Union ASeq);
 end;
 
 ::
 :: THEOREMS CONCERNED PROBABILITY
 ::
 
-canceled 2;
+reserve Omega for non empty set;
+reserve Sigma for SigmaField of Omega;
+reserve A, B, C, A1, A2, A3 for Event of Sigma;
+reserve ASeq,BSeq for SetSequence of Sigma;
+reserve P,P1,P2 for Probability of Sigma;
+
+Lm2: for P,ASeq st ASeq is non-descending holds P * ASeq is convergent & lim (
+P * ASeq) = P.Union ASeq
+proof
+  let P,ASeq such that
+A1: ASeq is non-descending;
+  set BSeq = Complement ASeq;
+A2: BSeq is non-ascending by A1,Lm1;
+  then
+A3: P * BSeq is convergent by PROB_1:def 8;
+A4: now
+    let n;
+    (P * BSeq).n = P.(BSeq.n) by FUNCT_2:15
+      .= P.((ASeq.n)`) by PROB_1:def 2
+      .= P.([#] Sigma \ ASeq.n)
+      .= 1 - P.(ASeq.n) by PROB_1:32
+      .= 1 - (P * ASeq).n by FUNCT_2:15
+      .= 1 + - (P * ASeq).n;
+    hence (P * ASeq).n = 1 - (P * BSeq).n;
+  end;
+  hence P * ASeq is convergent by A3,Th5;
+  reconsider V = Union ASeq as Event of Sigma by PROB_1:26;
+  Intersection BSeq = [#] Sigma \ Union ASeq;
+  then
+A5: P.Intersection BSeq = 1 - P.V by PROB_1:32;
+  thus lim (P * ASeq) = 1 - lim (P * BSeq) by A3,A4,Th5
+    .= 1 - (1 - P.V) by A2,A5,PROB_1:def 8
+    .= P.(Union ASeq);
+end;
+
+theorem Th13:
+  (for A holds P.A = P1.A) implies P = P1
+proof
+  assume for A holds P.A = P1.A;
+  then for x st x in Sigma holds P.x = P1.x;
+  hence thesis by FUNCT_2:12;
+end;
 
 theorem
  :: Equivalent Definition of Probability
@@ -473,7 +469,7 @@ proof
   thus P is Probability of Sigma implies (for A holds 0 <= P.A) & P.Omega = 1
   & (for A,B st A misses B holds P.(A \/ B) = P.A + P.B) & for ASeq st ASeq is
 non-descending holds P * ASeq is convergent & lim (P * ASeq) = P.Union ASeq by
-Lm2,PROB_1:def 13;
+Lm2,PROB_1:def 8;
   assume that
 A1: for A holds 0 <= P.A and
 A2: P.Omega = 1 and
@@ -487,23 +483,23 @@ A4: for ASeq st ASeq is non-descending holds P * ASeq is convergent &
 A5: ASeq is non-ascending;
     Intersection ASeq = @Intersection ASeq;
     then reconsider V = Intersection ASeq as Event of Sigma;
-    set BSeq = @Complement ASeq;
+    set BSeq = Complement ASeq;
 A6: for A holds P.(A`) = 1 - P.A
     proof
       let A;
-      reconsider B = A` as Event of Sigma by PROB_1:50;
-A7:   A misses B by SUBSET_1:44;
+      reconsider B = A` as Event of Sigma by PROB_1:20;
+A7:   A misses B by SUBSET_1:24;
       1 = P.[#]Omega by A2
-        .= P.(A \/ B) by SUBSET_1:25
+        .= P.(A \/ B) by SUBSET_1:10
         .= P.A + P.B by A3,A7;
       hence thesis;
     end;
 A8: now
       let n;
-      (P * BSeq).n = P.(BSeq.n) by FUNCT_2:21
-        .= P.((ASeq.n)`) by PROB_1:def 4
+      (P * BSeq).n = P.(BSeq.n) by FUNCT_2:15
+        .= P.((ASeq.n)`) by PROB_1:def 2
         .= 1 - P.(ASeq.n) by A6
-        .= 1 - (P * ASeq).n by FUNCT_2:21
+        .= 1 - (P * ASeq).n by FUNCT_2:15
         .= 1 + - (P * ASeq).n;
       hence (P * ASeq).n = 1 - (P * BSeq).n;
     end;
@@ -518,7 +514,7 @@ A11: P * BSeq is convergent by A4;
       .= 1 - (1 - P.V) by A4,A10,A9
       .= P.(Intersection ASeq);
   end;
-  hence thesis by A1,A2,A3,PROB_1:def 13;
+  hence thesis by A1,A2,A3,PROB_1:def 8;
 end;
 
 theorem
@@ -526,51 +522,51 @@ theorem
   C)) + P.(A /\ B /\ C)
 proof
 A1: P.((A \/ B) /\ C) = P.((A /\ C) \/ (B /\ C)) by XBOOLE_1:23
-    .= P.(A /\ C) + P.(B /\ C) - P.((A /\ C) /\ (B /\ C)) by PROB_1:74
+    .= P.(A /\ C) + P.(B /\ C) - P.((A /\ C) /\ (B /\ C)) by PROB_1:38
     .= P.(A /\ C) + P.(B /\ C) - P.(A /\ ((B /\ C) /\ C)) by XBOOLE_1:16
     .= P.(A /\ C) + P.(B /\ C) - P.(A /\ (B /\ (C /\ C))) by XBOOLE_1:16
     .= P.(B /\ C) + P.(A /\ C) - P.(A /\ B /\ C) by XBOOLE_1:16;
-  P.(A \/ B \/ C) = P.(A \/ B) + P.C - P.((A \/ B) /\ C) by PROB_1:74
-    .= P.A + P.B - P.(A /\ B) + P.C - P.((A \/ B) /\ C) by PROB_1:74
+  P.(A \/ B \/ C) = P.(A \/ B) + P.C - P.((A \/ B) /\ C) by PROB_1:38
+    .= P.A + P.B - P.(A /\ B) + P.C - P.((A \/ B) /\ C) by PROB_1:38
     .= P.A + P.B + P.C - (P.(A /\ B) + P.((A \/ B) /\ C));
   hence thesis by A1;
 end;
 
 theorem
-  P.(A \ (A /\ B)) = P.A - P.(A /\ B) by PROB_1:69,XBOOLE_1:17;
+  P.(A \ (A /\ B)) = P.A - P.(A /\ B) by PROB_1:33,XBOOLE_1:17;
 
 theorem
-  P.(A /\ B) <= P.B & P.(A /\ B) <= P.A by PROB_1:70,XBOOLE_1:17;
+  P.(A /\ B) <= P.B & P.(A /\ B) <= P.A by PROB_1:34,XBOOLE_1:17;
 
 theorem Th24:
   C = B` implies P.A = P.(A /\ B) + P.(A /\ C)
 proof
   assume
 A1: C = B`;
-  then B misses C by SUBSET_1:44;
+  then B misses C by SUBSET_1:24;
   then A /\ C misses B by XBOOLE_1:74;
   then
 A2: A /\ B misses A /\ C by XBOOLE_1:74;
   P.A = P.(A /\ [#]Omega) by XBOOLE_1:28
-    .= P.(A /\ (B \/ C)) by A1,SUBSET_1:25
+    .= P.(A /\ (B \/ C)) by A1,SUBSET_1:10
     .= P.(A /\ B \/ A /\ C) by XBOOLE_1:23
-    .= P.(A /\ B) + P.(A /\ C) by A2,PROB_1:def 13;
+    .= P.(A /\ B) + P.(A /\ C) by A2,PROB_1:def 8;
   hence thesis;
 end;
 
 theorem Th25:
   P.A + P.B - 1 <= P.(A /\ B)
 proof
-  P.A + P.B - P.(A /\ B) = P.(A \/ B) by PROB_1:74;
-  then P.A + P.B - P.(A /\ B) <= 1 by PROB_1:71;
-  then P.A + P.B <= P.(A /\ B) + 1 by XREAL_1:22;
-  hence thesis by XREAL_1:22;
+  P.A + P.B - P.(A /\ B) = P.(A \/ B) by PROB_1:38;
+  then P.A + P.B - P.(A /\ B) <= 1 by PROB_1:35;
+  then P.A + P.B <= P.(A /\ B) + 1 by XREAL_1:20;
+  hence thesis by XREAL_1:20;
 end;
 
 theorem Th26:
   P.A = 1 - P.([#] Sigma \ A)
 proof
-  P.([#] Sigma \ A) + P.A = 1 by PROB_1:67;
+  P.([#] Sigma \ A) + P.A = 1 by PROB_1:31;
   hence thesis;
 end;
 
@@ -582,12 +578,12 @@ proof
     assume P.A < 1;
     then 1 - P.([#] Sigma \ A) < 1 by Th26;
     then 1 + - P.([#] Sigma \ A) < 1;
-    then - P.([#] Sigma \ A) < 1 - 1 by XREAL_1:22;
+    then - P.([#] Sigma \ A) < 1 - 1 by XREAL_1:20;
     hence thesis;
   end;
   assume 0 < P.([#] Sigma \ A);
-  then 0 < 1 - P.A by PROB_1:68;
-  then P.A + 0 < 1 by XREAL_1:22;
+  then 0 < 1 - P.A by PROB_1:32;
+  then P.A + 0 < 1 by XREAL_1:20;
   hence thesis;
 end;
 
@@ -597,14 +593,14 @@ proof
   thus P.([#] Sigma \ A) < 1 implies 0 < P.A
   proof
     assume P.([#] Sigma \ A) < 1;
-    then 1 - P.A < 1 by PROB_1:68;
+    then 1 - P.A < 1 by PROB_1:32;
     then 1 + - P.A < 1;
-    then - P.A < 1 - 1 by XREAL_1:22;
+    then - P.A < 1 - 1 by XREAL_1:20;
     hence thesis;
   end;
   assume 0 < P.A;
   then 0 < 1 - P.([#] Sigma \ A) by Th26;
-  then P.([#] Sigma \ A) + 0 < 1 by XREAL_1:22;
+  then P.([#] Sigma \ A) + 0 < 1 by XREAL_1:20;
   hence thesis;
 end;
 
@@ -624,8 +620,6 @@ definition
 P.B * P.C & P.(A /\ B) = P.A * P.B & P.(A /\ C) = P.A * P.C & P.(B /\ C) = P.B
   * P.C;
 end;
-
-canceled 2;
 
 theorem Th31:
   A,B are_independent_respect_to P implies B,A are_independent_respect_to P
@@ -706,7 +700,7 @@ theorem
   A, [#] Sigma are_independent_respect_to P
 proof
   P.(A /\ ([#] Sigma)) = P.A * 1 by XBOOLE_1:28
-    .= P.A * P.([#] Sigma) by PROB_1:66;
+    .= P.A * P.([#] Sigma) by PROB_1:30;
   hence thesis by Def5;
 end;
 
@@ -718,11 +712,11 @@ proof
   assume A,B are_independent_respect_to P;
   then
 A1: P.(A /\ B) = P.A * P.B by Def5;
-  P.(A /\ ([#] Sigma \ B)) = P.(A /\ B`) .= P.(A \ B) by SUBSET_1:32
+  P.(A /\ ([#] Sigma \ B)) = P.(A /\ B`) .= P.(A \ B) by SUBSET_1:13
     .= P.(A \ (A /\ B)) by XBOOLE_1:47
-    .= P.A * 1 - P.A * P.B by A1,PROB_1:69,XBOOLE_1:17
+    .= P.A * 1 - P.A * P.B by A1,PROB_1:33,XBOOLE_1:17
     .= P.A * (1 - P.B)
-    .= P.A * P.([#] Sigma \ B) by PROB_1:68;
+    .= P.A * P.([#] Sigma \ B) by PROB_1:32;
   hence thesis by Def5;
 end;
 
@@ -749,11 +743,11 @@ A2: A,C are_independent_respect_to P and
 A3: B misses C;
 A4: (A /\ B) misses (A /\ C) by A3,XBOOLE_1:76;
   P.(A /\ (B \/ C)) = P.((A /\ B) \/ (A /\ C)) by XBOOLE_1:23
-    .= P.(A /\ B) + P.(A /\ C) by A4,PROB_1:def 13
+    .= P.(A /\ B) + P.(A /\ C) by A4,PROB_1:def 8
     .= P.A * P.B + P.(A /\ C) by A1,Def5
     .= P.A * P.B + P.A * P.C by A2,Def5
     .= P.A * (P.B + P.C)
-    .= P.A * P.(B \/ C) by A3,PROB_1:def 13;
+    .= P.A * P.(B \/ C) by A3,PROB_1:def 8;
   hence thesis by Def5;
 end;
 
@@ -764,8 +758,8 @@ proof
 A1: now
     let r,r1;
     assume 0 < r1;
-    then - r1 < -0 by XREAL_1:26;
-    then r + - r1 < r + 0 by XREAL_1:8;
+    then - r1 < -0 by XREAL_1:24;
+    then r + - r1 < r + 0 by XREAL_1:6;
     hence r - r1 < r;
   end;
   let P,A,B;
@@ -777,7 +771,7 @@ A5: 0 < P.([#] Sigma \ A) & 0 < P.([#] Sigma \ B) by A3,Th27;
   P.(A \/ B) = 1 - P.([#] Sigma \ (A \/ B)) by Th26
     .= 1 - P.(([#] Sigma \ A) /\ ([#] Sigma \ B)) by XBOOLE_1:53
     .= 1 - P.([#] Sigma \ A) * P.([#] Sigma \ B) by A4,Def5;
-  hence thesis by A5,A1,XREAL_1:131;
+  hence thesis by A5,A1,XREAL_1:129;
 end;
 
 ::
@@ -823,15 +817,15 @@ A7: for A,C st A misses C holds f.(A \/ C) = f.A + f.C
 A8:   A /\ B misses C /\ B by XBOOLE_1:76;
       thus f.(A \/ C) = P.((A \/ C) /\ B)/P.B by A5
         .= P.((A /\ B) \/ (C /\ B))/P.B by XBOOLE_1:23
-        .= (P.(A /\ B) + P.(C /\ B))/P.B by A8,PROB_1:def 13
-        .= P.(A /\ B)/P.B + P.(C /\ B)/P.B by XCMPLX_1:63
+        .= (P.(A /\ B) + P.(C /\ B))/P.B by A8,PROB_1:def 8
+        .= P.(A /\ B)/P.B + P.(C /\ B)/P.B by XCMPLX_1:62
         .= P.(A /\ B)/P.B + f.C by A5
         .= f.A + f.C by A5;
     end;
 A9: for A holds 0 <= f.A
     proof
       let A;
-      0 <= P.(A /\ B) by PROB_1:def 13;
+      0 <= P.(A /\ B) by PROB_1:def 8;
       then 0 <= P.(A /\ B)/P.B by A1;
       hence thesis by A5;
     end;
@@ -848,26 +842,26 @@ A13:  now
         assume
 A14:    n in dom(f*ASeq);
         then reconsider n1 = n as Element of NAT by FUNCT_2:def 1;
-        thus (f*ASeq).n = f.(ASeq.n) by A12,A14,FUNCT_2:21
+        thus (f*ASeq).n = f.(ASeq.n) by A12,A14,FUNCT_2:15
           .= P.(ASeq.n1 /\ B)/P.B by A5
           .= P.(BSeq.n)/P.B by A11
-          .= (P*BSeq).n/P.B by A12,A14,FUNCT_2:21
+          .= (P*BSeq).n/P.B by A12,A14,FUNCT_2:15
           .= (P.B)" * (P*BSeq).n by XCMPLX_0:def 9;
       end;
 A15:  BSeq is non-ascending by A10,A11,Th10;
       then
-A16:  P*BSeq is convergent by PROB_1:def 13;
+A16:  P*BSeq is convergent by PROB_1:def 8;
       dom(P*BSeq) = NAT by FUNCT_2:def 1;
       then
 A17:  f*ASeq = (P.B)" (#) (P*BSeq) by A12,A13,VALUED_1:def 5;
-      hence f*ASeq is convergent by A16,SEQ_2:21;
-      lim (P*BSeq) = P.(Intersection BSeq) by A15,PROB_1:def 13;
-      hence lim (f*ASeq) = (P.B)" * P.(@Intersection BSeq) by A17,A16,SEQ_2:22
+      hence f*ASeq is convergent by A16,SEQ_2:7;
+      lim (P*BSeq) = P.(Intersection BSeq) by A15,PROB_1:def 8;
+      hence lim (f*ASeq) = (P.B)" * P.(@Intersection BSeq) by A17,A16,SEQ_2:8
         .= (P.(@Intersection BSeq))/P.B by XCMPLX_0:def 9
         .= (P.((@Intersection ASeq) /\ B))/P.B by A11,Th12
         .= f.(Intersection ASeq) by A5;
     end;
-    then reconsider f as Probability of Sigma by A9,A6,A7,PROB_1:def 13;
+    then reconsider f as Probability of Sigma by A9,A6,A7,PROB_1:def 8;
     take f;
     thus thesis by A5;
   end;
@@ -885,8 +879,6 @@ A19: for A holds P2.A = P.(A /\ B)/P.B;
     hence thesis by Th13;
   end;
 end;
-
-canceled;
 
 theorem Th42:
   for P,B,A st 0 < P.B holds P.(A /\ B) = P.|.B.A * P.B
@@ -910,7 +902,7 @@ proof
   assume
 A1: 0 < P.(A /\ B);
   then
-A2: 0 < P.A by PROB_1:70,XBOOLE_1:17;
+A2: 0 < P.A by PROB_1:34,XBOOLE_1:17;
   P.(A /\ B /\ C) = P.(B /\ A) * P.|.(A /\ B).C by A1,Th42
     .= P.A * P.|.A.B * P.|.(A /\ B).C by A2,Th42;
   hence thesis;
@@ -944,18 +936,18 @@ A3: 0 < P.A1 and
 A4: 0 < P.A2 and
 A5: 0 < P.A3;
 A6: A /\ A1 misses A /\ A2 by A1,XBOOLE_1:76;
-  (A1 \/ A2) misses A3 by A2,SUBSET_1:44;
+  (A1 \/ A2) misses A3 by A2,SUBSET_1:24;
   then
 A7: A /\ (A1 \/ A2) misses A /\ A3 by XBOOLE_1:76;
-A8: A1 \/ A2 \/ A3 = [#]Omega by A2,SUBSET_1:25
+A8: A1 \/ A2 \/ A3 = [#]Omega by A2,SUBSET_1:10
     .= Omega;
   (P.|.A1.A * P.A1) + (P.|.A2.A * P.A2) + (P.|.A3.A * P.A3) = P.(A /\ A1)
   + (P.|.A2.A * P.A2) + (P.|.A3.A * P.A3) by A3,Th42
     .= P.(A /\ A1) + P.(A /\ A2) + (P.|.A3.A * P.A3) by A4,Th42
     .= P.(A /\ A1) + P.(A /\ A2) + P.(A /\ A3) by A5,Th42
-    .= P.((A /\ A1) \/ (A /\ A2)) + P.(A /\ A3) by A6,PROB_1:def 13
+    .= P.((A /\ A1) \/ (A /\ A2)) + P.(A /\ A3) by A6,PROB_1:def 8
     .= P.(A /\ (A1 \/ A2)) + P.(A /\ A3) by XBOOLE_1:23
-    .= P.((A /\ (A1 \/ A2)) \/ (A /\ A3)) by A7,PROB_1:def 13
+    .= P.((A /\ (A1 \/ A2)) \/ (A /\ A3)) by A7,PROB_1:def 8
     .= P.(A /\ Omega) by A8,XBOOLE_1:23
     .= P.A by XBOOLE_1:28;
   hence thesis;
@@ -972,7 +964,7 @@ A1: 0 < P.B;
   proof
     assume P.|.B.A = P.A;
     then P.(A /\ B)/P.B * P.B = P.A * P.B by A1,Def7;
-    then P.(A /\ B) = P.A * P.B by A1,XCMPLX_1:88;
+    then P.(A /\ B) = P.A * P.B by A1,XCMPLX_1:87;
     hence thesis by Def5;
   end;
   assume A,B are_independent_respect_to P;
@@ -1000,7 +992,7 @@ A5: B`= ([#] Sigma \ B);
   P.([#] Sigma \ B) <> 0 by A2,Th27;
   then
   P.(A /\ B) * P.([#] Sigma \ B) = P.(A /\ ([#] Sigma \B)) * P.B by A1,A4,Th4;
-  then P.(A /\ B) * (1 - P.B) = P.(A /\ ([#] Sigma \B)) * P.B by PROB_1:68;
+  then P.(A /\ B) * (1 - P.B) = P.(A /\ ([#] Sigma \B)) * P.B by PROB_1:32;
   then P.(A /\ B) = (P.(A /\ ([#] Sigma \B)) + P.(A /\ B)) * P.B
     .= P.A * P.B by A5,Th24;
   hence thesis by Def5;
@@ -1011,7 +1003,7 @@ theorem
 proof
   let P,A,B such that
 A1: 0 < P.B;
-  (P.A + P.B - 1)/P.B <= P.(A /\ B)/P.B by A1,Th25,XREAL_1:74;
+  (P.A + P.B - 1)/P.B <= P.(A /\ B)/P.B by A1,Th25,XREAL_1:72;
   hence thesis by A1,Def7;
 end;
 
@@ -1082,9 +1074,9 @@ proof
 A1: 0 < P.B;
   P.B + P.A - 1 <= P.(A /\ B) by Th25;
   then P.B + -(1 - P.A) <= P.(A /\ B);
-  then P.B + -P.([#] Sigma \ A) <= P.(A /\ B) by PROB_1:68;
-  then (P.B + -P.([#] Sigma \ A))/P.B <= P.(A /\ B)/P.B by A1,XREAL_1:74;
+  then P.B + -P.([#] Sigma \ A) <= P.(A /\ B) by PROB_1:32;
+  then (P.B + -P.([#] Sigma \ A))/P.B <= P.(A /\ B)/P.B by A1,XREAL_1:72;
   then (P.B - P.([#] Sigma \ A))/P.B <= P.|.B.A by A1,Def7;
-  then P.B/P.B - P.([#] Sigma \ A)/P.B <= P.|.B.A by XCMPLX_1:121;
+  then P.B/P.B - P.([#] Sigma \ A)/P.B <= P.|.B.A by XCMPLX_1:120;
   hence thesis by A1,XCMPLX_1:60;
 end;

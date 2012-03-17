@@ -16,10 +16,6 @@
 <ArticleID name="XCMPLX_0"/>
 <ArticleID name="NAT_1"/>
 <ArticleID name="FINSET_1"/>
-<ArticleID name="CARD_1"/>
-<ArticleID name="CARD_3"/>
-<ArticleID name="FINSEQ_1"/>
-<ArticleID name="FINSEQ_2"/>
 <ArticleID name="FUNCOP_1"/>
 <ArticleID name="PBOOLE"/>
 </Signature>
@@ -367,7 +363,7 @@
 </ArgTypes>
 <Not>
 <For>
-<Typ kind="M" nr="11">
+<Typ kind="M" nr="7">
 <Cluster/>
 <Func kind="F" nr="2"/>
 <Func kind="F" nr="3"/>

@@ -29,7 +29,7 @@ environ
       RELSET_1;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, NUMBERS, XXREAL_0, XREAL_0, NAT_1,
       INT_1, BINOP_2, MEMBERED, FINSEQ_1, REALSET1, STRUCT_0, GROUP_1, GROUP_2,
-      VALUED_0, ALGSTR_0, CARD_1, FINSEQ_2;
+      VALUED_0, ALGSTR_0, CARD_1, FINSEQ_2, ZFMISC_1, FINSET_1;
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
 
 
@@ -50,61 +50,55 @@ registration
 end;
 
 definition
-  canceled;
+
   redefine func addint means
-:: GR_CY_1:def 2
+:: GR_CY_1:def 1
   for i1,i2 being Element of INT holds it.(i1,i2) = addreal.(i1,i2);
 end;
 
-canceled 14;
-
-theorem :: GR_CY_1:15
+theorem :: GR_CY_1:1
   for i1 st i1 = 0 holds i1 is_a_unity_wrt addint;
 
-theorem :: GR_CY_1:16
+theorem :: GR_CY_1:2
   Sum I = addint $$ I;
 
 definition
   let I;
   redefine func Sum(I) -> Element of INT equals
-:: GR_CY_1:def 3
+:: GR_CY_1:def 2
   addint $$ I;
 end;
 
-canceled 5;
-
-theorem :: GR_CY_1:22
+theorem :: GR_CY_1:3
   Sum (<*> INT) = 0;
 
-canceled;
-
-theorem :: GR_CY_1:24
+theorem :: GR_CY_1:4
   for I being FinSequence of INT holds Product(((len I)|->a)|^I) = a|^Sum I;
 
 :: Finite groups and their some properties
 
-theorem :: GR_CY_1:25
+theorem :: GR_CY_1:5
   b in gr {a} iff ex j1 st b=a|^j1;
 
-theorem :: GR_CY_1:26
+theorem :: GR_CY_1:6
   for G being finite Group, a being Element of G holds a is not
   being_of_order_0;
 
-theorem :: GR_CY_1:27
+theorem :: GR_CY_1:7
   for G being finite Group, a being Element of G holds ord a = card gr {a};
 
-theorem :: GR_CY_1:28
+theorem :: GR_CY_1:8
   for G being finite Group, a being Element of G holds ord a divides card G;
 
-theorem :: GR_CY_1:29
+theorem :: GR_CY_1:9
   for G being finite Group, a being Element of G holds a|^card G = 1_G;
 
-theorem :: GR_CY_1:30
+theorem :: GR_CY_1:10
   for G being finite Group, a being Element of G holds (a|^n)" = a
   |^(card G - (n mod card G));
 
 registration
-  let G be associative (non empty multMagma);
+  let G be associative non empty multMagma;
   cluster the multMagma of G -> associative;
 end;
 
@@ -113,21 +107,22 @@ registration
   cluster the multMagma of G -> Group-like;
 end;
 
-theorem :: GR_CY_1:31
+theorem :: GR_CY_1:11
   for G being strict finite Group st card G > 1 ex a being Element
   of G st a <> 1_G;
 
-theorem :: GR_CY_1:32
+theorem :: GR_CY_1:12
   for G being strict finite Group st card G = p & p is prime holds for H
   being strict Subgroup of G holds H = (1).G or H = G;
 
-theorem :: GR_CY_1:33
-  multMagma(#INT,addint#) is associative Group-like;
-
 definition
-  func INT.Group -> strict Group equals
-:: GR_CY_1:def 4
+  func INT.Group -> non empty strict multMagma equals
+:: GR_CY_1:def 3
   multMagma(#INT,addint#);
+end;
+
+registration
+ cluster INT.Group -> associative Group-like;
 end;
 
 registration
@@ -148,67 +143,56 @@ definition
   let n be natural number such that
  n > 0;
   func addint(n) -> BinOp of Segm(n) means
-:: GR_CY_1:def 5
+:: GR_CY_1:def 4
 
   for k,l being Element of Segm(n) holds it.(k,l) = (k+l) mod n;
 end;
 
-theorem :: GR_CY_1:34
-  for n being non zero natural number holds multMagma(#Segm(n),
-    addint(n)#) is associative Group-like;
-
 definition
-  let n be natural number such that
- n > 0;
-  func INT.Group(n) -> strict Group equals
-:: GR_CY_1:def 6
-
+  let n be non zero natural number;
+  func INT.Group(n) -> non empty strict multMagma equals
+:: GR_CY_1:def 5
   multMagma(#Segm(n),addint(n)#);
 end;
 
 registration
   let n be non zero natural number;
-  cluster INT.Group(n) -> finite;
+  cluster INT.Group(n) -> finite associative Group-like;
 end;
 
-theorem :: GR_CY_1:35
+theorem :: GR_CY_1:13
   1_INT.Group = 0;
 
-theorem :: GR_CY_1:36
-  for n be natural number st n>0 holds 1_INT.Group(n) = 0;
+theorem :: GR_CY_1:14
+  for n be non zero natural number holds 1_INT.Group(n) = 0;
 
 definition
   let h be Integer;
-  canceled;
+
   func @'h -> Element of INT.Group equals
-:: GR_CY_1:def 8
+:: GR_CY_1:def 6
   h;
 end;
 
-theorem :: GR_CY_1:37
+theorem :: GR_CY_1:15
   for h being Element of INT.Group holds h" = -h;
 
 reserve G1 for Subgroup of INT.Group;
 
-canceled;
-
-theorem :: GR_CY_1:39
+theorem :: GR_CY_1:16
   j1 = (@'1) |^ j1;
 
 definition
   let IT be Group;
   attr IT is cyclic means
-:: GR_CY_1:def 9
+:: GR_CY_1:def 7
 
   ex a being Element of IT st the multMagma of IT = gr {a};
 end;
 
 registration
-  cluster strict cyclic Group;
+  cluster strict cyclic for Group;
 end;
-
-theorem :: GR_CY_1:40
-  (1).G is cyclic;
 
 registration
   let G be Group;
@@ -216,54 +200,46 @@ registration
 end;
 
 registration
-  cluster strict finite cyclic Group;
+  cluster strict finite cyclic for Group;
 end;
 
-theorem :: GR_CY_1:41
+theorem :: GR_CY_1:17
   G is cyclic Group iff ex a being Element of G st for b being
   Element of G ex j1 st b=a|^j1;
 
-theorem :: GR_CY_1:42
+theorem :: GR_CY_1:18
   for G being finite Group holds G is cyclic iff ex a being
   Element of G st for b being Element of G ex n st b = a|^n;
 
-theorem :: GR_CY_1:43
+theorem :: GR_CY_1:19
   for G being finite Group holds ( G is cyclic iff ex a being
   Element of G st ord a = card G );
 
-theorem :: GR_CY_1:44
+theorem :: GR_CY_1:20
   for G being finite Group, H being strict Subgroup of G st G is cyclic
   holds H is cyclic;
 
-theorem :: GR_CY_1:45
-  for G being strict finite Group holds card G = p & p is prime implies
+theorem :: GR_CY_1:21
+  for G being strict finite Group holds card G is prime implies
   G is cyclic Group;
 
-theorem :: GR_CY_1:46
-  for n st n>0 ex g being Element of INT.Group(n) st for b being
+theorem :: GR_CY_1:22
+  for n being non zero natural number
+   ex g being Element of INT.Group(n) st for b being
   Element of INT.Group(n) ex j1 st b = g|^j1;
 
 registration
-  cluster cyclic -> commutative Group;
+  cluster cyclic -> commutative for Group;
 end;
 
-theorem :: GR_CY_1:47
+theorem :: GR_CY_1:23
   INT.Group = gr {@'1};
-
-theorem :: GR_CY_1:48
-  INT.Group is cyclic;
 
 registration
   cluster INT.Group -> cyclic;
 end;
 
-theorem :: GR_CY_1:49
-  n > 0 implies INT.Group(n) is cyclic;
-
 registration
   let n be non zero natural number;
   cluster INT.Group(n) -> cyclic;
 end;
-
-theorem :: GR_CY_1:50
-  INT.Group is commutative;

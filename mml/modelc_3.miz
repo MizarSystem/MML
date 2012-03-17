@@ -27,7 +27,7 @@ environ
       RELSET_1;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1, XXREAL_0,
       XREAL_0, NAT_1, INT_1, ORDERS_1, FINSET_1, MODELC_2, FINSEQ_1, NUMBERS,
-      VALUED_0, MEMBERED, STRUCT_0, MODELC_1, CARD_1;
+      VALUED_0, MEMBERED, STRUCT_0, MODELC_1, CARD_1, RELSET_1, FUNCT_2;
  requirements REAL, NUMERALS, ARITHM, SUBSET, BOOLE;
  definitions TARSKI, MODELC_2, SERIES_1;
  theorems XBOOLE_0, ZFMISC_1, XBOOLE_1, TARSKI, FUNCT_1, FUNCT_2, FUNCT_7,
@@ -44,7 +44,6 @@ reserve L,L1,L2 for FinSequence;
 reserve F,F1,G,G1,H for LTL-formula;
 reserve W,W1,W2 for Subset of Subformulae H;
 reserve v for LTL-formula;
-
 
 Lm1: a in (X1 \/ X2) \/ X3 iff a in X1 or a in X2 or a in X3
 proof
@@ -63,8 +62,8 @@ end;
 Lm3: (<* H *>).1 = H & rng <* H *> = {H}
 proof
   set p = <* H *>;
-  dom p = {1} & p.1= H by FINSEQ_1:4,def 8;
-  hence thesis by FUNCT_1:14;
+  dom p = {1} & p.1= H by FINSEQ_1:2,def 8;
+  hence thesis by FUNCT_1:4;
 end;
 
 Lm4: for r1,r2 being real number holds r1<=r2 implies [\ r1 /] <= [\ r2 /]
@@ -77,10 +76,10 @@ A1: r1<=r2;
     now
       assume [\ r2 /] < [\ r1 /];
       then
-A2:   [\ r2 /] +1 <= [\ r1 /] by INT_1:20;
+A2:   [\ r2 /] +1 <= [\ r1 /] by INT_1:7;
       [\ r1 /] <= r1 by INT_1:def 6;
       then [\ r2 /] +1 <= r1 by A2,XXREAL_0:2;
-      hence contradiction by A1,INT_1:52,XXREAL_0:2;
+      hence contradiction by A1,INT_1:29,XXREAL_0:2;
     end;
     hence thesis;
   end;
@@ -93,10 +92,10 @@ proof
   r1<=r2-1 implies [\ r1 /] <= [\ r2 /]-1
   proof
     assume r1<=r2-1;
-    then r1+1<=r2-1 +1 by XREAL_1:8;
+    then r1+1<=r2-1 +1 by XREAL_1:6;
     then [\ r1+1 /] <= [\ r2 /] by Lm4;
-    then [\ r1 /] +1 <= [\ r2 /] by INT_1:51;
-    then [\ r1 /]+1 -1 <= [\ r2 /] -1 by XREAL_1:11;
+    then [\ r1 /] +1 <= [\ r2 /] by INT_1:28;
+    then [\ r1 /]+1 -1 <= [\ r2 /] -1 by XREAL_1:9;
     hence thesis;
   end;
   hence thesis;
@@ -138,7 +137,7 @@ proof
   set E = Subformulae H;
   assume F is_subformula_of H;
   then F in E by MODELC_2:45;
-  hence thesis by SUBSET_1:63;
+  hence thesis by SUBSET_1:41;
 end;
 
 Lm10: F is_subformula_of H & G is_subformula_of H implies {F,G} is Subset of
@@ -147,7 +146,7 @@ proof
   set E = Subformulae H;
   assume F is_subformula_of H & G is_subformula_of H;
   then F in E & G in E by MODELC_2:45;
-  hence thesis by SUBSET_1:56;
+  hence thesis by SUBSET_1:34;
 end;
 
 Lm11: H is disjunctive or H is conjunctive or H is Until or H is Release
@@ -202,20 +201,20 @@ definition
   the_left_argument_of H } if H is disjunctive, {} if H is next, {
   the_left_argument_of H } if H is Until, {the_right_argument_of H } if H is
   Release otherwise {};
-  correctness by Lm11,Lm12,MODELC_2:78,SUBSET_1:4;
+  correctness by Lm11,Lm12,MODELC_2:78,SUBSET_1:1;
   func LTLNew2 H -> Subset of Subformulae H equals
   :Def2:
   {} if H is
 conjunctive, {the_right_argument_of H } if H is disjunctive, {} if H is next, {
   the_right_argument_of H } if H is Until, {the_left_argument_of H,
   the_right_argument_of H } if H is Release otherwise {};
-  correctness by Lm11,Lm12,MODELC_2:78,SUBSET_1:4;
+  correctness by Lm11,Lm12,MODELC_2:78,SUBSET_1:1;
   func LTLNext H -> Subset of Subformulae H equals
   :Def3:
   {} if H is
 conjunctive, {} if H is disjunctive, {the_argument_of H} if H is next, {H} if H
   is Until, {H} if H is Release otherwise {};
-  correctness by Lm13,Lm14,MODELC_2:78,SUBSET_1:4;
+  correctness by Lm13,Lm14,MODELC_2:78,SUBSET_1:1;
 end;
 
 definition
@@ -242,7 +241,7 @@ A1: H in the LTLnew of N;
     set NewA= (the LTLnew of N) \ {H};
     set Old= (the LTLold of N) \/ {H};
     set NewC = NewA \/ NewB;
-    {H} c= Subformulae v by A1,ZFMISC_1:37;
+    {H} c= Subformulae v by A1,ZFMISC_1:31;
     then reconsider Old as Subset of Subformulae v by XBOOLE_1:8;
     ex F st H=F & F is_subformula_of v by A1,MODELC_2:def 24;
     then
@@ -276,7 +275,7 @@ A1: H in the LTLnew of N;
     set NewA= (the LTLnew of N) \ {H};
     set Old= (the LTLold of N) \/ {H};
     set NewC = NewA \/ NewB;
-    {H} c= Subformulae v by A1,ZFMISC_1:37;
+    {H} c= Subformulae v by A1,ZFMISC_1:31;
     then reconsider Old as Subset of Subformulae v by XBOOLE_1:8;
     ex F st H=F & F is_subformula_of v by A1,MODELC_2:def 24;
     then Subformulae H c= Subformulae v by MODELC_2:46;
@@ -347,7 +346,7 @@ definition
   let v;
   func {}v -> Subset of Subformulae v equals
   {};
-  correctness by SUBSET_1:4;
+  correctness by SUBSET_1:1;
 end;
 
 definition
@@ -359,7 +358,7 @@ end;
 
 registration
   let v;
-  cluster elementary strict LTLnode over v;
+  cluster elementary strict for LTLnode over v;
   existence
   proof
     set X = LTLnode(# {}v,{}v,{}v #);
@@ -423,25 +422,25 @@ proof
 A1: L is_Finseq_for v and
 A2: 1<= m and
 A3: m<=len(L);
-A4: m-1<=len(L)-0 by A3,XREAL_1:15;
+A4: m-1<=len(L)-0 by A3,XREAL_1:13;
   set m1=m-1;
   reconsider m1 as Nat by A2,NAT_1:21;
   set L1=L|Seg m1;
-  reconsider L1 as FinSequence by FINSEQ_1:19;
+  reconsider L1 as FinSequence by FINSEQ_1:15;
   consider L2 being FinSequence such that
-A5: L = L1^L2 by FINSEQ_1:101;
-  len(L)=len(L1)+len(L2) by A5,FINSEQ_1:35;
+A5: L = L1^L2 by FINSEQ_1:80;
+  len(L)=len(L1)+len(L2) by A5,FINSEQ_1:22;
   then
-A6: len(L2) = len(L)-len(L1) .= len(L)-m1 by A4,FINSEQ_1:21;
-  m-m<=len(L)-m by A3,XREAL_1:11;
+A6: len(L2) = len(L)-len(L1) .= len(L)-m1 by A4,FINSEQ_1:17;
+  m-m<=len(L)-m by A3,XREAL_1:9;
   then
-A7: 0+1<=(len(L)-m)+1 by XREAL_1:8;
-  then 1 in dom L2 by A6,FINSEQ_3:27;
+A7: 0+1<=(len(L)-m)+1 by XREAL_1:6;
+  then 1 in dom L2 by A6,FINSEQ_3:25;
   then
 A8: L2.1 = L.(len(L1) + 1) by A5,FINSEQ_1:def 7
-    .= L.(m1+1) by A4,FINSEQ_1:21
+    .= L.(m1+1) by A4,FINSEQ_1:17
     .=L.m;
-A9: len(L1) = m1 by A4,FINSEQ_1:21;
+A9: len(L1) = m1 by A4,FINSEQ_1:17;
   for k st 1 <= k & k < len(L2) holds ex N,M st N = L2.k & M=L2.(k+1) & M
   is_succ_of N
   proof
@@ -450,24 +449,24 @@ A10: 1 <= k & k < len(L2);
     set k1=k+1;
     1<=k1 & k1<=len(L2) by A10,NAT_1:13;
     then
-A11: k1 in dom L2 by FINSEQ_3:27;
+A11: k1 in dom L2 by FINSEQ_3:25;
     set km1=k+m1;
-    1+0<= k+m1 & km1 <(len(L)-m1) +m1 by A6,A10,XREAL_1:8,9;
+    1+0<= k+m1 & km1 <(len(L)-m1) +m1 by A6,A10,XREAL_1:6,7;
     then consider N,M such that
 A12: N = L.km1 and
 A13: M=L.(km1+1) and
 A14: M is_succ_of N by A1,Def19;
 A15: M = L.(m1+k1) by A13
       .= L2.(k1) by A9,A5,A11,FINSEQ_1:def 7;
-    k in dom L2 by A10,FINSEQ_3:27;
+    k in dom L2 by A10,FINSEQ_3:25;
     then N = L2.k by A9,A5,A12,FINSEQ_1:def 7;
     hence thesis by A14,A15;
   end;
   then
 A16: L2 is_Finseq_for v by Def19;
-  len(L2) in dom L2 by A7,A6,FINSEQ_3:27;
+  len(L2) in dom L2 by A7,A6,FINSEQ_3:25;
   then L2.(len(L2)) =L.(len(L1)+len(L2)) by A5,FINSEQ_1:def 7
-    .= L.(len(L)) by A5,FINSEQ_1:35;
+    .= L.(len(L)) by A5,FINSEQ_1:22;
   hence thesis by A7,A5,A6,A8,A16;
 end;
 
@@ -544,7 +543,7 @@ A15: a in NN implies a in NN \ {H} or a in NO \/{H} by XBOOLE_0:def 3,def 5;
     hence thesis by A8,A5,A9,A14,A15,XBOOLE_0:def 3;
   end;
   LTLNext H = {} by A7,A3,A6,Def3;
-  hence thesis by A4,A10,A13,TARSKI:2;
+  hence thesis by A4,A10,A13,TARSKI:1;
 end;
 
 Lm17: H in the LTLnew of N & (H is conjunctive or H is next ) implies (w |= *N
@@ -568,7 +567,7 @@ A4: w |= *N implies w |= *SN
     assume
 A5: w |= *N;
     then
-A6: w |= H by A3,MODELC_2:def 68;
+A6: w |= H by A3,MODELC_2:def 64;
     for F being LTL-formula st F in *SN holds w|= F
     proof
       let F be LTL-formula such that
@@ -584,12 +583,12 @@ A8:       F in NO \/ {H} by A1,Def4;
             suppose
               F in NO;
               then F in *N by Lm1;
-              hence thesis by A5,MODELC_2:def 68;
+              hence thesis by A5,MODELC_2:def 64;
             end;
             suppose
               F in {H};
               then F in *N by A3,TARSKI:def 1;
-              hence thesis by A5,MODELC_2:def 68;
+              hence thesis by A5,MODELC_2:def 64;
             end;
           end;
           hence thesis;
@@ -603,7 +602,7 @@ A9:       F in (NN \ {H})\/ (LTLNew1 H \ NO) by A1,Def4;
             suppose
               F in NN;
               then F in (NO \/ NN) \/ XNX by Lm1;
-              hence thesis by A5,MODELC_2:def 68;
+              hence thesis by A5,MODELC_2:def 64;
             end;
             suppose
 A10:          F in (LTLNew1 H);
@@ -647,7 +646,7 @@ A18:      SN1 = NX \/ LTLNext H by A1,Def4;
               G1 in NX;
               then F in XNX by A14,A17;
               then F in (NO \/ NN) \/ XNX by Lm1;
-              hence thesis by A5,MODELC_2:def 68;
+              hence thesis by A5,MODELC_2:def 64;
             end;
             suppose
 A19:          G1 in LTLNext H;
@@ -672,7 +671,7 @@ A20:              H is next;
       end;
       hence thesis;
     end;
-    hence thesis by MODELC_2:def 68;
+    hence thesis by MODELC_2:def 64;
   end;
   w |= *SN implies w |= *N
   proof
@@ -689,7 +688,7 @@ A22:  F in *N;
           then F in NO \/ {H} by XBOOLE_0:def 3;
           then F in SNO by A1,Def4;
           then F in *SN by Lm1;
-          hence thesis by A21,MODELC_2:def 68;
+          hence thesis by A21,MODELC_2:def 64;
         end;
         suppose
 A23:      F in NN;
@@ -701,7 +700,7 @@ A23:      F in NN;
               then F in NO \/ {H} by XBOOLE_0:def 3;
               then F in SNO by A1,Def4;
               then F in *SN by Lm1;
-              hence thesis by A21,MODELC_2:def 68;
+              hence thesis by A21,MODELC_2:def 64;
             end;
             suppose
               not F=H;
@@ -710,7 +709,7 @@ A23:      F in NN;
               then F in (NN \ {H}) \/(LTLNew1 H \ NO) by XBOOLE_0:def 3;
               then F in SNN by A1,Def4;
               then F in *SN by Lm1;
-              hence thesis by A21,MODELC_2:def 68;
+              hence thesis by A21,MODELC_2:def 64;
             end;
           end;
           hence thesis;
@@ -732,12 +731,12 @@ A28:      G ='X' G1 by A26;
           then F in 'X' SN1 by A25,A28;
           then F in XSNX by A1,Def4;
           then F in *SN by Lm1;
-          hence thesis by A21,MODELC_2:def 68;
+          hence thesis by A21,MODELC_2:def 64;
         end;
       end;
       hence thesis;
     end;
-    hence thesis by MODELC_2:def 68;
+    hence thesis by MODELC_2:def 64;
   end;
   hence thesis by A4;
 end;
@@ -839,16 +838,16 @@ A15: w |= *N implies (w |= *SN1 or w |= *SN2)
     assume
 A16: w |= *N;
     now
-      per cases by A3,A14,A16,MODELC_2:def 68;
+      per cases by A3,A14,A16,MODELC_2:def 64;
       suppose
 A17:    w|= H1;
         F in *SN1 implies w|= F
         proof
           assume F in *SN1;
           then F in *N or F=H1 by A7;
-          hence thesis by A16,A17,MODELC_2:def 68;
+          hence thesis by A16,A17,MODELC_2:def 64;
         end;
-        hence thesis by MODELC_2:def 68;
+        hence thesis by MODELC_2:def 64;
       end;
       suppose
 A18:    w|= H2;
@@ -856,9 +855,9 @@ A18:    w|= H2;
         proof
           assume F in *SN2;
           then F in *N or F=H2 by A12;
-          hence thesis by A16,A18,MODELC_2:def 68;
+          hence thesis by A16,A18,MODELC_2:def 64;
         end;
-        hence thesis by MODELC_2:def 68;
+        hence thesis by MODELC_2:def 64;
       end;
     end;
     hence thesis;
@@ -917,16 +916,16 @@ A26:  F in *SN1 by A19,A24;
         per cases by A23;
         suppose
           w |= *SN1;
-          hence thesis by A26,MODELC_2:def 68;
+          hence thesis by A26,MODELC_2:def 64;
         end;
         suppose
           w |= *SN2;
-          hence thesis by A25,MODELC_2:def 68;
+          hence thesis by A25,MODELC_2:def 64;
         end;
       end;
       hence thesis;
     end;
-    hence thesis by MODELC_2:def 68;
+    hence thesis by MODELC_2:def 64;
   end;
   hence thesis by A15;
 end;
@@ -1042,16 +1041,16 @@ A20: w |= *N implies (w |= *SN1 or w |= *SN2)
     assume
 A21: w |= *N;
     now
-      per cases by A3,A19,A21,MODELC_2:65,def 68;
+      per cases by A3,A19,A21,MODELC_2:65,def 64;
       suppose
 A22:    w|=H1 & w|='X' H;
         F in *SN1 implies w|= F
         proof
           assume F in *SN1;
           then F in *N or F=H1 or F='X' H by A8;
-          hence thesis by A21,A22,MODELC_2:def 68;
+          hence thesis by A21,A22,MODELC_2:def 64;
         end;
-        hence thesis by MODELC_2:def 68;
+        hence thesis by MODELC_2:def 64;
       end;
       suppose
 A23:    w|= H2;
@@ -1059,9 +1058,9 @@ A23:    w|= H2;
         proof
           assume F in *SN2;
           then F in *N or F=H2 by A17;
-          hence thesis by A21,A23,MODELC_2:def 68;
+          hence thesis by A21,A23,MODELC_2:def 64;
         end;
-        hence thesis by MODELC_2:def 68;
+        hence thesis by MODELC_2:def 64;
       end;
     end;
     hence thesis;
@@ -1129,16 +1128,16 @@ A35:  F in *SN1 by A24,A33;
         per cases by A32;
         suppose
           w |= *SN1;
-          hence thesis by A35,MODELC_2:def 68;
+          hence thesis by A35,MODELC_2:def 64;
         end;
         suppose
           w |= *SN2;
-          hence thesis by A34,MODELC_2:def 68;
+          hence thesis by A34,MODELC_2:def 64;
         end;
       end;
       hence thesis;
     end;
-    hence thesis by MODELC_2:def 68;
+    hence thesis by MODELC_2:def 64;
   end;
   hence thesis by A20;
 end;
@@ -1254,16 +1253,16 @@ A20: w |= *N implies (w |= *SN1 or w |= *SN2)
     assume
 A21: w |= *N;
     now
-      per cases by A3,A19,A21,MODELC_2:65,def 68;
+      per cases by A3,A19,A21,MODELC_2:65,def 64;
       suppose
 A22:    w|=H2 & w|='X' H;
         F in *SN1 implies w|= F
         proof
           assume F in *SN1;
           then F in *N or F=H2 or F='X' H by A8;
-          hence thesis by A21,A22,MODELC_2:def 68;
+          hence thesis by A21,A22,MODELC_2:def 64;
         end;
-        hence thesis by MODELC_2:def 68;
+        hence thesis by MODELC_2:def 64;
       end;
       suppose
 A23:    w|=H1 & w|=H2;
@@ -1271,9 +1270,9 @@ A23:    w|=H1 & w|=H2;
         proof
           assume F in *SN2;
           then F in *N or F=H1 or F=H2 by A17;
-          hence thesis by A21,A23,MODELC_2:def 68;
+          hence thesis by A21,A23,MODELC_2:def 64;
         end;
-        hence thesis by MODELC_2:def 68;
+        hence thesis by MODELC_2:def 64;
       end;
     end;
     hence thesis;
@@ -1341,16 +1340,16 @@ A35:  F in *SN1 by A24,A33;
         per cases by A32;
         suppose
           w |= *SN1;
-          hence thesis by A35,MODELC_2:def 68;
+          hence thesis by A35,MODELC_2:def 64;
         end;
         suppose
           w |= *SN2;
-          hence thesis by A34,MODELC_2:def 68;
+          hence thesis by A34,MODELC_2:def 64;
         end;
       end;
       hence thesis;
     end;
-    hence thesis by MODELC_2:def 68;
+    hence thesis by MODELC_2:def 64;
   end;
   hence thesis by A20;
 end;
@@ -1366,7 +1365,7 @@ proof
   set H1 = the_argument_of H;
   H in Subformulae H by MODELC_2:45;
   then
-A1: {H} c= Subformulae H by ZFMISC_1:37;
+A1: {H} c= Subformulae H by ZFMISC_1:31;
   assume
 A2: H is negative or H is next;
   then H1 is_immediate_constituent_of H by MODELC_2:20,21;
@@ -1402,7 +1401,7 @@ A5:   F is_subformula_of H by MODELC_2:def 24;
     end;
     hence thesis by A3;
   end;
-  hence thesis by TARSKI:2;
+  hence thesis by TARSKI:1;
 end;
 
 Lm22: (H is conjunctive or H is disjunctive or H is Until or H is Release)
@@ -1415,7 +1414,7 @@ proof
   the_right_argument_of H);
   H in Subformulae H by MODELC_2:def 24;
   then
-A1: {H} c= Subformulae H by ZFMISC_1:37;
+A1: {H} c= Subformulae H by ZFMISC_1:31;
   assume
 A2: H is conjunctive or H is disjunctive or H is Until or H is Release;
   then H2 is_immediate_constituent_of H by MODELC_2:22,23,24,25;
@@ -1459,7 +1458,7 @@ A6:   F is_subformula_of H by MODELC_2:def 24;
     end;
     hence thesis by A4;
   end;
-  hence thesis by TARSKI:2;
+  hence thesis by TARSKI:1;
 end;
 
 Lm23: H is atomic implies Subformulae H ={H}
@@ -1467,7 +1466,7 @@ proof
   assume H is atomic;
   then ex n st H = atom.n by MODELC_2:def 11;
   then
-A1: len H =1 by FINSEQ_1:57;
+A1: len H =1 by FINSEQ_1:40;
 A2: x in Subformulae H implies x in {H}
   proof
     assume x in Subformulae H;
@@ -1488,14 +1487,14 @@ A4: G is_subformula_of H by MODELC_2:def 24;
     then x = H by TARSKI:def 1;
     hence thesis by MODELC_2:45;
   end;
-  hence thesis by A2,TARSKI:2;
+  hence thesis by A2,TARSKI:1;
 end;
 
 Lm24: not {} in W
 proof
   assume {} in W;
   then ex F st F = {} & F is_subformula_of H by MODELC_2:def 24;
-  hence contradiction by CARD_1:47,MODELC_2:3;
+  hence contradiction by CARD_1:27,MODELC_2:3;
 end;
 
 theorem Th3:
@@ -1511,7 +1510,7 @@ A3: P[the_argument_of H];
 A4: Subformulae the_argument_of H = rng L1 by A3;
     set L = L1 ^ <* H *>;
     take L;
-    rng L = rng L1 \/ rng <* H *> by FINSEQ_1:44
+    rng L = rng L1 \/ rng <* H *> by FINSEQ_1:31
       .= Subformulae the_argument_of H \/ {H} by A4,Lm3
       .= Subformulae H by A2,Lm21;
     hence thesis;
@@ -1528,10 +1527,10 @@ A9: Subformulae the_left_argument_of H = rng L1 by A7;
     consider L2 such that
 A10: Subformulae the_right_argument_of H = rng L2 by A8;
 A11: rng(L1 ^ L2) = Subformulae the_left_argument_of H \/ Subformulae
-    the_right_argument_of H by A9,A10,FINSEQ_1:44;
+    the_right_argument_of H by A9,A10,FINSEQ_1:31;
     set L = (L1 ^ L2) ^ <* H *>;
     take L;
-    rng L = rng (L1 ^ L2) \/ rng <* H *> by FINSEQ_1:44
+    rng L = rng (L1 ^ L2) \/ rng <* H *> by FINSEQ_1:31
       .= (Subformulae the_left_argument_of H \/ Subformulae
     the_right_argument_of H) \/ {H} by A11,Lm3
       .= Subformulae H by A6,Lm22;
@@ -1583,7 +1582,7 @@ A1: for x st x in NAT holds F(x) in REAL
     proof
       let x such that
       x in NAT;
-      F(x) in NAT by ORDINAL1:def 13;
+      F(x) in NAT by ORDINAL1:def 12;
       hence thesis;
     end;
     consider IT being Function of NAT,REAL such that
@@ -1593,7 +1592,7 @@ A2: for x st x in NAT holds IT.x = F(x) from FUNCT_2:sch 2 (A1);
     implies IT.k=0 )
     proof
       let k;
-A3:   k in NAT by ORDINAL1:def 13;
+A3:   k in NAT by ORDINAL1:def 12;
 A4:   not L.k in W implies IT.k=0
       proof
         assume
@@ -1644,7 +1643,7 @@ A10:        not L.x in W;
         end;
         hence thesis;
       end;
-      hence thesis by FUNCT_2:18;
+      hence thesis by FUNCT_2:12;
     end;
     hence thesis;
   end;
@@ -1682,7 +1681,7 @@ A7:     k<=k+1 by NAT_1:11;
         assume i<= k;
         hence thesis by A4,A7,XXREAL_0:2;
       end;
-      reconsider k as Element of NAT by ORDINAL1:def 13;
+      reconsider k as Element of NAT by ORDINAL1:def 12;
       Sum(R1, CastNat(m)) = Sum(R1, m) by MODELC_2:def 1
         .= Sum(R2, k) + R2.m by A3,A6,A5,SERIES_1:def 1
         .= Sum(R2, m) by SERIES_1:def 1;
@@ -1721,7 +1720,7 @@ A4:   CastNat(k)=k by MODELC_2:def 1;
       assume that
 A5:   for i st i<=k+1 & not i = j holds R1.i = R2.i and
 A6:   j <= k+1;
-      reconsider k as Element of NAT by ORDINAL1:def 13;
+      reconsider k as Element of NAT by ORDINAL1:def 12;
       now
         per cases by A6,NAT_1:8;
         suppose
@@ -1780,7 +1779,7 @@ A1: for n being Element of NAT holds s.n = 0*n+0 by Def24;
   for n holds Partial_Sums(s).n = 0
   proof
     let n;
-    reconsider n as Element of NAT by ORDINAL1:def 13;
+    reconsider n as Element of NAT by ORDINAL1:def 12;
 A2: s.0 = 0 by Def24;
     Partial_Sums(s).n = (n+1)*(s.0 + s.n)/2 by A1,SERIES_2:42
       .= (n+1)*(0+0)/2 by A2,Def24;
@@ -1802,7 +1801,7 @@ A3: x in W;
     hence thesis by A3,XBOOLE_0:def 5;
   end;
   x in W \ {F} implies x in W by XBOOLE_0:def 5;
-  hence thesis by A2,TARSKI:2;
+  hence thesis by A2,TARSKI:1;
 end;
 
 theorem Th6:
@@ -1815,7 +1814,7 @@ A2: L is one-to-one and
 A3: F in W;
   consider x such that
 A4: x in dom L and
-A5: L.x = F by A1,A3,FUNCT_1:def 5;
+A5: L.x = F by A1,A3,FUNCT_1:def 3;
   set R2= Partial_seq(L,W\{F});
   set R1 = Partial_seq(L,W);
   set n = len L;
@@ -1841,7 +1840,7 @@ A10: not i=k;
       suppose
         not i in dom L;
         then
-A11:    L.i = {} by FUNCT_1:def 4;
+A11:    L.i = {} by FUNCT_1:def 2;
         then
 A12:    not L.i in W by Lm24;
         not L.i in W\{F} by A11,Lm24;
@@ -1851,7 +1850,7 @@ A12:    not L.i in W by Lm24;
       end;
       suppose
         i in dom L;
-        then not L.i = F by A2,A4,A5,A7,A10,FUNCT_1:def 8;
+        then not L.i = F by A2,A4,A5,A7,A10,FUNCT_1:def 4;
         then
 A13:    not L.i in {F} by TARSKI:def 1;
         now
@@ -1904,7 +1903,7 @@ A4: x in W1\{F} implies x in W
     hence thesis by XBOOLE_0:def 5;
   end;
   then
-A5: W1\{F} = W by A4,TARSKI:2;
+A5: W1\{F} = W by A4,TARSKI:1;
   F in {F} by TARSKI:def 1;
   then F in W1 by A3,XBOOLE_0:def 3;
   then len(L,W) = len(L,W1) - len F by A1,A5,Th6;
@@ -1946,10 +1945,10 @@ A6:         card W1 = k+1;
 A7:         F in W1 by XBOOLE_0:def 1;
             F in Subformulae H by A7;
             then reconsider F as LTL-formula by MODELC_2:1;
-            {F} c= W1 by A7,ZFMISC_1:37;
+            {F} c= W1 by A7,ZFMISC_1:31;
             then
-A8:         card (W1 \ {F}) = card W1 - card {F} by CARD_2:63
-              .= card W1 - 1 by CARD_1:50
+A8:         card (W1 \ {F}) = card W1 - card {F} by CARD_2:44
+              .= card W1 - 1 by CARD_1:30
               .= k by A6;
 A9:         len(L1,W1) = (len(L1,W1) - len F) + len F
               .= len(L1,W1\{F}) + len F by A4,A7,Th6;
@@ -1987,7 +1986,7 @@ definition
   existence
   proof
     consider L such that
-A1: rng L = Subformulae H & L is one-to-one by FINSEQ_4:73;
+A1: rng L = Subformulae H & L is one-to-one by FINSEQ_4:58;
     set IT = len(L,W);
     take IT;
     thus thesis by A1;
@@ -2001,7 +2000,7 @@ proof
   assume
 A1: not F in W;
   consider L such that
-A2: rng L = Subformulae H & L is one-to-one by FINSEQ_4:73;
+A2: rng L = Subformulae H & L is one-to-one by FINSEQ_4:58;
   len(W\{F}) = len(L,W\{F}) by A2,Def26
     .= len(L,W) by A1,Th5;
   hence thesis by A2,Def26;
@@ -2013,7 +2012,7 @@ proof
   assume
 A1: F in W;
   consider L such that
-A2: rng L = Subformulae H & L is one-to-one by FINSEQ_4:73;
+A2: rng L = Subformulae H & L is one-to-one by FINSEQ_4:58;
   len(W\{F}) = len(L,W\{F}) by A2,Def26
     .= len(L,W) - len F by A1,A2,Th6;
   hence thesis by A2,Def26;
@@ -2025,7 +2024,7 @@ proof
   assume
 A1: ( not F in W)& W1 = W \/ {F};
   consider L such that
-A2: rng L = Subformulae H & L is one-to-one by FINSEQ_4:73;
+A2: rng L = Subformulae H & L is one-to-one by FINSEQ_4:58;
   len(W1) = len(L,W1) by A2,Def26
     .= len(L,W) + len F by A1,A2,Th7;
   hence thesis by A2,Def26;
@@ -2040,9 +2039,9 @@ A1: W1 = W \/ {F};
     per cases;
     suppose
       F in W;
-      then {F} c= W by ZFMISC_1:37;
+      then {F} c= W by ZFMISC_1:31;
       then W1 = W by A1,XBOOLE_1:12;
-      hence thesis by XREAL_1:33;
+      hence thesis by XREAL_1:31;
     end;
     suppose
       not F in W;
@@ -2056,7 +2055,7 @@ theorem Th13:
   len({}H ) = 0
 proof
   consider L such that
-A1: rng L = Subformulae H & L is one-to-one by FINSEQ_4:73;
+A1: rng L = Subformulae H & L is one-to-one by FINSEQ_4:58;
   len({}H) = len(L,{}H) by A1,Def26;
   hence thesis by Th4;
 end;
@@ -2090,7 +2089,7 @@ A1: W c= W1;
   proof
     assume not W = W1;
     then consider x such that
-A2: not (x in W implies x in W1) or not (x in W1 implies x in W) by TARSKI:2;
+A2: not (x in W implies x in W1) or not (x in W1 implies x in W) by TARSKI:1;
     take x;
 A3: y in W implies y in W \ {x}
     proof
@@ -2100,7 +2099,7 @@ A4:   y in W;
       hence thesis by A4,XBOOLE_0:def 5;
     end;
     y in W \ {x} implies y in W by XBOOLE_0:def 5;
-    then W \ {x} = W by A3,TARSKI:2;
+    then W \ {x} = W by A3,TARSKI:1;
     hence thesis by A1,A2,XBOOLE_1:33;
   end;
   hence thesis;
@@ -2138,15 +2137,15 @@ A6:         W c= W1\{x};
             x in Subformulae H by A5;
             then reconsider x as LTL-formula by MODELC_2:1;
             set X = {x};
-            X c= W1 by A5,ZFMISC_1:37;
-            then card (W1\X) = card W1 - card X by CARD_2:63
-              .= card W1 - 1 by CARD_1:50;
+            X c= W1 by A5,ZFMISC_1:31;
+            then card (W1\X) = card W1 - card X by CARD_2:44
+              .= card W1 - 1 by CARD_1:30;
             then card (W1\X) +1 <= k+1 by A3;
-            then card (W1\X) <= k by XREAL_1:8;
+            then card (W1\X) <= k by XREAL_1:6;
             then len(W) <= len(W1\X) by A2,A6;
             then
 A7:         len(W) <= len(W1) - len x by A5,Th10;
-            len(W1) - len x <= len(W1) by XREAL_1:45;
+            len(W1) - len x <= len(W1) by XREAL_1:43;
             hence thesis by A7,XXREAL_0:2;
           end;
         end;
@@ -2180,7 +2179,7 @@ A2: x in W by XBOOLE_0:def 1;
     x in Subformulae H by A2;
     then reconsider x as LTL-formula by MODELC_2:1;
     set X = {x};
-A3: X c= W by A2,ZFMISC_1:37;
+A3: X c= W by A2,ZFMISC_1:31;
     x is_subformula_of H by A2,MODELC_2:45;
     then reconsider X as Subset of Subformulae H by Lm9;
     len(X) = len x by Th14;
@@ -2243,16 +2242,16 @@ A5:         x in W1 by XBOOLE_0:def 1;
             set X = {x};
             set Y = W1\X;
             set Z = Y \/ W2;
-A6:         X c= W1 by A5,ZFMISC_1:37;
-            then card (Y) = card W1 - card X by CARD_2:63
-              .= card W1 - 1 by CARD_1:50;
+A6:         X c= W1 by A5,ZFMISC_1:31;
+            then card (Y) = card W1 - card X by CARD_2:44
+              .= card W1 - 1 by CARD_1:30;
             then card (Y) + 1 = card W1;
-            then card (Y) <= k by A3,XREAL_1:8;
+            then card (Y) <= k by A3,XREAL_1:6;
             then Z = Y \/ W2 implies len(Z) <= len(Y) + len(W2) by A2;
             then len(Z) <= len(W1) - len x + len(W2) by A5,Th10;
             then len(Z) <= (len(W1) + len(W2)) - len x;
             then
-A7:         len(Z) + len x <= len(W1) + len(W2) by XREAL_1:21;
+A7:         len(Z) + len x <= len(W1) + len(W2) by XREAL_1:19;
             Z \/ X = (Y \/ X) \/ W2 by XBOOLE_1:4
               .= W1 \/ W2 by A6,XBOOLE_1:45;
             then len(W) <= len(Z) + len x by A4,Th12;
@@ -2324,7 +2323,7 @@ A4:   H is conjunctive;
       Left is Subset of Subformulae H by A4,Lm12;
       then reconsider Left as Subset of Subformulae v by A3,XBOOLE_1:1;
       New = {the_left_argument_of H,the_right_argument_of H } by A2,A4,Def1;
-      then New = Left \/ Right by ENUMSET1:41;
+      then New = Left \/ Right by ENUMSET1:1;
       then
 A5:   len(New) <= len(Left) + len(Right) by Th18;
 A6:   len(H) = 1+len(the_left_argument_of H) + len(the_right_argument_of H
@@ -2339,7 +2338,7 @@ A7:   H is disjunctive or H is Until;
       then len(New) = len(the_left_argument_of H) by Th14;
       then
 A8:   len(New) +0 <= len(the_left_argument_of H) + len(
-      the_right_argument_of H) by XREAL_1:9;
+      the_right_argument_of H) by XREAL_1:7;
       len(H) = 1+len(the_left_argument_of H) + len(the_right_argument_of H
       ) by A7,MODELC_2:11;
       hence thesis by A8;
@@ -2348,7 +2347,7 @@ A8:   len(New) +0 <= len(the_left_argument_of H) + len(
 A9:   H is next;
       1<=len(H) by MODELC_2:3;
       then
-A10:  1-1 <= len(H)-1 by XREAL_1:11;
+A10:  1-1 <= len(H)-1 by XREAL_1:9;
       New = {} v by A2,A9,Def1;
       hence thesis by A10,Th13;
     end;
@@ -2358,7 +2357,7 @@ A11:  H is Release;
       then len(New) = len(the_right_argument_of H) by Th14;
       then
 A12:  len(New)+0 <= len(the_left_argument_of H) + len(
-      the_right_argument_of H) by XREAL_1:9;
+      the_right_argument_of H) by XREAL_1:7;
       len(H) = 1+len(the_left_argument_of H) + len(the_right_argument_of H
       ) by A11,MODELC_2:11;
       hence thesis by A12;
@@ -2368,7 +2367,7 @@ A13:  not (H is conjunctive or H is disjunctive or H is next or H is
       Until or H is Release);
       1<=len(H) by MODELC_2:3;
       then
-A14:  1-1 <= len(H)-1 by XREAL_1:11;
+A14:  1-1 <= len(H)-1 by XREAL_1:9;
       New = {} v by A2,A13,Def1;
       hence thesis by A14,Th13;
     end;
@@ -2397,7 +2396,7 @@ A4:   H is Release;
       Left is Subset of Subformulae H by A4,Lm12;
       then reconsider Left as Subset of Subformulae v by A3,XBOOLE_1:1;
       New = {the_left_argument_of H,the_right_argument_of H } by A2,A4,Def2;
-      then New = Left \/ Right by ENUMSET1:41;
+      then New = Left \/ Right by ENUMSET1:1;
       then
 A5:   len(New) <= len(Left) + len(Right) by Th18;
 A6:   len(H) = 1+len(the_left_argument_of H) + len(the_right_argument_of H
@@ -2412,7 +2411,7 @@ A7:   H is disjunctive or H is Until;
       then len(New) = len(the_right_argument_of H) by Th14;
       then
 A8:   len(New)+0 <= len(the_left_argument_of H) + len(
-      the_right_argument_of H) by XREAL_1:9;
+      the_right_argument_of H) by XREAL_1:7;
       len(H) = 1+len(the_left_argument_of H) + len(the_right_argument_of H
       ) by A7,MODELC_2:11;
       hence thesis by A8;
@@ -2421,7 +2420,7 @@ A8:   len(New)+0 <= len(the_left_argument_of H) + len(
 A9:   H is conjunctive or H is next;
       1<=len(H) by MODELC_2:3;
       then
-A10:  1-1 <= len(H)-1 by XREAL_1:11;
+A10:  1-1 <= len(H)-1 by XREAL_1:9;
       New = {} v by A2,A9,Def2;
       hence thesis by A10,Th13;
     end;
@@ -2430,7 +2429,7 @@ A11:  not (H is conjunctive or H is disjunctive or H is next or H is
       Until or H is Release);
       1<=len(H) by MODELC_2:3;
       then
-A12:  1-1 <= len(H)-1 by XREAL_1:11;
+A12:  1-1 <= len(H)-1 by XREAL_1:9;
       New = {} v by A2,A11,Def2;
       hence thesis by A12,Th13;
     end;
@@ -2461,7 +2460,7 @@ A4: len(M2) <= len(New1) by Th15,XBOOLE_1:36;
   len(New1) <= len(H) -1 by A1,Lm28;
   then len(M2) <= len(H) -1 by A4,XXREAL_0:2;
   then
-A5: len(M1) + len(M2) <= len(M1) + (len(H) -1) by XREAL_1:8;
+A5: len(M1) + len(M2) <= len(M1) + (len(H) -1) by XREAL_1:6;
   len(M1) = len(NN1)-len(H) by A1,Th10;
   hence thesis by A5,A3,XXREAL_0:2;
 end;
@@ -2490,7 +2489,7 @@ A4: len(M2) <= len(New2) by Th15,XBOOLE_1:36;
   len(New2) <= len(H) -1 by A1,Lm29;
   then len(M2) <= len(H) -1 by A4,XXREAL_0:2;
   then
-A5: len(M1) + len(M2) <= len(M1) + (len(H) -1) by XREAL_1:8;
+A5: len(M1) + len(M2) <= len(M1) + (len(H) -1) by XREAL_1:6;
   len(M1) = len(NN1)-len(H) by A1,Th10;
   hence thesis by A5,A3,XXREAL_0:2;
 end;
@@ -2502,7 +2501,7 @@ definition
   correctness
   proof
     len(the LTLnew of N) >= 0 by Th17;
-    hence thesis by INT_1:80;
+    hence thesis by INT_1:53;
   end;
 end;
 
@@ -2523,7 +2522,7 @@ proof
   assume
 A1: len(N)<=0;
   len(the LTLnew of N) -1 < [\ len(the LTLnew of N) /] by INT_1:def 6;
-  then len(the LTLnew of N) -1 +1 <0+1 by A1,XREAL_1:10;
+  then len(the LTLnew of N) -1 +1 <0+1 by A1,XREAL_1:8;
   hence thesis by Th16;
 end;
 
@@ -2535,7 +2534,7 @@ A1: len(N) >0;
   now
     assume the LTLnew of N = {}v;
     then len (the LTLnew of N) = 0 by Th13;
-    hence contradiction by A1,INT_1:47;
+    hence contradiction by A1,INT_1:25;
   end;
   hence thesis;
 end;
@@ -2589,8 +2588,8 @@ A11:          the LTLnew of M = {}v and
 A12:          L is_Finseq_for v by A2,A4;
               set L1 = <*N*>^L;
               set n1=n+1;
-A13:          len L1 = len <*N*> + len L by FINSEQ_1:35
-                .= n1 by A8,FINSEQ_1:56;
+A13:          len L1 = len <*N*> + len L by FINSEQ_1:22
+                .= n1 by A8,FINSEQ_1:39;
 A14:          L1 is_Finseq_for v
               proof
                 let k such that
@@ -2608,14 +2607,14 @@ A17:            k+1<=len(L1) by A16,NAT_1:13;
                       then
 A18:                  k=1 by A15,XXREAL_0:1;
                       then reconsider N1 as strict LTLnode over v by
-FINSEQ_1:58;
-                      len <*N*> =1 by FINSEQ_1:56;
+FINSEQ_1:41;
+                      len <*N*> =1 by FINSEQ_1:39;
                       then
-A19:                  N2 = L.(2-1) by A17,A18,FINSEQ_1:37
+A19:                  N2 = L.(2-1) by A17,A18,FINSEQ_1:24
                         .= M1 by A9;
                       then reconsider N2 as strict LTLnode over v;
                       take N1,N2;
-                      thus thesis by A6,A18,A19,FINSEQ_1:58;
+                      thus thesis by A6,A18,A19,FINSEQ_1:41;
                     end;
                     suppose
 A20:                  1< k;
@@ -2624,17 +2623,17 @@ A20:                  1< k;
                       1<km1+1 by A20;
                       then
 A21:                  1<= km1 by NAT_1:13;
-A22:                  len <*N*> < k by A20,FINSEQ_1:56;
+A22:                  len <*N*> < k by A20,FINSEQ_1:39;
                       then
-A23:                  N1=L.(k - len <*N*>) by A16,FINSEQ_1:37
-                        .= L.km1 by FINSEQ_1:56;
+A23:                  N1=L.(k - len <*N*>) by A16,FINSEQ_1:24
+                        .= L.km1 by FINSEQ_1:39;
                       k<=k+1 by NAT_1:11;
                       then len <*N*> <k+1 by A22,XXREAL_0:2;
                       then
-A24:                  N2= L.(k+1 - len <*N*>) by A17,FINSEQ_1:37
-                        .= L.(k+1 -1) by FINSEQ_1:56
+A24:                  N2= L.(k+1 - len <*N*>) by A17,FINSEQ_1:24
+                        .= L.(k+1 -1) by FINSEQ_1:39
                         .= L.(km1+1);
-A25:                  km1<n1-1 by A13,A16,XREAL_1:16;
+A25:                  km1<n1-1 by A13,A16,XREAL_1:14;
                       then
 A26:                  ex N10,N20 st L.km1 = N10 & L.(km1 + 1) = N20 & N20
                       is_succ_of N10 by A8,A12,A21,Def19;
@@ -2648,10 +2647,10 @@ A26:                  ex N10,N20 st L.km1 = N10 & L.(km1 + 1) = N20 & N20
                 end;
                 hence thesis;
               end;
-A27:          len <*N*> =1 by FINSEQ_1:56;
-A28:          L1.1= N by FINSEQ_1:58;
+A27:          len <*N*> =1 by FINSEQ_1:39;
+A28:          L1.1= N by FINSEQ_1:41;
               1<n1 by A7,NAT_1:13;
-              then L1.n1 = L.(n1 - 1) by A13,A27,FINSEQ_1:37
+              then L1.n1 = L.(n1 - 1) by A13,A27,FINSEQ_1:24
                 .= M by A10;
               hence thesis by A11,A13,A28,A14,NAT_1:11;
             end;
@@ -2681,8 +2680,8 @@ A30:  len(N)<=0;
       take L;
       take M;
       for k st 1 <= k & k < len L holds ex N1,N2 st L.k = N1 & L.(k + 1) =
-      N2 & N2 is_succ_of N1 by FINSEQ_1:56;
-      hence thesis by A30,Def19,Th22,FINSEQ_1:57;
+      N2 & N2 is_succ_of N1 by FINSEQ_1:39;
+      hence thesis by A30,Def19,Th22,FINSEQ_1:40;
     end;
     hence thesis;
   end;
@@ -2728,21 +2727,21 @@ A1: L is_Finseq_for v and
 A2: m<= len(L) and
 A3: L1 = L|Seg m;
   reconsider L1 as FinSequence;
-A4: len(L1) = m by A2,A3,FINSEQ_1:21;
-A5: dom L1 = Seg m by A2,A3,FINSEQ_1:21;
+A4: len(L1) = m by A2,A3,FINSEQ_1:17;
+A5: dom L1 = Seg m by A2,A3,FINSEQ_1:17;
   for k st 1 <= k & k < len(L1) holds ex N1,N2 st N1 = L1.k & N2=L1.(k+1)
   & N2 is_succ_of N1
   proof
     let k such that
 A6: 1 <= k and
 A7: k < len(L1);
-    k in dom L1 by A4,A5,A6,A7,FINSEQ_1:3;
+    k in dom L1 by A4,A5,A6,A7,FINSEQ_1:1;
     then
-A8: L1.k=L.k by A3,FUNCT_1:70;
+A8: L1.k=L.k by A3,FUNCT_1:47;
     1<= k+1 & k+1<=m by A4,A6,A7,NAT_1:13;
-    then k+1 in dom L1 by A5,FINSEQ_1:3;
+    then k+1 in dom L1 by A5,FINSEQ_1:1;
     then
-A9: L1.(k+1)=L.(k+1) by A3,FUNCT_1:70;
+A9: L1.(k+1)=L.(k+1) by A3,FUNCT_1:47;
     k < len(L) by A2,A4,A7,XXREAL_0:2;
     hence thesis by A1,A6,A8,A9,Def19;
   end;
@@ -2794,18 +2793,18 @@ A10:        F1 in the LTLold of CastNode(L1.n1,v);
               suppose
 A11:            n1<=k;
                 set L2=L1|Seg k;
-                reconsider L2 as FinSequence by FINSEQ_1:19;
-A12:            k+0 <= k+1 by XREAL_1:9;
+                reconsider L2 as FinSequence by FINSEQ_1:15;
+A12:            k+0 <= k+1 by XREAL_1:7;
                 then
-A13:            dom L2 = Seg k by A5,FINSEQ_1:21;
-                then n1 in dom L2 by A8,A11,FINSEQ_1:3;
+A13:            dom L2 = Seg k by A5,FINSEQ_1:17;
+                then n1 in dom L2 by A8,A11,FINSEQ_1:1;
                 then
-A14:            L2.n1 = L1.n1 by FUNCT_1:70;
+A14:            L2.n1 = L1.n1 by FUNCT_1:47;
                 1< k by A8,A11,XXREAL_0:2;
-                then 1 in dom L2 by A13,FINSEQ_1:3;
+                then 1 in dom L2 by A13,FINSEQ_1:1;
                 then
-A15:            not F1 in the LTLold of CastNode(L2.1,v) by A7,FUNCT_1:70;
-                len(L2) = k & L2 is_Finseq_for v by A5,A6,A12,Th26,FINSEQ_1:21;
+A15:            not F1 in the LTLold of CastNode(L2.1,v) by A7,FUNCT_1:47;
+                len(L2) = k & L2 is_Finseq_for v by A5,A6,A12,Th26,FINSEQ_1:17;
                 then consider m such that
 A16:            1<= m and
 A17:            m<n1 and
@@ -2815,19 +2814,19 @@ A18:            ( not F1 in the LTLold of CastNode(L2.m,v))& F1 in
                 then
 A19:            m+1 <=k by A11,XXREAL_0:2;
                 1<= m+1 by A16,NAT_1:13;
-                then m+1 in dom L2 by A13,A19,FINSEQ_1:3;
+                then m+1 in dom L2 by A13,A19,FINSEQ_1:1;
                 then
-A20:            L2.(m+1) = L1.(m+1) by FUNCT_1:70;
+A20:            L2.(m+1) = L1.(m+1) by FUNCT_1:47;
                 m <=k by A11,A17,XXREAL_0:2;
-                then m in dom L2 by A13,A16,FINSEQ_1:3;
-                then L2.m = L1.m by FUNCT_1:70;
+                then m in dom L2 by A13,A16,FINSEQ_1:1;
+                then L2.m = L1.m by FUNCT_1:47;
                 hence thesis by A16,A17,A18,A20;
               end;
               suppose
 A21:            n1=k+1;
                 then
 A22:            1<= k by A8,NAT_1:13;
-A23:            k+0 < k+1 by XREAL_1:10;
+A23:            k+0 < k+1 by XREAL_1:8;
                 now
                   per cases;
                   suppose
@@ -2840,40 +2839,40 @@ A25:                1<k
                     proof
                       set b=1-k;
                       set a=k-1;
-A26:                  a+b=0 & 1-1<=k-1 by A22,XREAL_1:11;
+A26:                  a+b=0 & 1-1<=k-1 by A22,XREAL_1:9;
                       now
                         assume k<=1;
-                        then 1-1<=1-k by XREAL_1:12;
+                        then 1-1<=1-k by XREAL_1:10;
                         then a=0 by A26;
                         hence contradiction by A7,A24;
                       end;
                       hence thesis;
                     end;
                     set L2=L1|Seg k;
-                    reconsider L2 as FinSequence by FINSEQ_1:19;
-A27:                k+0 <= k+1 by XREAL_1:9;
+                    reconsider L2 as FinSequence by FINSEQ_1:15;
+A27:                k+0 <= k+1 by XREAL_1:7;
                     then
-A28:                dom L2 = Seg k by A5,FINSEQ_1:21;
-                    then k in dom L2 by A22,FINSEQ_1:3;
+A28:                dom L2 = Seg k by A5,FINSEQ_1:17;
+                    then k in dom L2 by A22,FINSEQ_1:1;
                     then
-A29:                F1 in the LTLold of CastNode(L2.k,v) by A24,FUNCT_1:70;
-                    1 in dom L2 by A22,A28,FINSEQ_1:3;
+A29:                F1 in the LTLold of CastNode(L2.k,v) by A24,FUNCT_1:47;
+                    1 in dom L2 by A22,A28,FINSEQ_1:1;
                     then
-A30:                not F1 in the LTLold of CastNode(L2.1,v) by A7,FUNCT_1:70;
+A30:                not F1 in the LTLold of CastNode(L2.1,v) by A7,FUNCT_1:47;
                     len(L2) = k & L2 is_Finseq_for v by A5,A6,A27,Th26,
-FINSEQ_1:21;
+FINSEQ_1:17;
                     then consider m such that
 A31:                1<= m and
 A32:                m<k and
 A33:                not F1 in the LTLold of CastNode(L2.m,v) and
 A34:                F1 in the LTLold of CastNode(L2.(m+1),v) by A3,A30,A29,A25;
-                    m in dom L2 by A28,A31,A32,FINSEQ_1:3;
+                    m in dom L2 by A28,A31,A32,FINSEQ_1:1;
                     then
-A35:                not F1 in the LTLold of CastNode(L1.m,v) by A33,FUNCT_1:70;
+A35:                not F1 in the LTLold of CastNode(L1.m,v) by A33,FUNCT_1:47;
                     1<= m+1 & m+1<=k by A31,A32,NAT_1:13;
-                    then m+1 in dom L2 by A28,FINSEQ_1:3;
+                    then m+1 in dom L2 by A28,FINSEQ_1:1;
                     then
-A36:                L2.(m+1) = L1.(m+1) by FUNCT_1:70;
+A36:                L2.(m+1) = L1.(m+1) by FUNCT_1:47;
                     m<n1 by A21,A23,A32,XXREAL_0:2;
                     hence thesis by A31,A34,A35,A36;
                   end;
@@ -2974,18 +2973,18 @@ A10:        not F1 in the LTLnew of CastNode(L1.n1,v);
               suppose
 A11:            n1<=k;
                 set L2=L1|Seg k;
-                reconsider L2 as FinSequence by FINSEQ_1:19;
-A12:            k+0 <= k+1 by XREAL_1:9;
+                reconsider L2 as FinSequence by FINSEQ_1:15;
+A12:            k+0 <= k+1 by XREAL_1:7;
                 then
-A13:            dom L2 = Seg k by A5,FINSEQ_1:21;
-                then n1 in dom L2 by A8,A11,FINSEQ_1:3;
+A13:            dom L2 = Seg k by A5,FINSEQ_1:17;
+                then n1 in dom L2 by A8,A11,FINSEQ_1:1;
                 then
-A14:            L2.n1 = L1.n1 by FUNCT_1:70;
+A14:            L2.n1 = L1.n1 by FUNCT_1:47;
                 1< k by A8,A11,XXREAL_0:2;
-                then 1 in dom L2 by A13,FINSEQ_1:3;
+                then 1 in dom L2 by A13,FINSEQ_1:1;
                 then
-A15:            F1 in the LTLnew of CastNode(L2.1,v) by A7,FUNCT_1:70;
-                len(L2) = k & L2 is_Finseq_for v by A5,A6,A12,Th26,FINSEQ_1:21;
+A15:            F1 in the LTLnew of CastNode(L2.1,v) by A7,FUNCT_1:47;
+                len(L2) = k & L2 is_Finseq_for v by A5,A6,A12,Th26,FINSEQ_1:17;
                 then consider m such that
 A16:            1<= m and
 A17:            m<n1 and
@@ -2995,19 +2994,19 @@ A18:            F1 in the LTLnew of CastNode(L2.m,v) & not F1 in the
                 then
 A19:            m+1 <=k by A11,XXREAL_0:2;
                 1<= m+1 by A16,NAT_1:13;
-                then m+1 in dom L2 by A13,A19,FINSEQ_1:3;
+                then m+1 in dom L2 by A13,A19,FINSEQ_1:1;
                 then
-A20:            L2.(m+1) = L1.(m+1) by FUNCT_1:70;
+A20:            L2.(m+1) = L1.(m+1) by FUNCT_1:47;
                 m <=k by A11,A17,XXREAL_0:2;
-                then m in dom L2 by A13,A16,FINSEQ_1:3;
-                then L2.m = L1.m by FUNCT_1:70;
+                then m in dom L2 by A13,A16,FINSEQ_1:1;
+                then L2.m = L1.m by FUNCT_1:47;
                 hence thesis by A16,A17,A18,A20;
               end;
               suppose
 A21:            n1=k+1;
                 then
 A22:            1<= k by A8,NAT_1:13;
-A23:            k+0 < k+1 by XREAL_1:10;
+A23:            k+0 < k+1 by XREAL_1:8;
                 now
                   per cases;
                   suppose
@@ -3020,41 +3019,41 @@ A25:                1<k
                     proof
                       set b=1-k;
                       set a=k-1;
-A26:                  a+b=0 & 1-1<=k-1 by A22,XREAL_1:11;
+A26:                  a+b=0 & 1-1<=k-1 by A22,XREAL_1:9;
                       now
                         assume k<=1;
-                        then 1-1<=1-k by XREAL_1:12;
+                        then 1-1<=1-k by XREAL_1:10;
                         then a=0 by A26;
                         hence contradiction by A7,A24;
                       end;
                       hence thesis;
                     end;
                     set L2=L1|Seg k;
-                    reconsider L2 as FinSequence by FINSEQ_1:19;
-A27:                k+0 <= k+1 by XREAL_1:9;
+                    reconsider L2 as FinSequence by FINSEQ_1:15;
+A27:                k+0 <= k+1 by XREAL_1:7;
                     then
-A28:                dom L2 = Seg k by A5,FINSEQ_1:21;
-                    then k in dom L2 by A22,FINSEQ_1:3;
+A28:                dom L2 = Seg k by A5,FINSEQ_1:17;
+                    then k in dom L2 by A22,FINSEQ_1:1;
                     then
-A29:                not F1 in the LTLnew of CastNode(L2.k,v) by A24,FUNCT_1:70;
-                    1 in dom L2 by A22,A28,FINSEQ_1:3;
+A29:                not F1 in the LTLnew of CastNode(L2.k,v) by A24,FUNCT_1:47;
+                    1 in dom L2 by A22,A28,FINSEQ_1:1;
                     then
-A30:                F1 in the LTLnew of CastNode(L2.1,v) by A7,FUNCT_1:70;
+A30:                F1 in the LTLnew of CastNode(L2.1,v) by A7,FUNCT_1:47;
                     len(L2) = k & L2 is_Finseq_for v by A5,A6,A27,Th26,
-FINSEQ_1:21;
+FINSEQ_1:17;
                     then consider m such that
 A31:                1<= m and
 A32:                m<k and
 A33:                F1 in the LTLnew of CastNode(L2.m,v) and
 A34:                not F1 in the LTLnew of CastNode(L2.(m+1),v) by A3,A30,A29
 ,A25;
-                    m in dom L2 by A28,A31,A32,FINSEQ_1:3;
+                    m in dom L2 by A28,A31,A32,FINSEQ_1:1;
                     then
-A35:                F1 in the LTLnew of CastNode(L1.m,v) by A33,FUNCT_1:70;
+A35:                F1 in the LTLnew of CastNode(L1.m,v) by A33,FUNCT_1:47;
                     1<= m+1 & m+1<=k by A31,A32,NAT_1:13;
-                    then m+1 in dom L2 by A28,FINSEQ_1:3;
+                    then m+1 in dom L2 by A28,FINSEQ_1:1;
                     then
-A36:                L2.(m+1) = L1.(m+1) by FUNCT_1:70;
+A36:                L2.(m+1) = L1.(m+1) by FUNCT_1:47;
                     m<n1 by A21,A23,A32,XXREAL_0:2;
                     hence thesis by A31,A34,A35,A36;
                   end;
@@ -3156,18 +3155,18 @@ A10:        1<=n1 by A7,A8,XXREAL_0:2;
               suppose
 A11:            n1<=k;
                 set L2=L1|Seg k;
-                reconsider L2 as FinSequence by FINSEQ_1:19;
-A12:            k+0 <= k+1 by XREAL_1:9;
+                reconsider L2 as FinSequence by FINSEQ_1:15;
+A12:            k+0 <= k+1 by XREAL_1:7;
                 then
-A13:            dom L2 = Seg k by A5,FINSEQ_1:21;
-                then n1 in dom L2 by A10,A11,FINSEQ_1:3;
+A13:            dom L2 = Seg k by A5,FINSEQ_1:17;
+                then n1 in dom L2 by A10,A11,FINSEQ_1:1;
                 then
-A14:            L2.n1 = L1.n1 by FUNCT_1:70;
+A14:            L2.n1 = L1.n1 by FUNCT_1:47;
                 m1<=k by A8,A11,XXREAL_0:2;
-                then m1 in dom L2 by A7,A13,FINSEQ_1:3;
+                then m1 in dom L2 by A7,A13,FINSEQ_1:1;
                 then
-A15:            L2.m1 = L1.m1 by FUNCT_1:70;
-                len(L2) = k & L2 is_Finseq_for v by A5,A6,A12,Th26,FINSEQ_1:21;
+A15:            L2.m1 = L1.m1 by FUNCT_1:47;
+                len(L2) = k & L2 is_Finseq_for v by A5,A6,A12,Th26,FINSEQ_1:17;
                 hence thesis by A3,A7,A8,A11,A15,A14;
               end;
               suppose
@@ -3177,20 +3176,20 @@ A16:            n1=k+1;
                   suppose
 A17:                m1<n1;
                     set L2=L1|Seg k;
-                    reconsider L2 as FinSequence by FINSEQ_1:19;
+                    reconsider L2 as FinSequence by FINSEQ_1:15;
 A18:                m1<=k by A16,A17,NAT_1:13;
-A19:                k+0 <= k+1 by XREAL_1:9;
+A19:                k+0 <= k+1 by XREAL_1:7;
                     then
-A20:                dom L2 = Seg k by A5,FINSEQ_1:21;
-                    then m1 in dom L2 by A7,A18,FINSEQ_1:3;
+A20:                dom L2 = Seg k by A5,FINSEQ_1:17;
+                    then m1 in dom L2 by A7,A18,FINSEQ_1:1;
                     then
-A21:                L2.m1 = L1.m1 by FUNCT_1:70;
+A21:                L2.m1 = L1.m1 by FUNCT_1:47;
 A22:                1<= k by A7,A18,XXREAL_0:2;
-                    then k in dom L2 by A20,FINSEQ_1:3;
+                    then k in dom L2 by A20,FINSEQ_1:1;
                     then
-A23:                L2.k = L1.k by FUNCT_1:70;
+A23:                L2.k = L1.k by FUNCT_1:47;
                     len(L2) = k & L2 is_Finseq_for v by A5,A6,A19,Th26,
-FINSEQ_1:21;
+FINSEQ_1:17;
                     then
 A24:                the LTLold of CastNode(L1.m1,v) c= the LTLold of
 CastNode(L1.k,v) & the LTLnext of CastNode(L1.m1,v) c= the LTLnext of CastNode(
@@ -3341,17 +3340,17 @@ A4:   len(L) = n+1;
 A5:     L is_Finseq_for v and
 A6:     1<= k and
 A7:     k<=len(L);
-        reconsider L1 as FinSequence by FINSEQ_1:19;
+        reconsider L1 as FinSequence by FINSEQ_1:15;
 A8:     n<len(L) by A4,NAT_1:13;
         then
-A9:     len(L1) = n by FINSEQ_1:21;
-A10:    dom L1 = Seg n by A8,FINSEQ_1:21;
+A9:     len(L1) = n by FINSEQ_1:17;
+A10:    dom L1 = Seg n by A8,FINSEQ_1:17;
 A11:    for m st 1<= m & m<=n holds L1.m = L.m
         proof
           let m;
           assume 1<= m & m<=n;
-          then m in dom L1 by A10,FINSEQ_1:3;
-          hence thesis by FUNCT_1:70;
+          then m in dom L1 by A10,FINSEQ_1:1;
+          hence thesis by FUNCT_1:47;
         end;
 A12:    not n=0 implies 0<0+n;
         now
@@ -3369,14 +3368,14 @@ A15:        k=n+1 & n>=1;
             then
             len(CastNode(L.k,v)) <= len(CastNode(L.n,v)) -1 by A5,A8,Th21,Th35;
             then
-A16:        len(CastNode(L.k,v)) + 1 <= len(CastNode(L.n,v))-1 +1 by XREAL_1:8;
+A16:        len(CastNode(L.k,v)) + 1 <= len(CastNode(L.n,v))-1 +1 by XREAL_1:6;
             L1.n = L.n & L1.1=L.1 by A11,A15;
             then
             len(CastNode(L.n,v)) <= len(CastNode(L.1,v)) -n+1 by A2,A5,A8,A9
 ,A15,Th26;
             then len(CastNode(L.k,v)) + 1 <= (len(CastNode(L.1,v)) -n)+1 by A16
 ,XXREAL_0:2;
-            hence thesis by A15,XREAL_1:8;
+            hence thesis by A15,XREAL_1:6;
           end;
           suppose
             k=n+1 & n=0;
@@ -4079,10 +4078,10 @@ A5:   y = N1 & the LTLold of N1 = y1 & the LTLnew of N1 = y2 & the
 A6:   x = [[z1,z2],z3] and
 A7:   z = N2 & the LTLold of N2 = z1 & the LTLnew of N2 = z2 & the
       LTLnext of N2 = z3 by A3;
-A8:   y3=z3 by A4,A6,ZFMISC_1:33;
-A9:   [y1,y2]= [z1,z2] by A4,A6,ZFMISC_1:33;
-      then y1=z1 by ZFMISC_1:33;
-      hence thesis by A5,A7,A9,A8,ZFMISC_1:33;
+A8:   y3=z3 by A4,A6,ZFMISC_1:27;
+A9:   [y1,y2]= [z1,z2] by A4,A6,ZFMISC_1:27;
+      then y1=z1 by ZFMISC_1:27;
+      hence thesis by A5,A7,A9,A8,ZFMISC_1:27;
     end;
     consider IT being set such that
 A10: for x holds x in IT iff ex y st y in Y & P[y,x] from TARSKI:sch 1(
@@ -4136,7 +4135,7 @@ A14:  for x holds x in Y iff ex N being strict LTLnode over v st x=N;
         x in X iff ex N being strict LTLnode over v st x=N by A13;
         hence thesis by A14;
       end;
-      hence thesis by TARSKI:2;
+      hence thesis by TARSKI:1;
     end;
     hence thesis;
   end;
@@ -4160,8 +4159,8 @@ A1: for x st x in LN holds F(x) in Y
       assume x in LN;
       set M1 = [N1,N2];
       set X1 = [:X,X:];
-      Y =[:X1,X:] & M1 in X1 by ZFMISC_1:106,def 3;
-      hence thesis by ZFMISC_1:106;
+      Y =[:X1,X:] & M1 in X1 by ZFMISC_1:87,def 3;
+      hence thesis by ZFMISC_1:87;
     end;
     ex f being Function of LN,Y st for x st x in LN holds f.x = F(x) from
     FUNCT_2:sch 2(A1);
@@ -4189,19 +4188,19 @@ A8:   Nx22 = the LTLnew of x2 & Nx23 = the LTLnext of x2 by Def16;
       reconsider x1 as strict LTLnode over v by A7;
 A9:   f.x1 = [Mx1,Nx13] & f.x2 = [Mx2,Nx23] by A2,A3,A4;
       then
-A10:  Nx13 = Nx23 by A5,ZFMISC_1:33;
+A10:  Nx13 = Nx23 by A5,ZFMISC_1:27;
 A11:  Nx13 = the LTLnext of x1 & Nx21 = the LTLold of x2 by Def16;
 A12:  Nx11 = the LTLold of x1 & Nx12 = the LTLnew of x1 by Def16;
-A13:  Mx1 =Mx2 by A5,A9,ZFMISC_1:33;
-      then Nx11 = Nx21 by ZFMISC_1:33;
-      hence thesis by A12,A11,A8,A13,A10,ZFMISC_1:33;
+A13:  Mx1 =Mx2 by A5,A9,ZFMISC_1:27;
+      then Nx11 = Nx21 by ZFMISC_1:27;
+      hence thesis by A12,A11,A8,A13,A10,ZFMISC_1:27;
     end;
     then
-A14: f is one-to-one by FUNCT_2:25;
+A14: f is one-to-one by FUNCT_2:19;
     rng f is finite;
-    then dom (f") is finite by A14,FUNCT_1:55;
-    then dom f = LN & rng (f") is finite by FINSET_1:26,FUNCT_2:def 1;
-    hence thesis by A14,FUNCT_1:55;
+    then dom (f") is finite by A14,FUNCT_1:33;
+    then dom f = LN & rng (f") is finite by FINSET_1:8,FUNCT_2:def 1;
+    hence thesis by A14,FUNCT_1:33;
   end;
 end;
 
@@ -4300,7 +4299,7 @@ A8:     1 <= j and
 A9:     j <= m1;
         j <m1 by A5,A6,A7,A9,XXREAL_0:1;
         then j<=m by NAT_1:13;
-        hence thesis by A7,A8,FINSEQ_1:3;
+        hence thesis by A7,A8,FINSEQ_1:1;
       end;
       hence thesis;
     end;
@@ -4434,20 +4433,20 @@ A5:     P[m];
         proof
           set y = (f|**m).x;
 A6:       m<=m+1 by NAT_1:13;
-A7:       (f|**(m+1)).x = (f*(f|**m)).x by FUNCT_7:73
-            .= f.y by A2,FUNCT_2:21;
+A7:       (f|**(m+1)).x = (f*(f|**m)).x by FUNCT_7:71
+            .= f.y by A2,FUNCT_2:15;
           assume for i st i<=m+1 holds CastNode((f|**i).x,v) is non elementary;
           then CastNode(y,v) is non elementary & w |= *CastNode(y,v) by A5,A6,
 XXREAL_0:2;
-          hence thesis by A1,A2,A7,FUNCT_2:7;
+          hence thesis by A1,A2,A7,FUNCT_2:5;
         end;
         hence thesis;
       end;
 A8:   P[0]
       proof
         assume for i st i<=0 holds CastNode((f|**i).x,v) is non elementary;
-        f|**0 = id LN by FUNCT_7:86;
-        hence thesis by A2,A3,FUNCT_1:35;
+        f|**0 = id LN by FUNCT_7:84;
+        hence thesis by A2,A3,FUNCT_1:18;
       end;
 A9:   for m holds P[m] from NAT_1:sch 2 (A8,A4);
       let k;
@@ -4487,9 +4486,9 @@ A4: CastNode(x,v) is non elementary & w |= *CastNode(x,v);
       let k such that
 A5:   for i st i<=k holds CastNode((f|**i).x,v) is non elementary;
       set y = (f|**k).x;
-A6:   y in LN by A3,FUNCT_2:7;
-A7:   (f|**(k+1)).x = (f*(f|**k)).x by FUNCT_7:73
-        .= f.y by A3,FUNCT_2:21;
+A6:   y in LN by A3,FUNCT_2:5;
+A7:   (f|**(k+1)).x = (f*(f|**k)).x by FUNCT_7:71
+        .= f.y by A3,FUNCT_2:15;
       CastNode(y,v) is non elementary & w |= *CastNode(y,v) by A2,A3,A4,A5,Th47
 ;
       hence thesis by A1,A6,A7,Def32;
@@ -4533,7 +4532,7 @@ A8: for k st 1<= k & k<=len(L) holds L.k= (f|**k).x
     proof
       let k;
       assume 1<= k & k<=len(L);
-      then k in Seg len1 by A6,FINSEQ_1:3;
+      then k in Seg len1 by A6,FINSEQ_1:1;
       then L.k = (f|**CastNat(k)).x by A6,A7;
       hence thesis by MODELC_2:def 1;
     end;
@@ -4544,7 +4543,7 @@ A11:  for k st 1<=k & k<=len(L) holds CastNode((f|**k).x,v) is non elementary
       proof
         let k such that
 A12:    1<=k & k<=len(L);
-        reconsider k as Element of NAT by ORDINAL1:def 13;
+        reconsider k as Element of NAT by ORDINAL1:def 12;
         not k in X by A10;
         hence thesis by A6,A12;
       end;
@@ -4568,8 +4567,8 @@ A15:      i < len(L) by A14,XXREAL_0:2;
             end;
             suppose
               i = 0;
-              then f|**i = id LN by FUNCT_7:86;
-              hence thesis by A2,A3,FUNCT_1:35;
+              then f|**i = id LN by FUNCT_7:84;
+              hence thesis by A2,A3,FUNCT_1:18;
             end;
           end;
           hence thesis;
@@ -4585,12 +4584,12 @@ A16:    1 <= m & m < len(L);
         1<=m+1 & m+1<=len(L) by A16,NAT_1:13;
         then
 A17:    M=(f|**(m+1)).x by A8;
-        then M in LN by A2,FUNCT_2:7;
+        then M in LN by A2,FUNCT_2:5;
         then
 A18:    ex M1 being strict LTLnode over v st M=M1 by Def30;
         set N = L.m;
 A19:    N=(f|**m).x by A8,A16;
-        then N in LN by A2,FUNCT_2:7;
+        then N in LN by A2,FUNCT_2:5;
         then
 A20:    ex N1 being strict LTLnode over v st N=N1 by Def30;
         reconsider M as strict LTLnode over v by A18;
@@ -4604,7 +4603,7 @@ A20:    ex N1 being strict LTLnode over v st N=N1 by Def30;
       then len(CastNode(L.len1,v))<=len(CastNode((f|**1).x,v)) -len1+1 by A5,A6
 ,A8;
       then len(CastNode(L.len1,v)) <= len(CastNode(f.x,v)) -len1 +1 by
-FUNCT_7:72;
+FUNCT_7:70;
       then len(CastNode((f|**len1).x,v)) <= 0 by A5,A6,A8;
       then the LTLnew of CastNode((f|**len1).x,v) = {}v by Th22;
       then CastNode((f|**len1).x,v) is elementary by Def11;
@@ -4618,7 +4617,7 @@ FUNCT_7:72;
       then
       ex m being Element of NAT st y = m & 1<=m & m<=len1 & CastNode((f|**
       m).x,v) is elementary;
-      hence thesis by FINSEQ_1:3;
+      hence thesis by FINSEQ_1:1;
     end;
     then consider n such that
     1<=n and
@@ -4633,8 +4632,8 @@ A25:  i<n;
         per cases by Lm6;
         suppose
           i=0;
-          then f|**i = id LN by FUNCT_7:86;
-          hence thesis by A2,A3,FUNCT_1:35;
+          then f|**i = id LN by FUNCT_7:84;
+          hence thesis by A2,A3,FUNCT_1:18;
         end;
         suppose
 A26:      1<=i;
@@ -4643,7 +4642,7 @@ A27:      not i in X by A23,A25;
           now
             assume
 A28:        CastNode((f|**i).x,v) is elementary;
-            reconsider i as Element of NAT by ORDINAL1:def 13;
+            reconsider i as Element of NAT by ORDINAL1:def 12;
             i<len1 by A21,A25,XXREAL_0:2;
             hence contradiction by A26,A27,A28;
           end;
@@ -4686,9 +4685,9 @@ A2: x in LN and
       let k such that
 A3:   CastNode((f|**k).x,v) is non elementary & w |= *CastNode((f|**k) .x,v);
       set y = (f|**k).x;
-A4:   (f|**(k+1)).x = (f*(f|**k)).x by FUNCT_7:73
-        .= f.y by A2,FUNCT_2:21;
-      y in LN by A2,FUNCT_2:7;
+A4:   (f|**(k+1)).x = (f*(f|**k)).x by FUNCT_7:71
+        .= f.y by A2,FUNCT_2:15;
+      y in LN by A2,FUNCT_2:5;
       hence thesis by A1,A3,A4,Def33;
     end;
     hence thesis;
@@ -4780,8 +4779,8 @@ A16: P[0]
         let i;
         assume i<=0;
         then i=0;
-        then f|**i = id LN by FUNCT_7:86;
-        hence thesis by A3,A5,FUNCT_1:35;
+        then f|**i = id LN by FUNCT_7:84;
+        hence thesis by A3,A5,FUNCT_1:18;
       end;
       hence thesis;
     end;
@@ -4797,7 +4796,7 @@ reserve q for sequence of LTLStates(v);
 theorem Th52:
   ex s st s = CastNode(q.n,v)
 proof
-  reconsider n as Element of NAT by ORDINAL1:def 13;
+  reconsider n as Element of NAT by ORDINAL1:def 12;
   consider s such that
 A1: s=q.n by Th45;
   CastNode(q.n,v) = s by A1,Def16;
@@ -4985,9 +4984,9 @@ A10: X c= Seg k
       assume x in X;
       then ex m being Element of NAT st x = m & 1<=m & m<=k & G in the LTLold
       of Node(m);
-      hence thesis by FINSEQ_1:3;
+      hence thesis by FINSEQ_1:1;
     end;
-    reconsider m0 as Element of NAT by ORDINAL1:def 13;
+    reconsider m0 as Element of NAT by ORDINAL1:def 12;
     m0 in X by A9;
     then consider j such that
     1<=j and
@@ -5000,7 +4999,7 @@ A13: for i st 1<=i & i<j holds not i in X by A10,Lm31;
 A14:  1<=i and
 A15:  i<j;
 A16:  i<k by A11,A15,XXREAL_0:2;
-      reconsider i as Element of NAT by ORDINAL1:def 13;
+      reconsider i as Element of NAT by ORDINAL1:def 12;
       not i in X by A13,A14,A15;
       hence thesis by A14,A16;
     end;
@@ -5043,7 +5042,7 @@ theorem Th55:
   union BOOL X = X
 proof
   {} c= X by XBOOLE_1:2;
-  then BOOL X = bool X \ {{}} & {{}} c= bool X by ORDERS_1:def 2,ZFMISC_1:37;
+  then BOOL X = bool X \ {{}} & {{}} c= bool X by ORDERS_1:def 2,ZFMISC_1:31;
   then
 A1: BOOL X \/ {{}} c= bool X by XBOOLE_1:8;
   BOOL X \/ {{}} = (bool X \{{}}) \/{{}} by ORDERS_1:def 2
@@ -5051,9 +5050,9 @@ A1: BOOL X \/ {{}} c= bool X by XBOOLE_1:8;
   then bool X c= BOOL X \/ {{}} by XBOOLE_1:7;
   then
 A2: bool X = BOOL X \/ {{}} by A1,XBOOLE_0:def 10;
-  X = union bool X by ZFMISC_1:99
-    .= union BOOL X \/ union {{}} by A2,ZFMISC_1:96
-    .= union BOOL X \/ {} by ZFMISC_1:31;
+  X = union bool X by ZFMISC_1:81
+    .= union BOOL X \/ union {{}} by A2,ZFMISC_1:78
+    .= union BOOL X \/ {} by ZFMISC_1:25;
   hence thesis;
 end;
 
@@ -5064,7 +5063,7 @@ proof
   set x = the LTLnew of N;
   assume N is non elementary;
   then x <> {} by Def11;
-  hence thesis by ORDERS_1:5;
+  hence thesis by ORDERS_1:2;
 end;
 
 registration
@@ -5081,26 +5080,26 @@ theorem
 proof
   set Y = Subformulae v;
   set X = BOOL Y;
-  for x st x in X holds x <> {} by ORDERS_1:4;
+  for x st x in X holds x <> {} by ORDERS_1:1;
   then consider Choice being Function such that
 A1: dom Choice = X and
-A2: for x st x in X holds Choice.x in x by WELLORD2:28;
+A2: for x st x in X holds Choice.x in x by FUNCT_1:111;
 A3: for x st x in X holds Choice.x in Y
   proof
     let x such that
 A4: x in X;
-    x is non empty by A4,ORDERS_1:4;
+    x is non empty by A4,ORDERS_1:1;
     then
-A5: x is Subset of Y by A4,ORDERS_1:5;
+A5: x is Subset of Y by A4,ORDERS_1:2;
     Choice.x in x by A2,A4;
     hence thesis by A5;
   end;
   then
-A6: Choice is Function of X,Y by A1,FUNCT_2:5;
-  (not {} in X)& union X = Y by Th55,ORDERS_1:4;
+A6: Choice is Function of X,Y by A1,FUNCT_2:3;
+  (not {} in X)& union X = Y by Th55,ORDERS_1:1;
   then reconsider Choice as Choice_Function of X by A2,A6,ORDERS_1:def 1;
   take Choice;
-  thus thesis by A1,A3,FUNCT_2:5;
+  thus thesis by A1,A3,FUNCT_2:3;
 end;
 
 reserve U for Choice_Function of BOOL Subformulae v;
@@ -5119,7 +5118,7 @@ A1: N is non elementary;
     set x = the LTLnew of N;
     set a = U.x;
     x in BOOL Subformulae v by A1,Th56;
-    then U.x in union BOOL Subformulae v by FUNCT_2:7;
+    then U.x in union BOOL Subformulae v by FUNCT_2:5;
     then a in Subformulae v by Th55;
     then ex F st F = a & F is_subformula_of v by MODELC_2:def 24;
     hence thesis;
@@ -5133,7 +5132,7 @@ proof
   set X = BOOL Subformulae v;
   assume
 A1: not N is elementary;
-  then ( not {} in X)& x in X by Th56,ORDERS_1:4;
+  then ( not {} in X)& x in X by Th56,ORDERS_1:1;
   then U.x in x by ORDERS_1:def 1;
   hence thesis by A1,Def34;
 end;
@@ -5199,7 +5198,7 @@ A11:          not w |= *SN;
               then not H2 in the LTLold of N implies H2 in the LTLnew of N2 by
 A10,XBOOLE_0:def 3;
               then H2 in *N2 by A9,Lm1;
-              hence contradiction by A7,A8,A11,MODELC_2:def 68;
+              hence contradiction by A7,A8,A11,MODELC_2:def 64;
             end;
             hence thesis;
           end;
@@ -5231,7 +5230,7 @@ A16:        SNN c= NN \/ {H2} by A15,XBOOLE_1:13;
             set NX = the LTLnext of N;
             set SNX = the LTLnext of SN;
             set SNO = the LTLold of SN;
-            SNO =NO \/ {H} & {H} c= NN by A3,A13,Def5,ZFMISC_1:37;
+            SNO =NO \/ {H} & {H} c= NN by A3,A13,Def5,ZFMISC_1:31;
             then
 A17:        SNO c= NO \/ NN by XBOOLE_1:9;
 A18:        SNX = NX by A3,A13,Def5;
@@ -5244,24 +5243,24 @@ A20:          G in *SN;
                 suppose
                   G in SNO;
                   then G in *N by A17,XBOOLE_0:def 3;
-                  hence thesis by A1,MODELC_2:def 68;
+                  hence thesis by A1,MODELC_2:def 64;
                 end;
                 suppose
                   G in SNN;
                   then G in NN or G in {H2} by A16,XBOOLE_0:def 3;
                   then G in *N or G = H2 by Lm1,TARSKI:def 1;
-                  hence thesis by A1,A14,MODELC_2:def 68;
+                  hence thesis by A1,A14,MODELC_2:def 64;
                 end;
                 suppose
                   G in 'X' CastLTL(SNX);
                   then G in *N by A18,Lm1;
-                  hence thesis by A1,MODELC_2:def 68;
+                  hence thesis by A1,MODELC_2:def 64;
                 end;
               end;
               hence thesis;
             end;
             SN is_succ2_of N by A3,A13,A14,Def8;
-            hence thesis by A19,Def9,MODELC_2:def 68;
+            hence thesis by A19,Def9,MODELC_2:def 64;
           end;
           suppose
 A21:        not w |=*N1;
@@ -5376,7 +5375,7 @@ A5:   x in LTLNodes(v);
         .= f2.x by A4,A5;
       hence thesis;
     end;
-    hence thesis by FUNCT_2:18;
+    hence thesis by FUNCT_2:12;
   end;
 end;
 
@@ -5411,7 +5410,7 @@ definition
 end;
 
 registration
-  cluster neg-inner-most LTL-formula;
+  cluster neg-inner-most for LTL-formula;
   existence
   proof
     set a=atom.0;
@@ -5438,7 +5437,7 @@ A5:   for k st 1 <= k & k < n ex H1,G1 being LTL-formula st L.k = H1 &
           then 1<1+k by A2,XXREAL_0:1;
           then
 A6:       1<=k by NAT_1:19;
-          k<k+1 by XREAL_1:31;
+          k<k+1 by XREAL_1:29;
           then ex H1,G1 being LTL-formula st L.k = H1 & L.(k + 1) = G1 & H1
           is_immediate_constituent_of G1 by A5,A6;
           hence contradiction by A1,A4,MODELC_2:19;
@@ -5788,12 +5787,12 @@ A6: ex s,s1,x st y=[[s,x],s1] & s1 is_next_of s & x in Label_(s1);
     consider s,s1,x such that
 A7: y=[[s,x],s1] and
 A8: s1 is_next_of s & x in Label_(s1) by A6;
-A9: Run(i+1) = CastNode(s1,v) by A5,A7,ZFMISC_1:33
+A9: Run(i+1) = CastNode(s1,v) by A5,A7,ZFMISC_1:27
       .= s1 by Def16;
-A10: [s,x] = [run.i,Gzai(i)] by A5,A7,ZFMISC_1:33;
-    then Run(i) = CastNode(s,v) by ZFMISC_1:33
+A10: [s,x] = [run.i,Gzai(i)] by A5,A7,ZFMISC_1:27;
+    then Run(i) = CastNode(s,v) by ZFMISC_1:27
       .= s by Def16;
-    hence thesis by A8,A10,A9,ZFMISC_1:33;
+    hence thesis by A8,A10,A9,ZFMISC_1:27;
   end;
   then
 A11: Run01 is_next_of Run00;
@@ -5802,7 +5801,7 @@ A11: Run01 is_next_of Run00;
 A12: for i holds Run(i) = run.i
   proof
     let i;
-    reconsider i as Element of NAT by ORDINAL1:def 13;
+    reconsider i as Element of NAT by ORDINAL1:def 12;
     run.i in LTLStates(v);
     then
     ex x being Element of LTLNodes(v) st run.i =x & x is elementary strict
@@ -5846,12 +5845,12 @@ A22:  F in the LTLold of Run(i+1);
         per cases by A20,Th63,Th65;
         suppose
 A23:      F is Sub_atomic;
-          set Gi9=Shift(CastSeq(w,AtomicFamily),i);
+          set Gi9=CastSeq(w,AtomicFamily)^\i;
           set Gi=Gzai(i);
           CastSeq(zeta,AtomicFamily) = Gi9 by MODELC_2:81;
           then
 A24:      CastSeq(zeta,AtomicFamily).0 = CastSeq(w,AtomicFamily).(0+i) by
-MODELC_2:def 45
+NAT_1:def 3
             .= Gi;
           Gi in Label_(Run(i+1)) by A4;
           then consider X being Subset of atomic_LTL such that
@@ -5957,7 +5956,7 @@ A47:      for x st x in NAT holds Fun(x) in LTLStates(v)
             let x;
             assume x in NAT;
             set y = CastNat(x)+i;
-            reconsider y as Element of NAT by ORDINAL1:def 13;
+            reconsider y as Element of NAT by ORDINAL1:def 12;
             Fun(x) = run.y;
             hence thesis;
           end;
@@ -5969,7 +5968,7 @@ A48:      for x st x in NAT holds runQ.x = Fun(x) from FUNCT_2:sch 2(
 A49:      for m holds RunQ(m) = Run(m+i)
           proof
             let m;
-            reconsider m as Element of NAT by ORDINAL1:def 13;
+            reconsider m as Element of NAT by ORDINAL1:def 12;
             RunQ(m) = CastNode(Fun(m),v) by A48
               .= Run(m+i) by MODELC_2:def 1;
             hence thesis;
@@ -6008,7 +6007,7 @@ A56:          k<=i and
                   k <> 0;
                   then 0<0+k;
                   then 1<= k by NAT_1:19;
-                  then k in Seg i by A56,FINSEQ_1:3;
+                  then k in Seg i by A56,FINSEQ_1:1;
                   hence thesis by A55,XBOOLE_0:def 3;
                 end;
               end;
@@ -6054,8 +6053,8 @@ A69:            x = k1 by A66,MODELC_2:def 1;
                 hence thesis by A68;
               end;
               assume FRunQ is finite;
-              then rng fun is finite by A58,FINSET_1:26;
-              hence thesis by A64,FINSET_1:13,FUNCT_1:19;
+              then rng fun is finite by A58,FINSET_1:8;
+              hence thesis by A64,FINSET_1:1,FUNCT_1:9;
             end;
             FRun c= FRun1 \/ FRun2
             proof
@@ -6134,7 +6133,7 @@ A86:      for k st k<j0 holds Shift(zeta,k) |= h1
 A87:        k<j0;
             set k1 = k+1;
             set ki=k+i;
-            1<=k1 & k+1 < j0+1 by A87,NAT_1:11,XREAL_1:10;
+            1<=k1 & k+1 < j0+1 by A87,NAT_1:11,XREAL_1:8;
             then h1 in the LTLold of RunQ(k1) by A83;
             then h1 in the LTLold of Run(k1+i) by A49;
             then h1 in the LTLold of Run(ki+1);
@@ -6370,7 +6369,7 @@ A7:   for k st 1<=k & k<=n1 holds L.k = CastNode((f|**CastNat(k-1)).N,v)
       proof
         let k;
         assume 1<=k & k<=n1;
-        then k in Seg n1 by FINSEQ_1:3;
+        then k in Seg n1 by FINSEQ_1:1;
         then L.k=CastNode((f|**CastNat(CastNat(k)-1)).N,v) by A5,A6;
         hence thesis by MODELC_2:def 1;
       end;
@@ -6390,7 +6389,7 @@ A9:     k<len(L);
 A10:    L.(k+1) = CastNode((f|**CastNat(kp-1)).N,v) by A7
           .= M1 by MODELC_2:def 1;
         set N1 = CastNode((f|**k1).N,v);
-        k-1<n1-1 by A4,A9,XREAL_1:16;
+        k-1<n1-1 by A4,A9,XREAL_1:14;
         then
 A11:    M1 is_succ_of N1 by A1,A3,Def48;
         L.k = CastNode((f|**CastNat(k1)).N,v) by A4,A7,A8,A9
@@ -6406,8 +6405,8 @@ A14:  L.(len L) = CastNode((f|**CastNat(n1-1)).N,v) by A4,A7
 A15:  nextnode = chosen_next(w,v,U,s) by A1,A3,Def49;
       L.1 = CastNode((f|**CastNat(1-1)).N,v) by A13,A7
         .= CastNode((f|**0).N,v) by MODELC_2:def 1
-        .= CastNode((id LN).N,v) by FUNCT_7:86
-        .= CastNode(N,v) by A2,FUNCT_1:35
+        .= CastNode((id LN).N,v) by FUNCT_7:84
+        .= CastNode(N,v) by A2,FUNCT_1:18
         .='X' s by Def16;
       hence thesis by A1,A3,A15,A13,A4,A14,A12,Def20,Def48;
     end;
@@ -6417,20 +6416,20 @@ A15:  nextnode = chosen_next(w,v,U,s) by A1,A3,Def49;
       then
 A16:  chosen_next(w,v,U,s)= N by A1,Def49;
       set L =<*N*>;
-A17:  Seg 1 = dom L by FINSEQ_1:55;
+A17:  Seg 1 = dom L by FINSEQ_1:38;
 A18:  for n be Nat st n in dom L holds L.n = N
       proof
         let n be Nat;
         assume n in dom L;
-        then n = 1 by A17,FINSEQ_1:4,TARSKI:def 1;
-        hence thesis by FINSEQ_1:57;
+        then n = 1 by A17,FINSEQ_1:2,TARSKI:def 1;
+        hence thesis by FINSEQ_1:40;
       end;
       for k st 1 <= k & k < len(L) holds ex N1,M1 st N1 = L.k & M1=L.(k+1
-      ) & M1 is_succ_of N1 by FINSEQ_1:56;
+      ) & M1 is_succ_of N1 by FINSEQ_1:39;
       then
 A19:  L is_Finseq_for v by Def19;
-      1 in Seg 1 by FINSEQ_1:3;
-      then len L = 1 & L.1='X' s by A17,A18,FINSEQ_1:56;
+      1 in Seg 1 by FINSEQ_1:1;
+      then len L = 1 & L.1='X' s by A17,A18,FINSEQ_1:39;
       hence thesis by A1,A16,A19,Def20;
     end;
   end;
@@ -6462,7 +6461,7 @@ A3: for n being Element of NAT holds IT.(n+1) = G(n,IT.n);
 A4: for n being Nat holds IT.(n+1) = G(n,IT.n)
     proof
       let n being Nat;
-      reconsider n as Element of NAT by ORDINAL1:def 13;
+      reconsider n as Element of NAT by ORDINAL1:def 12;
       IT.(n+1) = G(n,IT.n) by A3;
       hence thesis;
     end;
@@ -6501,7 +6500,7 @@ A9:       y = IT.(x1+1) .= G(x1,IT.x1) by A4;
       end;
       hence thesis;
     end;
-    then reconsider IT as sequence of LS by A1,FUNCT_2:5;
+    then reconsider IT as sequence of LS by A1,FUNCT_2:3;
     take IT;
     thus thesis by A2,A5;
   end;
@@ -6533,7 +6532,7 @@ A16:  P[0] by A11,A13;
       then
 A17:  for x st x in dom f holds f.x = g.x;
       dom f = NAT & dom g = NAT by FUNCT_2:def 1;
-      hence thesis by A17,FUNCT_1:9;
+      hence thesis by A17,FUNCT_1:2;
     end;
     for f,g being Function of NAT,LTLStates(v) st (f.0 =init v & for n
 holds f.(n+1) = G1(n,f.n)) & (g.0 =init v & for n holds g.(n+1) = G1(n,g.n))
@@ -6586,10 +6585,10 @@ A1: w |= *N;
     let H be LTL-formula;
     assume H in 'X' CastLTL(the LTLnext of N);
     then H in *N by Lm1;
-    hence thesis by A1,MODELC_2:def 68;
+    hence thesis by A1,MODELC_2:def 64;
   end;
   then
-A2: w |='X' CastLTL(the LTLnext of N) by MODELC_2:def 68;
+A2: w |='X' CastLTL(the LTLnext of N) by MODELC_2:def 64;
   *XN = CastLTL(the LTLnext of N) by Lm34;
   hence thesis by A2,MODELC_2:77;
 end;
@@ -6608,7 +6607,7 @@ A1: w |= 'X' v;
     Seed v) & x='X' u;
     hence thesis by A1,TARSKI:def 1;
   end;
-  hence thesis by MODELC_2:def 68;
+  hence thesis by MODELC_2:def 64;
 end;
 
 theorem Th72:
@@ -6622,13 +6621,13 @@ A2: w |= *M implies w |= v
     assume
 A3: w |= *M;
     v in *M by A1,TARSKI:def 1;
-    hence thesis by A3,MODELC_2:def 68;
+    hence thesis by A3,MODELC_2:def 64;
   end;
   w |= v implies w |= *M
   proof
     assume w |= v;
     then for H be LTL-formula st H in *M holds w|= H by A1,TARSKI:def 1;
-    hence thesis by MODELC_2:def 68;
+    hence thesis by MODELC_2:def 64;
   end;
   hence thesis by A2;
 end;
@@ -6742,7 +6741,7 @@ A8:     for k st 1<=k & k<=n1 holds L.k = CastNode((f|**CastNat(k-1)).N,v)
         proof
           let k;
           assume 1<=k & k<=n1;
-          then k in Seg n1 by FINSEQ_1:3;
+          then k in Seg n1 by FINSEQ_1:1;
           then L.k=CastNode((f|**CastNat(CastNat(k)-1)).N,v) by A6,A7;
           hence thesis by MODELC_2:def 1;
         end;
@@ -6762,7 +6761,7 @@ A11:      k<len(L);
 A12:      L.(k+1) = CastNode((f|**CastNat(kp-1)).N,v) by A8
             .= M1 by MODELC_2:def 1;
           set N1 = CastNode((f|**k1).N,v);
-          k-1<n1-1 by A5,A11,XREAL_1:16;
+          k-1<n1-1 by A5,A11,XREAL_1:14;
           then
 A13:      M1 is_succ_of N1 by A2,A4,Def48;
           L.k = CastNode((f|**CastNat(k1)).N,v) by A5,A8,A10,A11
@@ -6775,8 +6774,8 @@ A14:    L is_Finseq_for v by Def19;
         then
 A15:    L.1 = CastNode((f|**CastNat(1-1)).N,v) by A8
           .= CastNode((f|**0).N,v) by MODELC_2:def 1
-          .= CastNode((id LN).N,v) by FUNCT_7:86
-          .= CastNode(N,v) by A3,FUNCT_1:35
+          .= CastNode((id LN).N,v) by FUNCT_7:84
+          .= CastNode(N,v) by A3,FUNCT_1:18
           .= N by Def16;
         1<=n1 by NAT_1:11;
         then
@@ -6806,7 +6805,7 @@ A25:      ( not H in the LTLold of CastNode(L.m,v))& H in the LTLold
           reconsider mm1 as Nat by A23,NAT_1:21;
           set Nm1= (f|**mm1).N;
           set m1 = m+1;
-A26:      Nm1 in LN by A3,FUNCT_2:7;
+A26:      Nm1 in LN by A3,FUNCT_2:5;
           consider N1,N2 such that
 A27:      N1 = L.m and
 A28:      N2 = L.(m+1) and
@@ -6817,11 +6816,11 @@ A31:      1<=m1 & m1<=n1 by A23,A24,NAT_1:13;
           then
 A32:      N2 = CastNode((f|**CastNat(m1-1)).N,v) by A8,A28
             .= CastNode((f|**(mm1+1)).N,v) by MODELC_2:def 1
-            .= CastNode((f*(f|**mm1)).N,v) by FUNCT_7:73
-            .= CastNode(f.((f|**mm1).N),v) by A3,FUNCT_2:21
+            .= CastNode((f*(f|**mm1)).N,v) by FUNCT_7:71
+            .= CastNode(f.((f|**mm1).N),v) by A3,FUNCT_2:15
             .= CastNode(chosen_succ(w0,v,U,CastNode(Nm1,v)),v) by A26,Def36
             .= chosen_succ(w0,v,U,N1) by A30,Def16;
-          m-1<n1-1 by A24,XREAL_1:16;
+          m-1<n1-1 by A24,XREAL_1:14;
           then
 A33:      N1 is non elementary by A2,A4,A30,Def48;
           chosen_formula(U,N1) = H
@@ -6926,7 +6925,7 @@ A1: w |= v;
   AtomicFamily).n],run.(n+1)] in LT & for FSet being set st FSet in FS holds {k
   where k is Element of NAT:run.k in FSet} is infinite set
   proof
-    set chf =the  Choice_Function of BOOL Subformulae v;
+    set chf = the Choice_Function of BOOL Subformulae v;
     deffunc R(set) = chosen_run(w,v,chf).k_nat($1);
 A2: for x st x in NAT holds R(x) in LS;
     ex run being Function of NAT,LS st for x st x in NAT holds run.x = R(x
@@ -6938,7 +6937,7 @@ A4: for n holds run.n is elementary strict LTLnode over v & Run(n) is
     elementary strict LTLnode over v
     proof
       let n;
-      reconsider n as Element of NAT by ORDINAL1:def 13;
+      reconsider n as Element of NAT by ORDINAL1:def 12;
       set Rn = Run(n);
       run.n in LS;
       then consider N being Element of LTLNodes(v) such that
@@ -6952,7 +6951,7 @@ A6:   N is elementary strict LTLnode over v;
 A7: for n holds run.n = chosen_run(w,v,chf).n
     proof
       let n;
-      reconsider n as Element of NAT by ORDINAL1:def 13;
+      reconsider n as Element of NAT by ORDINAL1:def 12;
       run.n = R(n) by A3;
       hence thesis by MODELC_1:def 2;
     end;
@@ -6975,16 +6974,15 @@ A10:  w1 |= * ('X' Rn) by A1,Th73;
 A11: for n holds CastSeq(w,AtomicFamily).n in Label_(Run(n+1))
     proof
       let n;
-      reconsider n as Element of NAT by ORDINAL1:def 13;
+      reconsider n as Element of NAT by ORDINAL1:def 12;
       set Rn1 = Run(n+1);
       set w1= Shift(w,n);
       set X = CastSeq(w,AtomicFamily).n;
       reconsider X as Subset of atomic_LTL;
-      CastSeq(w1,AtomicFamily) = Shift(CastSeq(w,AtomicFamily),n) by
-MODELC_2:81;
+      CastSeq(w1,AtomicFamily) = CastSeq(w,AtomicFamily)^\n by MODELC_2:81;
       then
-A12:  CastSeq(w1,AtomicFamily).0 = CastSeq(w,AtomicFamily).(0+n) by
-MODELC_2:def 45;
+A12:  CastSeq(w1,AtomicFamily).0 = CastSeq(w,AtomicFamily).(0+n) by NAT_1:def 3
+;
 A13:  w1 |= * Rn1 by A8;
 A14:  now
         assume not Neg_atomic_LTL(Rn1) misses X;
@@ -6996,7 +6994,7 @@ A15:    a in Neg_atomic_LTL(Rn1) /\ X by XBOOLE_0:def 1;
 A16:    x = a & x is atomic and
 A17:    ('not' x) in the LTLold of Rn1;
         ('not' x) in * Rn1 by A17,Lm1;
-        then w1 |= ('not' x) by A13,MODELC_2:def 68;
+        then w1 |= ('not' x) by A13,MODELC_2:def 64;
         then
 A18:    w1 |/= x by MODELC_2:64;
         a in X by A15,XBOOLE_0:def 4;
@@ -7010,7 +7008,7 @@ A18:    w1 |/= x by MODELC_2:64;
 A19:    x = a & x is atomic and
 A20:    x in the LTLold of Rn1;
         x in * Rn1 by A20,Lm1;
-        then w1 |= x by A13,MODELC_2:def 68;
+        then w1 |= x by A13,MODELC_2:def 64;
         hence thesis by A12,A19,MODELC_2:63;
       end;
       hence thesis by A14;
@@ -7018,7 +7016,7 @@ A20:    x in the LTLold of Rn1;
 A21: for n holds [[run.n,CastSeq(w,AtomicFamily).n],run.(n+1)] in LT
     proof
       let n;
-      reconsider n as Element of NAT by ORDINAL1:def 13;
+      reconsider n as Element of NAT by ORDINAL1:def 12;
       set R = Run(n);
       reconsider R as elementary strict LTLnode over v by A4;
       set n1=n+1;
@@ -7028,8 +7026,8 @@ A21: for n holds [[run.n,CastSeq(w,AtomicFamily).n],run.(n+1)] in LT
       set gA = CastSeq(w,AtomicFamily).n;
       set y = [[r, gA], r1];
       reconsider R1 as elementary strict LTLnode over v by A4;
-      [r, gA] in [: LS, AtomicFamily :] by ZFMISC_1:106;
-      then [[r, gA],r1] in [:[: LS, AtomicFamily :],LS:] by ZFMISC_1:106;
+      [r, gA] in [: LS, AtomicFamily :] by ZFMISC_1:87;
+      then [[r, gA],r1] in [:[: LS, AtomicFamily :],LS:] by ZFMISC_1:87;
       then
 A22:  y is Element of [: LS, AtomicFamily, LS:] by ZFMISC_1:def 3;
       reconsider r1 as elementary strict LTLnode over v by A4;
@@ -7067,7 +7065,7 @@ A30:  F = F1 'U' F2 by A28,MODELC_2:8;
       now
         assume not FK is infinite set;
         then consider L such that
-A31:    FK = rng L by FINSEQ_1:73;
+A31:    FK = rng L by FINSEQ_1:52;
         ex m st for k st m<=k holds not k in FK
         proof
 A32:      len L = 0 or 0< 0+len L;
@@ -7090,13 +7088,13 @@ A33:          1<=len L;
               0<=realMAX
               proof
                 set b = L.LEN;
-                LEN in Seg (len L) by A33,FINSEQ_1:3;
+                LEN in Seg (len L) by A33,FINSEQ_1:1;
                 then LEN in dom L by FINSEQ_1:def 3;
-                then b in rng L by FUNCT_1:12;
+                then b in rng L by FUNCT_1:3;
                 then ex k being Element of NAT st k=b & run.k in FSet by A31;
                 hence thesis by A33,RFINSEQ2:1;
               end;
-              then reconsider iMAX as Nat by INT_1:80;
+              then reconsider iMAX as Nat by INT_1:53;
               iMAX +1 is Nat;
               then reconsider natMAX as Nat;
               for k st natMAX<=k holds not k in FK
@@ -7108,12 +7106,12 @@ A34:            natMAX <= k;
                   assume k in FK;
                   then consider i1 being set such that
 A35:              i1 in dom L and
-A36:              k = L.i1 by A31,FUNCT_1:def 5;
+A36:              k = L.i1 by A31,FUNCT_1:def 3;
                   reconsider i1 as Element of NAT by A35;
                   i1 in Seg LEN by A35,FINSEQ_1:def 3;
-                  then 1<=i1 & i1<=LEN by FINSEQ_1:3;
+                  then 1<=i1 & i1<=LEN by FINSEQ_1:1;
                   then k <= realMAX by A36,RFINSEQ2:1;
-                  hence contradiction by A34,INT_1:57,XXREAL_0:2;
+                  hence contradiction by A34,INT_1:32,XXREAL_0:2;
                 end;
                 hence thesis;
               end;
@@ -7137,7 +7135,7 @@ A38:    for k st m<=k holds F in the LTLold of Run(k) & not F2 in the
           assume m<=k;
           then
 A39:      not k in FK by A37;
-          reconsider k as Element of NAT by ORDINAL1:def 13;
+          reconsider k as Element of NAT by ORDINAL1:def 12;
           set r = run.k;
           reconsider r as elementary strict LTLnode over v by A4;
           now
@@ -7154,7 +7152,7 @@ A40:    w1 |= * Run(m1) by A8;
         m<=m1 by NAT_1:11;
         then F in the LTLold of Run(m1) by A38;
         then F in * Run(m1) by Lm1;
-        then w1 |= F by A40,MODELC_2:def 68;
+        then w1 |= F by A40,MODELC_2:def 64;
         then consider h such that
         for j being Nat st j<h holds Shift(w1,j) |= F1 and
 A41:    Shift(w1,h) |= F2 by A30,MODELC_2:68;

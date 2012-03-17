@@ -14,12 +14,10 @@
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
-<ArticleID name="CARD_3"/>
 <ArticleID name="FUNCOP_1"/>
+<ArticleID name="STRUCT_0"/>
 <ArticleID name="NUMBERS"/>
 <ArticleID name="FINSEQ_1"/>
-<ArticleID name="FINSEQ_2"/>
-<ArticleID name="STRUCT_0"/>
 <ArticleID name="PBOOLE"/>
 <ArticleID name="BINOP_1"/>
 <ArticleID name="MULTOP_1"/>
@@ -33,27 +31,27 @@
 <ArgTypes>
 <Typ kind="G" nr="7">
 <Cluster>
-<Adjective nr="42" value="false"/>
-<Adjective nr="59"/>
-<Adjective nr="68"/>
-<Adjective nr="69"/>
+<Adjective nr="35" value="false"/>
+<Adjective nr="56"/>
+<Adjective nr="65"/>
+<Adjective nr="66"/>
 </Cluster>
 </Typ>
-<Typ kind="M" nr="18">
+<Typ kind="M" nr="16">
 <Cluster>
-<Adjective nr="42" value="false"/>
-<Adjective nr="59"/>
-<Adjective nr="93">
+<Adjective nr="35" value="false"/>
+<Adjective nr="56"/>
+<Adjective nr="90">
 <Func kind="F" nr="1"/>
 </Adjective>
 </Cluster>
 <Func kind="F" nr="1"/>
 </Typ>
-<Typ kind="M" nr="18">
+<Typ kind="M" nr="16">
 <Cluster>
-<Adjective nr="42" value="false"/>
-<Adjective nr="59"/>
-<Adjective nr="93">
+<Adjective nr="35" value="false"/>
+<Adjective nr="56"/>
+<Adjective nr="90">
 <Func kind="F" nr="1"/>
 </Adjective>
 </Cluster>
@@ -170,7 +168,7 @@
 </Pred>
 <Not>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="175">
+<Func kind="K" nr="155">
 <Func kind="F" nr="1"/>
 <Var nr="1"/>
 <Var nr="2"/>
@@ -182,7 +180,7 @@
 <For>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="175">
+<Func kind="K" nr="155">
 <Func kind="F" nr="1"/>
 <Var nr="1"/>
 <Var nr="2"/>
@@ -193,7 +191,7 @@
 <And>
 <Pred kind="R" nr="2">
 <Var nr="5"/>
-<Func kind="K" nr="175">
+<Func kind="K" nr="155">
 <Func kind="F" nr="2"/>
 <Var nr="3"/>
 <Var nr="4"/>
@@ -218,7 +216,7 @@
 <Not>
 <Pred kind="R" nr="2">
 <Var nr="5"/>
-<Func kind="K" nr="175">
+<Func kind="K" nr="155">
 <Func kind="F" nr="2"/>
 <Var nr="3"/>
 <Var nr="4"/>
@@ -322,7 +320,7 @@
 </Pred>
 <Not>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="175">
+<Func kind="K" nr="155">
 <Func kind="F" nr="1"/>
 <Var nr="1"/>
 <Var nr="2"/>
@@ -334,7 +332,7 @@
 <For>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="175">
+<Func kind="K" nr="155">
 <Func kind="F" nr="1"/>
 <Var nr="1"/>
 <Var nr="2"/>
@@ -345,7 +343,7 @@
 <And>
 <Pred kind="R" nr="2">
 <Var nr="5"/>
-<Func kind="K" nr="175">
+<Func kind="K" nr="155">
 <Func kind="F" nr="3"/>
 <Var nr="3"/>
 <Var nr="4"/>
@@ -370,7 +368,7 @@
 <Not>
 <Pred kind="R" nr="2">
 <Var nr="5"/>
-<Func kind="K" nr="175">
+<Func kind="K" nr="155">
 <Func kind="F" nr="3"/>
 <Var nr="3"/>
 <Var nr="4"/>
@@ -393,24 +391,24 @@
 <ArgTypes>
 <Typ kind="G" nr="7">
 <Cluster>
-<Adjective nr="42" value="false"/>
-<Adjective nr="59"/>
-<Adjective nr="68"/>
-<Adjective nr="69"/>
+<Adjective nr="35" value="false"/>
+<Adjective nr="56"/>
+<Adjective nr="65"/>
+<Adjective nr="66"/>
 </Cluster>
 </Typ>
 </ArgTypes>
 <Not>
 <For>
-<Typ kind="M" nr="18">
+<Typ kind="M" nr="16">
 <Cluster>
-<Adjective nr="42" value="false"/>
-<Adjective nr="59"/>
-<Adjective nr="63"/>
-<Adjective nr="92">
+<Adjective nr="35" value="false"/>
+<Adjective nr="56"/>
+<Adjective nr="60"/>
+<Adjective nr="89">
 <Func kind="F" nr="1"/>
 </Adjective>
-<Adjective nr="93">
+<Adjective nr="90">
 <Func kind="F" nr="1"/>
 </Adjective>
 </Cluster>
@@ -486,33 +484,33 @@
 <ArgTypes>
 <Typ kind="G" nr="7">
 <Cluster>
-<Adjective nr="42" value="false"/>
-<Adjective nr="59"/>
-<Adjective nr="68"/>
-<Adjective nr="69"/>
+<Adjective nr="35" value="false"/>
+<Adjective nr="56"/>
+<Adjective nr="65"/>
+<Adjective nr="66"/>
 </Cluster>
 </Typ>
-<Typ kind="M" nr="18">
+<Typ kind="M" nr="16">
 <Cluster>
-<Adjective nr="42" value="false"/>
-<Adjective nr="59"/>
-<Adjective nr="92">
+<Adjective nr="35" value="false"/>
+<Adjective nr="56"/>
+<Adjective nr="89">
 <Func kind="F" nr="1"/>
 </Adjective>
-<Adjective nr="93">
+<Adjective nr="90">
 <Func kind="F" nr="1"/>
 </Adjective>
 </Cluster>
 <Func kind="F" nr="1"/>
 </Typ>
-<Typ kind="M" nr="18">
+<Typ kind="M" nr="16">
 <Cluster>
-<Adjective nr="42" value="false"/>
-<Adjective nr="59"/>
-<Adjective nr="92">
+<Adjective nr="35" value="false"/>
+<Adjective nr="56"/>
+<Adjective nr="89">
 <Func kind="F" nr="1"/>
 </Adjective>
-<Adjective nr="93">
+<Adjective nr="90">
 <Func kind="F" nr="1"/>
 </Adjective>
 </Cluster>

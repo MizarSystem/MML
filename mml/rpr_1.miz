@@ -15,11 +15,13 @@
 environ
 
  vocabularies NUMBERS, XBOOLE_0, SUBSET_1, FINSEQ_1, ZFMISC_1, TARSKI,
-      FINSET_1, RELAT_1, CARD_1, ARYTM_3, XXREAL_0, REAL_1, ARYTM_1, RPR_1;
+      FINSET_1, RELAT_1, CARD_1, ARYTM_3, XXREAL_0, REAL_1, ARYTM_1, RPR_1,
+      BSPACE;
  notations TARSKI, XBOOLE_0, SUBSET_1, FUNCT_1, DOMAIN_1, CARD_1, NUMBERS,
-      XCMPLX_0, REAL_1, FINSEQ_1, FINSET_1, REALSET1, XXREAL_0;
- constructors XXREAL_0, REAL_1, NAT_1, MEMBERED, FINSEQ_1, REALSET1;
- registrations XBOOLE_0, RELSET_1, FINSET_1, XXREAL_0, XREAL_0, MEMBERED;
+      XCMPLX_0, REAL_1, FINSEQ_1, FINSET_1, XXREAL_0;
+ constructors XXREAL_0, REAL_1, NAT_1, MEMBERED, FINSEQ_1, DOMAIN_1;
+ registrations XBOOLE_0, RELSET_1, FINSET_1, XXREAL_0, XREAL_0, MEMBERED,
+      SUBSET_1, CARD_1;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions XBOOLE_0, SUBSET_1;
  theorems TARSKI, SUBSET_1, ZFMISC_1, FINSEQ_1, CARD_1, CARD_2, REALSET1,
@@ -33,68 +35,48 @@ reserve A, B for Subset of E;
 reserve Y for set;
 reserve p for FinSequence;
 
-registration
-  let E be non empty set;
-  cluster non empty trivial Subset of E;
-  existence
-  proof
-    consider x being set such that
-A1: x in E by XBOOLE_0:def 1;
-    take {x};
-    thus thesis by A1,REALSET1:def 4,ZFMISC_1:37;
-  end;
-end;
-
-definition
-  let E;
-  mode El_ev of E is non empty trivial Subset of E;
-end;
-
 theorem Th1:
-  for e being non empty Subset of E holds e is El_ev of E iff for Y
+  for e being non empty Subset of E holds e is Singleton of E iff for Y
   holds (Y c= e iff Y = {} or Y = e)
 proof
   let e be non empty Subset of E;
-  thus e is El_ev of E implies for Y holds (Y c= e iff Y = {} or Y = e)
+  thus e is Singleton of E implies for Y holds (Y c= e iff Y = {} or Y = e)
   proof
     assume
-A1: e is El_ev of E;
+A1: e is Singleton of E;
     let Y;
-    ex x being set st e = {x} by A1,REALSET1:def 4;
-    hence thesis by ZFMISC_1:39;
+    ex x being set st e = {x} by A1,ZFMISC_1:131;
+    hence thesis by ZFMISC_1:33;
   end;
   assume
 A2: for Y holds Y c= e iff Y = {} or Y = e;
   consider x being set such that
 A3: x in e by XBOOLE_0:def 1;
-  {x} c= e by A3,ZFMISC_1:37;
+  {x} c= e by A3,ZFMISC_1:31;
   then {x} = e by A2;
-  hence thesis by REALSET1:def 4;
+  hence thesis;
 end;
 
 registration
   let E;
-  cluster -> finite El_ev of E;
+  cluster -> finite for Singleton of E;
   coherence
   proof
-    let e be El_ev of E;
-    per cases by REALSET1:def 4;
+    let e be Singleton of E;
+    per cases by ZFMISC_1:131;
     suppose
       e is empty;
       then reconsider T = e as empty set;
-      T is finite;
-      hence thesis;
+      thus thesis;
     end;
     suppose
       ex x being set st e = {x};
-      hence thesis;
+      thus thesis;
     end;
   end;
 end;
 
-reserve e, e1, e2 for El_ev of E;
-
-canceled 3;
+reserve e, e1, e2 for Singleton of E;
 
 theorem
   e = A \/ B & A <> B implies A = {} & B = e or A = e & B = {}
@@ -120,15 +102,8 @@ A1: e = A \/ B;
   hence thesis by A1;
 end;
 
-theorem Th7:
-  {a} is El_ev of E
-proof
-  set e = {a};
-  Y c= e iff Y = {} or Y = e by ZFMISC_1:39;
-  hence thesis by Th1;
-end;
-
-canceled 2;
+theorem
+  {a} is Singleton of E;
 
 theorem
   e1 c= e2 implies e1 = e2 by Th1;
@@ -136,7 +111,7 @@ theorem
 theorem Th11:
   ex a st a in E & e = {a}
 proof
-  set x =the  Element of e;
+  set x = the Element of e;
 A1: {x} c= e;
   reconsider x as Element of E;
   {x} = e by A1,Th1;
@@ -144,14 +119,12 @@ A1: {x} c= e;
 end;
 
 theorem
-  ex e st e is El_ev of E
+  ex e st e is Singleton of E
 proof
-  set a =the  Element of E;
-  {a} is El_ev of E by Th7;
+  set a = the Element of E;
+  {a} is Singleton of E;
   hence thesis;
 end;
-
-canceled;
 
 theorem
   ex p st p is FinSequence of E & rng p = e & len p = 1
@@ -160,7 +133,7 @@ proof
   a in E and
 A1: e = {a} by Th11;
   reconsider p = <*a*> as FinSequence;
-  rng p = {a} & len p = 1 by FINSEQ_1:56;
+  rng p = {a} & len p = 1 by FINSEQ_1:39;
   hence thesis by A1;
 end;
 
@@ -169,48 +142,43 @@ definition
   mode Event of E is Subset of E;
 end;
 
-canceled 7;
-
 theorem
-  for E being non empty set, e being El_ev of E, A being Event of E
+  for E being non empty set, e being Singleton of E, A being Event of E
   holds e misses A or e /\ A = e
 proof
-  let E be non empty set, e be El_ev of E, A be Event of E;
-  e /\ E = e & A \/ A` = [#] E by SUBSET_1:25,XBOOLE_1:28;
+  let E be non empty set, e be Singleton of E, A be Event of E;
+  e /\ E = e & A \/ A` = [#] E by SUBSET_1:10,XBOOLE_1:28;
   then e = e /\ A \/ e /\ A` by XBOOLE_1:23;
   then e /\ A c= e by XBOOLE_1:7;
   then e /\ A = {} or e /\ A = e by Th1;
   hence thesis by XBOOLE_0:def 7;
 end;
 
-canceled 2;
-
 theorem
   for E being non empty set, A being Event of E st A <> {} ex e being
-  El_ev of E st e c= A
+  Singleton of E st e c= A
 proof
   let E be non empty set, A be Event of E;
-  set x =the  Element of A;
+  set x = the Element of A;
   assume
 A1: A <> {};
   then reconsider x as Element of E by TARSKI:def 3;
-A2: {x} c= A by A1,ZFMISC_1:37;
-  {x} is El_ev of E by Th7;
-  hence thesis by A2;
+A2: {x} c= A by A1,ZFMISC_1:31;
+  thus thesis by A2;
 end;
 
 theorem
-  for E being non empty set, e being El_ev of E, A being Event of E st e
+  for E being non empty set, e being Singleton of E, A being Event of E st e
   c= A \/ A` holds e c= A or e c= A`
 proof
-  let E be non empty set, e be El_ev of E, A be Event of E;
+  let E be non empty set, e be Singleton of E, A be Event of E;
   ex a being Element of E st a in E & e = {a} by Th11;
   then consider a being Element of E such that
 A1: e = {a};
   assume e c= A \/ A`;
-  then a in A \/ A` by A1,ZFMISC_1:37;
+  then a in A \/ A` by A1,ZFMISC_1:31;
   then a in A or a in A` by XBOOLE_0:def 3;
-  hence thesis by A1,ZFMISC_1:37;
+  hence thesis by A1,ZFMISC_1:31;
 end;
 
 theorem
@@ -222,53 +190,36 @@ proof
   hence thesis by Th1,XBOOLE_0:def 7;
 end;
 
-canceled 6;
-
 theorem Th34:
   A /\ B misses A /\ B`
 proof
   A /\ B misses A \ B by XBOOLE_1:89;
-  hence thesis by SUBSET_1:32;
+  hence thesis by SUBSET_1:13;
 end;
 
 Lm1: for E being finite non empty set holds 0 < card E
 proof
   let E be finite non empty set;
-  set x =the  Element of E;
-  card {x} <= card E by NAT_1:44;
-  hence thesis by CARD_1:50;
-end;
-
-Lm2: card e = 1
-proof
-  ex a st a in E & {a} = e by Th11;
-  hence thesis by CARD_1:50;
+  set x = the Element of E;
+  card {x} <= card E by NAT_1:43;
+  hence thesis by CARD_1:30;
 end;
 
 definition
   let E be finite non empty set;
   let A be Event of E;
-  canceled 3;
+
   func prob(A) -> Real equals
   card A / card E;
   coherence by XREAL_0:def 1;
 end;
 
-canceled 3;
-
 theorem
-  for E being finite non empty set, e being El_ev of E holds prob(e) = 1
-  / card E by Lm2;
+  for E being finite non empty set, e being Singleton of E holds prob(e) = 1
+  / card E by CARD_1:def 7;
 
 theorem Th39:
-  for E being finite non empty set holds prob([#] E) = 1
-proof
-  let E be finite non empty set;
-  card E <> 0 by Lm1;
-  hence thesis by XCMPLX_1:60;
-end;
-
-canceled;
+  for E being finite non empty set holds prob([#] E) = 1 by XCMPLX_1:60;
 
 theorem Th41:
   for E being finite non empty set, A,B being Event of E st A
@@ -277,7 +228,7 @@ proof
   let E be finite non empty set, A,B be Event of E;
   assume A misses B;
   then A /\ B = {} E by XBOOLE_0:def 7;
-  hence thesis by CARD_1:47;
+  hence thesis by CARD_1:27;
 end;
 
 theorem
@@ -285,7 +236,7 @@ theorem
 proof
   let E be finite non empty set, A be Event of E;
   0 < card E by Lm1;
-  then card A * (card E)" <= card E * (card E)" by NAT_1:44,XREAL_1:66;
+  then card A * (card E)" <= card E * (card E)" by NAT_1:43,XREAL_1:64;
   then card A / card E <= card E * (card E)" by XCMPLX_0:def 9;
   then prob([#] E) = card E / card E & prob(A) <= card E / card E by
 XCMPLX_0:def 9;
@@ -296,7 +247,7 @@ theorem Th43:
   for E being finite non empty set, A being Event of E holds 0 <= prob(A)
 proof
   let E be finite non empty set, A be Event of E;
-  0 < card E & 0 <= card A by Lm1,CARD_1:47;
+  0 < card E & 0 <= card A by Lm1,CARD_1:27;
   hence thesis;
 end;
 
@@ -308,12 +259,10 @@ proof
   assume
 A1: A c= B;
   0 < card E by Lm1;
-  then card A * (card E)" <= card B * (card E)" by A1,NAT_1:44,XREAL_1:66;
+  then card A * (card E)" <= card B * (card E)" by A1,NAT_1:43,XREAL_1:64;
   then card A / card E <= card B * (card E)" by XCMPLX_0:def 9;
   hence thesis by XCMPLX_0:def 9;
 end;
-
-canceled;
 
 theorem Th46:
   for E being finite non empty set, A,B being Event of E holds
@@ -323,7 +272,7 @@ proof
   set q = ( card E )";
   set p = card E;
   card (( A \/ B ) qua Event of E) = card A + card B - card ( A /\ B ) by
-CARD_2:64;
+CARD_2:45;
   then
   card ( A \/ B ) * q = card A * q + ( card B * q - card ( A /\ B ) * q );
   then card ( A \/ B ) / p = card A * q + card B * q - card ( A /\ B ) * q by
@@ -351,9 +300,9 @@ theorem Th48:
   A) = 1 - prob(A`) & prob(A`) = 1 - prob(A)
 proof
   let E be finite non empty set, A be Event of E;
-  A misses A` by SUBSET_1:44;
+  A misses A` by SUBSET_1:24;
   then prob(A \/ A`) = prob(A) + prob(A`) by Th47;
-  then prob( [#] E ) = prob(A) + prob(A`) by SUBSET_1:25;
+  then prob( [#] E ) = prob(A) + prob(A`) by SUBSET_1:10;
   then 1 = prob(A) + prob(A`) by Th39;
   hence thesis;
 end;
@@ -384,10 +333,8 @@ theorem
 proof
   let E be finite non empty set, A,B be Event of E;
   prob(A \/ B) = prob(A) + prob(B) - prob(A /\ B) by Th46;
-  hence thesis by Th43,XREAL_1:45;
+  hence thesis by Th43,XREAL_1:43;
 end;
-
-canceled;
 
 theorem Th53:
   for E being finite non empty set, A,B being Event of E holds
@@ -395,9 +342,9 @@ theorem Th53:
 proof
   let E be finite non empty set, A,B be Event of E;
   A = A /\ ( A \/ [#] E ) by XBOOLE_1:21;
-  then A = A /\ [#] E by SUBSET_1:28;
+  then A = A /\ [#] E by SUBSET_1:11;
   then
-A1: A = A /\ ( B \/ B`) by SUBSET_1:25;
+A1: A = A /\ ( B \/ B`) by SUBSET_1:10;
   prob((A /\ B) \/ (A /\ B`)) = prob(A /\ B) + prob(A /\ B`) by Th34,Th47;
   hence thesis by A1,XBOOLE_1:23;
 end;
@@ -473,7 +420,7 @@ theorem
 proof
   let E be finite non empty set, A,B be Event of E;
   prob(A /\ B) <= prob(B) by Th44,XBOOLE_1:17;
-  then prob(A) - prob(B) <= prob(A) - prob(A /\ B) by XREAL_1:15;
+  then prob(A) - prob(B) <= prob(A) - prob(A /\ B) by XREAL_1:13;
   hence thesis by Th49;
 end;
 
@@ -484,8 +431,6 @@ definition
   prob(A /\ B) / prob(B);
   coherence;
 end;
-
-canceled 2;
 
 theorem
   for E being finite non empty set, A being Event of E holds prob(A, [#]
@@ -504,8 +449,6 @@ proof
   hence thesis;
 end;
 
-canceled;
-
 theorem
   for E being finite non empty set, A,B being Event of E st 0 < prob(B)
   holds prob(A, B) <= 1
@@ -514,7 +457,7 @@ proof
   assume
 A1: 0 < prob(B);
   A /\ B c= B by XBOOLE_1:17;
-  then prob(A /\ B) * (prob(B))" <= prob(B) * (prob(B))" by A1,Th44,XREAL_1:66;
+  then prob(A /\ B) * (prob(B))" <= prob(B) * (prob(B))" by A1,Th44,XREAL_1:64;
   then prob(A /\ B) * (prob(B))" <= 1 by A1,XCMPLX_0:def 7;
   hence thesis by XCMPLX_0:def 9;
 end;
@@ -539,7 +482,7 @@ proof
   by Th49;
   then prob(A, B) = ( prob(B) - prob(B \ A) ) / prob(B);
   then
-A1: prob(A, B) = prob(B) / prob(B) - prob(B \ A) / prob(B) by XCMPLX_1:121;
+A1: prob(A, B) = prob(B) / prob(B) - prob(B \ A) / prob(B) by XCMPLX_1:120;
   assume 0 < prob(B);
   hence thesis by A1,XCMPLX_1:60;
 end;
@@ -555,7 +498,7 @@ A2: A c= B;
   prob(A, B) = 1 - prob(B \ A) / prob(B) by A1,Th66;
   then prob(A, B) = 1 - ( prob(B) - prob(A) ) / prob(B) by A2,Th50;
   then prob(A, B) = 1 - ( prob(B) / prob(B) - prob(A) / prob(B) ) by
-XCMPLX_1:121;
+XCMPLX_1:120;
   then prob(A, B) = 1 - ( 1 - prob(A) / prob(B) ) by A1,XCMPLX_1:60;
   hence thesis;
 end;
@@ -579,8 +522,8 @@ proof
   assume that
 A1: 0 < prob(A) and
 A2: 0 < prob(B);
-  prob(A) * prob(B, A) = prob(A /\ B) by A1,XCMPLX_1:88;
-  hence thesis by A2,XCMPLX_1:88;
+  prob(A) * prob(B, A) = prob(A /\ B) by A1,XCMPLX_1:87;
+  hence thesis by A2,XCMPLX_1:87;
 end;
 
 theorem Th70:
@@ -590,11 +533,11 @@ proof
   let E be finite non empty set, A,B be Event of E;
   assume
 A1: 0 < prob(B);
-  (A \/ A`) /\ B = [#] E /\ B & [#] E /\ B = B by SUBSET_1:25,XBOOLE_1:28;
+  (A \/ A`) /\ B = [#] E /\ B & [#] E /\ B = B by SUBSET_1:10,XBOOLE_1:28;
   then (A /\ B) \/ (A` /\ B) = B by XBOOLE_1:23;
   then prob(A /\ B) + prob(A` /\ B) = prob(B) by Th34,Th47;
-  then prob(A, B) * prob(B) + prob(A` /\ B) = prob(B) by A1,XCMPLX_1:88;
-  then prob(A, B) * prob(B) + prob(A`, B) * prob(B) = prob(B) by A1,XCMPLX_1:88
+  then prob(A, B) * prob(B) + prob(A` /\ B) = prob(B) by A1,XCMPLX_1:87;
+  then prob(A, B) * prob(B) + prob(A`, B) * prob(B) = prob(B) by A1,XCMPLX_1:87
 ;
   then ( prob(A, B) + prob(A` , B) ) * prob(B) * (prob(B))" = 1 by A1,
 XCMPLX_0:def 7;
@@ -623,7 +566,7 @@ theorem
   for E being finite non empty set, A being Event of E holds prob(A`, A) = 0
 proof
   let E be finite non empty set, A be Event of E;
-  A` misses A by SUBSET_1:44;
+  A` misses A by SUBSET_1:24;
   then prob(A` /\ A) = 0 by Th41;
   hence thesis;
 end;
@@ -632,7 +575,7 @@ theorem
   for E being finite non empty set, A being Event of E holds prob(A, A`) = 0
 proof
   let E be finite non empty set, A be Event of E;
-  A misses A` by SUBSET_1:44;
+  A misses A` by SUBSET_1:24;
   then prob(A /\ A`) = 0 by Th41;
   hence thesis;
 end;
@@ -659,7 +602,7 @@ proof
 A1: 0 < prob(A) and
 A2: prob(B) < 1 and
 A3: A misses B;
-  prob(B) - 1 < 1 - 1 by A2,XREAL_1:11;
+  prob(B) - 1 < 1 - 1 by A2,XREAL_1:9;
   then 0 < - ( - ( 1 - prob(B) ) );
   then
 A4: 0 < prob(B`) by Th48;
@@ -682,7 +625,7 @@ A1: 0 < prob(A) and
 A2: prob(B) < 1 and
 A3: A misses B;
 A4: prob(B`) = 1 - prob(B) by Th48;
-  prob(B) -1 < 1 - 1 by A2,XREAL_1:11;
+  prob(B) -1 < 1 - 1 by A2,XREAL_1:9;
   then 0 < - ( - ( 1 - prob(B) ) );
   then prob(A` , B`) = 1 - prob(A, B`) by A4,Th70;
   hence thesis by A1,A2,A3,Th76;
@@ -697,9 +640,9 @@ proof
   assume that
 A1: 0 < prob(B /\ C) and
 A2: 0 < prob(C);
-A3: prob(B /\ C) = prob(B, C) * prob(C) by A2,XCMPLX_1:88;
+A3: prob(B /\ C) = prob(B, C) * prob(C) by A2,XCMPLX_1:87;
   prob(A /\ B /\ C) = prob(A /\ (B /\ C)) by XBOOLE_1:16;
-  then prob(A /\ B /\ C) = prob(A, B /\ C) * prob(B /\ C) by A1,XCMPLX_1:88;
+  then prob(A /\ B /\ C) = prob(A, B /\ C) * prob(B /\ C) by A1,XCMPLX_1:87;
   hence thesis by A3;
 end;
 
@@ -712,13 +655,13 @@ proof
   assume that
 A1: 0 < prob(B) and
 A2: prob(B) < 1;
-  prob(B) -1 < 1 - 1 by A2,XREAL_1:11;
+  prob(B) -1 < 1 - 1 by A2,XREAL_1:9;
   then 0 < - ( - ( 1 - prob(B) ) );
   then
 A3: 0 < prob(B`) by Th48;
   prob(A) = prob(A /\ B) + prob(A /\ B`) by Th53;
-  then prob(A) = prob(A, B) * prob(B) + prob(A /\ B`) by A1,XCMPLX_1:88;
-  hence thesis by A3,XCMPLX_1:88;
+  then prob(A) = prob(A, B) * prob(B) + prob(A /\ B`) by A1,XCMPLX_1:87;
+  hence thesis by A3,XCMPLX_1:87;
 end;
 
 theorem Th80:
@@ -736,7 +679,7 @@ A5: B2 \ B1 = E \ B1 by A3,XBOOLE_1:40;
   then 0 < prob((B1)`) by A2,A4,XBOOLE_1:83;
   then 0 < 1 - prob(B1) by Th48;
   then
-A6: 1 - ( 1 - prob(B1) ) < 1 by XREAL_1:46;
+A6: 1 - ( 1 - prob(B1) ) < 1 by XREAL_1:44;
   B2 = B1` by A4,A5,XBOOLE_1:83;
   hence thesis by A1,A6,Th79;
 end;
@@ -770,10 +713,10 @@ A9: prob(A) = prob((B1 /\ A) \/ (B2 /\ A)) + prob(B3 /\ A) by XBOOLE_1:23;
 XBOOLE_1:76;
   then
   prob(A) = prob(A, B1) * prob(B1) + prob(A /\ B2) + prob(A /\ B3) by A1,
-XCMPLX_1:88;
+XCMPLX_1:87;
   then prob(A) = prob(A, B1) * prob(B1) + prob(A, B2) * prob(B2) + prob(A /\
-  B3) by A2,XCMPLX_1:88;
-  hence thesis by A3,XCMPLX_1:88;
+  B3) by A2,XCMPLX_1:87;
+  hence thesis by A3,XCMPLX_1:87;
 end;
 
 theorem
@@ -786,7 +729,7 @@ proof
 A1: 0 < prob(B1) and
 A2: 0 < prob(B2) & B1 \/ B2 = E & B1 misses B2;
   prob(A) = prob(A, B1) * prob(B1) + prob(A, B2) * prob(B2) by A1,A2,Th80;
-  hence thesis by A1,XCMPLX_1:88;
+  hence thesis by A1,XCMPLX_1:87;
 end;
 
 theorem
@@ -802,7 +745,7 @@ A2: 0 < prob(B2) & 0 < prob(B3) & B1 \/ B2 \/ B3 = E & B1 misses B2 & B1
   misses B3 & B2 misses B3;
   prob(A) = ( prob(A, B1) * prob(B1) + prob(A, B2) * prob(B2) ) + prob(A,
   B3) * prob(B3) by A1,A2,Th81;
-  hence thesis by A1,XCMPLX_1:88;
+  hence thesis by A1,XCMPLX_1:87;
 end;
 
 definition
@@ -814,8 +757,6 @@ definition
   symmetry;
 end;
 
-canceled 2;
-
 theorem
   for E being finite non empty set, A,B being Event of E st 0 < prob(B)
   & A, B are_independent holds prob(A, B) = prob(A)
@@ -825,7 +766,7 @@ proof
 A1: 0 < prob(B) and
 A2: A, B are_independent;
   prob(A /\ B) = prob(A) * prob(B) by A2,Def6;
-  then prob(A, B) = prob(A) * ( prob(B) / prob(B) ) by XCMPLX_1:75;
+  then prob(A, B) = prob(A) * ( prob(B) / prob(B) ) by XCMPLX_1:74;
   then prob(A, B) = prob(A) * 1 by A1,XCMPLX_1:60;
   hence thesis;
 end;
@@ -848,7 +789,7 @@ theorem
   are_independent holds A`, B are_independent
 proof
   let E be finite non empty set, A,B be Event of E;
-  prob(A` /\ B) = prob(B \ A) by SUBSET_1:32;
+  prob(A` /\ B) = prob(B \ A) by SUBSET_1:13;
   then
 A1: prob(A` /\ B) = prob(B) - prob(A /\ B) by Th49;
   assume A, B are_independent;

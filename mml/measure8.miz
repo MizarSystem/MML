@@ -26,12 +26,12 @@ environ
       MEASURE2, MEASURE4, MESFUNC5, SUPINF_2, XXREAL_3, NAT_1, MESFUNC9,
       SUPINF_1, RECDEF_1, PROB_1, PROB_2, PROB_3, SETLIM_1, SETLIM_2, NAGATA_2,
       FUNCT_7;
- constructors REAL_1, DOMAIN_1, KURATO_2, MESFUNC5, RINFSUP2, MESFUNC9,
+ constructors REAL_1, DOMAIN_1, KURATO_0, MESFUNC5, RINFSUP2, MESFUNC9,
       SUPINF_1, PROB_3, MEASURE7, RECDEF_1, SETLIM_2, SETLIM_1, NAGATA_2,
       FUNCT_7, ALTCAT_2;
  registrations MEMBERED, ORDINAL1, MEASURE1, XBOOLE_0, NUMBERS, XXREAL_0,
       VALUED_0, FUNCT_1, FUNCT_2, SUBSET_1, RELSET_1, MEASURE4, NAT_1,
-      XXREAL_3, XREAL_0;
+      XXREAL_3, XREAL_0, PROB_3;
  requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
  definitions SUPINF_2, TARSKI, PROB_2, RINFSUP2, MESFUNC9, PROB_3, ALTCAT_2;
  theorems ZFMISC_1, TARSKI, XBOOLE_0, PROB_1, MEASURE1, FUNCT_2, FUNCT_1,
@@ -39,7 +39,7 @@ environ
       SUPINF_2, XXREAL_2, PROB_4, MEASURE7, XXREAL_0, MEASURE6, FINSUB_1,
       CARD_3, RINFSUP2, MESFUNC9, VALUED_0, MESFUNC5, MONOID_1, MEASURE2,
       SETLIM_1, SETLIM_2, ABCMIZ_1, PROB_2, NAGATA_2, FUNCTOR1, FUNCT_7,
-      XXREAL_3, XREAL_0;
+      XXREAL_3, XREAL_0, PARTFUN1;
  schemes FUNCT_2, NAT_1, BINOP_2, XBOOLE_0, SUBSET_1;
 
 begin  :: The outer measure induced by the finite additive measure
@@ -63,12 +63,12 @@ A1: for k be Element of NAT st P[k] holds P[k+1]
     proof
       let k be Element of NAT;
       assume P[k];
-      then (Ser seq).(k+1) = (Partial_Sums seq).k + seq.(k+1) by SUPINF_2:63;
+      then (Ser seq).(k+1) = (Partial_Sums seq).k + seq.(k+1) by SUPINF_2:44;
       hence P[k+1] by MESFUNC9:def 1;
     end;
     assume x in NAT;
     then reconsider n = x as Element of NAT;
-    (Ser seq).0 = seq.0 by SUPINF_2:63
+    (Ser seq).0 = seq.0 by SUPINF_2:44
       .= (Partial_Sums seq).0 by MESFUNC9:def 1;
     then
 A2: P[0];
@@ -76,7 +76,7 @@ A2: P[0];
     then (Ser seq).x = (Partial_Sums seq).n;
     hence (Ser seq).x = (Partial_Sums seq).x;
   end;
-  hence Ser seq = Partial_Sums seq by FUNCT_2:18;
+  hence Ser seq = Partial_Sums seq by FUNCT_2:12;
 end;
 
 :: In the theorem below, the notion "summable" means in MESFUNC9, not in SUPINF_2
@@ -111,7 +111,7 @@ A4: for n be Element of NAT holds seq.n = seq1.n + seq2.n;
 A5: for k be Nat holds Fseq.k = Gseq.k + Hseq.k
   proof
     let k be Nat;
-    k in NAT by ORDINAL1:def 13;
+    k in NAT by ORDINAL1:def 12;
     hence Fseq.k = Gseq.k + Hseq.k by A1,A2,A4,MEASURE7:3;
   end;
   for m,n being ext-real number st m in dom Fseq & n in dom Fseq & m <= n
@@ -122,8 +122,8 @@ A5: for k be Nat holds Fseq.k = Gseq.k + Hseq.k
 A6: m in dom Fseq and
 A7: n in dom Fseq and
 A8: m <= n;
-    Gseq.m <= Gseq.n & Hseq.m <= Hseq.n by A1,A2,A6,A7,A8,MEASURE7:9;
-    then Gseq.m + Hseq.m <= Gseq.n + Hseq.n by XXREAL_3:38;
+    Gseq.m <= Gseq.n & Hseq.m <= Hseq.n by A1,A2,A6,A7,A8,MEASURE7:8;
+    then Gseq.m + Hseq.m <= Gseq.n + Hseq.n by XXREAL_3:36;
     then Fseq.m <= Gseq.n + Hseq.n by A1,A2,A4,A6,MEASURE7:3;
     hence thesis by A1,A2,A4,A7,MEASURE7:3;
   end;
@@ -141,12 +141,12 @@ A11: Hseq is nonnegative by Th1;
     let n be set;
     assume n in dom seq;
     then reconsider n9=n as Element of NAT;
-A12: seq2.n9 >= 0 by A2,SUPINF_2:70;
-    seq.n = seq1.n9 + seq2.n9 & seq1.n9 >= 0 by A1,A3,SUPINF_2:70;
+A12: seq2.n9 >= 0 by A2,SUPINF_2:51;
+    seq.n = seq1.n9 + seq2.n9 & seq1.n9 >= 0 by A1,A3,SUPINF_2:51;
     hence seq.n >= 0 by A12;
   end;
   hence
-A13: seq is nonnegative by SUPINF_2:71;
+A13: seq is nonnegative by SUPINF_2:52;
   Partial_Sums seq2 is non-decreasing by A2,MESFUNC9:16;
   then Hseq is non-decreasing by Th1;
   then
@@ -161,20 +161,20 @@ end;
 
 registration
   let X,F;
-  cluster disjoint_valued Function of NAT,F;
+  cluster disjoint_valued for Function of NAT,F;
   existence
   proof
     consider f being Function of NAT,{{}} such that
-A1: for n being Element of NAT holds f.n = {} by MEASURE1:35;
-    {} in F by PROB_1:10;
-    then {{}} c= F by ZFMISC_1:37;
-    then reconsider f as Function of NAT,F by FUNCT_2:9;
+A1: for n being Element of NAT holds f.n = {} by MEASURE1:16;
+    {} in F by PROB_1:4;
+    then {{}} c= F by ZFMISC_1:31;
+    then reconsider f as Function of NAT,F by FUNCT_2:7;
     take f;
 A2: for x being set holds f.x = {}
     proof
       let x be set;
       x in dom f implies f.x = {} by A1;
-      hence thesis by FUNCT_1:def 4;
+      hence thesis by FUNCT_1:def 2;
     end;
     thus for x,y being set st x <> y holds f.x misses f.y
     proof
@@ -193,32 +193,32 @@ definition
   existence
   proof
     consider f being FinSequence of bool X such that
-A1: for k being Nat st k in dom f holds f.k = X by PROB_3:52;
+A1: for k being Nat st k in dom f holds f.k = X by PROB_3:47;
     take f;
     hereby
       let k be Nat;
       assume k in dom f;
       then f.k = X by A1;
-      hence f.k in F by PROB_1:11;
+      hence f.k in F by PROB_1:5;
     end;
   end;
 end;
 
 registration
   let X,F;
-  cluster disjoint_valued FinSequence of F;
+  cluster disjoint_valued for FinSequence of F;
   existence
   proof
     {} c= X by XBOOLE_1:2;
-    then reconsider f = <* {} *> as FinSequence of bool X by FINSEQ_1:95;
+    then reconsider f = <* {} *> as FinSequence of bool X by FINSEQ_1:74;
     for k being Nat st k in dom f holds f.k in F
     proof
       let k be Nat;
       assume k in dom f;
       then k in Seg 1 by FINSEQ_1:def 8;
-      then k = 1 by FINSEQ_1:4,TARSKI:def 1;
+      then k = 1 by FINSEQ_1:2,TARSKI:def 1;
       then f.k = {} by FINSEQ_1:def 8;
-      hence f.k in F by PROB_1:10;
+      hence f.k in F by PROB_1:4;
     end;
     then reconsider f = <* {} *> as FinSequence of F by Def1;
     take f;
@@ -228,10 +228,10 @@ A1: for n being set holds f.n = {}
       now
         assume n in dom f;
         then n in Seg 1 by FINSEQ_1:def 8;
-        then n = 1 by FINSEQ_1:4,TARSKI:def 1;
+        then n = 1 by FINSEQ_1:2,TARSKI:def 1;
         hence f.n = {} by FINSEQ_1:def 8;
       end;
-      hence thesis by FUNCT_1:def 4;
+      hence thesis by FUNCT_1:def 2;
     end;
     thus for x,y being set st x <> y holds f.x misses f.y
     proof
@@ -260,12 +260,12 @@ definition
   existence
   proof
     X in bool X by ZFMISC_1:def 1;
-    then reconsider A = NAT --> X as SetSequence of X by FUNCOP_1:57;
+    then reconsider A = NAT --> X as SetSequence of X by FUNCOP_1:45;
     take A;
     let n be Nat;
-    n is Element of NAT by ORDINAL1:def 13;
-    then A.n = X by FUNCOP_1:13;
-    hence thesis by PROB_1:11;
+    n is Element of NAT by ORDINAL1:def 12;
+    then A.n = X by FUNCOP_1:7;
+    hence thesis by PROB_1:5;
   end;
 end;
 
@@ -277,18 +277,18 @@ definition
   existence
   proof
     X in bool X by ZFMISC_1:def 1;
-    then reconsider IT = NAT --> X as SetSequence of X by FUNCOP_1:57;
+    then reconsider IT = NAT --> X as SetSequence of X by FUNCOP_1:45;
     for n be Nat holds IT.n in F
     proof
       let n be Nat;
-      n in NAT by ORDINAL1:def 13;
-      then IT.n = X by FUNCOP_1:13;
-      hence IT.n in F by PROB_1:11;
+      n in NAT by ORDINAL1:def 12;
+      then IT.n = X by FUNCOP_1:7;
+      hence IT.n in F by PROB_1:5;
     end;
     then reconsider IT as Set_Sequence of F by Def2;
     take IT;
-    rng IT = {X} by FUNCOP_1:14;
-    then X c= union rng IT by ZFMISC_1:31;
+    rng IT = {X} by FUNCOP_1:8;
+    then X c= union rng IT by ZFMISC_1:25;
     hence thesis by XBOOLE_1:1;
   end;
 end;
@@ -305,15 +305,15 @@ end;
 Lm1: NAT --> X is Set_Sequence of F
 proof
   X in bool X by ZFMISC_1:def 1;
-  then reconsider G0 = NAT --> X as SetSequence of X by FUNCOP_1:57;
-A1: rng (NAT --> X) = {X} by FUNCOP_1:14;
+  then reconsider G0 = NAT --> X as SetSequence of X by FUNCOP_1:45;
+A1: rng (NAT --> X) = {X} by FUNCOP_1:8;
   for n be Nat holds G0.n in F
   proof
     let n be Nat;
-    n in NAT by ORDINAL1:def 13;
-    then G0.n in {X} by A1,FUNCT_2:6;
+    n in NAT by ORDINAL1:def 12;
+    then G0.n in {X} by A1,FUNCT_2:4;
     then G0.n = X by TARSKI:def 1;
-    hence G0.n in F by PROB_1:11;
+    hence G0.n in F by PROB_1:5;
   end;
   hence NAT --> X is Set_Sequence of F by Def2;
 end;
@@ -326,17 +326,17 @@ definition
   existence
   proof
     reconsider G0 = NAT --> X as Set_Sequence of F by Lm1;
-    reconsider G = G0 as Element of Funcs(NAT,bool X) by FUNCT_2:11;
+    reconsider G = G0 as Element of Funcs(NAT,bool X) by FUNCT_2:8;
     reconsider H = NAT --> G as Function of NAT,Funcs(NAT,bool X);
     take H;
     hereby
       let n be Nat;
-      rng (NAT --> X) = {X} by FUNCOP_1:14;
-      then X c= union rng (NAT --> X) by ZFMISC_1:31;
+      rng (NAT --> X) = {X} by FUNCOP_1:8;
+      then X c= union rng (NAT --> X) by ZFMISC_1:25;
       then
 A1:   Sets.n c= union rng (NAT --> X) by XBOOLE_1:1;
-      n in NAT by ORDINAL1:def 13;
-      then H.n = (NAT --> X) by FUNCOP_1:13;
+      n in NAT by ORDINAL1:def 12;
+      then H.n = (NAT --> X) by FUNCOP_1:7;
       hence H.n is Covering of Sets.n,F by A1,Def3;
     end;
   end;
@@ -357,7 +357,7 @@ A1: for n being Element of NAT holds IT.n = H(n) from FUNCT_2:sch 4;
     take IT;
     hereby
       let n be Nat;
-      n in NAT by ORDINAL1:def 13;
+      n in NAT by ORDINAL1:def 12;
       hence IT.n = M.(FSets.n) by A1;
     end;
   end;
@@ -374,7 +374,7 @@ A3: for n being Nat holds V2.n = M.(FSets.n);
       thus V1.x = M.(FSets.n) by A2
         .= V2.x by A3;
     end;
-    hence thesis by FUNCT_2:18;
+    hence thesis by FUNCT_2:12;
   end;
 end;
 
@@ -384,11 +384,11 @@ proof
   for n being Element of NAT holds 0 <= (vol(M,FSets)).n
   proof
     let n be Element of NAT;
-    (vol(M,FSets)).n = M.(FSets.n) & {} in F by Def5,PROB_1:10;
-    then M.{} <= (vol(M,FSets)).n by MEASURE1:25,XBOOLE_1:2;
+    (vol(M,FSets)).n = M.(FSets.n) & {} in F by Def5,PROB_1:4;
+    then M.{} <= (vol(M,FSets)).n by MEASURE1:8,XBOOLE_1:2;
     hence 0 <= (vol(M,FSets)).n by VALUED_0:def 19;
   end;
-  hence thesis by SUPINF_2:58;
+  hence thesis by SUPINF_2:39;
 end;
 
 definition
@@ -411,7 +411,7 @@ A2: for n being Element of NAT holds P[n,G0.n] from FUNCT_2:sch 3(A1);
     take G0;
     hereby
       let n be Nat;
-      n in NAT by ORDINAL1:def 13;
+      n in NAT by ORDINAL1:def 12;
       hence G0.n = SUM(vol(M,Cvr.n)) by A2;
     end;
   end;
@@ -428,7 +428,7 @@ A4: for n being Nat holds G2.n = SUM(vol(M,Cvr.n));
       thus G1.x = SUM(vol(M,Cvr.n)) by A3
         .= G2.x by A4;
     end;
-    hence thesis by FUNCT_2:18;
+    hence thesis by FUNCT_2:12;
   end;
 end;
 
@@ -438,11 +438,11 @@ proof
   for k being Element of NAT holds 0 <= (vol(M,Cvr.n)).k
   proof
     let k be Element of NAT;
-    0 <= M.((Cvr.n).k) by SUPINF_2:70;
+    0 <= M.((Cvr.n).k) by SUPINF_2:51;
     hence thesis by Def5;
   end;
   then
-A1: vol(M,Cvr.n) is nonnegative by SUPINF_2:58;
+A1: vol(M,Cvr.n) is nonnegative by SUPINF_2:39;
   (Volume(M,Cvr)).n = SUM(vol(M,Cvr.n)) by Def6;
   hence thesis by A1,MEASURE6:2;
 end;
@@ -483,18 +483,18 @@ registration
     then consider CA being Function of NAT, bool X such that
 A1: rng CA = {X,{}} and
     CA.0 = X and
-    for n being Element of NAT st 0 < n holds CA.n = {} by MEASURE1:40;
+    for n being Element of NAT st 0 < n holds CA.n = {} by MEASURE1:19;
     for n be Nat holds CA.n in F
     proof
       let n be Nat;
-      n in NAT by ORDINAL1:def 13;
+      n in NAT by ORDINAL1:def 12;
       then
-A2:   CA.n in rng CA by FUNCT_2:6;
-      X in F & {} in F by PROB_1:10,11;
-      then rng CA c= F by A1,ZFMISC_1:38;
+A2:   CA.n in rng CA by FUNCT_2:4;
+      X in F & {} in F by PROB_1:4,5;
+      then rng CA c= F by A1,ZFMISC_1:32;
       hence CA.n in F by A2;
     end;
-    then union{X,{}} = X \/ {} & CA is Set_Sequence of F by Def2,ZFMISC_1:93;
+    then union{X,{}} = X \/ {} & CA is Set_Sequence of F by Def2,ZFMISC_1:75;
     then reconsider CA as Covering of A,F by A1,Def3;
     defpred P[set] means ex G being Covering of A,F st $1 = SUM(vol(M,G));
     consider D being set such that
@@ -528,7 +528,7 @@ end;
 definition
   func InvPairFunc -> Function of NAT,[:NAT,NAT:] equals
   PairFunc";
-  correctness by FUNCTOR1:3,NAGATA_2:2;
+  correctness by FUNCTOR1:2,NAGATA_2:2;
 end;
 
 definition
@@ -548,7 +548,7 @@ A2: for n being Element of NAT holds P[n,Seq0.n] from FUNCT_2:sch 3(A1
     for n be Nat holds Seq0.n in F
     proof
       let n be Nat;
-      n in NAT by ORDINAL1:def 13;
+      n in NAT by ORDINAL1:def 12;
       then Seq0.n = (Cvr.(pr1 InvPairFunc.n)).(pr2 InvPairFunc.n) by A2;
       hence Seq0.n in F;
     end;
@@ -561,30 +561,30 @@ A2: for n being Element of NAT holds P[n,Seq0.n] from FUNCT_2:sch 3(A1
 A3:   x in A and
 A4:   A in rng Sets by TARSKI:def 4;
       consider n1 being Element of NAT such that
-A5:   A = Sets.n1 by A4,FUNCT_2:190;
+A5:   A = Sets.n1 by A4,FUNCT_2:113;
       Sets.n1 c= union rng(Cvr.n1) by Def3;
       then consider AA being set such that
 A6:   x in AA and
 A7:   AA in rng(Cvr.n1) by A3,A5,TARSKI:def 4;
       consider n2 being Element of NAT such that
-A8:   AA = (Cvr.n1).n2 by A7,FUNCT_2:190;
-      dom PairFunc = rng InvPairFunc by FUNCT_1:55,NAGATA_2:2;
+A8:   AA = (Cvr.n1).n2 by A7,FUNCT_2:113;
+      dom PairFunc = rng InvPairFunc by FUNCT_1:33,NAGATA_2:2;
       then rng InvPairFunc = [:NAT,NAT:] by FUNCT_2:def 1;
       then [n1,n2] in rng InvPairFunc by ZFMISC_1:def 2;
       then consider n being Element of NAT such that
-A9:   [n1,n2] = InvPairFunc.n by FUNCT_2:190;
-      [pr1 InvPairFunc.n, pr2 InvPairFunc.n] = [n1,n2] by A9,FUNCT_2:196;
-      then pr1 InvPairFunc.n = n1 & pr2 InvPairFunc.n = n2 by ZFMISC_1:33;
+A9:   [n1,n2] = InvPairFunc.n by FUNCT_2:113;
+      [pr1 InvPairFunc.n, pr2 InvPairFunc.n] = [n1,n2] by A9,FUNCT_2:119;
+      then pr1 InvPairFunc.n = n1 & pr2 InvPairFunc.n = n2 by ZFMISC_1:27;
       then
 A10:  x in Seq0.n by A2,A6,A8;
-      Seq0.n in rng Seq0 by FUNCT_2:6;
+      Seq0.n in rng Seq0 by FUNCT_2:4;
       hence thesis by A10,TARSKI:def 4;
     end;
     then reconsider Seq0 as Covering of union rng Sets,F by Def3;
     take Seq0;
     hereby
       let n be Nat;
-      n in NAT by ORDINAL1:def 13;
+      n in NAT by ORDINAL1:def 12;
       hence Seq0.n = (Cvr.(pr1 InvPairFunc.n)).(pr2 InvPairFunc.n) by A2;
     end;
   end;
@@ -603,7 +603,7 @@ A12: for n being Nat holds Seq2.n = (Cvr.(pr1 InvPairFunc.n)).(pr2
       Seq1.n = (Cvr.(pr1 InvPairFunc.n)).(pr2 InvPairFunc.n) by A11;
       hence thesis by A12;
     end;
-    hence thesis by FUNCT_2:18;
+    hence thesis by FUNCT_2:12;
   end;
 end;
 
@@ -616,8 +616,8 @@ proof
 of X holds for Cvr being Covering of Sets,F holds (Partial_Sums(vol(M,On Cvr)))
   .$1 <= (Partial_Sums Volume(M,Cvr)).m;
   {} c= X by XBOOLE_1:2;
-  then reconsider D = NAT --> {} as Function of NAT,bool X by FUNCOP_1:57;
-  reconsider y = D as Element of Funcs(NAT,bool X) by FUNCT_2:11;
+  then reconsider D = NAT --> {} as Function of NAT,bool X by FUNCOP_1:45;
+  reconsider y = D as Element of Funcs(NAT,bool X) by FUNCT_2:8;
 A1: for k being Element of NAT st P[k] holds P[k+1]
   proof
     let k be Element of NAT;
@@ -650,13 +650,13 @@ A4: for n being Element of NAT holds ex y being Element of Funcs(NAT,bool
     proof
       let n be Element of NAT;
 A5:   now
-        reconsider y = Cvr.n as Element of Funcs(NAT,bool X) by FUNCT_2:11;
+        reconsider y = Cvr.n as Element of Funcs(NAT,bool X) by FUNCT_2:8;
         assume
 A6:     n = a;
         take y;
         thus QQ0[n,y] by A6;
       end;
-      n <> a implies QQ0[n,y] by FUNCOP_1:13;
+      n <> a implies QQ0[n,y] by FUNCOP_1:7;
       hence thesis by A5;
     end;
     consider Cvr0 being Function of NAT,Funcs(NAT,bool X) such that
@@ -668,24 +668,24 @@ A8: for n being Nat holds Cvr0.n is Covering of D.n,F
       consider FSets0 being Function such that
 A9:   Cvr0.n = FSets0 and
 A10:  dom FSets0 = NAT & rng FSets0 c= bool X by FUNCT_2:def 2;
-      reconsider FSets0 as SetSequence of X by A10,FUNCT_2:4;
+      reconsider FSets0 as SetSequence of X by A10,FUNCT_2:2;
       for s being Nat holds FSets0.s in F
       proof
         let s be Nat;
-A11:    s in NAT by ORDINAL1:def 13;
+A11:    s in NAT by ORDINAL1:def 12;
 A12:    now
           assume n = a;
           then FSets0.s = (Cvr.n).s by A7,A9,A11;
           hence FSets0.s in F;
         end;
-        n in NAT by ORDINAL1:def 13;
+        n in NAT by ORDINAL1:def 12;
         then n <> a implies FSets0.s = {} by A7,A9,A11;
-        hence thesis by A12,PROB_1:10;
+        hence thesis by A12,PROB_1:4;
       end;
       then
 A13:  FSets0 is Set_Sequence of F by Def2;
-      n in NAT by ORDINAL1:def 13;
-      then D.n = {} by FUNCOP_1:13;
+      n in NAT by ORDINAL1:def 12;
+      then D.n = {} by FUNCOP_1:7;
       then D.n c= union rng FSets0 by XBOOLE_1:2;
       hence Cvr0.n is Covering of D.n,F by A9,A13,Def3;
     end;
@@ -694,13 +694,13 @@ A14: for n being Element of NAT holds ex y being Element of Funcs(NAT,bool
     proof
       let n be Element of NAT;
 A15:  now
-        reconsider y = Cvr.n as Element of Funcs(NAT,bool X) by FUNCT_2:11;
+        reconsider y = Cvr.n as Element of Funcs(NAT,bool X) by FUNCT_2:8;
         assume
 A16:    n <> a;
         take y;
         thus QQ1[n,y] by A16;
       end;
-      n = a implies QQ1[n,y] by FUNCOP_1:13;
+      n = a implies QQ1[n,y] by FUNCOP_1:7;
       hence thesis by A15;
     end;
     consider Cvr1 being Function of NAT,Funcs(NAT,bool X) such that
@@ -712,24 +712,24 @@ A17: for n being Element of NAT holds QQ1[n,Cvr1.n] from FUNCT_2:sch 3
       consider FSets1 being Function such that
 A18:  Cvr1.n = FSets1 and
 A19:  dom FSets1 = NAT & rng FSets1 c= bool X by FUNCT_2:def 2;
-      reconsider FSets1 as Function of NAT,bool X by A19,FUNCT_2:4;
+      reconsider FSets1 as Function of NAT,bool X by A19,FUNCT_2:2;
       for s being Nat holds FSets1.s in F
       proof
         let s be Nat;
-A20:    s in NAT by ORDINAL1:def 13;
-A21:    n in NAT by ORDINAL1:def 13;
+A20:    s in NAT by ORDINAL1:def 12;
+A21:    n in NAT by ORDINAL1:def 12;
 A22:    now
           assume n <> a;
           then FSets1.s = (Cvr.n).s by A17,A18,A21,A20;
           hence FSets1.s in F;
         end;
         n = a implies FSets1.s = {} by A17,A18,A20;
-        hence thesis by A22,PROB_1:10;
+        hence thesis by A22,PROB_1:4;
       end;
       then
 A23:  FSets1 is Set_Sequence of F by Def2;
-      n in NAT by ORDINAL1:def 13;
-      then D.n = {} by FUNCOP_1:13;
+      n in NAT by ORDINAL1:def 12;
+      then D.n = {} by FUNCOP_1:7;
       then D.n c= union rng FSets1 by XBOOLE_1:2;
       hence Cvr1.n is Covering of D.n,F by A18,A23,Def3;
     end;
@@ -762,7 +762,7 @@ A29:    s in N0;
         pr2 InvPairFunc.s =SOS.s by A26;
         then (vol(M,On Cvr0)).s = M.((Cvr0.a).(SOS.s)) by A28,Def10;
         then (vol(M,On Cvr0)).s = (vol(M,Cvr0.a)).(SOS.s) by Def5;
-        hence thesis by A29,FUNCT_2:21;
+        hence thesis by A29,FUNCT_2:15;
       end;
       assume not s in N0;
       then
@@ -780,33 +780,33 @@ A32:  SOS.s1 = SOS.s2;
 A33:  ( ex s11 being Element of NAT st s11 = s1 & a = pr1 InvPairFunc.s11
 )& ex s22 being Element of NAT st s22 = s2 & a = pr1 InvPairFunc.s22 by A31;
 A34:  InvPairFunc.s1 = [pr1 InvPairFunc.s1,pr2 InvPairFunc.s1] &
-InvPairFunc.s2 = [pr1 InvPairFunc.s2,pr2 InvPairFunc.s2] by A31,FUNCT_2:196;
+InvPairFunc.s2 = [pr1 InvPairFunc.s2,pr2 InvPairFunc.s2] by A31,FUNCT_2:119;
       SOS.s1 = pr2 InvPairFunc.s1 & SOS.s2 = pr2 InvPairFunc.s2 by A26,A31;
-      hence s1 = s2 by A32,A33,A34,FUNCT_2:25,NAGATA_2:2;
+      hence s1 = s2 by A32,A33,A34,FUNCT_2:19,NAGATA_2:2;
     end;
     then
-A35: SOS is one-to-one by FUNCT_2:25;
+A35: SOS is one-to-one by FUNCT_2:19;
     (Ser vol(M,On Cvr1)).(k+1) = (Ser vol(M,On Cvr1)).k + (vol(M,On Cvr1
-    )).(k+1) by SUPINF_2:63
+    )).(k+1) by SUPINF_2:44
       .= (Ser vol(M,On Cvr1)).k by A24,XXREAL_3:4;
     then PSv1.(k+1) = (Ser vol(M,On Cvr1)).k by Th1;
     then
 A36: PSv1.(k+1) = PSv1.k by Th1;
     for s being Element of NAT holds 0. <= (Volume(M,Cvr0)).s by Th5;
     then
-A37: Volume(M,Cvr0) is nonnegative by SUPINF_2:58;
+A37: Volume(M,Cvr0) is nonnegative by SUPINF_2:39;
     then (Volume(M,Cvr0)).a <= (Ser Volume(M,Cvr0)).a by MEASURE7:2;
     then
 A38: SUM vol(M,Cvr0.a) <= (Ser Volume(M,Cvr0)).a by Def6;
-A39: m0 is Element of NAT by ORDINAL1:def 13;
-    then (Ser Volume(M,Cvr0)).a <= (Ser Volume(M,Cvr0)).m by A37,SUPINF_2:60;
+A39: m0 is Element of NAT by ORDINAL1:def 12;
+    then (Ser Volume(M,Cvr0)).a <= (Ser Volume(M,Cvr0)).m by A37,SUPINF_2:41;
     then
 A40: SUM vol(M,Cvr0.a) <= (Ser Volume(M,Cvr0)).m by A38,XXREAL_0:2;
     vol(M,Cvr0.a) is nonnegative by Th4;
-    then SUM vol(M,On Cvr0) <= SUM vol(M,Cvr0.a) by A35,A27,MEASURE7:12;
+    then SUM vol(M,On Cvr0) <= SUM vol(M,Cvr0.a) by A35,A27,MEASURE7:11;
     then
 A41: SUM vol(M,On Cvr0) <= (Ser Volume(M,Cvr0)).m by A40,XXREAL_0:2;
-    (Ser vol(M,On Cvr0)).(k+1) <= SUM vol(M,On Cvr0) by Th4,MEASURE7:7;
+    (Ser vol(M,On Cvr0)).(k+1) <= SUM vol(M,On Cvr0) by Th4,MEASURE7:6;
     then (Ser vol(M,On Cvr0)).(k+1) <= (Ser Volume(M,Cvr0)).m by A41,XXREAL_0:2
 ;
     then PSv0.(k+1) <= (Ser Volume(M,Cvr0)).m by Th1;
@@ -814,7 +814,7 @@ A41: SUM vol(M,On Cvr0) <= (Ser Volume(M,Cvr0)).m by A40,XXREAL_0:2;
 A42: PSv0.(k+1) <= (Partial_Sums Volume(M,Cvr0)).m by Th1;
     for s being Element of NAT holds 0. <= (Volume(M,Cvr1)).s by Th5;
     then
-A43: Volume(M,Cvr1) is nonnegative by SUPINF_2:58;
+A43: Volume(M,Cvr1) is nonnegative by SUPINF_2:39;
     then m0 <= m & Partial_Sums Volume(M,Cvr1) is non-decreasing by MESFUNC9:16
 ,NAT_1:11;
     then
@@ -889,7 +889,7 @@ A56:    SUM vol(M,Cvr0.n) = 0. by MEASURE7:1;
           hence thesis by A17,A55;
         end;
         then SUM vol(M,Cvr1.n) <= SUM vol(M,Cvr.n) & SUM vol(M,Cvr.n) <= SUM
-        vol(M,Cvr1.n ) by SUPINF_2:62;
+        vol(M,Cvr1.n ) by SUPINF_2:43;
         then SUM vol(M,Cvr.n) = SUM vol(M,Cvr1.n) by XXREAL_0:1;
         hence SUM vol(M,Cvr.n) = SUM vol(M,Cvr0.n) + SUM vol(M,Cvr1.n) by A56,
 XXREAL_3:4;
@@ -915,7 +915,7 @@ A59:    SUM vol(M,Cvr1.n) = 0 by MEASURE7:1;
           hence thesis by Def5;
         end;
         then SUM vol(M,Cvr.n) <= SUM vol(M,Cvr0.n) & SUM vol(M,Cvr0.n) <= SUM
-        vol(M,Cvr.n ) by SUPINF_2:62;
+        vol(M,Cvr.n ) by SUPINF_2:43;
         then SUM vol(M,Cvr.n) = SUM vol(M,Cvr0.n) by XXREAL_0:1;
         hence SUM vol(M,Cvr.n) = SUM vol(M,Cvr0.n) + SUM vol(M,Cvr1.n) by A59,
 XXREAL_3:4;
@@ -931,7 +931,7 @@ XXREAL_3:4;
       .= (Partial_Sums Volume(M,Cvr0)).m + (Ser Volume(M,Cvr1)).m by Th1
       .= (Partial_Sums Volume(M,Cvr0)).m + (Partial_Sums Volume(M,Cvr1)).m
     by Th1;
-    hence thesis by A42,A53,A52,XXREAL_3:38;
+    hence thesis by A42,A53,A52,XXREAL_3:36;
   end;
 A60: P[0]
   proof
@@ -939,7 +939,7 @@ A60: P[0]
     let Sets be SetSequence of X;
     let Cvr be Covering of Sets,F;
     for n being Element of NAT holds 0 <= (Volume(M,Cvr)).n by Th5;
-    then Volume(M,Cvr) is nonnegative by SUPINF_2:58;
+    then Volume(M,Cvr) is nonnegative by SUPINF_2:39;
     then (Volume(M,Cvr)).m <= (Ser Volume(M,Cvr)).m by MEASURE7:2;
     then
 A61: (Volume(M,Cvr)).m <= (Partial_Sums Volume(M,Cvr)).m by Th1;
@@ -969,7 +969,7 @@ proof
     let x be ext-real number;
     assume x in rng Ser vol(M,On Cvr);
     then consider n being Element of NAT such that
-A1: x = Ser(vol(M,On Cvr)).n by FUNCT_2:190;
+A1: x = Ser(vol(M,On Cvr)).n by FUNCT_2:113;
     consider m being Nat such that
 A2: for Sets being SetSequence of X holds for G be Covering of Sets,F
     holds (Partial_Sums vol(M,On G)).n <= (Partial_Sums Volume(M,G)).m by Th6;
@@ -983,8 +983,8 @@ A3: for Sets being SetSequence of X, G be Covering of Sets,F holds Ser(vol
       then Ser(vol(M,On G)).n <= (Partial_Sums Volume(M,G)).m by Th1;
       hence Ser(vol(M,On G)).n <= Ser(Volume(M,G)).m by Th1;
     end;
-    m in NAT by ORDINAL1:def 13;
-    hence thesis by A1,A3,FUNCT_2:6;
+    m in NAT by ORDINAL1:def 12;
+    hence thesis by A1,A3,FUNCT_2:4;
   end;
   then
 A4: SUM vol(M,On Cvr) <= SUM Volume(M,Cvr) by XXREAL_2:63;
@@ -997,26 +997,26 @@ theorem Th8:
   A in F implies (A,{}X) followed_by {}X is Covering of A,F
 proof
   reconsider Sets = (A,{}X) followed_by {}X as SetSequence of X;
-A1: Sets.0 = A by FUNCT_7:124;
-A2: Sets.1 = {}X by FUNCT_7:125;
+A1: Sets.0 = A by FUNCT_7:122;
+A2: Sets.1 = {}X by FUNCT_7:123;
   assume
 A3: A in F;
   for n be Nat holds Sets.n in F
   proof
     let n be Nat;
-    per cases by NAT_1:26;
+    per cases by NAT_1:25;
     suppose
       n = 0;
-      hence Sets.n in F by A3,FUNCT_7:124;
+      hence Sets.n in F by A3,FUNCT_7:122;
     end;
     suppose
       n = 1;
-      hence Sets.n in F by A2,PROB_1:10;
+      hence Sets.n in F by A2,PROB_1:4;
     end;
     suppose
       n > 1;
-      then Sets.n = {} by FUNCT_7:126;
-      hence Sets.n in F by PROB_1:10;
+      then Sets.n = {} by FUNCT_7:124;
+      hence Sets.n in F by PROB_1:4;
     end;
   end;
   then reconsider Sets as Set_Sequence of F by Def2;
@@ -1025,7 +1025,7 @@ A3: A in F;
     let x be set;
     dom Sets = NAT by FUNCT_2:def 1;
     then
-A4: Sets.0 in rng Sets by FUNCT_1:12;
+A4: Sets.0 in rng Sets by FUNCT_1:3;
     assume x in A;
     hence x in union rng Sets by A1,A4,TARSKI:def 4;
   end;
@@ -1044,14 +1044,14 @@ proof
 A1: A9 in F;
   then reconsider A = A9 as Subset of X;
   reconsider Aseq = (A,{}X) followed_by {}X as Set_Sequence of F by A1,Th8;
-A2: Aseq.1 = {}X by FUNCT_7:125;
-A3: Aseq.0 = A by FUNCT_7:124;
+A2: Aseq.1 = {}X by FUNCT_7:123;
+A3: Aseq.0 = A by FUNCT_7:122;
   A c= union rng Aseq
   proof
     let x be set;
     dom Aseq = NAT by FUNCT_2:def 1;
     then
-A4: Aseq.0 in rng Aseq by FUNCT_1:12;
+A4: Aseq.0 in rng Aseq by FUNCT_1:3;
     assume x in A;
     hence x in union rng Aseq by A3,A4,TARSKI:def 4;
   end;
@@ -1060,13 +1060,13 @@ A5: for n being Element of NAT st n <> 0 holds (vol(M,Aseq)).n = 0
   proof
     let n being Element of NAT;
     assume n <> 0;
-    then Aseq.n = {} by A2,FUNCT_7:126,NAT_1:26;
+    then Aseq.n = {} by A2,FUNCT_7:124,NAT_1:25;
     then (vol(M,Aseq)).n = M.{} by Def5;
     hence (vol(M,Aseq)).n = 0 by VALUED_0:def 19;
   end;
   then for n being Element of NAT st 1 <= n holds (vol(M,Aseq)).n = 0;
-  then SUM (vol(M,Aseq)) = Ser(vol(M,Aseq)).1 by Th4,SUPINF_2:67
-    .= (vol(M,Aseq)).0 by A5,MEASURE7:10;
+  then SUM (vol(M,Aseq)) = Ser(vol(M,Aseq)).1 by Th4,SUPINF_2:48
+    .= (vol(M,Aseq)).0 by A5,MEASURE7:9;
   then SUM vol(M,Aseq) = M.(Aseq.0) by Def5;
   then
 A6: M.A in Svc(M,A) by A3,Def7;
@@ -1083,7 +1083,7 @@ proof
     assume r in rng (C_Meas M);
     then consider A being set such that
 A1: A in bool X and
-A2: (C_Meas M).A = r by FUNCT_2:17;
+A2: (C_Meas M).A = r by FUNCT_2:11;
     reconsider A as Subset of X by A1;
     now
       let p be ext-real number;
@@ -1096,23 +1096,23 @@ A2: (C_Meas M).A = r by FUNCT_2:17;
     hence 0 <= r by A2,Def8;
   end;
   then for r being R_eal holds r in rng C_Meas M implies 0 <= r;
-  then rng C_Meas M is nonnegative by SUPINF_2:def 15;
-  hence C_Meas M is nonnegative by SUPINF_2:def 22;
+  then rng C_Meas M is nonnegative by SUPINF_2:def 9;
+  hence C_Meas M is nonnegative by SUPINF_2:def 16;
 end;
 
 theorem Th11:
   (C_Meas M).{} = 0
 proof
-  (C_Meas M).{} <= M.{} by Th9,PROB_1:10;
+  (C_Meas M).{} <= M.{} by Th9,PROB_1:4;
   then
 A1: (C_Meas M).{} <= 0 by VALUED_0:def 19;
   {}X in bool X;
   then {} in dom(C_Meas M) by FUNCT_2:def 1;
   then
-A2: (C_Meas M).{} in rng C_Meas M by FUNCT_1:12;
+A2: (C_Meas M).{} in rng C_Meas M by FUNCT_1:3;
   C_Meas M is nonnegative by Th10;
-  then rng C_Meas M is nonnegative by SUPINF_2:def 22;
-  hence (C_Meas M).{} = 0. by A1,A2,SUPINF_2:def 15;
+  then rng C_Meas M is nonnegative by SUPINF_2:def 16;
+  hence (C_Meas M).{} = 0. by A1,A2,SUPINF_2:def 9;
 end;
 
 theorem Th12:
@@ -1143,11 +1143,11 @@ proof
   assume ex n be Nat st (C_Meas M).(Sets.n) = +infty;
   then consider N being Nat such that
 A1: (C_Meas M).(Sets.N) = +infty;
-  reconsider N as Element of NAT by ORDINAL1:def 13;
-A2: (C_Meas M)*Sets is nonnegative by Th10,MEASURE1:54;
+  reconsider N as Element of NAT by ORDINAL1:def 12;
+A2: (C_Meas M)*Sets is nonnegative by Th10,MEASURE1:25;
   dom Sets = NAT by FUNCT_2:def 1;
-  then ((C_Meas M)*Sets).N = (C_Meas M).(Sets.N) by FUNCT_1:23;
-  then SUM((C_Meas M)*Sets) = +infty by A1,A2,SUPINF_2:64;
+  then ((C_Meas M)*Sets).N = (C_Meas M).(Sets.N) by FUNCT_1:13;
+  then SUM((C_Meas M)*Sets) = +infty by A1,A2,SUPINF_2:45;
   hence (C_Meas M).(union rng Sets) <= SUM((C_Meas M)*Sets) by XXREAL_0:3;
 end;
 
@@ -1160,22 +1160,22 @@ A2: for n being Element of NAT holds Svc(M,Sets.n) <> {+infty};
     inf Svc(M,union rng Sets) <= sup rng Ser((C_Meas M)*Sets)
     proof
       set y = inf Svc(M,union rng Sets), x = sup rng Ser((C_Meas M)*Sets);
-A3:   Ser((C_Meas M)*Sets).0 <= x by FUNCT_2:6,XXREAL_2:4;
-A4:   (C_Meas M)*Sets is nonnegative by Th10,MEASURE1:54;
-      then 0 <= ((C_Meas M)*Sets).0 by SUPINF_2:58;
+A3:   Ser((C_Meas M)*Sets).0 <= x by FUNCT_2:4,XXREAL_2:4;
+A4:   (C_Meas M)*Sets is nonnegative by Th10,MEASURE1:25;
+      then 0 <= ((C_Meas M)*Sets).0 by SUPINF_2:39;
       then
-A5:   0 <= Ser((C_Meas M)*Sets).0 by SUPINF_2:63;
+A5:   0 <= Ser((C_Meas M)*Sets).0 by SUPINF_2:44;
       assume not inf Svc(M,union rng Sets) <= sup rng Ser((C_Meas M)*Sets);
       then consider eps being real number such that
 A6:   0 < eps and
-A7:   x + eps < y by A5,A3,XXREAL_3:55;
+A7:   x + eps < y by A5,A3,XXREAL_3:49;
       eps in ExtREAL by XXREAL_0:def 1;
       then consider E being Function of NAT,ExtREAL such that
 A8:   for n being Element of NAT holds 0 < E.n and
-A9:   SUM E < eps by A6,MEASURE6:31;
+A9:   SUM E < eps by A6,MEASURE6:4;
       for n being Element of NAT holds 0 <= E.n by A8;
       then
-A10:  E is nonnegative by SUPINF_2:58;
+A10:  E is nonnegative by SUPINF_2:39;
       defpred P[Element of NAT,set] means ex F0 being Covering of Sets.$1,F st
       $2 = F0 & SUM vol(M,F0) < inf Svc(M,Sets.$1) + E.$1;
 A11:  for n being Element of NAT holds ex F0 being Element of Funcs(NAT,
@@ -1185,9 +1185,9 @@ A11:  for n being Element of NAT holds ex F0 being Element of Funcs(NAT,
         C_Meas M is nonnegative & (C_Meas M).(Sets.n) = inf Svc(M,Sets.n)
         by Def8,Th10;
         then
-A12:    0 is Real & 0. <= inf Svc(M,Sets.n) by SUPINF_2:70;
+A12:    0 is Real & 0. <= inf Svc(M,Sets.n) by SUPINF_2:51;
         Svc(M,Sets.n) <> {+infty} by A2;
-        then not Svc(M,Sets.n) c= {+infty} by ZFMISC_1:39;
+        then not Svc(M,Sets.n) c= {+infty} by ZFMISC_1:33;
         then Svc(M,Sets.n) \ {+infty} <> {} by XBOOLE_1:37;
         then consider x being set such that
 A13:    x in Svc(M,Sets.n) \ {+infty} by XBOOLE_0:def 1;
@@ -1201,10 +1201,10 @@ A14:    x <> +infty by TARSKI:def 1;
         then inf Svc(M,Sets.n) is Real by A12,XXREAL_0:46;
         then consider S1 being ext-real number such that
 A15:    S1 in Svc(M,Sets.n) and
-A16:    S1 < inf Svc(M,Sets.n) + E.n by A8,MEASURE6:32;
+A16:    S1 < inf Svc(M,Sets.n) + E.n by A8,MEASURE6:5;
         consider FS being Covering of Sets.n,F such that
 A17:    S1 = SUM vol(M,FS) by A15,Def7;
-        reconsider FS as Element of Funcs(NAT,bool X) by FUNCT_2:11;
+        reconsider FS as Element of Funcs(NAT,bool X) by FUNCT_2:8;
         take FS;
         thus thesis by A16,A17;
       end;
@@ -1214,7 +1214,7 @@ A18:  for n being Element of NAT holds P[n,FF.n] from FUNCT_2:sch 3(
 A19:  for n being Nat holds FF.n is Covering of Sets.n,F
       proof
         let n be Nat;
-        n in NAT by ORDINAL1:def 13;
+        n in NAT by ORDINAL1:def 12;
         then ex F0 being Covering of Sets.n,F st F0 = FF.n & SUM vol(M,F0) <
         inf Svc(M,Sets.n) + E.n by A18;
         hence thesis;
@@ -1231,20 +1231,20 @@ A21:  for n being Element of NAT holds G0.n = F(n) from FUNCT_2:sch 9
         let n be Element of NAT;
         (ex F0 being Covering of Sets.n,F st F0 = FF.n & SUM vol( M,F0) <
 inf Svc(M, Sets.n) + E.n )& ((C_Meas M)*Sets).n = (C_Meas M).(Sets.n) by A18,
-FUNCT_2:21;
+FUNCT_2:15;
         then SUM vol(M,FF.n) < ((C_Meas M)*Sets).n + E.n by Def8;
         then (Volume(M,FF)).n < ((C_Meas M)*Sets).n + E.n by Def6;
         hence thesis by A21;
       end;
       then
-A22:  SUM Volume(M,FF) <= SUM G0 by SUPINF_2:62;
+A22:  SUM Volume(M,FF) <= SUM G0 by SUPINF_2:43;
 A23:  now
         let n be Nat;
-        n is Element of NAT by ORDINAL1:def 13;
+        n is Element of NAT by ORDINAL1:def 12;
         hence G0.n = ((C_Meas M)*Sets).n + E.n by A21;
       end;
       SUM((C_Meas M)*Sets) + SUM(E) <= SUM((C_Meas M)*Sets) + eps by A9,
-XXREAL_3:38;
+XXREAL_3:36;
       then SUM G0 <= SUM((C_Meas M)*Sets) + eps by A4,A10,A23,Th3;
       then
 A24:  SUM Volume(M,FF) <= SUM((C_Meas M)*Sets) + eps by A22,XXREAL_0:2;
@@ -1273,7 +1273,7 @@ A1: C_Meas M is zeroed by VALUED_0:def 19;
   C_Meas M is nonnegative & for A,B being Subset of X st A c= B holds (
 C_Meas M ).A <= (C_Meas M).B & for F being Function of NAT,bool X holds (C_Meas
   M).( union rng F) <= SUM((C_Meas M)*F) by Th10,Th12,Th13;
-  hence thesis by A1,MEASURE4:def 2;
+  hence thesis by A1,MEASURE4:def 1;
 end;
 
 definition
@@ -1306,7 +1306,7 @@ A1: for k be Nat st P[k] holds P[k+1]
 A2: (Partial_Union FSets).(k+1) = (Partial_Union FSets).k \/ FSets.(k+1)
     by PROB_3:def 2;
     assume P[k];
-    hence P[k+1] by A2,PROB_1:9;
+    hence P[k+1] by A2,PROB_1:3;
   end;
   (Partial_Union FSets).0 = FSets.0 by PROB_3:def 2;
   then
@@ -1328,7 +1328,7 @@ A1: for k be Nat st P[k] holds P[k+1]
 A2: (Partial_Union FSets).k in F by Def2;
     (Partial_Diff_Union FSets).(k+1) = FSets.(k+1) \ (Partial_Union FSets)
     .k by PROB_3:def 3;
-    hence P[k+1] by A2,PROB_1:12;
+    hence P[k+1] by A2,PROB_1:6;
   end;
   (Partial_Diff_Union FSets).0 = FSets.0 by PROB_3:def 3;
   then
@@ -1352,7 +1352,7 @@ A2: A in F;
     assume y in rng FSets;
     then consider x be set such that
 A3: x in NAT and
-A4: FSets.x = y by FUNCT_2:17;
+A4: FSets.x = y by FUNCT_2:11;
     reconsider n = x as Element of NAT by A3;
 A5: FSets.n = (Partial_Diff_Union CA).n /\ A by A1;
     Partial_Diff_Union CA is Set_Sequence of F by Th16;
@@ -1360,21 +1360,20 @@ A5: FSets.n = (Partial_Diff_Union CA).n /\ A by A1;
     hence y in F by A2,A4,A5,FINSUB_1:def 2;
   end;
   then rng FSets c= F by TARSKI:def 3;
-  then reconsider FSets as Function of NAT,F by FUNCT_2:8;
+  then reconsider FSets as Function of NAT,F by FUNCT_2:6;
   for m,n be Nat st m <> n holds FSets.m misses FSets.n
   proof
     let m,n be Nat;
-A6: Partial_Diff_Union CA is disjoint_valued by PROB_3:24;
-    n in NAT by ORDINAL1:def 13;
+    n in NAT by ORDINAL1:def 12;
     then FSets.n = (Partial_Diff_Union CA).n /\ A by A1;
     then
 A7: FSets.n c= (Partial_Diff_Union CA).n by XBOOLE_1:17;
-    m in NAT by ORDINAL1:def 13;
+    m in NAT by ORDINAL1:def 12;
     then FSets.m = (Partial_Diff_Union CA).m /\ A by A1;
     then
 A8: FSets.m c= (Partial_Diff_Union CA).m by XBOOLE_1:17;
     assume m <> n;
-    then (Partial_Diff_Union CA).m misses (Partial_Diff_Union CA).n by A6,
+    then (Partial_Diff_Union CA).m misses (Partial_Diff_Union CA).n by
 PROB_3:def 4;
     hence thesis by A8,A7,XBOOLE_1:64;
   end;
@@ -1386,19 +1385,19 @@ A9: x in A;
     A c= union rng CA by Def3;
     then x in union rng CA by A9;
     then x in Union CA by CARD_3:def 4;
-    then x in Union Partial_Diff_Union CA by PROB_3:23;
+    then x in Union Partial_Diff_Union CA by PROB_3:20;
     then x in union rng Partial_Diff_Union CA by CARD_3:def 4;
     then consider E be set such that
 A10: x in E and
 A11: E in rng Partial_Diff_Union CA by TARSKI:def 4;
     consider n be set such that
 A12: n in NAT and
-A13: (Partial_Diff_Union CA).n = E by A11,FUNCT_2:17;
+A13: (Partial_Diff_Union CA).n = E by A11,FUNCT_2:11;
     reconsider n as Element of NAT by A12;
     x in (Partial_Diff_Union CA).n /\ A by A9,A10,A13,XBOOLE_0:def 4;
     then
 A14: x in FSets.n by A1;
-    FSets.n in rng FSets by FUNCT_2:6;
+    FSets.n in rng FSets by FUNCT_2:4;
     hence x in union rng FSets by A14,TARSKI:def 4;
   end;
   then
@@ -1412,7 +1411,7 @@ A16: x in E and
 A17: E in rng FSets by TARSKI:def 4;
     consider n be set such that
 A18: n in NAT and
-A19: FSets.n = E by A17,FUNCT_2:17;
+A19: FSets.n = E by A17,FUNCT_2:11;
     reconsider n as Element of NAT by A18;
     x in (Partial_Diff_Union CA).n /\ A by A1,A16,A19;
     hence x in A by XBOOLE_0:def 4;
@@ -1421,11 +1420,11 @@ A19: FSets.n = E by A17,FUNCT_2:17;
   hence A = union rng FSets by A15,XBOOLE_0:def 10;
   hereby
     let n be Nat;
-    n in NAT by ORDINAL1:def 13;
+    n in NAT by ORDINAL1:def 12;
     then FSets.n = (Partial_Diff_Union CA).n /\ A by A1;
     then
 A20: FSets.n c= (Partial_Diff_Union CA).n by XBOOLE_1:17;
-    (Partial_Diff_Union CA).n c= CA.n by PROB_3:20;
+    (Partial_Diff_Union CA).n c= CA.n by PROB_3:17;
     hence FSets.n c= CA.n by A20,XBOOLE_1:1;
   end;
 end;
@@ -1452,11 +1451,11 @@ A5: for n be Nat holds Bseq.n c= Aseq.n by A2,Th17;
     for n being Element of NAT holds (M*Bseq).n <= (vol(M,Aseq)).n
     proof
       let n be Element of NAT;
-      M.(Bseq.n) <= M.(Aseq.n) by A5,MEASURE1:25;
-      then (M*Bseq).n <= M.(Aseq.n) by FUNCT_2:21;
+      M.(Bseq.n) <= M.(Aseq.n) by A5,MEASURE1:8;
+      then (M*Bseq).n <= M.(Aseq.n) by FUNCT_2:15;
       hence thesis by Def5;
     end;
-    then SUM(M*Bseq) <= SUM vol(M,Aseq) by SUPINF_2:62;
+    then SUM(M*Bseq) <= SUM vol(M,Aseq) by SUPINF_2:43;
     hence M.A <= x by A1,A2,A3,A4,Def11;
   end;
   then M.A is LowerBound of Svc(M,A9) by XXREAL_2:def 2;
@@ -1496,7 +1495,7 @@ A5: Y /\ (X \ A) = (Y /\ X) \ A by XBOOLE_1:49
       .= W \/ {} by A4,XBOOLE_0:def 7;
     hence thesis by A1,A5;
   end;
-  hence A in sigma_Field C by MEASURE4:def 3;
+  hence A in sigma_Field C by MEASURE4:def 2;
 end;
 
 theorem Th20:
@@ -1524,7 +1523,7 @@ A3:     for n be Element of NAT holds Bseq.n = F1(n) from FUNCT_2:sch
         for n be Nat holds Bseq.n in F
         proof
           let n be Nat;
-          n in NAT by ORDINAL1:def 13;
+          n in NAT by ORDINAL1:def 12;
           then Bseq.n = seq.n /\ E by A3;
           hence Bseq.n in F by A1,FINSUB_1:def 2;
         end;
@@ -1538,7 +1537,7 @@ A5:       x in A;
           then consider B be set such that
 A6:       x in B and
 A7:       B in rng seq by A5,TARSKI:def 4;
-          ex n be Element of NAT st B = seq.n by A7,FUNCT_2:190;
+          ex n be Element of NAT st B = seq.n by A7,FUNCT_2:113;
           hence thesis by A6;
         end;
         now
@@ -1552,7 +1551,7 @@ A9:       x in seq.n by A4;
           then x in seq.n /\ E by A9,XBOOLE_0:def 4;
           then
 A10:      x in Bseq.n by A3;
-          Bseq.n in rng Bseq by FUNCT_2:6;
+          Bseq.n in rng Bseq by FUNCT_2:4;
           hence x in union rng Bseq by A10,TARSKI:def 4;
         end;
         then A /\ E9 c= union rng Bseq by TARSKI:def 3;
@@ -1565,10 +1564,10 @@ A11:    for n be Element of NAT holds Cseq.n = F2(n) from FUNCT_2:sch
         for n be Nat holds Cseq.n in F
         proof
           let n be Nat;
-          X in F by PROB_1:11;
+          X in F by PROB_1:5;
           then
-A12:      X \ E in F by A1,PROB_1:12;
-          n in NAT by ORDINAL1:def 13;
+A12:      X \ E in F by A1,PROB_1:6;
+          n in NAT by ORDINAL1:def 12;
           then Cseq.n = seq.n /\ (X \ E) by A11;
           hence Cseq.n in F by A12,FINSUB_1:def 2;
         end;
@@ -1584,7 +1583,7 @@ A14:      x in seq.n by A4;
           then x in seq.n /\ (X \ E) by A14,XBOOLE_0:def 4;
           then
 A15:      x in Cseq.n by A11;
-          Cseq.n in rng Cseq by FUNCT_2:6;
+          Cseq.n in rng Cseq by FUNCT_2:4;
           hence x in union rng Cseq by A15,TARSKI:def 4;
         end;
         then A /\ (X \ E9) c= union rng Cseq by TARSKI:def 3;
@@ -1594,7 +1593,7 @@ A16:    for n be Nat holds (vol(M,seq)).n = (vol(M,Bseq)).n + (vol(M,Cseq )).n
           let n be Nat;
 A17:      M.(seq.n) = (vol(M,seq)).n & M.(Bseq.n) = (vol(M,Bseq)).n by Def5;
 A18:      M.(Cseq.n) = (vol(M,Cseq)).n by Def5;
-          n is Element of NAT by ORDINAL1:def 13;
+          n is Element of NAT by ORDINAL1:def 12;
           then
 A19:      Bseq.n = seq.n /\ E & Cseq.n = seq.n /\ (X \ E) by A3,A11;
           then Bseq.n \/ Cseq.n = seq.n /\ (E \/ (X \ E)) by XBOOLE_1:23;
@@ -1604,7 +1603,7 @@ A19:      Bseq.n = seq.n /\ E & Cseq.n = seq.n /\ (X \ E) by A3,A11;
 A20:      Bseq.n \/ Cseq.n = seq.n by XBOOLE_1:28;
           Bseq.n misses Cseq.n by A19,XBOOLE_1:76,79;
           hence (vol(M,seq)).n = (vol(M,Bseq)).n + (vol(M,Cseq)).n by A20,A17
-,A18,MEASURE1:def 5;
+,A18,MEASURE1:def 3;
         end;
         (C_Meas M).(A /\ (X \ E9)) = inf Svc(M,A /\ (X \ E9)) & SUM vol(M
         ,Cseq) in Svc(M,A /\ (X \ E9)) by Def7,Def8;
@@ -1617,7 +1616,7 @@ A22:    (C_Meas M).(A /\ E9) <= SUM vol(M,Bseq) by XXREAL_2:3;
         vol(M,Bseq) is nonnegative & vol(M,Cseq) is nonnegative by Th4;
         then SUM vol(M,seq) = SUM vol(M,Bseq) + SUM vol(M,Cseq) by A16,Th3;
         hence (C_Meas M).(A /\ E9) + (C_Meas M).(A /\ (X \ E9)) <= SUM vol(M,
-        seq) by A22,A21,XXREAL_3:38;
+        seq) by A22,A21,XXREAL_3:36;
       end;
       for r be ext-real number holds r in Svc(M,A) implies CA <= r
       proof
@@ -1635,9 +1634,6 @@ A22:    (C_Meas M).(A /\ E9) <= SUM vol(M,Bseq) by XXREAL_2:3;
   hence thesis by TARSKI:def 3;
 end;
 
-
-
-
 theorem Th21:
   for X be set, F be Field_Subset of X, FSets be Set_Sequence of F
   , M be Function of F,ExtREAL holds M * FSets is ExtREAL_sequence
@@ -1649,12 +1645,12 @@ proof
   now
     let y be set;
     assume y in rng FSets;
-    then ex x be set st x in NAT & FSets.x = y by FUNCT_2:17;
+    then ex x be set st x in NAT & FSets.x = y by FUNCT_2:11;
     hence y in F by Def2;
   end;
   then rng FSets c= F by TARSKI:def 3;
   then rng FSets c= dom M by FUNCT_2:def 1;
-  then dom(M * FSets) = dom FSets by RELAT_1:46;
+  then dom(M * FSets) = dom FSets by RELAT_1:27;
   then dom(M * FSets) = NAT by FUNCT_2:def 1;
   hence thesis by FUNCT_2:def 1;
 end;
@@ -1678,7 +1674,7 @@ proof
   let M be Function of S,ExtREAL;
   rng SSets c= S by RELAT_1:def 19;
   then rng SSets c= dom M by FUNCT_2:def 1;
-  then dom(M * SSets) = dom SSets by RELAT_1:46;
+  then dom(M * SSets) = dom SSets by RELAT_1:27;
   then dom(M * SSets) = NAT by FUNCT_2:def 1;
   hence thesis by FUNCT_2:def 1;
 end;
@@ -1705,7 +1701,7 @@ A1: for m being Nat st m <= n holds F.m <= G.m;
 A2: for k being Nat st P[k] holds P[k+1]
   proof
     let k be Nat;
-A3: k is Element of NAT by ORDINAL1:def 13;
+A3: k is Element of NAT by ORDINAL1:def 12;
     assume
 A4: P[k];
     now
@@ -1718,14 +1714,14 @@ A6:   now
         hence F.m <= G.m by A5;
       end;
       F.(k+1) <= G.(k+1) by A5;
-      then (Ser F).k + F.(k+1) <= (Ser G).k + G.(k+1) by A4,A6,XXREAL_3:38;
-      then (Ser F).(k+1) <= (Ser G).k + G.(k+1) by A3,SUPINF_2:63;
-      hence (Ser F).(k+1) <= (Ser G).(k+1) by A3,SUPINF_2:63;
+      then (Ser F).k + F.(k+1) <= (Ser G).k + G.(k+1) by A4,A6,XXREAL_3:36;
+      then (Ser F).(k+1) <= (Ser G).k + G.(k+1) by A3,SUPINF_2:44;
+      hence (Ser F).(k+1) <= (Ser G).(k+1) by A3,SUPINF_2:44;
     end;
     hence P[k+1];
   end;
   now
-A7: (Ser F).0 = F.0 & (Ser G).0 = G.0 by SUPINF_2:63;
+A7: (Ser F).0 = F.0 & (Ser G).0 = G.0 by SUPINF_2:44;
     assume for m being Nat st m <= 0 holds F.m <= G.m;
     hence (Ser F).0 <= (Ser G).0 by A7;
   end;
@@ -1742,7 +1738,7 @@ proof
   let X,C;
   let seq be Sep_Sequence of sigma_Field C;
 A1: rng seq c= sigma_Field C by RELAT_1:def 19;
-  then reconsider seq1 = seq as Function of NAT,bool X by FUNCT_2:8;
+  then reconsider seq1 = seq as Function of NAT,bool X by FUNCT_2:6;
 A2: for A being Subset of X, n being Element of NAT holds (Ser(C*(A (/\) seq1
   ))).n + C.(A /\ (X \ union rng seq)) <= C.A
   proof
@@ -1762,10 +1758,10 @@ A6:     C.(A /\ (X \ seq1.(k+1))) >= (Ser(C*( (A /\ (X \ seq1.(k+1)))
         (X \ seq1.(k+1))) (/\) seq1)).m
         proof
           let m be Nat;
-          reconsider m1 = m as Element of NAT by ORDINAL1:def 13;
+          reconsider m1 = m as Element of NAT by ORDINAL1:def 12;
           assume m <= k;
           then m < k+1 by NAT_1:13;
-          then seq1.m misses seq1.(k+1) by PROB_2:def 3;
+          then seq1.m misses seq1.(k+1) by PROB_2:def 2;
           then
 A7:       seq1.m /\ (X \ seq1.(k+1)) = seq1.m by XBOOLE_1:28,86;
           ((A /\ (X \ seq1.(k+1))) (/\) seq1).m = (A /\ (X \ seq1.(k+1)))
@@ -1775,20 +1771,20 @@ A7:       seq1.m /\ (X \ seq1.(k+1)) = seq1.m by XBOOLE_1:28,86;
 SETLIM_2:def 5;
           then
           (C*( (A /\ (X \ seq1.(k+1))) (/\) seq1)).m1 = C.((A (/\) seq1).
-          m1) by FUNCT_2:21;
-          hence thesis by FUNCT_2:21;
+          m1) by FUNCT_2:15;
+          hence thesis by FUNCT_2:15;
         end;
         then
 A8:     Ser(C*(A (/\) seq1)).k <= Ser(C*( (A /\ (X \ seq1.(k+1))) (/\)
         seq1)).k by Th23;
-        seq1.(k+1) c= union rng seq by FUNCT_2:6,ZFMISC_1:92;
+        seq1.(k+1) c= union rng seq by FUNCT_2:4,ZFMISC_1:74;
         then (X \ seq1.(k+1)) /\ (X \ union rng seq) = X \ union rng seq by
 XBOOLE_1:28,34;
         then (A /\ (X \ seq1.(k+1))) /\ (X \ union rng seq) = A /\ (X \ union
         rng seq) by XBOOLE_1:16;
         then (Ser(C*( (A /\ (X \ seq1.(k+1))) (/\) seq1))).k + C.( (A /\ (X \
 seq1.(k+1))) /\ (X \ union rng seq)) >= Ser(C*(A (/\) seq1)).k + C.(A /\ (X \
-        union rng seq)) by A8,XXREAL_3:38;
+        union rng seq)) by A8,XXREAL_3:36;
         hence
         C.(A /\ (X \ seq1.(k+1))) >= (Ser(C*(A (/\) seq1))).k + C.(A /\ (
         X \ union rng seq)) by A6,XXREAL_0:2;
@@ -1801,31 +1797,31 @@ A9:   C.(A \ seq1.(k+1)) >= (Ser(C*(A (/\) seq1))).k + C.(A /\ (X \ union
       rng seq)) by A5;
 A10:  A \ seq1.(k+1) c= X \ seq1.(k+1) by XBOOLE_1:33;
 A11:  A \/ (A \ seq1.(k+1)) = A by XBOOLE_1:12,36;
-      seq1.(k+1) in rng seq & A /\ seq1.(k+1) c= seq1.(k+1) by FUNCT_2:6
+      seq1.(k+1) in rng seq & A /\ seq1.(k+1) c= seq1.(k+1) by FUNCT_2:4
 ,XBOOLE_1:17;
       then C.(A /\ seq1.(k+1)) + C.(A \ seq1.(k+1)) = C.((A /\ seq1.(k+1)) \/
-      (A \ seq1.(k+1))) by A1,A10,MEASURE4:14
+      (A \ seq1.(k+1))) by A1,A10,MEASURE4:5
         .= C.((A \/ (A \ seq1.(k+1))) /\ (seq1.(k+1) \/ (A \ seq1.(k+1))))
       by XBOOLE_1:24
         .= C.((A \/ (A \ seq1.(k+1))) /\ (seq1.(k+1) \/A)) by XBOOLE_1:39;
       then C.(A /\ seq1.(k+1)) + C.(A \ seq1.(k+1)) = C.A by A11,XBOOLE_1:7,28;
       then
 A12:  C.A >= (Ser(C*(A (/\) seq1))).k + C.(A /\ (X \ union rng seq)) + C.
-      (A /\ seq1.(k+1)) by A9,XXREAL_3:38;
+      (A /\ seq1.(k+1)) by A9,XXREAL_3:36;
 A13:  (Ser(C*(A (/\) seq1))).k + C.(A /\ seq1.(k+1)) = (Ser(C*(A (/\)
       seq1))).k + C.((A (/\) seq1).(k+1)) by SETLIM_2:def 5
-        .= (Ser(C*(A (/\) seq1))).k + (C*(A (/\) seq1)).(k+1) by FUNCT_2:21
-        .= (Ser(C*(A (/\) seq1))).(k+1) by SUPINF_2:63;
-A14:  C is nonnegative by MEASURE4:def 2;
+        .= (Ser(C*(A (/\) seq1))).k + (C*(A (/\) seq1)).(k+1) by FUNCT_2:15
+        .= (Ser(C*(A (/\) seq1))).(k+1) by SUPINF_2:44;
+A14:  C is nonnegative by MEASURE4:def 1;
       then
-A15:  C*(A(/\)seq1) is nonnegative by MEASURE1:54;
-      then (C*(A(/\)seq1)).k >= 0 by SUPINF_2:70;
+A15:  C*(A(/\)seq1) is nonnegative by MEASURE1:25;
+      then (C*(A(/\)seq1)).k >= 0 by SUPINF_2:51;
       then
 A16:  (Ser(C*(A(/\)seq1))).k > -infty by A15,MEASURE7:2;
       C.(A /\ (X \ union rng seq)) > -infty & C.(A /\ seq1.(k+1)) >
-      -infty by A14,SUPINF_2:70;
+      -infty by A14,SUPINF_2:51;
       hence C.A >= (Ser(C*(A (/\) seq1))).(k+1) + C.(A /\ (X \ union rng seq))
-      by A16,A12,A13,XXREAL_3:30;
+      by A16,A12,A13,XXREAL_3:29;
     end;
 A17: seq.0 in sigma_Field C;
     now
@@ -1833,7 +1829,7 @@ A17: seq.0 in sigma_Field C;
       A /\ seq1.0 c= seq1.0 & A /\ (X \ seq1.0) c= X \ seq1.0 by XBOOLE_1:17;
       then
 A18:  C.(A /\ seq1.0) + C.(A /\ (X \ seq1.0)) = C.((A /\ seq1.0) \/ (A /\
-      (X \ seq1.0))) by A17,MEASURE4:14
+      (X \ seq1.0))) by A17,MEASURE4:5
         .= C.((A /\ seq1.0) \/ ((A /\ X) \ seq1.0)) by XBOOLE_1:49
         .= C.((A /\ seq1.0) \/ (A \ seq1.0)) by XBOOLE_1:28
         .= C.A by XBOOLE_1:51;
@@ -1842,12 +1838,12 @@ A18:  C.(A /\ seq1.0) + C.(A /\ (X \ seq1.0)) = C.((A /\ seq1.0) \/ (A /\
       then X \ union rng seq c= X \ seq.0 by XBOOLE_1:34;
       then A /\ (X \ union rng seq) c= A /\ (X \ seq.0) by XBOOLE_1:26;
       then
-A19:  C.(A /\ (X \ union rng seq)) <= C.(A /\ (X \ seq.0)) by MEASURE4:def 2;
-      (Ser(C*(A (/\) seq1))).0 = (C*(A (/\) seq1)).0 by SUPINF_2:63
-        .= C.((A (/\) seq1).0) by FUNCT_2:21
+A19:  C.(A /\ (X \ union rng seq)) <= C.(A /\ (X \ seq.0)) by MEASURE4:def 1;
+      (Ser(C*(A (/\) seq1))).0 = (C*(A (/\) seq1)).0 by SUPINF_2:44
+        .= C.((A (/\) seq1).0) by FUNCT_2:15
         .= C.(A /\ seq1.0) by SETLIM_2:def 5;
       hence C.A >= (Ser(C*(A (/\) seq1))).0 + C.(A /\ (X \ union rng seq)) by
-A18,A19,XXREAL_3:38;
+A18,A19,XXREAL_3:36;
     end;
     then
 A20: P[0];
@@ -1858,10 +1854,10 @@ A21: for A being Subset of X holds SUM(C*(A(/\)seq1)) + C.(A /\ (X \ union
   rng seq)) <= C.A & C.(A /\ Union seq1) <= SUM(C*(A(/\)seq1))
   proof
     let A be Subset of X;
-A22: C is nonnegative by MEASURE4:def 2;
+A22: C is nonnegative by MEASURE4:def 1;
     then
-A23: C*(A(/\)seq1) is nonnegative by MEASURE1:54;
-A24: C.(A /\ (X \ union rng seq)) > -infty by A22,SUPINF_2:70;
+A23: C*(A(/\)seq1) is nonnegative by MEASURE1:25;
+A24: C.(A /\ (X \ union rng seq)) > -infty by A22,SUPINF_2:51;
     not(C.A = +infty & C.(A /\ (X \ union rng seq)) = +infty) implies SUM
     (C*(A(/\)seq1)) + C.(A /\ (X \ union rng seq)) <= C.A
     proof
@@ -1874,15 +1870,15 @@ A25:  not(C.A = +infty & C.(A /\ (X \ union rng seq)) = +infty);
         assume x in rng Ser(C*(A(/\)seq1));
         then consider i be set such that
 A26:    i in NAT and
-A27:    Ser(C*(A(/\)seq1)).i = x by FUNCT_2:17;
+A27:    Ser(C*(A(/\)seq1)).i = x by FUNCT_2:11;
         reconsider i as Element of NAT by A26;
-        (C*(A(/\)seq1)).i >= 0 by A23,SUPINF_2:70;
+        (C*(A(/\)seq1)).i >= 0 by A23,SUPINF_2:51;
         then
 A28:    x > -infty by A23,A27,MEASURE7:2;
         C.(A /\ (X \ union rng seq)) > -infty & Ser(C*(A(/\)seq1)).i + C.
-        (A /\ (X \ union rng seq)) <= C.A by A2,A22,SUPINF_2:70;
+        (A /\ (X \ union rng seq)) <= C.A by A2,A22,SUPINF_2:51;
         hence x <= C.A - C.(A /\ (X \ union rng seq)) by A25,A27,A28,
-XXREAL_3:67;
+XXREAL_3:56;
       end;
       then C.A - C.(A /\ (X \ union rng seq)) is UpperBound of rng Ser(C*(A
       (/\)seq1)) by XXREAL_2:def 1;
@@ -1892,11 +1888,11 @@ XXREAL_2:def 3;
       SUM(C*(A(/\)seq1)) >= 0 by A23,MEASURE6:2;
       hence
       SUM(C*(A(/\)seq1)) + C.(A /\ (X \ union rng seq)) <= C.A by A24,A29,
-XXREAL_3:66;
+XXREAL_3:55;
     end;
     hence SUM(C*(A(/\)seq1)) + C.(A /\ (X \ union rng seq)) <= C.A by
 XXREAL_0:3;
-    C.(union rng (A(/\)seq1)) <= SUM(C*(A(/\)seq1)) by MEASURE4:def 2;
+    C.(union rng (A(/\)seq1)) <= SUM(C*(A(/\)seq1)) by MEASURE4:def 1;
     then C.(Union (A (/\) seq1)) <= SUM(C*(A(/\)seq1)) by CARD_3:def 4;
     hence C.(A /\ Union seq1) <= SUM(C*(A(/\)seq1)) by SETLIM_2:38;
   end;
@@ -1925,17 +1921,17 @@ A36: Z /\ Union seq1 = {} by A34;
     then C.W <= SUM(C*(A(/\)seq1)) by A21,A36;
     then
 A37: C.W + C.Z <= SUM(C*(A(/\)seq1)) + C.(A /\ (X \ union rng seq)) by A35,
-XXREAL_3:38;
+XXREAL_3:36;
     SUM(C*(A(/\)seq1)) + C.(A /\ (X \ union rng seq)) <= C.A by A21;
     hence C.W + C.Z <= C.(W \/ Z) by A37,XXREAL_0:2;
   end;
-  then Union seq1 in sigma_Field(C) by MEASURE4:def 3;
+  then Union seq1 in sigma_Field(C) by MEASURE4:def 2;
   hence union rng seq in sigma_Field(C) by CARD_3:def 4;
   set Sseq = Ser(C*seq1);
   union rng seq misses X \ union rng seq by XBOOLE_1:79;
   then
 A38: union rng seq /\ (X \ union rng seq) = {} by XBOOLE_0:def 7;
-  C is zeroed by MEASURE4:def 2;
+  C is zeroed by MEASURE4:def 1;
   then
 A39: C.(union rng seq /\ (X \ union rng seq)) = 0 by A38,VALUED_0:def 19;
   for n be set st n in NAT holds (union rng seq(/\)seq1).n = seq.n
@@ -1943,17 +1939,17 @@ A39: C.(union rng seq /\ (X \ union rng seq)) = 0 by A38,VALUED_0:def 19;
     let n be set;
     assume n in NAT;
     then reconsider n1 = n as Element of NAT;
-    seq1.n1 c= union rng seq by FUNCT_2:6,ZFMISC_1:92;
+    seq1.n1 c= union rng seq by FUNCT_2:4,ZFMISC_1:74;
     then union rng seq /\ seq1.n1 = seq.n by XBOOLE_1:28;
     hence thesis by SETLIM_2:def 5;
   end;
   then
-A40: SUM(C*(union rng seq(/\)seq1)) = sup Ser(C*seq1) by FUNCT_2:18;
-  C is nonnegative by MEASURE4:def 2;
-  then C*seq1 is nonnegative by MEASURE1:54;
+A40: SUM(C*(union rng seq(/\)seq1)) = sup Ser(C*seq1) by FUNCT_2:12;
+  C is nonnegative by MEASURE4:def 1;
+  then C*seq1 is nonnegative by MEASURE1:25;
   then
   for m,n being ext-real number st m in dom Sseq & n in dom Sseq & m <= n
-  holds Sseq.m <= Sseq.n by MEASURE7:9;
+  holds Sseq.m <= Sseq.n by MEASURE7:8;
   then Sseq is non-decreasing by VALUED_0:def 15;
   then SUM(C*(union rng seq(/\)seq1)) = lim Ser(C*seq1) by A40,RINFSUP2:37;
   then
@@ -1971,13 +1967,13 @@ theorem
 proof
   let X,C;
   let seq be SetSequence of sigma_Field(C);
-  set Aseq = @Partial_Diff_Union seq;
+  set Aseq = Partial_Diff_Union seq;
   rng Aseq c= sigma_Field(C) by RELAT_1:def 19;
-  then reconsider Aseq9 = Aseq as Function of NAT,sigma_Field(C) by FUNCT_2:8;
-  reconsider Aseq9 as Sep_Sequence of sigma_Field(C) by PROB_3:41;
+  then reconsider Aseq9 = Aseq as Function of NAT,sigma_Field(C) by FUNCT_2:6;
+  reconsider Aseq9 as Sep_Sequence of sigma_Field(C);
   union rng Aseq9 in sigma_Field(C) by Th24;
   then Union Aseq in sigma_Field(C) by CARD_3:def 4;
-  hence Union seq in sigma_Field(C) by PROB_3:40;
+  hence Union seq in sigma_Field(C) by PROB_3:36;
 end;
 
 theorem Th26:
@@ -1992,68 +1988,68 @@ proof
   assume
 A1: SSets is non-descending;
   then
-A2: @Partial_Union SSets = SSets by PROB_4:20;
+A2: Partial_Union SSets = SSets by PROB_4:19;
   now
     let x be set;
-A3: rng @Partial_Diff_Union SSets c= S by RELAT_1:def 19;
-    assume x in rng @Partial_Diff_Union SSets;
+A3: rng Partial_Diff_Union SSets c= S by RELAT_1:def 19;
+    assume x in rng Partial_Diff_Union SSets;
     hence x in S by A3;
   end;
-  then rng @Partial_Diff_Union SSets c= S by TARSKI:def 3;
-  then reconsider Bseq = @Partial_Diff_Union SSets as Sep_Sequence of S by
-FUNCT_2:8,PROB_3:41;
-  for n be set st n in NAT holds Ser(M*Bseq).n = (M*@Partial_Union SSets) .n
+  then rng Partial_Diff_Union SSets c= S by TARSKI:def 3;
+  then reconsider Bseq = Partial_Diff_Union SSets as Sep_Sequence of S
+      by FUNCT_2:6;
+  for n be set st n in NAT holds Ser(M*Bseq).n = (M*Partial_Union SSets) .n
   proof
-    defpred P[Nat] means Ser(M*Bseq).$1 = (M*@Partial_Union SSets).$1;
+    defpred P[Nat] means Ser(M*Bseq).$1 = (M*Partial_Union SSets).$1;
     let n be set;
 A4: for k being Element of NAT st P[k] holds P[k + 1]
     proof
       let k be Element of NAT;
       assume
 A5:   P[k];
-A6:   (@Partial_Union (@Partial_Diff_Union SSets)).k = (@Partial_Union
-SSets).k & (@Partial_Diff_Union SSets).(k+1) = SSets.(k+1) \ (Partial_Union
-      SSets).k by PROB_3:39,def 3;
-      Ser(M*Bseq).(k+1) = Ser(M*Bseq).k + (M*Bseq).(k+1) by SUPINF_2:63
-        .= (M*@Partial_Union SSets).k + M.((@Partial_Diff_Union SSets).(k+1)
-      ) by A5,FUNCT_2:21
-        .= M.((@Partial_Union SSets).k) + M.((@Partial_Diff_Union SSets).(k+
-      1)) by FUNCT_2:21
-        .= M.((@Partial_Union (@Partial_Diff_Union SSets)).k) + M.((
-      @Partial_Diff_Union SSets).(k+1)) by PROB_3:39;
+A6:   (Partial_Union (Partial_Diff_Union SSets)).k = (Partial_Union
+SSets).k & (Partial_Diff_Union SSets).(k+1) = SSets.(k+1) \ (Partial_Union
+      SSets).k by PROB_3:35,def 3;
+      Ser(M*Bseq).(k+1) = Ser(M*Bseq).k + (M*Bseq).(k+1) by SUPINF_2:44
+        .= (M*Partial_Union SSets).k + M.((Partial_Diff_Union SSets).(k+1)
+      ) by A5,FUNCT_2:15
+        .= M.((Partial_Union SSets).k) + M.((Partial_Diff_Union SSets).(k+
+      1)) by FUNCT_2:15
+        .= M.((Partial_Union (Partial_Diff_Union SSets)).k) + M.((
+      Partial_Diff_Union SSets).(k+1)) by PROB_3:35;
       then
-      Ser(M*Bseq).(k+1) = M.( (Partial_Union (@Partial_Diff_Union SSets))
-      .k \/ (@Partial_Diff_Union SSets).(k+1) ) by A6,MEASURE1:61,XBOOLE_1:79
-        .= M.( (@Partial_Union (@Partial_Diff_Union SSets)).(k+1)) by
+      Ser(M*Bseq).(k+1) = M.( (Partial_Union (Partial_Diff_Union SSets))
+      .k \/ (Partial_Diff_Union SSets).(k+1) ) by A6,MEASURE1:30,XBOOLE_1:79
+        .= M.( (Partial_Union (Partial_Diff_Union SSets)).(k+1)) by
 PROB_3:def 2
-        .= M.( (@Partial_Union SSets).(k+1)) by PROB_3:39;
-      hence Ser(M*Bseq).(k+1) = (M*(@Partial_Union SSets)).(k+1) by FUNCT_2:21;
+        .= M.( (Partial_Union SSets).(k+1)) by PROB_3:35;
+      hence Ser(M*Bseq).(k+1) = (M*(Partial_Union SSets)).(k+1) by FUNCT_2:15;
     end;
     assume n in NAT;
     then reconsider n1 = n as Element of NAT;
-    Ser(M*Bseq).0 = (M*Bseq).0 by SUPINF_2:63
-      .= M.((@Partial_Diff_Union SSets).0) by FUNCT_2:21
-      .= M.(SSets.0) by PROB_3:35
-      .= M.((@Partial_Union SSets).0) by PROB_3:26;
+    Ser(M*Bseq).0 = (M*Bseq).0 by SUPINF_2:44
+      .= M.((Partial_Diff_Union SSets).0) by FUNCT_2:15
+      .= M.(SSets.0) by PROB_3:31
+      .= M.((Partial_Union SSets).0) by PROB_3:22;
     then
-A7: P[0] by FUNCT_2:21;
+A7: P[0] by FUNCT_2:15;
     for k being Element of NAT holds P[k] from NAT_1:sch 1(A7,A4);
-    then Ser(M*Bseq).n1 = (M*@Partial_Union SSets).n1;
+    then Ser(M*Bseq).n1 = (M*Partial_Union SSets).n1;
     hence thesis;
   end;
   then
-A8: Ser(M * Bseq) = M * SSets by A2,FUNCT_2:18;
+A8: Ser(M * Bseq) = M * SSets by A2,FUNCT_2:12;
   reconsider Gseq = Ser(M * Bseq) as ExtREAL_sequence;
-  M*Bseq is nonnegative by MEASURE1:54;
+  M*Bseq is nonnegative by MEASURE1:25;
   then
   for m,n being ext-real number st m in dom Gseq & n in dom Gseq & m <= n
-  holds Gseq.m <= Gseq.n by MEASURE7:9;
+  holds Gseq.m <= Gseq.n by MEASURE7:8;
   then Gseq is non-decreasing by VALUED_0:def 15;
   then
-A9: SUM(M * Bseq) = M.(union rng Bseq) & lim Gseq = sup Gseq by MEASURE1:def 11
+A9: SUM(M * Bseq) = M.(union rng Bseq) & lim Gseq = sup Gseq by MEASURE1:def 6
 ,RINFSUP2:37;
-  @Partial_Union (@Partial_Diff_Union SSets) = SSets by A2,PROB_3:39;
-  then Union SSets = Union @Partial_Diff_Union SSets by PROB_3:34;
+  Partial_Union (Partial_Diff_Union SSets) = SSets by A2,PROB_3:35;
+  then Union SSets = Union Partial_Diff_Union SSets by PROB_3:30;
   then lim Gseq = M.(Union SSets) by A9,CARD_3:def 4;
   hence thesis by A1,A8,SETLIM_1:63;
 end;
@@ -2068,9 +2064,9 @@ A2: FSets is non-descending;
     let n,m be Element of NAT;
     assume n <= m;
     then
-A3: FSets.n c= FSets.m by A2,PROB_1:def 7;
-    (M*FSets).n = M.(FSets.n) & (M*FSets).m = M.(FSets.m) by A1,FUNCT_1:22;
-    hence (M*FSets).n <= (M*FSets).m by A3,MEASURE1:25;
+A3: FSets.n c= FSets.m by A2,PROB_1:def 5;
+    (M*FSets).n = M.(FSets.n) & (M*FSets).m = M.(FSets.m) by A1,FUNCT_1:12;
+    hence (M*FSets).n <= (M*FSets).m by A3,MEASURE1:8;
   end;
   then for n,m be Element of NAT st m<=n holds (M*FSets).m<=(M*FSets).n;
   hence M*FSets is non-decreasing by RINFSUP2:7;
@@ -2086,9 +2082,9 @@ A2: FSets is non-ascending;
     let n,m be Element of NAT;
     assume m <= n;
     then
-A3: FSets.n c= FSets.m by A2,PROB_1:def 6;
-    (M*FSets).n = M.(FSets.n) & (M*FSets).m = M.(FSets.m) by A1,FUNCT_1:22;
-    hence (M*FSets).n <= (M*FSets).m by A3,MEASURE1:25;
+A3: FSets.n c= FSets.m by A2,PROB_1:def 4;
+    (M*FSets).n = M.(FSets.n) & (M*FSets).m = M.(FSets.m) by A1,FUNCT_1:12;
+    hence (M*FSets).n <= (M*FSets).m by A3,MEASURE1:8;
   end;
   hence M*FSets is non-increasing by RINFSUP2:7;
 end;
@@ -2107,13 +2103,12 @@ A1: dom(M*SSets) = NAT by FUNCT_2:def 1;
 A2: SSets is non-descending;
   now
     let n,m be Element of NAT;
-A3: SSets.n in rng SSets & SSets.m in rng SSets by FUNCT_2:6;
-A4: (M*SSets).m = M.(SSets.m) by A1,FUNCT_1:22;
+A4: (M*SSets).m = M.(SSets.m) by A1,FUNCT_1:12;
     assume n <= m;
     then
-A5: SSets.n c= SSets.m by A2,PROB_1:def 7;
-    rng SSets c= S & (M*SSets).n = M.(SSets.n) by A1,FUNCT_1:22,RELAT_1:def 19;
-    hence (M*SSets).n <= (M*SSets).m by A5,A3,A4,MEASURE1:62;
+A5: SSets.n c= SSets.m by A2,PROB_1:def 5;
+    rng SSets c= S & (M*SSets).n = M.(SSets.n) by A1,FUNCT_1:12,RELAT_1:def 19;
+    hence (M*SSets).n <= (M*SSets).m by A5,A4,MEASURE1:31;
   end;
   then for n,m be Element of NAT st m<=n holds (M*SSets).m<=(M*SSets).n;
   hence M*SSets is non-decreasing by RINFSUP2:7;
@@ -2133,13 +2128,12 @@ A1: dom(M*SSets) = NAT by FUNCT_2:def 1;
 A2: SSets is non-ascending;
   now
     let n,m be Element of NAT;
-A3: SSets.n in rng SSets & SSets.m in rng SSets by FUNCT_2:6;
-A4: (M*SSets).m = M.(SSets.m) by A1,FUNCT_1:22;
+A4: (M*SSets).m = M.(SSets.m) by A1,FUNCT_1:12;
     assume m <= n;
     then
-A5: SSets.n c= SSets.m by A2,PROB_1:def 6;
-    rng SSets c= S & (M*SSets).n = M.(SSets.n) by A1,FUNCT_1:22,RELAT_1:def 19;
-    hence (M*SSets).n <= (M*SSets).m by A5,A3,A4,MEASURE1:62;
+A5: SSets.n c= SSets.m by A2,PROB_1:def 4;
+    rng SSets c= S & (M*SSets).n = M.(SSets.n) by A1,FUNCT_1:12,RELAT_1:def 19;
+    hence (M*SSets).n <= (M*SSets).m by A5,A4,MEASURE1:31;
   end;
   hence M*SSets is non-increasing by RINFSUP2:7;
 end;
@@ -2156,13 +2150,13 @@ proof
   assume that
 A1: SSets is non-ascending and
 A2: M.(SSets.0) < +infty;
-A3: M.(SSets.0 \ lim SSets) >= 0 by SUPINF_2:70;
+A3: M.(SSets.0 \ lim SSets) >= 0 by SUPINF_2:51;
   now
     let y be set;
     assume y in rng (SSets.0 (\) SSets);
     then consider x be set such that
 A4: x in NAT and
-A5: (SSets.0 (\) SSets).x = y by FUNCT_2:17;
+A5: (SSets.0 (\) SSets).x = y by FUNCT_2:11;
     reconsider x as Element of NAT by A4;
     SSets.0 \ SSets.x in S;
     hence y in S by A5,SETLIM_2:def 7;
@@ -2175,85 +2169,85 @@ RELAT_1:def 19;
 A6: for n being Element of NAT holds seq1.n = F1(n) from FUNCT_2:sch 4;
 A7: now
     let k be Nat;
-    reconsider k1=k as Element of NAT by ORDINAL1:def 13;
+    reconsider k1=k as Element of NAT by ORDINAL1:def 12;
 A8: SSets.k1 in S & Bseq.k1 in S;
-A9: k is Element of NAT by ORDINAL1:def 13;
+A9: k is Element of NAT by ORDINAL1:def 12;
     then SSets.k \/ (SSets.0 \ SSets.k) = SSets.0 \/ SSets.k & SSets.k c=
-    SSets.0 by A1,PROB_1:def 6,XBOOLE_1:39;
+    SSets.0 by A1,PROB_1:def 4,XBOOLE_1:39;
     then SSets.k \/ (SSets.0 \ SSets.k) = SSets.0 by XBOOLE_1:12;
     then
 A10: SSets.k \/ Bseq.k = SSets.0 by A9,SETLIM_2:def 7;
     SSets.k misses SSets.0 \ SSets.k by XBOOLE_1:79;
     then SSets.k misses Bseq.k by A9,SETLIM_2:def 7;
-    then M.(SSets.0) = M.(SSets.k) + M.(Bseq.k) by A10,A8,MEASURE1:61;
-    then (M*SSets).0 = M.(SSets.k) + M.(Bseq.k) by FUNCT_2:21;
+    then M.(SSets.0) = M.(SSets.k) + M.(Bseq.k) by A10,A8,MEASURE1:30;
+    then (M*SSets).0 = M.(SSets.k) + M.(Bseq.k) by FUNCT_2:15;
     then seq1.k = M.(SSets.k) + M.(Bseq.k) by A6,A9;
-    then seq1.k = (M*SSets).k + M.(Bseq.k) by A9,FUNCT_2:21;
-    hence seq1.k = (M*SSets).k + (M*Bseq).k by A9,FUNCT_2:21;
+    then seq1.k = (M*SSets).k + M.(Bseq.k) by A9,FUNCT_2:15;
+    hence seq1.k = (M*SSets).k + (M*Bseq).k by A9,FUNCT_2:15;
   end;
   M*SSets is non-increasing by A1,Th30;
   then
 A11: M*SSets is convergent by RINFSUP2:36;
   rng Bseq c= S by RELAT_1:def 19;
-  then Bseq is Function of NAT,S by FUNCT_2:8;
+  then Bseq is Function of NAT,S by FUNCT_2:6;
   then
 A12: M*Bseq is nonnegative by MEASURE2:1;
 A13: for n be Nat holds seq1.n = (M*SSets).0
   proof
     let n be Nat;
-    n is Element of NAT by ORDINAL1:def 13;
+    n is Element of NAT by ORDINAL1:def 12;
     hence seq1.n = (M*SSets).0 by A6;
   end;
 A14: rng SSets c= S by RELAT_1:def 19;
-  then SSets is Function of NAT,S by FUNCT_2:8;
+  then SSets is Function of NAT,S by FUNCT_2:6;
   then
 A15: M*SSets is nonnegative by MEASURE2:1;
   then
-A16: -infty < (M*SSets).0 by SUPINF_2:70;
+A16: -infty < (M*SSets).0 by SUPINF_2:51;
   (inferior_setsequence SSets).(0+1) c= SSets.0 by A1,SETLIM_1:50;
   then Intersection SSets c= SSets.0 by A1,SETLIM_1:52;
   then lim SSets c= SSets.0 by A1,SETLIM_1:61;
   then
 A17: SSets.0 \/ lim SSets = SSets.0 by XBOOLE_1:12;
-  Intersection SSets in S by A14,PROB_1:def 8;
+  Intersection SSets in S by A14,PROB_1:def 6;
   then
 A18: lim SSets in S by A1,SETLIM_1:61;
   then
-A19: SSets.0 \ lim SSets is Element of S by PROB_1:12;
+A19: SSets.0 \ lim SSets is Element of S by PROB_1:6;
   then M.((SSets.0 \ lim SSets) \/ lim SSets) = M.(SSets.0 \ lim SSets) + M.(
-  lim SSets) by A18,MEASURE1:61,XBOOLE_1:79;
+  lim SSets) by A18,MEASURE1:30,XBOOLE_1:79;
   then
 A20: M.(SSets.0 \/ lim SSets) = M.(SSets.0 \ lim SSets) + M.(lim SSets) by
 XBOOLE_1:39;
-  (M*SSets).0 < +infty by A2,FUNCT_2:21;
+  (M*SSets).0 < +infty by A2,FUNCT_2:15;
   then
 A21: (M*SSets).0 in REAL by A16,XXREAL_0:14;
   for n,m being Element of NAT st n <= m holds Bseq.n c= Bseq.m
   proof
     let n,m be Element of NAT;
     assume n <= m;
-    then SSets.m c= SSets.n by A1,PROB_1:def 6;
+    then SSets.m c= SSets.n by A1,PROB_1:def 4;
     then SSets.0 \ SSets.n c= SSets.0 \ SSets.m by XBOOLE_1:34;
     then Bseq.n c= SSets.0 \ SSets.m by SETLIM_2:def 7;
     hence Bseq.n c= Bseq.m by SETLIM_2:def 7;
   end;
   then
-A22: Bseq is non-descending by PROB_1:def 7;
+A22: Bseq is non-descending by PROB_1:def 5;
   then M*Bseq is non-decreasing by Th29;
   then M*Bseq is convergent by RINFSUP2:37;
   then lim seq1 = lim(M*Bseq) + lim(M*SSets) by A11,A12,A15,A7,MESFUNC9:11;
   then
-A23: (M*SSets).0 = lim(M*Bseq) + lim(M*SSets) by A21,A13,MESFUNC5:58;
+A23: (M*SSets).0 = lim(M*Bseq) + lim(M*SSets) by A21,A13,MESFUNC5:52;
   lim(M*Bseq) = M.(lim Bseq) by A22,Th26
     .= M.(SSets.0 \ lim SSets) by A1,SETLIM_1:64,SETLIM_2:86;
   then
 A24: M.(SSets.0 \ lim SSets) + M.(lim SSets) = lim(M*SSets) + M.(SSets.0 \
-  lim SSets) by A20,A17,A23,FUNCT_2:21;
-A25: M.(SSets.0 \ lim SSets) <= M.(SSets.0) by A19,MEASURE1:62,XBOOLE_1:36;
+  lim SSets) by A20,A17,A23,FUNCT_2:15;
+A25: M.(SSets.0 \ lim SSets) <= M.(SSets.0) by A19,MEASURE1:31,XBOOLE_1:36;
   then M.(SSets.0 \ lim SSets) < +infty by A2,XXREAL_0:2;
   then
 A26: M.(lim SSets) = lim(M*SSets) + M.(SSets.0 \ lim SSets) - M.(SSets.0 \
-  lim SSets) by A3,A24,XXREAL_3:29;
+  lim SSets) by A3,A24,XXREAL_3:28;
   M.(SSets.0 \ lim SSets) is Real by A2,A25,A3,XXREAL_0:14;
   hence M.(lim SSets) = lim(M*SSets) by A26,XXREAL_3:22;
 end;
@@ -2277,25 +2271,25 @@ proof
   let X be non empty set, F be Field_Subset of X, m be Measure of F;
   given M be sigma_Measure of sigma F such that
 A1: M is_extension_of m;
-A2: F c= sigma F by PROB_1:def 14;
+A2: F c= sigma F by PROB_1:def 9;
   for Aseq being Sep_Sequence of F st union rng Aseq in F holds SUM(m*Aseq
   ) = m.(union rng Aseq)
   proof
     let Aseq be Sep_Sequence of F;
-    reconsider Bseq = Aseq as Function of NAT,sigma F by A2,FUNCT_2:9;
+    reconsider Bseq = Aseq as Function of NAT,sigma F by A2,FUNCT_2:7;
     reconsider Bseq as Sep_Sequence of sigma F;
 A3: now
       let n be set;
       assume n in NAT;
       then reconsider n9 = n as Element of NAT;
-      (M*Bseq).n = M.(Bseq.n9) by FUNCT_2:21;
+      (M*Bseq).n = M.(Bseq.n9) by FUNCT_2:15;
       then (M*Bseq).n = m.(Aseq.n9) by A1,Def12;
-      hence (M*Bseq).n = (m*Aseq).n by FUNCT_2:21;
+      hence (M*Bseq).n = (m*Aseq).n by FUNCT_2:15;
     end;
     assume union rng Aseq in F;
     then m.(union rng Aseq) = M.(union rng Aseq) by A1,Def12;
-    then m.(union rng Aseq) = SUM(M*Bseq) by MEASURE1:def 11;
-    hence thesis by A3,FUNCT_2:18;
+    then m.(union rng Aseq) = SUM(M*Bseq) by MEASURE1:def 6;
+    hence thesis by A3,FUNCT_2:12;
   end;
   hence m is completely-additive by Def11;
 end;
@@ -2311,35 +2305,35 @@ A1: m is completely-additive;
   set M = (sigma_Meas(C_Meas m))|(sigma F);
 A2: F c= sigma_Field(C_Meas m) by Th20;
   then
-A3: sigma F c= sigma_Field(C_Meas m) by PROB_1:def 14;
-  then reconsider M as Function of sigma F,ExtREAL by FUNCT_2:38;
+A3: sigma F c= sigma_Field(C_Meas m) by PROB_1:def 9;
+  then reconsider M as Function of sigma F,ExtREAL by FUNCT_2:32;
 A4: for SS being Sep_Sequence of sigma F holds SUM(M*SS) = M.(union rng SS)
   proof
     let SS be Sep_Sequence of sigma F;
     reconsider SS9 = SS as Sep_Sequence of sigma_Field(C_Meas m) by A3,
-FUNCT_2:9;
+FUNCT_2:7;
 A5: rng SS c= sigma F by RELAT_1:def 19;
-    M*SS = (sigma_Meas(C_Meas m))*((sigma F)|SS) by MONOID_1:2
-      .= (sigma_Meas(C_Meas m))*SS9 by A5,RELAT_1:125;
+    M*SS = (sigma_Meas(C_Meas m))*((sigma F)|SS) by MONOID_1:1
+      .= (sigma_Meas(C_Meas m))*SS9 by A5,RELAT_1:94;
     then
-A6: SUM(M*SS) = (sigma_Meas(C_Meas m)).(union rng SS9) by MEASURE1:def 11;
-    union rng SS is Element of sigma F by MEASURE1:53;
-    hence SUM(M*SS) = M.(union rng SS) by A6,FUNCT_1:72;
+A6: SUM(M*SS) = (sigma_Meas(C_Meas m)).(union rng SS9) by MEASURE1:def 6;
+    union rng SS is Element of sigma F by MEASURE1:24;
+    hence SUM(M*SS) = M.(union rng SS) by A6,FUNCT_1:49;
   end;
-  M.{} = (sigma_Meas(C_Meas m)).{} by FUNCT_1:72,PROB_1:10
+  M.{} = (sigma_Meas(C_Meas m)).{} by FUNCT_1:49,PROB_1:4
     .= 0 by VALUED_0:def 19;
-  then reconsider M as sigma_Measure of sigma F by A4,MEASURE1:def 11
-,MESFUNC5:21,VALUED_0:def 19;
+  then reconsider M as sigma_Measure of sigma F by A4,MEASURE1:def 6
+,MESFUNC5:15,VALUED_0:def 19;
   take M;
-A7: F c= sigma F by PROB_1:def 14;
+A7: F c= sigma F by PROB_1:def 9;
   for A be set st A in F holds M.A = m.A
   proof
     let A be set;
     assume
 A8: A in F;
     then reconsider A9 = A as Subset of X;
-    M.A = (sigma_Meas(C_Meas m)).A by A7,A8,FUNCT_1:72
-      .= (C_Meas m).A9 by A2,A8,MEASURE4:def 4;
+    M.A = (sigma_Meas(C_Meas m)).A by A7,A8,FUNCT_1:49
+      .= (C_Meas m).A9 by A2,A8,MEASURE4:def 3;
     hence M.A = m.A by A1,A8,Th18;
   end;
   hence M is_extension_of m & M = (sigma_Meas(C_Meas m))|(sigma F) by Def12;
@@ -2354,8 +2348,8 @@ proof
 A1: for n holds M.(FSets.n) < +infty;
 A2: now
     let k be Nat;
-A3: 0 <= M.((Partial_Union FSets).k) by SUPINF_2:70;
-    M.(FSets.(k+1)) < +infty & 0 <= M.(FSets.(k+1)) by A1,SUPINF_2:70;
+A3: 0 <= M.((Partial_Union FSets).k) by SUPINF_2:51;
+    M.(FSets.(k+1)) < +infty & 0 <= M.(FSets.(k+1)) by A1,SUPINF_2:51;
     then
 A4: M.(FSets.(k+1)) in REAL by XXREAL_0:10;
     assume P[k];
@@ -2368,7 +2362,7 @@ A6: (Partial_Union FSets).k in F by Def2;
     (Partial_Union FSets).(k+1) = (Partial_Union FSets).k \/ FSets.(k+1)
     by PROB_3:def 2;
     then M.((Partial_Union FSets).(k+1)) <= M.((Partial_Union FSets).k) + M.(
-    FSets.(k+1)) by A6,MEASURE1:27;
+    FSets.(k+1)) by A6,MEASURE1:10;
     hence P[k+1] by A5,XXREAL_0:9,13;
   end;
   (Partial_Union FSets).0 = FSets.0 by PROB_3:def 2;
@@ -2386,7 +2380,7 @@ sigma_Measure of sigma F st M is_extension_of m holds M = (sigma_Meas(C_Meas m)
   )|(sigma F)
 proof
   let X be non empty set, F be Field_Subset of X, m be Measure of F;
-A1: F c= sigma F by PROB_1:def 14;
+A1: F c= sigma F by PROB_1:def 9;
   assume m is completely-additive;
   then consider M1 be sigma_Measure of sigma F such that
 A2: M1 is_extension_of m and
@@ -2402,7 +2396,7 @@ A5: X = union rng Aseq;
 A6: M is_extension_of m;
   F c= sigma_Field(C_Meas m) by Th20;
   then
-A7: sigma F c= sigma_Field(C_Meas m) by PROB_1:def 14;
+A7: sigma F c= sigma_Field(C_Meas m) by PROB_1:def 9;
 A8: for B being Subset of X st B in sigma F holds M.B <= M1.B
   proof
     let B be Subset of X;
@@ -2421,7 +2415,7 @@ A11:  now
         assume y in rng seq;
         then consider x be set such that
 A12:    x in NAT and
-A13:    seq.x = y by FUNCT_2:17;
+A13:    seq.x = y by FUNCT_2:11;
         thus y in sigma F by A11,A12,A13;
       end;
       then rng seq c= sigma F by TARSKI:def 3;
@@ -2431,16 +2425,16 @@ A13:    seq.x = y by FUNCT_2:17;
         assume y in rng seq1;
         then consider x be set such that
 A14:    x in NAT and
-A15:    seq1.x = y by FUNCT_2:17;
+A15:    seq1.x = y by FUNCT_2:11;
         thus y in sigma F by A11,A14,A15;
       end;
       then
 A16:  rng seq1 c= sigma F by TARSKI:def 3;
-      then reconsider Fseq = seq1 as Function of NAT,sigma F by FUNCT_2:8;
+      then reconsider Fseq = seq1 as Function of NAT,sigma F by FUNCT_2:6;
       B c= union rng seq1 by Def3;
-      then Union seq1 in sigma F & B c= Union seq1 by CARD_3:def 4,PROB_1:46;
+      then Union seq1 in sigma F & B c= Union seq1 by CARD_3:def 4,PROB_1:17;
       then
-A17:  M.B <= M.(Union seq1) by A9,MEASURE1:62;
+A17:  M.B <= M.(Union seq1) by A9,MEASURE1:31;
       for n be set st n in NAT holds (M*Fseq).n = (vol(m,seq)).n
       proof
         let n be set;
@@ -2448,15 +2442,15 @@ A17:  M.B <= M.(Union seq1) by A9,MEASURE1:62;
 A18:    n in NAT;
         then reconsider n1=n as Element of NAT;
         n1 in dom Fseq by A18,FUNCT_2:def 1;
-        then (M*Fseq).n = M.(Fseq.n1) by FUNCT_1:23
+        then (M*Fseq).n = M.(Fseq.n1) by FUNCT_1:13
           .= m.(seq.n1) by A6,Def12;
         hence (M*Fseq).n = (vol(m,seq)).n by Def5;
       end;
       then
-A19:  SUM(M*Fseq) = SUM vol(m,seq) by FUNCT_2:18;
-      rng Fseq is N_Sub_set_fam of X by MEASURE1:52;
+A19:  SUM(M*Fseq) = SUM vol(m,seq) by FUNCT_2:12;
+      rng Fseq is N_Sub_set_fam of X by MEASURE1:23;
       then rng Fseq is N_Measure_fam of sigma F by A16,MEASURE2:def 1;
-      then M.(union rng Fseq) <= SUM(M*Fseq) by MEASURE2:13;
+      then M.(union rng Fseq) <= SUM(M*Fseq) by MEASURE2:11;
       then M.(Union seq1) <= SUM vol(m,seq) by A19,CARD_3:def 4;
       hence M.B <= SUM vol(m,seq) by A17,XXREAL_0:2;
     end;
@@ -2470,8 +2464,8 @@ A19:  SUM(M*Fseq) = SUM vol(m,seq) by FUNCT_2:18;
     then M.B is LowerBound of Svc(m,B) by XXREAL_2:def 2;
     then M.B <= inf Svc(m,B) by XXREAL_2:def 4;
     then M.B <= (C_Meas m).B by Def8;
-    then M.B <= (sigma_Meas(C_Meas m)).B by A7,A9,MEASURE4:def 4;
-    hence M.B <= M1.B by A3,A9,FUNCT_1:72;
+    then M.B <= (sigma_Meas(C_Meas m)).B by A7,A9,MEASURE4:def 3;
+    hence M.B <= M1.B by A3,A9,FUNCT_1:49;
   end;
 A20: for B be set st (ex k be Element of NAT st B c= Bseq.k) & B in sigma F
   holds M.B = M1.B
@@ -2484,36 +2478,36 @@ A22: M.(Bseq.k) = m.(Bseq.k) by A6,Def12;
     assume
 A23: B in sigma F;
     then reconsider B9 = B as Subset of X;
-A24: F c= sigma F & Bseq.k in F by PROB_1:def 14;
+A24: F c= sigma F & Bseq.k in F by PROB_1:def 9;
     then
-A25: Bseq.k \ B is Element of sigma F by A23,PROB_1:12;
-    then M.(Bseq.k \ B) <= M.(Bseq.k) by A24,MEASURE1:62,XBOOLE_1:36;
+A25: Bseq.k \ B is Element of sigma F by A23,PROB_1:6;
+    then M.(Bseq.k \ B) <= M.(Bseq.k) by A24,MEASURE1:31,XBOOLE_1:36;
     then
 A26: M.(Bseq.k \ B) < +infty by A4,A22,Th34,XXREAL_0:2;
-    M.B + M.(Bseq.k \ B) = M.(B \/ (Bseq.k \ B)) by A23,A25,MEASURE1:61
+    M.B + M.(Bseq.k \ B) = M.(B \/ (Bseq.k \ B)) by A23,A25,MEASURE1:30
 ,XBOOLE_1:79;
     then M.B + M.(Bseq.k \ B) = M.(Bseq.k \/ B) by XBOOLE_1:39;
     then
 A27: M.B + M.(Bseq.k \ B) = M.(Bseq.k) by A21,XBOOLE_1:12;
-    0 <= M.(Bseq.k \ B) by SUPINF_2:70;
+    0 <= M.(Bseq.k \ B) by SUPINF_2:51;
     then
-A28: M.B = M.(Bseq.k) - M.(Bseq.k \ B) by A27,A26,XXREAL_3:29;
+A28: M.B = M.(Bseq.k) - M.(Bseq.k \ B) by A27,A26,XXREAL_3:28;
 A29: M1.(Bseq.k) = m.(Bseq.k) by A2,Def12;
-    M1.B + M1.(Bseq.k \ B) = M1.(B \/ (Bseq.k \ B)) by A23,A25,MEASURE1:61
+    M1.B + M1.(Bseq.k \ B) = M1.(B \/ (Bseq.k \ B)) by A23,A25,MEASURE1:30
 ,XBOOLE_1:79;
     then M1.B + M1.(Bseq.k \ B) = M1.(Bseq.k \/ B) by XBOOLE_1:39;
     then
 A30: M1.B + M1.(Bseq.k \ B) = M1.(Bseq.k) by A21,XBOOLE_1:12;
-    M1.(Bseq.k \ B) <= M1.(Bseq.k) by A24,A25,MEASURE1:62,XBOOLE_1:36;
+    M1.(Bseq.k \ B) <= M1.(Bseq.k) by A24,A25,MEASURE1:31,XBOOLE_1:36;
     then
 A31: M1.(Bseq.k \ B) < +infty by A4,A29,Th34,XXREAL_0:2;
-    0 <= M1.(Bseq.k \ B) by SUPINF_2:70;
+    0 <= M1.(Bseq.k \ B) by SUPINF_2:51;
     then
-A32: M1.B = M1.(Bseq.k) - M1.(Bseq.k \ B) by A30,A31,XXREAL_3:29;
-    M.(Bseq.k \ B) <= M1.(Bseq.k \ B) by A8,A23,A24,PROB_1:12;
+A32: M1.B = M1.(Bseq.k) - M1.(Bseq.k \ B) by A30,A31,XXREAL_3:28;
+    M.(Bseq.k \ B) <= M1.(Bseq.k \ B) by A8,A23,A24,PROB_1:6;
     then
 A33: M1.(Bseq.k) - M1.(Bseq.k \ B) <= M.(Bseq.k) - M.(Bseq.k \ B) by A29,A22,
-XXREAL_3:39;
+XXREAL_3:37;
     M.B9 <= M1.B9 by A8,A23;
     hence M.B = M1.B by A28,A32,A33,XXREAL_0:1;
   end;
@@ -2539,76 +2533,81 @@ A36: for n be set st n in NAT holds Cseq.n = F1(n) from FUNCT_2:sch 2(
     for n,m be Element of NAT st n <= m holds Cseq.n c= Cseq.m
     proof
       let n,m be Element of NAT;
-A37:  Bseq is non-descending by PROB_3:13;
+A37:  Bseq is non-descending by PROB_3:11;
       assume n <= m;
-      then Bseq.n c= Bseq.m by A37,PROB_1:def 7;
+      then Bseq.n c= Bseq.m by A37,PROB_1:def 5;
       then B /\ Bseq.n c= B /\ Bseq.m by XBOOLE_1:26;
       then Cseq.n c= B /\ Bseq.m by A36;
       hence Cseq.n c= Cseq.m by A36;
     end;
     then
-A38: Cseq is non-descending by PROB_1:def 7;
+A38: Cseq is non-descending by PROB_1:def 5;
     now
       let y be set;
       assume y in rng Cseq;
       then consider x be set such that
 A39:  x in NAT and
-A40:  Cseq.x = y by FUNCT_2:17;
+A40:  Cseq.x = y by FUNCT_2:11;
       reconsider x as Element of NAT by A39;
       Bseq.x in F;
-      then Bseq.x /\ B in sigma F by A1,A34,MEASURE1:66;
+      then Bseq.x /\ B in sigma F by A1,A34,MEASURE1:34;
       hence y in sigma F by A36,A40;
     end;
     then rng Cseq c= sigma F by TARSKI:def 3;
     then reconsider Cseq as SetSequence of sigma F by RELAT_1:def 19;
-    for n be set st n in NAT holds (M1 * @Partial_Union Cseq).n = (M *
-    @Partial_Union Cseq).n
+    for n be set st n in NAT holds (M1 * Partial_Union Cseq).n = (M *
+    Partial_Union Cseq).n
     proof
       let n be set;
       assume n in NAT;
       then reconsider n1 = n as Element of NAT;
 A41:  now
         let x be set;
-        assume x in (@Partial_Union Cseq).n1;
+        assume x in (Partial_Union Cseq).n1;
         then consider k be Nat such that
 A42:    k <= n1 and
-A43:    x in Cseq.k by PROB_3:15;
-        reconsider k as Element of NAT by ORDINAL1:def 13;
+A43:    x in Cseq.k by PROB_3:13;
+        reconsider k as Element of NAT by ORDINAL1:def 12;
         take k;
         x in B /\ Bseq.k by A36,A43;
         hence k <= n1 & x in Bseq.k by A42,XBOOLE_0:def 4;
       end;
-      now
+AA:  (Partial_Union Cseq).n1 c= Bseq.n1
+      proof
         let x be set;
-        assume x in (@Partial_Union Cseq).n1;
+        assume x in (Partial_Union Cseq).n1;
         then consider k be Element of NAT such that
 A44:    k <= n1 and
 A45:    x in Bseq.k by A41;
-        Bseq is non-descending by PROB_3:13;
-        then Bseq.k c= Bseq.n1 by A44,PROB_1:def 7;
+        Bseq is non-descending by PROB_3:11;
+        then Bseq.k c= Bseq.n1 by A44,PROB_1:def 5;
         hence x in Bseq.n1 by A45;
       end;
-      then (M1 * @Partial_Union Cseq).n = M1.((@Partial_Union Cseq).n1) & (
-      @Partial_Union Cseq).n1 c= Bseq.n1 by FUNCT_2:21,TARSKI:def 3;
-      then (M1 * @Partial_Union Cseq).n = M.((@Partial_Union Cseq).n1) by A20;
-      hence (M1 * @Partial_Union Cseq).n = (M * @Partial_Union Cseq).n by
-FUNCT_2:21;
+XX:    (M1 * Partial_Union Cseq).n = M1.((Partial_Union Cseq).n1)
+        by FUNCT_2:15;
+YY:   rng Partial_Union Cseq c= sigma F by RELAT_1:def 19;
+      dom Partial_Union Cseq = NAT by PARTFUN1:def 2;
+      then (Partial_Union Cseq).n1 in rng Partial_Union Cseq by FUNCT_1:3;
+      then (M1 * Partial_Union Cseq).n = M.((Partial_Union Cseq).n1)
+                 by XX,A20,AA,YY;
+      hence (M1 * Partial_Union Cseq).n = (M * Partial_Union Cseq).n by
+FUNCT_2:15;
     end;
     then
-A46: M1 * @Partial_Union Cseq = M * @Partial_Union Cseq by FUNCT_2:18;
+A46: M1 * Partial_Union Cseq = M * Partial_Union Cseq by FUNCT_2:12;
     for n be Element of NAT holds Cseq.n = B9 /\ Bseq.n by A36;
     then Cseq = B9 (/\) Bseq by SETLIM_2:def 5;
     then Union Cseq = B9 /\ Union Bseq by SETLIM_2:38;
-    then Union Cseq = B9 /\ Union Aseq by PROB_3:17;
+    then Union Cseq = B9 /\ Union Aseq by PROB_3:15;
     then Union Cseq = B9 /\ X by A5,CARD_3:def 4;
     then
 A47: B9 = Union Cseq by XBOOLE_1:28;
     then B9 = lim Cseq by A38,SETLIM_1:63;
     then M1.B = lim(M1 * Cseq) by A38,Th26;
-    then M1.B = lim(M * @Partial_Union Cseq) by A38,A46,PROB_4:20;
-    then M1.B = lim(M * Cseq) by A38,PROB_4:20;
+    then M1.B = lim(M * Partial_Union Cseq) by A38,A46,PROB_4:19;
+    then M1.B = lim(M * Cseq) by A38,PROB_4:19;
     then M1.B = M.(lim Cseq) by A38,Th26;
     hence M1.B = M.B by A38,A47,SETLIM_1:63;
   end;
-  hence thesis by A3,FUNCT_2:18;
+  hence thesis by A3,FUNCT_2:12;
 end;

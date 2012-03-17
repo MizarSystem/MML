@@ -15,14 +15,14 @@
 <ArticleID name="NUMBERS"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
-<ArticleID name="CARD_3"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="FUNCOP_1"/>
+<ArticleID name="PBOOLE"/>
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="FINSEQ_2"/>
-<ArticleID name="PBOOLE"/>
 <ArticleID name="UNIALG_1"/>
 <ArticleID name="MSUALG_1"/>
+<ArticleID name="CARD_3"/>
 <ArticleID name="FUNCT_4"/>
 <ArticleID name="XBOOLEAN"/>
 <ArticleID name="MARGREL1"/>
@@ -39,7 +39,7 @@
 <Cluster>
 <Adjective nr="6"/>
 <Adjective nr="15">
-<Func kind="K" nr="153">
+<Func kind="K" nr="150">
 <LocusVar nr="1"/>
 <Func kind="K" nr="203"/>
 </Func>
@@ -48,7 +48,7 @@
 </Cluster>
 <Func kind="K" nr="21">
 <Func kind="K" nr="22">
-<Func kind="K" nr="153">
+<Func kind="K" nr="150">
 <LocusVar nr="1"/>
 <Func kind="K" nr="203"/>
 </Func>
@@ -63,7 +63,7 @@
 <Adjective nr="31">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="50"/>
+<Adjective nr="49"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -74,19 +74,19 @@
 <LocusVar nr="3"/>
 </Func>
 <Cluster>
-<Adjective nr="61">
+<Adjective nr="58">
 <Func kind="K" nr="221">
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
 </Func>
 </Adjective>
-<Adjective nr="62">
+<Adjective nr="59">
 <Func kind="K" nr="221">
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
 </Func>
 </Adjective>
-<Adjective nr="75">
+<Adjective nr="77">
 <Func kind="K" nr="221">
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>

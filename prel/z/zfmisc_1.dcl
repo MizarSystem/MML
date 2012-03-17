@@ -6,6 +6,25 @@
 <ArticleID name="XBOOLE_0"/>
 <ArticleID name="ZFMISC_1"/>
 </Signature>
+<RCluster aid="ZFMISC_1" nr="1">
+<ArgTypes/>
+<Typ kind="M" nr="1">
+<Cluster/>
+</Typ>
+<Cluster>
+<Adjective nr="1" value="false"/>
+<Adjective nr="2"/>
+</Cluster>
+</RCluster>
+<RCluster aid="ZFMISC_1" nr="2">
+<ArgTypes/>
+<Typ kind="M" nr="1">
+<Cluster/>
+</Typ>
+<Cluster>
+<Adjective nr="2" value="false"/>
+</Cluster>
+</RCluster>
 <FCluster aid="ZFMISC_1" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
@@ -84,6 +103,18 @@
 </Typ>
 <Cluster>
 <Adjective nr="2"/>
+</Cluster>
+</CCluster>
+<CCluster aid="ZFMISC_1" nr="2">
+<ArgTypes/>
+<Cluster>
+<Adjective nr="2" value="false"/>
+</Cluster>
+<Typ kind="M" nr="1">
+<Cluster/>
+</Typ>
+<Cluster>
+<Adjective nr="1" value="false"/>
 </Cluster>
 </CCluster>
 </Registrations>

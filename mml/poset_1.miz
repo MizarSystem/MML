@@ -25,7 +25,7 @@ environ
  constructors ORDERS_3, NAT_1, DOMAIN_1, XXREAL_0, ABIAN, LATTICE3, YELLOW_2,
       RELSET_1;
  registrations XBOOLE_0, ORDINAL1, FUNCT_1, PARTFUN1, STRUCT_0, ORDERS_2,
-      XREAL_0, NAT_1, RELAT_1, WAYBEL10, YELLOW_0, WAYBEL24;
+      XREAL_0, NAT_1, RELAT_1, WAYBEL10, YELLOW_0, WAYBEL24, FUNCT_7, RELSET_1;
  requirements NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions RELAT_1, LATTICE3, STRUCT_0;
  theorems RELAT_1, RELSET_1, RELAT_2, ORDERS_2, TARSKI, FUNCT_1, FUNCT_2,
@@ -42,7 +42,7 @@ proof
   let f be Function;
   assume rng f c= dom f;
   then field f = dom f by XBOOLE_1:12;
-  hence thesis by FUNCT_7:70;
+  hence thesis by FUNCT_7:68;
 end;
 
 Lm2: for f being Function, n be Nat st
@@ -54,16 +54,16 @@ proof
   assume rng f c= dom f;
   then iter(f,0) = id dom f by Lm1;
   then
-A1: U[ 0] by RELAT_1:71;
+A1: U[ 0] by RELAT_1:45;
 A2: for k be Nat holds U[k] implies U[k+1]
   proof
     let k be Nat;
     assume
 A3: dom iter(f,k) = dom f & rng iter(f,k) c= dom f;
     iter(f,k+1) = f*iter(f,k) & iter(f,k+1) = iter(f,k)*f
-                                          by FUNCT_7:71,73;
+                                          by FUNCT_7:69,71;
     then dom iter(f,k+1) = dom iter(f,k) &
-    rng iter(f,k+1) c= rng iter(f,k) by A3,RELAT_1:45,46;
+    rng iter(f,k+1) c= rng iter(f,k) by A3,RELAT_1:26,27;
     hence thesis by A3,XBOOLE_1:1;
   end;
   for k be Nat holds U[k] from NAT_1:sch 2(A1,A2);
@@ -78,20 +78,20 @@ proof
 A1: X = {} implies X = {}; then
 A2: dom f = X & rng f c= X by FUNCT_2:def 1;
   then dom iter(f,n) = X & rng iter(f,n) c= X by Lm2;
-  then reconsider R = iter(f,n) as Relation of X,X by RELSET_1:11;
+  then reconsider R = iter(f,n) as Relation of X,X by RELSET_1:4;
   dom R = X & rng R c= X by A2,Lm2;
   hence thesis by A1,FUNCT_2:def 1;
 end;
 
 registration let P be non empty Poset; :: move to ORDERS_2
-  cluster non empty Chain of P;
+  cluster non empty for Chain of P;
   existence
   proof
     ex L being Chain of P st L is non empty
     proof
-      set z =the  Element of P;
+      set z = the Element of P;
       set IT={z};
-      reconsider IT as Chain of P by ORDERS_2:35;
+      reconsider IT as Chain of P by ORDERS_2:8;
       IT is non empty;
       hence thesis;
     end;
@@ -139,13 +139,13 @@ theorem Th1:
     assume A1:x in K2 & y in K2 & x <>y;
     then reconsider x,y as Element of P2;
     consider a be set such that A2: a in dom h & a in K & x = h.a
-                                            by A1,FUNCT_1:def 12;
+                                            by A1,FUNCT_1:def 6;
     consider b be set such that A3: b in dom h & b in K & y = h.b
-                                            by A1,FUNCT_1:def 12;
+                                            by A1,FUNCT_1:def 6;
     reconsider a,b as Element of P1 by A2,A3;
-    a<=b or b<=a by A2,A3,ORDERS_2:38;
+    a<=b or b<=a by A2,A3,ORDERS_2:11;
     then x<=y or y<=x by A2,A3,ORDERS_3:def 5;
-    hence thesis by ORDERS_2:def 9;
+    hence thesis by ORDERS_2:def 5;
   end;
   then A4:R is_connected_in K2 by RELAT_2:def 6;
   for x be set st x in K2 holds [x,x] in R
@@ -154,23 +154,23 @@ theorem Th1:
     assume x in K2;
     then reconsider x as Element of P2;
     x<=x;
-    hence thesis by ORDERS_2:def 9;
+    hence thesis by ORDERS_2:def 5;
   end;
   then R is_reflexive_in K2 by RELAT_2:def 1;
-  then R is_strongly_connected_in K2 by A4,ORDERS_1:92;
-  then reconsider K2 as Chain of P2 by ORDERS_2:def 11;
+  then R is_strongly_connected_in K2 by A4,ORDERS_1:7;
+  then reconsider K2 as Chain of P2 by ORDERS_2:def 7;
   consider a be set such that A5:a in K by XBOOLE_0:7;
   a in the carrier of P1 by A5;
   then a in dom h by FUNCT_2:def 1;
-  then h.a in K2 by A5,FUNCT_1:def 12;
+  then h.a in K2 by A5,FUNCT_1:def 6;
   hence thesis;
   end;
 
 registration
-  cluster strict chain-complete non empty Poset;
+  cluster strict chain-complete non empty for Poset;
   existence
   proof
-    set z =the  set;
+    set z = the set;
     set A = {z};
     reconsider R = id A as Relation of A;
     reconsider R as Order of A;
@@ -191,7 +191,7 @@ registration
 end;
 
 registration
-  cluster chain-complete -> lower-bounded RelStr;
+  cluster chain-complete -> lower-bounded for RelStr;
   coherence by Def1;
 end;
 
@@ -219,7 +219,7 @@ theorem Th2:
     let q;
     assume q in M;
     then consider x such that
-A2: x in dom f & x in L & q = f.x by FUNCT_1:def 12;
+A2: x in dom f & x in L & q = f.x by FUNCT_1:def 6;
     reconsider x as Element of P by A2;
     L is_<=_than r by A1,YELLOW_0:def 9;
     then x <= r by A2,LATTICE3:def 9;
@@ -243,8 +243,8 @@ Lm5:
         g be monotone Function of P, P,
         p be Element of P;
     set X = the carrier of P;
-    iter(g,0).p = (id X).p by FUNCT_7:86
-              .= p by FUNCT_1:35;
+    iter(g,0).p = (id X).p by FUNCT_7:84
+              .= p by FUNCT_1:18;
     hence thesis;
   end;
 
@@ -281,7 +281,7 @@ Lm7:
   proof
     set X = the carrier of P;
     reconsider g1 = iter(g,n) as Function of X,X by Lm3;
-    (g*g1).p = g.(g1.p) & (g1*g).p = g1.(g.p) by FUNCT_2:21;
+    (g*g1).p = g.(g1.p) & (g1*g).p = g1.(g.p) by FUNCT_2:15;
     hence thesis;
   end;
 
@@ -310,7 +310,7 @@ Lm8:
      reconsider x1=iter(g,k).p as Element of P by Lm6;
      reconsider y1=iter(g,k).p3 as Element of P by Lm6;
      A5:x1<=y1 by A4,A3;
-     iter(g,k+1) = g*iter(g,k) by FUNCT_7:73;
+     iter(g,k+1) = g*iter(g,k) by FUNCT_7:71;
      then p1 = g.(iter(g,k).p) & p4 = g.(iter(g,k).p3) by Lm7,A4;
      hence thesis by A5,ORDERS_3:def 5;
      end;
@@ -340,10 +340,10 @@ Lm9:
      assume A4:p3= g.p & p<=p3 & p1=iter(g,n).p & p4= iter(g,n+(k+1)).p;
      reconsider y1=iter(g,n+k).p as Element of P by Lm6;
      A5:p1<=y1 by A4,A3;
-     iter(g,n+(k+1)) = iter(g,(n+k)+1).=iter(g,n+k)*g by FUNCT_7:71;
+     iter(g,n+(k+1)) = iter(g,(n+k)+1).=iter(g,n+k)*g by FUNCT_7:69;
      then p4 = iter(g,n+k).p3 by Lm7,A4;
      then y1<=p4 by A4,Lm8;
-     hence thesis by A5,ORDERS_2:26;
+     hence thesis by A5,ORDERS_2:3;
      end;
     hence thesis;
     end;
@@ -373,7 +373,7 @@ Lm11:
      proof
      let p;
      assume A4:p is_a_fixpoint_of g;
-     iter(g,k+1) = g*iter(g,k) by FUNCT_7:73;
+     iter(g,k+1) = g*iter(g,k) by FUNCT_7:71;
      then iter(g,k+1).p = g.(iter(g,k).p) by Lm7
                        .= g.p by A4,A3
                        .= p by A4,ABIAN:def 3;
@@ -411,13 +411,13 @@ Lm12:
       reconsider q2 = iter(g2,k).p as Element of P by Lm6;
       set r = g1.q2;
 A5:   q1 <= q2 by A4,A3;
-  iter(g1,k+1) = g1*iter(g1,k) by FUNCT_7:73;
+  iter(g1,k+1) = g1*iter(g1,k) by FUNCT_7:71;
 then A6:   p1 = g1.q1 by Lm7,A4;
-  iter(g2,k+1) = g2*iter(g2,k) by FUNCT_7:73;
+  iter(g2,k+1) = g2*iter(g2,k) by FUNCT_7:71;
 then A7:   p2 = g2.q2 by Lm7,A4;
 A8:   p1 <= r by A5,A6,ORDERS_3:def 5;
-      r <= p2 by A4,A7,YELLOW_2:10;
-      hence thesis by A8,ORDERS_2:26;
+      r <= p2 by A4,A7,YELLOW_2:9;
+      hence thesis by A8,ORDERS_2:3;
       end;
     hence thesis;
     end;
@@ -456,7 +456,7 @@ A2: x=y & ex n being Nat st y = iter(g,n).a;
     p<=p1 or p1<=p
       proof
       set a1 = iter(g,1).a;
-      A8:a1=g.a by FUNCT_7:72;
+      A8:a1=g.a by FUNCT_7:70;
       per cases;
         suppose n<=m;
           hence thesis by A6,A7,A8,Lm10,YELLOW_0:44;
@@ -465,7 +465,7 @@ A2: x=y & ex n being Nat st y = iter(g,n).a;
           hence thesis by A6,A7,A8,Lm10,YELLOW_0:44;
           end;
       end;
-    hence thesis by A4,A5,ORDERS_2:def 9;
+    hence thesis by A4,A5,ORDERS_2:def 5;
     end;
   then A9:R is_connected_in L by RELAT_2:def 6;
   x in L implies [x,x] in R
@@ -473,11 +473,11 @@ A2: x=y & ex n being Nat st y = iter(g,n).a;
     assume x in L;
     then reconsider x as Element of P;
     x<=x;
-    hence thesis by ORDERS_2:def 9;
+    hence thesis by ORDERS_2:def 5;
     end;
   then R is_reflexive_in L by RELAT_2:def 1;
-  then R is_strongly_connected_in L by A9,ORDERS_1:92;
-  then reconsider L as Chain of P by ORDERS_2:def 11;
+  then R is_strongly_connected_in L by A9,ORDERS_1:7;
+  then reconsider L as Chain of P by ORDERS_2:def 7;
   L is non empty Chain of P;
   hence thesis;
 end;
@@ -511,9 +511,9 @@ theorem Th4:
       reconsider z=iter(g,k).a as Element of P by Lm6;
       z in the carrier of P; then
 A8:   z in dom g & z in iter_min(g) by FUNCT_2:def 1;
-      p = (g*iter(g,k)).a by A5,A7,FUNCT_7:73
+      p = (g*iter(g,k)).a by A5,A7,FUNCT_7:71
        .= g.z by Lm7;
-      hence thesis by A8,FUNCT_1:def 12;
+      hence thesis by A8,FUNCT_1:def 6;
       end;
     n=0 implies p=a by A5,Lm5;
     hence thesis by A6,A4,A3,LATTICE3:def 9,NAT_1:14,YELLOW_0:44;
@@ -525,19 +525,19 @@ A8:   z in dom g & z in iter_min(g) by FUNCT_2:def 1;
     let x be Element of P;
     assume x in L;
     then consider z such that
-A10: z in dom g & z in iter_min(g) & x = g.z by FUNCT_1:def 12;
+A10: z in dom g & z in iter_min(g) & x = g.z by FUNCT_1:def 6;
     consider z1 be Element of P such that
                A11:z=z1 & ex n st z1 = iter(g,n).a by A10;
     consider n such that A12:z1=iter(g,n).a by A11;
     set n1=n+1;
     g.z = (g*iter(g,n)).a by Lm7,A11,A12
-       .= iter(g,n1).a by FUNCT_7:73;
+       .= iter(g,n1).a by FUNCT_7:71;
     then x in iterSet(g,a) by A10;
     hence thesis by A2,LATTICE3:def 9;
     end;
   then L is_<=_than s1 by LATTICE3:def 9;
   then s2<=s1 by A1,YELLOW_0:def 9;
-  hence thesis by A9,ORDERS_2:25;
+  hence thesis by A9,ORDERS_2:2;
   end;
 
 theorem Th5:
@@ -558,7 +558,7 @@ theorem Th5:
     y in iter_min(g2);
     then A6:y <= p2 by A3,LATTICE3:def 9;
     p <= y by A1,A5,Lm12;
-    hence thesis by A4,A6,ORDERS_2:26;
+    hence thesis by A4,A6,ORDERS_2:3;
     end;
   then iter_min(g1) is_<=_than p2 by LATTICE3:def 9;
   hence thesis by A2,YELLOW_0:30;
@@ -616,8 +616,8 @@ theorem Th7:
         let x be Element of Q;
         assume x in M;
         then consider a be set such that
-    A1: a in dom IT & a in L & x = IT.a by FUNCT_1:def 12;
-        thus thesis by A1,FUNCOP_1:13;
+    A1: a in dom IT & a in L & x = IT.a by FUNCT_1:def 6;
+        thus thesis by A1,FUNCOP_1:7;
         end;
       then A2:M is_<=_than z by LATTICE3:def 9;
       for y being Element of Q st M is_<=_than y holds z <= y
@@ -626,29 +626,29 @@ theorem Th7:
         assume A3:M is_<=_than y;
         consider a be set such that A4:a in L by XBOOLE_0:def 1;
         a in the carrier of P by A4;
-        then A5:a in dom IT by FUNCOP_1:19;
-        IT.a = z by A4,FUNCOP_1:13;
-        then z in M by A4,A5,FUNCT_1:def 12;
+        then A5:a in dom IT by FUNCOP_1:13;
+        IT.a = z by A4,FUNCOP_1:7;
+        then z in M by A4,A5,FUNCT_1:def 6;
         hence thesis by A3,LATTICE3:def 9;
         end;
       then z = "\/"(M,Q) by A2,YELLOW_0:30;
-      hence thesis by FUNCOP_1:13;
+      hence thesis by FUNCOP_1:7;
       end;
     hence thesis by Th6;
   end;
 
 registration let P,Q;
-  cluster continuous Function of P, Q;
+  cluster continuous for Function of P, Q;
   existence
   proof
-    set z =the  Element of Q;
+    set z = the Element of Q;
     take P-->z;
     thus thesis by Th7;
   end;
 end;
 
 registration let P,Q;
-  cluster continuous -> monotone Function of P, Q;
+  cluster continuous -> monotone for Function of P, Q;
   correctness by Def4;
 end;
 
@@ -665,7 +665,7 @@ theorem Th8:
     set a2=sup (f.:L);
     A2:a2<=a1 by Th2;
     a1<=a2 by A1;
-    hence thesis by A2,ORDERS_2:25;
+    hence thesis by A2,ORDERS_2:2;
     end;
   hence thesis by Th6;
   end;
@@ -728,7 +728,7 @@ definition let P; let g be monotone Function of P,P;
            (p2 is_a_fixpoint_of g &
                for p st p is_a_fixpoint_of g holds p2 <= p);
     then p1 <=  p2 & p2 <= p1;
-    hence thesis by ORDERS_2:25;
+    hence thesis by ORDERS_2:2;
   end;
 end;
 
@@ -743,7 +743,7 @@ proof
   then A1:q <= p by Def5;
   q is_a_fixpoint_of g by Def5;
   then p <= q by Lm14;
-  hence thesis by A1,ORDERS_2:25;
+  hence thesis by A1,ORDERS_2:2;
 end;
 
 theorem Th10:
@@ -772,9 +772,9 @@ definition let P,Q;
                :ex f be continuous Function of P,Q st f=x };
     IT is non empty
     proof
-      set z =the  Element of Q;
+      set z = the Element of Q;
       reconsider f = P-->z as continuous Function of P,Q by Th7;
-      f is Element of Funcs(the carrier of P,the carrier of Q) by FUNCT_2:11;
+      f is Element of Funcs(the carrier of P,the carrier of Q) by FUNCT_2:8;
       then f in IT;
       hence thesis;
     end;
@@ -787,7 +787,7 @@ Lm15:
 proof
   let f be Function of P,Q;
   for p holds f.p <= f.p;
-  hence thesis by YELLOW_2:10;
+  hence thesis by YELLOW_2:9;
 end;
 
 Lm16:
@@ -802,12 +802,12 @@ Lm16:
       proof
       assume A2:q=f.p & q2=h.p;
       set q1=g.p;
-      q<=q1 & q1<=q2 by A2,A1,YELLOW_2:10;
-      hence thesis by ORDERS_2:26;
+      q<=q1 & q1<=q2 by A2,A1,YELLOW_2:9;
+      hence thesis by ORDERS_2:3;
       end;
     hence thesis;
     end;
-  hence thesis by YELLOW_2:10;
+  hence thesis by YELLOW_2:9;
   end;
 
 Lm17:
@@ -822,11 +822,11 @@ proof
     then reconsider p=x as Element of P;
     set q1=f.p;
     set q2=g.p;
-    A2:q1<=q2 by A1,YELLOW_2:10;
-    q2<=q1 by A1,YELLOW_2:10;
-    hence thesis by A2,ORDERS_2:25;
+    A2:q1<=q2 by A1,YELLOW_2:9;
+    q2<=q1 by A1,YELLOW_2:9;
+    hence thesis by A2,ORDERS_2:2;
   end;
-  hence thesis by FUNCT_2:18;
+  hence thesis by FUNCT_2:12;
 end;
 
 definition let P,Q;
@@ -872,7 +872,7 @@ Lm18:
   field ConRelat(P,Q) c= ConFuncs(P,Q)
   proof
     ConFuncs(P,Q) \/ ConFuncs(P,Q) c= ConFuncs(P,Q);
-    hence thesis by RELSET_1:19;
+    hence thesis by RELSET_1:8;
   end;
 
 Lm19:
@@ -995,7 +995,7 @@ A1: the InternalRel of IT is_reflexive_in the carrier of IT by Lm19;
 A2: the InternalRel of IT is_transitive_in the carrier of IT by Lm20;
     the InternalRel of IT is_antisymmetric_in the carrier of IT
                                                             by Lm21;
-    hence thesis by A1,A2,ORDERS_2:def 4,def 5,def 6;
+    hence thesis by A1,A2,ORDERS_2:def 2,def 3,def 4;
   end;
 end;
 
@@ -1032,19 +1032,19 @@ A5:   y=b & ex g being continuous Function of P,Q st g in F & b=g.p by A2;
       consider g being continuous Function of P,Q such that
 A6:   g in F & b=g.p by A5;
       set S =the InternalRel of ConPoset(P,Q);
-      A7:S is_strongly_connected_in F by ORDERS_2:def 11;
+      A7:S is_strongly_connected_in F by ORDERS_2:def 7;
       per cases by A7,A4,A6,RELAT_2:def 7;
         suppose [f,g] in S;
            then consider f1,g1 being Function of P,Q such that
         A8:f=f1 & g=g1 & f1 <= g1 by Def7;
-           a <= b by A8,A4,A6,YELLOW_2:10;
-           hence thesis by A3,A5,ORDERS_2:def 9;
+           a <= b by A8,A4,A6,YELLOW_2:9;
+           hence thesis by A3,A5,ORDERS_2:def 5;
            end;
         suppose [g,f] in S;
            then consider g1,f1 being Function of P,Q such that
               A9:g=g1 & f=f1 & g1 <= f1 by Def7;
-           b<= a by A9,A4,A6,YELLOW_2:10;
-           hence thesis by A3,A5,ORDERS_2:def 9;
+           b<= a by A9,A4,A6,YELLOW_2:9;
+           hence thesis by A3,A5,ORDERS_2:def 5;
            end;
         end;
     then A10:R is_connected_in IT by RELAT_2:def 6;
@@ -1053,11 +1053,11 @@ A6:   g in F & b=g.p by A5;
       assume x in IT;
       then reconsider x as Element of Q;
       x<=x;
-      hence thesis by ORDERS_2:def 9;
+      hence thesis by ORDERS_2:def 5;
       end;
     then R is_reflexive_in IT by RELAT_2:def 1;
-    then R is_strongly_connected_in IT by A10,ORDERS_1:92;
-    then reconsider IT as Chain of Q by ORDERS_2:def 11;
+    then R is_strongly_connected_in IT by A10,ORDERS_1:7;
+    then reconsider IT as Chain of Q by ORDERS_2:def 7;
     consider a be set such that A11:a in F by XBOOLE_0:7;
     a in ConFuncs(P,Q) by A11; then
     consider b being Element of Funcs(the carrier of P,the carrier of Q)
@@ -1112,7 +1112,7 @@ A2: for x st x in X holds U[x,IT.x] from FUNCT_2:sch 1(A1);
           f.x = sup M by A3 .= g.x by A3;
           hence thesis;
         end;
-        hence thesis by FUNCT_2:18;
+        hence thesis by FUNCT_2:12;
       end;
       hence thesis;
     end;
@@ -1148,7 +1148,7 @@ Lm22:
         A8:a <= b by A1,A7,ORDERS_3:def 5;
         b in X1 by A7;
         then b <= q1 by A5,LATTICE3:def 9;
-        hence thesis by A6,A8,ORDERS_2:26;
+        hence thesis by A6,A8,ORDERS_2:3;
       end;
       then X is_<=_than q1 by LATTICE3:def 9;
       hence thesis by A3,A4,YELLOW_0:def 9;
@@ -1204,18 +1204,18 @@ Lm25:
         let q2;
         assume q2 in M2;
         then consider x such that A5: x in dom g & x in L & q2 = g.x
-                                            by FUNCT_1:def 12;
+                                            by FUNCT_1:def 6;
         reconsider x as Element of P by A5;
         set Mx=F-image x;
         A6:f.x= sup Mx by Def10;
         set y = f.x;
         x in the carrier of P;
         then x in dom f by FUNCT_2:def 1;
-        then y in M1 by A5,FUNCT_1:def 12;
+        then y in M1 by A5,FUNCT_1:def 6;
         then A7:y <= q1 by Lm23;
         q2 in F-image x by A5,A3;
         then q2 <= sup Mx by Lm23;
-        hence thesis by A7,A6,ORDERS_2:26;
+        hence thesis by A7,A6,ORDERS_2:3;
       end;
       hence thesis by A4,Lm24;
     end;
@@ -1233,7 +1233,7 @@ Lm26:
   sup_func(F) is Element of ConPoset(P,Q)
   proof
     set x = sup_func(F);
-A1: x is Element of Funcs(the carrier of P,the carrier of Q) by FUNCT_2:11;
+A1: x is Element of Funcs(the carrier of P,the carrier of Q) by FUNCT_2:8;
     reconsider x = sup_func(F) as continuous Function of P,Q;
     x in ConFuncs(P,Q) by A1;
     hence thesis;
@@ -1276,9 +1276,9 @@ A2: x = g1 by Lm27;
       end;
       hence thesis;
     end;
-    then g1 <= f1 by YELLOW_2:10;
+    then g1 <= f1 by YELLOW_2:9;
     then [g,f] in ConRelat(P,Q) by Def7;
-    hence thesis by A2,ORDERS_2:def 9;
+    hence thesis by A2,ORDERS_2:def 5;
     end;
    then A5:F is_<=_than f by LATTICE3:def 9;
    for y being Element of X holds F is_<=_than y implies f <= y
@@ -1309,19 +1309,19 @@ A2: x = g1 by Lm27;
               A11: g in F & a=g.p by A10;
             reconsider g1 = g as Element of ConPoset(P,Q) by A11;
             g1 <= y by A8,A11,LATTICE3:def 9;
-            then [g1,y] in ConRelat(P,Q) by ORDERS_2:def 9;
+            then [g1,y] in ConRelat(P,Q) by ORDERS_2:def 5;
             then consider g2,g3 being Function of P,Q such that
          A12:g1=g2 & y=g3 & g2 <= g3 by Def7;
-            thus thesis by A12,A6,A7,A10,A11,A9,YELLOW_2:10;
+            thus thesis by A12,A6,A7,A10,A11,A9,YELLOW_2:9;
             end;
           then sup M <= q2 by Lm24;
           hence thesis by A9,Def10;
           end;
         hence thesis;
         end;
-      then f1 <= gy by YELLOW_2:10;
+      then f1 <= gy by YELLOW_2:9;
       then [f,y] in ConRelat(P,Q) by A6,A7,Def7;
-      hence thesis by ORDERS_2:def 9;
+      hence thesis by ORDERS_2:def 5;
       end;
     hence thesis;
     end;
@@ -1344,7 +1344,7 @@ Lm28:
   proof
     reconsider f = min_func(P,Q) as continuous Function of P,Q;
     reconsider x = f as Element of Funcs(the carrier of P,the carrier of Q)
-                                                     by FUNCT_2:11;
+                                                     by FUNCT_2:8;
     x in ConFuncs(P,Q);
     hence thesis;
   end;
@@ -1371,14 +1371,14 @@ A3: g=x1 by A2;
       q1=f1.p & q2=g.p implies q1<=q2
         proof
         assume q1=f1.p & q2=g.p;
-        then q1=Bottom Q by FUNCOP_1:13;
+        then q1=Bottom Q by FUNCOP_1:7;
         hence thesis by YELLOW_0:44;
         end;
       hence thesis;
       end;
-    then f1 <= g by YELLOW_2:10;
+    then f1 <= g by YELLOW_2:9;
     then [f,x] in ConRelat(P,Q) by A2,A3,Def7,A1;
-    hence thesis by ORDERS_2:def 9;
+    hence thesis by ORDERS_2:def 5;
   end;
   hence thesis by Lm4;
 end;
@@ -1421,7 +1421,7 @@ Lm30:
 proof
   assume A1:g is continuous Function of P,P;
   reconsider g1 = g as Element of Funcs(the carrier of P,the carrier of P)
-                                  by FUNCT_2:11;
+                                  by FUNCT_2:8;
   g1 in ConFuncs (P,P) by A1;
   hence thesis;
 end;
@@ -1475,7 +1475,7 @@ A3: (for g being Element of ConPoset(P,P),
           .= h2.x by A3;
       hence thesis;
     end;
-    hence thesis by FUNCT_2:18;
+    hence thesis by FUNCT_2:12;
   end;
 end;
 
@@ -1487,7 +1487,7 @@ Lm31:
   proof
     let p1,p2 be Element of ConPoset(P,P);
     assume p1 <= p2;
-    then A1:[p1,p2] in ConRelat(P,P) by ORDERS_2:def 9;
+    then A1:[p1,p2] in ConRelat(P,P) by ORDERS_2:def 5;
     ex g1,g2 being continuous Function of P,P st p1=g1 & p2=g2 & g1 <= g2
     proof
       consider g1,g2 being Function of P,P such that
@@ -1611,7 +1611,7 @@ for G being non empty Chain of ConPoset(P,P),
   let f,g be monotone Function of P,P;
   assume A1: f in G & g in G;
   set S = the InternalRel of ConPoset(P,P);
-  A2:S is_strongly_connected_in G by ORDERS_2:def 11;
+  A2:S is_strongly_connected_in G by ORDERS_2:def 7;
   per cases by A2,A1,RELAT_2:def 7;
     suppose [f,g] in S;
       then consider f1,g1 being Function of P,P such that
@@ -1653,11 +1653,11 @@ A4: y=p2 & g2 in G & p2 = iter(g2,n).(Bottom P) by A1,A2,Lm33;
     per cases by A3,A4,Lm36;
     suppose g1 <= g2;
       then p1 <= p2 by Lm12,A3,A4;
-      hence thesis by A3,A4,ORDERS_2:def 9;
+      hence thesis by A3,A4,ORDERS_2:def 5;
     end;
     suppose g2 <= g1;
       then p2 <= p1 by Lm12,A3,A4;
-      hence thesis by A3,A4,ORDERS_2:def 9;
+      hence thesis by A3,A4,ORDERS_2:def 5;
     end;
   end;
   then A5:R is_connected_in X by RELAT_2:def 6;
@@ -1666,11 +1666,11 @@ A4: y=p2 & g2 in G & p2 = iter(g2,n).(Bottom P) by A1,A2,Lm33;
     assume x in X;
     then reconsider x as Element of P;
     x<=x;
-    hence thesis by ORDERS_2:def 9;
+    hence thesis by ORDERS_2:def 5;
     end;
   then R is_reflexive_in X by RELAT_2:def 1;
-  then R is_strongly_connected_in X by A5,ORDERS_1:92;
-  hence thesis by ORDERS_2:def 11;
+  then R is_strongly_connected_in X by A5,ORDERS_1:7;
+  hence thesis by ORDERS_2:def 7;
   end;
 
 Lm38:
@@ -1687,7 +1687,7 @@ Lm38:
    reconsider h as Function of X,Y;
    x in X by A1; then
    x in dom h by FUNCT_2:def 1;
-   hence thesis by A1,FUNCT_1:def 12;
+   hence thesis by A1,FUNCT_1:def 6;
    end;
 
 Lm39:
@@ -1729,7 +1729,7 @@ for G being non empty Chain of ConPoset(P,P), x being set, n being Nat,
                        h being continuous Function of P,P
                      st h = g & g in G & p = iter(h,n).(Bottom P)}
            & x in g1.:M;
-   then ex y st y in dom g1 & y in M & x = g1.y by FUNCT_1:def 12;
+   then ex y st y in dom g1 & y in M & x = g1.y by FUNCT_1:def 6;
    then consider y being Element of M such that
 A2:y in M & x = g1.y;
    consider p being Element of P such that
@@ -1784,7 +1784,7 @@ A7:      p=p0 & g in G & p0 = iter(g,n0).a by Lm33;
          then reconsider r as Element of P;
       A8:r <= sup L by Lm23,A7,Lm38;
          p <= r by A7,Lm39;
-         hence thesis by A8,ORDERS_2:26;
+         hence thesis by A8,ORDERS_2:3;
          end; then
      A9: sup M0 <= sup L by Lm24;
        defpred U[Nat] means
@@ -1822,7 +1822,7 @@ A7:      p=p0 & g in G & p0 = iter(g,n0).a by Lm33;
                          h being continuous Function of P,P
                         st h = g & g in G & p = iter(h,k+1).a};
             reconsider z = iter(g0,k).a as Element of P by Lm6;
-            A14:z1 = (g0*iter(g0,k)).a by A13,FUNCT_7:73
+            A14:z1 = (g0*iter(g0,k)).a by A13,FUNCT_7:71
                  .= g0.z by Lm7;
             reconsider M = {p where p is Element of P
                      :ex g being Element of ConPoset(P,P),
@@ -1853,16 +1853,16 @@ A7:      p=p0 & g in G & p0 = iter(g,n0).a by Lm33;
                 such that A21:g1 in G & q1=g1.a1 by A20;
                 per cases by A17,A21,Lm36;
                   suppose g1 <= g;
-                  then A22:q1 <= g.a1 by A21,YELLOW_2:10;
+                  then A22:q1 <= g.a1 by A21,YELLOW_2:9;
                   set a2 = g.a1;
                   reconsider g2 = g as Element of ConPoset(P,P)
                                           by Lm30;
                   reconsider gg = g2 as continuous Function of P,P;
                   a2 = (g*iter(g,k)).a by Lm7
-                    .= iter(gg,k+1).a by FUNCT_7:73;
+                    .= iter(gg,k+1).a by FUNCT_7:71;
                   then a2 in M1 by A13,A17;
                   then a2 <= sup M1 by Lm23;
-                  hence thesis by A22,ORDERS_2:26;
+                  hence thesis by A22,ORDERS_2:3;
                   end;
                   suppose A23:g <= g1;
                   reconsider a2 = iter(g1,k).a as Element of P by Lm6;
@@ -1873,10 +1873,10 @@ A7:      p=p0 & g in G & p0 = iter(g,n0).a by Lm33;
                                           by Lm30;
                   reconsider gg = g2 as continuous Function of P,P;
                   a3 = (g1*iter(g1,k)).a by Lm7
-                    .= iter(gg,k+1).a by FUNCT_7:73;
+                    .= iter(gg,k+1).a by FUNCT_7:71;
                   then a3 in M1 by A13,A21;
                   then a3 <= sup M1 by Lm23;
-                  hence thesis by A24,ORDERS_2:26;
+                  hence thesis by A24,ORDERS_2:3;
                   end;
                 end;
               then W is_<=_than sup M1 by LATTICE3:def 9;
@@ -1886,13 +1886,13 @@ A7:      p=p0 & g in G & p0 = iter(g,n0).a by Lm33;
             then A25:sup M0 <= sup M1 by A16,YELLOW_0:def 9;
             z <= sup M by A12;
             then z1 <= sup M0 by A14,A15,ORDERS_3:def 5;
-            hence thesis by A25,ORDERS_2:26;
+            hence thesis by A25,ORDERS_2:3;
             end;
          hence thesis;
          end;
        U[k] from NAT_1:sch 2(A10,A11);
        then x <= sup M0 by A6;
-       hence thesis by A9,ORDERS_2:26;
+       hence thesis by A9,ORDERS_2:3;
        end;
      then I0 is_<=_than sup L by LATTICE3:def 9;
      hence thesis by A3,A4,YELLOW_0:def 9;

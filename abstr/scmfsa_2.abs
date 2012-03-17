@@ -22,13 +22,14 @@ environ
  notations TARSKI, XBOOLE_0, ENUMSET1, ZFMISC_1, SUBSET_1, ORDINAL1, XCMPLX_0,
       XXREAL_0, NAT_1, INT_1, RELAT_1, MCART_1, CARD_1, CARD_3, INT_2,
       FINSEQ_1, FUNCOP_1, STRUCT_0, FUNCT_1, RELSET_1, PARTFUN1, FUNCT_2,
-      FINSET_1, FUNCT_4, FINSEQ_2, FUNCT_7, RECDEF_2, NUMBERS, COMPOS_1,
-      EXTPRO_1, AMI_2, AMI_3, SCMFSA_1;
+      FINSET_1, FUNCT_4, FINSEQ_2, FUNCT_7, RECDEF_2, NUMBERS, MEMSTR_0,
+      COMPOS_1, EXTPRO_1, AMI_2, AMI_3, SCMFSA_1;
  constructors WELLORD2, DOMAIN_1, XXREAL_0, REAL_1, INT_2, FINSEQ_4, CAT_2,
-      AMI_3, SCMFSA_1, RELSET_1, PRE_POLY, RECDEF_2;
+      AMI_3, SCMFSA_1, RELSET_1, PRE_POLY, RECDEF_2, FUNCT_7, MEMSTR_0;
  registrations XBOOLE_0, SETFAM_1, RELAT_1, FUNCT_1, ORDINAL1, FUNCOP_1,
       NUMBERS, XREAL_0, NAT_1, INT_1, CARD_3, STRUCT_0, AMI_2, AMI_3, SCMFSA_1,
-      CARD_1, FINSET_1, CARD_2, RELSET_1, FUNCT_2, COMPOS_1, EXTPRO_1;
+      CARD_1, FINSET_1, CARD_2, RELSET_1, FUNCT_2, COMPOS_1, EXTPRO_1,
+      MEMSTR_0;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
 
 
@@ -39,27 +40,22 @@ definition
 :: SCMFSA_2:def 1
   AMI-Struct(# SCM+FSA-Memory,In (NAT,SCM+FSA-Memory),
      SCM+FSA-Instr, In([0,{},{}],SCM+FSA-Instr),
-     SCM+FSA-OK,SCM+FSA-Exec#)
-  ;
+     SCM+FSA-OK,SCM+FSA-Exec#);
 end;
 
 registration
-  cluster SCM+FSA -> non empty stored-program standard-ins;
+  cluster SCM+FSA -> non empty standard-ins;
 end;
 
-registration
- cluster NAT-defined -> (the carrier of SCM+FSA)-defined Function;
-end;
 
-canceled 6;
 
-theorem :: SCMFSA_2:7
+theorem :: SCMFSA_2:1
   IC SCM+FSA = NAT;
 
 begin :: The Memory Structure
 
 reserve k for Element of NAT,
-  J,K,L for Element of Segm 14,
+  J,K,L for Element of Segm 13,
   O,P,R for Element of Segm 9;
 
 definition
@@ -87,27 +83,23 @@ reserve da for Int-Location,
   fa for FinSeq-Location,
   x,y for set;
 
-canceled;
 
-theorem :: SCMFSA_2:9
+
+theorem :: SCMFSA_2:2
   da in Int-Locations;
 
-theorem :: SCMFSA_2:10
+theorem :: SCMFSA_2:3
   fa in FinSeq-Locations;
 
-theorem :: SCMFSA_2:11
+theorem :: SCMFSA_2:4
   x in Int-Locations implies x is Int-Location;
 
-theorem :: SCMFSA_2:12
+theorem :: SCMFSA_2:5
   x in FinSeq-Locations implies x is FinSeq-Location;
 
-theorem :: SCMFSA_2:13
-  Int-Locations misses NAT;
 
-theorem :: SCMFSA_2:14
-  FinSeq-Locations misses NAT;
 
-theorem :: SCMFSA_2:15
+theorem :: SCMFSA_2:6
   Int-Locations misses FinSeq-Locations;
 
 definition
@@ -115,23 +107,23 @@ definition
   func intloc k -> Int-Location equals
 :: SCMFSA_2:def 6
   dl.k;
-  canceled;
+
   func fsloc k -> FinSeq-Location equals
-:: SCMFSA_2:def 8
+:: SCMFSA_2:def 7
   -(k+1);
 end;
 
-canceled;
 
-theorem :: SCMFSA_2:17
+
+theorem :: SCMFSA_2:7
   for k1,k2 being natural number st k1 <> k2 holds fsloc k1 <> fsloc k2;
 
-canceled;
 
-theorem :: SCMFSA_2:19
+
+theorem :: SCMFSA_2:8
   for dl being Int-Location ex i being Element of NAT st dl = intloc i;
 
-theorem :: SCMFSA_2:20
+theorem :: SCMFSA_2:9
   for fl being FinSeq-Location ex i being Element of NAT st fl =
   fsloc i;
 
@@ -139,21 +131,21 @@ registration
  cluster FinSeq-Locations -> infinite;
 end;
 
-canceled 4;
 
-theorem :: SCMFSA_2:25
+
+theorem :: SCMFSA_2:10
   for I being Int-Location holds I is Data-Location;
 
-theorem :: SCMFSA_2:26
+theorem :: SCMFSA_2:11
   for l being Int-Location holds ObjectKind l = INT;
 
-theorem :: SCMFSA_2:27
+theorem :: SCMFSA_2:12
   for l being FinSeq-Location holds ObjectKind l = INT*;
 
-theorem :: SCMFSA_2:28
+theorem :: SCMFSA_2:13
   for x being set st x in SCM+FSA-Data-Loc holds x is Int-Location;
 
-theorem :: SCMFSA_2:29
+theorem :: SCMFSA_2:14
   for x being set st x in SCM+FSA-Data*-Loc holds x is FinSeq-Location;
 
 reserve la,lb for Element of NAT,
@@ -176,45 +168,41 @@ registration
   cluster InsCode I -> natural;
 end;
 
-canceled 4;
 
-theorem :: SCMFSA_2:34
+
+theorem :: SCMFSA_2:15
   for I being Instruction of SCM+FSA st InsCode I <= 8 holds I is
   Instruction of SCM;
 
-theorem :: SCMFSA_2:35
-  for I being Instruction of SCM+FSA holds InsCode I <= 13;
+theorem :: SCMFSA_2:16
+  for I being Instruction of SCM+FSA holds InsCode I <= 12;
 
-canceled;
 
-theorem :: SCMFSA_2:37
-  for i being Instruction of SCM+FSA, I being Instruction of SCM st i =
-  I holds InsCode i = InsCode I;
 
-theorem :: SCMFSA_2:38
+theorem :: SCMFSA_2:17
   for I being Instruction of SCM holds I is Instruction of SCM+FSA;
 
 definition
   let a,b;
-  canceled 2;
+
   func a := b -> Instruction of SCM+FSA means
-:: SCMFSA_2:def 11
+:: SCMFSA_2:def 8
 
   ex A,B st a = A & b = B & it = A:=B;
   func AddTo(a,b) -> Instruction of SCM+FSA means
-:: SCMFSA_2:def 12
+:: SCMFSA_2:def 9
 
   ex A,B st a = A & b = B & it = AddTo(A,B);
   func SubFrom(a,b) -> Instruction of SCM+FSA means
-:: SCMFSA_2:def 13
+:: SCMFSA_2:def 10
 
   ex A,B st a = A & b = B & it = SubFrom(A,B);
   func MultBy(a,b) -> Instruction of SCM+FSA means
-:: SCMFSA_2:def 14
+:: SCMFSA_2:def 11
 
   ex A,B st a = A & b = B & it = MultBy(A,B);
   func Divide(a,b) -> Instruction of SCM+FSA means
-:: SCMFSA_2:def 15
+:: SCMFSA_2:def 12
 
   ex A,B st a = A & b = B & it = Divide(A,B);
 end;
@@ -222,16 +210,16 @@ end;
 definition
   let la;
   func goto la -> Instruction of SCM+FSA equals
-:: SCMFSA_2:def 16
+:: SCMFSA_2:def 13
 
    SCM-goto la;
   let a;
   func a=0_goto la -> Instruction of SCM+FSA means
-:: SCMFSA_2:def 17
+:: SCMFSA_2:def 14
 
   ex A st a = A & it = A=0_goto la;
   func a>0_goto la -> Instruction of SCM+FSA means
-:: SCMFSA_2:def 18
+:: SCMFSA_2:def 15
 
   ex A st a = A & it = A>0_goto la;
 end;
@@ -240,10 +228,10 @@ definition
   let c,i be Int-Location;
   let a be FinSeq-Location;
   func c:=(a,i) -> Instruction of SCM+FSA equals
-:: SCMFSA_2:def 19
+:: SCMFSA_2:def 16
   [9,{},<*c,a,i*>];
   func (a,i):=c -> Instruction of SCM+FSA equals
-:: SCMFSA_2:def 20
+:: SCMFSA_2:def 17
   [10,{},<*c,a,i*>];
 end;
 
@@ -251,103 +239,96 @@ definition
   let i be Int-Location;
   let a be FinSeq-Location;
   func i:=len a -> Instruction of SCM+FSA equals
-:: SCMFSA_2:def 21
+:: SCMFSA_2:def 18
   [11,{},<*i,a*>];
   func a:=<0,...,0>i -> Instruction of SCM+FSA equals
-:: SCMFSA_2:def 22
+:: SCMFSA_2:def 19
   [12,{},<*i,a*>];
 end;
 
-definition
-  let i be Int-Location;
-  func i:==1 -> Instruction of SCM+FSA equals
-:: SCMFSA_2:def 23
-  [13,{},<*i*>];
-end;
 
-canceled 3;
 
-theorem :: SCMFSA_2:42
+theorem :: SCMFSA_2:18
   InsCode (a:=b) = 1;
 
-theorem :: SCMFSA_2:43
+theorem :: SCMFSA_2:19
   InsCode (AddTo(a,b)) = 2;
 
-theorem :: SCMFSA_2:44
+theorem :: SCMFSA_2:20
   InsCode (SubFrom(a,b)) = 3;
 
-theorem :: SCMFSA_2:45
+theorem :: SCMFSA_2:21
   InsCode (MultBy(a,b)) = 4;
 
-theorem :: SCMFSA_2:46
+theorem :: SCMFSA_2:22
   InsCode (Divide(a,b)) = 5;
 
-theorem :: SCMFSA_2:47
+theorem :: SCMFSA_2:23
   InsCode (goto lb) = 6;
 
-theorem :: SCMFSA_2:48
+theorem :: SCMFSA_2:24
   InsCode (a=0_goto lb) = 7;
 
-theorem :: SCMFSA_2:49
+theorem :: SCMFSA_2:25
   InsCode (a>0_goto lb) = 8;
 
-theorem :: SCMFSA_2:50
+theorem :: SCMFSA_2:26
   InsCode (c:=(fa,a)) = 9;
 
-theorem :: SCMFSA_2:51
+theorem :: SCMFSA_2:27
   InsCode ((fa,a):=c) = 10;
 
-theorem :: SCMFSA_2:52
+theorem :: SCMFSA_2:28
   InsCode (a:=len fa) = 11;
 
-theorem :: SCMFSA_2:53
+theorem :: SCMFSA_2:29
   InsCode (fa:=<0,...,0>a) = 12;
 
-theorem :: SCMFSA_2:54
+theorem :: SCMFSA_2:30
   for ins being Instruction of SCM+FSA st InsCode ins = 1 holds ex
   da,db st ins = da:=db;
 
-theorem :: SCMFSA_2:55
+theorem :: SCMFSA_2:31
   for ins being Instruction of SCM+FSA st InsCode ins = 2 holds ex
   da,db st ins = AddTo(da,db);
 
-theorem :: SCMFSA_2:56
+theorem :: SCMFSA_2:32
   for ins being Instruction of SCM+FSA st InsCode ins = 3 holds ex
   da,db st ins = SubFrom(da,db);
 
-theorem :: SCMFSA_2:57
+theorem :: SCMFSA_2:33
   for ins being Instruction of SCM+FSA st InsCode ins = 4 holds ex
   da,db st ins = MultBy(da,db);
 
-theorem :: SCMFSA_2:58
+theorem :: SCMFSA_2:34
   for ins being Instruction of SCM+FSA st InsCode ins = 5 holds ex
   da,db st ins = Divide(da,db);
 
-theorem :: SCMFSA_2:59
+theorem :: SCMFSA_2:35
   for ins being Instruction of SCM+FSA st InsCode ins = 6 holds ex
   lb st ins = goto lb;
 
-theorem :: SCMFSA_2:60
+theorem :: SCMFSA_2:36
   for ins being Instruction of SCM+FSA st InsCode ins = 7 holds ex
   lb,da st ins = da=0_goto lb;
 
-theorem :: SCMFSA_2:61
+theorem :: SCMFSA_2:37
   for ins being Instruction of SCM+FSA st InsCode ins = 8 holds ex
   lb,da st ins = da>0_goto lb;
 
-theorem :: SCMFSA_2:62
+theorem :: SCMFSA_2:38
   for ins being Instruction of SCM+FSA st InsCode ins = 9 holds ex
   a,b,fa st ins = b:=(fa,a);
 
-theorem :: SCMFSA_2:63
+theorem :: SCMFSA_2:39
   for ins being Instruction of SCM+FSA st InsCode ins = 10 holds
   ex a,b,fa st ins = (fa,a):=b;
 
-theorem :: SCMFSA_2:64
+theorem :: SCMFSA_2:40
   for ins being Instruction of SCM+FSA st InsCode ins = 11 holds
   ex a,fa st ins = a:=len fa;
 
-theorem :: SCMFSA_2:65
+theorem :: SCMFSA_2:41
   for ins being Instruction of SCM+FSA st InsCode ins = 12 holds
   ex a,fa st ins = fa:=<0,...,0>a;
 
@@ -356,41 +337,41 @@ begin :: Relationship to {\bf SCM}
 reserve S for State of SCM,
   s,s1 for State of SCM+FSA;
 
-theorem :: SCMFSA_2:66
+theorem :: SCMFSA_2:42
   for s being State of SCM+FSA, d being Int-Location holds d in dom s;
 
-theorem :: SCMFSA_2:67
+theorem :: SCMFSA_2:43
   f in dom s;
 
-theorem :: SCMFSA_2:68
+theorem :: SCMFSA_2:44
   not f in dom S;
 
-theorem :: SCMFSA_2:69
+theorem :: SCMFSA_2:45
   for s being State of SCM+FSA holds Int-Locations c= dom s;
 
-theorem :: SCMFSA_2:70
+theorem :: SCMFSA_2:46
   for s being State of SCM+FSA holds FinSeq-Locations c= dom s;
 
-theorem :: SCMFSA_2:71
+theorem :: SCMFSA_2:47
   for s being State of SCM+FSA holds dom (s|Int-Locations) =
   Int-Locations;
 
-theorem :: SCMFSA_2:72
+theorem :: SCMFSA_2:48
   for s being State of SCM+FSA holds dom (s|FinSeq-Locations) =
   FinSeq-Locations;
 
-theorem :: SCMFSA_2:73
-  for s being State of SCM+FSA, i being Instruction of SCM holds (s|
-  SCM-Memory) +* (NAT --> i) is State of SCM;
+theorem :: SCMFSA_2:49
+  for s being State of SCM+FSA, i being Instruction of SCM
+   holds s|SCM-Memory is State of SCM;
 
-theorem :: SCMFSA_2:74
-  for s being State of SCM+FSA, s9 being State of SCM holds s +* s9 +* (
-  s|NAT) is State of SCM+FSA;
+theorem :: SCMFSA_2:50
+  for s being State of SCM+FSA, s9 being State of SCM
+   holds s +* s9  is State of SCM+FSA;
 
-theorem :: SCMFSA_2:75
+theorem :: SCMFSA_2:51
   for i being Instruction of SCM, ii being Instruction of SCM+FSA,
   s being State of SCM, ss being State of SCM+FSA st i = ii & s = ss|SCM-Memory
-  +* (NAT --> i) holds Exec(ii,ss) = ss +* Exec(i,s) +* ss|NAT;
+   holds Exec(ii,ss) = ss +* Exec(i,s);
 
 definition
   let s be State of SCM+FSA, d be Int-Location;
@@ -402,129 +383,127 @@ definition
   redefine func s.d -> FinSequence of INT;
 end;
 
-theorem :: SCMFSA_2:76
-  S = s|SCM-Memory +* (NAT --> I) implies s = s +* S +* s|NAT;
+theorem :: SCMFSA_2:52
+  S = s|SCM-Memory implies s = s +* S;
 
-canceled;
+theorem :: SCMFSA_2:53
+  s1 = s +* S implies s1.IC SCM+FSA = S.IC SCM;
 
-theorem :: SCMFSA_2:78
-  s1 = s +* S +* s|NAT implies s1.IC SCM+FSA = S.IC SCM;
+theorem :: SCMFSA_2:54
+  s1 = s +* S & A = a implies S.A = s1.a;
 
-theorem :: SCMFSA_2:79
-  s1 = s +* S +* s|NAT & A = a implies S.A = s1.a;
-
-theorem :: SCMFSA_2:80
-  S = s|SCM-Memory +* (NAT --> I) & A = a implies S.A = s.a;
+theorem :: SCMFSA_2:55
+  S = s|SCM-Memory & A = a implies S.A = s.a;
 
 registration
-  cluster SCM+FSA -> proper-halt realistic IC-Ins-separated definite;
+  cluster SCM+FSA -> proper-halt IC-Ins-separated;
 end;
 
-theorem :: SCMFSA_2:81
+theorem :: SCMFSA_2:56
   for dl being Int-Location holds dl <> IC SCM+FSA;
 
-theorem :: SCMFSA_2:82
+theorem :: SCMFSA_2:57
   for dl being FinSeq-Location holds dl <> IC SCM+FSA;
 
-theorem :: SCMFSA_2:83
+theorem :: SCMFSA_2:58
   for il being Int-Location, dl being FinSeq-Location holds il <> dl;
 
-theorem :: SCMFSA_2:84
+theorem :: SCMFSA_2:59
   for il being Element of NAT, dl being Int-Location
   holds il <> dl;
 
-theorem :: SCMFSA_2:85
+theorem :: SCMFSA_2:60
   for il being Element of NAT, dl being FinSeq-Location
   holds il <> dl;
 
-theorem :: SCMFSA_2:86
+theorem :: SCMFSA_2:61
   for s1,s2 being State of SCM+FSA st IC s1 = IC s2 & (for a being
 Int-Location holds s1.a = s2.a) & (for f being FinSeq-Location holds s1.f = s2.
-  f) & for i being Element of NAT holds s1.i = s2.i holds s1 =
+  f)  holds s1 =
   s2;
 
-canceled;
 
-theorem :: SCMFSA_2:88
-  S = s|SCM-Memory +* (NAT --> I) implies IC s = IC S;
+
+theorem :: SCMFSA_2:62
+  S = s|SCM-Memory implies IC s = IC S;
 
 begin :: Users guide
 
-theorem :: SCMFSA_2:89
+theorem :: SCMFSA_2:63
   Exec(a:=b, s).IC SCM+FSA = succ IC s & Exec(a:=b, s).a = s.b & (
 for c st c <> a holds Exec(a:=b, s).c = s.c) & for f holds Exec(a:=b, s).f = s.
   f;
 
-theorem :: SCMFSA_2:90
+theorem :: SCMFSA_2:64
   Exec(AddTo(a,b), s).IC SCM+FSA = succ IC s & Exec(AddTo(a,b), s)
   .a = s.a + s.b & (for c st c <> a holds Exec(AddTo(a,b), s).c = s.c) & for f
   holds Exec(AddTo(a,b), s).f = s.f;
 
-theorem :: SCMFSA_2:91
+theorem :: SCMFSA_2:65
   Exec(SubFrom(a,b), s).IC SCM+FSA = succ IC s & Exec(SubFrom(a,b)
   , s).a = s.a - s.b & (for c st c <> a holds Exec(SubFrom(a,b), s).c = s.c) &
   for f holds Exec(SubFrom(a,b), s).f = s.f;
 
-theorem :: SCMFSA_2:92
+theorem :: SCMFSA_2:66
   Exec(MultBy(a,b), s).IC SCM+FSA = succ IC s & Exec(MultBy(a,b),
 s).a = s.a * s.b & (for c st c <> a holds Exec(MultBy(a,b), s).c = s.c) & for f
   holds Exec(MultBy(a,b), s).f = s.f;
 
-theorem :: SCMFSA_2:93
+theorem :: SCMFSA_2:67
   Exec(Divide(a,b), s).IC SCM+FSA = succ IC s & (a <> b implies
 Exec(Divide(a,b), s).a = s.a div s.b) & Exec(Divide(a,b), s).b = s.a mod s.b &
   (for c st c <> a & c <> b holds Exec(Divide(a,b), s).c = s.c) & for f holds
   Exec(Divide(a,b), s).f = s.f;
 
-theorem :: SCMFSA_2:94
+theorem :: SCMFSA_2:68
   Exec(Divide(a,a), s).IC SCM+FSA = succ IC s & Exec(Divide(a,a), s).a =
   s.a mod s.a & (for c st c <> a holds Exec(Divide(a,a), s).c = s.c) & for f
   holds Exec(Divide(a,a), s).f = s.f;
 
-theorem :: SCMFSA_2:95
+theorem :: SCMFSA_2:69
   Exec(goto l, s).IC SCM+FSA = l & (for c holds Exec(goto l, s).c
   = s.c) & for f holds Exec(goto l, s).f = s.f;
 
-theorem :: SCMFSA_2:96
+theorem :: SCMFSA_2:70
   (s.a = 0 implies Exec(a =0_goto l, s).IC SCM+FSA = l) & (s.a <>
   0 implies Exec(a=0_goto l, s).IC SCM+FSA = succ IC s) & (for c holds Exec(a
   =0_goto l, s).c = s.c) & for f holds Exec(a=0_goto l, s).f = s.f;
 
-theorem :: SCMFSA_2:97
+theorem :: SCMFSA_2:71
   (s.a > 0 implies Exec(a >0_goto l, s).IC SCM+FSA = l) & (s.a <=
   0 implies Exec(a>0_goto l, s).IC SCM+FSA = succ IC s) & (for c holds Exec(a
   >0_goto l, s).c = s.c) & for f holds Exec(a>0_goto l, s).f = s.f;
 
-theorem :: SCMFSA_2:98
+theorem :: SCMFSA_2:72
   Exec(c:=(g,a), s).IC SCM+FSA = succ IC s & (ex k st k = abs(s.a)
 & Exec(c:=(g,a), s).c = (s.g)/.k) & (for b st b <> c holds Exec(c:=(g,a), s).b
   = s.b) & for f holds Exec(c:=(g,a), s).f = s.f;
 
-theorem :: SCMFSA_2:99
+theorem :: SCMFSA_2:73
   Exec((g,a):=c, s).IC SCM+FSA = succ IC s & (ex k st k = abs(s.a)
 & Exec((g,a):=c, s).g = s.g+*(k,s.c)) & (for b holds Exec((g,a):=c, s).b = s.b)
   & for f st f <> g holds Exec((g,a):=c, s).f = s.f;
 
-theorem :: SCMFSA_2:100
+theorem :: SCMFSA_2:74
   Exec(c:=len g, s).IC SCM+FSA = succ IC s & Exec(c:=len g, s).c
   = len(s.g) & (for b st b <> c holds Exec(c:=len g, s).b = s.b) & for f holds
   Exec(c:=len g, s).f = s.f;
 
-theorem :: SCMFSA_2:101
+theorem :: SCMFSA_2:75
   Exec(g:=<0,...,0>c, s).IC SCM+FSA = succ IC s & (ex k st k =
 abs(s.c) & Exec(g:=<0,...,0>c, s).g = k |-> 0) & (for b holds Exec(g:=<0,...,0>
   c, s).b = s.b) & for f st f <> g holds Exec(g:=<0,...,0>c, s).f = s.f;
 
 begin :: Halt Instruction
 
-theorem :: SCMFSA_2:102
+theorem :: SCMFSA_2:76
   for S being SCM+FSA-State st S = s holds IC s = IC S;
 
-theorem :: SCMFSA_2:103
+theorem :: SCMFSA_2:77
   for i being Instruction of SCM, I being Instruction of SCM+FSA
   st i = I & i is halting holds I is halting;
 
-theorem :: SCMFSA_2:104
+theorem :: SCMFSA_2:78
   for I being Instruction of SCM+FSA st ex s st Exec(I,s).IC
   SCM+FSA = succ IC s holds I is non halting;
 
@@ -536,26 +515,26 @@ registration let a,b;
  cluster Divide(a,b) -> non halting;
 end;
 
-theorem :: SCMFSA_2:105
+theorem :: SCMFSA_2:79
   a := b is non halting;
 
-theorem :: SCMFSA_2:106
+theorem :: SCMFSA_2:80
   AddTo(a,b) is non halting;
 
-theorem :: SCMFSA_2:107
+theorem :: SCMFSA_2:81
   SubFrom(a,b) is non halting;
 
-theorem :: SCMFSA_2:108
+theorem :: SCMFSA_2:82
   MultBy(a,b) is non halting;
 
-theorem :: SCMFSA_2:109
+theorem :: SCMFSA_2:83
   Divide(a,b) is non halting;
 
 registration let la;
  cluster goto la -> non halting;
 end;
 
-theorem :: SCMFSA_2:110
+theorem :: SCMFSA_2:84
   goto la is non halting;
 
 registration let a,la;
@@ -563,10 +542,10 @@ registration let a,la;
  cluster a>0_goto la -> non halting;
 end;
 
-theorem :: SCMFSA_2:111
+theorem :: SCMFSA_2:85
   a=0_goto la is non halting;
 
-theorem :: SCMFSA_2:112
+theorem :: SCMFSA_2:86
   a>0_goto la is non halting;
 
 registration let c,f,a;
@@ -574,10 +553,10 @@ registration let c,f,a;
  cluster (f,a):=c -> non halting;
 end;
 
-theorem :: SCMFSA_2:113
+theorem :: SCMFSA_2:87
   c:=(f,a) is non halting;
 
-theorem :: SCMFSA_2:114
+theorem :: SCMFSA_2:88
   (f,a):=c is non halting;
 
 registration let c,f;
@@ -585,26 +564,22 @@ registration let c,f;
  cluster f:=<0,...,0>c -> non halting;
 end;
 
-theorem :: SCMFSA_2:115
+theorem :: SCMFSA_2:89
   c:=len f is non halting;
 
-theorem :: SCMFSA_2:116
+theorem :: SCMFSA_2:90
   f:=<0,...,0>c is non halting;
 
-registration let a;
- cluster a:==1 -> non halting;
-end;
 
-canceled;
 
-theorem :: SCMFSA_2:118
+theorem :: SCMFSA_2:91
   for I being Instruction of SCM+FSA
    st I = [0,{},{}] holds I is halting;
 
-theorem :: SCMFSA_2:119
+theorem :: SCMFSA_2:92
   for I be Instruction of SCM+FSA st InsCode I = 0 holds I = [0,{},{}];
 
-theorem :: SCMFSA_2:120
+theorem :: SCMFSA_2:93
   for I being set holds I is Instruction of SCM+FSA iff
    I = [0,{},{}]
    or (ex a,b st I = a:=b) or (ex a,b st I = AddTo(a,b))
@@ -613,78 +588,63 @@ theorem :: SCMFSA_2:120
    (ex la st I = goto la) or (ex lb,da st I = da=0_goto lb) or
    (ex lb,da st I = da>0_goto lb) or (ex b,a,fa st I = a:=(fa,b)) or
    (ex a,b,fa st I = (fa,a):=b) or
-   (ex a,f st I = a:=len f) or (ex a,f st I = f:=<0,...,0>a)
-     or ex a st I = a:==1;
+   (ex a,f st I = a:=len f) or ex a,f st I = f:=<0,...,0>a;
 
 registration
   cluster SCM+FSA -> halting;
 end;
 
-theorem :: SCMFSA_2:121
+theorem :: SCMFSA_2:94
   for I being Instruction of SCM+FSA st I is halting holds I = halt SCM+FSA;
 
-theorem :: SCMFSA_2:122
+theorem :: SCMFSA_2:95
   for I being Instruction of SCM+FSA st InsCode I = 0 holds I =
   halt SCM+FSA;
 
-theorem :: SCMFSA_2:123
+theorem :: SCMFSA_2:96
   halt SCM = halt SCM+FSA;
 
-theorem :: SCMFSA_2:124
+theorem :: SCMFSA_2:97
   InsCode halt SCM+FSA = 0;
 
-theorem :: SCMFSA_2:125
+theorem :: SCMFSA_2:98
   for i being Instruction of SCM, I being Instruction of SCM+FSA st i =
   I & i is non halting holds I is non halting;
 
-theorem :: SCMFSA_2:126
+theorem :: SCMFSA_2:99
   for i,j being natural number holds fsloc i <> intloc j;
 
-theorem :: SCMFSA_2:127
+theorem :: SCMFSA_2:100
   Data-Locations SCM+FSA = Int-Locations \/ FinSeq-Locations;
 
-theorem :: SCMFSA_2:128
+theorem :: SCMFSA_2:101
  for i,j being Nat st i <> j
   holds intloc i <> intloc j;
 
 reserve n for  Element of NAT,
         I for  Program of SCM+FSA;
 
-theorem :: SCMFSA_2:129
-  I +* Start-At(n,SCM+FSA) c= s implies I c= s;
 
-theorem :: SCMFSA_2:130
+
+theorem :: SCMFSA_2:102
   not a in dom Start-At(l,SCM+FSA);
 
-theorem :: SCMFSA_2:131
+theorem :: SCMFSA_2:103
   not f in dom Start-At(l,SCM+FSA);
 
-theorem :: SCMFSA_2:132
-  not a in dom (I+*Start-At(l,SCM+FSA));
-
-theorem :: SCMFSA_2:133
-  not f in dom (I+*Start-At(l,SCM+FSA));
-
-begin :: Theorems related to the instruction x:==1
-
-theorem :: SCMFSA_2:134
-  for ins being Instruction of SCM+FSA st InsCode ins = 13 holds
-  ex a st ins = a:==1;
-
-theorem :: SCMFSA_2:135
-  a:==1 is non halting;
-
-theorem :: SCMFSA_2:136
-  Exec(c:==1, s).IC SCM+FSA = succ IC s & (Exec(c:==1, s).c = 1) &
-   (for b st b <> c holds Exec(c:==1, s).b = s.b) &
-   for f holds Exec(c:==1, s).f = s.f;
-
-theorem :: SCMFSA_2:137
-  InsCode (a:==1) = 13;
-
-theorem :: SCMFSA_2:138
-  for s1,s2 being State of SCM+FSA st IC(s1) = IC(s2) &
+theorem :: SCMFSA_2:104
+  for s1,s2 being State of SCM+FSA st IC s1 = IC s2 &
   (for a being Int-Location holds s1.a = s2.a) &
   (for f being FinSeq-Location holds s1.f = s2.f)
-    holds NPP s1 = NPP s2;
+    holds s1 = s2;
+
+registration let f be FinSeq-Location, w be FinSequence of INT;
+ cluster f .--> w -> data-only for PartState of SCM+FSA;
+end;
+
+registration let x be Int-Location, i be Integer;
+ cluster x .--> i -> data-only for PartState of SCM+FSA;
+end;
+
+
 

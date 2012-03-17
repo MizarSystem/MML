@@ -36,7 +36,7 @@
 </Func>
 <Cluster>
 <Adjective nr="36" value="false"/>
-<Adjective nr="47"/>
+<Adjective nr="48"/>
 </Cluster>
 </FCluster>
 <FCluster aid="LATSUM_1" nr="2">
@@ -56,7 +56,7 @@
 </Func>
 <Cluster>
 <Adjective nr="36" value="false"/>
-<Adjective nr="47"/>
+<Adjective nr="48"/>
 </Cluster>
 </FCluster>
 </Registrations>

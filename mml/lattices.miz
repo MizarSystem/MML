@@ -15,13 +15,13 @@
 environ
 
  vocabularies STRUCT_0, BINOP_1, XBOOLE_0, ZFMISC_1, SUBSET_1, EQREL_1,
-      FUNCT_1, PBOOLE, XXREAL_2, CAT_1, LATTICES;
- notations XBOOLE_0, ZFMISC_1, STRUCT_0, BINOP_1;
+      FUNCT_1, PBOOLE, XXREAL_2, CAT_1, LATTICES, CARD_1;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, CARD_1, STRUCT_0, BINOP_1;
  constructors BINOP_1, STRUCT_0;
- registrations XBOOLE_0, SUBSET_1, STRUCT_0;
- requirements SUBSET, BOOLE;
+ registrations XBOOLE_0, SUBSET_1, CARD_1, ORDINAL1, STRUCT_0;
+ requirements SUBSET, BOOLE, NUMERALS;
  definitions STRUCT_0;
- theorems ZFMISC_1, SUBSET_1;
+ theorems ZFMISC_1, SUBSET_1, STRUCT_0;
 
 begin
 
@@ -55,26 +55,32 @@ registration
 end;
 
 registration
-  cluster strict non empty \/-SemiLattStr;
+  cluster 1-element strict for \/-SemiLattStr;
   existence
   proof
-    set u =the  BinOp of bool {};
-    take \/-SemiLattStr (# bool {}, u #);
-    thus thesis;
+    set u = the BinOp of bool {};
+    take L =  \/-SemiLattStr (# bool {}, u #);
+     the carrier of L = {{}} by ZFMISC_1:1;
+     then the carrier of L is 1-element;
+    hence thesis by STRUCT_0:def 19;
   end;
-  cluster strict non empty /\-SemiLattStr;
+  cluster 1-element strict for /\-SemiLattStr;
   existence
   proof
-    set u =the  BinOp of bool {};
-    take /\-SemiLattStr (# bool {}, u #);
-    thus thesis;
+    set u = the BinOp of bool {};
+    take L = /\-SemiLattStr (# bool {}, u #);
+     the carrier of L = {{}} by ZFMISC_1:1;
+     then the carrier of L is 1-element;
+    hence thesis by STRUCT_0:def 19;
   end;
-  cluster strict non empty LattStr;
+  cluster 1-element strict for LattStr;
   existence
   proof
-    set u =the  BinOp of bool {};
-    take LattStr (# bool {}, u, u #);
-    thus thesis;
+    set u = the BinOp of bool {};
+    take L = LattStr (# bool {}, u, u #);
+     the carrier of L = {{}} by ZFMISC_1:1;
+     then the carrier of L is 1-element;
+    hence thesis by STRUCT_0:def 19;
   end;
 end;
 
@@ -166,36 +172,38 @@ end;
 
 registration
   cluster Lattice-like -> join-commutative join-associative meet-absorbing
-    meet-commutative meet-associative join-absorbing (non empty LattStr);
+    meet-commutative meet-associative join-absorbing for non empty LattStr;
   coherence by Def10;
   cluster join-commutative join-associative meet-absorbing meet-commutative
-    meet-associative join-absorbing -> Lattice-like (non empty LattStr);
+    meet-associative join-absorbing -> Lattice-like for non empty LattStr;
   coherence by Def10;
 end;
 
 registration
-  cluster strict join-commutative join-associative (non empty \/-SemiLattStr);
+  cluster strict join-commutative join-associative for
+non empty \/-SemiLattStr;
   existence
   proof
-    set u =the  BinOp of bool {};
+    set u = the BinOp of bool {};
     take GGj = \/-SemiLattStr(#bool {},u#);
     ( for x,y being Element of GGj holds x"\/"y = y"\/"x)& for x,y,z being
     Element of GGj holds x"\/"(y"\/"z) = (x"\/"y)"\/"z by Lm2;
     hence thesis by Def4,Def5;
   end;
-  cluster strict meet-commutative meet-associative (non empty /\-SemiLattStr);
+  cluster strict meet-commutative meet-associative for
+non empty /\-SemiLattStr;
   existence
   proof
-    set u =the  BinOp of bool {};
+    set u = the BinOp of bool {};
     take GGm = /\-SemiLattStr(#bool {},u#);
     ( for x,y being Element of GGm holds x"/\"y = y"/\"x)& for x,y,z being
     Element of GGm holds x"/\"(y"/\"z) = (x"/\"y)"/\"z by Lm3;
     hence thesis by Def6,Def7;
   end;
-  cluster strict Lattice-like (non empty LattStr);
+  cluster strict Lattice-like for non empty LattStr;
   existence
   proof
-    set u =the  BinOp of bool {};
+    set u = the BinOp of bool {};
     take GG = LattStr(#bool {},u,u#);
 A1: ( for x,y being Element of GG holds (x"/\"y)"\/"y = y)& for x,y being
     Element of GG holds x"/\"y = y"/\"x by Lm1;
@@ -211,17 +219,17 @@ A2: ( for x,y,z being Element of GG holds x"/\"(y"/\"z) = (x"/\"y)"/\"z)&
 end;
 
 definition
-  mode Lattice is Lattice-like (non empty LattStr);
+  mode Lattice is Lattice-like non empty LattStr;
 end;
 
 definition
-  let L be join-commutative (non empty \/-SemiLattStr), a, b be Element of L;
+  let L be join-commutative non empty \/-SemiLattStr, a, b be Element of L;
   redefine func a"\/"b;
   commutativity by Def4;
 end;
 
 definition
-  let L be meet-commutative (non empty /\-SemiLattStr), a, b be Element of L;
+  let L be meet-commutative non empty /\-SemiLattStr, a, b be Element of L;
   redefine func a"/\"b;
   commutativity by Def6;
 end;
@@ -281,10 +289,10 @@ A5: G is meet-commutative by Def6;
 end;
 
 registration
-  cluster strict distributive lower-bounded upper-bounded modular Lattice;
+  cluster strict distributive lower-bounded upper-bounded modular for Lattice;
   existence
   proof
-    set uu =the  BinOp of bool {};
+    set uu = the BinOp of bool {};
     set GG=LattStr(#bool {},uu,uu#);
     reconsider GG as Lattice by Lm4;
     reconsider 0GG={}, D = {} as Element of GG by ZFMISC_1:def 1;
@@ -340,17 +348,17 @@ definition
 end;
 
 registration
-  cluster lower-bounded upper-bounded -> bounded (non empty LattStr);
+  cluster lower-bounded upper-bounded -> bounded for non empty LattStr;
   coherence by Def15;
-  cluster bounded -> lower-bounded upper-bounded (non empty LattStr);
+  cluster bounded -> lower-bounded upper-bounded for non empty LattStr;
   coherence by Def15;
 end;
 
 registration
-  cluster bounded strict Lattice;
+  cluster bounded strict for Lattice;
   existence
   proof
-    set uu =the  BinOp of bool {};
+    set uu = the BinOp of bool {};
     set G=LattStr(#bool {},uu,uu#);
     reconsider G as Lattice by Lm4;
     G is 0_Lattice & G is 1_Lattice by Lm5,Lm6;
@@ -413,17 +421,17 @@ definition
 end;
 
 registration
-  cluster bounded complemented strict Lattice;
+  cluster bounded complemented strict for Lattice;
   existence
   proof
-    set n =the  BinOp of bool {};
+    set n = the BinOp of bool {};
     reconsider GG = LattStr (#bool {},n,n#) as strict Lattice by Lm4;
     take GG;
     GG is 0_Lattice & GG is 1_Lattice by Lm5,Lm6;
     hence GG is bounded;
     thus GG is complemented
     proof
-      set a =the  Element of GG;
+      set a = the Element of GG;
       let b be Element of GG;
       take a;
       thus a"\/"b = Top GG & b"\/"a = Top GG by Lm1;
@@ -445,17 +453,17 @@ definition
 end;
 
 registration
-  cluster Boolean -> bounded complemented distributive (non empty LattStr);
+  cluster Boolean -> bounded complemented distributive for non empty LattStr;
   coherence by Def20;
-  cluster bounded complemented distributive -> Boolean (non empty LattStr);
+  cluster bounded complemented distributive -> Boolean for non empty LattStr;
   coherence by Def20;
 end;
 
 registration
-  cluster Boolean strict Lattice;
+  cluster Boolean strict for Lattice;
   existence
   proof
-    set n =the  BinOp of bool {};
+    set n = the BinOp of bool {};
     reconsider G = LattStr (#bool {},n,n#) as strict Lattice by Lm4;
 A1: G is complemented
     proof
@@ -477,23 +485,21 @@ definition
   mode B_Lattice is Boolean Lattice;
 end;
 
-canceled 16;
-
 theorem Th17:
-  for L being meet-absorbing join-absorbing meet-commutative (non
-  empty LattStr), a being Element of L holds a "\/" a = a
+  for L being meet-absorbing join-absorbing meet-commutative non
+  empty LattStr, a being Element of L holds a "\/" a = a
 proof
-  let L be meet-absorbing join-absorbing meet-commutative (non empty LattStr),
+  let L be meet-absorbing join-absorbing meet-commutative non empty LattStr,
   a be Element of L;
   thus a"\/"a = ( a "/\" ( a"\/"a ) ) "\/" a by Def9
     .= a by Def8;
 end;
 
 theorem
-  for L being meet-absorbing join-absorbing meet-commutative (non empty
-  LattStr), a being Element of L holds a "/\" a = a
+  for L being meet-absorbing join-absorbing meet-commutative non empty
+  LattStr, a being Element of L holds a "/\" a = a
 proof
-  let L be meet-absorbing join-absorbing meet-commutative (non empty LattStr),
+  let L be meet-absorbing join-absorbing meet-commutative non empty LattStr,
   a be Element of L;
   a"/\"( a"\/"a ) = a by Def9;
   hence thesis by Th17;
@@ -525,13 +531,11 @@ A2: for a,b,c be Element of L holds a"\/"(b"/\"c)=(a"\/"b)"/\"(a"\/"c);
     .=(a"/\"b)"\/"(a"/\"c) by A2;
 end;
 
-canceled;
-
 theorem Th21:
-  for L being meet-absorbing join-absorbing (non empty LattStr), a
+  for L being meet-absorbing join-absorbing non empty LattStr, a
   , b being Element of L holds a [= b iff a"/\"b = a
 proof
-  let L be meet-absorbing join-absorbing (non empty LattStr), a, b be Element
+  let L be meet-absorbing join-absorbing non empty LattStr, a, b be Element
   of L;
   a [= b iff a"\/"b = b by Def3;
   hence thesis by Def8,Def9;
@@ -539,25 +543,25 @@ end;
 
 theorem Th22:
   for L being meet-absorbing join-absorbing join-associative
-meet-commutative (non empty LattStr), a, b being Element of L holds a [= a"\/"b
+meet-commutative non empty LattStr, a, b being Element of L holds a [= a"\/"b
 proof
-  let L be meet-absorbing join-absorbing join-associative meet-commutative (
-  non empty LattStr), a, b be Element of L;
+  let L be meet-absorbing join-absorbing join-associative meet-commutative
+  non empty LattStr, a, b be Element of L;
   thus a"\/"( a"\/"b) = (a"\/"a)"\/"b by Def5
     .= a"\/"b by Th17;
 end;
 
 theorem Th23:
-  for L being meet-absorbing meet-commutative (non empty LattStr),
+  for L being meet-absorbing meet-commutative non empty LattStr,
   a, b being Element of L holds a"/\"b [= a
 proof
-  let L be meet-absorbing meet-commutative (non empty LattStr), a, b be
+  let L be meet-absorbing meet-commutative non empty LattStr, a, b be
   Element of L;
   thus ( a"/\"b )"\/"a = a by Def8;
 end;
 
 definition
-  let L be meet-absorbing join-absorbing meet-commutative (non empty LattStr),
+  let L be meet-absorbing join-absorbing meet-commutative non empty LattStr,
   a, b be Element of L;
   redefine pred a [= b;
   reflexivity
@@ -567,41 +571,37 @@ definition
   end;
 end;
 
-canceled;
-
 theorem
-  for L being join-associative (non empty \/-SemiLattStr), a, b, c being
+  for L being join-associative non empty \/-SemiLattStr, a, b, c being
   Element of L holds a [= b & b [= c implies a [= c
 proof
-  let L be join-associative (non empty \/-SemiLattStr), a, b, c be Element of
+  let L be join-associative non empty \/-SemiLattStr, a, b, c be Element of
   L;
   assume a"\/"b = b & b"\/"c = c;
   hence a"\/"c = c by Def5;
 end;
 
 theorem Th26:
-  for L being join-commutative (non empty \/-SemiLattStr), a, b
+  for L being join-commutative non empty \/-SemiLattStr, a, b
   being Element of L holds a [= b & b [= a implies a=b
 proof
-  let L be join-commutative (non empty \/-SemiLattStr), a, b be Element of L;
+  let L be join-commutative non empty \/-SemiLattStr, a, b be Element of L;
   assume a"\/"b = b & b"\/"a =a;
   hence thesis;
 end;
 
 theorem Th27:
-  for L being meet-absorbing join-absorbing meet-associative (non
-empty LattStr), a, b, c being Element of L holds a [= b implies a"/\"c [= b"/\"
+  for L being meet-absorbing join-absorbing meet-associative non
+empty LattStr, a, b, c being Element of L holds a [= b implies a"/\"c [= b"/\"
   c
 proof
-  let L be meet-absorbing join-absorbing meet-associative (non empty LattStr),
+  let L be meet-absorbing join-absorbing meet-associative non empty LattStr,
   a, b, c be Element of L;
   assume a [= b;
   hence (a"/\"c)"\/"(b"/\"c) = ((a"/\"b)"/\"c)"\/"(b"/\"c) by Th21
     .= (a"/\"(b"/\"c))"\/"(b"/\"c) by Def7
     .= b"/\"c by Def8;
 end;
-
-canceled;
 
 theorem
   for L being Lattice holds (for a,b,c being Element of L holds (a"/\"b)
@@ -647,8 +647,6 @@ end;
 reserve L for D_Lattice;
 reserve a, b, c for Element of L;
 
-canceled;
-
 theorem Th31:
   a"\/"(b"/\"c) = (a"\/"b)"/\"(a"\/"c)
 proof
@@ -668,8 +666,6 @@ A2: c"\/"a = c"\/"b;
     .= b by A2,Def9;
 end;
 
-canceled;
-
 theorem
   (a"\/"b)"/\"(b"\/"c)"/\"(c"\/"a) = (a"/\"b)"\/"(b"/\"c)"\/"(c"/\"a)
 proof
@@ -688,7 +684,7 @@ proof
 end;
 
 registration
-  cluster distributive -> modular Lattice;
+  cluster distributive -> modular for Lattice;
   coherence
   proof
     let L be Lattice;
@@ -699,8 +695,6 @@ A1: L is distributive;
     hence a"\/"(b"/\"c) = (a"\/"b)"/\"c by A1,Th31;
   end;
 end;
-
-canceled 4;
 
 theorem Th39:
   for L being 0_Lattice, a being Element of L holds Bottom L "\/" a = a
@@ -721,8 +715,6 @@ proof
   Bottom L [= Bottom L "\/" a by Th22;
   hence thesis by Th39;
 end;
-
-canceled;
 
 theorem Th43:
   for L being 1_Lattice, a being Element of L holds Top L"/\"a = a
@@ -765,8 +757,6 @@ end;
 
 reserve L for B_Lattice;
 reserve a, b for Element of L;
-
-canceled;
 
 theorem Th47:
   a`"/\"a = Bottom L
@@ -889,13 +879,13 @@ registration let L be Lattice;
 end;
 
 registration let L be Lattice;
- cluster initial final non empty Subset of L;
+ cluster initial final non empty for Subset of L;
  existence
   proof
    take [#]L;
    thus thesis;
   end;
- cluster empty -> initial final Subset of L;
+ cluster empty -> initial final for Subset of L;
  coherence
   proof let S be Subset of L;
    assume
@@ -906,7 +896,7 @@ A1:  S is empty;
    let p be Element of L;
    thus thesis by A1;
   end;
- cluster initial -> meet-closed Subset of L;
+ cluster initial -> meet-closed for Subset of L;
  coherence
   proof let S be Subset of L such that
 A2:  S is initial;
@@ -915,7 +905,7 @@ A3: q in S;
     p "/\" q [= q by Th23;
    hence p "/\" q in S by A2,A3,Def22;
   end;
- cluster final -> join-closed Subset of L;
+ cluster final -> join-closed for Subset of L;
  coherence
   proof let S be Subset of L such that
 A4:  S is final;
@@ -931,7 +921,7 @@ theorem
    holds S = [#]L
  proof let L be Lattice, S be initial final non empty Subset of L;
    consider p being Element of L such that
-A1:  p in S by SUBSET_1:10;
+A1:  p in S by SUBSET_1:4;
    for x being Element of L holds x in S iff x in [#]L
     proof let x be Element of L;
      thus x in S implies x in [#]L;
@@ -942,5 +932,5 @@ A2:     x "/\" p in S by A1,Def22;
       x "/\" p [= x by Th23;
      hence x in S by A2,Def23;
     end;
-  hence S = [#]L by SUBSET_1:8;
+  hence S = [#]L by SUBSET_1:3;
  end;

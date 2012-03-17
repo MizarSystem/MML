@@ -54,7 +54,7 @@
 </Func>
 </Func>
 <Cluster>
-<Adjective nr="47"/>
+<Adjective nr="48"/>
 </Cluster>
 </FCluster>
 <FCluster aid="LUKASI_1" nr="2">
@@ -69,7 +69,7 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="47"/>
+<Adjective nr="48"/>
 </Cluster>
 </FCluster>
 <FCluster aid="LUKASI_1" nr="3">
@@ -91,7 +91,7 @@
 </Func>
 </Func>
 <Cluster>
-<Adjective nr="47"/>
+<Adjective nr="48"/>
 </Cluster>
 </FCluster>
 <FCluster aid="LUKASI_1" nr="4">
@@ -126,7 +126,7 @@
 </Func>
 </Func>
 <Cluster>
-<Adjective nr="47"/>
+<Adjective nr="48"/>
 </Cluster>
 </FCluster>
 <FCluster aid="LUKASI_1" nr="5">
@@ -151,7 +151,7 @@
 </Func>
 </Func>
 <Cluster>
-<Adjective nr="47"/>
+<Adjective nr="48"/>
 </Cluster>
 </FCluster>
 <FCluster aid="LUKASI_1" nr="6">
@@ -179,7 +179,7 @@
 </Func>
 </Func>
 <Cluster>
-<Adjective nr="47"/>
+<Adjective nr="48"/>
 </Cluster>
 </FCluster>
 <FCluster aid="LUKASI_1" nr="7">
@@ -217,7 +217,7 @@
 </Func>
 </Func>
 <Cluster>
-<Adjective nr="47"/>
+<Adjective nr="48"/>
 </Cluster>
 </FCluster>
 <FCluster aid="LUKASI_1" nr="8">
@@ -249,7 +249,7 @@
 </Func>
 </Func>
 <Cluster>
-<Adjective nr="47"/>
+<Adjective nr="48"/>
 </Cluster>
 </FCluster>
 <FCluster aid="LUKASI_1" nr="9">
@@ -284,7 +284,7 @@
 </Func>
 </Func>
 <Cluster>
-<Adjective nr="47"/>
+<Adjective nr="48"/>
 </Cluster>
 </FCluster>
 <FCluster aid="LUKASI_1" nr="10">
@@ -313,7 +313,7 @@
 </Func>
 </Func>
 <Cluster>
-<Adjective nr="47"/>
+<Adjective nr="48"/>
 </Cluster>
 </FCluster>
 <FCluster aid="LUKASI_1" nr="11">
@@ -342,7 +342,7 @@
 </Func>
 </Func>
 <Cluster>
-<Adjective nr="47"/>
+<Adjective nr="48"/>
 </Cluster>
 </FCluster>
 <FCluster aid="LUKASI_1" nr="12">
@@ -361,7 +361,7 @@
 </Func>
 </Func>
 <Cluster>
-<Adjective nr="47"/>
+<Adjective nr="48"/>
 </Cluster>
 </FCluster>
 <FCluster aid="LUKASI_1" nr="13">
@@ -380,7 +380,7 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="47"/>
+<Adjective nr="48"/>
 </Cluster>
 </FCluster>
 <FCluster aid="LUKASI_1" nr="14">
@@ -409,7 +409,7 @@
 </Func>
 </Func>
 <Cluster>
-<Adjective nr="47"/>
+<Adjective nr="48"/>
 </Cluster>
 </FCluster>
 <FCluster aid="LUKASI_1" nr="15">
@@ -438,7 +438,7 @@
 </Func>
 </Func>
 <Cluster>
-<Adjective nr="47"/>
+<Adjective nr="48"/>
 </Cluster>
 </FCluster>
 <FCluster aid="LUKASI_1" nr="16">
@@ -467,7 +467,7 @@
 </Func>
 </Func>
 <Cluster>
-<Adjective nr="47"/>
+<Adjective nr="48"/>
 </Cluster>
 </FCluster>
 <FCluster aid="LUKASI_1" nr="17">
@@ -496,7 +496,7 @@
 </Func>
 </Func>
 <Cluster>
-<Adjective nr="47"/>
+<Adjective nr="48"/>
 </Cluster>
 </FCluster>
 </Registrations>

@@ -32,6 +32,9 @@
 </Typ>
 <Cluster>
 <Adjective nr="1"/>
+<Adjective nr="4">
+<Func kind="K" nr="47"/>
+</Adjective>
 <Adjective nr="6"/>
 <Adjective nr="8" value="false"/>
 <Adjective nr="21"/>

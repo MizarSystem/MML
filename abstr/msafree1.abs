@@ -19,10 +19,10 @@ environ
       MSUALG_1, PBOOLE, MSAFREE, ZFMISC_1, MARGREL1, PROB_2, NAT_1, PARTFUN1,
       MCART_1, MSUALG_3, MSAFREE1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NAT_1, RELAT_1, FUNCT_1,
-      PARTFUN1, FUNCT_2, STRUCT_0, MCART_1, FINSEQ_1, MULTOP_1, PROB_2, CARD_3,
-      TREES_2, TREES_3, TREES_4, LANG1, DTCONSTR, PBOOLE, MSUALG_1, MSAFREE,
-      MSUALG_3;
- constructors MULTOP_1, PROB_2, MSUALG_3, MSAFREE, RELSET_1, CAT_3;
+      PARTFUN1, FUNCT_2, FINSEQ_2, STRUCT_0, MCART_1, FINSEQ_1, MULTOP_1,
+      PROB_2, CARD_3, TREES_2, TREES_3, TREES_4, LANG1, DTCONSTR, PBOOLE,
+      MSUALG_1, MSAFREE, MSUALG_3;
+ constructors MULTOP_1, PROB_2, MSUALG_3, MSAFREE, RELSET_1, CAT_3, FINSEQ_2;
  registrations XBOOLE_0, FUNCT_1, RELSET_1, FINSEQ_1, RELAT_1, TREES_3,
       STRUCT_0, DTCONSTR, MSUALG_1, MSUALG_3, MSAFREE, ORDINAL1, PBOOLE,
       PRE_POLY;
@@ -40,16 +40,18 @@ scheme :: MSAFREE1:sch 1
 Element of D(), H(set, set, set) -> Element of D(), f1, f2() -> Function of TS(
   DT()), D() }: f1() = f2()
 provided
- for t being Symbol of DT() st t in Terminals DT() holds f1().(
-root-tree t) = G(t) and
- for nt being Symbol of DT(), ts being FinSequence of TS(DT()) st nt
-==> roots ts for x being FinSequence of D() st x = f1() * ts holds f1().(nt
--tree ts) = H(nt, ts, x) and
- for t being Symbol of DT() st t in Terminals DT() holds f2().(
-root-tree t) = G(t) and
- for nt being Symbol of DT(), ts being FinSequence of TS(DT()) st nt
-==> roots ts for x being FinSequence of D() st x = f2() * ts holds f2().(nt
--tree ts) = H(nt, ts, x);
+ for t being Symbol of DT() st t in Terminals DT()
+     holds f1().(root-tree t) = G(t) and
+ for nt being Symbol of DT(), ts being Element of (TS DT())*
+     st nt ==> roots ts
+    for x being Element of D()* st x = f1() * ts
+     holds f1().(nt-tree ts) = H(nt, ts, x) and
+ for t being Symbol of DT() st t in Terminals DT()
+     holds f2().(root-tree t) = G(t) and
+ for nt being Symbol of DT(), ts being Element of (TS DT())*
+     st nt ==> roots ts
+    for x being Element of D()* st x = f2() * ts
+       holds f2().(nt-tree ts) = H(nt, ts, x);
 
 theorem :: MSAFREE1:2  :: MSAFREE:5
   for S being non void non empty ManySortedSign, X being
@@ -66,11 +68,6 @@ carrier of S],b] in REL(X) holds len b = len (the_arity_of o) & for x be set st
   o1 = (the_arity_of o).x) & (b.x in Union(coprod X) implies b.x in coprod((
   the_arity_of o).x,X));
 
-definition
-  let D be set;
-  redefine mode FinSequence of D -> Element of D*;
-end;
-
 registration
   let I be non empty set, M be ManySortedSet of I;
   cluster rng M -> non empty;
@@ -78,12 +75,12 @@ end;
 
 registration
   let I be set;
-  cluster empty-yielding -> disjoint_valued ManySortedSet of I;
+  cluster empty-yielding -> disjoint_valued for ManySortedSet of I;
 end;
 
 registration
   let I be set;
-  cluster disjoint_valued ManySortedSet of I;
+  cluster disjoint_valued for ManySortedSet of I;
 end;
 
 definition
@@ -121,7 +118,7 @@ end;
 
 registration
   let S be non empty ManySortedSign;
-  cluster non-empty disjoint_valued MSAlgebra over S;
+  cluster non-empty disjoint_valued for MSAlgebra over S;
 end;
 
 registration
@@ -148,22 +145,23 @@ registration
 end;
 
 scheme :: MSAFREE1:sch 2
-
-  FreeSortUniq{ S() -> non void non empty ManySortedSign, X,D() -> non-empty
-ManySortedSet of the carrier of S(), G(set) -> Element of Union D(), H(set, set
-, set) -> Element of Union D(), f1, f2() -> ManySortedFunction of FreeSort X(),
-  D() }: f1() = f2()
+ FreeSortUniq{ S() -> non void non empty ManySortedSign,
+    X,D() -> non-empty ManySortedSet of the carrier of S(),
+    G(set) -> Element of Union D(),
+    H(set, set, set) -> Element of Union D(),
+    f1, f2() -> ManySortedFunction of FreeSort X(),D() }:
+   f1() = f2()
 provided
- for o being OperSymbol of S(), ts being Element of Args(o,FreeMSA X(
-)) for x being FinSequence of Union D() st x = (Flatten f1()) * ts holds f1().(
-the_result_sort_of o).(Den(o,FreeMSA X()).ts) = H(o, ts, x) and
- for s being SortSymbol of S(), y be set st y in FreeGen(s,X()) holds
-f1().s.y = G(y) and
- for o being OperSymbol of S(), ts being Element of Args(o,FreeMSA X(
-)) for x being FinSequence of Union D() st x = (Flatten f2()) * ts holds f2().(
-the_result_sort_of o).(Den(o,FreeMSA X()).ts) = H(o, ts, x) and
- for s being SortSymbol of S(), y be set st y in FreeGen(s,X()) holds
-f2().s.y = G(y);
+ for o being OperSymbol of S(), ts being Element of Args(o,FreeMSA X())
+   for x being Element of (Union D())* st x = (Flatten f1()) * ts holds
+     f1().(the_result_sort_of o).(Den(o,FreeMSA X()).ts) = H(o, ts, x) and
+ for s being SortSymbol of S(), y be set st y in FreeGen(s,X())
+     holds f1().s.y = G(y) and
+ for o being OperSymbol of S(), ts being Element of Args(o,FreeMSA X())
+   for x being Element of (Union D())* st x = (Flatten f2()) * ts holds
+    f2().(the_result_sort_of o).(Den(o,FreeMSA X()).ts) = H(o, ts, x) and
+ for s being SortSymbol of S(), y be set st y in FreeGen(s,X())
+      holds f2().s.y = G(y);
 
 registration
   let S be non void non empty ManySortedSign;

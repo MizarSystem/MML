@@ -418,4 +418,21 @@
 </Adjective>
 </Cluster>
 </FCluster>
+<FCluster aid="FUNCT_4" nr="13">
+<ArgTypes>
+<Typ kind="M" nr="1">
+<Cluster/>
+</Typ>
+<Typ kind="M" nr="1">
+<Cluster/>
+</Typ>
+</ArgTypes>
+<Func kind="K" nr="91">
+<LocusVar nr="1"/>
+<LocusVar nr="2"/>
+</Func>
+<Cluster>
+<Adjective nr="12"/>
+</Cluster>
+</FCluster>
 </Registrations>

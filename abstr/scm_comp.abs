@@ -22,14 +22,15 @@ environ
       VALUED_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, CARD_1, NUMBERS, XCMPLX_0,
       XXREAL_0, NAT_1, INT_1, MCART_1, RELAT_1, FUNCT_1, FUNCT_2, VALUED_1,
-      TREES_2, TREES_3, TREES_4, ORDINAL1, AFINSQ_1, STRUCT_0, COMPOS_1,
-      EXTPRO_1, AMI_2, AMI_3, SCM_1, FINSEQ_1, FINSEQ_2, LANG1, BINTREE1,
-      DTCONSTR, LIMFUNC1, PARTFUN1, PRE_POLY;
+      TREES_2, TREES_3, TREES_4, ORDINAL1, AFINSQ_1, STRUCT_0, MEMSTR_0,
+      COMPOS_1, EXTPRO_1, AMI_2, AMI_3, SCM_1, FINSEQ_1, FINSEQ_2, LANG1,
+      BINTREE1, DTCONSTR, LIMFUNC1, PARTFUN1, PRE_POLY;
  constructors LIMFUNC1, DTCONSTR, BINTREE1, SCM_1, DOMAIN_1, PRE_POLY,
-      ORDINAL4, AFINSQ_1, AMI_2;
+      ORDINAL4, AFINSQ_1, AMI_2, MEMSTR_0, RELSET_1;
  registrations XBOOLE_0, SUBSET_1, SETFAM_1, FUNCT_1, ORDINAL1, RELSET_1,
       FUNCT_2, NUMBERS, XXREAL_0, XREAL_0, NAT_1, INT_1, TREES_3, STRUCT_0,
-      DTCONSTR, BINTREE1, AMI_2, AMI_3, AFINSQ_1, COMPOS_1, SCM_1, PBOOLE;
+      DTCONSTR, BINTREE1, AMI_2, AMI_3, AFINSQ_1, COMPOS_1, SCM_1, PBOOLE,
+      MEMSTR_0;
  requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
 
 
@@ -37,7 +38,7 @@ begin
 
 definition
   func SCM-AE -> binary with_terminals with_nonterminals
-  with_useful_nonterminals strict (non empty DTConstrStr) means
+  with_useful_nonterminals strict non empty DTConstrStr means
 :: SCM_COMP:def 1
 
   Terminals
@@ -67,13 +68,11 @@ definition
   t;
 end;
 
-canceled 2;
-
-theorem :: SCM_COMP:3
+theorem :: SCM_COMP:1
   for nt being NonTerminal of SCM-AE holds nt = [0,0] or nt = [0,1]
   or nt = [0,2] or nt = [0,3] or nt = [0,4];
 
-theorem :: SCM_COMP:4
+theorem :: SCM_COMP:2
   [0,0] is NonTerminal of SCM-AE & [0,1] is NonTerminal of SCM-AE &
   [0,2] is NonTerminal of SCM-AE & [0,3] is NonTerminal of SCM-AE & [0,4] is
   NonTerminal of SCM-AE;
@@ -97,7 +96,7 @@ definition
   [0,4]-tree(t1, t2);
 end;
 
-theorem :: SCM_COMP:5 :: PRE_COMP_5:
+theorem :: SCM_COMP:3 :: PRE_COMP_5:
   for term being bin-term holds (ex t being Terminal of SCM-AE st term =
   root-tree t) or ex tl, tr being bin-term st term = tl+tr or term = tl-tr or
   term = tl*tr or term = tl div tr or term = tl mod tr;
@@ -140,15 +139,15 @@ definition
     f.(nt-tree (tl, tr)) = nt-Meaning_on (xl, xr);
 end;
 
-theorem :: SCM_COMP:6
+theorem :: SCM_COMP:4
   for s being State of SCM, t being Terminal of SCM-AE holds
   (root-tree t)@s = s.t;
 
-theorem :: SCM_COMP:7
+theorem :: SCM_COMP:5
   for s being State of SCM, nt being NonTerminal of SCM-AE, tl, tr
   being bin-term holds (nt-tree(tl, tr))@s = nt-Meaning_on(tl@s, tr@s);
 
-theorem :: SCM_COMP:8 :: PRE_COMP_8:
+theorem :: SCM_COMP:6 :: PRE_COMP_8:
   for s being State of SCM, tl, tr being bin-term holds
   (tl+tr)@s = (tl@s)+(tr@s) & (tl-tr)@s = (tl@s)-(tr@s) &
   (tl*tr)@s = (tl@s)*(tr@s) & (tl div tr)@s = (tl@s) div (tr@s) &
@@ -167,11 +166,10 @@ definition
 end;
 
 definition
- canceled 2;
   func SCM-Compile ->
    Function of TS SCM-AE, Funcs(NAT, (the Instructions of SCM)^omega)
     means
-:: SCM_COMP:def 13
+:: SCM_COMP:def 11
 
     (for t being Terminal of SCM-AE
     ex g being Function of NAT, (the Instructions of SCM)^omega
@@ -188,17 +186,15 @@ end;
 definition
   let term be bin-term, aux be Element of NAT;
   func SCM-Compile(term, aux) -> XFinSequence of the Instructions of SCM equals
-:: SCM_COMP:def 14
+:: SCM_COMP:def 12
    (SCM-Compile.term).aux;
 end;
 
-
-
-theorem :: SCM_COMP:9
+theorem :: SCM_COMP:7
   for t being Terminal of SCM-AE, n being Element of NAT holds
   SCM-Compile(root-tree t, n) = <% dl.n:=@t %>;
 
-theorem :: SCM_COMP:10
+theorem :: SCM_COMP:8
   for nt being NonTerminal of SCM-AE, t1, t2 being bin-term, n
 being Element of NAT, rtl, rtr being Symbol of SCM-AE st rtl = root-label t1 &
 rtr = root-label t2 & nt ==> <*rtl, rtr*> holds SCM-Compile(nt-tree(t1,t2), n)
@@ -207,7 +203,7 @@ rtr = root-label t2 & nt ==> <*rtl, rtr*> holds SCM-Compile(nt-tree(t1,t2), n)
 definition
   let t be Terminal of SCM-AE;
   func d".t -> Element of NAT means
-:: SCM_COMP:def 15
+:: SCM_COMP:def 13
 
   dl.it = t;
 end;
@@ -215,7 +211,7 @@ end;
 definition
   let term be bin-term;
   func max_Data-Loc_in term -> Element of NAT means
-:: SCM_COMP:def 16
+:: SCM_COMP:def 14
 
   ex f being
   Function of TS SCM-AE, NAT st it = f.term & (for t being Terminal of SCM-AE
@@ -225,23 +221,22 @@ root-label tr & nt ==> <* rtl, rtr *> for xl, xr being Element of NAT st xl = f
   .tl & xr = f.tr holds f.(nt-tree (tl, tr)) = max(xl, xr);
 end;
 
-theorem :: SCM_COMP:11
-  for t being Terminal of SCM-AE holds max_Data-Loc_in root-tree t
-  = d".t;
+theorem :: SCM_COMP:9
+  for t being Terminal of SCM-AE holds max_Data-Loc_in root-tree t = d".t;
 
-theorem :: SCM_COMP:12
+theorem :: SCM_COMP:10
   for nt being NonTerminal of SCM-AE, tl, tr being bin-term holds
 max_Data-Loc_in(nt-tree(tl, tr)) = max(max_Data-Loc_in tl, max_Data-Loc_in tr);
 
-theorem :: SCM_COMP:13
+theorem :: SCM_COMP:11
   for term being bin-term, s1, s2 being State of SCM st for dn
   being Element of NAT st dn <= max_Data-Loc_in term holds s1.dl.dn = s2.dl.dn
   holds term @ s1 = term @ s2;
 
 reserve F for total
- (NAT-defined (the Instructions of SCM)-valued Function);
+ NAT-defined (the Instructions of SCM)-valued Function;
 
-theorem :: SCM_COMP:14
+theorem :: SCM_COMP:12
   for F for term being bin-term for aux, n, k being Element of NAT
     st Shift(SCM-Compile(term, aux),n) c= F
   for s being n-started State-consisting of k, <*>INT
@@ -252,7 +247,7 @@ F,s,i) =
   (n+i) & IC u = (n+(i+1)) & u.dl.aux = term@s & for dn being Element of
   NAT st dn < aux holds s.dl.dn = u.dl.dn;
 
-theorem :: SCM_COMP:15
+theorem :: SCM_COMP:13
   for F for term being bin-term, aux, n, k being Element of NAT
    st Shift(SCM-Compile(term, aux)^<%halt SCM%>,n) c= F
   for s being n-started State-consisting of k,

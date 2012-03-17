@@ -38,7 +38,7 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="221">
+<Func kind="K" nr="224">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -48,11 +48,11 @@
 </FCluster>
 <FCluster aid="PARTIT_2" nr="2">
 <ArgTypes/>
-<Func kind="K" nr="217"/>
+<Func kind="K" nr="220"/>
 <Cluster>
 <Adjective nr="7"/>
 <Adjective nr="12"/>
-<Adjective nr="61"/>
+<Adjective nr="62"/>
 </Cluster>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -74,7 +74,7 @@
 </Func>
 <Cluster>
 <Adjective nr="7"/>
-<Adjective nr="61"/>
+<Adjective nr="62"/>
 </Cluster>
 </FCluster>
 <CCluster aid="PARTIT_2" nr="1">

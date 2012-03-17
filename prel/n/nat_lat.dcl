@@ -26,7 +26,7 @@
 <Typ kind="G" nr="8">
 <Cluster>
 <Adjective nr="41" value="false"/>
-<Adjective nr="61"/>
+<Adjective nr="62"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -36,7 +36,6 @@
 </Typ>
 <Cluster>
 <Adjective nr="41" value="false"/>
-<Adjective nr="54"/>
 <Adjective nr="55"/>
 <Adjective nr="56"/>
 <Adjective nr="57"/>
@@ -44,6 +43,7 @@
 <Adjective nr="59"/>
 <Adjective nr="60"/>
 <Adjective nr="61"/>
+<Adjective nr="62"/>
 </Cluster>
 </RCluster>
 <FCluster aid="NAT_LAT" nr="1">
@@ -60,8 +60,8 @@
 <Func kind="K" nr="112"/>
 <Cluster>
 <Adjective nr="41" value="false"/>
-<Adjective nr="54"/>
-<Adjective nr="61"/>
+<Adjective nr="55"/>
+<Adjective nr="62"/>
 </Cluster>
 </FCluster>
 <FCluster aid="NAT_LAT" nr="3">
@@ -69,7 +69,7 @@
 <Func kind="K" nr="112"/>
 <Cluster>
 <Adjective nr="41" value="false"/>
-<Adjective nr="54"/>
+<Adjective nr="55"/>
 </Cluster>
 </FCluster>
 <FCluster aid="NAT_LAT" nr="4">
@@ -77,8 +77,8 @@
 <Func kind="K" nr="112"/>
 <Cluster>
 <Adjective nr="41" value="false"/>
-<Adjective nr="54"/>
-<Adjective nr="64"/>
+<Adjective nr="55"/>
+<Adjective nr="65"/>
 </Cluster>
 </FCluster>
 <FCluster aid="NAT_LAT" nr="5">
@@ -93,20 +93,20 @@
 <Func kind="K" nr="119"/>
 <Cluster>
 <Adjective nr="41" value="false"/>
-<Adjective nr="54"/>
+<Adjective nr="55"/>
 </Cluster>
 </FCluster>
 <FCluster aid="NAT_LAT" nr="7">
 <ArgTypes/>
 <Func kind="K" nr="119"/>
 <Cluster>
-<Adjective nr="54"/>
 <Adjective nr="55"/>
 <Adjective nr="56"/>
 <Adjective nr="57"/>
 <Adjective nr="58"/>
 <Adjective nr="59"/>
 <Adjective nr="60"/>
+<Adjective nr="61"/>
 </Cluster>
 </FCluster>
 <CCluster aid="NAT_LAT" nr="1">

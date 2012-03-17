@@ -20,23 +20,25 @@ environ
       FUNCT_1, PARTFUN1, COMPLEX1, FUNCT_4, ARYTM_3, SF_MASTR, SCMFSA6C,
       SCMFSA6B, FUNCOP_1, ORDINAL1, RELAT_1, TARSKI, XBOOLE_0, XXREAL_0,
       CIRCUIT2, NAT_1, STRUCT_0, ARYTM_1, INT_1, FINSEQ_1, FINSEQ_2, SCMFSA6A,
-      FINSUB_1, CARD_3, CLASSES1, VALUED_0, MSUALG_1, SCM_HALT, GLIB_000,
-      SCMBSORT, PBOOLE, SETFAM_1, COMPOS_1;
+      FINSUB_1, CARD_3, CLASSES1, VALUED_0, MSUALG_1, SCM_HALT, SCMBSORT,
+      PBOOLE, COMPOS_1;
  notations TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, SETFAM_1, ORDINAL1, CARD_1,
       NUMBERS, XCMPLX_0, NAT_1, INT_1, RELAT_1, FINSEQ_1, FUNCT_1, COMPLEX1,
-      FUNCT_2, PBOOLE, FUNCT_4, FINSEQ_2, FUNCT_7, STRUCT_0, COMPOS_1,
-      EXTPRO_1, AMISTD_2, SCMFSA_2, FUNCOP_1, FINSUB_1, CARD_3, PARTFUN1,
-      SCMFSA6B, SCMFSA6C, SCMFSA6A, SF_MASTR, SCMFSA8A, SCMFSA8B, SCMFSA8C,
-      CLASSES1, RFINSEQ, SCMFSA7B, NAT_D, SCM_HALT, XXREAL_0;
+      FUNCT_2, PBOOLE, FUNCT_4, FINSEQ_2, FUNCT_7, STRUCT_0, MEMSTR_0,
+      COMPOS_1, EXTPRO_1, AMISTD_2, SCMFSA_2, FUNCOP_1, FINSUB_1, CARD_3,
+      PARTFUN1, SCMFSA6B, SCMFSA6C, SCMFSA6A, SF_MASTR, SCMFSA8A, SCMFSA8B,
+      SCMFSA8C, CLASSES1, RFINSEQ, SCMFSA7B, NAT_D, SCM_HALT, XXREAL_0;
  constructors SETWISEO, XXREAL_0, REAL_1, AMI_3, SCMFSA6A, SF_MASTR, SCMFSA6B,
       SCMFSA6C, SCMFSA8A, SCMFSA8B, SCMFSA8C, SCM_HALT, SEQ_1, SCMFSA7B,
       AMISTD_2, NAT_D, CLASSES1, RELSET_1, DOMAIN_1, SFMASTR1, AMISTD_1,
-      PBOOLE, PRE_POLY, SCMFSA_3, SCMFSA_7, SCMFSA_9, SCMFSA_2;
+      PBOOLE, PRE_POLY, SCMFSA_3, SCMFSA_7, SCMFSA_9, SCMFSA_2, XXREAL_2,
+      MEMSTR_0;
  registrations XBOOLE_0, SETFAM_1, FUNCT_1, RELSET_1, FUNCOP_1, FINSUB_1,
       NUMBERS, XXREAL_0, XREAL_0, NAT_1, INT_1, CARD_3, RFINSEQ, SCMFSA_2,
       SF_MASTR, SCMFSA6C, SCMFSA7B, FINSET_1, SCMFSA8A, SCMFSA8B, SCMFSA_9,
       SCM_HALT, STRUCT_0, VALUED_0, ORDINAL1, RELAT_1, FUNCT_2, PBOOLE,
-      SCMFSA10, AMISTD_2, SCMFSA6A, COMPOS_1, SFMASTR1, FUNCT_4, EXTPRO_1;
+      SCMFSA10, AMISTD_2, SCMFSA6A, COMPOS_1, SFMASTR1, FUNCT_4, EXTPRO_1,
+      SCMFSA8C, MEMSTR_0;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
 
 
@@ -48,81 +50,71 @@ reserve p for preProgram of SCM+FSA,
   fa,f for FinSeq-Location,
   a,b,da,db for Int-Location,
   la,lb for Element of NAT;
-reserve p1,p2,q for (the Instructions of SCM+FSA)-valued ManySortedSet of NAT;
+reserve p1,p2,q for Instruction-Sequence of SCM+FSA;
 
-canceled 2;
-
-theorem :: SCMBSORT:3
+theorem :: SCMBSORT:1
   for I being Program of SCM+FSA,a,b being Int-Location st
   I does not destroy b & a<>b holds Times(a,I) does not destroy b;
 
-canceled 4;
-
-theorem :: SCMBSORT:8
+theorem :: SCMBSORT:2
   for s be State of SCM+FSA,f be FinSeq-Location,a,b be Int-Location
   holds Exec(b:=(f,a), s).b = (s.f)/.abs(s.a);
 
-theorem :: SCMBSORT:9
+theorem :: SCMBSORT:3
   for s be State of SCM+FSA,f be FinSeq-Location,a,b be Int-Location
   holds Exec((f,a):=b, s).f = s.f+*(abs(s.a),s.b);
 
-theorem :: SCMBSORT:10
+theorem :: SCMBSORT:4
   for s be State of SCM+FSA,f be FinSeq-Location,m,n be Element of NAT,
   a be Int-Location
   st m<>n+1 holds Exec(intloc m:=(f,a), Initialized s).intloc (n+1)
   =s.intloc (n+1);
 
-theorem :: SCMBSORT:11
+theorem :: SCMBSORT:5
   for s be State of SCM+FSA,m,n be Element of NAT,a be Int-Location
   st m<>n+1 holds Exec(intloc m:=a, Initialized s).intloc (n+1) =s.intloc (n+1)
 ;
 
-theorem :: SCMBSORT:12
-  for p being (the Instructions of SCM+FSA)-valued ManySortedSet of NAT
+theorem :: SCMBSORT:6
+  for p being Instruction-Sequence of SCM+FSA
   for s be State of SCM+FSA, f be FinSeq-Location, a be read-write Int-Location
   holds IExec(Stop SCM+FSA,p,s).a =s.a &
      IExec(Stop SCM+FSA,p,s).f =s.f;
 
 reserve n for natural number;
 
-canceled 3;
-
-theorem :: SCMBSORT:16
+theorem :: SCMBSORT:7
   ic in rng p & (ic = a:=b or ic = AddTo(a, b) or ic = SubFrom(a, b) or
   ic = MultBy(a, b) or ic = Divide(a, b))
   implies a in UsedIntLoc p & b in UsedIntLoc p;
 
-theorem :: SCMBSORT:17
+theorem :: SCMBSORT:8
   ic in rng p & (ic = a=0_goto la or ic = a>0_goto la)
   implies a in UsedIntLoc p;
 
-theorem :: SCMBSORT:18
+theorem :: SCMBSORT:9
   ic in rng p & ( ic = b := (fa, a) or ic = (fa, a) := b)
   implies a in UsedIntLoc p & b in UsedIntLoc p;
 
-theorem :: SCMBSORT:19
+theorem :: SCMBSORT:10
   ic in rng p & ( ic = b := (fa, a) or ic = (fa, a) := b)
   implies fa in UsedInt*Loc p;
 
-theorem :: SCMBSORT:20
+theorem :: SCMBSORT:11
   ic in rng p & (ic = a :=len fa or ic = fa :=<0,...,0>a)
   implies a in UsedIntLoc p;
 
-theorem :: SCMBSORT:21
+theorem :: SCMBSORT:12
   ic in rng p & (ic = a :=len fa or ic = fa :=<0,...,0>a)
   implies fa in UsedInt*Loc p;
 
-canceled;
-
-theorem :: SCMBSORT:23
+theorem :: SCMBSORT:13
   for t being FinPartState of SCM+FSA,p being Program of SCM+FSA,
   x being set st dom t c= Int-Locations \/ FinSeq-Locations &
   x in dom t \/ UsedInt*Loc p \/ UsedIntLoc p
   holds x is Int-Location or x is FinSeq-Location;
 
-canceled;
-
-theorem :: SCMBSORT:25
+theorem :: SCMBSORT:14
   for i,k being Element of NAT,t being FinPartState of SCM+FSA,
   p being Program of SCM+FSA, s1,s2 being State of SCM+FSA
   st k <= i & p c= p1 & p c= p2 & dom t c= Int-Locations \/ FinSeq-Locations &
@@ -135,7 +127,7 @@ theorem :: SCMBSORT:25
   Comput(p1,s1,i) |(dom t \/ UsedInt*Loc p \/ UsedIntLoc p) =
   Comput(p2,s2,i) |(dom t \/ UsedInt*Loc p \/ UsedIntLoc p);
 
-theorem :: SCMBSORT:26
+theorem :: SCMBSORT:15
   for i,k being Element of NAT,p being Program of SCM+FSA,
   s1,s2 being State of SCM+FSA st k <= i & p c= p1 & p c= p2 &
   (for j holds IC Comput(p1,s1,j) in dom p &
@@ -149,28 +141,28 @@ SCM+FSA &
   Comput(p1,s1,i) |(UsedInt*Loc p \/ UsedIntLoc p) =
   Comput(p2,s2,i) |(UsedInt*Loc p \/ UsedIntLoc p);
 
-canceled 2;
 
-theorem :: SCMBSORT:29
+
+theorem :: SCMBSORT:16
   for I,J being Program of SCM+FSA, a being Int-Location holds
   UsedIntLoc if=0(a,I,J) = {a} \/ UsedIntLoc I \/ UsedIntLoc J &
   UsedIntLoc if>0(a,I,J) = {a} \/ UsedIntLoc I \/ UsedIntLoc J;
 
-theorem :: SCMBSORT:30
+theorem :: SCMBSORT:17
   for I be Program of SCM+FSA,l be Element of NAT holds
   UsedIntLoc (Directed(I,l)) = UsedIntLoc I;
 
-theorem :: SCMBSORT:31
+theorem :: SCMBSORT:18
   for a being Int-Location,I being Program of SCM+FSA holds
   UsedIntLoc Times(a,I) = UsedIntLoc I \/ {a,intloc 0};
 
-canceled 4;
 
-theorem :: SCMBSORT:36
+
+theorem :: SCMBSORT:19
   for I be Program of SCM+FSA,l be Element of NAT holds
   UsedInt*Loc (Directed(I,l)) = UsedInt*Loc I;
 
-theorem :: SCMBSORT:37
+theorem :: SCMBSORT:20
   for a being Int-Location,I being Program of SCM+FSA holds
   UsedInt*Loc Times(a,I) = UsedInt*Loc I;
 
@@ -179,83 +171,72 @@ definition
   redefine func f .--> t -> FinPartState of SCM+FSA;
 end;
 
-canceled 2;
 
-theorem :: SCMBSORT:40
-  dom Initialize ((intloc 0) .--> 1) = {intloc 0,IC SCM+FSA};
 
-theorem :: SCMBSORT:41
-  for I be Program of SCM+FSA holds
-  dom (Initialized I) = dom I \/ {intloc 0,IC SCM+FSA};
-
-theorem :: SCMBSORT:42
+theorem :: SCMBSORT:21
   for w being FinSequence of INT,f be FinSeq-Location,I be Program of SCM+FSA
-  holds dom (Initialized I +* (f.--> w)) = dom I \/ {intloc 0,IC SCM+FSA,f};
+  holds dom (Initialized (f.--> w)) = {intloc 0,IC SCM+FSA,f};
 
-canceled;
 
-theorem :: SCMBSORT:44
+
+theorem :: SCMBSORT:22
   for a being Int-Location,I being Program of SCM+FSA holds
   card Times(a,I) = card I + 12;
 
-theorem :: SCMBSORT:45
+theorem :: SCMBSORT:23
   for i1,i2,i3 be Instruction of SCM+FSA holds card (i1 ';' i2 ';' i3)=6;
 
-theorem :: SCMBSORT:46
-  for t be FinSequence of INT,f be FinSeq-Location,I be Program of SCM+FSA
-  holds dom (Initialized I) misses dom (f .--> t);
+theorem :: SCMBSORT:24
+  for t be FinSequence of INT,f be FinSeq-Location
+  holds dom Initialize((intloc 0) .--> 1) misses dom (f .--> t);
 
-theorem :: SCMBSORT:47
+theorem :: SCMBSORT:25
   for w be FinSequence of INT,f be FinSeq-Location,I be Program of SCM+FSA
-  holds Initialized I +* (f .--> w) is 0-started;
+  holds Initialize((intloc 0) .--> 1) +* (f .--> w) is 0-started;
 
-theorem :: SCMBSORT:48
+theorem :: SCMBSORT:26
   for I,J being Program of SCM+FSA, k being Element of NAT,
   i being Instruction of SCM+FSA st k< card J & i = J. k holds
   (I ';' J).( (card I +k)) =IncAddr( i, card I );
 
-canceled;
 
-theorem :: SCMBSORT:50
+
+theorem :: SCMBSORT:27
   for I,J be Program of SCM+FSA,k be Element of NAT,
   i be Instruction of SCM+FSA st
   (for n be Element of NAT holds IncAddr( i, n)=i) & i <> halt SCM+FSA &
   k= card I holds (I ';' i ';' J).( k) = i &
   (I ';' i ';' J).( (k+1)) = goto  (card I+2);
 
-theorem :: SCMBSORT:51
+theorem :: SCMBSORT:28
   for I,J being Program of SCM+FSA, k being Element of NAT holds
   k= card I implies (I ';'(a:=b) ';' J).( k) = a:= b
   & (I ';'(a:=b) ';' J).( (k+1)) = goto  (card I+2);
 
-theorem :: SCMBSORT:52
+theorem :: SCMBSORT:29
   for I,J being Program of SCM+FSA, k being Element of NAT holds
   k= card I implies (I ';'(a:=len f) ';' J).( k) = a:=len f
   & (I ';'(a:=len f) ';' J).( (k+1)) = goto  (card I+2);
 
-theorem :: SCMBSORT:53
-  for w being FinSequence of INT,f be FinSeq-Location,s being State of SCM+FSA,
-  I be Program of SCM+FSA holds
-   ProgramPart(Initialized I +* (f.--> w)) = I;
 
-theorem :: SCMBSORT:54
+
+theorem :: SCMBSORT:30
   for w being FinSequence of INT,f be FinSeq-Location,s be State of SCM+FSA,
-  I be Program of SCM+FSA st NPP(Initialized I +* (f .--> w)) c= s
+  I be Program of SCM+FSA st  Initialized(f .--> w) c= s
   holds s.f = w & s.(intloc 0) = 1;
 
-theorem :: SCMBSORT:55
+theorem :: SCMBSORT:31
   for f being FinSeq-Location,a being Int-Location,s being State of SCM+FSA
   holds {a,IC SCM+FSA,f} c= dom s;
 
-theorem :: SCMBSORT:56
+theorem :: SCMBSORT:32
   for p being Program of SCM+FSA,s being State of SCM+FSA holds
   UsedInt*Loc p \/ UsedIntLoc p c= dom s;
 
-theorem :: SCMBSORT:57
-  for p being (the Instructions of SCM+FSA)-valued ManySortedSet of NAT
+theorem :: SCMBSORT:33
+  for p being Instruction-Sequence of SCM+FSA
   for s be State of SCM+FSA,I be Program of SCM+FSA,f be FinSeq-Location
-  holds (Result(p +* I,s +* Initialize((intloc 0).-->1))).f
-   = IExec(I,p,s).f;
+  holds Result(p +* I,Initialized s).f = IExec(I,p,s).f;
 
 :: set a0 = intloc 0;
 :: set a1 = intloc 1;
@@ -288,12 +269,12 @@ definition
   bubble-sort fsloc 0;
 end;
 
-theorem :: SCMBSORT:58
+theorem :: SCMBSORT:34
   for f being FinSeq-Location holds
   UsedIntLoc (bubble-sort f) = {intloc 0,intloc 1,intloc 2,intloc 3, intloc 4,
   intloc 5,intloc 6};
 
-theorem :: SCMBSORT:59
+theorem :: SCMBSORT:35
   for f being FinSeq-Location holds UsedInt*Loc (bubble-sort f) = {f};
 
 definition
@@ -307,30 +288,30 @@ definition
   u is non-increasing & p = fsloc 0 .--> t & q = fsloc 0 .--> u;
 end;
 
-theorem :: SCMBSORT:60
+theorem :: SCMBSORT:36
   for p being set holds p in dom Sorting-Function iff
   ex t being FinSequence of INT st p = fsloc 0 .--> t;
 
-theorem :: SCMBSORT:61
+theorem :: SCMBSORT:37
   for t being FinSequence of INT holds
   ex u being FinSequence of REAL st t,u are_fiberwise_equipotent &
   u is non-increasing & u is FinSequence of INT &
   Sorting-Function.(fsloc 0 .--> t ) = fsloc 0 .--> u;
 
-theorem :: SCMBSORT:62
+theorem :: SCMBSORT:38
   for f being FinSeq-Location holds card (bubble-sort f) = 63;
 
-theorem :: SCMBSORT:63
-  for P being (the Instructions of SCM+FSA)-valued ManySortedSet of NAT
+theorem :: SCMBSORT:39
+  for P being Instruction-Sequence of SCM+FSA
    st Bubble-Sort-Algorithm c= P
   for f being FinSeq-Location, k being Element of NAT st
   k < 63 holds Bubble-Sort-Algorithm.k= P.k;
 
-theorem :: SCMBSORT:64
+theorem :: SCMBSORT:40
   bubble-sort (fsloc 0) is keepInt0_1 InitHalting;
 
-theorem :: SCMBSORT:65
-  for p be (the Instructions of SCM+FSA)-valued ManySortedSet of NAT
+theorem :: SCMBSORT:41
+  for p be Instruction-Sequence of SCM+FSA
   for s be State of SCM+FSA holds
   s.(fsloc 0), IExec(bubble-sort (fsloc 0),p,s).(fsloc 0)
   are_fiberwise_equipotent &
@@ -338,16 +319,16 @@ theorem :: SCMBSORT:65
   for x1,x2 be Integer st x1 =IExec(bubble-sort (fsloc 0),p,s).(fsloc 0).i &
   x2=IExec(bubble-sort (fsloc 0),p,s).(fsloc 0).j holds x1 >= x2;
 
-theorem :: SCMBSORT:66
+theorem :: SCMBSORT:42
   for i being Element of NAT, s being State of SCM+FSA,
-  P being (the Instructions of SCM+FSA)-valued ManySortedSet of NAT
+  P being Instruction-Sequence of SCM+FSA
    st Bubble-Sort-Algorithm c= P
   for w being FinSequence of INT
-  st NPP(Initialized Bubble-Sort-Algorithm +* ((fsloc 0) .--> w)) c= s
+  st (Initialized ((fsloc 0) .--> w)) c= s
   holds IC Comput(P,s,i) in dom Bubble-Sort-Algorithm;
 
-theorem :: SCMBSORT:67
-  for p being (the Instructions of SCM+FSA)-valued ManySortedSet of NAT
+theorem :: SCMBSORT:43
+  for p being Instruction-Sequence of SCM+FSA
   for s be State of SCM+FSA,t be FinSequence of INT st
   Initialize((intloc 0).-->1) +*(fsloc 0 .--> t) c= s &
   Bubble-Sort-Algorithm c= p
@@ -355,15 +336,15 @@ theorem :: SCMBSORT:67
   st t,u are_fiberwise_equipotent & u is non-increasing &
   u is FinSequence of INT & (Result(p,s)).(fsloc 0) = u;
 
-theorem :: SCMBSORT:68
+theorem :: SCMBSORT:44
   for w being FinSequence of INT holds
-  Initialized Bubble-Sort-Algorithm +* ((fsloc 0) .--> w) is autonomic;
+  Initialized ((fsloc 0) .--> w) is Bubble-Sort-Algorithm-autonomic;
 
 registration
  cluster Bubble-Sort-Algorithm -> non halt-free;
 end;
 
-theorem :: SCMBSORT:69
-  Bubble-Sort-Algorithm, Initialized Bubble-Sort-Algorithm
+theorem :: SCMBSORT:45
+  Bubble-Sort-Algorithm, Initialize((intloc 0).-->1)
       computes Sorting-Function;
 

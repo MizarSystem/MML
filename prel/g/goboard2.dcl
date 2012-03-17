@@ -40,32 +40,12 @@
 </Signature>
 <FCluster aid="GOBOARD2" nr="1">
 <ArgTypes>
-<Typ kind="M" nr="7">
+<Typ kind="M" nr="8">
 <Cluster>
 <Adjective nr="11" value="false"/>
 </Cluster>
 <Func kind="U" nr="1">
-<Func kind="K" nr="280">
-<Num nr="2"/>
-</Func>
-</Func>
-</Typ>
-</ArgTypes>
-<Func kind="K" nr="300">
-<LocusVar nr="1"/>
-</Func>
-<Cluster>
-<Adjective nr="11" value="false"/>
-</Cluster>
-</FCluster>
-<FCluster aid="GOBOARD2" nr="2">
-<ArgTypes>
-<Typ kind="M" nr="7">
-<Cluster>
-<Adjective nr="11" value="false"/>
-</Cluster>
-<Func kind="U" nr="1">
-<Func kind="K" nr="280">
+<Func kind="K" nr="281">
 <Num nr="2"/>
 </Func>
 </Func>
@@ -78,82 +58,102 @@
 <Adjective nr="11" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster aid="GOBOARD2" nr="3">
+<FCluster aid="GOBOARD2" nr="2">
 <ArgTypes>
-<Typ kind="M" nr="7">
-<Cluster>
-<Adjective nr="11" value="false"/>
-</Cluster>
-<Func kind="K" nr="50"/>
-</Typ>
-<Typ kind="M" nr="7">
-<Cluster>
-<Adjective nr="11" value="false"/>
-</Cluster>
-<Func kind="K" nr="50"/>
-</Typ>
-</ArgTypes>
-<Func kind="K" nr="303">
-<LocusVar nr="1"/>
-<LocusVar nr="2"/>
-</Func>
-<Cluster>
-<Adjective nr="3" value="false"/>
-<Adjective nr="155"/>
-<Adjective nr="158"/>
-<Adjective nr="159"/>
-</Cluster>
-</FCluster>
-<FCluster aid="GOBOARD2" nr="4">
-<ArgTypes>
-<Typ kind="M" nr="7">
-<Cluster>
-<Adjective nr="11" value="false"/>
-<Adjective nr="33"/>
-</Cluster>
-<Func kind="K" nr="50"/>
-</Typ>
-<Typ kind="M" nr="7">
-<Cluster>
-<Adjective nr="11" value="false"/>
-<Adjective nr="33"/>
-</Cluster>
-<Func kind="K" nr="50"/>
-</Typ>
-</ArgTypes>
-<Func kind="K" nr="303">
-<LocusVar nr="1"/>
-<LocusVar nr="2"/>
-</Func>
-<Cluster>
-<Adjective nr="155"/>
-<Adjective nr="160"/>
-<Adjective nr="161"/>
-</Cluster>
-</FCluster>
-<FCluster aid="GOBOARD2" nr="5">
-<ArgTypes>
-<Typ kind="M" nr="7">
+<Typ kind="M" nr="8">
 <Cluster>
 <Adjective nr="11" value="false"/>
 </Cluster>
 <Func kind="U" nr="1">
-<Func kind="K" nr="280">
+<Func kind="K" nr="281">
 <Num nr="2"/>
 </Func>
 </Func>
 </Typ>
 </ArgTypes>
+<Func kind="K" nr="302">
+<LocusVar nr="1"/>
+</Func>
+<Cluster>
+<Adjective nr="11" value="false"/>
+</Cluster>
+</FCluster>
+<FCluster aid="GOBOARD2" nr="3">
+<ArgTypes>
+<Typ kind="M" nr="8">
+<Cluster>
+<Adjective nr="11" value="false"/>
+</Cluster>
+<Func kind="K" nr="50"/>
+</Typ>
+<Typ kind="M" nr="8">
+<Cluster>
+<Adjective nr="11" value="false"/>
+</Cluster>
+<Func kind="K" nr="50"/>
+</Typ>
+</ArgTypes>
 <Func kind="K" nr="304">
+<LocusVar nr="1"/>
+<LocusVar nr="2"/>
+</Func>
+<Cluster>
+<Adjective nr="3" value="false"/>
+<Adjective nr="156"/>
+<Adjective nr="159"/>
+<Adjective nr="160"/>
+</Cluster>
+</FCluster>
+<FCluster aid="GOBOARD2" nr="4">
+<ArgTypes>
+<Typ kind="M" nr="8">
+<Cluster>
+<Adjective nr="11" value="false"/>
+<Adjective nr="33"/>
+</Cluster>
+<Func kind="K" nr="50"/>
+</Typ>
+<Typ kind="M" nr="8">
+<Cluster>
+<Adjective nr="11" value="false"/>
+<Adjective nr="33"/>
+</Cluster>
+<Func kind="K" nr="50"/>
+</Typ>
+</ArgTypes>
+<Func kind="K" nr="304">
+<LocusVar nr="1"/>
+<LocusVar nr="2"/>
+</Func>
+<Cluster>
+<Adjective nr="156"/>
+<Adjective nr="161"/>
+<Adjective nr="162"/>
+</Cluster>
+</FCluster>
+<FCluster aid="GOBOARD2" nr="5">
+<ArgTypes>
+<Typ kind="M" nr="8">
+<Cluster>
+<Adjective nr="11" value="false"/>
+</Cluster>
+<Func kind="U" nr="1">
+<Func kind="K" nr="281">
+<Num nr="2"/>
+</Func>
+</Func>
+</Typ>
+</ArgTypes>
+<Func kind="K" nr="305">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
 <Adjective nr="3" value="false"/>
-<Adjective nr="155"/>
-<Adjective nr="158"/>
+<Adjective nr="156"/>
 <Adjective nr="159"/>
 <Adjective nr="160"/>
 <Adjective nr="161"/>
+<Adjective nr="162"/>
 </Cluster>
 </FCluster>
 </Registrations>

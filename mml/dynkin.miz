@@ -16,10 +16,10 @@ environ
 
  vocabularies XBOOLE_0, PROB_1, SUBSET_1, SETFAM_1, NUMBERS, RELAT_1, FUNCT_1,
       FINSET_1, ARYTM_3, ORDINAL1, CARD_1, FUNCT_7, CARD_3, TARSKI, ZFMISC_1,
-      PROB_2, XXREAL_0, MSSUBFAM, NAT_1, EQREL_1, DYNKIN;
+      PROB_2, XXREAL_0, MSSUBFAM, NAT_1, EQREL_1, DYNKIN, FINSUB_1;
  notations TARSKI, XBOOLE_0, ENUMSET1, ZFMISC_1, SUBSET_1, FINSET_1, CARD_1,
       NUMBERS, SETFAM_1, RELAT_1, FUNCT_1, FUNCT_2, NAT_1, FUNCT_7, CARD_3,
-      PROB_1, COHSP_1, PROB_2, XXREAL_0;
+      PROB_1, FINSUB_1, PROB_2, XXREAL_0;
  constructors SETFAM_1, FINSUB_1, NAT_1, PROB_2, XREAL_0, FUNCT_7, ENUMSET1,
       RELSET_1;
  registrations XBOOLE_0, SUBSET_1, FUNCT_1, ORDINAL1, RELSET_1, FINSET_1,
@@ -51,13 +51,13 @@ A1: now
     assume x in rng f;
     then consider z such that
 A2: z in dom f and
-A3: x=f.z by FUNCT_1:def 5;
+A3: x=f.z by FUNCT_1:def 3;
     reconsider n=z as Element of NAT by A2,FUNCT_2:def 1;
     take n;
     thus f.n=x by A3;
   end;
   dom f=NAT by FUNCT_2:def 1;
-  hence thesis by A1,FUNCT_1:def 5;
+  hence thesis by A1,FUNCT_1:def 3;
 end;
 
 theorem Th2:
@@ -69,7 +69,7 @@ A1: for n st P[n] holds P[n+1]
     let n;
     assume P[n];
     then succ n is finite;
-    hence thesis by NAT_1:39;
+    hence thesis by NAT_1:38;
   end;
 A2: P[0];
   thus for n holds P[n] from NAT_1:sch 1(A2,A1);
@@ -94,19 +94,17 @@ definition
   end;
 end;
 
-canceled 3;
-
 theorem Th6:
   for a,b being set holds Union (a,b) followed_by {} = a \/ b
 proof
   let a,b be set;
-  rng (a,b) followed_by {} = {a,b,{}} by FUNCT_7:129;
+  rng (a,b) followed_by {} = {a,b,{}} by FUNCT_7:127;
   hence Union ((a,b) followed_by {}) = union{a,b} by MEASURE1:1
-    .= a \/ b by ZFMISC_1:93;
+    .= a \/ b by ZFMISC_1:75;
 end;
 
 definition
-  canceled;
+
   let Omega be non empty set;
   let f be SetSequence of Omega;
   let X be Subset of Omega;
@@ -134,7 +132,7 @@ A3: for n holds i2.n=X/\ f.n;
       i1.n=X/\ f.n by A2;
       hence i1.n=i2.n by A3;
     end;
-    hence i1=i2 by FUNCT_2:113;
+    hence i1=i2 by FUNCT_2:63;
   end;
 end;
 
@@ -151,7 +149,7 @@ definition
   compatibility
   proof
     thus f is disjoint_valued implies for n,m holds (n<m implies f.n misses f.
-    m) by PROB_2:def 3;
+    m) by PROB_2:def 2;
     assume
 A1: n<m implies f.n misses f.m;
     now
@@ -167,11 +165,11 @@ A2:   x <> y;
       end;
       suppose
         not (x in dom f & y in dom f);
-        then f.x = {} or f.y = {} by FUNCT_1:def 4;
+        then f.x = {} or f.y = {} by FUNCT_1:def 2;
         hence f.x misses f.y by XBOOLE_1:65;
       end;
     end;
-    hence thesis by PROB_2:def 3;
+    hence thesis by PROB_2:def 2;
   end;
 end;
 
@@ -208,14 +206,14 @@ end;
 
 notation
   let x be set;
-  synonym x is intersection_stable for x is multiplicative;
+  synonym x is intersection_stable for x is cap-closed;
 end;
 
 definition
   let Omega be non empty set;
   let f be SetSequence of Omega;
   let n be Nat;
-  canceled;
+
   func disjointify(f,n) -> Subset of Omega equals
   f.n \ union rng (f|n);
   coherence;
@@ -234,7 +232,7 @@ definition
 A1: for x being Element of NAT holds f.x = F(x) from FUNCT_2:sch 4;
     take f;
     let n be Nat;
-    n in NAT by ORDINAL1:def 13;
+    n in NAT by ORDINAL1:def 12;
     hence thesis by A1;
   end;
   uniqueness
@@ -249,7 +247,7 @@ A3: for n be Nat holds i2.n=disjointify(g,n);
       i1.n=disjointify(g,n) by A2;
       hence i1.n=i2.n by A3;
     end;
-    hence i1=i2 by FUNCT_2:113;
+    hence i1=i2 by FUNCT_2:63;
   end;
 end;
 
@@ -269,14 +267,14 @@ proof
     let n,m;
     assume n<m;
     then
-A1: n in m by NAT_1:45;
+A1: n in m by NAT_1:44;
     dom f=NAT by FUNCT_2:def 1;
-    then dom(f|m)=m/\ NAT by RELAT_1:90;
+    then dom(f|m)=m/\ NAT by RELAT_1:61;
     then n in dom(f|m) by A1,XBOOLE_0:def 4;
     then
-A2: (f|m).n in rng(f|m) by FUNCT_1:def 5;
-    (f|m).n=f.n by A1,FUNCT_1:72;
-    then f.n misses f.m \ union rng(f|m) by A2,XBOOLE_1:85,ZFMISC_1:92;
+A2: (f|m).n in rng(f|m) by FUNCT_1:def 3;
+    (f|m).n=f.n by A1,FUNCT_1:49;
+    then f.n misses f.m \ union rng(f|m) by A2,XBOOLE_1:85,ZFMISC_1:74;
     then
 A3: f.n misses (disjointify(f)).m by Th8;
     f.n \ union rng(f|n) c= f.n by XBOOLE_1:36;
@@ -301,7 +299,7 @@ A3: x in y and
 A4: y in rng f by TARSKI:def 4;
     consider z such that
 A5: z in dom(f) and
-A6: y=f.z by A4,FUNCT_1:def 5;
+A6: y=f.z by A4,FUNCT_1:def 3;
     reconsider n=z as Element of NAT by A5,FUNCT_2:def 1;
 A7: ex k being Nat st P[k]
     proof
@@ -317,18 +315,18 @@ A9:   x in y and
 A10:  y in rng(f|k) by TARSKI:def 4;
       consider z such that
 A11:  z in dom(f|k) and
-A12:  y=(f|k).z by A10,FUNCT_1:def 5;
-      dom(f|k) c= NAT by A1,RELAT_1:89;
+A12:  y=(f|k).z by A10,FUNCT_1:def 3;
+      dom(f|k) c= NAT by A1,RELAT_1:60;
       then reconsider n=z as Element of NAT by A11;
-      dom(f|k) c= k by RELAT_1:87;
-      then n<k & y=f.n by A11,A12,FUNCT_1:72,NAT_1:45;
+      dom(f|k) c= k by RELAT_1:58;
+      then n<k & y=f.n by A11,A12,FUNCT_1:49,NAT_1:44;
       hence contradiction by A8,A9;
     end;
     then x in f.k \ union rng(f|k) by A8,XBOOLE_0:def 5;
     then
 A13: x in (disjointify(f)).k by Th8;
-    k in NAT by ORDINAL1:def 13;
-    then (disjointify f).k in rng disjointify(f) by A2,FUNCT_1:def 5;
+    k in NAT by ORDINAL1:def 12;
+    then (disjointify f).k in rng disjointify(f) by A2,FUNCT_1:def 3;
     hence x in union rng disjointify(f) by A13,TARSKI:def 4;
   end;
   then
@@ -341,9 +339,9 @@ A15: x in y and
 A16: y in rng disjointify(f) by TARSKI:def 4;
     consider z such that
 A17: z in dom(disjointify(f)) and
-A18: y=(disjointify(f)).z by A16,FUNCT_1:def 5;
+A18: y=(disjointify(f)).z by A16,FUNCT_1:def 3;
     reconsider n=z as Element of NAT by A17,FUNCT_2:def 1;
-A19: f.n\ union rng (f|n) c= f.n & f.n in rng(f) by A1,FUNCT_1:def 5
+A19: f.n\ union rng (f|n) c= f.n & f.n in rng(f) by A1,FUNCT_1:def 3
 ,XBOOLE_1:36;
     x in f.n\ union rng (f|n) by A15,A18,Th8;
     hence x in union rng f by A19,TARSKI:def 4;
@@ -361,7 +359,7 @@ A1: x misses y;
   reconsider r=(x,y) followed_by {} Omega as Function of NAT, bool Omega;
   now
     let n,m;
-A2: m>1 implies r.m={} by FUNCT_7:126;
+A2: m>1 implies r.m={} by FUNCT_7:124;
     assume
 A3: n<m;
 A4: now
@@ -371,8 +369,8 @@ A5:   m=0 or m=1;
       then n <= 0 by A3,A5,NAT_1:13;
       hence n=0 & m=1 by A3,A5,NAT_1:3;
     end;
-    r.0=x by FUNCT_7:124;
-    hence r.n misses r.m by A1,A4,A2,FUNCT_7:125,NAT_1:26,XBOOLE_1:65;
+    r.0=x by FUNCT_7:122;
+    hence r.n misses r.m by A1,A4,A2,FUNCT_7:123,NAT_1:25,XBOOLE_1:65;
   end;
   hence thesis by Def3;
 end;
@@ -391,7 +389,7 @@ A1: f is disjoint_valued;
   proof
     let n,m;
     assume n<m;
-    then f.n misses f.m by A1,PROB_2:def 3;
+    then f.n misses f.m by A1,PROB_2:def 2;
     then
 A2: X/\ f.n misses f.m by XBOOLE_1:74;
     (seqIntersection(X,f)).n=X/\ f.n & (seqIntersection(X,f)).m=X/\ f.m by Def2
@@ -417,12 +415,12 @@ A2: z in u and
 A3: u in rng g by TARSKI:def 4;
     consider v such that
 A4: v in dom g and
-A5: u=g.v by A3,FUNCT_1:def 5;
+A5: u=g.v by A3,FUNCT_1:def 3;
     reconsider n=v as Element of NAT by A4,FUNCT_2:def 1;
 A6: z in X/\ f.n by A2,A5,Def2;
     then
 A7: z in X by XBOOLE_0:def 4;
-A8: f.n in rng f by A1,FUNCT_1:def 5;
+A8: f.n in rng f by A1,FUNCT_1:def 3;
     z in f.n by A6,XBOOLE_0:def 4;
     then z in Union f by A8,TARSKI:def 4;
     hence z in X/\ Union f by A7,XBOOLE_0:def 4;
@@ -440,11 +438,11 @@ A12: z in u and
 A13: u in rng f by TARSKI:def 4;
     consider v such that
 A14: v in dom f and
-A15: u=f.v by A13,FUNCT_1:def 5;
+A15: u=f.v by A13,FUNCT_1:def 3;
     reconsider n=v as Element of NAT by A14,FUNCT_2:def 1;
     X/\ f.n = (seqIntersection(X,f)).n by Def2;
     then
-A16: X/\ f.n in rng seqIntersection(X,f) by A10,FUNCT_1:def 5;
+A16: X/\ f.n in rng seqIntersection(X,f) by A10,FUNCT_1:def 3;
     z in X by A11,XBOOLE_0:def 4;
     then z in X/\ f.n by A12,A15,XBOOLE_0:def 4;
     hence z in Union seqIntersection(X,f) by A16,TARSKI:def 4;
@@ -475,7 +473,7 @@ end;
 
 registration
   let Omega;
-  cluster -> non empty Dynkin_System of Omega;
+  cluster -> non empty for Dynkin_System of Omega;
   coherence by Def7;
 end;
 
@@ -510,7 +508,7 @@ A5: f is disjoint_valued;
     now
       let Y such that
 A6:   Y in F;
-      meet F c= Y by A6,SETFAM_1:4;
+      meet F c= Y by A6,SETFAM_1:3;
       then
 A7:   rng f c= Y by A4,XBOOLE_1:1;
       Y is Dynkin_System of Omega by A1,A6;
@@ -526,13 +524,13 @@ A9: X in meet F;
     proof
       let Y;
       assume Y in F;
-      then Y is Dynkin_System of Omega & meet F c= Y by A1,SETFAM_1:4;
+      then Y is Dynkin_System of Omega & meet F c= Y by A1,SETFAM_1:3;
       hence thesis by A9,Def7;
     end;
     hence X` in meet F by SETFAM_1:def 1;
   end;
-  set Y =the  Element of F;
-A10: meet F c= Y by SETFAM_1:4;
+  set Y = the Element of F;
+A10: meet F c= Y by SETFAM_1:3;
   Y is Dynkin_System of Omega by A1;
   then meet F is Subset-Family of Omega by A10,XBOOLE_1:1;
   hence thesis by A3,A8,A2,Def7;
@@ -550,7 +548,7 @@ A3: A in D and
 A4: B in D;
   B`in D by A1,A4,Def7;
   then A /\ (B`) in D by A2,A3,FINSUB_1:def 2;
-  hence thesis by SUBSET_1:32;
+  hence thesis by SUBSET_1:13;
 end;
 
 theorem Th17:
@@ -588,8 +586,8 @@ A6: union b in D;
     y in D by A3,A5;
     then reconsider y1=y as Subset of Omega;
     reconsider unionb = union b as Subset of Omega by A6;
-    union {y}=y & unionb \/ y1 in D by A1,A2,A3,A5,A6,Th17,ZFMISC_1:31;
-    hence thesis by ZFMISC_1:96;
+    union {y}=y & unionb \/ y1 in D by A1,A2,A3,A5,A6,Th17,ZFMISC_1:25;
+    hence thesis by ZFMISC_1:78;
   end;
 A7: x is finite;
 A8: P[{}] by A1,Def7,ZFMISC_1:2;
@@ -609,14 +607,14 @@ A2: rng f c= D;
 A3: for n holds (disjointify(f)).n in D
   proof
     let n;
-A4: rng (f|n) c= rng(f) by RELAT_1:99;
-    dom(f|n) c= Segm n & rng(f) is Subset-Family of Omega by RELAT_1:87,def 19;
+A4: rng (f|n) c= rng(f) by RELAT_1:70;
+    dom(f|n) c= Segm n & rng(f) is Subset-Family of Omega by RELAT_1:58,def 19;
     then rng(f|n) is finite Subset-Family of Omega by A4,XBOOLE_1:1;
     then
 A5: union rng(f|n)in D by A1,A2,A4,Th18,XBOOLE_1:1;
     then reconsider urf=union rng(f|n) as Subset of Omega;
     dom(f)=NAT by FUNCT_2:def 1;
-    then f.n in rng f by FUNCT_1:def 5;
+    then f.n in rng f by FUNCT_1:def 3;
     then f.n \ urf in D by A1,A2,A5,Th16;
     hence thesis by Th8;
   end;
@@ -625,7 +623,7 @@ A5: union rng(f|n)in D by A1,A2,A4,Th18,XBOOLE_1:1;
     assume y in rng disjointify(f);
     then consider x such that
 A6: x in dom(disjointify(f)) and
-A7: y=(disjointify(f)).x by FUNCT_1:def 5;
+A7: y=(disjointify(f)).x by FUNCT_1:def 3;
     reconsider n=x as Element of NAT by A6,FUNCT_2:def 1;
     y=(disjointify(f)).n by A7;
     hence y in D by A3;
@@ -675,11 +673,11 @@ proof
   let D be Dynkin_System of Omega;
   let x,y be Element of D;
 A1: (x \/ y`)` = x` /\ y`` by XBOOLE_1:53
-    .= y\x by SUBSET_1:32;
+    .= y\x by SUBSET_1:13;
   assume x c= y;
   then x c= y``;
   then
-A2: x misses y` by SUBSET_1:43;
+A2: x misses y` by SUBSET_1:23;
   y`in D by Def7;
   then x \/ y` in D by A2,Th21;
   hence thesis by A1,Def7;
@@ -703,13 +701,13 @@ A4: rng f c= D;
 A5: for n holds (f.n)`in D
     proof
       let n;
-      f.n in rng f by NAT_1:52;
+      f.n in rng f by NAT_1:51;
       hence thesis by A1,A4,Def7;
     end;
 A6: for n holds (Complement f).n in D
     proof
       let n;
-      (Complement f).n=(f.n)` by PROB_1:def 4;
+      (Complement f).n=(f.n)` by PROB_1:def 2;
       hence thesis by A5;
     end;
     for x st x in rng Complement f holds x in D
@@ -718,7 +716,7 @@ A6: for n holds (Complement f).n in D
       assume x in rng Complement f;
       then consider z such that
 A7:   z in dom Complement f and
-A8:   x=(Complement f).z by FUNCT_1:def 5;
+A8:   x=(Complement f).z by FUNCT_1:def 3;
       reconsider n=z as Element of NAT by A7,FUNCT_2:def 1;
       x=(Complement f).n by A8;
       hence thesis by A6;
@@ -726,10 +724,10 @@ A8:   x=(Complement f).z by FUNCT_1:def 5;
     then rng Complement f c= D by TARSKI:def 3;
     then Union Complement f in D by A1,A2,Th20;
     then (Union Complement f)` in D by A1,Def7;
-    hence thesis by PROB_1:def 5;
+    hence thesis by PROB_1:def 3;
   end;
   for X st X in D holds X`in D by A1,Def7;
-  hence thesis by A3,PROB_1:32;
+  hence thesis by A3,PROB_1:15;
 end;
 
 definition
@@ -754,7 +752,7 @@ A1: for x holds x in Y iff x in bool bool Omega & P[x] from XBOOLE_0:
     let D be Dynkin_System of Omega;
     assume E c= D;
     then D in Y by A1;
-    hence thesis by SETFAM_1:4;
+    hence thesis by SETFAM_1:3;
   end;
   uniqueness
   proof
@@ -799,7 +797,7 @@ A3: for A being Subset of Omega holds A in I2 iff A/\ X in G;
       A in I1 iff A /\ X in G by A2;
       hence A in I1 iff A in I2 by A3;
     end;
-    hence thesis by SUBSET_1:8;
+    hence thesis by SUBSET_1:3;
   end;
 end;
 
@@ -845,7 +843,7 @@ A8:   X /\ X` = {} by XBOOLE_0:def 7;
       then X /\ A in G by Def9;
       then
 A9:   X\(X/\ A)in G by Th22,XBOOLE_1:17;
-      X\(X/\ A) = X /\ (X/\ A)` by SUBSET_1:32
+      X\(X/\ A) = X /\ (X/\ A)` by SUBSET_1:13
         .= X /\ (X` \/ A`) by XBOOLE_1:54
         .= (X/\ X`) \/ (X/\ A`) by XBOOLE_1:23
         .= X/\ A` by A8;
@@ -911,14 +909,14 @@ A5: for Y st Y in h holds Y is Dynkin_System of Omega
   end;
   h is non empty
   proof
-    set X =the  Element of G;
+    set X = the Element of G;
     DynSys(X,G) in h by A4;
     hence thesis;
   end;
   then reconsider h as non empty set;
   DynSys(X,G)in h by A1,A4;
   then
-A6: meet h c= DynSys(X,G) by SETFAM_1:4;
+A6: meet h c= DynSys(X,G) by SETFAM_1:3;
   for x holds x in E implies x in meet h
   proof
     let x;
@@ -970,6 +968,6 @@ A2: G is SigmaField of Omega by Th23;
   then
 A3: G c= D by Def8;
   E c= G by Def8;
-  then sigma(E) c= G by A2,PROB_1:def 14;
+  then sigma(E) c= G by A2,PROB_1:def 9;
   hence thesis by A3,XBOOLE_1:1;
 end;

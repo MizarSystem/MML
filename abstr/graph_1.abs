@@ -23,7 +23,7 @@ environ
  constructors PARTFUN1, FUNCT_2, XXREAL_0, XREAL_0, NAT_1, FINSEQ_1, STRUCT_0,
       FUNCT_5, RELSET_1;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, PARTFUN1, FINSET_1,
-      XREAL_0, FINSEQ_1, ORDINAL1, STRUCT_0, CARD_1, FUNCT_2;
+      XREAL_0, FINSEQ_1, ORDINAL1, STRUCT_0, CARD_1, FUNCT_2, RELSET_1;
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
 
 
@@ -44,7 +44,7 @@ definition
 end;
 
 registration
-  cluster strict non empty non void MultiGraphStruct;
+  cluster strict non empty non void for MultiGraphStruct;
 end;
 
 definition
@@ -130,8 +130,8 @@ definition
 end;
 
 registration
-  cluster finite MultiGraphStruct;
-  cluster finite non-multi oriented simple connected Graph;
+  cluster finite for MultiGraphStruct;
+  cluster finite non-multi oriented simple connected for Graph;
 end;
 
 registration
@@ -189,12 +189,12 @@ end;
 
 registration
   let G be Graph;
-  cluster empty Chain of G;
+  cluster empty for Chain of G;
 end;
 
 registration
   let G be Graph;
-  cluster empty -> oriented Chain of G;
+  cluster empty -> oriented for Chain of G;
 end;
 
 definition
@@ -218,9 +218,9 @@ end;
 definition
   let G be Graph;
   let IT be Path of G;
-  canceled;
+
   attr IT is cyclic means
-:: GRAPH_1:def 16
+:: GRAPH_1:def 15
   ex p being FinSequence st len p = len IT + 1 &
   (for n st 1 <= n & n <= len p holds p.n in the carrier of G) &
   (for n st 1 <= n & n <= len IT
@@ -230,7 +230,7 @@ end;
 
 registration
   let G be Graph;
-  cluster empty -> cyclic Path of G;
+  cluster empty -> cyclic for Path of G;
 end;
 
 definition
@@ -245,9 +245,9 @@ end;
 
 definition
   let G be Graph;
-  canceled;
+
   mode Subgraph of G -> Graph means
-:: GRAPH_1:def 18
+:: GRAPH_1:def 16
 
     the carrier of it c= the carrier of G &
     the carrier' of it c= the carrier' of G &
@@ -260,16 +260,16 @@ end;
 
 registration
   let G be Graph;
-  cluster strict Subgraph of G;
+  cluster strict for Subgraph of G;
 end;
 
 definition
   let G be finite Graph;
   func VerticesCount G -> Element of NAT means
-:: GRAPH_1:def 19
+:: GRAPH_1:def 17
   ex B being finite set st B = the carrier of G & it = card B;
   func EdgesCount G -> Element of NAT means
-:: GRAPH_1:def 20
+:: GRAPH_1:def 18
   ex B being finite set st B = the carrier' of G & it = card B;
 end;
 
@@ -277,11 +277,11 @@ definition
   let G be finite Graph;
   let x be Vertex of G;
   func EdgesIn x -> Element of NAT means
-:: GRAPH_1:def 21
+:: GRAPH_1:def 19
   ex X being finite set st (for z being set holds
   z in X iff z in the carrier' of G & (the Target of G).z = x) & it = card(X);
   func EdgesOut x -> Element of NAT means
-:: GRAPH_1:def 22
+:: GRAPH_1:def 20
   ex X being finite set st (for z being set holds
   z in X iff z in the carrier' of G & (the Source of G).z = x) & it = card(X);
 end;
@@ -290,14 +290,14 @@ definition
   let G be finite Graph;
   let x be Vertex of G;
   func Degree x -> Element of NAT equals
-:: GRAPH_1:def 23
+:: GRAPH_1:def 21
   EdgesIn(x) + EdgesOut(x);
 end;
 
 definition
   let G1, G2 be Graph;
   pred G1 c= G2 means
-:: GRAPH_1:def 24
+:: GRAPH_1:def 22
 
   G1 is Subgraph of G2;
   reflexivity;
@@ -306,7 +306,7 @@ end;
 definition
   let G be Graph;
   func bool G -> set means
-:: GRAPH_1:def 25
+:: GRAPH_1:def 23
 
   for x being set holds x in it iff x is strict Subgraph of G;
 end;
@@ -418,43 +418,39 @@ theorem :: GRAPH_1:24
   (the Target of G1) tolerates (the Target of G2) &
   (G1 \/ G2 = G2 or G2 \/ G1 = G2) implies G1 c= G2;
 
-canceled 2;
-
-theorem :: GRAPH_1:27
+theorem :: GRAPH_1:25
   for G being oriented Graph st G1 c= G holds G1 is oriented;
 
-theorem :: GRAPH_1:28
+theorem :: GRAPH_1:26
   for G being non-multi Graph st G1 c= G holds G1 is non-multi;
 
-theorem :: GRAPH_1:29
+theorem :: GRAPH_1:27
   for G being simple Graph st G1 c= G holds G1 is simple;
 
 :: Set of all subgraphs ::
 
-theorem :: GRAPH_1:30
+theorem :: GRAPH_1:28
   for G1 being strict Graph holds G1 in bool G iff G1 c= G;
 
-theorem :: GRAPH_1:31
+theorem :: GRAPH_1:29
   for G being strict Graph holds G in bool G;
 
-theorem :: GRAPH_1:32
+theorem :: GRAPH_1:30
   for G1 being strict Graph holds G1 c= G2 iff bool G1 c= bool G2;
 
-canceled;
-
-theorem :: GRAPH_1:34
+theorem :: GRAPH_1:31
   for G being strict Graph holds { G } c= bool G;
 
-theorem :: GRAPH_1:35
+theorem :: GRAPH_1:32
   for G1,G2 being strict Graph holds
   (the Source of G1) tolerates (the Source of G2) &
   (the Target of G1) tolerates (the Target of G2) &
   bool (G1 \/ G2) c= (bool G1) \/ (bool G2) implies G1 c= G2 or G2 c= G1;
 
-theorem :: GRAPH_1:36
+theorem :: GRAPH_1:33
   (the Source of G1) tolerates (the Source of G2) &
   (the Target of G1) tolerates (the Target of G2) implies
   bool G1 \/ bool G2 c= bool (G1 \/ G2);
 
-theorem :: GRAPH_1:37
+theorem :: GRAPH_1:34
   G1 in bool G & G2 in bool G implies (G1 \/ G2) in bool G;

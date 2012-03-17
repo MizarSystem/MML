@@ -1,6 +1,6 @@
 :: First order languages: syntax, part two; semantics.
 ::  by Marco B. Caminati
-:: 
+::
 :: Received December 29, 2010
 :: Copyright (c) 2010-2011 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
@@ -66,7 +66,7 @@ end;
 
 definition let X be set;
 redefine func id X -> Equivalence_Relation of X;
-coherence by EQREL_1:6;
+coherence by EQREL_1:3;
 end;
 
 definition
@@ -83,7 +83,7 @@ proof
 assume s is relational;
 take the Function of (abs(ar(s)))-tuples_on U, BOOLEAN; thus thesis;
 end;
-assume not s is relational; 
+assume not s is relational;
 take the Function of (abs(ar(s)))-tuples_on U, U; thus thesis;
 end;
 consistency;
@@ -117,13 +117,13 @@ end;
 
 registration
 let S,U; let s be termal Element of S;
-cluster -> U-valued (Interpreter of s,U);
+cluster -> U-valued for (Interpreter of s,U);
 coherence by DefInterpreter1;
 end;
 
 registration
 let S be Language;
-cluster literal -> own Element of S;
+cluster literal -> own for Element of S;
 coherence;
 end;
 
@@ -168,13 +168,13 @@ end;
 
 registration
 let S; let U be non empty set;
-cluster (S,U)-interpreter-like -> Function-yielding Function;
+cluster (S,U)-interpreter-like -> Function-yielding for Function;
 coherence by DefInterpreterLike;
 end;
 
 registration
 let S,U; let s be own Element of S;
-cluster -> non empty Interpreter of s,U;
+cluster -> non empty for Interpreter of s,U;
 coherence;
 end;
 
@@ -185,7 +185,7 @@ let f be Interpreter of S,U;
 now
 let x be set; assume x in O; then
 reconsider s=x as own Element of S by FOMODEL1:def 19;
-f.s is non empty by DefInterpreter2; hence x in dom f by FUNCT_1:def 4;
+f.s is non empty by DefInterpreter2; hence x in dom f by FUNCT_1:def 2;
 end;
 hence thesis by TARSKI:def 3;
 end;
@@ -199,25 +199,25 @@ end;
 registration
 let S be Language;
 let U be non empty set;
-cluster (S,U)-interpreter-like Function;
+cluster (S,U)-interpreter-like for Function;
 existence
 proof
 set O=OwnSymbolsOf S, SS=AllSymbolsOf S;
 set I = the Interpreter of S,U; reconsider f=I|O as Function;
-B1: dom f= O /\ dom I by RELAT_1:90 .= O by XBOOLE_1:28, Lm2;
+B1: dom f= O /\ dom I by RELAT_1:61 .= O by Lm2,XBOOLE_1:28;
 take f; B2: for s being own Element of S holds
 f.s is Interpreter of s,U & f.s is Function
 proof
 let s be own Element of S;
-s in dom f by B1, FOMODEL1:def 19; then
-Z0: f.s=I.s by FUNCT_1:70;
+s in dom f by B1,FOMODEL1:def 19; then
+Z0: f.s=I.s by FUNCT_1:47;
 hence f.s is Interpreter of s,U by DefInterpreter2;
-thus f.s is Function by Z0, DefInterpreter2;
+thus f.s is Function by Z0,DefInterpreter2;
 end;
 then reconsider ff=f as Interpreter of S,U by DefInterpreter2;
 now
 let x; assume x in dom f; then reconsider
-s=x as own Element of S by B1, FOMODEL1:def 19; ff.s is Function by B2;
+s=x as own Element of S by B1,FOMODEL1:def 19; ff.s is Function by B2;
 hence ff.x is Function;
 end;
 then ff is Function-yielding by FUNCOP_1:def 6;
@@ -245,8 +245,8 @@ cluster I +* (x .--> f) -> (S,U)-interpreter-like;
 coherence
 proof
 set g=x .--> f, O=OwnSymbolsOf S, h=I +* g;
-B1: dom g={x} by FUNCOP_1:19;
-O c= dom I & dom I c= dom I \/ dom g by Lm18, XBOOLE_1:7;
+B1: dom g={x} by FUNCOP_1:13;
+O c= dom I & dom I c= dom I \/ dom g by Lm18,XBOOLE_1:7;
 then
 B2: O c= dom I \/ dom g by XBOOLE_1:1;
 reconsider I as Interpreter of S,U by DefInterpreterLike;
@@ -255,11 +255,11 @@ let s be own Element of S;
 Z1: s in O by FOMODEL1:def 19;
 per cases;
 suppose C1: s in dom g; then
-Z0: h.s = g.s by FUNCT_4:def 1, Z1, B2
-.= f by FUNCOP_1:13, B1,C1;
-thus h.s is Interpreter of s,U by Z0, C1, B1, TARSKI:def 1;
+Z0: h.s = g.s by Z1,B2,FUNCT_4:def 1
+.= f by B1,C1,FUNCOP_1:7;
+thus h.s is Interpreter of s,U by Z0,C1,B1,TARSKI:def 1;
 end;
-suppose not s in dom g; then h.s=I.s by FUNCT_4:def 1, B2, Z1;
+suppose not s in dom g; then h.s=I.s by B2,Z1,FUNCT_4:def 1;
 hence h.s is Interpreter of s,U by DefInterpreter2;
 end;
 end;
@@ -302,13 +302,13 @@ end;
 registration
 let Y be set;
 let X,Z be non empty set;
-cluster -> Function-yielding (Function of X, Funcs(Y,Z));
+cluster -> Function-yielding for (Function of X, Funcs(Y,Z));
 coherence;
 end;
 
 registration
 let X,Y,Z be non empty set;
-cluster Function-yielding Function of X, Funcs(Y,Z);
+cluster Function-yielding for Function of X, Funcs(Y,Z);
 existence
 proof take the Function of X, Funcs(Y,Z); thus thesis; end;
 end;
@@ -333,7 +333,7 @@ now
 let x; assume x in dom IT1;
 then IT1.x=g*(f.x) & IT2.x=g*(f.x) by B1,B2; hence IT1.x=IT2.x;
 end;
-hence thesis by B1, B2, FUNCT_1:9;
+hence thesis by B1,B2,FUNCT_1:2;
 end;
 end;
 
@@ -366,7 +366,7 @@ now
 let x be set; assume C1: x in dom IT1;
 thus IT1.x=(f.x).(g.x) by B1,C1 .= IT2.x by B2,C1,B1;
 end;
-hence thesis by FUNCT_1:9, B1, B2;
+hence thesis by B1,B2,FUNCT_1:2;
 end;
 end;
 
@@ -381,13 +381,13 @@ end;
 
 registration
 let X be FinSequence-membered set;
-cluster X-valued -> Function-yielding Function;
+cluster X-valued -> Function-yielding for Function;
 coherence
 proof
 let f be Function; assume f is X-valued; then
 reconsider g=f as X-valued Function;
 now
-let x be set; assume x in dom g; then g.x in X by FUNCT_1:172;
+let x be set; assume x in dom g; then g.x in X by FUNCT_1:102;
 hence f.x is Function;
 end;
 hence thesis by FUNCOP_1:def 6;
@@ -396,11 +396,11 @@ end;
 
 registration
 let E, D be non empty set, p be D-valued FinSequence, h be Function of D,E;
-cluster h*p -> (len p)-element FinSequence;
+cluster h*p -> (len p)-element for FinSequence;
 coherence
 proof
 reconsider pp=p as FinSequence of D by FOMODEL0:26;
-len (h*pp)=len pp by FINSEQ_2:37; hence thesis by CARD_1:def 13;
+len (h*pp)=len pp by FINSEQ_2:33; hence thesis by CARD_1:def 7;
 end;
 end;
 
@@ -414,7 +414,7 @@ end;
 registration
 let E, D be non empty set, n be Nat,
 p be n-element D-valued FinSequence, h be Function of D,E;
-cluster h*p -> n-element FinSequence of E;
+cluster h*p -> n-element for FinSequence of E;
 coherence;
 end;
 
@@ -450,28 +450,28 @@ reconsider ss=F.t as termal Element of S;
 reconsider s=ss as own Element of S;
 reconsider t1=s as Element of OwnSymbolsOf S by FOMODEL1:def 19;
 t1 in OwnSymbolsOf S & OwnSymbolsOf S c= dom I by Lm18;
-hence D2: a in dom (I*F) by FUNCT_1:21, B0;
+hence D2: a in dom (I*F) by B0,FUNCT_1:11;
 reconsider tt=a as Element of A by D1;
 reconsider i=I.s as Interpreter of s,U;
 ST.tt = SubTerms(t) by FOMODEL1:def 39;
 then reconsider y=ST.tt as n-element FinSequence of A by FINSEQ_1:def 11;
-reconsider z=xx*y as n-element FinSequence of U; len z=n by CARD_1:def 13;
-then reconsider zz=z as Element of n-tuples_on U by FINSEQ_2:153;
+reconsider z=xx*y as n-element FinSequence of U; len z=n by CARD_1:def 7;
+then reconsider zz=z as Element of n-tuples_on U by FINSEQ_2:133;
 (n-tuples_on U) c= dom (I.t1) by Lm15; then
 Z1: zz in dom i by TARSKI:def 3;
 tt in A; then D3: tt in dom ST by FUNCT_2:def 1;
 assume a in dom g; then
-g.t= ((I*F).t).(f.t) by Def7 .= (I.s).(f.t) by D2, FUNCT_1:22 .=
-i.zz by Def6, D3;
-hence g.a in U by Z1, FUNCT_1:172;
+g.t= ((I*F).t).(f.t) by Def7 .= (I.s).(f.t) by D2,FUNCT_1:12 .=
+i.zz by Def6,D3;
+hence g.a in U by Z1,FUNCT_1:102;
 end; then
 Z0: for a being set st a in A holds a in dom (I*F); then
 C3: A c= dom (I*F) by TARSKI:def 3;
-C4: dom g = dom (I*F) /\ A by C1, Def7 .= A by C3, XBOOLE_1:28; then
+C4: dom g = dom (I*F) /\ A by C1,Def7 .= A by C3,XBOOLE_1:28; then
 for a being set st a in A holds g.a in U by C2;
-then g is Function of A,U by FUNCT_2:5, C4;
-hence g is Element of Funcs(A,U) by FUNCT_2:11;
-thus thesis by Z0, TARSKI:def 3;
+then g is Function of A,U by C4,FUNCT_2:3;
+hence g is Element of Funcs(A,U) by FUNCT_2:8;
+thus thesis by Z0,TARSKI:def 3;
 end;
 
 definition ::def9 1
@@ -486,13 +486,13 @@ set A=AllTermsOf S,F=S-firstChar, ST=S-subTerms, SS=AllSymbolsOf S,
 Z=AtomicTermsOf S, T=S-termsOfMaxDepth, fz=A --> u;
 defpred P[set,Element of Funcs(A,U),set] means $3=^^^I*F,^^^$2,ST__ __;
 reconsider fzz=fz as Function of A, U;
-reconsider fzzz=fzz as Element of Funcs(A,U) by FUNCT_2:11;
+reconsider fzzz=fzz as Element of Funcs(A,U) by FUNCT_2:8;
 B2: for mm being Element of NAT for x being Element of Funcs(A,U)
 ex y being Element of Funcs(A,U) st P[mm,x,y]
 proof
 let mm; let x be Element of Funcs(A,U); reconsider xx=x as Function of A,U;
 reconsider yy=^^^I*F, ^^^xx,ST__ __ as Function of A,U by Lm20;
-reconsider yyy=yy as Element of Funcs(A,U) by FUNCT_2:11;
+reconsider yyy=yy as Element of Funcs(A,U) by FUNCT_2:8;
 take yyy; thus thesis;
 end;
 consider f being Function of NAT, Funcs(A,U) such that B3:
@@ -504,7 +504,7 @@ uniqueness
 proof
 set A=AllTermsOf S,F=S-firstChar, ST=S-subTerms, SS=AllSymbolsOf S,
 Z=AtomicTermsOf S, T=S-termsOfMaxDepth, fz=A --> u;
-reconsider fzz=fz as Element of Funcs(A,U) by FUNCT_2:11;
+reconsider fzz=fz as Element of Funcs(A,U) by FUNCT_2:8;
 defpred P[set,set,set] means for f being Element of Funcs(A,U) st $2=f holds
 $3=^^^I*F,^^^ f, ST __ __;
 let IT1, IT2 be Function of NAT, Funcs(A,U);
@@ -513,14 +513,14 @@ assume B2: IT2.0=fz & for mm holds IT2.(mm+1)=^^^I*F,^^^IT2.mm, ST__ __;
 C1: IT1.0=fzz by B1;
 C2: for m holds P[m,IT1.m,IT1.(m+1)]
 proof
-let m; reconsider mm=m as Element of NAT by ORDINAL1:def 13;
+let m; reconsider mm=m as Element of NAT by ORDINAL1:def 12;
 let f be Element of Funcs(A,U); assume IT1.m=f; then
  IT1.mm=f; hence thesis by B1;
 end;
 C3: IT2.0=fzz by B2;
 C4: for m holds P[m,IT2.m,IT2.(m+1)]
 proof
-let m; reconsider mm=m as Element of NAT by ORDINAL1:def 13;
+let m; reconsider mm=m as Element of NAT by ORDINAL1:def 12;
 let f be Element of Funcs(A,U); assume IT2.m=f; then IT2.mm=f;
 hence thesis by B2;
 end;
@@ -547,17 +547,17 @@ let u be Element of U;
 let I be (S,U)-interpreter-like Function;
 let t be termal string of S; let mm;
 set TE=(I,u)-TermEval, F=S-firstChar, ST=S-subTerms, A=AllTermsOf S;
-B1: t in A & A c= dom (I*F) by FOMODEL1:def 32, Lm20;
+B1: t in A & A c= dom (I*F) by Lm20,FOMODEL1:def 32;
 reconsider tt=t as Element of A by FOMODEL1:def 32;
 set G=^^^ I*F , ^^^ TE.mm, ST __ __;
 B3: dom ST=A by FUNCT_2:def 1;
 TE.mm is Element of Funcs(A,U); then
 G is Function of A,U by Lm20; then B2: dom G=A by FUNCT_2:def 1;
 Z1: (TE.(mm+1)).t = G.t by DefTermEval1 .=
-((I*F).t).(^^^TE.mm, ST__.t) by B1, Def7, B2
-.= ((I*F).t).(TE.mm*(ST.tt)) by Def6, B3
+((I*F).t).(^^^TE.mm, ST__.t) by B1,Def7,B2
+.= ((I*F).t).(TE.mm*(ST.tt)) by Def6,B3
 .= ((I*F).t).(TE.mm*(SubTerms(t))) by FOMODEL1:def 39
-.= (I.(F.t)).(TE.mm*(SubTerms(t))) by B1, FUNCT_1:22; hence
+.= (I.(F.t)).(TE.mm*(SubTerms(t))) by B1,FUNCT_1:12; hence
  (TE.(mm+1)).t = (I.(F.t)).((TE.mm)*(SubTerms(t)));
 assume t is 0-termal; then reconsider tt=t as 0-termal string of S;
 reconsider s=F.tt as literal Element of S;
@@ -578,7 +578,7 @@ defpred P[Nat] means for t being $1-termal string of S, n being Nat holds
 B0: P[0]
 proof
 let t be 0-termal string of S, n be Nat;
-reconsider nn=n as Element of NAT by ORDINAL1:def 13;
+reconsider nn=n as Element of NAT by ORDINAL1:def 12;
 (U1.(0+1)).t=(I.(S-firstChar.t)).{} by Lm21 .=
 (U2.(0+1+nn)).t by Lm21; hence thesis;
 end;
@@ -594,29 +594,29 @@ proof
 set V=SubTerms(t), l=abs(ar(t));
 reconsider VV=V as l-element FinSequence of A by FINSEQ_1:def 11;
 reconsider VVV=V as (T.k)-valued Function;
-len VV=l by CARD_1:def 13; then D1: dom VVV=Seg l by FINSEQ_1:def 3;
+len VV=l by CARD_1:def 7; then D1: dom VVV=Seg l by FINSEQ_1:def 3;
 U1.K is Element of Funcs(A,U) & U2.KK is Element of Funcs(A,U); then
 reconsider U1K=U1.K , U2K=U2.KK as Function of A,U;
 reconsider p=U1K*VV,q=U2K*VV as l-element FinSequence of U;
-len p =l & len q=l by CARD_1:def 13; then
+len p =l & len q=l by CARD_1:def 7; then
 D2: dom p=Seg l & dom q= Seg l by FINSEQ_1:def 3;
 for i being set st i in Seg l holds p.i=q.i
 proof
 let i be set; assume E1: i in Seg l; then
-VVV.i in SS*\{{}} & VVV.i in (T.k) by D1, FUNCT_1:172; then
+VVV.i in SS*\{{}} & VVV.i in (T.k) by D1,FUNCT_1:102; then
 reconsider t1=VVV.i as k-termal string of S by FOMODEL1:def 33;
-p.i = (U1.K).t1 by E1, D2, FUNCT_1:22 .=
-U2K.(VVV.i) by C0 .= q.i by E1, D2, FUNCT_1:22; hence thesis;
+p.i = (U1.K).t1 by E1,D2,FUNCT_1:12 .=
+U2K.(VVV.i) by C0 .= q.i by E1,D2,FUNCT_1:12; hence thesis;
 end;
-hence thesis by D2, FUNCT_1:9;
+hence thesis by D2,FUNCT_1:2;
 end;
 (U1.(K+1)).tt =
-(I.(F.tt)).((U2.KK)*(SubTerms(t))) by Lm21, C2 .= (U2.(KK+1)).tt by Lm21;
+(I.(F.tt)).((U2.KK)*(SubTerms(t))) by Lm21,C2 .= (U2.(KK+1)).tt by Lm21;
 hence thesis;
 end;
 B2: for mm being Element of NAT holds P[mm] from NAT_1:sch 1(B0,B1);
 now
-let m be Nat; reconsider mm=m as Element of NAT by ORDINAL1:def 13;
+let m be Nat; reconsider mm=m as Element of NAT by ORDINAL1:def 12;
 P[mm] by B2; hence P[m];
 end;
 hence thesis;
@@ -633,9 +633,9 @@ proof
 set T=S-termsOfMaxDepth, A=AllTermsOf S; consider mm such that
 B0: t in T.mm by FOMODEL1:5; set u1 = the Element of U;
 reconsider t0=t as string of S;
-reconsider t1=t0 as mm-termal string of S by B0, FOMODEL1:def 33;
+reconsider t1=t0 as mm-termal string of S by B0,FOMODEL1:def 33;
 reconsider mmm=mm+1 as Element of NAT;
-reconsider f1=(I,u1)-TermEval.mmm as Function of A,U by FUNCT_2:121;
+reconsider f1=(I,u1)-TermEval.mmm as Function of A,U by FUNCT_2:66;
 reconsider IT=f1.t as Element of U; take IT;
 let u2 be Element of U, nn; assume t in T.nn; then
 reconsider t2=t0 as nn-termal string of S by FOMODEL1:def 33;
@@ -653,7 +653,7 @@ assume B2: for u2 being Element of U, nn st t in T.nn holds
 IT2=((I,u2)-TermEval.(nn+1)).t;
 consider mm such that B0: t in T.mm by FOMODEL1:5;
 set u = the Element of U;
-IT1=((I,u)-TermEval.(mm+1)).t by B1,B0 .= IT2 by B2, B0; hence thesis;
+IT1=((I,u)-TermEval.(mm+1)).t by B1,B0 .= IT2 by B2,B0; hence thesis;
 end;
 end;
 
@@ -678,7 +678,7 @@ assume B2: for t being Element of AllTermsOf S holds IT2.t=I-TermEval(t);
 now
 let t be Element of A; thus IT1.t=I-TermEval(t) by B1 .= IT2.t by B2;
 end;
-hence thesis by FUNCT_2:113;
+hence thesis by FUNCT_2:63;
 end;
 end;
 
@@ -699,16 +699,16 @@ end;
 
 registration
 let S,U; let I be (S,U)-interpreter-like Function;
-cluster I=== -> I-extension Function;
+cluster I=== -> I-extension for Function;
 coherence by DefExtension;
-cluster I-extension -> Function-like set;
+cluster I-extension -> Function-like for set;
 coherence proof let x; assume x is I-extension;
 then x=I=== by DefExtension; hence thesis; end;
 end;
 
 registration
 let S,U; let I be (S,U)-interpreter-like Function;
-cluster I-extension Function;
+cluster I-extension for Function;
 existence proof take f=I===; thus thesis; end;
 end;
 
@@ -722,8 +722,8 @@ A=AtomicFormulaSymbolsOf S;
 now
 let s be own Element of S; s in O by FOMODEL1:def 19; then
 not s in A\O by XBOOLE_0:def 5; then not s in {EQ} by FOMODEL1:9;
-then not s in dom g by FUNCOP_1:19; then
-(I===).s = I.s by FUNCT_4:12; hence (I===).s is Interpreter of s,U;
+then not s in dom g by FUNCOP_1:13; then
+(I===).s = I.s by FUNCT_4:11; hence (I===).s is Interpreter of s,U;
 end;
 hence I=== is Interpreter of S,U by DefInterpreter2;
 thus thesis;
@@ -752,7 +752,7 @@ per cases;
   then sss in {EQ} by FOMODEL1:9; then
    s=EQ by TARSKI:def 1; then
   f.s is Function of abs(n)-tuples_on U, BOOLEAN & s is relational
-  by B1, B2, FUNCT_7:96; hence thesis by DefInterpreter1;
+  by B1,B2,FUNCT_7:94; hence thesis by DefInterpreter1;
   end;
 end;
 end;
@@ -777,8 +777,8 @@ set n=abs(ar(s));
 reconsider f=(I===).s as Interpreter of s, U;
 reconsider ff=f as Function of n-tuples_on U, BOOLEAN by DefInterpreter1;
 reconsider V=SubTerms(phi) as n-element FinSequence of A by FINSEQ_1:def 11;
-reconsider iV=i*V as n-element FinSequence of U; len iV=n by CARD_1:def 13;
-then reconsider iVV=iV as Element of n-tuples_on U by FINSEQ_2:153;
+reconsider iV=i*V as n-element FinSequence of U; len iV=n by CARD_1:def 7;
+then reconsider iVV=iV as Element of n-tuples_on U by FINSEQ_2:133;
 ff.iVV is Element of BOOLEAN; hence thesis;
 end;
 end;
@@ -788,31 +788,31 @@ end;
 
 registration
 let S,U; let I be (S,U)-interpreter-like Function;
-cluster I|(OwnSymbolsOf S) -> PFuncs(U*, U\/BOOLEAN)-valued Function;
+cluster I|(OwnSymbolsOf S) -> PFuncs(U*, U\/BOOLEAN)-valued for Function;
 coherence
 proof
 set O=OwnSymbolsOf S, f=I|O, D=dom f, C=U\/BOOLEAN;
 now
-let y be set; assume y in rng f; then y in f.:D by RELAT_1:146;then
-consider x such that C1:x in D & x in D & y=f.x by FUNCT_1:def 12;
+let y be set; assume y in rng f; then y in f.:D by RELAT_1:113;then
+consider x such that C1:x in D & x in D & y=f.x by FUNCT_1:def 6;
 Z0: D c= O by RELAT_1:def 18; then
  x in O by C1; then reconsider s=x as own Element of S by FOMODEL1:def 19;
 reconsider n=abs(ar(s)) as Element of NAT;
-reconsider DD=n-tuples_on U as Subset of U* by FINSEQ_2:154; C c= C;
-then reconsider CC=C as Subset of C; f.x=I.s by FUNCT_1:72, C1, Z0;
+reconsider DD=n-tuples_on U as Subset of U* by FINSEQ_2:134; C c= C;
+then reconsider CC=C as Subset of C; f.x=I.s by C1,Z0,FUNCT_1:49;
 then reconsider g=f.x as Function of DD,CC; [:DD,CC:] c= [:U*,C:];
 then reconsider gg=g as Relation of U*,C by XBOOLE_1:1;
-gg is PartFunc of U*,C; hence y in PFuncs(U*,C) by PARTFUN1:119, C1;
+gg is PartFunc of U*,C; hence y in PFuncs(U*,C) by C1,PARTFUN1:45;
 end;
 then rng f c= PFuncs(U*,C) by TARSKI:def 3; hence thesis by RELAT_1:def 19;
 end;
-cluster I|(OwnSymbolsOf S) -> (S,U)-interpreter-like Function;
+cluster I|(OwnSymbolsOf S) -> (S,U)-interpreter-like for Function;
 coherence
 proof
 set O=OwnSymbolsOf S, f=I|O, D=dom f, C=U\/BOOLEAN;
 now
 let s be own Element of S; s in O by FOMODEL1:def 19; then
-f.s=I.s by FUNCT_1:72; hence f.s is Interpreter of s,U;
+f.s=I.s by FUNCT_1:49; hence f.s is Interpreter of s,U;
 end;
 then f is Interpreter of S,U by DefInterpreter2;
 hence thesis by DefInterpreterLike;
@@ -821,12 +821,12 @@ end;
 
 registration
 let S,U; let I be (S,U)-interpreter-like Function;
-cluster I|(OwnSymbolsOf S) -> total ((OwnSymbolsOf S)-defined Relation);
+cluster I|(OwnSymbolsOf S) -> total for (OwnSymbolsOf S)-defined Relation;
 coherence
 proof
 set O=OwnSymbolsOf S, f=I|O, D=dom f, C=U\/BOOLEAN;
-O c= dom f & dom f c= O by RELAT_1:def 18, Lm18;
-then dom f=O by XBOOLE_0:def 10; hence thesis by PARTFUN1:def 4;
+O c= dom f & dom f c= O by Lm18,RELAT_1:def 18;
+then dom f=O by XBOOLE_0:def 10; hence thesis by PARTFUN1:def 2;
 end;
 end;
 
@@ -858,9 +858,9 @@ coherence
 proof
 set I = the (S,U)-interpreter-like Function;
 set O=OwnSymbolsOf S, f=I|O, C=PFuncs(U*, U\/BOOLEAN);
-dom f c= O & rng f c= C by RELAT_1:def 18, def 19; then
-reconsider ff=f as Relation of O,C by RELSET_1:11;
-reconsider fff=ff as Element of Funcs(O,C) by FUNCT_2:11;
+dom f c= O & rng f c= C by RELAT_1:def 18,def 19; then
+reconsider ff=f as Relation of O,C by RELSET_1:4;
+reconsider fff=ff as Element of Funcs(O,C) by FUNCT_2:8;
 ex g being Element of Funcs(O,C) st f=g & g is (S,U)-interpreter-like
 proof take fff; thus thesis; end;
 then f in U-InterpretersOf S; hence thesis;
@@ -869,7 +869,7 @@ end;
 
 registration
 let S,U;
-cluster -> (S,U)-interpreter-like Element of U-InterpretersOf S;
+cluster -> (S,U)-interpreter-like for Element of U-InterpretersOf S;
 coherence
 proof
 set SUI=U-InterpretersOf S,O=OwnSymbolsOf S, C=PFuncs(U*,U\/BOOLEAN);
@@ -978,7 +978,7 @@ C2: x1 in II & x2 in Strings & xx=[x1,x2] by ZFMISC_1:def 2;
 reconsider I=x1 as Element of II by C2;
 reconsider phi=x2 as Element of Strings by C2;
 P[I,phi] by B1,C1,C2;
-hence x in dom IT2 by B3, C2;
+hence x in dom IT2 by B3,C2;
 end;
 then B5: dom IT1 c= dom IT2 by TARSKI:def 3;
  now
@@ -988,10 +988,10 @@ C2: x1 in II & x2 in Strings & xx=[x1,x2] by ZFMISC_1:def 2;
 reconsider I=x1 as Element of II by C2;
 reconsider phi=x2 as Element of Strings by C2;
 P[I,phi] by B3,C1,C2;
-hence x in dom IT1 by B1, C2;
+hence x in dom IT1 by B1,C2;
 end; then
  dom IT2 c= dom IT1 by TARSKI:def 3; then
-B6: dom IT2=dom IT1 by B5, XBOOLE_0:def 10;
+B6: dom IT2=dom IT1 by B5,XBOOLE_0:def 10;
 now
 let x be set; assume C1: x in dom IT1; then reconsider xx=x as Element of D;
 consider x1,x2 being set such that
@@ -999,11 +999,11 @@ C2: x1 in II & x2 in Strings & xx=[x1,x2] by ZFMISC_1:def 2;
 reconsider I=x1 as Element of II by C2;
 reconsider phi=x2 as Element of Strings by C2;
 IT1.x = IT1.(I,phi) by C2 .=
-g-ExFunctor(I,phi) by B2, C2, C1  .= IT2.(I,phi)
-by B4, C2, C1, B5 .= IT2.x by C2;
+g-ExFunctor(I,phi) by B2,C2,C1  .= IT2.(I,phi)
+by B4,C2,C1,B5 .= IT2.x by C2;
 hence IT1.x = IT2.x;
 end;
-hence thesis by FUNCT_1:9, B6;
+hence thesis by B6,FUNCT_1:2;
 end;
 end;
 
@@ -1092,7 +1092,7 @@ C2: x1 in II & x2 in Strings & xx=[x1,x2] by ZFMISC_1:def 2;
 reconsider I=x1 as Element of II by C2;
 reconsider phi=x2 as Element of Strings by C2;
 P[I,phi] by B1,C1,C2;
-hence x in dom IT2 by B3, C2;
+hence x in dom IT2 by B3,C2;
 end;
 then B5: dom IT1 c= dom IT2 by TARSKI:def 3;
 now
@@ -1102,21 +1102,21 @@ C2: x1 in II & x2 in Strings & xx=[x1,x2] by ZFMISC_1:def 2;
 reconsider I=x1 as Element of II by C2;
 reconsider phi=x2 as Element of Strings by C2;
 P[I,phi] by B3,C1,C2;
-hence x in dom IT1 by B1, C2;
+hence x in dom IT1 by B1,C2;
 end; then
  dom IT2 c= dom IT1 by TARSKI:def 3; then
-B6: dom IT2=dom IT1 by B5, XBOOLE_0:def 10;
+B6: dom IT2=dom IT1 by B5,XBOOLE_0:def 10;
 now
 let x be set; assume C1: x in dom IT1; then reconsider xx=x as Element of D;
 consider x1,x2 being set such that
 C2: x1 in II & x2 in Strings & xx=[x1,x2] by ZFMISC_1:def 2;
 reconsider I=x1 as Element of II by C2;
 reconsider phi=x2 as Element of Strings by C2;
-IT1.x = IT1.(I,phi) by C2 .= F(I,phi) by B2, C2, C1 .= IT2.(I,phi)
-by B4, C2, C1, B5
+IT1.x = IT1.(I,phi) by C2 .= F(I,phi) by B2,C2,C1 .= IT2.(I,phi)
+by B4,C2,C1,B5
 .= IT2.x by C2; hence IT1.x = IT2.x;
 end;
-hence thesis by FUNCT_1:9, B6;
+hence thesis by B6,FUNCT_1:2;
 end;
 end;
 
@@ -1135,7 +1135,7 @@ reconsider subboolean=BOOLEAN as Subset of BOOLEAN by XBOOLE_0:def 10;
 reconsider sub=[: ii, AF :] as Subset of D;
 [: sub, subboolean :] c= [: D, BOOLEAN :];
 then S-TruthEval(U) is PartFunc of D, BOOLEAN by XBOOLE_1:1; then
-reconsider Z=S-TruthEval(U) as Element of PFuncs(D, BOOLEAN) by PARTFUN1:119;
+reconsider Z=S-TruthEval(U) as Element of PFuncs(D, BOOLEAN) by PARTFUN1:45;
 deffunc F(Element of PFuncs(D, BOOLEAN))=ExIterator($1) +*
 NorIterator($1) +* $1;
 defpred P[set,Element of PFuncs(D,BOOLEAN),set] means $3=F($2);
@@ -1143,7 +1143,7 @@ B1: for n being Element of NAT for x being Element of PFuncs(D, BOOLEAN)
 ex y being Element of PFuncs(D, BOOLEAN) st P[n,x,y]
 proof
 let n be Element of NAT, x be Element of PFuncs(D,BOOLEAN);
-reconsider yy=F(x) as Element of PFuncs(D,BOOLEAN) by PARTFUN1:119;
+reconsider yy=F(x) as Element of PFuncs(D,BOOLEAN) by PARTFUN1:45;
 take y=yy; thus thesis;
 end;
 consider f being Function of NAT,PFuncs(D, BOOLEAN) such that B2: f.0=Z &
@@ -1158,10 +1158,10 @@ uniqueness
 proof
 set SS=AllSymbolsOf S, II=U-InterpretersOf S, AF=AtomicFormulasOf S,
 Strings=SS*\{{}}, D=[:II, Strings:], Z=S-TruthEval(U);
-[:II, AF:] c= D & BOOLEAN c= BOOLEAN by ZFMISC_1:119;
+[:II, AF:] c= D & BOOLEAN c= BOOLEAN by ZFMISC_1:96;
 then dom Z c= D & rng Z c= BOOLEAN by XBOOLE_1:1;
-then Z is Relation of D, BOOLEAN by RELSET_1:11;
-then reconsider ZZ=Z as Element of PFuncs(D, BOOLEAN) by PARTFUN1:119;
+then Z is Relation of D, BOOLEAN by RELSET_1:4;
+then reconsider ZZ=Z as Element of PFuncs(D, BOOLEAN) by PARTFUN1:45;
 deffunc RecFun(set,Element of PFuncs(D,BOOLEAN))=
 ExIterator($2) +* NorIterator($2) +* $2;
 defpred P[set,set,set] means
@@ -1174,14 +1174,14 @@ IT2.(mm+1)=ExIterator(IT2.mm) +* NorIterator(IT2.mm) +* IT2.mm;
 B1: IT1.0=ZZ by B11;
 B2: for m holds P[m,IT1.m, IT1.(m+1)]
 proof
-let m; reconsider mm=m as Element of NAT by ORDINAL1:def 13;
+let m; reconsider mm=m as Element of NAT by ORDINAL1:def 12;
 let f being Element of PFuncs(D,BOOLEAN); assume f=IT1.m; then
 IT1.(mm+1)=RecFun(m,f) by B11; hence thesis;
 end;
 B3: IT2.0=ZZ by B12;
 B4: for m holds P[m,IT2.m, IT2.(m+1)]
 proof
-let m; reconsider mm=m as Element of NAT by ORDINAL1:def 13;
+let m; reconsider mm=m as Element of NAT by ORDINAL1:def 12;
 let f be Element of PFuncs(D,BOOLEAN); assume f=IT2.m; then
 IT2.(mm+1) = RecFun(m,f) by B12; hence thesis;
 end;
@@ -1191,7 +1191,7 @@ proof
 let n be Nat, x,y1,y2 be Element of PFuncs(D,BOOLEAN);
 assume that C1: P[n,x,y1] and C2: P[n,x,y2];
 C4: y2=RecFun(n,x) by C2;
-thus thesis by C1, C4;
+thus thesis by C1,C4;
 end;
 thus thesis from NAT_1:sch 14(B1,B2,B3,B4,B5);
 end;
@@ -1202,10 +1202,10 @@ I|(OwnSymbolsOf S) in U-InterpretersOf S
 proof
 let I be (S,U)-interpreter-like Function;
 set O=OwnSymbolsOf S, C=PFuncs(U*,U\/BOOLEAN);
-dom (I|O) c= O & rng (I|O) c= C by RELAT_1:def 18, RELAT_1:def 19;
-then I|O is Function of O,C by RELSET_1:11; then
+dom (I|O) c= O & rng (I|O) c= C by RELAT_1:def 18,def 19;
+then I|O is Function of O,C by RELSET_1:4; then
 I|O is (S,U)-interpreter-like & I|O is Element of Funcs(O,C)
-by FUNCT_2:11; hence thesis;
+by FUNCT_2:8; hence thesis;
 end;
 
 definition ::def22
@@ -1216,7 +1216,7 @@ means :DefTruth2: for mm st m=mm holds it=(S,U)-TruthEval.mm;
 existence
 proof
 set f=(S,U)-TruthEval;
-reconsider nn=m as Element of NAT by ORDINAL1:def 13;
+reconsider nn=m as Element of NAT by ORDINAL1:def 12;
 take f.nn; let mm; assume m=mm; hence f.nn=f.mm;
 end;
 uniqueness
@@ -1226,7 +1226,7 @@ let IT1,IT2 be Element of PFuncs([:II,SS*\{{}}:],BOOLEAN);
 assume that C1:
 for mm st m=mm holds IT1=(S,U)-TruthEval.mm and C2:
 for mm st m=mm holds IT2=(S,U)-TruthEval.mm;
-reconsider mm=m as Element of NAT by ORDINAL1:def 13;
+reconsider mm=m as Element of NAT by ORDINAL1:def 12;
 thus IT1=f.mm by C1 .= IT2 by C2;
 end;
 end;
@@ -1244,7 +1244,7 @@ B0: P[0];
 B1: for n st P[n] holds P[n+1]
 proof
 let n;
-reconsider k=m+n, K=(m+n)+1 as Element of NAT by ORDINAL1:def 13;
+reconsider k=m+n, K=(m+n)+1 as Element of NAT by ORDINAL1:def 12;
 assume C1: P[n];
 set g=(S,U)-TruthEval m, g0=(S,U)-TruthEval (m+n),
 g1=(S,U)-TruthEval ((m+n)+1);
@@ -1253,12 +1253,12 @@ C6: f.K=ExIterator(f.k) +* NorIterator(f.k) +* f.k by DefTruth1; then
  dom (f.K)=dom (ExIterator(f.k) +* NorIterator(f.k)) \/ dom (f.k)
 by FUNCT_4:def 1; then
 C3: dom (f.k) c= dom (f.K) by XBOOLE_1:7; assume
-C8: x in dom g; then x in dom (f.k) by C1, DefTruth2; then
+C8: x in dom g; then x in dom (f.k) by C1,DefTruth2; then
 C5: x in dom (f.K) by C3;
-thus x in dom (S,U)-TruthEval (m+(n+1)) by C2, C8, C1, C3;
+thus x in dom (S,U)-TruthEval (m+(n+1)) by C2,C8,C1,C3;
 x in dom (ExIterator(f.k) +* NorIterator(f.k)) \/ dom (f.k)
-by FUNCT_4:def 1, C5, C6;
-hence thesis by C1, C2, C8, C6, FUNCT_4:def 1;
+by C5,C6,FUNCT_4:def 1;
+hence thesis by C1,C2,C8,C6,FUNCT_4:def 1;
 end;
 thus for n holds P[n] from NAT_1:sch 2(B0,B1);
 end;
@@ -1288,15 +1288,15 @@ Element of PFuncs ([:II1,SS*\{{}}:], BOOLEAN); reconsider
 g2=((S,U2)-TruthEval).Z as Element of PFuncs ([:II2,SS*\{{}}:], BOOLEAN);
 D1: f1=g1 & f2=g2 by DefTruth2;
 D2: g1=S-TruthEval(U1) & g2=S-TruthEval(U2) by DefTruth1;
-D3: dom f1 = [:II1,AF:] by D1, FUNCT_2:def 1,D2;
-D4: dom f2 = [:II2,AF:] by D1, FUNCT_2:def 1,D2;
+D3: dom f1 = [:II1,AF:] by D1,D2,FUNCT_2:def 1;
+D4: dom f2 = [:II2,AF:] by D1,D2,FUNCT_2:def 1;
 let I1 be Element of II1, I2 be Element of II2; let w;
-assume [I1,w] in dom f1; then I1 in II1 & w in AF by ZFMISC_1:106,D3;
-hence [I2,w] in dom f2 by D4, ZFMISC_1:106;
+assume [I1,w] in dom f1; then I1 in II1 & w in AF by D3,ZFMISC_1:87;
+hence [I2,w] in dom f2 by D4,ZFMISC_1:87;
 end;
 B1: for n st P[n] holds P[n+1]
 proof
-let n; reconsider nn=n,NN=n+1 as Element of NAT by ORDINAL1:def 13;
+let n; reconsider nn=n,NN=n+1 as Element of NAT by ORDINAL1:def 12;
 assume C0: P[n];
 let I1 be Element of II1, I2 be Element of II2;
 set f1n=(S,U1)-TruthEval n, f1N=(S,U1)-TruthEval (n+1)
@@ -1325,14 +1325,14 @@ by FUNCT_4:def 1 .= dom ExIterator(g2n) \/ dom NorIterator(g2n)
 end;
 let w; set x=[I1,w]; assume
 Z0: x in dom f1N;
-per cases by Z0, Lm25, C11;
+per cases by Z0,Lm25,C11;
 suppose x in dom ExIterator(f1n);
 then
 consider v being literal Element of S, ww being string of S such that D1:
 [I1,ww] in dom f1n & w=<*v*>^ww by DefExIter;
 [I2,ww] in dom f2n & w=<*v*>^ww by D1,C0;
 then [I2,w] in dom ExIterator(f2n) by DefExIter; hence
-[I2,w] in dom f2N by Lm25, C12;
+[I2,w] in dom f2N by Lm25,C12;
 end;
 suppose x in dom NorIterator(f1n); then
 consider phi1, phi2 being string of S such that D1:
@@ -1354,26 +1354,26 @@ proof
 set II=U-InterpretersOf S, AF=AtomicFormulasOf S, f=(S,U)-TruthEval.mm
 , SS=AllSymbolsOf S, F=(S,U)-TruthEval;
 reconsider g = curry f as Element of PFuncs(II,PFuncs(SS*\{{}},BOOLEAN))
-by FUNCT_6:23; set y = the Element of AF;
+by FUNCT_6:14; set y = the Element of AF;
 reconsider Z=0 as Element of NAT;
 dom (S-TruthEval U)=[:II,AF:] by FUNCT_2:def 1; then
 B1: dom (F.0)=[:II,AF:] by DefTruth1;
 now
-let x; assume x in II; then [x,y] in dom (F.0) by B1, ZFMISC_1:106;
+let x; assume x in II; then [x,y] in dom (F.0) by B1,ZFMISC_1:87;
 then [x,y] in dom (S,U)-TruthEval 0 by DefTruth2; then
 [x,y] in dom (S,U)-TruthEval (0+mm) by Lm26; then
-[x,y] in dom f by DefTruth2; hence x in dom g by FUNCT_5:26;
+[x,y] in dom f by DefTruth2; hence x in dom g by FUNCT_5:19;
 end;
 then II c= dom g & dom g c= II by TARSKI:def 3; then
 dom g=II by XBOOLE_0:def 10; then
 reconsider gg=g as total PartFunc of II,PFuncs(SS*\{{}},BOOLEAN)
-by PARTFUN1:def 4; curry f=gg; hence thesis;
+by PARTFUN1:def 2; curry f=gg; hence thesis;
 end;
 
 Lm28: curry ((S,U)-TruthEval m) is Function of
 U-InterpretersOf S, PFuncs((AllSymbolsOf S)*\{{}},BOOLEAN)
 proof
-reconsider mm=m as Element of NAT by ORDINAL1:def 13;
+reconsider mm=m as Element of NAT by ORDINAL1:def 12;
 set f=(S,U)-TruthEval mm, g=(S,U)-TruthEval.mm;
 curry f=curry g by DefTruth2; hence thesis by Lm22;
 end;
@@ -1385,7 +1385,7 @@ equals  (curry ((S,U)-TruthEval m)).I;
 coherence
 proof
 set II=U-InterpretersOf S, SS=AllSymbolsOf S;
-reconsider mm=m as Element of NAT by ORDINAL1:def 13;
+reconsider mm=m as Element of NAT by ORDINAL1:def 12;
 curry ((S,U)-TruthEval mm)= curry ((S,U)-TruthEval.mm) by DefTruth2; then
 reconsider f=curry ((S,U)-TruthEval mm) as Function of II, PFuncs(SS*\{{}}
 ,BOOLEAN) by Lm22;
@@ -1407,22 +1407,22 @@ B2: for x st x in dom IT1 holds (x in dom IT2 & IT1.x=IT2.x)
 proof
 let x; assume
 Z1: x in dom IT1; then
-D2: [I,x] in dom f by Z0, FUNCT_5:38; then
+D2: [I,x] in dom f by Z0,FUNCT_5:31; then
 D1: [I,x] in dom g & g.[I,x]=f.[I,x] by Lm26; then
-x in dom IT2 & IT2.x=g.(I,x) by FUNCT_5:27; then
-IT2.x = f.(I,x) by D2, Lm26 .= IT1.x by Z1, FUNCT_5:38, Z0;
-hence x in dom IT2 & IT1.x=IT2.x by D1, FUNCT_5:27;
+x in dom IT2 & IT2.x=g.(I,x) by FUNCT_5:20; then
+IT2.x = f.(I,x) by D2,Lm26 .= IT1.x by Z1,Z0,FUNCT_5:31;
+hence x in dom IT2 & IT1.x=IT2.x by D1,FUNCT_5:20;
 end;
 B3: (for x st x in dom IT1 holds x in dom IT2) &
 for x st x in dom IT1 holds IT1.x=IT2.x by B2; then
-dom IT1 c= dom IT2 by TARSKI:def 3; hence thesis by GRFUNC_1:8, B3;
+dom IT1 c= dom IT2 by TARSKI:def 3; hence thesis by B3,GRFUNC_1:2;
 end;
 
 Lm24: for I1 being Element of U1-InterpretersOf S,
 I2 being Element of U2-InterpretersOf S holds
 dom (I1,m)-TruthEval c= dom (I2,m)-TruthEval
 proof
-reconsider mm=m as Element of NAT by ORDINAL1:def 13;
+reconsider mm=m as Element of NAT by ORDINAL1:def 12;
 set II1=U1-InterpretersOf S, II2=U2-InterpretersOf S,
 f=(S,U1)-TruthEval.mm, SS=AllSymbolsOf S,
 ff1=(S,U1)-TruthEval mm, ff2=(S,U2)-TruthEval mm, g=(S,U2)-TruthEval.mm;
@@ -1435,15 +1435,15 @@ f2=(curry((S,U2)-TruthEval.mm)).I2 as Element of PFuncs(SS*\{{}},BOOLEAN);
 reconsider F=curry f as Function of II1,PFuncs(SS*\{{}},BOOLEAN) by Lm22;
 Z1: I1 in II1; f is Element of PFuncs ([:II1,SS*\{{}}:], BOOLEAN); then
 dom f c= [: II1, SS*\{{}} :] by RELAT_1:def 18; then
-B3: uncurry F=f by FUNCT_5:57;
+B3: uncurry F=f by FUNCT_5:50;
 now
 let ww be set; assume C1: ww in dom f1; then
 reconsider w=ww as Element of SS*\{{}};
-I1 in dom F & f1=F.I1 & ww in dom f1 by Z1, FUNCT_2:def 1, C1;
-then [I1,w] in dom ff1 by B0, B3, FUNCT_5:45;
-then [I2,ww] in dom g by B0, Lm23; hence ww in dom f2 by FUNCT_5:27;
+I1 in dom F & f1=F.I1 & ww in dom f1 by Z1,C1,FUNCT_2:def 1;
+then [I1,w] in dom ff1 by B0,B3,FUNCT_5:38;
+then [I2,ww] in dom g by B0,Lm23; hence ww in dom f2 by FUNCT_5:20;
 end;
-hence thesis by B10, TARSKI:def 3;
+hence thesis by B10,TARSKI:def 3;
 end;
 
 Lm27: for I1 being Element of U1-InterpretersOf S,
@@ -1467,7 +1467,7 @@ existence
 proof
 set SS=AllSymbolsOf S;
 set UU = the non empty set, II = the Element of UU-InterpretersOf S;
-reconsider nn=m as Element of NAT by ORDINAL1:def 13;
+reconsider nn=m as Element of NAT by ORDINAL1:def 12;
 reconsider IT=dom ((II,nn)-TruthEval) as Subset of SS*\{{}};
 take IT;
 let U; set III=U-InterpretersOf S; let I be Element of III; let mm;
@@ -1481,9 +1481,9 @@ let IT1,IT2 be Subset of (SS*\{{}}); assume that
 B1:for U being non empty set, I being Element of U-InterpretersOf S,
 mm being Element of NAT st m=mm holds IT1=dom (I,mm)-TruthEval and
 B2: for U being non empty set, I being Element of U-InterpretersOf S,
-mm being Element of NAT st m=mm holds IT2=dom (I,mm)-TruthEval; 
+mm being Element of NAT st m=mm holds IT2=dom (I,mm)-TruthEval;
 set U = the non empty set; set I = the Element of U-InterpretersOf S;
-reconsider nn=m as Element of NAT by ORDINAL1:def 13;
+reconsider nn=m as Element of NAT by ORDINAL1:def 12;
 thus IT1=dom (I,nn)-TruthEval by B1 .= IT2 by B2;
 end;
 end;
@@ -1493,10 +1493,10 @@ proof
 set U = the non empty set;
 set X=S-formulasOfMaxDepth m, Y=S-formulasOfMaxDepth (m+n),
 II=U-InterpretersOf S; set I = the Element of II;
-reconsider mm=m, NN=m+n as Element of NAT by ORDINAL1:def 13;
+reconsider mm=m, NN=m+n as Element of NAT by ORDINAL1:def 12;
 set f=(I,mm)-TruthEval, g=(I,NN)-TruthEval;
 B0: X=dom f & Y=dom g by DefFormula1;
-f c= g by Lm29; hence thesis by GRFUNC_1: 8, B0;
+f c= g by Lm29; hence thesis by B0,GRFUNC_1:2;
 end;
 
 Lm3: S-formulasOfMaxDepth 0 = AtomicFormulasOf S
@@ -1510,8 +1510,8 @@ dom ((S,U)-TruthEval.z) by DefTruth1 .=
 dom ((S,U)-TruthEval 0) by DefTruth2;
 now
 let x; assume x in AF; then
-[I,x] in dom ((S,U)-TruthEval 0) by B0, ZFMISC_1:def 2;
-then x in dom (I,z)-TruthEval by FUNCT_5:27;
+[I,x] in dom ((S,U)-TruthEval 0) by B0,ZFMISC_1:def 2;
+then x in dom (I,z)-TruthEval by FUNCT_5:20;
 hence x in S-formulasOfMaxDepth 0 by DefFormula1;
 end; then
 B1: AF c= S-formulasOfMaxDepth 0 by TARSKI:def 3;
@@ -1522,11 +1522,11 @@ set f=(S,U)-TruthEval z, g=(I,z)-TruthEval;
 f=(S,U)-TruthEval.z by DefTruth2; then reconsider gg=curry f as
 Function of II, PFuncs((AllSymbolsOf S)*\{{}},BOOLEAN) by Lm22;
 dom gg=II by FUNCT_2:def 1; then
-[I,x] in [:II, AF:] by B0, C0, FUNCT_5:38;
+[I,x] in [:II, AF:] by B0,C0,FUNCT_5:31;
 then ([I,x])`2 in AF by MCART_1:10; hence x in AF by MCART_1:7;
 end;
 then S-formulasOfMaxDepth 0 c= AF by TARSKI:def 3;
-hence thesis by B1, XBOOLE_0:def 10;
+hence thesis by B1,XBOOLE_0:def 10;
 end;
 
 definition
@@ -1541,14 +1541,14 @@ end;
 
 registration
 let S;
-cluster 0-wff -> 0wff string of S;
+cluster 0-wff -> 0wff for string of S;
 coherence
 proof
 set AF=AtomicFormulasOf S, Z=S-formulasOfMaxDepth 0;
 let w be string of S; assume w is 0-wff; then w in Z by DefWff1; then
 w in AF by Lm3; hence thesis;
 end;
-cluster 0wff -> 0-wff string of S;
+cluster 0wff -> 0-wff for string of S;
 coherence
 proof
 set AF=AtomicFormulasOf S;
@@ -1556,22 +1556,22 @@ let w be string of S; assume w is 0wff; then w in AF; then
 w in S-formulasOfMaxDepth 0 by Lm3; hence thesis by DefWff1;
 end;
 let m;
-cluster m-wff -> wff string of S;
+cluster m-wff -> wff for string of S;
 coherence by DefWff2;
 let n;
-cluster (m+0*n)-wff -> (m+n)-wff (string of S);
+cluster (m+0*n)-wff -> (m+n)-wff for (string of S);
 coherence
 proof
 set X=S-formulasOfMaxDepth m, Y=S-formulasOfMaxDepth (m+n);
 B0: X c= Y by Lm4;
 let w; assume w is (m+0*n)-wff; then w in X by DefWff1;
-hence thesis by DefWff1, B0;
+hence thesis by DefWff1,B0;
 end;
 end;
 
 registration
 let S,m;
-cluster m-wff string of S;
+cluster m-wff for string of S;
 existence
 proof
 set w = the 0wff string of S;
@@ -1592,7 +1592,7 @@ end;
 
 registration
 let S;
-cluster wff string of S;
+cluster wff for string of S;
 existence
 proof take the 0-wff string of S; thus thesis;end;
 end;
@@ -1605,23 +1605,23 @@ existence
 proof
 set IU=U-InterpretersOf S, SS=AllSymbolsOf S, III=I, II=I;
 consider n such that B1: w is n-wff by DefWff2;
-reconsider nn=n as Element of NAT by ORDINAL1:def 13;
+reconsider nn=n as Element of NAT by ORDINAL1:def 12;
 set fn=(III,n)-TruthEval;
 reconsider ww=w as n-wff string of S by B1;
 B4: S-formulasOfMaxDepth nn=dom ((III,nn)-TruthEval) by DefFormula1;
-ww in dom fn by B4, DefWff1;
-then fn.ww=fn /. ww by PARTFUN1:def 8; then
+ww in dom fn by B4,DefWff1;
+then fn.ww=fn /. ww by PARTFUN1:def 6; then
 reconsider IT=fn.ww as Element of BOOLEAN; take IT;
 let m;
 set fm=(II,m)-TruthEval, f=(II,m+n)-TruthEval, g=(III,n+m)-TruthEval;
-reconsider mm=m,nn=n as Element of NAT by ORDINAL1:def 13;
+reconsider mm=m,nn=n as Element of NAT by ORDINAL1:def 12;
 B3: S-formulasOfMaxDepth m=dom ((II,mm)-TruthEval) &
 S-formulasOfMaxDepth nn=dom (III,nn)-TruthEval by DefFormula1;
 B2: fm c= f & fn c= g & f=g by Lm29;
-assume w is m-wff; then w in dom fm by B3, DefWff1; then
-B6: fm.w=f.w by B2, GRFUNC_1:8;
-ww in dom fn by B4, DefWff1;
-hence IT=fm.w by B6, B2, GRFUNC_1:8;
+assume w is m-wff; then w in dom fm by B3,DefWff1; then
+B6: fm.w=f.w by B2,GRFUNC_1:2;
+ww in dom fn by B4,DefWff1;
+hence IT=fm.w by B6,B2,GRFUNC_1:2;
 end;
 uniqueness
 proof
@@ -1629,7 +1629,7 @@ let IT1,IT2 be Element of BOOLEAN;
 assume B1: for m being Nat st w is m-wff holds IT1=(I,m)-TruthEval.w;
 assume B2: for m being Nat st w is m-wff holds IT2=(I,m)-TruthEval.w;
 consider m being Nat such that B3: w is m-wff by DefWff2;
-thus IT1=(I,m)-TruthEval.w by B1, B3 .= IT2 by B2,B3;
+thus IT1=(I,m)-TruthEval.w by B1,B3 .= IT2 by B2,B3;
 end;
 end;
 
@@ -1658,7 +1658,7 @@ theorem Th3:
 (I.(S-firstChar.t)).(((I,u)-TermEval.m)*(SubTerms(t))) &
 (t is 0-termal implies ((I,u)-TermEval.(m+1)).t = (I.(S-firstChar.t)).{})
 proof
-reconsider mm=m as Element of NAT by ORDINAL1:def 13;
+reconsider mm=m as Element of NAT by ORDINAL1:def 12;
 ((I,u)-TermEval.(mm+1)).t =
 (I.(S-firstChar.t)).(((I,u)-TermEval.mm)*(SubTerms(t))) &
 (t is 0-termal implies ((I,u)-TermEval.(mm+1)).t = (I.(S-firstChar.t)).{})
@@ -1684,7 +1684,7 @@ for U being non empty set, I being Element of U-InterpretersOf S
 holds it=dom (I,m)-TruthEval;
 compatibility
 proof
-reconsider mm=m as Element of NAT by ORDINAL1:def 13;
+reconsider mm=m as Element of NAT by ORDINAL1:def 12;
 set SS=AllSymbolsOf S, Phim=S-formulasOfMaxDepth m;
 defpred P[set] means for U being non empty set, I being Element of U
 -InterpretersOf S holds $1=dom (I,m)-TruthEval;
@@ -1711,7 +1711,7 @@ end;
 Lm31: curry ((S,U)-TruthEval m) is Function of U-InterpretersOf S, Funcs(S
 -formulasOfMaxDepth m, BOOLEAN)
 proof
-reconsider mm=m as Element of NAT by ORDINAL1:def 13;
+reconsider mm=m as Element of NAT by ORDINAL1:def 12;
 set Fm=(S,U)-TruthEval m, II=U-InterpretersOf S, SS=AllSymbolsOf S,
 Phim=S-formulasOfMaxDepth m;
 reconsider f=curry Fm as Function of II, PFuncs(SS*\{{}}, BOOLEAN) by Lm28;
@@ -1723,7 +1723,7 @@ g is BOOLEAN-valued & g=(Ix,m)-TruthEval; then
 g=g & dom g=Phim & rng g c= BOOLEAN by DefFormulas;
 hence f.x in Funcs(Phim, BOOLEAN) by FUNCT_2:def 2;
 end;
-hence thesis by FUNCT_2:5, B0;
+hence thesis by B0,FUNCT_2:3;
 end;
 
 theorem Lm32: (S,U)-TruthEval m in ::Th8
@@ -1732,13 +1732,13 @@ Funcs([:U-InterpretersOf S, S-formulasOfMaxDepth m:], BOOLEAN) &
 Funcs([:U-InterpretersOf S, S-formulasOfMaxDepth m:], BOOLEAN)
 proof
 set Fm=(S,U)-TruthEval m,II=U-InterpretersOf S,Phim=S-formulasOfMaxDepth m,
-SS=AllSymbolsOf S; reconsider mm=m as Element of NAT by ORDINAL1:def 13;
+SS=AllSymbolsOf S; reconsider mm=m as Element of NAT by ORDINAL1:def 12;
 reconsider Fmm=Fm as PartFunc of [:II, SS*\{{}}:], BOOLEAN;
 dom Fm c= [:II,SS*\{{}}:]; then
-B0: uncurry curry Fm = Fm by FUNCT_5:57;
+B0: uncurry curry Fm = Fm by FUNCT_5:50;
 reconsider f=curry Fm as Function of II, Funcs(Phim, BOOLEAN) by Lm31;
 rng f c= Funcs(Phim, BOOLEAN) & dom f=II by FUNCT_2:def 1;
-then Fm=Fm & dom Fm = [:II, Phim:] & rng Fm c= BOOLEAN by B0, FUNCT_5:33;
+then Fm=Fm & dom Fm = [:II, Phim:] & rng Fm c= BOOLEAN by B0,FUNCT_5:26;
 hence Fm in Funcs([:II, Phim:], BOOLEAN) by FUNCT_2:def 2; then
 (S,U)-TruthEval.mm in Funcs([:II,Phim:],BOOLEAN) by DefTruth2; hence thesis;
 end;
@@ -1790,7 +1790,7 @@ Fmm=Fm as Function of [:II, Phim:], BOOLEAN;
 B1: dom Fmm=[:II, Phim:] by FUNCT_2:def 1;
 reconsider ITT=IT as PartFunc of [:II,SS*\{{}}:], BOOLEAN;
 B2: [:II, SS*\{{}}:]={[x,y] where x is Element of II,
-y is Element of SS*\{{}}: not contradiction} by DOMAIN_1:49;
+y is Element of SS*\{{}}: not contradiction} by DOMAIN_1:19;
 now
 let z; assume
 D0: z in LH; then z in [:II, SS*\{{}}:];
@@ -1798,10 +1798,10 @@ then consider x being Element of II, y being Element of SS*\{{}} such that
 D1: z=[x,y] & not contradiction by B2;
 consider phi1, phi2 being Element of SS*\{{}} such that
 D2: y=<*N*>^phi1^phi2 & [x,phi1] in dom Fm & [x,phi2] in dom Fm
-by DefNorIter, D0, D1;
+by DefNorIter,D0,D1;
 reconsider phi11=phi1, phi22=phi2 as Element of Phim
-by ZFMISC_1:106, D2, B1;
-set yy=F(phi11, phi22); x in II & yy in A & z=[x,yy] by D1, D2;
+by D2,B1,ZFMISC_1:87;
+set yy=F(phi11, phi22); x in II & yy in A & z=[x,yy] by D1,D2;
 hence z in RH by ZFMISC_1:def 2;
 end; then
 B5: LH c= RH by TARSKI:def 3;
@@ -1815,9 +1815,9 @@ D1: yy=F(phi1, phi2) & not contradiction by D0;
 reconsider phi11=phi1, phi22=phi2 as string of S;
 <*N*>^phi11^phi22 is string of S; then reconsider y=yy as string of S by D1;
 [x,phi1] in dom Fmm & [x,phi2] in dom Fmm by B1; then
-[x,y] in LH by D1, DefNorIter; hence z in LH by D0;
+[x,y] in LH by D1,DefNorIter; hence z in LH by D0;
 end;
-then RH c= LH by TARSKI:def 3; hence thesis by B5, XBOOLE_0:def 10;
+then RH c= LH by TARSKI:def 3; hence thesis by B5,XBOOLE_0:def 10;
 end;
 
 Lm35: dom ExIterator((S,U)-TruthEval m)=
@@ -1835,18 +1835,18 @@ Fmm=Fm as Function of [:II, Phim:], BOOLEAN;
 B1: dom Fmm=[:II, Phim:] by FUNCT_2:def 1;
 reconsider ITT=IT as PartFunc of [:II,SS*\{{}}:], BOOLEAN;
 B2: [:II, SS*\{{}}:]={[x,y] where x is Element of II,
-y is Element of SS*\{{}}: not contradiction} by DOMAIN_1:49;
+y is Element of SS*\{{}}: not contradiction} by DOMAIN_1:19;
 now
 let z; assume
 D0: z in LH; then z in [:II, SS*\{{}}:];
 then consider x being Element of II, y being Element of SS*\{{}} such that
 D1: z=[x,y] & not contradiction by B2;
 consider v being literal Element of S, w being string of S such that
-D2: [x,w] in dom Fm & y=<*v*>^w by DefExIter, D0, D1;
-reconsider phi=w as Element of Phim by B1, D2, ZFMISC_1:106;
+D2: [x,w] in dom Fm & y=<*v*>^w by DefExIter,D0,D1;
+reconsider phi=w as Element of Phim by B1,D2,ZFMISC_1:87;
 reconsider vv=v as Element of L by FOMODEL1:def 14;
 y=<*vv*>^phi & not contradiction by D2; then y in A; hence
-z in RH by ZFMISC_1:def 2, D1;
+z in RH by D1,ZFMISC_1:def 2;
 end; then
 B5: LH c= RH by TARSKI:def 3;
 now
@@ -1857,10 +1857,10 @@ reconsider x=xx as Element of II by D0; consider vv being Element of L,
 phi being Element of Phim such that
 D1: yy=F(vv,phi) & not contradiction by D0;
 reconsider v=vv as literal Element of S; reconsider w=phi as string of S;
-[x,phi] in dom Fm & yy=<*v*>^w by D1, B1;
-hence z in LH by D0, DefExIter;
+[x,phi] in dom Fm & yy=<*v*>^w by D1,B1;
+hence z in LH by D0,DefExIter;
 end; then
-RH c= LH by TARSKI:def 3; hence thesis by B5, XBOOLE_0:def 10;
+RH c= LH by TARSKI:def 3; hence thesis by B5,XBOOLE_0:def 10;
 end;
 
 theorem Lm37: S-formulasOfMaxDepth(m+1) = ::Th9
@@ -1869,20 +1869,20 @@ proof
 set U = the non empty set;
 set n=m+1, II=U-InterpretersOf S, SS=AllSymbolsOf S, N=TheNorSymbOf S;
 set I = the Element of II;
-reconsider mm=m, nn=n as Element of NAT by ORDINAL1:def 13;
+reconsider mm=m, nn=n as Element of NAT by ORDINAL1:def 12;
 set F=(S,U)-TruthEval, Fn=F.nn, Fc=(curry Fn), Dm=S-formulasOfMaxDepth m,
 Dn=S-formulasOfMaxDepth n;
 F.mm is Element of PFuncs( [:II, SS*\{{}}:], BOOLEAN ); then
 reconsider Fm=F.mm as PartFunc of [:II, SS*\{{}}:], BOOLEAN;
 Z0: (S,U)-TruthEval n=Fn & (S,U)-TruthEval m=Fm by DefTruth2;
 reconsider Fcc=Fc as Function of II, Funcs(Dn, BOOLEAN)
-by Lm31, Z0;
+by Lm31,Z0;
 Fcc.I is Element of Funcs(Dn, BOOLEAN); then
 reconsider fn=Fcc.I as Function of Dn, BOOLEAN;
 Fm is Element of Funcs([:II, Dm:], BOOLEAN) by Lm32;
 then reconsider Fmm=Fm as Function of [:II, Dm:], BOOLEAN;
  dom fn=Dn & dom Fcc=II by FUNCT_2:def 1; then
-B1: Dn=proj2 (dom Fn/\[:{I}, proj2 dom Fn:]) by FUNCT_5:38;
+B1: Dn=proj2 (dom Fn/\[:{I}, proj2 dom Fn:]) by FUNCT_5:31;
 B10: Fn=ExIterator(F.mm) +* NorIterator(F.mm) +* Fm by DefTruth1;
 reconsider Em=ExIterator(F.mm) as PartFunc of [:II, SS*\{{}}:], BOOLEAN;
 reconsider dEm=dom Em as Relation of II, SS*\{{}};
@@ -1890,17 +1890,17 @@ reconsider dNm=dom (NorIterator (F.mm)), dFm=dom(Fm) as
 Relation of II, SS*\{{}};
 B6: dFm = dom Fmm .= [:II, Dm:] by FUNCT_2:def 1;
 B2: dom Fn = dom (ExIterator(F.mm) +* NorIterator (F.mm)) \/
-dom (Fm) by B10, FUNCT_4:def 1 .= dEm\/dNm\/dFm by FUNCT_4:def 1;
+dom (Fm) by B10,FUNCT_4:def 1 .= dEm\/dNm\/dFm by FUNCT_4:def 1;
 set RNNN = m-NorFormulasOf S, REEE = m-ExFormulasOf S;
 (S,U)-TruthEval m=Fm by DefTruth2; then
-dNm=[:II, RNNN:] & dEm=[:II, REEE:] by Lm33, Lm35; then
-B7: dEm\/dNm\/dFm = [:II, REEE\/RNNN:]\/[:II, Dm:] by B6, ZFMISC_1:120 .=
-[:II,REEE\/RNNN\/Dm:] by ZFMISC_1:120;
+dNm=[:II, RNNN:] & dEm=[:II, REEE:] by Lm33,Lm35; then
+B7: dEm\/dNm\/dFm = [:II, REEE\/RNNN:]\/[:II, Dm:] by B6,ZFMISC_1:97 .=
+[:II,REEE\/RNNN\/Dm:] by ZFMISC_1:97;
 reconsider sub=[:{I}, REEE\/RNNN\/Dm:] as Subset of
-[:II, REEE\/RNNN\/Dm:] by ZFMISC_1:119;
+[:II, REEE\/RNNN\/Dm:] by ZFMISC_1:96;
 Dn = rng ([:II,REEE\/RNNN\/Dm:] /\ sub )
-by B7, RELAT_1:195, B1, B2 .=
-REEE\/RNNN\/Dm by RELAT_1:195; hence thesis;
+by B7,B1,B2,RELAT_1:160 .=
+REEE\/RNNN\/Dm by RELAT_1:160; hence thesis;
 end;
 
 theorem Th10: AtomicFormulasOf S is S-prefix
@@ -1913,38 +1913,38 @@ C1: p1=phi1 & phi1 is 0wff;
 assume p2 in AF; then consider phi2 being string of S such that
 C2: p2=phi2 & phi2 is 0wff; consider r1 being relational Element of S,
 T1 being abs(ar r1)-element Element of TT* such that
-C3: phi1=<*r1*>^(C.T1) by C1, FOMODEL1:def 35;
+C3: phi1=<*r1*>^(C.T1) by C1,FOMODEL1:def 35;
 consider r2 being relational Element of S,
 T2 being abs(ar r2)-element Element of TT* such that
-C4: phi2=<*r2*>^(C.T2) by C2, FOMODEL1:def 35; assume p1^q1=p2^q2; then
-C5: <*r1*>^((C.T1)^q1)=(<*r2*>^(C.T2))^q2 by C1, C2, C3, C4, FINSEQ_1:45 .=
-<*r2*>^((C.T2)^q2) by FINSEQ_1:45; then
+C4: phi2=<*r2*>^(C.T2) by C2,FOMODEL1:def 35; assume p1^q1=p2^q2; then
+C5: <*r1*>^((C.T1)^q1)=(<*r2*>^(C.T2))^q2 by C1,C2,C3,C4,FINSEQ_1:32 .=
+<*r2*>^((C.T2)^q2) by FINSEQ_1:32; then
 C6: r1 = (<*r2*>^((C.T2)^q2)).1
-by FINSEQ_1:58 .= r2 by FINSEQ_1:58;
+by FINSEQ_1:41 .= r2 by FINSEQ_1:41;
 set n=abs(ar r1), nT=n-tuples_on TT;
-reconsider T11=T1, T22=T2 as Element of nT by FOMODEL0:16, C6;
+reconsider T11=T1, T22=T2 as Element of nT by C6,FOMODEL0:16;
 reconsider P=C.:(nT) as SS-prefix set;
 Z0: (SS*\{{}})* c= SS** & TT*c=(SS*\{{}})*; then
  T1 in SS** & T2 in SS** & dom C=SS**
-by TARSKI:def 3, FUNCT_2:def 1; then
-C8: C.T11 in P & C.T22 in P by FUNCT_1:def 12;
+by FUNCT_2:def 1,TARSKI:def 3; then
+C8: C.T11 in P & C.T22 in P by FUNCT_1:def 6;
 reconsider T111=T1, T222=T2 as Element of SS**
-by Z0, TARSKI:def 3;
-(C.T111)^q1=(C.T222)^q2 by C6, FINSEQ_1:46, C5;
-hence p1=p2 & q1=q2 by C1, C2, C8, FOMODEL0:def 20, C3, C4, C6;
+by Z0,TARSKI:def 3;
+(C.T111)^q1=(C.T222)^q2 by C6,C5,FINSEQ_1:33;
+hence p1=p2 & q1=q2 by C1,C2,C8,C3,C4,C6,FOMODEL0:def 20;
 end;
 then AF is SS-prefix by FOMODEL0:def 20; hence thesis;
 end;
 
 registration
 let S;
-cluster AtomicFormulasOf S -> S-prefix set;
+cluster AtomicFormulasOf S -> S-prefix for set;
 coherence by Th10;
 end;
 
 registration
 let S;
-cluster S-formulasOfMaxDepth 0 -> S-prefix set;
+cluster S-formulasOfMaxDepth 0 -> S-prefix for set;
 coherence
 proof
 S-formulasOfMaxDepth 0 = AtomicFormulasOf S by Lm3; hence thesis;
@@ -1968,8 +1968,8 @@ proof
 let IT1, IT2 be Nat; assume
 B1: phi is IT1-wff & for n st phi is n-wff holds IT1 <= n; assume
 B2: phi is IT2-wff & for n st phi is n-wff holds IT2 <= n;
-B3: IT2 <= IT1 by B2, B1;
-IT1 <= IT2 by B1, B2; hence thesis by B3, XXREAL_0:1;
+B3: IT2 <= IT1 by B2,B1;
+IT1 <= IT2 by B1,B2; hence thesis by B3,XXREAL_0:1;
 end;
 end;
 
@@ -1981,9 +1981,9 @@ B1: phi in Phim \ Phi0; then not phi in Phi0
 by XBOOLE_0:def 5; then not phi is 0-wff by DefWff1; then
 Depth phi <> 0 by DefDepth; then consider n such that
 B0: Depth phi=n+1 by NAT_1:6; take n; not n+1<=n+0
-by XREAL_1:8; hence phi is (n+1)-wff & not phi is n-wff by DefDepth, B0;
-phi is m-wff by DefWff1, B1;
-hence n+1 <= m by B0, DefDepth;
+by XREAL_1:6; hence phi is (n+1)-wff & not phi is n-wff by DefDepth,B0;
+phi is m-wff by DefWff1,B1;
+hence n+1 <= m by B0,DefDepth;
 end;
 
 Lm8: (w is (m+1)-wff & not w is m-wff) implies (
@@ -2011,14 +2011,14 @@ reconsider v=vv as literal Element of S;
 take v; take phii; thus thesis by C0;
 end;
 then consider phi1, phi2 being Element of Phim such that
-B3: w=<*N*>^phi1^phi2 & not contradiction by B1, Z0, B0, DefWff1;
+B3: w=<*N*>^phi1^phi2 & not contradiction by B1,Z0,B0,DefWff1;
 reconsider phi11=phi1,phi22=phi2 as m-wff string of S by DefWff1;
 take phi11,phi22; thus thesis by B3;
 end;
 
 registration
 let S, m; let phi1, phi2 be m-wff string of S;
-cluster <*TheNorSymbOf S*>^phi1^phi2 -> (m+1)-wff string of S;
+cluster <*TheNorSymbOf S*>^phi1^phi2 -> (m+1)-wff for string of S;
 coherence
 proof
 set N=TheNorSymbOf S, Phim=S-formulasOfMaxDepth m, NF=m-NorFormulasOf S,
@@ -2032,7 +2032,7 @@ end;
 
 registration
 let S, phi1, phi2;
-cluster <*TheNorSymbOf S*>^phi1^phi2 -> wff string of S;
+cluster <*TheNorSymbOf S*>^phi1^phi2 -> wff for string of S;
 coherence
 proof
 set N=TheNorSymbOf S, IT=<*N*>^phi1^phi2; consider m such that
@@ -2048,7 +2048,7 @@ end;
 
 registration
 let S, m; let phi be m-wff string of S, v be literal Element of S;
-cluster <*v*>^phi -> (m+1)-wff string of S;
+cluster <*v*>^phi -> (m+1)-wff for string of S;
 coherence
 proof
 set L=LettersOf S, Phim=S-formulasOfMaxDepth m, NF=m-NorFormulasOf S,
@@ -2062,7 +2062,7 @@ end;
 
 registration
 let S,l,phi;
-cluster <*l*>^phi -> wff string of S;
+cluster <*l*>^phi -> wff for string of S;
 coherence
 proof
 consider m such that
@@ -2073,39 +2073,39 @@ end;
 
 registration
 let S, w; let s be non relational Element of S;
-cluster <*s*>^w -> non 0wff string of S;
+cluster <*s*>^w -> non 0wff for string of S;
 coherence
 proof
 set FC=S-firstChar, IT=<*s*>^w, SS=AllSymbolsOf S;
-FC.IT = IT.1 by FOMODEL0:6 .= s by FINSEQ_1:58;
+FC.IT = IT.1 by FOMODEL0:6 .= s by FINSEQ_1:41;
 hence thesis;
 end;
 end;
 
 registration
 let S, w1, w2; let s be non relational Element of S;
-cluster <*s*>^w1^w2 -> non 0wff string of S;
+cluster <*s*>^w1^w2 -> non 0wff for string of S;
 coherence
 proof
-<*s*>^w1^w2=<*s*>^(w1^w2) by FINSEQ_1:45; hence thesis;
+<*s*>^w1^w2=<*s*>^(w1^w2) by FINSEQ_1:32; hence thesis;
 end;
 end;
 
 registration
 let S;
-cluster TheNorSymbOf S -> non relational (Element of S);
+cluster TheNorSymbOf S -> non relational for (Element of S);
 coherence;
 end;
 
 registration
 let S, w;
-cluster <*TheNorSymbOf S*>^w -> non 0wff string of S;
+cluster <*TheNorSymbOf S*>^w -> non 0wff for string of S;
 coherence;
 end;
 
 registration
 let S,l,w;
-cluster <*l*>^w -> non 0wff string of S;
+cluster <*l*>^w -> non 0wff for string of S;
 coherence;
 end;
 
@@ -2116,17 +2116,17 @@ end;
 
 registration
 let S,w,l;
-cluster <*l*>^w -> exal string of S;
+cluster <*l*>^w -> exal for string of S;
 coherence
 proof
 set ww=<*l*>^w, F=S-firstChar; F.ww = ww.1 by FOMODEL0:6 .=
-l by FINSEQ_1:58; hence thesis by DefExal;
+l by FINSEQ_1:41; hence thesis by DefExal;
 end;
 end;
 
 registration
 let S,m1;
-cluster exal (m1-wff string of S);
+cluster exal for m1-wff string of S;
 existence
 proof
 consider m such that
@@ -2139,7 +2139,7 @@ end;
 
 registration
 let S;
-cluster exal -> non 0wff string of S;
+cluster exal -> non 0wff for string of S;
 coherence
 proof
 set F=S-firstChar; let w; assume w is exal; then
@@ -2149,7 +2149,7 @@ end;
 
 registration
 let S,m1;
-cluster non 0wff (exal m1-wff string of S);
+cluster non 0wff for exal m1-wff string of S;
 existence
 proof
 set l = the literal (Element of S); consider m such that
@@ -2161,10 +2161,10 @@ end;
 
 registration
 let S;
-cluster non 0wff (exal wff string of S);
+cluster non 0wff for exal wff string of S;
 existence
 proof
-set m1 = the non zero Nat; set phi = the non 0wff (exal m1-wff string of S);
+set m1 = the non zero Nat; set phi = the non 0wff exal m1-wff string of S;
 take phi; thus thesis;
 end;
 end;
@@ -2174,8 +2174,8 @@ proof assume phi is non 0wff; then not phi is 0-wff;
 hence Depth phi <> 0 by DefDepth; end;
 
 registration
-let S; let phi be non 0wff (wff string of S);
-cluster Depth phi -> non zero Nat;
+let S; let phi be non 0wff wff string of S;
+cluster Depth phi -> non zero for Nat;
 coherence by Lm5;
 end;
 
@@ -2185,26 +2185,26 @@ proof
 set L=LettersOf S, N=TheNorSymbOf S, SS=AllSymbolsOf S; assume w is wff;
 then reconsider ww=w as wff string of S; set n=Depth ww; assume
 w is non 0wff; then consider m such that
-B0: n=m+1 by NAT_1:6; m+1>m+0 by XREAL_1:10; then
-Z1: ww is (m+1)-wff & not ww is m-wff by DefDepth, B0;
-per cases by Z1, Lm8;
+B0: n=m+1 by NAT_1:6; m+1>m+0 by XREAL_1:8; then
+Z1: ww is (m+1)-wff & not ww is m-wff by DefDepth,B0;
+per cases by Z1,Lm8;
 suppose ex v being literal Element of S, phi being m-wff string of S
 st w=<*v*>^phi; then consider v being literal Element of S,
 phi being m-wff string of S such that
-C0: w=<*v*>^phi; v = w.1 by C0, FINSEQ_1:58;
+C0: w=<*v*>^phi; v = w.1 by C0,FINSEQ_1:41;
 hence thesis by FOMODEL1:def 14;
 end;
 suppose ex phi1, phi2 being m-wff string of S st
 w=<*N*>^phi1^phi2; then consider phi1, phi2 being
 m-wff string of S such that
-C0: w=<*N*>^phi1^phi2; w.1=(<*N*>^(phi1^phi2)).1 by C0, FINSEQ_1:45 .=
-N by FINSEQ_1:58; hence thesis;
+C0: w=<*N*>^phi1^phi2; w.1=(<*N*>^(phi1^phi2)).1 by C0,FINSEQ_1:32 .=
+N by FINSEQ_1:41; hence thesis;
 end;
 end;
 
 registration
-let S; let w be non 0wff (wff string of S);
-cluster S-firstChar.w -> non relational Element of S;
+let S; let w be non 0wff wff string of S;
+cluster S-firstChar.w -> non relational for Element of S;
 coherence
 proof
 set F=S-firstChar, L=LettersOf S, N=TheNorSymbOf S, SS=AllSymbolsOf S;
@@ -2233,69 +2233,69 @@ now
 let p1,q1,p2,q2 be SS-valued FinSequence; assume
 C1: p1 in PhiN \ Phi0; then reconsider
 phi1=p1 as N-wff string of S by DefWff1; consider m1 being Nat such that
-C3: phi1 is (m1+1)-wff & not phi1 is m1-wff & m1+1 <= N by Lm16, C1;
+C3: phi1 is (m1+1)-wff & not phi1 is m1-wff & m1+1 <= N by Lm16,C1;
 assume
 C4: p2 in PhiN \ Phi0; then reconsider
 phi2=p2 as N-wff string of S by DefWff1; consider m2 being Nat such that
-C5: phi2 is (m2+1)-wff & not phi2 is m2-wff & m2+1 <= N by Lm16, C4;
-C8: m1<=n & m2<=n by C3,C5,XREAL_1:8; then consider k1 being Nat such that
+C5: phi2 is (m2+1)-wff & not phi2 is m2-wff & m2+1 <= N by Lm16,C4;
+C8: m1<=n & m2<=n by C3,C5,XREAL_1:6; then consider k1 being Nat such that
 C9: n=m1+k1 by NAT_1:10; consider k2 being Nat such that
-C10: n=m2+k2 by C8, NAT_1:10; assume
+C10: n=m2+k2 by C8,NAT_1:10; assume
 C7: p1^q1=p2^q2;
-per cases by Lm8, C3;
+per cases by Lm8,C3;
 suppose (ex v1 being literal Element of S, phi11 being m1-wff string of S st
 phi1=<*v1*>^phi11); then consider
 v1 being literal Element of S, phi11 being m1-wff string of S such that
 D0: phi1=<*v1*>^phi11;
-per cases by Lm8, C5;
+per cases by Lm8,C5;
 suppose ex v2 being literal Element of S, phi22 being
 m2-wff string of S st phi2=<*v2*>^phi22; then consider v2 being
 literal Element of S, phi22 being m2-wff string of S such that
 E0: phi2=<*v2*>^phi22; <*v2*>^phi22^q2 =
-<*v1*>^(phi11^q1) by E0, C7, D0, FINSEQ_1:45; then
-E1: <*v2*>^(phi22^q2)=<*v1*>^(phi11^q1) by FINSEQ_1:45; then
-Z0: (<*v2*>^(phi22^q2)).1 = v1 by FINSEQ_1:58; then
-E3: v2=v1 by FINSEQ_1:58;
-<*v1*>^(phi22^q2)=<*v1*>^(phi11^q1) by E1, Z0, FINSEQ_1:58; then
-E2: phi22^q2=phi11^q1 by FINSEQ_1:46; phi11 is (m1+0*k1)-wff &
+<*v1*>^(phi11^q1) by E0,C7,D0,FINSEQ_1:32; then
+E1: <*v2*>^(phi22^q2)=<*v1*>^(phi11^q1) by FINSEQ_1:32; then
+Z0: (<*v2*>^(phi22^q2)).1 = v1 by FINSEQ_1:41; then
+E3: v2=v1 by FINSEQ_1:41;
+<*v1*>^(phi22^q2)=<*v1*>^(phi11^q1) by E1,Z0,FINSEQ_1:41; then
+E2: phi22^q2=phi11^q1 by FINSEQ_1:33; phi11 is (m1+0*k1)-wff &
 phi22 is (m2+0*k2)-wff; then phi11 in Phin & phi22 in Phin
-by C9, C10, DefWff1;
-hence p1=p2 & q1=q2 by D0, E3, E0, B0, E2, FOMODEL0:def 20;
+by C9,C10,DefWff1;
+hence p1=p2 & q1=q2 by D0,E3,E0,B0,E2,FOMODEL0:def 20;
 end;
 suppose
 ex r2, s2 being m2-wff string of S st phi2=<*Nor*>^r2^s2; then
 consider r2, s2 being m2-wff string of S such that
-E0: phi2=<*Nor*>^r2^s2; phi1.1 = (phi2^q2).1 by FOMODEL0:28, C7 .=
-phi2.1 by FOMODEL0:28 .= (<*Nor*>^(r2^s2)).1 by E0, FINSEQ_1:45 .= Nor
-by FINSEQ_1:58;
-hence p1=p2 & q1=q2 by D0, FINSEQ_1:58;
+E0: phi2=<*Nor*>^r2^s2; phi1.1 = (phi2^q2).1 by C7,FOMODEL0:28 .=
+phi2.1 by FOMODEL0:28 .= (<*Nor*>^(r2^s2)).1 by E0,FINSEQ_1:32 .= Nor
+by FINSEQ_1:41;
+hence p1=p2 & q1=q2 by D0,FINSEQ_1:41;
 end;
 end;
 suppose ex r1, s1 being m1-wff string of S st phi1=<*Nor*>^r1^s1; then
 consider r1, s1 being m1-wff string of S such that
 D0: phi1=<*Nor*>^r1^s1;
-Z0: phi1.1 = (<*Nor*>^(r1^s1)).1 by D0, FINSEQ_1:45
-.= Nor by FINSEQ_1:58;
-per cases by C5, Lm8;
+Z0: phi1.1 = (<*Nor*>^(r1^s1)).1 by D0,FINSEQ_1:32
+.= Nor by FINSEQ_1:41;
+per cases by C5,Lm8;
 suppose ex v2 being literal Element of S, phi22 being
 m2-wff string of S st phi2=<*v2*>^phi22; then consider v2 being
 literal Element of S, phi22 being m2-wff string of S such that
 E0: phi2=<*v2*>^phi22;
-phi1.1 = (phi2^q2).1 by FOMODEL0:28, C7 .=
-(<*v2*>^phi22).1 by FOMODEL0:28, E0 .= v2 by FINSEQ_1:58;
+phi1.1 = (phi2^q2).1 by C7,FOMODEL0:28 .=
+(<*v2*>^phi22).1 by E0,FOMODEL0:28 .= v2 by FINSEQ_1:41;
 hence p1=p2 & q1=q2 by Z0;
 end;
 suppose ex r2, s2 being m2-wff string of S st phi2=<*Nor*>^r2^s2; then
 consider r2, s2 being m2-wff string of S such that
 E0: phi2=<*Nor*>^r2^s2; r1 is (m1+0*k1)-wff & r2 is (m2+0*k2)-wff; then
-E1: r1 in Phin & r2 in Phin & s1 in Phin & s2 in Phin by C9, C10, DefWff1;
-<*Nor*>^((r1^s1)^q1) = <*Nor*>^(r1^s1)^q1 by FINSEQ_1:45 .=
-<*Nor*>^r2^s2^q2 by D0, E0, C7, FINSEQ_1:45.=
-<*Nor*>^(r2^s2)^q2 by FINSEQ_1:45 .= <*Nor*>^(r2^s2^q2) by FINSEQ_1:45; then
-r1^s1^q1 = r2^s2^q2 by FINSEQ_1:46 .= r2^(s2^q2) by FINSEQ_1:45; then
-r1^(s1^q1)=r2^(s2^q2) by FINSEQ_1:45; then
- r1=r2 & s1^q1=s2^q2 by B0, FOMODEL0:def 20, E1;
-hence p1=p2 & q1=q2 by D0, E0, B0, E1, FOMODEL0:def 20;
+E1: r1 in Phin & r2 in Phin & s1 in Phin & s2 in Phin by C9,C10,DefWff1;
+<*Nor*>^((r1^s1)^q1) = <*Nor*>^(r1^s1)^q1 by FINSEQ_1:32 .=
+<*Nor*>^r2^s2^q2 by D0,E0,C7,FINSEQ_1:32.=
+<*Nor*>^(r2^s2)^q2 by FINSEQ_1:32 .= <*Nor*>^(r2^s2^q2) by FINSEQ_1:32; then
+r1^s1^q1 = r2^s2^q2 by FINSEQ_1:33 .= r2^(s2^q2) by FINSEQ_1:32; then
+r1^(s1^q1)=r2^(s2^q2) by FINSEQ_1:32; then
+ r1=r2 & s1^q1=s2^q2 by B0,E1,FOMODEL0:def 20;
+hence p1=p2 & q1=q2 by D0,E0,B0,E1,FOMODEL0:def 20;
 end;
 end;
 end;
@@ -2310,19 +2310,19 @@ suppose D0: phi1 in Phi0; then phi1 is 0-wff by DefWff1; then
 reconsider phi11=phi1 as 0wff string of S;
 F.phi11 is relational Element of S; then phi1.1 is relational Element of S
 by FOMODEL0:6; then
-(phi2^q2).1 is relational Element of S by C0, FOMODEL0:28; then
+(phi2^q2).1 is relational Element of S by C0,FOMODEL0:28; then
 phi2.1 is relational Element of S by FOMODEL0:28; then F.phi2 is relational
 by FOMODEL0:6; then phi2 is 0wff; then phi2 is 0-wff;
-then phi2 in Phi0 & phi1 in Phi0 by D0, DefWff1;
-hence p1=p2 & q1=q2 by C0, FOMODEL0:def 20;
+then phi2 in Phi0 & phi1 in Phi0 by D0,DefWff1;
+hence p1=p2 & q1=q2 by C0,FOMODEL0:def 20;
 end;
 suppose D0: not phi1 in Phi0; then phi1 is non 0-wff by DefWff1; then
-reconsider phi11=phi1 as non 0wff (wff string of S);
-F.phi2 = phi2.1 by FOMODEL0:6 .= (phi1^q1).1 by C0, FOMODEL0:28 .=
+reconsider phi11=phi1 as non 0wff wff string of S;
+F.phi2 = phi2.1 by FOMODEL0:6 .= (phi1^q1).1 by C0,FOMODEL0:28 .=
 phi1.1 by FOMODEL0:28 .= F.phi11 by FOMODEL0:6; then
 phi2 is non 0-wff; then not phi2 in Phi0 by DefWff1;
-then phi1 in PhiN\Phi0 & phi2 in PhiN\Phi0 by C0, D0, XBOOLE_0:def 5;
-hence p1=p2 & q1=q2 by C0, B1, FOMODEL0:def 20; end;
+then phi1 in PhiN\Phi0 & phi2 in PhiN\Phi0 by C0,D0,XBOOLE_0:def 5;
+hence p1=p2 & q1=q2 by C0,B1,FOMODEL0:def 20; end;
 end;
 hence thesis by FOMODEL0:def 20;
 end;
@@ -2332,7 +2332,7 @@ end;
 
 registration
 let S, m;
-cluster S-formulasOfMaxDepth m -> S-prefix set;
+cluster S-formulasOfMaxDepth m -> S-prefix for set;
 coherence by Lm6;
 end;
 
@@ -2352,7 +2352,7 @@ end;
 
 registration
 let S;
-cluster -> wff Element of AllFormulasOf S;
+cluster -> wff for Element of AllFormulasOf S;
 coherence
 proof
 set FF=AllFormulasOf S; let x be Element of FF; x in FF; then
@@ -2370,16 +2370,16 @@ C0: p1 in FF & p2 in FF & p1^q1=p2^q2; then reconsider phi1=p1, phi2=p2 as
 wff string of S; consider m1 being Nat such that
 C1: phi1 is m1-wff by DefWff2; consider m2 being Nat such that
 C2: phi2 is m2-wff by DefWff2; set N=m1+m2, PhiN=S-formulasOfMaxDepth N;
-phi1 is (m1+0*m2)-wff & phi2 is (m2+0*m1)-wff by C1, C2; then reconsider
+phi1 is (m1+0*m2)-wff & phi2 is (m2+0*m1)-wff by C1,C2; then reconsider
 phi11=phi1, phi22=phi2 as N-wff string of S; phi11 in PhiN & phi22 in PhiN
-by DefWff1; hence p1=p2 & q1=q2 by C0, FOMODEL0:def 20;
+by DefWff1; hence p1=p2 & q1=q2 by C0,FOMODEL0:def 20;
 end;
 then FF is SS-prefix by FOMODEL0:def 20; hence thesis;
 end;
 
 registration
 let S;
-cluster AllFormulasOf S -> S-prefix set;
+cluster AllFormulasOf S -> S-prefix for set;
 coherence by Lm11;
 end;
 
@@ -2395,7 +2395,7 @@ set d=U-deltaInterpreter, f=U-concatenation, U1=1-tuples_on U,
 U2=2-tuples_on U, A=f.:(id U1), B=U2;
 B0: d"{1} = A/\(1+1)-tuples_on U by FOMODEL0:24 .=
 f.:(id U1)/\(f.:[:U1,U1:]) by FOMODEL0:22;
-reconsider O=f.:(id U1) as Subset of f.:[:U1, U1:] by RELAT_1:156;
+reconsider O=f.:(id U1) as Subset of f.:[:U1, U1:] by RELAT_1:123;
 O /\ f.:[:U1,U1:]=O null f.:[:U1, U1:] .= O; hence thesis by B0;
 end;
 
@@ -2404,7 +2404,7 @@ theorem Th13: U-deltaInterpreter"{1} =
 proof
 set RH={<*u,u*> where u is Element of U: not contradiction},
 LH=U-deltaInterpreter"{1}, X=(U-concatenation).:(id (1-tuples_on U));
-LH=X & X=RH by Lm12, FOMODEL0:38; hence thesis;
+LH=X & X=RH by Lm12,FOMODEL0:38; hence thesis;
 end;
 
 definition
@@ -2415,14 +2415,14 @@ end;
 
 registration
 let S;
-cluster ar(TheEqSymbOf S) + 2 -> zero number;
+cluster ar(TheEqSymbOf S) + 2 -> zero for number;
 coherence
 proof set E=TheEqSymbOf S; ar E=-2 by FOMODEL1:def 23; hence thesis; end;
-cluster abs(ar(TheEqSymbOf S)) - 2 -> zero number;
+cluster abs(ar(TheEqSymbOf S)) - 2 -> zero for number;
 coherence
 proof
 set E=TheEqSymbOf S; B0: abs(-2)=-(-2) by ABSVALUE:def 1 .= 2;
-abs(ar(E))=2 by B0, FOMODEL1:def 23; hence thesis;
+abs(ar(E))=2 by B0,FOMODEL1:def 23; hence thesis;
 end;
 end;
 
@@ -2441,12 +2441,12 @@ Z0: abs(ar E)-2=0;
 thus r<>E implies V=(I.(F.phi)).(UV*p)
 proof
 assume r <> E; then not r in {E} by TARSKI:def 1; then
-not r in dom (E .--> d) by FUNCOP_1:19;
-hence V=G.(UV*p) by FUNCT_4:12;
+not r in dom (E .--> d) by FUNCOP_1:13;
+hence V=G.(UV*p) by FUNCT_4:11;
 end;
 assume r=E; then
-B0: r in {E} & n=2 by TARSKI:def 1, Z0; then r in dom (E .--> d)
-by FUNCOP_1:19; then f = (E .--> d).r by FUNCT_4:14 .= d by B0, FUNCOP_1:13;
+B0: r in {E} & n=2 by Z0,TARSKI:def 1; then r in dom (E .--> d)
+by FUNCOP_1:13; then f = (E .--> d).r by FUNCT_4:13 .= d by B0,FUNCOP_1:7;
 hence V=d.(UV*p);
 end;
 
@@ -2460,33 +2460,33 @@ set E=TheEqSymbOf S, p=SubTerms phi, F=S-firstChar, s=F.phi, UV=I-TermEval,
 V=I-AtomicEval phi,d=U-deltaInterpreter,U2=2-tuples_on U,TT=AllTermsOf S,D=
 {<*u,u*> where u is Element of U: not contradiction}, n=abs(ar s);
 B2: U2={<*u1,u2*> where u1, u2 is Element of U: not contradiction}
-by FINSEQ_2:119;
+by FINSEQ_2:99;
 Z0: abs(ar E)-2=0; reconsider r=s as relational Element of S; set f=I===.r;
 reconsider EE=E as relational Element of S; assume
-Z1: s=E; then V=d.(UV*p) & n=2 by Th14, Z0; then
+Z1: s=E; then V=d.(UV*p) & n=2 by Th14,Z0; then
 V=1 iff UV*p in d"{1} by FOMODEL0:25; then
 B6: V=1 iff UV*p in D by Th13;
-reconsider pp=p as 2-element FinSequence of TT by FINSEQ_1:def 11, Z1, Z0;
+reconsider pp=p as 2-element FinSequence of TT by Z1,Z0,FINSEQ_1:def 11;
 reconsider q=UV*pp as FinSequence of U;
 reconsider qq=q as Element of U2 by FOMODEL0:16; qq in U2; then
 consider u1, u2 being Element of U such that
 B3: qq=<*u1,u2*> & not contradiction by B2;
-B4: qq.1=u1 & qq.2=u2 by B3, FINSEQ_1:61; 1<=2; then 1<=1 & 1 <= len q
-& 1<=2 & 2<=len q by CARD_1:def 13; then 1 in Seg (len q) & 2 in Seg
+B4: qq.1=u1 & qq.2=u2 by B3,FINSEQ_1:44; 1<=2; then 1<=1 & 1 <= len q
+& 1<=2 & 2<=len q by CARD_1:def 7; then 1 in Seg (len q) & 2 in Seg
 (len q); then 1 in dom q & 2 in dom q by FINSEQ_1:def 3; then
-B1: q.1=UV.(p.1) & q.2=UV.(p.2) by FUNCT_1:22;
+B1: q.1=UV.(p.1) & q.2=UV.(p.2) by FUNCT_1:12;
  q in D implies UV.(p.1)=UV.(p.2)
 proof
 assume q in D; then consider u being Element of U such that
-C0: <*u,u*>=q & not contradiction; q.1=u & q.2=u by C0, FINSEQ_1:61;
+C0: <*u,u*>=q & not contradiction; q.1=u & q.2=u by C0,FINSEQ_1:44;
 hence thesis by B1;
 end;
-hence thesis by B6, B1, B3, B4;
+hence thesis by B6,B1,B3,B4;
 end;
 
 registration
 let S,m;
-cluster m-ExFormulasOf S -> non empty set;
+cluster m-ExFormulasOf S -> non empty for set;
 coherence
 proof
 set IT=m-ExFormulasOf S, L=LettersOf S, Phim=S-formulasOfMaxDepth m;
@@ -2497,7 +2497,7 @@ end;
 
 registration
 let S,m;
-cluster m-NorFormulasOf S -> non empty set;
+cluster m-NorFormulasOf S -> non empty for set;
 coherence
 proof
 set IT=m-NorFormulasOf S, Phim=S-formulasOfMaxDepth m, N=TheNorSymbOf S;
@@ -2523,13 +2523,13 @@ end;
 
 registration
 let S; let w be exal string of S;
-cluster S-firstChar.w -> literal Element of S;
+cluster S-firstChar.w -> literal for Element of S;
 coherence by DefExal;
 end;
 
 registration
 let S,m;
-cluster -> non exal (Element of m-NorFormulasOf S);
+cluster -> non exal for (Element of m-NorFormulasOf S);
 coherence
 proof
 set IT=m-NorFormulasOf S, Phim=S-formulasOfMaxDepth m, F=S-firstChar,
@@ -2537,7 +2537,7 @@ N=TheNorSymbOf S, SS=AllSymbolsOf S; let x be Element of IT;
 x in IT; then consider phi1, phi2 being Element of Phim such that
 B0: x=<*N*>^phi1^phi2 & not contradiction; reconsider
 phi=x as string of S; F.phi=phi.1 by FOMODEL0:6 .=
-(<*N*>^(phi1^phi2)).1 by FINSEQ_1:45, B0 .=  N by FINSEQ_1:58;
+(<*N*>^(phi1^phi2)).1 by B0,FINSEQ_1:32 .=  N by FINSEQ_1:41;
 hence thesis;
 end;
 end;
@@ -2548,11 +2548,11 @@ set p=Depth phi, Phim=S-formulasOfMaxDepth m, E=m-ExFormulasOf S,
 PhiM=S-formulasOfMaxDepth (m+1), N=m-NorFormulasOf S;
 Z0: PhiM\Phim =
 (E\/N\/Phim)\Phim by Lm37 .= (E\/N)\Phim by XBOOLE_1:40;
-B0: m+0<m+1 by XREAL_1:10;
-assume p=m+1; then phi is (m+1)-wff & not phi is m-wff by B0, DefDepth; then
+B0: m+0<m+1 by XREAL_1:8;
+assume p=m+1; then phi is (m+1)-wff & not phi is m-wff by B0,DefDepth; then
 phi in PhiM & not phi in Phim by DefWff1; then
 Z1: phi in PhiM\Phim by XBOOLE_0:def 5;  assume phi is exal; then
-not phi in N; hence phi in E by Z1, XBOOLE_0:def 3, Z0;
+not phi in N; hence phi in E by Z1,Z0,XBOOLE_0:def 3;
 end;
 
 Lm44: Depth (<*l*>^phi1) > Depth phi1
@@ -2560,12 +2560,12 @@ proof
 set nor=TheNorSymbOf S, phi=<*l*>^phi1, m=Depth phi1, M=Depth phi,
 L=LettersOf S; consider n such that
 B1: M=n+1 by NAT_1:6; set Phin=S-formulasOfMaxDepth n;
-phi in n-ExFormulasOf S by Lm14, B1; then
+phi in n-ExFormulasOf S by Lm14,B1; then
 consider v being Element of L, psi being Element of Phin such that
 B0: phi=<*v*>^psi & not contradiction;
-v = (<*v*>^psi).1 by FINSEQ_1:58 .=  l by B0, FINSEQ_1:58; then
-psi=phi1 by B0, FINSEQ_1:46; then phi1 is n-wff by DefWff1; then
-m<=n by DefDepth; then m +0 < n+1 by XREAL_1:10; hence thesis by B1;
+v = (<*v*>^psi).1 by FINSEQ_1:41 .=  l by B0,FINSEQ_1:41; then
+psi=phi1 by B0,FINSEQ_1:33; then phi1 is n-wff by DefWff1; then
+m<=n by DefDepth; then m +0 < n+1 by XREAL_1:8; hence thesis by B1;
 end;
 
 definition
@@ -2587,7 +2587,7 @@ end;
 
 registration
 let S,m;
-cluster -> exal Element of m-ExFormulasOf S;
+cluster -> exal for Element of m-ExFormulasOf S;
 coherence
 proof
 set E=m-ExFormulasOf S, L=LettersOf S, Phim=S-formulasOfMaxDepth m;
@@ -2603,42 +2603,42 @@ set p=Depth phi, Phim=S-formulasOfMaxDepth m, E=m-ExFormulasOf S,
 PhiM=S-formulasOfMaxDepth (m+1), N=m-NorFormulasOf S;
 Z0: PhiM\Phim =
 (E\/N\/Phim)\Phim by Lm37 .= (E\/N)\Phim by XBOOLE_1:40;
-B0: m+0<m+1 by XREAL_1:10;
-assume p=m+1; then phi is (m+1)-wff & not phi is m-wff by B0, DefDepth; then
+B0: m+0<m+1 by XREAL_1:8;
+assume p=m+1; then phi is (m+1)-wff & not phi is m-wff by B0,DefDepth; then
 phi in PhiM & not phi in Phim by DefWff1; then
 Z1: phi in PhiM\Phim by XBOOLE_0:def 5;  assume not phi is exal; then
 not phi in E;
-hence phi in N by Z0, Z1, XBOOLE_0:def 3;
+hence phi in N by Z0,Z1,XBOOLE_0:def 3;
 end;
 
 registration
 let S;
-cluster non literal Element of S;
+cluster non literal for Element of S;
 existence proof take TheNorSymbOf S; thus thesis; end;
 end;
 
 registration
 let S, w; let s be non literal Element of S;
-cluster <*s*>^w -> non exal string of S;
+cluster <*s*>^w -> non exal for string of S;
 coherence
 proof
 set IT=<*s*>^w, F=S-firstChar, SS=AllSymbolsOf S;
-F.IT = IT.1 by FOMODEL0:6 .= s by FINSEQ_1:58; hence thesis;
+F.IT = IT.1 by FOMODEL0:6 .= s by FINSEQ_1:41; hence thesis;
 end;
 end;
 
 registration
 let S,w1,w2; let s be non literal Element of S;
-cluster <*s*>^w1^w2 -> non exal string of S;
+cluster <*s*>^w1^w2 -> non exal for string of S;
 coherence
 proof
-<*s*>^w1^w2 = <*s*>^(w1^w2) by FINSEQ_1:45; hence thesis;
+<*s*>^w1^w2 = <*s*>^(w1^w2) by FINSEQ_1:32; hence thesis;
 end;
 end;
 
 registration
 let S;
-cluster TheNorSymbOf S -> non literal Element of S;
+cluster TheNorSymbOf S -> non literal for Element of S;
 coherence;
 end;
 
@@ -2655,16 +2655,16 @@ set nor=TheNorSymbOf S, phi=<*nor*>^phi1^phi2, m1=Depth phi1, m2=Depth phi2,
 M=Depth phi, L=LettersOf S, FF=AllFormulasOf S, SS=AllSymbolsOf S;
 consider n such that
 B0: M=n+1 by NAT_1:6; set Phin=S-formulasOfMaxDepth n;
-phi in n-NorFormulasOf S by Lm13, B0; then
+phi in n-NorFormulasOf S by Lm13,B0; then
 consider phi11, phi22 being Element of Phin such that
 B1: phi=<*nor*>^phi11^phi22 & not contradiction;
 reconsider phi111=phi11, phi222=phi22 as n-wff string of S by DefWff1;
-<*nor*>^(phi1^phi2) = phi by FINSEQ_1:45 .=
-<*nor*>^(phi11^phi22) by B1, FINSEQ_1:45; then
-B2: phi1^phi2=phi111^phi222 by FINSEQ_1:46;
+<*nor*>^(phi1^phi2) = phi by FINSEQ_1:32 .=
+<*nor*>^(phi11^phi22) by B1,FINSEQ_1:32; then
+B2: phi1^phi2=phi111^phi222 by FINSEQ_1:33;
 phi111 in FF & phi1 in FF by Th16; then
-phi1 is n-wff & phi2 is n-wff by FOMODEL0:def 20, B2; then
-m1 <= n & m2 <= n by DefDepth; then m1+0<n+1 & m2+0 < n+1 by XREAL_1:10;
+phi1 is n-wff & phi2 is n-wff by B2,FOMODEL0:def 20; then
+m1 <= n & m2 <= n by DefDepth; then m1+0<n+1 & m2+0 < n+1 by XREAL_1:8;
 hence thesis by B0;
 end;
 
@@ -2681,9 +2681,9 @@ reconsider phi11=phi1, phi22=phi2 as m-wff string of S;
 Z0: phi=<*nor*>^phi11^phi22;
 now
 let n; assume phi is n-wff; then n>=M by DefDepth; hence n>=m+1
-by B1, XXREAL_0:2;
+by B1,XXREAL_0:2;
 end;
-hence M=m+1 by Z0, DefDepth;
+hence M=m+1 by Z0,DefDepth;
 end;
 
 notation let S,m,w;
@@ -2695,24 +2695,24 @@ registration let m, S;
 ::# The clustering above gives a nasty misterious error, as all the schemes
 ::# cluster xxx -> non (yyy-attribute) type;
 ::# this is the reason why introduced attribute -nonwff itself, indeed :)
-cluster non m-wff -> m-nonwff string of S;
+cluster non m-wff -> m-nonwff for string of S;
 coherence;
 end;
 
 registration let S, phi1, phi2;
 cluster <*TheNorSymbOf S*>^phi1^phi2 ->
-(max(Depth phi1, Depth phi2))-nonwff string of S;
+(max(Depth phi1, Depth phi2))-nonwff for string of S;
 coherence
 proof
 set nor=TheNorSymbOf S, phi=<*nor*>^phi1^phi2, m1=Depth phi1, m2=Depth phi2,
 m=Depth phi, M=max(m1,m2); m=M+1 by Lm40; then
-m > M+0 by XREAL_1:10; hence thesis by DefDepth;
+m > M+0 by XREAL_1:8; hence thesis by DefDepth;
 end;
 end;
 
 registration
 let S,phi,l;
-cluster <*l*>^phi -> (Depth phi)-nonwff string of S;
+cluster <*l*>^phi -> (Depth phi)-nonwff for string of S;
 coherence
 proof
 set m=Depth phi, psi=<*l*>^phi, M=Depth psi;
@@ -2722,7 +2722,7 @@ end;
 
 registration
 let S,phi,l;
-cluster <*l*>^phi -> (1+Depth phi)-wff string of S;
+cluster <*l*>^phi -> (1+Depth phi)-wff for string of S;
 coherence
 proof
 set m=Depth phi, psi=<*l*>^phi, M=Depth psi;
@@ -2738,12 +2738,12 @@ set O=OwnSymbolsOf S, II=U-InterpretersOf S; let I be Relation;
 assume I in II; then consider f being
 Element of Funcs(O,PFuncs(U*,U\/BOOLEAN)) such that
 B0: I=f & f is (S,U)-interpreter-like; reconsider ff=f as
-Function of O, PFuncs(U*,U\/BOOLEAN); thus dom I=O by B0, FUNCT_2:def 1;
+Function of O, PFuncs(U*,U\/BOOLEAN); thus dom I=O by B0,FUNCT_2:def 1;
 end;
 
 registration
 let S,U;
-cluster -> (OwnSymbolsOf S)-defined (Element of U-InterpretersOf S);
+cluster -> (OwnSymbolsOf S)-defined for (Element of U-InterpretersOf S);
 coherence
 proof
 set O=OwnSymbolsOf S, II=U-InterpretersOf S; let I be Element of II;
@@ -2753,7 +2753,7 @@ end;
 
 registration
 let S,U;
-cluster (OwnSymbolsOf S)-defined (Element of U-InterpretersOf S);
+cluster (OwnSymbolsOf S)-defined for (Element of U-InterpretersOf S);
 existence
 proof
 set O=OwnSymbolsOf S, II=U-InterpretersOf S;
@@ -2763,12 +2763,13 @@ end;
 
 registration
 let S,U;
-cluster -> total ((OwnSymbolsOf S)-defined (Element of U-InterpretersOf S));
+cluster -> total for
+(OwnSymbolsOf S)-defined (Element of U-InterpretersOf S);
 coherence
 proof
 set O=OwnSymbolsOf S, II=U-InterpretersOf S;
 let I be O-defined Element of II;
-dom I=O by Lm46; hence thesis by PARTFUN1:def 4;
+dom I=O by Lm46; hence thesis by PARTFUN1:def 2;
 end;
 end;
 
@@ -2781,9 +2782,9 @@ proof
 set II=U-InterpretersOf S, IT=(x,u) ReassignIn I, O=OwnSymbolsOf S,
 new={{}} --> u, g=x .--> new;
 reconsider xx=x as own Element of S; xx in O by FOMODEL1:def 19; then
-{x} c= O & dom g={x} by FUNCOP_1:19, ZFMISC_1:37; then
+{x} c= O & dom g={x} by FUNCOP_1:13,ZFMISC_1:31; then
 reconsider G=dom g as Subset of O;
-dom IT=dom I \/ G by FUNCT_4:def 1 .= O \/ G by PARTFUN1:def 4 .= O;
+dom IT=dom I \/ G by FUNCT_4:def 1 .= O \/ G by PARTFUN1:def 2 .= O;
 then reconsider ITT=IT as O-defined Function by RELAT_1:def 18;
 ITT|O = ITT; hence thesis by Th2;
 end;
@@ -2798,8 +2799,8 @@ f is Element of Funcs([:II, Phim:],BOOLEAN) by Lm32; then reconsider ff=f as
 Function of [:II, Phim:], BOOLEAN;
 B1: dom ff=[:II, Phim:] by FUNCT_2:def 1; assume w is m-wff; then
 w in Phim by DefWff1; then
-[I,w] in dom f & g=(curry f).I by B1, ZFMISC_1:106; then
-w in dom g & g.w=f.(I,w) by FUNCT_5:27; hence thesis;
+[I,w] in dom f & g=(curry f).I by B1,ZFMISC_1:87; then
+w in dom g & g.w=f.(I,w) by FUNCT_5:20; hence thesis;
 end;
 
 reserve I for Element of U-InterpretersOf S;
@@ -2816,17 +2817,17 @@ let f be PartFunc of [: II, SS*\{{}} :], BOOLEAN; assume
 dom f=[:II, Phim:] & phi1 is m-wff;
 set LH=f-ExFunctor(I,psi); reconsider psii=psi, phi11=phi1
 as FinSequence of SS by FOMODEL0:26;
-Z0: (<*l*>^phi11)/^1=phi11 by FINSEQ_6:49;
+Z0: (<*l*>^phi11)/^1=phi11 by FINSEQ_6:45;
 hereby
 assume LH=1; then consider
 u being Element of U, v being literal Element of S such that
 C0: (psi.1=v & f.((v,u) ReassignIn I, psi/^1)=TRUE) by DefExFunc; take u;
-thus f.((l,u) ReassignIn I, phi1)=TRUE by C0, Z0, FINSEQ_1:58;
+thus f.((l,u) ReassignIn I, phi1)=TRUE by C0,Z0,FINSEQ_1:41;
 end;
 given u such that
 B3: f.((l,u) ReassignIn I, phi1)=TRUE;
 ex u1, l1 st psii.1=l1 & f.((l1,u1) ReassignIn I, psii/^1)=TRUE
-by Z0, FINSEQ_1:58, B3; hence thesis by DefExFunc;
+by Z0,B3,FINSEQ_1:41; hence thesis by DefExFunc;
 end;
 
 Lm47: I-TruthEval (<*l*>^phi) = TRUE iff
@@ -2839,7 +2840,7 @@ reconsider phii=phi as m-wff string of S by DefDepth;
 reconsider psi=<*l*>^phi as M-wff string of S;
 deffunc E(Element of D)=ExIterator($1);
 deffunc N(Element of D)=NorIterator($1); set F=(S,U)-TruthEval;
-reconsider mm=m, MM=M as Element of NAT by ORDINAL1:def 13;
+reconsider mm=m, MM=M as Element of NAT by ORDINAL1:def 12;
 set Phim=S-formulasOfMaxDepth m, PhiM=S-formulasOfMaxDepth M;
 reconsider phiii=phii as Element of Phim by DefWff1;
 reconsider ll=l as Element of L by FOMODEL1:def 14;
@@ -2847,9 +2848,9 @@ set FM=(S,U)-TruthEval M, Fm=(S,U)-TruthEval m, mNF=m-NorFormulasOf S,
 mEF=m-ExFormulasOf S;
 psi=<*ll*>^phiii & not contradiction; then
 psi in mEF & not psi in mNF; then
-[I,psi] in [:II,mEF:] & not [I,psi] in [:II, mNF:] by ZFMISC_1:106; then
+[I,psi] in [:II,mEF:] & not [I,psi] in [:II, mNF:] by ZFMISC_1:87; then
 B5: [I,psi] in dom ExIterator Fm & not [I,psi] in dom NorIterator Fm
-by Lm33, Lm35;
+by Lm33,Lm35;
 B6: F.MM = ExIterator(F.mm)+*NorIterator(F.mm)+*F.mm by DefTruth1;
 Fm is Element of Funcs([:II, Phim:], BOOLEAN) by Lm32; then
 reconsider Fmm=Fm as Function of [:II, Phim:], BOOLEAN;
@@ -2857,31 +2858,31 @@ B7: not [I,psi] in dom (F.mm)
 proof
 Z0: not psi in Phim by DefWff1;
 dom (F.mm)=dom Fmm by DefTruth2 .= [:II,Phim:] by FUNCT_2:def 1;
-hence thesis by Z0, ZFMISC_1:106;
+hence thesis by Z0,ZFMISC_1:87;
 end;
 Z1: dom Fmm=[:II, Phim:] by FUNCT_2:def 1;
 Z2: I-TruthEval psi = ((I,M)-TruthEval).psi by DefTruth4 .=
 FM.[I,psi] by Lm41 .= (F.MM).[I,psi] by DefTruth2 .=
-(ExIterator(F.mm) +* NorIterator(F.mm)).[I,psi] by B6, B7, FUNCT_4:12 .=
+(ExIterator(F.mm) +* NorIterator(F.mm)).[I,psi] by B6,B7,FUNCT_4:11 .=
 (ExIterator(F.mm) +* NorIterator(Fm)).[I,psi] by DefTruth2 .=
-(ExIterator(F.mm)).[I,psi] by FUNCT_4:12, B5 .=
+(ExIterator(F.mm)).[I,psi] by B5,FUNCT_4:11 .=
 (E(Fm)).(I,psi) by DefTruth2 .=
-Fm-ExFunctor(I,psi) by B5, DefExIter;
+Fm-ExFunctor(I,psi) by B5,DefExIter;
 B12: (ex u st Fm.((l,u) ReassignIn I, phii)=TRUE) implies
 ex u st ((l,u) ReassignIn I)-TruthEval phii=TRUE
 proof
 given u such that C0: Fm.((l,u) ReassignIn I, phii)=TRUE; take u;
 set J=(l,u) ReassignIn I;
-(J,m)-TruthEval.phii=TRUE by C0, Lm41; hence thesis by DefTruth4;
+(J,m)-TruthEval.phii=TRUE by C0,Lm41; hence thesis by DefTruth4;
 end;
 (ex u st ((l,u) ReassignIn I)-TruthEval phii=TRUE) implies
 (ex u st Fm.((l,u) ReassignIn I, phii)=TRUE)
 proof
 given u such that C0: ((l,u) ReassignIn I)-TruthEval phii=TRUE; take u;
 set J=(l,u) ReassignIn I;
-(J,m)-TruthEval.phii=TRUE by C0, DefTruth4; hence thesis by Lm41;
+(J,m)-TruthEval.phii=TRUE by C0,DefTruth4; hence thesis by Lm41;
 end;
-hence thesis by Z2, Z1, Lm43, B12;
+hence thesis by Z2,Z1,Lm43,B12;
 end;
 
 Lm38: for f being PartFunc of
@@ -2895,18 +2896,18 @@ phi2=w2, psi=<*N*>^phi1^phi2, FF=AllFormulasOf S, Phim=S-formulasOfMaxDepth m;
 let f be PartFunc of [: II, SS*\{{}} :], BOOLEAN; assume
 B0: dom f=[:II, Phim:] & phi1 is m-wff; then
 phi1 in Phim by DefWff1; then
-B1: [I,phi1] in dom f by B0, ZFMISC_1:106;
+B1: [I,phi1] in dom f by B0,ZFMISC_1:87;
 set LH=f-NorFunctor(I,psi), RH1=f.(I,phi1), RH2=f.(I,phi2);
 hereby
 assume LH=1; then consider w, w1 such that
 C0: [I,w] in dom f & f.(I,w)=FALSE & f.(I,w1)=FALSE & psi=<*N*>^w^w1
 by DefNew;
-C1: w in Phim & phi1 in Phim by B0, C0, ZFMISC_1:106, DefWff1;
-<*N*>^(w^w1)=psi by C0, FINSEQ_1:45 .= <*N*>^(phi1^phi2) by FINSEQ_1:45;
-then w^w1=phi1^phi2 by FINSEQ_1:46;
-hence RH1=0 & RH2=0 by C0, FOMODEL0:def 20, C1;
+C1: w in Phim & phi1 in Phim by B0,C0,DefWff1,ZFMISC_1:87;
+<*N*>^(w^w1)=psi by C0,FINSEQ_1:32 .= <*N*>^(phi1^phi2) by FINSEQ_1:32;
+then w^w1=phi1^phi2 by FINSEQ_1:33;
+hence RH1=0 & RH2=0 by C0,C1,FOMODEL0:def 20;
 end;
-assume RH1=0 & RH2=0; hence LH=1 by B1, DefNew;
+assume RH1=0 & RH2=0; hence LH=1 by B1,DefNew;
 end;
 
 Lm45: I-TruthEval (<*TheNorSymbOf S*>^phi1^phi2) = TRUE iff
@@ -2921,7 +2922,7 @@ phi1 is (m1+0*d1)-wff & phi2 is (m2+0*d2)-wff by DefDepth; then
 phi1 is (m1+d1)-wff & phi2 is (m2+d2)-wff;
 then reconsider phi11=phi1, phi22=phi2 as m-wff string of S;
 reconsider phi=<*Nor*>^phi11^phi22 as (m+1)-wff
-string of S; reconsider mm=m, MM=M as Element of NAT by ORDINAL1:def 13;
+string of S; reconsider mm=m, MM=M as Element of NAT by ORDINAL1:def 12;
 set Phim=S-formulasOfMaxDepth m, PhiM=S-formulasOfMaxDepth M;
 set FM=(S,U)-TruthEval M, Fm=(S,U)-TruthEval m, mNF=m-NorFormulasOf S;
 B4: I-TruthEval phi1 = ((I,m)-TruthEval).phi11 by DefTruth4
@@ -2930,7 +2931,7 @@ Z1: I-TruthEval phi22 = ((I,m)-TruthEval).phi22 by DefTruth4
 .= Fm.(I,phi2) by Lm41;
 reconsider phi111=phi11, phi222=phi22 as Element of Phim by DefWff1;
 phi=<*Nor*>^phi111^phi222 & not contradiction; then phi in mNF; then
-[I,phi] in [:II, mNF:] by ZFMISC_1:106; then
+[I,phi] in [:II, mNF:] by ZFMISC_1:87; then
 B5: [I,phi] in dom NorIterator Fm by Lm33;
 B6: F.MM = ExIterator(F.mm)+*NorIterator(F.mm)+*F.mm by DefTruth1;
 Fm is Element of Funcs([:II, Phim:], BOOLEAN) by Lm32; then
@@ -2939,15 +2940,15 @@ B7: not [I,phi] in dom (F.mm)
 proof
 Z3: not phi in Phim by DefWff1;
 dom (F.mm)=dom Fmm by DefTruth2 .= [:II,Phim:] by FUNCT_2:def 1;
-hence thesis by Z3, ZFMISC_1:106;
+hence thesis by Z3,ZFMISC_1:87;
 end;
 Z4: dom Fmm=[:II, Phim:] by FUNCT_2:def 1;
 I-TruthEval phi = ((I,M)-TruthEval).phi by DefTruth4 .=
 FM.[I,phi] by Lm41 .= (F.MM).[I,phi] by DefTruth2 .=
-(ExIterator(F.mm) +* NorIterator(F.mm)).[I,phi] by B6, B7, FUNCT_4:12 .=
+(ExIterator(F.mm) +* NorIterator(F.mm)).[I,phi] by B6,B7,FUNCT_4:11 .=
 (ExIterator(F.mm) +* NorIterator(Fm)).[I,phi] by DefTruth2 .=
-(N(Fm)).(I,phi) by FUNCT_4:14, B5 .= Fm-NorFunctor(I,phi) by B5, DefNorIter;
-hence thesis by Z4, Lm38, Z1, B4;
+(N(Fm)).(I,phi) by B5,FUNCT_4:13 .= Fm-NorFunctor(I,phi) by B5,DefNorIter;
+hence thesis by Z4,Lm38,Z1,B4;
 end;
 
 definition
@@ -2958,19 +2959,19 @@ end;
 
 registration
 let S, m; let phi be m-wff string of S;
-cluster xnot phi -> (m+1)-wff string of S;
+cluster xnot phi -> (m+1)-wff for string of S;
 coherence;
 end;
 
 registration
 let S, phi;
-cluster xnot phi -> wff string of S;
+cluster xnot phi -> wff for string of S;
 coherence;
 end;
 
 registration
 let S;
-cluster TheEqSymbOf S -> non own Element of S;
+cluster TheEqSymbOf S -> non own for Element of S;
 coherence
 proof
 set E=TheEqSymbOf S, R=RelSymbolsOf S, O=OwnSymbolsOf S;
@@ -2993,7 +2994,7 @@ set N=TheNorSymbOf S, m1=Depth phi1, m2=Depth phi2,
 e=<*l*>^phi1, n=<*N*>^phi1^phi2; thus Depth n=1+max(m1,m2) by Lm40;
 now
 let m; assume C0: e is m-wff; assume m<(m1+1); then m<=m1 by NAT_1:13;
-then m-m <= m1-m by XREAL_1:11; then
+then m-m <= m1-m by XREAL_1:9; then
 reconsider k=m1-m as Nat; e is (m+0*k)-wff by C0; then e is (m+k)-wff;
 hence contradiction;
 end; hence
@@ -3001,35 +3002,37 @@ Depth e=m1+1 by DefDepth;
 end;
 
 theorem (Depth phi=m+1) implies ((phi is exal iff phi in m-ExFormulasOf S)
-& (phi is non exal iff phi in m-NorFormulasOf S)) by Lm14, Lm13; ::Th18
+& (phi is non exal iff phi in m-NorFormulasOf S)) by Lm14,Lm13; ::Th18
 
 theorem (I-TruthEval (<*l*>^phi) = TRUE iff       ::Th19
 (ex u st ((l,u) ReassignIn I)-TruthEval phi=1) ) &
 (I-TruthEval (<*TheNorSymbOf S*>^phi1^phi2) = TRUE iff
-(I-TruthEval phi1 = FALSE & I-TruthEval phi2 = FALSE)) by Lm47, Lm45;
+(I-TruthEval phi1 = FALSE & I-TruthEval phi2 = FALSE)) by Lm47,Lm45;
 
 reserve I for (S,U)-interpreter-like Function;
 
 theorem Th20:
 (I,u)-TermEval.(m+1)|(S-termsOfMaxDepth.m) =I-TermEval|(S-termsOfMaxDepth.m)
 proof
-reconsider mm=m, MM=m+1 as Element of NAT by ORDINAL1:def 13;
+reconsider mm=m, MM=m+1 as Element of NAT by ORDINAL1:def 12;
 set T=S-termsOfMaxDepth, TI=I-TermEval, TII=(I,u)-TermEval, TT=AllTermsOf S;
 TII.MM is Element of Funcs(TT,U); then
 reconsider IM=TII.MM as Function of TT,U;
 reconsider Tm=T.mm, TM=T.MM as Subset of TT by FOMODEL1:2;
 set LH=IM|Tm, RH=TI|Tm;
-B0: dom LH = Tm & dom RH = Tm by PARTFUN1:def 4;
+B0: dom LH = Tm & dom RH = Tm by PARTFUN1:def 2;
 now
 let x; assume
-C0: x in dom LH; then reconsider tt=x as Element of TT;
-reconsider ttt=x as Element of Tm by C0, PARTFUN1:def 4;
+C0: x in dom LH;
+then x in dom IM by RELAT_1:57;
+then reconsider tt=x as Element of TT;
+reconsider ttt=x as Element of Tm by C0,PARTFUN1:def 2;
 LH.ttt\+\IM.ttt={} & RH.ttt\+\TI.ttt={}; then
 C1: LH.x=IM.tt & RH.x=TI.x by FOMODEL0:29; then LH.x = I-TermEval tt
-by C0,B0,DefTermEval2 .= RH.x by C1, DefTermEval3;
+by C0,B0,DefTermEval2 .= RH.x by C1,DefTermEval3;
 hence LH.x=RH.x;
 end;
-hence thesis by B0, FUNCT_1:9;
+hence thesis by B0,FUNCT_1:2;
 end;
 
 theorem Th21:
@@ -3037,7 +3040,7 @@ I-TermEval.t = (I.(S-firstChar.t)).((I-TermEval)*(SubTerms t))
 proof
 set u=the Element of U, TI=I-TermEval, TII=(I,u)-TermEval, TT=AllTermsOf S,
 F=S-firstChar, s=F.t, m=Depth t, T=S-termsOfMaxDepth, ST=SubTerms t;
-reconsider mm=m, MM=m+1 as Element of NAT by ORDINAL1:def 13;
+reconsider mm=m, MM=m+1 as Element of NAT by ORDINAL1:def 12;
 B0: t is (m+0*1)-termal by FOMODEL1:def 40;
 reconsider tm=t as m-termal string of S by FOMODEL1:def 40;
 reconsider tM=t as (mm+1)-termal string of S by B0;
@@ -3048,11 +3051,11 @@ TII.MM is Element of Funcs(TT,U); then
 reconsider IM=TII.MM as Function of TT, U;
 SubTerms tM is Tm-valued; then
 B1: dom (TI|Tm)=Tm & dom (IM|Tm)=Tm & rng ST c= Tm
-by RELAT_1:def 19, PARTFUN1:def 4;
+by PARTFUN1:def 2,RELAT_1:def 19;
 TI.t = V by DefTermEval3 .= (TII.MM).ttt by DefTermEval2 .=
 (TII.(m+1+1)).tm by Lm1 .= (I.s).((TII.MM)*ST) by Th3 .=
-(I.s).(((TII.MM)|Tm)*ST) by RELAT_1:200, B1 .= (I.s).((TI|Tm)*ST) by Th20
-.= (I.s).(TI*ST) by B1, RELAT_1:200; hence thesis;
+(I.s).(((TII.MM)|Tm)*ST) by B1,RELAT_1:165 .= (I.s).((TI|Tm)*ST) by Th20
+.= (I.s).(TI*ST) by B1,RELAT_1:165; hence thesis;
 end;
 
 definition ::def37 1
@@ -3072,23 +3075,23 @@ assume phi is non 0wff; then consider m such that
 B0: d=m+1 by NAT_1:6;
 per cases;
 suppose phi is exal; then
-phi in m-ExFormulasOf S by B0, Lm14; then consider ll being
+phi in m-ExFormulasOf S by B0,Lm14; then consider ll being
 Element of L, phi0 being Element of S-formulasOfMaxDepth m such that
 C0: phi=<*ll*>^phi0;
-C1: ll=phi.1 by C0, FINSEQ_1:58 .= s by FOMODEL0:6;
+C1: ll=phi.1 by C0,FINSEQ_1:41 .= s by FOMODEL0:6;
 reconsider l=ll as literal Element of S;
 reconsider phi1=phi0 as m-wff string of S by DefWff1;
 take IT=[phi1,{}]; take phi1; take p={} null SS; thus p is SS-valued;
-thus IT=[phi1,p]; thus thesis by C0, C1;
+thus IT=[phi1,p]; thus thesis by C0,C1;
 end;
 suppose not phi is exal; then
-phi in m-NorFormulasOf S by B0, Lm13; then consider phi0, psi0
+phi in m-NorFormulasOf S by B0,Lm13; then consider phi0, psi0
 being Element of S-formulasOfMaxDepth m such that
 C0: phi=<*N*>^phi0^psi0 & not contradiction;
-C1: s = phi.1 by FOMODEL0:6 .= (<*N*>^(phi0^psi0)).1 by C0, FINSEQ_1:45 .= N
-by FINSEQ_1:58; reconsider phi1=phi0, psi1=psi0 as m-wff string of S
+C1: s = phi.1 by FOMODEL0:6 .= (<*N*>^(phi0^psi0)).1 by C0,FINSEQ_1:32 .= N
+by FINSEQ_1:41; reconsider phi1=phi0, psi1=psi0 as m-wff string of S
 by DefWff1; take IT=[phi1,psi0]; take phi1; take p=psi1;
-thus p is SS-valued; thus IT=[phi1,p]; thus phi=<*s*>^phi1^p by C0, C1;
+thus p is SS-valued; thus IT=[phi1,p]; thus phi=<*s*>^phi1^p by C0,C1;
 end;
 end;
 assume phi is 0wff; take IT=[phi,{}]; thus thesis;
@@ -3105,9 +3108,9 @@ consider phi1,p1 such that
 B1: p1 is SS-valued & IT1=[phi1,p1] & phi=<*s*>^phi1^p1 by C0;
 consider phi2,p2 such that
 B2: p2 is SS-valued & IT2=[phi2,p2] & phi=<*s*>^phi2^p2 by C0;
-reconsider q1=p1, q2=p2 as SS-valued FinSequence by B1, B2; <*s*>^(phi1^p1)
-= phi by B1, FINSEQ_1:45 .= <*s*>^(phi2^p2) by FINSEQ_1:45, B2; then
-phi1^q1=phi2^q2 & phi1 in FF & phi2 in FF by Th16, FINSEQ_1:46;
+reconsider q1=p1, q2=p2 as SS-valued FinSequence by B1,B2; <*s*>^(phi1^p1)
+= phi by B1,FINSEQ_1:32 .= <*s*>^(phi2^p2) by B2,FINSEQ_1:32; then
+phi1^q1=phi2^q2 & phi1 in FF & phi2 in FF by Th16,FINSEQ_1:33;
 then phi1=phi2 & q1=q2 by FOMODEL0:def 20; hence thesis by B1,B2;
 end;
 thus phi is 0wff & IT1=[phi,{}] & IT2=[phi,{}] implies IT1=IT2;
@@ -3136,18 +3139,18 @@ per cases;
 suppose phi is non 0wff; then consider phi1, p such that
 C0: p is SS-valued & IT=[phi1,p] & phi=<*F.phi*>^phi1^p by DefSub1;
 IT`2 \+\ p={} by C0; then IT`2=p & p is FinSequence of SS
-by C0, FOMODEL0:26,29; hence thesis;
+by C0,FOMODEL0:26,29; hence thesis by FINSEQ_1:def 11;
 end;
 suppose phi is 0wff; then IT=[phi,{}] by DefSub1; then IT`2 \+\ {}=
 {} null SS; then reconsider ITT=IT`2 as SS-valued FinSequence;
-ITT is FinSequence of SS by FOMODEL0:26; hence thesis;
+ITT is FinSequence of SS by FOMODEL0:26; hence thesis by FINSEQ_1:def 11;
 end;
 end;
 end;
 
 registration
 let S,m;
-cluster (S-formulasOfMaxDepth m) \ (AllFormulasOf S) -> empty set;
+cluster (S-formulasOfMaxDepth m) \ (AllFormulasOf S) -> empty for set;
 coherence
 proof
 set Fm=S-formulasOfMaxDepth m, FF=AllFormulasOf S;
@@ -3160,14 +3163,14 @@ end;
 
 registration
 let S;
-cluster (AtomicFormulasOf S) \ (AllFormulasOf S) -> empty set;
+cluster (AtomicFormulasOf S) \ (AllFormulasOf S) -> empty for set;
 coherence
 proof (S-formulasOfMaxDepth 0)\(AllFormulasOf S)={};hence thesis by Lm3;end;
 end;
 
 theorem Depth (<*l*>^phi1) > Depth phi1 &
 Depth (<*TheNorSymbOf S*>^phi1^phi2) > Depth phi1 &
-Depth (<*TheNorSymbOf S*>^phi1^phi2) > Depth phi2 by Lm44, Lm39;
+Depth (<*TheNorSymbOf S*>^phi1^phi2) > Depth phi2 by Lm44,Lm39;
 
 theorem Th23: (not phi is 0wff) implies
 (phi=<*x*>^phi2^p2 iff (x=S-firstChar.phi & phi2=head phi & p2=tail phi))
@@ -3180,21 +3183,21 @@ B4: Phi`1=phi1 & Phi`2=p by FOMODEL0:29;
 hereby
 assume
 B1: phi=<*x*>^phi2^p2; then
-Z0: phi.1 = (<*x*>^(phi2^p2)).1 by FINSEQ_1:45
-.= x by FINSEQ_1:58; hence x=s by FOMODEL0:6;
+Z0: phi.1 = (<*x*>^(phi2^p2)).1 by FINSEQ_1:32
+.= x by FINSEQ_1:41; hence x=s by FOMODEL0:6;
 rng p2 c= rng phi & rng phi c= SS
-by B1, FINSEQ_1:43, RELAT_1:def 19; then
+by B1,FINSEQ_1:30,RELAT_1:def 19; then
 rng p2 c= SS by XBOOLE_1:1; then
 p2 is SS-valued & [phi2,p2]=[phi2,p2] & phi=<*s*>^phi2^p2
-by RELAT_1:def 19, Z0, FOMODEL0:6, B1; then Phi=[phi2,p2] by B3, DefSub1;
+by Z0,B1,FOMODEL0:6,RELAT_1:def 19; then Phi=[phi2,p2] by B3,DefSub1;
 hence phi2=head phi & p2=tail phi by MCART_1:7;
 end;
-assume x=s & phi2=head phi & p2=tail phi; hence thesis by B4, B0;
+assume x=s & phi2=head phi & p2=tail phi; hence thesis by B4,B0;
 end;
 
 registration
 let S, m1;
-cluster non exal (non 0wff m1-wff string of S);
+cluster non exal for non 0wff m1-wff string of S;
 existence
 proof
 set phi=the 0-wff string of S, N=TheNorSymbOf S, phi1=<*N*>^phi^phi;
@@ -3207,14 +3210,14 @@ end;
 
 registration
 let S; let phi be exal wff string of S;
-cluster tail phi -> empty set;
+cluster tail phi -> empty for set;
 coherence
 proof
 set d=Depth phi, L=LettersOf S, h=head phi, t=tail phi, F=S-firstChar,
 FF=AllFormulasOf S, SS=AllSymbolsOf S, s=F.phi;
 consider m such that
 B0: d=m+1 by NAT_1:6; set Phim=S-formulasOfMaxDepth m;
-phi in m-ExFormulasOf S by B0, Lm14; then consider ll being
+phi in m-ExFormulasOf S by B0,Lm14; then consider ll being
 Element of L, phim being Element of Phim such that
 B1: phi=<*ll*>^phim & not contradiction;
 reconsider phimm=phim as m-wff string of S by DefWff1;
@@ -3235,19 +3238,19 @@ phi=<*N*>^phi11^phi22 by B0; hence phi22=tail phi by Th23; thus thesis;
 end;
 
 definition
-let S; let phi be non exal (non 0wff wff string of S);
+let S; let phi be non exal non 0wff wff string of S;
 redefine func tail phi -> wff string of S;
 coherence
 proof
 consider m such that
 B0: Depth phi=m+1 by NAT_1:6; consider phi2 being m-wff string of S such that
-B1: tail phi=phi2 by B0, Lm49; thus thesis by B1;
+B1: tail phi=phi2 by B0,Lm49; thus thesis by B1;
 end;
 end;
 
 registration
-let S; let phi be non exal (non 0wff wff string of S);
-cluster tail phi -> wff (string of S);
+let S; let phi be non exal non 0wff wff string of S;
+cluster tail phi -> wff for (string of S);
 coherence;
 end;
 
@@ -3257,20 +3260,20 @@ identify head phi0 with phi0 null;
 compatibility
 proof
 [phi0,{}]`1 \+\ phi0={}; then phi0=[phi0,{}]`1 & SubWffsOf phi0=[phi0,{}]
-by DefSub1, FOMODEL0:29; hence thesis;
+by DefSub1,FOMODEL0:29; hence thesis;
 end;
 end;
 
 registration
 let S; let phi be non 0wff non exal wff string of S;
-cluster S-firstChar.phi \+\ TheNorSymbOf S -> empty set;
+cluster S-firstChar.phi \+\ TheNorSymbOf S -> empty for set;
 coherence
 proof
 set F=S-firstChar, N=TheNorSymbOf S, s=F.phi; consider m such that
-B0: Depth phi=m+1 by NAT_1:6; phi in m-NorFormulasOf S by B0, Lm13;
+B0: Depth phi=m+1 by NAT_1:6; phi in m-NorFormulasOf S by B0,Lm13;
 then consider phi11,phi22 being Element of S-formulasOfMaxDepth m such that
 B1: phi=<*N*>^phi11^phi22; F.phi = phi.1 by FOMODEL0:6 .=
-(<*N*>^(phi11^phi22)).1 by B1, FINSEQ_1:45 .= N by FINSEQ_1:58; hence thesis;
+(<*N*>^(phi11^phi22)).1 by B1,FINSEQ_1:32 .= N by FINSEQ_1:41; hence thesis;
 end;
 end;
 
@@ -3285,8 +3288,8 @@ reconsider h=head phii as dh-wff string of S by DefDepth;
 reconsider t=tail phii as dt-wff string of S by DefDepth;
 B0: d <= m+1 by DefDepth; F.phii \+\ N={}; then s=N by FOMODEL0:29; then
 phii=<*N*>^h^t by Th23; then
-M+1 <= m+1 by B0, Th17; then M+1-1 <= m+1-1 by XREAL_1:8; then
-M+(-dh)<=m+(-dh) & M+(-dt)<=m+(-dt) by XREAL_1:8; then
+M+1 <= m+1 by B0,Th17; then M+1-1 <= m+1-1 by XREAL_1:6; then
+M+(-dh)<=m+(-dh) & M+(-dt)<=m+(-dt) by XREAL_1:6; then
 max(dh,dt)-dh<=m-dh & max(dh,dt)-dt<=m-dt; then 0<=m-dh & 0<=m-dt; then
 reconsider nh=m-dh, nt=m-dt as Nat;
 h is (dh+0*nh)-wff & t is (dt+0*nt)-wff; then
@@ -3295,7 +3298,7 @@ end;
 
 registration
 let m,S; let phi be (m+1)-wff string of S;
-cluster head phi -> m-wff string of S;
+cluster head phi -> m-wff for string of S;
 coherence
 proof
 set d=Depth phi, F=S-firstChar, s=F.phi, N=TheNorSymbOf S,
@@ -3314,8 +3317,8 @@ end;
 suppose not phi is 0wff & phi is exal;
 then reconsider phii=phi as non 0wff exal (m+1)-wff string of S;
 set t=tail phii; phii=<*s*>^h^t by Th23 .= <*s*>^h; then
-dh+1<=m+1 by B0, Th17; then dh<=m by XREAL_1:8; then
-dh+(-dh)<=m+(-dh) by XREAL_1:8; then reconsider n=m-dh as Nat;
+dh+1<=m+1 by B0,Th17; then dh<=m by XREAL_1:6; then
+dh+(-dh)<=m+(-dh) by XREAL_1:6; then reconsider n=m-dh as Nat;
 h is (dh+0*n)-wff; then h is (dh+n)-wff; hence thesis;
 end;
 end;
@@ -3323,7 +3326,7 @@ end;
 
 registration
 let m, S; let phi be (m+1)-wff non exal non 0wff string of S;
-cluster tail phi -> m-wff string of S;
+cluster tail phi -> m-wff for string of S;
 coherence by Lm50;
 end;
 
@@ -3350,9 +3353,9 @@ set F=curry f;
 reconsider F=curry f as Function of II, PFuncs(SS*\{{}},BOOLEAN) by Lm28;
 dom F=II & dom g=Phi0 by FUNCT_2:def 1; then
 I in dom F & g=F.I & phi000 in dom g; then
-B0: g.phi0=f.(I,phi0) & [I,phi0] in dom f by FUNCT_5:38;
+B0: g.phi0=f.(I,phi0) & [I,phi0] in dom f by FUNCT_5:31;
 LH=g.phi0 by DefTruth4 .=
-((S,U)-TruthEval.z).[I,phi0] by B0, DefTruth2
+((S,U)-TruthEval.z).[I,phi0] by B0,DefTruth2
 .= (S-TruthEval U).(I,phi00) by DefTruth1 .= RH by DefTruth6; hence thesis;
 end;
 
@@ -3366,7 +3369,7 @@ end;
 
 registration
 let S;
-cluster non literal (ofAtomicFormula Element of S);
+cluster non literal for ofAtomicFormula Element of S;
 existence proof take TheEqSymbOf S; thus thesis; end;
 end;
 
@@ -3386,45 +3389,45 @@ B0: P[0]
 proof
 set d=X*/\(T.0); T.0 c= TT & d c= T.0 by FOMODEL1:2; then reconsider
 dd=d as Subset of TT by XBOOLE_1:1;
-C0: dom (E1|dd)=d & dom (E2|dd)=d by PARTFUN1:def 4;
+C0: dom (E1|dd)=d & dom (E2|dd)=d by PARTFUN1:def 2;
 now
 let x; assume
 Z0: x in dom (E1|d);
 reconsider dd as non empty Subset of TT by Z0;
-reconsider xd=x as Element of dd by Z0, PARTFUN1:def 4;
-reconsider t=x as 0-termal string of S by Z0, C0, FOMODEL1:def 33;
-set o=F.t, ST=SubTerms t; reconsider XX=X as non empty set by Z0, C0;
-reconsider tx=x as non empty Element of XX* by Z0, C0;
-{tx.1} \ XX = {}; then tx.1 in XX by ZFMISC_1:68; then reconsider oo=o as
+reconsider xd=x as Element of dd by Z0,PARTFUN1:def 2;
+reconsider t=x as 0-termal string of S by Z0,C0,FOMODEL1:def 33;
+set o=F.t, ST=SubTerms t; reconsider XX=X as non empty set by Z0,C0;
+reconsider tx=x as non empty Element of XX* by Z0,C0;
+{tx.1} \ XX = {}; then tx.1 in XX by ZFMISC_1:60; then reconsider oo=o as
 Element of XX by FOMODEL0:6; I11.oo \+\ I1.oo={} & I22.oo \+\ I2.oo={} &
 E1|dd.xd\+\E1.xd={} & E2|dd.xd\+\E2.xd={}; then
 D1: I11.o=I1.o & I22.o=I2.o & E1|d.x=E1.x & E2|d.x=E2.x by FOMODEL0:29;
 hence E1|d.x = I1.o.(E1*ST) by Th21
-.= I2.o.(E2*ST) by Z3, D1 .= E2|d.x by D1, Th21;
+.= I2.o.(E2*ST) by Z3,D1 .= E2|d.x by D1,Th21;
 end;
-hence thesis by C0, FUNCT_1:9;
+hence thesis by C0,FUNCT_1:2;
 end;
 B1: for n st P[n] holds P[n+1]
 proof
 let n; set d=X*/\(T.n), D=X*/\(T.(n+1)); reconsider nn=n, NN=n+1 as
-Element of NAT by ORDINAL1:def 13; assume
+Element of NAT by ORDINAL1:def 12; assume
 Z9: P[n];
 D c= T.NN & d c= T.nn & T.nn c= TT & T.NN c= TT by FOMODEL1:2; then
 reconsider DD=D, dd=d as Subset of TT by XBOOLE_1:1;
 C1: dom (E1|dd) = d & dom(E2|dd)=d & dom (E1|DD)=D & dom (E2|DD)=D
-by PARTFUN1:def 4;
+by PARTFUN1:def 2;
 now
 let x; assume
 Z4: x in dom (E1|D);
-reconsider t=x as (nn+1)-termal string of S by Z4, C1, FOMODEL1:def 33;
-reconsider XX=X as non empty set by Z4, C1;
+reconsider t=x as (nn+1)-termal string of S by Z4,C1,FOMODEL1:def 33;
+reconsider XX=X as non empty set by Z4,C1;
 reconsider DD as non empty Subset of TT
-by Z4; reconsider tx=x as non empty Element of XX* by Z4, C1;
-reconsider dx=x as Element of DD by Z4, PARTFUN1:def 4;
+by Z4; reconsider tx=x as non empty Element of XX* by Z4,C1;
+reconsider dx=x as Element of DD by Z4,PARTFUN1:def 2;
 set o=F.t, m=abs ar o;
-{tx.1} \ XX = {}; then tx.1 in XX by ZFMISC_1:68; then reconsider oo=o as
+{tx.1} \ XX = {}; then tx.1 in XX by ZFMISC_1:60; then reconsider oo=o as
 Element of XX by FOMODEL0:6;
-reconsider r=rng t as Subset of X by Z4, C1, RELAT_1:def 19; r* c= X*; then
+reconsider r=rng t as Subset of X by Z4,C1,RELAT_1:def 19; r* c= X*; then
 reconsider newords=(rng t)* as non empty Subset of X*;
 reconsider ST=SubTerms t as newords-valued m-element FinSequence;
 I11.oo \+\ I1.oo = {} & I22.oo \+\ I2.oo={}; then
@@ -3432,31 +3435,31 @@ Z10: I11.oo=I1.oo & I22.oo=I2.oo by FOMODEL0:29;
 E1|DD.dx \+\ E1.dx ={} & E2|DD.dx \+\ E2.dx={}; then
 D3: E1|D.x= E1.x & E2|D.x=E2.x by FOMODEL0:29;
 rng ST c= T.nn & rng ST c= X* by RELAT_1:def 19; then
-D2: (E1|d)*ST = E1*ST & (E2|d)*ST=E2*ST by XBOOLE_1:19, C1, RELAT_1:200;
+D2: (E1|d)*ST = E1*ST & (E2|d)*ST=E2*ST by C1,RELAT_1:165,XBOOLE_1:19;
 then I1.o.((E1|d)*ST) = E1.t by Th21;
-hence E1|D.x=E2|D.x by D3, Z9, Z3, Z10, D2, Th21;
+hence E1|D.x=E2|D.x by D3,Z9,Z3,Z10,D2,Th21;
 end;
-hence thesis by C1, FUNCT_1:9;
+hence thesis by C1,FUNCT_1:2;
 end;
 B3: for m holds P[m] from NAT_1:sch 2(B0, B1);
 set f1=E1|(X*), f2=E2|(X*);
-B4: dom f1=X*/\TT & dom f2=X*/\TT by RELAT_1:90, B2;
+B4: dom f1=X*/\TT & dom f2=X*/\TT by B2,RELAT_1:61;
 now
 let x; assume
 Z5: x in dom f1;
-reconsider D=X*/\TT as non empty Subset of TT by Z5, RELAT_1:90, B2;
-reconsider t=x as termal string of S by Z5, B4;
+reconsider D=X*/\TT as non empty Subset of TT by Z5,B2,RELAT_1:61;
+reconsider t=x as termal string of S by Z5,B4;
 set m=Depth t; reconsider t as m-termal string of S by FOMODEL1:def 40;
-Z7: t in X* & t in T.m by Z5, B4, FOMODEL1:def 33;
-reconsider Dm=X*/\(T.m) as non empty set by Z7, XBOOLE_0:def 4;
-reconsider tt=t as Element of Dm by Z7, XBOOLE_0:def 4;
-reconsider xx=x as Element of X* by B4, Z5; set g1=E1|Dm, g2=E2|Dm;
+Z7: t in X* & t in T.m by Z5,B4,FOMODEL1:def 33;
+reconsider Dm=X*/\(T.m) as non empty set by Z7,XBOOLE_0:def 4;
+reconsider tt=t as Element of Dm by Z7,XBOOLE_0:def 4;
+reconsider xx=x as Element of X* by B4,Z5; set g1=E1|Dm, g2=E2|Dm;
 f1.xx \+\ E1.xx={} &
 f2.xx\+\E2.xx={} & g1.tt\+\E1.tt={} & g2.tt\+\E2.tt={};
 then f1.x=E1.x & f2.x=E2.x & g1.x=E1.x & g2.x=E2.x by FOMODEL0:29;
 hence f1.x = f2.x by B3;
 end;
-hence thesis by B4, FUNCT_1:9;
+hence thesis by B4,FUNCT_1:2;
 end;
 
 theorem ::Th25
@@ -3465,15 +3468,15 @@ proof
 set tt=p, II=U-InterpretersOf S, I2=(l2,u) ReassignIn I, f2=l2.-->({}.-->u);
 tt null {} is ({}\/rng tt)-valued FinSequence; then
 tt is FinSequence of (rng tt) by FOMODEL0:26; then
-reconsider ttt=tt as Element of (rng tt)*;
+reconsider ttt=tt as Element of (rng tt)* by FINSEQ_1:def 11;
 I2-TermEval|((rng tt)*).ttt \+\ I2-TermEval.ttt={} &
 I-TermEval|((rng tt)*).ttt \+\ I-TermEval.ttt={}; then
 B0: I2-TermEval|((rng tt)*).tt=I2-TermEval.tt &
 I-TermEval|((rng tt)*).tt=I-TermEval.tt by FOMODEL0:29;
 assume not l2 in rng tt; then
-{l2} misses rng tt by ZFMISC_1:56; then dom f2 misses rng tt
-by FUNCOP_1:19; then I2|(rng tt)=I|(rng tt) by FUNCT_4:76;
-hence thesis by B0, Lm52;
+{l2} misses rng tt by ZFMISC_1:50; then dom f2 misses rng tt
+by FUNCOP_1:13; then I2|(rng tt)=I|(rng tt) by FUNCT_4:72;
+hence thesis by B0,Lm52;
 end;
 
 definition ::def40 2
@@ -3496,7 +3499,7 @@ antonym X is s-free for X is s-containing;
 end;
 
 registration let X be finite set; let S;
-cluster X-absent (literal Element of S);
+cluster X-absent for literal Element of S;
 existence
 proof
 set L=LettersOf S, SS=AllSymbolsOf S; reconsider Y=(SS*\{{}})/\X as
@@ -3520,11 +3523,11 @@ let w; assume w is 0-termal; then reconsider t0=w as 0-termal string of S;
 reconsider l=F.t0 as literal Element of S;
 reconsider ll=l as Element of L by FOMODEL1:def 14; t0 =
 <*l*>^(C.(SubTerms t0)) by FOMODEL1:def 37 .= <*l*>^{} .= <*l*>;
-then rng t0 /\ L={ll} null L by FINSEQ_1:55; hence thesis;
+then rng t0 /\ L={ll} null L by FINSEQ_1:38; hence thesis;
 end;
 B1: for k st P[k] holds P[k+1]
 proof
-let k; reconsider kk=k as Element of NAT by ORDINAL1:def 13; assume
+let k; reconsider kk=k as Element of NAT by ORDINAL1:def 12; assume
 C5: P[k]; let w; assume
 w is (k+1)-termal; then reconsider t=w as (k+1)-termal string of S;
 per cases;
@@ -3532,28 +3535,28 @@ suppose not t is 0-termal;
 then F.t is operational by FOMODEL1:16;
 then reconsider n=abs ar (F.t) as non zero Nat; consider m such that
 C1: n=m+1 by NAT_1:6; reconsider mm=m,nn=n as
-Element of NAT by ORDINAL1:def 13;
+Element of NAT by ORDINAL1:def 12;
 reconsider tt=t as (kk+1)-termal string of S;
 reconsider ST=SubTerms t as
 (m+1)-element Element of TT* by C1; ST is (m+1+0)-element; then
 {ST.(m+1)} \ TT = {}; then reconsider q=ST.(m+1) as Element of TTT by
-ZFMISC_1:68; q is Element of SS* by TARSKI:def 3; then
+ZFMISC_1:60; q is Element of SS* by TARSKI:def 3; then
 reconsider qq=q as SS-valued FinSequence;
 reconsider p=ST|(Seg m) as TTT-valued FinSequence;
 ST|(Seg m)^<*ST.(m+1)*> \+\ ST={}; then
 C2: ST=p^<*qq*> by FOMODEL0:29;
-C3: C.ST=(C.p)^qq by C2, FOMODEL0:33;
-t = <*F.t*>^((C.p)^qq) by FOMODEL1:def 37, C3; then
-rng t = rng <*F.t*> \/ rng (C.p^qq) by FINSEQ_1:44 .=
-{F.t} \/ rng (C.p^qq) by FINSEQ_1:55 .=
-{F.t} \/ (rng (C.p) \/ rng qq) by FINSEQ_1:44 .=
+C3: C.ST=(C.p)^qq by C2,FOMODEL0:33;
+t = <*F.t*>^((C.p)^qq) by C3,FOMODEL1:def 37; then
+rng t = rng <*F.t*> \/ rng (C.p^qq) by FINSEQ_1:31 .=
+{F.t} \/ rng (C.p^qq) by FINSEQ_1:38 .=
+{F.t} \/ (rng (C.p) \/ rng qq) by FINSEQ_1:31 .=
 rng qq \/ ({F.t} \/ rng (C.p))
 by XBOOLE_1:4; then rng qq null ({F.t}\/rng(C.p)) c= rng t; then
 C6: rng q /\ L c= rng t /\ L by XBOOLE_1:26;
 SubTerms tt is (T.kk)-valued; then reconsider STT=ST as (T.kk)-valued
 (m+1+0)-element FinSequence;
 {STT.(m+1)} \ (T.kk) = {}; then reconsider qqq=q as Element of T.kk
-by ZFMISC_1:68; reconsider tq=qqq as k-termal string of S
+by ZFMISC_1:60; reconsider tq=qqq as k-termal string of S
 by FOMODEL1:def 33; (rng tq) /\ L <> {} by C5; hence thesis by C6;
 end;
 suppose t is 0-termal; hence thesis by B0;
@@ -3566,7 +3569,7 @@ end;
 
 registration
 let S,t;
-cluster rng t /\ LettersOf S -> non empty set;
+cluster rng t /\ LettersOf S -> non empty for set;
 coherence by Lm53;
 end;
 
@@ -3584,14 +3587,14 @@ reconsider n=abs ar r as non zero Nat; consider m such that
 C0: n=m+1 by NAT_1:6;
 reconsider ST=SubTerms phi0 as (m+1+0)-element Element of TT* by C0;
 reconsider p=ST|(Seg m) as SS*-valued FinSequence;
-{ST.(m+1)}\TT={}; then reconsider q=ST.(m+1) as Element of TT by ZFMISC_1:68;
+{ST.(m+1)}\TT={}; then reconsider q=ST.(m+1) as Element of TT by ZFMISC_1:60;
 reconsider t=q as termal string of S;
 ST|(Seg m) ^ <*q*> \+\ ST = {}; then
 C1: ST=ST|(Seg m) ^ <*q*> by FOMODEL0:29;
 reconsider qq=q as SS-valued FinSequence;
 phi0=<*r*>^(C.ST) by FOMODEL1:def 38 .=
-<*r*>^(C.p^qq) by C1, FOMODEL0:33; then rng phi0=rng <*r*> \/ rng (C.p^q)
-by FINSEQ_1:44 .= rng <*r*> \/ (rng (C.p) \/ rng q) by FINSEQ_1:44 .=
+<*r*>^(C.p^qq) by C1,FOMODEL0:33; then rng phi0=rng <*r*> \/ rng (C.p^q)
+by FINSEQ_1:31 .= rng <*r*> \/ (rng (C.p) \/ rng q) by FINSEQ_1:31 .=
 rng q \/ (rng <*r*> \/ rng (C.p)) by XBOOLE_1:4; then
 rng t null (rng <*r*> \/ rng (C.p)) c= rng phi0; then
 rng t /\ L c= rng phi0 /\ L by XBOOLE_1:26; hence thesis;
@@ -3605,12 +3608,12 @@ per cases;
 suppose not phi is 0wff; then reconsider phii=phi as non 0wff
 wff string of S; reconsider phi1=head phii as k-wff string of S;
 phii=<*F.phii*>^phi1^(tail phi) by Th23; then rng phii=
-rng (<*F.phii*>^phi1) \/ rng (tail phi) by FINSEQ_1:44 .=
-rng phi1 \/ rng <*F.phii*> \/ rng (tail phi) by FINSEQ_1:44 .=
+rng (<*F.phii*>^phi1) \/ rng (tail phi) by FINSEQ_1:31 .=
+rng phi1 \/ rng <*F.phii*> \/ rng (tail phi) by FINSEQ_1:31 .=
 rng phi1 \/ (rng <*F.phii*> \/ rng (tail phi)) by XBOOLE_1:4; then
 rng phi1 null (rng <*F.phii*> \/ rng (tail phi)) c= rng phii; then
 rng phi1 /\ L c= rng phii /\ L by XBOOLE_1:26;
-hence thesis by C0, XBOOLE_1:3;
+hence thesis by C0,XBOOLE_1:3;
 end;
 suppose phi is 0wff; hence thesis by B0;
 end;
@@ -3622,13 +3625,13 @@ end;
 
 registration
 let S, phi;
-cluster rng phi /\ LettersOf S -> non empty set;
+cluster rng phi /\ LettersOf S -> non empty for set;
 coherence by Lm54;
 end;
 
 registration
 let B,S; let A be Subset of B;
-cluster A-occurring -> B-occurring (Element of S);
+cluster A-occurring -> B-occurring for (Element of S);
 coherence
 proof
 set SS=AllSymbolsOf S, DA=A/\(SS*\{{}}), DB=B/\(SS*\{{}});
@@ -3636,19 +3639,19 @@ reconsider Y=DB as functional set; reconsider X=DA as Subset of Y by
 XBOOLE_1:26;
 B0: SymbolsOf X c= SymbolsOf Y by FOMODEL0:46; let s be Element of S;
 assume s is A-occurring; then s in SymbolsOf X by DefOccur;
-hence s is B-occurring by DefOccur, B0;
+hence s is B-occurring by DefOccur,B0;
 end;
 end;
 
 registration
 let A,B,S;
-cluster (A null B)-absent -> (A/\B)-absent (Element of S);
+cluster (A null B)-absent -> (A/\B)-absent for (Element of S);
 coherence;
 end;
 
 registration
 let F be finite set; let A,S;
-cluster A-absent -> (A\/F)-absent (F-absent Element of S);
+cluster A-absent -> (A\/F)-absent for F-absent Element of S;
 coherence
 proof
 set SS=AllSymbolsOf S, strings=SS*\{{}};
@@ -3658,13 +3661,13 @@ B0: D=strings/\(A\/F) by XBOOLE_1:23;
 let s be F-absent Element of S; assume s is A-absent; then
 not s in SymbolsOf DA & not s in SymbolsOf DF by DefOccur; then
 not s in (SymbolsOf DA \/ SymbolsOf DF) by XBOOLE_0:def 3; then
-not s in SymbolsOf D by FOMODEL0:47; hence thesis by B0, DefOccur;
+not s in SymbolsOf D by FOMODEL0:47; hence thesis by B0,DefOccur;
 end;
 end;
 
 registration
 let S,U; let I be (S,U)-interpreter-like Function;
-cluster (OwnSymbolsOf S)\(dom I) -> empty set;
+cluster (OwnSymbolsOf S)\(dom I) -> empty for set;
 coherence
 proof OwnSymbolsOf S c= dom I by Lm18; hence thesis; end;
 end;
@@ -3676,25 +3679,25 @@ B0: O c= dom I & {{}}={{}} by XBOOLE_1:37;
 reconsider lo=l as Element of O by FOMODEL1:def 19; reconsider i=I.l as
 Interpreter of l, U;
 i is Function of 0-tuples_on U, U & 0-tuples_on U={{}}
-by FOMODEL0:10, DefInterpreter1; then reconsider ii=i as Function of {{}}, U;
+by DefInterpreter1,FOMODEL0:10; then reconsider ii=i as Function of {{}}, U;
 reconsider e={} as Element of {{}} by TARSKI:def 1;
 reconsider u=ii.e as Element of U; take u; thus u=I.l.{};
 set h={}.-->u, H=l.-->h, J=(l,u) ReassignIn I; h= {{}} --> u; then
 reconsider hh=h as Function of {{}}, U;
-B2: dom H={lo} by FUNCOP_1:19; then
-B1: dom H c= dom I by B0, XBOOLE_1:1;
+B2: dom H={lo} by FUNCOP_1:13; then
+B1: dom H c= dom I by B0,XBOOLE_1:1;
 now
-let z be Element of {{}}; ii.z=u & hh.z=u by FUNCOP_1:13; hence ii.z=hh.z;
+let z be Element of {{}}; ii.z=u & hh.z=u by FUNCOP_1:7; hence ii.z=hh.z;
 end; then
-B3: ii=hh by FUNCT_2:113;
+B3: ii=hh by FUNCT_2:63;
 now
 let z; assume
  z in dom H; then
-C0: z in {l} by FUNCOP_1:19; hence H.z = h by FUNCOP_1:13
-.= I.z by B3, C0, TARSKI:def 1;
-end; then H tolerates I by PARTFUN1:132, B1;
-then J=H+*I by FUNCT_4:35 .= I
-by B2, B0, XBOOLE_1:1, FUNCT_4:20; hence thesis;
+C0: z in {l} by FUNCOP_1:13; hence H.z = h by FUNCOP_1:7
+.= I.z by B3,C0,TARSKI:def 1;
+end; then H tolerates I by B1,PARTFUN1:53;
+then J=H+*I by FUNCT_4:34 .= I
+by B2,B0,FUNCT_4:19,XBOOLE_1:1; hence thesis;
 end;
 
 definition
@@ -3705,11 +3708,11 @@ end;
 
 registration
 let S;
-cluster S-mincover -> S-covering set;
+cluster S-mincover -> S-covering for set;
 coherence
 proof
 let X; assume B0: X is S-mincover;
-thus for phi st not phi in X holds xnot phi in X by B0, DefCover;
+thus for phi st not phi in X holds xnot phi in X by B0,DefCover;
 thus thesis;
 end;
 end;
@@ -3718,7 +3721,7 @@ registration
 let U, S; let phi be non 0wff non exal wff string of S;
 let I be Element of U-InterpretersOf S;
 cluster (I-TruthEval phi) \+\ I-TruthEval head phi
-'nor' (I-TruthEval (tail phi)) -> empty set;
+'nor' (I-TruthEval (tail phi)) -> empty for set;
 coherence
 proof
 set h=head phi, t=tail phi, A=I-TruthEval phi, B=I-TruthEval h,
@@ -3730,11 +3733,11 @@ proof
 per cases;
 suppose Z0: not RH=0;
 not B=1 & not C=1 by Z0; then B=0 & C=0 by FOMODEL0:39;
-hence thesis by B0, Lm45;
+hence thesis by B0,Lm45;
 end;
 suppose D0: RH=0; then (1-B)=0 or (1-C)=0; then
-not A=1 by B0, Lm45;
-hence thesis by D0, FOMODEL0:39;
+not A=1 by B0,Lm45;
+hence thesis by D0,FOMODEL0:39;
 end;
 end;
 hence thesis;
@@ -3752,20 +3755,20 @@ $1 is wff & $1 is exal; defpred Q[set] means not contradiction;
 deffunc F(set)=$1;
 B0: for w holds P[w] implies Q[w]; set IT={F(w): P[w]};
 IT c= {F(w): Q[w]} from FRAENKEL:sch 1(B0);
-hence thesis by DOMAIN_1:48;
+hence thesis by DOMAIN_1:18;
 end;
 end;
 
 registration
 let S;
-cluster ExFormulasOf S -> non empty set;
+cluster ExFormulasOf S -> non empty for set;
 coherence
 proof the exal wff string of S in ExFormulasOf S; hence thesis; end;
 end;
 
 registration
 let S;
-cluster -> exal wff Element of ExFormulasOf S;
+cluster -> exal wff for Element of ExFormulasOf S;
 coherence
 proof
 set EF=ExFormulasOf S; let x be Element of ExFormulasOf S;
@@ -3777,19 +3780,19 @@ end;
 
 registration
 let S;
-cluster -> wff Element of ExFormulasOf S;
+cluster -> wff for Element of ExFormulasOf S;
 coherence;
 end;
 
 registration
 let S;
-cluster -> exal Element of ExFormulasOf S;
+cluster -> exal for Element of ExFormulasOf S;
 coherence;
 end;
 
 registration
 let S;
-cluster ExFormulasOf S \ (AllFormulasOf S) -> empty set;
+cluster ExFormulasOf S \ (AllFormulasOf S) -> empty for set;
 coherence
 proof
 set EF=ExFormulasOf S, FF=AllFormulasOf S;
@@ -3799,7 +3802,7 @@ end;
 
 registration
 let U,S1; let S2 be S1-extending Language;
-cluster (S2,U)-interpreter-like -> (S1,U)-interpreter-like Function;
+cluster (S2,U)-interpreter-like -> (S1,U)-interpreter-like for Function;
 coherence
 proof
 set O1=OwnSymbolsOf S1, O2=OwnSymbolsOf S2, a1=the adicity of S1,
@@ -3808,32 +3811,32 @@ AS2=AtomicFormulaSymbolsOf S2, E1=TheEqSymbOf S1; let I2 be Function;
 assume I2 is (S2,U)-interpreter-like; then reconsider
 I222=I2 as (S2,U)-interpreter-like Function; reconsider I22=I222 as
 Interpreter of S2, U by DefInterpreterLike; O1\O2={}; then
-B0: O1 c= O2 & dom a1=AS1 & dom a2=AS2 by XBOOLE_1:37, FUNCT_2:def 1;
+B0: O1 c= O2 & dom a1=AS1 & dom a2=AS2 by FUNCT_2:def 1,XBOOLE_1:37;
 a1 c= a2 by FOMODEL1:def 41; then
-B1: dom a1 c= dom a2 by RELAT_1:25;
+B1: dom a1 c= dom a2 by RELAT_1:11;
 now
 let s1 be own Element of S1;
 Z0: s1 in AS1 by FOMODEL1:def 20; then
 C2: s1 in dom a1 by FUNCT_2:def 1;
-s1 in AS2 by Z0, B1, B0;
+s1 in AS2 by Z0,B1,B0;
 then reconsider s2=s1 as ofAtomicFormula Element of S2
 by FOMODEL1:def 20; s1<>E1; then s2<>E2 & s2 <> TheNorSymbOf S2
 by FOMODEL1:def 41; then s2 is Element of O2 by FOMODEL1:15; then
 reconsider s2 as own Element of S2 by FOMODEL1:def 19; reconsider i2=I22.s2
 as Interpreter of s2, U by DefInterpreter2; set m2=ar s2, m1=ar s1;
-a1 c= a2 by FOMODEL1:def 41; then a2.s2=(a2+*a1).s2 by FUNCT_4:104
-.= a1.s2 by FUNCT_4:14,C2; then
+a1 c= a2 by FOMODEL1:def 41; then a2.s2=(a2+*a1).s2 by FUNCT_4:98
+.= a1.s2 by C2,FUNCT_4:13; then
 C0: m1=m2;
 per cases;
 suppose
 s2 is relational;
 then s1 is relational & i2 is Function of (abs m1)-tuples_on U, BOOLEAN
-by C0, DefInterpreter1;
+by C0,DefInterpreter1;
 hence I2.s1 is Interpreter of s1, U by DefInterpreter1;
 end;
 suppose not s2 is relational; then
 i2 is Function of (abs m1)-tuples_on U, U & not s1 is relational
-by C0, DefInterpreter1;
+by C0,DefInterpreter1;
 hence I2.s1 is Interpreter of s1, U by DefInterpreter1;
 end;
 end; then I2 is Interpreter of S1, U & I222 is Function-yielding
@@ -3844,7 +3847,7 @@ end;
 registration
 let U, S1; let S2 be S1-extending Language;
 let I be (S2,U)-interpreter-like Function;
-cluster I|OwnSymbolsOf S1 -> (S1,U)-interpreter-like Function;
+cluster I|OwnSymbolsOf S1 -> (S1,U)-interpreter-like for Function;
 coherence;
 end;
 
@@ -3860,26 +3863,26 @@ now
 let s2 be own Element of S2;
 per cases;
 suppose s2 in dom I1; then
-C1: s2 in O1 & IT.s2 = I1.s2 by FUNCT_4:14, PARTFUN1:def 4;
+C1: s2 in O1 & IT.s2 = I1.s2 by FUNCT_4:13,PARTFUN1:def 2;
 then reconsider s1=s2 as own Element of S1 by FOMODEL1:def 19;
 s1 in AS1 by FOMODEL1:def 20; then
 C2: s1 in dom a1 by FUNCT_2:def 1; reconsider i1=I1.s1 as
 Interpreter of s1, U; set m2=ar s2, m1=ar s1; a1 c= a2 by FOMODEL1:def 41;
-then a2.s2=(a2+*a1).s2 by FUNCT_4:104 .= a1.s2 by FUNCT_4:14,C2; then
+then a2.s2=(a2+*a1).s2 by FUNCT_4:98 .= a1.s2 by C2,FUNCT_4:13; then
 C0: m1=m2;
 per cases;
 suppose s1 is relational; then
 s2 is relational & i1 is Function of (abs m2)-tuples_on U, BOOLEAN
-by C0, DefInterpreter1;
-hence IT.s2 is Interpreter of s2, U by C1, DefInterpreter1;
+by C0,DefInterpreter1;
+hence IT.s2 is Interpreter of s2, U by C1,DefInterpreter1;
 end;
 suppose not s1 is relational; then
 i1 is Function of (abs m2)-tuples_on U, U & not s2 is relational
-by C0, DefInterpreter1;
-hence IT.s2 is Interpreter of s2, U by DefInterpreter1, C1;
+by C0,DefInterpreter1;
+hence IT.s2 is Interpreter of s2, U by DefInterpreter1,C1;
 end;
 end;
-suppose not s2 in dom I1; then IT.s2=I2.s2 by FUNCT_4:12;
+suppose not s2 in dom I1; then IT.s2=I2.s2 by FUNCT_4:11;
 hence IT.s2 is Interpreter of s2, U;
 end;
 end; then IT is Interpreter of S2, U by DefInterpreter2;
@@ -3909,7 +3912,7 @@ end;
 
 registration
 let X,U,S; let I be Element of U-InterpretersOf S;
-cluster I-satisfied Subset of X;
+cluster I-satisfied for Subset of X;
 existence
 proof
 reconsider e={} null I as Subset of X by XBOOLE_1:2; take e; thus thesis;
@@ -3918,7 +3921,7 @@ end;
 
 registration
 let U,S; let I be Element of U-InterpretersOf S;
-cluster I-satisfied set;
+cluster I-satisfied for set;
 existence
 proof take the I-satisfied Subset of 1; thus thesis; end;
 end;
@@ -3926,7 +3929,7 @@ end;
 registration
 let U,S; let I be Element of U-InterpretersOf S;
 let X be I-satisfied set;
-cluster -> I-satisfied (Subset of X);
+cluster -> I-satisfied for (Subset of X);
 coherence
 proof
 let Y be Subset of X;
@@ -3949,7 +3952,7 @@ end;
 
 registration
 let U,S; let I be Element of U-InterpretersOf S; let X be I-satisfied set;
-cluster I null X -> X-satisfying (Element of U-InterpretersOf S);
+cluster I null X -> X-satisfying for (Element of U-InterpretersOf S);
 coherence by DefSat2;
 end;
 
@@ -3973,7 +3976,7 @@ end;
 
 registration
 let S,X;
-cluster S-correct Subset of X;
+cluster S-correct for Subset of X;
 existence
 proof reconsider IT={} null S as Subset of X by XBOOLE_1:2; take IT;
 thus IT is S-correct;
@@ -3986,7 +3989,7 @@ proof
 let I be Element of U-InterpretersOf S;
 hereby assume
 B0: I-TruthEval phi=1;
-for psi st psi in {phi} holds I-TruthEval psi=1 by B0, TARSKI:def 1;
+for psi st psi in {phi} holds I-TruthEval psi=1 by B0,TARSKI:def 1;
 hence {phi} is I-satisfied by DefSat;
 end;
 assume {phi} is I-satisfied; then reconsider X={phi} as I-satisfied set;
@@ -4003,7 +4006,7 @@ end;
 registration
 let U, S; let phi1, phi2; let I be Element of U-InterpretersOf S;
 cluster (I-TruthEval (<*TheNorSymbOf S*>^phi1^phi2)) \+\
-I-TruthEval phi1 'nor' (I-TruthEval phi2) -> empty set;
+I-TruthEval phi1 'nor' (I-TruthEval phi2) -> empty for set;
 coherence
 proof
 set F=S-firstChar, N=TheNorSymbOf S, phi=<*N*>^phi1^phi2,
@@ -4015,7 +4018,7 @@ end;
 
 registration
 let S, phi, U; let I be Element of U-InterpretersOf S;
-cluster I-TruthEval xnot phi \+\ ('not' (I-TruthEval phi)) -> empty set;
+cluster I-TruthEval xnot phi \+\ ('not' (I-TruthEval phi)) -> empty for set;
 coherence
 proof
 set N=TheNorSymbOf S, v1=I-TruthEval phi, psi=xnot phi;

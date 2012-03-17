@@ -27,7 +27,8 @@ environ
  constructors FINSEQOP, VECTSP_7, VECTSP_9, REALSET1, WELLORD2, NAT_D, FUNCT_7,
       CARD_2, RANKNULL, INT_3, GR_CY_1, XXREAL_0, RELSET_1, BINOP_2;
  registrations RELAT_1, STRUCT_0, CARD_1, FINSET_1, FINSEQ_1, SUBSET_1,
-      XBOOLE_0, VECTSP_1, ORDINAL1, XREAL_0, INT_1, VECTSP_7, ZFMISC_1;
+      XBOOLE_0, VECTSP_1, ORDINAL1, XREAL_0, INT_1, VECTSP_7, ZFMISC_1,
+      RELSET_1;
  requirements NUMERALS, BOOLE, ARITHM, SUBSET, REAL;
 
 
@@ -43,7 +44,6 @@ end;
 :: exactly as in FINSEQ_2
 
 reserve S for 1-sorted,
-
   i for Element of NAT,
   p for FinSequence,
   X for set;
@@ -216,34 +216,14 @@ registration
     add-associative right_zeroed;
 end;
 
-begin :: The Linear Independence and Linear Span of Singleton Subsets
+begin :: The Linear Independence and Linear Span of 1-element Subsets
 
 definition
-  let X be set;
-  attr X is Singleton means
-:: BSPACE:def 8
 
-  X is non empty trivial;
-end;
-
-registration
-  cluster Singleton -> non empty trivial set;
-  cluster non empty trivial -> Singleton set;
-end;
-
-definition
-  let X be set, f be Subset of X;
-  redefine attr f is Singleton means
-:: BSPACE:def 9
-
-  ex x being set st x in X & f = {x};
-end;
-
-definition
   let X be set;
   func singletons(X) equals
-:: BSPACE:def 10
-  { f where f is Subset of X : f is Singleton };
+:: BSPACE:def 8
+  { f where f is Subset of X : f is 1-element };
 end;
 
 definition
@@ -258,7 +238,7 @@ end;
 
 theorem :: BSPACE:30
   for X being non empty set, f being Subset of X st f is Element
-  of singletons(X) holds f is Singleton;
+  of singletons(X) holds f is 1-element;
 
 definition
   let F be Field, V be VectSp of F, l be Linear_Combination of V, x be Element
@@ -269,7 +249,7 @@ end;
 definition
   let X be non empty set, s be FinSequence of bspace(X), x be Element of X;
   func s@x -> FinSequence of Z_2 means
-:: BSPACE:def 11
+:: BSPACE:def 9
 
   len it = len s & for j being Nat st 1 <= j & j <= len s holds it.j = (s.j)@x;
 end;
@@ -295,24 +275,26 @@ theorem :: BSPACE:35
   for X being non empty set, l being Linear_Combination of bspace(
   X), x being Element of bspace(X) st x in Carrier l holds l.x = 1_Z_2;
 
-theorem :: BSPACE:36
-  singletons {} = {};
+registration let X be empty set;
+ cluster singletons X -> empty;
 
-theorem :: BSPACE:37
+end;
+
+theorem :: BSPACE:36
   singletons(X) is linearly-independent;
 
-theorem :: BSPACE:38
+theorem :: BSPACE:37
   for f being Element of bspace(X) st (ex x being set st x in X & f = {x
   }) holds f in singletons(X);
 
-theorem :: BSPACE:39
+theorem :: BSPACE:38
   for X being finite set, A being Subset of X ex l being
   Linear_Combination of singletons(X) st Sum l = A;
 
-theorem :: BSPACE:40
+theorem :: BSPACE:39
   for X being finite set holds Lin(singletons(X)) = bspace(X);
 
-theorem :: BSPACE:41
+theorem :: BSPACE:40
   for X being finite set holds singletons(X) is Basis of bspace(X);
 
 registration
@@ -325,11 +307,13 @@ registration
   cluster bspace(X) -> finite-dimensional;
 end;
 
-theorem :: BSPACE:42
+theorem :: BSPACE:41
   card (singletons X) = card X;
 
-theorem :: BSPACE:43
+theorem :: BSPACE:42
   card [#](bspace X) = exp(2,card(X));
 
-theorem :: BSPACE:44
+theorem :: BSPACE:43
   dim bspace {} = 0;
+::>
+::> 192: Inaccessible theorem

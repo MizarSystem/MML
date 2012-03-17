@@ -31,19 +31,17 @@ begin :: Auxiliary Theorems
 
 reserve x,y,z,X,Y for set;
 
-canceled 2;
-
 theorem Th3:
   {x} c= {x,y,z}
 proof
-  {x,y,z} = {x} \/ {y,z} by ENUMSET1:42;
+  {x,y,z} = {x} \/ {y,z} by ENUMSET1:2;
   hence thesis by XBOOLE_1:7;
 end;
 
 theorem Th4:
   {x,y} c= {x,y,z}
 proof
-  {x,y,z} = {x,y} \/ {z} by ENUMSET1:43;
+  {x,y,z} = {x,y} \/ {z} by ENUMSET1:3;
   hence thesis by XBOOLE_1:7;
 end;
 
@@ -53,7 +51,7 @@ proof
   assume that
 A1: X c= Y \/ {x} and
 A2: not x in X;
-A3: X misses {x} by A2,ZFMISC_1:56;
+A3: X misses {x} by A2,ZFMISC_1:50;
   X = X /\ (Y \/ {x}) by A1,XBOOLE_1:28
     .= X /\ Y \/ X /\ {x} by XBOOLE_1:23
     .= X /\ Y \/ {} by A3,XBOOLE_0:def 7
@@ -68,17 +66,13 @@ proof
   hence thesis by TARSKI:def 1;
 end;
 
-canceled;
-
 theorem Th8:
   X \/ {x} c= Y iff x in Y & X c= Y
 proof
 A1: X c= Y & {x} c= Y implies X \/ {x} c= Y by XBOOLE_1:8;
   X \/ {x} c= Y implies X c= Y & {x} c= Y by XBOOLE_1:11;
-  hence thesis by A1,ZFMISC_1:37;
+  hence thesis by A1,ZFMISC_1:31;
 end;
-
-canceled 2;
 
 theorem Th11:
   for X,Y for f being Function holds f.:(Y \ f"X) = f.:Y \ X
@@ -93,11 +87,11 @@ proof
       then consider z such that
 A1:   z in dom f and
 A2:   z in Y \ f"X and
-A3:   f.z = x by FUNCT_1:def 12;
+A3:   f.z = x by FUNCT_1:def 6;
       not z in f"X by A2,XBOOLE_0:def 5;
       then
-A4:   not x in X by A1,A3,FUNCT_1:def 13;
-      f.z in f.:Y by A1,A2,FUNCT_1:def 12;
+A4:   not x in X by A1,A3,FUNCT_1:def 7;
+      f.z in f.:Y by A1,A2,FUNCT_1:def 6;
       hence thesis by A3,A4,XBOOLE_0:def 5;
     end;
     assume
@@ -105,13 +99,13 @@ A5: x in f.:Y \ X;
     then consider z such that
 A6: z in dom f and
 A7: z in Y and
-A8: f.z = x by FUNCT_1:def 12;
+A8: f.z = x by FUNCT_1:def 6;
     not x in X by A5,XBOOLE_0:def 5;
-    then not z in f"X by A8,FUNCT_1:def 13;
+    then not z in f"X by A8,FUNCT_1:def 7;
     then z in Y \ f"X by A7,XBOOLE_0:def 5;
-    hence x in f.:(Y \ f"X) by A6,A8,FUNCT_1:def 12;
+    hence x in f.:(Y \ f"X) by A6,A8,FUNCT_1:def 6;
   end;
-  hence thesis by TARSKI:2;
+  hence thesis by TARSKI:1;
 end;
 
 reserve X,Y for non empty set,
@@ -122,7 +116,7 @@ theorem Th12:
 proof
   let x be Element of X;
   f.x in {f.x} by TARSKI:def 1;
-  hence thesis by FUNCT_2:46;
+  hence thesis by FUNCT_2:38;
 end;
 
 theorem Th13:
@@ -135,11 +129,11 @@ proof
     thus y in f.:{x} implies y = f.x
     proof
       assume y in f.:{x};
-      then ex z st z in dom f & z in {x} & f.z = y by FUNCT_1:def 12;
+      then ex z st z in dom f & z in {x} & f.z = y by FUNCT_1:def 6;
       hence thesis by TARSKI:def 1;
     end;
     x in {x} by TARSKI:def 1;
-    hence thesis by FUNCT_2:43;
+    hence thesis by FUNCT_2:35;
   end;
   hence thesis by TARSKI:def 1;
 end;
@@ -168,7 +162,7 @@ A1: for x being Element of X holds x in A implies f.x in B;
   then consider y being set such that
   y in dom f and
 A2: y in A and
-A3: x = f.y by FUNCT_1:def 12;
+A3: x = f.y by FUNCT_1:def 6;
   reconsider y as Element of X by A2,Th14;
   x = f.y by A3;
   hence thesis by A1,A2;
@@ -189,13 +183,11 @@ end;
 Lm1: for A being Element of Fin X holds f.: A is Element of Fin Y by
 FINSUB_1:def 5;
 
-canceled;
-
 theorem Th18:
   for B being Element of Fin X st B <> {} ex x being Element of X st x in B
 proof
   let B be Element of Fin X;
-  set x =the  Element of B;
+  set x = the Element of B;
   assume
 A1: B <> {};
   then reconsider x as Element of X by Th14;
@@ -212,16 +204,16 @@ A1: f.:A = {};
   assume A <> {};
   then consider x being Element of X such that
 A2: x in A by Th18;
-  f.x in f.:A by A2,FUNCT_2:43;
+  f.x in f.:A by A2,FUNCT_2:35;
   hence contradiction by A1;
 end;
 
 registration
   let X be set;
-  cluster empty Element of Fin X;
+  cluster empty for Element of Fin X;
   existence
   proof
-    {} is Element of Fin X by FINSUB_1:18;
+    {} is Element of Fin X by FINSUB_1:7;
     hence thesis;
   end;
 end;
@@ -230,7 +222,7 @@ definition
   let X be set;
   func {}.X -> empty Element of Fin X equals
   {};
-  coherence by FINSUB_1:18;
+  coherence by FINSUB_1:7;
 end;
 
 scheme
@@ -247,7 +239,7 @@ A1: now
 A2: for a being Element of A() holds a in y iff X[a] from SUBSET_1:sch
     3;
     for x being Element of A() holds x in y implies x in B by A2;
-    then y c= B() by SUBSET_1:7;
+    then y c= B() by SUBSET_1:2;
     then reconsider y as Element of Fin A() by FINSUB_1:def 5;
     take y9 = y;
     thus X[x,y9] by A2;
@@ -264,8 +256,6 @@ definition
   :Def2:
   ex x being Element of X st x is_a_unity_wrt F;
 end;
-
-canceled 2;
 
 theorem Th22:
   for X being non empty set, F being BinOp of X holds F is
@@ -291,18 +281,18 @@ proof
   then
 A1: the_unity_wrt F is_a_unity_wrt F by Th22;
   let x be Element of X;
-  thus thesis by A1,BINOP_1:11;
+  thus thesis by A1,BINOP_1:3;
 end;
 
 :: Main part
 
 registration
   let X be non empty set;
-  cluster non empty Element of Fin X;
+  cluster non empty for Element of Fin X;
   existence
   proof
-    set x =the  Element of X;
-    {x} is Subset of X by SUBSET_1:63;
+    set x = the Element of X;
+    {x} is Subset of X by SUBSET_1:41;
     then {x} is Element of Fin X by FINSUB_1:def 5;
     hence thesis;
   end;
@@ -322,21 +312,21 @@ definition
   redefine func {.x.} -> Element of Fin X;
   coherence
   proof
-    {x} is Subset of X by SUBSET_1:63;
+    {x} is Subset of X by SUBSET_1:41;
     hence thesis by FINSUB_1:def 5;
   end;
   let y be Element of X;
   redefine func {.x,y.} -> Element of Fin X;
   coherence
   proof
-    {x,y} is Subset of X by SUBSET_1:56;
+    {x,y} is Subset of X by SUBSET_1:34;
     hence thesis by FINSUB_1:def 5;
   end;
   let z be Element of X;
   redefine func {.x,y,z.} -> Element of Fin X;
   coherence
   proof
-    {x,y,z} is Subset of X by SUBSET_1:57;
+    {x,y,z} is Subset of X by SUBSET_1:35;
     hence thesis by FINSUB_1:def 5;
   end;
 end;
@@ -345,14 +335,14 @@ definition
   let X be set;
   let A,B be Element of Fin X;
   redefine func A \/ B -> Element of Fin X;
-  coherence by FINSUB_1:10;
+  coherence by FINSUB_1:1;
 end;
 
 definition
   let X be set;
   let A,B be Element of Fin X;
   redefine func A \ B -> Element of Fin X;
-  coherence by FINSUB_1:10;
+  coherence by FINSUB_1:1;
 end;
 
 scheme
@@ -375,7 +365,7 @@ A6: ex B9 being Element of Fin X() st B9 = A & P[B9];
     reconsider A9 = A as Element of Fin X() by A5,Th16;
     take A9 \/ {.x9.};
     thus A9 \/ {.x9.} = A \/ {x};
-    thus P[A9 \/ {x9}] by A2,A6,ZFMISC_1:46;
+    thus P[A9 \/ {x9}] by A2,A6,ZFMISC_1:40;
   end;
 A7: B is finite;
 A8: X[{}] by A1;
@@ -492,7 +482,7 @@ A13:          B9 = C \/ {x};
               proof
                 not x in C by A8,A12;
                 then
-A14:            C c= B9 \ {x} by A13,XBOOLE_1:7,ZFMISC_1:40;
+A14:            C c= B9 \ {x} by A13,XBOOLE_1:7,ZFMISC_1:34;
                 B9 \ {x} = C \ {x} by A13,XBOOLE_1:40;
                 then
 A15:            B9 \ {x} = C by A14,XBOOLE_0:def 10;
@@ -502,7 +492,7 @@ A16:            C1 c= B and
 A17:            B9 = C1 \/ {x};
                 not x in C1 by A8,A16;
                 then
-A18:            C1 c= B9 \ {x} by A17,XBOOLE_1:7,ZFMISC_1:40;
+A18:            C1 c= B9 \ {x} by A17,XBOOLE_1:7,ZFMISC_1:34;
                 B9 \{x} = C1 \ {x} by A17,XBOOLE_1:40;
                 hence thesis by A18,A15,XBOOLE_0:def 10;
               end;
@@ -531,7 +521,7 @@ A21:      C <> {} and
 A22:      C c= B and
 A23:      {x} = C \/ {x};
           C c= {x} by A23,XBOOLE_1:7;
-          then C = {x} by A21,ZFMISC_1:39;
+          then C = {x} by A21,ZFMISC_1:33;
           then x in C by TARSKI:def 1;
           hence contradiction by A8,A22;
         end;
@@ -539,7 +529,7 @@ A23:      {x} = C \/ {x};
 A24:    J.{x} = G.{.x.} by A20;
         thus for e being Element of Y st e is_a_unity_wrt F holds J.{} = e
         proof
-          reconsider E = {} as Element of Fin X by FINSUB_1:18;
+          reconsider E = {} as Element of Fin X by FINSUB_1:7;
           not ex C being Element of Fin X st C <> {} & C c= B & E = C \/ { x};
           then J.E = G.E by A20;
           hence thesis by A5;
@@ -554,8 +544,8 @@ A26:        C c= B and
 A27:        {x9} = C \/ {x};
             C c= {x9} by A27,XBOOLE_1:7;
             then
-A28:        C = {x9} by A25,ZFMISC_1:39;
-            x = x9 by A27,XBOOLE_1:7,ZFMISC_1:24;
+A28:        C = {x9} by A25,ZFMISC_1:33;
+            x = x9 by A27,XBOOLE_1:7,ZFMISC_1:18;
             then x in C by A28,TARSKI:def 1;
             hence contradiction by A8,A26;
           end;
@@ -576,7 +566,7 @@ A33:      x in B9;
           then
 A34:      x9 in B by A31,A32,Th6;
           then
-A35:      {x9} c= B by ZFMISC_1:37;
+A35:      {x9} c= B by ZFMISC_1:31;
           per cases;
           suppose
 A36:        B9 = {x};
@@ -587,7 +577,7 @@ A36:        B9 = {x};
           end;
           suppose
             B9 <> {x};
-            then not B9 c= {x} by A30,ZFMISC_1:39;
+            then not B9 c= {x} by A30,ZFMISC_1:33;
             then
 A37:        B9 \ {x} <> {} by XBOOLE_1:37;
             set C = (B9 \ {.x.}) \/ {.x9.};
@@ -597,7 +587,7 @@ A38:        x9 in B \(B9 \ {x}) by A34,XBOOLE_0:def 5;
             B9 \ {x} c= B by A29,XBOOLE_1:43;
             then
 A39:        C c= B by A34,Th8;
-            B9 \/ {.x9.} = B9 \/ {x} \/ {x9} by A33,ZFMISC_1:46
+            B9 \/ {.x9.} = B9 \/ {x} \/ {x9} by A33,ZFMISC_1:40
               .= (B9 \ {x}) \/ {x} \/ {x9} by XBOOLE_1:39
               .= C \/ {.x.} by XBOOLE_1:4;
             hence J.(B9 \/ {.x9.}) = F.(G.C, f.x) by A20,A39
@@ -607,7 +597,7 @@ A39:        C c= B by A34,Th8;
               .= F.(F.(G.(B9\{.x.}), f.x), f.x9) by A3,BINOP_1:def 3
               .= F.(J.((B9\{.x.})\/{.x.}), f.x9) by A20,A29,A37,XBOOLE_1:43
               .= F.(J.(B9 \/ {x}), f.x9) by XBOOLE_1:39
-              .= F.(J.B9, f.x9) by A33,ZFMISC_1:46;
+              .= F.(J.B9, f.x9) by A33,ZFMISC_1:40;
           end;
         end;
         suppose
@@ -651,7 +641,7 @@ A48:    now
 A49:      x = {x9};
           take y = f.x9;
           thus for x9 being Element of X st x = {x9} holds y = f.x9 by A49,
-ZFMISC_1:6;
+ZFMISC_1:3;
           thus not (ex x9 being Element of X st x = {x9}) implies y = e by A49;
         end;
         now
@@ -669,7 +659,7 @@ A51:  for B9 being Element of Fin X holds X[B9,G9.B9] from FUNCT_2:
       take G = G9;
       thus for e being Element of Y st e is_a_unity_wrt F holds G.{} = e
       proof
-        reconsider E = {} as Element of Fin X by FINSUB_1:18;
+        reconsider E = {} as Element of Fin X by FINSUB_1:7;
         let e9 be Element of Y such that
 A52:    e9 is_a_unity_wrt F;
         not ex x9 being Element of X st E = {x9};
@@ -751,8 +741,6 @@ A73:  X[{}.X];
   end;
 end;
 
-canceled;
-
 theorem Th25:
   for X, Y being non empty set for F being BinOp of Y for B being
 Element of Fin X for f being Function of X,Y st (B <> {} or F is having_a_unity
@@ -797,10 +785,10 @@ A10:  x in B;
       suppose
         x in B9;
         then
-A11:    B9 \/ {x} = B9 by ZFMISC_1:46;
+A11:    B9 \/ {x} = B9 by ZFMISC_1:40;
         then
 A12:    {x} c= B9 by XBOOLE_1:7;
-        not x in B9 \ {x} by ZFMISC_1:64;
+        not x in B9 \ {x} by ZFMISC_1:56;
         then
 A13:    x in B \ (B9 \ {x}) by A10,XBOOLE_0:def 5;
         per cases;
@@ -883,8 +871,8 @@ A3: for x being Element of X holds G.{x} = f.x and
 A4: for B9 being Element of Fin X st B9 c= {a,b} & B9 <> {} for x being
   Element of X st x in {a,b} holds G.(B9 \/ {x}) = F.(G.B9,f.x) by A1,Th25;
 A5: b in {a,b} by TARSKI:def 2;
-  thus F $$ ({.a,b.},f) = G.({.a.} \/ {.b.}) by A2,ENUMSET1:41
-    .= F.(G.{.a.}, f.b) by A4,A5,ZFMISC_1:12
+  thus F $$ ({.a,b.},f) = G.({.a.} \/ {.b.}) by A2,ENUMSET1:1
+    .= F.(G.{.a.}, f.b) by A4,A5,ZFMISC_1:7
     .= F.(f.a, f.b) by A3;
 end;
 
@@ -903,11 +891,11 @@ A4: for B9 being Element of Fin X st B9 c= {a,b,c} & B9 <> {} for x
   being Element of X st x in {a,b,c} holds G.(B9 \/ {x}) = F.(G.B9,f.x) by A1
 ,Th25;
 A5: b in {a,b,c} by ENUMSET1:def 1;
-A6: G.{a,b} = G.({a} \/ {b}) by ENUMSET1:41
+A6: G.{a,b} = G.({a} \/ {b}) by ENUMSET1:1
     .= F.(G.{.a.}, f.b) by A4,A5,Th3
     .= F.(f.a, f.b) by A3;
 A7: c in {a,b,c} by ENUMSET1:def 1;
-  thus F $$ ({.a,b,c.},f) = G.({.a,b.} \/ {.c.}) by A2,ENUMSET1:43
+  thus F $$ ({.a,b,c.},f) = G.({.a,b.} \/ {.c.}) by A2,ENUMSET1:3
     .= F.(F.(f.a, f.b), f.c) by A4,A6,A7,Th4;
 end;
 
@@ -1018,7 +1006,7 @@ A2: F is idempotent;
 A3: x in B;
   thus F.(f.x,F$$(B,f)) = F.(F$$({.x.},f), F$$(B,f)) by A1,Th26
     .= F$$({.x.} \/ B, f) by A1,A2,A3,Th30
-    .= F$$(B,f) by A3,ZFMISC_1:46;
+    .= F$$(B,f) by A3,ZFMISC_1:40;
 end;
 
 theorem
@@ -1098,10 +1086,10 @@ A3: for b being Element of X st b in B holds f.b = a
   proof
     let b be Element of X;
     assume b in B;
-    then f.b in {a} by A2,FUNCT_2:43;
+    then f.b in {a} by A2,FUNCT_2:35;
     hence thesis by TARSKI:def 1;
   end;
-  B <> {} by A2,RELAT_1:149;
+  B <> {} by A2,RELAT_1:116;
   hence thesis by A1,A3,Th33;
 end;
 
@@ -1131,17 +1119,17 @@ A6: f.:(A \/ {x}) = g.:B;
       f.x in f.:A;
       then consider x9 being Element of X such that
 A7:   x9 in A and
-A8:   f.x9 = f.x by FUNCT_2:116;
-A9:   g.:B = f.:A \/ Im(f,x) by A6,RELAT_1:153
+A8:   f.x9 = f.x by FUNCT_2:65;
+A9:   g.:B = f.:A \/ Im(f,x) by A6,RELAT_1:120
         .= f.:A \/ {f.x} by Th13
-        .= f.:A by A7,A8,FUNCT_2:43,ZFMISC_1:46;
+        .= f.:A by A7,A8,FUNCT_2:35,ZFMISC_1:40;
       thus F$$(A \/ {.x.},f) = F.(F$$(A,f), f.x) by A1,A2,A3,A7,Th29
-        .= F.(F$$(A \/ {.x9.},f), f.x) by A7,ZFMISC_1:46
+        .= F.(F$$(A \/ {.x9.},f), f.x) by A7,ZFMISC_1:40
         .= F.(F.(F$$(A,f), f.x9), f.x) by A1,A2,A3,A7,Th29
         .= F.(F$$(A,f), F.(f.x9, f.x9)) by A2,A8,BINOP_1:def 3
         .= F.(F$$(A,f), f.x9) by A3,BINOP_1:def 4
         .= F$$(A \/ {.x9.},f) by A1,A2,A3,A7,Th29
-        .= F$$(A,f) by A7,ZFMISC_1:46
+        .= F$$(A,f) by A7,ZFMISC_1:40
         .= F$$(B,g) by A5,A7,A9;
     end;
     suppose
@@ -1162,11 +1150,11 @@ A14:    now
           assume B1 = {};
           then B c= g"{f.x} by XBOOLE_1:37;
           then
-A15:      g.:B c= g.:g"{f.x} by RELAT_1:156;
-A16:      f.:A misses {f.x} by A10,ZFMISC_1:56;
-          g.:g"{f.x} c= {f.x} by FUNCT_1:145;
+A15:      g.:B c= g.:g"{f.x} by RELAT_1:123;
+A16:      f.:A misses {f.x} by A10,ZFMISC_1:50;
+          g.:g"{f.x} c= {f.x} by FUNCT_1:75;
           then f.:(A \/ {x}) c= {f.x} by A6,A15,XBOOLE_1:1;
-          then f.:A \/ f.:{x} c= {f.x} by RELAT_1:153;
+          then f.:A \/ f.:{x} c= {f.x} by RELAT_1:120;
           then f.:A = f.:A /\ {f.x} by XBOOLE_1:11,28
             .= {} by A16,XBOOLE_0:def 7;
           hence contradiction by A13,Th19;
@@ -1178,19 +1166,19 @@ A18:    for b being Element of X st b in B2 holds g.b = f.x
           let b be Element of X;
           assume b in B2;
           then b in g"{f.x} by XBOOLE_0:def 4;
-          then g.b in {f.x} by FUNCT_1:def 13;
+          then g.b in {f.x} by FUNCT_1:def 7;
           hence thesis by TARSKI:def 1;
         end;
-A19:    f.:A = f.:A \ {f.x} by A10,ZFMISC_1:65
+A19:    f.:A = f.:A \ {f.x} by A10,ZFMISC_1:57
           .= f.:A \ Im(f,x) by Th13
           .= (f.:A \/ f.:{x}) \ f.:{x} by XBOOLE_1:40
-          .= f.:(A \/ {x}) \ Im(f,x) by RELAT_1:153
+          .= f.:(A \/ {x}) \ Im(f,x) by RELAT_1:120
           .= g.:B \ {f.x} by A6,Th13
           .= g.:B1 by Th11;
         x in A \/ {x} by Th6;
         then consider x9 being Element of X such that
 A20:    x9 in B and
-A21:    g.x9 = f.x by A6,FUNCT_2:43,116;
+A21:    g.x9 = f.x by A6,FUNCT_2:35,65;
         x9 in g"{f.x} by A21,Th12;
         then
 A22:    B2 <> {} by A20,XBOOLE_0:def 4;
@@ -1230,14 +1218,14 @@ A5: for B1,B2 being non empty Element of Fin X holds X[B1] & X[B2] implies X
     assume
 A6: G.(a,F$$(B1,f)) = F$$(B1,G[;](a,f)) & G.(a,F$$(B2,f)) = F$$(B2,G [;](a,f));
     thus G.(a,F$$(B1 \/ B2,f)) = G.(a,F.(F$$(B1,f),F$$(B2,f))) by A1,A2,Th30
-      .= F.(F$$(B1,G[;](a,f)), F$$(B2,G[;] (a,f))) by A3,A6,BINOP_1:23
+      .= F.(F$$(B1,G[;](a,f)), F$$(B2,G[;] (a,f))) by A3,A6,BINOP_1:11
       .= F$$(B1 \/ B2,G[;](a,f)) by A1,A2,Th30;
   end;
 A7: for x being Element of X holds X[{.x.}]
   proof
     let x be Element of X;
     thus G.(a,F$$({.x.},f)) = G.(a,f.x) by A2,Th26
-      .= (G[;](a,f)).x by FUNCOP_1:66
+      .= (G[;](a,f)).x by FUNCOP_1:53
       .= F$$({.x.},G[;](a,f)) by A2,Th26;
   end;
   for B being non empty Element of Fin X holds X[B] from FinSubInd2(A7,
@@ -1267,14 +1255,14 @@ A5: for B1,B2 being non empty Element of Fin X holds X[B1] & X[B2] implies X
     assume
 A6: G.(F$$(B1,f),a) = F$$(B1,G[:](f,a)) & G.(F$$(B2,f),a) = F$$(B2,G [:](f,a));
     thus G.(F$$(B1 \/ B2,f),a) = G.(F.(F$$(B1,f),F$$(B2,f)),a) by A1,A2,Th30
-      .= F.(F$$(B1,G[:](f,a)), F$$(B2,G[:] (f,a))) by A3,A6,BINOP_1:23
+      .= F.(F$$(B1,G[:](f,a)), F$$(B2,G[:] (f,a))) by A3,A6,BINOP_1:11
       .= F$$(B1 \/ B2,G[:](f,a)) by A1,A2,Th30;
   end;
 A7: for x being Element of X holds X[{.x.}]
   proof
     let x be Element of X;
     thus G.(F$$({.x.},f),a) = G.(f.x,a) by A2,Th26
-      .= (G[:](f,a)).x by FUNCOP_1:60
+      .= (G[:](f,a)).x by FUNCOP_1:48
       .= F$$({.x.},G[:](f,a)) by A2,Th26;
   end;
   for B being non empty Element of Fin X holds X[B] from FinSubInd2(A7,
@@ -1315,13 +1303,13 @@ A6: F$$(f.:B1,g) = F$$(B1,g*f) & F$$(f.:B2,g) = F$$(B2,g*f);
     then X /\ B1 <> {} by XBOOLE_1:28;
     then X meets B1 by XBOOLE_0:def 7;
     then
-A7: f.:B1 <> {} by A4,RELAT_1:151;
+A7: f.:B1 <> {} by A4,RELAT_1:118;
     B2 c= X by FINSUB_1:def 5;
     then X /\ B2 <> {} by XBOOLE_1:28;
     then X meets B2 by XBOOLE_0:def 7;
     then
-A8: f.:B2 <> {} by A4,RELAT_1:151;
-    thus F$$(f.:(B1 \/ B2),g) = F$$(f.:B1 \/ f.:B2, g) by RELAT_1:153
+A8: f.:B2 <> {} by A4,RELAT_1:118;
+    thus F$$(f.:(B1 \/ B2),g) = F$$(f.:B1 \/ f.:B2, g) by RELAT_1:120
       .= F.(F$$(f.:B1,g), F$$(f.:B2,g)) by A1,A2,A7,A8,Th30
       .= F$$(B1 \/ B2,g*f) by A1,A2,A6,Th30;
   end;
@@ -1329,9 +1317,9 @@ A9: for x being Element of X holds X[{.x.}]
   proof
     let x be Element of X;
     f.:{.x.} = Im(f,x);
-    hence F$$(f.:{.x.},g) = F$$({.f.x.},g) by A4,FUNCT_1:117
+    hence F$$(f.:{.x.},g) = F$$({.f.x.},g) by A4,FUNCT_1:59
       .= g.(f.x) by A2,Th26
-      .= (g*f).x by FUNCT_2:21
+      .= (g*f).x by FUNCT_2:15
       .= F$$({.x.},g*f) by A2,Th26;
   end;
   for B being non empty Element of Fin X holds X[B] from FinSubInd2(A9,
@@ -1368,14 +1356,14 @@ A7: B <> {} implies g.(F$$(B,f)) = G$$(B,g*f) and
     suppose
 A8:   B = {};
       hence g.(F$$(B \/ {.x.},f)) = g.(f.x) by A1,Th26
-        .= (g*f).x by FUNCT_2:21
+        .= (g*f).x by FUNCT_2:15
         .= G$$(B \/ {.x.},g*f) by A3,A8,Th26;
     end;
     suppose
 A9:   B <> {};
       hence g.(F$$(B \/ {.x.},f)) = g.(F.(F$$(B,f), f.x)) by A1,A2,Th29
         .= G.(g.(F$$(B,f)), g.(f.x)) by A5
-        .= G.(G$$(B,g*f), (g*f).x) by A7,A9,FUNCT_2:21
+        .= G.(G$$(B,g*f), (g*f).x) by A7,A9,FUNCT_2:15
         .= G$$(B \/ {.x.},g*f) by A3,A4,A9,Th29;
     end;
   end;
@@ -1469,7 +1457,7 @@ A5: A = {};
     then A = {}.X;
     then
 A6: F$$(A,f) = the_unity_wrt F by A1,A3,Th40;
-    B = {}.X by A4,A5,Th19,RELAT_1:149;
+    B = {}.X by A4,A5,Th19,RELAT_1:116;
     hence thesis by A1,A3,A6,Th40;
   end;
   hence thesis by A1,A2,A4,Th35;
@@ -1491,7 +1479,7 @@ A3: F is having_a_unity;
   now
     assume
 A4: B = {};
-    then f.:B = {}.Y by RELAT_1:149;
+    then f.:B = {}.Y by RELAT_1:116;
     then
 A5: F$$(f.:B,g) = the_unity_wrt F by A2,A3,Th40;
     B = {}.X by A4;
@@ -1564,8 +1552,6 @@ end;
 
 reserve A for set,
   x,y,z for Element of Fin A;
-
-canceled 3;
 
 theorem Th49:
   FinUnion A is idempotent
@@ -1697,13 +1683,13 @@ A1: for B being (Element of Fin X), i st X[B] holds X[B \/ {.i.}]
     let B be (Element of Fin X), i;
     assume FinUnion(B,f) = union (f.:B);
     hence FinUnion(B \/ {.i.}, f) = union(f.:B) \/ f.i by Th60
-      .= union (f.:B) \/ union {f.i} by ZFMISC_1:31
-      .= union (f.:B \/ {f.i}) by ZFMISC_1:96
+      .= union (f.:B) \/ union {f.i} by ZFMISC_1:25
+      .= union (f.:B \/ {f.i}) by ZFMISC_1:78
       .= union (f.:B \/ Im(f,i)) by Th13
-      .= union (f.:(B \/ {i})) by RELAT_1:153;
+      .= union (f.:(B \/ {i})) by RELAT_1:120;
   end;
   FinUnion({}.X,f) = union {} by Th59,ZFMISC_1:2
-    .= union (f.:{}.X) by RELAT_1:149;
+    .= union (f.:{}.X) by RELAT_1:116;
   then
 A2: X[{}.X];
   thus for B being Element of Fin X holds X[B] from FinSubInd3(A2,A1 );
@@ -1715,8 +1701,8 @@ theorem
 proof
   let B1,B2 be Element of Fin X;
   thus FinUnion(B1 \/ B2, f) = union(f.:(B1 \/ B2)) by Th61
-    .= union(f.:B1 \/ f .:B2) by RELAT_1:153
-    .= union(f.:B1) \/ union(f.:B2) by ZFMISC_1:96
+    .= union(f.:B1 \/ f .:B2) by RELAT_1:120
+    .= union(f.:B1) \/ union(f.:B2) by ZFMISC_1:78
     .= FinUnion(B1,f) \/ union(f.:B2) by Th61
     .= FinUnion(B1,f) \/ FinUnion(B2,f) by Th61;
 end;
@@ -1729,7 +1715,7 @@ proof
   let f be Function of X,Y;
   let g be Function of Y,Fin A;
   thus FinUnion(f.:B,g) = union (g.:(f.:B)) by Th61
-    .= union ((g*f).:B) by RELAT_1:159
+    .= union ((g*f).:B) by RELAT_1:126
     .= FinUnion(B,g*f) by Th61;
 end;
 
@@ -1779,7 +1765,7 @@ A7: {} = {}.Fin Y;
   suppose
 A8: B = {};
     then
-A9: f.:B = {} by RELAT_1:149;
+A9: f.:B = {} by RELAT_1:116;
     thus g.(FinUnion(B,f)) = g.{}.Y by A6,A8,Th59
       .= G$$(f.:B,g) by A1,A3,A4,A7,A9,Th40
       .= G$$(B,g*f) by A1,A2,A3,Th44;
@@ -1822,11 +1808,9 @@ A5:   x in A;
       then IT.x = {x} by A3;
       hence IT.x = IT9.x by A4,A5;
     end;
-    hence thesis by FUNCT_2:18;
+    hence thesis by FUNCT_2:12;
   end;
 end;
-
-canceled;
 
 theorem Th67:
   for A being non empty set for f being Function of A, Fin A holds
@@ -1877,7 +1861,7 @@ A3: Z in f .:B by TARSKI:def 4;
     f.:B is Subset of Fin A by Lm2;
     then reconsider Z as Element of Fin A by A3;
     consider i being Element of X such that
-A4: i in B & Z = f.i by A3,FUNCT_2:116;
+A4: i in B & Z = f.i by A3,FUNCT_2:65;
     take i9 = i;
     thus i9 in B & x in f.i9 by A2,A4;
   end;
@@ -1885,7 +1869,7 @@ A4: i in B & Z = f.i by A3,FUNCT_2:116;
     given i being Element of X such that
 A5: i in B and
 A6: x in f.i;
-    f.i in f.:B by A5,FUNCT_2:43;
+    f.i in f.:B by A5,FUNCT_2:35;
     hence x in union (f.:B) by A6,TARSKI:def 4;
   end;
   hence thesis by A1,Th61;
@@ -1909,7 +1893,7 @@ A1: x in B;
     x in singleton X.x9 by Th68;
     hence x in FinUnion(B, singleton X) by A1,Th70;
   end;
-  hence thesis by TARSKI:2;
+  hence thesis by TARSKI:1;
 end;
 
 theorem

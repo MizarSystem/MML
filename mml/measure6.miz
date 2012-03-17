@@ -31,7 +31,7 @@ environ
  registrations XBOOLE_0, SUBSET_1, RELAT_1, ORDINAL1, NUMBERS, XXREAL_0,
       XREAL_0, MEMBERED, XXREAL_1, XXREAL_2, XXREAL_3, VALUED_0, VALUED_1,
       NAT_1, INT_1, SETFAM_1, FINSET_1, MEMBER_1, RCOMP_1, SEQ_2, SEQ_4,
-      FUNCOP_1, FCONT_3, FUNCT_2, MEASURE5;
+      FUNCOP_1, FCONT_3, FUNCT_2, MEASURE5, RELSET_1;
  requirements NUMERALS, BOOLE, SUBSET, ARITHM, REAL;
  definitions SEQ_2, TARSKI, XBOOLE_0, SUPINF_2, XXREAL_2, SUBSET_1, XXREAL_3,
       FINSET_1, RCOMP_1, VALUED_1, XCMPLX_0, MEMBER_1;
@@ -40,7 +40,7 @@ environ
       XXREAL_1, XXREAL_2, XXREAL_3, SETFAM_1, TARSKI, RELAT_1, COMPLEX1,
       ABSVALUE, VALUED_1, SEQ_1, XCMPLX_1, SEQ_4, SEQ_2, RCOMP_1, FUNCOP_1,
       RELSET_1, INT_1, SUBSET_1, MEMBER_1;
- schemes RECDEF_1, NAT_1, FINSET_1, FUNCT_2, BINOP_2, DOMAIN_1, WELLORD2;
+ schemes RECDEF_1, NAT_1, FINSET_1, FUNCT_2, BINOP_2, DOMAIN_1, FUNCT_1;
 
 begin :: Some theorems about R_eal numbers
 
@@ -50,8 +50,8 @@ theorem
 proof
   consider F being Function such that
 A1: F is one-to-one and
-A2: dom F = NAT & rng F = [:NAT,NAT:] by CARD_4:53,WELLORD2:def 4;
-  F is Function of NAT,[:NAT,NAT:] by A2,FUNCT_2:3;
+A2: dom F = NAT & rng F = [:NAT,NAT:] by CARD_4:5,WELLORD2:def 4;
+  F is Function of NAT,[:NAT,NAT:] by A2,FUNCT_2:1;
   hence thesis by A1,A2;
 end;
 
@@ -60,8 +60,8 @@ theorem
 proof
   let F be Function of NAT,ExtREAL;
   assume F is nonnegative;
-  then 0. <= Ser(F).0 by SUPINF_2:59;
-  hence thesis by FUNCT_2:6,XXREAL_2:4;
+  then 0. <= Ser(F).0 by SUPINF_2:40;
+  hence thesis by FUNCT_2:4,XXREAL_2:4;
 end;
 
 theorem
@@ -75,21 +75,21 @@ A1: ex n being Element of NAT st x <= F.n and
 A2: F is nonnegative;
   consider n being Element of NAT such that
 A3: x <= F.n by A1;
-A4: Ser(F).n <= SUM(F) by FUNCT_2:6,XXREAL_2:4;
+A4: Ser(F).n <= SUM(F) by FUNCT_2:4,XXREAL_2:4;
   per cases by NAT_1:6;
   suppose
     n = 0;
-    then Ser(F).n = F.n by SUPINF_2:63;
+    then Ser(F).n = F.n by SUPINF_2:44;
     hence thesis by A3,A4,XXREAL_0:2;
   end;
   suppose
     ex k being Nat st n = k + 1;
     then consider k being Nat such that
 A5: n = k + 1;
-    reconsider k as Element of NAT by ORDINAL1:def 13;
-A6: 0. <= Ser(F).k by A2,SUPINF_2:59;
-    Ser(F).n = Ser(F).k + F.(k + 1) by A5,SUPINF_2:63;
-    then 0. + x <= Ser(F).n by A3,A5,A6,XXREAL_3:38;
+    reconsider k as Element of NAT by ORDINAL1:def 12;
+A6: 0. <= Ser(F).k by A2,SUPINF_2:40;
+    Ser(F).n = Ser(F).k + F.(k + 1) by A5,SUPINF_2:44;
+    then 0. + x <= Ser(F).n by A3,A5,A6,XXREAL_3:36;
     then x <= Ser(F).n by XXREAL_3:4;
     hence thesis by A4,XXREAL_0:2;
   end;
@@ -101,8 +101,6 @@ definition
   x;
   coherence by XXREAL_0:def 1;
 end;
-
-canceled 27;
 
 theorem
   for eps being R_eal st 0. < eps ex F being Function of NAT,ExtREAL st
@@ -117,7 +115,7 @@ A1: 0. < x0 and
 A2: x0 < eps by XXREAL_3:3;
   consider x being real number such that
 A3: 0. < x and
-A4: x + (x qua ext-real number) < x0 by A1,XXREAL_3:56;
+A4: x + (x qua ext-real number) < x0 by A1,XXREAL_3:50;
   reconsider x as Element of ExtREAL by XXREAL_0:def 1;
 A5: for n being Element of NAT for x being Element of ExtREAL ex y being
   Element of ExtREAL st P[n,x,y]
@@ -146,7 +144,7 @@ A9: P[0] by A3,A6;
 A10: for n being Element of NAT holds P[n] from NAT_1:sch 1(A9,A7);
   then for n being Element of NAT holds 0. <= F.n;
   then
-A11: F is nonnegative by SUPINF_2:58;
+A11: F is nonnegative by SUPINF_2:39;
   for s being ext-real number holds s in rng Ser(F) implies s <= x0
   proof
     defpred P[Element of NAT] means Ser(F).$1 + F.$1 < x0;
@@ -154,27 +152,27 @@ A11: F is nonnegative by SUPINF_2:58;
     assume s in rng Ser(F);
     then consider n being set such that
 A12: n in dom Ser(F) and
-A13: s = Ser(F).n by FUNCT_1:def 5;
+A13: s = Ser(F).n by FUNCT_1:def 3;
     reconsider n as Element of NAT by A12;
 A14: for l being Element of NAT st P[l] holds P[l+1]
     proof
       let l be Element of NAT;
       F.(l+1) = (F.l)/2 by A6;
       then
-A15:  Ser(F).l + (F.(l+1) + F.(l+1)) <= Ser(F).l + F.l by XXREAL_3:117;
-      0. <= Ser(F).l & 0. <= F.(l+1) by A10,A11,SUPINF_2:59;
+A15:  Ser(F).l + (F.(l+1) + F.(l+1)) <= Ser(F).l + F.l by XXREAL_3:105;
+      0. <= Ser(F).l & 0. <= F.(l+1) by A10,A11,SUPINF_2:40;
       then
 A16:  Ser(F).(l+1) + F.(l+1) = (Ser(F).l + F.(l+1)) + F.(l+1) & Ser(F).l
-      + F.(l+1) + F.(l+1) <= Ser(F).l + F.l by A15,SUPINF_2:63,XXREAL_3:48;
+      + F.(l+1) + F.(l+1) <= Ser(F).l + F.l by A15,SUPINF_2:44,XXREAL_3:44;
       assume Ser(F).l + F.l < x0;
       hence thesis by A16,XXREAL_0:2;
     end;
-A17: P[0] by A4,A6,SUPINF_2:63;
+A17: P[0] by A4,A6,SUPINF_2:44;
     for k being Element of NAT holds P[k] from NAT_1:sch 1(A17,A14);
     then
 A18: Ser(F).n + F.n < x0;
-    0. <= Ser(F).n & 0. <= F.n by A10,A11,SUPINF_2:59;
-    hence thesis by A13,A18,XXREAL_3:53;
+    0. <= Ser(F).n & 0. <= F.n by A10,A11,SUPINF_2:40;
+    hence thesis by A13,A18,XXREAL_3:48;
   end;
   then x0 is UpperBound of rng Ser(F) by XXREAL_2:def 1;
   then
@@ -209,7 +207,7 @@ A3: inf X + eps <= inf X by XXREAL_2:def 4;
     eps < +infty;
     then reconsider a = inf X, b = eps as Real by A1,A2,XXREAL_0:48;
     inf X + eps = a + b by SUPINF_2:1;
-    then b <= a - a by A3,XREAL_1:21;
+    then b <= a - a by A3,XREAL_1:19;
     hence thesis by A1;
   end;
   suppose
@@ -237,8 +235,8 @@ A3: sup X <= sup X - eps by XXREAL_2:def 3;
   suppose
     eps < +infty;
     then reconsider a = sup X, b = eps as Real by A1,A2,XXREAL_0:48;
-    a <= a - b by A3,SUPINF_2:5;
-    hence thesis by A1,XREAL_1:46;
+    a <= a - b by A3,SUPINF_2:3;
+    hence thesis by A1,XREAL_1:44;
   end;
   suppose
     eps = +infty;
@@ -262,33 +260,31 @@ A3: for k being Element of NAT st P[k] holds P[k+1]
     let k be Element of NAT;
     assume F.k <= Ser(F).k;
     reconsider x = Ser(F).k as R_eal;
-    x + F.(k+1) = Ser(F).(k+1) by SUPINF_2:63;
-    hence thesis by A1,SUPINF_2:59,XXREAL_3:42;
+    x + F.(k+1) = Ser(F).(k+1) by SUPINF_2:44;
+    hence thesis by A1,SUPINF_2:40,XXREAL_3:39;
   end;
-A4: P[0] by SUPINF_2:63;
+A4: P[0] by SUPINF_2:44;
   for n being Element of NAT holds P[n] from NAT_1:sch 1(A4,A3);
   then
 A5: F.n <= Ser(F).n;
-  Ser(F).n <= SUM(F) by FUNCT_2:6,XXREAL_2:4;
+  Ser(F).n <= SUM(F) by FUNCT_2:4,XXREAL_2:4;
   then F.n <= SUM(F) by A5,XXREAL_0:2;
   then
 A6: F.n < +infty by A2,XXREAL_0:2;
-  0. = 0 & 0. <= F.n by A1,SUPINF_2:58;
+  0. = 0 & 0. <= F.n by A1,SUPINF_2:39;
   hence thesis by A6,XXREAL_0:46;
 end;
 
 :: PROPERTIES OF THE INTERVALS
 
 registration
-  cluster non empty interval Subset of REAL;
+  cluster non empty interval for Subset of REAL;
   existence
   proof
     take [#]REAL;
     thus thesis;
   end;
 end;
-
-canceled 3;
 
 theorem
   for A being non empty Interval, a being R_eal st ex b being R_eal st a
@@ -314,8 +310,6 @@ A2: A = [.IT,b.[;
   then IT < b by A1,XXREAL_0:1;
   hence thesis by A2,XXREAL_2:26;
 end;
-
-canceled 2;
 
 theorem
   for A being non empty Interval, b being R_eal st ex a being R_eal st a
@@ -358,7 +352,7 @@ proof
   let A be non empty Interval;
   assume A is open_interval;
   then consider a,b being R_eal such that
-A1: A = ].a,b.[ by MEASURE5:def 5;
+A1: A = ].a,b.[ by MEASURE5:def 2;
   sup A = b by A1,XXREAL_1:28,XXREAL_2:32;
   hence thesis by A1,XXREAL_1:28,XXREAL_2:28;
 end;
@@ -370,7 +364,7 @@ proof
   let A be non empty Interval;
   assume A is closed_interval;
   then consider a,b being real number such that
-A1: A = [.a,b.] by MEASURE5:def 6;
+A1: A = [.a,b.] by MEASURE5:def 3;
 A2: a <= b by A1,XXREAL_1:29;
   reconsider b as R_eal by XXREAL_0:def 1;
   sup A = b by A1,A2,XXREAL_2:29;
@@ -384,7 +378,7 @@ proof
   let A be non empty Interval;
   assume A is right_open_interval;
   then consider a being real number,b being R_eal such that
-A1: A = [.a,b.[ by MEASURE5:def 7;
+A1: A = [.a,b.[ by MEASURE5:def 4;
   reconsider a as R_eal by XXREAL_0:def 1;
 A2: a <= b by A1,XXREAL_1:27;
   then sup A = b by A1,Th47;
@@ -398,14 +392,12 @@ proof
   let A be non empty Interval;
   assume A is left_open_interval;
   then consider a being R_eal,b being real number such that
-A1: A = ].a,b.] by MEASURE5:def 8;
+A1: A = ].a,b.] by MEASURE5:def 5;
 A2: a <= b by A1,XXREAL_1:26;
   reconsider b as R_eal by XXREAL_0:def 1;
   sup A = b by A2,A1,Th45;
   hence thesis by A1,XXREAL_1:26,XXREAL_2:27;
 end;
-
-canceled 3;
 
 theorem
   for A,B being non empty Interval, a,b being real number st
@@ -422,8 +414,6 @@ A4: sup A <= inf B;
   then R_EAL a <= inf B by A4,XXREAL_0:2;
   hence thesis by A3,XXREAL_0:2;
 end;
-
-canceled;
 
 theorem
   for A,B be real-membered set holds for y being Real holds y in B ++ A iff
@@ -453,11 +443,11 @@ proof
 A1: sup A = inf B and
 A2: sup A in A or inf B in B;
   A is right_end or B is left_end by A2,XXREAL_2:def 5,def 6;
-  hence thesis by A1,XXREAL_2:94,95;
+  hence thesis by A1,XXREAL_2:90,91;
 end;
 
 definition
-  canceled 4;
+
   let A be real-membered set;
   let x be real number;
   redefine func x ++ A -> Subset of REAL;
@@ -548,7 +538,7 @@ A1: for B being Interval, y being real number st
     reconsider z = y as R_eal by XXREAL_0:def 1;
     assume B is open_interval;
     then consider a,b being R_eal such that
-A2: B = ].a,b.[ by MEASURE5:def 5;
+A2: B = ].a,b.[ by MEASURE5:def 2;
     reconsider s = z + a, t = z + b as R_eal;
  y ++ B = ].s,t.[
     proof
@@ -562,11 +552,11 @@ A3:     c in y ++ B;
 A4:     d in B and
 A5:     c = y + d by A3,Lm1;
         reconsider d1 = d as R_eal by XXREAL_0:def 1;
-        a < d1 by A2,A4,MEASURE5:def 2; then
-A6:     s < z + d1 by XXREAL_3:47;
-        d1 < b by A2,A4,MEASURE5:def 2;
+        a < d1 by A2,A4,MEASURE5:def 1; then
+A6:     s < z + d1 by XXREAL_3:43;
+        d1 < b by A2,A4,MEASURE5:def 1;
         then
-A7:     z + d1 < t by XXREAL_3:47;
+A7:     z + d1 < t by XXREAL_3:43;
         z + d1 = c by A5,SUPINF_2:1;
         hence thesis by A6,A7;
       end;
@@ -576,19 +566,19 @@ A8:  c in ].s,t.[;
       then reconsider c as Real;
       reconsider c1 = c as R_eal by XXREAL_0:def 1;
 A9:  c = y + (c - y);
-      c1 < z + b by A8,MEASURE5:def 2;
-      then c1 - z < (b + z) - z by XXREAL_3:47;
+      c1 < z + b by A8,MEASURE5:def 1;
+      then c1 - z < (b + z) - z by XXREAL_3:43;
       then
 A10:  c1 - z < b by XXREAL_3:22;
-      z + a < c1 by A8,MEASURE5:def 2;
-      then (a + z) - z < c1 - z by XXREAL_3:47;
+      z + a < c1 by A8,MEASURE5:def 1;
+      then (a + z) - z < c1 - z by XXREAL_3:43;
       then
 A11:  a < c1 - z by XXREAL_3:22;
-      c1 - z = c - y by SUPINF_2:5;
+      c1 - z = c - y by SUPINF_2:3;
       then c - y in B by A2,A11,A10;
       hence thesis by A9,Lm1;
     end;
-    hence thesis by MEASURE5:def 5;
+    hence thesis by MEASURE5:def 2;
   end;
   hence A is open_interval implies x ++ A is open_interval;
   assume
@@ -613,7 +603,7 @@ A1: for B being Interval, y being real number st B is closed_interval
     reconsider z = y as R_eal by XXREAL_0:def 1;
     assume B is closed_interval;
     then consider a1,b1 being real number such that
-A2: B = [.a1,b1.] by MEASURE5:def 6;
+A2: B = [.a1,b1.] by MEASURE5:def 3;
     reconsider a=a1,b=b1 as R_eal by XXREAL_0:def 1;
     reconsider s = z + a, t = z + b as R_eal;
  y ++ B = [.s,t.]
@@ -629,10 +619,10 @@ A4:     d in B and
 A5:     c = y + d by A3,Lm1;
         reconsider d1 = d as R_eal by XXREAL_0:def 1;
         a <= d1 by A2,A4,XXREAL_1:1; then
-A6:     s <= z + d1 by XXREAL_3:38;
+A6:     s <= z + d1 by XXREAL_3:36;
         d1 <= b by A2,A4,XXREAL_1:1;
         then
-A7:     z + d1 <= t by XXREAL_3:38;
+A7:     z + d1 <= t by XXREAL_3:36;
         z + d1 = c by A5,SUPINF_2:1;
         hence thesis by A6,A7,XXREAL_1:1;
       end;
@@ -644,18 +634,18 @@ A8:  c in [.s,t.];
       reconsider c1 = c as R_eal by XXREAL_0:def 1;
 A9:  c = y + (c - y);
       c1 <= z + b by A8,XXREAL_1:1;
-      then c1 - z <= (b + z) - z by XXREAL_3:38;
+      then c1 - z <= (b + z) - z by XXREAL_3:36;
       then
 A10:  c1 - z <= b by XXREAL_3:22;
       z + a <= c1 by A8,XXREAL_1:1;
-      then (a + z) - z <= c1 - z by XXREAL_3:38;
+      then (a + z) - z <= c1 - z by XXREAL_3:36;
       then
 A11:  a <= c1 - z by XXREAL_3:22;
-      c1 - z = c - y by SUPINF_2:5;
+      c1 - z = c - y by SUPINF_2:3;
       then c - y in B by A2,A11,A10;
       hence thesis by A9,Lm1;
     end;
-    hence thesis by MEASURE5:def 6;
+    hence thesis by MEASURE5:def 3;
   end;
   x ++ A is closed_interval implies A is closed_interval
   proof
@@ -684,7 +674,7 @@ A1: for B being Interval, y being real number st
     reconsider z = y as R_eal by XXREAL_0:def 1;
     assume B is right_open_interval;
     then consider a1 being real number,b being R_eal such that
-A2: B = [.a1,b.[ by MEASURE5:def 7;
+A2: B = [.a1,b.[ by MEASURE5:def 4;
     reconsider a=a1 as R_eal by XXREAL_0:def 1;
     reconsider s = z + a, t = z + b as R_eal;
  y ++ B = [.s,t.[
@@ -701,10 +691,10 @@ A5:     c = y + d by A3,Lm1;
         reconsider d1 = d as R_eal by XXREAL_0:def 1;
         a <= d1 by A2,A4,XXREAL_1:3;
         then
-A6:     s <= z + d1 by XXREAL_3:38;
+A6:     s <= z + d1 by XXREAL_3:36;
         d1 < b by A2,A4,XXREAL_1:3;
         then
-A7:     z + d1 < t by XXREAL_3:47;
+A7:     z + d1 < t by XXREAL_3:43;
         z + d1 = c by A5,SUPINF_2:1;
         hence thesis by A6,A7,XXREAL_1:3;
       end;
@@ -715,18 +705,18 @@ A8:  c in [.s,t.[;
       reconsider c1 = c as R_eal by XXREAL_0:def 1;
 A9:  c = y + (c - y);
       c1 < z + b by A8,XXREAL_1:3;
-      then c1 - z < (b + z) - z by XXREAL_3:47;
+      then c1 - z < (b + z) - z by XXREAL_3:43;
       then
 A10:  c1 - z < b by XXREAL_3:22;
       z + a <= c1 by A8,XXREAL_1:3;
-      then (a + z) - z <= c1 - z by XXREAL_3:38;
+      then (a + z) - z <= c1 - z by XXREAL_3:36;
       then
 A11:  a <= c1 - z by XXREAL_3:22;
-      c1 - z = c - y by SUPINF_2:5;
+      c1 - z = c - y by SUPINF_2:3;
       then c - y in B by A2,A11,A10;
       hence thesis by A9,Lm1;
     end;
-    hence thesis by MEASURE5:def 7;
+    hence thesis by MEASURE5:def 4;
   end;
   x ++ A is right_open_interval implies A is right_open_interval
   proof
@@ -753,7 +743,7 @@ A1: for B being Interval, y being real number st B is
     reconsider z = y as R_eal by XXREAL_0:def 1;
     assume B is left_open_interval;
     then consider a being R_eal,b1 being real number such that
-A2: B = ].a,b1.] by MEASURE5:def 8;
+A2: B = ].a,b1.] by MEASURE5:def 5;
     reconsider b = b1 as R_eal by XXREAL_0:def 1;
     set s = z + a, t = z + b;
  y ++ B = ].s,t.]
@@ -770,9 +760,9 @@ A5:     c = y + d by A3,Lm1;
         reconsider d1 = d as R_eal by XXREAL_0:def 1;
         a < d1 by A2,A4,XXREAL_1:2;
         then
-A6:     s < z + d1 by XXREAL_3:47;
+A6:     s < z + d1 by XXREAL_3:43;
         d1 <= b by A2,A4,XXREAL_1:2; then
-A7:     z + d1 <= t by XXREAL_3:38;
+A7:     z + d1 <= t by XXREAL_3:36;
         z + d1 = c by A5,SUPINF_2:1;
         hence thesis by A6,A7,XXREAL_1:2;
       end;
@@ -783,18 +773,18 @@ A8:  c in ].s,t.];
       reconsider c1 = c as R_eal by XXREAL_0:def 1;
 A9:  c = y + (c - y);
       c1 <= z + b by A8,XXREAL_1:2;
-      then c1 - z <= (b + z) - z by XXREAL_3:38;
+      then c1 - z <= (b + z) - z by XXREAL_3:36;
       then
 A10:  c1 - z <= b by XXREAL_3:22;
       z + a < c1 by A8,XXREAL_1:2;
-      then (a + z) - z < c1 - z by XXREAL_3:47;
+      then (a + z) - z < c1 - z by XXREAL_3:43;
       then
 A11:  a < c1 - z by XXREAL_3:22;
-      c1 - z = c - y by SUPINF_2:5;
+      c1 - z = c - y by SUPINF_2:3;
       then c - y in B by A2,A11,A10;
       hence thesis by A9,Lm1;
     end;
-    hence thesis by MEASURE5:def 8;
+    hence thesis by MEASURE5:def 5;
   end;
   x ++ A is left_open_interval implies A is left_open_interval
   proof
@@ -812,7 +802,7 @@ theorem
   for A being Interval, x being real number holds x ++ A is Interval
 proof
   let A be Interval, x be real number;
-  per cases by MEASURE5:9;
+  per cases by MEASURE5:1;
   suppose
     A is open_interval;
     then x ++ A is open_interval by Th62;
@@ -855,10 +845,10 @@ A3:   u in A;
       y + uu = x + u1 by A1,XXREAL_3:def 2;
       then y + uu in x ++ A by A3,Lm1;
       then y + uu <= z by XXREAL_2:def 1;
-      hence thesis by A1,XXREAL_3:49;
+      hence thesis by A1,XXREAL_3:45;
     end;
     then sup A <= zz - y by XXREAL_2:def 3;
-    hence thesis by A1,XXREAL_3:49;
+    hence thesis by A1,XXREAL_3:45;
   end;
   y + sup A is UpperBound of x ++ A
   proof
@@ -871,7 +861,7 @@ A5: z = x + a by Lm1;
 A6: a <= sup A by A4,XXREAL_2:4;
     ex a,c being complex number st y = a & b = c & y + b = a + c by A1,
 XXREAL_3:def 2;
-    hence thesis by A1,A5,A6,XXREAL_3:38;
+    hence thesis by A1,A5,A6,XXREAL_3:36;
   end;
   hence thesis by A2,XXREAL_2:def 3;
 end;
@@ -896,10 +886,10 @@ A3:   u in A;
       y + uu = x + u1 by A1,XXREAL_3:def 2;
       then y + uu in x ++ A by A3,Lm1;
       then z <= y + uu by XXREAL_2:def 2;
-      hence thesis by A1,XXREAL_3:45;
+      hence thesis by A1,XXREAL_3:42;
     end;
     then zz - y <= inf A by XXREAL_2:def 4;
-    hence thesis by A1,XXREAL_3:44;
+    hence thesis by A1,XXREAL_3:41;
   end;
   y + inf A is LowerBound of x ++ A
   proof
@@ -912,7 +902,7 @@ A5: z = x + a by Lm1;
 A6: inf A <= a by A4,XXREAL_2:3;
     ex a,c being complex number st y = a & b = c & y + b = a + c by A1,
 XXREAL_3:def 2;
-    hence thesis by A1,A5,A6,XXREAL_3:38;
+    hence thesis by A1,A5,A6,XXREAL_3:36;
   end;
   hence thesis by A2,XXREAL_2:def 4;
 end;
@@ -933,11 +923,11 @@ A2: y in A by MEMBERED:9;
     reconsider y as Real by XREAL_0:def 1;
 A3: x + y in x ++ A by A2,Lm1;
     reconsider y = x as R_eal by XXREAL_0:def 1;
-    thus diameter(A) = sup A - inf A by A1,MEASURE5:def 10
-      .= y + sup A - (y + inf A) by XXREAL_3:34
+    thus diameter(A) = sup A - inf A by A1,MEASURE5:def 6
+      .= y + sup A - (y + inf A) by XXREAL_3:33
       .= sup(x ++ A) - (y + inf A) by Th67
       .= sup(x ++ A) - inf(x ++ A) by Th68
-      .= diameter(x ++ A) by A3,MEASURE5:def 10;
+      .= diameter(x ++ A) by A3,MEASURE5:def 6;
   end;
 end;
 
@@ -954,7 +944,7 @@ definition
   redefine attr X is without_zero means
   :Def6:
   not 0 in X;
-  compatibility by SETFAM_1:def 9;
+  compatibility by SETFAM_1:def 8;
 end;
 
 registration
@@ -965,7 +955,7 @@ registration
 end;
 
 registration
-  cluster non empty without_zero set;
+  cluster non empty without_zero for set;
   existence
   proof
     set s = {1};
@@ -973,12 +963,12 @@ registration
     thus s is non empty;
     thus thesis;
   end;
-  cluster non empty with_zero set;
+  cluster non empty with_zero for set;
   existence by Def6;
 end;
 
 registration
-  cluster non empty without_zero Subset of REAL;
+  cluster non empty without_zero for Subset of REAL;
   existence
   proof
     set s = {1 qua Real};
@@ -986,7 +976,7 @@ registration
     thus s is non empty;
     thus thesis;
   end;
-  cluster non empty with_zero Subset of REAL;
+  cluster non empty with_zero for Subset of REAL;
   existence by Def6;
 end;
 
@@ -1033,7 +1023,7 @@ A13:    for y being set st y in B holds z c= y by A10;
         {x} holds x9 c= y
         proof
           z in G by A9,A12; then
-A14:      x, z are_c=-comparable by A3,A5,A8,ORDINAL1:def 9;
+A14:      x, z are_c=-comparable by A3,A5,A8,ORDINAL1:def 8;
           per cases by A14,XBOOLE_0:def 9;
           suppose
 A15:        x c= z;
@@ -1094,7 +1084,7 @@ end;
 registration
   let F be set;
   cluster non empty with_non-empty_elements c=-linear -> centered
-    Subset-Family of F;
+    for Subset-Family of F;
   coherence by Th70;
 end;
 
@@ -1103,10 +1093,10 @@ registration ::: FUNCT_2
   cluster f.:X -> non empty;
   coherence
   proof
-    set x =the  Element of X;
+    set x = the Element of X;
 A1: dom f = X by FUNCT_2:def 1;
-    then f.x in rng f by FUNCT_1:def 5;
-    hence thesis by A1,FUNCT_1:def 12;
+    then f.x in rng f by FUNCT_1:def 3;
+    hence thesis by A1,FUNCT_1:def 6;
   end;
 end;
 
@@ -1140,14 +1130,14 @@ A2: now
     let SS be set;
     assume
 A3: SS in S;
-    then ("f).SS in ("f).:S by FUNCT_2:43;
+    then ("f).SS in ("f).:S by FUNCT_2:35;
     then
 A4: x in ("f).SS by A1,SETFAM_1:def 1;
     ("f).SS = f"SS by A3,Def7;
-    hence f.x in SS by A4,FUNCT_1:def 13;
+    hence f.x in SS by A4,FUNCT_1:def 7;
   end;
   ("f).:S is non empty by A1,SETFAM_1:def 1;
-  then S is non empty by RELAT_1:149;
+  then S is non empty by RELAT_1:116;
   hence thesis by A2,SETFAM_1:def 1;
 end;
 
@@ -1157,10 +1147,10 @@ theorem Th72: ::: SQUARE_1 or ABSVALUE
   abs r + abs s = 0 implies r = 0
 proof
   set aa = abs(r), ab = abs(s);
-A1: 0 <= aa & 0 <= ab by COMPLEX1:132;
+A1: 0 <= aa & 0 <= ab by COMPLEX1:46;
   assume abs(r)+abs(s) = 0;
   then aa = 0 by A1;
-  hence thesis by ABSVALUE:7;
+  hence thesis by ABSVALUE:2;
 end;
 
 theorem Th73: ::: SQUARE_1 or ABSVALUE
@@ -1172,14 +1162,14 @@ A2: s < t;
   per cases;
   suppose
 A3: s<0;
-    -s < -r by A1,XREAL_1:26; then
-A4: -s+0 < -r+abs(t) by COMPLEX1:132,XREAL_1:10;
+    -s < -r by A1,XREAL_1:24; then
+A4: -s+0 < -r+abs(t) by COMPLEX1:46,XREAL_1:8;
     -s = abs(s) by A3,ABSVALUE:def 1;
     hence thesis by A1,A3,A4,ABSVALUE:def 1;
   end;
   suppose
 A5: 0<=s;
-A6: s+0 < t+abs(r) by A2,COMPLEX1:132,XREAL_1:10;
+A6: s+0 < t+abs(r) by A2,COMPLEX1:46,XREAL_1:8;
     s = abs(s) by A5,ABSVALUE:def 1;
     hence thesis by A2,A5,A6,ABSVALUE:def 1;
   end;
@@ -1201,20 +1191,20 @@ A4: for n being Element of NAT holds (seq").n<r;
 A5: for n being Element of NAT holds s<(seq").n;
   set aa = abs(r), ab = abs(s);
   set rab = 1/(aa+ab);
-A6: 0 <= aa & 0 <= ab by COMPLEX1:132;
+A6: 0 <= aa & 0 <= ab by COMPLEX1:46;
 A7: now
     let n be Element of NAT;
     set g = seq.n, t = (seq").n;
     set At = abs(t);
     t= 1/g by VALUED_1:10;
     then
-A8: At = 1/(abs g) by ABSVALUE:15;
+A8: At = 1/(abs g) by ABSVALUE:7;
     t" = g " " by VALUED_1:10;
-    then t <> 0 by A2,SEQ_1:7,XCMPLX_1:203; then
-A9: 0 < At by COMPLEX1:133;
+    then t <> 0 by A2,SEQ_1:5,XCMPLX_1:202; then
+A9: 0 < At by COMPLEX1:47;
     s<t & t<r by A4,A5;
     then At < aa+ab by Th73;
-    then At" > (aa+ab)" by A9,XREAL_1:90;
+    then At" > (aa+ab)" by A9,XREAL_1:88;
     hence abs(seq.n) > rab by A8;
   end;
 A10: (seq").1<r by A4;
@@ -1245,15 +1235,15 @@ A2: t is UpperBound of rng seq;
     proof
       take t+1;
       let n be Element of NAT;
-      seq.n <= t & t < t+1 by A2,FUNCT_2:6,XREAL_1:31,XXREAL_2:def 1;
+      seq.n <= t & t < t+1 by A2,FUNCT_2:4,XREAL_1:29,XXREAL_2:def 1;
       hence thesis by XXREAL_0:2;
     end;
     take s-1;
     let n be Element of NAT;
-    s < s+1 by XREAL_1:31;
+    s < s+1 by XREAL_1:29;
     then
-A3: s-1 < s by XREAL_1:21;
-    seq.n >= s by A1,FUNCT_2:6,XXREAL_2:def 2;
+A3: s-1 < s by XREAL_1:19;
+    seq.n >= s by A1,FUNCT_2:4,XXREAL_2:def 2;
     hence thesis by A3,XXREAL_0:2;
   end;
   given t such that
@@ -1265,13 +1255,13 @@ A5: for n being Element of NAT holds seq.n>s;
     take s;
     let r be ext-real number;
     assume r in rng seq;
-    then ex n being set st n in dom seq & seq.n = r by FUNCT_1:def 5;
+    then ex n being set st n in dom seq & seq.n = r by FUNCT_1:def 3;
     hence thesis by A5;
   end;
   take t;
   let r be ext-real number;
   assume r in rng seq;
-  then ex n being set st n in dom seq & seq.n = r by FUNCT_1:def 5;
+  then ex n being set st n in dom seq & seq.n = r by FUNCT_1:def 3;
   hence thesis by A4;
 end;
 
@@ -1291,13 +1281,13 @@ definition
     proof assume
 A1:    X is with_max;
      hence X is bounded_above;
-      reconsider X as non empty bounded_above (real-membered set) by A1;
+      reconsider X as non empty bounded_above real-membered set by A1;
       upper_bound X in X by A1,XXREAL_2:def 6;
      hence thesis;
     end;
    assume
 A2:   X is bounded_above & upper_bound X in X;
-     then reconsider X as non empty bounded_above (real-membered set);
+     then reconsider X as non empty bounded_above real-membered set;
     upper_bound X in X by A2;
    hence thesis by XXREAL_2:def 6;
   end;
@@ -1309,20 +1299,20 @@ A2:   X is bounded_above & upper_bound X in X;
     proof assume
 A3:    X is with_min;
      hence X is bounded_below;
-      reconsider X as non empty bounded_below (real-membered set) by A3;
+      reconsider X as non empty bounded_below real-membered set by A3;
       lower_bound X in X by A3,XXREAL_2:def 5;
      hence thesis;
     end;
    assume
 A4:   X is bounded_below & lower_bound X in X;
-     then reconsider X as non empty bounded_below (real-membered set);
+     then reconsider X as non empty bounded_below real-membered set;
     lower_bound X in X by A4;
    hence thesis by XXREAL_2:def 5;
   end;
 end;
 
 registration
-  cluster non empty closed bounded Subset of REAL;
+  cluster non empty closed bounded for Subset of REAL;
   existence
   proof
     [. 0,0 .] = {0} by XXREAL_1:17;
@@ -1363,7 +1353,7 @@ A2: t = -r3 and
 A3: r3 in X;
   reconsider r3 as Real by A3;
   r3 <= s by A1,A3,XXREAL_2:def 1;
-  hence thesis by A2,XREAL_1:26;
+  hence thesis by A2,XREAL_1:24;
 end;
 
 Lm3: for X being Subset of REAL st X is bounded_below holds --X is
@@ -1380,7 +1370,7 @@ A2: t = -r3 and
 A3: r3 in X;
   reconsider r3 as Real by A3;
   r3 >= s by A1,A3,XXREAL_2:def 2;
-  hence thesis by A2,XREAL_1:26;
+  hence thesis by A2,XREAL_1:24;
 end;
 
 theorem Th77:
@@ -1412,11 +1402,11 @@ A2: for s st s in X holds s >= t;
       assume s in --X;
       then -s in -- --X by MEMBER_1:11;
       then -s >= t by A2;
-      then - -s <= -t by XREAL_1:26;
+      then - -s <= -t by XREAL_1:24;
       hence s <= -t;
     end;
-    then -r <= -t by SEQ_4:62;
-    hence r >= t by XREAL_1:26;
+    then -r <= -t by SEQ_4:45;
+    hence r >= t by XREAL_1:24;
   end;
   assume X is bounded_below;
   then
@@ -1425,10 +1415,10 @@ A3: --X is bounded_above by Lm3;
     let s;
     assume s in X;
     then -s in --X by MEMBER_1:11;
-    then -s <= -r by A3,SEQ_4:def 4;
-    hence s >= r by XREAL_1:26;
+    then -s <= -r by A3,SEQ_4:def 1;
+    hence s >= r by XREAL_1:24;
   end;
-  hence thesis by A1,SEQ_4:61;
+  hence thesis by A1,SEQ_4:44;
 end;
 
 theorem Th80:
@@ -1446,11 +1436,11 @@ A2: for t st t in X holds t <= s;
       assume t in --X;
       then -t in -- --X by MEMBER_1:11;
       then -t <= s by A2;
-      then - -t >= -s by XREAL_1:26;
+      then - -t >= -s by XREAL_1:24;
       hence t >= -s;
     end;
-    then -r >= -s by SEQ_4:60;
-    hence r <= s by XREAL_1:26;
+    then -r >= -s by SEQ_4:43;
+    hence r <= s by XREAL_1:24;
   end;
   assume X is bounded_above;
   then
@@ -1459,10 +1449,10 @@ A3: --X is bounded_below by Lm2;
     let t;
     assume t in X;
     then -t in --X by MEMBER_1:11;
-    then -t >= -r by A3,SEQ_4:def 5;
-    hence t <= r by XREAL_1:26;
+    then -t >= -r by A3,SEQ_4:def 2;
+    hence t <= r by XREAL_1:24;
   end;
-  hence thesis by A1,SEQ_4:63;
+  hence thesis by A1,SEQ_4:46;
 end;
 
 Lm4: for X being Subset of REAL st X is closed holds --X is closed
@@ -1474,21 +1464,21 @@ A1: X is closed;
   assume that
 A2: rng s1 c= --X and
 A3: s1 is convergent;
-A4: - lim s1 = lim -s1 by A3,SEQ_2:24;
+A4: - lim s1 = lim -s1 by A3,SEQ_2:10;
 A5: rng -s1 c= X
   proof
     let x be set;
     assume x in rng -s1;
     then consider n being set such that
 A6: n in dom -s1 and
-A7: x = (-s1).n by FUNCT_1:def 5;
+A7: x = (-s1).n by FUNCT_1:def 3;
     reconsider n as Element of NAT by A6;
-A8: s1.n in rng s1 by FUNCT_2:6;
-    x = -(s1.n) by A7,SEQ_1:14;
+A8: s1.n in rng s1 by FUNCT_2:4;
+    x = -(s1.n) by A7,SEQ_1:10;
     then x in -- --X by A2,A8;
     hence thesis;
   end;
-  -s1 is convergent by A3,SEQ_2:23;
+  -s1 is convergent by A3,SEQ_2:9;
   then lim -s1 in X by A1,A5,RCOMP_1:def 4;
   then - -lim s1 in --X by A4,MEMBER_1:11;
   hence thesis;
@@ -1550,7 +1540,7 @@ A1: s is UpperBound of X;
 A2: t = p+r3 and
 A3: r3 in X;
   r3 <= s by A1,A3,XXREAL_2:def 1;
-  hence thesis by A2,XREAL_1:8;
+  hence thesis by A2,XREAL_1:6;
 end;
 
 theorem
@@ -1575,7 +1565,7 @@ A1: s is LowerBound of X;
 A2: t = p+r3 and
 A3: r3 in X;
   r3 >= s by A1,A3,XXREAL_2:def 2;
-  hence thesis by A2,XREAL_1:8;
+  hence thesis by A2,XREAL_1:6;
 end;
 
 theorem
@@ -1601,10 +1591,10 @@ A3: for s st s in q3++X holds s >= t;
       let s;
       assume s in X;
       then t <= q3+s by A3,MEMBER_1:141;
-      hence t-q3 <= s by XREAL_1:22;
+      hence t-q3 <= s by XREAL_1:20;
     end;
-    then lower_bound X >= t-q3 by SEQ_4:60;
-    hence t <= i by XREAL_1:22;
+    then lower_bound X >= t-q3 by SEQ_4:43;
+    hence t <= i by XREAL_1:20;
   end;
   now
     let s;
@@ -1613,10 +1603,10 @@ A3: for s st s in q3++X holds s >= t;
     then consider r3 such that
 A4: q3+r3 = s and
 A5: r3 in X;
-    r3 >= lower_bound X by A1,A5,SEQ_4:def 5;
-    hence s >= i by A4,XREAL_1:8;
+    r3 >= lower_bound X by A1,A5,SEQ_4:def 2;
+    hence s >= i by A4,XREAL_1:6;
   end;
-  hence thesis by A2,SEQ_4:61;
+  hence thesis by A2,SEQ_4:44;
 end;
 
 theorem
@@ -1634,10 +1624,10 @@ A3: for s st s in q3++X holds s <= t;
       let s;
       assume s in X;
       then q3+s <= t by A3,MEMBER_1:141;
-      hence s <= t-q3 by XREAL_1:21;
+      hence s <= t-q3 by XREAL_1:19;
     end;
-    then upper_bound X <= t-q3 by SEQ_4:62;
-    hence i <= t by XREAL_1:21;
+    then upper_bound X <= t-q3 by SEQ_4:45;
+    hence i <= t by XREAL_1:19;
   end;
   now
     let s;
@@ -1646,10 +1636,10 @@ A3: for s st s in q3++X holds s <= t;
     then consider r3 such that
 A4: q3+r3 = s and
 A5: r3 in X;
-    r3 <= upper_bound X by A1,A5,SEQ_4:def 4;
-    hence s <= i by A4,XREAL_1:8;
+    r3 <= upper_bound X by A1,A5,SEQ_4:def 1;
+    hence s <= i by A4,XREAL_1:6;
   end;
-  hence thesis by A2,SEQ_4:63;
+  hence thesis by A2,SEQ_4:46;
 end;
 
 Lm8: for X being Subset of REAL st X is closed holds q3++X is closed
@@ -1663,8 +1653,8 @@ A2: q3++X = { q3+r3 : r3 in X} by Lm5;
   assume that
 A3: (rng s1) c= q3++X and
 A4: s1 is convergent;
-  lim (s1-s0) = (lim s1) - s0.0 by A4,SEQ_4:59
-    .= (lim s1) - q3 by FUNCOP_1:13; then
+  lim (s1-s0) = (lim s1) - s0.0 by A4,SEQ_4:42
+    .= (lim s1) - q3 by FUNCOP_1:7; then
 A5: q3+lim(s1-s0) = lim s1;
 A6: rng (s1-s0) c= X
   proof
@@ -1673,17 +1663,17 @@ A6: rng (s1-s0) c= X
 A7: x in rng (s1-s0);
     then consider n being set such that
 A8: n in dom (s1-s0) and
-A9: x = (s1-s0).n by FUNCT_1:def 5;
+A9: x = (s1-s0).n by FUNCT_1:def 3;
     reconsider x9 = x as Real by A7;
     reconsider n as Element of NAT by A8;
-A10: s1.n in rng s1 by FUNCT_2:6;
-    x = s1.n + (-s0).n by A9,SEQ_1:11
-      .= s1.n + -(s0.n) by SEQ_1:14
-      .= s1.n - q3 by FUNCOP_1:13;
+A10: s1.n in rng s1 by FUNCT_2:4;
+    x = s1.n + (-s0).n by A9,SEQ_1:7
+      .= s1.n + -(s0.n) by SEQ_1:10
+      .= s1.n - q3 by FUNCOP_1:7;
     then x9+q3 in q3++X by A3,A10;
     hence thesis by Th82;
   end;
-  s1-s0 is convergent by A4,SEQ_2:25;
+  s1-s0 is convergent by A4,SEQ_2:11;
   then lim (s1-s0) in X by A1,A6,RCOMP_1:def 4;
   hence thesis by A5,A2;
 end;
@@ -1746,7 +1736,7 @@ registration
   cluster Inv X -> non empty;
   coherence
   proof
-    ex x being Real st x in X by SUBSET_1:10;
+    ex x being Real st x in X by SUBSET_1:4;
     hence thesis by Th90;
   end;
 end;
@@ -1758,7 +1748,7 @@ registration
   proof
     now assume 0 in Inv X;
       then ex r3 st 0 = 1/r3 & r3 in X;
-      hence contradiction by XCMPLX_1:203;
+      hence contradiction by XCMPLX_1:202;
     end;
     hence thesis by Def6;
   end;
@@ -1782,16 +1772,16 @@ A5: rng (s1") c= X
     assume x in rng (s1");
     then consider n being set such that
 A6: n in dom (s1") and
-A7: x = (s1").n by FUNCT_1:def 5;
+A7: x = (s1").n by FUNCT_1:def 3;
     reconsider n as Element of NAT by A6;
-    s1.n in rng s1 by FUNCT_2:6;
+    s1.n in rng s1 by FUNCT_2:4;
     then 1/(s1.n) in Inv Inv X by A3;
     hence thesis by A7,VALUED_1:10;
   end;
 A8: not 0 in rng s1 by A3;
 A9: now assume not s1 is non-zero;
-    then ex n being Element of NAT st s1.n = 0 by SEQ_1:7;
-    hence contradiction by A8,FUNCT_2:6;
+    then ex n being Element of NAT st s1.n = 0 by SEQ_1:5;
+    hence contradiction by A8,FUNCT_2:4;
   end;
 A10: now
 A11: rng (s1") c= X
@@ -1800,9 +1790,9 @@ A11: rng (s1") c= X
       assume y in rng (s1");
       then consider x being set such that
 A12:  x in dom (s1") and
-A13:  y = (s1").x by FUNCT_1:def 5;
+A13:  y = (s1").x by FUNCT_1:def 3;
       reconsider x as Element of NAT by A12;
-      s1.x in rng s1 by FUNCT_2:6;
+      s1.x in rng s1 by FUNCT_2:4;
       then 1/(s1.x) in Inv Inv X by A3;
       hence thesis by A13,VALUED_1:10;
     end;
@@ -1811,9 +1801,9 @@ A13:  y = (s1").x by FUNCT_1:def 5;
     then rng (s1") is non bounded by Th75;
     hence contradiction by A2,A11,XXREAL_2:45;
   end;
-  then s1" is convergent by A4,A9,SEQ_2:35;
+  then s1" is convergent by A4,A9,SEQ_2:21;
   then lim s1" in X by A1,A5,RCOMP_1:def 4;
-  then 1/lim s1 in X by A4,A9,A10,SEQ_2:36;
+  then 1/lim s1 in X by A4,A9,A10,SEQ_2:22;
   then 1/(1/lim s1) in Inv X;
   hence thesis;
 end;
@@ -1898,7 +1888,7 @@ A7:     A is closed;
           then ex B being Subset of REAL st Z = B & X c= B & B is closed;
           hence thesis;
         end;
-        then X c= IT by A1,A2,SETFAM_1:6;
+        then X c= IT by A1,A2,SETFAM_1:5;
         then X c= A by A6,XBOOLE_1:1;
         then A in ClX by A7;
         hence thesis by A1,A4,A5,SETFAM_1:def 1;
@@ -1917,7 +1907,7 @@ A9:   Y in ClX;
 A10:  A = Y and
       X c= A and
 A11:  A is closed;
-      IT c= A by A1,A9,A10,SETFAM_1:4;
+      IT c= A by A1,A9,A10,SETFAM_1:3;
       then A in ClIT by A11;
       hence thesis by A8,A10,SETFAM_1:def 1;
     end;
@@ -1952,7 +1942,7 @@ proof
   set ClX = { A where A is Subset of REAL : X c= A & A is closed };
   assume X c= Y;
   then Y in ClX;
-  hence thesis by SETFAM_1:4;
+  hence thesis by SETFAM_1:3;
 end;
 
 theorem Th94:
@@ -1979,7 +1969,7 @@ proof
     set ClX = { A where A is Subset of REAL : X c= A & A is closed };
     assume X is closed;
     then X in ClX; then
-A1: Cl X c= X by SETFAM_1:4;
+A1: Cl X c= X by SETFAM_1:3;
     X c= Cl X by Th94;
     hence X = Cl X by A1,XBOOLE_0:def 10;
   end;
@@ -2001,7 +1991,7 @@ A1: X c= Y;
   Y c= Cl Y by Th94;
   then X c= Cl Y by A1,XBOOLE_1:1;
   then Cl Y in ClX;
-  hence thesis by SETFAM_1:4;
+  hence thesis by SETFAM_1:3;
 end;
 
 theorem Th99:
@@ -2015,8 +2005,8 @@ A1: r3 in Cl X;
 A2: r3 in O and
 A3: O /\ X is empty;
     O misses X by A3,XBOOLE_0:def 7; then
-A4: X c= O` by SUBSET_1:43;
-A5: O misses O` by SUBSET_1:44;
+A4: X c= O` by SUBSET_1:23;
+A5: O misses O` by SUBSET_1:24;
     O` is closed by RCOMP_1:def 5;
     then Cl X c= O` by A4,Th93;
     hence contradiction by A1,A2,A5,XBOOLE_0:3;
@@ -2028,10 +2018,10 @@ A6: (Cl X)` is open by RCOMP_1:def 5;
   then
 A7: (Cl X)` /\ X c= Cl X by XBOOLE_1:1;
   (Cl X)` /\ X c= (Cl X)` by XBOOLE_1:17; then
-A8: (Cl X)` /\ X is empty by A7,SUBSET_1:40;
+A8: (Cl X)` /\ X is empty by A7,SUBSET_1:20;
   assume for O being open Subset of REAL st r3 in O holds O /\ X is non empty;
   then not r3 in (Cl X)` by A6,A8;
-  hence thesis by SUBSET_1:50;
+  hence thesis by SUBSET_1:29;
 end;
 
 theorem
@@ -2049,8 +2039,8 @@ A2: now
     set oi = ].r3-1/n1,r3+1/n1.[;
     reconsider u = choose(X/\oi) as set;
     take u;
-A3: r3 < r3+1/n1 by XREAL_1:31;
-    then r3-1/n1 < r3 by XREAL_1:21;
+A3: r3 < r3+1/n1 by XREAL_1:29;
+    then r3-1/n1 < r3 by XREAL_1:19;
     then r3 in oi by A3;
     then X/\oi is non empty by A1,Th99;
     then u in X/\oi;
@@ -2059,8 +2049,8 @@ A3: r3 < r3+1/n1 by XREAL_1:31;
   end;
   consider seq being Function such that
 A4: dom seq = NAT & rng seq c= REAL and
-A5: for x being set st x in NAT holds P[x,seq.x] from WELLORD2:sch 1(A2);
-  reconsider seq as Real_Sequence by A4,FUNCT_2:def 1,RELSET_1:11;
+A5: for x being set st x in NAT holds P[x,seq.x] from FUNCT_1:sch 5(A2);
+  reconsider seq as Real_Sequence by A4,FUNCT_2:def 1,RELSET_1:4;
   take seq;
   thus rng seq c= X
   proof
@@ -2068,15 +2058,15 @@ A5: for x being set st x in NAT holds P[x,seq.x] from WELLORD2:sch 1(A2);
     assume y in rng seq;
     then consider x being set such that
 A6: x in dom seq and
-A7: seq.x = y by FUNCT_1:def 5;
+A7: seq.x = y by FUNCT_1:def 3;
     consider n being Nat such that
     x = n and
 A8: seq.x = choose(X/\].r3-1/(n+1),r3+1/(n+1).[) by A5,A6;
-    reconsider n as Element of NAT by ORDINAL1:def 13;
+    reconsider n as Element of NAT by ORDINAL1:def 12;
     set n1 = n+1;
     set oi = ].r3-1/n1,r3+1/n1.[;
-A9: r3 < r3+1/n1 by XREAL_1:31;
-    then r3-1/n1 < r3 by XREAL_1:21;
+A9: r3 < r3+1/n1 by XREAL_1:29;
+    then r3-1/n1 < r3 by XREAL_1:19;
     then r3 in oi by A9;
     then X/\oi is non empty by A1,Th99;
     hence thesis by A7,A8,XBOOLE_0:def 4;
@@ -2089,24 +2079,24 @@ A11: 1/p <= cp by INT_1:def 7;
 A12: 0<p;
     then
 A13: 0 < cp by INT_1:def 7;
-    then reconsider cp as Element of NAT by INT_1:16;
+    then reconsider cp as Element of NAT by INT_1:3;
     take n = cp;
     n < n+1 by NAT_1:13;
     then
-A14: 1/(n+1) < 1/n by A13,XREAL_1:90;
-    1/(1/p) >= 1/cp by A12,A11,XREAL_1:87; then
+A14: 1/(n+1) < 1/n by A13,XREAL_1:88;
+    1/(1/p) >= 1/cp by A12,A11,XREAL_1:85; then
 A15: 1/(n+1) < p by A14,XXREAL_0:2;
     let m be Element of NAT;
     assume n<=m;
     then
-A16: n+1 <= m+1 by XREAL_1:8;
+A16: n+1 <= m+1 by XREAL_1:6;
     set m1 = m+1;
-    1/m1 <= 1/(n+1) by A16,XREAL_1:87;
+    1/m1 <= 1/(n+1) by A16,XREAL_1:85;
     then
 A17: 1/m1 < p by A15,XXREAL_0:2;
     set oi = ].r3-1/m1,r3+1/m1.[;
-A18: r3 < r3+1/m1 by XREAL_1:31;
-    then r3-1/m1 < r3 by XREAL_1:21;
+A18: r3 < r3+1/m1 by XREAL_1:29;
+    then r3-1/m1 < r3 by XREAL_1:19;
     then r3 in oi by A18;
     then
 A19: X/\oi is non empty by A1,Th99;
@@ -2116,8 +2106,8 @@ A19: X/\oi is non empty by A1,Th99;
     then consider s being Real such that
 A20: seq.m = s and
 A21: r3-1/m1 < s & s < r3+1/m1;
-    -1/m1 < s-r3 & s-r3 < 1/m1 by A21,XREAL_1:21,22;
-    then abs(s-r3) < 1/m1 by SEQ_2:9;
+    -1/m1 < s-r3 & s-r3 < 1/m1 by A21,XREAL_1:19,20;
+    then abs(s-r3) < 1/m1 by SEQ_2:1;
     hence abs(seq.m-r3)<p by A20,A17,XXREAL_0:2;
   end;
   hence seq is convergent by SEQ_2:def 6;
@@ -2140,7 +2130,7 @@ A2:   for y being set st y in dom f holds r<f.y;
       take r;
       let s be ext-real number;
       assume s in f.:X;
-      then ex x being set st x in X & x in X & s = f.x by FUNCT_2:115;
+      then ex x being set st x in X & x in X & s = f.x by FUNCT_2:64;
       hence thesis by A1,A2;
     end;
     given p being real number such that
@@ -2148,13 +2138,13 @@ A3: p is LowerBound of f.:X;
     take p - 1;
     let y be set;
     assume y in dom f;
-    then f.y in rng f by FUNCT_1:12;
-    then f.y in f.:X by RELSET_1:38;
+    then f.y in rng f by FUNCT_1:3;
+    then f.y in f.:X by RELSET_1:22;
     then
 A4: p <= f.y by A3,XXREAL_2:def 2;
-    f.y < f.y + 1 by XREAL_1:31;
+    f.y < f.y + 1 by XREAL_1:29;
     then p < f.y + 1 by A4,XXREAL_0:2;
-    hence thesis by XREAL_1:21;
+    hence thesis by XREAL_1:19;
   end;
   redefine attr f is bounded_above means
   f.:X is bounded_above;
@@ -2168,7 +2158,7 @@ A6:   for y being set st y in dom f holds r>f.y;
       take r;
       let s be ext-real number;
       assume s in f.:X;
-      then ex x being set st x in X & x in X & s = f.x by FUNCT_2:115;
+      then ex x being set st x in X & x in X & s = f.x by FUNCT_2:64;
       hence thesis by A5,A6;
     end;
     given p being real number such that
@@ -2176,12 +2166,12 @@ A7: p is UpperBound of f.:X;
     take p + 1;
     let y be set;
     assume y in dom f;
-    then f.y in rng f by FUNCT_1:12;
-    then f.y in f.:X by RELSET_1:38;
+    then f.y in rng f by FUNCT_1:3;
+    then f.y in f.:X by RELSET_1:22;
     then p >= f.y by A7,XXREAL_2:def 1;
     then
-A8: p+1 >= f.y+1 by XREAL_1:8;
-    f.y < f.y + 1 by XREAL_1:31;
+A8: p+1 >= f.y+1 by XREAL_1:6;
+    f.y < f.y + 1 by XREAL_1:29;
     hence thesis by A8,XXREAL_0:2;
   end;
 end;
@@ -2203,8 +2193,8 @@ proof
     hereby
       assume x in (-f).:A;
       then consider x1 being set such that
-A1:   x1 in X & x1 in A & x = (-f).x1 by FUNCT_2:115;
-      x = -(f.x1) & f.x1 in f.:A by A1,FUNCT_2:43,VALUED_1:8;
+A1:   x1 in X & x1 in A & x = (-f).x1 by FUNCT_2:64;
+      x = -(f.x1) & f.x1 in f.:A by A1,FUNCT_2:35,VALUED_1:8;
       hence x in --(f.:A);
     end;
     assume x in --(f.:A); then
@@ -2214,11 +2204,11 @@ A3: r3 in f.:A;
     reconsider r3 as Real by A3;
     consider x1 being set such that
 A4: x1 in X & x1 in A and
-A5: r3 = f.x1 by A3,FUNCT_2:115;
+A5: r3 = f.x1 by A3,FUNCT_2:64;
     x = (-f).x1 by A2,A5,VALUED_1:8;
-    hence x in (-f).:A by A4,FUNCT_2:43;
+    hence x in (-f).:A by A4,FUNCT_2:35;
   end;
-  hence thesis by TARSKI:2;
+  hence thesis by TARSKI:1;
 end;
 
 Lm9: for X being non empty set, f being Function of X, REAL st f is with_max
@@ -2282,18 +2272,18 @@ proof
 A1:   (-f).x = -(f.x) by VALUED_1:8;
       assume
 A2:   x in (-f)"A;
-      then (-f).x in A by FUNCT_2:46;
+      then (-f).x in A by FUNCT_2:38;
       then - -f.x in --A by A1;
-      hence x in f"(--A) by A2,FUNCT_2:46;
+      hence x in f"(--A) by A2,FUNCT_2:38;
     end;
 A3: (-f).x = -(f.x) by VALUED_1:8;
     assume
 A4: x in f"(--A);
-    then f.x in --A by FUNCT_2:46;
+    then f.x in --A by FUNCT_2:38;
     then (-f).x in -- --A by A3;
-    hence x in (-f)"A by A4,FUNCT_2:46;
+    hence x in (-f)"A by A4,FUNCT_2:38;
   end;
-  hence thesis by TARSKI:2;
+  hence thesis by TARSKI:1;
 end;
 
 theorem
@@ -2306,8 +2296,8 @@ proof
     hereby
       assume x in (s+f).:A;
       then consider x1 being set such that
-A1:   x1 in X & x1 in A & x = (s+f).x1 by FUNCT_2:115;
-      x = s+(f.x1) & f.x1 in f.:A by A1,FUNCT_2:43,VALUED_1:2; then
+A1:   x1 in X & x1 in A & x = (s+f).x1 by FUNCT_2:64;
+      x = s+(f.x1) & f.x1 in f.:A by A1,FUNCT_2:35,VALUED_1:2; then
       x in { s + q3 : q3 in f.:A };
       hence x in s++(f.:A) by Lm5;
     end;
@@ -2319,11 +2309,11 @@ A3: r3 in f.:A;
     consider x1 being set such that
 A4: x1 in X and
 A5: x1 in A and
-A6: r3 = f.x1 by A3,FUNCT_2:115;
+A6: r3 = f.x1 by A3,FUNCT_2:64;
     x = (s+f).x1 by A2,A4,A6,VALUED_1:2;
-    hence x in (s+f).:A by A4,A5,FUNCT_2:43;
+    hence x in (s+f).:A by A4,A5,FUNCT_2:35;
   end;
-  hence thesis by TARSKI:2;
+  hence thesis by TARSKI:1;
 end;
 
 theorem
@@ -2336,21 +2326,21 @@ proof
     hereby
       assume
 A1:   x in (q3+f)"A;
-      then (q3+f).x in A & (q3+f).x = q3+(f.x) by FUNCT_2:46,VALUED_1:2;
+      then (q3+f).x in A & (q3+f).x = q3+(f.x) by FUNCT_2:38,VALUED_1:2;
       then -q3+(q3+(f.x)) in { -q3 + p3 : p3 in A };
       then -q3+(q3+(f.x)) in -q3++A by Lm5;
-      hence x in f"(-q3++A) by A1,FUNCT_2:46;
+      hence x in f"(-q3++A) by A1,FUNCT_2:38;
     end;
     assume
 A2: x in f"(-q3++A);
-    then f.x in -q3++A & (q3+f).x = q3+(f.x) by FUNCT_2:46,VALUED_1:2;
+    then f.x in -q3++A & (q3+f).x = q3+(f.x) by FUNCT_2:38,VALUED_1:2;
     then (q3+f).x in { q3+p3 : p3 in -q3 ++ A };
     then (q3+f).x in q3++(-q3++A) by Lm5;
     then (q3+f).x in (q3+-q3)++A by MEMBER_1:147;
     then (q3+f).x in A by MEMBER_1:146;
-    hence x in (q3+f)"A by A2,FUNCT_2:46;
+    hence x in (q3+f)"A by A2,FUNCT_2:38;
   end;
-  hence thesis by TARSKI:2;
+  hence thesis by TARSKI:1;
 end;
 
 notation
@@ -2381,18 +2371,18 @@ proof
 A1:   (Inv f).x = (f.x)" by VALUED_1:10;
       assume
 A2:   x in (Inv f)"A;
-      then (Inv f).x in A by FUNCT_2:46;
+      then (Inv f).x in A by FUNCT_2:38;
       then 1/((f.x)") in Inv A by A1;
-      hence x in f"(Inv A) by A2,FUNCT_2:46;
+      hence x in f"(Inv A) by A2,FUNCT_2:38;
     end;
 A3: (f.x)" = 1/(f.x) & (Inv f).x = (f.x)" by VALUED_1:10;
     assume
 A4: x in f"(Inv A);
-    then f.x in Inv A by FUNCT_2:46;
+    then f.x in Inv A by FUNCT_2:38;
     then (Inv f).x in Inv Inv A by A3;
-    hence x in (Inv f)"A by A4,FUNCT_2:46;
+    hence x in (Inv f)"A by A4,FUNCT_2:38;
   end;
-  hence thesis by TARSKI:2;
+  hence thesis by TARSKI:1;
 end;
 
 theorem

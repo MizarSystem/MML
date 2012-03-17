@@ -22,11 +22,11 @@ environ
       XXREAL_0, NAT_1, PARTFUN1, MSUALG_6, PRELAMB;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, DOMAIN_1, RELAT_1, FUNCT_1,
       RELSET_1, STRUCT_0, NUMBERS, NAT_1, MCART_1, FINSET_1, CARD_3, FINSEQ_1,
-      TREES_1, TREES_2, FUNCT_6, TREES_3, TREES_4, DTCONSTR, LANG1, PBOOLE,
-      TREES_9, MSUALG_1, MSUALG_2, MSAFREE, FUNCOP_1, MSUALG_3, EQUATION,
-      MSATERM, MSUALG_6, CATALG_1, XXREAL_0;
+      FINSEQ_2, TREES_1, TREES_2, FUNCT_6, TREES_3, TREES_4, DTCONSTR, LANG1,
+      PBOOLE, TREES_9, MSUALG_1, MSUALG_2, MSAFREE, FUNCOP_1, MSUALG_3,
+      EQUATION, MSATERM, MSUALG_6, CATALG_1, XXREAL_0;
  constructors DOMAIN_1, XXREAL_0, NAT_1, TREES_9, MSSUBFAM, MSUALG_3, MSATERM,
-      MSUALG_6, CATALG_1, EQUATION, SEQ_4, RELSET_1;
+      MSUALG_6, CATALG_1, EQUATION, SEQ_4, RELSET_1, FINSEQ_2;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1, FUNCOP_1,
       XREAL_0, FINSEQ_1, TREES_2, TREES_3, TREES_9, STRUCT_0, RELSET_1,
       MSUALG_1, MSUALG_2, MSUALG_3, MSAFREE, MSATERM, INDEX_1, MSUALG_6,
@@ -50,41 +50,39 @@ definition
   mode Element of A is Element of Union the Sorts of A;
 end;
 
-canceled;
-
-theorem :: MSAFREE3:2
+theorem :: MSAFREE3:1
   for I being set, A being ManySortedSet of I for F being
   ManySortedFunction of I st F is "1-1" & A c= doms F holds F""(F.:.:A) = A;
 
 definition
   let S be non void Signature;
   let X be ManySortedSet of the carrier of S;
-  canceled;
+
   func Free(S, X) -> strict MSAlgebra over S means
-:: MSAFREE3:def 2
+:: MSAFREE3:def 1
 
   ex A being MSSubset
   of FreeMSA (X \/ ((the carrier of S) --> {0})) st it = GenMSAlg A & A = (
   Reverse (X \/ ((the carrier of S) --> {0})))""X;
 end;
 
-theorem :: MSAFREE3:3
+theorem :: MSAFREE3:2
   for S being non void Signature for X being ManySortedSet of the
 carrier of S for s being SortSymbol of S holds [x,s] in the carrier of DTConMSA
   X iff x in X.s;
 
-theorem :: MSAFREE3:4
+theorem :: MSAFREE3:3
   for S being non void Signature for Y being non-empty
 ManySortedSet of the carrier of S for X being ManySortedSet of the carrier of S
 for s being SortSymbol of S holds x in X.s & x in Y.s iff root-tree [x,s] in ((
   Reverse Y)""X).s;
 
-theorem :: MSAFREE3:5
+theorem :: MSAFREE3:4
   for S being non void Signature for X being ManySortedSet of the
 carrier of S for s being SortSymbol of S st x in X.s holds root-tree [x,s] in (
   the Sorts of Free(S, X)).s;
 
-theorem :: MSAFREE3:6
+theorem :: MSAFREE3:5
   for S being non void Signature for X being ManySortedSet of the
 carrier of S for o being OperSymbol of S st the_arity_of o = {} holds root-tree
   [o, the carrier of S] in (the Sorts of Free(S, X)).the_result_sort_of o;
@@ -95,16 +93,16 @@ registration
   cluster Free(S, X) -> non empty;
 end;
 
-theorem :: MSAFREE3:7
+theorem :: MSAFREE3:6
   for S being non void Signature for X being non-empty ManySortedSet of
   the carrier of S holds x is Element of FreeMSA X iff x is Term of S, X;
 
-theorem :: MSAFREE3:8
+theorem :: MSAFREE3:7
   for S being non void Signature for X being non-empty
 ManySortedSet of the carrier of S for s being SortSymbol of S for x being Term
   of S, X holds x in (the Sorts of FreeMSA X).s iff the_sort_of x = s;
 
-theorem :: MSAFREE3:9
+theorem :: MSAFREE3:8
   for S being non void Signature for X being non empty-yielding
 ManySortedSet of the carrier of S for x being Element of Free(S, X) holds x is
   Term of S, X \/ ((the carrier of S) --> {0});
@@ -112,30 +110,30 @@ ManySortedSet of the carrier of S for x being Element of Free(S, X) holds x is
 registration
   let S be non empty non void ManySortedSign;
   let X be non empty-yielding ManySortedSet of the carrier of S;
-  cluster -> Relation-like Function-like Element of Free(S, X);
+  cluster -> Relation-like Function-like for Element of Free(S, X);
 end;
 
 registration
   let S be non empty non void ManySortedSign;
   let X be non empty-yielding ManySortedSet of the carrier of S;
-  cluster -> finite DecoratedTree-like Element of Free(S, X);
+  cluster -> finite DecoratedTree-like for Element of Free(S, X);
 end;
 
 registration
   let S be non empty non void ManySortedSign;
   let X be non empty-yielding ManySortedSet of the carrier of S;
-  cluster -> finite-branching Element of Free(S, X);
+  cluster -> finite-branching for Element of Free(S, X);
 end;
 
 registration
-  cluster -> non empty DecoratedTree;
+  cluster -> non empty for DecoratedTree;
 end;
 
 definition
   let S be ManySortedSign;
   let t be non empty Relation;
   func S variables_in t -> ManySortedSet of the carrier of S means
-:: MSAFREE3:def 3
+:: MSAFREE3:def 2
 
   for
   s being set st s in the carrier of S holds it.s = {a`1 where a is Element of
@@ -147,43 +145,43 @@ definition
   let X be ManySortedSet of the carrier of S;
   let t be non empty Relation;
   func X variables_in t -> ManySortedSubset of X equals
-:: MSAFREE3:def 4
+:: MSAFREE3:def 3
   X /\ (S variables_in t
   );
 end;
 
-theorem :: MSAFREE3:10
+theorem :: MSAFREE3:9
   for S being ManySortedSign, X being ManySortedSet of the carrier
 of S for t being non empty Relation, V being ManySortedSubset of X holds V = X
   variables_in t iff for s being set st s in the carrier of S holds V.s = (X.s)
   /\ {a`1 where a is Element of rng t: a`2 = s};
 
-theorem :: MSAFREE3:11
+theorem :: MSAFREE3:10
   for S being ManySortedSign, s,x being set holds (s in the
   carrier of S implies (S variables_in root-tree [x,s]).s = {x}) & for s9 being
 set st s9 <> s or not s in the carrier of S holds (S variables_in root-tree [x,
   s]).s9 = {};
 
-theorem :: MSAFREE3:12
+theorem :: MSAFREE3:11
   for S being ManySortedSign, s being set st s in the carrier of S
   for p being DTree-yielding FinSequence holds x in (S variables_in ([z, the
   carrier of S]-tree p)).s iff ex t being DecoratedTree st t in rng p & x in (S
   variables_in t).s;
 
-theorem :: MSAFREE3:13
+theorem :: MSAFREE3:12
   for S being ManySortedSign for X being ManySortedSet of the
   carrier of S for s,x being set holds (x in X.s implies (X variables_in
 root-tree [x,s]).s = {x}) & for s9 being set st s9 <> s or not x in X.s holds (
   X variables_in root-tree [x,s]).s9 = {};
 
-theorem :: MSAFREE3:14
+theorem :: MSAFREE3:13
   for S being ManySortedSign for X being ManySortedSet of the
   carrier of S for s being set st s in the carrier of S for p being
   DTree-yielding FinSequence holds x in (X variables_in ([z, the carrier of S]
 -tree p)).s iff ex t being DecoratedTree st t in rng p & x in (X variables_in t
   ).s;
 
-theorem :: MSAFREE3:15
+theorem :: MSAFREE3:14
   for S being non void Signature for X being non-empty
 ManySortedSet of the carrier of S for t being Term of S, X holds S variables_in
   t c= X;
@@ -193,11 +191,11 @@ definition
   let X be non-empty ManySortedSet of the carrier of S;
   let t be Term of S, X;
   func variables_in t -> ManySortedSubset of X equals
-:: MSAFREE3:def 5
+:: MSAFREE3:def 4
   S variables_in t;
 end;
 
-theorem :: MSAFREE3:16
+theorem :: MSAFREE3:15
   for S being non void Signature for X being non-empty
 ManySortedSet of the carrier of S for t being Term of S, X holds variables_in t
   = X variables_in t;
@@ -207,141 +205,141 @@ definition
   let Y be non-empty ManySortedSet of the carrier of S;
   let X be ManySortedSet of the carrier of S;
   func S-Terms(X,Y) -> MSSubset of FreeMSA Y means
-:: MSAFREE3:def 6
+:: MSAFREE3:def 5
 
   for s being
   SortSymbol of S holds it.s = {t where t is Term of S,Y: the_sort_of t = s &
   variables_in t c= X};
 end;
 
-theorem :: MSAFREE3:17
+theorem :: MSAFREE3:16
   for S being non void Signature for Y being non-empty
 ManySortedSet of the carrier of S for X being ManySortedSet of the carrier of S
   for s being SortSymbol of S st x in S-Terms(X,Y).s holds x is Term of S,Y;
 
-theorem :: MSAFREE3:18
+theorem :: MSAFREE3:17
   for S being non void Signature for Y being non-empty
 ManySortedSet of the carrier of S for X being ManySortedSet of the carrier of S
   for t being Term of S, Y for s being SortSymbol of S st t in S-Terms(X,Y).s
   holds the_sort_of t = s & variables_in t c= X;
 
-theorem :: MSAFREE3:19
+theorem :: MSAFREE3:18
   for S being non void Signature for Y being non-empty
 ManySortedSet of the carrier of S for X being ManySortedSet of the carrier of S
 for s being SortSymbol of S holds root-tree [x,s] in (S-Terms(X,Y)).s iff x in
   X.s & x in Y.s;
 
-theorem :: MSAFREE3:20
+theorem :: MSAFREE3:19
   for S being non void Signature for Y being non-empty
 ManySortedSet of the carrier of S for X being ManySortedSet of the carrier of S
 for o being OperSymbol of S for p being ArgumentSeq of Sym(o,Y) holds Sym(o,Y)
 -tree p in (S-Terms(X,Y)).the_result_sort_of o iff rng p c= Union (S-Terms(X,Y)
   );
 
-theorem :: MSAFREE3:21
+theorem :: MSAFREE3:20
   for S being non void Signature for X being non-empty
 ManySortedSet of the carrier of S for A being MSSubset of FreeMSA X holds A is
   opers_closed iff for o being OperSymbol of S, p being ArgumentSeq of Sym(o,X)
   st rng p c= Union A holds Sym(o,X)-tree p in A.the_result_sort_of o;
 
-theorem :: MSAFREE3:22
+theorem :: MSAFREE3:21
   for S being non void Signature for Y being non-empty
 ManySortedSet of the carrier of S for X being ManySortedSet of the carrier of S
   holds S-Terms(X,Y) is opers_closed;
 
-theorem :: MSAFREE3:23
+theorem :: MSAFREE3:22
   for S being non void Signature for Y being non-empty
 ManySortedSet of the carrier of S for X being ManySortedSet of the carrier of S
   holds (Reverse Y)""X c= S-Terms(X,Y);
 
-theorem :: MSAFREE3:24
+theorem :: MSAFREE3:23
   for S being non void Signature for X being ManySortedSet of the
 carrier of S for t being Term of S, X \/ ((the carrier of S)-->{0}) for s being
   SortSymbol of S st t in S-Terms(X, X \/ ((the carrier of S)-->{0})).s holds t
   in (the Sorts of Free(S, X)).s;
 
-theorem :: MSAFREE3:25
+theorem :: MSAFREE3:24
   for S being non void Signature for X being ManySortedSet of the
 carrier of S holds the Sorts of Free(S, X) = S-Terms(X, X \/ ((the carrier of S
   )-->{0}));
 
-theorem :: MSAFREE3:26
+theorem :: MSAFREE3:25
   for S being non void Signature for X being ManySortedSet of the
   carrier of S holds (FreeMSA (X \/ ((the carrier of S)-->{0})))| (S-Terms(X, X
   \/ ((the carrier of S)-->{0}))) = Free(S, X);
 
-theorem :: MSAFREE3:27
+theorem :: MSAFREE3:26
   for S being non void Signature for X,Y being non-empty
   ManySortedSet of the carrier of S for A being MSSubAlgebra of FreeMSA X for B
   being MSSubAlgebra of FreeMSA Y st the Sorts of A = the Sorts of B holds the
   MSAlgebra of A = the MSAlgebra of B;
 
-theorem :: MSAFREE3:28
+theorem :: MSAFREE3:27
   for S being non void Signature for X being non empty-yielding
 ManySortedSet of the carrier of S for Y being ManySortedSet of the carrier of S
   for t being Element of Free(S, X) holds S variables_in t c= X;
 
-theorem :: MSAFREE3:29
+theorem :: MSAFREE3:28
   for S being non void Signature for X being non-empty
 ManySortedSet of the carrier of S for t being Term of S,X holds variables_in t
   c= X;
 
-theorem :: MSAFREE3:30
+theorem :: MSAFREE3:29
   for S being non void Signature for X,Y being non-empty
 ManySortedSet of the carrier of S for t1 being Term of S,X, t2 being Term of S,
   Y st t1 = t2 holds the_sort_of t1 = the_sort_of t2;
 
-theorem :: MSAFREE3:31
+theorem :: MSAFREE3:30
   for S being non void Signature for X,Y being non-empty
 ManySortedSet of the carrier of S for t being Term of S,Y st variables_in t c=
   X holds t is Term of S,X;
 
-theorem :: MSAFREE3:32
+theorem :: MSAFREE3:31
   for S being non void Signature for X being non-empty ManySortedSet of
   the carrier of S holds Free(S, X) = FreeMSA X;
 
-theorem :: MSAFREE3:33
+theorem :: MSAFREE3:32
   for S being non void Signature for Y being non-empty
   ManySortedSet of the carrier of S for t being Term of S,Y for p being Element
   of dom t holds variables_in (t|p) c= variables_in t;
 
-theorem :: MSAFREE3:34
+theorem :: MSAFREE3:33
   for S being non void Signature for X being non empty-yielding
 ManySortedSet of the carrier of S for t being Element of Free(S, X) for p being
   Element of dom t holds t|p is Element of Free(S, X);
 
-theorem :: MSAFREE3:35
+theorem :: MSAFREE3:34
   for S being non void Signature for X being non-empty
   ManySortedSet of the carrier of S for t being Term of S,X for a being Element
   of rng t holds a = [a`1,a`2];
 
-theorem :: MSAFREE3:36
+theorem :: MSAFREE3:35
   for S being non void Signature for X being non empty-yielding
 ManySortedSet of the carrier of S for t being Element of Free(S, X) for s being
 SortSymbol of S holds (x in (S variables_in t).s implies [x,s] in rng t) & ([x,
   s] in rng t implies x in (S variables_in t).s & x in X.s);
 
-theorem :: MSAFREE3:37
+theorem :: MSAFREE3:36
   for S being non void Signature for X being ManySortedSet of the
   carrier of S st for s being SortSymbol of S st X.s = {} ex o being OperSymbol
   of S st the_result_sort_of o = s & the_arity_of o = {} holds Free(S, X) is
   non-empty;
 
-theorem :: MSAFREE3:38
+theorem :: MSAFREE3:37
   for S being non void non empty ManySortedSign for A being
   MSAlgebra over S for B being MSSubAlgebra of A for o being OperSymbol of S
   holds Args(o,B) c= Args(o,A);
 
-theorem :: MSAFREE3:39
+theorem :: MSAFREE3:38
   for S being non void Signature for A being feasible MSAlgebra
   over S for B being MSSubAlgebra of A holds B is feasible;
 
 registration
   let S be non void Signature, A be feasible MSAlgebra over S;
-  cluster -> feasible MSSubAlgebra of A;
+  cluster -> feasible for MSSubAlgebra of A;
 end;
 
-theorem :: MSAFREE3:40
+theorem :: MSAFREE3:39
   for S being non void Signature for X being ManySortedSet of the
   carrier of S holds Free(S, X) is feasible free;
 

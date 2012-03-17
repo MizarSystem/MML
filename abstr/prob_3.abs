@@ -22,13 +22,14 @@ environ
  notations FINSEQ_1, ORDINAL1, CARD_3, REAL_1, RELAT_1, TARSKI, XBOOLE_0,
       RVSUM_1, FINSOP_1, SUBSET_1, NUMBERS, XCMPLX_0, XREAL_0, SETFAM_1,
       BINOP_1, SETWOP_2, BINOP_2, SETWISEO, NAT_1, FINSEQ_2, COMPLEX1, SEQ_1,
-      SEQ_2, FUNCT_1, RELSET_1, PARTFUN1, FUNCT_2, PROB_1, PROB_2, KURATO_2,
+      SEQ_2, FUNCT_1, RELSET_1, PARTFUN1, FUNCT_2, PROB_1, PROB_2, KURATO_0,
       SETLIM_2, SEQM_3, SETLIM_1, RINFSUP1, SERIES_1, XXREAL_0;
  constructors SETFAM_1, PARTFUN1, SETWISEO, XXREAL_0, REAL_1, NAT_1, BINOP_2,
-      COMPLEX1, SEQ_2, SEQM_3, PROB_2, FINSOP_1, RVSUM_1, SERIES_1, PCOMPS_1,
-      KURATO_2, SETLIM_1, RINFSUP1, SETLIM_2, SEQ_1, PROB_1, RELSET_1;
+      COMPLEX1, SEQ_2, SEQM_3, PROB_2, FINSOP_1, RVSUM_1, SERIES_1, BINOP_1,
+      KURATO_0, SETLIM_1, RINFSUP1, SETLIM_2, SEQ_1, PROB_1, RELSET_1,
+      SETWOP_2;
  registrations SUBSET_1, ORDINAL1, RELSET_1, NUMBERS, XREAL_0, NAT_1, MEMBERED,
-      PROB_1, VALUED_0, SEQ_2;
+      PROB_1, VALUED_0, SEQ_2, FINSEQ_1;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
 
 
@@ -69,16 +70,6 @@ theorem :: PROB_3:6
 theorem :: PROB_3:7
   ASeq is non-ascending implies P * ASeq is non-increasing;
 
-theorem :: PROB_3:8
-  for X being set, A1 being SetSequence of X holds ex S being
-SetSequence of X st S.0 = A1.0 & for n being Nat holds S.(n+1) = S.n /\ A1.(n+1
-  );
-
-theorem :: PROB_3:9
-  for X being set, A1 being SetSequence of X holds ex S being
-SetSequence of X st S.0 = A1.0 & for n being Nat holds S.(n+1) = S.n \/ A1.(n+1
-  );
-
 definition
   let X be set, A1 be SetSequence of X;
   func Partial_Intersection A1 -> SetSequence of X means
@@ -95,34 +86,29 @@ definition
   it.0 = A1.0 & for n being Nat holds it.(n+1) = it.n \/ A1.(n+1);
 end;
 
-theorem :: PROB_3:10
+theorem :: PROB_3:8
   (Partial_Intersection A1).n c= A1.n;
 
-theorem :: PROB_3:11
+theorem :: PROB_3:9
   A1.n c= (Partial_Union A1).n;
 
-theorem :: PROB_3:12
+theorem :: PROB_3:10
   Partial_Intersection A1 is non-ascending;
 
-theorem :: PROB_3:13
+theorem :: PROB_3:11
   Partial_Union A1 is non-descending;
 
-theorem :: PROB_3:14
+theorem :: PROB_3:12
   x in (Partial_Intersection A1).n iff for k st k <= n holds x in A1.k;
 
-theorem :: PROB_3:15
+theorem :: PROB_3:13
   x in (Partial_Union A1).n iff ex k st k <= n & x in A1.k;
 
-theorem :: PROB_3:16
+theorem :: PROB_3:14
   Intersection Partial_Intersection A1 = Intersection A1;
 
-theorem :: PROB_3:17
+theorem :: PROB_3:15
   Union Partial_Union A1 = Union A1;
-
-theorem :: PROB_3:18
-  for X being set, A1 being SetSequence of X holds ex A2 being
-SetSequence of X st A2.0 = A1.0 & for n being Nat holds A2.(n+1) = A1.(n+1) \ (
-  Partial_Union A1).n;
 
 definition
   let X be set, A1 be SetSequence of X;
@@ -133,20 +119,20 @@ definition
   for n being Nat holds it.(n+1) = A1.(n+1) \ (Partial_Union A1).n;
 end;
 
-theorem :: PROB_3:19
+theorem :: PROB_3:16
   x in (Partial_Diff_Union A1).n iff x in A1.n & for k st k < n
   holds not x in A1.k;
 
-theorem :: PROB_3:20
+theorem :: PROB_3:17
   (Partial_Diff_Union A1).n c= A1.n;
 
-theorem :: PROB_3:21
+theorem :: PROB_3:18
   (Partial_Diff_Union A1).n c= (Partial_Union A1).n;
 
-theorem :: PROB_3:22
+theorem :: PROB_3:19
   Partial_Union (Partial_Diff_Union A1) = Partial_Union A1;
 
-theorem :: PROB_3:23
+theorem :: PROB_3:20
   Union Partial_Diff_Union A1 = Union A1;
 
 definition
@@ -157,124 +143,115 @@ definition
   for m,n st m <> n holds A1. m misses A1.n;
 end;
 
-theorem :: PROB_3:24
-  Partial_Diff_Union A1 is disjoint_valued;
-
-definition
-  let X be set, Si be SigmaField of X, XSeq be SetSequence of Si;
-  func @Partial_Intersection XSeq -> SetSequence of Si equals
-:: PROB_3:def 5
-  Partial_Intersection XSeq;
+registration let X,A1;
+ cluster Partial_Diff_Union A1 -> disjoint_valued;
 end;
 
-definition
-  let X be set, Si be SigmaField of X, XSeq be SetSequence of Si;
-  func @Partial_Union XSeq -> SetSequence of Si equals
-:: PROB_3:def 6
-  Partial_Union XSeq;
+registration
+ let X be set, Si be SigmaField of X, XSeq be SetSequence of Si;
+ cluster Partial_Intersection XSeq -> Si-valued;
 end;
 
-definition
+registration
   let X be set, Si be SigmaField of X, XSeq be SetSequence of Si;
-  func @Partial_Diff_Union XSeq -> SetSequence of Si equals
-:: PROB_3:def 7
-  Partial_Diff_Union
-  XSeq;
+  cluster Partial_Union XSeq -> Si-valued;
 end;
 
-theorem :: PROB_3:25
-  YSeq = @Partial_Intersection XSeq implies YSeq.0 = XSeq.0 & for n
+registration
+  let X be set, Si be SigmaField of X, XSeq be SetSequence of Si;
+  cluster Partial_Diff_Union XSeq -> Si-valued;
+end;
+
+theorem :: PROB_3:21
+  YSeq = Partial_Intersection XSeq implies YSeq.0 = XSeq.0 & for n
   holds YSeq.(n+1) = YSeq.n /\ XSeq.(n+1);
 
-theorem :: PROB_3:26
-  YSeq = @Partial_Union XSeq implies YSeq.0 = XSeq.0 & for n holds YSeq.
+theorem :: PROB_3:22
+  YSeq = Partial_Union XSeq implies YSeq.0 = XSeq.0 & for n holds YSeq.
   (n+1) = YSeq.n \/ XSeq.(n+1);
 
-theorem :: PROB_3:27
-  (@Partial_Intersection XSeq).n c= XSeq.n;
+theorem :: PROB_3:23
+  (Partial_Intersection XSeq).n c= XSeq.n;
 
-theorem :: PROB_3:28
-  XSeq.n c= (@Partial_Union XSeq).n;
+theorem :: PROB_3:24
+  XSeq.n c= (Partial_Union XSeq).n;
 
-theorem :: PROB_3:29
-  x in (@Partial_Intersection XSeq).n iff for k st k <= n holds x in
+theorem :: PROB_3:25
+  x in (Partial_Intersection XSeq).n iff for k st k <= n holds x in
   XSeq.k;
 
+theorem :: PROB_3:26
+  x in (Partial_Union XSeq).n iff ex k st k <= n & x in XSeq.k;
+
+theorem :: PROB_3:27
+  Partial_Intersection XSeq is non-ascending;
+
+theorem :: PROB_3:28
+  Partial_Union XSeq is non-descending;
+
+theorem :: PROB_3:29
+  Intersection Partial_Intersection XSeq = Intersection XSeq;
+
 theorem :: PROB_3:30
-  x in (@Partial_Union XSeq).n iff ex k st k <= n & x in XSeq.k;
+  Union Partial_Union XSeq = Union XSeq;
 
 theorem :: PROB_3:31
-  @Partial_Intersection XSeq is non-ascending;
+  YSeq = Partial_Diff_Union XSeq implies YSeq.0 = XSeq.0 & for n holds
+  YSeq.(n+1) = XSeq.(n+1) \ (Partial_Union XSeq).n;
 
 theorem :: PROB_3:32
-  @Partial_Union XSeq is non-descending;
-
-theorem :: PROB_3:33
-  Intersection @Partial_Intersection XSeq = Intersection XSeq;
-
-theorem :: PROB_3:34
-  Union @Partial_Union XSeq = Union XSeq;
-
-theorem :: PROB_3:35
-  YSeq = @Partial_Diff_Union XSeq implies YSeq.0 = XSeq.0 & for n holds
-  YSeq.(n+1) = XSeq.(n+1) \ (@Partial_Union XSeq).n;
-
-theorem :: PROB_3:36
-  x in (@Partial_Diff_Union XSeq).n iff x in XSeq.n & for k st k < n
+  x in (Partial_Diff_Union XSeq).n iff x in XSeq.n & for k st k < n
   holds not x in XSeq.k;
 
+theorem :: PROB_3:33
+  (Partial_Diff_Union XSeq).n c= XSeq.n;
+
+theorem :: PROB_3:34
+  (Partial_Diff_Union XSeq).n c= (Partial_Union XSeq).n;
+
+theorem :: PROB_3:35
+  Partial_Union (Partial_Diff_Union XSeq) = Partial_Union XSeq;
+
+theorem :: PROB_3:36
+  Union Partial_Diff_Union XSeq = Union XSeq;
+
 theorem :: PROB_3:37
-  (@Partial_Diff_Union XSeq).n c= XSeq.n;
+  (P * Partial_Union ASeq) is non-decreasing;
 
 theorem :: PROB_3:38
-  (@Partial_Diff_Union XSeq).n c= (@Partial_Union XSeq).n;
+  (P * Partial_Intersection ASeq) is non-increasing;
 
 theorem :: PROB_3:39
-  @Partial_Union (@Partial_Diff_Union XSeq) = @Partial_Union XSeq;
-
-theorem :: PROB_3:40
-  Union @Partial_Diff_Union XSeq = Union XSeq;
-
-theorem :: PROB_3:41
-  @Partial_Diff_Union XSeq is disjoint_valued;
-
-theorem :: PROB_3:42
-  (P * @Partial_Union ASeq) is non-decreasing;
-
-theorem :: PROB_3:43
-  (P * @Partial_Intersection ASeq) is non-increasing;
-
-theorem :: PROB_3:44
   Partial_Sums(P * ASeq) is non-decreasing;
 
-theorem :: PROB_3:45
-  (P * @Partial_Union ASeq).0 = Partial_Sums(P * ASeq).0;
+theorem :: PROB_3:40
+  (P * Partial_Union ASeq).0 = Partial_Sums(P * ASeq).0;
 
-theorem :: PROB_3:46
-  P * @Partial_Union ASeq is convergent & lim (P * @Partial_Union
-ASeq) = upper_bound (P * @Partial_Union ASeq) & lim (P * @Partial_Union ASeq)
+theorem :: PROB_3:41
+  P * Partial_Union ASeq is convergent & lim (P * Partial_Union
+ASeq) = upper_bound (P * Partial_Union ASeq) & lim (P * Partial_Union ASeq)
  = P.Union
   ASeq;
 
-theorem :: PROB_3:47
+theorem :: PROB_3:42
   ASeq is disjoint_valued implies for n,m st n < m holds (
-  @Partial_Union ASeq).n misses ASeq.m;
+  Partial_Union ASeq).n misses ASeq.m;
 
-theorem :: PROB_3:48
-  ASeq is disjoint_valued implies (P * @Partial_Union ASeq).n =
+theorem :: PROB_3:43
+  ASeq is disjoint_valued implies (P * Partial_Union ASeq).n =
   Partial_Sums(P * ASeq).n;
 
-theorem :: PROB_3:49
-  ASeq is disjoint_valued implies (P * @Partial_Union ASeq) =
+theorem :: PROB_3:44
+  ASeq is disjoint_valued implies (P * Partial_Union ASeq) =
   Partial_Sums(P * ASeq);
 
-theorem :: PROB_3:50
+theorem :: PROB_3:45
   ASeq is disjoint_valued implies Partial_Sums(P * ASeq) is
   convergent & lim Partial_Sums(P * ASeq) = upper_bound Partial_Sums(P * ASeq)
    & lim
   Partial_Sums(P * ASeq) = P.Union ASeq;
 
-theorem :: PROB_3:51
+theorem :: PROB_3:46
   ASeq is disjoint_valued implies P.(Union ASeq) = Sum(P * ASeq);
 
 definition
@@ -282,10 +259,10 @@ definition
   redefine func F1.n -> Subset of X;
 end;
 
-theorem :: PROB_3:52
+theorem :: PROB_3:47
   ex F1 being FinSequence of bool X st for k st k in dom F1 holds F1.k = X;
 
-theorem :: PROB_3:53
+theorem :: PROB_3:48
   for F1 being FinSequence of bool X holds union rng F1 is Subset of X;
 
 definition
@@ -293,13 +270,14 @@ definition
   redefine func Union F1 -> Subset of X;
 end;
 
-theorem :: PROB_3:54
+theorem :: PROB_3:49
   x in Union F1 iff ex k st k in dom F1 & x in F1.k;
 
 definition
+
   let X, F1;
   func Complement F1 -> FinSequence of bool X means
-:: PROB_3:def 8
+:: PROB_3:def 5
 
   len it = len F1 & for n st n in dom it holds it.n = (F1.n)`;
 end;
@@ -307,41 +285,38 @@ end;
 definition
   let X, F1;
   func Intersection F1 -> Subset of X equals
-:: PROB_3:def 9
+:: PROB_3:def 6
 
   (Union Complement F1)` if
   F1 <> {} otherwise {};
 end;
 
-theorem :: PROB_3:55
+theorem :: PROB_3:50
   dom Complement F1 = dom F1;
 
-theorem :: PROB_3:56
+theorem :: PROB_3:51
   F1 <> {} implies (x in Intersection F1 iff for k st k in dom F1
   holds x in F1.k );
 
-theorem :: PROB_3:57
+theorem :: PROB_3:52
   F1 <> {} implies (x in meet rng F1 iff for n st n in dom F1 holds x in F1.n);
 
-theorem :: PROB_3:58
+theorem :: PROB_3:53
   Intersection F1 = meet rng F1;
 
-theorem :: PROB_3:59
+theorem :: PROB_3:54
   for F1 being FinSequence of bool X holds ex A1 being SetSequence
   of X st (for k st k in dom F1 holds A1.k = F1.k) & for k st not k in dom F1
   holds A1.k = {};
 
-theorem :: PROB_3:60
+theorem :: PROB_3:55
   for F1 being FinSequence of bool X for A1 being SetSequence of X
   st (for k st k in dom F1 holds A1.k = F1.k) & (for k st not k in dom F1 holds
   A1.k = {}) holds A1.0={} & Union A1 = Union F1;
 
-definition
+definition :: czy wystarczy rejestracja?
   let X be set, Si be SigmaField of X;
-  mode FinSequence of Si -> FinSequence of bool X means
-:: PROB_3:def 10
-
-    for k st k in dom it holds it.k in Si;
+  redefine mode FinSequence of Si -> FinSequence of bool X;
 end;
 
 definition
@@ -349,30 +324,28 @@ definition
   redefine func FSi.n -> Event of Si;
 end;
 
-theorem :: PROB_3:61
+theorem :: PROB_3:56
   for FSi being FinSequence of Si holds ex ASeq being SetSequence
   of Si st (for k st k in dom FSi holds ASeq.k = FSi.k) & for k st not k in dom
   FSi holds ASeq.k = {};
 
-theorem :: PROB_3:62
+theorem :: PROB_3:57
   for FSi being FinSequence of Si holds Union FSi in Si;
 
-definition
+ registration
   let X be set, S be SigmaField of X, F being FinSequence of S;
-  func @Complement F -> FinSequence of S equals
-:: PROB_3:def 11
-  Complement F;
+  cluster Complement F -> S-valued;
 end;
 
-theorem :: PROB_3:63
+theorem :: PROB_3:58
   for FSi being FinSequence of Si holds Intersection FSi in Si;
 
 reserve FSeq for FinSequence of Sigma;
 
-theorem :: PROB_3:64
+theorem :: PROB_3:59
   dom(P * FSeq) = dom FSeq;
 
-theorem :: PROB_3:65
+theorem :: PROB_3:60
   P * FSeq is FinSequence of REAL;
 
 definition
@@ -380,59 +353,60 @@ definition
   redefine func P * FSeq -> FinSequence of REAL;
 end;
 
-theorem :: PROB_3:66
+theorem :: PROB_3:61
   len (P * FSeq) = len FSeq;
 
-theorem :: PROB_3:67
+theorem :: PROB_3:62
   len RFin = 0 implies Sum RFin = 0;
 
-theorem :: PROB_3:68
+theorem :: PROB_3:63
   len RFin >= 1 implies ex f being Real_Sequence st f.1 = RFin.1 &
 (for n st 0 <> n & n < len RFin holds f.(n+1) = f.n+RFin.(n+1)) & Sum(RFin) = f
   .(len RFin);
 
-theorem :: PROB_3:69
+theorem :: PROB_3:64
   for FSeq being FinSequence of Sigma, ASeq being SetSequence of
   Sigma st (for k st k in dom FSeq holds ASeq.k = FSeq.k) & (for k st not k in
 dom FSeq holds ASeq.k = {}) holds Partial_Sums(P * ASeq) is convergent & Sum(P
 * ASeq) = Partial_Sums(P * ASeq).(len FSeq) & P.(Union ASeq) <= Sum(P * ASeq) &
   Sum(P * FSeq) = Sum(P * ASeq);
 
-theorem :: PROB_3:70
+theorem :: PROB_3:65
   P.(Union FSeq) <= Sum(P * FSeq) & (FSeq is disjoint_valued implies P.(
   Union FSeq) = Sum(P * FSeq));
 
 definition
+ canceled 2;
   let X;
   let IT be Subset-Family of X;
   attr IT is non-decreasing-closed means
-:: PROB_3:def 12
+:: PROB_3:def 9
 
   for A1 being SetSequence of X
   st A1 is non-descending & rng A1 c= IT holds Union A1 in IT;
   attr IT is non-increasing-closed means
-:: PROB_3:def 13
+:: PROB_3:def 10
 
   for A1 being SetSequence of X
   st A1 is non-ascending & rng A1 c= IT holds Intersection A1 in IT;
 end;
 
-theorem :: PROB_3:71
+theorem :: PROB_3:66
   for IT be Subset-Family of X holds IT is non-decreasing-closed
 iff for A1 being SetSequence of X st A1 is non-descending & rng A1 c= IT holds
   lim A1 in IT;
 
-theorem :: PROB_3:72
+theorem :: PROB_3:67
   for IT be Subset-Family of X holds IT is non-increasing-closed
   iff for A1 being SetSequence of X st A1 is non-ascending & rng A1 c= IT holds
   lim A1 in IT;
 
-theorem :: PROB_3:73
+theorem :: PROB_3:68
   bool X is non-decreasing-closed & bool X is non-increasing-closed;
 
 registration
   let X;
-  cluster non-decreasing-closed non-increasing-closed Subset-Family of X;
+  cluster non-decreasing-closed non-increasing-closed for Subset-Family of X;
 end;
 
 definition
@@ -441,34 +415,30 @@ definition
     Subset-Family of X;
 end;
 
-theorem :: PROB_3:74
+theorem :: PROB_3:69
   Z is MonotoneClass of X iff Z c= bool X & for A1 being
   SetSequence of X st A1 is monotone & rng A1 c= Z holds lim A1 in Z;
 
-theorem :: PROB_3:75
+theorem :: PROB_3:70
   for F being Field_Subset of X holds F is SigmaField of X iff F
   is MonotoneClass of X;
 
-theorem :: PROB_3:76
+theorem :: PROB_3:71
   bool Omega is MonotoneClass of Omega;
 
-theorem :: PROB_3:77
-  for X being Subset-Family of Omega ex Y being MonotoneClass of
-  Omega st X c= Y & for Z st X c= Z & Z is MonotoneClass of Omega holds Y c= Z;
-
 definition
-  canceled;
+
   let Omega;
   let X be Subset-Family of Omega;
   func monotoneclass(X) -> MonotoneClass of Omega means
-:: PROB_3:def 15
+:: PROB_3:def 11
 
   X c= it & for Z st X c= Z & Z is MonotoneClass of Omega holds it c= Z;
 end;
 
-theorem :: PROB_3:78
+theorem :: PROB_3:72
   for Z being Field_Subset of Omega holds monotoneclass(Z) is
   Field_Subset of Omega;
 
-theorem :: PROB_3:79
+theorem :: PROB_3:73
   for Z being Field_Subset of Omega holds sigma Z = monotoneclass Z;

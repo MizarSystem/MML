@@ -1,0 +1,206 @@
+:: On the {K}uratowski Limit Operators I
+::  by Adam Grabowski
+::
+:: Received August 12, 2003
+:: Copyright (c) 2003-2011 Association of Mizar Users
+::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
+:: This code can be distributed under the GNU General Public Licence
+:: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
+:: License version 3.0 or later, subject to the binding interpretation
+:: detailed in file COPYING.interpretation.
+:: See COPYING.GPL and COPYING.CC-BY-SA for the full text of these
+:: licenses, or see http://www.gnu.org/licenses/gpl.html and
+:: http://creativecommons.org/licenses/by-sa/3.0/.
+
+environ
+
+ vocabularies NUMBERS, FUNCT_1, RELAT_1, SETFAM_1, TARSKI, XBOOLE_0, ZFMISC_1,
+      PROB_1, SUBSET_1, FUNCOP_1, STRUCT_0, CARD_3, ORDINAL2, NAT_1, ARYTM_3,
+      CARD_1, XXREAL_0, SEQ_2, FINSEQ_1, EUCLID, TOPREAL1, RCOMP_1, PRE_TOPC,
+      XREAL_0, ORDINAL1, METRIC_1, REAL_1, COMPLEX1, ARYTM_1, SEQ_1, INT_1,
+      PCOMPS_1, FRECHET, RLVECT_3, YELLOW_8, CONNSP_2, TOPS_1, JORDAN2C,
+      XXREAL_2, VALUED_0, MCART_1, TOPREAL2, JORDAN9, GOBOARD9, WAYBEL_7,
+      KURATO_2;
+ notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, ZFMISC_1,
+      XXREAL_0, XREAL_0, REAL_1, NAT_1, SETFAM_1, MCART_1, DOMAIN_1, RELAT_1,
+      FUNCT_1, INT_1, FINSEQ_1, RELSET_1, FUNCT_2, FUNCOP_1, CARD_3, PROB_1,
+      LIMFUNC1, VALUED_0, FUNCT_6;
+ constructors SETFAM_1, REAL_1, PROB_1, LIMFUNC1, FUNCT_6, FINSEQ_1, DOMAIN_1,
+      NAT_1, RELSET_1;
+ registrations XBOOLE_0, SUBSET_1, RELAT_1, ORDINAL1, FUNCT_2, XXREAL_0,
+      XREAL_0, NAT_1, INT_1, MEMBERED, FUNCOP_1, VALUED_0, RELSET_1;
+ requirements REAL, SUBSET, BOOLE, NUMERALS, ARITHM;
+
+
+begin
+
+theorem :: KURATO_0:1
+  for F being Function, i being set st i in dom F holds meet F c= F.i;
+
+theorem :: KURATO_0:2
+  for A, B, C, D being set st A meets B & C meets D
+   holds [: A, C :] meets [: B, D :];
+
+registration
+  let X be set;
+  cluster -> non empty for SetSequence of X;
+end;
+
+registration
+  let T be non empty set;
+  cluster non-empty for SetSequence of T;
+end;
+
+definition
+  let X be set, F be SetSequence of X;
+  redefine func Union F -> Subset of X;
+  redefine func meet F -> Subset of X;
+end;
+
+begin :: Lower and Upper Limit of Sequences of Subsets
+
+definition
+  let X be set, F be SetSequence of X;
+  func lim_inf F -> Subset of X means
+:: KURATO_0:def 1
+
+  ex f being SetSequence of X st it
+  = Union f & for n being Element of NAT holds f.n = meet (F ^\ n);
+  func lim_sup F -> Subset of X means
+:: KURATO_0:def 2
+
+  ex f being SetSequence of X st it
+  = meet f & for n being Element of NAT holds f.n = Union (F ^\ n);
+end;
+
+theorem :: KURATO_0:3
+  for X being set, F being SetSequence of X, x being set
+   holds x in meet F iff for z being Element of NAT holds x in F.z;
+
+theorem :: KURATO_0:4
+  for X being set, F being SetSequence of X, x being set holds x in
+  lim_inf F iff ex n being Element of NAT st for k being Element of NAT holds x
+  in F.(n+k);
+
+theorem :: KURATO_0:5
+  for X being set, F being SetSequence of X, x being set holds x in
+lim_sup F iff for n being Element of NAT ex k being Element of NAT st x in F.(n
+  +k);
+
+theorem :: KURATO_0:6
+  for X being set, F being SetSequence of X holds lim_inf F c= lim_sup F;
+
+theorem :: KURATO_0:7
+  for X being set, F being SetSequence of X holds meet F c= lim_inf F;
+
+theorem :: KURATO_0:8
+  for X being set, F being SetSequence of X holds lim_sup F c= Union F;
+
+theorem :: KURATO_0:9
+  for X being set, F being SetSequence of X
+   holds lim_inf F = (lim_sup Complement F)`;
+
+theorem :: KURATO_0:10
+  for X being set, A, B, C being SetSequence of X
+   st for n being Element of NAT holds C.n = A.n /\ B.n
+ holds lim_inf C = lim_inf A /\ lim_inf B;
+
+theorem :: KURATO_0:11
+  for X being set, A, B, C being SetSequence of X
+    st for n being Element of NAT holds C.n = A.n \/ B.n
+   holds lim_sup C = lim_sup A \/ lim_sup B;
+
+theorem :: KURATO_0:12
+  for X being set, A, B, C being SetSequence of X
+   st for n being Element of NAT holds C.n = A.n \/ B.n
+   holds lim_inf A \/ lim_inf B c= lim_inf C;
+
+theorem :: KURATO_0:13
+  for X being set, A, B, C being SetSequence of X st (for n being
+Element of NAT holds C.n = A.n /\ B.n) holds lim_sup C c= lim_sup A /\ lim_sup
+  B;
+
+theorem :: KURATO_0:14
+  for X being set, A being SetSequence of X, B being Subset of X
+  st (for n being Nat holds A.n = B) holds lim_sup A = B;
+
+theorem :: KURATO_0:15
+  for X being set, A being SetSequence of X, B being Subset of X
+  st (for n being Nat holds A.n = B) holds lim_inf A = B;
+
+theorem :: KURATO_0:16
+  for X being set, A, B being SetSequence of X, C being Subset of X st (
+  for n being Element of NAT holds B.n = C \+\ A.n) holds C \+\ lim_inf A c=
+  lim_sup B;
+
+theorem :: KURATO_0:17
+  for X being set, A, B being SetSequence of X, C being Subset of X st (
+  for n being Element of NAT holds B.n = C \+\ A.n) holds C \+\ lim_sup A c=
+  lim_sup B;
+
+begin :: Ascending and Descending Families of Subsets
+
+theorem :: KURATO_0:18
+  for f being Function st (for i being Element of NAT holds f.(i+1
+  ) c= f.i) for i, j being Element of NAT st i <= j holds f.j c= f.i;
+
+definition
+  let T be set, S be SetSequence of T;
+  redefine attr S is non-ascending means
+:: KURATO_0:def 3
+
+  for i being Element of NAT holds S.(i+1) c= S.i;
+  redefine attr S is non-descending means
+:: KURATO_0:def 4
+
+  for i being Element of NAT holds S.i c= S.(i+1);
+end;
+
+theorem :: KURATO_0:19
+  for T being set, F being SetSequence of T, x being set st F is
+non-ascending & ex k being Element of NAT st for n being Element of NAT st n >
+  k holds x in F.n holds x in meet F;
+
+theorem :: KURATO_0:20
+  for T being set, F being SetSequence of T st F is non-ascending holds
+  lim_inf F = meet F;
+
+theorem :: KURATO_0:21
+  for T being set, F being SetSequence of T st F is non-descending holds
+  lim_sup F = Union F;
+
+begin :: Constant and Convergent Sequences
+
+definition
+  let T be set, S be SetSequence of T;
+  attr S is convergent means
+:: KURATO_0:def 5
+
+  lim_sup S = lim_inf S;
+end;
+
+theorem :: KURATO_0:22
+  for T being set, S being SetSequence of T st S is constant holds
+  the_value_of S is Subset of T;
+
+registration
+  let T be set;
+  cluster constant -> convergent non-descending non-ascending for
+SetSequence of T;
+end;
+
+registration
+  let T be set;
+  cluster constant non empty for SetSequence of T;
+end;
+
+notation
+  let T be set, S be convergent SetSequence of T;
+  synonym Lim_K S for lim_sup S;
+end;
+
+theorem :: KURATO_0:23
+  for X being set, F being convergent SetSequence of X, x being set
+holds x in Lim_K F iff ex n being Element of NAT st for k being Element of NAT
+  holds x in F.(n+k);
+

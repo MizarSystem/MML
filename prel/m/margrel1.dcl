@@ -28,8 +28,8 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="35"/>
-<Adjective nr="38"/>
+<Adjective nr="36"/>
+<Adjective nr="39"/>
 </Cluster>
 </RCluster>
 <RCluster aid="MARGREL1" nr="2">
@@ -40,7 +40,7 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="6"/>
-<Adjective nr="42"/>
+<Adjective nr="43"/>
 </Cluster>
 </RCluster>
 <RCluster aid="MARGREL1" nr="3">
@@ -55,7 +55,7 @@
 <Cluster/>
 <Func kind="K" nr="21">
 <Func kind="K" nr="22">
-<Func kind="K" nr="155">
+<Func kind="K" nr="156">
 <LocusVar nr="1"/>
 </Func>
 <LocusVar nr="1"/>
@@ -65,7 +65,7 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4">
-<Func kind="K" nr="155">
+<Func kind="K" nr="156">
 <LocusVar nr="1"/>
 </Func>
 </Adjective>
@@ -74,8 +74,8 @@
 </Adjective>
 <Adjective nr="6"/>
 <Adjective nr="11" value="false"/>
-<Adjective nr="43"/>
-<Adjective nr="44">
+<Adjective nr="44"/>
+<Adjective nr="45">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -89,7 +89,7 @@
 <Adjective nr="1"/>
 <Adjective nr="6"/>
 <Adjective nr="11" value="false"/>
-<Adjective nr="43"/>
+<Adjective nr="44"/>
 </Cluster>
 </RCluster>
 <RCluster aid="MARGREL1" nr="5">
@@ -103,7 +103,7 @@
 <Typ kind="M" nr="6">
 <Cluster/>
 <Func kind="K" nr="38">
-<Func kind="K" nr="155">
+<Func kind="K" nr="156">
 <LocusVar nr="1"/>
 </Func>
 <LocusVar nr="1"/>
@@ -117,7 +117,7 @@
 </Adjective>
 <Adjective nr="5">
 <Func kind="K" nr="38">
-<Func kind="K" nr="155">
+<Func kind="K" nr="156">
 <LocusVar nr="1"/>
 </Func>
 <LocusVar nr="1"/>
@@ -125,14 +125,15 @@
 </Adjective>
 <Adjective nr="6"/>
 <Adjective nr="18"/>
-<Adjective nr="26"/>
-<Adjective nr="33"/>
+<Adjective nr="19"/>
+<Adjective nr="27"/>
 <Adjective nr="34"/>
-<Adjective nr="40"/>
-<Adjective nr="45">
+<Adjective nr="35"/>
+<Adjective nr="41"/>
+<Adjective nr="46">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="46">
+<Adjective nr="47">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -145,7 +146,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="160">
+<Func kind="K" nr="163">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -154,7 +155,7 @@
 </FCluster>
 <FCluster aid="MARGREL1" nr="2">
 <ArgTypes/>
-<Func kind="K" nr="163"/>
+<Func kind="K" nr="166"/>
 <Cluster>
 <Adjective nr="11" value="false"/>
 </Cluster>
@@ -165,11 +166,11 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="168">
+<Func kind="K" nr="171">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="36"/>
+<Adjective nr="37"/>
 </Cluster>
 </FCluster>
 <FCluster aid="MARGREL1" nr="4">
@@ -178,7 +179,7 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="6"/>
-<Adjective nr="42"/>
+<Adjective nr="43"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
@@ -190,7 +191,7 @@
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="36"/>
+<Adjective nr="37"/>
 </Cluster>
 </FCluster>
 <FCluster aid="MARGREL1" nr="5">
@@ -202,7 +203,7 @@
 </Typ>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="38"/>
+<Adjective nr="39"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -212,7 +213,7 @@
 </Func>
 <Cluster>
 <Adjective nr="1"/>
-<Adjective nr="43"/>
+<Adjective nr="44"/>
 </Cluster>
 </FCluster>
 <FCluster aid="MARGREL1" nr="6">
@@ -228,7 +229,7 @@
 </Cluster>
 <Func kind="K" nr="21">
 <Func kind="K" nr="22">
-<Func kind="K" nr="155">
+<Func kind="K" nr="156">
 <LocusVar nr="1"/>
 </Func>
 <LocusVar nr="1"/>
@@ -240,7 +241,7 @@
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="35"/>
+<Adjective nr="36"/>
 </Cluster>
 </FCluster>
 <FCluster aid="MARGREL1" nr="7">
@@ -248,7 +249,7 @@
 <Typ kind="M" nr="1">
 <Cluster>
 <Adjective nr="1"/>
-<Adjective nr="43"/>
+<Adjective nr="44"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -256,7 +257,7 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="38"/>
+<Adjective nr="39"/>
 </Cluster>
 </FCluster>
 <FCluster aid="MARGREL1" nr="8">
@@ -268,12 +269,12 @@
 </Typ>
 <Typ kind="M" nr="6">
 <Cluster>
-<Adjective nr="45">
+<Adjective nr="46">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
 <Func kind="K" nr="38">
-<Func kind="K" nr="155">
+<Func kind="K" nr="156">
 <LocusVar nr="1"/>
 </Func>
 <LocusVar nr="1"/>
@@ -288,7 +289,7 @@
 <LocusVar nr="3"/>
 </Func>
 <Cluster>
-<Adjective nr="43"/>
+<Adjective nr="44"/>
 </Cluster>
 </FCluster>
 <CCluster aid="MARGREL1" nr="1">
@@ -300,7 +301,7 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="38"/>
+<Adjective nr="39"/>
 </Cluster>
 </CCluster>
 <CCluster aid="MARGREL1" nr="2">
@@ -308,10 +309,10 @@
 <Cluster/>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="163"/>
+<Func kind="K" nr="166"/>
 </Typ>
 <Cluster>
-<Adjective nr="36"/>
+<Adjective nr="37"/>
 </Cluster>
 </CCluster>
 <CCluster aid="MARGREL1" nr="3">
@@ -325,11 +326,11 @@
 <Cluster/>
 <Func kind="K" nr="70">
 <LocusVar nr="1"/>
-<Func kind="K" nr="163"/>
+<Func kind="K" nr="166"/>
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="42"/>
+<Adjective nr="43"/>
 </Cluster>
 </CCluster>
 </Registrations>

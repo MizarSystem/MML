@@ -31,7 +31,7 @@ environ
  registrations XBOOLE_0, ORDINAL1, RELSET_1, NUMBERS, XXREAL_0, XREAL_0,
       MEMBERED, VALUED_0, VALUED_1, FUNCT_2, XXREAL_2, FUNCOP_1, SEQ_2,
       FINSET_1, BINOP_2, FUNCT_1, FINSEQ_2, SUBSET_1, NAT_1, RELAT_1, FINSEQ_1,
-      CARD_1, SEQM_3, MEMBER_1;
+      CARD_1, SEQM_3, MEMBER_1, PBOOLE;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
 
 
@@ -44,59 +44,53 @@ reserve Nseq for increasing sequence of NAT;
 reserve x for set;
 reserve X,Y for Subset of REAL;
 
-canceled 7;
-
-theorem :: SEQ_4:8
+theorem :: SEQ_4:1
   for X,Y st for r,p st r in X & p in Y holds r<p ex g st for r,p
   st r in X & p in Y holds r<=g & g<=p;
 
-theorem :: SEQ_4:9
+theorem :: SEQ_4:2
   0<p & (ex r st r in X) & (for r st r in X holds r+p in X) implies
   for g ex r st r in X & g<r;
 
-theorem :: SEQ_4:10
+theorem :: SEQ_4:3
   for r ex n st r<n;
 
-canceled 3;
-
-theorem :: SEQ_4:14
+theorem :: SEQ_4:4
   X is bounded iff ex s st 0<s & for r st r in X holds abs(r)<s;
 
 definition
- canceled 2;
+
   let r;
   redefine func {r} -> Subset of REAL;
 end;
 
-canceled;
-
-theorem :: SEQ_4:16
+theorem :: SEQ_4:5
   for X being real-membered set holds X is non empty bounded_above
 implies ex g st (for r st r in X holds r<=g) & for s st 0<s ex r st r in X & g-
   s<r;
 
-theorem :: SEQ_4:17
+theorem :: SEQ_4:6
   for X being real-membered set holds (for r st r in X holds r<=g1
 ) & (for s st 0<s ex r st (r in X & g1-s<r)) & (for r st r in X holds r<=g2) &
   (for s st 0<s ex r st (r in X & g2-s<r)) implies g1=g2;
 
-theorem :: SEQ_4:18
+theorem :: SEQ_4:7
   for X being real-membered set holds X is non empty bounded_below
 implies ex g st (for r st r in X holds g<=r) & for s st 0<s ex r st r in X & r<
   g+s;
 
-theorem :: SEQ_4:19
+theorem :: SEQ_4:8
   for X being real-membered set holds (for r st r in X holds g1<=r
 ) & (for s st 0<s ex r st (r in X & r<g1+s)) & (for r st r in X holds g2<=r) &
   (for s st 0<s ex r st (r in X & r<g2+s)) implies g1=g2;
 
 definition
-  canceled;
+
   let X be real-membered set;
   assume
  X is non empty bounded_above;
   func upper_bound X -> real number means
-:: SEQ_4:def 4
+:: SEQ_4:def 1
 
   (for r st r in X holds r<=it) & for s st 0<s ex r st r in X & it-s<r;
 end;
@@ -106,18 +100,18 @@ definition
   assume
  X is non empty bounded_below;
   func lower_bound X -> real number means
-:: SEQ_4:def 5
+:: SEQ_4:def 2
 
   (for r st r in X holds it<=r) & for s st 0<s ex r st r in X & r<it+s;
 end;
 
 registration
-  let X be non empty bounded_below (real-membered set);
+  let X be non empty bounded_below real-membered set;
   identify lower_bound X with inf X;
 end;
 
 registration
-  let X be non empty bounded_above (real-membered set);
+  let X be non empty bounded_above real-membered set;
   identify upper_bound X with sup X;
 end;
 
@@ -127,18 +121,16 @@ definition
   redefine func lower_bound X -> Real;
 end;
 
-canceled 2;
-
-theorem :: SEQ_4:22
+theorem :: SEQ_4:9
   lower_bound {r} = r & upper_bound {r} = r;
 
-theorem :: SEQ_4:23
+theorem :: SEQ_4:10
   lower_bound {r} = upper_bound {r};
 
-theorem :: SEQ_4:24
+theorem :: SEQ_4:11
   X is bounded non empty implies lower_bound X <= upper_bound X;
 
-theorem :: SEQ_4:25
+theorem :: SEQ_4:12
   X is bounded non empty implies ((ex r,p st r in X & p in X & p<>r) iff
   lower_bound X < upper_bound X);
 
@@ -146,141 +138,135 @@ theorem :: SEQ_4:25
 :: Theorems about the Convergence and the Limit
 ::
 
-theorem :: SEQ_4:26
+theorem :: SEQ_4:13
   seq is convergent implies abs seq is convergent;
 
 registration
   let seq be convergent Real_Sequence;
-  cluster abs seq -> convergent Real_Sequence;
+  cluster abs seq -> convergent for Real_Sequence;
 end;
 
-theorem :: SEQ_4:27
+theorem :: SEQ_4:14
   seq is convergent implies lim abs seq = abs lim seq;
 
-theorem :: SEQ_4:28
+theorem :: SEQ_4:15
   abs seq is convergent & lim abs seq=0 implies seq is convergent & lim seq=0;
 
-theorem :: SEQ_4:29
+theorem :: SEQ_4:16
   seq1 is subsequence of seq & seq is convergent implies seq1 is convergent;
 
-theorem :: SEQ_4:30
+theorem :: SEQ_4:17
   seq1 is subsequence of seq & seq is convergent implies lim seq1= lim seq;
 
-theorem :: SEQ_4:31
+theorem :: SEQ_4:18
   seq is convergent & (ex k st for n st k<=n holds seq1.n=seq.n)
   implies seq1 is convergent;
 
-theorem :: SEQ_4:32
+theorem :: SEQ_4:19
   seq is convergent & (ex k st for n st k<=n holds seq1.n=seq.n) implies
   lim seq=lim seq1;
 
 registration
-  cluster constant -> convergent Real_Sequence;
+  cluster constant -> convergent for Real_Sequence;
 end;
 
 registration
-  cluster constant Real_Sequence;
+  cluster constant for Real_Sequence;
 end;
 
 registration
   let seq be convergent Real_Sequence;
   let k;
-  cluster seq ^\ k -> convergent Real_Sequence;
+  cluster seq ^\ k -> convergent for Real_Sequence;
 end;
 
-theorem :: SEQ_4:33
+theorem :: SEQ_4:20
   seq is convergent implies lim (seq^\k)=lim seq;
 
-canceled;
-
-theorem :: SEQ_4:35
+theorem :: SEQ_4:21
   seq^\k is convergent implies seq is convergent;
 
-theorem :: SEQ_4:36
+theorem :: SEQ_4:22
   seq^\k is convergent implies lim seq = lim (seq^\k);
 
-theorem :: SEQ_4:37
+theorem :: SEQ_4:23
   seq is convergent & lim seq<>0 implies ex k st (seq ^\k) is non-zero;
 
-theorem :: SEQ_4:38
+theorem :: SEQ_4:24
   seq is convergent & lim seq<>0 implies ex seq1 st seq1 is subsequence
   of seq & seq1 is non-zero;
 
-canceled;
-
-theorem :: SEQ_4:40
+theorem :: SEQ_4:25
  seq is constant & (r in rng seq or ex n st seq.n=r ) implies lim seq=r;
 
-theorem :: SEQ_4:41
+theorem :: SEQ_4:26
   seq is constant implies for n holds lim seq=seq.n;
 
-theorem :: SEQ_4:42
+theorem :: SEQ_4:27
   seq is convergent & lim seq<>0 implies for seq1 st seq1 is subsequence
   of seq & seq1 is non-zero holds lim (seq1")=(lim seq)";
 
-theorem :: SEQ_4:43
+theorem :: SEQ_4:28
   0<=r & (for n holds seq.n=1/(n+r)) implies seq is convergent;
 
-theorem :: SEQ_4:44
+theorem :: SEQ_4:29
   0<=r & (for n holds seq.n=1/(n+r)) implies lim seq=0;
 
-theorem :: SEQ_4:45
+theorem :: SEQ_4:30
   (for n holds seq.n=1/(n+1)) implies seq is convergent & lim seq=0;
 
-theorem :: SEQ_4:46
+theorem :: SEQ_4:31
   0<=r & (for n holds seq.n=g/(n+r)) implies seq is convergent & lim seq =0;
 
-theorem :: SEQ_4:47
+theorem :: SEQ_4:32
   0<=r & (for n holds seq.n=1/(n*n+r)) implies seq is convergent;
 
-theorem :: SEQ_4:48
+theorem :: SEQ_4:33
   0<=r & (for n holds seq.n=1/(n*n+r)) implies lim seq=0;
 
-theorem :: SEQ_4:49
+theorem :: SEQ_4:34
   (for n holds seq.n=1/(n*n+1)) implies seq is convergent & lim seq=0;
 
-theorem :: SEQ_4:50
+theorem :: SEQ_4:35
   0<=r & (for n holds seq.n=g/(n*n+r)) implies seq is convergent & lim seq=0;
 
 registration
-  cluster non-decreasing bounded_above -> convergent Real_Sequence;
+  cluster non-decreasing bounded_above -> convergent for Real_Sequence;
 end;
 
 registration
-  cluster non-increasing bounded_below -> convergent Real_Sequence;
+  cluster non-increasing bounded_below -> convergent for Real_Sequence;
 end;
 
 registration
-  cluster monotone bounded -> convergent Real_Sequence;
+  cluster monotone bounded -> convergent for Real_Sequence;
 end;
 
-canceled 2;
-
-theorem :: SEQ_4:53
+theorem :: SEQ_4:36
   seq is monotone & seq is bounded implies seq is convergent;
 
-theorem :: SEQ_4:54
+theorem :: SEQ_4:37
   seq is bounded_above & seq is non-decreasing implies for n holds seq.n
   <=lim seq;
 
-theorem :: SEQ_4:55
+theorem :: SEQ_4:38
   seq is bounded_below & seq is non-increasing implies for n holds lim
   seq <= seq.n;
 
-theorem :: SEQ_4:56
+theorem :: SEQ_4:39
   for seq ex Nseq st seq*Nseq is monotone;
 
 ::$N Bolzano-Weierstrass Theorem (1 dimension)
-theorem :: SEQ_4:57
+theorem :: SEQ_4:40
   seq is bounded implies ex seq1 st seq1 is subsequence of seq &
   seq1 is convergent;
 
 ::$N Cauchy sequence
-theorem :: SEQ_4:58 :: Cauchy Theorem
+theorem :: SEQ_4:41 :: Cauchy Theorem
   seq is convergent iff for s st 0<s ex n st for m st n<=m holds abs(seq
   .m -seq.n)<s;
 
-theorem :: SEQ_4:59
+theorem :: SEQ_4:42
   seq is constant & seq1 is convergent implies lim (seq+seq1) =(seq.0) +
 lim seq1 & lim (seq-seq1) =(seq.0) - lim seq1 & lim (seq1-seq) =(lim seq1) -seq
   .0 & lim (seq(#)seq1) =(seq.0) * (lim seq1);
@@ -288,29 +274,29 @@ lim seq1 & lim (seq-seq1) =(seq.0) - lim seq1 & lim (seq1-seq) =(lim seq1) -seq
 begin :: Addenda
 :: from PSCOMP_1
 
-theorem :: SEQ_4:60
+theorem :: SEQ_4:43
   for X being non empty real-membered set for t st for s st s in X
   holds s >= t holds lower_bound X >= t;
 
-theorem :: SEQ_4:61
+theorem :: SEQ_4:44
   for X being non empty real-membered set st (for s st s in X holds s >=
 r) & for t st for s st s in X holds s >= t holds r >= t holds r = lower_bound X
 ;
 
-theorem :: SEQ_4:62
+theorem :: SEQ_4:45
   for X being non empty real-membered set, r for t st for s st s
   in X holds s <= t holds upper_bound X <= t;
 
-theorem :: SEQ_4:63
+theorem :: SEQ_4:46
   for X being non empty real-membered set, r st (for s st s in X holds s
   <= r) & for t st for s st s in X holds s <= t holds r <= t holds r =
   upper_bound X;
 
-theorem :: SEQ_4:64
+theorem :: SEQ_4:47
   for X being non empty real-membered set, Y being real-membered set st
   X c= Y & Y is bounded_below holds lower_bound Y <= lower_bound X;
 
-theorem :: SEQ_4:65
+theorem :: SEQ_4:48
   for X being non empty real-membered set, Y being real-membered set st
   X c= Y & Y is bounded_above holds upper_bound X <= upper_bound Y;
 
@@ -327,45 +313,45 @@ reserve k,n for Element of NAT,
   r,r9,r1,r2 for Real,
   c,c9,c1,c2,c3 for Element of COMPLEX;
 
-theorem :: SEQ_4:66
+theorem :: SEQ_4:49
   0c is_a_unity_wrt addcomplex;
 
-theorem :: SEQ_4:67
+theorem :: SEQ_4:50
   compcomplex is_an_inverseOp_wrt addcomplex;
 
-theorem :: SEQ_4:68
+theorem :: SEQ_4:51
   addcomplex is having_an_inverseOp;
 
-theorem :: SEQ_4:69
+theorem :: SEQ_4:52
   the_inverseOp_wrt addcomplex = compcomplex;
 
 definition
   redefine func diffcomplex equals
-:: SEQ_4:def 6
+:: SEQ_4:def 3
   addcomplex*(id COMPLEX,compcomplex);
 end;
 
-theorem :: SEQ_4:70
+theorem :: SEQ_4:53
   1r is_a_unity_wrt multcomplex;
 
-theorem :: SEQ_4:71
+theorem :: SEQ_4:54
   multcomplex is_distributive_wrt addcomplex;
 
 definition let c be complex number;
   func c multcomplex -> UnOp of COMPLEX equals
-:: SEQ_4:def 7
+:: SEQ_4:def 4
   multcomplex[;](c,id COMPLEX);
 end;
 
-theorem :: SEQ_4:72
+theorem :: SEQ_4:55
   (c multcomplex).c9 = c*c9;
 
-theorem :: SEQ_4:73
+theorem :: SEQ_4:56
   c multcomplex is_distributive_wrt addcomplex;
 
 definition
   func abscomplex -> Function of COMPLEX,REAL means
-:: SEQ_4:def 8
+:: SEQ_4:def 5
   for c holds it.c = |.c.|;
 end;
 
@@ -373,16 +359,16 @@ reserve z,z1,z2 for FinSequence of COMPLEX;
 
 definition let z1,z2;
   redefine func z1 + z2 -> FinSequence of COMPLEX equals
-:: SEQ_4:def 9
+:: SEQ_4:def 6
   addcomplex.:(z1,z2);
   redefine func z1 - z2 -> FinSequence of COMPLEX equals
-:: SEQ_4:def 10
+:: SEQ_4:def 7
   diffcomplex.:(z1,z2);
 end;
 
 definition let z;
   redefine func -z -> FinSequence of COMPLEX equals
-:: SEQ_4:def 11
+:: SEQ_4:def 8
   compcomplex*z;
 end;
 
@@ -394,19 +380,19 @@ end;
 definition let z;
   let c be complex number;
   redefine func c*z -> FinSequence of COMPLEX equals
-:: SEQ_4:def 12
+:: SEQ_4:def 9
   (c multcomplex)*z;
 end;
 
 definition let z;
   redefine func abs z -> FinSequence of REAL equals
-:: SEQ_4:def 13
+:: SEQ_4:def 10
   abscomplex*z;
 end;
 
 definition let n;
   func COMPLEX n -> FinSequence-DOMAIN of COMPLEX equals
-:: SEQ_4:def 14
+:: SEQ_4:def 11
   n-tuples_on COMPLEX;
 end;
 
@@ -417,19 +403,19 @@ end;
 reserve x,z,z1,z2,z3 for Element of COMPLEX n,
   A,B for Subset of COMPLEX n;
 
-theorem :: SEQ_4:74
+theorem :: SEQ_4:57
   k in Seg n implies z.k in COMPLEX;
 
 definition let n,z1,z2;
   redefine func z1 + z2 -> Element of COMPLEX n;
 end;
 
-theorem :: SEQ_4:75
+theorem :: SEQ_4:58
   k in Seg n & c1 = z1.k & c2 = z2.k implies (z1 + z2).k = c1 + c2;
 
 definition let n;
   func 0c n -> FinSequence of COMPLEX equals
-:: SEQ_4:def 15
+:: SEQ_4:def 12
   n |-> 0c;
 end;
 
@@ -437,176 +423,176 @@ definition let n;
   redefine func 0c n -> Element of COMPLEX n;
 end;
 
-theorem :: SEQ_4:76
+theorem :: SEQ_4:59
   z + 0c n = z & z = 0c n + z;
 
 definition let n,z;
   redefine func -z -> Element of COMPLEX n;
 end;
 
-theorem :: SEQ_4:77
+theorem :: SEQ_4:60
   k in Seg n & c = z.k implies (-z).k = -c;
 
-theorem :: SEQ_4:78
+theorem :: SEQ_4:61
   z + -z = 0c n & -z + z = 0c n;
 
-theorem :: SEQ_4:79
+theorem :: SEQ_4:62
   z1 + z2 = 0c n implies z1 = -z2 & z2 = -z1
 ;
 
-theorem :: SEQ_4:80
+theorem :: SEQ_4:63
   -(-z) = z;
 
-theorem :: SEQ_4:81
+theorem :: SEQ_4:64
   -z1 = -z2 implies z1 = z2;
 
-theorem :: SEQ_4:82
+theorem :: SEQ_4:65
   z1 + z = z2 + z or z1 + z = z + z2 implies z1 = z2;
 
-theorem :: SEQ_4:83
+theorem :: SEQ_4:66
   -(z1 + z2) = -z1 + -z2;
 
 definition let n,z1,z2;
   redefine func z1 - z2 -> Element of COMPLEX n;
 end;
 
-theorem :: SEQ_4:84
+theorem :: SEQ_4:67
   k in Seg n implies (z1 - z2).k = z1.k - z2.k;
 
-theorem :: SEQ_4:85
+theorem :: SEQ_4:68
   z - 0c n = z;
 
-theorem :: SEQ_4:86
+theorem :: SEQ_4:69
   0c n - z = -z;
 
-theorem :: SEQ_4:87
+theorem :: SEQ_4:70
   z1 - -z2 = z1 + z2;
 
-theorem :: SEQ_4:88
+theorem :: SEQ_4:71
   -(z1 - z2) = z2 - z1;
 
-theorem :: SEQ_4:89
+theorem :: SEQ_4:72
   -(z1 - z2) = -z1 + z2;
 
-theorem :: SEQ_4:90
+theorem :: SEQ_4:73
   z - z = 0c n;
 
-theorem :: SEQ_4:91
+theorem :: SEQ_4:74
   z1 - z2 = 0c n implies z1 = z2;
 
-theorem :: SEQ_4:92
+theorem :: SEQ_4:75
   z1 - z2 - z3 = z1 - (z2 + z3);
 
-theorem :: SEQ_4:93
+theorem :: SEQ_4:76
   z1 + (z2 - z3) = z1 + z2 - z3;
 
-theorem :: SEQ_4:94
+theorem :: SEQ_4:77
   z1 - (z2 - z3) = z1 - z2 + z3;
 
-theorem :: SEQ_4:95
+theorem :: SEQ_4:78
   z1 - z2 + z3 = z1 + z3 - z2;
 
-theorem :: SEQ_4:96
+theorem :: SEQ_4:79
   z1 = z1 + z - z;
 
-theorem :: SEQ_4:97
+theorem :: SEQ_4:80
   z1 + (z2 - z1) = z2;
 
-theorem :: SEQ_4:98
+theorem :: SEQ_4:81
   z1 = z1 - z + z;
 
 definition let n,z,c;
   redefine func c*z -> Element of COMPLEX n;
 end;
 
-theorem :: SEQ_4:99
+theorem :: SEQ_4:82
   k in Seg n & c9 = z.k implies (c*z).k = c*c9;
 
-theorem :: SEQ_4:100
+theorem :: SEQ_4:83
   c1*(c2*z) = (c1*c2)*z;
 
-theorem :: SEQ_4:101
+theorem :: SEQ_4:84
   (c1 + c2)*z = c1*z + c2*z;
 
-theorem :: SEQ_4:102
+theorem :: SEQ_4:85
   c*(z1+z2) = c*z1 + c*z2;
 
-theorem :: SEQ_4:103
+theorem :: SEQ_4:86
   1r*z = z;
 
-theorem :: SEQ_4:104
+theorem :: SEQ_4:87
   0c*z = 0c n;
 
-theorem :: SEQ_4:105
+theorem :: SEQ_4:88
   (-1r)*z = -z;
 
 definition let n,z;
   redefine func abs z -> Element of n-tuples_on REAL;
 end;
 
-theorem :: SEQ_4:106
+theorem :: SEQ_4:89
   k in Seg n & c = z.k implies (abs z).k = |.c.|;
 
-theorem :: SEQ_4:107
+theorem :: SEQ_4:90
   abs 0c n = n |-> 0;
 
-theorem :: SEQ_4:108
+theorem :: SEQ_4:91
   abs -z = abs z;
 
-theorem :: SEQ_4:109
+theorem :: SEQ_4:92
   abs(c*z) = |.c.|*(abs z);
 
 definition
   let z be FinSequence of COMPLEX;
   func |.z.| -> Real equals
-:: SEQ_4:def 16
+:: SEQ_4:def 13
   sqrt Sum sqr abs z;
 end;
 
-theorem :: SEQ_4:110
+theorem :: SEQ_4:93
   |.0c n.| = 0;
 
-theorem :: SEQ_4:111
+theorem :: SEQ_4:94
   |.z.| = 0 implies z = 0c n;
 
-theorem :: SEQ_4:112
+theorem :: SEQ_4:95
   0 <= |.z.|;
 
-theorem :: SEQ_4:113
+theorem :: SEQ_4:96
   |.-z.| = |.z.|;
 
-theorem :: SEQ_4:114
+theorem :: SEQ_4:97
   |.c*z.| = |.c.|*|.z.|;
 
-theorem :: SEQ_4:115
+theorem :: SEQ_4:98
   |.z1 + z2.| <= |.z1.| + |.z2.|;
 
-theorem :: SEQ_4:116
+theorem :: SEQ_4:99
   |.z1 - z2.| <= |.z1.| + |.z2.|;
 
-theorem :: SEQ_4:117
+theorem :: SEQ_4:100
   |.z1.| - |.z2.| <= |.z1 + z2.|;
 
-theorem :: SEQ_4:118
+theorem :: SEQ_4:101
   |.z1.| - |.z2.| <= |.z1 - z2.|;
 
-theorem :: SEQ_4:119
+theorem :: SEQ_4:102
   |.z1 - z2.| = 0 iff z1 = z2;
 
-theorem :: SEQ_4:120
+theorem :: SEQ_4:103
   z1 <> z2 implies 0 < |.z1 - z2.|;
 
-theorem :: SEQ_4:121
+theorem :: SEQ_4:104
   |.z1 - z2.| = |.z2 - z1.|;
 
-theorem :: SEQ_4:122
+theorem :: SEQ_4:105
   |.z1 - z2.| <= |.z1 - z.| + |.z - z2.|;
 
 definition
   let n;
   let A be Subset of COMPLEX n;
   attr A is open means
-:: SEQ_4:def 17
+:: SEQ_4:def 14
 
   for x st x in A ex r st 0 < r & for z st |.z.| < r holds x + z in A;
 end;
@@ -614,44 +600,44 @@ end;
 definition let n;
   let A be Subset of COMPLEX n;
   attr A is closed means
-:: SEQ_4:def 18
+:: SEQ_4:def 15
   for x st for r st r > 0 ex z st |.z.| < r & x + z in A holds x in A;
 end;
 
-theorem :: SEQ_4:123
+theorem :: SEQ_4:106
   for A being Subset of COMPLEX n st A = {} holds A is open;
 
-theorem :: SEQ_4:124
+theorem :: SEQ_4:107
   for A being Subset of COMPLEX n st A = COMPLEX n holds A is open;
 
-theorem :: SEQ_4:125
+theorem :: SEQ_4:108
   for AA being Subset-Family of COMPLEX n st for A being Subset of
   COMPLEX n st A in AA holds A is open for A being Subset of COMPLEX n st A =
   union AA holds A is open;
 
-theorem :: SEQ_4:126
+theorem :: SEQ_4:109
   for A,B being Subset of COMPLEX n st A is open & B is open for C
   being Subset of COMPLEX n st C = A /\ B holds C is open;
 
 definition
   let n,x,r;
   func Ball(x,r) -> Subset of COMPLEX n equals
-:: SEQ_4:def 19
+:: SEQ_4:def 16
   { z : |.z - x.| < r };
 end;
 
-theorem :: SEQ_4:127
+theorem :: SEQ_4:110
   z in Ball(x,r) iff |.x - z.| < r;
 
-theorem :: SEQ_4:128
+theorem :: SEQ_4:111
   0 < r implies x in Ball(x,r);
 
-theorem :: SEQ_4:129
+theorem :: SEQ_4:112
   Ball(z1,r1) is open;
 
 definition let n,x,A;
   func dist(x,A) -> Real means
-:: SEQ_4:def 20
+:: SEQ_4:def 17
 
   for X being Subset of REAL st X = {|.x
   - z.| : z in A} holds it = lower_bound X;
@@ -659,95 +645,91 @@ end;
 
 definition let n,A,r;
   func Ball(A,r) -> Subset of COMPLEX n equals
-:: SEQ_4:def 21
+:: SEQ_4:def 18
   { z : dist(z,A) < r };
 end;
 
-theorem :: SEQ_4:130
+theorem :: SEQ_4:113
   for X being Subset of REAL, r st X <> {} & for r9 st r9 in X
   holds r <= r9 holds lower_bound X >= r;
 
-theorem :: SEQ_4:131
+theorem :: SEQ_4:114
   A <> {} implies dist(x,A) >= 0;
 
-theorem :: SEQ_4:132
+theorem :: SEQ_4:115
   A <> {} implies dist(x + z,A) <= dist(x,A) + |.z.|;
 
-theorem :: SEQ_4:133
+theorem :: SEQ_4:116
   x in A implies dist(x,A) = 0;
 
-theorem :: SEQ_4:134
+theorem :: SEQ_4:117
   not x in A & A <> {} & A is closed implies dist(x,A) > 0;
 
-theorem :: SEQ_4:135
+theorem :: SEQ_4:118
   A <> {} implies |.z1 - x.| + dist(x,A) >= dist(z1,A);
 
-theorem :: SEQ_4:136
+theorem :: SEQ_4:119
   z in Ball(A,r) iff dist(z,A) < r;
 
-theorem :: SEQ_4:137
+theorem :: SEQ_4:120
   0 < r & x in A implies x in Ball(A,r);
 
-theorem :: SEQ_4:138
+theorem :: SEQ_4:121
   0 < r implies A c= Ball(A,r);
 
-theorem :: SEQ_4:139
+theorem :: SEQ_4:122
   A <> {} implies Ball(A,r1) is open;
 
 definition
   let n,A,B;
   func dist(A,B) -> Real means
-:: SEQ_4:def 22
+:: SEQ_4:def 19
 
   for X being Subset of REAL st X = {|.x
   - z.| : x in A & z in B} holds it = lower_bound X;
 end;
 
-definition
-  canceled;
-end;
-
-theorem :: SEQ_4:140
+theorem :: SEQ_4:123
   for X,Y being Subset of REAL holds X <> {} & Y <> {} implies X ++ Y <> {};
 
-theorem :: SEQ_4:141
+theorem :: SEQ_4:124
   for X,Y being Subset of REAL holds X is bounded_below &
     Y is bounded_below implies X++Y is bounded_below;
 
-theorem :: SEQ_4:142
+theorem :: SEQ_4:125
   for X,Y being Subset of REAL st
   X <> {} & X is bounded_below & Y <> {} & Y is bounded_below holds
   lower_bound (X ++ Y) = lower_bound X + lower_bound Y;
 
-theorem :: SEQ_4:143
+theorem :: SEQ_4:126
   for X,Y being Subset of REAL st Y is bounded_below & X <> {} &
   for r st r in X ex r1 st r1 in Y & r1 <= r holds
     lower_bound X >= lower_bound Y;
 
-theorem :: SEQ_4:144
+theorem :: SEQ_4:127
   A <> {} & B <> {} implies dist(A,B) >= 0;
 
-theorem :: SEQ_4:145
+theorem :: SEQ_4:128
   dist(A,B) = dist(B,A);
 
-theorem :: SEQ_4:146
+theorem :: SEQ_4:129
   A <> {} & B <> {} implies dist(x,A) + dist(x,B) >= dist(A,B);
 
-theorem :: SEQ_4:147
+theorem :: SEQ_4:130
   A meets B implies dist(A,B) = 0;
 
 definition
   let n;
   func ComplexOpenSets(n) -> Subset-Family of COMPLEX n equals
-:: SEQ_4:def 24
+:: SEQ_4:def 20
   {A where A is
   Subset of COMPLEX n: A is open};
 end;
 
-theorem :: SEQ_4:148
+theorem :: SEQ_4:131
   for A being Subset of COMPLEX n holds A in ComplexOpenSets n iff A is open;
 
-theorem :: SEQ_4:149
+theorem :: SEQ_4:132
   for A being Subset of COMPLEX n holds A is closed iff A` is open;
 
 begin :: moved from GOBOARD2, 2010.03.01, A.T.
@@ -757,45 +739,45 @@ reserve
   n,m,k for Element of NAT,
   x for set;
 
-theorem :: SEQ_4:150
+theorem :: SEQ_4:133
   for R being finite Subset of REAL holds R <> {} implies R is
 bounded_above & upper_bound(R) in R & R is bounded_below & lower_bound(R) in R;
 
-theorem :: SEQ_4:151
+theorem :: SEQ_4:134
   for n being Nat for f being FinSequence holds 1 <= n & n+1 <= len
   f iff n in dom f & n+1 in dom f;
 
-theorem :: SEQ_4:152
+theorem :: SEQ_4:135
   for n being Nat for f being FinSequence holds 1 <= n & n+2 <= len f
   iff n in dom f & n+1 in dom f & n+2 in dom f;
 
-theorem :: SEQ_4:153
+theorem :: SEQ_4:136
   for D being non empty set, f1,f2 being FinSequence of D, n st 1
   <= n & n <= len f2 holds (f1^f2)/.(n + len f1) = f2/.n;
 
-theorem :: SEQ_4:154
+theorem :: SEQ_4:137
   v is increasing implies for n,m st n in dom v & m in dom v & n<=m
   holds v.n <= v.m;
 
-theorem :: SEQ_4:155
+theorem :: SEQ_4:138
   v is increasing implies for n,m st n in dom v & m in dom v & n<>
   m holds v.n<>v.m;
 
-theorem :: SEQ_4:156
+theorem :: SEQ_4:139
   v is increasing & v1 = v|Seg n implies v1 is increasing;
 
-theorem :: SEQ_4:157
+theorem :: SEQ_4:140
   for v holds ex v1 st rng v1 = rng v & len v1 = card rng v & v1 is
   increasing;
 
-theorem :: SEQ_4:158
+theorem :: SEQ_4:141
   for v1,v2 st len v1 = len v2 & rng v1 = rng v2 & v1 is increasing & v2
   is increasing holds v1 = v2;
 
 definition
   let v;
   func Incr(v) ->increasing FinSequence of REAL means
-:: SEQ_4:def 25
+:: SEQ_4:def 21
 
   rng it = rng v & len it = card rng v;
 end;
@@ -804,3 +786,24 @@ registration
   let v be non empty FinSequence of REAL;
   cluster Incr v -> non empty;
 end;
+
+:: from SPRECT_1, 2011.04.24, A.T
+
+registration
+  cluster non empty bounded_above bounded_below for Subset of REAL;
+end;
+
+theorem :: SEQ_4:142
+  for A,B being non empty bounded_below Subset of REAL holds lower_bound(A
+  \/ B) = min(lower_bound A,lower_bound B);
+
+theorem :: SEQ_4:143
+  for A,B being non empty bounded_above Subset of REAL holds upper_bound(A
+  \/ B) = max(upper_bound A,upper_bound B);
+
+:: from TOPMETR3, 2011.04.24, A.T
+
+theorem :: SEQ_4:144
+  for R being non empty Subset of REAL,r0 being real number st for
+  r being real number st r in R holds r <= r0 holds upper_bound R <= r0;
+

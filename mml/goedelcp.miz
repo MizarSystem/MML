@@ -26,7 +26,7 @@ environ
  constructors SETFAM_1, DOMAIN_1, XXREAL_0, NAT_1, NAT_D, FINSEQ_2, QC_LANG3,
       CQC_SIM1, SUBSTUT2, CALCUL_1, HENMODEL, CARD_3, RELSET_1;
  registrations SUBSET_1, RELAT_1, ORDINAL1, XXREAL_0, XREAL_0, CQC_LANG,
-      HENMODEL, FINSEQ_1, FINSET_1, CARD_3;
+      HENMODEL, FINSEQ_1, FINSET_1, CARD_3, RELSET_1;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions TARSKI, XBOOLE_0;
  theorems TARSKI, FUNCT_1, MCART_1, XBOOLE_0, XBOOLE_1, CQC_LANG, QC_LANG1,
@@ -66,7 +66,7 @@ end;
 
 theorem
   CX is negation_faithful implies (CX |- p iff not CX |- 'not' p)
-  by Def1,HENMODEL:def 3;
+  by Def1,HENMODEL:def 2;
 
 theorem Th2:
   for f being FinSequence of CQC-WFF holds
@@ -85,9 +85,9 @@ A5: |- f1 by A2,A3,A4,CALCUL_1:8,36;
   set f2 = f^<*'not' p*>^<*'not' p*>;
 A6: Ant(f2) = f^<*'not' p*> by CALCUL_1:5;
 A7: Suc(f2) = 'not' p by CALCUL_1:5;
-A8: (Ant(f2)).(len f+1) = 'not' p by A6,FINSEQ_1:59;
-  len f+1 = len f + len <*'not' p *> by FINSEQ_1:56;
-  then len f+1 = len Ant(f2) by A6,FINSEQ_1:35;
+A8: (Ant(f2)).(len f+1) = 'not' p by A6,FINSEQ_1:42;
+  len f+1 = len f + len <*'not' p *> by FINSEQ_1:39;
+  then len f+1 = len Ant(f2) by A6,FINSEQ_1:22;
   then len f+1 in dom Ant(f2) by A6,CALCUL_1:10;
   then Suc(f2) is_tail_of Ant(f2) by A7,A8,CALCUL_1:def 16;
   then
@@ -101,9 +101,9 @@ A12: |- Ant(f1)^<*q*> by A5,CALCUL_1:44;
   set f3 = f^<*q*>^<*q*>;
 A13: Ant(f3) = f^<*q*> by CALCUL_1:5;
 A14: Suc(f3) = q by CALCUL_1:5;
-A15: (Ant(f3)).(len f+1) = q by A13,FINSEQ_1:59;
-  len f+1 = len f + len <*q*> by FINSEQ_1:56;
-  then len f+1 = len Ant(f3) by A13,FINSEQ_1:35;
+A15: (Ant(f3)).(len f+1) = q by A13,FINSEQ_1:42;
+  len f+1 = len f + len <*q*> by FINSEQ_1:39;
+  then len f+1 = len Ant(f3) by A13,FINSEQ_1:22;
   then len f+1 in dom Ant(f3) by A13,CALCUL_1:10;
   then Suc(f3) is_tail_of Ant(f3) by A14,A15,CALCUL_1:def 16;
   then |- f3 by CALCUL_1:33;
@@ -142,20 +142,20 @@ A1: X is with_examples;
     assume X |- Ex(x,p);
     then consider f1 such that
 A2: rng f1 c= X and
-A3: |- f1^<*Ex(x,p)*> by HENMODEL:def 2;
+A3: |- f1^<*Ex(x,p)*> by HENMODEL:def 1;
     consider y such that
 A4: X |- 'not' Ex(x,p) 'or' (p.(x,y)) by A1,Def2;
     consider f2 such that
 A5: rng f2 c= X and
-A6: |- f2^<*'not' Ex(x,p) 'or' (p.(x,y))*> by A4,HENMODEL:def 2;
+A6: |- f2^<*'not' Ex(x,p) 'or' (p.(x,y))*> by A4,HENMODEL:def 1;
     take y;
 A7: |- f1^f2^<*Ex(x,p)*> by A3,HENMODEL:5;
     |- f1^f2^<*'not' Ex(x,p) 'or' (p.(x,y))*> by A6,CALCUL_2:20;
     then
 A8: |- f1^f2^<*p.(x,y)*> by A7,Th2;
-    rng(f1^f2) = rng f1 \/ rng f2 by FINSEQ_1:44;
+    rng(f1^f2) = rng f1 \/ rng f2 by FINSEQ_1:31;
     then rng(f1^f2) c= X by A2,A5,XBOOLE_1:8;
-    hence thesis by A8,HENMODEL:def 2;
+    hence thesis by A8,HENMODEL:def 1;
   end;
   thus (ex y st X |- p.(x,y)) implies X |- Ex(x,p)
   proof
@@ -163,9 +163,9 @@ A8: |- f1^f2^<*p.(x,y)*> by A7,Th2;
 A9: X |- p.(x,y);
     consider f1 such that
 A10: rng f1 c= X and
-A11: |- f1^<*p.(x,y)*> by A9,HENMODEL:def 2;
+A11: |- f1^<*p.(x,y)*> by A9,HENMODEL:def 1;
     |- f1^<*Ex(x,p)*> by A11,CALCUL_1:58;
-    hence thesis by A10,HENMODEL:def 2;
+    hence thesis by A10,HENMODEL:def 1;
   end;
 end;
 
@@ -173,7 +173,7 @@ theorem
   (CX is negation_faithful & CX is with_examples implies
   (JH,valH |= p iff CX |- p)) implies
   (CX is negation_faithful & CX is with_examples implies
-  (JH,valH |= 'not' p iff CX |- 'not' p)) by Def1,HENMODEL:def 3,VALUAT_1:28;
+  (JH,valH |= 'not' p iff CX |- 'not' p)) by Def1,HENMODEL:def 2,VALUAT_1:17;
 
 theorem Th5:
   |- f1^<*p*> & |- f1^<*q*> implies |- f1^<*p '&' q*>
@@ -200,27 +200,27 @@ A1: X |- p and
 A2: X |- q;
     consider f1 such that
 A3: rng f1 c= X and
-A4: |- f1^<*p*> by A1,HENMODEL:def 2;
+A4: |- f1^<*p*> by A1,HENMODEL:def 1;
     consider f2 such that
 A5: rng f2 c= X and
-A6: |- f2^<*q*> by A2,HENMODEL:def 2;
+A6: |- f2^<*q*> by A2,HENMODEL:def 1;
 A7: |- f1^f2^<*p*> by A4,HENMODEL:5;
     |- f1^f2^<*q*> by A6,CALCUL_2:20;
     then
 A8: |- f1^f2^<*p '&' q*> by A7,Th5;
-    rng(f1^f2) = rng f1 \/ rng f2 by FINSEQ_1:44;
+    rng(f1^f2) = rng f1 \/ rng f2 by FINSEQ_1:31;
     then rng(f1^f2) c= X by A3,A5,XBOOLE_1:8;
-    hence thesis by A8,HENMODEL:def 2;
+    hence thesis by A8,HENMODEL:def 1;
   end;
   thus X |- p '&' q implies X |- p & X |- q
   proof
     assume X |- p '&' q;
     then consider f1 such that
 A9: rng f1 c= X and
-A10: |- f1^<*p '&' q*> by HENMODEL:def 2;
+A10: |- f1^<*p '&' q*> by HENMODEL:def 1;
 A11: |- f1^<*p*> by A10,CALCUL_2:22;
     |- f1^<*q*> by A10,CALCUL_2:23;
-    hence thesis by A9,A11,HENMODEL:def 2;
+    hence thesis by A9,A11,HENMODEL:def 1;
   end;
 end;
 
@@ -230,7 +230,7 @@ theorem
   (CX is negation_faithful & CX is with_examples implies
   (JH,valH |= q iff CX |- q)) implies
   (CX is negation_faithful & CX is with_examples
-  implies (JH,valH |= p '&' q iff CX |- p '&' q)) by Th6,VALUAT_1:29;
+  implies (JH,valH |= p '&' q iff CX |- p '&' q)) by Th6,VALUAT_1:18;
 
 theorem Th8:
   for p st QuantNbr(p) <= 0 holds
@@ -243,7 +243,7 @@ proof
 A1: for r,s,x,k for l being CQC-variable_list of k
   for P being QC-pred_symbol of k holds P[VERUM] & P[P!l] &
   (P[r] implies P['not' r]) & (P[r] & P[s] implies P[r '&' s])
-  by Def1,Th6,HENMODEL:16,17,def 3,VALUAT_1:28,29;
+  by Def1,Th6,HENMODEL:16,17,def 2,VALUAT_1:17,18;
 A2: for p st QuantNbr(p) = 0 holds P[p] from SUBSTUT2:sch 3(A1);
   now
     let p;
@@ -257,22 +257,22 @@ end;
 theorem Th9:
   J,v |= Ex(x,p) iff ex a st J,v.(x|a) |= p
 proof
-A1: J,v |= 'not' All(x,'not' p) iff not J,v |= All(x,'not' p) by VALUAT_1:28;
+A1: J,v |= 'not' All(x,'not' p) iff not J,v |= All(x,'not' p) by VALUAT_1:17;
 A2: (ex a st not J,v.(x|a) |= 'not' p) implies ex a st J,v.(x|a) |= p
   proof
     given a such that
 A3: not J,v.(x|a) |= 'not' p;
     take a;
-    thus thesis by A3,VALUAT_1:28;
+    thus thesis by A3,VALUAT_1:17;
   end;
   (ex a st J,v.(x|a) |= p) implies ex a st not J,v.(x|a) |= 'not' p
   proof
     given a such that
 A4: J,v.(x|a) |= p;
     take a;
-    thus thesis by A4,VALUAT_1:28;
+    thus thesis by A4,VALUAT_1:17;
   end;
-  hence thesis by A1,A2,QC_LANG2:def 5,SUBLEMMA:51;
+  hence thesis by A1,A2,QC_LANG2:def 5,SUBLEMMA:50;
 end;
 
 theorem Th10:
@@ -283,10 +283,10 @@ proof
     assume JH,valH |= Ex(x,p);
     then consider x1 being Element of HCar such that
 A1: JH,valH.(x|x1) |= p by Th9;
-    rng valH = bound_QC-variables by HENMODEL:def 7,RELAT_1:71;
+    rng valH = bound_QC-variables by HENMODEL:def 6,RELAT_1:45;
     then consider b such that
 A2: b in dom valH and
-A3: valH.b = x1 by FUNCT_1:def 5,HENMODEL:def 5;
+A3: valH.b = x1 by FUNCT_1:def 3,HENMODEL:def 4;
     reconsider y = b as bound_QC-variable by A2;
     take y;
     thus thesis by A1,A3,CALCUL_1:24;
@@ -311,7 +311,7 @@ A2: (for a holds not J,v.(x|a) |= 'not' p) implies for a holds J,v.(x|a) |= p
 A3: for a holds not J,v.(x|a) |= 'not' p;
     let a;
     not J,v.(x|a) |= 'not' p by A3;
-    hence thesis by VALUAT_1:28;
+    hence thesis by VALUAT_1:17;
   end;
   (for a holds J,v.(x|a) |= p) implies for a holds not J,v.(x|a) |= 'not' p
   proof
@@ -319,9 +319,9 @@ A3: for a holds not J,v.(x|a) |= 'not' p;
 A4: for a holds J,v.(x|a) |= p;
     let a;
     J,v.(x|a) |= p by A4;
-    hence thesis by VALUAT_1:28;
+    hence thesis by VALUAT_1:17;
   end;
-  hence thesis by A1,A2,SUBLEMMA:51,VALUAT_1:28;
+  hence thesis by A1,A2,SUBLEMMA:50,VALUAT_1:17;
 end;
 
 theorem Th12:
@@ -332,18 +332,18 @@ proof
     assume X |- 'not' Ex(x,'not' p);
     then consider f1 such that
 A1: rng f1 c= X and
-A2: |- f1^<*'not' Ex(x,'not' p)*> by HENMODEL:def 2;
+A2: |- f1^<*'not' Ex(x,'not' p)*> by HENMODEL:def 1;
     |- f1^<*All(x,p)*> by A2,CALCUL_1:68;
-    hence thesis by A1,HENMODEL:def 2;
+    hence thesis by A1,HENMODEL:def 1;
   end;
   thus X |- All(x,p) implies X |- 'not' Ex(x,'not' p)
   proof
     assume X |- All(x,p);
     then consider f1 such that
 A3: rng f1 c= X and
-A4: |- f1^<*All(x,p)*> by HENMODEL:def 2;
+A4: |- f1^<*All(x,p)*> by HENMODEL:def 1;
     |- f1^<*'not' Ex(x,'not' p)*> by A4,CALCUL_1:68;
-    hence thesis by A3,HENMODEL:def 2;
+    hence thesis by A3,HENMODEL:def 1;
   end;
 end;
 
@@ -360,7 +360,7 @@ theorem Th14:
   QuantNbr(p) = QuantNbr(p.(x,y))
 proof
   QuantNbr(p) = QuantNbr(CQC_Sub([p,Sbst(x,y)])) by SUBSTUT2:25;
-  hence thesis by SUBSTUT2:def 2;
+  hence thesis by SUBSTUT2:def 1;
 end;
 
 reserve L for PATH of q,p,
@@ -385,8 +385,8 @@ A8: QuantNbr(q) = QuantNbr(r) + 1 by A6,CQC_SIM1:18;
   then 1 <= QuantNbr(q) by NAT_1:11;
   then
 A9: 1 = QuantNbr(q) by A7,XXREAL_0:1;
-  set L =the  PATH of q,p;
-A10: 1 <= len L by A4,SUBSTUT2:def 6;
+  set L = the PATH of q,p;
+A10: 1 <= len L by A4,SUBSTUT2:def 5;
   defpred P[Element of NAT] means 1 <= $1 & $1 <= len L implies
   ex p1 st p1 = L.$1 & QuantNbr(q) <= QuantNbr(p1) &
   (CX |- p1 iff JH,valH |= p1);
@@ -402,7 +402,7 @@ A15: k+1 <= len L;
 A16: now
       assume k = 0;
       then
-A17:  L.j = q by A4,SUBSTUT2:def 6;
+A17:  L.j = q by A4,SUBSTUT2:def 5;
       take q;
       thus QuantNbr(q) <= QuantNbr(q);
 A18:  now
@@ -424,7 +424,7 @@ A20:    CX |- ('not' r).(x,y) by A3,Th3;
         hence JH,valH |= Ex(x,'not' r) by Th10;
       end;
       then JH,valH |= 'not' Ex(x,'not' r) iff CX |- 'not' Ex(x,'not' r)
-      by A2,A18,Def1,HENMODEL:def 3,VALUAT_1:28;
+      by A2,A18,Def1,HENMODEL:def 2,VALUAT_1:17;
       then JH,valH |= q iff CX |- q by A6,Th11,Th12;
       hence thesis by A17;
     end;
@@ -437,7 +437,7 @@ A21:  0+1 <= k by NAT_1:13;
       then consider G1,H1 being Element of QC-WFF such that
 A22:  L.k = G1 and
 A23:  L.j = H1 and
-A24:  G1 is_immediate_constituent_of H1 by A4,A21,SUBSTUT2:def 6;
+A24:  G1 is_immediate_constituent_of H1 by A4,A21,SUBSTUT2:def 5;
       consider p1 such that
 A25:  p1 = L.k and
 A26:  QuantNbr(q) <= QuantNbr(p1) and
@@ -450,14 +450,14 @@ A29:  now
 A30:    s = 'not' p1;
         then
 A31:    QuantNbr(q) <= QuantNbr(s) by A26,CQC_SIM1:16;
-        CX |- s iff JH,valH |= s by A2,A27,A30,Def1,HENMODEL:def 3,VALUAT_1:28;
+        CX |- s iff JH,valH |= s by A2,A27,A30,Def1,HENMODEL:def 2,VALUAT_1:17;
         hence thesis by A23,A31;
       end;
 A32:  QuantNbr(s) <= 1 by A1,A23,A28,SUBSTUT2:30;
 A33:  now
         given F1 such that
 A34:    s = p1 '&' F1;
-        reconsider F1 as Element of CQC-WFF by A34,CQC_LANG:19;
+        reconsider F1 as Element of CQC-WFF by A34,CQC_LANG:9;
         QuantNbr(s) = QuantNbr(p1) + QuantNbr(F1) by A34,CQC_SIM1:17;
         then
 A35:    QuantNbr(p1) <= QuantNbr(s) by NAT_1:11;
@@ -470,13 +470,13 @@ A38:    QuantNbr(p1) = 1 by A9,A26,A36,XXREAL_0:1;
         then
 A39:    CX |- F1 iff JH,valH |= F1 by A2,A3,Th8;
 A40:    QuantNbr(q) <= QuantNbr(s) by A26,A35,XXREAL_0:2;
-        CX |- s iff JH,valH |= s by A27,A34,A39,Th6,VALUAT_1:29;
+        CX |- s iff JH,valH |= s by A27,A34,A39,Th6,VALUAT_1:18;
         hence thesis by A23,A40;
       end;
 A41:  now
         given F1 such that
 A42:    s = F1 '&' p1;
-        reconsider F1 as Element of CQC-WFF by A42,CQC_LANG:19;
+        reconsider F1 as Element of CQC-WFF by A42,CQC_LANG:9;
 A43:    QuantNbr(s) = QuantNbr(p1) + QuantNbr(F1) by A42,CQC_SIM1:17;
         then
 A44:    QuantNbr(p1) <= QuantNbr(s) by NAT_1:11;
@@ -488,7 +488,7 @@ A47:    QuantNbr(p1) = 1 by A9,A26,A45,XXREAL_0:1;
         then
 A48:    CX |- F1 iff JH,valH |= F1 by A2,A3,A43,A47,Th8;
 A49:    QuantNbr(q) <= QuantNbr(s) by A26,A44,XXREAL_0:2;
-        CX |- s iff JH,valH |= s by A27,A42,A48,Th6,VALUAT_1:29;
+        CX |- s iff JH,valH |= s by A27,A42,A48,Th6,VALUAT_1:18;
         hence thesis by A23,A49;
       end;
       now
@@ -497,14 +497,14 @@ A50:    s = All(x,p1);
         1 < QuantNbr(p1) + 1 by A9,A26,NAT_1:13;
         hence contradiction by A32,A50,CQC_SIM1:18;
       end;
-      hence thesis by A22,A24,A25,A29,A33,A41,QC_LANG2:def 20;
+      hence thesis by A22,A24,A25,A29,A33,A41,QC_LANG2:def 19;
     end;
     hence thesis by A16;
   end;
   for k holds P[k] from NAT_1:sch 1(A11,A12);
   then ex p1 st ( p1 = L.(len L))&( QuantNbr(q) <= QuantNbr(p1))&(
   CX |- p1 iff JH,valH |= p1) by A10;
-  hence thesis by A4,SUBSTUT2:def 6;
+  hence thesis by A4,SUBSTUT2:def 5;
 end;
 
 theorem Th16:
@@ -529,8 +529,8 @@ A6: QuantNbr(p) = n+1;
     then consider q such that
 A7: q is_subformula_of p and
 A8: QuantNbr(q) = 1 by NAT_1:11,SUBSTUT2:34;
-    set L =the  PATH of q,p;
-A9: 1 <= len L by A7,SUBSTUT2:def 6;
+    set L = the PATH of q,p;
+A9: 1 <= len L by A7,SUBSTUT2:def 5;
     defpred P[Element of NAT] means 1 <= $1 & $1 <= len L implies
     ex p1 st p1 = L.$1 & QuantNbr(q) <= QuantNbr(p1) &
     (CX |- p1 iff JH,valH |= p1);
@@ -546,7 +546,7 @@ A14:  k+1 <= len L;
 A15:  now
         assume k = 0;
         then
-A16:    L.j = q by A7,SUBSTUT2:def 6;
+A16:    L.j = q by A7,SUBSTUT2:def 5;
         take q;
         JH,valH |= q iff CX |- q by A3,A4,A8,Th15;
         hence thesis by A16;
@@ -560,7 +560,7 @@ A17:    0+1 <= k by NAT_1:13;
         then consider G1,H1 being Element of QC-WFF such that
 A18:    L.k = G1 and
 A19:    L.j = H1 and
-A20:    G1 is_immediate_constituent_of H1 by A7,A17,SUBSTUT2:def 6;
+A20:    G1 is_immediate_constituent_of H1 by A7,A17,SUBSTUT2:def 5;
         consider p1 such that
 A21:    QuantNbr(q) <= QuantNbr(p1) and
 A22:    p1 = L.k and
@@ -574,21 +574,21 @@ A25:    now
 A26:      s = 'not' p1;
           then
 A27:      QuantNbr(q) <= QuantNbr(s) by A21,CQC_SIM1:16;
-CX |- s iff JH,valH |= s by A3,A23,A26,Def1,HENMODEL:def 3,VALUAT_1:28;
+CX |- s iff JH,valH |= s by A3,A23,A26,Def1,HENMODEL:def 2,VALUAT_1:17;
           hence thesis by A19,A27;
         end;
 A28:    QuantNbr(s) <= n+1 by A6,A19,A24,SUBSTUT2:30;
 A29:    now
           given F1 such that
 A30:      s = p1 '&' F1;
-          reconsider F1 as Element of CQC-WFF by A30,CQC_LANG:19;
+          reconsider F1 as Element of CQC-WFF by A30,CQC_LANG:9;
 A31:      QuantNbr(s) = QuantNbr(p1) + QuantNbr(F1) by A30,CQC_SIM1:17;
-          then 1+QuantNbr(F1) <= QuantNbr(s) by A8,A21,XREAL_1:8;
+          then 1+QuantNbr(F1) <= QuantNbr(s) by A8,A21,XREAL_1:6;
           then 1+QuantNbr(F1) <= n+1 by A28,XXREAL_0:2;
-          then QuantNbr(F1)+1+(-1) <= n+1+(-1) by XREAL_1:8;
+          then QuantNbr(F1)+1+(-1) <= n+1+(-1) by XREAL_1:6;
           then CX |- F1 iff JH,valH |= F1 by A1,A3,A4;
           then
-A32:      CX |- s iff JH,valH |= s by A23,A30,Th6,VALUAT_1:29;
+A32:      CX |- s iff JH,valH |= s by A23,A30,Th6,VALUAT_1:18;
           QuantNbr(p1) <= QuantNbr(s) by A31,NAT_1:11;
           then QuantNbr(q) <= QuantNbr(s) by A21,XXREAL_0:2;
           hence thesis by A19,A32;
@@ -596,14 +596,14 @@ A32:      CX |- s iff JH,valH |= s by A23,A30,Th6,VALUAT_1:29;
 A33:    now
           given F1 such that
 A34:      s = F1 '&' p1;
-          reconsider F1 as Element of CQC-WFF by A34,CQC_LANG:19;
+          reconsider F1 as Element of CQC-WFF by A34,CQC_LANG:9;
 A35:      QuantNbr(s) = QuantNbr(p1) + QuantNbr(F1) by A34,CQC_SIM1:17;
-          then 1+QuantNbr(F1) <= QuantNbr(s) by A8,A21,XREAL_1:8;
+          then 1+QuantNbr(F1) <= QuantNbr(s) by A8,A21,XREAL_1:6;
           then 1+QuantNbr(F1) <= n+1 by A28,XXREAL_0:2;
-          then QuantNbr(F1)+1+(-1) <= n+1+(-1) by XREAL_1:8;
+          then QuantNbr(F1)+1+(-1) <= n+1+(-1) by XREAL_1:6;
           then CX |- F1 iff JH,valH |= F1 by A1,A3,A4;
           then
-A36:      CX |- s iff JH,valH |= s by A23,A34,Th6,VALUAT_1:29;
+A36:      CX |- s iff JH,valH |= s by A23,A34,Th6,VALUAT_1:18;
           QuantNbr(p1) <= QuantNbr(s) by A35,NAT_1:11;
           then QuantNbr(q) <= QuantNbr(s) by A21,XXREAL_0:2;
           hence thesis by A19,A36;
@@ -634,18 +634,18 @@ A43:        CX |- ('not' p1).(x,y) by A4,Th3;
             hence JH,valH |= Ex(x,'not' p1) by Th10;
           end;
           then JH,valH |= 'not' Ex(x,'not' p1) iff CX |- 'not' Ex(x,'not' p1 )
-          by A3,A41,Def1,HENMODEL:def 3,VALUAT_1:28;
+          by A3,A41,Def1,HENMODEL:def 2,VALUAT_1:17;
           then JH,valH |= s iff CX |- s by A37,Th11,Th12;
           hence thesis by A19,A40;
         end;
-        hence thesis by A18,A20,A22,A25,A29,A33,QC_LANG2:def 20;
+        hence thesis by A18,A20,A22,A25,A29,A33,QC_LANG2:def 19;
       end;
       hence thesis by A15;
     end;
     for k holds P[k] from NAT_1:sch 1(A10,A11);
     then ex p1 st ( p1 = L.(len L))&( QuantNbr(q) <= QuantNbr(p1))&(
     CX |- p1 iff JH,valH |= p1) by A9;
-    hence thesis by A7,SUBSTUT2:def 6;
+    hence thesis by A7,SUBSTUT2:def 5;
   end;
   hence thesis by A2,A5,NAT_1:8;
 end;
@@ -671,11 +671,11 @@ begin :: Satisfiability of Consistent Sets of Formulas with Finitely Many Free
 theorem Th18:
   QC-WFF is countable
 proof
-  QC-WFF is QC-closed by QC_LANG1:def 10;
+  QC-WFF is QC-closed by QC_LANG1:def 9;
   then
-A1: QC-WFF is Subset of [:NAT,NAT:]* by QC_LANG1:def 9;
-  [:NAT,NAT:] is countable by CARD_4:55;
-  then [:NAT,NAT:]* is countable by CARD_4:65;
+A1: QC-WFF is Subset of [:NAT,NAT:]* by QC_LANG1:def 8;
+  [:NAT,NAT:] is countable by CARD_4:7;
+  then [:NAT,NAT:]* is countable by CARD_4:13;
   hence thesis by A1;
 end;
 
@@ -704,7 +704,7 @@ A3: a in A2 iff P[a];
       a in A1 iff P[a] by A2;
       hence a in A1 iff a in A2 by A3;
     end;
-    hence thesis by TARSKI:2;
+    hence thesis by TARSKI:1;
   end;
 end;
 
@@ -714,7 +714,7 @@ theorem Th19:
 theorem Th20:
   ExCl is non empty & ExCl is countable
 proof
-  set x =the  bound_QC-variable,p =the  Element of CQC-WFF;
+  set x = the bound_QC-variable,p = the Element of CQC-WFF;
   set a = Ex(x,p);
   a in ExCl by Def3;
   hence ExCl is non empty;
@@ -728,7 +728,7 @@ proof
 A1: A is countable;
   A c= A;
   then consider F being Function of NAT,A such that
-A2: A = rng F by A1,SUPINF_2:def 14;
+A2: A = rng F by A1,SUPINF_2:def 8;
   dom F = NAT by FUNCT_2:def 1;
   hence thesis by A2;
 end;
@@ -740,7 +740,7 @@ A1: p is existential;
   :Def4:
   ex q being Element of QC-WFF st p = Ex(it,q);
   existence by A1,QC_LANG2:def 13;
-  uniqueness by QC_LANG2:19;
+  uniqueness by QC_LANG2:13;
 end;
 
 definition
@@ -754,13 +754,13 @@ A1: p is existential;
     consider x,F1 such that
 A2: p = Ex(x,F1) by A1,QC_LANG2:def 13;
     p = 'not' All(x,'not' F1) by A2,QC_LANG2:def 5;
-    then All(x,'not' F1) is Element of CQC-WFF by CQC_LANG:18;
+    then All(x,'not' F1) is Element of CQC-WFF by CQC_LANG:8;
     then
-A3: 'not' F1 is Element of CQC-WFF by CQC_LANG:23;
+A3: 'not' F1 is Element of CQC-WFF by CQC_LANG:13;
     take F1;
-    thus thesis by A2,A3,CQC_LANG:18;
+    thus thesis by A2,A3,CQC_LANG:8;
   end;
-  uniqueness by QC_LANG2:19;
+  uniqueness by QC_LANG2:13;
 end;
 
 definition
@@ -834,14 +834,14 @@ A1: p in X;
   now
     let a;
     assume a in rng <*p*>;
-    then a in {p} by FINSEQ_1:55;
+    then a in {p} by FINSEQ_1:38;
     hence a in X by A1,TARSKI:def 1;
   end;
   then
 A2: rng <*p*> c= X by TARSKI:def 3;
   |- <*>CQC-WFF^<*p*>^<*p*> by CALCUL_2:21;
-  then |- <*p*>^<*p*> by FINSEQ_1:47;
-  hence thesis by A2,HENMODEL:def 2;
+  then |- <*p*>^<*p*> by FINSEQ_1:34;
+  hence thesis by A2,HENMODEL:def 1;
 end;
 
 theorem Th22:
@@ -857,7 +857,7 @@ proof
   set f = <*>CQC-WFF;
 A1: rng f c= X by XBOOLE_1:2;
   |- f^<*VERUM*> by HENMODEL:15;
-  hence thesis by A1,HENMODEL:def 2;
+  hence thesis by A1,HENMODEL:def 1;
 end;
 
 theorem Th24:
@@ -868,7 +868,7 @@ proof
     assume
 A1: X |- 'not' VERUM;
     X |- VERUM by Th23;
-    hence thesis by A1,HENMODEL:def 3;
+    hence thesis by A1,HENMODEL:def 2;
   end;
   thus thesis by HENMODEL:6;
 end;
@@ -912,7 +912,7 @@ A3: a in still_not-bound_in p;
     then b in {still_not-bound_in q : q in {p}};
     hence a in still_not-bound_in {p} by A3,TARSKI:def 4;
   end;
-  hence thesis by A1,TARSKI:2;
+  hence thesis by A1,TARSKI:1;
 end;
 
 theorem Th27:
@@ -984,7 +984,7 @@ proof
   let A be Subset of bound_QC-variables;
   assume A is finite;
   then not (for b holds b in A iff b in bound_QC-variables)
-  by CALCUL_1:64,TARSKI:2;
+  by CALCUL_1:64,TARSKI:1;
   then consider b such that
 A1: not b in A and
 A2: b in bound_QC-variables;
@@ -1027,7 +1027,7 @@ A3: b in A by TARSKI:def 4;
     consider p such that
 A4: b = still_not-bound_in p and
 A5: p in rng f by A3;
-    ex c st ( c in dom f)&( f.c = p) by A5,FUNCT_1:def 5;
+    ex c st ( c in dom f)&( f.c = p) by A5,FUNCT_1:def 3;
     hence a in still_not-bound_in f by A2,A4,CALCUL_1:def 5;
   end;
   now
@@ -1037,11 +1037,11 @@ A5: p in rng f by A3;
 A6: i in dom f and
 A7: q = f.i and
 A8: a in still_not-bound_in q by CALCUL_1:def 5;
-    q in rng f by A6,A7,FUNCT_1:def 5;
+    q in rng f by A6,A7,FUNCT_1:def 3;
     then still_not-bound_in q in A;
     hence a in still_not-bound_in rng f by A8,TARSKI:def 4;
   end;
-  hence thesis by A1,TARSKI:2;
+  hence thesis by A1,TARSKI:1;
 end;
 
 :: Ebb et al, Chapter V, Lemma 2.1
@@ -1055,7 +1055,7 @@ A1: still_not-bound_in CX is finite;
   consider f being Function such that
 A2: dom f = NAT and
 A3: ExCl = rng f by Lm1,Th20;
-  reconsider f as Function of NAT,CQC-WFF by A2,A3,FUNCT_2:4;
+  reconsider f as Function of NAT,CQC-WFF by A2,A3,FUNCT_2:2;
   defpred P[Element of NAT,set,set] means
   ex K,L st K = $2`2 & L = K \/ still_not-bound_in {f.($1+1)} &
   $3 = [('not' (f.($1+1))) 'or' (the_scope_of(f,($1+1)).(bound_in(f,$1+1),
@@ -1107,7 +1107,7 @@ A8: now
     Ex(x,p) in ExCl by Def3;
     then consider a such that
 A9: a in dom f and
-A10: f.a = Ex(x,p) by A3,FUNCT_1:def 5;
+A10: f.a = Ex(x,p) by A3,FUNCT_1:def 3;
     reconsider a as Element of NAT by A9;
     reconsider r9 = f.a as Element of CQC-WFF;
 A11: Ex-bound_in r9 = x by A10,Th22;
@@ -1128,7 +1128,7 @@ A18:  a = 0;
       assume a <> 0;
       then consider m being Nat such that
 A19:  a = m+1 by NAT_1:6;
-      reconsider m as Element of NAT by ORDINAL1:def 13;
+      reconsider m as Element of NAT by ORDINAL1:def 12;
 A20:  ex K,L st K = (h.m)`2 & L = K \/ still_not-bound_in {r9} &
       h.a = [('not' r9) 'or' (the_scope_of(f,a).(bound_in(f,a),
       x.(min* {i : not x.i in L}))), K \/ still_not-bound_in
@@ -1163,7 +1163,7 @@ A26:  F.0 = CX \/ {(h.n)`1 : n in 0} by A21;
       end;
       then
 A27:  {(h.n)`1 : n in 0} = {} by XBOOLE_0:def 1;
-      F.0 in rng F by A21,FUNCT_1:12;
+      F.0 in rng F by A21,FUNCT_1:3;
       hence thesis by A25,A26,A27,TARSKI:def 4;
     end;
     now
@@ -1171,13 +1171,13 @@ A27:  {(h.n)`1 : n in 0} = {} by XBOOLE_0:def 1;
       then consider n such that
 A28:  a = (h.n)`1;
       n < n+1 by NAT_1:13;
-      then n in n+1 by NAT_1:45;
+      then n in n+1 by NAT_1:44;
       then
 A29:  a in {(h.m)`1 : m in n+1} by A28;
       F.(n+1) = CX \/ {(h.m)`1 : m in n+1} by A21;
       then
 A30:  {(h.m)`1 : m in n+1} c= F.(n+1) by XBOOLE_1:7;
-      F.(n+1) in rng F by A21,FUNCT_1:12;
+      F.(n+1) in rng F by A21,FUNCT_1:3;
       hence thesis by A29,A30,TARSKI:def 4;
     end;
     hence thesis by A23,A24,XBOOLE_0:def 3;
@@ -1191,7 +1191,7 @@ A31: a in b and
 A32: b in rng F by TARSKI:def 4;
     consider c such that
 A33: c in dom F and
-A34: F.c = b by A32,FUNCT_1:def 5;
+A34: F.c = b by A32,FUNCT_1:def 3;
     reconsider n = c as Element of NAT by A21,A33;
 A35: a in CX \/ {(h.m)`1 : m in n} by A21,A31,A34;
 A36: now
@@ -1233,9 +1233,9 @@ A46:    a in CX;
         then consider i such that
 A47:    (h.i)`1 = a and
 A48:    i in n;
-        i < n by A48,NAT_1:45;
+        i < n by A48,NAT_1:44;
         then i < m by A41,XXREAL_0:2;
-        then i in m by NAT_1:45;
+        then i in m by NAT_1:44;
         then
 A49:    a in {(h.j)`1 : j in m} by A47;
         {(h.j)`1 : j in m} c= F.m by A43,XBOOLE_1:7;
@@ -1251,7 +1251,7 @@ A49:    a in {(h.j)`1 : j in m} by A47;
     assume a in rng F;
     then consider b such that
 A50: b in dom F and
-A51: F.b = a by FUNCT_1:def 5;
+A51: F.b = a by FUNCT_1:def 3;
     reconsider b as Element of NAT by A21,A50;
 A52: F.b = CX \/ {(h.i)`1 : i in b} by A21;
     now
@@ -1264,7 +1264,7 @@ A52: F.b = CX \/ {(h.i)`1 : i in b} by A21;
     then F.b c= CQC-WFF by A52,XBOOLE_1:8;
     hence thesis by A51;
   end;
-  then reconsider F as Function of NAT,bool CQC-WFF by A21,FUNCT_2:4;
+  then reconsider F as Function of NAT,bool CQC-WFF by A21,FUNCT_2:2;
 A53: for n holds F.(n+1) = F.n \/ {(h.n)`1}
   proof
     let n;
@@ -1274,7 +1274,7 @@ A53: for n holds F.(n+1) = F.n \/ {(h.n)`1}
       then consider j such that
 A54:  a = (h.j)`1 and
 A55:  j in n+1;
-      j < n+1 by A55,NAT_1:45;
+      j < n+1 by A55,NAT_1:44;
       then
 A56:  j+1 <= n+1 by NAT_1:13;
 A57:  now
@@ -1287,7 +1287,7 @@ A58:    a in {(h.n)`1} by A54,TARSKI:def 1;
       now
         assume j+1 <= n;
         then j < n by NAT_1:13;
-        then j in n by NAT_1:45;
+        then j in n by NAT_1:44;
         then
 A59:    a in {(h.k)`1 : k in n} by A54;
         {(h.k)`1 : k in n} c= {(h.i)`1 : i in n} \/ {(h.n)`1} by XBOOLE_1:7;
@@ -1307,9 +1307,9 @@ A62:  now
 A63:    (h.j)`1 = a and
 A64:    j in n;
 A65:    n <= n+1 by NAT_1:11;
-        j < n by A64,NAT_1:45;
+        j < n by A64,NAT_1:44;
         then j < n+1 by A65,XXREAL_0:2;
-        then j in n+1 by NAT_1:45;
+        then j in n+1 by NAT_1:44;
         hence a in {(h.i)`1 : i in n+1} by A63;
       end;
       now
@@ -1317,7 +1317,7 @@ A65:    n <= n+1 by NAT_1:11;
         then
 A66:    a = (h.n)`1 by TARSKI:def 1;
         n < n+1 by NAT_1:13;
-        then n in n+1 by NAT_1:45;
+        then n in n+1 by NAT_1:44;
         hence a in {(h.i)`1 : i in n+1} by A66;
       end;
       hence a in {(h.i)`1 : i in n+1} by A61,A62,XBOOLE_0:def 3;
@@ -1340,7 +1340,7 @@ A68: (h.0)`2 = still_not-bound_in (CX \/ {('not' (f.0)) 'or'
     reconsider s = ('not' (f.0)) 'or'
     (the_scope_of(f,0).(bound_in(f,0), x.(min* {j :
     not x.j in still_not-bound_in (CX \/ {f.0})}))) as Element of CQC-WFF;
-    still_not-bound_in s is finite by CQC_SIM1:20;
+    still_not-bound_in s is finite by CQC_SIM1:19;
     then still_not-bound_in {s} is finite by Th26;
     then still_not-bound_in {s} \/ still_not-bound_in CX is finite by A1;
     hence thesis by A68,Th27;
@@ -1359,7 +1359,7 @@ A71: ex K,L st K = (h.k)`2 & L = K \/ still_not-bound_in {f.(k+1)} &
     set L = K \/ still_not-bound_in {f.(k+1)};
     set s = ('not' (f.(k+1))) 'or' (the_scope_of(f,(k+1)).
     (bound_in(f,k+1),x.(min* {j : not x.j in L})));
-    still_not-bound_in s is finite by CQC_SIM1:20;
+    still_not-bound_in s is finite by CQC_SIM1:19;
     hence thesis by A70,A71,MCART_1:7;
   end;
 A72: for k holds P[k] from NAT_1:sch 1(A67,A69);
@@ -1381,12 +1381,12 @@ A75:  (h.0)`2 = still_not-bound_in (CX \/ A1) by A5,MCART_1:7;
       reconsider B = (h.0)`2 as Subset of bound_QC-variables by A5,MCART_1:7;
       reconsider C = still_not-bound_in {s} \/ B as Element of
       bool bound_QC-variables;
-      still_not-bound_in s is finite by CQC_SIM1:20;
+      still_not-bound_in s is finite by CQC_SIM1:19;
       then still_not-bound_in {s} is finite by Th26;
       then consider x such that
 A76:  not x in C by A67,Th28;
       consider l being Element of NAT such that
-A77:  x.l = x by QC_LANG3:36;
+A77:  x.l = x by QC_LANG3:30;
       l in {i : not x.i in C} by A76,A77;
       then reconsider A = {i : not x.i in C} as non empty set;
       now
@@ -1435,14 +1435,14 @@ A85:  (h.(k+1))`2 = K \/ still_not-bound_in r by A83,MCART_1:7;
 MCART_1:7;
       reconsider C = still_not-bound_in {s} \/ B as Element of
       bool bound_QC-variables;
-      still_not-bound_in s is finite by CQC_SIM1:20;
+      still_not-bound_in s is finite by CQC_SIM1:19;
       then
 A86:  still_not-bound_in {s} is finite by Th26;
       (h.(k+1))`2 is finite by A72;
       then consider x such that
 A87:  not x in C by A86,Th28;
       consider l being Element of NAT such that
-A88:  x.l = x by QC_LANG3:36;
+A88:  x.l = x by QC_LANG3:30;
       l in {i : not x.i in still_not-bound_in {s} \/ B} by A87,A88;
       then reconsider A = {i : not x.i in still_not-bound_in {s} \/ B}
       as non empty set;
@@ -1532,14 +1532,14 @@ A104:   |- f1^<*s*>^<*('not' (f.k)) 'or' s*> by CALCUL_1:52;
 A105:   |- f1^<*s*>^<*'not' VERUM*> by A100,A101,A104,CALCUL_2:24;
         reconsider r1 = f.0 as Element of CQC-WFF;
         set C = still_not-bound_in (CX \/ {r1});
-        still_not-bound_in r1 is finite by CQC_SIM1:20;
+        still_not-bound_in r1 is finite by CQC_SIM1:19;
         then still_not-bound_in {r1} is finite by Th26;
         then still_not-bound_in {r1} \/ still_not-bound_in CX is finite by A1;
         then C is finite by Th27;
         then consider x such that
 A106:   not x in C by Th28;
         consider l being Element of NAT such that
-A107:   x.l = x by QC_LANG3:36;
+A107:   x.l = x by QC_LANG3:30;
         l in {i : not x.i in C} by A106,A107;
         then reconsider A = {i : not x.i in C} as non empty set;
         now
@@ -1574,7 +1574,7 @@ A112:   F.0 = CX \/ {(h.n)`1 : n in 0} by A21;
 A113:   not x.j in still_not-bound_in f1 by A108,Th30;
         reconsider r2 = the_scope_of(f,0) as Element of CQC-WFF;
         reconsider y2 = bound_in(f,0) as bound_QC-variable;
-        r1 in ExCl by A2,A3,FUNCT_1:12;
+        r1 in ExCl by A2,A3,FUNCT_1:3;
         then consider y1,s1 such that
 A114:   r1 = Ex(y1,s1) by Def3;
 A115:   s1 = Ex-the_scope_of r1 by A114,Th22;
@@ -1587,7 +1587,7 @@ A118:   y2 = Ex-bound_in r1 by Def6;
         by A113,XBOOLE_0:def 3;
         then
 A119:   not x.j in still_not-bound_in (f1^<*r1*>) by CALCUL_1:59;
-        not x.j in still_not-bound_in 'not' VERUM by QC_LANG3:7,11;
+        not x.j in still_not-bound_in 'not' VERUM by QC_LANG3:3,7;
         then not x.j in still_not-bound_in <*'not' VERUM*> by CALCUL_1:60;
         then not x.j in still_not-bound_in (f1^<*r1*>) \/
         still_not-bound_in <*'not' VERUM*> by A119,XBOOLE_0:def 3;
@@ -1596,14 +1596,14 @@ A119:   not x.j in still_not-bound_in (f1^<*r1*>) by CALCUL_1:59;
         then |- f1^<*r1*>^<*'not' VERUM*> by A105,A114,A115,A116,A117,A118,
 CALCUL_1:61;
         then |- f1^<*'not' VERUM*> by A100,A103,CALCUL_2:26;
-        then F.k |- 'not' VERUM by A96,HENMODEL:def 2;
+        then F.k |- 'not' VERUM by A96,HENMODEL:def 1;
         hence contradiction by A92,A100,Th24;
       end;
       now
         assume k <> 0;
         then consider k1 being Nat such that
 A120:   k = k1+1 by NAT_1:6;
-        reconsider k1 as Element of NAT by ORDINAL1:def 13;
+        reconsider k1 as Element of NAT by ORDINAL1:def 12;
 A121:   ex K,L st K = (h.k1)`2 & L = K \/ still_not-bound_in {f.(k1+1)} &
         h.(k1+1) = [('not' (f.(k1+1))) 'or' (the_scope_of(f,(k1+1)).
         (bound_in(f,k1+1),x.(min* {i : not x.i in L}))),
@@ -1642,7 +1642,7 @@ A126:   |- f1^<*s*>^<*'not' VERUM*> by A125,CALCUL_2:24;
         reconsider r2 = the_scope_of(f,k1+1) as Element of CQC-WFF;
         reconsider y2 = bound_in(f,k1+1) as bound_QC-variable;
         reconsider r1 as Element of CQC-WFF;
-        r1 in ExCl by A2,A3,FUNCT_1:12;
+        r1 in ExCl by A2,A3,FUNCT_1:3;
         then consider y1,s1 such that
 A127:   r1 = Ex(y1,s1) by Def3;
 A128:   s1 = Ex-the_scope_of r1 by A127,Th22;
@@ -1665,7 +1665,7 @@ A134:   not y in still_not-bound_in f1 by Th30;
         still_not-bound_in <*r1*> by A134,XBOOLE_0:def 3;
         then
 A135:   not y in still_not-bound_in (f1^<*r1*>) by CALCUL_1:59;
-        not x.j in still_not-bound_in 'not' VERUM by QC_LANG3:7,11;
+        not x.j in still_not-bound_in 'not' VERUM by QC_LANG3:3,7;
         then not x.j in still_not-bound_in <*'not' VERUM*> by CALCUL_1:60;
         then not x.j in still_not-bound_in (f1^<*r1*>) \/
         still_not-bound_in <*'not' VERUM*> by A135,XBOOLE_0:def 3;
@@ -1674,7 +1674,7 @@ A135:   not y in still_not-bound_in (f1^<*r1*>) by CALCUL_1:59;
         then |- f1^<*r1*>^<*'not' VERUM*> by A126,A127,A128,A129,A130,A131,
 CALCUL_1:61;
         then |- f1^<*'not' VERUM*> by A124,CALCUL_2:26;
-        then F.k |- 'not' VERUM by A96,HENMODEL:def 2;
+        then F.k |- 'not' VERUM by A96,HENMODEL:def 1;
         hence contradiction by A95,Th24;
       end;
       hence contradiction by A99;
@@ -1697,9 +1697,9 @@ A1: X |- p and
 A2: X c= Y;
   consider f being FinSequence of CQC-WFF such that
 A3: rng f c= X and
-A4: |- f^<*p*> by A1,HENMODEL:def 2;
+A4: |- f^<*p*> by A1,HENMODEL:def 1;
   rng f c= Y by A2,A3,XBOOLE_1:1;
-  hence thesis by A4,HENMODEL:def 2;
+  hence thesis by A4,HENMODEL:def 1;
 end;
 
 reserve C,D for Subset of CQC-WFF;
@@ -1715,7 +1715,7 @@ A1: CX is with_examples;
   consider f being Function such that
 A2: dom f = NAT and
 A3: CQC-WFF = rng f by Lm1,Th18;
-  reconsider f as Function of NAT,CQC-WFF by A2,A3,FUNCT_2:4;
+  reconsider f as Function of NAT,CQC-WFF by A2,A3,FUNCT_2:2;
   defpred P[set,set,set] means
   ex X st X = $2 \/ {f.$1} & (X is Consistent implies $3 = X) &
   (not X is Consistent implies $3 = $2);
@@ -1738,7 +1738,7 @@ A6: now
     let a such that
 A7: a in CX;
     dom h = NAT by FUNCT_2:def 1;
-    then h.0 in rng h by FUNCT_1:12;
+    then h.0 in rng h by FUNCT_1:3;
     hence a in union rng h by A5,A7,TARSKI:def 4;
   end;
   then
@@ -1805,7 +1805,7 @@ A22: CY is negation_faithful
     let p;
     consider a such that
 A23: a in dom f and
-A24: f.a = p by A3,FUNCT_1:def 5;
+A24: f.a = p by A3,FUNCT_1:def 3;
     reconsider n = a as Element of NAT by A23;
     now
       assume not CY |- 'not' p;
@@ -1819,7 +1819,7 @@ A27:    h.n \/ {p} |- 'not' VERUM by Th24;
           let a such that
 A28:      a in h.n;
           dom h = NAT by FUNCT_2:def 1;
-          then h.n in rng h by FUNCT_1:12;
+          then h.n in rng h by FUNCT_1:3;
           hence a in CY by A28,TARSKI:def 4;
         end;
         then h.n c= CY by TARSKI:def 3;
@@ -1832,14 +1832,14 @@ A29:  ex Y st Y = h.n \/ {f.n} & (Y is Consistent implies h.(n+1) = Y) &
         let a such that
 A30:    a in h.(n+1);
         dom h = NAT by FUNCT_2:def 1;
-        then h.(n+1) in rng h by FUNCT_1:12;
+        then h.(n+1) in rng h by FUNCT_1:3;
         hence a in CY by A30,TARSKI:def 4;
       end;
       then
 A31:  h.(n+1) c= CY by TARSKI:def 3;
       {p} c= h.(n+1) by A24,A26,A29,XBOOLE_1:7;
       then {p} c= CY by A31,XBOOLE_1:1;
-      then p in CY by ZFMISC_1:37;
+      then p in CY by ZFMISC_1:31;
       hence CY |- p by Th21;
     end;
     hence thesis;
@@ -1872,7 +1872,7 @@ A3: CY c= CZ and
 A4: CZ is negation_faithful and
 A5: CZ is with_examples by A2,Th33;
 A6: CX c= CZ by A1,A3,XBOOLE_1:1;
-  set JH1 =the  Henkin_interpretation of CZ;
+  set JH1 = the Henkin_interpretation of CZ;
 A7: now
     let p;
     assume p in CX;
@@ -1902,7 +1902,7 @@ theorem Th36:
 proof
   assume
 A1: still_not-bound_in X is finite;
-  still_not-bound_in p is finite by CQC_SIM1:20;
+  still_not-bound_in p is finite by CQC_SIM1:19;
   then still_not-bound_in {p} is finite by Th26;
   then still_not-bound_in X \/ still_not-bound_in {p} is finite by A1;
   hence thesis by Th27;
@@ -1920,7 +1920,7 @@ A3: J,v |= X by Th35,XBOOLE_1:7;
 A4: {'not' p} c= X \/ {'not' p} by XBOOLE_1:7;
   'not' p in {'not' p} by TARSKI:def 1;
   then J,v |= 'not' p by A2,A4,CALCUL_1:def 11;
-  then not J,v |= p by VALUAT_1:28;
+  then not J,v |= p by VALUAT_1:17;
   hence contradiction by A1,A3,CALCUL_1:def 12;
 end;
 

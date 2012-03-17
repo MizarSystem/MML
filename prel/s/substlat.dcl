@@ -93,7 +93,7 @@
 </Func>
 <Cluster>
 <Adjective nr="37" value="false"/>
-<Adjective nr="50"/>
+<Adjective nr="51"/>
 </Cluster>
 </FCluster>
 <FCluster aid="SUBSTLAT" nr="3">
@@ -110,8 +110,8 @@
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="50"/>
-<Adjective nr="57"/>
+<Adjective nr="51"/>
+<Adjective nr="58"/>
 </Cluster>
 </FCluster>
 <FCluster aid="SUBSTLAT" nr="4">
@@ -128,9 +128,9 @@
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="50"/>
-<Adjective nr="58"/>
-<Adjective nr="62"/>
+<Adjective nr="51"/>
+<Adjective nr="59"/>
+<Adjective nr="63"/>
 </Cluster>
 </FCluster>
 <CCluster aid="SUBSTLAT" nr="1">

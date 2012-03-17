@@ -70,19 +70,19 @@
 <Adjective nr="39"/>
 <Adjective nr="40"/>
 <Adjective nr="62"/>
-<Adjective nr="105"/>
+<Adjective nr="106"/>
 </Cluster>
 </RCluster>
 <FCluster aid="TIETZE" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
-<Adjective nr="77"/>
+<Adjective nr="78"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="2">
 <Cluster>
-<Adjective nr="79">
+<Adjective nr="80">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -93,13 +93,13 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="214">
+<Func kind="K" nr="215">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="76"/>
-<Adjective nr="99">
+<Adjective nr="77"/>
+<Adjective nr="100">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>

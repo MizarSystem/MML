@@ -135,8 +135,8 @@
 <Typ kind="G" nr="16">
 <Cluster>
 <Adjective nr="38" value="false"/>
-<Adjective nr="109"/>
-<Adjective nr="133"/>
+<Adjective nr="110"/>
+<Adjective nr="134"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="2">

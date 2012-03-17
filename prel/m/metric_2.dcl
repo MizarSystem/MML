@@ -42,9 +42,9 @@
 <Typ kind="G" nr="6">
 <Cluster>
 <Adjective nr="37" value="false"/>
-<Adjective nr="53"/>
-<Adjective nr="55"/>
+<Adjective nr="54"/>
 <Adjective nr="56"/>
+<Adjective nr="57"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -53,11 +53,11 @@
 </Func>
 <Cluster>
 <Adjective nr="37" value="false"/>
-<Adjective nr="48"/>
-<Adjective nr="53"/>
+<Adjective nr="49"/>
 <Adjective nr="54"/>
 <Adjective nr="55"/>
 <Adjective nr="56"/>
+<Adjective nr="57"/>
 </Cluster>
 </FCluster>
 <CCluster aid="METRIC_2" nr="1">
@@ -65,9 +65,9 @@
 <Typ kind="G" nr="6">
 <Cluster>
 <Adjective nr="37" value="false"/>
-<Adjective nr="53"/>
-<Adjective nr="55"/>
+<Adjective nr="54"/>
 <Adjective nr="56"/>
+<Adjective nr="57"/>
 </Cluster>
 </Typ>
 </ArgTypes>

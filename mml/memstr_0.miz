@@ -1,0 +1,1519 @@
+:: Memory Structures
+::  by Andrzej Trybulec
+::
+:: Received April 28, 2011
+:: Copyright (c) 2011 Association of Mizar Users
+::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
+:: This code can be distributed under the GNU General Public Licence
+:: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
+:: License version 3.0 or later, subject to the binding interpretation
+:: detailed in file COPYING.interpretation.
+:: See COPYING.GPL and COPYING.CC-BY-SA for the full text of these
+:: licenses, or see http://www.gnu.org/licenses/gpl.html and
+:: http://creativecommons.org/licenses/by-sa/3.0/.
+
+environ
+
+ vocabularies STRUCT_0, SUBSET_1, XBOOLE_0, FUNCT_1, NUMBERS, CARD_3, CARD_1,
+      FUNCOP_1, FUNCT_4, RELAT_1, TARSKI, CAT_1, FSM_1, SETFAM_1, FINSET_1,
+      NAT_1, ARYTM_1, PARTFUN1, ZFMISC_1, AMI_1, ARYTM_3, COMPOS_1, SCMFSA6C,
+      XXREAL_0, SUPINF_2, MEMSTR_0;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, MCART_1, SUBSET_1, SETFAM_1, ORDINAL1,
+      PBOOLE, FUNCT_7, CARD_1, CARD_3, XCMPLX_0, RELAT_1, FUNCT_1, PARTFUN1,
+      FINSET_1, NUMBERS, INT_1, NAT_1, NAT_D, FUNCOP_1, FUNCT_4, AFINSQ_1,
+      FINSEQ_1, FUNCT_2, DOMAIN_1, VALUED_0, VALUED_1, STRUCT_0, XXREAL_0;
+ constructors SETFAM_1, DOMAIN_1, FUNCT_4, XXREAL_0, RELSET_1, FUNCT_7,
+      PRE_POLY, PBOOLE, RECDEF_2, AFINSQ_1, NAT_D, WELLORD2, STRUCT_0;
+ registrations XBOOLE_0, SETFAM_1, RELAT_1, FUNCT_1, ORDINAL1, FUNCT_2,
+      FUNCOP_1, FUNCT_4, FINSET_1, XREAL_0, FINSEQ_1, CARD_3, STRUCT_0, INT_1,
+      RELSET_1, GRFUNC_1, PRE_POLY, PBOOLE, AFINSQ_1, VALUED_1, XCMPLX_0,
+      PARTFUN1, NUMBERS, NAT_1, MEMBERED, FUNCT_7, CARD_1, XXREAL_2, ZFMISC_1,
+      SUBSET_1, VALUED_0, XXREAL_0, ORDINAL4, ORDINAL5;
+ requirements NUMERALS, BOOLE, SUBSET, ARITHM, REAL;
+ definitions RELAT_1, FUNCOP_1, ORDINAL1, PBOOLE, PARTFUN1, MCART_1, ZFMISC_1,
+      TARSKI, STRUCT_0, FUNCT_1, XBOOLE_0, NAT_1, FUNCT_4, NAT_D, AFINSQ_1,
+      VALUED_1, CARD_3;
+ theorems ZFMISC_1, FUNCT_2, TARSKI, CARD_3, FUNCT_4, FUNCOP_1, FUNCT_1,
+      GRFUNC_1, RELAT_1, RELSET_1, XBOOLE_0, XBOOLE_1, ORDINAL1, SUBSET_1,
+      FUNCT_7, PARTFUN1, PBOOLE, XREAL_1, NAT_D, NAT_2, STRUCT_0;
+ schemes FRAENKEL;
+
+begin :: Terminology
+
+reserve x,N for set,
+        k for Nat;
+
+definition let N;
+  struct (ZeroStr) Mem-Struct over N (# carrier -> set,
+    ZeroF -> Element of the carrier,
+    Object-Kind -> Function of the carrier, N \/ { NAT }
+     #);
+end;
+
+definition let N;
+  func Trivial-Mem N -> strict Mem-Struct over N means
+:Def1:
+  the carrier of it = {0} & the ZeroF of it = 0 &
+  the Object-Kind of it = 0 .--> NAT;
+  existence
+  proof
+    set f = 0 .--> NAT;
+A1: dom f = {0} by FUNCOP_1:13;
+B2: rng(0 .--> NAT) c= {NAT} by FUNCOP_1:13;
+    { NAT } c= N \/ { NAT} by XBOOLE_1:7;
+    then rng f c= N \/ { NAT} by B2,XBOOLE_1:1;
+    then reconsider f as Function of {0}, N \/ {NAT} by A1,RELSET_1:4;
+    reconsider y = 0 as Element of {0} by TARSKI:def 1;
+    take Mem-Struct(#{0},y,f #);
+    thus thesis;
+  end;
+  uniqueness;
+end;
+
+registration let N;
+  cluster Trivial-Mem N-> 1-element;
+  coherence
+   proof
+    the carrier of Trivial-Mem N = {0} by Def1;
+    hence the carrier of Trivial-Mem N is 1-element;
+   end;
+end;
+
+registration let N;
+  cluster 1-element for Mem-Struct over N;
+  existence
+  proof
+    take Trivial-Mem N;
+    thus thesis;
+  end;
+end;
+
+notation let N;
+ let S be Mem-Struct over N;
+  synonym IC S for 0.S;
+  synonym Data-Locations S for NonZero S;
+end;
+
+definition let N;
+  let S be Mem-Struct over N;
+  mode PartState of S is (the carrier of S)-defined
+           (the Object-Kind of S)-compatible Function;
+end;
+
+definition let N be with_non-empty_elements set;
+  let S be Mem-Struct over N;
+  mode State of S is total PartState of S;
+end;
+
+definition let N;
+  let S be Mem-Struct over N;
+  mode Object of S is Element of S;
+end;
+
+begin :: the Object Kind
+
+definition let N;
+  let S be non empty Mem-Struct over N;
+  let o be Object of S;
+  func ObjectKind o -> Element of N \/ { NAT } equals
+  (the Object-Kind of S).o;
+  correctness;
+end;
+
+definition let N;
+  let IT be non empty Mem-Struct over N;
+  attr IT is IC-Ins-separated means
+  :Def6:
+  ObjectKind IC IT = NAT;
+end;
+
+registration let N;
+  cluster Trivial-Mem N -> IC-Ins-separated;
+  coherence
+   proof
+     IC Trivial-Mem N = 0 by Def1;
+    hence ObjectKind IC Trivial-Mem N
+     = (0 .--> NAT).0 by Def1
+    .= NAT by FUNCOP_1:72;
+   end;
+end;
+
+registration let N;
+  cluster IC-Ins-separated strict for 1-element Mem-Struct over N;
+  existence
+  proof
+    take Trivial-Mem N;
+    thus thesis;
+  end;
+end;
+
+definition
+  let N be with_non-empty_elements set;
+  let S be IC-Ins-separated non empty Mem-Struct over N;
+  let p be PartState of S;
+  func IC p -> Element of NAT equals
+  p.IC S;
+  coherence
+  proof
+   per cases;
+   suppose
+A1: IC S in dom p;
+    consider s being State of S such that
+A2: p c= s by PBOOLE:141;
+   reconsider ss=s as Element of product the Object-Kind of S by CARD_3:107;
+    dom the Object-Kind of S = the carrier of S by FUNCT_2:def 1;
+    then pi(product the Object-Kind of S,IC S) = ObjectKind IC S by CARD_3:12
+      .= NAT by Def6;
+    then ss.IC S in NAT by CARD_3:def 6;
+    hence thesis by A1,A2,GRFUNC_1:2;
+   end;
+   suppose not IC S in dom p;
+    then p.IC S = 0 by FUNCT_1:def 2;
+   hence thesis;
+   end;
+  end;
+end;
+
+theorem
+ for N being with_non-empty_elements set
+ for S being IC-Ins-separated 1-element Mem-Struct over N
+  for s1, s2 being State of S st IC s1 = IC s2 holds s1= s2
+proof
+ let N be with_non-empty_elements set;
+ let T be IC-Ins-separated 1-element Mem-Struct over N;
+  let s1,s2 be State of T such that
+A1: IC s1 = IC s2;
+A2: dom s1 = the carrier of T by PARTFUN1:def 2;
+    then
+B2: dom s1 =dom s2 by PARTFUN1:def 2;
+ now
+    let x be set;
+    assume
+A4: x in dom s1;
+A10:  x = IC T  by A4,A2,STRUCT_0:def 10;
+     hence s1.x = IC s1
+        .= s2.x by A1,A10;
+  end;
+  hence thesis by B2,FUNCT_1:2;
+end;
+
+registration
+  let N be with_non-empty_elements set;
+  let S be non empty Mem-Struct over N, o be Object of S;
+  cluster ObjectKind o -> non empty;
+  coherence;
+end;
+
+registration
+  let N be with_non-empty_elements set;
+  let S be IC-Ins-separated non empty Mem-Struct over N;
+  let la be Object of S;
+  let a be Element of ObjectKind la;
+  cluster la .--> a -> (the Object-Kind of S)-compatible;
+  coherence
+   proof
+   set p = la .--> a;
+A2: dom p = {la} by FUNCOP_1:13;
+     let x be set;
+     assume
+     x in dom p;
+     then
+A4: x = la by A2,TARSKI:def 1;
+     then p.x = a by FUNCOP_1:72;
+     hence p.x in (the Object-Kind of S).x by A4;
+   end;
+  let lb be Object of S;
+  let b be Element of ObjectKind lb;
+  cluster (la,lb) --> (a,b) -> (the Object-Kind of S)-compatible;
+  coherence;
+end;
+
+theorem Lm6:
+  for N being with_non-empty_elements set,
+      S being non empty Mem-Struct over N
+  for s being State of S holds IC S in dom s
+proof
+  let N be with_non-empty_elements set,
+      S be non empty Mem-Struct over N;
+  let s be State of S;
+  dom s = the carrier of S by PARTFUN1:def 2;
+  hence thesis;
+end;
+
+reserve N for with_non-empty_elements set;
+
+reserve S for IC-Ins-separated non empty Mem-Struct over N;
+
+definition
+  let N be set;
+  let S be Mem-Struct over N;
+  let p be PartState of S;
+  func DataPart p -> PartState of S equals
+  p | Data-Locations S;
+  coherence;
+  projectivity by RELAT_1:72;
+end;
+
+definition
+  let N be set, S be Mem-Struct over N;
+  let p be PartState of S;
+  attr p is data-only means
+:Def23:
+  dom p misses {IC S};
+end;
+
+registration
+  let N be set, S be Mem-Struct over N;
+  cluster empty -> data-only for PartState of S;
+  coherence
+   proof
+    let p be PartState of S;
+    assume p is empty;
+    hence dom p misses {IC S} by RELAT_1:38,XBOOLE_1:65;
+   end;
+end;
+
+registration
+  let N be set, S be Mem-Struct over N;
+  cluster empty for PartState of S;
+  existence
+  proof
+    reconsider a = {} as PartState of S by FUNCT_1:104,RELAT_1:171;
+    take a;
+    thus thesis;
+  end;
+end;
+
+theorem Th11:
+  for N being set, S being Mem-Struct over N
+  for p being PartState of S holds not IC S in dom DataPart p
+proof
+  let N be set, S be Mem-Struct over N;
+  let p be PartState of S;
+  assume
+A1: IC S in dom DataPart p;
+  dom DataPart p c= (the carrier of S) \ {IC S} by RELAT_1:58;
+  then not IC S in {IC S} by A1,XBOOLE_0:def 5;
+  hence contradiction by TARSKI:def 1;
+end;
+
+theorem
+  for N being set, S being Mem-Struct over N for p being
+  PartState of S holds {IC S} misses dom DataPart p by Th11,ZFMISC_1:50;
+
+theorem
+  for p being data-only PartState of S, q being PartState of S
+  holds p c= q iff p c= DataPart q
+proof
+  let p be data-only PartState of S, q be PartState of S;
+  set X = (the carrier of S) \ ({IC S});
+A1: q|X c= q by RELAT_1:59;
+  hereby
+A2:  X \/ ({IC S}) = (the carrier of S) \/ ({IC S})
+     by XBOOLE_1:39;
+    dom p c= the carrier of S by RELAT_1:def 18;
+    then
+A3: dom p c= X \/ ({IC S}) by A2,XBOOLE_1:10;
+    assume
+    p c= q;
+    then
+A4: p|X c= DataPart q by RELAT_1:76;
+    dom p misses {IC S} by Def23;
+    hence p c= DataPart q by A4,A3,RELAT_1:68,XBOOLE_1:73;
+  end;
+ thus thesis by A1,XBOOLE_1:1;
+end;
+
+registration
+  let N be set;
+  let S be Mem-Struct over N;
+  let p be PartState of S;
+  cluster DataPart p -> data-only;
+  coherence
+  proof
+    thus dom DataPart p misses {IC S} by Th11,ZFMISC_1:50;
+  end;
+end;
+
+theorem Th31:
+  for S being Mem-Struct over N, p being PartState
+  of S holds p is data-only iff dom p c= Data-Locations S
+proof
+  let S be Mem-Struct over N, p be PartState of S;
+  thus p is data-only implies dom p c= Data-Locations S
+  proof
+A1: dom p c= the carrier of S by RELAT_1:def 18;
+    assume dom p misses {IC S};
+    hence thesis by A1,XBOOLE_1:86;
+  end;
+  assume
+  dom p c= Data-Locations S;
+  hence dom p misses {IC S} by XBOOLE_1:106;
+end;
+
+theorem
+  for S being Mem-Struct over N, p being data-only PartState of S
+   holds DataPart p = p
+proof
+  let S be Mem-Struct over N, p be data-only PartState of S;
+     dom p c= Data-Locations S by Th31;
+    hence thesis by RELAT_1:68;
+end;
+
+reserve s for State of S;
+
+theorem Th49:
+  Data-Locations S c= dom s
+proof
+  dom s = the carrier of S by PARTFUN1:def 2;
+  hence thesis;
+end;
+
+theorem Th50:
+  dom DataPart s = Data-Locations S
+proof
+  Data-Locations S c= dom s by Th49;
+  hence thesis by RELAT_1:62;
+end;
+
+theorem Th57:
+  for d being data-only PartState of S holds not IC S in dom d
+proof
+  let d be data-only PartState of S;
+  dom d c= Data-Locations S by Th31;
+  hence thesis by STRUCT_0:3;
+end;
+
+theorem Th58:
+  for p being PartState of S, d being data-only PartState of S
+  holds IC(p+*d) = IC p
+proof
+  let p be PartState of S, d be data-only PartState of S;
+A1: not IC S in dom d by Th57;
+  thus IC(p+*d) = IC p by A1,FUNCT_4:11;
+end;
+
+reserve p for PartState of S;
+
+theorem
+  for p being PartState of S holds DataPart p c=  p by RELAT_1:59;
+
+theorem Th13:
+ dom s = {IC S} \/ Data-Locations S
+proof
+ dom s = the carrier of S by PARTFUN1:def 2;
+ hence thesis by STRUCT_0:4;
+end;
+
+theorem
+ dom  p /\ Data-Locations S = dom DataPart p by RELAT_1:61;
+
+registration let N;
+  let S be IC-Ins-separated non empty Mem-Struct over N,
+      l be Element of NAT, s be State of S;
+  cluster s+*(IC S,l) -> (the Object-Kind of S)-compatible;
+ coherence
+  proof let x;
+   assume x in dom(s+*(IC S,l));
+    then
+A:   x in dom s by FUNCT_7:30;
+   per cases;
+   suppose
+S:   x = IC S;
+    then
+B:   (s+*(IC S,l)).x = l by A,FUNCT_7:31;
+    ObjectKind IC S = NAT by Def6;
+   hence (s+*(IC S,l)).x in (the Object-Kind of S).x by S,B;
+   end;
+   suppose x <> IC S;
+    then (s+*(IC S,l)).x = s.x by FUNCT_7:32;
+   hence (s+*(IC S,l)).x in (the Object-Kind of S).x by A,FUNCT_1:def 14;
+   end;
+  end;
+end;
+
+begin :: The value of the Instruction Counter
+
+definition
+  let N be with_non-empty_elements set;
+  let S be IC-Ins-separated non empty Mem-Struct over N;
+  let l be Nat;
+  func Start-At(l,S) -> PartState of S equals
+   IC S .--> l;
+  correctness
+  proof
+    reconsider l as Element of NAT by ORDINAL1:def 12;
+    ObjectKind IC S = NAT by Def6;
+    then reconsider l as Element of ObjectKind IC S;
+     IC S .--> l is PartState of S;
+    hence thesis;
+  end;
+end;
+
+definition
+  let N be with_non-empty_elements set;
+  let S be IC-Ins-separated non empty Mem-Struct over N,
+      l be Nat;
+  let p be PartState of S;
+  attr p is l-started means
+:Def16: IC S in dom p & IC p = l;
+end;
+
+registration
+ let N be with_non-empty_elements set;
+ let S be IC-Ins-separated non empty Mem-Struct over N, l be Nat;
+  cluster Start-At(l,S) -> l-started non empty;
+  coherence
+   proof
+     dom Start-At(l,S) = {IC S} by FUNCOP_1:13;
+    hence IC S in dom Start-At(l,S) by TARSKI:def 1;
+    thus thesis by FUNCOP_1:72;
+   end;
+end;
+
+theorem Lm52:
+ for l being Nat holds IC S in dom Start-At(l,S)
+proof let l be Nat;
+  dom Start-At(l,S) = {IC S} by FUNCOP_1:13;
+  hence thesis by TARSKI:def 1;
+end;
+
+theorem Lm142:
+ for n being Nat
+ holds IC(p +* Start-At( n,S)) =  n
+proof
+ let n be Nat;
+A1: IC S in dom Start-At( n,S) by Lm52;
+  (Start-At( n,S)).IC S =  n by FUNCOP_1:72;
+  hence thesis by A1,FUNCT_4:13;
+end;
+
+registration
+  let N be with_non-empty_elements set;
+  let S be IC-Ins-separated non empty Mem-Struct over N, l be Nat;
+  cluster l-started for State of S;
+  existence
+   proof
+    take s = (the State of S)+*Start-At(l,S);
+    thus IC S in dom s by Lm6;
+    thus IC s = l by Lm142;
+   end;
+end;
+
+registration
+  let N be with_non-empty_elements set;
+  let S be IC-Ins-separated non empty Mem-Struct over N, l be Nat,
+      p being PartState of S, q be l-started PartState of S;
+  cluster p +* q -> l-started;
+  coherence
+   proof
+A1:   IC S in dom q by Def16;
+     dom q c= dom(p+*q) by FUNCT_4:10;
+    hence IC S in dom(p+*q) by A1;
+     IC q = l by Def16;
+    hence IC(p+*q) = l by A1,FUNCT_4:13;
+   end;
+end;
+
+definition
+  let N be with_non-empty_elements set;
+  let S be IC-Ins-separated non empty Mem-Struct over N, l be Nat;
+  let s be State of S;
+  redefine attr s is l-started means
+  IC s = l;
+  compatibility
+   proof
+    thus s is l-started implies IC s = l by Def16;
+    assume
+A1:    IC s = l;
+    thus IC S in dom s by Lm6;
+    thus IC s = l by A1;
+   end;
+end;
+
+theorem
+  for S being IC-Ins-separated non empty Mem-Struct over N, l being Nat,
+      p being l-started PartState of S
+  for s being PartState of S st p c= s holds s is l-started
+proof
+  let S be IC-Ins-separated non empty Mem-Struct over N, l be Nat,
+      p be l-started PartState of S;
+A1: IC S in dom p by Def16;
+A2: IC p = l by Def16;
+  let s be PartState of S;
+  assume
+A3:  p c= s;
+   then dom p c= dom s by RELAT_1:11;
+  hence IC S in dom s by A1;
+  thus IC s = l by A3,A2,A1,GRFUNC_1:2;
+end;
+
+theorem Th10:
+  for s being State of S holds Start-At(IC s,S) = s | {IC S}
+proof
+  let s be State of S;
+A1: IC S in dom s by Lm6;
+  thus Start-At(IC s,S) = {[IC S,s.IC S]} by FUNCT_4:82
+    .= s | {IC S} by A1,GRFUNC_1:28;
+end;
+
+theorem Th18:
+  for S being IC-Ins-separated non empty Mem-Struct over N
+  for p being PartState of S st IC S in
+  dom p holds p = Start-At(IC p,S) +* DataPart p
+proof
+  let S be IC-Ins-separated non empty Mem-Struct over N;
+  let p be PartState of S;
+  assume IC S in dom p;
+  then
+A1: {IC S} is Subset of dom p by SUBSET_1:41;
+A3: {IC S} \/ ((the carrier of S) \ {IC S})
+     = (the carrier of S) \/ {IC S} by XBOOLE_1:39
+    .= the carrier of S by XBOOLE_1:12;
+A4: dom p c= the carrier of S by RELAT_1:def 18;
+A5: now
+    let x be set;
+    assume
+A6: x in dom p;
+    per cases by A6,A4,A3,XBOOLE_0:def 3;
+    suppose
+A8:   x in {IC S};
+      {IC S} = dom Start-At(IC p,S) by FUNCOP_1:13;
+      then IC S in dom Start-At(IC p,S) by TARSKI:def 1;
+      then
+A10:  IC S in dom (Start-At(IC p,S)) \/ dom DataPart p by XBOOLE_0:def 3;
+A12:  x = IC S by A8,TARSKI:def 1;
+      not IC S in dom (DataPart p) by Th11;
+      then
+      (Start-At(IC p,S) +* DataPart p).x
+         = (Start-At(IC p,S)).x by A12,A10,FUNCT_4:def 1
+        .= IC p by A12,FUNCOP_1:72;
+      hence p.x = (Start-At(IC p,S) +* DataPart p).x by A8,TARSKI:def 1;
+    end;
+    suppose
+      x in (the carrier of S) \ {IC S};
+      then x in dom p /\ ((the carrier of S) \ {IC S}) by A6,XBOOLE_0:def 4;
+      then
+A13:  x in dom (p | ((the carrier of S) \ {IC S})) by RELAT_1:61;
+      (Start-At(IC p,S) +* DataPart p).x
+       = (DataPart p).x by A13,FUNCT_4:13
+        .= p.x by A13,FUNCT_1:47;
+      hence p.x = (Start-At(IC p,S) +* DataPart p).x;
+    end;
+  end;
+A17: dom p c= the carrier of S by RELAT_1:def 18;
+  dom(Start-At(IC p,S) +* DataPart p)
+     = dom (Start-At(IC p,S) ) \/ dom (DataPart p) by FUNCT_4:def 1
+    .= {IC S} \/ dom(DataPart p) by FUNCOP_1:13
+    .= dom p /\ {IC S} \/ dom(p|((the carrier of S) \ {IC S}))
+         by A1,XBOOLE_1:28
+    .= dom p /\ {IC S} \/ dom p /\ ((the carrier of S) \ {IC S}) by RELAT_1:61
+    .= dom p /\ the carrier of S by A3,XBOOLE_1:23
+    .= dom p by A17,XBOOLE_1:28;
+  hence thesis by A5,FUNCT_1:2;
+end;
+
+theorem Th30:
+ for N being with_non-empty_elements set,
+     S be IC-Ins-separated non empty Mem-Struct over N, l be Nat
+  holds DataPart Start-At(l,S) = {}
+proof
+ let N be with_non-empty_elements set,
+     S be IC-Ins-separated non empty Mem-Struct over N, l be Nat;
+  Data-Locations S misses {IC S} by XBOOLE_1:79;
+  then Data-Locations S misses dom Start-At(l,S) by FUNCOP_1:13;
+ hence thesis by RELAT_1:66;
+end;
+
+theorem
+  for l1,l2,k being Nat holds Start-At(l1+k,S) =
+  Start-At(l2+k,S) iff Start-At(l1,S) = Start-At(l2,S)
+proof
+  let l1,l2,k be Nat;
+  hereby
+    assume Start-At(l1+k,S) = Start-At(l2+k,S);
+    then {[IC S, l1+k]} = IC S .--> (l2+k) by FUNCT_4:82;
+    then {[IC S, l1+k]} = {[IC S, l2+k]} by FUNCT_4:82;
+    then [IC S, l1+k] = [IC S, l2+k] by ZFMISC_1:3;
+    then l1+k = l2+k by ZFMISC_1:27;
+    hence Start-At(l1,S) = Start-At(l2,S);
+  end;
+  assume Start-At(l1,S) = Start-At(l2,S);
+  then {[IC S, l1]} = Start-At(l2,S) by FUNCT_4:82;
+  then {[IC S, l1]} = {[IC S, l2]} by FUNCT_4:82;
+  then [IC S, l1] = [IC S, l2] by ZFMISC_1:3;
+  hence thesis by ZFMISC_1:27;
+end;
+
+theorem
+  for l1,l2,k being Nat st Start-At(l1,S) = Start-At(l2,S)
+  holds Start-At(l1 -' k,S) = Start-At(l2 -' k,S)
+proof
+  let l1,l2,k be Nat;
+  assume Start-At(l1,S) = Start-At(l2,S);
+  then {[IC S, l1]} = Start-At(l2,S) by FUNCT_4:82
+    .= {[IC S, l2]} by FUNCT_4:82;
+  then [IC S, l1] = [IC S, l2] by ZFMISC_1:3;
+  hence thesis by ZFMISC_1:27;
+end;
+
+theorem Th59:
+  for d being data-only PartState of S, k being Nat
+  holds d tolerates Start-At(k,S)
+proof
+  let d be data-only PartState of S, k be Nat;
+  dom Start-At(k,S) = {IC S} by FUNCOP_1:13;
+  then dom d misses dom Start-At(k,S) by Th57,ZFMISC_1:50;
+  hence thesis by PARTFUN1:56;
+end;
+
+theorem Th70:
+ for S being IC-Ins-separated non empty Mem-Struct over N
+ for p being PartState of S st IC S in dom p
+  holds dom  p = {IC S} \/ dom DataPart p
+proof
+ let S be IC-Ins-separated non empty Mem-Struct over N;
+ let p be PartState of S;
+ assume IC S in dom p;
+  then
+C2: p = Start-At(IC p,S) +* DataPart p by Th18;
+  dom p =  dom Start-At(IC p,S) \/ dom DataPart p by C2,FUNCT_4:def 1
+    .= {IC S} \/ dom DataPart p by FUNCOP_1:13;
+ hence thesis;
+end;
+
+
+
+theorem
+ for S being IC-Ins-separated non empty Mem-Struct over N
+ for s being State of S
+  holds dom  s = {IC S} \/ dom DataPart s by Lm6,Th70;
+
+theorem Th74:
+ for p being PartState of S st IC S in dom p
+  holds p = DataPart p +* Start-At (IC p,S)
+proof
+ let p be PartState of S;
+B2: dom Start-At(IC p,S) = {IC S} by FUNCOP_1:13;
+  then
+A2: dom DataPart p misses dom Start-At (IC p,S) by Th11,ZFMISC_1:50;
+A5: dom((Start-At(IC p,S))) misses dom DataPart p
+                  by B2,Th11,ZFMISC_1:50;
+ assume IC S in dom p;
+  then p = Start-At(IC p,S) +* DataPart p by Th18;
+  then
+A7:  p = (Start-At(IC p,S) ) \/  DataPart p by A5,FUNCT_4:31;
+ thus thesis by A2,A7,FUNCT_4:31;
+end;
+
+theorem Th141:
+  IC S in dom (p +* Start-At( k,S))
+proof
+  dom Start-At( k,S) = {IC S} by FUNCOP_1:13;
+  then IC S in dom Start-At( k,S) by TARSKI:def 1;
+  hence thesis by FUNCT_4:12;
+end;
+
+theorem
+  p +* Start-At( k,S) c= s implies IC s =  k
+proof
+  assume
+A1: p +* Start-At( k,S) c= s;
+  IC S in dom (p +* Start-At( k,S)) by Th141;
+  hence IC s = IC(p +* Start-At( k,S)) by A1,GRFUNC_1:2
+    .=  k by Lm142;
+end;
+
+theorem Th151:
+  for N be with_non-empty_elements set
+  for S be IC-Ins-separated non empty Mem-Struct over N, l be Nat
+  for p be PartState of S
+  holds p is l-started iff Start-At(l,S) c= p
+proof
+ let N be with_non-empty_elements set;
+ let S be IC-Ins-separated non empty Mem-Struct over N, l be Nat;
+ let p be PartState of S;
+A1: dom Start-At(l,S) = {IC S} by FUNCOP_1:13;
+ thus p is l-started implies Start-At(l,S) c= p
+  proof assume
+A2:  p is l-started;
+    IC S in dom p by A2,Def16;
+    then
+A3:  dom Start-At(l,S) c= dom p by A1,ZFMISC_1:31;
+    for x st x in dom Start-At(l,S) holds Start-At(l,S).x = p.x
+     proof let x;
+      assume
+Z:     x in dom Start-At(l,S);
+      hence Start-At(l,S).x = IC Start-At(l,S) by A1,TARSKI:def 1
+         .= l by FUNCOP_1:72
+         .= IC p by A2,Def16
+         .= p.x  by A1,Z,TARSKI:def 1;
+     end;
+   hence Start-At(l,S) c= p by A3,GRFUNC_1:2;
+  end;
+ assume
+A5: Start-At(l,S) c= p;
+  then
+A6:  dom Start-At(l,S) c= dom p by RELAT_1:11;
+A7: IC S in dom Start-At(l,S) by A1,TARSKI:def 1;
+ hence IC S in dom p by A6;
+ thus IC p = IC Start-At(l,S) by A5,A7,GRFUNC_1:2
+     .= l by FUNCOP_1:72;
+end;
+
+registration let N,S; let k be Nat;
+ let p be k-started PartState of S, d be data-only PartState of S;
+ cluster p +* d -> k-started;
+ coherence
+  proof
+A1:    IC S in dom p by Def16;
+    dom(p +* d) = dom p \/ dom d by FUNCT_4:def 1;
+   hence IC S in dom(p +* d) by A1,XBOOLE_0:def 3;
+    not IC S in dom d by Th57;
+   hence IC(p +* d) =IC p by FUNCT_4:11
+     .= k by Def16;
+  end;
+end;
+
+theorem Th164:
+  Start-At(IC s,S) c= s
+ proof
+   Start-At(IC s,S) = s | {IC S} by Th10;
+  hence thesis by RELAT_1:59;
+ end;
+
+theorem
+ for s being State of S
+  holds s +* Start-At(IC s,S) = s by Th164,FUNCT_4:98;
+
+theorem
+ dom  p c= {IC S} \/ dom DataPart p
+proof
+ set S0 = Start-At(0,S);
+ per cases;
+ suppose IC S in dom p;
+  hence thesis by Th70;
+ end;
+ suppose
+A1: not IC S in dom p;
+A2: dom S0 = {IC S} by FUNCOP_1:13;
+A3:  dom (p +* S0)
+     = {IC S} \/ dom DataPart(p +* S0) by Th70,Th141
+    .= {IC S} \/ dom(DataPart p +* DataPart S0) by FUNCT_4:71
+    .= {IC S} \/ dom(DataPart p +* {}) by Th30
+    .= {IC S} \/ dom DataPart p by FUNCT_4:21;
+  now assume dom p meets dom S0;
+   then consider x such that
+A4: x in dom p and
+A5: x in dom S0 by XBOOLE_0:3;
+   thus contradiction by A4,A1,A2,A5,TARSKI:def 1;
+  end;
+  then p c= p +* S0 by FUNCT_4:32;
+ hence dom  p c= {IC S} \/ dom DataPart p by A3,RELAT_1:11;
+ end;
+end;
+
+theorem LmAA:
+ for S being IC-Ins-separated non empty Mem-Struct over N
+ for s be State of S holds s = s|(Data-Locations S \/ {IC S})
+proof
+ let S be IC-Ins-separated non empty Mem-Struct over N;
+ let s be State of S;
+ thus  s = s|dom  s by GRFUNC_1:23
+     .= s|({IC S} \/ dom DataPart s) by Lm6,Th70
+     .= s|(Data-Locations S \/ {IC S}) by Th50;
+end;
+
+theorem
+ for S being IC-Ins-separated non empty Mem-Struct over N
+ for s1,s2 be State of S
+  st s1|(Data-Locations S \/ {IC S}) = s2|(Data-Locations S \/ {IC S})
+ holds s1 =  s2
+proof
+ let S be IC-Ins-separated non empty Mem-Struct over N;
+ let s1,s2 be State of S;
+  s1 = s1|(Data-Locations S \/ {IC S}) by LmAA;
+ hence thesis by LmAA;
+end;
+
+theorem
+ IC S in dom p implies  p = Start-At(IC p,S) +* DataPart p by Th18;
+
+theorem Th199:
+ for p being PartState of S, k,l being Nat
+  holds p +* Start-At(k,S) +* Start-At(l,S)  = p +* Start-At(l,S)
+proof let p be PartState of S, k,l be Nat;
+  dom Start-At(k,S) = {IC S} by FUNCOP_1:13
+    .= dom Start-At(l,S) by FUNCOP_1:13;
+ hence p +* Start-At(k,S) +* Start-At(l,S)  = p +* Start-At(l,S) by FUNCT_4:74;
+end;
+
+theorem
+ for p being PartState of S st IC S in dom p
+  holds p +* Start-At(IC p,S) = p by FUNCT_4:7,98;
+
+theorem
+  p +* Start-At(k,S) c= s implies IC s = k
+proof
+  assume
+A1: p +* Start-At(k,S) c= s;
+  IC S in dom (p +* Start-At( k,S)) by Th141;
+  hence IC s = IC (p +* Start-At( k,S)) by A1,GRFUNC_1:2
+    .=  k by Lm142;
+end;
+
+theorem
+ for p being PartState of S holds Start-At(0,S) c= p implies IC p = 0
+proof let p be PartState of S;
+A1: IC Start-At(0,S) = 0 by Def16;
+ IC S in dom Start-At(0,S) by Def16;
+  hence thesis by A1,GRFUNC_1:2;
+end;
+
+theorem
+ for p being PartState of S st Start-At(k,S) c= p holds IC p = k
+proof
+ let p be PartState of S;
+ assume Start-At(k,S) c= p;
+  then p is k-started by Th151;
+ hence IC p = k by Def16;
+end;
+
+registration let N;
+ let S be IC-Ins-separated non empty Mem-Struct over N;
+ cluster non empty for PartState of S;
+ existence
+  proof
+   take Start-At(0,S);
+   thus thesis;
+  end;
+end;
+
+theorem
+ for S being IC-Ins-separated non empty Mem-Struct over N
+ for p being non empty PartState of S
+ holds dom p meets {IC S} \/ Data-Locations S
+  proof let S being IC-Ins-separated non empty Mem-Struct over N;
+  let p being non empty PartState of S;
+   dom p c= the carrier of S by RELAT_1:def 18;
+   then dom p meets the carrier of S by XBOOLE_1:69;
+   hence dom p meets {IC S} \/ Data-Locations S by STRUCT_0:4;
+  end;
+
+begin :: Initialize
+
+definition let N;
+  let S be IC-Ins-separated non empty Mem-Struct over N;
+  let p be PartState of S;
+  func Initialize p -> PartState of S equals
+  p +* Start-At(0,S);
+  coherence;
+  projectivity by FUNCT_4:93;
+end;
+
+registration let N,S;
+  let p be PartState of S;
+ cluster Initialize p -> 0-started;
+ coherence;
+end;
+
+theorem Th76:
+  for S being IC-Ins-separated non empty Mem-Struct over N,
+      p being PartState of S
+  holds dom Initialize p = dom p \/ {IC S}
+proof let S be IC-Ins-separated non empty  Mem-Struct over N;
+  let p being PartState of S;
+  thus dom Initialize p
+     = dom p \/ dom Start-At(0,S) by FUNCT_4:def 1
+    .= dom p \/ {IC S} by FUNCOP_1:13;
+end;
+
+theorem
+  for x being set st x in dom Initialize p holds x in dom p or x = IC S
+proof
+  let x be set;
+  assume
+A1: x in dom Initialize p;
+  dom Initialize p = dom p \/ {IC S} by Th76;
+  then x in dom p or x in {IC S} by A1,XBOOLE_0:def 3;
+  hence thesis by TARSKI:def 1;
+end;
+
+theorem
+ for p being 0-started PartState of S
+  holds Initialize p = p
+ proof let p be 0-started PartState of S;
+   IC S in dom p & IC p = 0 by Def16;
+  hence Initialize p = p by FUNCT_4:85,98;
+ end;
+
+theorem Th45:
+ for p being PartState of S
+  holds DataPart Initialize p = DataPart p
+ proof let p be PartState of S;
+  thus DataPart Initialize p
+        = DataPart p +* DataPart Start-At(0,S) by FUNCT_4:71
+       .= DataPart p +* {} by Th30
+       .= DataPart p by FUNCT_4:21;
+ end;
+
+theorem
+ for s being State of S st IC s =  0 holds Initialize s = s
+proof let s be State of S;
+  assume
+A1: IC s =  0;
+A2: IC S in dom s by Lm6;
+  thus Initialize s = s by A1,A2,FUNCT_7:109;
+end;
+
+registration let N,S;
+  let s be State of S;
+  cluster Initialize s -> total;
+  coherence;
+end;
+
+theorem Th47:
+ for p being PartState of S
+ holds Initialize p c= s implies IC s = 0
+proof let p be PartState of S;
+A1: IC Initialize p =  0 by Def16;
+A2: IC S in dom Initialize p by Def16;
+  assume Initialize p c= s;
+  hence thesis by A1,A2,GRFUNC_1:2;
+end;
+
+theorem Th225:
+ for p being PartState of S holds IC S in dom Initialize p
+proof let p be PartState of S;
+A: dom Initialize p = dom p \/ {IC S} by Th76;
+  IC S in {IC S} by TARSKI:def 1;
+ hence IC S in dom Initialize p by A,XBOOLE_0:def 3;
+end;
+
+theorem
+ for p,q being PartState of S holds IC S in dom(p +* Initialize q)
+proof let p,q be PartState of S;
+A: dom(p +* Initialize q) =  dom p \/ dom Initialize q by FUNCT_4:def 1;
+  IC S in dom Initialize q by Th225;
+ hence IC S in dom(p +* Initialize q) by A,XBOOLE_0:def 3;
+end;
+
+theorem
+ for S being IC-Ins-separated non empty Mem-Struct over N
+ for p,q being PartState of S
+ holds Initialize p c= q implies Start-At(0,S) c= q
+proof
+ let S be IC-Ins-separated non empty Mem-Struct over N;
+ let p,q be PartState of S;
+  Start-At(0,S) c= Initialize p by FUNCT_4:25;
+ hence thesis by XBOOLE_1:1;
+end;
+
+begin :: Increment & Decrement, of the Instruction Counter
+
+definition let N,S;
+ let p be PartState of S, k be Nat;
+  func IncIC(p,k) -> PartState of S equals
+  p +* Start-At(IC p+k,S);
+  correctness;
+end;
+
+theorem Th48:
+  for p being PartState of S, k being Nat
+  holds DataPart IncIC(p,k) = DataPart p
+proof
+  let p be PartState of S, k be Nat;
+  thus DataPart IncIC(p,k)
+  = DataPart p +* DataPart Start-At(IC p+k,S) by FUNCT_4:71
+    .= DataPart p +* {} by Th30
+    .= DataPart p by FUNCT_4:21;
+end;
+
+theorem Th53:
+ for p being PartState of S, k being Nat holds IC S in dom IncIC(p,k)
+proof let p be PartState of S, k be Nat;
+A1: dom IncIC(p,k) = dom p \/ dom Start-At(IC p+k,S) by FUNCT_4:def 1;
+  IC S in dom Start-At(IC p+k,S) by Lm52;
+  hence thesis by A1,XBOOLE_0:def 3;
+end;
+
+theorem Th54:
+  for p being PartState of S, k being Nat
+   holds IC IncIC (p,k) = IC p + k
+proof
+  let p be PartState of S, k be Nat;
+   dom Start-At(IC p+k,S) = {IC S} by FUNCOP_1:13;
+   then IC S in dom Start-At(IC p+k,S) by TARSKI:def 1;
+  hence IC IncIC (p,k) = (Start-At((IC p)+k,S)).IC S by FUNCT_4:13
+    .= IC p +k by FUNCOP_1:72;
+end;
+
+theorem
+  for d being data-only PartState of S, k being Nat
+  holds IncIC(p+*d,k) = IncIC(p,k) +* d
+proof
+  let d be data-only PartState of S, k be Nat;
+A1: d tolerates Start-At(IC p+k,S) by Th59;
+  thus IncIC(p+*d,k) = p +* d +* Start-At(IC p+k,S) by Th58
+    .= p +* (d +* Start-At(IC p+k,S)) by FUNCT_4:14
+    .= p +* (Start-At(IC p+k,S) +* d) by A1,FUNCT_4:34
+    .= IncIC(p,k) +* d by FUNCT_4:14;
+end;
+
+theorem
+  for p being PartState of S, k being Nat holds
+  Start-At(IC p+k,S) c= IncIC (p,k)
+proof
+  let p be PartState of S, k be Nat;
+A1: IC IncIC(p,k) = IC p + k by Th54;
+A2: IC S in dom (IncIC(p,k)) by Th53;
+A3: Start-At(IC p+k,S) = {[IC S,IC p + k]} & [IC S,IC p + k] in
+  IncIC(p,k) by A2,A1,FUNCT_1:def 2,FUNCT_4:82;
+  for x being set st x in Start-At(IC p+k,S)
+    holds x in IncIC (p,k) by A3,TARSKI:def 1;
+ hence thesis by TARSKI:def 3;
+end;
+
+theorem
+ for p being PartState of S st IC S in dom p
+  holds IncIC( p,k) = DataPart p +* Start-At ((IC p) +k,S)
+ proof let p be PartState of S;
+A1: dom Start-At ((IC p) +k,S) = {IC S} by FUNCOP_1:13
+     .= dom Start-At (IC p,S) by FUNCOP_1:13;
+  assume
+A2: IC S in dom p;
+  thus IncIC( p,k)
+     = DataPart p +* Start-At (IC p,S) +* Start-At ((IC p) +k,S) by A2,Th74
+    .= DataPart p +* Start-At ((IC p) +k,S) by A1,FUNCT_4:74;
+ end;
+
+registration
+  let N,S;
+  let s be State of S, k be Nat;
+  cluster IncIC(s,k) -> total;
+  coherence;
+end;
+
+theorem
+ for p being PartState of S, i,j being Nat
+ holds IncIC(IncIC(p,i),j) = IncIC(p,i+j)
+ proof let p be PartState of S, i,j being Nat;
+  thus IncIC(IncIC(p,i),j)
+        = p +* Start-At(IC p+i,S) +* Start-At(IC p + i +j,S) by Th54
+       .= IncIC(p,i+j) by FUNCT_4:114;
+ end;
+
+theorem
+ for p being PartState of S, j,k being Nat
+ holds IncIC(p +* Start-At(j,S),k) = p +* Start-At(j+k,S)
+proof
+ let p be PartState of S, j,k be Nat;
+ thus IncIC(p +* Start-At(j,S),k)
+   = p +* Start-At(IC(p +* Start-At(j,S))+k,S) by FUNCT_4:114
+  .= p +* Start-At(j+k,S) by Lm142;
+end;
+
+theorem
+ for k being Nat
+ holds IC IncIC(s,k) -' k = IC s
+proof
+ let k be Nat;
+ thus IC IncIC(s,k) -' k = IC s + k -' k by Th54
+    .= IC s by NAT_D:34;
+end;
+
+theorem
+ for p,q being PartState of S, k being Nat st IC S in dom q
+  holds IncIC(p+*q,k) = p +* IncIC(q,k)
+proof let p,q be PartState of S, k be Nat;
+  assume IC S in dom q;
+   then IC(p+*q) = IC q by FUNCT_4:13;
+ hence IncIC(p+*q,k) = p +* IncIC(q,k) by FUNCT_4:14;
+end;
+
+theorem
+ for S being IC-Ins-separated non empty Mem-Struct over N
+  for k being Nat, p being PartState of S,
+      s1, s2 being State of S st p c= s1 & IncIC(p,k) c= s2
+   holds p c= s1 +* DataPart s2
+proof
+ let S be IC-Ins-separated non empty Mem-Struct over N;
+  let k be Nat, p be PartState of S,
+      s1, s2 be State of S such that
+A1: p c= s1 and
+A2: IncIC(p,k) c= s2;
+  set s3 = DataPart s2;
+  reconsider s = s1 +* DataPart s2 as State of S;
+A3:  dom p c= the carrier of S by RELAT_1:def 18;
+  then
+A4: dom p c= {IC S} \/ Data-Locations S by STRUCT_0:4;
+A5: now
+    Data-Locations S = dom s2 /\ Data-Locations S
+       by Th49,XBOOLE_1:28;
+    then
+A6: dom s3 = Data-Locations S by RELAT_1:61;
+    let x be set such that
+A7: x in dom p;
+    per cases by A4,A7,XBOOLE_0:def 3;
+    suppose
+A9:   x in {IC S};
+      x = IC S by A9,TARSKI:def 1;
+      then s1.x = s.x by A6,FUNCT_4:11,STRUCT_0:3;
+      hence (p).x = s.x by A1,A7,GRFUNC_1:2;
+    end;
+    suppose
+A11:  x in Data-Locations S;
+      set DPp = DataPart p;
+      x in dom p /\ Data-Locations S by A11,A7,XBOOLE_0:def 4;
+      then
+A12:  x in dom DPp by RELAT_1:61;
+YY:   DataPart IncIC(p,k) = DPp by Th48;
+      DPp c= IncIC(p,k) by YY,RELAT_1:59;
+      then
+A13:  DPp c= s2 by A2,XBOOLE_1:1;
+      then dom DPp c= dom s2 by GRFUNC_1:2;
+      then x in dom s2 /\ Data-Locations S by A11,A12,XBOOLE_0:def 4;
+      then
+A14:  x in dom s3 by RELAT_1:61;
+      DPp c= p by RELAT_1:59;
+      then
+A15:  DPp.x = (p).x by A12,GRFUNC_1:2;
+A16:  s2.x = s3.x by A11,FUNCT_1:49;
+      DPp.x = s2.x by A12,A13,GRFUNC_1:2;
+      hence (p).x = s.x by A15,A16,A14,FUNCT_4:13;
+    end;
+  end;
+  dom p c= dom s by A3,PARTFUN1:def 2;
+  hence thesis by A5,GRFUNC_1:2;
+end;
+
+theorem
+ for S being IC-Ins-separated non empty Mem-Struct over N
+ for p being PartState of S, k being Element of NAT
+ holds DataPart p c= IncIC(p,k)
+proof
+ let S be IC-Ins-separated non empty Mem-Struct over N;
+ let p being PartState of S, k be Element of NAT;
+  DataPart IncIC(p,k) = DataPart p by Th48;
+ hence DataPart p c= IncIC(p,k) by RELAT_1:59;
+end;
+
+definition let N,S;
+  let p be PartState of S, k be Nat;
+  func DecIC(p,k) -> PartState of S equals
+  p +* Start-At(IC p-'k,S);
+  correctness;
+end;
+
+theorem
+  for p being PartState of S, k being Nat
+  holds DataPart DecIC(p,k) = DataPart p
+proof
+  let p be PartState of S, k be Nat;
+  thus DataPart DecIC(p,k)
+  = DataPart p +* DataPart Start-At(IC p-'k,S) by FUNCT_4:71
+    .= DataPart p +* {} by Th30
+    .= DataPart p by FUNCT_4:21;
+end;
+
+theorem Th187:
+ for k being Nat holds IC S in dom DecIC(p,k)
+proof let k be Nat;
+A1: dom DecIC(p,k) = dom p \/ dom Start-At(IC p-'k,S) by FUNCT_4:def 1;
+  IC S in dom Start-At(IC p-'k,S) by Lm52;
+  hence thesis by A1,XBOOLE_0:def 3;
+end;
+
+theorem Th188:
+  for p being PartState of S, k being Nat
+   holds IC DecIC (p,k) = IC p -' k
+proof
+  let p be PartState of S, k be Nat;
+   dom Start-At(IC p-'k,S) = {IC S} by FUNCOP_1:13;
+   then IC S in dom Start-At(IC p-'k,S) by TARSKI:def 1;
+  hence IC DecIC (p,k) = (Start-At((IC p)-'k,S)).IC S by FUNCT_4:13
+    .= IC p -' k by FUNCOP_1:72;
+end;
+
+theorem
+  for p being PartState of S,
+   d being data-only PartState of S, k being Nat
+  holds DecIC(p+*d,k) = DecIC(p,k) +* d
+proof let p be PartState of S;
+  let d be data-only PartState of S, k being Nat;
+A1: d tolerates Start-At(IC p-'k,S) by Th59;
+  thus DecIC(p+*d,k)
+     = p +* d +* Start-At((IC p)-'k,S) by Th58
+    .= p +* (d +* Start-At(IC p-'k,S)) by FUNCT_4:14
+    .= p +* (Start-At(IC p-'k,S) +* d) by A1,FUNCT_4:34
+    .= DecIC(p,k) +* d by FUNCT_4:14;
+end;
+
+theorem
+  for p being PartState of S,k being Nat holds
+  Start-At(IC p-'k,S) c= DecIC (p,k)
+proof
+  let p be PartState of S, k be Nat;
+A1: IC DecIC(p,k) = IC p -' k by Th188;
+A2: IC S in dom (DecIC(p,k)) by Th187;
+A3: Start-At(IC p-'k,S) = {[IC S,IC p -' k]} & [IC S,IC p -' k] in
+  DecIC(p,k) by A2,A1,FUNCT_1:def 2,FUNCT_4:82;
+  for x being set st x in Start-At(IC p-'k,S)
+    holds x in DecIC (p,k) by A3,TARSKI:def 1;
+ hence thesis by TARSKI:def 3;
+end;
+
+theorem
+ for p being PartState of S, k being Nat st IC S in dom p
+  holds DecIC( p,k) = DataPart p +* Start-At ((IC p) -'k,S)
+ proof let p be PartState of S, k being Nat;
+A1: dom Start-At ((IC p) -'k,S) = {IC S} by FUNCOP_1:13
+     .= dom Start-At (IC p,S) by FUNCOP_1:13;
+  assume
+A2: IC S in dom p;
+  thus DecIC( p,k)
+     = DataPart p +* Start-At (IC p,S) +* Start-At ((IC p) -'k,S) by A2,Th74
+    .= DataPart p +* Start-At ((IC p) -'k,S) by A1,FUNCT_4:74;
+ end;
+
+registration
+  let N,S;
+  let s be State of S, k be Nat;
+  cluster DecIC(s,k) -> total;
+  coherence;
+end;
+
+theorem
+ for p being PartState of S, i,j being Nat
+ holds DecIC(DecIC(p,i),j) = DecIC(p,i+j)
+ proof let p be PartState of S, i,j being Nat;
+  thus DecIC(DecIC(p,i),j)
+        = p +* Start-At(IC p-'i,S) +* Start-At(IC p -' i -' j,S) by Th188
+       .= p +* Start-At(IC p-'i,S) +* Start-At(IC p -' (i + j),S) by NAT_2:30
+       .= DecIC(p,i+j) by FUNCT_4:114;
+ end;
+
+theorem
+ for p being PartState of S, j,k being Nat
+ holds DecIC(p +* Start-At(j,S),k) = p +* Start-At(j-'k,S)
+proof
+ let p be PartState of S, j,k be Nat;
+ thus DecIC(p +* Start-At(j,S),k)
+   = p +* Start-At(IC(p +* Start-At(j,S))-'k,S) by FUNCT_4:114
+  .= p +* Start-At(j-'k,S) by Lm142;
+end;
+
+theorem
+ for s being State of S, k being Nat st k <= IC s
+ holds IC DecIC(s,k) + k = IC s
+proof
+ let s be State of S, k be Nat such that
+Z: k <= IC s;
+ thus IC DecIC(s,k) + k = IC s -' k + k by Th188
+    .= IC s by Z,XREAL_1:235;
+end;
+
+theorem Th198:
+ for p,q being PartState of S, k being Nat st IC S in dom q
+  holds DecIC(p+*q,k) = p +* DecIC(q,k)
+proof let p,q be PartState of S, k be Nat;
+  assume IC S in dom q;
+   then IC(p+*q) = IC q by FUNCT_4:13;
+ hence DecIC(p+*q,k) = p +* DecIC(q,k) by FUNCT_4:14;
+end;
+
+theorem Th201:
+ for p being PartState of S, k being Nat st IC S in dom p
+  holds DecIC(IncIC(p,k),k) = p
+proof let p be PartState of S, k be Nat such that
+Z: IC S in dom p;
+ thus DecIC(IncIC(p,k),k)
+     = IncIC(p,k) +* Start-At(IC p + k -'k,S) by Th54
+    .= IncIC(p,k) +* Start-At(IC p, S) by NAT_D:34
+    .= p +* Start-At(IC p, S) by Th199
+    .= p by Z,FUNCT_4:7,98;
+end;
+
+theorem
+ for p,q being PartState of S, k being Nat st IC S in dom q
+  holds DecIC(p+*IncIC(q,k),k) = p +* q
+proof let p,q be PartState of S, k being Nat such that
+Z: IC S in dom q;
+  IC S in dom IncIC(q,k) by Th53;
+ hence DecIC(p+*IncIC(q,k),k) = p +* DecIC(IncIC(q,k),k) by Th198
+      .= p +* q by Z,Th201;
+end;
+
+begin :: Finite Partial States
+
+registration
+  let N be with_non-empty_elements set;
+  let S be IC-Ins-separated non empty Mem-Struct over N;
+  let l be Nat;
+  cluster Start-At(l,S) -> finite;
+  correctness;
+end;
+
+definition let N be set;
+  let S be Mem-Struct over N;
+  mode FinPartState of S is finite PartState of S;
+end;
+
+registration
+  let N be with_non-empty_elements set;
+  let S be IC-Ins-separated non empty Mem-Struct over N, l be Nat;
+  cluster l-started for FinPartState of S;
+  existence
+   proof
+    take Start-At(l,S);
+    thus thesis;
+   end;
+end;
+
+registration
+  let N be set;
+  let S be Mem-Struct over N;
+  let p be FinPartState of S;
+  cluster DataPart p -> finite;
+  coherence;
+end;
+
+registration let N,S;
+  let p be FinPartState of S;
+  cluster Initialize p -> finite;
+  coherence;
+end;
+
+registration let N,S;
+  let p be FinPartState of S, k be Nat;
+  cluster IncIC(p,k) -> finite;
+  coherence;
+end;
+
+registration let N,S;
+  let p be FinPartState of S, k be Nat;
+  cluster DecIC(p,k) -> finite;
+  coherence;
+end;
+
+definition
+  let N be set;
+  let S be Mem-Struct over N;
+  func FinPartSt S -> Subset of sproduct the Object-Kind of S equals
+  { p where p is Element of sproduct the Object-Kind of S: p is finite };
+  coherence
+  proof
+    defpred P[set] means $1 is finite;
+    { p where p is Element of sproduct the Object-Kind of S: P[p] } c=
+    sproduct the Object-Kind of S from FRAENKEL:sch 10;
+    hence thesis;
+  end;
+end;
+
+theorem Lm5:
+ for N being with_non-empty_elements set,
+     S be Mem-Struct over N
+ for p being FinPartState of S holds p in FinPartSt S
+proof
+  let N be with_non-empty_elements set,
+     S be Mem-Struct over N;
+  let p be FinPartState of S;
+   p in sproduct the Object-Kind of S by CARD_3:103;
+  hence thesis;
+end;
+
+registration
+  let N be with_non-empty_elements set;
+  let S be Mem-Struct over N;
+  cluster FinPartSt S -> non empty;
+  coherence by Lm5;
+end;
+
+theorem
+  for S being Mem-Struct over N, p being Element of FinPartSt S holds
+  p is FinPartState of S
+proof
+  let S be Mem-Struct over N;
+  let p be Element of FinPartSt S;
+  p in FinPartSt S;
+  then ex q being Element of sproduct the Object-Kind of S st q = p & q is
+  finite;
+  hence thesis;
+end;
+
+definition
+  let N,S;
+  let IT be PartFunc of FinPartSt S,FinPartSt S;
+  attr IT is data-only means
+  for p being PartState of S st p in dom IT holds p is data-only &
+   for q being PartState of S st q = IT.p holds q is data-only;
+end;
+
+registration let N,S;
+ cluster data-only for PartFunc of FinPartSt S, FinPartSt S;
+ existence
+  proof
+    reconsider f = {} as PartFunc of FinPartSt S, FinPartSt S by RELSET_1:12;
+   take f;
+   let p being PartState of S;
+   thus thesis;
+  end;
+end;
+
+begin :: Addenda
+
+theorem
+  for A being non empty Mem-Struct over N, s
+  being State of A, o being Object of A holds s.o in ObjectKind o
+proof
+  let A be non empty Mem-Struct over N, s be State of A, o be Object of A;
+  dom s = the carrier of A by PARTFUN1:def 2;
+  hence thesis by FUNCT_1:def 14;
+end;
+
+theorem Th78:
+  for A being IC-Ins-separated non empty Mem-Struct over N
+  for s1,s2 being State of A st IC s1= IC s2 & DataPart s1 =
+  DataPart s2 holds s1=s2
+proof
+  let A be IC-Ins-separated non empty Mem-Struct over N;
+   set D = Data-Locations A;
+  let s1,s2 be State of A;
+  assume that
+A1: IC s1= IC s2 and
+A2: DataPart s1 = DataPart s2;
+A4: dom s2 ={IC A} \/ D by Th13;
+A5: dom s1 ={IC A} \/ D by Th13;
+  then s1|{IC A} = s2|{IC A} by A1,A4,GRFUNC_1:29;
+  then s1|({IC A} \/ D) = s2| ({IC A} \/ D) by A2,RELAT_1:150;
+  then s1|({IC A} \/ D) = s2| ({IC A} \/ D);
+  hence s1=s2 | dom s2 by A5,A4,RELAT_1:68
+    .=s2 by RELAT_1:68;
+end;
+
+theorem
+  for s being State of S, l being Element of NAT
+  holds DataPart s = DataPart(s +* Start-At(l,S))
+proof
+  let s be State of S;
+  let l be Element of NAT;
+  thus DataPart s =  DataPart s +* {} by FUNCT_4:21
+      .=  DataPart s +* DataPart Start-At(l,S) by Th30
+      .= DataPart(s +* Start-At(l,S))by FUNCT_4:71;
+end;
+
+theorem
+  for s1,s2 be State of S holds
+  DataPart s1 = DataPart s2 implies
+    Initialize s1 =  Initialize s2
+proof
+  let s1,s2 be State of S;
+  assume
+A1: DataPart s1 = DataPart s2;
+  set S1 = Initialize s1, S2 = Initialize s2;
+A4: IC S1 =  0 & IC S2 =  0 by Th47;
+  DataPart S1 = DataPart s1 by Th45
+    .= DataPart S2 by A1,Th45;
+  hence thesis by A4,Th78;
+end;
+

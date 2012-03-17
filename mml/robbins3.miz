@@ -17,17 +17,18 @@ environ
  vocabularies XBOOLE_0, LATTICES, SUBSET_1, EQREL_1, SHEFFER1, ROBBINS1,
       OPOSET_1, QMAX_1, FUNCT_1, WAYBEL_0, XXREAL_0, LATTICE3, STRUCT_0,
       ORDERS_2, BINOP_1, RELAT_1, FUNCT_5, ZFMISC_1, RELAT_2, FILTER_1,
-      ORDERS_1, PBOOLE, TARSKI, YELLOW_0, WAYBEL_1, ROBBINS3;
+      ORDERS_1, PBOOLE, TARSKI, YELLOW_0, WAYBEL_1, ROBBINS3, CARD_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, BINOP_1, RELAT_1, RELSET_1, PARTFUN1,
-      RELAT_2, FUNCT_2, FUNCT_5, STRUCT_0, LATTICE3, LATTICES, ORDERS_1,
-      ORDERS_2, FILTER_1, ROBBINS1, QMAX_1, OPOSET_1, WAYBEL_0, WAYBEL_1,
-      YELLOW_0, SHEFFER1, PARTIT_2;
+      RELAT_2, FUNCT_2, FUNCT_5, CARD_1, STRUCT_0, LATTICE3, LATTICES,
+      ORDERS_1, ORDERS_2, FILTER_1, ROBBINS1, QMAX_1, OPOSET_1, WAYBEL_0,
+      WAYBEL_1, YELLOW_0, SHEFFER1, PARTIT_2;
  constructors BINOP_1, REALSET2, LATTICE3, WAYBEL_1, YELLOW_6, OPOSET_1,
       SHEFFER1, FUNCT_5, RELSET_1, PARTIT_2;
  registrations RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2, STRUCT_0, LATTICES,
-      YELLOW_0, YELLOW_1, ROBBINS1, OPOSET_1, SHEFFER1, ZFMISC_1, PARTIT_2;
- requirements SUBSET, BOOLE;
- definitions LATTICES, RELAT_2, TARSKI;
+      YELLOW_0, YELLOW_1, ROBBINS1, OPOSET_1, SHEFFER1, ZFMISC_1, PARTIT_2,
+      CARD_1, ORDINAL1;
+ requirements SUBSET, BOOLE, NUMERALS;
+ definitions LATTICES, RELAT_2, TARSKI, STRUCT_0;
  theorems ZFMISC_1, STRUCT_0, LATTICE3, RELAT_1, FILTER_1, LATTICES, OPOSET_1,
       ORDERS_1, ROBBINS1, PARTFUN1, RELAT_2, YELLOW_0, ORDERS_2, WAYBEL_9,
       WAYBEL_1, FUNCT_2, REALSET1, YELLOW_7, SHEFFER1, CARD_1, PARTIT_2;
@@ -212,62 +213,63 @@ A6: L is meet-absorbing by Th3;
 end;
 
 registration
-  cluster Lattice-like -> meet-Associative join-Associative meet-Absorbing (
-    non empty LattStr);
+  cluster Lattice-like -> meet-Associative join-Associative meet-Absorbing for
+
+    non empty LattStr;
   coherence by Th5;
   cluster meet-Associative join-Associative meet-Absorbing join-absorbing ->
-    Lattice-like (non empty LattStr);
+    Lattice-like for non empty LattStr;
   coherence by Th5;
 end;
 
 begin :: Orthoposets
 
 registration
-  cluster OrderInvolutive -> Dneg (PartialOrdered (non empty OrthoRelStr));
+  cluster OrderInvolutive -> Dneg for PartialOrdered non empty OrthoRelStr;
   coherence
   proof
-    let L be PartialOrdered (non empty OrthoRelStr);
+    let L be PartialOrdered non empty OrthoRelStr;
     assume L is OrderInvolutive;
     then consider f being Function of L,L such that
 A1: f = the Compl of L and
-A2: f is Orderinvolutive by OPOSET_1:def 33;
+A2: f is Orderinvolutive by OPOSET_1:def 18;
     ex g being Function of L, L st g = f & g is involutive antitone by A2,
-OPOSET_1:def 32;
-    hence thesis by A1,OPOSET_1:def 6;
+OPOSET_1:def 17;
+    hence thesis by A1,OPOSET_1:def 3;
   end;
 end;
 
 theorem Th6:
-  for L being Dneg (non empty OrthoRelStr), x being Element of L holds x`` = x
+  for L being Dneg non empty OrthoRelStr, x being Element of L holds x`` = x
 proof
-  let L be Dneg (non empty OrthoRelStr), x be Element of L;
+  let L be Dneg non empty OrthoRelStr, x be Element of L;
   consider f being Function of L,L such that
 A1: f = the Compl of L and
-A2: f is involutive by OPOSET_1:def 6;
+A2: f is involutive by OPOSET_1:def 3;
   f.x = x` & f.(f.x) = x by A1,A2,PARTIT_2:def 3,ROBBINS1:def 3;
   hence thesis by A1,ROBBINS1:def 3;
 end;
 
 theorem Th7:
-  for O being OrderInvolutive PartialOrdered (non empty OrthoRelStr
-  ), x, y being Element of O holds x <= y implies y` <= x`
+  for O being OrderInvolutive PartialOrdered non empty OrthoRelStr
+  , x, y being Element of O holds x <= y implies y` <= x`
 proof
-  let O be OrderInvolutive PartialOrdered (non empty OrthoRelStr), x, y be
+  let O be OrderInvolutive PartialOrdered non empty OrthoRelStr, x, y be
   Element of O;
   assume
 A1: x <= y;
   consider f being Function of O,O such that
 A2: f = the Compl of O and
-A3: f is Orderinvolutive by OPOSET_1:def 33;
+A3: f is Orderinvolutive by OPOSET_1:def 18;
   ex g being Function of O,O st g = f & g is involutive antitone by A3,
-OPOSET_1:def 32;
+OPOSET_1:def 17;
   then f.x >= f.y by A1,WAYBEL_9:def 1;
   then x` >= f.y by A2,ROBBINS1:def 3;
   hence thesis by A2,ROBBINS1:def 3;
 end;
 
 registration
-  cluster with_infima with_suprema strict PreOrthoPoset;
+  cluster with_infima with_suprema strict for PreOrthoPoset;
   existence
   proof
     take TrivOrthoRelStr;
@@ -316,24 +318,28 @@ definition
 end;
 
 registration
-  cluster TrivLattRelStr -> non empty trivial;
-  coherence by CARD_1:87;
+  cluster TrivLattRelStr -> 1-element;
+  coherence
+   proof
+    the carrier of TrivLattRelStr = {0} by CARD_1:49;
+    hence the carrier of TrivLattRelStr is 1-element;
+   end;
 end;
 
 registration
-  cluster non empty \/-SemiLattRelStr;
+  cluster non empty for \/-SemiLattRelStr;
   existence
   proof
     take TrivLattRelStr;
     thus thesis;
   end;
-  cluster non empty /\-SemiLattRelStr;
+  cluster non empty for /\-SemiLattRelStr;
   existence
   proof
     take TrivLattRelStr;
     thus thesis;
   end;
-  cluster non empty LattRelStr;
+  cluster non empty for LattRelStr;
   existence
   proof
     take TrivLattRelStr;
@@ -353,9 +359,9 @@ proof
 A1: i is_reflexive_in c and
 A2: i is antisymmetric transitive;
 A3: i is_transitive_in field i by A2,RELAT_2:def 16;
-A4: field i = c by A1,PARTIT_2:23;
+A4: field i = c by A1,PARTIT_2:21;
   then i is_antisymmetric_in c by A2,RELAT_2:def 12;
-  hence thesis by A1,A4,A3,ORDERS_2:def 4,def 5,def 6;
+  hence thesis by A1,A4,A3,ORDERS_2:def 2,def 3,def 4;
 end;
 
 registration
@@ -365,15 +371,15 @@ registration
     set T = TrivLattRelStr;
     set C = the carrier of T;
     set I = the InternalRel of T;
-    field I = C by PARTIT_2:20;
+    field I = C by PARTIT_2:18;
     then I is_reflexive_in C by RELAT_2:def 9;
-    hence thesis by ORDERS_2:def 4;
+    hence thesis by ORDERS_2:def 2;
   end;
 end;
 
 registration
   cluster antisymmetric reflexive transitive with_suprema with_infima
-    LattRelStr;
+    for LattRelStr;
   existence
   proof
     take TrivLattRelStr;
@@ -389,7 +395,7 @@ end;
 Lm1: TrivLattRelStr is Lattice-like;
 
 registration
-  cluster Lattice-like (non empty LattRelStr);
+  cluster Lattice-like for non empty LattRelStr;
   existence by Lm1;
 end;
 
@@ -405,7 +411,7 @@ A1: LattRel L = { [p,q] where p is Element of L, q is Element of L: p [= q
       let x be set;
       assume x in LattRel L;
       then ex p,q being Element of L st x = [p,q] & p [= q by A1;
-      hence thesis by ZFMISC_1:106;
+      hence thesis by ZFMISC_1:87;
     end;
     then reconsider R = LattRel L as Relation of the carrier of L;
 A2: R is_antisymmetric_in the carrier of L
@@ -414,8 +420,8 @@ A2: R is_antisymmetric_in the carrier of L
       assume x in the carrier of L & y in the carrier of L;
       then reconsider x9 = x, y9 = y as Element of L;
       assume [x,y] in R & [y,x] in R;
-      then x9 [= y9 & y9 [= x9 by FILTER_1:32;
-      hence thesis by LATTICES:26;
+      then x9 [= y9 & y9 [= x9 by FILTER_1:31;
+      hence thesis by LATTICES:8;
     end;
 A3: R is_transitive_in the carrier of L
     proof
@@ -424,9 +430,9 @@ A3: R is_transitive_in the carrier of L
       x in the carrier of L & y in the carrier of L & z in the carrier of L;
       then reconsider x9 = x, y9 = y, z9 = z as Element of L;
       assume [x,y] in R & [y,z] in R;
-      then x9 [= y9 & y9 [= z9 by FILTER_1:32;
-      then x9 [= z9 by LATTICES:25;
-      hence thesis by FILTER_1:32;
+      then x9 [= y9 & y9 [= z9 by FILTER_1:31;
+      then x9 [= z9 by LATTICES:7;
+      hence thesis by FILTER_1:31;
     end;
 A4: R is_reflexive_in the carrier of L
     proof
@@ -434,10 +440,10 @@ A4: R is_reflexive_in the carrier of L
       assume x in the carrier of L;
       then reconsider x as Element of L;
       x [= x;
-      hence thesis by FILTER_1:32;
+      hence thesis by FILTER_1:31;
     end;
-    then dom R = the carrier of L & field R = the carrier of L by ORDERS_1:98;
-    hence thesis by A4,A2,A3,PARTFUN1:def 4,RELAT_2:def 9,def 12,def 16;
+    then dom R = the carrier of L & field R = the carrier of L by ORDERS_1:13;
+    hence thesis by A4,A2,A3,PARTFUN1:def 2,RELAT_2:def 9,def 12,def 16;
   end;
 end;
 
@@ -494,8 +500,12 @@ registration
 end;
 
 registration
-  cluster TrivCLRelStr -> non empty trivial;
-  coherence by CARD_1:87;
+  cluster TrivCLRelStr -> 1-element;
+  coherence
+   proof
+    the carrier of TrivCLRelStr = {0} by CARD_1:49;
+    hence the carrier of TrivCLRelStr is 1-element;
+   end;
 end;
 
 registration
@@ -505,8 +515,8 @@ registration
     for x being Element of TrivCLRelStr holds x <= x
     proof
       let x be Element of TrivCLRelStr;
-      [x,x] in id {{}} by CARD_1:87,RELAT_1:def 10;
-      hence thesis by CARD_1:87,ORDERS_2:def 9;
+      [x,x] in id {{}} by CARD_1:49,RELAT_1:def 10;
+      hence thesis by CARD_1:49,ORDERS_2:def 5;
     end;
     hence thesis by YELLOW_0:def 1;
   end;
@@ -531,7 +541,8 @@ registration
 end;
 
 registration
-  cluster involutive with_Top de_Morgan Lattice-like (non empty OrthoLattStr);
+  cluster involutive with_Top de_Morgan Lattice-like for
+1-element OrthoLattStr;
   existence
   proof
     take TrivOrtLat;
@@ -540,8 +551,8 @@ registration
 end;
 
 definition
-  mode Ortholattice is involutive with_Top de_Morgan Lattice-like (non empty
-    OrthoLattStr);
+  mode Ortholattice is involutive with_Top de_Morgan Lattice-like non empty
+    OrthoLattStr;
 end;
 
 begin :: Lemmas
@@ -755,7 +766,7 @@ definition
     the RelStr of it = the RelStr of R;
   existence
   proof
-    set A =the  BinOp of the carrier of R;
+    set A = the BinOp of the carrier of R;
     set L = LattRelStr (# the carrier of R, A, A, the InternalRel of R #);
     take L;
     thus thesis;
@@ -769,7 +780,7 @@ definition
     the LattStr of it = the LattStr of R;
   existence
   proof
-    set IR =the  Relation of the carrier of R;
+    set IR = the Relation of the carrier of R;
     set L = LattRelStr (# the carrier of R, the L_join of R, the L_meet of R,
       IR #);
     take L;
@@ -779,7 +790,7 @@ end;
 
 registration
   let L be non empty LattStr;
-  cluster -> non empty LatAugmentation of L;
+  cluster -> non empty for LatAugmentation of L;
   coherence
   proof
     let R be LatAugmentation of L;
@@ -789,8 +800,8 @@ registration
 end;
 
 registration
-  let L be meet-associative (non empty LattStr);
-  cluster -> meet-associative LatAugmentation of L;
+  let L be meet-associative non empty LattStr;
+  cluster -> meet-associative for LatAugmentation of L;
   coherence
   proof
     let R be LatAugmentation of L;
@@ -800,8 +811,8 @@ registration
 end;
 
 registration
-  let L be join-associative (non empty LattStr);
-  cluster -> join-associative LatAugmentation of L;
+  let L be join-associative non empty LattStr;
+  cluster -> join-associative for LatAugmentation of L;
   coherence
   proof
     let R be LatAugmentation of L;
@@ -811,8 +822,8 @@ registration
 end;
 
 registration
-  let L be meet-commutative (non empty LattStr);
-  cluster -> meet-commutative LatAugmentation of L;
+  let L be meet-commutative non empty LattStr;
+  cluster -> meet-commutative for LatAugmentation of L;
   coherence
   proof
     let R be LatAugmentation of L;
@@ -822,8 +833,8 @@ registration
 end;
 
 registration
-  let L be join-commutative (non empty LattStr);
-  cluster -> join-commutative LatAugmentation of L;
+  let L be join-commutative non empty LattStr;
+  cluster -> join-commutative for LatAugmentation of L;
   coherence
   proof
     let R be LatAugmentation of L;
@@ -833,8 +844,8 @@ registration
 end;
 
 registration
-  let L be join-absorbing (non empty LattStr);
-  cluster -> join-absorbing LatAugmentation of L;
+  let L be join-absorbing non empty LattStr;
+  cluster -> join-absorbing for LatAugmentation of L;
   coherence
   proof
     let R be LatAugmentation of L;
@@ -844,8 +855,8 @@ registration
 end;
 
 registration
-  let L be meet-absorbing (non empty LattStr);
-  cluster -> meet-absorbing LatAugmentation of L;
+  let L be meet-absorbing non empty LattStr;
+  cluster -> meet-absorbing for LatAugmentation of L;
   coherence
   proof
     let R be LatAugmentation of L;
@@ -871,7 +882,7 @@ end;
 registration
   let L be Lattice;
   cluster naturally_sup-generated naturally_inf-generated Lattice-like
-    LatAugmentation of L;
+    for LatAugmentation of L;
   existence
   proof
     set R = LattRel L;
@@ -885,16 +896,16 @@ registration
       reconsider x9 = x, y9 = y as Element of L;
       hereby
         assume x <= y;
-        then [x,y] in the InternalRel of S by ORDERS_2:def 9;
-        then x9 [= y9 by FILTER_1:32;
-        then x9 |^| y9 = x9 by LATTICES:21;
+        then [x,y] in the InternalRel of S by ORDERS_2:def 5;
+        then x9 [= y9 by FILTER_1:31;
+        then x9 |^| y9 = x9 by LATTICES:4;
         hence x |^| y = x;
       end;
 A1:   x9 |^| y9 = x |^| y;
       assume x |^| y = x;
-      then x9 [= y9 by A1,LATTICES:21;
-      then [x9,y9] in LattRel L by FILTER_1:32;
-      hence thesis by ORDERS_2:def 9;
+      then x9 [= y9 by A1,LATTICES:4;
+      then [x9,y9] in LattRel L by FILTER_1:31;
+      hence thesis by ORDERS_2:def 5;
     end;
     then
 A2: S is naturally_inf-generated by Def11;
@@ -904,16 +915,16 @@ A2: S is naturally_inf-generated by Def11;
       reconsider x9 = x, y9 = y as Element of L;
       hereby
         assume x <= y;
-        then [x,y] in the InternalRel of S by ORDERS_2:def 9;
-        then x9 [= y9 by FILTER_1:32;
+        then [x,y] in the InternalRel of S by ORDERS_2:def 5;
+        then x9 [= y9 by FILTER_1:31;
         then x9 |_| y9 = y9 by LATTICES:def 3;
         hence x |_| y = y;
       end;
 A3:   x9 |_| y9 = x |_| y;
       assume x |_| y = y;
       then x9 [= y9 by A3,LATTICES:def 3;
-      then [x9,y9] in LattRel L by FILTER_1:32;
-      hence thesis by ORDERS_2:def 9;
+      then [x9,y9] in LattRel L by FILTER_1:31;
+      hence thesis by ORDERS_2:def 5;
     end;
     then S is naturally_sup-generated by Def10;
     hence thesis by A2;
@@ -921,7 +932,7 @@ A3:   x9 |_| y9 = x |_| y;
 end;
 
 registration
-  cluster trivial non empty reflexive LattRelStr;
+  cluster 1-element reflexive for LattRelStr;
   existence
   proof
     take TrivLattRelStr;
@@ -930,7 +941,7 @@ registration
 end;
 
 registration
-  cluster trivial non empty reflexive OrthoLattRelStr;
+  cluster 1-element reflexive for OrthoLattRelStr;
   existence
   proof
     take TrivCLRelStr;
@@ -939,7 +950,7 @@ registration
 end;
 
 registration
-  cluster trivial non empty reflexive OrthoRelStr;
+  cluster 1-element reflexive for OrthoRelStr;
   existence
   proof
     take TrivOrthoRelStr;
@@ -948,13 +959,12 @@ registration
 end;
 
 registration
-  cluster trivial -> involutive with_Top de_Morgan well-complemented (non
-    empty OrthoLattStr);
+  cluster -> involutive with_Top de_Morgan well-complemented
+      for 1-element OrthoLattStr;
   coherence
   proof
-    let L be non empty OrthoLattStr;
-    assume L is trivial;
-    then reconsider L9 = L as trivial (non empty OrthoLattStr);
+    let L be 1-element OrthoLattStr;
+    reconsider L9 = L as 1-element OrthoLattStr;
 A1: for x being Element of L9 holds x`` = x by STRUCT_0:def 10;
 A2: for x being Element of L9 holds x` is_a_complement_of x
     proof
@@ -970,42 +980,40 @@ A3:   x` |_| x = Top L9 & x` |^| x = Bottom L9 by STRUCT_0:def 10;
 end;
 
 registration
-  cluster trivial -> OrderInvolutive Pure PartialOrdered (non empty reflexive
-    OrthoRelStr);
+  cluster -> OrderInvolutive Pure PartialOrdered
+   for 1-element reflexive OrthoRelStr;
   coherence
   proof
-    let L be non empty reflexive OrthoRelStr;
-    assume L is trivial;
-    then reconsider L9 = L as trivial (non empty reflexive OrthoRelStr);
+    let L be 1-element reflexive OrthoRelStr;
+    reconsider L9 = L as 1-element reflexive OrthoRelStr;
     reconsider f = the Compl of L9 as Function of L9, L9;
     consider x being set such that
-A1: the carrier of L9 = {x} by REALSET1:def 4;
-    f = id {x} by A1,FUNCT_2:66;
+A1: the carrier of L9 = {x} by ZFMISC_1:131;
+    f = id {x} by A1,FUNCT_2:51;
     then
-A2: f is involutive by A1;
+A2: f is involutive;
     then
-A3: L9 is Dneg by OPOSET_1:def 6;
+A3: L9 is Dneg by OPOSET_1:def 3;
     for z, y being Element of L9 st z <= y holds f.z >= f.y
     proof
       let z, y be Element of L9;
       assume z <= y;
-      f.z = x & f.y = x by A1,FUNCT_2:65;
+      f.z = x & f.y = x by A1,FUNCT_2:50;
       hence thesis by YELLOW_0:def 1;
     end;
     then f is antitone by WAYBEL_9:def 1;
-    then f is Orderinvolutive by A2,OPOSET_1:def 32;
-    hence thesis by A3,OPOSET_1:def 26,def 33;
+    then f is Orderinvolutive by A2,OPOSET_1:def 17;
+    hence thesis by A3,OPOSET_1:def 15,def 18;
   end;
 end;
 
 registration
-  cluster trivial -> naturally_sup-generated naturally_inf-generated (non
-    empty reflexive LattRelStr);
+  cluster  -> naturally_sup-generated naturally_inf-generated
+   for 1-element reflexive LattRelStr;
   coherence
   proof
-    let L be non empty reflexive LattRelStr;
-    assume L is trivial;
-    then reconsider L9 = L as trivial (non empty reflexive LattRelStr);
+    let L be 1-element reflexive LattRelStr;
+    reconsider L9 = L as 1-element reflexive LattRelStr;
     ( for x, y being Element of L9 holds x <= y iff x |_| y = y)& for x, y
     being Element of L9 holds x <= y iff x |^| y = x by STRUCT_0:def 10;
     hence thesis by Def10,Def11;
@@ -1015,7 +1023,7 @@ end;
 registration
   cluster with_infima with_suprema naturally_sup-generated
     naturally_inf-generated de_Morgan Lattice-like OrderInvolutive Pure
-    PartialOrdered (non empty OrthoLattRelStr);
+    PartialOrdered for non empty OrthoLattRelStr;
   existence
   proof
     take TrivCLRelStr;
@@ -1025,7 +1033,7 @@ end;
 
 registration
   cluster with_infima with_suprema naturally_sup-generated
-    naturally_inf-generated Lattice-like (non empty LattRelStr);
+    naturally_inf-generated Lattice-like for non empty LattRelStr;
   existence
   proof
     take TrivLattRelStr;
@@ -1034,10 +1042,10 @@ registration
 end;
 
 theorem Th22:
-  for L being naturally_sup-generated (non empty LattRelStr), x, y
+  for L being naturally_sup-generated non empty LattRelStr, x, y
   being Element of L holds x <= y iff x [= y
 proof
-  let L be naturally_sup-generated (non empty LattRelStr), x, y be Element of
+  let L be naturally_sup-generated non empty LattRelStr, x, y be Element of
   L;
   hereby
     assume x <= y;
@@ -1050,10 +1058,10 @@ proof
 end;
 
 theorem Th23:
-  for L being naturally_sup-generated Lattice-like (non empty
-  LattRelStr) holds the RelStr of L = LattPOSet L
+  for L being naturally_sup-generated Lattice-like non empty
+  LattRelStr holds the RelStr of L = LattPOSet L
 proof
-  let L be naturally_sup-generated Lattice-like (non empty LattRelStr);
+  let L be naturally_sup-generated Lattice-like non empty LattRelStr;
 A1: for x, y being set holds [x,y] in the InternalRel of L iff [x,y] in
   LattRel L
   proof
@@ -1061,31 +1069,32 @@ A1: for x, y being set holds [x,y] in the InternalRel of L iff [x,y] in
     hereby
       assume
 A2:   [x,y] in the InternalRel of L;
-      then reconsider x9 = x, y9 = y as Element of L by ZFMISC_1:106;
-      x9 <= y9 by A2,ORDERS_2:def 9;
+      then reconsider x9 = x, y9 = y as Element of L by ZFMISC_1:87;
+      x9 <= y9 by A2,ORDERS_2:def 5;
       then x9 [= y9 by Th22;
-      hence [x,y] in LattRel L by FILTER_1:32;
+      hence [x,y] in LattRel L by FILTER_1:31;
     end;
     assume
 A3: [x,y] in LattRel L;
-    then reconsider x9 = x, y9 = y as Element of L by ZFMISC_1:106;
-    x9 [= y9 by A3,FILTER_1:32;
+    then reconsider x9 = x, y9 = y as Element of L by ZFMISC_1:87;
+    x9 [= y9 by A3,FILTER_1:31;
     then x9 <= y9 by Th22;
-    hence thesis by ORDERS_2:def 9;
+    hence thesis by ORDERS_2:def 5;
   end;
   LattPOSet L = RelStr (#the carrier of L, LattRel L#) by LATTICE3:def 2;
   hence thesis by A1,RELAT_1:def 2;
 end;
 
 registration
-  cluster naturally_sup-generated Lattice-like -> with_infima with_suprema (
-    non empty LattRelStr);
+  cluster naturally_sup-generated Lattice-like -> with_infima with_suprema for
+
+    non empty LattRelStr;
   coherence
   proof
     let L be non empty LattRelStr;
     assume L is naturally_sup-generated Lattice-like;
-    then reconsider L9 = L as naturally_sup-generated Lattice-like (non empty
-    LattRelStr);
+    then reconsider L9 = L as naturally_sup-generated Lattice-like non empty
+    LattRelStr;
     LattPOSet L9 is with_suprema with_infima;
     then the RelStr of L9 is with_suprema with_infima by Th23;
     hence thesis by YELLOW_7:14,15;
@@ -1101,7 +1110,7 @@ definition
     the OrthoLattStr of it = the OrthoLattStr of R;
   existence
   proof
-    set IR =the  Relation of the carrier of R;
+    set IR = the Relation of the carrier of R;
     set L = OrthoLattRelStr (# the carrier of R, the L_join of R, the L_meet
       of R, IR, the Compl of R #);
     take L;
@@ -1111,7 +1120,7 @@ end;
 
 registration
   let L be non empty OrthoLattStr;
-  cluster -> non empty CLatAugmentation of L;
+  cluster -> non empty for CLatAugmentation of L;
   coherence
   proof
     let R be CLatAugmentation of L;
@@ -1121,8 +1130,8 @@ registration
 end;
 
 registration
-  let L be meet-associative (non empty OrthoLattStr);
-  cluster -> meet-associative CLatAugmentation of L;
+  let L be meet-associative non empty OrthoLattStr;
+  cluster -> meet-associative for CLatAugmentation of L;
   coherence
   proof
     let R be CLatAugmentation of L;
@@ -1133,8 +1142,8 @@ registration
 end;
 
 registration
-  let L be join-associative (non empty OrthoLattStr);
-  cluster -> join-associative CLatAugmentation of L;
+  let L be join-associative non empty OrthoLattStr;
+  cluster -> join-associative for CLatAugmentation of L;
   coherence
   proof
     let R be CLatAugmentation of L;
@@ -1145,8 +1154,8 @@ registration
 end;
 
 registration
-  let L be meet-commutative (non empty OrthoLattStr);
-  cluster -> meet-commutative CLatAugmentation of L;
+  let L be meet-commutative non empty OrthoLattStr;
+  cluster -> meet-commutative for CLatAugmentation of L;
   coherence
   proof
     let R be CLatAugmentation of L;
@@ -1157,8 +1166,8 @@ registration
 end;
 
 registration
-  let L be join-commutative (non empty OrthoLattStr);
-  cluster -> join-commutative CLatAugmentation of L;
+  let L be join-commutative non empty OrthoLattStr;
+  cluster -> join-commutative for CLatAugmentation of L;
   coherence
   proof
     let R be CLatAugmentation of L;
@@ -1169,8 +1178,8 @@ registration
 end;
 
 registration
-  let L be meet-absorbing (non empty OrthoLattStr);
-  cluster -> meet-absorbing CLatAugmentation of L;
+  let L be meet-absorbing non empty OrthoLattStr;
+  cluster -> meet-absorbing for CLatAugmentation of L;
   coherence
   proof
     let R be CLatAugmentation of L;
@@ -1181,8 +1190,8 @@ registration
 end;
 
 registration
-  let L be join-absorbing (non empty OrthoLattStr);
-  cluster -> join-absorbing CLatAugmentation of L;
+  let L be join-absorbing non empty OrthoLattStr;
+  cluster -> join-absorbing for CLatAugmentation of L;
   coherence
   proof
     let R be CLatAugmentation of L;
@@ -1193,8 +1202,8 @@ registration
 end;
 
 registration
-  let L be with_Top (non empty OrthoLattStr);
-  cluster -> with_Top CLatAugmentation of L;
+  let L be with_Top non empty OrthoLattStr;
+  cluster -> with_Top for CLatAugmentation of L;
   coherence
   proof
     let R be CLatAugmentation of L;
@@ -1207,7 +1216,7 @@ end;
 registration
   let L be non empty Ortholattice;
   cluster naturally_sup-generated naturally_inf-generated Lattice-like
-    CLatAugmentation of L;
+    for CLatAugmentation of L;
   existence
   proof
     set R = LattRel L;
@@ -1221,16 +1230,16 @@ registration
       reconsider x9 = x, y9 = y as Element of L;
       hereby
         assume x <= y;
-        then [x9,y9] in the InternalRel of S by ORDERS_2:def 9;
-        then x9 [= y9 by FILTER_1:32;
-        then x9 |^| y9 = x9 by LATTICES:21;
+        then [x9,y9] in the InternalRel of S by ORDERS_2:def 5;
+        then x9 [= y9 by FILTER_1:31;
+        then x9 |^| y9 = x9 by LATTICES:4;
         hence x |^| y = x;
       end;
 A1:   x9 |^| y9 = x |^| y;
       assume x |^| y = x;
-      then x9 [= y9 by A1,LATTICES:21;
-      then [x9,y9] in LattRel L by FILTER_1:32;
-      hence thesis by ORDERS_2:def 9;
+      then x9 [= y9 by A1,LATTICES:4;
+      then [x9,y9] in LattRel L by FILTER_1:31;
+      hence thesis by ORDERS_2:def 5;
     end;
     then
 A2: S is naturally_inf-generated by Def11;
@@ -1240,16 +1249,16 @@ A2: S is naturally_inf-generated by Def11;
       reconsider x9 = x, y9 = y as Element of L;
       hereby
         assume x <= y;
-        then [x,y] in the InternalRel of S by ORDERS_2:def 9;
-        then x9 [= y9 by FILTER_1:32;
+        then [x,y] in the InternalRel of S by ORDERS_2:def 5;
+        then x9 [= y9 by FILTER_1:31;
         then x9 |_| y9 = y9 by LATTICES:def 3;
         hence x |_| y = y;
       end;
 A3:   x9 |_| y9 = x |_| y;
       assume x |_| y = y;
       then x9 [= y9 by A3,LATTICES:def 3;
-      then [x9,y9] in LattRel L by FILTER_1:32;
-      hence thesis by ORDERS_2:def 9;
+      then [x9,y9] in LattRel L by FILTER_1:31;
+      hence thesis by ORDERS_2:def 5;
     end;
     then S is naturally_sup-generated by Def10;
     hence thesis by A2;
@@ -1258,7 +1267,7 @@ end;
 
 registration
   cluster involutive with_Top de_Morgan Lattice-like naturally_sup-generated
-    well-complemented (non empty OrthoLattRelStr);
+    well-complemented for non empty OrthoLattRelStr;
   existence
   proof
     take TrivCLRelStr;
@@ -1267,11 +1276,11 @@ registration
 end;
 
 theorem Th24:
-  for L being with_infima with_suprema PartialOrdered (non empty
-OrthoRelStr) for x,y being Element of L holds x <= y implies y = x "|_|" y & x
+  for L being with_infima with_suprema PartialOrdered non empty
+OrthoRelStr for x,y being Element of L holds x <= y implies y = x "|_|" y & x
   = x "|^|" y
 proof
-  let L be with_infima with_suprema PartialOrdered (non empty OrthoRelStr);
+  let L be with_infima with_suprema PartialOrdered non empty OrthoRelStr;
   let a,b be Element of L;
   assume
 A1: a <= b;
@@ -1280,27 +1289,27 @@ A1: a <= b;
 end;
 
 definition
-  let L be meet-commutative (non empty /\-SemiLattStr), a, b be Element of L;
+  let L be meet-commutative non empty /\-SemiLattStr, a, b be Element of L;
   redefine func a |^| b;
   commutativity by LATTICES:def 6;
 end;
 
 definition
-  let L be join-commutative (non empty \/-SemiLattStr), a, b be Element of L;
+  let L be join-commutative non empty \/-SemiLattStr, a, b be Element of L;
   redefine func a |_| b;
   commutativity by LATTICES:def 4;
 end;
 
 registration
   cluster meet-absorbing join-absorbing meet-commutative
-    naturally_sup-generated -> reflexive (non empty LattRelStr);
+    naturally_sup-generated -> reflexive for non empty LattRelStr;
   coherence
   proof
     let L be non empty LattRelStr;
     assume L is meet-absorbing join-absorbing meet-commutative
     naturally_sup-generated;
     then reconsider L9 = L as meet-absorbing join-absorbing meet-commutative
-    naturally_sup-generated (non empty LattRelStr);
+    naturally_sup-generated non empty LattRelStr;
     for x being Element of L9 holds x <= x
     proof
       let x be Element of L9;
@@ -1312,21 +1321,21 @@ registration
 end;
 
 registration
-  cluster join-associative naturally_sup-generated -> transitive (non empty
-    LattRelStr);
+  cluster join-associative naturally_sup-generated -> transitive for non empty
+    LattRelStr;
   coherence
   proof
     let L be non empty LattRelStr;
     assume L is join-associative naturally_sup-generated;
     then reconsider
-    L9 = L as join-associative naturally_sup-generated (non empty
-    LattRelStr);
+    L9 = L as join-associative naturally_sup-generated non empty
+    LattRelStr;
     for x, y, z being Element of L9 st x <= y & y <= z holds x <= z
     proof
       let x, y, z be Element of L9;
       assume x <= y & y <= z;
       then x [= y & y [= z by Th22;
-      then x [= z by LATTICES:25;
+      then x [= z by LATTICES:7;
       hence thesis by Th22;
     end;
     hence thesis by YELLOW_0:def 2;
@@ -1334,21 +1343,22 @@ registration
 end;
 
 registration
-  cluster join-commutative naturally_sup-generated -> antisymmetric (non empty
-    LattRelStr);
+  cluster join-commutative naturally_sup-generated -> antisymmetric for
+non empty
+    LattRelStr;
   coherence
   proof
     let L be non empty LattRelStr;
     assume L is join-commutative naturally_sup-generated;
     then reconsider
-    L9 = L as join-commutative naturally_sup-generated (non empty
-    LattRelStr);
+    L9 = L as join-commutative naturally_sup-generated non empty
+    LattRelStr;
     for x, y being Element of L9 st x <= y & y <= x holds x = y
     proof
       let x, y be Element of L9;
       assume x <= y & y <= x;
       then x [= y & y [= x by Th22;
-      hence thesis by LATTICES:26;
+      hence thesis by LATTICES:8;
     end;
     hence thesis by YELLOW_0:def 3;
   end;
@@ -1356,21 +1366,21 @@ end;
 
 theorem Th25:
   for L being with_infima with_suprema naturally_sup-generated
-Lattice-like (non empty OrthoLattRelStr), x, y being Element of L holds x "|_|"
+Lattice-like non empty OrthoLattRelStr, x, y being Element of L holds x "|_|"
   y = x |_| y
 proof
-  let L be with_infima with_suprema naturally_sup-generated Lattice-like (non
-  empty OrthoLattRelStr), x, y be Element of L;
+  let L be with_infima with_suprema naturally_sup-generated Lattice-like non
+  empty OrthoLattRelStr, x, y be Element of L;
   x <= x "|_|" y by YELLOW_0:22;
   then
 A1: x [= x "|_|" y by Th22;
   y <= x "|_|" y by YELLOW_0:22;
   then
 A2: y [= x "|_|" y by Th22;
-  x [= x |_| y by LATTICES:22;
+  x [= x |_| y by LATTICES:5;
   then
 A3: x <= x |_| y by Th22;
-  y [= x |_| y by LATTICES:22;
+  y [= x |_| y by LATTICES:5;
   then
 A4: y <= x |_| y by Th22;
   (x |_| y) "|_|" (x "|_|" y) = (x |_| y) "|_|" x "|_|" y by LATTICE3:14
@@ -1387,21 +1397,21 @@ end;
 
 theorem Th26:
   for L being with_infima with_suprema naturally_sup-generated
-Lattice-like (non empty OrthoLattRelStr), x, y being Element of L holds x "|^|"
+Lattice-like non empty OrthoLattRelStr, x, y being Element of L holds x "|^|"
   y = x |^| y
 proof
-  let L be with_infima with_suprema naturally_sup-generated Lattice-like (non
-  empty OrthoLattRelStr), x, y be Element of L;
+  let L be with_infima with_suprema naturally_sup-generated Lattice-like non
+  empty OrthoLattRelStr, x, y be Element of L;
   x "|^|" y <= x by YELLOW_0:23;
   then
 A1: x "|^|" y [= x by Th22;
   x "|^|" y <= y by YELLOW_0:23;
   then
 A2: x "|^|" y [= y by Th22;
-  x |^| y [= x by LATTICES:23;
+  x |^| y [= x by LATTICES:6;
   then
 A3: x |^| y <= x by Th22;
-  x |^| y [= y by LATTICES:23;
+  x |^| y [= y by LATTICES:6;
   then
 A4: x |^| y <= y by Th22;
   (x |^| y) "|^|" (x "|^|" y) = (x |^| y) "|^|" x "|^|" y by LATTICE3:16
@@ -1411,19 +1421,19 @@ A4: x |^| y <= y by Th22;
   then
 A5: x |^| y [= x "|^|" y by Th22;
   (x "|^|" y) |^| (x |^| y) = (x "|^|" y) |^| x |^| y by LATTICES:def 7
-    .= (x "|^|" y) |^| y by A1,LATTICES:21
-    .= x "|^|" y by A2,LATTICES:21;
-  hence thesis by A5,LATTICES:21;
+    .= (x "|^|" y) |^| y by A1,LATTICES:4
+    .= x "|^|" y by A2,LATTICES:4;
+  hence thesis by A5,LATTICES:4;
 end;
 
 theorem
   for L being with_infima with_suprema naturally_sup-generated
-naturally_inf-generated Lattice-like OrderInvolutive PartialOrdered (non empty
-  OrthoLattRelStr) holds L is de_Morgan
+naturally_inf-generated Lattice-like OrderInvolutive PartialOrdered non empty
+  OrthoLattRelStr holds L is de_Morgan
 proof
   let L be with_infima with_suprema naturally_sup-generated
-naturally_inf-generated Lattice-like OrderInvolutive PartialOrdered (non empty
-  OrthoLattRelStr);
+naturally_inf-generated Lattice-like OrderInvolutive PartialOrdered non empty
+  OrthoLattRelStr;
 A1: for x,y being Element of L holds x` "|_|" y` <= ( x "|^|" y )`
   proof
     let a,b be Element of L;
@@ -1432,7 +1442,7 @@ A1: for x,y being Element of L holds x` "|_|" y` <= ( x "|^|" y )`
     i <= a by YELLOW_0:23;
     then a` <= i` by Th7;
     then
-A2: s <= i` "|_|" b` by WAYBEL_1:3;
+A2: s <= i` "|_|" b` by WAYBEL_1:2;
     i <= b by YELLOW_0:23;
     then b` <= i` by Th7;
     then i` = b` "|_|" i` by Th24;
@@ -1446,7 +1456,7 @@ A3: for x,y being Element of L holds ( x "|_|" y )` <= x` "|^|" y`
     a <= s by YELLOW_0:22;
     then s` <= a` by Th7;
     then
-A4: s` "|^|" b` <= i by WAYBEL_1:2;
+A4: s` "|^|" b` <= i by WAYBEL_1:1;
     b <= s by YELLOW_0:22;
     then s` <= b` by Th7;
     hence thesis by A4,Th24;
@@ -1463,14 +1473,14 @@ A5: s` <= i by A3;
     then
 A6: i <= s` by Th6;
     i = a |^| b & s = a` |_| b` by Th25,Th26;
-    hence thesis by A5,A6,ORDERS_2:25;
+    hence thesis by A5,A6,ORDERS_2:2;
   end;
   hence thesis by ROBBINS1:def 23;
 end;
 
 registration
   let L be Ortholattice;
-  cluster -> involutive CLatAugmentation of L;
+  cluster -> involutive for CLatAugmentation of L;
   coherence
   proof
     let R be CLatAugmentation of L;
@@ -1481,7 +1491,7 @@ end;
 
 registration
   let L be Ortholattice;
-  cluster -> de_Morgan CLatAugmentation of L;
+  cluster -> de_Morgan for CLatAugmentation of L;
   coherence
   proof
     let R be CLatAugmentation of L;
@@ -1499,7 +1509,7 @@ proof
   assume
   L is involutive with_Top de_Morgan Lattice-like naturally_sup-generated;
   then reconsider L9 = L as involutive with_Top de_Morgan Lattice-like
-  naturally_sup-generated (non empty OrthoLattRelStr);
+  naturally_sup-generated non empty OrthoLattRelStr;
   reconsider f = the Compl of L9 as Function of L9, L9;
   for x, y being Element of L9 st x <= y holds f.x >= f.y
   proof
@@ -1507,7 +1517,7 @@ proof
     assume x <= y;
     then x [= y by Th22;
     then
-A1: x` = (x |^| y)` by LATTICES:21
+A1: x` = (x |^| y)` by LATTICES:4
       .= (x` |_| y`)`` by ROBBINS1:def 23
       .= x` |_| y` by Def6;
     f.x = x` & f.y = y` by ROBBINS1:def 3;
@@ -1530,7 +1540,7 @@ A3: for y being Element of L9 holds ex_sup_of {y,f.y},L9 & ex_inf_of {y,f.y
       assume b in the carrier of L9;
       b |_| (y |_| y`) = b |_| (b |_| b`) by Def7
         .= b |_| b |_| b` by LATTICES:def 5
-        .= b |_| b` by LATTICES:17
+        .= b |_| b` by LATTICES:1
         .= y |_| y` by Def7;
       then b [= t by LATTICES:def 3;
       hence thesis by Th22;
@@ -1565,9 +1575,9 @@ A7: for a, b being Element of L9 holds a |^| a` = b |^| b`
       assume b in the carrier of L9;
       b |^| (y |^| y`) = b |^| (b |^| b`) by A7
         .= b |^| b |^| b` by LATTICES:def 7
-        .= b |^| b` by LATTICES:18
+        .= b |^| b` by LATTICES:2
         .= y |^| y` by A7;
-      then t [= b by LATTICES:21;
+      then t [= b by LATTICES:4;
       hence thesis by Th22;
     end;
     then
@@ -1593,9 +1603,9 @@ A10: for a being Element of L9 st the carrier of L9 is_>=_than a holds t
     hence thesis;
   end;
   then f is involutive by PARTIT_2:def 3;
-  then f is Orderinvolutive by A2,OPOSET_1:def 32;
-  then f OrthoComplement_on L9 by A3,OPOSET_1:def 36;
-  hence thesis by OPOSET_1:def 37;
+  then f is Orderinvolutive by A2,OPOSET_1:def 17;
+  then f OrthoComplement_on L9 by A3,OPOSET_1:def 21;
+  hence thesis by OPOSET_1:def 22;
 end;
 
 theorem
@@ -1604,7 +1614,8 @@ theorem
 
 registration
   let L be Ortholattice;
-  cluster -> Orthocomplemented (naturally_sup-generated CLatAugmentation of L);
+  cluster -> Orthocomplemented for
+naturally_sup-generated CLatAugmentation of L;
   coherence by Th28;
 end;
 
@@ -1614,9 +1625,9 @@ theorem Th30:
 proof
   let L be non empty OrthoLattStr;
   assume L is Boolean well-complemented Lattice-like;
-  then reconsider L9 = L as Boolean well-complemented Lattice-like (non empty
-  OrthoLattStr);
-A1: for x, y being Element of L9 holds x "/\" y = (x` "\/" y`)` by ROBBINS1:34;
+  then reconsider L9 = L as Boolean well-complemented Lattice-like non empty
+  OrthoLattStr;
+A1: for x, y being Element of L9 holds x "/\" y = (x` "\/" y`)` by ROBBINS1:33;
   ( for x being Element of L9 holds x`` = x)& for x, y being Element of L9
   holds x |_| x` = y |_| y` by ROBBINS1:3,4;
   hence thesis by A1,Def6,Def7,ROBBINS1:def 23;
@@ -1624,6 +1635,6 @@ end;
 
 registration
   cluster Boolean well-complemented Lattice-like -> involutive with_Top
-    de_Morgan (non empty OrthoLattStr);
+    de_Morgan for non empty OrthoLattStr;
   coherence by Th30;
 end;

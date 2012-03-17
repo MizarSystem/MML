@@ -54,12 +54,12 @@
 <Adjective nr="9"/>
 <Adjective nr="28"/>
 <Adjective nr="82"/>
-<Adjective nr="84"/>
 <Adjective nr="85"/>
-<Adjective nr="87"/>
-<Adjective nr="107"/>
-<Adjective nr="124"/>
-<Adjective nr="143"/>
+<Adjective nr="86"/>
+<Adjective nr="88"/>
+<Adjective nr="108"/>
+<Adjective nr="125"/>
+<Adjective nr="144"/>
 </Cluster>
 </RCluster>
 <FCluster aid="GLIB_005" nr="1">
@@ -72,25 +72,25 @@
 </Adjective>
 <Adjective nr="9"/>
 <Adjective nr="28"/>
-<Adjective nr="84"/>
-<Adjective nr="124"/>
-<Adjective nr="143"/>
+<Adjective nr="85"/>
+<Adjective nr="125"/>
+<Adjective nr="144"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="382">
+<Func kind="K" nr="386">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
 <Adjective nr="4"/>
 <Adjective nr="7">
-<Func kind="K" nr="296">
+<Func kind="K" nr="300">
 <LocusVar nr="1"/>
 </Func>
 </Adjective>
 <Adjective nr="9"/>
 <Adjective nr="14">
-<Func kind="K" nr="296">
+<Func kind="K" nr="300">
 <LocusVar nr="1"/>
 </Func>
 </Adjective>
@@ -107,10 +107,10 @@
 </Adjective>
 <Adjective nr="9"/>
 <Adjective nr="28"/>
-<Adjective nr="84"/>
+<Adjective nr="85"/>
 </Cluster>
 </Typ>
-<Typ kind="M" nr="28">
+<Typ kind="M" nr="29">
 <Cluster/>
 <LocusVar nr="1"/>
 </Typ>
@@ -139,10 +139,10 @@
 </Adjective>
 <Adjective nr="9"/>
 <Adjective nr="28"/>
-<Adjective nr="84"/>
+<Adjective nr="85"/>
 </Cluster>
 </Typ>
-<Typ kind="M" nr="28">
+<Typ kind="M" nr="29">
 <Cluster/>
 <LocusVar nr="1"/>
 </Typ>
@@ -158,7 +158,7 @@
 </Func>
 <Cluster>
 <Adjective nr="7">
-<Func kind="K" nr="296">
+<Func kind="K" nr="300">
 <LocusVar nr="1"/>
 </Func>
 </Adjective>
@@ -174,10 +174,10 @@
 </Adjective>
 <Adjective nr="9"/>
 <Adjective nr="28"/>
-<Adjective nr="84"/>
+<Adjective nr="85"/>
 </Cluster>
 </Typ>
-<Typ kind="M" nr="28">
+<Typ kind="M" nr="29">
 <Cluster/>
 <LocusVar nr="1"/>
 </Typ>
@@ -193,7 +193,7 @@
 </Func>
 <Cluster>
 <Adjective nr="14">
-<Func kind="K" nr="296">
+<Func kind="K" nr="300">
 <LocusVar nr="1"/>
 </Func>
 </Adjective>
@@ -209,9 +209,9 @@
 </Adjective>
 <Adjective nr="9"/>
 <Adjective nr="28"/>
-<Adjective nr="84"/>
-<Adjective nr="124"/>
-<Adjective nr="143"/>
+<Adjective nr="85"/>
+<Adjective nr="125"/>
+<Adjective nr="144"/>
 </Cluster>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -223,9 +223,9 @@
 </Adjective>
 <Adjective nr="9"/>
 <Adjective nr="28"/>
-<Adjective nr="84"/>
-<Adjective nr="124"/>
-<Adjective nr="131"/>
+<Adjective nr="85"/>
+<Adjective nr="125"/>
+<Adjective nr="132"/>
 </Cluster>
 </CCluster>
 </Registrations>

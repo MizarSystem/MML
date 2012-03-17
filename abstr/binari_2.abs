@@ -23,7 +23,7 @@ environ
  constructors PARTFUN1, BINOP_1, SETWISEO, XXREAL_0, NAT_1, INT_1, FINSEQ_4,
       FINSOP_1, SERIES_1, BINARITH, BINOP_2, NAT_D, RELSET_1;
  registrations ORDINAL1, RELSET_1, XREAL_0, NAT_1, INT_1, BINOP_2, XBOOLEAN,
-      MARGREL1, XBOOLE_0, FINSEQ_2, CARD_1;
+      MARGREL1, XBOOLE_0, FINSEQ_2, CARD_1, FINSEQ_1;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
 
 
@@ -72,73 +72,71 @@ definition
   (z1/.n) '&' (z2/.n) '&' 'not' (carry(z1,z2)/.n);
 end;
 
-canceled 2;
-
-theorem :: BINARI_2:3
+theorem :: BINARI_2:1
   for z1 being Tuple of 2, BOOLEAN holds
   z1=<*FALSE*>^<*FALSE*> implies Intval(z1) = 0;
 
-theorem :: BINARI_2:4
+theorem :: BINARI_2:2
   for z1 being Tuple of 2, BOOLEAN holds
   z1=<*TRUE*>^<*FALSE*> implies Intval(z1) = 1;
 
-theorem :: BINARI_2:5
+theorem :: BINARI_2:3
   for z1 being Tuple of 2, BOOLEAN holds
   z1=<*FALSE*>^<*TRUE*> implies Intval(z1) = -2;
 
-theorem :: BINARI_2:6
+theorem :: BINARI_2:4
   for z1 being Tuple of 2, BOOLEAN holds
   z1=<*TRUE*>^<*TRUE*> implies Intval(z1) = -1;
 
-theorem :: BINARI_2:7
+theorem :: BINARI_2:5
   for i st i in Seg n & i = 1 holds (Bin1(n))/.i = TRUE;
 
-theorem :: BINARI_2:8
+theorem :: BINARI_2:6
   for i st i in Seg n & i <> 1 holds (Bin1(n))/.i = FALSE;
 
-theorem :: BINARI_2:9
+theorem :: BINARI_2:7
   Bin1 (m+1) = Bin1 (m)^<*FALSE*>;
 
-theorem :: BINARI_2:10
+theorem :: BINARI_2:8
   for m holds Intval (Bin1(m)^<*FALSE*>) = 1;
 
-theorem :: BINARI_2:11
+theorem :: BINARI_2:9
   for z being Tuple of m, BOOLEAN for d being Element of BOOLEAN holds
   'not' (z^<* d *>) = 'not' z^<* 'not' d *>;
 
-theorem :: BINARI_2:12
+theorem :: BINARI_2:10
   for z being Tuple of m, BOOLEAN for d being Element of BOOLEAN holds
   Intval(z^<*d*>) =
   Absval(z)-(IFEQ(d,FALSE,0,2 to_power(m)) qua Nat);
 
-theorem :: BINARI_2:13
+theorem :: BINARI_2:11
   for z1,z2 being Tuple of m, BOOLEAN for d1,d2 being Element of BOOLEAN holds
   Intval(z1^<*d1*>+z2^<*d2*>)
   + IFEQ(Int_add_ovfl(z1^<*d1*>,z2^<*d2*>),FALSE,0,2 to_power(m+1))
   - IFEQ(Int_add_udfl(z1^<*d1*>,z2^<*d2*>),FALSE,0,2 to_power(m+1))
   = Intval(z1^<*d1*>) + Intval(z2^<*d2*>);
 
-theorem :: BINARI_2:14
+theorem :: BINARI_2:12
   for z1,z2 being Tuple of m, BOOLEAN for d1,d2 being Element of BOOLEAN holds
   Intval(z1^<*d1*>+z2^<*d2*>) = Intval(z1^<*d1*>) + Intval(z2^<*d2*>)
   - IFEQ(Int_add_ovfl(z1^<*d1*>,z2^<*d2*>),FALSE,0,2 to_power(m+1))
   + IFEQ(Int_add_udfl(z1^<*d1*>,z2^<*d2*>),FALSE,0,2 to_power(m+1));
 
-theorem :: BINARI_2:15
+theorem :: BINARI_2:13
   for m for x being Tuple of m, BOOLEAN holds
   Absval('not' x) = - Absval(x) + 2 to_power m - 1;
 
-theorem :: BINARI_2:16
+theorem :: BINARI_2:14
   for z being Tuple of m, BOOLEAN for d being Element of BOOLEAN holds
   Neg2(z^<*d*>) = Neg2(z)^<*'not' d 'xor' add_ovfl('not' z,Bin1(m))*>;
 
-theorem :: BINARI_2:17
+theorem :: BINARI_2:15
   for z being Tuple of m, BOOLEAN for d being Element of BOOLEAN holds
   Intval(Neg2(z^<*d*>))
   + IFEQ(Int_add_ovfl('not' (z^<*d*>),Bin1(m+1)),FALSE,0,2 to_power(m+1))
   = - Intval(z^<*d*>);
 
-theorem :: BINARI_2:18
+theorem :: BINARI_2:16
   for m for z being Tuple of m, BOOLEAN for d being Element of BOOLEAN holds
   Neg2(Neg2(z^<*d*>)) = z^<*d*>;
 
@@ -151,16 +149,16 @@ definition
   it/.i = (x/.i) 'xor' ((Neg2(y))/.i) 'xor' ((carry(x,Neg2(y)))/.i);
 end;
 
-theorem :: BINARI_2:19
+theorem :: BINARI_2:17
   for x,y being Tuple of m, BOOLEAN holds x - y = x + Neg2(y);
 
-theorem :: BINARI_2:20
+theorem :: BINARI_2:18
   for z1,z2 being Tuple of m, BOOLEAN for d1,d2 being Element of BOOLEAN holds
   z1^<*d1*> - z2^<*d2*>
   = (z1 + Neg2(z2))^<*d1 'xor' 'not' d2 'xor' add_ovfl('not'
   z2,Bin1(m)) 'xor' add_ovfl(z1,Neg2(z2))*>;
 
-theorem :: BINARI_2:21
+theorem :: BINARI_2:19
   for z1,z2 being Tuple of m, BOOLEAN for d1,d2 being Element of BOOLEAN holds
   Intval(z1^<*d1*>-z2^<*d2*>)
   + IFEQ(Int_add_ovfl(z1^<*d1*>,Neg2(z2^<*d2*>)),FALSE,0,2 to_power(m+1))

@@ -17,16 +17,18 @@ environ
  vocabularies NUMBERS, SUBSET_1, SCMPDS_2, INT_1, FSM_1, AMI_1, COMPLEX1,
       ARYTM_3, FUNCT_1, AMI_2, STRUCT_0, XBOOLE_0, RELAT_1, TARSKI, CARD_1,
       AMI_3, SCMPDS_1, GRAPHSP, SCMNORM, XXREAL_0, ARYTM_1, FUNCT_4, FUNCOP_1,
-      FUNCT_7, CIRCUIT2, ORDINAL1, PARTFUN1, AMISTD_5, PBOOLE, AMISTD_2;
+      FUNCT_7, CIRCUIT2, ORDINAL1, PARTFUN1, AMISTD_5, PBOOLE, AMISTD_2,
+      FINSET_1, COMPOS_1;
  notations TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, XCMPLX_0, RELAT_1, FUNCT_1,
-      PARTFUN1, PBOOLE, FUNCT_4, INT_1, NAT_1, STRUCT_0, FUNCOP_1, INT_2,
-      XXREAL_0, COMPOS_1, EXTPRO_1, AMI_2, AMISTD_2, AMISTD_5, SCMPDS_1,
+      PARTFUN1, PBOOLE, FUNCT_4, FINSET_1, INT_1, NAT_1, STRUCT_0, FUNCOP_1,
+      INT_2, XXREAL_0, MEMSTR_0, COMPOS_1, EXTPRO_1, AMI_2, AMISTD_5, SCMPDS_1,
       SCMPDS_2;
  constructors DOMAIN_1, XXREAL_0, INT_2, SCMPDS_1, SCMPDS_2, REAL_1, PRE_POLY,
-      AMI_3, AMISTD_5, PBOOLE, AMISTD_1;
+      AMI_3, AMISTD_5, PBOOLE, AMISTD_1, FUNCT_7, MEMSTR_0, RELSET_1;
  registrations XBOOLE_0, SETFAM_1, RELAT_1, FUNCT_1, ORDINAL1, NUMBERS,
       XREAL_0, INT_1, CARD_3, AMI_3, SCMPDS_2, FINSET_1, RELSET_1, FUNCT_2,
-      COMPOS_1, EXTPRO_1, AMISTD_5, PBOOLE, AMISTD_2, FUNCT_4, FUNCOP_1;
+      COMPOS_1, EXTPRO_1, AMISTD_5, PBOOLE, AMISTD_2, FUNCT_4, FUNCOP_1,
+      MEMSTR_0;
  requirements NUMERALS, SUBSET, BOOLE, ARITHM, REAL;
 
 
@@ -36,28 +38,24 @@ reserve j, k, m, n for Element of NAT,
   a,b for Int_position,
   k1,k2 for Integer;
 
-reserve P,P1,P2 for (the Instructions of SCMPDS)-valued ManySortedSet of NAT;
+reserve P,P1,P2 for Instruction-Sequence of SCMPDS;
 
-canceled;
-
-theorem :: SCMPDS_3:2
+theorem :: SCMPDS_3:1
   for k1 be Integer,s1,s2 being State of SCMPDS st IC s1 = IC s2
   holds ICplusConst(s1,k1)=ICplusConst(s2,k1);
 
-theorem :: SCMPDS_3:3
+theorem :: SCMPDS_3:2
   for k1 be Integer,a be Int_position,s1,s2 being State of SCMPDS
   st DataPart s1 = DataPart s2 holds s1.DataLoc(s1.a,k1)=s2.DataLoc(s2.a,k1);
 
-theorem :: SCMPDS_3:4
+theorem :: SCMPDS_3:3
   for a be Int_position,s1,s2 being State of SCMPDS st DataPart s1
   = DataPart s2 holds s1.a=s2.a;
 
-canceled;
-
-theorem :: SCMPDS_3:6
+theorem :: SCMPDS_3:4
   not IC SCMPDS in SCM-Data-Loc;
 
-theorem :: SCMPDS_3:7
+theorem :: SCMPDS_3:5
   for s1,s2 being State of SCMPDS st s1 | (SCM-Data-Loc \/ {IC
   SCMPDS }) = s2 | (SCM-Data-Loc \/ {IC SCMPDS }) for l being Instruction of
   SCMPDS holds Exec (l,s1) | (SCM-Data-Loc \/ {IC SCMPDS }) = Exec (l,s2) | (
@@ -65,13 +63,11 @@ theorem :: SCMPDS_3:7
 
 begin :: Finite partial states of SCMPDS
 
-canceled 6;
-
-theorem :: SCMPDS_3:14
+theorem :: SCMPDS_3:6
   for s being State of SCMPDS ,iloc being Element of NAT
   , a being Int_position holds s.a = (s +* Start-At(iloc,SCMPDS)).a;
 
-theorem :: SCMPDS_3:15
+theorem :: SCMPDS_3:7
   for s, t being State of SCMPDS holds s +* t|(SCM-Data-Loc ) is State
   of SCMPDS;
 
@@ -87,38 +83,28 @@ registration
  cluster SCMPDS -> IC-recognized;
 end;
 
-canceled 2;
-
-theorem :: SCMPDS_3:18
+theorem :: SCMPDS_3:8
   for s1,s2 being State of SCMPDS,k1,k2,m be Integer st IC s1= IC
   s2 & k1 <> k2 & m=IC s1 & m+k1 >= 0 & m+k2 >= 0 holds ICplusConst(s1,k1) <>
   ICplusConst(s2,k2);
 
-theorem :: SCMPDS_3:19
+theorem :: SCMPDS_3:9
   for s1,s2 being State of SCMPDS,k1,k2 be Element of NAT st IC s1
   = IC s2 & k1 <> k2 holds ICplusConst(s1,k1) <> ICplusConst(s2,k2);
 
-theorem :: SCMPDS_3:20
+theorem :: SCMPDS_3:10
   for s being State of SCMPDS holds succ IC s= ICplusConst(s,1);
 
 registration
  cluster SCMPDS -> CurIns-recognized;
 end;
 
-canceled;
-
-theorem :: SCMPDS_3:22
-  for p being autonomic non NAT-defined FinPartState of SCMPDS , s
-being State of SCMPDS st NPP p c= s
-  for P st ProgramPart p c= P
-for i being Element of NAT holds IC Comput(P,s,i) in dom ProgramPart(p);
-
-canceled;
-
-theorem :: SCMPDS_3:24
-  for p being autonomic non NAT-defined FinPartState of SCMPDS, s1, s2
-being State of SCMPDS st NPP p c= s1 & NPP p c= s2 &
- ProgramPart p c= P1 & ProgramPart p c= P2
+theorem :: SCMPDS_3:11
+  for q be non halt-free finite
+   (the Instructions of SCMPDS)-valued NAT-defined Function
+  for p being q-autonomic non empty FinPartState of SCMPDS, s1, s2
+being State of SCMPDS st  p c= s1 &  p c= s2 &
+ q c= P1 & q c= P2
  for i being Element of NAT,k1,k2 be
 Integer,a,b be Int_position st CurInstr(P1,
 Comput(P1,s1,i)) = (a,k1) := (b,k2)
@@ -127,10 +113,12 @@ Comput(P1,s1,i)) = (a,k1) := (b,k2)
 .DataLoc(Comput(P1,s1,i).b,k2) = Comput(P2,s2,i).
 DataLoc(Comput(P2,s2,i).b,k2);
 
-theorem :: SCMPDS_3:25
-  for p being autonomic non NAT-defined FinPartState of SCMPDS, s1, s2
-being State of SCMPDS st NPP p c= s1 & NPP p c= s2  &
- ProgramPart p c= P1 & ProgramPart p c= P2
+theorem :: SCMPDS_3:12
+  for q be non halt-free finite
+   (the Instructions of SCMPDS)-valued NAT-defined Function
+  for p being q-autonomic non empty FinPartState of SCMPDS, s1, s2
+being State of SCMPDS st  p c= s1 &  p c= s2  &
+ q c= P1 & q c= P2
 for i being Element of NAT,k1,k2 be
 Integer,a,b be Int_position st CurInstr(P1,
 Comput(P1,s1,i)) = AddTo(a,k1,b,k2)
@@ -140,10 +128,12 @@ Comput(P1,s1,i)) = AddTo(a,k1,b,k2)
 DataLoc(Comput(P2,s2,i).
   b,k2);
 
-theorem :: SCMPDS_3:26
-  for p being autonomic non NAT-defined FinPartState of SCMPDS, s1, s2
-being State of SCMPDS st NPP p c= s1 & NPP p c= s2 &
- ProgramPart p c= P1 & ProgramPart p c= P2
+theorem :: SCMPDS_3:13
+  for q be non halt-free finite
+   (the Instructions of SCMPDS)-valued NAT-defined Function
+  for p being q-autonomic non empty FinPartState of SCMPDS, s1, s2
+being State of SCMPDS st  p c= s1 &  p c= s2 &
+ q c= P1 & q c= P2
 for i being Element of NAT,k1,k2 be
 Integer,a,b be Int_position st CurInstr(P1,
 Comput(P1,s1,i)) = SubFrom(a,k1,b,k2
@@ -153,10 +143,12 @@ i).DataLoc(Comput(P1,s1,i).b,k2) = Comput(P2,s2,i).
 DataLoc(Comput(P2,s2,i
   ).b,k2);
 
-theorem :: SCMPDS_3:27
-  for p being autonomic non NAT-defined FinPartState of SCMPDS, s1, s2
-being State of SCMPDS st NPP p c= s1 & NPP p c= s2 &
- ProgramPart p c= P1 & ProgramPart p c= P2
+theorem :: SCMPDS_3:14
+  for q be non halt-free finite
+   (the Instructions of SCMPDS)-valued NAT-defined Function
+  for p being q-autonomic non empty FinPartState of SCMPDS, s1, s2
+being State of SCMPDS st  p c= s1 &  p c= s2 &
+ q c= P1 & q c= P2
 for i being Element of NAT,k1,k2 be
 Integer,a,b be Int_position st CurInstr(P1,
 Comput(P1,s1,i)) = MultBy(a,k1,b,k2)
@@ -168,10 +160,12 @@ b,k2) = Comput(P2,s2,i).DataLoc(Comput(P2,s2,i).a,k1)
 * Comput(P2,s2,i).
   DataLoc(Comput(P2,s2,i).b,k2);
 
-theorem :: SCMPDS_3:28
-  for p being autonomic non NAT-defined FinPartState of SCMPDS, s1, s2
-being State of SCMPDS st NPP p c= s1 & NPP p c= s2  &
- ProgramPart p c= P1 & ProgramPart p c= P2
+theorem :: SCMPDS_3:15
+  for q be non halt-free finite
+   (the Instructions of SCMPDS)-valued NAT-defined Function
+  for p being q-autonomic non empty FinPartState of SCMPDS, s1, s2
+being State of SCMPDS st  p c= s1 &  p c= s2  &
+ q c= P1 & q c= P2
 for i,m being Element of NAT,a being
 Int_position,k1,k2 be Integer st CurInstr(P1,
 Comput(P1,s1,i)) = (a,k1)<>0_goto
@@ -180,10 +174,12 @@ P1,s1,i).
 DataLoc(Comput(P1,s1,i).a,k1) = 0 iff Comput(P2,s2,i)
 .DataLoc(Comput(P2,s2,i).a,k1) = 0 );
 
-theorem :: SCMPDS_3:29
-  for p being autonomic non NAT-defined FinPartState of SCMPDS, s1, s2
-being State of SCMPDS st NPP p c= s1 & NPP p c= s2 &
- ProgramPart p c= P1 & ProgramPart p c= P2
+theorem :: SCMPDS_3:16
+  for q be non halt-free finite
+   (the Instructions of SCMPDS)-valued NAT-defined Function
+  for p being q-autonomic non empty FinPartState of SCMPDS, s1, s2
+being State of SCMPDS st  p c= s1 &  p c= s2 &
+ q c= P1 & q c= P2
 for i,m being Element of NAT,a being
 Int_position,k1,k2 be Integer st CurInstr(P1,
 Comput(P1,s1,i)) = (a,k1)<=0_goto
@@ -193,10 +189,12 @@ DataLoc(Comput(P1,s1,i).a,k1) > 0 iff Comput(P2,s2,i)
 .DataLoc(Comput(P2,
   s2,i).a,k1) > 0 );
 
-theorem :: SCMPDS_3:30
-  for p being autonomic non NAT-defined FinPartState of SCMPDS, s1, s2
-being State of SCMPDS st NPP p c= s1 & NPP p c= s2  &
- ProgramPart p c= P1 & ProgramPart p c= P2
+theorem :: SCMPDS_3:17
+  for q be non halt-free finite
+   (the Instructions of SCMPDS)-valued NAT-defined Function
+  for p being q-autonomic non empty FinPartState of SCMPDS, s1, s2
+being State of SCMPDS st  p c= s1 &  p c= s2  &
+ q c= P1 & q c= P2
 for i,m being Element of NAT,a being
 Int_position,k1,k2 be Integer st CurInstr(P1,
 Comput(P1,s1,i)) = (a,k1)>=0_goto

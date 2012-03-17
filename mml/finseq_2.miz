@@ -16,20 +16,21 @@ environ
 
  vocabularies NUMBERS, NAT_1, XBOOLE_0, SUBSET_1, FINSEQ_1, XXREAL_0, CARD_1,
       ARYTM_1, ARYTM_3, TARSKI, RELAT_1, FUNCT_1, ORDINAL4, FUNCT_2, FUNCOP_1,
-      ZFMISC_1, PARTFUN1, FINSEQ_2;
+      ZFMISC_1, PARTFUN1, FINSEQ_2, PBOOLE, CARD_3, VALUED_1;
  notations TARSKI, XBOOLE_0, ENUMSET1, ZFMISC_1, SUBSET_1, CARD_1, NUMBERS,
       XCMPLX_0, DOMAIN_1, NAT_1, RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2, FUNCT_3,
-      FINSEQ_1, BINOP_1, FUNCOP_1, XXREAL_0;
+      FINSEQ_1, BINOP_1, PBOOLE, FUNCOP_1, CARD_3, XXREAL_0, VALUED_1;
  constructors RELAT_2, PARTFUN1, BINOP_1, DOMAIN_1, FUNCT_3, FUNCOP_1,
-      SQUARE_1, NAT_1, FINSEQ_1, RELSET_1;
+      SQUARE_1, NAT_1, FINSEQ_1, RELSET_1, PBOOLE, CARD_3, VALUED_1, SETFAM_1;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1, PARTFUN1,
-      FUNCT_2, FUNCOP_1, XXREAL_0, XREAL_0, NAT_1, FINSEQ_1, CARD_1, RELSET_1;
+      FUNCT_2, FUNCOP_1, XXREAL_0, XREAL_0, NAT_1, FINSEQ_1, CARD_1, RELSET_1,
+      PBOOLE, CARD_3;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
- definitions TARSKI, FUNCT_1, FINSEQ_1, CARD_1;
+ definitions TARSKI, FUNCT_1, FINSEQ_1, CARD_1, PBOOLE, FUNCOP_1;
  theorems TARSKI, ZFMISC_1, ENUMSET1, NAT_1, FUNCT_1, FUNCT_2, FUNCT_3,
       FINSEQ_1, FUNCOP_1, RELAT_1, RELSET_1, XBOOLE_1, XREAL_1, GRFUNC_1,
-      XXREAL_0, ORDINAL1, CARD_1, SUBSET_1;
- schemes FINSEQ_1, NAT_1, FRAENKEL;
+      XXREAL_0, ORDINAL1, CARD_1, SUBSET_1, PBOOLE, CARD_3, VALUED_1;
+ schemes FINSEQ_1, NAT_1, FRAENKEL, PBOOLE, FUNCT_2;
 
 begin
 
@@ -43,14 +44,14 @@ reserve p,q,r for FinSequence;
 :: Auxiliary theorems
 
 theorem
-  min(i,j) is Element of NAT & max(i,j) is Element of NAT by ORDINAL1:def 13;
+  min(i,j) is Element of NAT & max(i,j) is Element of NAT by ORDINAL1:def 12;
 
 theorem Th2:
   l = min(i,j) implies Seg i /\ Seg j = Seg l
 proof
   i <= j or j <= i;
   then i <= j & Seg i /\ Seg j = Seg i or j <= i & Seg i /\ Seg j = Seg j by
-FINSEQ_1:9;
+FINSEQ_1:7;
   hence thesis by XXREAL_0:def 9;
 end;
 
@@ -58,7 +59,7 @@ theorem Th3:
   i <= j implies max(0,i-j) = 0
 proof
   assume i <= j;
-  then i-i <= j-i by XREAL_1:11;
+  then i-i <= j-i by XREAL_1:9;
   then -(j-i) <= -0;
   hence thesis by XXREAL_0:def 10;
 end;
@@ -67,7 +68,7 @@ theorem Th4:
   j <= i implies max(0,i-j) = i-j
 proof
   assume j <= i;
-  then j-j <= i-j by XREAL_1:11;
+  then j-j <= i-j by XREAL_1:9;
   hence thesis by XXREAL_0:def 10;
 end;
 
@@ -92,17 +93,15 @@ theorem
 
 :: Non-empty Segments of Natural Numbers
 
-canceled;
-
 theorem
   i in Seg (l+1) implies i in Seg l or i = l+1
 proof
   assume
 A1: i in Seg(l+1);
-  then i <= l+1 by FINSEQ_1:3;
+  then i <= l+1 by FINSEQ_1:1;
   then
-A2: 1 <= i & i <= l or i = l+1 by A1,FINSEQ_1:3,NAT_1:8;
-  i is Element of NAT by ORDINAL1:def 13;
+A2: 1 <= i & i <= l or i = l+1 by A1,FINSEQ_1:1,NAT_1:8;
+  i is Element of NAT by ORDINAL1:def 12;
   hence thesis by A2;
 end;
 
@@ -110,7 +109,7 @@ theorem
   i in Seg l implies i in Seg(l+j)
 proof
   l <= l+j by NAT_1:11;
-  then Seg l c= Seg(l+j) by FINSEQ_1:7;
+  then Seg l c= Seg(l+j) by FINSEQ_1:5;
   hence thesis;
 end;
 
@@ -123,18 +122,16 @@ proof
 A1: len p = len q and
 A2: for j st j in dom p holds p.j = q.j;
   dom p = Seg len p & dom q = Seg len p by A1,FINSEQ_1:def 3;
-  hence thesis by A2,FINSEQ_1:17;
+  hence thesis by A2,FINSEQ_1:13;
 end;
 
 theorem Th11:
   b in rng p implies ex i st i in dom p & p.i = b
 proof
   assume b in rng p;
-  then ex a st a in dom p & b = p.a by FUNCT_1:def 5;
+  then ex a st a in dom p & b = p.a by FUNCT_1:def 3;
   hence thesis;
 end;
-
-canceled;
 
 theorem Th13:
   for D being set for p being FinSequence of D st i in dom p holds p.i in D
@@ -143,7 +140,7 @@ proof
   let p be FinSequence of D;
   assume i in dom p;
   then
-A1: p.i in rng p by FUNCT_1:def 5;
+A1: p.i in rng p by FUNCT_1:def 3;
   rng p c= D by FINSEQ_1:def 4;
   hence thesis by A1;
 end;
@@ -163,10 +160,10 @@ end;
 
 Lm1: rng <*x1,x2*> = {x1,x2}
 proof
-  thus rng<* x1,x2 *> = rng<* x1 *> \/ rng <* x2 *> by FINSEQ_1:44
-    .= rng<* x1 *> \/ {x2} by FINSEQ_1:55
-    .= {x1} \/ {x2} by FINSEQ_1:56
-    .= {x1,x2} by ENUMSET1:41;
+  thus rng<* x1,x2 *> = rng<* x1 *> \/ rng <* x2 *> by FINSEQ_1:31
+    .= rng<* x1 *> \/ {x2} by FINSEQ_1:38
+    .= {x1} \/ {x2} by FINSEQ_1:39
+    .= {x1,x2} by ENUMSET1:1;
 end;
 
 theorem Th15:
@@ -178,11 +175,11 @@ end;
 
 Lm2: rng <*x1,x2,x3*> = {x1,x2,x3}
 proof
-  thus rng <* x1,x2,x3 *> = rng(<* x1 *> ^ <* x2,x3 *>) by FINSEQ_1:60
-    .= rng<* x1 *> \/ rng <* x2,x3 *> by FINSEQ_1:44
-    .= {x1} \/ rng<* x2,x3 *> by FINSEQ_1:55
+  thus rng <* x1,x2,x3 *> = rng(<* x1 *> ^ <* x2,x3 *>) by FINSEQ_1:43
+    .= rng<* x1 *> \/ rng <* x2,x3 *> by FINSEQ_1:31
+    .= {x1} \/ rng<* x2,x3 *> by FINSEQ_1:38
     .= {x1} \/ {x2,x3} by Lm1
-    .= {x1,x2,x3} by ENUMSET1:42;
+    .= {x1,x2,x3} by ENUMSET1:2;
 end;
 
 theorem Th16:
@@ -192,12 +189,10 @@ proof
   hence thesis by FINSEQ_1:def 4;
 end;
 
-canceled;
-
 theorem Th18:
   i in dom p implies i in dom(p^q)
 proof
-A1: dom p c= dom(p^q) by FINSEQ_1:39;
+A1: dom p c= dom(p^q) by FINSEQ_1:26;
   assume i in dom p;
   hence thesis by A1;
 end;
@@ -205,8 +200,8 @@ end;
 theorem Th19:
   len(p^<*a*>) = len p + 1
 proof
-  len(p^<*a*>) = len p + len <*a*> by FINSEQ_1:35;
-  hence thesis by FINSEQ_1:56;
+  len(p^<*a*>) = len p + len <*a*> by FINSEQ_1:22;
+  hence thesis by FINSEQ_1:39;
 end;
 
 theorem
@@ -214,13 +209,13 @@ theorem
 proof
   assume
 A1: p^<*a*> = q^<*b*>;
-A2: (p^<*a*>).(len p + 1) = a & (q^<*b*>).(len q + 1) = b by FINSEQ_1:59;
+A2: (p^<*a*>).(len p + 1) = a & (q^<*b*>).(len q + 1) = b by FINSEQ_1:42;
   len(p^<*a*>) = len p + 1 & len(q^<*b*>) = len q + 1 by Th19;
-  hence thesis by A1,A2,FINSEQ_1:46;
+  hence thesis by A1,A2,FINSEQ_1:33;
 end;
 
 theorem
-  len p = i + 1 implies ex q,a st p = q^<*a*> by CARD_1:47,FINSEQ_1:63;
+  len p = i + 1 implies ex q,a st p = q^<*a*> by CARD_1:27,FINSEQ_1:46;
 
 theorem Th22:
   for p being FinSequence of A st len p <> 0 ex q being
@@ -231,7 +226,7 @@ proof
 A1: len p <> 0;
   then p <> {};
   then consider q being FinSequence,d being set such that
-A2: p = q^<*d*> by FINSEQ_1:63;
+A2: p = q^<*d*> by FINSEQ_1:46;
   for i st i in dom q holds q.i in A
   proof
     let i;
@@ -241,11 +236,11 @@ A2: p = q^<*d*> by FINSEQ_1:63;
   end;
   then
 A3: q is FinSequence of A by Th14;
-  len p in Seg len p by A1,FINSEQ_1:5;
+  len p in Seg len p by A1,FINSEQ_1:3;
   then
 A4: len p in dom p by FINSEQ_1:def 3;
   len p = len q + 1 by A2,Th19;
-  then p.(len p) = d by A2,FINSEQ_1:59;
+  then p.(len p) = d by A2,FINSEQ_1:42;
   then d is Element of A by A4,Th13;
   hence thesis by A2,A3;
 end;
@@ -256,9 +251,9 @@ proof
   assume
 A1: q = p|(Seg i);
   assume len p <= i;
-  then Seg len p c= Seg i by FINSEQ_1:7;
+  then Seg len p c= Seg i by FINSEQ_1:5;
   then dom p c= Seg i by FINSEQ_1:def 3;
-  hence thesis by A1,RELAT_1:97;
+  hence thesis by A1,RELAT_1:68;
 end;
 
 theorem
@@ -270,7 +265,7 @@ A1: q = p|(Seg i);
     per cases;
     case
       i <= len p;
-      hence len q = i by A1,FINSEQ_1:21;
+      hence len q = i by A1,FINSEQ_1:17;
     end;
     case
       not i <= len p;
@@ -285,14 +280,14 @@ theorem Th25:
 proof
   assume
 A1: len r = i+j;
-  reconsider z=i as Element of NAT by ORDINAL1:def 13;
-  reconsider p = r|(Seg z) as FinSequence by FINSEQ_1:19;
+  reconsider z=i as Element of NAT by ORDINAL1:def 12;
+  reconsider p = r|(Seg z) as FinSequence by FINSEQ_1:15;
   consider q being FinSequence such that
-A2: r = p^q by FINSEQ_1:101;
+A2: r = p^q by FINSEQ_1:80;
   take p,q;
   i <= len r by A1,NAT_1:11;
-  hence len p = i by FINSEQ_1:21;
-  then len(p^q) = i + len q by FINSEQ_1:35;
+  hence len p = i by FINSEQ_1:17;
+  then len(p^q) = i + len q by FINSEQ_1:22;
   hence len q = j by A1,A2;
   thus thesis by A2;
 end;
@@ -306,7 +301,7 @@ proof
   then consider p,q being FinSequence such that
 A1: len p = i & len q = j and
 A2: r = p^q by Th25;
-  p is FinSequence of D & q is FinSequence of D by A2,FINSEQ_1:50;
+  p is FinSequence of D & q is FinSequence of D by A2,FINSEQ_1:36;
   hence thesis by A1,A2;
 end;
 
@@ -377,7 +372,7 @@ theorem Th28:
   for f being Function of Seg i, D holds f is FinSequence of D
 proof
   let f be Function of Seg i, D;
-  reconsider i as Element of NAT by ORDINAL1:def 13;
+  reconsider i as Element of NAT by ORDINAL1:def 12;
   dom f = Seg i by FUNCT_2:def 1;
   then
 A1: f is FinSequence by FINSEQ_1:def 2;
@@ -385,21 +380,19 @@ A1: f is FinSequence by FINSEQ_1:def 2;
   hence thesis by A1,FINSEQ_1:def 4;
 end;
 
-canceled;
-
 theorem
   for p being FinSequence of D holds p is Function of dom p, D
 proof
   let p be FinSequence of D;
   rng p c= D by FINSEQ_1:def 4;
-  hence thesis by FUNCT_2:4;
+  hence thesis by FUNCT_2:2;
 end;
 
 theorem
   for f being Function of NAT,D holds f|(Seg i) is FinSequence of D
 proof
   let f be Function of NAT,D;
-  f|(Seg i) is Function of Seg i, D by FUNCT_2:38;
+  f|(Seg i) is Function of Seg i, D by FUNCT_2:32;
   hence thesis by Th28;
 end;
 
@@ -407,8 +400,8 @@ theorem
   for f being Function of NAT,D st q = f|(Seg i) holds len q = i
 proof
   let f be Function of NAT,D;
-  reconsider i as Element of NAT by ORDINAL1:def 13;
-  f|(Seg i) is Function of Seg i, D by FUNCT_2:38;
+  reconsider i as Element of NAT by ORDINAL1:def 12;
+  f|(Seg i) is Function of Seg i, D by FUNCT_2:32;
   then dom(f|(Seg i)) = Seg i by FUNCT_2:def 1;
   hence thesis by FINSEQ_1:def 3;
 end;
@@ -418,7 +411,7 @@ theorem Th33:
 proof
   let f be Function;
   assume rng p c= dom f;
-  then dom(f*p) = dom p by RELAT_1:46;
+  then dom(f*p) = dom p by RELAT_1:27;
   then dom(f*p) = Seg len p by FINSEQ_1:def 3;
   hence thesis by FINSEQ_1:def 3;
 end;
@@ -432,11 +425,11 @@ A1: D = Seg i;
   let p be FinSequence;
   let q be FinSequence of D;
   assume i <= len p;
-  then Seg i c= Seg len p by FINSEQ_1:7;
+  then Seg i c= Seg len p by FINSEQ_1:5;
   then
 A2: Seg i c= dom p by FINSEQ_1:def 3;
   rng q c= Seg i by A1,FINSEQ_1:def 4;
-  then dom (p*q) = dom q by A2,RELAT_1:46,XBOOLE_1:1;
+  then dom (p*q) = dom q by A2,RELAT_1:27,XBOOLE_1:1;
   then dom (p*q) = Seg len q by FINSEQ_1:def 3;
   hence thesis by FINSEQ_1:def 2;
 end;
@@ -451,7 +444,7 @@ A1: D = Seg i;
   let q be FinSequence of D;
   assume i <= len p;
   then reconsider pq = p*q as FinSequence by A1,Th34;
-  rng pq c= rng p & rng p c= D9 by FINSEQ_1:def 4,RELAT_1:45;
+  rng pq c= rng p & rng p c= D9 by FINSEQ_1:def 4,RELAT_1:26;
   then rng pq c= D9 by XBOOLE_1:1;
   hence thesis by FINSEQ_1:def 4;
 end;
@@ -474,7 +467,7 @@ A1: D <> {};
 A2: rng p c= A by RELAT_1:def 19;
 A3: rng(f*p) c= D by RELAT_1:def 19;
     dom f = A by A1,FUNCT_2:def 1;
-    then f*p is FinSequence by A2,FINSEQ_1:20;
+    then f*p is FinSequence by A2,FINSEQ_1:16;
     hence thesis by A3,FINSEQ_1:def 4;
   end;
 end;
@@ -494,18 +487,18 @@ theorem
 proof
   let x be set, f be Function;
   assume A1: x in dom f;
-  then reconsider D = dom f, E = rng f as non empty set by FUNCT_1:12;
-  rng <*x*> = {x} by FINSEQ_1:55;
-  then rng <*x*> c= D by A1,ZFMISC_1:37;
+  then reconsider D = dom f, E = rng f as non empty set by FUNCT_1:3;
+  rng <*x*> = {x} by FINSEQ_1:38;
+  then rng <*x*> c= D by A1,ZFMISC_1:31;
   then reconsider p = <*x*> as FinSequence of D by FINSEQ_1:def 4;
-  reconsider f as Function of D, E by FUNCT_2:def 1,RELSET_1:11;
+  reconsider f as Function of D, E by FUNCT_2:def 1,RELSET_1:4;
   reconsider q = f*p as FinSequence of E by Th36;
-A2: p.1 = x by FINSEQ_1:57;
-A3: len q = len p by Th37 .= 1 by FINSEQ_1:56;
+A2: p.1 = x by FINSEQ_1:40;
+A3: len q = len p by Th37 .= 1 by FINSEQ_1:39;
   then 1 in Seg len q;
   then 1 in dom q by FINSEQ_1:def 3;
-  then q.1 = f.x by A2,FUNCT_1:22;
-  hence thesis by A3,FINSEQ_1:57;
+  then q.1 = f.x by A2,FUNCT_1:12;
+  hence thesis by A3,FINSEQ_1:40;
 end;
 
 theorem
@@ -515,15 +508,15 @@ proof
   let p be FinSequence of D;
   let f be Function of D,D9 such that
 A1: p = <*x1*>;
-A2: p.1 = x1 by A1,FINSEQ_1:57;
+A2: p.1 = x1 by A1,FINSEQ_1:40;
   reconsider q = f*p as FinSequence of D9 by Th36;
-  len p = 1 by A1,FINSEQ_1:56;
+  len p = 1 by A1,FINSEQ_1:39;
   then
 A3: len q = 1 by Th37;
   then 1 in Seg len q;
   then 1 in dom q by FINSEQ_1:def 3;
-  then q.1 = f.x1 by A2,FUNCT_1:22;
-  hence thesis by A3,FINSEQ_1:57;
+  then q.1 = f.x1 by A2,FUNCT_1:12;
+  hence thesis by A3,FINSEQ_1:40;
 end;
 
 theorem Th40:
@@ -533,21 +526,21 @@ proof
   let p be FinSequence of D;
   let f be Function of D,D9 such that
 A1: p = <*x1,x2*>;
-A2: p.2 = x2 by A1,FINSEQ_1:61;
+A2: p.2 = x2 by A1,FINSEQ_1:44;
   reconsider q = f*p as FinSequence of D9 by Th36;
-  len p = 2 by A1,FINSEQ_1:61;
+  len p = 2 by A1,FINSEQ_1:44;
   then
 A3: len q = 2 by Th37;
   then 2 in Seg len q;
   then 2 in dom q by FINSEQ_1:def 3;
   then
-A4: q.2 = f.x2 by A2,FUNCT_1:22;
+A4: q.2 = f.x2 by A2,FUNCT_1:12;
   1 in Seg len q by A3;
   then
 A5: 1 in dom q by FINSEQ_1:def 3;
-  p.1 = x1 by A1,FINSEQ_1:61;
-  then q.1 = f.x1 by A5,FUNCT_1:22;
-  hence thesis by A3,A4,FINSEQ_1:61;
+  p.1 = x1 by A1,FINSEQ_1:44;
+  then q.1 = f.x1 by A5,FUNCT_1:12;
+  hence thesis by A3,A4,FINSEQ_1:44;
 end;
 
 theorem Th41:
@@ -557,25 +550,25 @@ proof
   let p be FinSequence of D;
   let f be Function of D,D9 such that
 A1: p = <*x1,x2,x3*>;
-A2: p.2 = x2 by A1,FINSEQ_1:62;
+A2: p.2 = x2 by A1,FINSEQ_1:45;
   reconsider q = f*p as FinSequence of D9 by Th36;
-  len p = 3 by A1,FINSEQ_1:62;
+  len p = 3 by A1,FINSEQ_1:45;
   then
 A3: len q = 3 by Th37;
   then 2 in Seg len q;
   then 2 in dom q by FINSEQ_1:def 3;
   then
-A4: q.2 = f.x2 by A2,FUNCT_1:22;
-A5: p.3 = x3 by A1,FINSEQ_1:62;
-A6: p.1 = x1 by A1,FINSEQ_1:62;
+A4: q.2 = f.x2 by A2,FUNCT_1:12;
+A5: p.3 = x3 by A1,FINSEQ_1:45;
+A6: p.1 = x1 by A1,FINSEQ_1:45;
   3 in Seg len q by A3;
   then 3 in dom q by FINSEQ_1:def 3;
   then
-A7: q.3 = f.x3 by A5,FUNCT_1:22;
+A7: q.3 = f.x3 by A5,FUNCT_1:12;
   1 in Seg len q by A3;
   then 1 in dom q by FINSEQ_1:def 3;
-  then q.1 = f.x1 by A6,FUNCT_1:22;
-  hence thesis by A3,A4,A7,FINSEQ_1:62;
+  then q.1 = f.x1 by A6,FUNCT_1:12;
+  hence thesis by A3,A4,A7,FINSEQ_1:45;
 end;
 
 theorem Th42:
@@ -588,10 +581,10 @@ proof
   then
 A1: dom f = Seg i by FUNCT_2:def 1;
   assume j <= len p;
-  then rng f c= Seg j & Seg j c= Seg len p by FINSEQ_1:7,RELAT_1:def 19;
+  then rng f c= Seg j & Seg j c= Seg len p by FINSEQ_1:5,RELAT_1:def 19;
   then rng f c= Seg len p by XBOOLE_1:1;
   then rng f c= dom p by FINSEQ_1:def 3;
-  then dom(p*f) = dom f by RELAT_1:46;
+  then dom(p*f) = dom f by RELAT_1:27;
   hence thesis by A1,FINSEQ_1:def 2;
 end;
 
@@ -612,11 +605,11 @@ theorem Th45:
 proof
   let f be Function of Seg i,Seg i;
   assume rng f = Seg i & i <= len p;
-  then rng f c= Seg len p by FINSEQ_1:7;
+  then rng f c= Seg len p by FINSEQ_1:5;
   then rng f c= dom p by FINSEQ_1:def 3;
   then
-A1: dom(p*f) = dom f by RELAT_1:46;
-  i is Element of NAT & dom f = Seg i by FUNCT_2:67,ORDINAL1:def 13;
+A1: dom(p*f) = dom f by RELAT_1:27;
+  i is Element of NAT & dom f = Seg i by FUNCT_2:52,ORDINAL1:def 12;
   hence thesis by A1,FINSEQ_1:def 3;
 end;
 
@@ -651,7 +644,7 @@ proof
   let f be Function of Seg i,Seg j such that
 A1: ( j = 0 implies i = 0)& j <= len p;
   set q = p*f;
-  rng p c= D & rng q c= rng p by FINSEQ_1:def 4,RELAT_1:45;
+  rng p c= D & rng q c= rng p by FINSEQ_1:def 4,RELAT_1:26;
   then
 A2: rng q c= D by XBOOLE_1:1;
   q is FinSequence by A1,Th42;
@@ -675,9 +668,9 @@ theorem Th52:
   id Seg k is FinSequence of NAT
 proof
   set I = id Seg k;
-  reconsider k as Element of NAT by ORDINAL1:def 13;
-  dom I = Seg k by RELAT_1:71;
-  then rng I = Seg k & I is FinSequence by FINSEQ_1:def 2,RELAT_1:71;
+  reconsider k as Element of NAT by ORDINAL1:def 12;
+  dom I = Seg k by RELAT_1:45;
+  then rng I = Seg k & I is FinSequence by FINSEQ_1:def 2,RELAT_1:45;
   hence thesis by FINSEQ_1:def 4;
 end;
 
@@ -693,7 +686,7 @@ registration
   cluster idseq k -> k-element;
   coherence
   proof
-    k in NAT & dom idseq k = Seg k by ORDINAL1:def 13,RELAT_1:71;
+    k in NAT & dom idseq k = Seg k by ORDINAL1:def 12,RELAT_1:45;
     hence len idseq k = k by FINSEQ_1:def 3;
   end;
 end;
@@ -703,8 +696,6 @@ registration
   coherence;
 end;
 
-canceled 4;
-
 theorem
   for k being Element of Seg i holds (idseq i).k = k
 proof
@@ -712,23 +703,21 @@ proof
   per cases;
   suppose
     i <> 0;
-    hence thesis by FUNCT_1:35;
+    hence thesis by FUNCT_1:18;
   end;
   suppose
     i = 0;
-    then k = 0 & dom(idseq i) = 0 by SUBSET_1:def 2;
-    hence thesis by FUNCT_1:def 4;
+    then k = 0 & dom(idseq i) = 0 by SUBSET_1:def 1;
+    hence thesis by FUNCT_1:def 2;
   end;
 end;
-
-canceled;
 
 theorem Th59:
   idseq 1 = <*1*>
 proof
   1 in Seg 1;
-  then len idseq 1 = 1 & (idseq 1).1 = 1 by CARD_1:def 13,FUNCT_1:35;
-  hence thesis by FINSEQ_1:57;
+  then len idseq 1 = 1 & (idseq 1).1 = 1 by CARD_1:def 7,FUNCT_1:18;
+  hence thesis by FINSEQ_1:40;
 end;
 
 theorem Th60:
@@ -736,24 +725,24 @@ theorem Th60:
 proof
   set p = idseq (i+1);
   consider q being FinSequence , a being set such that
-A1: p = q^<*a*> by FINSEQ_1:63;
-A2: len p = i + 1 & len p = len q + 1 by A1,Th19,CARD_1:def 13;
+A1: p = q^<*a*> by FINSEQ_1:46;
+A2: len p = i + 1 & len p = len q + 1 by A1,Th19,CARD_1:def 7;
 A3: dom q = Seg len q by FINSEQ_1:def 3;
 A4: for a st a in Seg i holds q.a = a
   proof
     i <= i+1 by NAT_1:11;
     then
-A5: Seg i c= Seg (i+1) by FINSEQ_1:7;
+A5: Seg i c= Seg (i+1) by FINSEQ_1:5;
     let a;
     assume
 A6: a in Seg i;
     then reconsider j = a as Element of NAT;
     p.j = q.j by A1,A2,A3,A6,FINSEQ_1:def 7;
-    hence thesis by A6,A5,FUNCT_1:35;
+    hence thesis by A6,A5,FUNCT_1:18;
   end;
-  p.(i+1) = i+1 by FINSEQ_1:6,FUNCT_1:35;
-  then a = i+1 by A1,A2,FINSEQ_1:59;
-  hence thesis by A1,A2,A3,A4,FUNCT_1:34;
+  p.(i+1) = i+1 by FINSEQ_1:4,FUNCT_1:18;
+  then a = i+1 by A1,A2,FINSEQ_1:42;
+  hence thesis by A1,A2,A3,A4,FUNCT_1:17;
 end;
 
 theorem Th61:
@@ -762,17 +751,15 @@ theorem Th61:
 theorem
   idseq 3 = <*1,2,3*> by Th60,Th61;
 
-canceled;
-
 theorem Th64:
   len p <= k implies p*(idseq k) = p
 proof
   assume
 A1: len p <= k;
-  reconsider k as Element of NAT by ORDINAL1:def 13;
+  reconsider k as Element of NAT by ORDINAL1:def 12;
   dom p = Seg len p by FINSEQ_1:def 3;
-  then dom p c= Seg k by A1,FINSEQ_1:7;
-  hence thesis by RELAT_1:77;
+  then dom p c= Seg k by A1,FINSEQ_1:5;
+  hence thesis by RELAT_1:51;
 end;
 
 theorem
@@ -782,8 +769,8 @@ theorem Th66:
   (Seg k) --> a is FinSequence
 proof
   set p = Seg k --> a;
-  reconsider k as Element of NAT by ORDINAL1:def 13;
-  dom p = Seg k by FUNCOP_1:19;
+  reconsider k as Element of NAT by ORDINAL1:def 12;
+  dom p = Seg k by FUNCOP_1:13;
   hence thesis by FINSEQ_1:def 2;
 end;
 
@@ -805,16 +792,14 @@ registration
   cluster k |-> a -> k-element;
   coherence
   proof
-    k in NAT & dom(k |-> a) = Seg k by FUNCOP_1:19,ORDINAL1:def 13;
+    k in NAT & dom(k |-> a) = Seg k by FUNCOP_1:13,ORDINAL1:def 12;
     hence len(k |-> a) = k by FINSEQ_1:def 3;
   end;
 end;
 
-canceled 4;
-
 theorem
   for d being set, w being set st w in Seg k holds (k |-> d).w = d by
-FUNCOP_1:13;
+FUNCOP_1:7;
 
 theorem
   0 |-> a = {};
@@ -823,8 +808,8 @@ theorem Th73:
   1 |-> a = <*a*>
 proof
   1 in Seg 1;
-  then len(1 |-> a) = 1 & (1 |-> a).1 = a by CARD_1:def 13,FUNCOP_1:13;
-  hence thesis by FINSEQ_1:57;
+  then len(1 |-> a) = 1 & (1 |-> a).1 = a by CARD_1:def 7,FUNCOP_1:7;
+  hence thesis by FINSEQ_1:40;
 end;
 
 theorem Th74:
@@ -832,8 +817,8 @@ theorem Th74:
 proof
   set p = (i+1) |-> a;
   consider q being FinSequence , x being set such that
-A1: p = q^<*x*> by FINSEQ_1:63;
-A2: len p = i + 1 & len p = len q + 1 by A1,Th19,CARD_1:def 13;
+A1: p = q^<*x*> by FINSEQ_1:46;
+A2: len p = i + 1 & len p = len q + 1 by A1,Th19,CARD_1:def 7;
 A3: now
     per cases;
     suppose
@@ -843,16 +828,16 @@ A4:   i = 0;
     end;
     suppose
 A5:   i <> 0;
-A6:   rng q c= rng p & rng p = {a} by A1,FINSEQ_1:42,FUNCOP_1:14;
+A6:   rng q c= rng p & rng p = {a} by A1,FINSEQ_1:29,FUNCOP_1:8;
 A7:   dom q = Seg len q by FINSEQ_1:def 3;
-      then i in dom q by A2,A5,FINSEQ_1:5;
-      then q.i in rng q by FUNCT_1:def 5;
-      then rng q = {a} by A6,ZFMISC_1:39;
-      hence q = i |-> a by A2,A7,FUNCOP_1:15;
+      then i in dom q by A2,A5,FINSEQ_1:3;
+      then q.i in rng q by FUNCT_1:def 3;
+      then rng q = {a} by A6,ZFMISC_1:33;
+      hence q = i |-> a by A2,A7,FUNCOP_1:9;
     end;
   end;
-  p.(i+1) = a by FINSEQ_1:6,FUNCOP_1:13;
-  hence thesis by A1,A2,A3,FINSEQ_1:59;
+  p.(i+1) = a by FINSEQ_1:4,FUNCOP_1:7;
+  hence thesis by A1,A2,A3,FINSEQ_1:42;
 end;
 
 theorem Th75:
@@ -874,7 +859,7 @@ theorem Th77:
   k |-> d is FinSequence of D
 proof
   set s = k |-> d;
-  rng s c= {d} by FUNCOP_1:19;
+  rng s c= {d} by FUNCOP_1:13;
   then rng s c= D by XBOOLE_1:1;
   hence thesis by FINSEQ_1:def 4;
 end;
@@ -885,12 +870,11 @@ proof
   let F be Function such that
 A1: [:rng p,rng q:] c= dom F and
 A2: i = min(len p,len q);
-A3: rng <:p,q:> c= [:rng p,rng q:] & dom <:p,q:> = dom p /\ dom q by FUNCT_3:71
-,def 8;
-A4: F.:(p,q) = F*<:p,q:> by FUNCOP_1:def 3;
+A3: rng <:p,q:> c= [:rng p,rng q:] & dom <:p,q:> = dom p /\ dom q by FUNCT_3:51
+,def 7;
   dom p = Seg len p & dom q = Seg len q by FINSEQ_1:def 3;
   then dom p /\ dom q = Seg i by A2,Th2;
-  hence thesis by A1,A3,A4,RELAT_1:46,XBOOLE_1:1;
+  hence thesis by A1,A3,RELAT_1:27,XBOOLE_1:1;
 end;
 
 theorem Th78:
@@ -921,16 +905,15 @@ proof
   let F be Function such that
 A1: [:{a},rng p:] c= dom F;
   set q = dom p --> a;
-  dom q = dom p by FUNCOP_1:19;
+  dom q = dom p by FUNCOP_1:13;
   then
-A2: dom <:q,p:> = dom p by FUNCT_3:70;
-  rng q c= {a} by FUNCOP_1:19;
+A2: dom <:q,p:> = dom p by FUNCT_3:50;
+  rng q c= {a} by FUNCOP_1:13;
   then rng <:q,p:> c= [:rng q,rng p:] & [:rng q,rng p:] c= [:{a},rng p:] by
-FUNCT_3:71,ZFMISC_1:118;
+FUNCT_3:51,ZFMISC_1:95;
   then
 A3: rng <:q,p:> c= [:{a},rng p:] by XBOOLE_1:1;
-  F[;](a,p) = F*<:q,p:> by FUNCOP_1:def 5;
-  hence thesis by A1,A3,A2,RELAT_1:46,XBOOLE_1:1;
+  thus thesis by A1,A3,A2,RELAT_1:27,XBOOLE_1:1;
 end;
 
 theorem Th80:
@@ -960,16 +943,15 @@ proof
   let F be Function such that
 A1: [:rng p,{a}:] c= dom F;
   set q = dom p --> a;
-  dom q = dom p by FUNCOP_1:19;
+  dom q = dom p by FUNCOP_1:13;
   then
-A2: dom <:p,q:> = dom p by FUNCT_3:70;
-  rng q c= {a} by FUNCOP_1:19;
+A2: dom <:p,q:> = dom p by FUNCT_3:50;
+  rng q c= {a} by FUNCOP_1:13;
   then rng <:p,q:> c= [:rng p,rng q:] & [:rng p,rng q:] c= [:rng p,{a}:] by
-FUNCT_3:71,ZFMISC_1:118;
+FUNCT_3:51,ZFMISC_1:95;
   then
 A3: rng <:p,q:> c= [:rng p,{a}:] by XBOOLE_1:1;
-  F[:](p,a) = F*<:p,q:> by FUNCOP_1:def 4;
-  hence thesis by A1,A3,A2,RELAT_1:46,XBOOLE_1:1;
+  thus thesis by A1,A3,A2,RELAT_1:27,XBOOLE_1:1;
 end;
 
 theorem Th82:
@@ -1000,11 +982,9 @@ proof
   let F be Function of [:D,D9:],E;
   let p be FinSequence of D;
   let q be FinSequence of D9;
-  F.:(p,q) = F*<:p,q:> by FUNCOP_1:def 3;
-  then
-A1: rng(F.:(p,q)) c= rng F by RELAT_1:45;
+A1: rng(F.:(p,q)) c= rng F by RELAT_1:26;
   rng p c= D & rng q c= D9 by FINSEQ_1:def 4;
-  then [:rng p,rng q:] c= [:D,D9:] by ZFMISC_1:119;
+  then [:rng p,rng q:] c= [:D,D9:] by ZFMISC_1:96;
   then [:rng p,rng q:] c= dom F by FUNCT_2:def 1;
   then
 A2: F.:(p,q) is FinSequence by Th78;
@@ -1021,7 +1001,7 @@ proof
   let p be FinSequence of D;
   let q be FinSequence of D9;
   rng p c= D & rng q c= D9 by FINSEQ_1:def 4;
-  then [:rng p,rng q:] c= [:D,D9:] by ZFMISC_1:119;
+  then [:rng p,rng q:] c= [:D,D9:] by ZFMISC_1:96;
   then [:rng p,rng q:] c= dom F by FUNCT_2:def 1;
   hence thesis by Th79;
 end;
@@ -1063,15 +1043,15 @@ proof
   let p be FinSequence of D;
   let q be FinSequence of D9 such that
 A1: p = <*d1*> & q = <*d19*>;
-A2: p.1 = d1 & q.1 = d19 by A1,FINSEQ_1:57;
+A2: p.1 = d1 & q.1 = d19 by A1,FINSEQ_1:40;
   reconsider r = F.:(p,q) as FinSequence of E by Th84;
-  len p = 1 & len q = 1 by A1,FINSEQ_1:56;
+  len p = 1 & len q = 1 by A1,FINSEQ_1:39;
   then
 A3: len r = 1 by Th86;
   then 1 in Seg len r;
   then 1 in dom r by FINSEQ_1:def 3;
-  then r.1 = F.(d1,d19) by A2,FUNCOP_1:28;
-  hence thesis by A3,FINSEQ_1:57;
+  then r.1 = F.(d1,d19) by A2,FUNCOP_1:22;
+  hence thesis by A3,FINSEQ_1:40;
 end;
 
 theorem
@@ -1083,21 +1063,21 @@ proof
   let p be FinSequence of D;
   let q be FinSequence of D9 such that
 A1: p = <*d1,d2*> & q = <*d19,d29*>;
-A2: p.2 = d2 & q.2 = d29 by A1,FINSEQ_1:61;
+A2: p.2 = d2 & q.2 = d29 by A1,FINSEQ_1:44;
   reconsider r = F.:(p,q) as FinSequence of E by Th84;
-  len p = 2 & len q = 2 by A1,FINSEQ_1:61;
+  len p = 2 & len q = 2 by A1,FINSEQ_1:44;
   then
 A3: len r = 2 by Th86;
   then 2 in Seg len r;
   then 2 in dom r by FINSEQ_1:def 3;
   then
-A4: r.2 = F.(d2,d29) by A2,FUNCOP_1:28;
+A4: r.2 = F.(d2,d29) by A2,FUNCOP_1:22;
   1 in Seg len r by A3;
   then
 A5: 1 in dom r by FINSEQ_1:def 3;
-  p.1 = d1 & q.1 = d19 by A1,FINSEQ_1:61;
-  then r.1 = F.(d1,d19) by A5,FUNCOP_1:28;
-  hence thesis by A3,A4,FINSEQ_1:61;
+  p.1 = d1 & q.1 = d19 by A1,FINSEQ_1:44;
+  then r.1 = F.(d1,d19) by A5,FUNCOP_1:22;
+  hence thesis by A3,A4,FINSEQ_1:44;
 end;
 
 theorem
@@ -1109,25 +1089,25 @@ proof
   let p be FinSequence of D;
   let q be FinSequence of D9 such that
 A1: p = <*d1,d2,d3*> & q = <*d19,d29,d39*>;
-A2: p.2 = d2 & q.2 = d29 by A1,FINSEQ_1:62;
+A2: p.2 = d2 & q.2 = d29 by A1,FINSEQ_1:45;
   reconsider r = F.:(p,q) as FinSequence of E by Th84;
-  len p = 3 & len q = 3 by A1,FINSEQ_1:62;
+  len p = 3 & len q = 3 by A1,FINSEQ_1:45;
   then
 A3: len r = 3 by Th86;
   then 2 in Seg len r;
   then 2 in dom r by FINSEQ_1:def 3;
   then
-A4: r.2 = F.(d2,d29) by A2,FUNCOP_1:28;
-A5: p.3 = d3 & q.3 = d39 by A1,FINSEQ_1:62;
-A6: p.1 = d1 & q.1 = d19 by A1,FINSEQ_1:62;
+A4: r.2 = F.(d2,d29) by A2,FUNCOP_1:22;
+A5: p.3 = d3 & q.3 = d39 by A1,FINSEQ_1:45;
+A6: p.1 = d1 & q.1 = d19 by A1,FINSEQ_1:45;
   3 in Seg len r by A3;
   then 3 in dom r by FINSEQ_1:def 3;
   then
-A7: r.3 = F.(d3,d39) by A5,FUNCOP_1:28;
+A7: r.3 = F.(d3,d39) by A5,FUNCOP_1:22;
   1 in Seg len r by A3;
   then 1 in dom r by FINSEQ_1:def 3;
-  then r.1 = F.(d1,d19) by A6,FUNCOP_1:28;
-  hence thesis by A3,A4,A7,FINSEQ_1:62;
+  then r.1 = F.(d1,d19) by A6,FUNCOP_1:22;
+  hence thesis by A3,A4,A7,FINSEQ_1:45;
 end;
 
 theorem Th91:
@@ -1136,11 +1116,9 @@ theorem Th91:
 proof
   let F be Function of [:D,D9:],E;
   let p be FinSequence of D9;
-  F[;](d,p) = F * <:dom p --> d, p:> by FUNCOP_1:def 5;
-  then
-A1: rng(F[;](d,p)) c= rng F by RELAT_1:45;
+A1: rng(F[;](d,p)) c= rng F by RELAT_1:26;
   rng p c= D9 by FINSEQ_1:def 4;
-  then [:{d},rng p:] c= [:D,D9:] by ZFMISC_1:119;
+  then [:{d},rng p:] c= [:D,D9:] by ZFMISC_1:96;
   then [:{d},rng p:] c= dom F by FUNCT_2:def 1;
   then
 A2: F[;](d,p) is FinSequence by Th80;
@@ -1156,7 +1134,7 @@ proof
   let F be Function of [:D,D9:],E;
   let p be FinSequence of D9;
   rng p c= D9 by FINSEQ_1:def 4;
-  then [:{d},rng p:] c= [:D,D9:] by ZFMISC_1:119;
+  then [:{d},rng p:] c= [:D,D9:] by ZFMISC_1:96;
   then [:{d},rng p:] c= dom F by FUNCT_2:def 1;
   hence thesis by Th81;
 end;
@@ -1178,15 +1156,15 @@ proof
   let F be Function of [:D,D9:],E;
   let p be FinSequence of D9 such that
 A1: p = <*d19*>;
-A2: p.1 = d19 by A1,FINSEQ_1:57;
+A2: p.1 = d19 by A1,FINSEQ_1:40;
   reconsider r = F[;](d,p) as FinSequence of E by Th91;
-  len p = 1 by A1,FINSEQ_1:56;
+  len p = 1 by A1,FINSEQ_1:39;
   then
 A3: len r = 1 by Th92;
   then 1 in Seg len r;
   then 1 in dom r by FINSEQ_1:def 3;
-  then r.1 = F.(d,d19) by A2,FUNCOP_1:42;
-  hence thesis by A3,FINSEQ_1:57;
+  then r.1 = F.(d,d19) by A2,FUNCOP_1:32;
+  hence thesis by A3,FINSEQ_1:40;
 end;
 
 theorem
@@ -1196,21 +1174,21 @@ proof
   let F be Function of [:D,D9:],E;
   let p be FinSequence of D9 such that
 A1: p = <*d19,d29*>;
-A2: p.2 = d29 by A1,FINSEQ_1:61;
+A2: p.2 = d29 by A1,FINSEQ_1:44;
   reconsider r = F[;](d,p) as FinSequence of E by Th91;
-  len p = 2 by A1,FINSEQ_1:61;
+  len p = 2 by A1,FINSEQ_1:44;
   then
 A3: len r = 2 by Th92;
   then 2 in Seg len r;
   then 2 in dom r by FINSEQ_1:def 3;
   then
-A4: r.2 = F.(d,d29) by A2,FUNCOP_1:42;
+A4: r.2 = F.(d,d29) by A2,FUNCOP_1:32;
   1 in Seg len r by A3;
   then
 A5: 1 in dom r by FINSEQ_1:def 3;
-  p.1 = d19 by A1,FINSEQ_1:61;
-  then r.1 = F.(d,d19) by A5,FUNCOP_1:42;
-  hence thesis by A3,A4,FINSEQ_1:61;
+  p.1 = d19 by A1,FINSEQ_1:44;
+  then r.1 = F.(d,d19) by A5,FUNCOP_1:32;
+  hence thesis by A3,A4,FINSEQ_1:44;
 end;
 
 theorem
@@ -1220,25 +1198,25 @@ proof
   let F be Function of [:D,D9:],E;
   let p be FinSequence of D9 such that
 A1: p = <*d19,d29,d39*>;
-A2: p.2 = d29 by A1,FINSEQ_1:62;
+A2: p.2 = d29 by A1,FINSEQ_1:45;
   reconsider r = F[;](d,p) as FinSequence of E by Th91;
-  len p = 3 by A1,FINSEQ_1:62;
+  len p = 3 by A1,FINSEQ_1:45;
   then
 A3: len r = 3 by Th92;
   then 2 in Seg len r;
   then 2 in dom r by FINSEQ_1:def 3;
   then
-A4: r.2 = F.(d,d29) by A2,FUNCOP_1:42;
-A5: p.3 = d39 by A1,FINSEQ_1:62;
-A6: p.1 = d19 by A1,FINSEQ_1:62;
+A4: r.2 = F.(d,d29) by A2,FUNCOP_1:32;
+A5: p.3 = d39 by A1,FINSEQ_1:45;
+A6: p.1 = d19 by A1,FINSEQ_1:45;
   3 in Seg len r by A3;
   then 3 in dom r by FINSEQ_1:def 3;
   then
-A7: r.3 = F.(d,d39) by A5,FUNCOP_1:42;
+A7: r.3 = F.(d,d39) by A5,FUNCOP_1:32;
   1 in Seg len r by A3;
   then 1 in dom r by FINSEQ_1:def 3;
-  then r.1 = F.(d,d19) by A6,FUNCOP_1:42;
-  hence thesis by A3,A4,A7,FINSEQ_1:62;
+  then r.1 = F.(d,d19) by A6,FUNCOP_1:32;
+  hence thesis by A3,A4,A7,FINSEQ_1:45;
 end;
 
 theorem Th97:
@@ -1247,11 +1225,9 @@ theorem Th97:
 proof
   let F be Function of [:D,D9:],E;
   let p be FinSequence of D;
-  F[:](p,d9) = F * <:p,dom p --> d9:> by FUNCOP_1:def 4;
-  then
-A1: rng(F[:](p,d9)) c= rng F by RELAT_1:45;
+A1: rng(F[:](p,d9)) c= rng F by RELAT_1:26;
   rng p c= D by FINSEQ_1:def 4;
-  then [:rng p,{d9}:] c= [:D,D9:] by ZFMISC_1:119;
+  then [:rng p,{d9}:] c= [:D,D9:] by ZFMISC_1:96;
   then [:rng p,{d9}:] c= dom F by FUNCT_2:def 1;
   then
 A2: F[:](p,d9) is FinSequence by Th82;
@@ -1267,7 +1243,7 @@ proof
   let F be Function of [:D,D9:],E;
   let p be FinSequence of D;
   rng p c= D by FINSEQ_1:def 4;
-  then [:rng p,{d9}:] c= [:D,D9:] by ZFMISC_1:119;
+  then [:rng p,{d9}:] c= [:D,D9:] by ZFMISC_1:96;
   then [:rng p,{d9}:] c= dom F by FUNCT_2:def 1;
   hence thesis by Th83;
 end;
@@ -1289,15 +1265,15 @@ proof
   let F be Function of [:D,D9:],E;
   let p be FinSequence of D such that
 A1: p = <*d1*>;
-A2: p.1 = d1 by A1,FINSEQ_1:57;
+A2: p.1 = d1 by A1,FINSEQ_1:40;
   reconsider r = F[:](p,d9) as FinSequence of E by Th97;
-  len p = 1 by A1,FINSEQ_1:56;
+  len p = 1 by A1,FINSEQ_1:39;
   then
 A3: len r = 1 by Th98;
   then 1 in Seg len r;
   then 1 in dom r by FINSEQ_1:def 3;
-  then r.1 = F.(d1,d9) by A2,FUNCOP_1:35;
-  hence thesis by A3,FINSEQ_1:57;
+  then r.1 = F.(d1,d9) by A2,FUNCOP_1:27;
+  hence thesis by A3,FINSEQ_1:40;
 end;
 
 theorem
@@ -1307,21 +1283,21 @@ proof
   let F be Function of [:D,D9:],E;
   let p be FinSequence of D such that
 A1: p = <*d1,d2*>;
-A2: p.2 = d2 by A1,FINSEQ_1:61;
+A2: p.2 = d2 by A1,FINSEQ_1:44;
   reconsider r = F[:](p,d9) as FinSequence of E by Th97;
-  len p = 2 by A1,FINSEQ_1:61;
+  len p = 2 by A1,FINSEQ_1:44;
   then
 A3: len r = 2 by Th98;
   then 2 in Seg len r;
   then 2 in dom r by FINSEQ_1:def 3;
   then
-A4: r.2 = F.(d2,d9) by A2,FUNCOP_1:35;
+A4: r.2 = F.(d2,d9) by A2,FUNCOP_1:27;
   1 in Seg len r by A3;
   then
 A5: 1 in dom r by FINSEQ_1:def 3;
-  p.1 = d1 by A1,FINSEQ_1:61;
-  then r.1 = F.(d1,d9) by A5,FUNCOP_1:35;
-  hence thesis by A3,A4,FINSEQ_1:61;
+  p.1 = d1 by A1,FINSEQ_1:44;
+  then r.1 = F.(d1,d9) by A5,FUNCOP_1:27;
+  hence thesis by A3,A4,FINSEQ_1:44;
 end;
 
 theorem
@@ -1331,25 +1307,25 @@ proof
   let F be Function of [:D,D9:],E;
   let p be FinSequence of D such that
 A1: p = <*d1,d2,d3*>;
-A2: p.2 = d2 by A1,FINSEQ_1:62;
+A2: p.2 = d2 by A1,FINSEQ_1:45;
   reconsider r = F[:](p,d9) as FinSequence of E by Th97;
-  len p = 3 by A1,FINSEQ_1:62;
+  len p = 3 by A1,FINSEQ_1:45;
   then
 A3: len r = 3 by Th98;
   then 2 in Seg len r;
   then 2 in dom r by FINSEQ_1:def 3;
   then
-A4: r.2 = F.(d2,d9) by A2,FUNCOP_1:35;
-A5: p.3 = d3 by A1,FINSEQ_1:62;
-A6: p.1 = d1 by A1,FINSEQ_1:62;
+A4: r.2 = F.(d2,d9) by A2,FUNCOP_1:27;
+A5: p.3 = d3 by A1,FINSEQ_1:45;
+A6: p.1 = d1 by A1,FINSEQ_1:45;
   3 in Seg len r by A3;
   then 3 in dom r by FINSEQ_1:def 3;
   then
-A7: r.3 = F.(d3,d9) by A5,FUNCOP_1:35;
+A7: r.3 = F.(d3,d9) by A5,FUNCOP_1:27;
   1 in Seg len r by A3;
   then 1 in dom r by FINSEQ_1:def 3;
-  then r.1 = F.(d1,d9) by A6,FUNCOP_1:35;
-  hence thesis by A3,A4,A7,FINSEQ_1:62;
+  then r.1 = F.(d1,d9) by A6,FUNCOP_1:27;
+  hence thesis by A3,A4,A7,FINSEQ_1:45;
 end;
 
 :: Tuples
@@ -1368,7 +1344,7 @@ end;
 
 registration
   let D be set;
-  cluster non empty FinSequenceSet of D;
+  cluster non empty for FinSequenceSet of D;
   existence
   proof
     {<*>D} is FinSequenceSet of D
@@ -1384,8 +1360,6 @@ definition
   let D be set;
   mode FinSequence-DOMAIN of D is non empty FinSequenceSet of D;
 end;
-
-canceled;
 
 theorem Th104:
   for D being set holds D* is FinSequence-DOMAIN of D
@@ -1421,8 +1395,6 @@ definition
   coherence by Def3;
 end;
 
-canceled;
-
 theorem
   for D9 being non empty Subset of D, S being FinSequence-DOMAIN of D9
   holds S is FinSequence-DOMAIN of D
@@ -1444,7 +1416,7 @@ reserve s for Element of D*;
 
 registration
   let i be Nat, D be non empty set;
-  cluster i-element FinSequence of D;
+  cluster i-element for FinSequence of D;
   existence
    proof
     take i |-> the Element of D;
@@ -1479,10 +1451,10 @@ registration
   cluster i-tuples_on D -> non empty;
   coherence
   proof
-    set d =the  Element of D;
+    set d = the Element of D;
     i |-> d is FinSequence of D by Th77;
     then reconsider S = i |-> d as Element of D* by FINSEQ_1:def 11;
-    len S = i by CARD_1:def 13;
+    len S = i by CARD_1:def 7;
     then S in { s : len s = i };
     hence thesis;
   end;
@@ -1491,7 +1463,7 @@ end;
 registration
   let D;
   let i be Nat;
-  cluster -> i-element Element of i-tuples_on D;
+  cluster -> i-element for Element of i-tuples_on D;
   coherence
   proof
     let z be Element of i-tuples_on D;
@@ -1500,8 +1472,6 @@ registration
     hence len z = i;
   end;
 end;
-
-canceled 2;
 
 theorem Th110:
   for D be set, z being FinSequence of D holds z is Element of (
@@ -1517,7 +1487,7 @@ theorem
   i-tuples_on D = Funcs(Seg i,D)
 proof
   now
-    reconsider j=i as Element of NAT by ORDINAL1:def 13;
+    reconsider j=i as Element of NAT by ORDINAL1:def 12;
     let z be set;
     thus z in i-tuples_on D implies z in Funcs(Seg i,D)
     proof
@@ -1540,7 +1510,7 @@ A6: rng p c= D by FUNCT_2:def 2;
     len p = i by A5,FINSEQ_1:def 3;
     hence z in i-tuples_on D by A4;
   end;
-  hence thesis by TARSKI:2;
+  hence thesis by TARSKI:1;
 end;
 
 theorem
@@ -1561,11 +1531,9 @@ proof
   hence thesis by TARSKI:def 1;
 end;
 
-canceled 2;
-
 theorem
   for z being Tuple of 0,D for t being Tuple of i, D
-   holds z^t = t & t^z = t by FINSEQ_1:47;
+   holds z^t = t & t^z = t by FINSEQ_1:34;
 
 theorem Th116:
   1-tuples_on D = { <*d*>: not contradiction }
@@ -1581,22 +1549,22 @@ A2:   len s = 1;
       1 in Seg 1;
       then 1 in dom s by A2,FINSEQ_1:def 3;
       then reconsider d1 = s.1 as Element of D by Th13;
-      s = <*d1*> by A2,FINSEQ_1:57;
+      s = <*d1*> by A2,FINSEQ_1:40;
       hence thesis by A1;
     end;
     assume x in { <*d*>: not contradiction };
     then consider d such that
 A3: x = <*d*>;
-    len <*d*> = 1 & <*d*> is Element of D* by FINSEQ_1:57,def 11;
+    len <*d*> = 1 & <*d*> is Element of D* by FINSEQ_1:40,def 11;
     hence x in 1-tuples_on D by A3;
   end;
-  hence thesis by TARSKI:2;
+  hence thesis by TARSKI:1;
 end;
 
 Lm6:
  for z being Tuple of i,D holds z in i-tuples_on D proof let z be Tuple of i,D;
 A1: z is Element of D* by FINSEQ_1:def 11;
-  len z = i by CARD_1:def 13;
+  len z = i by CARD_1:def 7;
   hence z in i-tuples_on D by A1;
  end;
 
@@ -1633,17 +1601,17 @@ A3:   2 in dom s by A2,FINSEQ_1:def 3;
       1 in Seg 2;
       then 1 in dom s by A2,FINSEQ_1:def 3;
       then reconsider d19 = s.1, d29 = s.2 as Element of D by A3,Th13;
-      s = <*d19,d29*> by A2,FINSEQ_1:61;
+      s = <*d19,d29*> by A2,FINSEQ_1:44;
       hence thesis by A1;
     end;
     assume x in { <*d1,d2*>: not contradiction };
     then consider d1,d2 such that
 A4: x = <*d1,d2*>;
     <*d1,d2*> is FinSequence of D by Th15;
-    then len <*d1,d2*> = 2 & <*d1,d2*> is Element of D* by FINSEQ_1:61,def 11;
+    then len <*d1,d2*> = 2 & <*d1,d2*> is Element of D* by FINSEQ_1:44,def 11;
     hence x in 2-tuples_on D by A4;
   end;
-  hence thesis by TARSKI:2;
+  hence thesis by TARSKI:1;
 end;
 
 theorem
@@ -1651,7 +1619,7 @@ theorem
 proof
   let z be Tuple of 2,D;
 A1: z is Element of D* by FINSEQ_1:def 11;
-  len z = 2 by CARD_1:def 13;
+  len z = 2 by CARD_1:def 7;
   then z in 2-tuples_on D by A1;
   then z in { <*d1,d2*>: not contradiction } by Th119;
   hence thesis;
@@ -1686,18 +1654,18 @@ A4:   3 in dom s by A2,FINSEQ_1:def 3;
       then 1 in dom s by A2,FINSEQ_1:def 3;
       then reconsider d19 = s.1, d29 = s.2, d39 = s.3 as Element of D by A3,A4
 ,Th13;
-      s = <*d19,d29,d39*> by A2,FINSEQ_1:62;
+      s = <*d19,d29,d39*> by A2,FINSEQ_1:45;
       hence thesis by A1;
     end;
     assume x in { <*d1,d2,d3*>: not contradiction };
     then consider d1,d2,d3 such that
 A5: x = <*d1,d2,d3*>;
     <*d1,d2,d3*> is FinSequence of D by Th16;
-    then len <*d1,d2,d3*> = 3 & <*d1,d2,d3*> is Element of D* by FINSEQ_1:62
+    then len <*d1,d2,d3*> = 3 & <*d1,d2,d3*> is Element of D* by FINSEQ_1:45
 ,def 11;
     hence x in 3-tuples_on D by A5;
   end;
-  hence thesis by TARSKI:2;
+  hence thesis by TARSKI:1;
 end;
 
 theorem
@@ -1705,7 +1673,7 @@ theorem
 proof
   let z be Tuple of 3,D;
 A1: z is Element of D* by FINSEQ_1:def 11;
-  len z = 3 by CARD_1:def 13;
+  len z = 3 by CARD_1:def 7;
   then z in 3-tuples_on D by A1;
   then z in { <*d1,d2,d3*>: not contradiction } by Th122;
   hence thesis;
@@ -1735,19 +1703,19 @@ A2:   len s = i + j;
       consider z,t being FinSequence of D such that
 A3:   len z = i & len t = j and
 A4:   s = z^t by A2,Th26;
-      z is Tuple of i,D & t is Tuple of j,D by A3,CARD_1:def 13;
+      z is Tuple of i,D & t is Tuple of j,D by A3,CARD_1:def 7;
       hence thesis by A1,A4;
     end;
     assume x in T;
     then consider z being Tuple of i,D, t being Tuple of j,D such that
 A5: x = z^t;
-    len z = i & len t = j by CARD_1:def 13;
+    len z = i & len t = j by CARD_1:def 7;
     then
-A6: len(z^t) = i+j by FINSEQ_1:35;
+A6: len(z^t) = i+j by FINSEQ_1:22;
     z^t is Element of D* by FINSEQ_1:def 11;
     hence x in (i+j)-tuples_on D by A5,A6;
   end;
-  hence thesis by TARSKI:2;
+  hence thesis by TARSKI:1;
 end;
 
 theorem Th126:
@@ -1757,7 +1725,7 @@ theorem Th126:
 proof
   let s be Tuple of i+j,D;
 A1: s is Element of D* by FINSEQ_1:def 11;
-  len s = i+j by CARD_1:def 13;
+  len s = i+j by CARD_1:def 7;
   then s in (i+j)-tuples_on D by A1;
   then s in {z^t where z is Tuple of i,D, t is Tuple of j,D:not contradiction}
        by Th125;
@@ -1806,7 +1774,7 @@ A3: Z = i-tuples_on D by A2;
      ex s being Element of D* st s = a & len s = i by A1,A3;
     hence thesis;
   end;
-  hence thesis by TARSKI:2;
+  hence thesis by TARSKI:1;
 end;
 
 theorem
@@ -1824,7 +1792,7 @@ Lm7:
   assume x in i-tuples_on A;
    then x in { s where s is Element of A*: len s = i };
    then ex s being Element of A* st x = s & len s = i;
-  hence thesis by CARD_1:def 13;
+  hence thesis by CARD_1:def 7;
  end;
 
 theorem
@@ -1837,21 +1805,21 @@ A1:  f in i-tuples_on D by Lm6;
   assume i-tuples_on D = j-tuples_on A;
    then f in j-tuples_on A by A1;
    then f is j-element by Lm7;
-   then len f = j by CARD_1:def 13;
-  hence thesis by CARD_1:def 13;
+   then len f = j by CARD_1:def 7;
+  hence thesis by CARD_1:def 7;
 end;
 
 theorem
   idseq i is Element of i-tuples_on NAT
 proof
-  idseq i is FinSequence of NAT & len idseq i = i by Th52,CARD_1:def 13;
+  idseq i is FinSequence of NAT & len idseq i = i by Th52,CARD_1:def 7;
   hence thesis by Th110;
 end;
 
 theorem
   i |-> d is Element of i-tuples_on D
 proof
-  i |-> d is FinSequence of D & len(i |-> d) = i by Th77,CARD_1:def 13;
+  i |-> d is FinSequence of D & len(i |-> d) = i by Th77,CARD_1:def 7;
   hence thesis by Lm6;
 end;
 
@@ -1862,7 +1830,7 @@ proof
   let z be Tuple of i,D;
   let f be Function of D,D9;
   reconsider s = f*z as FinSequence of D9 by Th36;
-  len z = i by CARD_1:def 13;
+  len z = i by CARD_1:def 7;
   then len s = i by Th37;
   hence thesis by Th110;
 end;
@@ -1873,7 +1841,7 @@ theorem Th134:
 proof
   let z be Tuple of i,D;
   let f be Function of Seg i,Seg i;
-A1: len z = i by CARD_1:def 13;
+A1: len z = i by CARD_1:def 7;
   then
 A2: Seg i = dom z by FINSEQ_1:def 3;
   then reconsider t = z*f as FinSequence of D by Th51;
@@ -1897,8 +1865,8 @@ theorem
 proof
   let z be Tuple of i,D;
   let d;
-  len z = i by CARD_1:def 13;
-  hence thesis by FINSEQ_1:59;
+  len z = i by CARD_1:def 7;
+  hence thesis by FINSEQ_1:42;
 end;
 
 theorem
@@ -1917,7 +1885,7 @@ theorem
   for z being Tuple of i,D holds z*(idseq i) = z
 proof
   let z be Tuple of i,D;
-  len z = i by CARD_1:def 13;
+  len z = i by CARD_1:def 7;
   hence thesis by Th64;
 end;
 
@@ -1926,12 +1894,12 @@ theorem
   z1.j = z2.j holds z1 = z2
 proof
   let z1,z2 be Tuple of i,D;
-  len z2 = i by CARD_1:def 13;
+  len z2 = i by CARD_1:def 7;
   then
 A1: dom z2 = Seg i by FINSEQ_1:def 3;
-  len z1 = i by CARD_1:def 13;
+  len z1 = i by CARD_1:def 7;
   then dom z1 = Seg i by FINSEQ_1:def 3;
-  hence thesis by A1,FINSEQ_1:17;
+  hence thesis by A1,FINSEQ_1:13;
 end;
 
 theorem
@@ -1943,7 +1911,7 @@ proof
   let z1 be Tuple of i,D;
   let z2 be Tuple of i,D9;
   reconsider r = F.:(z1,z2) as FinSequence of E by Th84;
-  len z1 = i & len z2 = i by CARD_1:def 13;
+  len z1 = i & len z2 = i by CARD_1:def 7;
   then len r = i by Th86;
   hence thesis by Th110;
 end;
@@ -1955,7 +1923,7 @@ proof
   let F be Function of [:D,D9:],E;
   let z be Tuple of i,D9;
   reconsider r = F[;](d,z) as FinSequence of E by Th91;
-  len z = i by CARD_1:def 13;
+  len z = i by CARD_1:def 7;
   then len r = i by Th92;
   hence thesis by Th110;
 end;
@@ -1967,7 +1935,7 @@ proof
   let F be Function of [:D,D9:],E;
   let z be Tuple of i,D;
   reconsider r = F[:](z,d9) as FinSequence of E by Th97;
-  len z = i by CARD_1:def 13;
+  len z = i by CARD_1:def 7;
   then len r = i by Th98;
   hence thesis by Th110;
 end;
@@ -1981,10 +1949,10 @@ A1: for j st P[j] holds P[j+1]
     let j such that
 A2: (i+j)|->x = (i|->x)^(j|->x);
     thus (i+(j+1))|->x = (i+j+1)|->x .= ((i+j)|->x) ^ <*x*> by Th74
-      .= (i|->x)^((j|->x) ^ <*x*>) by A2,FINSEQ_1:45
+      .= (i|->x)^((j|->x) ^ <*x*>) by A2,FINSEQ_1:32
       .= (i|->x)^((j+1)|->x) by Th74;
   end;
-  (i+0)|->x = (i|->x)^{} by FINSEQ_1:47
+  (i+0)|->x = (i|->x)^{} by FINSEQ_1:34
     .= (i|->x)^(0|->x);
   then
 A3: P[0];
@@ -1999,7 +1967,7 @@ theorem
 proof
   let i, D;
   let x be Tuple of i,D;
-  len x = i by CARD_1:def 13;
+  len x = i by CARD_1:def 7;
   hence thesis by FINSEQ_1:def 3;
 end;
 
@@ -2012,11 +1980,11 @@ proof
   assume that
 A1: x in dom f and
 A2: y in dom f;
-  reconsider D = dom f, E = rng f as non empty set by A1,FUNCT_1:12;
+  reconsider D = dom f, E = rng f as non empty set by A1,FUNCT_1:3;
   rng <*x,y*> = {x,y} by Lm1;
-  then rng <*x,y*> c= D by A1,A2,ZFMISC_1:38;
+  then rng <*x,y*> c= D by A1,A2,ZFMISC_1:32;
   then reconsider p = <*x,y*> as FinSequence of D by FINSEQ_1:def 4;
-  reconsider g = f as Function of D,E by FUNCT_2:def 1,RELSET_1:11;
+  reconsider g = f as Function of D,E by FUNCT_2:def 1,RELSET_1:4;
   thus f*<*x,y*> = g*p .= <*f.x,f.y*> by Th40;
 end;
 
@@ -2029,14 +1997,14 @@ proof
   assume that
 A1: x in dom f and
 A2: y in dom f & z in dom f;
-  reconsider D = dom f, E = rng f as non empty set by A1,FUNCT_1:12;
+  reconsider D = dom f, E = rng f as non empty set by A1,FUNCT_1:3;
   rng <*x,y,z*> = {x,y,z} by Lm2;
   then
-A3: rng <*x,y,z*> = {x,y} \/ {z} by ENUMSET1:43;
-  {x,y} c= D & {z} c= D by A1,A2,ZFMISC_1:37,38;
+A3: rng <*x,y,z*> = {x,y} \/ {z} by ENUMSET1:3;
+  {x,y} c= D & {z} c= D by A1,A2,ZFMISC_1:31,32;
   then rng <*x,y,z*> c= D by A3,XBOOLE_1:8;
   then reconsider p = <*x,y,z*> as FinSequence of D by FINSEQ_1:def 4;
-  reconsider g = f as Function of D,E by FUNCT_2:def 1,RELSET_1:11;
+  reconsider g = f as Function of D,E by FUNCT_2:def 1,RELSET_1:4;
   thus f*<*x,y,z*> = g*p .= <*f.x,f.y,f.z*> by Th41;
 end;
 
@@ -2064,10 +2032,10 @@ A4: dom p1 = Seg i & dom p2 = Seg i by A3,FINSEQ_1:def 3;
     let j;
     assume
 A5: j in dom p1;
-    hence p1.j = q.j by A1,GRFUNC_1:8
-      .= p2.j by A2,A4,A5,GRFUNC_1:8;
+    hence p1.j = q.j by A1,GRFUNC_1:2
+      .= p2.j by A2,A4,A5,GRFUNC_1:2;
   end;
-  hence thesis by A4,FINSEQ_1:17;
+  hence thesis by A4,FINSEQ_1:13;
 end;
 
 :: from MODAL_1, 2007.03.14, A.T.
@@ -2077,20 +2045,20 @@ reserve m,n for Nat,
 
 theorem
   for D being non empty set,
-      s being FinSequence of D st s <> {} 
+      s being FinSequence of D st s <> {}
    ex w being FinSequence of D, n being Element of D st s = <*n*>^w
 proof
   let D be non empty set,
       s be FinSequence of D;
-  defpred P[FinSequence of D] means 
-    $1 <> {} implies ex w being FinSequence of D, 
+  defpred P[FinSequence of D] means
+    $1 <> {} implies ex w being FinSequence of D,
     n being Element of D st $1 = <*n*>^w;
-A1: for s being FinSequence of D 
+A1: for s being FinSequence of D
      for m being Element of D st P[s] holds P[s^<*m*>]
   proof
     let s be FinSequence of D;
     let m be Element of D such that
-A2: s <> {} implies ex w being FinSequence of D, 
+A2: s <> {} implies ex w being FinSequence of D,
      n be Element of D st s = <*n*>^w;
     assume s^<*m*> <> {};
     per cases;
@@ -2098,8 +2066,8 @@ A2: s <> {} implies ex w being FinSequence of D,
 A3:   s = {};
       reconsider w = <*> D as FinSequence of D;
       take w, n = m;
-      thus s^<*m*> = <*m*> by A3,FINSEQ_1:47
-        .= <*n*>^w by FINSEQ_1:47;
+      thus s^<*m*> = <*m*> by A3,FINSEQ_1:34
+        .= <*n*>^w by FINSEQ_1:34;
     end;
     suppose
       s <> {};
@@ -2107,7 +2075,7 @@ A3:   s = {};
          n be Element of D such that
 A4:   s = <*n*>^w by A2;
       take w^<*m*>,n;
-      thus thesis by A4,FINSEQ_1:45;
+      thus thesis by A4,FINSEQ_1:32;
     end;
   end;
 A5: P[<*> D];
@@ -2119,7 +2087,7 @@ end;
 
 registration
   let D be set;
-  cluster -> functional FinSequenceSet of D;
+  cluster -> functional for FinSequenceSet of D;
   coherence
   proof
     let f be FinSequenceSet of D;
@@ -2146,7 +2114,7 @@ theorem
   thus z is Tuple of i,D implies z in i-tuples_on D by Lm6;
   assume z in i-tuples_on D;
    then ex s being Element of D* st z = s & len s = i;
-  hence z is Tuple of i,D by CARD_1:def 13;
+  hence z is Tuple of i,D by CARD_1:def 7;
  end;
 
 :: from CATALG_1, 2009.09.08, A.T.
@@ -2199,9 +2167,9 @@ proof
 A1: x = s and
 A2: len s = 1;
     take a = s.1;
-A3: rng <*a*> = {a} & a in {a} by FINSEQ_1:56,TARSKI:def 1;
+A3: rng <*a*> = {a} & a in {a} by FINSEQ_1:39,TARSKI:def 1;
 A4: rng s c= A by RELAT_1:def 19;
-    x = <*a*> by A1,A2,FINSEQ_1:57;
+    x = <*a*> by A1,A2,FINSEQ_1:40;
     hence a in A & x = <*a*> by A1,A3,A4;
   end;
   given a being set such that
@@ -2220,8 +2188,8 @@ proof
   assume <*a*> in 1-tuples_on A;
   then
 A1: ex a9 being set st a9 in A & <*a*> = <*a9*> by Th155;
-  <*a*>.1 = a by FINSEQ_1:57;
-  hence thesis by A1,FINSEQ_1:57;
+  <*a*>.1 = a by FINSEQ_1:40;
+  hence thesis by A1,FINSEQ_1:40;
 end;
 
 theorem Th157:
@@ -2238,7 +2206,7 @@ A2: len s = 2;
     take a = s.1, b = s.2;
 A3: rng <*a,b*> = {a,b} & a in {a,b} by Lm1,TARSKI:def 2;
 A4: b in {a,b} & rng s c= A by RELAT_1:def 19,TARSKI:def 2;
-    x = <*a,b*> by A1,A2,FINSEQ_1:61;
+    x = <*a,b*> by A1,A2,FINSEQ_1:44;
     hence a in A & b in A & x = <*a,b*> by A1,A3,A4;
   end;
   given a,b being set such that
@@ -2258,8 +2226,8 @@ proof
   assume <*a,b*> in 2-tuples_on A;
   then
 A1: ex a9,b9 being set st a9 in A & b9 in A & <*a,b*> = <*a9,b9*> by Th157;
-  <*a,b*>.1 = a & <*a,b*>.2 = b by FINSEQ_1:61;
-  hence thesis by A1,FINSEQ_1:61;
+  <*a,b*>.1 = a & <*a,b*>.2 = b by FINSEQ_1:44;
+  hence thesis by A1,FINSEQ_1:44;
 end;
 
 theorem Th159:
@@ -2277,7 +2245,7 @@ A2: len s = 3;
 A3: rng <*a,b,c*> = {a,b,c} & a in {a,b,c} by Lm2,ENUMSET1:def 1;
 A4: rng s c= A by RELAT_1:def 19;
 A5: b in {a,b,c} & c in {a,b,c} by ENUMSET1:def 1;
-    x = <*a,b,c*> by A1,A2,FINSEQ_1:62;
+    x = <*a,b,c*> by A1,A2,FINSEQ_1:45;
     hence a in A & b in A & c in A & x = <*a,b,c*> by A1,A3,A5,A4;
   end;
   given a,b,c being set such that
@@ -2295,13 +2263,13 @@ theorem
   a in A & b in A & c in A
 proof
   let A,a,b,c be set;
-A1: <*a,b,c*>.3 = c by FINSEQ_1:62;
+A1: <*a,b,c*>.3 = c by FINSEQ_1:45;
   assume <*a,b,c*> in 3-tuples_on A;
   then
 A2: ex a9,b9,c9 being set st a9 in A & b9 in A & c9 in A & <*a,b,c*> = <*a9,
   b9,c9*> by Th159;
-  <*a,b,c*>.1 = a & <*a,b,c*>.2 = b by FINSEQ_1:62;
-  hence thesis by A2,A1,FINSEQ_1:62;
+  <*a,b,c*>.1 = a & <*a,b,c*>.2 = b by FINSEQ_1:45;
+  hence thesis by A2,A1,FINSEQ_1:45;
 end;
 
 theorem
@@ -2323,6 +2291,175 @@ end;
 theorem
   n |-> x = m |-> x implies n = m
 proof
-  len(n |-> x) = n by CARD_1:def 13;
-  hence thesis by CARD_1:def 13;
+  len(n |-> x) = n by CARD_1:def 7;
+  hence thesis by CARD_1:def 7;
 end;
+
+:: from PBOOLE, 2011.04.17, A.T.
+
+reserve i,j,e,u for set,
+        n for Element of NAT;
+
+definition
+  let I be set;
+  let M be ManySortedSet of I;
+  func M# -> ManySortedSet of I* means
+  :Def19:
+  for i being Element of I* holds it.i = product(M*i);
+  existence
+  proof
+    defpred P[set,set] means ex j being Element of I* st j = $1 & $2 = product
+    (M*j);
+A1: for i st i in I* ex j st P[i,j]
+    proof
+      let i;
+      assume i in I*;
+      then reconsider j = i as Element of I*;
+      reconsider e = product(M*j) as set;
+      take e,j;
+      thus thesis;
+    end;
+    consider f being ManySortedSet of I* such that
+A2: for i st i in I* holds P[i,f.i] from PBOOLE:sch 3(A1);
+    take f;
+    let i be Element of I*;
+    ex j being Element of I* st j = i & f.i = product(M*j) by A2;
+    hence thesis;
+  end;
+  uniqueness
+  proof
+    let N1,N2 be ManySortedSet of I* such that
+A3: for i being Element of I* holds N1.i = product(M*i) and
+A4: for i being Element of I* holds N2.i = product(M*i);
+    now
+      let i;
+      assume i in I*;
+      then reconsider e = i as Element of I*;
+      thus N1.i = product(M*e) by A3
+        .= N2.i by A4;
+    end;
+    hence thesis by PBOOLE:3;
+  end;
+end;
+
+registration
+  let I be set;
+  let M be non-empty ManySortedSet of I;
+  cluster M# -> non-empty;
+  coherence
+  proof
+    M# is non-empty
+    proof
+      let i;
+      assume i in I*;
+      then reconsider f = i as Element of I*;
+      product(M*f) <> {};
+      hence thesis by Def19;
+    end;
+    hence thesis;
+  end;
+end;
+
+definition
+  let a be set;
+  func *-->a -> Function of NAT,{a}* means
+  :Def20:
+  for n being Element of NAT holds it.n = n |-> a;
+  existence
+  proof
+    defpred P[Element of NAT,set] means $2 = $1 |-> a;
+A1: for x being Element of NAT ex y being Element of {a}* st P[x,y]
+    proof
+      let n be Element of NAT;
+      a is Element of {a} by TARSKI:def 1;
+      then n |-> a is FinSequence of {a} by Th77;
+      then reconsider u = n |-> a as Element of {a}* by FINSEQ_1:def 11;
+      take u;
+      thus thesis;
+    end;
+    ex f being Function of NAT, {a}* st for x being Element of NAT holds P
+    [x,f.x] from FUNCT_2:sch 3(A1);
+    hence thesis;
+  end;
+  uniqueness
+  proof
+    let f1,f2 be Function of NAT,{a}* such that
+A2: for n being Element of NAT holds f1.n = n |-> a and
+A3: for n being Element of NAT holds f2.n = n |-> a;
+    now
+      let k be Element of NAT;
+      thus f1.k = k |-> a by A2
+        .= f2.k by A3;
+    end;
+    hence f1 = f2 by FUNCT_2:63;
+  end;
+end;
+
+theorem Th152:
+  for a,b being set holds (a .--> b)*(n|->a) = n |-> b
+proof
+  let a,b be set;
+A1: now
+    let x be set;
+    hereby
+      assume x in dom (n |-> b);
+      then
+A2:   x in Seg n by FUNCOP_1:13;
+      hence x in dom(n|->a) by FUNCOP_1:13;
+      dom(a .--> b) = {a} & (n|->a).x = a by A2,FUNCOP_1:7,13;
+      hence (n|->a).x in dom(a .--> b) by TARSKI:def 1;
+    end;
+    assume that
+A3: x in dom(n|->a) and
+    (n|->a).x in dom(a .--> b);
+    x in Seg n by A3,FUNCOP_1:13;
+    hence x in dom (n |-> b) by FUNCOP_1:13;
+  end;
+  now
+    let x be set;
+A4: a in {a} by TARSKI:def 1;
+    assume x in dom (n |-> b);
+    then
+A5: x in Seg n by FUNCOP_1:13;
+    hence (n |-> b).x = b by FUNCOP_1:7
+      .= (a .--> b).a by A4,FUNCOP_1:7
+      .= (a .--> b).((n|->a).x) by A5,FUNCOP_1:7;
+  end;
+  hence thesis by A1,FUNCT_1:10;
+end;
+
+theorem
+  for a being set for M being ManySortedSet of {a} st M = a .--> D holds
+  (M#* *-->a).n = Funcs(Seg n, D)
+proof
+  let a be set;
+  let M be ManySortedSet of {a} such that
+A1: M = a .--> D;
+  a is Element of {a} by TARSKI:def 1;
+  then n |-> a is FinSequence of {a} by Th77;
+  then
+A2: n |-> a in {a}* by FINSEQ_1:def 11;
+  dom(*-->a) = NAT by FUNCT_2:def 1;
+  hence (M#* *-->a).n = M#.((*-->a).n) by FUNCT_1:13
+    .= M#.(n|->a) by Def20
+    .= product((a .--> D)*(n|->a)) by A1,A2,Def19
+    .= product(n |-> D) by Th152
+    .= Funcs(Seg n, D) by CARD_3:11;
+end;
+
+theorem
+ for F being total NAT-defined Function, p be NAT-defined Function,
+     n be Element of NAT st Shift(p,n) c= F
+ for i being Element of NAT st i in dom p holds F.(n+i) = p.i
+ proof
+  let F be total NAT-defined Function, p be NAT-defined Function,
+     n be Element of NAT such that
+A1: Shift(p,n) c= F;
+  let i be Element of NAT;
+  assume
+A2: i in dom p;
+   then n+i in dom Shift(p,n) by VALUED_1:24;
+  hence F.(n+i) = Shift(p,n).(n+i) by A1,GRFUNC_1:2
+      .= p.i by A2,VALUED_1:def 12;
+ end;
+

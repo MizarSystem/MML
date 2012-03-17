@@ -34,12 +34,12 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="K" nr="11">
-<Func kind="K" nr="258"/>
-<Func kind="K" nr="125"/>
+<Func kind="K" nr="261"/>
+<Func kind="K" nr="127"/>
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="64"/>
+<Adjective nr="65"/>
 </Cluster>
 </RCluster>
 <FCluster aid="SUBLEMMA" nr="1">
@@ -51,26 +51,26 @@
 <Typ kind="M" nr="6">
 <Cluster>
 <Adjective nr="8">
-<Func kind="K" nr="125"/>
+<Func kind="K" nr="127"/>
 </Adjective>
 <Adjective nr="31">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
-<Func kind="K" nr="124"/>
+<Func kind="K" nr="126"/>
 </Typ>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="243"/>
+<Func kind="K" nr="246"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="245">
+<Func kind="K" nr="248">
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
 </Func>
 <Cluster>
 <Adjective nr="8">
-<Func kind="K" nr="125"/>
+<Func kind="K" nr="127"/>
 </Adjective>
 <Adjective nr="31">
 <LocusVar nr="1"/>

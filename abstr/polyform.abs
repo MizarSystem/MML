@@ -32,7 +32,7 @@ environ
  registrations FINSET_1, XBOOLE_0, FUNCT_1, FUNCT_2, RELAT_1, SUBSET_1, NAT_1,
       INT_1, VECTSP_1, STRUCT_0, FINSEQ_1, FINSEQ_2, CARD_1, MATRLIN, BSPACE,
       ORDINAL1, NEWTON, FUNCOP_1, ABIAN, XREAL_0, NUMBERS, JORDAN23, PRE_POLY,
-      XCMPLX_0, XXREAL_0, VALUED_0, PARTFUN1;
+      XCMPLX_0, XXREAL_0, VALUED_0, PARTFUN1, RELSET_1;
  requirements NUMERALS, BOOLE, ARITHM, SUBSET, REAL;
 
 
@@ -146,17 +146,15 @@ definition
   redefine func p ^ q -> FinSequence of INT;
 end;
 
-canceled;
-
-theorem :: POLYFORM:21
+theorem :: POLYFORM:20
   for k being Integer, p being FinSequence of INT holds Sum (<*k*>
   ^ p) = k + (Sum p);
 
-theorem :: POLYFORM:22
+theorem :: POLYFORM:21
   for p,q,r being FinSequence of INT holds Sum (p ^ q ^ r) = (Sum
   p) + (Sum q) + (Sum r);
 
-theorem :: POLYFORM:23
+theorem :: POLYFORM:22
   for a being Element of Z_2 holds Sum <*a*> = a;
 
 begin :: Polyhedra and Incidence Matrices
@@ -168,7 +166,7 @@ definition
   mode incidence-matrix of X,Y is Element of Funcs([:X,Y:],{0.Z_2,1.Z_2});
 end;
 
-theorem :: POLYFORM:24
+theorem :: POLYFORM:23
   for X,Y being set holds [:X,Y:] --> 1.Z_2 is incidence-matrix of X,Y;
 
 :: A polyhedron (one might call it an abstract polyhedron) consists of
@@ -210,7 +208,7 @@ PolytopsF of p holds (the PolytopsF of p).n is non empty & (the PolytopsF of p)
 end;
 
 registration
-  cluster polyhedron_1 polyhedron_2 polyhedron_3 PolyhedronStr;
+  cluster polyhedron_1 polyhedron_2 polyhedron_3 for PolyhedronStr;
 end;
 
 definition
@@ -250,13 +248,13 @@ definition
   of p).(k+1))) & (k = dim(p) implies it = {p}) & (k > dim(p) implies it = {});
 end;
 
-theorem :: POLYFORM:25
+theorem :: POLYFORM:24
   -1 < k & k < dim(p) implies k + 1 is Nat & 1 <= k + 1 & k + 1 <= dim(p);
 
-theorem :: POLYFORM:26
+theorem :: POLYFORM:25
   k-polytopes(p) is non empty iff -1 <= k & k <= dim(p);
 
-theorem :: POLYFORM:27
+theorem :: POLYFORM:26
   k < dim(p) implies k - 1 < dim(p);
 
 :: As we defined the set of k-polytopes for all integers k, we define
@@ -314,19 +312,19 @@ definition
   num-polytopes(p,2);
 end;
 
-theorem :: POLYFORM:28
+theorem :: POLYFORM:27
   dom (k-polytope-seq(p)) = Seg (num-polytopes(p,k));
 
-theorem :: POLYFORM:29
+theorem :: POLYFORM:28
   len (k-polytope-seq(p)) = num-polytopes(p,k);
 
-theorem :: POLYFORM:30
+theorem :: POLYFORM:29
   rng (k-polytope-seq(p)) = k-polytopes(p);
 
-theorem :: POLYFORM:31
+theorem :: POLYFORM:30
   num-polytopes(p,-1) = 1;
 
-theorem :: POLYFORM:32
+theorem :: POLYFORM:31
   num-polytopes(p,dim(p)) = 1;
 
 :: The k-polytope sets aren't really sets: they're ordered sets
@@ -347,15 +345,15 @@ definition
   -polytope-seq(p)).n;
 end;
 
-theorem :: POLYFORM:33
+theorem :: POLYFORM:32
   -1 <= k & k <= dim(p) implies for x being Element of k-polytopes
 (p) ex n being Nat st x = n-th-polytope(p,k) & 1 <= n & n <= num-polytopes(p,k)
 ;
 
-theorem :: POLYFORM:34
+theorem :: POLYFORM:33
   k-polytope-seq(p) is one-to-one;
 
-theorem :: POLYFORM:35
+theorem :: POLYFORM:34
   for m,n being Nat st 1 <= n & n <= num-polytopes(p,k) & 1 <= m &
   m <= num-polytopes(p,k) & n-th-polytope(p,k) = m-th-polytope(p,k) holds m = n
 ;
@@ -385,11 +383,11 @@ definition
   -polytopes(p));
 end;
 
-theorem :: POLYFORM:36
+theorem :: POLYFORM:35
   for x being Element of k-polytopes(p) holds (0.(k-chain-space(p)))@x =
   0.Z_2;
 
-theorem :: POLYFORM:37
+theorem :: POLYFORM:36
   num-polytopes(p,k) = dim (k-chain-space(p));
 
 :: A k-chain is a set of k-polytopes.
@@ -414,39 +412,39 @@ definition
   -th-polytope(p,k)));
 end;
 
-theorem :: POLYFORM:38
+theorem :: POLYFORM:37
   for c,d being Element of k-chain-space(p), x being Element of k
   -polytopes(p) holds (c+d)@x = (c@x) + (d@x);
 
-theorem :: POLYFORM:39
+theorem :: POLYFORM:38
   for c,d being Element of k-chain-space(p), x being Element of (k
   -1)-polytopes(p) holds incidence-sequence(x,c+d) = incidence-sequence(x,c) +
   incidence-sequence(x,d);
 
-theorem :: POLYFORM:40
+theorem :: POLYFORM:39
   for c,d being Element of k-chain-space(p), x being Element of (k
 -1)-polytopes(p) holds Sum (incidence-sequence(x,c) + incidence-sequence(x,d))
   = (Sum incidence-sequence(x,c)) + (Sum incidence-sequence(x,d));
 
-theorem :: POLYFORM:41
+theorem :: POLYFORM:40
   for c,d being Element of k-chain-space(p), x being Element of (k
 -1)-polytopes(p) holds Sum incidence-sequence(x,c+d) = (Sum incidence-sequence(
   x,c)) + (Sum incidence-sequence(x,d));
 
-theorem :: POLYFORM:42
+theorem :: POLYFORM:41
   for c being Element of k-chain-space(p), a being Element of Z_2,
   x being Element of k-polytopes(p) holds (a*c)@x = a*(c@x);
 
-theorem :: POLYFORM:43
+theorem :: POLYFORM:42
   for c being Element of k-chain-space(p), a being Element of Z_2,
   x being Element of (k-1)-polytopes(p) holds incidence-sequence(x,a*c) = a*
   incidence-sequence(x,c);
 
-theorem :: POLYFORM:44
+theorem :: POLYFORM:43
   for c,d being Element of k-chain-space(p) holds c = d iff for x
   being Element of k-polytopes(p) holds c@x = d@x;
 
-theorem :: POLYFORM:45
+theorem :: POLYFORM:44
   for c,d being Element of k-chain-space(p) holds c = d iff for x
   being Element of k-polytopes(p) holds x in c iff x in d;
 
@@ -471,7 +469,7 @@ definition
   holds x in it iff Sum incidence-sequence(x,v) = 1.Z_2);
 end;
 
-theorem :: POLYFORM:46
+theorem :: POLYFORM:45
   for c being Element of k-chain-space(p), x being Element of (k-1
   )-polytopes(p) holds (Boundary(c))@x = Sum incidence-sequence(x,c);
 
@@ -486,18 +484,18 @@ definition
   for c being Element of k-chain-space(p) holds it.c = Boundary(c);
 end;
 
-theorem :: POLYFORM:47
+theorem :: POLYFORM:46
   for c,d being Element of k-chain-space(p) holds Boundary(c+d) =
   Boundary(c) + Boundary(d);
 
-theorem :: POLYFORM:48
+theorem :: POLYFORM:47
   for a being Element of Z_2, c being Element of k-chain-space(p)
   holds Boundary(a*c) = a*(Boundary(c));
 
 :: As defined, the k-boundary operator gives rise to a linear
 :: transformation.
 
-theorem :: POLYFORM:49
+theorem :: POLYFORM:48
   k-boundary(p) is linear-transformation of k-chain-space(p),(k-1)
   -chain-space(p);
 
@@ -556,7 +554,7 @@ definition
   -bounding-circuit-space(p));
 end;
 
-theorem :: POLYFORM:50
+theorem :: POLYFORM:49
   dim (k-chain-space(p)) = rank (k-boundary(p)) + nullity (k-boundary(p)
   );
 
@@ -572,7 +570,7 @@ definition
   for k being Integer holds k -circuits(p) = k-bounding-chains(p);
 end;
 
-theorem :: POLYFORM:51
+theorem :: POLYFORM:50
   p is simply-connected iff for n being Integer holds n
   -circuit-space(p) = n-bounding-chain-space(p);
 
@@ -605,7 +603,7 @@ len(it) = dim(p) + 1 & for k being Nat st 1 <= k & k <= dim(p) + 1 holds it.k =
   ((-1)|^(k+1))*num-polytopes(p,k-1);
 end;
 
-theorem :: POLYFORM:52
+theorem :: POLYFORM:51
   1 <= n & n <= len (alternating-proper-f-vector(p)) implies (
   alternating-proper-f-vector(p)).n = ((-1)|^(n+1))*(dim ((n-2)
   -bounding-chain-space(p))) + ((-1)|^(n+1))*(dim ((n-1)-circuit-space(p)));
@@ -620,7 +618,7 @@ definition
   Sum (alternating-proper-f-vector(p)) = 1 + (-1)|^(dim(p)+1);
 end;
 
-theorem :: POLYFORM:53
+theorem :: POLYFORM:52
   alternating-semi-proper-f-vector(p) =
   alternating-proper-f-vector(p) ^ <*(-1)|^(dim(p))*>;
 
@@ -634,7 +632,7 @@ definition
   Sum ( alternating-semi-proper-f-vector(p)) = 1;
 end;
 
-theorem :: POLYFORM:54
+theorem :: POLYFORM:53
   alternating-f-vector(p) = <*-1*> ^ alternating-semi-proper-f-vector(p);
 
 :: Yet another characterization of eulerian polyhedra
@@ -649,53 +647,53 @@ end;
 
 begin :: The Extremal Chain Spaces
 
-theorem :: POLYFORM:55
+theorem :: POLYFORM:54
   0-polytopes(p) is non empty;
 
-theorem :: POLYFORM:56
+theorem :: POLYFORM:55
   card [#]((-1)-chain-space(p)) = 2;
 
-theorem :: POLYFORM:57
+theorem :: POLYFORM:56
   [#]((-1)-chain-space(p)) = { {}, {{}} };
 
-theorem :: POLYFORM:58
+theorem :: POLYFORM:57
   for x being Element of k-polytopes(p), e being Element of (k-1)
   -polytopes(p) st k = 0 & e = {} holds incidence-value(e,x) = 1.Z_2;
 
-theorem :: POLYFORM:59
+theorem :: POLYFORM:58
   for k being Integer, x being Element of k-polytopes(p), v being
 Element of k-chain-space(p), e being Element of (k-1)-polytopes(p), n being Nat
   st k = 0 & v = {x} & e = {} & x = n-th-polytope(p,k) & 1 <= n & n <=
   num-polytopes(p,k) holds incidence-sequence(e,v).n = 1.Z_2;
 
-theorem :: POLYFORM:60
+theorem :: POLYFORM:59
   for k being Integer, x being Element of k-polytopes(p), e being
   Element of (k-1)-polytopes(p), v being Element of k-chain-space(p), m,n being
 Nat st k = 0 & v = {x} & x = n-th-polytope(p,k) & 1 <= m & m <= num-polytopes(p
 ,k) & 1 <= n & n <= num-polytopes(p,k) & m <> n holds incidence-sequence(e,v).m
   = 0.Z_2;
 
-theorem :: POLYFORM:61
+theorem :: POLYFORM:60
   for k being Integer, x being Element of k-polytopes(p), v being
 Element of k-chain-space(p), e being Element of (k-1)-polytopes(p) st k = 0 & v
   = {x} & e = {} holds Sum incidence-sequence(e,v) = 1.Z_2;
 
-theorem :: POLYFORM:62
+theorem :: POLYFORM:61
   for x being Element of 0-polytopes(p) holds (0-boundary(p)).({x} ) = {{}};
 
-theorem :: POLYFORM:63
+theorem :: POLYFORM:62
   k = -1 implies dim(k-bounding-chain-space(p)) = 1;
 
-theorem :: POLYFORM:64
+theorem :: POLYFORM:63
   card [#](dim(p)-chain-space(p)) = 2;
 
-theorem :: POLYFORM:65
+theorem :: POLYFORM:64
   {p} is Element of dim(p)-chain-space(p);
 
-theorem :: POLYFORM:66
+theorem :: POLYFORM:65
   {p} in [#](dim(p)-chain-space(p));
 
-theorem :: POLYFORM:67
+theorem :: POLYFORM:66
   (dim(p) - 1)-polytopes(p) is non empty;
 
 registration
@@ -703,37 +701,37 @@ registration
   cluster (dim(p)-1)-polytopes(p) -> non empty;
 end;
 
-theorem :: POLYFORM:68
+theorem :: POLYFORM:67
   [#](dim(p)-chain-space(p)) = { 0.(dim(p)-chain-space(p)), {p} };
 
-theorem :: POLYFORM:69
+theorem :: POLYFORM:68
   for x being Element of dim(p)-chain-space(p) holds x = 0.(dim(p)
   -chain-space(p)) or x = {p};
 
-theorem :: POLYFORM:70
+theorem :: POLYFORM:69
   for x,y being Element of dim(p)-chain-space(p) st x <> y holds x
   = 0.(dim(p)-chain-space(p)) or y = 0.(dim(p)-chain-space(p));
 
-theorem :: POLYFORM:71
+theorem :: POLYFORM:70
   dim(p)-polytope-seq(p) = <*p*>;
 
-theorem :: POLYFORM:72
+theorem :: POLYFORM:71
   1-th-polytope(p,dim(p)) = p;
 
-theorem :: POLYFORM:73
+theorem :: POLYFORM:72
   for c being Element of dim(p)-chain-space(p), x being Element of
   dim(p)-polytopes(p) st c = {p} holds c@x = 1.Z_2;
 
-theorem :: POLYFORM:74
+theorem :: POLYFORM:73
   for x being Element of (dim(p)-1)-polytopes(p), c being Element
   of dim(p)-polytopes(p) st c = p holds incidence-value(x,c) = 1.Z_2;
 
-theorem :: POLYFORM:75
+theorem :: POLYFORM:74
   for x being Element of (dim(p)-1)-polytopes(p), c being Element
   of dim(p)-chain-space(p) st c = {p} holds incidence-sequence(x,c) = <*1.Z_2*>
 ;
 
-theorem :: POLYFORM:76
+theorem :: POLYFORM:75
   for x being Element of (dim(p)-1)-polytopes(p), c being Element
   of dim(p)-chain-space(p) st c = {p} holds Sum incidence-sequence(x,c) = 1.Z_2
 ;
@@ -743,71 +741,70 @@ theorem :: POLYFORM:76
 :: space.  In other words, every (dim(p)-1)-polytope is incidence to
 :: the whole polyhedron.
 
-theorem :: POLYFORM:77
+theorem :: POLYFORM:76
   (dim(p)-boundary(p)).{p} = (dim(p)-1)-polytopes(p);
 
-theorem :: POLYFORM:78
+theorem :: POLYFORM:77
   dim(p)-boundary(p) is one-to-one;
 
-theorem :: POLYFORM:79
+theorem :: POLYFORM:78
   dim ((dim(p)-1)-bounding-chain-space(p)) = 1;
 
-theorem :: POLYFORM:80
+theorem :: POLYFORM:79
   p is simply-connected implies dim ((dim(p)-1)-circuit-space(p)) = 1;
 
-theorem :: POLYFORM:81
+theorem :: POLYFORM:80
   1 < n & n < dim(p) + 2 implies (alternating-f-vector(p)).n = (
   alternating-proper-f-vector(p)).(n-1);
 
-theorem :: POLYFORM:82
+theorem :: POLYFORM:81
   alternating-f-vector(p) = <*-1*> ^ alternating-proper-f-vector(p
   ) ^ <*(-1)|^(dim(p))*>;
 
-
 begin :: A Generalized Euler Relation and its 1-, 2-, and 3-dimensional Special Cases
 
-theorem :: POLYFORM:83
+theorem :: POLYFORM:82
   dim(p) is odd implies Sum (alternating-f-vector(p)) = Sum (
   alternating-proper-f-vector(p)) - 2;
 
-theorem :: POLYFORM:84
+theorem :: POLYFORM:83
   dim(p) is even implies Sum (alternating-f-vector(p)) = Sum (
   alternating-proper-f-vector(p));
 
-theorem :: POLYFORM:85
+theorem :: POLYFORM:84
   dim(p) = 1 implies Sum alternating-proper-f-vector(p) = num-polytopes(p,0);
 
-theorem :: POLYFORM:86
+theorem :: POLYFORM:85
   dim(p) = 2 implies Sum alternating-proper-f-vector(p) =
   num-polytopes(p,0) - num-polytopes(p,1);
 
-theorem :: POLYFORM:87
+theorem :: POLYFORM:86
   dim(p) = 3 implies Sum alternating-proper-f-vector(p) =
   num-polytopes(p,0) - num-polytopes(p,1) + num-polytopes(p,2);
 
 :: A trivial special case
 
-theorem :: POLYFORM:88
+theorem :: POLYFORM:87
   dim(p) = 0 implies p is eulerian;
 
-theorem :: POLYFORM:89
+theorem :: POLYFORM:88
   p is simply-connected implies p is eulerian;
 
 :: Euler's Polyhedron Formula in One Dimension: simply-connected
 :: 1-dimensional polyhedra are just line segments.
 
-theorem :: POLYFORM:90
+theorem :: POLYFORM:89
   p is simply-connected & dim(p) = 1 implies num-vertices(p) = 2;
 
 :: Euler's Polyhedron Formula in Two Dimensions: polygons have exactly
 :: as many vertices as edges.
 
-theorem :: POLYFORM:91
+theorem :: POLYFORM:90
   p is simply-connected & dim(p) = 2 implies num-vertices(p) = num-edges (p);
 
 :: Euler's Polyhedron Formula in Three Dimensions: V - E + F = 2.
 
-::$N Fundamental Theorem of Algebra
-theorem :: POLYFORM:92
+::$N Euler's Polyhedron Formula
+theorem :: POLYFORM:91
   p is simply-connected & dim(p) = 3 implies num-vertices(p) - num-edges
   (p) + num-faces(p) = 2;

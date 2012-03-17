@@ -17,13 +17,13 @@ environ
  vocabularies STRUCT_0, FUNCT_1, RELAT_1, XBOOLE_0, FUNCOP_1, SUBSET_1,
       MARGREL1, PBOOLE, CARD_1, NAT_1, UNIALG_1, FUNCT_2, PARTFUN1, FINSEQ_2,
       TARSKI, FINSEQ_1, NUMBERS, ZFMISC_1, CARD_3, MSUALG_1;
- notations TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, NAT_1, RELAT_1, FUNCT_1,
-      FUNCT_2, FINSEQ_1, STRUCT_0, PARTFUN1, FINSEQ_2, CARD_3, FUNCOP_1,
-      PBOOLE, MARGREL1, UNIALG_1;
+ notations TARSKI, XBOOLE_0, SUBSET_1, CARD_1, NUMBERS, NAT_1, RELAT_1,
+      FUNCT_1, FUNCT_2, FINSEQ_1, STRUCT_0, PARTFUN1, FINSEQ_2, CARD_3,
+      FUNCOP_1, PBOOLE, MARGREL1, UNIALG_1;
  constructors CARD_3, PBOOLE, REALSET2, UNIALG_1, RELSET_1, MARGREL1;
  registrations XBOOLE_0, FUNCT_1, ORDINAL1, RELSET_1, FUNCOP_1, FINSEQ_2,
       RELAT_1, PBOOLE, STRUCT_0, UNIALG_1, FUNCT_2, CARD_1, ZFMISC_1, MARGREL1;
- requirements BOOLE, SUBSET;
+ requirements BOOLE, SUBSET, NUMERALS;
 
 
 begin
@@ -39,8 +39,8 @@ Function of the carrier', the carrier*, ResultSort -> Function of the carrier',
 end;
 
 registration
-  cluster void strict non empty ManySortedSign;
-  cluster non void strict non empty ManySortedSign;
+  cluster void strict non empty for ManySortedSign;
+  cluster non void strict non empty for ManySortedSign;
 end;
 
 reserve S for non empty ManySortedSign;
@@ -52,14 +52,14 @@ definition
 end;
 
 definition
-  canceled 5;
+
   let S be non void non empty ManySortedSign;
   let o be OperSymbol of S;
   func the_arity_of o -> Element of (the carrier of S)* equals
-:: MSUALG_1:def 6
+:: MSUALG_1:def 1
   (the Arity of S).o;
   func the_result_sort_of o -> Element of S equals
-:: MSUALG_1:def 7
+:: MSUALG_1:def 2
   (the ResultSort of S).o;
 end;
 
@@ -81,19 +81,19 @@ definition
   let S be 1-sorted;
   let A be many-sorted over S;
   attr A is non-empty means
-:: MSUALG_1:def 8
+:: MSUALG_1:def 3
 
   the Sorts of A is non-empty;
 end;
 
 registration
   let S;
-  cluster strict non-empty MSAlgebra over S;
+  cluster strict non-empty for MSAlgebra over S;
 end;
 
 registration
   let S be 1-sorted;
-  cluster strict non-empty many-sorted over S;
+  cluster strict non-empty for many-sorted over S;
 end;
 
 registration
@@ -105,8 +105,8 @@ end;
 registration
   let S;
   let A be non-empty MSAlgebra over S;
-  cluster -> non empty Component of the Sorts of A;
-  cluster -> non empty Component of (the Sorts of A)#;
+  cluster -> non empty for Component of the Sorts of A;
+  cluster -> non empty for Component of (the Sorts of A)#;
 end;
 
 definition
@@ -114,11 +114,11 @@ definition
   let o be OperSymbol of S;
   let A be MSAlgebra over S;
   func Args(o,A) -> Component of (the Sorts of A)# equals
-:: MSUALG_1:def 9
+:: MSUALG_1:def 4
   ((the Sorts of A)# *
   the Arity of S).o;
   func Result(o,A) -> Component of the Sorts of A equals
-:: MSUALG_1:def 10
+:: MSUALG_1:def 5
   ((the Sorts of A) *
   the ResultSort of S).o;
 end;
@@ -128,14 +128,12 @@ definition
   let o be OperSymbol of S;
   let A be MSAlgebra over S;
   func Den(o,A) -> Function of Args(o,A), Result(o,A) equals
-:: MSUALG_1:def 11
+:: MSUALG_1:def 6
   (the Charact of A
   ).o;
 end;
 
-canceled 5;
-
-theorem :: MSUALG_1:6
+theorem :: MSUALG_1:1
   for S being non void non empty ManySortedSign, o being OperSymbol of S
   , A being non-empty MSAlgebra over S holds Den(o,A) is non empty;
 
@@ -144,15 +142,15 @@ begin :: On the one-sorted algebras
 reserve D for non empty set,
   n for Nat;
 
-theorem :: MSUALG_1:7
+theorem :: MSUALG_1:2
   for C being set, A,B being non empty set, F being PartFunc of C,A
   , G being Function of A,B holds G*F is Function of dom F,B;
 
-theorem :: MSUALG_1:8
+theorem :: MSUALG_1:3
   for h being homogeneous quasi_total non empty PartFunc of D*,D
   holds dom h = Funcs(Seg(arity h),D);
 
-theorem :: MSUALG_1:9
+theorem :: MSUALG_1:4
   for A being Universal_Algebra holds signature A is non empty;
 
 begin :: Relationship to one sorted algebras
@@ -160,38 +158,37 @@ begin :: Relationship to one sorted algebras
 definition
   let IT be ManySortedSign;
   attr IT is segmental means
-:: MSUALG_1:def 12
+:: MSUALG_1:def 7
 
   ex n st the carrier' of IT = Seg n;
 end;
 
-theorem :: MSUALG_1:10
+theorem :: MSUALG_1:5
   for S being non empty ManySortedSign st S is trivial for A being
   MSAlgebra over S, c1,c2 being Component of the Sorts of A holds c1 = c2;
 
 registration
-  cluster segmental trivial non void strict non empty ManySortedSign;
+  cluster segmental non void strict 1-element for ManySortedSign;
 end;
 
 definition
   let A be Universal_Algebra;
   func MSSign A -> non void strict segmental trivial ManySortedSign means
-:: MSUALG_1:def 13
-
-   the carrier of it = {0} & the carrier' of it = dom signature A & the
-Arity of it = (*-->0)*signature A & the ResultSort of it = dom signature(A)-->0
-  ;
+:: MSUALG_1:def 8
+ the carrier of it = {0} & the carrier' of it = dom signature A & the
+Arity of it = (*-->0)*signature A &
+     the ResultSort of it = dom signature(A)-->0;
 end;
 
 registration
   let A be Universal_Algebra;
-  cluster MSSign A -> non empty;
+  cluster MSSign A -> 1-element;
 end;
 
 definition
   let A be Universal_Algebra;
   func MSSorts A -> non-empty ManySortedSet of the carrier of MSSign A equals
-:: MSUALG_1:def 14
+:: MSUALG_1:def 9
   0.-->the carrier of A;
 end;
 
@@ -199,16 +196,15 @@ definition
   let A be Universal_Algebra;
   func MSCharact A -> ManySortedFunction of (MSSorts A)# * the Arity of MSSign
   A, (MSSorts A)* the ResultSort of MSSign A equals
-:: MSUALG_1:def 15
+:: MSUALG_1:def 10
   the charact of A;
 end;
 
 definition
   let A be Universal_Algebra;
   func MSAlg A -> strict MSAlgebra over MSSign A equals
-:: MSUALG_1:def 16
-  MSAlgebra(#MSSorts A,
-    MSCharact A#);
+:: MSUALG_1:def 11
+  MSAlgebra(#MSSorts A, MSCharact A#);
 end;
 
 registration
@@ -219,47 +215,45 @@ end;
 :: Manysorted Algebras with 1 Sort Only
 
 definition
-  let MS be trivial non empty ManySortedSign;
+  let MS be 1-element ManySortedSign;
   let A be MSAlgebra over MS;
   func the_sort_of A -> set means
-:: MSUALG_1:def 17
+:: MSUALG_1:def 12
 
   it is Component of the Sorts of A;
 end;
 
 registration
-  let MS be trivial non empty ManySortedSign;
+  let MS be 1-element ManySortedSign;
   let A be non-empty MSAlgebra over MS;
   cluster the_sort_of A -> non empty;
 end;
 
-theorem :: MSUALG_1:11
-  for MS being segmental trivial non void non empty ManySortedSign
+theorem :: MSUALG_1:6
+  for MS being segmental non void 1-element ManySortedSign
 , i being OperSymbol of MS, A being non-empty MSAlgebra over MS holds Args(i,A)
   = (len the_arity_of i)-tuples_on the_sort_of A;
 
-canceled;
-
-theorem :: MSUALG_1:13
-  for MS being segmental trivial non void non empty ManySortedSign
+theorem :: MSUALG_1:7
+  for MS being segmental non void 1-element ManySortedSign
 , i being OperSymbol of MS, A being non-empty MSAlgebra over MS holds Args(i,A)
   c= (the_sort_of A)*;
 
-theorem :: MSUALG_1:14
-  for MS being segmental trivial non void non empty ManySortedSign
+theorem :: MSUALG_1:8
+  for MS being segmental non void 1-element ManySortedSign
 , A being non-empty MSAlgebra over MS holds the Charact of A is FinSequence of
   PFuncs((the_sort_of A)*,the_sort_of A);
 
 definition
-  let MS be segmental trivial non void non empty ManySortedSign;
+  let MS be segmental non void 1-element ManySortedSign;
   let A be non-empty MSAlgebra over MS;
   func the_charact_of A -> PFuncFinSequence of the_sort_of A equals
-:: MSUALG_1:def 18
+:: MSUALG_1:def 13
   the
   Charact of A;
 end;
 
-reserve MS for segmental trivial non void non empty ManySortedSign,
+reserve MS for segmental non void 1-element ManySortedSign,
   A for non-empty MSAlgebra over MS,
   h for PartFunc of (the_sort_of A)*,(the_sort_of A) ,
   x,y for FinSequence of the_sort_of A;
@@ -267,15 +261,15 @@ reserve MS for segmental trivial non void non empty ManySortedSign,
 definition
   let MS,A;
   func 1-Alg A -> non-empty strict Universal_Algebra equals
-:: MSUALG_1:def 19
+:: MSUALG_1:def 14
   UAStr(#the_sort_of
     A, the_charact_of A#);
 end;
 
-theorem :: MSUALG_1:15
+theorem :: MSUALG_1:9
   for A being strict Universal_Algebra holds A = 1-Alg MSAlg A;
 
-theorem :: MSUALG_1:16
+theorem :: MSUALG_1:10
   for A being Universal_Algebra for f being Function of dom signature A,
   {0}* for z being Element of {0} st f = (*-->0)*signature A holds MSSign A =
   ManySortedSign(#{0},dom signature A,f,dom signature(A)-->z#);

@@ -18,12 +18,14 @@ environ
       STRUCT_0, SUBSET_1, FUNCT_4, FUNCOP_1, GOBOARD5, FRECHET, AMISTD_1,
       ZFMISC_1, NUMBERS, CARD_1, GLIB_000, AMISTD_2, CARD_5, NET_1, TARSKI,
       AMI_7, ORDINAL1, UNIALG_1;
- notations TARSKI, XBOOLE_0, SUBSET_1, SETFAM_1, RELAT_1, FUNCT_1, REALSET1,
-      MCART_1, NUMBERS, FUNCOP_1, FUNCT_4, NAT_1, STRUCT_0, COMPOS_1, EXTPRO_1,
-      FUNCT_7, AMISTD_1, AMISTD_2;
- constructors REALSET1, AMISTD_2, NAT_1, PRE_POLY, EXTPRO_1, AMISTD_1;
- registrations SETFAM_1, FUNCOP_1, STRUCT_0, AMISTD_1, AMISTD_2, REALSET1,
-      CARD_1, RELSET_1, ORDINAL1, COMPOS_1, EXTPRO_1;
+ notations TARSKI, XBOOLE_0, SUBSET_1, SETFAM_1, RELAT_1, FUNCT_1, ZFMISC_1,
+      MCART_1, NUMBERS, FUNCOP_1, FUNCT_4, NAT_1, STRUCT_0, MEMSTR_0, COMPOS_1,
+      EXTPRO_1, FUNCT_7, AMISTD_1, AMISTD_2;
+ constructors ZFMISC_1, AMISTD_2, NAT_1, PRE_POLY, EXTPRO_1, AMISTD_1,
+      DOMAIN_1, FUNCT_7, FUNCT_4, MEMSTR_0, RELSET_1;
+ registrations SETFAM_1, FUNCOP_1, STRUCT_0, AMISTD_1, AMISTD_2, ZFMISC_1,
+      CARD_1, RELSET_1, ORDINAL1, COMPOS_1, EXTPRO_1, ORDINAL6, FUNCT_7,
+      FUNCT_4, MEMSTR_0;
  requirements SUBSET, BOOLE;
 
 
@@ -31,38 +33,23 @@ begin :: Preliminaries
 
 reserve N for with_non-empty_elements non empty set;
 
-canceled;
-
-theorem :: AMISTD_4:2
-  for A being non empty stored-program AMI-Struct over N, s
-  being State of A, o being Object of A holds s.o in ObjectKind o;
-
-theorem :: AMISTD_4:3
-  for A being realistic IC-Ins-separated definite (non empty
-  stored-program AMI-Struct over N), s being State of A, f being
-Element of NAT, w being Element of ObjectKind IC A holds (s+*(IC A,w
-  )).f = s.f;
-
 definition
-
   let N be with_non-empty_elements non empty set,
-  A be IC-Ins-separated definite (non
-empty stored-program AMI-Struct over N), s be State of A, o be Object of A,
+  A be IC-Ins-separated non
+empty AMI-Struct over N, s be State of A, o be Object of A,
   a be Element of ObjectKind o;
   redefine func s+*(o,a) -> State of A;
 end;
 
-canceled 2;
-
-theorem :: AMISTD_4:6
-  for A being standard (IC-Ins-separated definite (non empty
-stored-program AMI-Struct over N)), I being Instruction of A, s being State
+theorem :: AMISTD_4:1
+  for A being standard IC-Ins-separated non empty
+AMI-Struct over N, I being Instruction of A, s being State
 of A, o being Object of A, w being Element of ObjectKind o st I is sequential &
   o <> IC A holds IC Exec(I,s) = IC Exec(I,s+*(o,w));
 
-theorem :: AMISTD_4:7
-  for A being standard (IC-Ins-separated definite (non empty
-stored-program AMI-Struct over N)), I being Instruction of A, s being State
+theorem :: AMISTD_4:2
+  for A being standard IC-Ins-separated non empty
+AMI-Struct over N, I being Instruction of A, s being State
 of A, o being Object of A, w being Element of ObjectKind o st I is sequential &
   o <> IC A holds IC Exec(I,s+*(o,w)) = IC (Exec(I,s) +* (o,w));
 
@@ -94,29 +81,27 @@ end;
 registration
   let N be with_non-empty_elements non empty set;
   cluster with_explicit_jumps
-    IC-relocable Exec-preserving with_non_trivial_ObjectKinds
+    IC-relocable with_non_trivial_ObjectKinds
 with_non_trivial_Instructions
- (regular J/A-independent homogeneous standard halting realistic
-  (standard-ins IC-Ins-separated
-    definite (non empty stored-program AMI-Struct over N)));
+ for regular J/A-independent homogeneous standard halting
+  standard-ins IC-Ins-separated
+    non empty AMI-Struct over N;
 end;
 
 registration
-
   let N be with_non-empty_elements set;
-  cluster with_non_trivial_ObjectKinds -> with_non_trivial_Instructions (
-    definite (non empty stored-program AMI-Struct over N));
+  cluster STC N -> with_non_trivial_Instructions;
 end;
 
 registration
   let N be with_non-empty_elements set;
   cluster with_non_trivial_ObjectKinds with_non_trivial_Instructions
-    IC-Ins-separated definite (non empty stored-program AMI-Struct over N);
+    IC-Ins-separated for non empty AMI-Struct over N;
 end;
 
 registration
-  let N be with_non-empty_elements set, A be with_non_trivial_ObjectKinds (non
-  empty AMI-Struct over N), o be Object of A;
+  let N be with_non-empty_elements set, A be with_non_trivial_ObjectKinds non
+  empty AMI-Struct over N, o be Object of A;
   cluster ObjectKind o -> non trivial;
 end;
 
@@ -127,15 +112,14 @@ registration
 end;
 
 registration
-
-  let N be with_non-empty_elements set, A be IC-Ins-separated (non empty
-  AMI-Struct over N);
+  let N be with_non-empty_elements set, A be IC-Ins-separated non empty
+  AMI-Struct over N;
   cluster ObjectKind IC A -> non trivial;
 end;
 
 definition
 
-  let N be with_non-empty_elements set, A be non empty stored-program
+  let N be with_non-empty_elements set, A be non empty
   AMI-Struct over N, I be Instruction of A;
   func Output I -> Subset of A means
 :: AMISTD_4:def 3
@@ -147,8 +131,8 @@ end;
 definition
 
   let N be with_non-empty_elements non empty set,
-  A be IC-Ins-separated definite (non
-  empty stored-program AMI-Struct over N), I be Instruction of A;
+  A be IC-Ins-separated non
+  empty AMI-Struct over N, I be Instruction of A;
   func Out_\_Inp I -> Subset of A means
 :: AMISTD_4:def 4
 
@@ -166,76 +150,72 @@ end;
 definition
 
   let N be with_non-empty_elements non empty set,
-  A be IC-Ins-separated definite (non
-  empty stored-program AMI-Struct over N), I be Instruction of A;
+  A be IC-Ins-separated non
+  empty AMI-Struct over N, I be Instruction of A;
   func Input I -> Subset of A equals
 :: AMISTD_4:def 6
   Out_U_Inp I \ Out_\_Inp I;
 end;
 
-canceled 2;
-
-theorem :: AMISTD_4:10
+theorem :: AMISTD_4:3
   for A being with_non_trivial_ObjectKinds IC-Ins-separated
-definite (non empty stored-program AMI-Struct over N), I being Instruction
+non empty AMI-Struct over N, I being Instruction
   of A holds Out_\_Inp I c= Output I;
 
-theorem :: AMISTD_4:11
-  for A being IC-Ins-separated definite (non empty stored-program
-  AMI-Struct over N), I being Instruction of A holds Output I c= Out_U_Inp I;
+theorem :: AMISTD_4:4
+  for A being IC-Ins-separated non empty
+  AMI-Struct over N, I being Instruction of A holds Output I c= Out_U_Inp I;
 
-canceled;
-
-theorem :: AMISTD_4:13
-  for A being with_non_trivial_ObjectKinds IC-Ins-separated definite (
-non empty stored-program AMI-Struct over N), I being Instruction of A holds
+theorem :: AMISTD_4:5
+  for A being with_non_trivial_ObjectKinds IC-Ins-separated
+non empty AMI-Struct over N, I being Instruction of A holds
   Out_\_Inp I = Output I \ Input I;
 
-theorem :: AMISTD_4:14
-  for A being with_non_trivial_ObjectKinds IC-Ins-separated definite (
-non empty stored-program AMI-Struct over N), I being Instruction of A holds
+theorem :: AMISTD_4:6
+  for A being with_non_trivial_ObjectKinds IC-Ins-separated
+non empty AMI-Struct over N, I being Instruction of A holds
   Out_U_Inp I = Output I \/ Input I;
 
-theorem :: AMISTD_4:15
-  for A being IC-Ins-separated definite (non empty stored-program
-  AMI-Struct over N), I being Instruction of A, o being Object of A st
+theorem :: AMISTD_4:7
+  for A being IC-Ins-separated non empty
+  AMI-Struct over N, I being Instruction of A, o being Object of A st
   ObjectKind o is trivial holds not o in Out_U_Inp I;
 
-theorem :: AMISTD_4:16
-  for A being IC-Ins-separated definite (non empty stored-program
-  AMI-Struct over N) , I being Instruction of A, o being Object of A st
+theorem :: AMISTD_4:8
+  for A being IC-Ins-separated non empty
+  AMI-Struct over N , I being Instruction of A, o being Object of A st
   ObjectKind o is trivial holds not o in Input I;
 
-theorem :: AMISTD_4:17
-  for A being IC-Ins-separated definite (non empty stored-program
-  AMI-Struct over N) , I being Instruction of A, o being Object of A st
+theorem :: AMISTD_4:9
+  for A being IC-Ins-separated non empty
+  AMI-Struct over N , I being Instruction of A, o being Object of A st
   ObjectKind o is trivial holds not o in Output I;
 
-theorem :: AMISTD_4:18
-  for A being IC-Ins-separated definite (non empty stored-program
-AMI-Struct over N), I being Instruction of A holds I is halting iff Output I
+theorem :: AMISTD_4:10
+  for A being IC-Ins-separated non empty
+AMI-Struct over N, I being Instruction of A holds I is halting iff Output I
   is empty;
 
-theorem :: AMISTD_4:19
+theorem :: AMISTD_4:11
   for A being with_non_trivial_ObjectKinds IC-Ins-separated
-definite (non empty stored-program AMI-Struct over N), I being Instruction
+non empty AMI-Struct over N, I being Instruction
   of A st I is halting holds Out_\_Inp I is empty;
 
-theorem :: AMISTD_4:20
-  for A being IC-Ins-separated definite (non empty stored-program
-AMI-Struct over N), I being Instruction of A st I is halting holds Out_U_Inp
+theorem :: AMISTD_4:12
+  for A being IC-Ins-separated non empty
+AMI-Struct over N, I being Instruction of A st I is halting holds Out_U_Inp
   I is empty;
 
-theorem :: AMISTD_4:21
-  for A being IC-Ins-separated definite (non empty stored-program
-  AMI-Struct over N), I being Instruction of A st I is halting holds Input I
+theorem :: AMISTD_4:13
+  for A being IC-Ins-separated non empty
+  AMI-Struct over N, I being Instruction of A st I is halting holds Input I
   is empty;
 
 registration
 
   let N be with_non-empty_elements non empty set,
-  A be halting IC-Ins-separated definite
-(non empty stored-program AMI-Struct over N), I be halting Instruction of A;
+  A be halting IC-Ins-separated
+non empty AMI-Struct over N, I be halting Instruction of A;
   cluster Input I -> empty;
   cluster Output I -> empty;
   cluster Out_U_Inp I -> empty;
@@ -243,80 +223,58 @@ end;
 
 registration
   let N be with_non-empty_elements non empty set;
-  cluster halting with_non_trivial_ObjectKinds IC-Ins-separated definite (non
-    empty stored-program AMI-Struct over N);
+  cluster halting with_non_trivial_ObjectKinds IC-Ins-separated for non
+    empty AMI-Struct over N;
 end;
 
 registration
   let N be with_non-empty_elements non empty set,
   A be halting
-  with_non_trivial_ObjectKinds IC-Ins-separated definite (non empty
-  stored-program AMI-Struct over N), I be halting Instruction of A;
+  with_non_trivial_ObjectKinds IC-Ins-separated non empty
+  AMI-Struct over N, I be halting Instruction of A;
   cluster Out_\_Inp I -> empty;
 end;
 
 registration
   let N;
-  cluster with_non_trivial_Instructions :::steady-programmed
+  cluster with_non_trivial_Instructions
   IC-Ins-separated
-    definite (non empty stored-program AMI-Struct over N);
+    for non empty AMI-Struct over N;
 end;
 
-canceled;
-
-theorem :: AMISTD_4:23
-  for A being standard (IC-Ins-separated definite (non empty
-  stored-program AMI-Struct over N)), I being Instruction of A st I is
+theorem :: AMISTD_4:14
+  for A being standard IC-Ins-separated non empty
+  AMI-Struct over N, I being Instruction of A st I is
   sequential holds not IC A in Out_\_Inp I;
 
-theorem :: AMISTD_4:24
-  for A being IC-Ins-separated definite (non empty stored-program
-  AMI-Struct over N), I being Instruction of A st ex s being State of A st
+theorem :: AMISTD_4:15
+  for A being IC-Ins-separated non empty
+  AMI-Struct over N, I being Instruction of A st ex s being State of A st
   Exec(I,s).IC A <> IC s holds IC A in Output I;
 
 registration
   let N;
-  cluster standard (IC-Ins-separated definite (non empty stored-program
-    AMI-Struct over N));
+  cluster standard for IC-Ins-separated non empty
+    AMI-Struct over N;
 end;
 
-theorem :: AMISTD_4:25
-  for A being standard (IC-Ins-separated definite (non empty
-  stored-program AMI-Struct over N)), I being Instruction of A st I is
+theorem :: AMISTD_4:16
+  for A being standard IC-Ins-separated non empty
+  AMI-Struct over N, I being Instruction of A st I is
   sequential holds IC A in Output I;
 
-theorem :: AMISTD_4:26
-  for A being IC-Ins-separated definite (non empty stored-program
-  AMI-Struct over N), I being Instruction of A st ex s being State of A st
+theorem :: AMISTD_4:17
+  for A being IC-Ins-separated non empty
+  AMI-Struct over N, I being Instruction of A st ex s being State of A st
   Exec(I,s).IC A <> IC s holds IC A in Out_U_Inp I;
 
-theorem :: AMISTD_4:27
-  for A being standard (IC-Ins-separated definite (non empty
-  stored-program AMI-Struct over N)), I being Instruction of A st I is
+theorem :: AMISTD_4:18
+  for A being standard IC-Ins-separated non empty
+  AMI-Struct over N, I being Instruction of A st I is
   sequential holds IC A in Out_U_Inp I;
 
-theorem :: AMISTD_4:28
-  for A being IC-Ins-separated definite (non empty stored-program
-  AMI-Struct over N), f being Element of NAT, I being Instruction
-of A st for s being State of A, p being NAT-defined FinPartState of A
- holds Exec(I, s +* p) = Exec (I,s) +* p holds not f in Out_U_Inp I;
-
-:: Twierdzenie to moze zostac przywrocone, jak zostanie wyrzucona
-:: wlasnosc 'stored-program', teraz jest prawdziwe jedynie
-:: dla 'steady-programmed'
-
-::theorem
-::  for A being IC-Ins-separated definite (standard-ins non empty
-::stored-program AMI-Struct over N), I being Instruction of A, o being Object
-::  of A st I is jump-only holds o in Output I implies o = IC A
-::proof
-::  let A be IC-Ins-separated definite (standard-ins non empty stored-program
-::  AMI-Struct over N), I be Instruction of A, o be Object of A;
-::  assume
-::A1: for s being State of A, o being Object of A, J being Instruction of
-::  A st InsCode I = InsCode J & o <> IC A holds Exec(J,s).o = s.o;
-::  assume o in Output I;
-::  then ex s being State of A st s.o <> Exec(I,s).o by Def3;
-::  hence thesis by A1;
-::end;
+theorem :: AMISTD_4:19
+  for A being IC-Ins-separated standard-ins non empty
+   AMI-Struct over N, I being Instruction of A, o being Object
+  of A st I is jump-only holds o in Output I implies o = IC A;
 

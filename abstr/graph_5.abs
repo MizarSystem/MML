@@ -17,16 +17,16 @@ environ
  vocabularies NUMBERS, SUBSET_1, FUNCT_1, RELAT_1, TARSKI, CARD_1, FINSET_1,
       XXREAL_0, FINSEQ_1, FINSEQ_2, CARD_3, NAT_1, XBOOLE_0, ARYTM_3, XREAL_0,
       ORDINAL1, ARYTM_1, ORDINAL4, GRAPH_1, STRUCT_0, TREES_2, GRAPH_4,
-      PARTFUN1, GLIB_000, REAL_1, GRAPH_5;
+      PARTFUN1, GLIB_000, REAL_1, GRAPH_5, ARYTM_2;
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, CARD_1, NUMBERS, XCMPLX_0,
       XXREAL_0, XREAL_0, RELAT_1, FUNCT_1, PARTFUN1, FINSEQ_1, SEQ_1, FINSEQ_2,
-      FINSEQ_4, FINSET_1, REAL_1, NAT_1, NAT_D, STRUCT_0, GRAPH_1, FUNCT_2,
-      GRAPH_4, CARD_3, RVSUM_1;
+      FINSEQ_4, FINSET_1, ARYTM_2, REAL_1, NAT_1, NAT_D, STRUCT_0, GRAPH_1,
+      FUNCT_2, GRAPH_4, CARD_3, RVSUM_1;
  constructors XXREAL_0, FINSEQ_4, FINSOP_1, BINARITH, GRAPH_4, SEQ_1, NAT_D,
-      RVSUM_1;
+      RVSUM_1, ARYTM_2, RELSET_1;
  registrations XBOOLE_0, RELAT_1, FUNCT_1, FINSET_1, NUMBERS, XXREAL_0,
       XREAL_0, NAT_1, MEMBERED, FINSEQ_1, GRAPH_1, GRAPH_4, VALUED_0, CARD_1,
-      STRUCT_0;
+      STRUCT_0, ARYTM_2;
  requirements REAL, BOOLE, SUBSET, NUMERALS, ARITHM;
 
 
@@ -36,9 +36,7 @@ reserve n,m,i,j,k for Element of NAT,
   x,y,e,X,V,U for set,
   W,f,g for Function;
 
-canceled;
-
-theorem :: GRAPH_5:2
+theorem :: GRAPH_5:1
   rng f c= rng g & x in dom f implies ex y st y in dom g & f.x = g. y;
 
 scheme :: GRAPH_5:sch 1
@@ -46,22 +44,20 @@ scheme :: GRAPH_5:sch 1
   LambdaAB { A, B()->set, F(Element of B())->set } : ex f being Function st
   dom f = A() & for x being Element of B() st x in A() holds f.x = F(x);
 
-theorem :: GRAPH_5:3
+theorem :: GRAPH_5:2
   for D being finite set, n being Element of NAT, X being set st X
   = {x where x is Element of D* : 1 <= len x & len x <= n } holds X is finite;
 
-theorem :: GRAPH_5:4
+theorem :: GRAPH_5:3
   for D being finite set, n being Element of NAT, X being set st X
   = {x where x is Element of D* : len x <= n } holds X is finite;
 
-canceled;
-
-theorem :: GRAPH_5:6
+theorem :: GRAPH_5:4
   for D being finite set, k being Element of NAT st card D = k+1
 holds ex x being Element of D,C being Subset of D st D = C \/ { x } & card C =
   k;
 
-theorem :: GRAPH_5:7
+theorem :: GRAPH_5:5
   for D being finite set st card D = 1 holds ex x being Element of D st D={x};
 
 scheme :: GRAPH_5:sch 2
@@ -78,59 +74,57 @@ begin :: Additional Properties of Finite Sequences
 
 reserve p,q for FinSequence;
 
-canceled;
-
-theorem :: GRAPH_5:9
+theorem :: GRAPH_5:6
   (for n,m st 1<=n & n<m & m<=len p holds p.n <> p.m) iff p is one-to-one;
 
-theorem :: GRAPH_5:10
+theorem :: GRAPH_5:7
   (for n,m st 1<=n & n<m & m<=len p holds p.n <> p.m) iff card rng p = len p;
 
 reserve G for Graph,
   pe,qe for FinSequence of the carrier' of G;
 
-theorem :: GRAPH_5:11
+theorem :: GRAPH_5:8
   i in dom pe implies (the Source of G).(pe.i) in the carrier of G & (
   the Target of G).(pe.i) in the carrier of G;
 
-theorem :: GRAPH_5:12
+theorem :: GRAPH_5:9
   q^<*x*> is one-to-one & rng (q^<*x*>) c= rng p implies ex p1,p2
   being FinSequence st p=p1^<*x*>^p2 & rng q c= rng (p1^p2);
 
 begin :: Additional Properties of Chains and Oriented Paths
 
-theorem :: GRAPH_5:13
+theorem :: GRAPH_5:10
   p^q is Chain of G implies p is Chain of G & q is Chain of G;
 
-theorem :: GRAPH_5:14
+theorem :: GRAPH_5:11
   p^q is oriented Chain of G implies p is oriented Chain of G & q
   is oriented Chain of G;
 
-theorem :: GRAPH_5:15
+theorem :: GRAPH_5:12
   for p,q being oriented Chain of G st (the Target of G).(p.len p)
   =(the Source of G).(q.1) holds p^q is oriented Chain of G;
 
 begin :: Additional Properties of Acyclic Oriented Paths
 
+theorem :: GRAPH_5:13
+  {} is Simple oriented Chain of G;
+
+theorem :: GRAPH_5:14
+  p^q is Simple oriented Chain of G implies p is Simple
+  oriented Chain of G & q is Simple oriented Chain of G;
+
+theorem :: GRAPH_5:15
+  len pe = 1 implies pe is Simple oriented Chain of G;
+
 theorem :: GRAPH_5:16
-  {} is Simple (oriented Chain of G);
-
-theorem :: GRAPH_5:17
-  p^q is Simple (oriented Chain of G) implies p is Simple (
-  oriented Chain of G) & q is Simple (oriented Chain of G);
-
-theorem :: GRAPH_5:18
-  len pe = 1 implies pe is Simple (oriented Chain of G);
-
-theorem :: GRAPH_5:19
-  for p being Simple (oriented Chain of G), q being FinSequence of
+  for p being Simple oriented Chain of G, q being FinSequence of
 the carrier' of G st len p >=1 & len q=1 & (the Source of G).(q.1)=(the Target
 of G).(p.(len p)) & (the Source of G).(p.1) <> (the Target of G).(p.(len p)) &
 not ex k st 1<=k & k <= len p & (the Target of G).(p.k) =(the Target of G).(q.1
-  ) holds p^q is Simple (oriented Chain of G);
+  ) holds p^q is Simple oriented Chain of G;
 
-theorem :: GRAPH_5:20
-  for p being Simple (oriented Chain of G) holds p is one-to-one;
+theorem :: GRAPH_5:17
+  for p being Simple oriented Chain of G holds p is one-to-one;
 
 begin :: The Set of the carrier On a Path or an Edge
 
@@ -149,51 +143,49 @@ definition
   of G : ex i st i in dom pe & v in vertices(pe/.i)};
 end;
 
-theorem :: GRAPH_5:21
-  for p being Simple (oriented Chain of G) st p=pe^qe & len pe >=
+theorem :: GRAPH_5:18
+  for p being Simple oriented Chain of G st p=pe^qe & len pe >=
 1 & len qe >= 1 & (the Source of G).(p.1) <> (the Target of G).(p.len p) holds
 not (the Source of G).(p.1) in vertices qe & not (the Target of G).(p.len p) in
   vertices pe;
 
-theorem :: GRAPH_5:22
+theorem :: GRAPH_5:19
   vertices pe c= V iff for i be Nat st i in dom pe holds vertices( pe/.i) c= V;
 
-theorem :: GRAPH_5:23
+theorem :: GRAPH_5:20
   not vertices pe c= V implies ex i being Element of NAT, q,r
 being FinSequence of the carrier' of G st i+1 <= len pe & not vertices(pe/.(i+1
   )) c= V & len q=i & pe=q^r & vertices q c= V;
 
-theorem :: GRAPH_5:24
+theorem :: GRAPH_5:21
   rng qe c= rng pe implies vertices qe c= vertices pe;
 
-theorem :: GRAPH_5:25
+theorem :: GRAPH_5:22
   rng qe c= rng pe & vertices(pe) \ X c= V implies vertices(qe) \ X c= V;
 
-theorem :: GRAPH_5:26
+theorem :: GRAPH_5:23
   vertices(pe^qe) \ X c= V implies vertices(pe) \ X c= V &
   vertices(qe) \ X c= V;
 
 reserve v,v1,v2,v3 for Element of G;
 
-canceled;
-
-theorem :: GRAPH_5:28
+theorem :: GRAPH_5:24
   i in dom pe & (v=(the Source of G).(pe.i) or v=(the Target of G)
   .(pe.i)) implies v in vertices pe;
 
-theorem :: GRAPH_5:29
+theorem :: GRAPH_5:25
   len pe = 1 implies vertices(pe) = vertices(pe/.1);
 
-theorem :: GRAPH_5:30
+theorem :: GRAPH_5:26
   vertices pe c= vertices(pe^qe) & vertices qe c= vertices(pe^qe);
 
 reserve p,q for oriented Chain of G;
 
-theorem :: GRAPH_5:31
+theorem :: GRAPH_5:27
   p = q^pe & len q >= 1 & len pe = 1 implies vertices(p) =
   vertices(q) \/ {(the Target of G).(pe.1)};
 
-theorem :: GRAPH_5:32
+theorem :: GRAPH_5:28
   v <> (the Source of G).(p.1) & v in vertices(p) implies ex i st
   1<=i & i <= len p & v = (the Target of G).(p.i);
 
@@ -223,23 +215,23 @@ definition
   where p is oriented Chain of G : p is_orientedpath_of v1,v2};
 end;
 
-theorem :: GRAPH_5:33
+theorem :: GRAPH_5:29
   p is_orientedpath_of v1,v2 implies v1 in vertices p & v2 in vertices p;
 
-theorem :: GRAPH_5:34
+theorem :: GRAPH_5:30
   x in OrientedPaths(v1,v2) iff ex p st p=x & p is_orientedpath_of v1,v2;
 
-theorem :: GRAPH_5:35
+theorem :: GRAPH_5:31
   p is_orientedpath_of v1,v2,V & v1 <> v2 implies v1 in V;
 
-theorem :: GRAPH_5:36
+theorem :: GRAPH_5:32
   p is_orientedpath_of v1,v2,V & V c= U implies p is_orientedpath_of v1,v2,U;
 
-theorem :: GRAPH_5:37
+theorem :: GRAPH_5:33
   len p >= 1 & p is_orientedpath_of v1,v2 & pe.1 orientedly_joins
   v2,v3 & len pe=1 implies ex q st q=p^pe & q is_orientedpath_of v1,v3;
 
-theorem :: GRAPH_5:38
+theorem :: GRAPH_5:34
   q=p^pe & len p >= 1 & len pe=1 & p is_orientedpath_of v1,v2,V &
   pe.1 orientedly_joins v2,v3 implies q is_orientedpath_of v1,v3,V \/{v2};
 
@@ -268,7 +260,7 @@ definition
   func AcyclicPaths(v1,v2) -> Subset of ((the carrier' of G)*) equals
 :: GRAPH_5:def 8
   {p where
-  p is Simple (oriented Chain of G): p is_acyclicpath_of v1,v2};
+  p is Simple oriented Chain of G: p is_acyclicpath_of v1,v2};
 end;
 
 definition
@@ -276,7 +268,7 @@ definition
   func AcyclicPaths(v1,v2,V) -> Subset of ((the carrier' of G)*) equals
 :: GRAPH_5:def 9
   {p
-  where p is Simple (oriented Chain of G) : p is_acyclicpath_of v1,v2,V};
+  where p is Simple oriented Chain of G : p is_acyclicpath_of v1,v2,V};
 end;
 
 definition
@@ -284,7 +276,7 @@ definition
   func AcyclicPaths(p) -> Subset of ((the carrier' of G)*) equals
 :: GRAPH_5:def 10
   {q where q
-  is Simple (oriented Chain of G) : q <> {} & (the Source of G).(q.1) = (the
+  is Simple oriented Chain of G : q <> {} & (the Source of G).(q.1) = (the
 Source of G).(p.1) & (the Target of G).(q.(len q)) = (the Target of G).(p.(len
   p)) & rng q c= rng p};
 end;
@@ -294,49 +286,53 @@ definition
   func AcyclicPaths(G) -> Subset of (the carrier' of G)* equals
 :: GRAPH_5:def 11
   {q where q is
-  Simple (oriented Chain of G) : not contradiction};
+  Simple oriented Chain of G : not contradiction};
 end;
 
-theorem :: GRAPH_5:39
+theorem :: GRAPH_5:35
   p={} implies not p is_acyclicpath_of v1,v2;
 
-theorem :: GRAPH_5:40
+theorem :: GRAPH_5:36
   p is_acyclicpath_of v1,v2 implies p is_orientedpath_of v1,v2;
 
-theorem :: GRAPH_5:41
+theorem :: GRAPH_5:37
   AcyclicPaths(v1,v2) c= OrientedPaths(v1,v2);
 
-theorem :: GRAPH_5:42
+theorem :: GRAPH_5:38
   AcyclicPaths(p) c= AcyclicPaths(G);
 
-theorem :: GRAPH_5:43
+theorem :: GRAPH_5:39
   AcyclicPaths(v1,v2) c= AcyclicPaths(G);
 
-theorem :: GRAPH_5:44
+theorem :: GRAPH_5:40
   p is_orientedpath_of v1,v2 implies AcyclicPaths(p) c= AcyclicPaths(v1,v2);
 
-theorem :: GRAPH_5:45
+theorem :: GRAPH_5:41
   p is_orientedpath_of v1,v2,V implies AcyclicPaths(p) c= AcyclicPaths(v1,v2,V)
 ;
 
-theorem :: GRAPH_5:46
+theorem :: GRAPH_5:42
   q in AcyclicPaths(p) implies len q <= len p;
 
-theorem :: GRAPH_5:47
+theorem :: GRAPH_5:43
   p is_orientedpath_of v1,v2 implies AcyclicPaths(p) <> {} &
   AcyclicPaths(v1,v2) <> {};
 
-theorem :: GRAPH_5:48
+theorem :: GRAPH_5:44
   p is_orientedpath_of v1,v2,V implies AcyclicPaths(p) <> {} &
   AcyclicPaths(v1,v2,V) <> {};
 
-theorem :: GRAPH_5:49
+theorem :: GRAPH_5:45
   AcyclicPaths(v1,v2,V) c= AcyclicPaths(G);
 
 begin :: Weight Graphs and Their Basic Properties
 
+notation
+ synonym Real>=0 for REAL+;
+end;
+
 definition
-  func Real>=0 -> Subset of REAL equals
+ redefine func Real>=0 -> Subset of REAL equals
 :: GRAPH_5:def 12
   { r where r is Real : r >=0 };
 end;
@@ -378,45 +374,45 @@ definition
   Sum RealSequence(p,W);
 end;
 
-theorem :: GRAPH_5:50
+theorem :: GRAPH_5:46
   W is_weight>=0of G implies W is_weight_of G;
 
-theorem :: GRAPH_5:51
+theorem :: GRAPH_5:47
   for f being FinSequence of REAL st W is_weight>=0of G & f =
   RealSequence(pe,W) holds for i st i in dom f holds f.i >= 0;
 
-theorem :: GRAPH_5:52
+theorem :: GRAPH_5:48
   rng qe c= rng pe & W is_weight_of G & i in dom qe implies ex j
   st j in dom pe & RealSequence(pe,W).j = RealSequence(qe,W).i;
 
-theorem :: GRAPH_5:53
+theorem :: GRAPH_5:49
   len qe = 1 & rng qe c= rng pe & W is_weight>=0of G implies cost(qe,W)
   <= cost(pe,W);
 
-theorem :: GRAPH_5:54
+theorem :: GRAPH_5:50
   W is_weight>=0of G implies cost(pe,W) >= 0;
 
-theorem :: GRAPH_5:55
+theorem :: GRAPH_5:51
   pe = {} & W is_weight_of G implies cost(pe,W) = 0;
 
-theorem :: GRAPH_5:56
+theorem :: GRAPH_5:52
   for D being non empty finite Subset of (the carrier' of G)* st D
 = AcyclicPaths(v1,v2) ex pe st pe in D & for qe st qe in D holds cost(pe,W) <=
   cost(qe,W);
 
-theorem :: GRAPH_5:57
+theorem :: GRAPH_5:53
   for D being non empty finite Subset of (the carrier' of G)* st D
 = AcyclicPaths(v1,v2,V) holds ex pe st pe in D & for qe st qe in D holds cost(
   pe,W) <= cost(qe,W);
 
-theorem :: GRAPH_5:58
+theorem :: GRAPH_5:54
   W is_weight_of G implies cost(pe^qe,W) = cost(pe,W) + cost(qe,W);
 
-theorem :: GRAPH_5:59
+theorem :: GRAPH_5:55
   qe is one-to-one & rng qe c= rng pe & W is_weight>=0of G implies
   cost(qe,W) <= cost(pe,W);
 
-theorem :: GRAPH_5:60
+theorem :: GRAPH_5:56
   pe in AcyclicPaths(p) & W is_weight>=0of G implies cost(pe,W) <= cost(p,W);
 
 begin :: Shortest Paths and Their Basic Properties
@@ -446,15 +442,15 @@ end;
 begin :: Basic Properties of a Graph with Finite carrier
 
 reserve G for finite Graph,
-  ps for Simple (oriented Chain of G),
+  ps for Simple oriented Chain of G,
   P,Q for oriented Chain of G,
   v1,v2,v3 for Element of G,
   pe,qe for FinSequence of the carrier' of G;
 
-theorem :: GRAPH_5:61
+theorem :: GRAPH_5:57
   len ps <= VerticesCount G;
 
-theorem :: GRAPH_5:62
+theorem :: GRAPH_5:58
   len ps <= EdgesCount G;
 
 registration
@@ -477,30 +473,30 @@ registration
   cluster AcyclicPaths(v1,v2,V) -> finite;
 end;
 
-theorem :: GRAPH_5:63
+theorem :: GRAPH_5:59
   AcyclicPaths(v1,v2) <> {} implies ex pe st pe in AcyclicPaths(v1,v2) &
   for qe st qe in AcyclicPaths(v1,v2) holds cost(pe,W) <= cost(qe,W);
 
-theorem :: GRAPH_5:64
+theorem :: GRAPH_5:60
   AcyclicPaths(v1,v2,V) <> {} implies ex pe st pe in AcyclicPaths(v1,v2,
   V) & for qe st qe in AcyclicPaths(v1,v2,V) holds cost(pe,W) <= cost(qe,W);
 
-theorem :: GRAPH_5:65
+theorem :: GRAPH_5:61
   P is_orientedpath_of v1,v2 & W is_weight>=0of G implies ex q being
-  Simple(oriented Chain of G) st q is_shortestpath_of v1,v2,W;
+  Simple oriented Chain of G st q is_shortestpath_of v1,v2,W;
 
-theorem :: GRAPH_5:66
+theorem :: GRAPH_5:62
   P is_orientedpath_of v1,v2,V & W is_weight>=0of G implies ex q
-  being Simple (oriented Chain of G) st q is_shortestpath_of v1,v2,V,W;
+  being Simple oriented Chain of G st q is_shortestpath_of v1,v2,V,W;
 
 begin :: Three Basic Theorems for Dijkstra's Shortest Path Algorithm
 
-theorem :: GRAPH_5:67
+theorem :: GRAPH_5:63
   W is_weight>=0of G & P is_shortestpath_of v1,v2,V,W & v1 <> v2 &
   (for Q, v3 st not v3 in V & Q is_shortestpath_of v1,v3,V,W holds cost(P,W) <=
   cost(Q,W)) implies P is_shortestpath_of v1,v2,W;
 
-theorem :: GRAPH_5:68
+theorem :: GRAPH_5:64
   W is_weight>=0of G & P is_shortestpath_of v1,v2,V,W & v1 <> v2 & V c=
 U & (for Q, v3 st not v3 in V & Q is_shortestpath_of v1,v3,V,W holds cost(P,W)
   <= cost(Q,W)) implies P is_shortestpath_of v1,v2,U,W;
@@ -517,7 +513,7 @@ st v in V & v <> v1 ex q being oriented Chain of G st q is_shortestpath_of v1,v
 end;
 
 ::$N Dijkstra's shortest path algorithm
-theorem :: GRAPH_5:69
+theorem :: GRAPH_5:65
   for G being finite oriented Graph, P,Q,R being oriented Chain of G, v1
   ,v2,v3 being Element of G st e in the carrier' of G & W
 is_weight>=0of G & len P >= 1 & P is_shortestpath_of v1,v2,V,W & v1 <> v2 & v1

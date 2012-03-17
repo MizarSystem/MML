@@ -30,13 +30,15 @@ environ
       EUCLID, WAYBEL18, TOPREAL9, TOPREALB;
  constructors SEQ_1, MONOID_0, FUNCT_7, FINSEQOP, VALUED_2, TOPREAL9, TOPREALB,
       TOPS_1, BORSUK_4, COMPLEX1, T_0TOPSP, SQUARE_1, TSP_1, FUNCT_4, FUNCSDOM,
-      CONVEX1, WAYBEL18, SETFAM_1, BINOP_2, EUCLID_7, EUCLID_9, SEQ_4;
+      CONVEX1, WAYBEL18, SETFAM_1, BINOP_2, EUCLID_7, EUCLID_9, SEQ_4,
+      PARTFUN3;
  registrations XBOOLE_0, RELAT_1, FUNCT_1, VALUED_0, VALUED_1, MEMBERED,
       XCMPLX_0, XREAL_0, VALUED_2, PRE_TOPC, STRUCT_0, EUCLID, MONOID_0,
       TOPREALB, XXREAL_0, NAT_1, BORSUK_4, BORSUK_6, TOPMETR, FUNCT_2, RVSUM_1,
       TOPREAL9, SQUARE_1, RCOMP_1, TOPS_1, FUNCT_7, NUMBERS, RLVECT_1,
       FINSEQ_1, FUNCOP_1, WAYBEL18, BORSUK_1, PRE_POLY, JORDAN2B, ZFMISC_1,
-      FINSEQ_2, REALSET1, ORDINAL1, PARTFUN3, EUCLID_9, CARD_1;
+      FINSEQ_2, REALSET1, ORDINAL1, PARTFUN3, EUCLID_9, CARD_1, FINSET_1,
+      RELSET_1;
  requirements SUBSET, BOOLE, NUMERALS, ARITHM, REAL;
  definitions FINSEQ_1, RLVECT_1, TARSKI, XBOOLE_0, LATTICE7, FUNCT_1, FUNCT_2,
       XCMPLX_0, SQUARE_1, BINOP_1, FUNCOP_1, VALUED_0, VALUED_1, FINSEQ_2,
@@ -50,7 +52,7 @@ environ
       RELAT_1, XCMPLX_1, ORDINAL1, TSP_1, RLVECT_1, TOPS_3, YELLOW12, JORDAN2C,
       TOPGEN_5, YELLOW17, ZFMISC_1, REAL_NS1, WAYBEL18, BINOP_1, JGRAPH_4,
       SUBSET_1, ABSVALUE, CARD_1, REALSET1, STRUCT_0, PRVECT_2, TOPREAL7,
-      EUCLID_9, TOPS_4;
+      EUCLID_9, TOPS_4, NAT_D;
  schemes FUNCT_2, BINOP_1, FINSEQ_2;
 
 begin :: Preliminaries
@@ -69,15 +71,15 @@ reserve
 registration
   let R be Relation, X be empty set;
   cluster R.:X -> empty;
-  coherence by RELAT_1:149;
+  coherence by RELAT_1:116;
   cluster R"X -> empty;
-  coherence by RELAT_1:171;
+  coherence by RELAT_1:136;
 end;
 
 registration
   let A be empty set;
-  cluster -> empty Element of A;
-  coherence by SUBSET_1:def 2;
+  cluster -> empty for Element of A;
+  coherence by SUBSET_1:def 1;
 end;
 
 theorem
@@ -85,10 +87,10 @@ theorem
   proof
     let X be trivial set, Y be set such that
 A1: X,Y are_equipotent;
-A2: card X < 2 by REALSET1:13;
-A3: Y is finite by A1,CARD_1:68;
-    card X = card Y by A1,CARD_1:21;
-    hence thesis by A2,A3,REALSET1:13;
+A2: card X < 2 by NAT_D:60;
+A3: Y is finite by A1,CARD_1:38;
+    card X = card Y by A1,CARD_1:5;
+    hence thesis by A2,A3,NAT_D:60;
   end;
 
 registration
@@ -98,14 +100,14 @@ registration
 end;
 
 registration
-  let r be positive (real number);
+  let r be positive real number;
   cluster r^2 -> positive;
   coherence;
 end;
 
 registration
   cluster sqrt(0) -> zero;
-  coherence by SQUARE_1:82;
+  coherence by SQUARE_1:17;
 end;
 
 registration
@@ -113,7 +115,7 @@ registration
   cluster sqr(f) -> empty;
   coherence;
   cluster |.f.| -> zero;
-  coherence by RVSUM_1:102;
+  coherence by RVSUM_1:72;
 end;
 
 theorem Th2:
@@ -187,7 +189,7 @@ A8: x in dom (f(/)c1 - g(/)c2);
     hence ((f(/)c1 - g(/)c2)).x = (f(/)c1).x - (g(/)c2).x by VALUED_1:13
     .= (f.x/c1) - (g(/)c2).x by VALUED_2:29
     .= (f.x/c1) - (g.x/c2) by VALUED_2:29
-    .= (f.x*c2-g.x*c1) / (c1*c2) by A1,XCMPLX_1:131
+    .= (f.x*c2-g.x*c1) / (c1*c2) by A1,XCMPLX_1:130
     .= (f.x*c2-(g(#)c1).x) / (c1*c2) by VALUED_1:6
     .= ((f(#)c2).x-(g(#)c1).x) / (c1*c2) by VALUED_1:6
     .= ((f(#)c2-g(#)c1)).x / (c1*c2) by A2,A3,A4,A5,A6,A7,A8,VALUED_1:13
@@ -209,7 +211,7 @@ A3: dom(f-c(#)g) = dom f /\ dom(c(#)g) by VALUED_1:12
 A4: x in dom(f(/)c - g);
     hence (f(/)c - g).x = (f(/)c).x - g.x by VALUED_1:13
     .= f.x/c - g.x by VALUED_2:29
-    .= f.x/c - c*g.x/c by A1,XCMPLX_1:90
+    .= f.x/c - c*g.x/c by A1,XCMPLX_1:89
     .= f.x/c - (c(#)g).x/c by VALUED_1:6
     .= (f.x-(c(#)g).x) / c
     .= ((f-c(#)g)).x / c by A2,A3,A4,VALUED_1:13
@@ -263,7 +265,7 @@ theorem
     assume x in dom((f(/)c)^2);
     thus ((f(/)c)^2).x = ((f(/)c).x)^2 by VALUED_1:11
     .= (f.x/c)^2 by VALUED_2:29
-    .= (f.x)^2 / c^2 by XCMPLX_1:77
+    .= (f.x)^2 / c^2 by XCMPLX_1:76
     .= (f^2).x / c^2 by VALUED_1:11
     .= (f^2 (/) c^2).x by VALUED_2:29;
   end;
@@ -271,11 +273,11 @@ theorem
 theorem Th11:
   |. (n|->r) - (n|->s) .| = sqrt(n) * abs(r-s)
   proof
-    thus |. (n|->r) - (n|->s) .| = sqrt Sum sqr (n|->(r-s)) by RVSUM_1:51
-    .= sqrt Sum (n|->(r-s)^2) by RVSUM_1:82
-    .= sqrt (n*(r-s)^2) by RVSUM_1:110
-    .= sqrt n * sqrt((r-s)^2) by SQUARE_1:97
-    .= sqrt n * abs(r-s) by COMPLEX1:158;
+    thus |. (n|->r) - (n|->s) .| = sqrt Sum sqr (n|->(r-s)) by RVSUM_1:30
+    .= sqrt Sum (n|->(r-s)^2) by RVSUM_1:56
+    .= sqrt (n*(r-s)^2) by RVSUM_1:80
+    .= sqrt n * sqrt((r-s)^2) by SQUARE_1:29
+    .= sqrt n * abs(r-s) by COMPLEX1:72;
   end;
 
 registration
@@ -287,10 +289,10 @@ registration
     let a be set such that a in dom F;
     per cases;
     suppose x in dom f & x = a;
-      hence thesis by FUNCT_7:33;
+      hence thesis by FUNCT_7:31;
     end;
     suppose x in dom f & x <> a;
-      then F.a = f.a by FUNCT_7:34;
+      then F.a = f.a by FUNCT_7:32;
       hence thesis;
     end;
     suppose not x in dom f;
@@ -305,8 +307,8 @@ theorem Th12:
   proof
     set f = (0*n)+*(x,c);
     set g = (0*n)+*(x,c^2);
-A1: dom f = dom (0*n) by FUNCT_7:32;
-A2: dom g = dom (0*n) by FUNCT_7:32;
+A1: dom f = dom (0*n) by FUNCT_7:30;
+A2: dom g = dom (0*n) by FUNCT_7:30;
 A3: dom (f^2) = dom f by VALUED_1:11;
     thus dom (f^2) = dom g by A1,A2,VALUED_1:11;
     let a be set;
@@ -316,15 +318,15 @@ A5: (f^2).a = (f.a)^2 by VALUED_1:11;
     per cases;
     suppose
 A6:   a = x;
-      then f.a = c by A1,A3,A4,FUNCT_7:33;
-      hence thesis by A6,A1,A3,A4,A5,FUNCT_7:33;
+      then f.a = c by A1,A3,A4,FUNCT_7:31;
+      hence thesis by A6,A1,A3,A4,A5,FUNCT_7:31;
     end;
     suppose
 A7:   a <> x;
       then
-A8:   f.a = (n|->0).a by FUNCT_7:34
+A8:   f.a = (n|->0).a by FUNCT_7:32
       .= {}.x;
-      g.a = (n|->0).a by A7,FUNCT_7:34
+      g.a = (n|->0).a by A7,FUNCT_7:32
       .= {}.x;
       hence thesis by A5,A8;
     end;
@@ -335,46 +337,46 @@ theorem Th13:
   proof
     set f = (0*n)+*(x,r);
 A1: r^2 in REAL by XREAL_0:def 1;
-A2: n in NAT by ORDINAL1:def 13;
+A2: n in NAT by ORDINAL1:def 12;
     assume
 A3: x in Seg n;
     f^2 = (0*n)+*(x,r^2) by Th12;
-    then Sum (f^2) = r^2 by A3,A1,A2,JORDAN2B:14;
-    hence thesis by COMPLEX1:158;
+    then Sum (f^2) = r^2 by A3,A1,A2,JORDAN2B:10;
+    hence thesis by COMPLEX1:72;
   end;
 
 theorem Th14:
   (0.REAL n)+*(x,0) = 0.REAL n
   proof
     set p = (0.REAL n)+*(x,0);
-A1: dom p = Seg n by EUCLID:3;
-A2: dom ((0.REAL n)+*(x,0)) = dom (0.REAL n) by FUNCT_7:32;
-A3: dom (0.REAL n) = Seg n by EUCLID:3;
+A1: dom p = Seg n by FINSEQ_1:89;
+A2: dom ((0.REAL n)+*(x,0)) = dom (0.REAL n) by FUNCT_7:30;
+A3: dom (0.REAL n) = Seg n by FINSEQ_1:89;
     now
       let z be set;
       assume
 A4:   z in dom p;
       per cases;
       suppose z = x;
-        hence p.z = 0 by A1,A3,A4,FUNCT_7:33
+        hence p.z = 0 by A1,A3,A4,FUNCT_7:31
         .= (0.REAL n).z;
       end;
       suppose z <> x;
-        hence p.z = (0.REAL n).z by FUNCT_7:34;
+        hence p.z = (0.REAL n).z by FUNCT_7:32;
       end;
     end;
-    hence thesis by A2,FUNCT_1:9;
+    hence thesis by A2,FUNCT_1:2;
   end;
 
 theorem Th15:
   mlt(f1,(0.REAL n)+*(x,r)) = (0.REAL n)+*(x,f1.x*r)
   proof
     set p = (0.REAL n)+*(x,r);
-A1: dom f1 = Seg n by EUCLID:3;
-A2: dom p = Seg n by EUCLID:3;
+A1: dom f1 = Seg n by FINSEQ_1:89;
+A2: dom p = Seg n by FINSEQ_1:89;
 A3: dom mlt(f1,p) = dom f1 /\ dom p by VALUED_1:def 4;
-A4: dom ((0.REAL n)+*(x,f1.x*r)) = dom (0.REAL n) by FUNCT_7:32;
-A5: dom (0.REAL n) = Seg n by EUCLID:3;
+A4: dom ((0.REAL n)+*(x,f1.x*r)) = dom (0.REAL n) by FUNCT_7:30;
+A5: dom (0.REAL n) = Seg n by FINSEQ_1:89;
     now
       let z be set;
       assume
@@ -383,35 +385,35 @@ A7:   (mlt(f1,p)).z = f1.z*p.z by VALUED_1:5;
       per cases;
       suppose
 A8:     z = x;
-        hence (mlt(f1,p)).z = f1.z*r by A1,A2,A3,A5,A6,A7,FUNCT_7:33
-        .= ((0.REAL n)+*(x,f1.x*r)).z by A1,A2,A3,A5,A6,A8,FUNCT_7:33;
+        hence (mlt(f1,p)).z = f1.z*r by A1,A2,A3,A5,A6,A7,FUNCT_7:31
+        .= ((0.REAL n)+*(x,f1.x*r)).z by A1,A2,A3,A5,A6,A8,FUNCT_7:31;
       end;
       suppose
 A9:     z <> x;
-        hence (mlt(f1,p)).z = f1.z*(0.REAL n).z by A7,FUNCT_7:34
+        hence (mlt(f1,p)).z = f1.z*(0.REAL n).z by A7,FUNCT_7:32
         .= f1.z*(n|->0).z
-        .= ((0.REAL n)+*(x,f1.x*r)).z by A9,FUNCT_7:34;
+        .= ((0.REAL n)+*(x,f1.x*r)).z by A9,FUNCT_7:32;
       end;
     end;
-    hence thesis by A4,A5,EUCLID:3,FUNCT_1:9;
+    hence thesis by A4,A5,FINSEQ_1:89,FUNCT_1:2;
   end;
 
 theorem
   |(f1,(0.REAL n)+*(x,r))| = f1.x * r
   proof
 A1: mlt(f1,(0.REAL n)+*(x,r)) = (0.REAL n)+*(x,f1.x*r) by Th15;
-A2: dom f1 = Seg n by EUCLID:3;
-A3: n in NAT by ORDINAL1:def 13;
+A2: dom f1 = Seg n by FINSEQ_1:89;
+A3: n in NAT by ORDINAL1:def 12;
 A4: f1.x*r in REAL by XREAL_0:def 1;
     per cases;
     suppose x in dom f1;
-      hence thesis by A1,A2,A3,A4,JORDAN2B:14;
+      hence thesis by A1,A2,A3,A4,JORDAN2B:10;
     end;
     suppose not x in dom f1;
       then
-A5:   f1.x = 0 by FUNCT_1:def 4;
+A5:   f1.x = 0 by FUNCT_1:def 2;
       hence |(f1,(0.REAL n)+*(x,r))| = Sum 0.REAL n by A1,Th14
-      .= f1.x * r by A5,A3,JORDAN2B:11;
+      .= f1.x * r by A5,A3,JORDAN2B:9;
     end;
   end;
 
@@ -419,10 +421,11 @@ theorem Th17:
   (g1+*(i,c)) - g1 = (0*n)+*(i,c-(g1.i))
   proof
 A1: dom (g1+*(i,c) - g1) = dom (g1+*(i,c)) /\ dom g1 by VALUED_1:12;
-A2: dom (0*n) = Seg n by EUCLID:3;
-A3: dom g1 = Seg n by EUCLID:3;
-A4: dom (g1+*(i,c)) = dom g1 by FUNCT_7:32;
-    hence dom (g1+*(i,c) - g1) = dom ((0*n)+*(i,c-(g1.i))) by A1,A3,EUCLID:3;
+A2: dom (0*n) = Seg n by FINSEQ_1:89;
+A3: dom g1 = Seg n by FINSEQ_1:89;
+A4: dom (g1+*(i,c)) = dom g1 by FUNCT_7:30;
+    hence dom (g1+*(i,c) - g1) = dom ((0*n)+*(i,c-(g1.i)))
+     by A1,A3,FINSEQ_1:89;
     let x;
     assume
 A5: x in dom (g1+*(i,c) - g1);
@@ -431,14 +434,14 @@ A6: (g1+*(i,c) - g1).x = (g1+*(i,c)).x - g1.x by VALUED_1:13;
     per cases;
     suppose
 A7:   x = i;
-      hence (g1+*(i,c) - g1).x = c - g1.x by A6,A1,A5,A4,FUNCT_7:33
-      .= ((0*n)+*(i,c-(g1.i))).x by A1,A2,A3,A5,A4,A7,FUNCT_7:33;
+      hence (g1+*(i,c) - g1).x = c - g1.x by A6,A1,A5,A4,FUNCT_7:31
+      .= ((0*n)+*(i,c-(g1.i))).x by A1,A2,A3,A5,A4,A7,FUNCT_7:31;
     end;
     suppose
 A8:   x <> i;
-      hence (g1+*(i,c) - g1).x = g1.x - g1.x by A6,FUNCT_7:34
+      hence (g1+*(i,c) - g1).x = g1.x - g1.x by A6,FUNCT_7:32
       .= (n|->0).x
-      .= ((0*n)+*(i,c-(g1.i))).x by A8,FUNCT_7:34;
+      .= ((0*n)+*(i,c-(g1.i))).x by A8,FUNCT_7:32;
     end;
   end;
 
@@ -446,9 +449,9 @@ theorem
   |.<*r*>.| = abs(r)
   proof
     set f = <*r*>;
-    sqr f = <*r^2*> by RVSUM_1:81;
-    then Sum sqr f = r^2 by RVSUM_1:103;
-    hence thesis by COMPLEX1:158;
+    sqr f = <*r^2*> by RVSUM_1:55;
+    then Sum sqr f = r^2 by RVSUM_1:73;
+    hence thesis by COMPLEX1:72;
   end;
 
 theorem Th19:
@@ -467,7 +470,7 @@ theorem
     assume |.f.| <> 0;
     then consider i being Element of NAT such that
 A1: i in dom sqr f and
-A2: (sqr f).i <> 0 by PRVECT_2:3,SQUARE_1:82;
+A2: (sqr f).i <> 0 by PRVECT_2:3,SQUARE_1:17;
     take i;
     thus i in dom f by A1,VALUED_1:11;
     (sqr f).i = (f.i)^2 by VALUED_1:11;
@@ -483,7 +486,7 @@ theorem Th21:
 A1: P[<*>REAL]
     proof
       take <*>REAL;
-      thus thesis by ABSVALUE:7,RVSUM_1:102;
+      thus thesis by ABSVALUE:2,RVSUM_1:72;
     end;
 A2: for p being FinSequence of REAL, x being Element of REAL st P[p] holds
     P[p^<*x*>]
@@ -492,15 +495,15 @@ A2: for p being FinSequence of REAL, x being Element of REAL st P[p] holds
       given F being real-valued FinSequence such that
 A3:   F = p and
 A4:   abs Sum F <= Sum abs F;
-A5:   abs Sum F + abs x <= Sum abs F + abs x by A4,XREAL_1:8;
+A5:   abs Sum F + abs x <= Sum abs F + abs x by A4,XREAL_1:6;
       take G = p^<*x*>;
-A6:   abs <*x*> = <*abs(x)*> by JORDAN2B:23;
-A7:   Sum <*abs(x)*> = abs(x) by RVSUM_1:103;
-      abs G = (abs p)^abs<*x*> by TOPREAL7:12;
+A6:   abs <*x*> = <*abs(x)*> by JORDAN2B:19;
+A7:   Sum <*abs(x)*> = abs(x) by RVSUM_1:73;
+      abs G = (abs p)^abs<*x*> by TOPREAL7:11;
       then
-A8:   Sum abs G = Sum abs p + abs x by A6,A7,RVSUM_1:105;
-      Sum G = Sum p + x by RVSUM_1:104;
-      then abs Sum G <= abs Sum p + abs x by COMPLEX1:142;
+A8:   Sum abs G = Sum abs p + abs x by A6,A7,RVSUM_1:75;
+      Sum G = Sum p + x by RVSUM_1:74;
+      then abs Sum G <= abs Sum p + abs x by COMPLEX1:56;
       hence thesis by A8,A3,A5,XXREAL_0:2;
     end;
 A9: for p being FinSequence of REAL holds P[p] from FINSEQ_2:sch 2(A1,A2);
@@ -514,17 +517,17 @@ Lm1: for f being n-element real-valued FinSequence holds
      proof
        let f be n-element real-valued FinSequence;
 A1:    f is FinSequence of REAL by Th19;
-       len f = n by CARD_1:def 13;
-       hence thesis by A1,FINSEQ_2:110;
+       len f = n by CARD_1:def 7;
+       hence thesis by A1,FINSEQ_2:92;
      end;
 
 theorem
-  for A being non empty 1-sorted, B being trivial non empty 1-sorted
+  for A being non empty 1-sorted, B being 1-element 1-sorted
   for t being Point of B
   for f being Function of A,B holds f = A --> t
   proof
     let A be non empty 1-sorted;
-    let B be trivial non empty 1-sorted;
+    let B be 1-element 1-sorted;
     let t be Point of B;
     let f be Function of A,B;
     let a be Element of A;
@@ -537,7 +540,7 @@ registration
   cluster proj(Seg n --> T,i) -> real-valued;
   coherence
   proof
-    (Seg n --> T).i = T by FUNCOP_1:13;
+    (Seg n --> T).i = T by FUNCOP_1:7;
     hence thesis;
   end;
 end;
@@ -548,12 +551,12 @@ definition
   coherence
   proof
 A1: p(/)r is FinSequence of REAL by Th19;
-A2: len p = n by CARD_1:def 13;
+A2: len p = n by CARD_1:def 7;
     Seg len (p(/)r) = dom (p(/)r) by FINSEQ_1:def 3
     .= dom p by VALUED_1:def 5
     .= Seg n by A2,FINSEQ_1:def 3;
-    then len (p(/)r) = n by FINSEQ_1:8;
-    hence thesis by A1,FINSEQ_2:110;
+    then len (p(/)r) = n by FINSEQ_1:6;
+    hence thesis by A1,FINSEQ_2:92;
   end;
 end;
 
@@ -561,14 +564,14 @@ theorem Th23:
   for p, q being Point of TOP-REAL m holds p in Ball(q,r) iff -p in Ball(-q,r)
   proof
     let p, q be Point of TOP-REAL m;
-A1: m in NAT by ORDINAL1:def 13;
+A1: m in NAT by ORDINAL1:def 12;
 A2: now
       let a, b be Point of TOP-REAL m;
       assume a in Ball(b,r);
       then
 A3:   |.a-b.| < r by A1,TOPREAL9:7;
-      -a--b = (-a)+-(-b) .= -(a-b) by RLVECT_1:45;
-      then |.-a--b.| = |.a-b.| by EUCLID:75;
+      -a--b = (-a)+-(-b) .= -(a-b) by RLVECT_1:31;
+      then |.-a--b.| = |.a-b.| by EUCLID:71;
       hence -a in Ball(-b,r) by A1,A3,TOPREAL9:7;
     end;
     --p = p & --q = q;
@@ -602,17 +605,17 @@ registration
   cluster TOP-REAL 0 -> real-membered;
   coherence
   proof
-    thus the carrier of TOP-REAL 0 is real-membered by EUCLID:25,JORDAN2C:113;
+    thus the carrier of TOP-REAL 0 is real-membered by EUCLID:22,JORDAN2C:105;
   end;
 end;
 
 registration
   cluster TOP-REAL 0 -> trivial;
-  coherence by EUCLID:25,JORDAN2C:113;
+  coherence by EUCLID:22,JORDAN2C:105;
 end;
 
 registration
-  cluster real-functions-membered -> complex-functions-membered 1-sorted;
+  cluster real-functions-membered -> complex-functions-membered for 1-sorted;
   coherence
   proof
     let S be 1-sorted;
@@ -624,7 +627,7 @@ A1: the carrier of S is real-functions-membered;
 end;
 
 registration
-  cluster strict non empty real-functions-membered 1-sorted;
+  cluster strict non empty real-functions-membered for 1-sorted;
   existence
   proof
     take S = 1-sorted(#{the real-valued Function}#);
@@ -648,7 +651,7 @@ registration
 end;
 
 registration
-  cluster strict non empty real-functions-membered TopSpace;
+  cluster strict non empty real-functions-membered for TopSpace;
   existence
   proof
     take the TopStruct of TOP-REAL 1;
@@ -658,24 +661,24 @@ end;
 
 registration
   let S be complex-functions-membered TopSpace;
-  cluster -> complex-functions-membered SubSpace of S;
+  cluster -> complex-functions-membered for SubSpace of S;
   coherence
   proof
     let A be SubSpace of S;
     let x;
-    the carrier of A c= the carrier of S by BORSUK_1:35;
+    the carrier of A c= the carrier of S by BORSUK_1:1;
     hence thesis;
   end;
 end;
 
 registration
   let S be real-functions-membered TopSpace;
-  cluster -> real-functions-membered SubSpace of S;
+  cluster -> real-functions-membered for SubSpace of S;
   coherence
   proof
     let A be SubSpace of S;
     let x;
-    the carrier of A c= the carrier of S by BORSUK_1:35;
+    the carrier of A c= the carrier of S by BORSUK_1:1;
     hence thesis;
   end;
 end;
@@ -701,7 +704,7 @@ definition
     hereby
       assume -f in F;
       then ex g being Element of X st -f = -g & g in X;
-      hence f in X by RVSUM_1:43;
+      hence f in X by RVSUM_1:24;
     end;
     thus thesis;
   end;
@@ -812,14 +815,14 @@ theorem Th25:
 A1:     -f = (-1)*v and
 A2:     v in X;
         reconsider g = -f as Element of T by A1;
-        -g = --v by A1,RLVECT_1:29
+        -g = --v by A1,RLVECT_1:16
         .= v;
         hence f in X by A2;
       end;
       assume
 A3:   f in X;
       then reconsider g = f as Element of T;
-      -g = (-1)*g by RLVECT_1:29;
+      -g = (-1)*g by RLVECT_1:16;
       hence thesis by A3;
     end;
     hence thesis by Def3;
@@ -839,18 +842,18 @@ end;
 registration
   let n;
   let X be open Subset of TOP-REAL n;
-  cluster (-)X -> open Subset of TOP-REAL n;
+  cluster (-)X -> open for Subset of TOP-REAL n;
   coherence
   proof
-    reconsider n as Element of NAT by ORDINAL1:def 13;
+    reconsider n as Element of NAT by ORDINAL1:def 12;
     reconsider Y = (-)X as Subset of TOP-REAL n;
     for p being Point of TOP-REAL n st p in Y
-    ex r being positive (real number) st Ball(p,r) c= Y
+    ex r being positive real number st Ball(p,r) c= Y
     proof
       let p be Point of TOP-REAL n;
       assume p in Y;
       then -(p qua real-valued Function) in (-)Y by Def3;
-      then consider r being positive (real number) such that
+      then consider r being positive real number such that
 A1:   Ball(-p,r) c= X by TOPS_4:2;
       take r;
       let x be Element of TOP-REAL n;
@@ -875,7 +878,7 @@ definition
   coherence
   proof
     consider x1 being Point of R, x2 being Point of S such that
-A1: x = [x1,x2] by BORSUK_1:50;
+A1: x = [x1,x2] by BORSUK_1:10;
     f. [x1,x2] is Point of T;
     hence thesis by A1;
   end;
@@ -898,13 +901,13 @@ definition
   coherence
   proof
 A1: p+r is FinSequence of REAL by Th19;
-A2: len p = n by CARD_1:def 13;
+A2: len p = n by CARD_1:def 7;
     Seg len (p+r) = dom (p+r) by FINSEQ_1:def 3
     .= dom p by VALUED_1:def 2
     .= Seg n by A2,FINSEQ_1:def 3;
-    then len (p+r) = n by FINSEQ_1:8;
-    then p+r is Element of REAL n by A1,FINSEQ_2:110;
-    hence thesis by EUCLID:25;
+    then len (p+r) = n by FINSEQ_1:6;
+    then p+r is Element of REAL n by A1,FINSEQ_2:92;
+    hence thesis by EUCLID:22;
   end;
 end;
 
@@ -924,13 +927,13 @@ definition
   coherence
   proof
 A1: p(#)r is FinSequence of REAL by Th19;
-A2: len p = n by CARD_1:def 13;
+A2: len p = n by CARD_1:def 7;
     Seg len (p(#)r) = dom (p(#)r) by FINSEQ_1:def 3
     .= dom p by VALUED_1:def 5
     .= Seg n by A2,FINSEQ_1:def 3;
-    then len (p(#)r) = n by FINSEQ_1:8;
-    then p(#)r is Element of REAL n by A1,FINSEQ_2:110;
-    hence thesis by EUCLID:25;
+    then len (p(#)r) = n by FINSEQ_1:6;
+    then p(#)r is Element of REAL n by A1,FINSEQ_2:92;
+    hence thesis by EUCLID:22;
   end;
 end;
 
@@ -939,9 +942,9 @@ definition
   redefine func p (/) r -> Point of TOP-REAL n;
   coherence
   proof
-    reconsider f = p as Element of REAL n by EUCLID:25;
+    reconsider f = p as Element of REAL n by EUCLID:22;
     f(/)r is Element of REAL n;
-    hence thesis by EUCLID:25;
+    hence thesis by EUCLID:22;
   end;
 end;
 
@@ -951,14 +954,14 @@ definition
   coherence
   proof
 A1: p1(#)p2 is FinSequence of REAL by Th19;
-A2: len p1 = n & len p2 = n by CARD_1:def 13;
+A2: len p1 = n & len p2 = n by CARD_1:def 7;
     Seg len (p1(#)p2) = dom (p1(#)p2) by FINSEQ_1:def 3
     .= dom p1 /\ dom p2 by VALUED_1:def 4
     .= Seg n /\ dom p2 by A2,FINSEQ_1:def 3
     .= Seg n /\ Seg n by A2,FINSEQ_1:def 3;
-    then len (p1(#)p2) = n by FINSEQ_1:8;
-    then p1(#)p2 is Element of REAL n by A1,FINSEQ_2:110;
-    hence thesis by EUCLID:25;
+    then len (p1(#)p2) = n by FINSEQ_1:6;
+    then p1(#)p2 is Element of REAL n by A1,FINSEQ_2:92;
+    hence thesis by EUCLID:22;
   end;
   commutativity;
 end;
@@ -979,14 +982,14 @@ definition
   coherence
   proof
 A1: p1/"p2 is FinSequence of REAL by Th19;
-A2: len p1 = n & len p2 = n by CARD_1:def 13;
+A2: len p1 = n & len p2 = n by CARD_1:def 7;
     Seg len (p1/"p2) = dom (p1/"p2) by FINSEQ_1:def 3
     .= dom p1 /\ dom p2 by VALUED_1:16
     .= Seg n /\ dom p2 by A2,FINSEQ_1:def 3
     .= Seg n /\ Seg n by A2,FINSEQ_1:def 3;
-    then len (p1/"p2) = n by FINSEQ_1:8;
-    then p1/"p2 is Element of REAL n by A1,FINSEQ_2:110;
-    hence thesis by EUCLID:25;
+    then len (p1/"p2) = n by FINSEQ_1:6;
+    then p1/"p2 is Element of REAL n by A1,FINSEQ_2:92;
+    hence thesis by EUCLID:22;
   end;
 end;
 
@@ -996,13 +999,13 @@ definition
   coherence
   proof
 A1: p+*(x,r) is FinSequence of REAL by Th19;
-A2: len p = n by CARD_1:def 13;
+A2: len p = n by CARD_1:def 7;
     Seg len (p+*(x,r)) = dom (p+*(x,r)) by FINSEQ_1:def 3
-    .= dom p by FUNCT_7:32
+    .= dom p by FUNCT_7:30
     .= Seg n by A2,FINSEQ_1:def 3;
-    then len (p+*(x,r)) = n by FINSEQ_1:8;
-    then p+*(x,r) is Element of REAL n by A1,FINSEQ_2:110;
-    hence thesis by EUCLID:25;
+    then len (p+*(x,r)) = n by FINSEQ_1:6;
+    then p+*(x,r) is Element of REAL n by A1,FINSEQ_2:92;
+    hence thesis by EUCLID:22;
   end;
 end;
 
@@ -1015,7 +1018,7 @@ theorem
     assume that
 A1: n <> 0 and
 A2: a in Ball(o,r);
-A3: Sum R2 = n*r by RVSUM_1:110;
+A3: Sum R2 = n*r by RVSUM_1:80;
 A4: abs R1 is Element of n-tuples_on REAL & R2 is Element of n-tuples_on REAL
     by Lm1;
 A5: for j being Nat st j in Seg n holds (abs R1).j < R2.j
@@ -1023,7 +1026,7 @@ A5: for j being Nat st j in Seg n holds (abs R1).j < R2.j
       let j be Nat;
       assume j in Seg n;
       then
-A6:   R2.j = r by FINSEQ_2:71;
+A6:   R2.j = r by FINSEQ_2:57;
       abs(R1.j) < r by A2,EUCLID_9:9;
       hence thesis by A6,VALUED_1:18;
     end;
@@ -1037,7 +1040,7 @@ A7: for j being Nat st j in Seg n holds (abs R1).j <= R2.j;
       hence thesis by A5;
     end;
     then
-A8: Sum abs R1 < Sum R2 by A7,A4,RVSUM_1:113;
+A8: Sum abs R1 < Sum R2 by A7,A4,RVSUM_1:83;
     abs Sum R1 <= Sum abs R1 by Th21;
     hence thesis by A3,A8,XXREAL_0:2;
   end;
@@ -1057,26 +1060,26 @@ end;
 
 theorem
   for V being add-associative right_zeroed
-  right_complementable (non empty addLoopStr), v,u being Element of V
+  right_complementable non empty addLoopStr, v,u being Element of V
   holds v + u - u = v
   proof
     let V be add-associative right_zeroed
-    right_complementable (non empty addLoopStr), v,u be Element of V;
-    thus v + u - u = v + (u-u) by RLVECT_1:42
-    .= v + 0.V by RLVECT_1:16
-    .= v by RLVECT_1:10;
+    right_complementable non empty addLoopStr, v,u be Element of V;
+    thus v + u - u = v + (u-u) by RLVECT_1:28
+    .= v + 0.V by RLVECT_1:5
+    .= v by RLVECT_1:4;
   end;
 
 theorem
   for V being Abelian add-associative right_zeroed
-  right_complementable (non empty addLoopStr), v,u being Element of V
+  right_complementable non empty addLoopStr, v,u being Element of V
   holds v - u + u = v
   proof
     let V be Abelian add-associative right_zeroed
-    right_complementable (non empty addLoopStr), v,u be Element of V;
-    thus v - u + u = v - (u-u) by RLVECT_1:43
-    .= v - 0.V by RLVECT_1:16
-    .= v by RLVECT_1:26;
+    right_complementable non empty addLoopStr, v,u be Element of V;
+    thus v - u + u = v - (u-u) by RLVECT_1:29
+    .= v - 0.V by RLVECT_1:5
+    .= v by RLVECT_1:13;
   end;
 
 theorem Th29:
@@ -1087,16 +1090,16 @@ theorem Th29:
     set g = dom f-->c;
 A1: dom (f[+]c) = dom f by VALUED_2:def 37;
 A2: dom (f<+>g) = dom f /\ dom g by VALUED_2:def 41;
-A3: dom g = dom f by FUNCOP_1:19;
+A3: dom g = dom f by FUNCOP_1:13;
     now
       let x;
       assume
 A4:   x in dom (f[+]c);
       hence (f[+]c).x = f.x+c by VALUED_2:def 37
-      .= f.x+g.x by A1,A4,FUNCOP_1:13
+      .= f.x+g.x by A1,A4,FUNCOP_1:7
       .= (f<+>g).x by A1,A2,A3,A4,VALUED_2:def 41;
     end;
-    hence thesis by A1,A2,A3,FUNCT_1:9;
+    hence thesis by A1,A2,A3,FUNCT_1:2;
   end;
 
 theorem
@@ -1107,16 +1110,16 @@ theorem
     set g = dom f-->c;
 A1: dom (f[-]c) = dom f by VALUED_2:def 37;
 A2: dom (f<->g) = dom f /\ dom g by VALUED_2:61;
-A3: dom g = dom f by FUNCOP_1:19;
+A3: dom g = dom f by FUNCOP_1:13;
     now
       let x;
       assume
 A4:   x in dom (f[-]c);
       hence (f[-]c).x = f.x-c by VALUED_2:def 37
-      .= f.x-g.x by A1,A4,FUNCOP_1:13
+      .= f.x-g.x by A1,A4,FUNCOP_1:7
       .= (f<->g).x by A1,A2,A3,A4,VALUED_2:62;
     end;
-    hence thesis by A1,A2,A3,FUNCT_1:9;
+    hence thesis by A1,A2,A3,FUNCT_1:2;
   end;
 
 theorem Th31:
@@ -1127,16 +1130,16 @@ theorem Th31:
     set g = dom f-->c;
 A1: dom (f[#]c) = dom f by VALUED_2:def 39;
 A2: dom (f<#>g) = dom f /\ dom g by VALUED_2:def 43;
-A3: dom g = dom f by FUNCOP_1:19;
+A3: dom g = dom f by FUNCOP_1:13;
     now
       let x;
       assume
 A4:   x in dom (f[#]c);
       hence (f[#]c).x = c(#)(f.x) by VALUED_2:def 39
-      .= (f.x)(#)(g.x) by A1,A4,FUNCOP_1:13
+      .= (f.x)(#)(g.x) by A1,A4,FUNCOP_1:7
       .= (f<#>g).x by A1,A2,A3,A4,VALUED_2:def 43;
     end;
-    hence thesis by A1,A2,A3,FUNCT_1:9;
+    hence thesis by A1,A2,A3,FUNCT_1:2;
   end;
 
 theorem
@@ -1147,16 +1150,16 @@ theorem
     set g = dom f-->c;
 A1: dom (f[/]c) = dom f by VALUED_2:def 39;
 A2: dom (f</>g) = dom f /\ dom g by VALUED_2:71;
-A3: dom g = dom f by FUNCOP_1:19;
+A3: dom g = dom f by FUNCOP_1:13;
     now
       let x;
       assume
 A4:   x in dom (f[/]c);
       hence (f[/]c).x = (f.x)(/)c by VALUED_2:56
-      .= (f.x)(/)(g.x) by A1,A4,FUNCOP_1:13
+      .= (f.x)(/)(g.x) by A1,A4,FUNCOP_1:7
       .= (f</>g).x by A1,A2,A3,A4,VALUED_2:72;
     end;
-    hence thesis by A1,A2,A3,FUNCT_1:9;
+    hence thesis by A1,A2,A3,FUNCT_1:2;
   end;
 
 registration
@@ -1207,7 +1210,7 @@ A4:   -((f.x) qua real-valued Function) = -f.x;
       g.x = -((f.x) qua real-valued Function) by A1,A2,VALUED_2:def 33;
       hence thesis by A4;
     end;
-    hence thesis by A1,A2,FUNCT_2:5;
+    hence thesis by A1,A2,FUNCT_2:3;
   end;
 
 theorem Th34:
@@ -1229,7 +1232,7 @@ A2: dom f = X by FUNCT_2:def 1;
       g.x = f.y by A1,A2,VALUED_2:def 34;
       hence thesis;
     end;
-    hence thesis by A1,A2,FUNCT_2:5;
+    hence thesis by A1,A2,FUNCT_2:3;
   end;
 
 theorem Th35:
@@ -1251,7 +1254,7 @@ A3:   ((f.x) qua real-valued Function)+r = f.x+r;
       h.x = ((f.x) qua real-valued Function)+r by A1,VALUED_2:def 37;
       hence thesis by A3;
     end;
-    hence thesis by A1,FUNCT_2:5;
+    hence thesis by A1,FUNCT_2:3;
   end;
 
 theorem
@@ -1277,7 +1280,7 @@ A3:   ((f.x) qua real-valued Function)(#)r = f.x(#)r;
       h.x = ((f.x) qua real-valued Function)(#)r by A1,VALUED_2:def 39;
       hence thesis by A3;
     end;
-    hence thesis by A1,FUNCT_2:5;
+    hence thesis by A1,FUNCT_2:3;
   end;
 
 theorem
@@ -1305,7 +1308,7 @@ A4:   ((f.x) qua real-valued Function)+g.x = f.x+g.x;
       h.x = ((f.x) qua real-valued Function)+g.x by A2,VALUED_2:def 45;
       hence thesis by A4;
     end;
-    hence thesis by A2,FUNCT_2:5;
+    hence thesis by A2,FUNCT_2:3;
   end;
 
 theorem Th40:
@@ -1329,7 +1332,7 @@ A4:   ((f.x) qua real-valued Function)-g.x = f.x-g.x;
       h.x = ((f.x) qua real-valued Function)-g.x by A2,VALUED_2:def 46;
       hence thesis by A4;
     end;
-    hence thesis by A2,FUNCT_2:5;
+    hence thesis by A2,FUNCT_2:3;
   end;
 
 theorem Th41:
@@ -1352,7 +1355,7 @@ A3:   x in X;
       h.x = f.x(#)g.x by A2,VALUED_2:def 47;
       hence thesis;
     end;
-    hence thesis by A2,FUNCT_2:5;
+    hence thesis by A2,FUNCT_2:3;
   end;
 
 theorem Th42:
@@ -1375,7 +1378,7 @@ A3:   x in X;
       h.x = f.x /" g.x by A2,VALUED_2:def 48;
       hence thesis;
     end;
-    hence thesis by A2,FUNCT_2:5;
+    hence thesis by A2,FUNCT_2:3;
   end;
 
 theorem Th43:
@@ -1398,7 +1401,7 @@ A3:   x in X;
       h.x = f.x+g.x by A2,VALUED_2:def 41;
       hence thesis;
     end;
-    hence thesis by A2,FUNCT_2:5;
+    hence thesis by A2,FUNCT_2:3;
   end;
 
 theorem Th44:
@@ -1421,7 +1424,7 @@ A3:   x in X;
       h.x = f.x-g.x by A2,VALUED_2:62;
       hence thesis;
     end;
-    hence thesis by A2,FUNCT_2:5;
+    hence thesis by A2,FUNCT_2:3;
   end;
 
 theorem Th45:
@@ -1444,7 +1447,7 @@ A3:   x in X;
       h.x = f.x(#)g.x by A2,VALUED_2:def 43;
       hence thesis;
     end;
-    hence thesis by A2,FUNCT_2:5;
+    hence thesis by A2,FUNCT_2:3;
   end;
 
 theorem Th46:
@@ -1467,7 +1470,7 @@ A3:   x in X;
       h.x = f.x(/)g.x by A2,VALUED_2:72;
       hence thesis;
     end;
-    hence thesis by A2,FUNCT_2:5;
+    hence thesis by A2,FUNCT_2:3;
   end;
 
 definition
@@ -1485,8 +1488,8 @@ A1: for x being Element of T ex y being Element of TOP-REAL n st P[x,y]
     proof
       let x be Element of T;
       f.x in REAL by XREAL_0:def 1;
-      then n |-> f.x is Element of REAL n by FINSEQ_2:132;
-      then reconsider y = n |-> f.x as Point of TOP-REAL n by EUCLID:25;
+      then n |-> f.x is Element of REAL n by FINSEQ_2:112;
+      then reconsider y = n |-> f.x as Point of TOP-REAL n by EUCLID:22;
       take y;
       thus thesis;
     end;
@@ -1515,7 +1518,7 @@ theorem Th47:
     assume
 A1: x in Seg n;
     thus incl(f,n).t.x = (n |-> f.t).x by Def4
-    .= f.t by A1,FINSEQ_2:71;
+    .= f.t by A1,FINSEQ_2:57;
   end;
 
 theorem Th48:
@@ -1549,11 +1552,11 @@ theorem Th49:
 A1:   dom h = the carrier of T by FUNCT_2:def 1;
 A2:   f.t + I.t = f.t + g.t
       proof
-A3:     dom (f.t) = Seg n & dom (I.t) = Seg n by EUCLID:3;
+A3:     dom (f.t) = Seg n & dom (I.t) = Seg n by FINSEQ_1:89;
 A4:     dom (f.t + I.t) = dom (f.t) /\ dom (I.t) by VALUED_1:def 1
         .= Seg n by A3;
 A5:    dom (f.t + g.t) = dom (f.t) by VALUED_1:def 2;
-        thus dom (f.t + I.t) = dom (f.t + g.t) by A4,EUCLID:3;
+        thus dom (f.t + I.t) = dom (f.t + g.t) by A4,FINSEQ_1:89;
         let x;
         assume
 A6:     x in dom (f.t + I.t);
@@ -1583,11 +1586,11 @@ theorem Th50:
 A1:   dom h = the carrier of T by FUNCT_2:def 1;
 A2:   f.t - I.t = f.t - g.t
       proof
-A3:     dom (f.t) = Seg n & dom (I.t) = Seg n by EUCLID:3;
+A3:     dom (f.t) = Seg n & dom (I.t) = Seg n by FINSEQ_1:89;
 A4:     dom (f.t - I.t) = dom (f.t) /\ dom (I.t) by VALUED_1:12
         .= Seg n by A3;
 A5:    dom (f.t - g.t) = dom (f.t) by VALUED_1:def 2;
-        thus dom (f.t - I.t) = dom (f.t - g.t) by A4,EUCLID:3;
+        thus dom (f.t - I.t) = dom (f.t - g.t) by A4,FINSEQ_1:89;
         let x;
         assume
 A6:     x in dom (f.t - I.t);
@@ -1617,10 +1620,10 @@ theorem Th51:
 A1:   dom h = the carrier of T by FUNCT_2:def 1;
 A2:   f.t (#) I.t = f.t (#) g.t
       proof
-A3:     dom (f.t) = Seg n & dom (I.t) = Seg n by EUCLID:3;
+A3:     dom (f.t) = Seg n & dom (I.t) = Seg n by FINSEQ_1:89;
 A4:     dom (f.t (#) I.t) = dom (f.t) /\ dom (I.t) by VALUED_1:def 4
         .= Seg n by A3;
-        hence dom (f.t (#) I.t) = dom (f.t (#) g.t) by EUCLID:3;
+        hence dom (f.t (#) I.t) = dom (f.t (#) g.t) by FINSEQ_1:89;
         let x;
         assume
 A5:     x in dom (f.t (#) I.t);
@@ -1650,10 +1653,10 @@ theorem
 A1:   dom h = the carrier of T by FUNCT_2:def 1;
 A2:   f.t /" I.t = f.t (#) (g".t)
       proof
-A3:     dom (f.t) = Seg n & dom (I.t) = Seg n by EUCLID:3;
+A3:     dom (f.t) = Seg n & dom (I.t) = Seg n by FINSEQ_1:89;
 A4:     dom (f.t /" I.t) = dom (f.t) /\ dom (I.t) by VALUED_1:16
         .= Seg n by A3;
-        hence dom (f.t /" I.t) = dom (f.t (#) g".t) by EUCLID:3;
+        hence dom (f.t /" I.t) = dom (f.t (#) g".t) by FINSEQ_1:89;
         let x;
         assume
 A5:     x in dom (f.t /" I.t);
@@ -1673,7 +1676,7 @@ definition
   let n;
   set T = TOP-REAL n;
   set c = the carrier of T;
-A1: the carrier of [:T,T:] = [:c,c:] by BORSUK_1:def 5;
+A1: the carrier of [:T,T:] = [:c,c:] by BORSUK_1:def 2;
   func TIMES(n) -> Function of [:TOP-REAL n,TOP-REAL n:],TOP-REAL n means
 :Def5:
   for x,y being Point of TOP-REAL n holds it.(x,y) = x(#)y;
@@ -1714,26 +1717,26 @@ theorem Th54:
     let f, g be Function of T,R;
 A1: dom(f<##>g) = dom f /\ dom g by VALUED_2:def 47;
     dom F = the carrier of [:R,R:] by FUNCT_2:def 1
-    .= [:the carrier of R,the carrier of R:] by BORSUK_1:def 5;
-    then [:rng f, rng g:] c= dom F by ZFMISC_1:119;
+    .= [:the carrier of R,the carrier of R:] by BORSUK_1:def 2;
+    then [:rng f, rng g:] c= dom F by ZFMISC_1:96;
     then
-A2: dom(F.:(f,g)) = dom f /\ dom g by FUNCOP_1:84;
+A2: dom(F.:(f,g)) = dom f /\ dom g by FUNCOP_1:69;
     now
       let x;
       assume
 A3:   x in dom (f<##>g);
       then
-A4:   f.x is Point of R & g.x is Point of R by FUNCT_2:7;
+A4:   f.x is Point of R & g.x is Point of R by FUNCT_2:5;
       thus (f<##>g).x = f.x(#)g.x by A3,VALUED_2:def 47
       .= F.(f.x,g.x) by A4,Def5
-      .= F.:(f,g).x by A1,A2,A3,FUNCOP_1:28;
+      .= F.:(f,g).x by A1,A2,A3,FUNCOP_1:22;
     end;
-    hence thesis by A1,A2,FUNCT_1:9;
+    hence thesis by A1,A2,FUNCT_1:2;
   end;
 
 definition
   let m, n;
-A1: m in NAT & n in NAT by ORDINAL1:def 13;
+A1: m in NAT & n in NAT by ORDINAL1:def 12;
   func PROJ(m,n) -> Function of TOP-REAL m,R^1 means
 :Def6:
   for p being Element of TOP-REAL m holds it.p = p/.n;
@@ -1755,7 +1758,7 @@ theorem Th55:
   proof
     let p be Point of TOP-REAL m such that
 A1: n in dom p;
-A2: m in NAT by ORDINAL1:def 13;
+A2: m in NAT by ORDINAL1:def 12;
     per cases;
     suppose
 A3:   r <= 0;
@@ -1764,26 +1767,26 @@ A3:   r <= 0;
     end;
     suppose
 A4:   0 < r;
-A5:   dom p = Seg m by EUCLID:3;
+A5:   dom p = Seg m by FINSEQ_1:89;
       thus PROJ(m,n).:Ball(p,r) c= ]. p/.n-r , p/.n+r .[
       proof
         let y be set;
         assume y in PROJ(m,n).:Ball(p,r);
         then consider x being Element of TOP-REAL m such that
 A6:     x in Ball(p,r) and
-A7:     y = PROJ(m,n).x by FUNCT_2:116;
+A7:     y = PROJ(m,n).x by FUNCT_2:65;
 A8:     PROJ(m,n).x = x/.n by Def6;
 A9:     |.x-p.| < r by A2,A6,TOPREAL9:7;
-        0 <= Sum sqr (x-p) by RVSUM_1:116;
-        then (sqrt Sum sqr (x-p))^2 = Sum sqr (x-p) by SQUARE_1:def 4;
+        0 <= Sum sqr (x-p) by RVSUM_1:86;
+        then (sqrt Sum sqr (x-p))^2 = Sum sqr (x-p) by SQUARE_1:def 2;
         then
-A10:     Sum sqr (x-p) < r^2 by A9,SQUARE_1:78;
-        dom x = Seg m by EUCLID:3;
+A10:     Sum sqr (x-p) < r^2 by A9,SQUARE_1:16;
+        dom x = Seg m by FINSEQ_1:89;
         then (x/.n - p/.n)^2 <= Sum sqr (x-p) by A5,A1,EUCLID_9:8;
         then (x/.n - p/.n)^2 < r^2 by A10,XXREAL_0:2;
-        then -r < x/.n - p/.n & x/.n - p/.n < r by A4,SQUARE_1:118;
+        then -r < x/.n - p/.n & x/.n - p/.n < r by A4,SQUARE_1:48;
         then -r + p/.n < x/.n - p/.n + p/.n &
-        x/.n - p/.n + p/.n < r + p/.n by XREAL_1:8;
+        x/.n - p/.n + p/.n < r + p/.n by XREAL_1:6;
         hence thesis by A7,A8,XXREAL_1:4;
       end;
       let y be set;
@@ -1791,21 +1794,21 @@ A10:     Sum sqr (x-p) < r^2 by A9,SQUARE_1:78;
 A11:   y in ]. p/.n-r , p/.n+r .[;
       then reconsider y as Element of REAL;
       set x = p+*(n,y);
-      reconsider X = x as FinSequence of REAL by EUCLID:27;
-A12:   dom X = dom p by FUNCT_7:32;
-A13:   p/.n = p.n by A1,PARTFUN1:def 8;
+      reconsider X = x as FinSequence of REAL by EUCLID:24;
+A12:   dom X = dom p by FUNCT_7:30;
+A13:   p/.n = p.n by A1,PARTFUN1:def 6;
       p/.n-r < y & y < p/.n+r by A11,XXREAL_1:4;
       then
-A14:   y - p/.n < r & -r < y - p/.n by XREAL_1:21,22;
+A14:   y - p/.n < r & -r < y - p/.n by XREAL_1:19,20;
       x-p = (0*m)+*(n,y-p.n) by Th17;
       then |.x-p.| = abs(y-p.n) by A1,A5,Th13;
-      then |.x-p.| < r by A13,A14,SEQ_2:9;
+      then |.x-p.| < r by A13,A14,SEQ_2:1;
       then
 A15:   x in Ball(p,r) by A2,TOPREAL9:7;
       PROJ(m,n).x = x/.n by Def6
-      .= X.n by A12,A1,PARTFUN1:def 8
-      .= y by A1,FUNCT_7:33;
-      hence thesis by A15,FUNCT_2:43;
+      .= X.n by A12,A1,PARTFUN1:def 6
+      .= y by A1,FUNCT_7:31;
+      hence thesis by A15,FUNCT_2:35;
     end;
   end;
 
@@ -1818,23 +1821,23 @@ theorem
     let p be Point of T;
     set I = incl(f,m);
     reconsider G = m|->f.p as FinSequence of REAL;
-A1: m in NAT by ORDINAL1:def 13;
+A1: m in NAT by ORDINAL1:def 12;
     1 <= m by NAT_1:14;
     then
 A2: m in Seg m by A1;
-A3: dom (m|->f.p) = Seg m by FUNCOP_1:19;
-    thus (PROJ(m,m)*I).p = PROJ(m,m).(I.p) by FUNCT_2:21
+A3: dom (m|->f.p) = Seg m by FUNCOP_1:13;
+    thus (PROJ(m,m)*I).p = PROJ(m,m).(I.p) by FUNCT_2:15
     .= I.p/.m by Def6
     .= G/.m by Def4
-    .= G.m by A2,A3,PARTFUN1:def 8
-    .= f.p by A2,FINSEQ_2:71;
+    .= G.m by A2,A3,PARTFUN1:def 6
+    .= f.p by A2,FINSEQ_2:57;
   end;
 
 begin :: Continuity
 
 registration
   let T;
-  cluster non-empty continuous Function of T,R^1;
+  cluster non-empty continuous for Function of T,R^1;
   existence
   proof
     take T --> R^1(1);
@@ -1847,9 +1850,9 @@ theorem
   proof
     assume
 A1: n in Seg m;
-A2: m in NAT by ORDINAL1:def 13;
+A2: m in NAT by ORDINAL1:def 12;
     for p being Element of TOP-REAL m holds PROJ(m,n).p = p/.n by Def6;
-    hence thesis by A2,A1,JORDAN2B:22;
+    hence thesis by A2,A1,JORDAN2B:18;
   end;
 
 theorem
@@ -1858,12 +1861,12 @@ theorem
     set f = PROJ(m,n);
     assume
 A1: n in Seg m;
-    for p being Point of TOP-REAL m, r being positive (real number) holds
-    ex s being positive (real number) st ].f.p-s,f.p+s.[ c= f.:Ball(p,r)
+    for p being Point of TOP-REAL m, r being positive real number holds
+    ex s being positive real number st ].f.p-s,f.p+s.[ c= f.:Ball(p,r)
     proof
-      let p be Point of TOP-REAL m, r be positive (real number);
+      let p be Point of TOP-REAL m, r be positive real number;
       take r;
-A2:   dom p = Seg m by EUCLID:3;
+A2:   dom p = Seg m by FINSEQ_1:89;
       p/.n = f.p by Def6;
       hence thesis by A2,A1,Th55;
     end;
@@ -1876,7 +1879,7 @@ registration
   cluster incl(f,n) -> continuous;
   coherence
   proof
-    reconsider n as Element of NAT by ORDINAL1:def 13;
+    reconsider n as Element of NAT by ORDINAL1:def 12;
     set g = incl(f,n);
     per cases;
     suppose
@@ -1895,46 +1898,46 @@ A2:   n > 0;
         assume that
 A3:     g.p in V and
 A4:     V is open;
-A5:     g.p in Int V by A3,A4,TOPS_1:55;
-        reconsider s = g.p as Point of Euclid n by EUCLID:71;
+A5:     g.p in Int V by A3,A4,TOPS_1:23;
+        reconsider s = g.p as Point of Euclid n by EUCLID:67;
         consider r being real number such that
 A6:     r > 0 and
-A7:     Ball(s,r) c= V by A5,GOBOARD6:8;
+A7:     Ball(s,r) c= V by A5,GOBOARD6:5;
         reconsider G = n|->f.p as FinSequence of REAL;
         1 <= n by A2,NAT_1:14;
         then
 A8:     n in Seg n;
-        reconsider F = g.p as FinSequence of REAL by EUCLID:27;
+        reconsider F = g.p as FinSequence of REAL by EUCLID:24;
 A9:     F = n|->f.p by Def4;
-A10:     dom (n|->f.p) = Seg n by FUNCOP_1:19;
+A10:     dom (n|->f.p) = Seg n by FUNCOP_1:13;
 A11:     g.p/.n = G/.n by Def4
-        .= G.n by A8,A10,PARTFUN1:def 8
-        .= f.p by A8,FINSEQ_2:71;
+        .= G.n by A8,A10,PARTFUN1:def 6
+        .= f.p by A8,FINSEQ_2:57;
         set R = r/sqrt n;
         set RR = R^1(].g.p/.n-r/sqrt n,g.p/.n+r/sqrt n.[);
-        f.p in RR by A2,A11,A6,TOPREAL6:20;
+        f.p in RR by A2,A11,A6,TOPREAL6:15;
         then consider W being Subset of T such that
 A12:     p in W & W is open and
-A13:     f.:W c= RR by JGRAPH_2:20;
+A13:     f.:W c= RR by JGRAPH_2:10;
         take W;
         thus p in W & W is open by A12;
         let y be Element of TOP-REAL n;
         assume y in g.:W;
         then consider x being Element of T such that
 A14:     x in W and
-A15:     g.x = y by FUNCT_2:116;
-        reconsider y1 = y as Point of Euclid n by EUCLID:71;
+A15:     g.x = y by FUNCT_2:65;
+        reconsider y1 = y as Point of Euclid n by EUCLID:67;
         reconsider y2 = y1, s2 = s as Element of REAL n;
 A16:     y2 = n|->f.x by A15,Def4;
 A17:     (Pitag_dist n).(y1,s) = |.y2-s2.| by EUCLID:def 6
         .= (sqrt n) * abs(f.x-f.p) by A16,A9,Th11;
-        f.x in f.:W by A14,FUNCT_2:43;
-        then abs(f.x-f.p) < R by A13,A11,RCOMP_1:8;
-        then dist(y1,s) < r by A2,A17,XREAL_1:81;
-        then y in Ball(s,r) by METRIC_1:12;
+        f.x in f.:W by A14,FUNCT_2:35;
+        then abs(f.x-f.p) < R by A13,A11,RCOMP_1:1;
+        then dist(y1,s) < r by A2,A17,XREAL_1:79;
+        then y in Ball(s,r) by METRIC_1:11;
         hence thesis by A7;
       end;
-      hence thesis by JGRAPH_2:20;
+      hence thesis by JGRAPH_2:10;
     end;
   end;
 end;
@@ -1946,7 +1949,7 @@ registration
   proof
     per cases;
     suppose n is non zero;
-      then reconsider n as non zero Element of NAT by ORDINAL1:def 13;
+      then reconsider n as non zero Element of NAT by ORDINAL1:def 12;
       set T = TOP-REAL n;
       set F = TIMES(n);
       set J = Seg n --> R^1;
@@ -1954,17 +1957,17 @@ registration
 A1:   TopSpaceMetr Euclid n = product(J) by EUCLID_9:28;
 A2:   the TopStruct of T = TopSpaceMetr Euclid n by EUCLID:def 8;
       then reconsider F as Function of [:T,T:], product J by EUCLID_9:28;
-A3:   the carrier of T = REAL n by EUCLID:25;
+A3:   the carrier of T = REAL n by EUCLID:22;
       now
         let i be Element of Seg n;
         set P = proj(J,i);
-A4:     J.i = R^1 by FUNCOP_1:13;
-        reconsider f = P*F as Function of [:T,T:],R^1 by FUNCOP_1:13;
-A5:     the carrier of [:T,T:] = [:c,c:] by BORSUK_1:def 5;
+A4:     J.i = R^1 by FUNCOP_1:7;
+        reconsider f = P*F as Function of [:T,T:],R^1 by FUNCOP_1:7;
+A5:     the carrier of [:T,T:] = [:c,c:] by BORSUK_1:def 2;
 A6:     for a,b being Point of T holds f.(a,b) = a.i*b.i
         proof
           let a,b be Point of T;
-          thus f.(a,b) = P.(F.(a,b)) by A5,BINOP_1:30
+          thus f.(a,b) = P.(F.(a,b)) by A5,BINOP_1:18
           .= P.(a(#)b) by Def5
           .= (a(#)b).i by A1,A2,YELLOW17:8
           .= a.i*b.i by VALUED_1:5;
@@ -1977,71 +1980,71 @@ A7:     for a,b being Element of c holds f1.(a,b) = F1(a,b) from BINOP_1:sch 4;
         consider f2 being Function of [:c,c:],REAL such that
 A8:     for a,b being Element of c holds f2.(a,b) = F2(a,b) from BINOP_1:sch 4;
         reconsider f1,f2 as Function of [:T,T:],R^1 by A5;
-        for p being Point of [:T,T:], r being positive (real number)
+        for p being Point of [:T,T:], r being positive real number
         ex W being open Subset of [:T,T:] st p in W &
         f1.:W c= ].f1.p-r,f1.p+r.[
         proof
-          let p be Point of [:T,T:], r be positive (real number);
+          let p be Point of [:T,T:], r be positive real number;
           consider p1,p2 being Point of T such that
-A9:       p = [p1,p2] by BORSUK_1:50;
+A9:       p = [p1,p2] by BORSUK_1:10;
           set B1 = Ball(p1,r), B2 = [#]T;
-          reconsider W = [:B1,B2:] as open Subset of [:T,T:] by BORSUK_1:46;
+          reconsider W = [:B1,B2:] as open Subset of [:T,T:] by BORSUK_1:6;
           take W;
-          p1 in B1 & p2 in B2 by TOPGEN_5:17;
+          p1 in B1 & p2 in B2 by TOPGEN_5:13;
           hence p in W by A9,ZFMISC_1:def 2;
           let y be set;
           assume y in f1.:W;
           then consider x being Point of [:T,T:] such that
 A10:       x in W and
-A11:       f1.x = y by FUNCT_2:116;
+A11:       f1.x = y by FUNCT_2:65;
           consider x1,x2 being Point of T such that
-A12:       x = [x1,x2] by BORSUK_1:50;
+A12:       x = [x1,x2] by BORSUK_1:10;
 A13:       f1.(x1,x2) = x1.i & f1.(p1,p2) = p1.i by A7;
-          x1 in B1 by A10,A12,ZFMISC_1:106;
+          x1 in B1 by A10,A12,ZFMISC_1:87;
           then
 A14:       |.x1-p1.| < r by TOPREAL9:7;
-          dom(x1-p1) = Seg n by EUCLID:3;
+          dom(x1-p1) = Seg n by FINSEQ_1:89;
           then x1.i-p1.i = (x1-p1).i by VALUED_1:13;
           then abs(x1.i - p1.i) <= |.x1-p1.| by A3,REAL_NS1:8;
           then abs(f1.x-f1.p) < r by A9,A12,A13,A14,XXREAL_0:2;
-          hence y in ].f1.p-r,f1.p+r.[ by A11,RCOMP_1:8;
+          hence y in ].f1.p-r,f1.p+r.[ by A11,RCOMP_1:1;
         end;
         then
 A15:     f1 is continuous by TOPS_4:21;
-        for p being Point of [:T,T:], r being positive (real number)
+        for p being Point of [:T,T:], r being positive real number
         ex W being open Subset of [:T,T:] st p in W &
         f2.:W c= ].f2.p-r,f2.p+r.[
         proof
-          let p be Point of [:T,T:], r be positive (real number);
+          let p be Point of [:T,T:], r be positive real number;
           consider p1,p2 being Point of T such that
-A16:       p = [p1,p2] by BORSUK_1:50;
+A16:       p = [p1,p2] by BORSUK_1:10;
           set B1 = [#]T, B2 = Ball(p2,r);
-          reconsider W = [:B1,B2:] as open Subset of [:T,T:] by BORSUK_1:46;
+          reconsider W = [:B1,B2:] as open Subset of [:T,T:] by BORSUK_1:6;
           take W;
-          p1 in B1 & p2 in B2 by TOPGEN_5:17;
+          p1 in B1 & p2 in B2 by TOPGEN_5:13;
           hence p in W by A16,ZFMISC_1:def 2;
           let y be set;
           assume y in f2.:W;
           then consider x being Point of [:T,T:] such that
 A17:       x in W and
-A18:       f2.x = y by FUNCT_2:116;
+A18:       f2.x = y by FUNCT_2:65;
           consider x1,x2 being Point of T such that
-A19:       x = [x1,x2] by BORSUK_1:50;
+A19:       x = [x1,x2] by BORSUK_1:10;
 A20:       f2.(x1,x2) = x2.i & f2.(p1,p2) = p2.i by A8;
-          x2 in B2 by A17,A19,ZFMISC_1:106;
+          x2 in B2 by A17,A19,ZFMISC_1:87;
           then
 A21:       |.x2-p2.| < r by TOPREAL9:7;
-          dom(x2-p2) = Seg n by EUCLID:3;
+          dom(x2-p2) = Seg n by FINSEQ_1:89;
           then x2.i-p2.i = (x2-p2).i by VALUED_1:13;
           then abs(x2.i - p2.i) <= |.x2-p2.| by A3,REAL_NS1:8;
           then abs(f2.x-f2.p) < r by A16,A19,A20,A21,XXREAL_0:2;
-          hence y in ].f2.p-r,f2.p+r.[ by A18,RCOMP_1:8;
+          hence y in ].f2.p-r,f2.p+r.[ by A18,RCOMP_1:1;
         end;
         then f2 is continuous by TOPS_4:21;
         then consider g being Function of [:T,T:],R^1 such that
 A22:     for p being Point of [:T,T:], r1,r2 being real number st
         f1.p = r1 & f2.p = r2 holds g.p = r1*r2 and
-A23:     g is continuous by A15,JGRAPH_2:35;
+A23:     g is continuous by A15,JGRAPH_2:25;
         now
           let a, b be Point of T;
 A24:       f1.(a,b) = a.i & f2.(a,b) = b.i by A7,A8;
@@ -2051,7 +2054,7 @@ A24:       f1.(a,b) = a.i & f2.(a,b) = b.i by A7,A8;
         end;
         hence P*F is continuous by A23,A4,A5,BINOP_1:2;
       end;
-      then F is continuous by WAYBEL18:7;
+      then F is continuous by WAYBEL18:6;
       hence thesis by A1,A2,YELLOW12:36;
     end;
     suppose n is zero;
@@ -2068,24 +2071,24 @@ theorem
     assume
 A1: f is continuous;
     reconsider g = f(-) as Function of TOP-REAL m,TOP-REAL n by Th34;
-    for p being Point of TOP-REAL m, r being positive (real number)
-    ex s being positive (real number) st g.:Ball(p,s) c= Ball(g.p,r)
+    for p being Point of TOP-REAL m, r being positive real number
+    ex s being positive real number st g.:Ball(p,s) c= Ball(g.p,r)
     proof
       let p be Point of TOP-REAL m;
-      let r be positive (real number);
-      consider s being positive (real number) such that
+      let r be positive real number;
+      consider s being positive real number such that
 A2:   f.:Ball(-p,s) c= Ball(f.-p,r) by A1,TOPS_4:20;
       take s;
       let y be Element of TOP-REAL n;
       assume y in g.:Ball(p,s);
       then consider x being Element of TOP-REAL m such that
 A3:   x in Ball(p,s) and
-A4:   g.x = y by FUNCT_2:116;
+A4:   g.x = y by FUNCT_2:65;
       dom g = the carrier of TOP-REAL m by FUNCT_2:def 1;
       then
 A5:   g.x = f.-x & g.p = f.-p by VALUED_2:def 34;
       -x in Ball(-p,s) by A3,Th23;
-      then f.-x in f.:Ball(-p,s) by FUNCT_2:43;
+      then f.-x in f.:Ball(-p,s) by FUNCT_2:35;
       hence y in Ball(g.p,r) by A2,A4,A5;
     end;
     hence thesis by TOPS_4:20;
@@ -2093,14 +2096,14 @@ A5:   g.x = f.-x & g.p = f.-p by VALUED_2:def 34;
 
 registration
   let T; let f be continuous Function of T,R^1;
-  cluster -f -> continuous Function of T,R^1;
+  cluster -f -> continuous for Function of T,R^1;
   coherence
   proof
     let F be Function of T,R^1 such that
 A1: F = -f;
     consider g being Function of T,R^1 such that
 A2: for p being Point of T, r being real number st f.p = r holds g.p = -r and
-A3: g is continuous by JGRAPH_4:13;
+A3: g is continuous by JGRAPH_4:8;
     F = g
     proof
       let x be Point of T;
@@ -2113,7 +2116,7 @@ end;
 
 registration
   let T; let f be non-empty continuous Function of T,R^1;
-  cluster f" -> continuous Function of T,R^1;
+  cluster f" -> continuous for Function of T,R^1;
   coherence
   proof
     let F be Function of T,R^1 such that
@@ -2122,7 +2125,7 @@ A1: F = f";
     then for q being Point of T holds f.q <> 0;
     then consider g being Function of T,R^1 such that
 A2: for p being Point of T, r being real number st f.p = r holds g.p = 1/r and
-A3: g is continuous by JGRAPH_2:36;
+A3: g is continuous by JGRAPH_2:26;
     F = g
     proof
       let x be Point of T;
@@ -2135,7 +2138,7 @@ end;
 
 registration
   let T; let f be continuous Function of T,R^1; let r;
-  cluster f+r -> continuous Function of T,R^1;
+  cluster f+r -> continuous for Function of T,R^1;
   coherence
   proof
     let F be Function of T,R^1 such that
@@ -2143,7 +2146,7 @@ A1: F = f+r;
     consider g being Function of T,R^1 such that
 A2: for p being Point of T, s being real number st f.p = s holds g.p = s + r
     and
-A3: g is continuous by JGRAPH_2:34;
+A3: g is continuous by JGRAPH_2:24;
     F = g
     proof
       let x be Point of T;
@@ -2152,16 +2155,16 @@ A3: g is continuous by JGRAPH_2:34;
     end;
     hence thesis by A3;
   end;
-  cluster f-r -> continuous Function of T,R^1;
+  cluster f-r -> continuous for Function of T,R^1;
   coherence;
-  cluster f(#)r -> continuous Function of T,R^1;
+  cluster f(#)r -> continuous for Function of T,R^1;
   coherence
   proof
     let F be Function of T,R^1 such that
 A4: F = f(#)r;
     consider g being Function of T,R^1 such that
 A5: for p being Point of T, s being real number st f.p = s holds g.p = r*s and
-A6: g is continuous by JGRAPH_2:33;
+A6: g is continuous by JGRAPH_2:23;
     F = g
     proof
       let x be Point of T;
@@ -2170,13 +2173,13 @@ A6: g is continuous by JGRAPH_2:33;
     end;
     hence thesis by A6;
   end;
-  cluster f(/)r -> continuous Function of T,R^1;
+  cluster f(/)r -> continuous for Function of T,R^1;
   coherence;
 end;
 
 registration
   let T; let f, g be continuous Function of T,R^1;
-  cluster f+g -> continuous Function of T,R^1;
+  cluster f+g -> continuous for Function of T,R^1;
   coherence
   proof
     let F be Function of T,R^1 such that
@@ -2185,7 +2188,7 @@ A1: F = f+g;
 A2: for p being Point of T, r1,r2 being real number st f.p = r1 & g.p = r2
     holds h.p = r1 + r2
     and
-A3: h is continuous by JGRAPH_2:29;
+A3: h is continuous by JGRAPH_2:19;
     F = h
     proof
       let x be Point of T;
@@ -2194,13 +2197,13 @@ A3: h is continuous by JGRAPH_2:29;
     end;
     hence thesis by A3;
   end;
-  cluster f-g -> continuous Function of T,R^1;
+  cluster f-g -> continuous for Function of T,R^1;
   coherence
   proof
     f-g = f+-g;
     hence thesis;
   end;
-  cluster f(#)g -> continuous Function of T,R^1;
+  cluster f(#)g -> continuous for Function of T,R^1;
   coherence
   proof
     let F be Function of T,R^1 such that
@@ -2209,7 +2212,7 @@ A4: F = f(#)g;
 A5: for p being Point of T, r1,r2 being real number st f.p = r1 & g.p = r2
     holds h.p = r1 * r2
     and
-A6: h is continuous by JGRAPH_2:35;
+A6: h is continuous by JGRAPH_2:25;
     F = h
     proof
       let x be Point of T;
@@ -2223,7 +2226,7 @@ end;
 registration
   let T; let f be continuous Function of T,R^1;
   let g be non-empty continuous Function of T,R^1;
-  cluster f /" g -> continuous Function of T,R^1;
+  cluster f /" g -> continuous for Function of T,R^1;
   coherence
   proof
     f /" g = f(#)(g");
@@ -2234,15 +2237,15 @@ end;
 registration
   let n,T;
   let f, g be continuous Function of T,TOP-REAL n;
-  cluster f<++>g -> continuous Function of T,TOP-REAL n;
+  cluster f<++>g -> continuous for Function of T,TOP-REAL n;
   coherence
   proof
     let h be Function of T,TOP-REAL n such that
 A1: h = f<++>g;
-    n in NAT by ORDINAL1:def 13;
+    n in NAT by ORDINAL1:def 12;
     then consider F being Function of T,TOP-REAL n such that
 A2: for r being Point of T holds F.r = f.r + g.r and
-A3: F is continuous by JGRAPH_6:20;
+A3: F is continuous by JGRAPH_6:12;
     F = h
     proof
 A4:   dom h = the carrier of T by FUNCT_2:def 1;
@@ -2252,12 +2255,12 @@ A4:   dom h = the carrier of T by FUNCT_2:def 1;
     end;
     hence thesis by A3;
   end;
-  cluster f<-->g -> continuous Function of T,TOP-REAL n;
+  cluster f<-->g -> continuous for Function of T,TOP-REAL n;
   coherence
   proof
     let h be Function of T,TOP-REAL n such that
 A5: h = f<-->g;
-A6: n in NAT by ORDINAL1:def 13;
+A6: n in NAT by ORDINAL1:def 12;
 A7: for r being Point of T holds h.r = f.r - g.r
     proof
       let r be Point of T;
@@ -2271,69 +2274,69 @@ A7: for r being Point of T holds h.r = f.r - g.r
       let p be Point of T, V be Subset of TOP-REAL n;
       assume h.p in V & V is open;
       then
-A8:   h.p in Int V by TOPS_1:55;
-      reconsider r=h.p as Point of Euclid n by EUCLID:71;
+A8:   h.p in Int V by TOPS_1:23;
+      reconsider r=h.p as Point of Euclid n by EUCLID:67;
       consider r0 being real number such that
-A9:   r0>0 & Ball(r,r0) c= V by A6,A8,GOBOARD6:8;
-      reconsider r01 = f.p as Point of Euclid n by EUCLID:71;
-      reconsider G1 = Ball(r01,r0/2) as Subset of TOP-REAL n by EUCLID:71;
-A10:   f.p in G1 by A9,GOBOARD6:4;
+A9:   r0>0 & Ball(r,r0) c= V by A6,A8,GOBOARD6:5;
+      reconsider r01 = f.p as Point of Euclid n by EUCLID:67;
+      reconsider G1 = Ball(r01,r0/2) as Subset of TOP-REAL n by EUCLID:67;
+A10:   f.p in G1 by A9,GOBOARD6:1;
 A11:   the TopStruct of TOP-REAL n = TopSpaceMetr Euclid n by EUCLID:def 8;
-      G1 is open by A11,TOPMETR:21,TOPS_3:76;
+      G1 is open by A11,TOPMETR:14,TOPS_3:76;
       then consider W1 being Subset of T such that
-A12:   p in W1 & W1 is open & f.:W1 c= G1 by A10,JGRAPH_2:20;
-      reconsider r02 = g.p as Point of Euclid n by EUCLID:71;
-      reconsider G2 = Ball(r02,r0/2) as Subset of TOP-REAL n by EUCLID:71;
-A13:  g.p in G2 by A9,GOBOARD6:4;
-      G2 is open by A11,TOPMETR:21,TOPS_3:76;
+A12:   p in W1 & W1 is open & f.:W1 c= G1 by A10,JGRAPH_2:10;
+      reconsider r02 = g.p as Point of Euclid n by EUCLID:67;
+      reconsider G2 = Ball(r02,r0/2) as Subset of TOP-REAL n by EUCLID:67;
+A13:  g.p in G2 by A9,GOBOARD6:1;
+      G2 is open by A11,TOPMETR:14,TOPS_3:76;
       then consider W2 being Subset of T such that
-A14:  p in W2 & W2 is open & g.:W2 c= G2 by A13,JGRAPH_2:20;
+A14:  p in W2 & W2 is open & g.:W2 c= G2 by A13,JGRAPH_2:10;
       take W = W1 /\ W2;
       thus p in W by A12,A14,XBOOLE_0:def 4;
       thus W is open by A12,A14;
       let x be Element of TOP-REAL n;
       assume x in h.:W;
       then consider z being set such that
-A15:  z in dom h & z in W & h.z=x by FUNCT_1:def 12;
+A15:  z in dom h & z in W & h.z=x by FUNCT_1:def 6;
 A16:  z in W1 by A15,XBOOLE_0:def 4;
       reconsider pz=z as Point of T by A15;
       dom f=the carrier of T by FUNCT_2:def 1;
       then
-A17:  f.pz in f.:W1 by A16,FUNCT_1:def 12;
-      reconsider bb1=f.pz as Point of Euclid n by EUCLID:71;
-      dist(r01,bb1)<r0/2 by A12,A17,METRIC_1:12;
+A17:  f.pz in f.:W1 by A16,FUNCT_1:def 6;
+      reconsider bb1=f.pz as Point of Euclid n by EUCLID:67;
+      dist(r01,bb1)<r0/2 by A12,A17,METRIC_1:11;
       then
-A18:  |.f.p - f.pz .| < r0/2 by A6,JGRAPH_1:45;
+A18:  |.f.p - f.pz .| < r0/2 by A6,JGRAPH_1:28;
 A19:  z in W2 by A15,XBOOLE_0:def 4;
       dom g=the carrier of T by FUNCT_2:def 1;
       then
-A20:  g.pz in g.:W2 by A19,FUNCT_1:def 12;
-      reconsider bb2=g.pz as Point of Euclid n by EUCLID:71;
-      dist(r02,bb2)<r0/2 by A14,A20,METRIC_1:12;
+A20:  g.pz in g.:W2 by A19,FUNCT_1:def 6;
+      reconsider bb2=g.pz as Point of Euclid n by EUCLID:67;
+      dist(r02,bb2)<r0/2 by A14,A20,METRIC_1:11;
       then
-A21:  |.g.p - g.pz.| < r0/2 by A6,JGRAPH_1:45;
+A21:  |.g.p - g.pz.| < r0/2 by A6,JGRAPH_1:28;
 A22:  f.pz-g.pz = x by A7,A15;
-      reconsider bb0=f.pz-g.pz as Point of Euclid n by EUCLID:71;
+      reconsider bb0=f.pz-g.pz as Point of Euclid n by EUCLID:67;
 A23:  h.pz = f.pz-g.pz by A7;
-      (f.p-g.p)-(f.pz-g.pz) = f.p-g.p-f.pz+g.pz by EUCLID:51
+      (f.p-g.p)-(f.pz-g.pz) = f.p-g.p-f.pz+g.pz by EUCLID:47
       .= f.p-f.pz-g.p+g.pz by A6,TOPREAL9:1
-      .= f.p-f.pz+g.pz+-g.p by EUCLID:30
-      .= f.p-f.pz+(g.pz-g.p) by EUCLID:30;
+      .= f.p-f.pz+g.pz+-g.p by EUCLID:26
+      .= f.p-f.pz+(g.pz-g.p) by EUCLID:26;
       then
 A24:  |.(f.p-g.p)-(f.pz-g.pz).|
-      <= |.f.p-f.pz.| + |.g.pz-g.p.| by A6,TOPRNS_1:30;
-A25:  |.g.p-g.pz.| = |.-(g.pz-g.p).| by EUCLID:48
-      .= |.g.pz-g.p.| by A6,TOPRNS_1:27;
-      |.f.p-f.pz.| + |.g.p-g.pz.| < r0/2+r0/2 by A18,A21,XREAL_1:10;
+      <= |.f.p-f.pz.| + |.g.pz-g.p.| by A6,TOPRNS_1:29;
+A25:  |.g.p-g.pz.| = |.-(g.pz-g.p).| by EUCLID:44
+      .= |.g.pz-g.p.| by A6,TOPRNS_1:26;
+      |.f.p-f.pz.| + |.g.p-g.pz.| < r0/2+r0/2 by A18,A21,XREAL_1:8;
       then |.(f.p-g.p)-(f.pz-g.pz).| < r0 by A24,A25,XXREAL_0:2;
       then |.h.p - h.pz .| < r0 by A7,A23;
-      then dist(r,bb0) < r0 by A6,A15,A22,JGRAPH_1:45;
-      then x in Ball(r,r0) by A22,METRIC_1:12;
+      then dist(r,bb0) < r0 by A6,A15,A22,JGRAPH_1:28;
+      then x in Ball(r,r0) by A22,METRIC_1:11;
       hence thesis by A9;
     end;
-    hence thesis by JGRAPH_2:20;
+    hence thesis by JGRAPH_2:10;
   end;
-  cluster f<##>g -> continuous Function of T,TOP-REAL n;
+  cluster f<##>g -> continuous for Function of T,TOP-REAL n;
   coherence
   proof
 A26: f <##> g = TIMES(n).:(f,g) by Th54;
@@ -2348,7 +2351,7 @@ registration
   let f be continuous Function of T,TOP-REAL n;
   let g be continuous Function of T,R^1;
   set I = incl(g,n);
-  cluster f<+>g -> continuous Function of T,TOP-REAL n;
+  cluster f<+>g -> continuous for Function of T,TOP-REAL n;
   coherence
   proof
     let h be Function of T,TOP-REAL n;
@@ -2358,7 +2361,7 @@ A1: h = f<+>g;
     h = G by A1,Th49;
     hence thesis;
   end;
-  cluster f<->g -> continuous Function of T,TOP-REAL n;
+  cluster f<->g -> continuous for Function of T,TOP-REAL n;
   coherence
   proof
     let h be Function of T,TOP-REAL n;
@@ -2368,7 +2371,7 @@ A2: h = f<->g;
     h = G by A2,Th50;
     hence thesis;
   end;
-  cluster f<#>g -> continuous Function of T,TOP-REAL n;
+  cluster f<#>g -> continuous for Function of T,TOP-REAL n;
   coherence
   proof
     let h be Function of T,TOP-REAL n;
@@ -2384,7 +2387,7 @@ registration
   let n,T;
   let f be continuous Function of T,TOP-REAL n;
   let g be non-empty continuous Function of T,R^1;
-  cluster f</>g -> continuous Function of T,TOP-REAL n;
+  cluster f</>g -> continuous for Function of T,TOP-REAL n;
   coherence
   proof
     let h be Function of T,TOP-REAL n;
@@ -2397,7 +2400,7 @@ end;
 registration
   let n,T,r;
   let f be continuous Function of T,TOP-REAL n;
-  cluster f[+]r -> continuous Function of T,TOP-REAL n;
+  cluster f[+]r -> continuous for Function of T,TOP-REAL n;
   coherence
   proof
     let h be Function of T,TOP-REAL n such that
@@ -2407,9 +2410,9 @@ A1: h = f[+]r;
     then h = f<+>(T-->r) by A1,Th29;
     hence thesis;
   end;
-  cluster f[-]r -> continuous Function of T,TOP-REAL n;
+  cluster f[-]r -> continuous for Function of T,TOP-REAL n;
   coherence;
-  cluster f[#]r -> continuous Function of T,TOP-REAL n;
+  cluster f[#]r -> continuous for Function of T,TOP-REAL n;
   coherence
   proof
     let h be Function of T,TOP-REAL n such that
@@ -2419,36 +2422,36 @@ A2: h = f[#]r;
     then h = f<#>(T-->r) by A2,Th31;
     hence thesis;
   end;
-  cluster f[/]r -> continuous Function of T,TOP-REAL n;
+  cluster f[/]r -> continuous for Function of T,TOP-REAL n;
   coherence;
 end;
 
 theorem Th60:
-  for r being non negative (real number)
+  for r being non negative real number
   for n being non zero Nat, p being Point of Tcircle(0.TOP-REAL n,r)
   holds -p is Point of Tcircle(0.TOP-REAL n,r)
   proof
-    let r be non negative (real number);
+    let r be non negative real number;
     let n be non zero Nat;
     let p be Point of Tcircle(0.TOP-REAL n,r);
-    reconsider p1 = p as Point of TOP-REAL n by PRE_TOPC:55;
-A1: n in NAT by ORDINAL1:def 13;
+    reconsider p1 = p as Point of TOP-REAL n by PRE_TOPC:25;
+A1: n in NAT by ORDINAL1:def 12;
     then
 A2: the carrier of Tcircle(0.TOP-REAL n,r) = Sphere(0.TOP-REAL n,r)
     by TOPREALB:9;
-    |. (-p1) - 0.TOP-REAL n .| = |. -p1 .| by RLVECT_1:26
-    .= |. p1 .| by EUCLID:75
-    .= |. p1 - 0.TOP-REAL n .| by RLVECT_1:26
+    |. (-p1) - 0.TOP-REAL n .| = |. -p1 .| by RLVECT_1:13
+    .= |. p1 .| by EUCLID:71
+    .= |. p1 - 0.TOP-REAL n .| by RLVECT_1:13
     .= r by A1,A2,TOPREAL9:9;
     hence thesis by A2,A1,TOPREAL9:9;
   end;
 
 theorem Th61:
-  for r being non negative (real number)
+  for r being non negative real number
   for f being Function of Tcircle(0.TOP-REAL(n+1),r),TOP-REAL n holds
   f(-) is Function of Tcircle(0.TOP-REAL(n+1),r),TOP-REAL n
   proof
-    let r be non negative (real number);
+    let r be non negative real number;
     set X = the carrier of Tcircle(0.TOP-REAL(n+1),r);
     let f be Function of X,TOP-REAL n;
     set g = f(-);
@@ -2464,11 +2467,11 @@ A2: dom f = X by FUNCT_2:def 1;
       g.x = f.y by A1,A2,VALUED_2:def 34;
       hence thesis;
     end;
-    hence thesis by A1,A2,FUNCT_2:5;
+    hence thesis by A1,A2,FUNCT_2:3;
   end;
 
 definition
-  let n be Nat, r be non negative (real number);
+  let n be Nat, r be non negative real number;
   let X be Subset of Tcircle(0.TOP-REAL(n+1),r);
   redefine func (-)X -> Subset of Tcircle(0.TOP-REAL(n+1),r);
   coherence
@@ -2490,9 +2493,9 @@ end;
 
 registration
   let m;
-  let r be non negative (real number);
+  let r be non negative real number;
   let X be open Subset of Tcircle(0.TOP-REAL(m+1),r);
-  cluster (-)X -> open Subset of Tcircle(0.TOP-REAL(m+1),r);
+  cluster (-)X -> open for Subset of Tcircle(0.TOP-REAL(m+1),r);
   coherence
   proof
     set T = Tcircle(0.TOP-REAL(m+1),r);
@@ -2532,19 +2535,19 @@ A5:   -x in G by Th24;
 end;
 
 theorem
-  for r being non negative (real number)
+  for r being non negative real number
   for f being continuous Function of Tcircle(0.TOP-REAL(m+1),r),TOP-REAL m
   holds f(-) is continuous Function of Tcircle(0.TOP-REAL(m+1),r),TOP-REAL m
   proof
-    let r be non negative (real number);
+    let r be non negative real number;
     set T = Tcircle(0.TOP-REAL(m+1),r);
     let f be continuous Function of T,TOP-REAL m;
     reconsider g = f(-) as Function of T,TOP-REAL m by Th61;
-    for p being Point of T, r being positive (real number)
+    for p being Point of T, r being positive real number
     ex W being open Subset of T st p in W & g.:W c= Ball(g.p,r)
     proof
       let p be Point of T;
-      let r be positive (real number);
+      let r be positive real number;
       reconsider q = -p as Point of T by Th60;
       consider W being open Subset of T such that
 A1:   q in W and
@@ -2557,12 +2560,12 @@ A2:   f.:W c= Ball(f.q,r) by TOPS_4:18;
       assume y in g.:W1;
       then consider x being Element of T such that
 A3:   x in W1 and
-A4:   g.x = y by FUNCT_2:116;
+A4:   g.x = y by FUNCT_2:65;
       dom g = the carrier of T by FUNCT_2:def 1;
       then
 A5:   g.x = f.-x & g.p = f.-p by VALUED_2:def 34;
       -x in (-)W1 by A3,Def3;
-      then f.-x in f.:W by FUNCT_2:43;
+      then f.-x in f.:W by FUNCT_2:35;
       hence y in Ball(g.p,r) by A2,A4,A5;
     end;
     hence thesis by TOPS_4:18;

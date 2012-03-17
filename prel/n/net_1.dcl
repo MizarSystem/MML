@@ -37,8 +37,8 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="44"/>
-<Adjective nr="82"/>
+<Adjective nr="45"/>
+<Adjective nr="84"/>
 </Cluster>
 </RCluster>
 <FCluster aid="NET_1" nr="1">
@@ -47,7 +47,7 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="241">
+<Func kind="K" nr="244">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -59,18 +59,18 @@
 <Func kind="G" nr="6">
 <Func kind="K" nr="5"/>
 <Func kind="K" nr="5"/>
-<Func kind="K" nr="239">
+<Func kind="K" nr="242">
 <Func kind="K" nr="5"/>
 <Func kind="K" nr="5"/>
 </Func>
-<Func kind="K" nr="239">
+<Func kind="K" nr="242">
 <Func kind="K" nr="5"/>
 <Func kind="K" nr="5"/>
 </Func>
 </Func>
 <Cluster>
-<Adjective nr="44"/>
-<Adjective nr="82"/>
+<Adjective nr="45"/>
+<Adjective nr="84"/>
 </Cluster>
 </FCluster>
 </Registrations>

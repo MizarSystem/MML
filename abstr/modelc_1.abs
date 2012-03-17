@@ -27,7 +27,7 @@ environ
       ZF_LANG, KNASTER, RELSET_1, FUNCT_5, ROBBINS1;
  registrations XBOOLE_0, SUBSET_1, FUNCT_1, ORDINAL1, PARTFUN1, XXREAL_0,
       XREAL_0, NAT_1, INT_1, ORDERS_1, XBOOLEAN, MARGREL1, KNASTER, CARD_1,
-      RELSET_1, STRUCT_0;
+      RELSET_1, STRUCT_0, RELAT_1, FINSEQ_1;
  requirements REAL, NUMERALS, ARITHM, SUBSET, BOOLE;
 
 
@@ -146,7 +146,7 @@ definition
 end;
 
 registration
-  cluster CTL-formula-like FinSequence of NAT;
+  cluster CTL-formula-like for FinSequence of NAT;
 end;
 
 definition
@@ -280,8 +280,7 @@ end;
 definition
   func atomic_WFF -> Subset of CTL_WFF equals
 :: MODELC_1:def 25
-  {x where x is CTL-formula:x is
-  atomic};
+  {x where x is CTL-formula:x is atomic};
 end;
 
 definition
@@ -359,15 +358,15 @@ registration
 end;
 
 registration
- cluster non empty CTLModelStr;
+ cluster non empty for CTLModelStr;
 end;
 
 registration
- cluster with_basic (non empty CTLModelStr);
+ cluster with_basic for non empty CTLModelStr;
 end;
 
 definition
- mode CTLModel is with_basic (non empty CTLModelStr);
+ mode CTLModel is with_basic non empty CTLModelStr;
 end;
 
 registration let C be CTLModel;
@@ -436,14 +435,14 @@ notation
 end;
 
 definition
- canceled 2;
+
   let V be CTLModel;
   let f be Assign of V;
   func EX(f) -> Assign of V equals
-:: MODELC_1:def 37
+:: MODELC_1:def 35
   (the EneXt of V).f;
   func EG(f) -> Assign of V equals
-:: MODELC_1:def 38
+:: MODELC_1:def 36
   (the EGlobal of V).f;
 end;
 
@@ -451,10 +450,10 @@ definition
   let V be CTLModel;
   let f,g be Assign of V;
   func f EU g -> Assign of V equals
-:: MODELC_1:def 39
+:: MODELC_1:def 37
   (the EUntill of V).(f,g);
   func f 'or' g -> Assign of V equals
-:: MODELC_1:def 40
+:: MODELC_1:def 38
   'not'('not'(f) '&' 'not'(g));
 end;
 
@@ -515,7 +514,7 @@ definition
   let S be non empty set;
   let R be total Relation of S,S;
   mode inf_path of R -> Function of NAT,S means
-:: MODELC_1:def 41
+:: MODELC_1:def 39
 
     for n being Element of NAT holds [it.n,it.(n+1)] in R;
 end;
@@ -525,7 +524,7 @@ end;
 definition
   let S be non empty set;
   func ModelSP(S) -> set equals
-:: MODELC_1:def 42
+:: MODELC_1:def 40
   Funcs(S,BOOLEAN);
 end;
 
@@ -540,7 +539,7 @@ definition
   let S be non empty set;
   let f be set;
   func Fid(f,S) -> Function of S,BOOLEAN equals
-:: MODELC_1:def 43
+:: MODELC_1:def 41
 
   f if f in ModelSP(S)
   otherwise S --> FALSE;
@@ -599,7 +598,7 @@ definition
   let S be non empty set;
   let f be set;
   func Not_0(f,S) -> Element of ModelSP(S) means
-:: MODELC_1:def 44
+:: MODELC_1:def 42
 
   for s being set st s
   in S holds 'not' (Castboolean (Fid(f,S)).s) = TRUE iff (Fid(it,S)).s = TRUE;
@@ -608,7 +607,7 @@ end;
 definition
   let S be non empty set;
   func Not_(S) -> UnOp of ModelSP(S) means
-:: MODELC_1:def 45
+:: MODELC_1:def 43
 
   for f being set st f in ModelSP(S) holds it.f = Not_0(f,S);
 end;
@@ -621,7 +620,7 @@ definition
   let f be Function of S,BOOLEAN;
   let x be set;
   func EneXt_univ(x,f,R) -> Element of BOOLEAN equals
-:: MODELC_1:def 46
+:: MODELC_1:def 44
 
   TRUE if x in S &
   ex pai being inf_path of R st pai.0 = x & f.(pai.1) =TRUE otherwise FALSE;
@@ -632,7 +631,7 @@ definition
   let R be total Relation of S,S;
   let f be set;
   func EneXt_0(f,R) -> Element of ModelSP(S) means
-:: MODELC_1:def 47
+:: MODELC_1:def 45
 
   for s being set st
   s in S holds EneXt_univ(s,Fid(f,S),R)=TRUE iff (Fid(it,S)).s=TRUE;
@@ -642,7 +641,7 @@ definition
   let S be non empty set;
   let R be total Relation of S,S;
   func EneXt_(R) -> UnOp of ModelSP(S) means
-:: MODELC_1:def 48
+:: MODELC_1:def 46
 
   for f being set st f in ModelSP(S) holds it.f = EneXt_0(f,R);
 end;
@@ -655,7 +654,7 @@ definition
   let f be Function of S,BOOLEAN;
   let x be set;
   func EGlobal_univ(x,f,R) -> Element of BOOLEAN equals
-:: MODELC_1:def 49
+:: MODELC_1:def 47
 
   TRUE if x in S
 & ex pai being inf_path of R st (pai.0 = x & for n being Element of NAT holds f
@@ -667,7 +666,7 @@ definition
   let R be total Relation of S,S;
   let f be set;
   func EGlobal_0(f,R) -> Element of ModelSP(S) means
-:: MODELC_1:def 50
+:: MODELC_1:def 48
 
   for s being set
   st s in S holds EGlobal_univ(s,Fid(f,S),R)=TRUE iff (Fid(it,S)).s=TRUE;
@@ -677,7 +676,7 @@ definition
   let S be non empty set;
   let R be total Relation of S,S;
   func EGlobal_(R) -> UnOp of ModelSP(S) means
-:: MODELC_1:def 51
+:: MODELC_1:def 49
 
   for f being set st f in ModelSP(S) holds it.f = EGlobal_0(f,R);
 end;
@@ -688,7 +687,7 @@ definition
   let S be non empty set;
   let f,g be set;
   func And_0(f,g,S) -> Element of ModelSP(S) means
-:: MODELC_1:def 52
+:: MODELC_1:def 50
 
   for s being set st
 s in S holds (Castboolean (Fid(f,S)).s ) '&' (Castboolean (Fid(g,S)).s ) =TRUE
@@ -698,7 +697,7 @@ end;
 definition
   let S be non empty set;
   func And_(S) -> BinOp of ModelSP(S) means
-:: MODELC_1:def 53
+:: MODELC_1:def 51
 
   for f,g being set st f in
   ModelSP(S) & g in ModelSP(S) holds it.(f,g) = And_0(f,g,S);
@@ -712,7 +711,7 @@ definition
   let f,g be Function of S,BOOLEAN;
   let x be set;
   func EUntill_univ(x,f,g,R) -> Element of BOOLEAN equals
-:: MODELC_1:def 54
+:: MODELC_1:def 52
 
   TRUE if x in
   S & ex pai being inf_path of R st (pai.0 = x & ex m being Element of NAT st (
@@ -725,7 +724,7 @@ definition
   let R be total Relation of S,S;
   let f,g be set;
   func EUntill_0(f,g,R) -> Element of ModelSP(S) means
-:: MODELC_1:def 55
+:: MODELC_1:def 53
 
   for s being set
 st s in S holds EUntill_univ(s,Fid(f,S),Fid(g,S),R)=TRUE iff (Fid(it,S)).s=TRUE
@@ -736,7 +735,7 @@ definition
   let S be non empty set;
   let R be total Relation of S,S;
   func EUntill_(R) -> BinOp of ModelSP(S) means
-:: MODELC_1:def 56
+:: MODELC_1:def 54
 
   for f,g being set st f
   in ModelSP(S) & g in ModelSP(S) holds it.(f,g) = EUntill_0(f,g,R);
@@ -749,7 +748,7 @@ definition
   let X be non empty Subset of ModelSP(S);
   let s be set;
   func F_LABEL(s,X) -> Subset of X means
-:: MODELC_1:def 57
+:: MODELC_1:def 55
 
   for x being set holds x in it
   iff x in X & ex f being Function of S,BOOLEAN st f=x & f.s=TRUE;
@@ -759,7 +758,7 @@ definition
   let S be non empty set;
   let X be non empty Subset of ModelSP(S);
   func Label_(X) -> Function of S,bool X means
-:: MODELC_1:def 58
+:: MODELC_1:def 56
 
   for x being set st x in S holds it.x = F_LABEL(x,X);
 end;
@@ -770,7 +769,7 @@ definition
   let R be total Relation of S,S;
   let Prop be non empty Subset of ModelSP(S);
   func KModel(R,S0,Prop) -> KripkeStr over Prop equals
-:: MODELC_1:def 59
+:: MODELC_1:def 57
   KripkeStr (# S, S0, R,
     Label_(Prop) #);
 end;
@@ -788,7 +787,7 @@ registration
   let S0 be Subset of S;
   let R be total Relation of S,S;
   let Prop be non empty Subset of ModelSP(S);
-  cluster ModelSP(the carrier of KModel(R,S0,Prop)) -> non empty Subset of
+  cluster ModelSP(the carrier of KModel(R,S0,Prop)) -> non empty for Subset of
     Funcs(the carrier of KModel(R,S0,Prop),BOOLEAN);
 end;
 
@@ -797,7 +796,7 @@ definition
   let R be total Relation of S,S;
   let BASSIGN be non empty Subset of ModelSP(S);
   func BASSModel(R,BASSIGN) -> CTLModelStr equals
-:: MODELC_1:def 60
+:: MODELC_1:def 58
   CTLModelStr(# ModelSP(S),
     BASSIGN, And_(S), Not_(S), EneXt_(R), EGlobal_(R), EUntill_(R) #);
 end;
@@ -821,7 +820,7 @@ definition
   let s be Element of S;
   let f be Assign of BASSModel(R,BASSIGN);
   pred s |= f means
-:: MODELC_1:def 61
+:: MODELC_1:def 59
 
   (Fid(f,S)).s=TRUE;
 end;
@@ -874,7 +873,7 @@ definition
   let s be Element of S;
   let H be CTL-formula;
   pred s,kai|= H means
-:: MODELC_1:def 62
+:: MODELC_1:def 60
 
   s|= Evaluate(H,kai);
 end;
@@ -939,7 +938,7 @@ definition
   let pai be inf_path of R;
   let n be set;
   func PrePath(n,s0,pai) -> Element of S equals
-:: MODELC_1:def 63
+:: MODELC_1:def 61
 
   s0 if n=0 otherwise
   pai.(k_nat(k_nat(n)-1));
@@ -959,7 +958,7 @@ definition
   let R be total Relation of S,S;
   let H be Subset of S;
   func Pred(H,R) -> Subset of S equals
-:: MODELC_1:def 64
+:: MODELC_1:def 62
   { s where s is Element of S : ex t
   being Element of S st t in H & [s,t] in R };
 end;
@@ -972,7 +971,7 @@ definition
   let BASSIGN be non empty Subset of ModelSP(S);
   let f be Assign of BASSModel(R,BASSIGN);
   func SIGMA(f) -> Subset of S equals
-:: MODELC_1:def 65
+:: MODELC_1:def 63
   { s where s is Element of S : s|= f };
 end;
 
@@ -990,7 +989,7 @@ definition
   let BASSIGN be non empty Subset of ModelSP(S);
   let T be Subset of S;
   func Tau(T,R,BASSIGN) -> Assign of BASSModel(R,BASSIGN) means
-:: MODELC_1:def 66
+:: MODELC_1:def 64
 
   for s being set st s in S holds (Fid(it,S)).s = chi(T,S).s;
 end;
@@ -1044,7 +1043,7 @@ definition
   let BASSIGN be non empty Subset of ModelSP(S);
   let f,g be Assign of BASSModel(R,BASSIGN);
   func Fax(f,g) -> Assign of BASSModel(R,BASSIGN) equals
-:: MODELC_1:def 67
+:: MODELC_1:def 65
   f '&' EX(g);
 end;
 
@@ -1072,7 +1071,7 @@ definition
   let f be Assign of BASSModel(R,BASSIGN);
   let G be Subset of S;
   func SigFaxTau(f,G,R,BASSIGN) -> Subset of S equals
-:: MODELC_1:def 68
+:: MODELC_1:def 66
   SIGMA(Fax(f,Tau(G,R,
   BASSIGN)));
 end;
@@ -1092,7 +1091,7 @@ definition
   let pai be inf_path of R;
   let k be Element of NAT;
   func PathShift(pai,k) -> inf_path of R means
-:: MODELC_1:def 69
+:: MODELC_1:def 67
 
   for n being Element of NAT holds it.n = pai.(n+k);
 end;
@@ -1103,7 +1102,7 @@ definition
   let pai1,pai2 be inf_path of R;
   let n,k be Element of NAT;
   func PathChange(pai1,pai2,k,n) -> set equals
-:: MODELC_1:def 70
+:: MODELC_1:def 68
 
   pai1.n if n<k otherwise
   pai2.(n-k);
@@ -1115,7 +1114,7 @@ definition
   let pai1,pai2 be inf_path of R;
   let k be Element of NAT;
   func PathConc(pai1,pai2,k) -> Function of NAT,S means
-:: MODELC_1:def 71
+:: MODELC_1:def 69
 
   for n being Element of NAT holds it.n = PathChange(pai1,pai2,k,n);
 end;
@@ -1153,7 +1152,7 @@ definition
   let BASSIGN be non empty Subset of ModelSP(S);
   let f be Assign of BASSModel(R,BASSIGN);
   func TransEG(f) -> c=-monotone Function of bool S, bool S means
-:: MODELC_1:def 72
+:: MODELC_1:def 70
 
   for G being Subset of S holds it.G = SigFaxTau(f,G,R,BASSIGN);
 end;
@@ -1177,7 +1176,7 @@ definition
   let BASSIGN be non empty Subset of ModelSP(S);
   let f,g,h be Assign of BASSModel(R,BASSIGN);
   func Foax(g,f,h) -> Assign of BASSModel(R,BASSIGN) equals
-:: MODELC_1:def 73
+:: MODELC_1:def 71
   g 'or' Fax(f,h);
 end;
 
@@ -1205,7 +1204,7 @@ definition
   let f,g be Assign of BASSModel(R,BASSIGN);
   let H be Subset of S;
   func SigFoaxTau(g,f,H,R,BASSIGN) -> Subset of S equals
-:: MODELC_1:def 74
+:: MODELC_1:def 72
   SIGMA(Foax(g,f,Tau(H,
   R,BASSIGN)));
 end;
@@ -1238,7 +1237,7 @@ definition
   let BASSIGN be non empty Subset of ModelSP(S);
   let f,g be Assign of BASSModel(R,BASSIGN);
   func TransEU(f,g) -> c=-monotone Function of bool S, bool S means
-:: MODELC_1:def 75
+:: MODELC_1:def 73
 
   for H being Subset of S holds it.H = SigFoaxTau(g,f,H,R,BASSIGN);
 end;

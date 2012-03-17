@@ -1,0 +1,949 @@
+:: On the {K}uratowski Limit Operators I
+::  by Adam Grabowski
+::
+:: Received August 12, 2003
+:: Copyright (c) 2003-2011 Association of Mizar Users
+::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
+:: This code can be distributed under the GNU General Public Licence
+:: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
+:: License version 3.0 or later, subject to the binding interpretation
+:: detailed in file COPYING.interpretation.
+:: See COPYING.GPL and COPYING.CC-BY-SA for the full text of these
+:: licenses, or see http://www.gnu.org/licenses/gpl.html and
+:: http://creativecommons.org/licenses/by-sa/3.0/.
+
+environ
+
+ vocabularies NUMBERS, FUNCT_1, RELAT_1, SETFAM_1, TARSKI, XBOOLE_0, ZFMISC_1,
+      PROB_1, SUBSET_1, FUNCOP_1, STRUCT_0, CARD_3, ORDINAL2, NAT_1, ARYTM_3,
+      CARD_1, XXREAL_0, SEQ_2, FINSEQ_1, EUCLID, TOPREAL1, RCOMP_1, PRE_TOPC,
+      XREAL_0, ORDINAL1, METRIC_1, REAL_1, COMPLEX1, ARYTM_1, SEQ_1, INT_1,
+      PCOMPS_1, FRECHET, RLVECT_3, YELLOW_8, CONNSP_2, TOPS_1, JORDAN2C,
+      XXREAL_2, VALUED_0, MCART_1, TOPREAL2, JORDAN9, GOBOARD9, WAYBEL_7,
+      KURATO_2;
+ notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, ZFMISC_1,
+      XXREAL_0, XREAL_0, REAL_1, NAT_1, SETFAM_1, MCART_1, DOMAIN_1, RELAT_1,
+      FUNCT_1, INT_1, FINSEQ_1, RELSET_1, FUNCT_2, FUNCOP_1, CARD_3, PROB_1,
+      LIMFUNC1, VALUED_0, FUNCT_6;
+ constructors SETFAM_1, REAL_1, PROB_1, LIMFUNC1, FUNCT_6, FINSEQ_1, DOMAIN_1,
+      NAT_1, RELSET_1;
+ registrations XBOOLE_0, SUBSET_1, RELAT_1, ORDINAL1, FUNCT_2, XXREAL_0,
+      XREAL_0, NAT_1, INT_1, MEMBERED, FUNCOP_1, VALUED_0, RELSET_1;
+ requirements REAL, SUBSET, BOOLE, NUMERALS, ARITHM;
+ definitions XBOOLE_0, TARSKI, SUBSET_1, XCMPLX_0;
+ theorems SETFAM_1, XBOOLE_1, SUBSET_1, NAT_1, FUNCT_2, RELSET_1, XBOOLE_0,
+      FUNCT_1, INT_1, XREAL_0, ZFMISC_1, RELAT_1, FUNCT_6, SEQM_3, MCART_1,
+      PROB_1, MEASURE2, XREAL_1, XXREAL_0, ORDINAL1, VALUED_0;
+ schemes XBOOLE_0, FUNCT_2, NAT_1, SUBSET_1;
+
+begin
+
+theorem
+  for F being Function, i being set st i in dom F holds meet F c= F.i
+proof
+  let F be Function, i be set;
+  assume
+A1: i in dom F;
+  let x be set;
+  assume x in meet F;
+  hence thesis by A1,FUNCT_6:25,RELAT_1:38;
+end;
+
+theorem
+  for A, B, C, D being set st A meets B & C meets D
+   holds [: A, C :] meets [: B, D :]
+proof
+  let A, B, C, D be set;
+  assume that
+A1: A meets B and
+A2: C meets D;
+  consider x being set such that
+A3: x in A & x in B by A1,XBOOLE_0:3;
+  consider y being set such that
+A4: y in C & y in D by A2,XBOOLE_0:3;
+  [x,y] in [: A, C :] & [x,y] in [: B, D :] by A3,A4,ZFMISC_1:87;
+  hence thesis by XBOOLE_0:3;
+end;
+
+registration
+  let X be set;
+  cluster -> non empty for SetSequence of X;
+  coherence;
+end;
+
+registration
+  let T be non empty set;
+  cluster non-empty for SetSequence of T;
+  existence
+  proof
+    set a = the Element of T;
+    reconsider A = {a} as Subset of T;
+    set X = NAT --> A;
+    reconsider X as SetSequence of T;
+    take X;
+    thus thesis;
+  end;
+end;
+
+definition
+  let X be set, F be SetSequence of X;
+  redefine func Union F -> Subset of X;
+  coherence
+  proof
+    Union F c= X;
+    hence thesis;
+  end;
+  redefine func meet F -> Subset of X;
+  coherence
+  proof
+    reconsider G = rng F as Subset-Family of X;
+    meet G c= X;
+    hence thesis by FUNCT_6:def 4;
+  end;
+end;
+
+begin :: Lower and Upper Limit of Sequences of Subsets
+
+definition
+  let X be set, F be SetSequence of X;
+  func lim_inf F -> Subset of X means
+  :Def3:
+  ex f being SetSequence of X st it
+  = Union f & for n being Element of NAT holds f.n = meet (F ^\ n);
+  existence
+  proof
+    deffunc F(Element of NAT) = meet (F ^\ $1);
+    consider f being SetSequence of X such that
+A1: for n being Element of NAT holds f.n = F(n) from FUNCT_2:sch 4;
+    take Union f;
+    thus thesis by A1;
+  end;
+  uniqueness
+  proof
+    let A1, A2 be Subset of X;
+    given f1 being SetSequence of X such that
+A2: A1 = Union f1 and
+A3: for n being Element of NAT holds f1.n = meet (F ^\ n);
+    given f2 being SetSequence of X such that
+A4: A2 = Union f2 and
+A5: for n being Element of NAT holds f2.n = meet (F ^\ n);
+    for n being Element of NAT holds f1.n = f2.n
+    proof
+      let n be Element of NAT;
+      f1.n = meet (F ^\ n) by A3
+        .= f2.n by A5;
+      hence thesis;
+    end;
+    hence thesis by A2,A4,FUNCT_2:63;
+  end;
+  func lim_sup F -> Subset of X means
+  :Def4:
+  ex f being SetSequence of X st it
+  = meet f & for n being Element of NAT holds f.n = Union (F ^\ n);
+  existence
+  proof
+    deffunc F(Element of NAT) = Union (F ^\ $1);
+    consider f being SetSequence of X such that
+A6: for n being Element of NAT holds f.n = F(n) from FUNCT_2:sch 4;
+    take meet f;
+    thus thesis by A6;
+  end;
+  uniqueness
+  proof
+    let A1, A2 be Subset of X;
+    given f1 being SetSequence of X such that
+A7: A1 = meet f1 and
+A8: for n being Element of NAT holds f1.n = Union (F ^\ n);
+    given f2 being SetSequence of X such that
+A9: A2 = meet f2 and
+A10: for n being Element of NAT holds f2.n = Union (F ^\ n);
+    for n being Element of NAT holds f1.n = f2.n
+    proof
+      let n be Element of NAT;
+      f1.n = Union (F ^\ n) by A8
+        .= f2.n by A10;
+      hence thesis;
+    end;
+    hence thesis by A7,A9,FUNCT_2:63;
+  end;
+end;
+
+theorem Th6:
+  for X being set, F being SetSequence of X, x being set
+   holds x in meet F iff for z being Element of NAT holds x in F.z
+proof
+  let X be set, F be SetSequence of X, x be set;
+  hereby
+    assume
+A1: x in meet F;
+    let z be Element of NAT;
+    z in NAT;
+    then z in dom F by FUNCT_2:def 1;
+    hence x in F.z by A1,FUNCT_6:25;
+  end;
+  assume for z being Element of NAT holds x in F.z;
+  then for y being set st y in dom F holds x in F.y;
+  hence thesis by FUNCT_6:25;
+end;
+
+theorem Th7:
+  for X being set, F being SetSequence of X, x being set holds x in
+  lim_inf F iff ex n being Element of NAT st for k being Element of NAT holds x
+  in F.(n+k)
+proof
+  let X be set, F be SetSequence of X, x be set;
+  consider f being SetSequence of X such that
+A1: lim_inf F = Union f and
+A2: for n being Element of NAT holds f.n = meet (F ^\ n) by Def3;
+  hereby
+    consider f being SetSequence of X such that
+A3: lim_inf F = Union f and
+A4: for n being Element of NAT holds f.n = meet (F ^\ n) by Def3;
+    assume x in lim_inf F;
+    then consider n being Element of NAT such that
+A5: x in f.n by A3,PROB_1:12;
+    set G = F ^\ n;
+    take n;
+    let k be Element of NAT;
+A6: G.k = F.(n + k) by NAT_1:def 3;
+    x in meet (F ^\ n) by A4,A5;
+    hence x in F.(n+k) by A6,Th6;
+  end;
+  given n being Element of NAT such that
+A7: for k being Element of NAT holds x in F.(n+k);
+  set G = F ^\ n;
+  for z being Element of NAT holds x in G.z
+  proof
+    let z be Element of NAT;
+    G.z = F.(n + z) by NAT_1:def 3;
+    hence thesis by A7;
+  end;
+  then x in meet G by Th6;
+  then x in f.n by A2;
+  hence thesis by A1,PROB_1:12;
+end;
+
+theorem Th8:
+  for X being set, F being SetSequence of X, x being set holds x in
+lim_sup F iff for n being Element of NAT ex k being Element of NAT st x in F.(n
+  +k)
+proof
+  let X be set, F be SetSequence of X, x be set;
+  consider f being SetSequence of X such that
+A1: lim_sup F = meet f and
+A2: for n being Element of NAT holds f.n = Union (F ^\ n) by Def4;
+  hereby
+    assume
+A3: x in lim_sup F;
+    let n be Element of NAT;
+    set G = F ^\ n;
+    consider f being SetSequence of X such that
+A4: lim_sup F = meet f and
+A5: for n being Element of NAT holds f.n = Union (F ^\ n) by Def4;
+    f.n = Union G by A5;
+    then x in Union G by A3,A4,Th6;
+    then consider k being Element of NAT such that
+A6: x in G.k by PROB_1:12;
+    take k;
+    thus x in F.(n+k) by A6,NAT_1:def 3;
+  end;
+  assume
+A7: for n being Element of NAT ex k being Element of NAT st x in F.(n+k);
+  for z being Element of NAT holds x in f.z
+  proof
+    let z be Element of NAT;
+    set G = F ^\ z;
+    consider k being Element of NAT such that
+A8: x in F.(z+k) by A7;
+    f.z = Union G & G.k = F.(z + k) by A2,NAT_1:def 3;
+    hence thesis by A8,PROB_1:12;
+  end;
+  hence thesis by A1,Th6;
+end;
+
+theorem
+  for X being set, F being SetSequence of X holds lim_inf F c= lim_sup F
+proof
+  let X be set, F be SetSequence of X;
+  let x be set;
+  assume x in lim_inf F;
+  then consider n be Element of NAT such that
+A1: for k being Element of NAT holds x in F.(n+k) by Th7;
+  now
+    let k be Element of NAT;
+    x in F.(n+k) by A1;
+    hence ex n being Element of NAT st x in F.(k+n);
+  end;
+  hence thesis by Th8;
+end;
+
+theorem Th10:
+  for X being set, F being SetSequence of X holds meet F c= lim_inf F
+proof
+  let X be set, F be SetSequence of X;
+  let x be set;
+  assume x in meet F;
+  then for k being Element of NAT holds x in F.(0 qua Nat+k) by Th6;
+  hence thesis by Th7;
+end;
+
+theorem Th11:
+  for X being set, F being SetSequence of X holds lim_sup F c= Union F
+proof
+  let X be set, F be SetSequence of X;
+  let x be set;
+  assume x in lim_sup F;
+  then ex k being Element of NAT st x in F.(0 qua Nat+k) by Th8;
+  hence thesis by PROB_1:12;
+end;
+
+theorem
+  for X being set, F being SetSequence of X
+   holds lim_inf F = (lim_sup Complement F)`
+proof
+  let X be set, F be SetSequence of X;
+  set G = Complement F;
+  thus lim_inf F c= (lim_sup Complement F)`
+  proof
+    let x be set;
+    assume
+A1: x in lim_inf F;
+    then consider n being Element of NAT such that
+A2: for k being Element of NAT holds x in F.(n+k) by Th7;
+    for k being Element of NAT holds not x in G.(n+k)
+    proof
+      let k be Element of NAT;
+A3:   G.(n+k) = (F.(n+k))` by PROB_1:def 2;
+      assume x in G.(n+k);
+      then not x in F.(n+k) by A3,XBOOLE_0:def 5;
+      hence thesis by A2;
+    end;
+    then not x in lim_sup G by Th8;
+    hence thesis by A1,XBOOLE_0:def 5;
+  end;
+  thus (lim_sup Complement F)` c= lim_inf F
+  proof
+    let x be set;
+    assume
+A4: x in (lim_sup Complement F)`;
+    then not x in lim_sup Complement F by XBOOLE_0:def 5;
+    then consider n being Element of NAT such that
+A5: for k being Element of NAT holds not x in G.(n+k) by Th8;
+    for k being Element of NAT holds x in F.(n+k)
+    proof
+      let k be Element of NAT;
+      assume not x in F.(n+k);
+      then x in (F.(n+k))` by A4,XBOOLE_0:def 5;
+      then x in G.(n+k) by PROB_1:def 2;
+      hence thesis by A5;
+    end;
+    hence thesis by Th7;
+  end;
+end;
+
+theorem
+  for X being set, A, B, C being SetSequence of X
+   st for n being Element of NAT holds C.n = A.n /\ B.n
+ holds lim_inf C = lim_inf A /\ lim_inf B
+proof
+  let X be set, A, B, C be SetSequence of X;
+  assume
+A1: for n being Element of NAT holds C.n = A.n /\ B.n;
+  thus lim_inf C c= lim_inf A /\ lim_inf B
+  proof
+    let x be set;
+    assume x in lim_inf C;
+    then consider n being Element of NAT such that
+A2: for k being Element of NAT holds x in C.(n+k) by Th7;
+    for k being Element of NAT holds x in B.(n+k)
+    proof
+      let k be Element of NAT;
+      C.(n+k) = A.(n+k) /\ B.(n+k) & x in C.(n+k) by A1,A2;
+      hence thesis by XBOOLE_0:def 4;
+    end;
+    then
+A3: x in lim_inf B by Th7;
+    for k being Element of NAT holds x in A.(n+k)
+    proof
+      let k be Element of NAT;
+      C.(n+k) = A.(n+k) /\ B.(n+k) & x in C.(n+k) by A1,A2;
+      hence thesis by XBOOLE_0:def 4;
+    end;
+    then x in lim_inf A by Th7;
+    hence thesis by A3,XBOOLE_0:def 4;
+  end;
+  thus lim_inf A /\ lim_inf B c= lim_inf C
+  proof
+    let x be set;
+    assume
+A4: x in lim_inf A /\ lim_inf B;
+    then x in lim_inf A by XBOOLE_0:def 4;
+    then consider n1 being Element of NAT such that
+A5: for k being Element of NAT holds x in A.(n1+k) by Th7;
+    x in lim_inf B by A4,XBOOLE_0:def 4;
+    then consider n2 being Element of NAT such that
+A6: for k being Element of NAT holds x in B.(n2+k) by Th7;
+    set n = max (n1, n2);
+A7: for k being Element of NAT holds x in B.(n+k)
+    proof
+      let k be Element of NAT;
+      consider g being Nat such that
+A8:   n = n2 + g by NAT_1:10,XXREAL_0:25;
+      reconsider g as Element of NAT by ORDINAL1:def 12;
+      x in B.(n2+(g+k)) by A6;
+      hence thesis by A8;
+    end;
+A9: for k being Element of NAT holds x in A.(n+k)
+    proof
+      let k be Element of NAT;
+      consider g being Nat such that
+A10:  n = n1 + g by NAT_1:10,XXREAL_0:25;
+      reconsider g as Element of NAT by ORDINAL1:def 12;
+      x in A.(n1+(g+k)) by A5;
+      hence thesis by A10;
+    end;
+    for k being Element of NAT holds x in C.(n+k)
+    proof
+      let k be Element of NAT;
+      x in A.(n+k) & x in B.(n+k) by A9,A7;
+      then x in A.(n+k) /\ B.(n+k) by XBOOLE_0:def 4;
+      hence thesis by A1;
+    end;
+    hence thesis by Th7;
+  end;
+end;
+
+theorem
+  for X being set, A, B, C being SetSequence of X
+    st for n being Element of NAT holds C.n = A.n \/ B.n
+   holds lim_sup C = lim_sup A \/ lim_sup B
+proof
+  let X be set, A, B, C be SetSequence of X;
+  assume
+A1: for n being Element of NAT holds C.n = A.n \/ B.n;
+  thus lim_sup C c= lim_sup A \/ lim_sup B
+  proof
+    let x be set;
+    assume
+A2: x in lim_sup C;
+    (for n being Element of NAT ex k being Element of NAT st x in A.(n+k))
+    or for n being Element of NAT ex k being Element of NAT st x in B.(n+k)
+    proof
+      given n1 being Element of NAT such that
+A3:   for k being Element of NAT holds not x in A.(n1+k);
+      given n2 being Element of NAT such that
+A4:   for k being Element of NAT holds not x in B.(n2+k);
+      set n = max (n1, n2);
+      consider g being Nat such that
+A5:   n = n1 + g by NAT_1:10,XXREAL_0:25;
+      consider h being Nat such that
+A6:   n = n2 + h by NAT_1:10,XXREAL_0:25;
+      reconsider g, h as Element of NAT by ORDINAL1:def 12;
+      consider k being Element of NAT such that
+A7:   x in C.(n+k) by A2,Th8;
+A8:   x in A.(n+k) \/ B.(n+k) by A1,A7;
+      per cases by A8,XBOOLE_0:def 3;
+      suppose
+        x in A.(n+k);
+        then x in A.(n1+(g+k)) by A5;
+        hence thesis by A3;
+      end;
+      suppose
+        x in B.(n+k);
+        then x in B.(n2+(h+k)) by A6;
+        hence thesis by A4;
+      end;
+    end;
+    then x in lim_sup A or x in lim_sup B by Th8;
+    hence thesis by XBOOLE_0:def 3;
+  end;
+  thus lim_sup A \/ lim_sup B c= lim_sup C
+  proof
+    let x be set;
+    assume
+A9: x in lim_sup A \/ lim_sup B;
+    per cases by A9,XBOOLE_0:def 3;
+    suppose
+A10:  x in lim_sup A;
+      for n being Element of NAT ex k being Element of NAT st x in C.(n+k )
+      proof
+        let n be Element of NAT;
+        consider k being Element of NAT such that
+A11:    x in A.(n+k) by A10,Th8;
+        take k;
+        x in A.(n+k) \/ B.(n+k) by A11,XBOOLE_0:def 3;
+        hence thesis by A1;
+      end;
+      hence thesis by Th8;
+    end;
+    suppose
+A12:  x in lim_sup B;
+      for n being Element of NAT ex k being Element of NAT st x in C.(n+k )
+      proof
+        let n be Element of NAT;
+        consider k being Element of NAT such that
+A13:    x in B.(n+k) by A12,Th8;
+        take k;
+        x in A.(n+k) \/ B.(n+k) by A13,XBOOLE_0:def 3;
+        hence thesis by A1;
+      end;
+      hence thesis by Th8;
+    end;
+  end;
+end;
+
+theorem
+  for X being set, A, B, C being SetSequence of X
+   st for n being Element of NAT holds C.n = A.n \/ B.n
+   holds lim_inf A \/ lim_inf B c= lim_inf C
+proof
+  let X be set, A, B, C be SetSequence of X;
+  assume
+A1: for n being Element of NAT holds C.n = A.n \/ B.n;
+  let x be set;
+  assume
+A2: x in lim_inf A \/ lim_inf B;
+  per cases by A2,XBOOLE_0:def 3;
+  suppose
+    x in lim_inf A;
+    then consider n being Element of NAT such that
+A3: for k being Element of NAT holds x in A.(n+k) by Th7;
+    for k being Element of NAT holds x in C.(n+k)
+    proof
+      let k be Element of NAT;
+      x in A.(n+k) by A3;
+      then x in A.(n+k) \/ B.(n+k) by XBOOLE_0:def 3;
+      hence thesis by A1;
+    end;
+    hence thesis by Th7;
+  end;
+  suppose
+    x in lim_inf B;
+    then consider n being Element of NAT such that
+A4: for k being Element of NAT holds x in B.(n+k) by Th7;
+    for k being Element of NAT holds x in C.(n+k)
+    proof
+      let k be Element of NAT;
+      x in B.(n+k) by A4;
+      then x in A.(n+k) \/ B.(n+k) by XBOOLE_0:def 3;
+      hence thesis by A1;
+    end;
+    hence thesis by Th7;
+  end;
+end;
+
+theorem
+  for X being set, A, B, C being SetSequence of X st (for n being
+Element of NAT holds C.n = A.n /\ B.n) holds lim_sup C c= lim_sup A /\ lim_sup
+  B
+proof
+  let X be set, A, B, C be SetSequence of X;
+  assume
+A1: for n being Element of NAT holds C.n = A.n /\ B.n;
+  let x be set;
+  assume
+A2: x in lim_sup C;
+  for n being Element of NAT ex k being Element of NAT st x in B.(n+k)
+  proof
+    let n be Element of NAT;
+    consider k being Element of NAT such that
+A3: x in C.(n+k) by A2,Th8;
+    take k;
+    x in A.(n+k) /\ B.(n+k) by A1,A3;
+    hence thesis by XBOOLE_0:def 4;
+  end;
+  then
+A4: x in lim_sup B by Th8;
+  for n being Element of NAT ex k being Element of NAT st x in A.(n+k)
+  proof
+    let n be Element of NAT;
+    consider k being Element of NAT such that
+A5: x in C.(n+k) by A2,Th8;
+    take k;
+    x in A.(n+k) /\ B.(n+k) by A1,A5;
+    hence thesis by XBOOLE_0:def 4;
+  end;
+  then x in lim_sup A by Th8;
+  hence thesis by A4,XBOOLE_0:def 4;
+end;
+
+theorem Th17:
+  for X being set, A being SetSequence of X, B being Subset of X
+  st (for n being Nat holds A.n = B) holds lim_sup A = B
+proof
+  let X be set, A be SetSequence of X, B be Subset of X;
+  assume
+A1: for n being Nat holds A.n = B;
+  thus lim_sup A c= B
+  proof
+    let x be set;
+    assume x in lim_sup A;
+    then ex k being Element of NAT st x in A.(0 qua Nat+k) by Th8;
+    hence thesis by A1;
+  end;
+  thus B c= lim_sup A
+  proof
+    let x be set;
+    assume
+A2: x in B;
+    for m being Element of NAT ex k being Element of NAT st x in A.(m+k)
+    proof
+      let m be Element of NAT;
+      take 0;
+      thus thesis by A1,A2;
+    end;
+    hence thesis by Th8;
+  end;
+end;
+
+theorem Th18:
+  for X being set, A being SetSequence of X, B being Subset of X
+  st (for n being Nat holds A.n = B) holds lim_inf A = B
+proof
+  let X be set, A be SetSequence of X, B be Subset of X;
+  assume
+A1: for n being Nat holds A.n = B;
+  thus lim_inf A c= B
+  proof
+    let x be set;
+    assume x in lim_inf A;
+    then consider m being Element of NAT such that
+A2: for k being Element of NAT holds x in A.(m+k) by Th7;
+    x in A.(m+(0 qua Nat)) by A2;
+    hence thesis by A1;
+  end;
+  thus B c= lim_inf A
+  proof
+    let x be set;
+    assume
+A3: x in B;
+    ex m being Element of NAT st for k being Element of NAT holds x in A.( m+k)
+    proof
+      take 0;
+      let k be Element of NAT;
+      thus thesis by A1,A3;
+    end;
+    hence thesis by Th7;
+  end;
+end;
+
+theorem
+  for X being set, A, B being SetSequence of X, C being Subset of X st (
+  for n being Element of NAT holds B.n = C \+\ A.n) holds C \+\ lim_inf A c=
+  lim_sup B
+proof
+  let X be set, A, B be SetSequence of X, C be Subset of X;
+  assume
+A1: for n being Element of NAT holds B.n = C \+\ A.n;
+  let x be set;
+  assume
+A2: x in C \+\ lim_inf A;
+  per cases by A2,XBOOLE_0:1;
+  suppose
+A3: x in C & not x in lim_inf A;
+    for n being Element of NAT ex k being Element of NAT st x in B.(n+k)
+    proof
+      let n be Element of NAT;
+      consider k being Element of NAT such that
+A4:   not x in A.(n+k) by A3,Th7;
+      take k;
+      x in C \+\ A.(n+k) by A3,A4,XBOOLE_0:1;
+      hence thesis by A1;
+    end;
+    hence thesis by Th8;
+  end;
+  suppose
+A5: not x in C & x in lim_inf A;
+    then consider n being Element of NAT such that
+A6: for k being Element of NAT holds x in A.(n+k) by Th7;
+    for m being Element of NAT ex k being Element of NAT st x in B.(m+k)
+    proof
+      let m be Element of NAT;
+      take k = n;
+      x in A.(m+k) by A6;
+      then x in C \+\ A.(m+k) by A5,XBOOLE_0:1;
+      hence thesis by A1;
+    end;
+    hence thesis by Th8;
+  end;
+end;
+
+theorem
+  for X being set, A, B being SetSequence of X, C being Subset of X st (
+  for n being Element of NAT holds B.n = C \+\ A.n) holds C \+\ lim_sup A c=
+  lim_sup B
+proof
+  let X be set, A, B be SetSequence of X, C be Subset of X;
+  assume
+A1: for n being Element of NAT holds B.n = C \+\ A.n;
+  let x be set;
+  assume
+A2: x in C \+\ lim_sup A;
+  per cases by A2,XBOOLE_0:1;
+  suppose
+A3: x in C & not x in lim_sup A;
+    then consider n being Element of NAT such that
+A4: for k being Element of NAT holds not x in A.(n+k) by Th8;
+    for m being Element of NAT ex k being Element of NAT st x in B.(m+k)
+    proof
+      let m be Element of NAT;
+      take k = n;
+      not x in A.(m+k) by A4;
+      then x in C \+\ A.(m+k) by A3,XBOOLE_0:1;
+      hence thesis by A1;
+    end;
+    hence thesis by Th8;
+  end;
+  suppose
+A5: not x in C & x in lim_sup A;
+    for m being Element of NAT ex k being Element of NAT st x in B.(m+k)
+    proof
+      let m be Element of NAT;
+      consider k being Element of NAT such that
+A6:   x in A.(m+k) by A5,Th8;
+      take k;
+      x in C \+\ A.(m+k) by A5,A6,XBOOLE_0:1;
+      hence thesis by A1;
+    end;
+    hence thesis by Th8;
+  end;
+end;
+
+begin :: Ascending and Descending Families of Subsets
+
+theorem Th21:
+  for f being Function st (for i being Element of NAT holds f.(i+1
+  ) c= f.i) for i, j being Element of NAT st i <= j holds f.j c= f.i
+proof
+  let f be Function;
+  assume
+A1: for i being Element of NAT holds f.(i+1) c= f.i;
+  let i, j be Element of NAT;
+  defpred P[Element of NAT] means i + $1 <= j implies f.(i + $1) c= f.i;
+A2: now
+    let k be Element of NAT;
+    assume
+A3: P[k];
+A4: i + k + 1 = i + (k + 1);
+    then f.(i + (k + 1)) c= f.(i + k) by A1;
+    hence P[k+1] by A4,A3,NAT_1:13,XBOOLE_1:1;
+  end;
+A5: P[0];
+A6: for k being Element of NAT holds P[k] from NAT_1:sch 1(A5,A2);
+  assume i <= j;
+  then consider k be Nat such that
+A7: i + k = j by NAT_1:10;
+  k in NAT by ORDINAL1:def 12;
+  hence thesis by A6,A7;
+end;
+
+definition
+  let T be set, S be SetSequence of T;
+  redefine attr S is non-ascending means
+  :Def5:
+  for i being Element of NAT holds S.(i+1) c= S.i;
+  compatibility
+  proof
+    thus S is non-ascending implies for i being Element of NAT holds S.(i+1)
+    c= S.i
+    proof
+      assume
+A1:   S is non-ascending;
+      let i be Element of NAT;
+      i <=i+1 by NAT_1:13;
+      hence thesis by A1,PROB_1:def 4;
+    end;
+    assume for i being Element of NAT holds S.(i+1) c= S.i;
+    then for i, j being Element of NAT st i <= j holds S.j c= S.i by Th21;
+    hence thesis by PROB_1:def 4;
+  end;
+  redefine attr S is non-descending means
+  :Def6:
+  for i being Element of NAT holds S.i c= S.(i+1);
+  compatibility
+  proof
+    thus S is non-descending implies
+     for i being Element of NAT holds S.i c= S.(i+1)
+    proof
+      assume
+A2:   S is non-descending;
+      let i be Element of NAT;
+      i <=i+1 by NAT_1:13;
+      hence thesis by A2,PROB_1:def 5;
+    end;
+    assume for i being Element of NAT holds S.i c= S.(i+1);
+    then for i, j being Element of NAT st i <= j holds S.i c= S.j
+     by MEASURE2:18;
+    hence thesis by PROB_1:def 5;
+  end;
+end;
+
+theorem Th24:
+  for T being set, F being SetSequence of T, x being set st F is
+non-ascending & ex k being Element of NAT st for n being Element of NAT st n >
+  k holds x in F.n holds x in meet F
+proof
+  let T be set, F be SetSequence of T, x be set;
+  assume
+A1: F is non-ascending;
+  given k being Element of NAT such that
+A2: for n being Element of NAT st n > k holds x in F.n;
+  k + 1 > k by NAT_1:13;
+  then
+A3: x in F.(k + 1) by A2;
+  assume not x in meet F;
+  then not x in meet rng F by FUNCT_6:def 4;
+  then consider Y being set such that
+A4: Y in rng F and
+A5: not x in Y by SETFAM_1:def 1;
+  consider y being set such that
+A6: y in dom F and
+A7: Y = F.y by A4,FUNCT_1:def 3;
+  reconsider y as Element of NAT by A6;
+  per cases;
+  suppose
+    y > k;
+    hence thesis by A2,A5,A7;
+  end;
+  suppose
+    y <= k;
+    then F.k c= F.y by A1,PROB_1:def 4;
+    then
+A8: not x in F.k by A5,A7;
+    F.(k + 1) c= F.k by A1,Def5;
+    hence thesis by A3,A8;
+  end;
+end;
+
+theorem
+  for T being set, F being SetSequence of T st F is non-ascending holds
+  lim_inf F = meet F
+proof
+  let T be set, F be SetSequence of T;
+  assume
+A1: F is non-ascending;
+  thus lim_inf F c= meet F
+  proof
+    let x be set;
+    assume x in lim_inf F;
+    then consider n being Element of NAT such that
+A2: for k being Element of NAT holds x in F.(n+k) by Th7;
+    for k being Element of NAT st k > n holds x in F.k
+    proof
+      let k be Element of NAT;
+      assume k > n;
+      then consider h being Nat such that
+A3:   k = n + h by NAT_1:10;
+      h in NAT by ORDINAL1:def 12;
+      hence thesis by A2,A3;
+    end;
+    hence thesis by A1,Th24;
+  end;
+  thus thesis by Th10;
+end;
+
+theorem
+  for T being set, F being SetSequence of T st F is non-descending holds
+  lim_sup F = Union F
+proof
+  let T be set, F be SetSequence of T;
+  assume
+A1: F is non-descending;
+  thus lim_sup F c= Union F by Th11;
+  let x be set;
+  assume x in Union F;
+  then consider n being Element of NAT such that
+A2: x in F.n by PROB_1:12;
+  assume not x in lim_sup F;
+  then consider m being Element of NAT such that
+A3: for k being Element of NAT holds not x in F.(m+k) by Th8;
+A4: not x in F.(m+(0 qua Nat)) by A3;
+  per cases;
+  suppose
+    n <= m;
+    then F.n c= F.m by A1,PROB_1:def 5;
+    hence thesis by A2,A4;
+  end;
+  suppose
+    n > m;
+    then consider h being Nat such that
+A5: n = m + h by NAT_1:10;
+    h in NAT by ORDINAL1:def 12;
+    hence thesis by A2,A3,A5;
+  end;
+end;
+
+begin :: Constant and Convergent Sequences
+
+definition
+  let T be set, S be SetSequence of T;
+  attr S is convergent means
+  :Def7:
+  lim_sup S = lim_inf S;
+end;
+
+theorem
+  for T being set, S being SetSequence of T st S is constant holds
+  the_value_of S is Subset of T
+proof
+  let T be set, S be SetSequence of T;
+  assume S is constant;
+  then consider x being set such that
+A1: x in dom S and
+A2: the_value_of S = S.x by FUNCT_1:def 12;
+  reconsider n = x as Element of NAT by A1;
+  S.n in bool T;
+  hence thesis by A2;
+end;
+
+registration
+  let T be set;
+  cluster constant -> convergent non-descending non-ascending for
+SetSequence of T;
+  coherence
+  proof
+    let S be SetSequence of T;
+    assume S is constant;
+    then consider A being Subset of T such that
+A1: for n being Nat holds S.n = A by VALUED_0:def 18;
+A2: now
+      let n be Element of NAT;
+      S.n = A by A1;
+      hence S.(n+1) c= S.n by A1;
+    end;
+A3: now
+      let n be Element of NAT;
+      S.n = A by A1;
+      hence S.n c= S.(n+1) by A1;
+    end;
+    lim_sup S = A & lim_inf S = A by A1,Th17,Th18;
+    hence thesis by A3,A2,Def5,Def6,Def7;
+  end;
+end;
+
+registration
+  let T be set;
+  cluster constant non empty for SetSequence of T;
+  existence
+  proof
+    reconsider E = NAT --> {}T as SetSequence of T;
+    E is constant;
+    hence thesis;
+  end;
+end;
+
+notation
+  let T be set, S be convergent SetSequence of T;
+  synonym Lim_K S for lim_sup S;
+end;
+
+theorem
+  for X being set, F being convergent SetSequence of X, x being set
+holds x in Lim_K F iff ex n being Element of NAT st for k being Element of NAT
+  holds x in F.(n+k)
+proof
+  let X be set, F be convergent SetSequence of X, x be set;
+  Lim_K F = lim_inf F by Def7;
+  hence thesis by Th7;
+end;
+

@@ -16,19 +16,20 @@ environ
 
  vocabularies NUMBERS, ORDINAL1, REAL_1, SUBSET_1, CARD_1, ARYTM_3, XREAL_0,
       TARSKI, RELAT_1, XXREAL_0, XCMPLX_0, ARYTM_1, XBOOLE_0, FINSET_1,
-      FUNCT_1, NAT_1, FUNCOP_1;
- notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, FINSET_1, CARD_1, NUMBERS,
-      XCMPLX_0, XREAL_0, REAL_1, XXREAL_0, RELAT_1, FUNCT_1, PARTFUN1,
+      FUNCT_1, NAT_1, FUNCOP_1, PBOOLE, PARTFUN1;
+ notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, FINSET_1, CARD_1, PBOOLE,
+      NUMBERS, XCMPLX_0, XREAL_0, REAL_1, XXREAL_0, RELAT_1, FUNCT_1, PARTFUN1,
       FUNCOP_1, FUNCT_2;
  constructors NUMBERS, XCMPLX_0, XXREAL_0, XREAL_0, CARD_1, WELLORD2, FUNCT_2,
-      PARTFUN1, FUNCOP_1, FUNCT_4, ENUMSET1, RELSET_1;
+      PARTFUN1, FUNCOP_1, FUNCT_4, ENUMSET1, RELSET_1, PBOOLE;
  registrations SUBSET_1, ORDINAL1, NUMBERS, XXREAL_0, XREAL_0, REAL_1, CARD_1,
-      RELSET_1, FUNCT_2;
+      RELSET_1, FUNCT_2, PBOOLE;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
- definitions TARSKI, XBOOLE_0, CARD_1, FUNCT_1;
+ definitions TARSKI, XBOOLE_0, CARD_1, RELAT_1, FUNCT_1;
  theorems AXIOMS, ORDINAL1, XCMPLX_1, XREAL_1, XXREAL_0, TARSKI, ORDINAL2,
-      XBOOLE_1, XBOOLE_0, CARD_1, FUNCT_2, FUNCT_1, FUNCOP_1;
- schemes SUBSET_1, ORDINAL2, FUNCT_2, FRAENKEL;
+      XBOOLE_1, XBOOLE_0, CARD_1, FUNCT_2, FUNCT_1, FUNCOP_1, PBOOLE, RELSET_1,
+      RELAT_1, PARTFUN1;
+ schemes SUBSET_1, ORDINAL2, FUNCT_2, FRAENKEL, PBOOLE;
 
 begin
 
@@ -51,9 +52,9 @@ A1: 0 in A;
   assume x in A implies x + 1 in A;
   then for x being real number st x in A holds x + 1 in A;
   then
-A2: NAT c= A by A1,AXIOMS:29;
+A2: NAT c= A by A1,AXIOMS:3;
   let n;
-  n in NAT by ORDINAL1:def 13;
+  n in NAT by ORDINAL1:def 12;
   hence thesis by A2;
 end;
 
@@ -76,9 +77,9 @@ A2: now
 A3:   x = k and
 A4:   n + k is natural by A1;
 A5:   (n + k) + 1 = n + (k + 1);
-      reconsider k as Element of NAT by ORDINAL1:def 13;
-      n + k is Element of NAT by A4,ORDINAL1:def 13;
-      then k + 1 is Element of NAT & (n + k) + 1 is Element of NAT by AXIOMS:28
+      reconsider k as Element of NAT by ORDINAL1:def 12;
+      n + k is Element of NAT by A4,ORDINAL1:def 12;
+      then k + 1 is Element of NAT & (n + k) + 1 is Element of NAT by AXIOMS:2
 ;
       hence x + 1 in X by A1,A3,A5;
     end;
@@ -93,13 +94,13 @@ end;
 definition
   let n be Nat, k be Element of NAT;
   redefine func n + k -> Element of NAT;
-  coherence by ORDINAL1:def 13;
+  coherence by ORDINAL1:def 12;
 end;
 
 definition
   let n be Element of NAT, k be Nat;
   redefine func n + k -> Element of NAT;
-  coherence by ORDINAL1:def 13;
+  coherence by ORDINAL1:def 12;
 end;
 
 :: Now we can form and prove the scheme of induction.
@@ -122,7 +123,7 @@ A4: for x st x in X holds x + 1 in X
     then consider k such that
 A5: P[k] and
 A6: k = x by A3;
-    reconsider k as Element of NAT by ORDINAL1:def 13;
+    reconsider k as Element of NAT by ORDINAL1:def 12;
     P[k + 1] by A2,A5;
     hence thesis by A3,A6;
   end;
@@ -140,7 +141,7 @@ A2: for k be Nat st P[k] holds P[k + 1]
 proof
 A3: for k be Element of NAT st P[k] holds P[k + 1] by A2;
   let k be Nat;
-A4: k is Element of NAT by ORDINAL1:def 13;
+A4: k is Element of NAT by ORDINAL1:def 12;
 A5: P[0] by A1;
   for k be Element of NAT holds P[k] from Ind(A5,A3);
   hence thesis by A4;
@@ -172,13 +173,13 @@ end;
 definition
   let n be Nat, k be Element of NAT;
   redefine func n * k -> Element of NAT;
-  coherence by ORDINAL1:def 13;
+  coherence by ORDINAL1:def 12;
 end;
 
 definition
   let n be Element of NAT, k be Nat;
   redefine func n * k -> Element of NAT;
-  coherence by ORDINAL1:def 13;
+  coherence by ORDINAL1:def 12;
 end;
 
 :: Order relation ::
@@ -204,7 +205,7 @@ proof
   assume
 A1: i <= j;
   0 <= h by Th2;
-  hence thesis by A1,XREAL_1:66;
+  hence thesis by A1,XREAL_1:64;
 end;
 
 theorem
@@ -236,7 +237,7 @@ A1: i + j = 0;
 end;
 
 registration
-  cluster non zero Nat;
+  cluster non zero for Nat;
   existence
   proof
     take 1;
@@ -259,14 +260,14 @@ provided
 A1: for k,n being Nat holds P[k,n] iff k = 0 & n = N() or ex m,l being
 Nat st k = m + 1 & P[m,l] & n = F(k,l)
 proof
-  reconsider N = N() as Element of NAT by ORDINAL1:def 13;
+  reconsider N = N() as Element of NAT by ORDINAL1:def 12;
   defpred P[Nat] means ex n being Nat st P[$1,n];
 A2: for k being Nat holds P[k] implies P[k+1]
   proof
     let k be Nat;
     given n being Nat such that
 A3: P[k,n];
-    reconsider F = F(k+1,n) as Element of NAT by ORDINAL1:def 13;
+    reconsider F = F(k+1,n) as Element of NAT by ORDINAL1:def 12;
     take F;
     thus thesis by A1,A3;
   end;
@@ -312,15 +313,15 @@ A3: i + 1 <= j + 1;
 A4: now
       given k such that
 A5:   j = k + 1;
-      i <= k + 1 by A3,A5,XREAL_1:8;
+      i <= k + 1 by A3,A5,XREAL_1:6;
       then i <= k or i = k + 1 by A2;
-      hence thesis by A5,XREAL_1:8;
+      hence thesis by A5,XREAL_1:6;
     end;
     now
 A6:   0 <= i by Th2;
       assume
 A7:   j = 0;
-      then i <= 0 by A3,XREAL_1:8;
+      then i <= 0 by A3,XREAL_1:6;
       hence thesis by A7,A6;
     end;
     hence thesis by A4,Th6;
@@ -378,7 +379,7 @@ theorem Th11:
   i <= i + j
 proof
   0 + i = i & 0 <= j by Th2;
-  hence thesis by XREAL_1:9;
+  hence thesis by XREAL_1:7;
 end;
 
 scheme
@@ -458,7 +459,7 @@ A9: k = m + 1 by Th6;
     then
 A10: k <= m by A5;
     -m + m + 1 = -m + (m + 1);
-    hence contradiction by A9,A10,XREAL_1:8;
+    hence contradiction by A9,A10,XREAL_1:6;
   end;
   thus thesis by A4;
 end;
@@ -468,9 +469,9 @@ theorem Th12:
 proof
   assume i <= j;
   then
-A1: i + h <= j + h by XREAL_1:9;
+A1: i + h <= j + h by XREAL_1:7;
   0 <= h by Th2;
-  then i + 0 <= i + h by XREAL_1:9;
+  then i + 0 <= i + h by XREAL_1:7;
   hence thesis by A1,XXREAL_0:2;
 end;
 
@@ -483,7 +484,7 @@ A1: i <= j;
 A2: now
 A3: j + (- j) = 0 & j + 1 + (- j) = 1;
     assume i = j + 1;
-    hence contradiction by A1,A3,XREAL_1:8;
+    hence contradiction by A1,A3,XREAL_1:6;
   end;
   i <= j + 1 by A1,Th12;
   hence thesis by A2,XXREAL_0:1;
@@ -629,12 +630,12 @@ A13: u = 0 by Th6;
 end;
 
 registration
-  cluster -> ordinal Nat;
+  cluster -> ordinal for Nat;
   coherence;
 end;
 
 registration
-  cluster non empty ordinal Subset of REAL;
+  cluster non empty ordinal for Subset of REAL;
   existence
   proof
     take NAT;
@@ -665,7 +666,7 @@ proof
   then consider j being Nat such that
 A1: n = k + 1 + j by Th10;
   n - 1 = k + j by A1;
-  hence thesis by ORDINAL1:def 13;
+  hence thesis by ORDINAL1:def 12;
 end;
 
 theorem
@@ -679,7 +680,7 @@ A1: k <= n;
     then k + 1 <= n by Th13;
     then consider j being Nat such that
 A2: n = k + 1 + j by Th10;
-    reconsider j as Element of NAT by ORDINAL1:def 13;
+    reconsider j as Element of NAT by ORDINAL1:def 12;
     n - k = 1 + j by A2;
     hence thesis;
   end;
@@ -711,7 +712,7 @@ proof
 end;
 
 registration
-  cluster non zero Element of NAT;
+  cluster non zero for Element of NAT;
   existence
   proof
     take 1;
@@ -720,12 +721,12 @@ registration
 end;
 
 registration
-  cluster -> non negative Element of NAT;
+  cluster -> non negative for Element of NAT;
   coherence by Th2;
 end;
 
 registration
-  cluster -> non negative Nat;
+  cluster -> non negative for Nat;
   coherence by Th2;
 end;
 
@@ -744,8 +745,6 @@ end;
 
 :: from SCMFSA_7, 2006.03.15, A.T.
 
-canceled;
-
 :: from BINOM, 2006.05.28, A.T.
 
 scheme
@@ -754,7 +753,7 @@ provided
 A1: P[M()] and
 A2: for j being Nat st M() <= j holds P[j] implies P[j+1]
 proof
-  reconsider M = M() as Element of NAT by ORDINAL1:def 13;
+  reconsider M = M() as Element of NAT by ORDINAL1:def 12;
   defpred Q[Nat] means P[M() + $1];
 A3: now
     let m be Element of NAT;
@@ -768,7 +767,7 @@ A3: now
 A4: i = M() + m by Th10;
 A5: Q[0] by A1;
 A6: for m being Element of NAT holds Q[m] from Ind(A5,A3);
-  m in NAT by ORDINAL1:def 13;
+  m in NAT by ORDINAL1:def 12;
   hence thesis by A6,A4;
 end;
 
@@ -961,7 +960,7 @@ definition
     k in A holds i <= k
     proof
       defpred P[Nat] means $1 in A;
-      set x =the  Element of A;
+      set x = the Element of A;
       assume
 A1:   A is non empty Subset of NAT;
       then x is Element of NAT by TARSKI:def 3;
@@ -999,13 +998,13 @@ theorem Th39:
   for n being natural number holds succ n = n + 1
 proof
   let n be natural number;
-A1: n+1 = {L where L is Element of NAT: L < n+1} by AXIOMS:30;
-A2: n = {K where K is Element of NAT: K < n} by AXIOMS:30;
+A1: n+1 = {L where L is Element of NAT: L < n+1} by AXIOMS:4;
+A2: n = {K where K is Element of NAT: K < n} by AXIOMS:4;
   thus succ n c= n+1
   proof
     let x such that
 A3: x in succ n;
-    per cases by A3,ORDINAL1:13;
+    per cases by A3,ORDINAL1:8;
     suppose
       x in n;
       then consider K being Element of NAT such that
@@ -1016,7 +1015,7 @@ A5:   K < n by A2;
     end;
     suppose
 A6:   x = n;
-      reconsider n as Element of NAT by ORDINAL1:def 13;
+      reconsider n as Element of NAT by ORDINAL1:def 12;
       n < n+1 by Th13;
       hence thesis by A1,A6;
     end;
@@ -1029,7 +1028,7 @@ A8: K < n+1 by A1;
   K <= n by A8,Th13;
   then K = n or K < n by XXREAL_0:1;
   then x = n or x in n by A2,A7;
-  hence thesis by ORDINAL1:13;
+  hence thesis by ORDINAL1:8;
 end;
 
 theorem Th40:
@@ -1046,7 +1045,7 @@ A2: P[n];
       assume n+1 <= m;
       then consider k being Nat such that
 A3:   m = n+1+k by Th10;
-      reconsider k as Element of NAT by ORDINAL1:def 13;
+      reconsider k as Element of NAT by ORDINAL1:def 12;
       n <= n+k by Th11;
       then n c= (n+k) by A2;
       then
@@ -1058,7 +1057,7 @@ A4:   succ n c= succ (n+k) by ORDINAL2:1;
 A5: (n+1) c= m;
     (n+1) = succ n by Th39;
     then
-A6: n in m by A5,ORDINAL1:33;
+A6: n in m by A5,ORDINAL1:21;
     then n c= m by ORDINAL1:def 2;
     then
 A7: n <= m by A2;
@@ -1074,8 +1073,8 @@ end;
 theorem Th41:
   card n c= card m iff n <= m
 proof
-  reconsider n,m as Element of NAT by ORDINAL1:def 13;
-  card n = n & card m = m by CARD_1:def 5;
+  reconsider n,m as Element of NAT by ORDINAL1:def 12;
+  card n = n & card m = m by CARD_1:def 2;
   hence thesis by Th40;
 end;
 
@@ -1084,7 +1083,7 @@ theorem Th42:
 proof
 A1: n <= m & n <> m iff n < m by XXREAL_0:1;
   card n c< card m iff card n c= card m & card n <> card m by XBOOLE_0:def 8;
-  hence thesis by A1,Th41,ORDINAL1:21,def 2;
+  hence thesis by A1,Th41,ORDINAL1:11,def 2;
 end;
 
 reserve M,N for Cardinal;
@@ -1092,20 +1091,20 @@ reserve M,N for Cardinal;
 theorem
   nextcard card n = card(n+1)
 proof
-  reconsider n as Element of NAT by ORDINAL1:def 13;
+  reconsider n as Element of NAT by ORDINAL1:def 12;
 A1: for M st card card n in M holds card(n+1) c= M
   proof
-A2: card n = n by CARD_1:def 5;
+A2: card n = n by CARD_1:def 2;
     let M;
     assume card card n in M;
     then
-A3: succ n c= M by A2,ORDINAL1:33;
+A3: succ n c= M by A2,ORDINAL1:21;
     (n+1) = succ n by Th39;
-    hence thesis by A3,CARD_1:def 5;
+    hence thesis by A3,CARD_1:def 2;
   end;
   n < n+1 by Th13;
   then card card n in card(n+1) by Th42;
-  hence thesis by A1,CARD_1:def 6;
+  hence thesis by A1,CARD_1:def 3;
 end;
 
 definition
@@ -1120,7 +1119,7 @@ theorem
 proof
   let X,Y be finite set;
   assume X c= Y;
-  then card X c= card Y by CARD_1:27;
+  then card X c= card Y by CARD_1:11;
   hence thesis by Th40;
 end;
 
@@ -1131,24 +1130,24 @@ theorem
 proof
   hereby
     assume k in n;
-    then k in { l : l < n } by AXIOMS:30;
+    then k in { l : l < n } by AXIOMS:4;
     then ex l st k = l & l < n;
     hence k < n;
   end;
   assume
 A1: k < n;
-  reconsider k as Element of NAT by ORDINAL1:def 13;
+  reconsider k as Element of NAT by ORDINAL1:def 12;
   k in { l : l < n } by A1;
-  hence thesis by AXIOMS:30;
+  hence thesis by AXIOMS:4;
 end;
 
 theorem
   n in n+1
 proof
-  reconsider n as Element of NAT by ORDINAL1:def 13;
-  n<n+1 by XREAL_1:31;
+  reconsider n as Element of NAT by ORDINAL1:def 12;
+  n<n+1 by XREAL_1:29;
   then n in {l:l<n+1};
-  hence thesis by AXIOMS:30;
+  hence thesis by AXIOMS:4;
 end;
 
 theorem
@@ -1205,7 +1204,7 @@ A4:   n = k+1;
       hence thesis;
     end;
   end;
-  then reconsider f as Function of NAT,D() by A1,FUNCT_2:5;
+  then reconsider f as Function of NAT,D() by A1,FUNCT_2:3;
   take f;
   thus thesis by A2,A3;
 end;
@@ -1234,7 +1233,7 @@ A9: P[n,F().n,G().(n+1)] by A6;
 A10: P[0] by A2,A5;
   for n holds P[n] from NatInd(A10,A8);
   then for x st x in NAT holds F().x = G().x;
-  hence thesis by A1,A4,FUNCT_1:9;
+  hence thesis by A1,A4,FUNCT_1:2;
 end;
 
 scheme
@@ -1251,7 +1250,7 @@ proof
   defpred Q[Nat] means F().$1 <> G().$1;
 A6: dom F() = NAT & dom G() = NAT by FUNCT_2:def 1;
   assume F() <> G();
-  then ex x st x in NAT & F().x <> G().x by A6,FUNCT_1:9;
+  then ex x st x in NAT & F().x <> G().x by A6,FUNCT_1:2;
   then
 A7: ex k be Nat st Q[k];
   consider m be Nat such that
@@ -1260,7 +1259,7 @@ A8: Q[m] & for n be Nat st Q[n] holds m <= n from Min(A7);
     assume m<>0;
     then consider k being Nat such that
 A9: m=k+1 by Th6;
-    reconsider k as Element of NAT by ORDINAL1:def 13;
+    reconsider k as Element of NAT by ORDINAL1:def 12;
     k < m by A9,Th13;
     then
 A10: F().k = G().k by A8;
@@ -1355,7 +1354,7 @@ definition
   redefine func f.n -> Element of D;
   coherence
   proof
-    reconsider n as Element of NAT by ORDINAL1:def 13;
+    reconsider n as Element of NAT by ORDINAL1:def 12;
     f.n is Element of D;
     hence thesis;
   end;
@@ -1365,40 +1364,91 @@ end;
 
 definition
   let X be set;
-  mode sequence of X is Function of NAT,X;
+  mode sequence of X is Function of NAT, X;
 end;
 
 :: from SEQM_3, BHSP_3, COMSEQ_3, KURATO_2, LOPBAN_3, CLVECT_2, CLOPBAN3
 ::      (generalized), 2008.08.23, A.T.
 
 definition
-  let X be non empty set, s be sequence of X, k be Nat;
-  func s ^\ k -> sequence of X means
+  let s be ManySortedSet of NAT, k be Nat;
+  func s ^\ k -> ManySortedSet of NAT means
   :Def3:
   for n being Nat holds it.n=s.(n+k);
   existence
   proof
-    deffunc U(Element of NAT) = s.($1+k);
-    consider f being sequence of X such that
-A1: for n being Element of NAT holds f.n=U(n) from FUNCT_2:sch 4;
+    defpred P[set,set] means
+     ex n being Element of NAT st n=$1 & $2=s.(n+k);
+A0: for i being set st i in NAT ex j being set st P[i,j]
+     proof let i be set;
+      assume
+     i in NAT;
+       then reconsider n=i as Element of NAT;
+      take j = s.(n+k);
+      thus P[i,j];
+     end;
+    consider f being ManySortedSet of NAT such that
+A1:  for i being set st i in NAT holds P[i,f.i] from PBOOLE:sch 3(A0);
     take f;
     let n be Nat;
-    n in NAT by ORDINAL1:def 13;
-    hence thesis by A1;
+     n in NAT by ORDINAL1:def 12;
+     then P[n,f.n] by A1;
+    hence thesis;
   end;
   uniqueness
   proof
-    let s1,s2 be sequence of X;
+    let s1,s2 be ManySortedSet of NAT;
     assume that
 A2: for n holds s1.n=s.(n+k) and
 A3: for n holds s2.n=s.(n+k);
     now
-      let n be Element of NAT;
-      s1.n=s.(n+k) by A2;
-      hence s1.n=s2.n by A3;
+      let n be set;
+      assume
+      n in NAT;
+        then reconsider nn = n as Element of NAT;
+      thus s1.n=s.(nn+k) by A2
+           .=s2.n by A3;
     end;
-    hence s1=s2 by FUNCT_2:113;
+    hence s1=s2 by PBOOLE:3;
   end;
+end;
+
+LmX:
+  for s be ManySortedSet of NAT, k be Nat
+   holds rng(s ^\ k) c= rng s
+ proof
+  let s be ManySortedSet of NAT, k be Nat;
+  let i be set;
+  assume i in rng(s ^\ k);
+   then consider u being set such that
+W1: u in dom(s ^\ k) and
+W2: i = (s ^\ k).u by FUNCT_1:def 3;
+   reconsider n = u as Element of NAT by W1,PARTFUN1:def 2;
+X:  dom s = NAT by PARTFUN1:def 2;
+   i = s.(n+k) by W2,Def3;
+  hence i in rng s by X,FUNCT_1:3;
+ end;
+
+registration
+ let X be non empty set, s be X-valued ManySortedSet of NAT, k be Nat;
+ cluster s ^\ k -> X-valued;
+ coherence
+  proof
+X:  rng(s ^\ k) c= rng s by LmX;
+   rng s c= X by RELAT_1:def 19;
+   hence rng(s ^\ k) c= X by X,XBOOLE_1:1;
+  end;
+end;
+
+definition
+ let X be non empty set, s be sequence of X, k be Nat;
+ redefine func s ^\ k -> sequence of X;
+  coherence
+   proof
+     rng(s ^\ k) c= X & dom(s ^\ k) = NAT
+          by PARTFUN1:def 2,RELAT_1:def 19;
+    hence s ^\ k is sequence of X by RELSET_1:4;
+   end;
 end;
 
 reserve X for non empty set,
@@ -1413,7 +1463,7 @@ proof
     thus (s ^\0).n=s.(n+0) by Def3
       .=s.n;
   end;
-  hence thesis by FUNCT_2:113;
+  hence thesis by FUNCT_2:63;
 end;
 
 theorem Th49:
@@ -1426,7 +1476,7 @@ proof
       .=s.(n+(k+m))
       .=(s ^\(k+m)).n by Def3;
   end;
-  hence thesis by FUNCT_2:113;
+  hence thesis by FUNCT_2:63;
 end;
 
 theorem
@@ -1436,6 +1486,21 @@ proof
     .= s^\m^\k by Th49;
 end;
 
+registration let N be sequence of NAT; let X,s;
+ cluster s * N -> Function-like NAT-defined X-valued;
+ coherence;
+end;
+
+registration let N be sequence of NAT; let X,s;
+ cluster s * N -> total;
+ coherence;
+end;
+
+:::definition
+:::  let X be non empty set;
+:::  mode sequence of X is X-valued ManySortedSet of NAT;
+:::end;
+
 theorem
   for N being sequence of NAT holds (s * N) ^\k = s * (N ^\k)
 proof
@@ -1443,19 +1508,19 @@ proof
   now
     let n be Element of NAT;
     thus ((s * N) ^\k).n = (s * N).(n + k) by Def3
-      .= s.(N.(n + k)) by FUNCT_2:21
+      .= s.(N.(n + k)) by FUNCT_2:15
       .= s.((N ^\k).n) by Def3
-      .= (s * (N ^\k)).n by FUNCT_2:21;
+      .= (s * (N ^\k)).n by FUNCT_2:15;
   end;
-  hence thesis by FUNCT_2:113;
+  hence thesis by FUNCT_2:63;
 end;
 
 theorem
   s.n in rng s
 proof
-  n in NAT by ORDINAL1:def 13;
+  n in NAT by ORDINAL1:def 12;
   then n in dom s by FUNCT_2:def 1;
-  hence thesis by FUNCT_1:12;
+  hence thesis by FUNCT_1:3;
 end;
 
 theorem
@@ -1467,7 +1532,7 @@ A1: for n holds s.n in Y;
   assume y in rng s;
   then consider x such that
 A2: x in dom s and
-A3: y = s.x by FUNCT_1:def 5;
+A3: y = s.x by FUNCT_1:def 3;
   x in NAT by A2,FUNCT_2:def 1;
   hence thesis by A1,A3;
 end;
@@ -1491,7 +1556,7 @@ theorem
     deffunc F(Nat) = $1;
 A1:   for l holds Q[l] iff P[l] by Th13;
    thus succ n = n+1
-     .= {F(l) : Q[l]} by AXIOMS:30
+     .= {F(l) : Q[l]} by AXIOMS:4
      .= {F(l) : P[l]} from FRAENKEL:sch 3(A1);
   end;
 
@@ -1504,12 +1569,12 @@ proof
   now
     consider f being Function of NAT, NAT such that
 A2: for k be Element of NAT holds f.k = F(k) from FUNCT_2:sch 4;
-A3:  f.0 in rng f by FUNCT_2:6;
+A3:  f.0 in rng f by FUNCT_2:4;
     rng f c= NAT
     proof
       let x be set; assume x in rng f; then
       consider y being set such that
-A4:    y in dom f & x = f.y by FUNCT_1:def 5;
+A4:    y in dom f & x = f.y by FUNCT_1:def 3;
       reconsider y1 = y as Element of NAT by A4,FUNCT_2:def 1;
       x = F(y1) by A4,A2;
       hence thesis;
@@ -1519,13 +1584,13 @@ A4:    y in dom f & x = f.y by FUNCT_1:def 5;
     m in rf by Def1;
     then consider x being set such that
 A5: x in dom f and
-A6: m = f.x by FUNCT_1:def 5;
+A6: m = f.x by FUNCT_1:def 3;
     reconsider x as Element of NAT by A5,FUNCT_2:def 1;
     f.x = F(x) & f.(x+1) = F(x+1) by A2; then
 A7: f.(x+1) < f.x or P[x] by A1;
     assume
 A8: for k holds not P[k];
-    f.(x+1) in rf by FUNCT_2:6;
+    f.(x+1) in rf by FUNCT_2:4;
     hence contradiction by Def1,A8,A6,A7;
   end; then
 A9: ex k be Nat st P[k];
@@ -1533,7 +1598,7 @@ A9: ex k be Nat st P[k];
 A10: P[k] and
 A11: for n be Nat st P[n] holds k <= n from Min(A9);
   k in NAT & for n be Element of NAT st P[n] holds k <= n
-    by A11,ORDINAL1:def 13;
+    by A11,ORDINAL1:def 12;
   hence thesis by A10;
 end;
 
@@ -1541,7 +1606,11 @@ registration let k be Ordinal, x be set;
   cluster k --> x -> T-Sequence-like;
  coherence
  proof
-   dom(k --> x) = k by FUNCOP_1:19;
+   dom(k --> x) = k by FUNCOP_1:13;
    hence thesis by ORDINAL1:def 7;
  end;
 end;
+
+theorem
+  for s be ManySortedSet of NAT, k be Nat
+   holds rng(s ^\ k) c= rng s by LmX;

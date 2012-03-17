@@ -15,10 +15,12 @@
 environ
 
  vocabularies STRUCT_0, BINOP_1, LATTICES, FUNCT_5, XBOOLE_0, ZFMISC_1,
-      SUBSET_1, FUNCT_1, ARYTM_3, EQREL_1, XXREAL_2, ARYTM_1, ROBBINS1;
- notations STRUCT_0, LATTICES, BINOP_1, FUNCT_2, FUNCT_5;
+      SUBSET_1, FUNCT_1, ARYTM_3, EQREL_1, XXREAL_2, ARYTM_1, ROBBINS1, CARD_1;
+ notations TARSKI, CARD_1, STRUCT_0, LATTICES, BINOP_1, FUNCT_2, FUNCT_5;
  constructors BINOP_1, LATTICES, FUNCT_5;
- registrations RELSET_1, STRUCT_0, LATTICES, LATTICE2, XBOOLE_0, ZFMISC_1;
+ registrations RELSET_1, STRUCT_0, LATTICES, LATTICE2, XBOOLE_0, ZFMISC_1,
+      CARD_1, ORDINAL1;
+ requirements SUBSET, NUMERALS;
 
 
 begin :: Preliminaries
@@ -56,22 +58,22 @@ definition
 end;
 
 registration
-  cluster TrivComplLat -> non empty trivial;
-  cluster TrivOrtLat -> non empty trivial;
+  cluster TrivComplLat -> 1-element;
+  cluster TrivOrtLat -> 1-element;
 end;
 
 registration
-  cluster strict non empty trivial OrthoLattStr;
-  cluster strict non empty trivial ComplLLattStr;
+  cluster strict 1-element for OrthoLattStr;
+  cluster strict 1-element for ComplLLattStr;
 end;
 
 registration
-  let L be non empty trivial ComplLLattStr;
-  cluster the ComplStr of L -> non empty trivial;
+  let L be 1-element ComplLLattStr;
+  cluster the ComplStr of L -> 1-element;
 end;
 
 registration
-  cluster strict non empty trivial ComplStr;
+  cluster strict 1-element for ComplStr;
 end;
 
 definition
@@ -128,52 +130,52 @@ end;
 
 registration
   cluster strict join-associative join-commutative Robbins join-idempotent
-    Huntington (non empty ComplLLattStr);
+    Huntington for non empty ComplLLattStr;
 end;
 
 registration
-  cluster strict Lattice-like Robbins Huntington (non empty OrthoLattStr);
+  cluster strict Lattice-like Robbins Huntington for non empty OrthoLattStr;
 end;
 
 definition
-  let L be join-commutative (non empty ComplLLattStr), x,y be Element of L;
+  let L be join-commutative non empty ComplLLattStr, x,y be Element of L;
   redefine func x + y;
   commutativity;
 end;
 
 theorem :: ROBBINS1:1  :: 4.8
-  for L being Huntington join-commutative join-associative (non
-empty ComplLLattStr), a, b being Element of L holds (a *' b) + (a *' b`) = a;
+  for L being Huntington join-commutative join-associative non
+empty ComplLLattStr, a, b being Element of L holds (a *' b) + (a *' b`) = a;
 
 theorem :: ROBBINS1:2  :: 4.9
-  for L being Huntington join-commutative join-associative (non
-  empty ComplLLattStr), a being Element of L holds a + a` = a` + a``;
+  for L being Huntington join-commutative join-associative non
+  empty ComplLLattStr, a being Element of L holds a + a` = a` + a``;
 
 theorem :: ROBBINS1:3  :: 4.10
-  for L being join-commutative join-associative Huntington (non
-  empty ComplLLattStr), x being Element of L holds x`` = x;
+  for L being join-commutative join-associative Huntington non
+  empty ComplLLattStr, x being Element of L holds x`` = x;
 
 theorem :: ROBBINS1:4  :: 4.11 revised p. 557 without idempotency
-  for L being join-commutative join-associative Huntington (non
-  empty ComplLLattStr), a, b being Element of L holds a + a` = b + b`;
+  for L being join-commutative join-associative Huntington non
+  empty ComplLLattStr, a, b being Element of L holds a + a` = b + b`;
 
 theorem :: ROBBINS1:5  :: 4.12
   for L being join-commutative join-associative join-idempotent
-  Huntington (non empty ComplLLattStr) ex c being Element of L st for a being
+  Huntington non empty ComplLLattStr ex c being Element of L st for a being
   Element of L holds c + a = c & a + a` = c;
 
 theorem :: ROBBINS1:6  :: 4.12
   for L being join-commutative join-associative join-idempotent
-  Huntington (non empty ComplLLattStr) holds L is upper-bounded;
+  Huntington non empty ComplLLattStr holds L is upper-bounded;
 
 registration
   cluster join-commutative join-associative join-idempotent Huntington ->
-    upper-bounded (non empty ComplLLattStr);
+    upper-bounded for non empty ComplLLattStr;
 end;
 
 definition
-  let L be join-commutative join-associative join-idempotent Huntington (non
-  empty ComplLLattStr);
+  let L be join-commutative join-associative join-idempotent Huntington non
+  empty ComplLLattStr;
   redefine func Top L means
 :: ROBBINS1:def 8
 
@@ -182,147 +184,146 @@ end;
 
 theorem :: ROBBINS1:7  :: 4.13
   for L being join-commutative join-associative join-idempotent
-  Huntington (non empty ComplLLattStr) ex c being Element of L st for a being
+  Huntington non empty ComplLLattStr ex c being Element of L st for a being
   Element of L holds c *' a = c & (a + a`)` = c;
 
 definition
-  let L be join-commutative join-associative (non empty ComplLLattStr);
+  let L be join-commutative join-associative non empty ComplLLattStr;
   let x,y be Element of L;
   redefine func x *' y;
   commutativity;
 end;
 
 definition
-  let L be join-commutative join-associative join-idempotent Huntington (non
-  empty ComplLLattStr);
+  let L be join-commutative join-associative join-idempotent Huntington non
+  empty ComplLLattStr;
   func Bot L -> Element of L means
 :: ROBBINS1:def 9
 
   for a being Element of L holds it *' a = it;
 end;
 
-canceled;
+theorem :: ROBBINS1:8
+  for L being join-commutative join-associative join-idempotent
+Huntington non empty ComplLLattStr, a being Element of L
+ holds Bot L = (a + a`)`;
 
 theorem :: ROBBINS1:9
   for L being join-commutative join-associative join-idempotent
-Huntington (non empty ComplLLattStr), a being Element of L
- holds Bot L = (a + a`)`;
-
-theorem :: ROBBINS1:10
-  for L being join-commutative join-associative join-idempotent
-  Huntington (non empty ComplLLattStr)
+  Huntington non empty ComplLLattStr
    holds (Top L)` = Bot L & Top L = (Bot L)`;
 
-theorem :: ROBBINS1:11  :: 4.14
-  for L being join-commutative join-associative Huntington (non
-  empty ComplLLattStr), a, b being Element of L st a` = b` holds a = b;
+theorem :: ROBBINS1:10  :: 4.14
+  for L being join-commutative join-associative Huntington non
+  empty ComplLLattStr, a, b being Element of L st a` = b` holds a = b;
 
-theorem :: ROBBINS1:12  :: 4.15 proof without join-idempotency, no top at all
-  for L being join-commutative join-associative Huntington (non
-  empty ComplLLattStr), a, b being Element of L holds a + (b + b`)` = a;
+theorem :: ROBBINS1:11  :: 4.15 proof without join-idempotency, no top at all
+  for L being join-commutative join-associative Huntington non
+  empty ComplLLattStr, a, b being Element of L holds a + (b + b`)` = a;
 
-theorem :: ROBBINS1:13  :: 4.5
-  for L being join-commutative join-associative Huntington (non
-  empty ComplLLattStr), a being Element of L holds a + a = a;
+theorem :: ROBBINS1:12  :: 4.5
+  for L being join-commutative join-associative Huntington non
+  empty ComplLLattStr, a being Element of L holds a + a = a;
 
 registration
-  cluster join-commutative join-associative Huntington -> join-idempotent (non
-    empty ComplLLattStr);
+  cluster join-commutative join-associative Huntington -> join-idempotent for
+non
+    empty ComplLLattStr;
 end;
 
-theorem :: ROBBINS1:14  :: 4.15
-  for L being join-commutative join-associative Huntington (non
-  empty ComplLLattStr), a being Element of L holds a + Bot L = a;
+theorem :: ROBBINS1:13  :: 4.15
+  for L being join-commutative join-associative Huntington non
+  empty ComplLLattStr, a being Element of L holds a + Bot L = a;
 
-theorem :: ROBBINS1:15 :: 4.16
-  for L being join-commutative join-associative Huntington (non empty
-  ComplLLattStr), a being Element of L holds a *' Top L = a;
+theorem :: ROBBINS1:14 :: 4.16
+  for L being join-commutative join-associative Huntington non empty
+  ComplLLattStr, a being Element of L holds a *' Top L = a;
 
-theorem :: ROBBINS1:16  :: 4.17
-  for L being join-commutative join-associative Huntington (non
-  empty ComplLLattStr), a being Element of L holds a *' a` = Bot L;
+theorem :: ROBBINS1:15  :: 4.17
+  for L being join-commutative join-associative Huntington non
+  empty ComplLLattStr, a being Element of L holds a *' a` = Bot L;
 
-theorem :: ROBBINS1:17  :: 4.19
-  for L being join-commutative join-associative Huntington (non
-empty ComplLLattStr), a, b, c being Element of L
+theorem :: ROBBINS1:16  :: 4.19
+  for L being join-commutative join-associative Huntington non
+empty ComplLLattStr, a, b, c being Element of L
  holds a *' (b *' c) = a *' b *' c;
 
-theorem :: ROBBINS1:18  :: 4.20
-  for L being join-commutative join-associative Huntington (non
-  empty ComplLLattStr), a, b being Element of L holds a + b = (a` *' b`)`;
+theorem :: ROBBINS1:17  :: 4.20
+  for L being join-commutative join-associative Huntington non
+  empty ComplLLattStr, a, b being Element of L holds a + b = (a` *' b`)`;
 
-theorem :: ROBBINS1:19 :: 4.21
-  for L being join-commutative join-associative Huntington (non empty
-  ComplLLattStr), a being Element of L holds a *' a = a;
+theorem :: ROBBINS1:18 :: 4.21
+  for L being join-commutative join-associative Huntington non empty
+  ComplLLattStr, a being Element of L holds a *' a = a;
 
-theorem :: ROBBINS1:20 :: 4.22
-  for L being join-commutative join-associative Huntington (non empty
-  ComplLLattStr), a being Element of L holds a + Top L = Top L;
+theorem :: ROBBINS1:19 :: 4.22
+  for L being join-commutative join-associative Huntington non empty
+  ComplLLattStr, a being Element of L holds a + Top L = Top L;
 
-theorem :: ROBBINS1:21  :: 4.24
-  for L being join-commutative join-associative Huntington (non
-  empty ComplLLattStr), a, b being Element of L holds a + (a *' b) = a;
+theorem :: ROBBINS1:20  :: 4.24
+  for L being join-commutative join-associative Huntington non
+  empty ComplLLattStr, a, b being Element of L holds a + (a *' b) = a;
 
-theorem :: ROBBINS1:22  :: 4.25
-  for L being join-commutative join-associative Huntington (non
-  empty ComplLLattStr), a, b being Element of L holds a *' (a + b) = a;
+theorem :: ROBBINS1:21  :: 4.25
+  for L being join-commutative join-associative Huntington non
+  empty ComplLLattStr, a, b being Element of L holds a *' (a + b) = a;
 
-theorem :: ROBBINS1:23  :: 4.26
-  for L being join-commutative join-associative Huntington (non
-empty ComplLLattStr), a, b being Element of L
+theorem :: ROBBINS1:22  :: 4.26
+  for L being join-commutative join-associative Huntington non
+empty ComplLLattStr, a, b being Element of L
    st a` + b = Top L & b` + a = Top L
   holds a = b;
 
-theorem :: ROBBINS1:24  :: 4.27
-  for L being join-commutative join-associative Huntington (non
-empty ComplLLattStr), a, b being Element of L st a + b = Top L & a *' b = Bot L
+theorem :: ROBBINS1:23  :: 4.27
+  for L being join-commutative join-associative Huntington non
+empty ComplLLattStr, a, b being Element of L st a + b = Top L & a *' b = Bot L
   holds a` = b;
 
-theorem :: ROBBINS1:25  :: 4.28
-  for L being join-commutative join-associative Huntington (non
-  empty ComplLLattStr), a, b, c being Element of L
+theorem :: ROBBINS1:24  :: 4.28
+  for L being join-commutative join-associative Huntington non
+  empty ComplLLattStr, a, b, c being Element of L
    holds (a *' b *' c) + (a *' b
 *' c`) + (a *' b` *' c) + (a *' b` *' c`) + (a` *' b *' c) + (a` *' b *' c`) +
   (a` *' b` *' c) + (a` *' b` *' c`) = Top L;
 
-theorem :: ROBBINS1:26  :: 4.29
-  for L being join-commutative join-associative Huntington (non
-  empty ComplLLattStr), a, b, c being Element of L
+theorem :: ROBBINS1:25  :: 4.29
+  for L being join-commutative join-associative Huntington non
+  empty ComplLLattStr, a, b, c being Element of L
    holds (a *' c) *' (b *' c`) =
 Bot L & (a *' b *' c) *' (a` *' b *' c) = Bot L & (a *' b` *' c) *' (a` *' b *'
   c) = Bot L & (a *' b *' c) *' (a` *' b` *' c) = Bot L & (a *' b *' c`) *' (a`
   *' b` *' c`) = Bot L;
 
-theorem :: ROBBINS1:27  :: 4.30
-  for L being join-commutative join-associative Huntington (non
-empty ComplLLattStr), a, b, c being Element of L holds (a *' b) + (a *' c) = (a
+theorem :: ROBBINS1:26  :: 4.30
+  for L being join-commutative join-associative Huntington non
+empty ComplLLattStr, a, b, c being Element of L holds (a *' b) + (a *' c) = (a
   *' b *' c) + (a *' b *' c`) + (a *' b` *' c);
 
-theorem :: ROBBINS1:28  :: 4.31
-  for L being join-commutative join-associative Huntington (non
-empty ComplLLattStr), a, b, c being Element of L
+theorem :: ROBBINS1:27  :: 4.31
+  for L being join-commutative join-associative Huntington non
+empty ComplLLattStr, a, b, c being Element of L
  holds (a *' (b + c))` = (a *' b
 ` *' c`) + (a` *' b *' c) + (a` *' b *' c`) + (a` *' b` *' c) + (a` *' b` *' c`
   );
 
-theorem :: ROBBINS1:29  :: 4.32
-  for L being join-commutative join-associative Huntington (non
-empty ComplLLattStr), a, b, c being Element of L
+theorem :: ROBBINS1:28  :: 4.32
+  for L being join-commutative join-associative Huntington non
+empty ComplLLattStr, a, b, c being Element of L
  holds ((a *' b) + (a *' c)) + (a *' (b + c))` = Top L;
 
-theorem :: ROBBINS1:30  :: 4.33
-  for L being join-commutative join-associative Huntington (non
-empty ComplLLattStr), a, b, c being Element of L holds ((a *' b) + (a *' c)) *'
+theorem :: ROBBINS1:29  :: 4.33
+  for L being join-commutative join-associative Huntington non
+empty ComplLLattStr, a, b, c being Element of L holds ((a *' b) + (a *' c)) *'
   (a *' (b + c))` = Bot L;
 
-theorem :: ROBBINS1:31  :: 4.34
-  for L being join-commutative join-associative Huntington (non
-empty ComplLLattStr), a, b, c being Element of L
+theorem :: ROBBINS1:30  :: 4.34
+  for L being join-commutative join-associative Huntington non
+empty ComplLLattStr, a, b, c being Element of L
  holds a *' (b + c) = (a *' b) + (a *' c);
 
-theorem :: ROBBINS1:32 :: 4.35
-  for L being join-commutative join-associative Huntington (non empty
-ComplLLattStr), a, b, c being Element of L holds a + (b *' c) = (a + b) *' (a +
+theorem :: ROBBINS1:31 :: 4.35
+  for L being join-commutative join-associative Huntington non empty
+ComplLLattStr, a, b, c being Element of L holds a + (b *' c) = (a + b) *' (a +
   c);
 
 begin :: Pre-Ortholattices
@@ -340,18 +341,18 @@ registration
 end;
 
 definition
-  mode preOrthoLattice is Lattice-like (non empty OrthoLattStr);
+  mode preOrthoLattice is Lattice-like non empty OrthoLattStr;
 end;
 
 registration
-  cluster strict Boolean well-complemented preOrthoLattice;
+  cluster strict Boolean well-complemented for preOrthoLattice;
 end;
 
-theorem :: ROBBINS1:33
+theorem :: ROBBINS1:32
   for L being distributive well-complemented preOrthoLattice, x
   being Element of L holds x`` = x;
 
-theorem :: ROBBINS1:34
+theorem :: ROBBINS1:33
   for L being bounded distributive well-complemented
   preOrthoLattice, x, y being Element of L holds x "/\" y = (x` "\/" y`)`;
 
@@ -374,49 +375,49 @@ registration
 end;
 
 registration
-  let L be join-commutative (non empty ComplLLattStr);
+  let L be join-commutative non empty ComplLLattStr;
   cluster CLatt L -> join-commutative;
 end;
 
 registration
-  let L be join-associative (non empty ComplLLattStr);
+  let L be join-associative non empty ComplLLattStr;
   cluster CLatt L -> join-associative;
 end;
 
 registration
-  let L be join-commutative join-associative (non empty ComplLLattStr);
+  let L be join-commutative join-associative non empty ComplLLattStr;
   cluster CLatt L -> meet-commutative;
 end;
 
-theorem :: ROBBINS1:35
+theorem :: ROBBINS1:34
   for L being non empty ComplLLattStr, a, b being Element of L, a9, b9
 being Element of CLatt L st a = a9 & b = b9 holds a *' b = a9 "/\" b9 & a + b =
   a9 "\/" b9 & a` = a9`;
 
 registration
-  let L be join-commutative join-associative Huntington (non empty
-  ComplLLattStr);
+  let L be join-commutative join-associative Huntington non empty
+  ComplLLattStr;
   cluster CLatt L -> meet-associative join-absorbing meet-absorbing;
 end;
 
 registration
-  let L be Huntington (non empty ComplLLattStr);
+  let L be Huntington non empty ComplLLattStr;
   cluster CLatt L -> Huntington;
 end;
 
 registration
-  let L be join-commutative join-associative Huntington (non empty
-  ComplLLattStr);
+  let L be join-commutative join-associative Huntington non empty
+  ComplLLattStr;
   cluster CLatt L -> lower-bounded;
 end;
 
-theorem :: ROBBINS1:36
-  for L being join-commutative join-associative Huntington (non
-  empty ComplLLattStr) holds Bot L = Bottom CLatt L;
+theorem :: ROBBINS1:35
+  for L being join-commutative join-associative Huntington non
+  empty ComplLLattStr holds Bot L = Bottom CLatt L;
 
 registration
-  let L be join-commutative join-associative Huntington (non empty
-  ComplLLattStr);
+  let L be join-commutative join-associative Huntington non empty
+  ComplLLattStr;
   cluster CLatt L -> complemented distributive bounded;
 end;
 
@@ -428,7 +429,7 @@ notation
 end;
 
 definition
-  let G be join-commutative (non empty ComplLLattStr);
+  let G be join-commutative non empty ComplLLattStr;
   redefine attr G is Huntington means
 :: ROBBINS1:def 12
 
@@ -443,8 +444,8 @@ definition
   ex x being Element of G st x + x = x;
 end;
 
-reserve G for Robbins join-associative join-commutative (non empty
-  ComplLLattStr);
+reserve G for Robbins join-associative join-commutative non empty
+  ComplLLattStr;
 reserve x, y, z, u, v for Element of G;
 
 definition
@@ -487,54 +488,52 @@ definition
   x _0 + (Double x + Double x);
 end;
 
-theorem :: ROBBINS1:37
+theorem :: ROBBINS1:36
   \delta ((x + y), (\delta (x, y))) = y;
 
-theorem :: ROBBINS1:38
+theorem :: ROBBINS1:37
   Expand (x, y) = y;
 
-theorem :: ROBBINS1:39
+theorem :: ROBBINS1:38
   \delta (-x + y, z) = -(\delta (x, y) + z);
 
-theorem :: ROBBINS1:40
+theorem :: ROBBINS1:39
   \delta (x, x) = x _0;
 
-theorem :: ROBBINS1:41
+theorem :: ROBBINS1:40
   \delta (Double x, x _0) = x;
 
-theorem :: ROBBINS1:42  :: Lemma 1
+theorem :: ROBBINS1:41  :: Lemma 1
   \delta (x _2, x) = x _0;
 
-canceled;
-
-theorem :: ROBBINS1:44
+theorem :: ROBBINS1:42
   x _4 + x _0 = x _3 + x _1;
 
-theorem :: ROBBINS1:45
+theorem :: ROBBINS1:43
   x _3 + x _0 = x _2 + x _1;
 
-theorem :: ROBBINS1:46
+theorem :: ROBBINS1:44
   x _3 + x = x _4;
 
-theorem :: ROBBINS1:47  :: Lemma 2
+theorem :: ROBBINS1:45  :: Lemma 2
   \delta (x _3, x _0) = x;
 
-theorem :: ROBBINS1:48 :: Left Argument Substitution
+theorem :: ROBBINS1:46 :: Left Argument Substitution
   -x = -y implies \delta (x, z) = \delta (y,z);
 
-theorem :: ROBBINS1:49  :: Exchange
+theorem :: ROBBINS1:47  :: Exchange
   \delta (x, -y) = \delta (y, -x);
 
-theorem :: ROBBINS1:50  :: Lemma 3
+theorem :: ROBBINS1:48  :: Lemma 3
   \delta (x _3, x) = x _0;
 
-theorem :: ROBBINS1:51  :: Lemma 4
+theorem :: ROBBINS1:49  :: Lemma 4
   \delta (x _1 + x _3, x) = x _0;
 
-theorem :: ROBBINS1:52  :: Lemma 5
+theorem :: ROBBINS1:50  :: Lemma 5
   \delta (x _1 + x _2, x) = x _0;
 
-theorem :: ROBBINS1:53  :: Lemma 6
+theorem :: ROBBINS1:51  :: Lemma 6
   \delta (x _1 + x _3, x _0) = x;
 
 definition
@@ -544,21 +543,21 @@ definition
   -(x _1 + x _3) + x + -(x _3);
 end;
 
-theorem :: ROBBINS1:54  :: Lemma 7
+theorem :: ROBBINS1:52  :: Lemma 7
   \delta (\beta x, x) = -x _3;
 
-theorem :: ROBBINS1:55  :: Lemma 8
+theorem :: ROBBINS1:53  :: Lemma 8
   \delta (\beta x, x) = -(x _1 + x _3);
 
-theorem :: ROBBINS1:56 :: Winker Second Condition
+theorem :: ROBBINS1:54 :: Winker Second Condition
   ex y, z st -(y + z) = -z;
 
 begin :: Proofs according to Bill McCune
 
-theorem :: ROBBINS1:57
+theorem :: ROBBINS1:55
   (for z holds --z = z) implies G is Huntington;
 
-theorem :: ROBBINS1:58
+theorem :: ROBBINS1:56
   G is with_idempotent_element implies G is Huntington;
 
 registration
@@ -566,19 +565,20 @@ registration
 end;
 
 registration
-  cluster with_idempotent_element -> Huntington (Robbins join-associative
-    join-commutative (non empty ComplLLattStr));
+  cluster with_idempotent_element -> Huntington for Robbins join-associative
+    join-commutative non empty ComplLLattStr;
 end;
 
-theorem :: ROBBINS1:59
+theorem :: ROBBINS1:57
   (ex c, d being Element of G st c + d = c) implies G is Huntington;
 
-theorem :: ROBBINS1:60
+theorem :: ROBBINS1:58
   ex y, z st y + z = z;
 
 registration
-  cluster Robbins -> Huntington (join-associative join-commutative (non empty
-    ComplLLattStr));
+  cluster Robbins -> Huntington for
+join-associative join-commutative non empty
+    ComplLLattStr;
 end;
 
 definition
@@ -594,12 +594,12 @@ registration
   cluster CLatt L -> de_Morgan;
 end;
 
-theorem :: ROBBINS1:61
+theorem :: ROBBINS1:59
   for L being well-complemented join-commutative meet-commutative
-(non empty OrthoLattStr), x being Element of L holds x + x` = Top L & x "/\" x`
+non empty OrthoLattStr, x being Element of L holds x + x` = Top L & x "/\" x`
   = Bottom L;
 
-theorem :: ROBBINS1:62
+theorem :: ROBBINS1:60
   for L being bounded distributive well-complemented
   preOrthoLattice holds (Top L)` = Bottom L;
 
@@ -608,26 +608,27 @@ registration
 end;
 
 registration
-  cluster strict de_Morgan Boolean Robbins Huntington preOrthoLattice;
+  cluster strict de_Morgan Boolean Robbins Huntington for preOrthoLattice;
 end;
 
 registration
-  cluster join-associative join-commutative de_Morgan -> meet-commutative (non
-    empty OrthoLattStr);
+  cluster join-associative join-commutative de_Morgan -> meet-commutative for
+non
+    empty OrthoLattStr;
 end;
 
-theorem :: ROBBINS1:63
+theorem :: ROBBINS1:61
   for L being Huntington de_Morgan preOrthoLattice holds Bot L = Bottom L;
 
 registration
-  cluster Boolean -> Huntington (well-complemented preOrthoLattice);
+  cluster Boolean -> Huntington for well-complemented preOrthoLattice;
 end;
 
 registration
-  cluster Huntington -> Boolean (de_Morgan preOrthoLattice);
+  cluster Huntington -> Boolean for de_Morgan preOrthoLattice;
 end;
 
 registration
-  cluster Robbins de_Morgan -> Boolean preOrthoLattice;
-  cluster Boolean -> Robbins (well-complemented preOrthoLattice);
+  cluster Robbins de_Morgan -> Boolean for preOrthoLattice;
+  cluster Boolean -> Robbins for well-complemented preOrthoLattice;
 end;

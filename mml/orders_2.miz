@@ -16,13 +16,14 @@ environ
 
  vocabularies STRUCT_0, RELAT_1, XBOOLE_0, PARTFUN1, RELAT_2, ORDERS_1,
       SUBSET_1, XXREAL_0, ARYTM_3, TREES_2, TARSKI, WELLORD1, FUNCT_1,
-      ZFMISC_1, ORDERS_2;
+      ZFMISC_1, ORDERS_2, CARD_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, RELAT_2, FUNCT_1,
-      RELSET_1, PARTFUN1, WELLORD1, DOMAIN_1, STRUCT_0, ORDERS_1;
+      RELSET_1, PARTFUN1, CARD_1, WELLORD1, DOMAIN_1, STRUCT_0, ORDERS_1;
  constructors RELAT_2, WELLORD1, PARTFUN1, DOMAIN_1, ORDERS_1, PRE_TOPC,
       RELSET_1, SETFAM_1;
- registrations XBOOLE_0, SUBSET_1, RELSET_1, ORDERS_1, STRUCT_0, PARTFUN1;
- requirements BOOLE, SUBSET;
+ registrations XBOOLE_0, SUBSET_1, RELSET_1, ORDERS_1, STRUCT_0, PARTFUN1,
+      CARD_1, ORDINAL1;
+ requirements BOOLE, SUBSET, NUMERALS;
  definitions RELAT_1, RELAT_2, TARSKI, WELLORD1, STRUCT_0, XBOOLE_0, ORDERS_1;
  theorems RELAT_1, RELAT_2, TARSKI, WELLORD1, ZFMISC_1, XBOOLE_0, XBOOLE_1,
       PARTFUN1, ORDERS_1;
@@ -46,7 +47,7 @@ end;
 
 definition
   let A be RelStr;
-  canceled 2;
+
   attr A is total means
   :Def3:
   the InternalRel of A is total;
@@ -62,13 +63,13 @@ definition
 end;
 
 registration
-  cluster non empty reflexive transitive antisymmetric strict total RelStr;
+  cluster reflexive transitive antisymmetric strict total 1-element for RelStr;
   existence
   proof
-    set R =the  Order of {{}};
+    set R = the Order of {{}};
     take L = RelStr(#{{}},R#);
-    thus the carrier of L is non empty;
-A1: field R = the carrier of L by ORDERS_1:97;
+:::    thus the carrier of L is non empty;
+A1: field R = the carrier of L by ORDERS_1:12;
     hence the InternalRel of L is_reflexive_in the carrier of L by
 RELAT_2:def 9;
     thus the InternalRel of L is_transitive_in the carrier of L by A1,
@@ -77,18 +78,19 @@ RELAT_2:def 16;
 RELAT_2:def 12;
     thus L is strict;
     thus the InternalRel of L is total;
+   thus the carrier of L is 1-element;
   end;
 end;
 
 registration
-  cluster reflexive -> total RelStr;
+  cluster reflexive -> total for RelStr;
   coherence
   proof
     let L be RelStr;
     assume L is reflexive;
     then the InternalRel of L is_reflexive_in the carrier of L by Def4;
-    then dom the InternalRel of L = the carrier of L by ORDERS_1:98;
-    hence the InternalRel of L is total by PARTFUN1:def 4;
+    then dom the InternalRel of L = the carrier of L by ORDERS_1:13;
+    hence the InternalRel of L is total by PARTFUN1:def 2;
   end;
 end;
 
@@ -110,7 +112,7 @@ registration
     set R = the InternalRel of A;
     R is_reflexive_in the carrier of A by Def4;
     then
-A1: field R = the carrier of A by ORDERS_1:98;
+A1: field R = the carrier of A by ORDERS_1:13;
     the InternalRel of A is_reflexive_in the carrier of A by Def4;
     hence thesis by A1,RELAT_2:def 9;
   end;
@@ -123,7 +125,7 @@ registration
   proof
     set R = the InternalRel of A;
     field R = the carrier of A & the InternalRel of A is_antisymmetric_in
-    the carrier of A by Def6,ORDERS_1:97;
+    the carrier of A by Def6,ORDERS_1:12;
     hence thesis by RELAT_2:def 12;
   end;
 end;
@@ -135,7 +137,7 @@ registration
   proof
     set R = the InternalRel of A;
     field R = the carrier of A & the InternalRel of A is_transitive_in the
-    carrier of A by Def5,ORDERS_1:97;
+    carrier of A by Def5,ORDERS_1:12;
     hence thesis by RELAT_2:def 16;
   end;
 end;
@@ -147,7 +149,7 @@ registration
   coherence
   proof
     set A = RelStr(#X,O#);
-    field O = X by ORDERS_1:97;
+    field O = X by ORDERS_1:12;
     hence the InternalRel of A is_reflexive_in the carrier of A by
 RELAT_2:def 9;
   end;
@@ -160,7 +162,7 @@ registration
   coherence
   proof
     set A = RelStr(#X,O#);
-    field O = X by ORDERS_1:97;
+    field O = X by ORDERS_1:12;
     hence the InternalRel of A is_transitive_in the carrier of A by
 RELAT_2:def 16;
   end;
@@ -173,7 +175,7 @@ registration
   coherence
   proof
     set A = RelStr(#X,O#);
-    field O = X by ORDERS_1:97;
+    field O = X by ORDERS_1:12;
     hence the InternalRel of A is_antisymmetric_in the carrier of A by
 RELAT_2:def 12;
   end;
@@ -188,7 +190,7 @@ Lm1: x in S implies x is Element of A;
 definition
   let A be RelStr;
   let a1,a2 be Element of A;
-  canceled 2;
+
   pred a1 <= a2 means
   :Def9:
   [a1,a2] in the InternalRel of A;
@@ -215,8 +217,6 @@ notation
   synonym a2 > a1 for a1 < a2;
 end;
 
-canceled 23;
-
 theorem Th24:
   for A being reflexive non empty RelStr, a being Element of A holds a <= a
 proof
@@ -242,7 +242,7 @@ proof
 A1: [a1,a2] in the InternalRel of A and
 A2: [a2,a1] in the InternalRel of A;
 A3: the InternalRel of A is_antisymmetric_in the carrier of A by Def6;
-  a1 in the carrier of A by A1,ZFMISC_1:106;
+  a1 in the carrier of A by A1,ZFMISC_1:87;
   hence thesis by A1,A2,A3,RELAT_2:def 4;
 end;
 
@@ -255,11 +255,9 @@ proof
 A1: [a1,a2] in the InternalRel of A and
 A2: [a2,a3] in the InternalRel of A;
 A3: the InternalRel of A is_transitive_in the carrier of A by Def5;
-  a1 in the carrier of A by A1,ZFMISC_1:106;
+  a1 in the carrier of A by A1,ZFMISC_1:87;
   hence [a1,a3] in the InternalRel of A by A1,A2,A3,RELAT_2:def 8;
 end;
-
-canceled;
 
 theorem Th28:
   for A being antisymmetric RelStr, a1,a2 being Element of A holds
@@ -297,8 +295,6 @@ A2: a2 < a1;
   a2 <= a1 by A2,Def10;
   hence thesis by A1,A2,Th25;
 end;
-
-canceled;
 
 theorem Th32:
   for A being transitive antisymmetric RelStr for a1,a2,a3 being
@@ -340,7 +336,7 @@ end;
 
 registration
   let A be RelStr;
-  cluster empty -> strongly_connected Subset of A;
+  cluster empty -> strongly_connected for Subset of A;
   coherence
   proof let S be Subset of A;
     assume S is empty;
@@ -353,7 +349,7 @@ end;
 
 registration
   let A be RelStr;
-  cluster strongly_connected Subset of A;
+  cluster strongly_connected for Subset of A;
   existence
   proof
     take {}A;
@@ -365,8 +361,6 @@ definition
   let A be RelStr;
   mode Chain of A is strongly_connected Subset of A;
 end;
-
-canceled 2;
 
 theorem Th35:
   for A being non empty reflexive RelStr for a being Element of A
@@ -441,7 +435,7 @@ proof
   assume
 A1: S c= C;
   the InternalRel of A is_strongly_connected_in C by Def11;
-  then the InternalRel of A is_strongly_connected_in S by A1,ORDERS_1:96;
+  then the InternalRel of A is_strongly_connected_in S by A1,ORDERS_1:11;
   hence thesis by Def11;
 end;
 
@@ -505,7 +499,7 @@ proof
   assume the InternalRel of A well_orders T;
   then the InternalRel of A is_connected_in T & the InternalRel of A
   is_reflexive_in T by WELLORD1:def 5;
-  then the InternalRel of A is_strongly_connected_in T by ORDERS_1:92;
+  then the InternalRel of A is_strongly_connected_in T by ORDERS_1:7;
   hence thesis by Def11;
 end;
 
@@ -552,8 +546,6 @@ definition
     hence thesis;
   end;
 end;
-
-canceled 2;
 
 theorem Th43:
   UpperCone({}(A)) = the carrier of A
@@ -691,7 +683,7 @@ definition
   existence
   proof
     now
-      set x =the  Element of S;
+      set x = the Element of S;
       assume S <> {};
       then reconsider x as Element of A by Lm1;
       take T = InitSegm(S,x);
@@ -703,8 +695,6 @@ definition
   consistency;
 end;
 
-canceled 4;
-
 theorem Th57:
   a in InitSegm(S,b) iff a < b & a in S
 proof
@@ -712,12 +702,8 @@ proof
   hence thesis by Th52;
 end;
 
-canceled 2;
-
 theorem
   InitSegm({}(A),a) = {};
-
-canceled;
 
 theorem Th62:
   not a in InitSegm(S,a)
@@ -729,8 +715,6 @@ A1: ex a1 st a = a1 & for a2 st a2 in {a} holds a1 < a2;
   a in {a} by TARSKI:def 1;
   hence thesis by A1;
 end;
-
-canceled;
 
 theorem
   a1 < a2 implies InitSegm(S,a1) c= InitSegm(S,a2)
@@ -764,8 +748,6 @@ A1: S c= T;
   then x in S & x in LowerCone{a} by XBOOLE_0:def 4;
   hence thesis by A1,XBOOLE_0:def 4;
 end;
-
-canceled;
 
 theorem Th67:
   for I being Initial_Segm of S holds I c= S
@@ -912,7 +894,7 @@ A4: S <> T;
     then Y <> {} by XBOOLE_1:37;
     then consider x such that
 A5: x in Y and
-A6: for y st y in Y holds [x,y] in the InternalRel of A by A2,WELLORD1:9
+A6: for y st y in Y holds [x,y] in the InternalRel of A by A2,WELLORD1:5
 ,XBOOLE_1:36;
     reconsider x as Element of A by A5;
     take x;
@@ -986,7 +968,7 @@ A4: S <> T;
     then Y <> {} by XBOOLE_1:37;
     then consider x such that
 A5: x in Y and
-A6: for y st y in Y holds [x,y] in the InternalRel of A by A2,WELLORD1:9
+A6: for y st y in Y holds [x,y] in the InternalRel of A by A2,WELLORD1:5
 ,XBOOLE_1:36;
     reconsider x as Element of A by A5;
     take x;
@@ -1059,7 +1041,7 @@ definition
   existence
   proof
     set AC = the carrier of A;
-    AC in BOOL AC & not {} in BOOL AC by ORDERS_1:4,5;
+    AC in BOOL AC & not {} in BOOL AC by ORDERS_1:1,2;
     then reconsider aa = f.AC as Element of A by ORDERS_1:def 1;
     reconsider X = {aa} as Chain of A by Th35;
     take X;
@@ -1069,9 +1051,9 @@ A1: the InternalRel of A is_antisymmetric_in the carrier of A by Def6;
     InternalRel of A is_transitive_in the carrier of A by Def4,Def5;
     hence the InternalRel of A is_reflexive_in X & the InternalRel of A
     is_transitive_in X & the InternalRel of A is_antisymmetric_in X by A1,
-ORDERS_1:93,94,95;
+ORDERS_1:8,9,10;
     the InternalRel of A is_strongly_connected_in X by Def11;
-    hence the InternalRel of A is_connected_in X by ORDERS_1:92;
+    hence the InternalRel of A is_connected_in X by ORDERS_1:7;
     thus the InternalRel of A is_well_founded_in X
     proof
       reconsider x = aa as set;
@@ -1080,7 +1062,7 @@ ORDERS_1:93,94,95;
 A2:   Y c= X and
 A3:   Y <> {};
       take x;
-      Y = X by A2,A3,ZFMISC_1:39;
+      Y = X by A2,A3,ZFMISC_1:33;
       hence x in Y by TARSKI:def 1;
       thus (the InternalRel of A)-Seg(x) /\ Y c= {}
       proof
@@ -1117,13 +1099,11 @@ end;
 
 reserve fC,fC1,fC2 for Chain of f;
 
-canceled 4;
-
 theorem Th78:
   {f.(the carrier of A)} is Chain of f
 proof
   set AC = the carrier of A;
-  AC in BOOL AC & not {} in BOOL AC by ORDERS_1:4,5;
+  AC in BOOL AC & not {} in BOOL AC by ORDERS_1:1,2;
   then reconsider aa = f.AC as Element of A by ORDERS_1:def 1;
   reconsider X = {aa} as Chain of A by Th35;
 A1: the InternalRel of A is_well_founded_in X
@@ -1134,7 +1114,7 @@ A1: the InternalRel of A is_well_founded_in X
 A2: Y c= X and
 A3: Y <> {};
     take x;
-    Y = X by A2,A3,ZFMISC_1:39;
+    Y = X by A2,A3,ZFMISC_1:33;
     hence x in Y by TARSKI:def 1;
     thus (the InternalRel of A)-Seg(x) /\ Y c= {}
     proof
@@ -1171,15 +1151,15 @@ A9:   ex a1 st x = a1 & for a2 st a2 in {a} holds a1 < a2;
   end;
   the InternalRel of A is_strongly_connected_in X by Def11;
   then
-A10: the InternalRel of A is_connected_in X by ORDERS_1:92;
+A10: the InternalRel of A is_connected_in X by ORDERS_1:7;
   the InternalRel of A is_antisymmetric_in the carrier of A by Def6;
   then
-A11: the InternalRel of A is_antisymmetric_in X by ORDERS_1:94;
+A11: the InternalRel of A is_antisymmetric_in X by ORDERS_1:9;
   the InternalRel of A is_transitive_in the carrier of A by Def5;
   then
-A12: the InternalRel of A is_transitive_in X by ORDERS_1:95;
+A12: the InternalRel of A is_transitive_in X by ORDERS_1:10;
   the InternalRel of A is_reflexive_in the carrier of A by Def4;
-  then the InternalRel of A is_reflexive_in X by ORDERS_1:93;
+  then the InternalRel of A is_reflexive_in X by ORDERS_1:8;
   then the InternalRel of A well_orders X by A12,A11,A10,A1,WELLORD1:def 5;
   hence thesis by A6,Def16;
 end;
@@ -1190,10 +1170,10 @@ proof
   the InternalRel of A well_orders fC & fC <> {} by Def16;
   then consider x such that
 A1: x in fC and
-A2: for y st y in fC holds [x,y] in the InternalRel of A by WELLORD1:9;
+A2: for y st y in fC holds [x,y] in the InternalRel of A by WELLORD1:5;
   reconsider x as Element of A by A1;
 A3: now
-    set y =the  Element of LowerCone{x} /\ fC;
+    set y = the Element of LowerCone{x} /\ fC;
     assume
 A4: LowerCone{x} /\ fC <> {}(A);
     then reconsider a = y as Element of A by Lm1;
@@ -1221,10 +1201,10 @@ A2: b = f.(the carrier of A);
   the InternalRel of A well_orders fC & fC <> {} by Def16;
   then consider x such that
 A3: x in fC and
-A4: for y st y in fC holds [x,y] in the InternalRel of A by WELLORD1:9;
+A4: for y st y in fC holds [x,y] in the InternalRel of A by WELLORD1:5;
   reconsider x as Element of A by A3;
 A5: now
-    set y =the  Element of LowerCone{x} /\ fC;
+    set y = the Element of LowerCone{x} /\ fC;
     assume
 A6: LowerCone{x} /\ fC <> {}(A);
     then reconsider a = y as Element of A by Lm1;
@@ -1249,7 +1229,7 @@ end;
 theorem
   a = f.(the carrier of A) implies InitSegm(fC,a) = {}
 proof
-  set x =the  Element of LowerCone{a} /\ fC;
+  set x = the Element of LowerCone{a} /\ fC;
   assume
 A1: a = f.(the carrier of A);
   then
@@ -1485,7 +1465,7 @@ registration
   cluster Chains f -> non empty;
   coherence
   proof
-    set x =the  Chain of f;
+    set x = the Chain of f;
     x in Chains f by Def17;
     hence thesis;
   end;
@@ -1499,7 +1479,7 @@ proof
     then X is Chain of f by Def17;
     hence X c= the carrier of A;
   end;
-  hence thesis by ZFMISC_1:94;
+  hence thesis by ZFMISC_1:76;
 end;
 
 Lm3: union(Chains(f)) is Chain of A
@@ -1551,14 +1531,12 @@ A9:     X <> Y;
   hence thesis by Def11;
 end;
 
-canceled 2;
-
 theorem Th87:
   union(Chains(f)) <> {}
 proof
   {f.(the carrier of A)} is Chain of f by Th78;
   then {f.(the carrier of A)} in Chains(f) by Def17;
-  hence thesis by ORDERS_1:91;
+  hence thesis by ORDERS_1:6;
 end;
 
 theorem Th88:
@@ -1567,9 +1545,9 @@ proof
   assume that
 A1: fC <> union(Chains(f)) and
 A2: S = union(Chains(f));
-  set x =the  Element of S \ fC;
+  set x = the Element of S \ fC;
   fC in Chains(f) by Def17;
-  then fC c= union(Chains(f)) by ZFMISC_1:92;
+  then fC c= union(Chains(f)) by ZFMISC_1:74;
   then not union(Chains(f)) c= fC by A1,XBOOLE_0:def 10;
   then
 A3: S \ fC <> {} by A2,XBOOLE_1:37;
@@ -1587,7 +1565,7 @@ A6: X in Chains(f) by A2,TARSKI:def 4;
   then consider a such that
 A7: a in X and
 A8: fC = InitSegm(X,a) by A5,Def15;
-A9: X c= S by A2,A6,ZFMISC_1:92;
+A9: X c= S by A2,A6,ZFMISC_1:74;
   InitSegm(S,a) = InitSegm(X,a)
   proof
     thus InitSegm(S,a) c= InitSegm(X,a)
@@ -1667,11 +1645,11 @@ A5: the InternalRel of A is_antisymmetric_in the carrier of A by Def6;
     InternalRel of A is_transitive_in the carrier of A by Def4,Def5;
     hence the InternalRel of A is_reflexive_in C & the InternalRel of A
     is_transitive_in C & the InternalRel of A is_antisymmetric_in C by A5,
-ORDERS_1:93,94,95;
+ORDERS_1:8,9,10;
     the InternalRel of A is_strongly_connected_in C by Def11;
-    hence the InternalRel of A is_connected_in C by ORDERS_1:92;
+    hence the InternalRel of A is_connected_in C by ORDERS_1:7;
     let Y;
-    set x =the  Element of Y;
+    set x = the Element of Y;
     assume that
 A6: Y c= C and
 A7: Y <> {};
@@ -1684,7 +1662,7 @@ A10: the InternalRel of A well_orders X by Def16;
     X /\ Y <> {} by A7,A8,XBOOLE_0:def 4;
     then consider a being set such that
 A11: a in X /\ Y and
-A12: for x st x in X /\ Y holds [a,x] in the InternalRel of A by A10,WELLORD1:9
+A12: for x st x in X /\ Y holds [a,x] in the InternalRel of A by A10,WELLORD1:5
 ,XBOOLE_1:17;
     take a;
     thus a in Y by A11,XBOOLE_0:def 4;
@@ -1739,20 +1717,18 @@ reserve R for Relation,
 ::  Orders.
 ::
 
-canceled 17;
-
 theorem Th107:
   field((the InternalRel of A) |_2 S) = S
 proof
   set P = (the InternalRel of A) |_2 S;
-  thus field P c= S by WELLORD1:20;
+  thus field P c= S by WELLORD1:13;
   thus S c= field P
   proof
     let x;
     assume
 A1: x in S;
     then
-A2: [x,x] in [:S,S:] by ZFMISC_1:106;
+A2: [x,x] in [:S,S:] by ZFMISC_1:87;
     the InternalRel of A is_reflexive_in the carrier of A by Def4;
     then [x,x] in the InternalRel of A by A1,RELAT_2:def 1;
     then [x,x] in P by A2,XBOOLE_0:def 4;
@@ -1805,7 +1781,7 @@ A1: P is_connected_in C
     assume
 A2: x in C & y in C;
     then
-A3: [x,y] in [:C,C:] & [y,x] in [:C,C:] by ZFMISC_1:106;
+A3: [x,y] in [:C,C:] & [y,x] in [:C,C:] by ZFMISC_1:87;
     the InternalRel of A is_strongly_connected_in C by Def11;
     then
     [x,y] in the InternalRel of A or [y,x] in the InternalRel of A by A2,
@@ -1813,14 +1789,12 @@ RELAT_2:def 7;
     hence thesis by A3,XBOOLE_0:def 4;
   end;
   the InternalRel of A is being_partial-order by ORDERS_1:def 4;
-  then P is being_partial-order by ORDERS_1:114;
+  then P is being_partial-order by ORDERS_1:26;
   hence P is reflexive & P is transitive & P is antisymmetric by ORDERS_1:def 4
 ;
   C = field P by Th107;
   hence thesis by A1,RELAT_2:def 14;
 end;
-
-canceled 25;
 
 theorem
   the InternalRel of A linearly_orders S implies S is Chain of A
@@ -1828,7 +1802,7 @@ proof
   assume the InternalRel of A linearly_orders S;
   then the InternalRel of A is_reflexive_in S & the InternalRel of A
   is_connected_in S by ORDERS_1:def 8;
-  then the InternalRel of A is_strongly_connected_in S by ORDERS_1:92;
+  then the InternalRel of A is_strongly_connected_in S by ORDERS_1:7;
   hence thesis by Def11;
 end;
 
@@ -1840,17 +1814,15 @@ A1: the InternalRel of A is_antisymmetric_in the carrier of A by Def6;
   of A is_transitive_in the carrier of A by Def4,Def5;
   hence the InternalRel of A is_reflexive_in C & the InternalRel of A
   is_transitive_in C & the InternalRel of A is_antisymmetric_in C by A1,
-ORDERS_1:93,94,95;
+ORDERS_1:8,9,10;
   the InternalRel of A is_strongly_connected_in C by Def11;
-  hence thesis by ORDERS_1:92;
+  hence thesis by ORDERS_1:7;
 end;
-
-canceled 21;
 
 theorem
   a is_minimal_in the InternalRel of A iff for b holds not b < a
 proof
-A1: the carrier of A = field(the InternalRel of A) by ORDERS_1:100;
+A1: the carrier of A = field(the InternalRel of A) by ORDERS_1:15;
   thus a is_minimal_in the InternalRel of A implies for b holds not b < a
   proof
     assume
@@ -1868,7 +1840,7 @@ A3: for b holds not b < a;
 A4: y in field(the InternalRel of A) and
 A5: y <> a and
 A6: [y,a] in the InternalRel of A;
-  reconsider b = y as Element of A by A4,ORDERS_1:100;
+  reconsider b = y as Element of A by A4,ORDERS_1:15;
   b <= a by A6,Def9;
   then b < a by A5,Def10;
   hence thesis by A3;
@@ -1877,7 +1849,7 @@ end;
 theorem
   a is_maximal_in the InternalRel of A iff for b holds not a < b
 proof
-A1: the carrier of A = field(the InternalRel of A) by ORDERS_1:100;
+A1: the carrier of A = field(the InternalRel of A) by ORDERS_1:15;
   thus a is_maximal_in the InternalRel of A implies for b holds not a < b
   proof
     assume
@@ -1895,7 +1867,7 @@ A3: for b holds not a < b;
 A4: y in field(the InternalRel of A) and
 A5: y <> a and
 A6: [a,y] in the InternalRel of A;
-  reconsider b = y as Element of A by A4,ORDERS_1:100;
+  reconsider b = y as Element of A by A4,ORDERS_1:15;
   a <= b by A6,Def9;
   then a < b by A5,Def10;
   hence thesis by A3;
@@ -1904,7 +1876,7 @@ end;
 theorem
   a is_superior_of the InternalRel of A iff for b st a <> b holds b < a
 proof
-A1: the carrier of A = field(the InternalRel of A) by ORDERS_1:100;
+A1: the carrier of A = field(the InternalRel of A) by ORDERS_1:15;
   thus a is_superior_of the InternalRel of A implies for b st a <> b holds b <
   a
   proof
@@ -1922,7 +1894,7 @@ A4: for b st a <> b holds b < a;
   thus a in field(the InternalRel of A) by A1;
   let y;
   assume y in field(the InternalRel of A);
-  then reconsider b = y as Element of A by ORDERS_1:100;
+  then reconsider b = y as Element of A by ORDERS_1:15;
   assume y <> a;
   then b < a by A4;
   then b <= a by Def10;
@@ -1932,7 +1904,7 @@ end;
 theorem
   a is_inferior_of the InternalRel of A iff for b st a <> b holds a < b
 proof
-A1: the carrier of A = field(the InternalRel of A) by ORDERS_1:100;
+A1: the carrier of A = field(the InternalRel of A) by ORDERS_1:15;
   thus a is_inferior_of the InternalRel of A implies for b st a <> b holds a <
   b
   proof
@@ -1950,7 +1922,7 @@ A4: for b st a <> b holds a < b;
   thus a in field(the InternalRel of A) by A1;
   let y;
   assume y in field(the InternalRel of A);
-  then reconsider b = y as Element of A by ORDERS_1:100;
+  then reconsider b = y as Element of A by ORDERS_1:15;
   assume y <> a;
   then a < b by A4;
   then a <= b by Def10;
@@ -1975,7 +1947,7 @@ A3: R is_antisymmetric_in X & R is_connected_in X by A1,WELLORD1:def 5;
 A4: R is_well_founded_in X by A1,WELLORD1:def 5;
   R is_reflexive_in X & R is_transitive_in X by A1,WELLORD1:def 5;
   hence R is_reflexive_in Y & R is_transitive_in Y & R is_antisymmetric_in Y &
-  R is_connected_in Y by A2,A3,Lm4,ORDERS_1:93,94,95;
+  R is_connected_in Y by A2,A3,Lm4,ORDERS_1:8,9,10;
   let Z be set;
   assume that
 A5: Z c= Y and
@@ -1992,7 +1964,7 @@ theorem Th162:
   (for C ex a st for b st b in C holds b <= a) implies ex a st
   for b holds not a < b
 proof
-  set f =the  Choice_Function of BOOL(the carrier of A);
+  set f = the Choice_Function of BOOL(the carrier of A);
   reconsider F = union(Chains(f)) as Chain of f by Th89;
   assume for C ex a st for b st b in C holds b <= a;
   then consider a such that
@@ -2011,7 +1983,7 @@ A2: a < b;
   then not UpperCone(F) in {{}} by TARSKI:def 1;
   then
 A3: UpperCone(F) in BOOL(the carrier of A) by XBOOLE_0:def 5;
-  not {} in BOOL(the carrier of A) by ORDERS_1:4;
+  not {} in BOOL(the carrier of A) by ORDERS_1:1;
   then
 A4: f.UpperCone(F) in UpperCone(F) by A3,ORDERS_1:def 1;
   then reconsider c = f.UpperCone(F) as Element of A;
@@ -2124,8 +2096,8 @@ A25:        a1 < c by A5,A19;
   end;
   the InternalRel of A is_reflexive_in the carrier of A by Def4;
   then
-A26: the InternalRel of A is_reflexive_in Z by ORDERS_1:93;
-  then the InternalRel of A is_strongly_connected_in Z by A6,ORDERS_1:92;
+A26: the InternalRel of A is_reflexive_in Z by ORDERS_1:8;
+  then the InternalRel of A is_strongly_connected_in Z by A6,ORDERS_1:7;
   then
 A27: Z is Chain of A by Def11;
 A28: the InternalRel of A is_well_founded_in Z
@@ -2153,7 +2125,7 @@ A34:    Y <> {c};
 A35:    now
           assume X = {};
           then Y c= {c} by XBOOLE_1:37;
-          hence contradiction by A30,A34,ZFMISC_1:39;
+          hence contradiction by A30,A34,ZFMISC_1:33;
         end;
 A36:    X c= F
         proof
@@ -2192,14 +2164,14 @@ A46:          x99 < c by A5,A36,A39;
               hence contradiction by A46,Th28;
             end;
 A47:        now
-              set x =the  Element of (the InternalRel of A)-Seg(x9) /\ {c };
+              set x = the Element of (the InternalRel of A)-Seg(x9) /\ {c };
               assume
 A48:          (the InternalRel of A)-Seg(x9) /\ {c} <> {};
               then x in {c} by XBOOLE_0:def 4;
               then x = c by TARSKI:def 1;
               hence contradiction by A43,A48,XBOOLE_0:def 4;
             end;
-            {c} c= Y by A42,ZFMISC_1:37;
+            {c} c= Y by A42,ZFMISC_1:31;
             then Y = X \/ {c} by XBOOLE_1:45;
             then (the InternalRel of A)-Seg(x9) /\ Y = {} \/ {} by A41,A47,
 XBOOLE_1:23
@@ -2208,7 +2180,7 @@ XBOOLE_1:23
           end;
           suppose
             not c in Y;
-            then Y misses {c} by ZFMISC_1:56;
+            then Y misses {c} by ZFMISC_1:50;
             hence (the InternalRel of A)-Seg(x9) misses Y by A40,XBOOLE_1:83;
           end;
         end;
@@ -2219,9 +2191,9 @@ XBOOLE_1:23
   end;
   the InternalRel of A is_transitive_in the carrier of A by Def5;
   then
-A49: the InternalRel of A is_transitive_in Z by ORDERS_1:95;
+A49: the InternalRel of A is_transitive_in Z by ORDERS_1:10;
   the InternalRel of A is_antisymmetric_in the carrier of A by Def6;
-  then the InternalRel of A is_antisymmetric_in Z by ORDERS_1:94;
+  then the InternalRel of A is_antisymmetric_in Z by ORDERS_1:9;
   then the InternalRel of A well_orders Z by A26,A49,A6,A28,WELLORD1:def 5;
   then reconsider Z as Chain of f by A27,A11,Def16;
   c in {c} by TARSKI:def 1;
@@ -2238,16 +2210,16 @@ theorem
 proof
   set X = the carrier of A;
   set R = (the InternalRel of A)~;
-A1: dom R = dom the InternalRel of A by RELAT_2:29
-    .= X by PARTFUN1:def 4;
+A1: dom R = dom the InternalRel of A by RELAT_2:12
+    .= X by PARTFUN1:def 2;
 A2: for a,b being Element of A holds [a,b] in R iff b <= a
   proof
     let a,b be Element of A;
     [a,b] in R iff [b,a] in the InternalRel of A by RELAT_1:def 7;
     hence thesis by Def9;
   end;
-  reconsider R as Order of the carrier of A by A1,PARTFUN1:def 4,RELAT_2:27,40
-,42;
+  reconsider R as Order of the carrier of A by A1,PARTFUN1:def 2,RELAT_2:10,23
+,25;
   set B = RelStr (# the carrier of A, R #);
   assume
 A3: for C ex a st for b st b in C holds a <= b;
@@ -2305,11 +2277,11 @@ A8: b < d;
   then e < f by A8,Def10;
   hence thesis by A7;
 end;
- 
+
 :: from YELLOW14, 2009.07.26, A.T.
 
 registration
-  cluster strict empty RelStr;
+  cluster strict empty for RelStr;
   existence
   proof
     take R = RelStr (#{},the Relation of {}#);
@@ -2317,3 +2289,4 @@ registration
     thus the carrier of R is empty;
   end;
 end;
+

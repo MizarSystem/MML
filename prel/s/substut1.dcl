@@ -41,7 +41,7 @@
 </Typ>
 <Cluster>
 <Adjective nr="11" value="false"/>
-<Adjective nr="46"/>
+<Adjective nr="47"/>
 </Cluster>
 </RCluster>
 <FCluster aid="SUBSTUT1" nr="1">
@@ -77,7 +77,7 @@
 <Func kind="K" nr="196"/>
 <Cluster>
 <Adjective nr="11" value="false"/>
-<Adjective nr="46"/>
+<Adjective nr="47"/>
 </Cluster>
 </FCluster>
 <FCluster aid="SUBSTUT1" nr="5">
@@ -111,7 +111,7 @@
 <LocusVar nr="4"/>
 </Func>
 <Cluster>
-<Adjective nr="49"/>
+<Adjective nr="50"/>
 </Cluster>
 </FCluster>
 <FCluster aid="SUBSTUT1" nr="6">
@@ -125,7 +125,7 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="50"/>
+<Adjective nr="51"/>
 </Cluster>
 </FCluster>
 <FCluster aid="SUBSTUT1" nr="7">

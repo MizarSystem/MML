@@ -23,18 +23,19 @@ environ
       FUNCT_1, PARTFUN1, FINSET_1, FINSEQ_1, FUNCT_2, CARD_3, TREES_1, TREES_2,
       TREES_3, TREES_4, PBOOLE, STRUCT_0, MSUALG_1, FINSEQ_2, MSAFREE,
       MSUALG_2, FUNCOP_1, DTCONSTR, LANG1, PRE_POLY, RELSET_1, MSUALG_3;
- constructors XXREAL_0, NAT_1, MSUALG_3, MSAFREE, SEQ_4, RELSET_1, PRE_POLY;
+ constructors XXREAL_0, NAT_1, MSUALG_3, MSAFREE, SEQ_4, RELSET_1, PRE_POLY,
+      FINSEQ_2;
  registrations XBOOLE_0, FUNCT_1, RELSET_1, FUNCOP_1, FINSET_1, TREES_1,
       CARD_3, TREES_2, TREES_3, PRE_CIRC, STRUCT_0, DTCONSTR, RELAT_1,
-      MSUALG_1, MSUALG_2, MSAFREE, ORDINAL1, PBOOLE;
+      MSUALG_1, MSUALG_2, MSAFREE, ORDINAL1, PBOOLE, FINSEQ_1;
  requirements BOOLE, SUBSET;
  definitions TARSKI, MSUALG_1, FINSET_1, MSUALG_2, FUNCT_1, STRUCT_0, PBOOLE,
       FUNCOP_1;
  theorems TARSKI, ZFMISC_1, FINSEQ_1, FINSEQ_3, FUNCT_1, FUNCT_2, TREES_3,
       TREES_4, SUBSET_1, CARD_3, FUNCOP_1, PBOOLE, MSUALG_1, MSUALG_2, MSAFREE,
       CARD_2, CARD_1, DTCONSTR, LANG1, PRE_CIRC, RELAT_1, RELSET_1, XBOOLE_0,
-      XBOOLE_1, FINSET_1, PARTFUN1;
- schemes DOMAIN_1, PBOOLE, MSAFREE1, WELLORD2;
+      XBOOLE_1, FINSET_1, PARTFUN1, FINSEQ_2;
+ schemes DOMAIN_1, PBOOLE, MSAFREE1, FUNCT_1;
 
 begin
 
@@ -64,7 +65,7 @@ definition
       S;
     end;
     assume S is void;
-    thus thesis by SUBSET_1:4;
+    thus thesis by SUBSET_1:1;
   end;
   consistency;
 end;
@@ -95,11 +96,9 @@ A1: v in InputVertices G;
 A2: the_result_sort_of o = v;
   o in the carrier' of G;
   then o in dom the ResultSort of G by FUNCT_2:def 1;
-  then v in rng the ResultSort of G by A2,FUNCT_1:def 5;
+  then v in rng the ResultSort of G by A2,FUNCT_1:def 3;
   hence contradiction by A1,XBOOLE_0:def 5;
 end;
-
-canceled 2;
 
 theorem Th5:
   for G being non empty ManySortedSign holds SortsWithConstants G
@@ -122,8 +121,8 @@ A2: x in SortsWithConstants G;
 A3: x9=x and
 A4: x9 is with_const_op by A2;
     ex o being OperSymbol of G st (the Arity of G).o = {} & ( the
-    ResultSort of G).o = x9 by A4,MSUALG_2:def 2;
-    hence thesis by A1,A3,FUNCT_2:6;
+    ResultSort of G).o = x9 by A4,MSUALG_2:def 1;
+    hence thesis by A1,A3,FUNCT_2:4;
   end;
 end;
 
@@ -144,17 +143,17 @@ definition
 end;
 
 registration
-  cluster non void with_input_V (non empty ManySortedSign);
+  cluster non void with_input_V for non empty ManySortedSign;
   existence
   proof
     {} in {{},{{}}} by TARSKI:def 2;
-    then reconsider g = {{}}-->{} as Function of {{}},{{},{{} }} by FUNCOP_1:58
+    then reconsider g = {{}}-->{} as Function of {{}},{{},{{} }} by FUNCOP_1:46
 ;
-    {} in {{},{{}}}* by FINSEQ_1:66;
-    then reconsider f = {{}}-->{} as Function of {{}},{{},{{}}}* by FUNCOP_1:58
+    {} in {{},{{}}}* by FINSEQ_1:49;
+    then reconsider f = {{}}-->{} as Function of {{}},{{},{{}}}* by FUNCOP_1:46
 ;
     take c = ManySortedSign (# {{},{{}}}, {{}}, f, g #);
-    rng the ResultSort of c = {{}} by FUNCOP_1:14;
+    rng the ResultSort of c = {{}} by FUNCOP_1:8;
     then {{}} in the carrier of c & not {{}} in rng the ResultSort of c by
 TARSKI:def 2;
     then InputVertices c <> {} by XBOOLE_0:def 5;
@@ -163,7 +162,7 @@ TARSKI:def 2;
 end;
 
 registration
-  let G be with_input_V (non empty ManySortedSign);
+  let G be with_input_V non empty ManySortedSign;
   cluster InputVertices G -> non empty;
   coherence by Def4;
 end;
@@ -174,7 +173,7 @@ registration
   coherence
   proof
     dom the ResultSort of G = the carrier' of G by FUNCT_2:def 1;
-    hence thesis by RELAT_1:65;
+    hence thesis by RELAT_1:42;
   end;
 end;
 
@@ -186,16 +185,16 @@ definition
 being Vertex of S st v in InputVertices S holds it.v in (the Sorts of MSA).v;
   existence
   proof
-    set e =the  Element of product(the Sorts of MSA);
+    set e = the Element of product(the Sorts of MSA);
     set p = e | InputVertices S;
 A1: dom the Sorts of MSA = the carrier of S & ex g being Function st e = g
 & dom g = dom the Sorts of MSA & for x being set st x in dom the Sorts of MSA
-    holds g.x in (the Sorts of MSA).x by CARD_3:def 5,PARTFUN1:def 4;
+    holds g.x in (the Sorts of MSA).x by CARD_3:def 5,PARTFUN1:def 2;
     reconsider p as ManySortedSet of InputVertices S;
     take p;
     let v be Vertex of S;
     assume v in InputVertices S;
-    then p.v = e.v by FUNCT_1:72;
+    then p.v = e.v by FUNCT_1:49;
     hence thesis by A1;
   end;
 end;
@@ -212,7 +211,7 @@ definition
 end;
 
 registration
-  cluster void -> Circuit-like (non empty ManySortedSign);
+  cluster void -> Circuit-like for non empty ManySortedSign;
   coherence
   proof
     let S be non empty ManySortedSign such that
@@ -223,11 +222,11 @@ A1: S is void;
 end;
 
 registration
-  cluster non void Circuit-like strict (non empty ManySortedSign);
+  cluster non void Circuit-like strict for non empty ManySortedSign;
   existence
   proof
-    {} in {{}}* by FINSEQ_1:66;
-    then reconsider f = {{}}-->{} as Function of {{}},{{}}* by FUNCOP_1:58;
+    {} in {{}}* by FINSEQ_1:49;
+    then reconsider f = {{}}-->{} as Function of {{}},{{}}* by FUNCOP_1:46;
     reconsider g = {{}}-->{} as Function of {{}},{{}};
     take c = ManySortedSign(#{{}},{{}},f,g#);
     c is Circuit-like
@@ -245,7 +244,7 @@ A1:   S = c;
 end;
 
 definition
-  let IIG be Circuit-like non void (non empty ManySortedSign);
+  let IIG be Circuit-like non void non empty ManySortedSign;
   let v be Vertex of IIG such that
 A1: v in InnerVertices IIG;
   func action_at v -> OperSymbol of IIG means
@@ -254,7 +253,7 @@ A1: v in InnerVertices IIG;
   proof
     consider x being set such that
 A2: x in dom the ResultSort of IIG and
-A3: (the ResultSort of IIG).x = v by A1,FUNCT_1:def 5;
+A3: (the ResultSort of IIG).x = v by A1,FUNCT_1:def 3;
     reconsider x as OperSymbol of IIG by A2;
     take x;
     thus thesis by A3;
@@ -280,34 +279,34 @@ A1: len p = len the_arity_of o and
 A2: for k being Nat st k in dom p holds p.k in (the Sorts of A).((
   the_arity_of o)/.k);
   set D = (the Sorts of A) * the_arity_of o;
-A3: dom p = dom the_arity_of o by A1,FINSEQ_3:31;
+A3: dom p = dom the_arity_of o by A1,FINSEQ_3:29;
   rng the_arity_of o c= the carrier of S;
-  then rng the_arity_of o c= dom the Sorts of A by PARTFUN1:def 4;
+  then rng the_arity_of o c= dom the Sorts of A by PARTFUN1:def 2;
   then
-A4: dom p = dom D by A3,RELAT_1:46;
+A4: dom p = dom D by A3,RELAT_1:27;
 A5: now
     let x be set;
     assume
 A6: x in dom D;
     then reconsider k = x as Nat by A4;
-    D.k = (the Sorts of A).((the_arity_of o).k) by A6,FUNCT_1:22
-      .= (the Sorts of A).((the_arity_of o)/.k) by A3,A4,A6,PARTFUN1:def 8;
+    D.k = (the Sorts of A).((the_arity_of o).k) by A6,FUNCT_1:12
+      .= (the Sorts of A).((the_arity_of o)/.k) by A3,A4,A6,PARTFUN1:def 6;
     hence p.x in D.x by A2,A4,A6;
   end;
   dom the Arity of S = the carrier' of S by FUNCT_2:def 1;
   then ((the Sorts of A)# * the Arity of S).o = (the Sorts of A)#.(
-  the_arity_of o) by FUNCT_1:23
-    .= product ((the Sorts of A) * the_arity_of o) by PBOOLE:def 19;
+  the_arity_of o) by FUNCT_1:13
+    .= product ((the Sorts of A) * the_arity_of o) by FINSEQ_2:def 5;
   hence thesis by A4,A5,CARD_3:def 5;
 end;
 
 definition
   let S be non void non empty ManySortedSign, MSA be non-empty MSAlgebra over
   S;
-  func FreeEnv MSA -> free strict (non-empty MSAlgebra over S) equals
+  func FreeEnv MSA -> free strict non-empty MSAlgebra over S equals
   FreeMSA
   (the Sorts of MSA);
-  coherence by MSAFREE:18;
+  coherence by MSAFREE:17;
 end;
 
 definition
@@ -321,7 +320,7 @@ st y in FreeSort(the Sorts of MSA, s) & y = root-tree [x, s] & x in (the Sorts
   existence
   proof
     reconsider A = FreeGen the Sorts of MSA as free GeneratorSet of FreeEnv
-    MSA by MSAFREE:17;
+    MSA by MSAFREE:16;
     defpred P[set,set] means ex s being SortSymbol of S, f being Function of A
 .s, (the Sorts of MSA).s st f = $2 & s = $1 & for x, y being set st y in A.s &
     y = root-tree [x, s] & x in (the Sorts of MSA).s holds f.y = x;
@@ -336,14 +335,14 @@ A2:   for e being set st e in A.s ex u being set st u in (the Sorts of MSA
       proof
         let e be set;
         assume e in A.s;
-        then e in FreeGen(s,the Sorts of MSA) by MSAFREE:def 18;
-        hence thesis by MSAFREE:def 17;
+        then e in FreeGen(s,the Sorts of MSA) by MSAFREE:def 16;
+        hence thesis by MSAFREE:def 15;
       end;
       consider j being Function such that
 A3:   dom j = A.s & rng j c= (the Sorts of MSA).s & for e being set st
-      e in A.s holds P[e,j.e] from WELLORD2:sch 1(A2);
+      e in A.s holds P[e,j.e] from FUNCT_1:sch 5(A2);
       reconsider f = j as Function of A.s, (the Sorts of MSA).s by A3,
-FUNCT_2:def 1,RELSET_1:11;
+FUNCT_2:def 1,RELSET_1:4;
       take j, s;
       take f;
       thus f = j & s = i;
@@ -353,7 +352,7 @@ A5:   y = root-tree [x, s] and
       x in (the Sorts of MSA).s;
       y = root-tree[j.y, s] by A3,A4;
       then [x, s] = [j.y, s] by A5,TREES_4:4;
-      hence thesis by ZFMISC_1:33;
+      hence thesis by ZFMISC_1:27;
     end;
     consider f being ManySortedSet of the carrier of S such that
 A6: for i being set st i in the carrier of S holds P[i,f.i] from
@@ -361,7 +360,7 @@ A6: for i being set st i in the carrier of S holds P[i,f.i] from
     now
       let x be set;
       assume x in dom f;
-      then x in the carrier of S by PARTFUN1:def 4;
+      then x in the carrier of S by PARTFUN1:def 2;
       then P[x,f.x] by A6;
       hence f.x is Function;
     end;
@@ -374,7 +373,7 @@ FUNCOP_1:def 6;
       hence f.i is Function of A.i, (the Sorts of MSA).i;
     end;
     then reconsider f as ManySortedFunction of A, the Sorts of MSA by
-PBOOLE:def 18;
+PBOOLE:def 15;
     consider IT being ManySortedFunction of FreeEnv MSA, MSA such that
 A7: IT is_homomorphism FreeEnv MSA, MSA and
 A8: IT || A = f by MSAFREE:def 5;
@@ -387,10 +386,10 @@ A9: ex t being SortSymbol of S, g being Function of A.t, (the Sorts of MSA
     assume that
     y in FreeSort(the Sorts of MSA, s) and
 A10: y = root-tree [x, s] & x in (the Sorts of MSA).s;
-    y in FreeGen(s, the Sorts of MSA) by A10,MSAFREE:def 17;
+    y in FreeGen(s, the Sorts of MSA) by A10,MSAFREE:def 15;
     then
-A11: y in A.s by MSAFREE:def 18;
-    hence IT.s.y = (IT.s | (A.s)).y by FUNCT_1:72
+A11: y in A.s by MSAFREE:def 16;
+    hence IT.s.y = (IT.s | (A.s)).y by FUNCT_1:49
       .= f.s.y by A8,MSAFREE:def 1
       .= x by A10,A11,A9;
   end;
@@ -415,14 +414,14 @@ A14: for s being SortSymbol of S, x,y being set st y in FreeGen(s,the
 A15:  y in FreeGen(s,the Sorts of MSA);
       then consider a being set such that
 A16:  a in (the Sorts of MSA).s and
-A17:  y = root-tree [a,s] by MSAFREE:def 17;
+A17:  y = root-tree [a,s] by MSAFREE:def 15;
       y in (FreeSort the Sorts of MSA).s by A15;
       then
-A18:  y in FreeSort(the Sorts of MSA, s) by MSAFREE:def 13;
+A18:  y in FreeSort(the Sorts of MSA, s) by MSAFREE:def 11;
       hence IT19.s.y = x implies y = root-tree [x, s] by A13,A16,A17;
       assume y = root-tree [x, s];
       then [x,s] = [a,s] by A17,TREES_4:4;
-      then x = a by ZFMISC_1:33;
+      then x = a by ZFMISC_1:27;
       hence thesis by A13,A18,A16,A17;
     end;
     assume IT2 is_homomorphism FreeEnv MSA, MSA;
@@ -440,14 +439,14 @@ A21: for s being SortSymbol of S, x,y being set st y in FreeGen(s,the
 A22:  y in FreeGen(s,the Sorts of MSA);
       then consider a being set such that
 A23:  a in (the Sorts of MSA).s and
-A24:  y = root-tree [a,s] by MSAFREE:def 17;
+A24:  y = root-tree [a,s] by MSAFREE:def 15;
       y in (FreeSort the Sorts of MSA).s by A22;
       then
-A25:  y in FreeSort(the Sorts of MSA, s) by MSAFREE:def 13;
+A25:  y in FreeSort(the Sorts of MSA, s) by MSAFREE:def 11;
       hence IT29.s.y = x implies y = root-tree [x, s] by A20,A23,A24;
       assume y = root-tree [x, s];
       then [x,s] = [a,s] by A24,TREES_4:4;
-      then x = a by ZFMISC_1:33;
+      then x = a by ZFMISC_1:27;
       hence thesis by A20,A25,A23,A24;
     end;
     IT19 = IT29 from MSAFREE1:sch 3(A12,A14,A19,A21);
@@ -455,88 +454,86 @@ A25:  y in FreeSort(the Sorts of MSA, s) by MSAFREE:def 13;
   end;
 end;
 
-canceled;
-
 theorem Th9:
   for S being non void non empty ManySortedSign, A being non-empty
   MSAlgebra over S holds the Sorts of A is GeneratorSet of A
 proof
   let S be non void non empty ManySortedSign, A be non-empty MSAlgebra over S;
   reconsider theA = the MSAlgebra of A as non-empty MSAlgebra over S;
-  reconsider AA = the Sorts of A as non-empty MSSubset of theA by PBOOLE:def 23
+  reconsider AA = the Sorts of A as non-empty MSSubset of theA by PBOOLE:def 18
 ;
   set GAA = GenMSAlg AA;
-A1: the Sorts of GAA is MSSubset of A by MSUALG_2:def 10;
+A1: the Sorts of GAA is MSSubset of A by MSUALG_2:def 9;
   now
     let B be MSSubset of A such that
 A2: B = the Sorts of GAA;
     reconsider C = B as MSSubset of theA;
-A3: C is opers_closed by A2,MSUALG_2:def 10;
+A3: C is opers_closed by A2,MSUALG_2:def 9;
 A4: now
       let o be OperSymbol of S;
-      C is_closed_on o by A3,MSUALG_2:def 7;
+      C is_closed_on o by A3,MSUALG_2:def 6;
       then
 A5:   rng ((Den(o,the MSAlgebra of A))|((C# * the Arity of S).o)) c= (C *
-      the ResultSort of S).o by MSUALG_2:def 6;
+      the ResultSort of S).o by MSUALG_2:def 5;
       Den (o, A) = Den (o, the MSAlgebra of A);
-      hence B is_closed_on o by A5,MSUALG_2:def 6;
+      hence B is_closed_on o by A5,MSUALG_2:def 5;
     end;
-    hence B is opers_closed by MSUALG_2:def 7;
+    hence B is opers_closed by MSUALG_2:def 6;
     reconsider OAB = Opers(A, B) as ManySortedFunction of (C# * the Arity of S
     ),(C * the ResultSort of S);
 A6: now
       let o be OperSymbol of S;
 A7:   C is_closed_on o & Den (o, A) = Den (o, the MSAlgebra of A) by A3,
-MSUALG_2:def 7;
-      thus OAB.o = o/.B by MSUALG_2:def 9
-        .= (Den(o,A)) | ((B# * the Arity of S).o) by A4,MSUALG_2:def 8
-        .= o/.C by A7,MSUALG_2:def 8;
+MSUALG_2:def 6;
+      thus OAB.o = o/.B by MSUALG_2:def 8
+        .= (Den(o,A)) | ((B# * the Arity of S).o) by A4,MSUALG_2:def 7
+        .= o/.C by A7,MSUALG_2:def 7;
     end;
-    the Charact of GAA = Opers(theA, C) by A2,MSUALG_2:def 10;
-    hence the Charact of GAA = Opers(A,B) by A6,MSUALG_2:def 9;
+    the Charact of GAA = Opers(theA, C) by A2,MSUALG_2:def 9;
+    hence the Charact of GAA = Opers(A,B) by A6,MSUALG_2:def 8;
   end;
   then reconsider GAA as strict non-empty MSSubAlgebra of A by A1,
-MSUALG_2:def 10;
-  reconsider BB = the Sorts of A as MSSubset of A by PBOOLE:def 23;
+MSUALG_2:def 9;
+  reconsider BB = the Sorts of A as MSSubset of A by PBOOLE:def 18;
 A8: now
     let U1 be MSSubAlgebra of A;
 A9: now
       let B be MSSubset of theA such that
 A10:  B = the Sorts of U1;
       reconsider C = B as MSSubset of A;
-A11:  C is opers_closed by A10,MSUALG_2:def 10;
+A11:  C is opers_closed by A10,MSUALG_2:def 9;
 A12:  now
         let o be OperSymbol of S;
-        C is_closed_on o by A11,MSUALG_2:def 7;
+        C is_closed_on o by A11,MSUALG_2:def 6;
         then
 A13:    rng ((Den(o,A))|((C# * the Arity of S).o)) c= (C * the ResultSort
-        of S).o by MSUALG_2:def 6;
+        of S).o by MSUALG_2:def 5;
         Den (o, the MSAlgebra of A) = Den (o, A);
-        hence B is_closed_on o by A13,MSUALG_2:def 6;
+        hence B is_closed_on o by A13,MSUALG_2:def 5;
       end;
-      hence B is opers_closed by MSUALG_2:def 7;
+      hence B is opers_closed by MSUALG_2:def 6;
       reconsider OAB = Opers(theA, B) as ManySortedFunction of (C# * the Arity
       of S),(C * the ResultSort of S);
 A14:  now
         let o be OperSymbol of S;
 A15:    Den (o, A) = Den (o, the MSAlgebra of A);
-A16:    C is_closed_on o by A11,MSUALG_2:def 7;
-        thus OAB.o = o/.B by MSUALG_2:def 9
-          .= (Den(o,A)) | ((B# * the Arity of S).o) by A12,A15,MSUALG_2:def 8
-          .= o/.C by A16,MSUALG_2:def 8;
+A16:    C is_closed_on o by A11,MSUALG_2:def 6;
+        thus OAB.o = o/.B by MSUALG_2:def 8
+          .= (Den(o,A)) | ((B# * the Arity of S).o) by A12,A15,MSUALG_2:def 7
+          .= o/.C by A16,MSUALG_2:def 7;
       end;
-      the Charact of U1 = Opers(A, C) by A10,MSUALG_2:def 10;
-      hence the Charact of U1 = Opers(theA,B) by A14,MSUALG_2:def 9;
+      the Charact of U1 = Opers(A, C) by A10,MSUALG_2:def 9;
+      hence the Charact of U1 = Opers(theA,B) by A14,MSUALG_2:def 8;
     end;
-    the Sorts of U1 is MSSubset of the MSAlgebra of A by MSUALG_2:def 10;
-    then reconsider U2 = U1 as MSSubAlgebra of theA by A9,MSUALG_2:def 10;
+    the Sorts of U1 is MSSubset of the MSAlgebra of A by MSUALG_2:def 9;
+    then reconsider U2 = U1 as MSSubAlgebra of theA by A9,MSUALG_2:def 9;
     assume BB is MSSubset of U1;
-    then GAA is MSSubAlgebra of U2 by MSUALG_2:def 18;
+    then GAA is MSSubAlgebra of U2 by MSUALG_2:def 17;
     hence GAA is MSSubAlgebra of U1;
   end;
-  BB is MSSubset of GenMSAlg AA by MSUALG_2:def 18;
-  then GenMSAlg AA = GenMSAlg BB by A8,MSUALG_2:def 18;
-  then the Sorts of GenMSAlg BB = the Sorts of A by MSUALG_2:22;
+  BB is MSSubset of GenMSAlg AA by MSUALG_2:def 17;
+  then GenMSAlg AA = GenMSAlg BB by A8,MSUALG_2:def 17;
+  then the Sorts of GenMSAlg BB = the Sorts of A by MSUALG_2:21;
   hence thesis by MSAFREE:def 4;
 end;
 
@@ -562,7 +559,8 @@ end;
 
 registration
   let S be non empty ManySortedSign;
-  cluster finite-yielding -> finitely-generated (non-empty MSAlgebra over S);
+  cluster finite-yielding -> finitely-generated for
+non-empty MSAlgebra over S;
   coherence
   proof
     let A be non-empty MSAlgebra over S;
@@ -596,7 +594,7 @@ definition
     reconsider f = (the carrier of S) --> {0} as ManySortedSet of the carrier
     of S;
 
-set Ch =the  ManySortedFunction of f# * the Arity of S, f * the ResultSort of S
+set Ch = the ManySortedFunction of f# * the Arity of S, f * the ResultSort of S
 ;
     take MSAlgebra(#f,Ch#);
     thus thesis;
@@ -614,22 +612,22 @@ A3: dom(the ResultSort of S) = the carrier' of S by FUNCT_2:def 1;
       assume
 A4:   i in the carrier' of S;
       then
-A5:   A = B.((the ResultSort of S).i) by A3,FUNCT_1:23
-        .= {0} by A1,A4,FUNCOP_1:13,FUNCT_2:7;
+A5:   A = B.((the ResultSort of S).i) by A3,FUNCT_1:13
+        .= {0} by A1,A4,FUNCOP_1:7,FUNCT_2:5;
       then reconsider A as non empty set;
       reconsider f1=(the Charact of A1).i, f2=(the Charact of A2).i as
-      Function of (B# * the Arity of S).i, A by A1,A2,A4,PBOOLE:def 18;
+      Function of (B# * the Arity of S).i, A by A1,A2,A4,PBOOLE:def 15;
       now
         let x be set;
         assume
 A6:     x in (B# * the Arity of S).i;
-        then f1.x in A by FUNCT_2:7;
+        then f1.x in A by FUNCT_2:5;
         then
 A7:     f1.x = 0 by A5,TARSKI:def 1;
-        f2.x in A by A6,FUNCT_2:7;
+        f2.x in A by A6,FUNCT_2:5;
         hence f1.x = f2.x by A5,A7,TARSKI:def 1;
       end;
-      hence (the Charact of A1).i = (the Charact of A2).i by FUNCT_2:18;
+      hence (the Charact of A1).i = (the Charact of A2).i by FUNCT_2:12;
     end;
     hence thesis by A1,A2,PBOOLE:3;
   end;
@@ -637,7 +635,7 @@ end;
 
 registration
   let S be non empty ManySortedSign;
-  cluster finite-yielding non-empty strict MSAlgebra over S;
+  cluster finite-yielding non-empty strict for MSAlgebra over S;
   existence
   proof
     take T = Trivial_Algebra S;
@@ -646,10 +644,10 @@ A1: the Sorts of T = (the carrier of S) --> {0} by Def12;
     proof
       let i be set;
       assume i in the carrier of S;
-      hence thesis by A1,FUNCOP_1:13;
+      hence thesis by A1,FUNCOP_1:7;
     end;
     hence T is finite-yielding by Def11;
-    thus T is non-empty by A1,MSUALG_1:def 8;
+    thus T is non-empty by A1,MSUALG_1:def 3;
     thus thesis;
   end;
 end;
@@ -657,17 +655,18 @@ end;
 definition
   let IT be non empty ManySortedSign;
   attr IT is monotonic means
-  for A being finitely-generated (non-empty
-  MSAlgebra over IT) holds A is finite-yielding;
+  for A being finitely-generated non-empty
+  MSAlgebra over IT holds A is finite-yielding;
 end;
 
 registration
-  cluster non void finite monotonic Circuit-like (non empty ManySortedSign);
+  cluster non void finite monotonic Circuit-like for
+non empty ManySortedSign;
   existence
   proof
-    {} in {{}}* by FINSEQ_1:66;
+    {} in {{}}* by FINSEQ_1:49;
     then reconsider f = {[{},{{}}]}-->{} as Function of {[{},{{}}]},{{}}* by
-FUNCOP_1:58;
+FUNCOP_1:46;
     reconsider g = {[{},{{}}]}-->{} as Function of {[{},{{}}]},{{}};
     take S = ManySortedSign (# {{}}, {[{},{{}}]}, f, g #);
     thus S is non void;
@@ -675,13 +674,13 @@ FUNCOP_1:58;
     thus S is monotonic
     proof
       reconsider S9 = S as non void non empty ManySortedSign;
-      let A be finitely-generated (non-empty MSAlgebra over S);
+      let A be finitely-generated non-empty MSAlgebra over S;
       reconsider A9 = A as non-empty MSAlgebra over S9;
-      set s =the  SortSymbol of S9;
+      set s = the SortSymbol of S9;
       consider G being GeneratorSet of A9 such that
 A1:   G is finite-yielding by Def10;
       reconsider Gs = G.s as finite set by A1,FINSET_1:def 4;
-      set o =the  OperSymbol of S9;
+      set o = the OperSymbol of S9;
       set T = s .--> (G.s \/ { Den(o,A9).{} });
       set O = (o .--> Den(o,A9));
       reconsider G9 = G as MSSubset of A9;
@@ -692,9 +691,9 @@ A2:   s = {} by TARSKI:def 1;
       then
 A3:   i = s by A2,TARSKI:def 1;
       reconsider T9 = T as ManySortedSet of the carrier of S9;
-A4:   Args(o,A9) = (the Sorts of A9)#.((the Arity of S).o) by FUNCT_2:21
-        .= (the Sorts of A9)#.<*>the carrier of S9 by FUNCOP_1:13
-        .= {{}} by PRE_CIRC:5;
+A4:   Args(o,A9) = (the Sorts of A9)#.((the Arity of S).o) by FUNCT_2:15
+        .= (the Sorts of A9)#.<*>the carrier of S9 by FUNCOP_1:7
+        .= {{}} by PRE_CIRC:2;
       then
 A5:   dom Den(o,A9) = {{}} by FUNCT_2:def 1;
 A6:   now
@@ -704,27 +703,27 @@ A7:     i in the carrier' of S;
         then i = [{},{{}}] by TARSKI:def 1;
         then
 A8:     i = o by TARSKI:def 1;
-        (T# * the Arity of S).i = T#.((the Arity of S).i) by A7,FUNCT_2:21
-          .= T#.(<*>the carrier of S) by A7,FUNCOP_1:13
-          .= {{}} by PRE_CIRC:5;
+        (T# * the Arity of S).i = T#.((the Arity of S).i) by A7,FUNCT_2:15
+          .= T#.(<*>the carrier of S) by A7,FUNCOP_1:7
+          .= {{}} by PRE_CIRC:2;
         then reconsider
         Oi = O.i as Function of (T# * the Arity of S).i, Result(o,
-        A9) by A4,A8,FUNCOP_1:87;
-        O.i = Den(o,A9) by A8,FUNCOP_1:87;
+        A9) by A4,A8,FUNCOP_1:72;
+        O.i = Den(o,A9) by A8,FUNCOP_1:72;
         then
-A9:     rng (Oi) = { Den(o,A9).{} } by A5,FUNCT_1:14;
+A9:     rng (Oi) = { Den(o,A9).{} } by A5,FUNCT_1:4;
         (T * the ResultSort of S).i = T.((the ResultSort of S).i) by A7,
-FUNCT_2:21
-          .= T.s by A2,A7,FUNCOP_1:13
-          .= G.s \/ { Den(o,A9).{} } by FUNCOP_1:87;
+FUNCT_2:15
+          .= T.s by A2,A7,FUNCOP_1:7
+          .= G.s \/ { Den(o,A9).{} } by FUNCOP_1:72;
         then rng (Oi) c= (T * the ResultSort of S).i by A9,XBOOLE_1:7;
         hence O.i is Function of (T# * the Arity of S).i, (T * the ResultSort
-        of S).i by FUNCT_2:8;
+        of S).i by FUNCT_2:6;
       end;
 A10:  o = [{},{{}}] by TARSKI:def 1;
       then reconsider
       O as ManySortedFunction of (T# * the Arity of S), (T * the
-      ResultSort of S) by A6,PBOOLE:def 18;
+      ResultSort of S) by A6,PBOOLE:def 15;
 A11:  now
         let B be MSSubset of A9;
         assume
@@ -738,42 +737,42 @@ A13:    B is opers_closed
 A14:      x in rng ((Den(o9,A9))|((B# * the Arity of S9).o9));
 A15:      o9 = o by A10,TARSKI:def 1;
 A16:      dom the ResultSort of S9 = {[{},{{}}]} & (the ResultSort of S9)
-          .o = s by A2,FUNCOP_1:13,19;
-A17:      Den(o,A9)|{{}} = Den(o,A9) by A5,RELAT_1:97;
-          (B# * the Arity of S).o = B#.((the Arity of S).o) by FUNCT_2:21
-            .= T#.(<*>the carrier of S) by A12,FUNCOP_1:13
-            .= {{}} by PRE_CIRC:5;
+          .o = s by A2,FUNCOP_1:7,13;
+A17:      Den(o,A9)|{{}} = Den(o,A9) by A5,RELAT_1:68;
+          (B# * the Arity of S).o = B#.((the Arity of S).o) by FUNCT_2:15
+            .= T#.(<*>the carrier of S) by A12,FUNCOP_1:7
+            .= {{}} by PRE_CIRC:2;
           then
           ex y being set st y in dom(Den(o,A9)) & x = (Den(o,A9)).y by A15,A17
-,A14,FUNCT_1:def 5;
+,A14,FUNCT_1:def 3;
           then x = Den(o,A9).{} by A4,TARSKI:def 1;
           then
 A18:      x in { Den(o,A9).{} } by TARSKI:def 1;
-          B.s = (G.s \/ { Den(o,A9).{} }) by A12,FUNCOP_1:87;
+          B.s = (G.s \/ { Den(o,A9).{} }) by A12,FUNCOP_1:72;
           then x in B.s by A18,XBOOLE_0:def 3;
-          hence thesis by A15,A16,FUNCT_1:23;
+          hence thesis by A15,A16,FUNCT_1:13;
         end;
         now
           let o9 be OperSymbol of S9;
-          (B# * the Arity of S9).o = B#.((the Arity of S9).o) by FUNCT_2:21
-            .= T#.(<*>the carrier of S9) by A12,FUNCOP_1:13
-            .= {{}} by PRE_CIRC:5;
+          (B# * the Arity of S9).o = B#.((the Arity of S9).o) by FUNCT_2:15
+            .= T#.(<*>the carrier of S9) by A12,FUNCOP_1:7
+            .= {{}} by PRE_CIRC:2;
           then (Den(o,A9)) | ((B# * the Arity of S9).o) = Den(o,A9) by A5,
-RELAT_1:97;
+RELAT_1:68;
           then
 A19:      (the Charact of MSAlgebra (# T, O #)).o = (Den(o,A9)) | ((B# *
-          the Arity of S9).o) by FUNCOP_1:87;
-          o9 = o & B is_closed_on o by A10,A13,MSUALG_2:def 7,TARSKI:def 1;
+          the Arity of S9).o) by FUNCOP_1:72;
+          o9 = o & B is_closed_on o by A10,A13,MSUALG_2:def 6,TARSKI:def 1;
           hence (the Charact of MSAlgebra (# T, O #)).o9 = o9/.B by A19,
-MSUALG_2:def 8;
+MSUALG_2:def 7;
         end;
         hence the Charact of MSAlgebra (# T, O #) = Opers(A9,B) by A12,
-MSUALG_2:def 9;
+MSUALG_2:def 8;
       end;
       reconsider A99 = MSAlgebra (# T, O #) as non-empty MSAlgebra over S9 by
-MSUALG_1:def 8;
-A20:  Result(o,A9) = (the Sorts of A9).((the ResultSort of S).o) by FUNCT_2:21
-        .= (the Sorts of A9).{} by FUNCOP_1:13;
+MSUALG_1:def 3;
+A20:  Result(o,A9) = (the Sorts of A9).((the ResultSort of S).o) by FUNCT_2:15
+        .= (the Sorts of A9).{} by FUNCOP_1:7;
       T9 c= the Sorts of A9
       proof
         let i be set;
@@ -781,31 +780,31 @@ A20:  Result(o,A9) = (the Sorts of A9).((the ResultSort of S).o) by FUNCT_2:21
         then
 A21:    i = {} by TARSKI:def 1;
         then
-A22:    T9.i = (G.s \/ { Den(o,A9).{} }) by A2,FUNCOP_1:87;
-        G c= the Sorts of A9 by PBOOLE:def 23;
+A22:    T9.i = (G.s \/ { Den(o,A9).{} }) by A2,FUNCOP_1:72;
+        G c= the Sorts of A9 by PBOOLE:def 18;
         then
-A23:    G.s c= (the Sorts of A9).i by A2,A21,PBOOLE:def 5;
+A23:    G.s c= (the Sorts of A9).i by A2,A21,PBOOLE:def 2;
         dom Den(o,A9) = Args(o,A9) by FUNCT_2:def 1;
         then {} in dom Den(o,A9) by A4,TARSKI:def 1;
-        then Den(o,A9).{} in rng Den(o,A9) by FUNCT_1:def 5;
-        then { Den(o,A9).{} } c= (the Sorts of A9).i by A20,A21,ZFMISC_1:37;
+        then Den(o,A9).{} in rng Den(o,A9) by FUNCT_1:def 3;
+        then { Den(o,A9).{} } c= (the Sorts of A9).i by A20,A21,ZFMISC_1:31;
         hence thesis by A22,A23,XBOOLE_1:8;
       end;
-      then the Sorts of MSAlgebra (# T, O #) is MSSubset of A9 by PBOOLE:def 23
+      then the Sorts of MSAlgebra (# T, O #) is MSSubset of A9 by PBOOLE:def 18
 ;
-      then reconsider A99 as strict MSSubAlgebra of A9 by A11,MSUALG_2:def 10;
+      then reconsider A99 as strict MSSubAlgebra of A9 by A11,MSUALG_2:def 9;
 A24:  now
         let U1 be MSSubAlgebra of A9;
         assume
 A25:    G9 is MSSubset of U1;
         now
-          Constants(A9) is MSSubset of U1 by MSUALG_2:11;
-          then Constants(A9) c= the Sorts of U1 by PBOOLE:def 23;
-          then (Constants(A9)).s c= (the Sorts of U1).s by PBOOLE:def 5;
+          Constants(A9) is MSSubset of U1 by MSUALG_2:10;
+          then Constants(A9) c= the Sorts of U1 by PBOOLE:def 18;
+          then (Constants(A9)).s c= (the Sorts of U1).s by PBOOLE:def 2;
           then
-A26:      Constants(A9,s) c= (the Sorts of U1).s by MSUALG_2:def 5;
+A26:      Constants(A9,s) c= (the Sorts of U1).s by MSUALG_2:def 4;
 A27:      {} in dom Den(o,A9) by A5,TARSKI:def 1;
-          then Den(o,A9).{} in rng Den(o,A9) by FUNCT_1:def 5;
+          then Den(o,A9).{} in rng Den(o,A9) by FUNCT_1:def 3;
           then reconsider
           b = Den(o,A9).{} as Element of (the Sorts of A9).s by A20,
 TARSKI:def 1;
@@ -813,37 +812,37 @@ TARSKI:def 1;
 A28:      (the Arity of S9).o = {} & ex X being non empty set st X =(the
 Sorts of A9) .s & Constants(A9,s) = { a where a is Element of X : ex o be
 OperSymbol of S9 st ( the Arity of S9).o = {} & (the ResultSort of S9).o = s &
-          a in rng Den (o, A9)} by FUNCOP_1:13,MSUALG_2:def 4;
-          b in rng Den(o,A9) by A27,FUNCT_1:def 5;
+          a in rng Den (o, A9)} by FUNCOP_1:7,MSUALG_2:def 3;
+          b in rng Den(o,A9) by A27,FUNCT_1:def 3;
           then Den(o,A9).{} in Constants(A9,s) by A2,A28;
           then
-A29:      { Den(o,A9).{} } c= (the Sorts of U1).s by A26,ZFMISC_1:37;
-          G c= (the Sorts of U1) by A25,PBOOLE:def 23;
+A29:      { Den(o,A9).{} } c= (the Sorts of U1).s by A26,ZFMISC_1:31;
+          G c= (the Sorts of U1) by A25,PBOOLE:def 18;
           then
 A30:      (the Sorts of A99).s = G.s \/ { Den(o,A9).{} } & G.s c= (the
-          Sorts of U1).s by FUNCOP_1:87,PBOOLE:def 5;
+          Sorts of U1).s by FUNCOP_1:72,PBOOLE:def 2;
           assume i in the carrier of S9;
           then i = s by A2,TARSKI:def 1;
           hence (the Sorts of A99).i c= (the Sorts of U1).i by A30,A29,
 XBOOLE_1:8;
         end;
-        then the Sorts of A99 c= the Sorts of U1 by PBOOLE:def 5;
-        hence A99 is MSSubAlgebra of U1 by MSUALG_2:9;
+        then the Sorts of A99 c= the Sorts of U1 by PBOOLE:def 2;
+        hence A99 is MSSubAlgebra of U1 by MSUALG_2:8;
       end;
       now
         let i be set;
         assume i in the carrier of S9;
         then
 A31:    i = s by A2,TARSKI:def 1;
-        (the Sorts of A99).s = G.s \/ { Den(o,A9).{} } by FUNCOP_1:87;
+        (the Sorts of A99).s = G.s \/ { Den(o,A9).{} } by FUNCOP_1:72;
         hence G9.i c= (the Sorts of A99).i by A31,XBOOLE_1:7;
       end;
-      then G9 c= the Sorts of A99 by PBOOLE:def 5;
-      then G9 is MSSubset of A99 by PBOOLE:def 23;
+      then G9 c= the Sorts of A99 by PBOOLE:def 2;
+      then G9 is MSSubset of A99 by PBOOLE:def 18;
       then s.--> (G.s \/ { Den(o, A9).{} }) = the Sorts of GenMSAlg(G) by A24,
-MSUALG_2:def 18
+MSUALG_2:def 17
         .= the Sorts of A9 by MSAFREE:def 4;
-      then (the Sorts of A).i = Gs \/ { Den(o,A9).{} } by A3,FUNCOP_1:87;
+      then (the Sorts of A).i = Gs \/ { Den(o,A9).{} } by A3,FUNCOP_1:72;
       hence thesis;
     end;
     thus S is Circuit-like
@@ -867,13 +866,13 @@ proof
   let S be non void non empty ManySortedSign, X be non-empty ManySortedSet of
 the carrier of S, v be SortSymbol of S, e be Element of (the Sorts of FreeMSA X
   ).v;
-  FreeMSA X = MSAlgebra (# FreeSort(X), FreeOper(X) #) by MSAFREE:def 16;
-  then (the Sorts of FreeMSA X).v = FreeSort (X, v) by MSAFREE:def 13;
+  FreeMSA X = MSAlgebra (# FreeSort(X), FreeOper(X) #) by MSAFREE:def 14;
+  then (the Sorts of FreeMSA X).v = FreeSort (X, v) by MSAFREE:def 11;
   then
 A1: e in TS(DTConMSA(X)) by TARSKI:def 3;
   then reconsider e9 = e as DecoratedTree;
   dom e9 is finite by A1;
-  hence thesis by FINSET_1:29;
+  hence thesis by FINSET_1:10;
 end;
 
 theorem
@@ -904,18 +903,18 @@ A1: S9 = S;
         defpred P[set,set] means $1 = root-tree [$2,i];
 A2:     for e being set st e in Gi ex u being set st u in Xi & P[e,u]
         proof
-A3:       Gi = FreeGen(iS,X) by MSAFREE:def 18;
+A3:       Gi = FreeGen(iS,X) by MSAFREE:def 16;
           let e be set;
           assume e in Gi;
           then consider u being set such that
-A4:       u in Xi & e = root-tree[u,i] by A3,MSAFREE:def 17;
+A4:       u in Xi & e = root-tree[u,i] by A3,MSAFREE:def 15;
           take u;
           thus thesis by A4;
         end;
         consider f being Function such that
 A5:     dom f = Gi and
 A6:     rng f c= Xi and
-A7:     for e being set st e in Gi holds P[e,f.e] from WELLORD2:sch 1
+A7:     for e being set st e in Gi holds P[e,f.e] from FUNCT_1:sch 5
         (A2);
         take f;
         f is one-to-one
@@ -932,8 +931,8 @@ A10:      f.x1 = f.x2;
         ex f being Function st f is one-to-one & dom f = Gi & rng f c= Xi
         by A5,A6;
       end;
-      then card Gi c= card Xi or card Gi in card Xi by CARD_1:26;
-      hence thesis by CARD_2:68;
+      then card Gi c= card Xi or card Gi in card Xi by CARD_1:10;
+      hence thesis by CARD_2:49;
     end;
   end;
   case
@@ -951,14 +950,14 @@ proof
   let S be non void non empty ManySortedSign, A be non-empty MSAlgebra over S,
   v be Vertex of S, e be Element of (the Sorts of FreeEnv A).v;
   FreeEnv A = MSAlgebra (# FreeSort(the Sorts of A), FreeOper(the Sorts of
-    A) #) by MSAFREE:def 16;
+    A) #) by MSAFREE:def 14;
   then e in (FreeSort(the Sorts of A)).v;
-  then e in FreeSort(the Sorts of A, v) by MSAFREE:def 13;
+  then e in FreeSort(the Sorts of A, v) by MSAFREE:def 11;
   then
   e in {a where a is Element of TS(DTConMSA(the Sorts of A)): (ex x being
 set st x in (the Sorts of A).v & a = root-tree [x,v]) or ex o being OperSymbol
   of S st [o,the carrier of S] = a.{} & the_result_sort_of o = v} by
-MSAFREE:def 12;
+MSAFREE:def 10;
   then consider a being Element of TS(DTConMSA(the Sorts of A)) such that
 A1: a = e and
 A2: (ex x being set st x in (the Sorts of A).v & a = root-tree [x,v]) or
@@ -985,22 +984,22 @@ proof
   assume
 A1: [o,the carrier of S]-tree p in (the Sorts of FreeMSA X).(
   the_result_sort_of o);
-  FreeMSA X = MSAlgebra (# FreeSort X, FreeOper X #) by MSAFREE:def 16;
-  then [o,the carrier of S]-tree p in FreeSort(X,s) by A1,MSAFREE:def 13;
+  FreeMSA X = MSAlgebra (# FreeSort X, FreeOper X #) by MSAFREE:def 14;
+  then [o,the carrier of S]-tree p in FreeSort(X,s) by A1,MSAFREE:def 11;
   then
 A2: [o,the carrier of S]-tree p in {a where a is Element of TS(DTConMSA(X)):
 (ex x being set st x in X.s & a = root-tree [x,s]) or ex o being OperSymbol of
   S st [o,the carrier of S] = a.{} & the_result_sort_of o = s} by
-MSAFREE:def 12;
+MSAFREE:def 10;
   the carrier of S in {the carrier of S} by TARSKI:def 1;
   then [o,the carrier of S] in [:the carrier' of S,{the carrier of S}:] by
-ZFMISC_1:106;
+ZFMISC_1:87;
   then reconsider nt = [o,the carrier of S] as NonTerminal of DTConMSA(X) by
 MSAFREE:6;
   reconsider O = [:the carrier' of S,{the carrier of S}:] \/ Union(coprod X)
   as non empty set;
   reconsider R = REL(X) as Relation of O, O*;
-A3: DTConMSA(X) = DTConstrStr (# O, R #) by MSAFREE:def 10;
+A3: DTConMSA(X) = DTConstrStr (# O, R #) by MSAFREE:def 8;
   then reconsider TSDT = TS(DTConMSA(X)) as Subset of FinTrees(O);
   reconsider c = nt as Element of O by A3;
   for x being set st x in TSDT holds x is DecoratedTree of O;
@@ -1019,11 +1018,11 @@ A6: nt ==> roots ts by DTCONSTR:10;
   reconsider b as Element of O* by FINSEQ_1:def 11;
   [c, b] in R by A6,A3,LANG1:def 1;
   then
-A7: len roots ts = len (the_arity_of o) by MSAFREE:def 9;
+A7: len roots ts = len (the_arity_of o) by MSAFREE:def 7;
   reconsider ts as DTree-yielding FinSequence;
 A8: dom roots ts = dom ts by TREES_3:def 18;
   ts = p by A4,A5,TREES_4:15;
-  hence thesis by A7,A8,FINSEQ_3:31;
+  hence thesis by A7,A8,FINSEQ_3:29;
 end;
 
 theorem Th14:
@@ -1035,14 +1034,14 @@ theorem Th14:
 proof
   let S be non void non empty ManySortedSign, X be non-empty ManySortedSet of
   the carrier of S, o be OperSymbol of S, p be DTree-yielding FinSequence;
-A1: FreeMSA X = MSAlgebra (# FreeSort X, FreeOper X #) by MSAFREE:def 16;
+A1: FreeMSA X = MSAlgebra (# FreeSort X, FreeOper X #) by MSAFREE:def 14;
   assume
 A2: [o,the carrier of S]-tree p in (the Sorts of FreeMSA X).(
   the_result_sort_of o);
   now
     the carrier of S in {the carrier of S} by TARSKI:def 1;
     then [o,the carrier of S] in [:the carrier' of S,{the carrier of S}:] by
-ZFMISC_1:106;
+ZFMISC_1:87;
     then reconsider
     nt = [o,the carrier of S] as NonTerminal of DTConMSA(X) by MSAFREE:6;
     set rso = the_result_sort_of o;
@@ -1050,16 +1049,16 @@ ZFMISC_1:106;
     let i be Nat;
     assume
 A3: i in dom the_arity_of o;
-    then ao.i in rng ao by FUNCT_1:def 5;
+    then ao.i in rng ao by FUNCT_1:def 3;
     then reconsider s = ao.i as SortSymbol of S;
-A4: (the Sorts of FreeMSA X).s = FreeSort(X,s) by A1,MSAFREE:def 13
-      .= FreeSort(X,(the_arity_of o)/.i) by A3,PARTFUN1:def 8;
-    [o,the carrier of S]-tree p in FreeSort(X,rso) by A2,A1,MSAFREE:def 13;
+A4: (the Sorts of FreeMSA X).s = FreeSort(X,s) by A1,MSAFREE:def 11
+      .= FreeSort(X,(the_arity_of o)/.i) by A3,PARTFUN1:def 6;
+    [o,the carrier of S]-tree p in FreeSort(X,rso) by A2,A1,MSAFREE:def 11;
     then
     [o,the carrier of S]-tree p in {a where a is Element of TS(DTConMSA(X)
     ): (ex x being set st x in X.rso & a = root-tree [x,rso]) or ex o being
 OperSymbol of S st [o,the carrier of S] = a.{} & the_result_sort_of o = rso}
-by MSAFREE:def 12;
+by MSAFREE:def 10;
     then consider a being Element of TS(DTConMSA(X)) such that
 A5: a = [o,the carrier of S]-tree p and
     (ex x being set st x in X.rso & a = root-tree [x,rso]) or ex o being
@@ -1068,7 +1067,7 @@ OperSymbol of S st [o,the carrier of S] = a.{} & the_result_sort_of o = rso;
     then consider ts being FinSequence of TS(DTConMSA(X)) such that
 A6: a = nt-tree ts and
 A7: nt ==> roots ts by DTCONSTR:10;
-    nt = Sym(o,X) by MSAFREE:def 11;
+    nt = Sym(o,X) by MSAFREE:def 9;
     then
 A8: ts in ((FreeSort X)# * (the Arity of S)).o by A7,MSAFREE:10;
     dom p = Seg len p & dom the_arity_of o = Seg len the_arity_of o by
@@ -1086,7 +1085,7 @@ end;
 registration
   let S be non void non empty ManySortedSign, X be non-empty ManySortedSet of
   the carrier of S, v be Vertex of S;
-  cluster -> finite non empty Function-like Relation-like Element of (the
+  cluster -> finite non empty Function-like Relation-like for Element of (the
     Sorts of FreeMSA X).v;
   coherence
   proof
@@ -1102,10 +1101,11 @@ end;
 registration
   let S be non void non empty ManySortedSign, X be non-empty ManySortedSet of
   the carrier of S, v be Vertex of S;
-  cluster Function-like Relation-like Element of (the Sorts of FreeMSA X).v;
+  cluster Function-like Relation-like for
+Element of (the Sorts of FreeMSA X).v;
   existence
   proof
-    set e =the  Element of (the Sorts of FreeMSA X).v;
+    set e = the Element of (the Sorts of FreeMSA X).v;
     take e;
     thus thesis;
   end;
@@ -1114,18 +1114,19 @@ end;
 registration
   let S be non void non empty ManySortedSign, X be non-empty ManySortedSet of
   the carrier of S, v be Vertex of S;
-  cluster -> DecoratedTree-like (Function-like Relation-like Element of (the
-    Sorts of FreeMSA X).v);
+  cluster -> DecoratedTree-like for
+Function-like Relation-like Element of (the
+    Sorts of FreeMSA X).v;
   coherence by Th10;
 end;
 
 registration
   let IIG be non void non empty ManySortedSign;
   let X be non-empty ManySortedSet of the carrier of IIG, v be Vertex of IIG;
-  cluster finite Element of (the Sorts of FreeMSA X).v;
+  cluster finite for Element of (the Sorts of FreeMSA X).v;
   existence
   proof
-    set e =the  Element of (the Sorts of FreeMSA X).v;
+    set e = the Element of (the Sorts of FreeMSA X).v;
     take e;
     thus thesis;
   end;
@@ -1145,16 +1146,16 @@ the carrier of S, v be Vertex of S, o be OperSymbol of S, e be Element of (the
 A1: e.{} = [o,the carrier of S];
   the carrier of S in {the carrier of S} by TARSKI:def 1;
   then [o,the carrier of S] in [:the carrier' of S,{the carrier of S}:] by
-ZFMISC_1:106;
+ZFMISC_1:87;
   then reconsider nt = [o,the carrier of S] as NonTerminal of DTConMSA(X) by
 MSAFREE:6;
-  FreeMSA X = MSAlgebra (# FreeSort X, FreeOper X #) by MSAFREE:def 16;
-  then (the Sorts of FreeMSA X).v = FreeSort(X,v) by MSAFREE:def 13;
+  FreeMSA X = MSAlgebra (# FreeSort X, FreeOper X #) by MSAFREE:def 14;
+  then (the Sorts of FreeMSA X).v = FreeSort(X,v) by MSAFREE:def 11;
   then e in FreeSort(X,v);
   then
   e in {a where a is Element of TS(DTConMSA(X)): (ex x being set st x in X
 .v & a = root-tree [x,v]) or ex o being OperSymbol of S st [o,the carrier of S]
-  = a.{} & the_result_sort_of o = v} by MSAFREE:def 12;
+  = a.{} & the_result_sort_of o = v} by MSAFREE:def 10;
   then consider a being Element of TS(DTConMSA(X)) such that
 A2: a = e and
 A3: (ex x being set st x in X.v & a = root-tree [x,v]) or ex o being
@@ -1171,13 +1172,13 @@ A5: a = nt-tree p and
 A6: a.{} = [x,v] by TREES_4:3;
 A7: for X be set holds not X in X;
     a.{} = [o,the carrier of S] by A5,TREES_4:def 4;
-    then the carrier of S = v by A6,ZFMISC_1:33;
+    then the carrier of S = v by A6,ZFMISC_1:27;
     hence contradiction by A7;
   end;
   then consider o9 being OperSymbol of S such that
 A8: [o9,the carrier of S] = a.{} and
 A9: the_result_sort_of o9 = v by A4;
-A10: o = o9 by A1,A2,A8,ZFMISC_1:33;
+A10: o = o9 by A1,A2,A8,ZFMISC_1:27;
   then
 A11: len p = len the_arity_of o by A2,A5,A9,Th13;
   then dom p = Seg len the_arity_of o by FINSEQ_1:def 3

@@ -94,8 +94,8 @@
 <Cluster>
 <Adjective nr="39" value="false"/>
 <Adjective nr="48" value="false"/>
-<Adjective nr="59"/>
 <Adjective nr="60"/>
+<Adjective nr="61"/>
 </Cluster>
 </FCluster>
 <FCluster aid="ENS_1" nr="5">
@@ -104,7 +104,7 @@
 <Cluster>
 <Adjective nr="39" value="false"/>
 <Adjective nr="48" value="false"/>
-<Adjective nr="60"/>
+<Adjective nr="61"/>
 </Cluster>
 </Typ>
 </ArgTypes>

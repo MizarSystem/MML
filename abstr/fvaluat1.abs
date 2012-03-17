@@ -1,0 +1,593 @@
+:: Valuation Theory, Part {I}
+::  by Grzegorz Bancerek , Hidetsune Kobayashi and Artur Korni{\l}owicz
+::
+:: Received April 7, 2011
+:: Copyright (c) 2011 Association of Mizar Users
+::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
+:: This code can be distributed under the GNU General Public Licence
+:: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
+:: License version 3.0 or later, subject to the binding interpretation
+:: detailed in file COPYING.interpretation.
+:: See COPYING.GPL and COPYING.CC-BY-SA for the full text of these
+:: licenses, or see http://www.gnu.org/licenses/gpl.html and
+:: http://creativecommons.org/licenses/by-sa/3.0/.
+
+environ
+
+ vocabularies INT_1, VECTSP_1, FUNCT_1, ARYTM_3, ZFMISC_1, RELAT_1, RLVECT_1,
+      FUNCOP_1, ARYTM_1, BINOP_1, FUNCSDOM, REALSET1, LATTICES, GROUP_1,
+      ORDINAL2, IDEAL_1, FINSEQ_1, SUBSET_1, VECTSP_2, FUNCT_3, NUMBERS,
+      GROUP_4, STRUCT_0, RLSUB_1, XXREAL_2, ALGSTR_0, XCMPLX_0, ORDINAL1,
+      REALSET2, NAT_1, REAL_1, INT_2, XXREAL_0, TARSKI, XREAL_0, XBOOLE_0,
+      NEWTON, CARD_FIL, RMOD_2, CARD_1, SUPINF_2, MESFUNC1, PARTFUN1, COMPLEX1,
+      MEMBERED, MSSUBFAM, FVALUAT1;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, ORDINAL1, DOMAIN_1,
+      RELAT_1, FUNCT_1, RELSET_1, PARTFUN1, FUNCT_2, FUNCOP_1, XXREAL_0,
+      XREAL_0, XXREAL_2, XXREAL_3, XCMPLX_0, REAL_1, INT_1, MEMBERED, SUPINF_2,
+      EXTREAL1, INT_2, NAT_1, MESFUNC1, FINSEQ_1, FINSEQ_4, REALSET1, BINOP_1,
+      STRUCT_0, ALGSTR_0, RLVECT_1, GRCAT_1, GROUP_1, YELLOW_9, VECTSP_1,
+      VECTSP_2, FUNCSDOM, REALSET2, RMOD_2, IDEAL_1, RING_1;
+ constructors REAL_1, FINSEQ_4, SUPINF_2, EXTREAL1, MESFUNC1, RMOD_2, YELLOW_9,
+      RING_1, BINOM, FUNCOP_1, REALSET2, RELSET_1, GRCAT_1;
+ registrations RELSET_1, VECTSP_1, INT_1, XREAL_0, ALGSTR_1, VECTSP_2,
+      STRUCT_0, NAT_1, SUBSET_1, WAYBEL_2, XBOOLE_0, RMOD_2, XCMPLX_0, IDEAL_1,
+      RING_1, XXREAL_0, NUMBERS, MEMBERED, ORDINAL1, ALGSTR_0, XXREAL_3,
+      REALSET2, FINSEQ_1;
+ requirements NUMERALS, ARITHM, REAL, BOOLE, SUBSET;
+
+
+begin :: Extended reals
+
+reserve x, y, z, s for ext-real number;
+reserve i, j for Integer;
+reserve n, m for Nat;
+
+theorem :: FVALUAT1:1
+  x = -x implies x = 0;
+
+theorem :: FVALUAT1:2
+  x + x = 0 implies x = 0;
+
+theorem :: FVALUAT1:3
+  0 <= x & x <= y & 0 <= s & s <= z implies x*s <= y*z;
+
+theorem :: FVALUAT1:4
+  y <> +infty & 0 < x & 0 < y implies 0 < x / y;
+
+theorem :: FVALUAT1:5
+  y <> +infty & x < 0 & 0 < y implies x / y < 0;
+
+theorem :: FVALUAT1:6
+  y <> -infty & 0 < x & y < 0 implies x / y < 0;
+
+theorem :: FVALUAT1:7
+  x in REAL & y in REAL or z in REAL implies
+  (x + y) / z = x/z + y/z;
+
+theorem :: FVALUAT1:8
+  y <> +infty & y <> -infty & y <> 0 implies x / y * y = x;
+
+theorem :: FVALUAT1:9
+  y <> -infty & y <> +infty & x <> 0 & y <> 0 implies x / y <> 0;
+
+definition let x be number;
+  attr x is ext-integer means
+:: FVALUAT1:def 1
+    x is integer or x = +infty;
+end;
+
+registration
+  cluster ext-integer -> ext-real for number;
+end;
+
+registration
+  cluster +infty -> ext-integer;
+  cluster -infty -> non ext-integer;
+  cluster 1. -> ext-integer positive real;
+  cluster integer -> ext-integer for number;
+  cluster real ext-integer -> integer for number;
+end;
+
+registration
+  cluster real ext-integer positive for Element of ExtREAL;
+  cluster positive for ext-integer number;
+end;
+
+definition
+  mode ExtInt is ext-integer number;
+end;
+
+reserve x, y, v, u for ExtInt;
+
+theorem :: FVALUAT1:10
+  x < y implies x + 1 <= y;
+
+theorem :: FVALUAT1:11
+  -infty < x;
+
+definition
+  let X be ext-real-membered set;
+  given i0 being positive ExtInt such that
+ i0 in X;
+  func least-positive(X) -> positive ExtInt means
+:: FVALUAT1:def 2
+
+  it in X &
+  for i being positive ExtInt st i in X holds it <= i;
+end;
+
+definition let f be Relation;
+  attr f is e.i.-valued means
+:: FVALUAT1:def 3
+
+  for x being set st x in rng f holds x is ext-integer;
+end;
+
+registration
+  cluster e.i.-valued for Function;
+end;
+
+registration
+  let A be set;
+  cluster e.i.-valued for Function of A, ExtREAL;
+end;
+
+registration
+  let f be e.i.-valued Function, x be set;
+  cluster f.x -> ext-integer;
+end;
+
+begin :: Structures
+
+theorem :: FVALUAT1:12
+  for K being distributive left_unital add-associative right_zeroed
+  right_complementable non empty doubleLoopStr holds
+  (-1.K) * (-1.K) = 1.K;
+
+definition
+  let K be non empty doubleLoopStr;
+  let S be Subset of K;
+  let n be Nat;
+  func S |^ n -> Subset of K means
+:: FVALUAT1:def 4
+
+  it = the carrier of K if n = 0 otherwise
+  ex f being FinSequence of bool the carrier of K st
+  it = f.len f & len f = n & f.1 = S &
+  for i being Nat st i in dom f & i+1 in dom f holds
+  f.(i+1) = S *' (f/.i);
+ end;
+
+reserve
+  D for non empty doubleLoopStr,
+  A for Subset of D;
+
+theorem :: FVALUAT1:13
+  A |^ 1 = A;
+
+theorem :: FVALUAT1:14
+  A |^ 2 = A *' A;
+
+registration
+  let R be Ring;
+  let S be Ideal of R;
+  let n be Nat;
+  cluster S|^n -> non empty add-closed left-ideal right-ideal;
+end;
+
+definition
+  let G be non empty doubleLoopStr,
+  g be Element of G,
+  i be Integer;
+  func g |^ i -> Element of G equals
+:: FVALUAT1:def 5
+  power(G).(g,abs(i)) if 0 <= i
+  otherwise (power(G).(g,abs(i)))";
+end;
+
+definition
+  let G be non empty doubleLoopStr,
+  g be Element of G,
+  n be Nat;
+  redefine func g |^ n equals
+:: FVALUAT1:def 6
+  power(G).(g,n);
+end;
+
+reserve K for Field-like non degenerated
+  associative add-associative right_zeroed right_complementable
+  distributive Abelian non empty doubleLoopStr,
+  a, b, c for Element of K;
+
+theorem :: FVALUAT1:15
+  a |^ (n + m) = (a |^ n) * (a |^ m);
+
+theorem :: FVALUAT1:16
+  a <> 0.K implies a|^i <> 0.K;
+
+begin :: Valuation
+
+definition let K be doubleLoopStr;
+  attr K is having_valuation means
+:: FVALUAT1:def 7
+
+  ex f being e.i.-valued Function of K, ExtREAL st
+  f.0.K = +infty &
+  (for a being Element of K st a <> 0.K holds f.a in INT) &
+  (for a,b being Element of K holds f.(a*b) = f.a + f.b) &
+  (for a being Element of K st 0 <= f.a holds 0 <= f.(1.K+a)) &
+  ex a being Element of K st f.a <> 0 & f.a <> +infty;
+end;
+
+definition let K be doubleLoopStr such that
+ K is having_valuation;
+  mode Valuation of K -> e.i.-valued Function of K, ExtREAL means
+:: FVALUAT1:def 8
+  it.0.K = +infty &
+  (for a being Element of K st a <> 0.K holds it.a in INT) &
+  (for a,b being Element of K holds it.(a*b) = it.a + it.b) &
+  (for a being Element of K st 0 <= it.a holds 0 <= it.(1.K+a)) &
+  ex a being Element of K st it.a <> 0 & it.a <> +infty;
+end;
+
+reserve v for Valuation of K;
+
+theorem :: FVALUAT1:17
+  K is having_valuation implies v.1.K = 0;
+
+theorem :: FVALUAT1:18
+  K is having_valuation & a <> 0.K implies v.a <> +infty;
+
+theorem :: FVALUAT1:19
+  K is having_valuation implies v.-1.K = 0;
+
+theorem :: FVALUAT1:20
+  K is having_valuation implies v.-a = v.a;
+
+theorem :: FVALUAT1:21
+  K is having_valuation & a <> 0.K implies v.(a") = -v.a;
+
+theorem :: FVALUAT1:22
+  K is having_valuation & b <> 0.K implies v.(a/b) = v.a - v.b;
+
+theorem :: FVALUAT1:23
+  K is having_valuation & a <> 0.K & b <> 0.K implies v.(a/b) = -v.(b/a);
+
+theorem :: FVALUAT1:24
+  K is having_valuation & b <> 0.K & 0 <= v.(a/b) implies v.b <= v.a;
+
+theorem :: FVALUAT1:25
+  K is having_valuation & a <> 0.K & b <> 0.K & v.(a/b) <= 0 implies
+  0 <= v.(b/a);
+
+theorem :: FVALUAT1:26
+  K is having_valuation & b <> 0.K & v.(a/b) <= 0 implies v.a <= v.b;
+
+theorem :: FVALUAT1:27
+  K is having_valuation implies min(v.a,v.b) <= v.(a+b);
+
+theorem :: FVALUAT1:28
+  K is having_valuation & v.a < v.b implies v.a = v.(a+b);
+
+theorem :: FVALUAT1:29
+  K is having_valuation & a <> 0.K implies v.(a|^i) = i * v.a;
+
+theorem :: FVALUAT1:30
+  K is having_valuation & 0 <= v.(1.K+a) implies 0 <= v.a;
+
+theorem :: FVALUAT1:31
+  K is having_valuation & 0 <= v.(1.K-a) implies 0 <= v.a;
+
+theorem :: FVALUAT1:32
+  K is having_valuation & a <> 0.K & v.a <= v.b implies 0 <= v.(b/a);
+
+theorem :: FVALUAT1:33
+  K is having_valuation implies +infty in rng v;
+
+theorem :: FVALUAT1:34
+  v.a = 1 implies least-positive(rng v) = 1;
+
+theorem :: FVALUAT1:35
+  K is having_valuation implies least-positive(rng v) is integer;
+
+theorem :: FVALUAT1:36
+  K is having_valuation implies
+  for x being Element of K st x <> 0.K
+  ex i being Integer st v.x = i * least-positive(rng v);
+
+definition
+  let K, v;
+  assume
+ K is having_valuation;
+  func Pgenerator(v) -> Element of K equals
+:: FVALUAT1:def 9
+
+  the Element of v"{least-positive(rng v)};
+end;
+
+definition
+  let K, v;
+  assume
+ K is having_valuation;
+  func normal-valuation(v) -> Valuation of K means
+:: FVALUAT1:def 10
+
+  v.a = (it.a) * least-positive(rng v);
+ end;
+
+theorem :: FVALUAT1:37
+  K is having_valuation implies
+  (v.a = 0 iff normal-valuation(v).a = 0);
+
+theorem :: FVALUAT1:38
+  K is having_valuation implies
+  (v.a = +infty iff normal-valuation(v).a = +infty);
+
+theorem :: FVALUAT1:39
+  K is having_valuation implies
+  (v.a = v.b iff normal-valuation(v).a = normal-valuation(v).b);
+
+theorem :: FVALUAT1:40
+  K is having_valuation implies
+  (v.a is positive iff normal-valuation(v).a is positive);
+
+theorem :: FVALUAT1:41
+  K is having_valuation implies
+  (0 <= v.a iff 0 <= normal-valuation(v).a);
+
+theorem :: FVALUAT1:42
+  K is having_valuation implies
+  (v.a is non negative iff normal-valuation(v).a is non negative);
+
+theorem :: FVALUAT1:43
+  K is having_valuation implies normal-valuation(v).Pgenerator(v) = 1;
+
+theorem :: FVALUAT1:44
+  K is having_valuation & 0 <= v.a implies normal-valuation(v).a <= v.a;
+
+theorem :: FVALUAT1:45
+  K is having_valuation & v.a = 1 implies normal-valuation(v) = v;
+
+theorem :: FVALUAT1:46
+  K is having_valuation implies
+  normal-valuation(normal-valuation(v)) = normal-valuation(v);
+
+begin :: Valuation Ring
+
+definition
+  let K be non empty doubleLoopStr;
+  let v be Valuation of K;
+  func NonNegElements v equals
+:: FVALUAT1:def 11
+  {x where x is Element of K: 0 <= v.x};
+end;
+
+theorem :: FVALUAT1:47
+  for K being non empty doubleLoopStr,
+      v being Valuation of K,
+      a being Element of K holds
+  a in NonNegElements v iff 0 <= v.a;
+
+theorem :: FVALUAT1:48
+  for K being non empty doubleLoopStr,
+      v being Valuation of K holds
+  NonNegElements v c= the carrier of K;
+
+theorem :: FVALUAT1:49
+  for K being non empty doubleLoopStr,
+      v being Valuation of K holds
+  K is having_valuation implies 0.K in NonNegElements v;
+
+theorem :: FVALUAT1:50
+  K is having_valuation implies 1.K in NonNegElements v;
+
+definition
+  let K, v such that
+ K is having_valuation;
+  func ValuatRing v -> strict commutative non degenerated Ring means
+:: FVALUAT1:def 12
+
+  the carrier of it = NonNegElements v &
+  the addF of it = (the addF of K) | [:NonNegElements v,NonNegElements v:] &
+  the multF of it = (the multF of K) | [:NonNegElements v,NonNegElements v:] &
+  the ZeroF of it = 0.K &
+  the OneF of it = 1.K;
+ end;
+
+theorem :: FVALUAT1:51
+  K is having_valuation implies
+  for x being Element of ValuatRing v holds x is Element of K;
+
+theorem :: FVALUAT1:52
+  K is having_valuation implies
+  (0 <= v.a iff a is Element of ValuatRing v);
+
+theorem :: FVALUAT1:53
+  K is having_valuation implies
+  for S being Subset of ValuatRing v holds 0 is LowerBound of v.:S;
+
+theorem :: FVALUAT1:54
+  K is having_valuation implies
+  for x, y being Element of K,
+  x1, y1 being Element of ValuatRing v st x = x1 & y = y1 holds
+  x + y = x1 + y1;
+
+theorem :: FVALUAT1:55
+  K is having_valuation implies
+  for x, y being Element of K,
+  x1, y1 being Element of ValuatRing v st x = x1 & y = y1 holds
+  x * y = x1 * y1;
+
+theorem :: FVALUAT1:56
+  K is having_valuation implies 0.ValuatRing v = 0.K;
+
+theorem :: FVALUAT1:57
+  K is having_valuation implies 1.ValuatRing v = 1.K;
+
+theorem :: FVALUAT1:58
+  K is having_valuation implies
+  for x being Element of K, y being Element of ValuatRing v
+  st x = y holds -x = -y;
+
+theorem :: FVALUAT1:59
+  K is having_valuation implies ValuatRing v is domRing-like;
+
+theorem :: FVALUAT1:60
+  K is having_valuation implies
+  for y being Element of ValuatRing v holds
+  power(K).(y,n) = power(ValuatRing v).(y,n);
+
+definition
+  let K, v; assume
+ K is having_valuation;
+  func PosElements v -> Ideal of ValuatRing v equals
+:: FVALUAT1:def 13
+
+  {x where x is Element of K: 0 < v.x};
+end;
+
+notation let K, v;
+  synonym vp v for PosElements v;
+end;
+
+theorem :: FVALUAT1:61
+  K is having_valuation implies
+  (a in vp v iff 0 < v.a);
+
+theorem :: FVALUAT1:62
+  K is having_valuation implies 0.K in vp v;
+
+theorem :: FVALUAT1:63
+  K is having_valuation implies not 1.K in vp v;
+
+definition
+  let K, v;
+  let S be non empty Subset of K;
+  assume that
+ K is having_valuation and
+ S is Subset of ValuatRing v;
+  func min(S,v) -> Subset of ValuatRing v equals
+:: FVALUAT1:def 14
+
+  v"{inf(v.:S)} /\ S;
+end;
+
+theorem :: FVALUAT1:64
+  for S being non empty Subset of K st
+  K is having_valuation & S is Subset of ValuatRing v
+  holds min(S,v) c= S;
+
+theorem :: FVALUAT1:65
+  for S being non empty Subset of K st
+  K is having_valuation & S is Subset of ValuatRing v
+  for x being Element of K holds x in min(S,v) iff x in S &
+  for y being Element of K st y in S holds v.x <= v.y;
+
+theorem :: FVALUAT1:66
+  K is having_valuation implies
+  for I being non empty Subset of K, x being Element of ValuatRing v st
+  I is Ideal of ValuatRing v & x in min(I,v) holds
+  I = {x}-Ideal;
+
+theorem :: FVALUAT1:67
+  for R being non empty doubleLoopStr,
+  I being add-closed non empty Subset of R holds
+  I is Preserv of the addF of R;
+
+definition
+  let R be Ring;
+  let P be RightIdeal of R;
+  mode Submodule of P -> Submodule of RightModule R means
+:: FVALUAT1:def 15
+
+  the carrier of it = P;
+end;
+
+registration
+  let R be Ring;
+  let P be RightIdeal of R;
+  cluster strict for Submodule of P;
+end;
+
+theorem :: FVALUAT1:68
+  for R being Ring, P being Ideal of R, M being Submodule of P
+  for a being BinOp of P, z be Element of P
+  for m being Function of [:P,the carrier of R:], P
+  st a = (the addF of R)|[:P,P:] &
+  m = (the multF of R)|[:P,the carrier of R:] & z = the ZeroF of R
+  holds the RightModStr of M = RightModStr(#P,a,z,m#);
+
+definition
+  let R be Ring;
+  let M1,M2 be RightMod of R;
+  let h be Function of M1,M2;
+  attr h is scalar-linear means
+:: FVALUAT1:def 16
+  for x being Element of M1, r being Element of R holds h.(x*r) = (h.x)*r;
+end;
+
+registration
+  let R be Ring, M1 be RightMod of R, M2 be Submodule of M1;
+  cluster incl(M2,M1) -> additive scalar-linear;
+end;
+
+theorem :: FVALUAT1:69
+  K is having_valuation & b is Element of ValuatRing v
+  implies v.a <= v.a + v.b;
+
+theorem :: FVALUAT1:70
+  K is having_valuation & a is Element of ValuatRing v implies
+  power(K).(a,n) is Element of ValuatRing v;
+
+theorem :: FVALUAT1:71
+  K is having_valuation implies
+  for x being Element of ValuatRing v st x <> 0.K
+  holds power(K).(x,n) <> 0.K;
+
+theorem :: FVALUAT1:72
+  K is having_valuation & v.a = 0 implies
+  a is Element of ValuatRing v & a" is Element of ValuatRing v;
+
+theorem :: FVALUAT1:73
+  K is having_valuation & a <> 0.K &
+  a is Element of ValuatRing v & a" is Element of ValuatRing v implies
+  v.a = 0;
+
+theorem :: FVALUAT1:74
+  K is having_valuation & v.a = 0 implies
+  for I being Ideal of ValuatRing v holds
+  a in I iff I = the carrier of ValuatRing v;
+
+theorem :: FVALUAT1:75
+  K is having_valuation implies Pgenerator(v) is Element of ValuatRing v;
+
+theorem :: FVALUAT1:76
+  K is having_valuation implies vp(v) is proper;
+
+theorem :: FVALUAT1:77
+  K is having_valuation implies
+  for x being Element of ValuatRing v st not x in vp(v)
+  holds v.x = 0;
+
+theorem :: FVALUAT1:78
+  K is having_valuation implies vp(v) is prime;
+
+theorem :: FVALUAT1:79
+  K is having_valuation implies
+  for I being proper Ideal of ValuatRing v holds I c= vp(v);
+
+theorem :: FVALUAT1:80
+  K is having_valuation implies vp(v) is maximal;
+
+theorem :: FVALUAT1:81
+  K is having_valuation implies
+  for I being maximal Ideal of ValuatRing v holds I = vp(v);
+
+theorem :: FVALUAT1:82
+  K is having_valuation implies
+  NonNegElements(normal-valuation v) = NonNegElements(v);
+
+theorem :: FVALUAT1:83
+  K is having_valuation implies
+  ValuatRing(normal-valuation v) = ValuatRing v;
+

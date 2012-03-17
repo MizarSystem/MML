@@ -15,17 +15,17 @@
 environ
 
  vocabularies NUMBERS, FUNCT_1, ZFMISC_1, XBOOLE_0, RELAT_1, TARSKI, BINOP_1,
-      SUBSET_1, CARD_1, MCART_1, FINSET_1, ARYTM_3, FUNCOP_1, REALSET1;
+      SUBSET_1, CARD_1, MCART_1, REALSET1, BSPACE;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1, FUNCT_2,
-      BINOP_1, DOMAIN_1, FUNCOP_1, FUNCT_3, FINSET_1, CARD_1, XXREAL_0;
+      BINOP_1, DOMAIN_1, FUNCOP_1, FUNCT_3, CARD_1, XXREAL_0;
  constructors BINOP_1, DOMAIN_1, FUNCT_3, FUNCOP_1, XXREAL_0, CARD_1, MEMBERED,
       NUMBERS, RELSET_1;
  registrations XBOOLE_0, FUNCT_1, RELSET_1, FINSET_1, MEMBERED, CARD_1,
-      ZFMISC_1;
+      ZFMISC_1, SUBSET_1;
  requirements SUBSET, BOOLE, NUMERALS, REAL;
- definitions BINOP_1, ZFMISC_1;
- theorems TARSKI, FUNCT_1, FUNCT_2, FUNCT_3, ZFMISC_1, XBOOLE_0, XBOOLE_1,
-      RELAT_1, CARD_2, NAT_1, CARD_1, FUNCT_4, GRFUNC_1;
+ definitions BINOP_1, ZFMISC_1, SUBSET_1;
+ theorems TARSKI, FUNCT_1, FUNCT_2, FUNCT_3, ZFMISC_1, XBOOLE_0, RELAT_1,
+      CARD_1;
 
 begin
 
@@ -39,19 +39,12 @@ proof
   then
 A1: dom F = [:X,X:] by FUNCT_2:def 1;
   assume x in [:X,X:];
-  then rng F c= X & F.x in rng F by A1,FUNCT_1:def 5,RELAT_1:def 19;
+  then rng F c= X & F.x in rng F by A1,FUNCT_1:def 3,RELAT_1:def 19;
   hence thesis;
 end;
 
 definition
-  let X be set;
-  let F be BinOp of X;
-  let A be Subset of X;
-  pred F is_in A means
-  for x being set holds x in [:A,A:] implies F.x in A;
-end;
 
-definition
   let X be set;
   let F be BinOp of X;
   mode Preserv of F -> Subset of X means
@@ -88,8 +81,6 @@ registration
   coherence;
 end;
 
-canceled;
-
 theorem Th3:
   for X being set, F being BinOp of X, A being Preserv of F holds F
   ||A is BinOp of A
@@ -98,16 +89,16 @@ proof
   X={} implies [:X,X:]={};
   then dom F = [:X,X:] by FUNCT_2:def 1;
   then
-A1: dom (F||A) = [:A,A:] by RELAT_1:91,ZFMISC_1:119;
+A1: dom (F||A) = [:A,A:] by RELAT_1:62,ZFMISC_1:96;
   for x being set holds x in [:A,A:] implies F||A.x in A
   proof
     let x be set;
     assume
 A2: x in [:A,A:];
-    then F||A.x=F.x by A1,FUNCT_1:70;
+    then F||A.x=F.x by A1,FUNCT_1:47;
     hence thesis by A2,Def2;
   end;
-  hence thesis by A1,FUNCT_2:5;
+  hence thesis by A1,FUNCT_2:3;
 end;
 
 definition
@@ -118,64 +109,11 @@ definition
   coherence by Th3;
 end;
 
-definition
-  let IT be set;
-  redefine attr IT is trivial means
-  :Def4:
-  IT is empty or ex x being set st IT = {x};
-  compatibility
-  proof
-    thus IT is trivial implies IT is empty or ex x being set st IT = {x}
-    proof
-      assume
-A1:   IT is trivial;
-      assume IT is not empty;
-      then consider x being set such that
-A2:   x in IT by XBOOLE_0:def 1;
-      take x;
-      for y being set holds y in IT iff y = x by A1,A2,ZFMISC_1:def 10;
-      hence thesis by TARSKI:def 1;
-    end;
-    assume
-A3: IT is empty or ex x being set st IT = {x};
-    assume
-A4: IT is not trivial;
-    then consider x0 being set such that
-A5: IT = {x0} by A3;
-    now
-      let x,y be set such that
-A6:   x in IT and
-A7:   y in IT;
-      thus x = x0 by A5,A6,TARSKI:def 1
-        .= y by A5,A7,TARSKI:def 1;
-    end;
-    hence contradiction by A4,ZFMISC_1:def 10;
-  end;
-end;
-
-registration
-  cluster trivial non empty set;
-  existence
-  proof
-    take {0};
-    thus thesis;
-  end;
-  cluster non trivial non empty set;
-  existence
-  proof
-    take {0,1};
-    not ex x being set st {0,1} = {x} by ZFMISC_1:9;
-    hence thesis by Def4;
-  end;
-  cluster non trivial -> non empty set;
-  coherence;
-end;
-
 theorem Th4:
-  for X being non empty set holds X is non trivial iff for x being
+  for X being set holds X is non trivial iff for x being
   set holds X\{x} is non empty set
 proof
-  let X be non empty set;
+  let X be set;
   hereby
     assume
 A1: X is non trivial;
@@ -183,17 +121,25 @@ A1: X is non trivial;
     X <> {x} by A1;
     then consider y being set such that
 A2: y in X and
-A3: x <> y by ZFMISC_1:41;
+A3: x <> y by A1,ZFMISC_1:35;
     not y in {x} by A3,TARSKI:def 1;
     hence X\{x} is non empty set by A2,XBOOLE_0:def 5;
   end;
   assume
 A4: for x being set holds X\{x} is non empty set;
-  thus X is non empty;
-  given x being set such that
-A5: X = {x};
-  X\{x} is empty by A5,XBOOLE_1:37;
-  hence contradiction by A4;
+   X\{{}} c= X;
+   then X is non empty by A4;
+   then consider x being set such that
+W1:  x in X by XBOOLE_0:def 1;
+   X\{x} is non empty by A4;
+   then consider y being set such that
+W2:  y in X\{x} by XBOOLE_0:def 1;
+  take x,y;
+  thus x in X by W1;
+  thus y in X by W2;
+   x in {x} by TARSKI:def 1;
+   then not x in X\{x} by XBOOLE_0:def 5;
+  hence x <> y by W2;
 end;
 
 theorem
@@ -215,25 +161,8 @@ A1: B\{1} is non empty set by XBOOLE_0:def 5;
   hence thesis;
 end;
 
-theorem Th6:
-  for X being non empty set st for x being Element of X holds X\{x}
-  is non empty set holds X is non trivial
-proof
-  let X be non empty set;
-  assume
-A1: for x being Element of X holds X\{x} is non empty set;
-  thus X is non empty;
-  given x being set such that
-A2: X = {x};
-  x in X & X\{x} is empty by A2,TARSKI:def 1,XBOOLE_1:37;
-  hence contradiction by A1;
-end;
-
-theorem
-  for A being non empty set st (for x being Element of A holds A\{x} is
-  non empty set) holds A is non trivial set by Th6;
-
 definition
+
   let X be non trivial set;
   let F be BinOp of X;
   let x be Element of X;
@@ -258,7 +187,7 @@ proof
 A1: p in A & q in A and
 A2: x = [p,q] by ZFMISC_1:def 2;
     S.x = S.(p,q) by A2;
-    hence thesis by A1,FUNCT_3:def 5;
+    hence thesis by A1,FUNCT_3:def 4;
   end;
   hence thesis;
 end;
@@ -282,16 +211,16 @@ proof
   X={} implies [:X,X:]={};
   then dom F = [:X,X:] by FUNCT_2:def 1;
   then
-A1: dom (F||A) = [:A,A:] by RELAT_1:91,ZFMISC_1:119;
+A1: dom (F||A) = [:A,A:] by RELAT_1:62,ZFMISC_1:96;
   for x being set holds x in [:A,A:] implies F||A.x in A
   proof
     let x be set;
     assume
 A2: x in [:A,A:];
-    then F||A.x=F.x by A1,FUNCT_1:70;
+    then F||A.x=F.x by A1,FUNCT_1:47;
     hence thesis by A2,Def6;
   end;
-  hence thesis by A1,FUNCT_2:5;
+  hence thesis by A1,FUNCT_2:3;
 end;
 
 definition
@@ -302,8 +231,6 @@ definition
   F||A;
   coherence by Th9;
 end;
-
-canceled;
 
 definition
   let A be set;
@@ -323,16 +250,16 @@ proof
   let F be DnT of x,A;
   dom F = [:A,A:] by FUNCT_2:def 1;
   then
-A1: dom(F||(A\{x})) = [:A\{x},A\{x}:] by RELAT_1:91,ZFMISC_1:119;
+A1: dom(F||(A\{x})) = [:A\{x},A\{x}:] by RELAT_1:62,ZFMISC_1:96;
   for y being set holds y in [:A\{x},A\{x}:] implies F||(A\{x}).y in A\{x}
   proof
     let y be set;
     assume
 A2: y in [:A\{x},A\{x}:];
-    then F||(A\{x}).y=F.y by A1,FUNCT_1:70;
+    then F||(A\{x}).y=F.y by A1,FUNCT_1:47;
     hence thesis by A2,Def8;
   end;
-  hence thesis by A1,FUNCT_2:5;
+  hence thesis by A1,FUNCT_2:3;
 end;
 
 definition
@@ -344,212 +271,20 @@ definition
   coherence by Th11;
 end;
 
-registration
-  let F be non empty set;
-  cluster trivial non empty Subset of F;
-  existence
-  proof
-    set y =the  Element of F;
-    take {y};
-    thus thesis;
-  end;
-end;
-
-definition
-  let F be non empty set;
-  mode OnePoint of F is trivial non empty Subset of F;
-end;
-
-Lm1: for F being non trivial set, A being OnePoint of F ex x being Element of
-F st A = {x}
-proof
-  let F be non trivial set, A be OnePoint of F;
-  consider x being set such that
-A1: A = {x} by Def4;
-  x in A by A1,TARSKI:def 1;
-  hence thesis by A1;
-end;
-
 theorem Th12:
-  for F being non trivial set holds for A being OnePoint of F
+  for F being non trivial set holds for A being Singleton of F
   holds F\A is non empty set
 proof
   let F be non trivial set;
-  let A be OnePoint of F;
-  ex x being Element of F st A = {x} by Lm1;
+  let A be Singleton of F;
+  ex x being Element of F st A = {x} by CARD_1:65;
   hence thesis by Th4;
 end;
 
 registration
   let F be non trivial set;
-  let A be OnePoint of F;
+  let A be Singleton of F;
   cluster F\A -> non empty;
   coherence by Th12;
 end;
 
-begin :: Addenda
-:: from SPPOL_1
-
-theorem
-  for A being finite set holds A is trivial iff card A < 2
-proof
-  let A be finite set;
-  hereby
-    assume A is trivial;
-    then
-A1: A is empty or ex x being set st A = {x} by Def4;
-    per cases;
-    suppose
-      A is empty;
-      hence card A < 2 by CARD_1:47;
-    end;
-    suppose
-      A is non empty;
-      then card A = 1 by A1,CARD_1:50;
-      hence card A < 2;
-    end;
-  end;
-  assume
-A2: card A < 2;
-  per cases by A2,NAT_1:23;
-  suppose
-    card A = 0;
-    hence A is empty or ex x being set st A = {x};
-  end;
-  suppose
-    card A = 1;
-    hence A is empty or ex x being set st A = {x} by CARD_2:60;
-  end;
-end;
-
-theorem Th14:
-  for A being set holds A is non trivial iff ex a1,a2 being set st
-  a1 in A & a2 in A & a1 <> a2
-proof
-  let A be set;
-  hereby
-    assume
-A1: A is non trivial;
-    then consider a1 being set such that
-A2: a1 in A by XBOOLE_0:def 1;
-    A <> {a1} by A1;
-    then consider a2 being set such that
-A3: a2 in A & a1 <> a2 by A2,ZFMISC_1:41;
-    take a1,a2;
-    thus a1 in A & a2 in A & a1 <> a2 by A2,A3;
-  end;
-  given a1,a2 being set such that
-A4: a1 in A and
-A5: a2 in A and
-A6: a1 <> a2;
-  thus A is non empty by A4;
-  given x being set such that
-A7: A = {x};
-A8: {a1,a2} c= {x} by A4,A5,A7,ZFMISC_1:38;
-  then a1 = x by ZFMISC_1:26;
-  hence contradiction by A6,A8,ZFMISC_1:26;
-end;
-
-theorem
-  for D being set, A being Subset of D holds A is non trivial iff ex d1,
-  d2 being Element of D st d1 in A & d2 in A & d1 <> d2
-proof
-  let D be set, A be Subset of D;
-  hereby
-    assume A is non trivial;
-    then consider d1,d2 being set such that
-A1: d1 in A & d2 in A and
-A2: d1 <> d2 by Th14;
-    reconsider d1,d2 as Element of D by A1;
-    take d1,d2;
-    thus d1 in A & d2 in A & d1 <> d2 by A1,A2;
-  end;
-  thus thesis by Th14;
-end;
-
-theorem
-  for F being non trivial set, A being OnePoint of F ex x being Element
-  of F st A = {x} by Lm1;
-
-begin :: Addenda
-:: from AMISTD_1, 2006.03.15, A.T.
-
-registration
-  let x, y be set;
-  cluster x .--> y -> trivial;
-  coherence
-  proof
-    x .--> y = {[x,y]} by FUNCT_4:87;
-    hence thesis;
-  end;
-end;
-
-:: from FINSEQ_5, 2007.04.12, A.T.
-
-registration
-  cluster empty -> trivial set;
-  coherence;
-end;
-
-:: from REALSET1, 2007.04.12, A.T.
-
-registration
-  cluster trivial -> finite set;
-  coherence
-  proof
-    let S be set such that
-A1: S is trivial;
-    per cases by A1,Def4;
-    suppose
-      S is empty;
-      then reconsider T = S as empty set;
-      T is finite;
-      hence thesis;
-    end;
-    suppose
-      ex x being set st S = {x};
-      hence thesis;
-    end;
-  end;
-end;
-
-registration
-  cluster infinite -> non trivial set;
-  coherence;
-end;
-
-:: missing, 2008.08.07
-
-theorem
-  for x being set, X being trivial set st x in X holds X = {x}
-proof
-  let x be set, X be trivial set;
-  assume
-A1: x in X;
-  then ex x being set st X = {x} by Def4;
-  hence thesis by A1,TARSKI:def 1;
-end;
-
-:: missing, 2009.01.24, A.T.
-
-registration
-  let f be non trivial Function;
-  cluster dom f -> non trivial;
-  coherence
-  proof
-    assume
-A1: dom f is trivial;
-    per cases by A1,Def4;
-    suppose
-      dom f is empty;
-      hence thesis by RELAT_1:64;
-    end;
-    suppose
-      ex x being set st dom f = {x};
-      then consider x being set such that
-A2:   dom f = {x};
-      f = {[x,f.x]} by A2,GRFUNC_1:18;
-      hence thesis;
-    end;
-  end;
-end;

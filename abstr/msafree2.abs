@@ -23,10 +23,11 @@ environ
       FUNCT_1, PARTFUN1, FINSET_1, FINSEQ_1, FUNCT_2, CARD_3, TREES_1, TREES_2,
       TREES_3, TREES_4, PBOOLE, STRUCT_0, MSUALG_1, FINSEQ_2, MSAFREE,
       MSUALG_2, FUNCOP_1, DTCONSTR, LANG1, PRE_POLY, RELSET_1, MSUALG_3;
- constructors XXREAL_0, NAT_1, MSUALG_3, MSAFREE, SEQ_4, RELSET_1, PRE_POLY;
+ constructors XXREAL_0, NAT_1, MSUALG_3, MSAFREE, SEQ_4, RELSET_1, PRE_POLY,
+      FINSEQ_2;
  registrations XBOOLE_0, FUNCT_1, RELSET_1, FUNCOP_1, FINSET_1, TREES_1,
       CARD_3, TREES_2, TREES_3, PRE_CIRC, STRUCT_0, DTCONSTR, RELAT_1,
-      MSUALG_1, MSUALG_2, MSAFREE, ORDINAL1, PBOOLE;
+      MSUALG_1, MSUALG_2, MSAFREE, ORDINAL1, PBOOLE, FINSEQ_1;
  requirements BOOLE, SUBSET;
 
 
@@ -69,13 +70,11 @@ theorem :: MSAFREE2:2
   G st v in InputVertices G holds not ex o being OperSymbol of G st
   the_result_sort_of o = v;
 
-canceled 2;
-
-theorem :: MSAFREE2:5
+theorem :: MSAFREE2:3
   for G being non empty ManySortedSign holds SortsWithConstants G
   c= InnerVertices G;
 
-theorem :: MSAFREE2:6
+theorem :: MSAFREE2:4
   for G being non empty ManySortedSign holds InputVertices G misses
   SortsWithConstants G;
 
@@ -88,11 +87,11 @@ definition
 end;
 
 registration
-  cluster non void with_input_V (non empty ManySortedSign);
+  cluster non void with_input_V for non empty ManySortedSign;
 end;
 
 registration
-  let G be with_input_V (non empty ManySortedSign);
+  let G be with_input_V non empty ManySortedSign;
   cluster InputVertices G -> non empty;
 end;
 
@@ -123,15 +122,15 @@ definition
 end;
 
 registration
-  cluster void -> Circuit-like (non empty ManySortedSign);
+  cluster void -> Circuit-like for non empty ManySortedSign;
 end;
 
 registration
-  cluster non void Circuit-like strict (non empty ManySortedSign);
+  cluster non void Circuit-like strict for non empty ManySortedSign;
 end;
 
 definition
-  let IIG be Circuit-like non void (non empty ManySortedSign);
+  let IIG be Circuit-like non void non empty ManySortedSign;
   let v be Vertex of IIG such that
  v in InnerVertices IIG;
   func action_at v -> OperSymbol of IIG means
@@ -145,7 +144,7 @@ begin
 :: Free Many Sorted Algebras
 ::---------------------------------------------------------------------------
 
-theorem :: MSAFREE2:7
+theorem :: MSAFREE2:5
   for S being non void non empty ManySortedSign, A being MSAlgebra over
 S, o being OperSymbol of S, p being FinSequence st len p = len the_arity_of o &
 for k being Nat st k in dom p holds p.k in (the Sorts of A).((the_arity_of o)/.
@@ -154,7 +153,7 @@ for k being Nat st k in dom p holds p.k in (the Sorts of A).((the_arity_of o)/.
 definition
   let S be non void non empty ManySortedSign, MSA be non-empty MSAlgebra over
   S;
-  func FreeEnv MSA -> free strict (non-empty MSAlgebra over S) equals
+  func FreeEnv MSA -> free strict non-empty MSAlgebra over S equals
 :: MSAFREE2:def 8
   FreeMSA
   (the Sorts of MSA);
@@ -171,9 +170,7 @@ st y in FreeSort(the Sorts of MSA, s) & y = root-tree [x, s] & x in (the Sorts
   of MSA).s holds it.s.y = x;
 end;
 
-canceled;
-
-theorem :: MSAFREE2:9
+theorem :: MSAFREE2:6
   for S being non void non empty ManySortedSign, A being non-empty
   MSAlgebra over S holds the Sorts of A is GeneratorSet of A;
 
@@ -200,7 +197,8 @@ end;
 
 registration
   let S be non empty ManySortedSign;
-  cluster finite-yielding -> finitely-generated (non-empty MSAlgebra over S);
+  cluster finite-yielding -> finitely-generated for
+non-empty MSAlgebra over S;
 end;
 
 definition
@@ -213,44 +211,45 @@ end;
 
 registration
   let S be non empty ManySortedSign;
-  cluster finite-yielding non-empty strict MSAlgebra over S;
+  cluster finite-yielding non-empty strict for MSAlgebra over S;
 end;
 
 definition
   let IT be non empty ManySortedSign;
   attr IT is monotonic means
 :: MSAFREE2:def 13
-  for A being finitely-generated (non-empty
-  MSAlgebra over IT) holds A is finite-yielding;
+  for A being finitely-generated non-empty
+  MSAlgebra over IT holds A is finite-yielding;
 end;
 
 registration
-  cluster non void finite monotonic Circuit-like (non empty ManySortedSign);
+  cluster non void finite monotonic Circuit-like for
+non empty ManySortedSign;
 end;
 
-theorem :: MSAFREE2:10
+theorem :: MSAFREE2:7
   for S being non void non empty ManySortedSign for X being
 non-empty ManySortedSet of the carrier of S, v be SortSymbol of S, e be Element
   of (the Sorts of FreeMSA X).v holds e is finite DecoratedTree;
 
-theorem :: MSAFREE2:11
+theorem :: MSAFREE2:8
   for S being non void non empty ManySortedSign, X being non-empty
   finite-yielding ManySortedSet of the carrier of S holds FreeMSA X is
   finitely-generated;
 
-theorem :: MSAFREE2:12
+theorem :: MSAFREE2:9
   for S being non void non empty ManySortedSign, A being non-empty
 MSAlgebra over S, v being Vertex of S, e being Element of (the Sorts of FreeEnv
   A).v st v in InputVertices S ex x being Element of (the Sorts of A).v st e =
   root-tree [x, v];
 
-theorem :: MSAFREE2:13
+theorem :: MSAFREE2:10
   for S being non void non empty ManySortedSign, X being non-empty
   ManySortedSet of the carrier of S, o being OperSymbol of S, p being
   DTree-yielding FinSequence st [o,the carrier of S]-tree p in (the Sorts of
   FreeMSA X).(the_result_sort_of o) holds len p = len the_arity_of o;
 
-theorem :: MSAFREE2:14
+theorem :: MSAFREE2:11
   for S being non void non empty ManySortedSign, X being non-empty
   ManySortedSet of the carrier of S, o being OperSymbol of S, p being
   DTree-yielding FinSequence st [o,the carrier of S]-tree p in (the Sorts of
@@ -260,30 +259,32 @@ theorem :: MSAFREE2:14
 registration
   let S be non void non empty ManySortedSign, X be non-empty ManySortedSet of
   the carrier of S, v be Vertex of S;
-  cluster -> finite non empty Function-like Relation-like Element of (the
+  cluster -> finite non empty Function-like Relation-like for Element of (the
     Sorts of FreeMSA X).v;
 end;
 
 registration
   let S be non void non empty ManySortedSign, X be non-empty ManySortedSet of
   the carrier of S, v be Vertex of S;
-  cluster Function-like Relation-like Element of (the Sorts of FreeMSA X).v;
+  cluster Function-like Relation-like for
+Element of (the Sorts of FreeMSA X).v;
 end;
 
 registration
   let S be non void non empty ManySortedSign, X be non-empty ManySortedSet of
   the carrier of S, v be Vertex of S;
-  cluster -> DecoratedTree-like (Function-like Relation-like Element of (the
-    Sorts of FreeMSA X).v);
+  cluster -> DecoratedTree-like for
+Function-like Relation-like Element of (the
+    Sorts of FreeMSA X).v;
 end;
 
 registration
   let IIG be non void non empty ManySortedSign;
   let X be non-empty ManySortedSet of the carrier of IIG, v be Vertex of IIG;
-  cluster finite Element of (the Sorts of FreeMSA X).v;
+  cluster finite for Element of (the Sorts of FreeMSA X).v;
 end;
 
-theorem :: MSAFREE2:15
+theorem :: MSAFREE2:12
   for S being non void non empty ManySortedSign, X being non-empty
 ManySortedSet of the carrier of S, v being Vertex of S, o being OperSymbol of S
 , e being Element of (the Sorts of FreeMSA X).v st e.{} = [o,the carrier of S]

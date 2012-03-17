@@ -17,12 +17,14 @@ environ
  vocabularies XBOOLE_0, STRUCT_0, ORDERS_2, SUBSET_1, XXREAL_0, RELAT_1,
       RELAT_2, REWRITE1, LATTICE3, ZFMISC_1, ORDERS_1, ARYTM_3, TARSKI,
       LATTICES, XXREAL_2, EQREL_1, FILTER_0, PBOOLE, ORDINAL2, FINSET_1, CAT_1,
-      WELLORD1, YELLOW_0;
+      WELLORD1, YELLOW_0, CARD_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_2, RELSET_1, FINSET_1,
-      TOLER_1, ORDERS_1, DOMAIN_1, STRUCT_0, LATTICES, ORDERS_2, LATTICE3;
+      TOLER_1, ORDERS_1, DOMAIN_1, CARD_1, STRUCT_0, LATTICES, ORDERS_2,
+      LATTICE3;
  constructors TOLER_1, REALSET2, LATTICE3;
- registrations XBOOLE_0, RELSET_1, FINSET_1, STRUCT_0, ORDERS_2, LATTICE3;
- requirements BOOLE, SUBSET;
+ registrations XBOOLE_0, RELSET_1, FINSET_1, STRUCT_0, ORDERS_2, LATTICE3,
+      CARD_1, ORDINAL1;
+ requirements BOOLE, SUBSET, NUMERALS;
 
 
 begin :: Reexamination of poset concepts
@@ -51,19 +53,19 @@ definition
 end;
 
 registration
-  cluster complete -> with_suprema with_infima (non empty RelStr);
-  cluster trivial -> complete transitive antisymmetric (non empty reflexive
-    RelStr);
+  cluster complete -> with_suprema with_infima for non empty RelStr;
+  cluster -> complete transitive antisymmetric
+         for 1-element reflexive RelStr;
 end;
 
 registration
   let x be set;
   let R be Relation of {x};
-  cluster RelStr(#{x},R#) -> trivial;
+  cluster RelStr(#{x},R#) -> 1-element;
 end;
 
 registration
-  cluster strict trivial non empty reflexive RelStr;
+  cluster strict 1-element reflexive for RelStr;
 end;
 
 theorem :: YELLOW_0:1
@@ -153,13 +155,13 @@ P1 is lower-bounded implies P2 is lower-bounded) & (P1 is upper-bounded implies
   P2 is upper-bounded);
 
 registration
-  cluster complete -> bounded (non empty RelStr);
-  cluster bounded -> lower-bounded upper-bounded RelStr;
-  cluster lower-bounded upper-bounded -> bounded RelStr;
+  cluster complete -> bounded for non empty RelStr;
+  cluster bounded -> lower-bounded upper-bounded for RelStr;
+  cluster lower-bounded upper-bounded -> bounded for RelStr;
 end;
 
 registration
-  cluster complete (non empty Poset);
+  cluster complete for non empty Poset;
 end;
 
 definition
@@ -260,7 +262,7 @@ theorem :: YELLOW_0:27
   being set st ex_inf_of X,L1 holds "/\"(X,L1) = "/\"(X,L2);
 
 theorem :: YELLOW_0:28
-  for L being complete (non empty Poset), X being set holds "\/"(X,L) =
+  for L being complete non empty Poset, X being set holds "\/"(X,L) =
   "\/"(X, latt L) & "/\"(X,L) = "/\"(X, latt L);
 
 theorem :: YELLOW_0:29
@@ -283,7 +285,7 @@ Element of L, X being set holds a = "\/"(X,L) iff a is_>=_than X & for b being
   Element of L st b is_>=_than X holds a <= b;
 
 theorem :: YELLOW_0:33
-  for L being complete antisymmetric (non empty RelStr) for a being
+  for L being complete antisymmetric non empty RelStr for a being
 Element of L, X being set holds a = "/\"(X,L) iff a is_<=_than X & for b being
   Element of L st b is_<=_than X holds a >= b;
 
@@ -423,21 +425,19 @@ end;
 
 registration
   let L be RelStr;
-  cluster strict full SubRelStr of L;
+  cluster strict full for SubRelStr of L;
 end;
 
 registration
   let L be non empty RelStr;
-  cluster non empty full strict SubRelStr of L;
+  cluster non empty full strict for SubRelStr of L;
 end;
 
-canceled;
-
-theorem :: YELLOW_0:57
+theorem :: YELLOW_0:56
   for L being RelStr, X being Subset of L holds RelStr(#X, (the
     InternalRel of L)|_2 X#) is full SubRelStr of L;
 
-theorem :: YELLOW_0:58
+theorem :: YELLOW_0:57
   for L being RelStr, S1,S2 being full SubRelStr of L st the
   carrier of S1 = the carrier of S2 holds the RelStr of S1 = the RelStr of S2;
 
@@ -449,26 +449,26 @@ definition
   the carrier of it = X;
 end;
 
-theorem :: YELLOW_0:59
+theorem :: YELLOW_0:58
   for L being non empty RelStr, S being non empty SubRelStr of L
   for x being Element of S holds x is Element of L;
 
-theorem :: YELLOW_0:60
+theorem :: YELLOW_0:59
   for L being RelStr, S being SubRelStr of L for a,b being Element
   of L for x,y being Element of S st x = a & y = b & x <= y holds a <= b;
 
-theorem :: YELLOW_0:61
+theorem :: YELLOW_0:60
   for L being RelStr, S being full SubRelStr of L for a,b being
   Element of L for x,y being Element of S st x = a & y = b & a <= b & x in the
   carrier of S holds x <= y;
 
-theorem :: YELLOW_0:62
+theorem :: YELLOW_0:61
   for L being non empty RelStr, S being non empty full SubRelStr
   of L for X being set, a being Element of L for x being Element of S st x = a
   holds (a is_<=_than X implies x is_<=_than X) & (a is_>=_than X implies x
   is_>=_than X);
 
-theorem :: YELLOW_0:63
+theorem :: YELLOW_0:62
   for L being non empty RelStr, S being non empty SubRelStr of L
 for X being Subset of S for a being Element of L for x being Element of S st x
   = a holds (x is_<=_than X implies a is_<=_than X) & (x is_>=_than X implies a
@@ -476,17 +476,17 @@ for X being Subset of S for a being Element of L for x being Element of S st x
 
 registration
   let L be reflexive RelStr;
-  cluster -> reflexive (full SubRelStr of L);
+  cluster -> reflexive for full SubRelStr of L;
 end;
 
 registration
   let L be transitive RelStr;
-  cluster -> transitive (full SubRelStr of L);
+  cluster -> transitive for full SubRelStr of L;
 end;
 
 registration
   let L be antisymmetric RelStr;
-  cluster -> antisymmetric (full SubRelStr of L);
+  cluster -> antisymmetric for full SubRelStr of L;
 end;
 
 definition
@@ -519,61 +519,62 @@ end;
 
 registration
   let L be non empty RelStr;
-  cluster infs-inheriting -> meet-inheriting SubRelStr of L;
-  cluster sups-inheriting -> join-inheriting SubRelStr of L;
+  cluster infs-inheriting -> meet-inheriting for SubRelStr of L;
+  cluster sups-inheriting -> join-inheriting for SubRelStr of L;
 end;
 
 registration
   let L be non empty RelStr;
-  cluster infs-inheriting sups-inheriting non empty full strict SubRelStr of L;
+  cluster infs-inheriting sups-inheriting non empty full strict for
+SubRelStr of L;
 end;
 
-theorem :: YELLOW_0:64
+theorem :: YELLOW_0:63
   for L being non empty transitive RelStr for S being non empty
 full SubRelStr of L for X being Subset of S st ex_inf_of X,L & "/\"(X,L) in the
   carrier of S holds ex_inf_of X,S & "/\"(X,S) = "/\"(X,L);
 
-theorem :: YELLOW_0:65
+theorem :: YELLOW_0:64
   for L being non empty transitive RelStr for S being non empty
 full SubRelStr of L for X being Subset of S st ex_sup_of X,L & "\/"(X,L) in the
   carrier of S holds ex_sup_of X,S & "\/"(X,S) = "\/"(X,L);
 
-theorem :: YELLOW_0:66
+theorem :: YELLOW_0:65
   for L being non empty transitive RelStr for S being non empty full
 SubRelStr of L for x,y being Element of S st ex_inf_of {x,y},L & "/\"({x,y},L)
 in the carrier of S holds ex_inf_of {x,y},S & "/\"({x,y},S) = "/\"({x,y},L);
 
-theorem :: YELLOW_0:67
+theorem :: YELLOW_0:66
   for L being non empty transitive RelStr for S being non empty full
 SubRelStr of L for x,y being Element of S st ex_sup_of {x,y},L & "\/"({x,y},L)
 in the carrier of S holds ex_sup_of {x,y},S & "\/"({x,y},S) = "\/"({x,y},L);
 
 registration
   let L be with_infima antisymmetric transitive RelStr;
-  cluster -> with_infima (non empty meet-inheriting full SubRelStr of L);
+  cluster -> with_infima for non empty meet-inheriting full SubRelStr of L;
 end;
 
 registration
   let L be with_suprema antisymmetric transitive RelStr;
-  cluster -> with_suprema (non empty join-inheriting full SubRelStr of L);
+  cluster -> with_suprema for non empty join-inheriting full SubRelStr of L;
 end;
 
-theorem :: YELLOW_0:68
-  for L being complete (non empty Poset) for S being non empty full
+theorem :: YELLOW_0:67
+  for L being complete non empty Poset for S being non empty full
   SubRelStr of L for X being Subset of S st "/\"(X,L) in the carrier of S holds
   "/\"(X,S) = "/\"(X,L);
 
-theorem :: YELLOW_0:69
-  for L being complete (non empty Poset) for S being non empty full
+theorem :: YELLOW_0:68
+  for L being complete non empty Poset for S being non empty full
   SubRelStr of L for X being Subset of S st "\/"(X,L) in the carrier of S holds
   "\/"(X,S) = "\/"(X,L);
 
-theorem :: YELLOW_0:70
+theorem :: YELLOW_0:69
   for L being with_infima Poset for S being meet-inheriting non empty
 full SubRelStr of L for x,y being Element of S, a,b be Element of L st a = x &
   b = y holds x"/\"y = a"/\"b;
 
-theorem :: YELLOW_0:71
+theorem :: YELLOW_0:70
   for L being with_suprema Poset for S being join-inheriting non empty
 full SubRelStr of L for x,y being Element of S, a,b be Element of L st a = x &
   b = y holds x"\/"y = a"\/"b;

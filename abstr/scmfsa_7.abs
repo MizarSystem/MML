@@ -18,16 +18,17 @@ environ
       SCMFSA_2, RELAT_1, FUNCT_1, PARTFUN1, TARSKI, XXREAL_0, NAT_1, CARD_1,
       XBOOLE_0, INT_1, GRAPHSP, FINSEQ_2, AMI_3, PRE_POLY, FSM_1, CIRCUIT2,
       MSUALG_1, COMPLEX1, FUNCT_4, SCMFSA_7, ORDINAL1, SCMNORM, AFINSQ_1,
-      FUNCOP_1, PBOOLE;
+      FUNCOP_1, PBOOLE, FINSET_1;
  notations TARSKI, XBOOLE_0, SUBSET_1, CARD_1, NUMBERS, XCMPLX_0, NAT_1, INT_2,
-      NAT_D, INT_1, RELAT_1, PARTFUN1, FINSEQ_1, AFINSQ_1, FINSEQ_2, FUNCT_1,
-      FUNCOP_1, FUNCT_7, PBOOLE, XXREAL_0, STRUCT_0, COMPOS_1, EXTPRO_1,
-      SCMFSA_2, PRE_POLY, AFINSQ_2;
+      NAT_D, INT_1, RELAT_1, PARTFUN1, FINSET_1, FINSEQ_1, AFINSQ_1, FINSEQ_2,
+      FUNCT_1, FUNCOP_1, FUNCT_7, PBOOLE, XXREAL_0, STRUCT_0, MEMSTR_0,
+      COMPOS_1, EXTPRO_1, SCMFSA_2, PRE_POLY, AFINSQ_2;
  constructors WELLORD2, XXREAL_0, REAL_1, AMI_3, SCMFSA_2, NAT_D, RELSET_1,
-      PRE_POLY, AFINSQ_1, AFINSQ_2, PBOOLE;
+      PRE_POLY, AFINSQ_1, AFINSQ_2, PBOOLE, FUNCT_7, MEMSTR_0;
  registrations XBOOLE_0, SETFAM_1, RELAT_1, FUNCT_1, ORDINAL1, NUMBERS,
       XXREAL_0, XREAL_0, NAT_1, INT_1, FINSEQ_1, FUNCT_7, SCMFSA_2, FINSET_1,
-      FINSEQ_2, CARD_1, COMPOS_1, AFINSQ_1, AFINSQ_2, FUNCOP_1, PBOOLE;
+      FINSEQ_2, CARD_1, COMPOS_1, AFINSQ_1, AFINSQ_2, FUNCOP_1, MEMSTR_0,
+      PBOOLE;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
 
 
@@ -37,11 +38,13 @@ reserve m for Element of NAT;
 reserve P for (the Instructions of SCM+FSA)-valued ManySortedSet of NAT;
 
 definition
- canceled;
+
   let a be Int-Location;
   let k be Integer;
-  func a := k -> FinPartState of SCM+FSA means
-:: SCMFSA_7:def 2
+  func a := k -> (the Instructions of SCM+FSA)-valued NAT-defined
+          finite Function
+   means
+:: SCMFSA_7:def 1
 
   ex k1 being Element of NAT st
     k1 + 1 = k & it = <% a:= intloc 0 %> ^ ( k1 --> AddTo(a,intloc 0) )
@@ -55,7 +58,7 @@ definition
   let a be Int-Location;
   let k be Integer;
   func aSeq(a,k) -> XFinSequence of the Instructions of SCM+FSA means
-:: SCMFSA_7:def 3
+:: SCMFSA_7:def 2
 
   ex k1 being Element of NAT st k1 + 1 = k &
   it = <% a:= intloc 0 %> ^ (k1 --> AddTo (a,intloc 0)) if k > 0
@@ -63,9 +66,7 @@ definition
      = <% a:= intloc 0 %> ^ (k1 --> SubFrom(a,intloc 0));
 end;
 
-canceled 32;
-
-theorem :: SCMFSA_7:33
+theorem :: SCMFSA_7:1
   for a being Int-Location, k being Integer holds a:=k = aSeq(a,k)
   ^ <% halt SCM+FSA %>;
 
@@ -73,7 +74,7 @@ definition
   let f be FinSeq-Location;
   let p be FinSequence of INT;
   func aSeq(f,p) -> XFinSequence of the Instructions of SCM+FSA means
-:: SCMFSA_7:def 4
+:: SCMFSA_7:def 3
 
   ex pp being XFinSequence of (the Instructions of SCM+FSA)^omega
     st len pp = len p &
@@ -87,21 +88,22 @@ end;
 definition
   let f be FinSeq-Location;
   let p be FinSequence of INT;
-  func f := p -> FinPartState of SCM+FSA equals
-:: SCMFSA_7:def 5
+  func f := p -> (the Instructions of SCM+FSA)-valued NAT-defined
+          finite Function equals
+:: SCMFSA_7:def 4
   aSeq(intloc 1,len p) ^ <% f:=<0,...,0>intloc 1 %> ^
    aSeq(f,p) ^ <% halt SCM+FSA %>;
 end;
 
-theorem :: SCMFSA_7:34
+theorem :: SCMFSA_7:2
   for a being Int-Location holds a:=1 =  <% a:= intloc 0 %> ^ <%
   halt SCM+FSA %>;
 
-theorem :: SCMFSA_7:35
+theorem :: SCMFSA_7:3
   for a being Int-Location holds a:=0 = <% a:= intloc 0 %>^<%
   SubFrom(a,intloc 0)%>^<%halt SCM+FSA%>;
 
-theorem :: SCMFSA_7:36
+theorem :: SCMFSA_7:4
   for c0 being Element of NAT
   for s being c0-started State of SCM+FSA st s.intloc 0 = 1
   for a being Int-Location, k being Integer st a <> intloc 0 &
@@ -115,7 +117,7 @@ theorem :: SCMFSA_7:36
   (for f being FinSeq-Location holds Comput(P,s,i).f = s.f)) &
   Comput(P,s,len aSeq(a,k)).a = k;
 
-theorem :: SCMFSA_7:37
+theorem :: SCMFSA_7:5
   for s being 0-started State of SCM+FSA st s.intloc 0 = 1
    for a being Int-Location
    for k being Integer st  aSeq(a,k) c= P & a<>intloc 0
@@ -129,7 +131,7 @@ theorem :: SCMFSA_7:37
 
 :: Users' guide
 
-theorem :: SCMFSA_7:38
+theorem :: SCMFSA_7:6
   for s being 0-started State of SCM+FSA st s.intloc 0 = 1 for a
   being Int-Location, k being Integer st a:=k c= P & a<>intloc 0
    holds P halts_on s &
@@ -138,7 +140,7 @@ holds Result(P,
   s).b = s.b) & for f being FinSeq-Location holds (Result(P,s)).f
 = s.f;
 
-theorem :: SCMFSA_7:39
+theorem :: SCMFSA_7:7
   for s being 0-started State of SCM+FSA st s.intloc 0 = 1 for f
   being FinSeq-Location, p being FinSequence of INT st f:=p c= P
    holds P halts_on s &

@@ -47,72 +47,34 @@
 <ArticleID name="TOPMETR"/>
 <ArticleID name="BORSUK_4"/>
 </Signature>
-<RCluster aid="BORSUK_4" nr="1">
-<ArgTypes>
-<Typ kind="G" nr="1">
-<Cluster>
-<Adjective nr="38" value="false"/>
-</Cluster>
-</Typ>
-</ArgTypes>
-<Typ kind="M" nr="2">
-<Cluster/>
-<Func kind="K" nr="21">
-<Func kind="U" nr="1">
-<LocusVar nr="1"/>
-</Func>
-</Func>
-</Typ>
-<Cluster>
-<Adjective nr="12" value="false"/>
-</Cluster>
-</RCluster>
-<RCluster aid="BORSUK_4" nr="2">
-<ArgTypes>
-<Typ kind="M" nr="1">
-<Cluster>
-<Adjective nr="12" value="false"/>
-</Cluster>
-</Typ>
-</ArgTypes>
-<Typ kind="M" nr="2">
-<Cluster/>
-<Func kind="K" nr="21">
-<LocusVar nr="1"/>
-</Func>
-</Typ>
-<Cluster>
-<Adjective nr="12" value="false"/>
-</Cluster>
-</RCluster>
 <FCluster aid="BORSUK_4" nr="1">
 <ArgTypes/>
-<Func kind="K" nr="367"/>
+<Func kind="K" nr="368"/>
 <Cluster>
 <Adjective nr="33" value="false"/>
-<Adjective nr="44"/>
+<Adjective nr="45"/>
 </Cluster>
 </FCluster>
 <FCluster aid="BORSUK_4" nr="2">
 <ArgTypes/>
-<Func kind="K" nr="367"/>
+<Func kind="K" nr="368"/>
 <Cluster>
-<Adjective nr="44"/>
-<Adjective nr="106">
-<Func kind="K" nr="366"/>
+<Adjective nr="45"/>
+<Adjective nr="107">
+<Func kind="K" nr="367"/>
 </Adjective>
 </Cluster>
 </FCluster>
 <CCluster aid="BORSUK_4" nr="1">
 <ArgTypes/>
 <Cluster>
-<Adjective nr="156"/>
+<Adjective nr="157"/>
 </Cluster>
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="K" nr="21">
 <Func kind="U" nr="1">
-<Func kind="K" nr="307">
+<Func kind="K" nr="308">
 <Num nr="2"/>
 </Func>
 </Func>
@@ -120,7 +82,7 @@
 </Typ>
 <Cluster>
 <Adjective nr="12" value="false"/>
-<Adjective nr="156"/>
+<Adjective nr="157"/>
 </Cluster>
 </CCluster>
 </Registrations>

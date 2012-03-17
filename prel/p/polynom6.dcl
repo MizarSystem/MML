@@ -95,25 +95,25 @@
 <Cluster>
 <Adjective nr="79" value="false"/>
 <Adjective nr="84" value="false"/>
-<Adjective nr="102"/>
-<Adjective nr="127"/>
+<Adjective nr="103"/>
 <Adjective nr="128"/>
 <Adjective nr="129"/>
-<Adjective nr="137"/>
-<Adjective nr="148"/>
+<Adjective nr="130"/>
+<Adjective nr="138"/>
 <Adjective nr="149"/>
+<Adjective nr="150"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="308">
+<Func kind="K" nr="310">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
 <Adjective nr="79" value="false"/>
 <Adjective nr="84" value="false"/>
-<Adjective nr="125"/>
-<Adjective nr="149"/>
+<Adjective nr="126"/>
+<Adjective nr="150"/>
 </Cluster>
 </FCluster>
 </Registrations>

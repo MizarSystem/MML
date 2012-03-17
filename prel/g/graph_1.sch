@@ -50,7 +50,7 @@
 <Var nr="2"/>
 <Typ kind="M" nr="10">
 <Cluster>
-<Adjective nr="47"/>
+<Adjective nr="48"/>
 </Cluster>
 <Func kind="F" nr="1"/>
 </Typ>
@@ -68,7 +68,7 @@
 <Var nr="2"/>
 <Typ kind="M" nr="10">
 <Cluster>
-<Adjective nr="47"/>
+<Adjective nr="48"/>
 </Cluster>
 <Func kind="F" nr="1"/>
 </Typ>

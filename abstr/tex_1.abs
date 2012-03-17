@@ -15,13 +15,15 @@
 environ
 
  vocabularies XBOOLE_0, PRE_TOPC, SUBSET_1, TMAP_1, RCOMP_1, TARSKI, STRUCT_0,
-      TOPS_1, TOPS_3, ZFMISC_1, SETFAM_1, TDLAT_3, NATTRA_1, COMPTS_1, TEX_1;
- notations TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, SETFAM_1, DOMAIN_1, STRUCT_0,
-      PRE_TOPC, TOPS_1, TMAP_1, TDLAT_3, TOPS_3, COMPTS_1;
+      TOPS_1, TOPS_3, ZFMISC_1, SETFAM_1, TDLAT_3, NATTRA_1, COMPTS_1, TEX_1,
+      CARD_1;
+ notations TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, SETFAM_1, DOMAIN_1, CARD_1,
+      STRUCT_0, PRE_TOPC, TOPS_1, TMAP_1, TDLAT_3, TOPS_3, COMPTS_1;
  constructors SETFAM_1, DOMAIN_1, TOPS_1, COMPTS_1, PCOMPS_1, TDLAT_3, TMAP_1,
       TOPS_3;
- registrations XBOOLE_0, SUBSET_1, STRUCT_0, PRE_TOPC, TOPS_1, TDLAT_3, TMAP_1;
- requirements BOOLE, SUBSET;
+ registrations XBOOLE_0, SUBSET_1, STRUCT_0, PRE_TOPC, TOPS_1, TDLAT_3, TMAP_1,
+      CARD_1, ORDINAL1;
+ requirements BOOLE, SUBSET, NUMERALS;
 
 
 begin
@@ -72,30 +74,30 @@ definition
 end;
 
 registration
-  cluster trivial strict non empty TopStruct;
-  cluster non trivial strict non empty TopStruct;
+  cluster 1-element strict for TopStruct;
+  cluster non trivial strict for TopStruct;
 end;
 
 theorem :: TEX_1:8
-  for Y being trivial non empty TopStruct st the topology of Y is non
+  for Y being 1-element TopStruct st the topology of Y is non
   empty holds Y is almost_discrete implies Y is TopSpace-like;
 
 registration
-  cluster trivial strict non empty TopSpace;
+  cluster 1-element strict for TopSpace;
 end;
 
 registration
-  cluster trivial -> anti-discrete discrete (non empty TopSpace);
-  cluster discrete anti-discrete -> trivial (non empty TopSpace);
+  cluster -> anti-discrete discrete for 1-element TopSpace;
+  cluster discrete anti-discrete -> trivial for non empty TopSpace;
 end;
 
 registration
-  cluster non trivial strict non empty TopSpace;
+  cluster non trivial strict for TopSpace;
 end;
 
 registration
-  cluster non discrete -> non trivial (non empty TopSpace);
-  cluster non anti-discrete -> non trivial (non empty TopSpace);
+  cluster non discrete -> non trivial for non empty TopSpace;
+  cluster non anti-discrete -> non trivial for non empty TopSpace;
 end;
 
 begin
@@ -131,37 +133,35 @@ registration
   cluster ADTS(D) -> non empty;
 end;
 
-canceled 2;
-
-theorem :: TEX_1:11
+theorem :: TEX_1:9
   for X being anti-discrete non empty TopSpace for A being Subset
 of X holds (A is empty implies Cl A = {}) & (A is non empty implies Cl A = the
   carrier of X);
 
-theorem :: TEX_1:12
+theorem :: TEX_1:10
   for X being anti-discrete non empty TopSpace for A being Subset
   of X holds (A <> the carrier of X implies Int A = {}) & (A = the carrier of X
   implies Int A = the carrier of X);
 
-theorem :: TEX_1:13
+theorem :: TEX_1:11
   for X being non empty TopSpace holds (for A being Subset of X
   holds (A is non empty implies Cl A = the carrier of X)) implies X is
   anti-discrete;
 
-theorem :: TEX_1:14
+theorem :: TEX_1:12
   for X being non empty TopSpace holds (for A being Subset of X
   holds (A <> the carrier of X implies Int A = {})) implies X is anti-discrete;
 
-theorem :: TEX_1:15
+theorem :: TEX_1:13
   for X being anti-discrete non empty TopSpace for A being Subset of X
   holds (A <> {} implies A is dense) & (A <> the carrier of X implies A is
   boundary);
 
-theorem :: TEX_1:16
+theorem :: TEX_1:14
   for X being non empty TopSpace holds (for A being Subset of X holds (A
   <> {} implies A is dense)) implies X is anti-discrete;
 
-theorem :: TEX_1:17
+theorem :: TEX_1:15
   for X being non empty TopSpace holds (for A being Subset of X holds (A
   <> the carrier of X implies A is boundary)) implies X is anti-discrete;
 
@@ -170,27 +170,25 @@ registration
   cluster 1TopSp D -> discrete;
 end;
 
-canceled 2;
-
-theorem :: TEX_1:20
+theorem :: TEX_1:16
   for X being discrete non empty TopSpace for A being Subset of X holds
   Cl A = A & Int A = A;
 
-theorem :: TEX_1:21
+theorem :: TEX_1:17
   for X being non empty TopSpace holds (for A being Subset of X holds Cl
   A = A) implies X is discrete;
 
-theorem :: TEX_1:22
+theorem :: TEX_1:18
   for X being non empty TopSpace holds (for A being Subset of X holds
   Int A = A) implies X is discrete;
 
-theorem :: TEX_1:23
+theorem :: TEX_1:19
   for D being non empty set holds ADTS(D) = 1TopSp(D) iff ex d0
   being Element of D st D = {d0};
 
 registration
-  cluster discrete non anti-discrete strict non empty TopSpace;
-  cluster anti-discrete non discrete strict non empty TopSpace;
+  cluster discrete non anti-discrete strict non empty for TopSpace;
+  cluster anti-discrete non discrete strict non empty for TopSpace;
 end;
 
 begin
@@ -199,9 +197,9 @@ begin
 
 definition
   let D be set, d0 be Element of D;
-  canceled;
+
   func STS(D,d0) -> TopStruct equals
-:: TEX_1:def 5
+:: TEX_1:def 4
   TopStruct (#D,(bool D) \ {A where A is
     Subset of D : d0 in A & A <> D}#);
 end;
@@ -219,56 +217,56 @@ end;
 reserve D for non empty set,
   d0 for Element of D;
 
-theorem :: TEX_1:24
+theorem :: TEX_1:20
   for A being Subset of STS(D,d0) holds ({d0} c= A implies A is
   closed) & (A is non empty & A is closed implies {d0} c= A);
 
-theorem :: TEX_1:25
+theorem :: TEX_1:21
   D \ {d0} is non empty implies for A being Subset of STS(D,d0)
   holds (A = {d0} implies A is closed & A is boundary) & (A is non empty & A is
   closed & A is boundary implies A = {d0});
 
-theorem :: TEX_1:26
+theorem :: TEX_1:22
   for A being Subset of STS(D,d0) holds (A c= D \ {d0} implies A
   is open) & (A <> D & A is open implies A c= D \ {d0});
 
-theorem :: TEX_1:27
+theorem :: TEX_1:23
   D \ {d0} is non empty implies for A being Subset of STS(D,d0) holds (A
   = D \ {d0} implies A is open & A is dense) & (A <> D & A is open & A is dense
   implies A = D \ {d0});
 
 registration
-  cluster non anti-discrete non discrete strict non empty TopSpace;
+  cluster non anti-discrete non discrete strict non empty for TopSpace;
 end;
 
-theorem :: TEX_1:28
+theorem :: TEX_1:24
   for Y being non empty TopSpace holds the TopStruct of Y = the
 TopStruct of STS(D,d0) iff the carrier of Y = D & for A being Subset of Y holds
 ({d0} c= A implies A is closed) & (A is non empty & A is closed implies {d0} c=
   A);
 
-theorem :: TEX_1:29
+theorem :: TEX_1:25
   for Y being non empty TopSpace holds the TopStruct of Y = the
 TopStruct of STS(D,d0) iff the carrier of Y = D & for A being Subset of Y holds
 (A c= D \ {d0} implies A is open) & (A <> D & A is open implies A c= D \ {d0});
 
-theorem :: TEX_1:30
+theorem :: TEX_1:26
   for Y being non empty TopSpace holds the TopStruct of Y = the
 TopStruct of STS(D,d0) iff the carrier of Y = D & for A being non empty Subset
   of Y holds Cl A = A \/ {d0};
 
-theorem :: TEX_1:31
+theorem :: TEX_1:27
   for Y being non empty TopSpace holds the TopStruct of Y = the
 TopStruct of STS(D,d0) iff the carrier of Y = D & for A being Subset of Y st A
   <> D holds Int A = A \ {d0};
 
-theorem :: TEX_1:32
+theorem :: TEX_1:28
   STS(D,d0) = ADTS(D) iff D = {d0};
 
-theorem :: TEX_1:33
+theorem :: TEX_1:29
   STS(D,d0) = 1TopSp(D) iff D = {d0};
 
-theorem :: TEX_1:34
+theorem :: TEX_1:30
   for D being non empty set, d0 being Element of D for A being Subset of
   STS(D,d0) st A = {d0} holds 1TopSp(D) = STS(D,d0) modified_with_respect_to A;
 
@@ -279,57 +277,57 @@ begin
 definition
   let X be non empty TopSpace;
   redefine attr X is discrete means
-:: TEX_1:def 6
+:: TEX_1:def 5
 
   for A being non empty Subset of X holds A is not boundary;
 end;
 
-theorem :: TEX_1:35
+theorem :: TEX_1:31
   X is discrete iff for A being Subset of X holds A <> the carrier of X
   implies A is not dense;
 
 registration
-  cluster non almost_discrete -> non discrete non anti-discrete (non empty
-    TopSpace);
+  cluster non almost_discrete -> non discrete non anti-discrete for non empty
+    TopSpace;
 end;
 
 definition
   let X be non empty TopSpace;
   redefine attr X is almost_discrete means
-:: TEX_1:def 7
+:: TEX_1:def 6
 
   for A being non empty Subset of X holds A is not nowhere_dense;
 end;
 
-theorem :: TEX_1:36
+theorem :: TEX_1:32
   X is almost_discrete iff for A being Subset of X holds A <> the
   carrier of X implies A is not everywhere_dense;
 
-theorem :: TEX_1:37
+theorem :: TEX_1:33
   X is non almost_discrete iff ex A being non empty Subset of X st
   A is boundary & A is closed;
 
-theorem :: TEX_1:38
+theorem :: TEX_1:34
   X is non almost_discrete iff ex A being Subset of X st A <> the
   carrier of X & A is dense & A is open;
 
 registration
   cluster almost_discrete non discrete non anti-discrete strict non empty
-    TopSpace;
+    for TopSpace;
 end;
 
-theorem :: TEX_1:39
+theorem :: TEX_1:35
   for C being non empty set, c0 being Element of C holds C \ {c0}
   is non empty iff STS(C,c0) is non almost_discrete;
 
 registration
-  cluster non almost_discrete strict non empty TopSpace;
+  cluster non almost_discrete strict non empty for TopSpace;
 end;
 
-theorem :: TEX_1:40
+theorem :: TEX_1:36
   for A being non empty Subset of X st A is boundary holds X
   modified_with_respect_to A` is non almost_discrete;
 
-theorem :: TEX_1:41
+theorem :: TEX_1:37
   for A being Subset of X st A <> the carrier of X & A is dense holds X
   modified_with_respect_to A is non almost_discrete;

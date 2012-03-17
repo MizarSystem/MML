@@ -15,14 +15,16 @@
 environ
 
  vocabularies NUMBERS, NAT_1, INT_1, RELAT_1, ARYTM_3, CARD_1, XXREAL_0,
-      SUBSET_1, ARYTM_1, INT_2, COMPLEX1, ORDINAL1;
- notations SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XXREAL_0, XREAL_0, NAT_1,
-      INT_1, INT_2;
- constructors XXREAL_0, NAT_1, INT_2, REAL_1;
- registrations XXREAL_0, XREAL_0, NAT_1, INT_1, ORDINAL1, XBOOLE_0;
+      SUBSET_1, ARYTM_1, INT_2, COMPLEX1, ORDINAL1, ZFMISC_1, XBOOLE_0,
+      FINSET_1;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, CARD_1, FINSET_1,
+      NUMBERS, XCMPLX_0, XXREAL_0, XREAL_0, NAT_1, INT_1, INT_2;
+ constructors XXREAL_0, NAT_1, INT_2, REAL_1, FINSET_1, CARD_1;
+ registrations XXREAL_0, XREAL_0, NAT_1, INT_1, ORDINAL1, XBOOLE_0, CARD_1,
+      ZFMISC_1;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  theorems ORDINAL1, XCMPLX_1, XREAL_1, XXREAL_0, NAT_1, INT_1, INT_2, ABSVALUE,
-      XREAL_0;
+      XREAL_0, CARD_1, ZFMISC_1, COMPLEX1, XCMPLX_0, TARSKI;
  schemes NAT_1;
 
 begin
@@ -33,13 +35,13 @@ reserve p,k,l,m,n,s,h,i,j,t for Nat;
 
 Lm1: now
   let k,l;
-  k div l in NAT by INT_1:16,82;
+  k div l in NAT by INT_1:3,55;
   hence k div l is Nat;
 end;
 
 Lm2: now
   let k,l;
-  k mod l in NAT by INT_1:16,84;
+  k mod l in NAT by INT_1:3,57;
   hence k mod l is Nat;
 end;
 
@@ -53,19 +55,19 @@ definition
     let r be Nat;
     per cases;
     suppose l = 0;
-      hence thesis by INT_1:75;
+      hence thesis by INT_1:48;
     end;
     suppose
 A1:   l > 0;
       then
-A2:   k = l * (k div l) + (k mod l) by INT_1:86;
+A2:   k = l * (k div l) + (k mod l) by INT_1:59;
 A3:   k mod l is Nat by Lm2;
       hence r = k div l implies
       (ex t being Nat st k = l * r + t & t < l) or r = 0 & l = 0
-      by A1,A2,INT_1:85;
+      by A1,A2,INT_1:58;
       assume
 A4:   ( ex t being Nat st k = l * r + t & t < l ) or r = 0 & l = 0;
-A5:   k mod l < l by A1,INT_1:85;
+A5:   k mod l < l by A1,INT_1:58;
       k div l is Nat by Lm1;
       hence thesis by A2,A3,A4,A5,NAT_1:18;
     end;
@@ -88,13 +90,13 @@ definition
     suppose
 A1:   l > 0;
       then
-A2:   k = l * (k div l) + (k mod l) by INT_1:86;
+A2:   k = l * (k div l) + (k mod l) by INT_1:59;
       hence r = k mod l implies
       ( ex t being Nat st k = l * t + r & r < l ) or r = 0 & l = 0
-      by A1,INT_1:85;
+      by A1,INT_1:58;
       assume
 A3:   ( ex t being Nat st k = l * t + r & r < l ) or r = 0 & l = 0;
-A4:   k mod l < l by A1,INT_1:85;
+A4:   k mod l < l by A1,INT_1:58;
       k mod l is Nat by Lm2;
       hence thesis by A2,A3,A4,NAT_1:18;
     end;
@@ -108,13 +110,13 @@ definition
   coherence
   proof
     k div l is Nat;
-    hence thesis by ORDINAL1:def 13;
+    hence thesis by ORDINAL1:def 12;
   end;
   redefine func k mod l -> Element of NAT;
   coherence
   proof
     k mod l is Nat;
-    hence thesis by ORDINAL1:def 13;
+    hence thesis by ORDINAL1:def 12;
   end;
 end;
 
@@ -127,7 +129,7 @@ proof
 end;
 
 theorem
-  0 < i implies j = i * (j div i) + (j mod i) by INT_1:86;
+  0 < i implies j = i * (j div i) + (j mod i) by INT_1:59;
 
 :: The divisibility relation
 
@@ -148,7 +150,7 @@ A2:     l = k * t by A1,INT_1:def 3;
         per cases;
         suppose 0 < l;
           then 0 <= t by A2;
-          then reconsider t as Element of NAT by INT_1:16;
+          then reconsider t as Element of NAT by INT_1:3;
           take t;
           thus l = k * t by A2;
         end;
@@ -183,7 +185,7 @@ A2: i = j * k + 0 by A1;
       assume
 A3:   j <> 0;
       then
-A4:   i = j * (i div j) + (i mod j) by INT_1:86;
+A4:   i = j * (i div j) + (i mod j) by INT_1:59;
       i mod j < j by A3,Th1;
       hence thesis by A2,A4,NAT_1:18;
     end;
@@ -285,7 +287,7 @@ A4: j = i * u by A1,Def3;
     assume
 A5: i <> 0;
     then
-A6: h = i * (h div i) + (h mod i) by INT_1:86;
+A6: h = i * (h div i) + (h mod i) by INT_1:59;
 A7: j + (i * (h div i) + (h mod i)) = i * (u + (h div i)) + (h mod i) by A4;
 A8: h mod i < i by A5,Th1;
     j + h = i * t + 0 by A3;
@@ -309,7 +311,7 @@ A3: now
   now
     assume h <> 0;
     then
-A4: j = h * (j div h) + (j mod h) by INT_1:86;
+A4: j = h * (j div h) + (j mod h) by INT_1:59;
     i divides h * (j div h) by A2,Th9;
     hence thesis by A1,A4,Th10;
   end;
@@ -329,7 +331,7 @@ definition
     let IT be Nat;
     thus IT = k lcm n implies k divides IT & n divides IT &
     for m being Nat st k divides m & n divides m holds IT divides m
-    by INT_2:def 2;
+    by INT_2:def 1;
     assume that
 A1: k divides IT and
 A2: n divides IT and
@@ -343,19 +345,19 @@ A4:   m = i or m = -i by INT_1:def 1;
       assume that
 A5:   k divides m and
 A6:   n divides m;
-A7:   k divides i by A4,A5,INT_2:14;
-      n divides i by A4,A6,INT_2:14;
+A7:   k divides i by A4,A5,INT_2:10;
+      n divides i by A4,A6,INT_2:10;
       then IT divides i by A3,A7;
-      hence thesis by A4,INT_2:14;
+      hence thesis by A4,INT_2:10;
     end;
-    hence thesis by A1,A2,INT_2:def 2;
+    hence thesis by A1,A2,INT_2:def 1;
   end;
 end;
 
 definition
   let k,n be Nat;
   redefine func k lcm n -> Element of NAT;
-  coherence by ORDINAL1:def 13;
+  coherence by ORDINAL1:def 12;
 end;
 
 definition
@@ -369,7 +371,7 @@ definition
     let IT be Nat;
     thus IT = k gcd n implies IT divides k & IT divides n &
     for m being Nat st m divides k & m divides n holds m divides IT
-    by INT_2:def 3;
+    by INT_2:def 2;
     assume that
 A1: IT divides k and
 A2: IT divides n and
@@ -383,19 +385,19 @@ A4:   m = i or m = -i by INT_1:def 1;
       assume that
 A5:   m divides k and
 A6:   m divides n;
-A7:   i divides k by A4,A5,INT_2:14;
-      i divides n by A4,A6,INT_2:14;
+A7:   i divides k by A4,A5,INT_2:10;
+      i divides n by A4,A6,INT_2:10;
       then i divides IT by A3,A7;
-      hence thesis by A4,INT_2:14;
+      hence thesis by A4,INT_2:10;
     end;
-    hence thesis by A1,A2,INT_2:def 3;
+    hence thesis by A1,A2,INT_2:def 2;
   end;
 end;
 
 definition
   let k,n be Nat;
   redefine func k gcd n -> Element of NAT;
-  coherence by ORDINAL1:def 13;
+  coherence by ORDINAL1:def 12;
 end;
 
 ::$N Correctness of Euclide Algorithm
@@ -417,12 +419,12 @@ A6: k <> 0 and
 A7: ex n being Element of NAT st k = Q(n);
     consider n being Element of NAT such that
 A8: k = Q(n) by A7;
-    reconsider Q = Q(n+1) as Element of NAT by ORDINAL1:def 13;
+    reconsider Q = Q(n+1) as Element of NAT by ORDINAL1:def 12;
 A9: n = 0 implies Q < k by A1,A2,A8;
     now
       given m such that
 A10:  n = m + 1;
-      reconsider m1=m as Element of NAT by ORDINAL1:def 13;
+      reconsider m1=m as Element of NAT by ORDINAL1:def 12;
       Q(m1 + 2) = Q(m1) mod Q(m1 + 1) by A3;
       hence Q(n + 1) < k by A6,A8,A10,Th1;
       take m = n + 1;
@@ -437,7 +439,7 @@ A12: ex n being Nat st Q[n] by A11;
 A13: Q[k] & for n being Nat st Q[n] holds k <= n from NAT_1:sch 5(A12);
   consider n such that
 A14: k = n + 1 by A1,A2,A13,NAT_1:6;
-  reconsider n as Element of NAT by ORDINAL1:def 13;
+  reconsider n as Element of NAT by ORDINAL1:def 12;
   take n;
   defpred PP[Nat] means Q(n) divides Q($1) & Q(n) divides Q($1 + 1);
   PP[n] by A13,A14,Th6;
@@ -452,7 +454,7 @@ A18: Q(n) divides Q(l) and
 A19: Q(n) divides Q(l + 1);
     consider m such that
 A20: l = m + 1 by A17,NAT_1:6;
-    reconsider m as Element of NAT by ORDINAL1:def 13;
+    reconsider m as Element of NAT by ORDINAL1:def 12;
     take m;
 A21: m <= m + 1 by NAT_1:11;
     m <> m + 1;
@@ -480,7 +482,7 @@ A29:      k <= m + 1;
 A30:        k < m + 1 by A29,XXREAL_0:1;
             then consider l such that
 A31:        m = l + 1 by A1,A2,A28,NAT_1:6,13;
-            reconsider l as Element of NAT by ORDINAL1:def 13;
+            reconsider l as Element of NAT by ORDINAL1:def 12;
             Q(l + 2) = Q(l) mod Q(l + 1) by A3;
             hence thesis by A28,A30,A31,Def2,NAT_1:13;
           end;
@@ -497,7 +499,7 @@ A31:        m = l + 1 by A1,A2,A28,NAT_1:6,13;
 A32:  Q(m + 1) <> 0;
       Q(m + 2) = Q(m) mod Q(m + 1) by A3;
       then
-A33:  Q(m) = Q(m + 1) * (Q(m) div Q(m + 1)) + Q(m + 2) by A32,INT_1:86;
+A33:  Q(m) = Q(m + 1) * (Q(m) div Q(m + 1)) + Q(m + 2) by A32,INT_1:59;
       Q(n) divides Q(m + 1) * (Q(m) div Q(m + 1)) by A18,A20,Th9;
       hence Q(n) divides Q(m) by A19,A20,A33,Th8;
     end;
@@ -583,8 +585,8 @@ A4: 0 < n by A1,Def2;
 A5: l = n * (t - m) + 0 by A2,A3;
     now
       assume t < m + 0;
-      then t - m < 0 by XREAL_1:21;
-      then l < n * 0 by A4,A5,XREAL_1:70;
+      then t - m < 0 by XREAL_1:19;
+      then l < n * 0 by A4,A5,XREAL_1:68;
       hence contradiction;
     end;
     then t - m is Element of NAT by NAT_1:21;
@@ -644,9 +646,9 @@ A1: k mod n = 0;
   suppose
 A2: n <> 0;
     then
-A3: k = n * (k div n) + 0 by A1,INT_1:86;
+A3: k = n * (k div n) + 0 by A1,INT_1:59;
 A4: ex t being Nat st l = n * t + (l mod n) & l mod n < n by A2,Def2;
-    l = n * (l div n) + (l mod n) by A2,INT_1:86;
+    l = n * (l div n) + (l mod n) by A2,INT_1:59;
     then k + l = n * ((k div n) + (l div n)) + (l mod n) by A3;
     hence thesis by A4,Def1;
   end;
@@ -686,7 +688,7 @@ A2:   m = n * q + t and
 A3:   t < n by A1,Def2;
       ex p st n*k + m = n*p + t & t < n
       proof
-        reconsider p = k+q as Element of NAT by ORDINAL1:def 13;
+        reconsider p = k+q as Element of NAT by ORDINAL1:def 12;
         take p;
         thus thesis by A2,A3;
       end;
@@ -704,7 +706,7 @@ theorem Th22:
 proof
   per cases;
   suppose n > 0;
-    then (p + s) mod n = (n*(p div n) + (p mod n) + s) mod n by INT_1:86
+    then (p + s) mod n = (n*(p div n) + (p mod n) + s) mod n by INT_1:59
       .=(n*(p div n) + ((p mod n) + s)) mod n
       .=((p mod n) + s) mod n by Th21;
     hence thesis;
@@ -780,7 +782,7 @@ proof
   assume m>0;
   then consider t be Nat such that
 A1: n = m * t + r and r < m by Def2;
-  reconsider t as Element of NAT by ORDINAL1:def 13;
+  reconsider t as Element of NAT by ORDINAL1:def 12;
 A2: x divides n by Def5;
 A3: x divides m by Def5;
   then x divides r by A2,Th11;
@@ -814,12 +816,12 @@ A6: R[i];
 A7: for i holds R[i] from NAT_1:sch 2(A4,A5);
   per cases;
   suppose n() mod k() = 0;
-    then n() = k() * (n() div k()) + 0 by A2,INT_1:86;
+    then n() = k() * (n() div k()) + 0 by A2,INT_1:59;
     hence thesis by A7;
   end;
   suppose
 A8: n() mod k() <> 0;
-A9: n() = k() * (n() div k()) + (n() mod k()) by A2,INT_1:86;
+A9: n() = k() * (n() div k()) + (n() mod k()) by A2,INT_1:59;
     n() mod k() <= k() by A2,Th1;
     hence thesis by A3,A7,A8,A9;
   end;
@@ -901,11 +903,11 @@ proof
 A1: i>=0 and
 A2: j>0;
 A3: abs(j)> 0 by A2,ABSVALUE:def 1;
-  thus i gcd j = abs(i) gcd abs(j) by INT_2:51
+  thus i gcd j = abs(i) gcd abs(j) by INT_2:34
     .=abs(j) gcd (abs(i) mod abs(j)) by A3,Th28
     .=abs(j) gcd abs(abs(i) mod abs(j)) by ABSVALUE:def 1
-    .=j gcd (abs(i) mod abs(j)) by INT_2:51
-    .=j gcd (i mod j) by A1,A2,INT_2:49;
+    .=j gcd (abs(i) mod abs(j)) by INT_2:34
+    .=j gcd (i mod j) by A1,A2,INT_2:32;
 end;
 
 :: ???, 2007.07.26, A.T.
@@ -934,7 +936,7 @@ A1: i < j and
 A2: i <> 0;
   assume i/j is integer;
   then reconsider r = i/j as Integer;
-  r = [\ r /] by INT_1:47
+  r = [\ r /] by INT_1:25
     .= i qua Integer div j by INT_1:def 9;
   hence thesis by A1,A2,Th27,XCMPLX_1:50;
 end;
@@ -947,7 +949,7 @@ definition
   coherence
   proof
     i -' j = i - j & 0 <= i -' j or i -' j = 0 by XREAL_0:def 2;
-    hence thesis by INT_1:16;
+    hence thesis by INT_1:3;
   end;
 end;
 
@@ -964,7 +966,7 @@ reserve a,b for natural number;
 theorem Th35:
   a -' b <= a
 proof
-  a-b <= a-0 by XREAL_1:232;
+  a-b <= a-0 by XREAL_1:230;
   hence thesis by XREAL_0:def 2;
 end;
 
@@ -977,21 +979,21 @@ proof
 A1: n-'i=0;
   assume i<n;
   then i+1<=n by NAT_1:13;
-  then i+1-i<=n-i by XREAL_1:11;
+  then i+1-i<=n-i by XREAL_1:9;
   hence contradiction by A1,XREAL_0:def 2;
 end;
 
 theorem
-  i<=j implies j+k-'i=j+k-i by NAT_1:12,XREAL_1:235;
+  i<=j implies j+k-'i=j+k-i by NAT_1:12,XREAL_1:233;
 
 theorem
   i<=j implies j+k-'i=j-'i+k
 proof
   assume
 A1: i<=j;
-  hence j+k-'i=j+k-i by NAT_1:12,XREAL_1:235
+  hence j+k-'i=j+k-i by NAT_1:12,XREAL_1:233
     .=j-i+k
-    .=j-'i+k by A1,XREAL_1:235;
+    .=j-'i+k by A1,XREAL_1:233;
 end;
 
 reserve i,j,k,i1,i2,n for natural number;
@@ -1027,12 +1029,12 @@ A1: i1<=i2;
   suppose
 A2: i2<=n;
     then
-A3: n-'i1=n-i1 by A1,XREAL_1:235,XXREAL_0:2;
-    n-'i2=n-i2 by A2,XREAL_1:235;
-    hence thesis by A1,A3,XREAL_1:12;
+A3: n-'i1=n-i1 by A1,XREAL_1:233,XXREAL_0:2;
+    n-'i2=n-i2 by A2,XREAL_1:233;
+    hence thesis by A1,A3,XREAL_1:10;
   end;
   suppose i2>n;
-    then n-i2<0 by XREAL_1:51;
+    then n-i2<0 by XREAL_1:49;
     hence thesis by XREAL_0:def 2;
   end;
 end;
@@ -1046,7 +1048,7 @@ A1: i1<=i2;
   suppose i1-n>=0;
     then
 A2: i1-'n=i1-n by XREAL_0:def 2;
-    i1-n<=i2-n by A1,XREAL_1:11;
+    i1-n<=i2-n by A1,XREAL_1:9;
     hence thesis by A2,XREAL_0:def 2;
   end;
   suppose i1-n<0;
@@ -1086,28 +1088,28 @@ proof
   suppose
 A1: i>=2;
     then 1<=i by XXREAL_0:2;
-    then i-1>=0 by XREAL_1:50;
+    then i-1>=0 by XREAL_1:48;
     then
 A2: i-'1=i-1 by XREAL_0:def 2;
-    i-1>=1+1-1 by A1,XREAL_1:11;
-    then i-1-1>=1-1 by XREAL_1:11;
+    i-1>=1+1-1 by A1,XREAL_1:9;
+    then i-1-1>=1-1 by XREAL_1:9;
     then i-'1-'1 =i-2 by A2,XREAL_0:def 2;
     hence thesis by XREAL_0:def 2;
   end;
   suppose
 A3: i<2;
-    then i-2<2-2 by XREAL_1:11;
+    then i-2<2-2 by XREAL_1:9;
     then
 A4: i-'2=0 by XREAL_0:def 2;
 A5: i+1-1<=1+1-1 by A3,NAT_1:13;
     now per cases;
       case 1<=i;
         then i=1 by A5,XXREAL_0:1;
-        then i-'1-'1=0-'1 by XREAL_1:234;
+        then i-'1-'1=0-'1 by XREAL_1:232;
         hence thesis by A4,Th35;
       end;
       case i<1;
-        then i-1<1-1 by XREAL_1:11;
+        then i-1<1-1 by XREAL_1:9;
         then i-'1-'1=0-'1 by XREAL_0:def 2;
         hence thesis by A4,Th35;
       end;
@@ -1141,7 +1143,7 @@ proof
   hence
 A1: i1+1<i2 & i1+1-'1<i2 & i1+1-'2<i2 & i1+1<=i2 by Th46,NAT_1:13;
   i1-'1<=i1 by Th35;
-  then i1-'1+1<=i1+1 by XREAL_1:8;
+  then i1-'1+1<=i1+1 by XREAL_1:6;
   then
 A2: i1-'1+1<i2 by A1,XXREAL_0:2;
   i1-'1+1-'1<=i1-'1+1 by Th35;
@@ -1181,16 +1183,16 @@ A1: i1<i2 or i1+1<=i2;
 A2: i1<i2;
     then i1+1<=i2 by NAT_1:13;
     then
-A3: i1+1-1<=i2-1 by XREAL_1:11;
+A3: i1+1-1<=i2-1 by XREAL_1:9;
     0+1<=i2 by A2,NAT_1:13;
-    hence thesis by A3,XREAL_1:235;
+    hence thesis by A3,XREAL_1:233;
   end;
   suppose
 A4: i1+1<=i2;
     then
-A5: i1+1-1<=i2-1 by XREAL_1:11;
+A5: i1+1-1<=i2-1 by XREAL_1:9;
     0+1<=i2 by A4,NAT_1:13;
-    hence thesis by A5,XREAL_1:235;
+    hence thesis by A5,XREAL_1:233;
   end;
 end;
 
@@ -1211,7 +1213,7 @@ A1: 1<=i and
 A2: 1<=i1-'i;
   i1-i=(i1-'i)+i-i by A2,Th43
     .=i1-'i;
-  hence thesis by A1,XREAL_1:233;
+  hence thesis by A1,XREAL_1:231;
 end;
 
 theorem Th52:
@@ -1222,8 +1224,8 @@ A1: i-'k <= j;
   per cases;
   suppose
 A2: i >= k;
-    i-'k +k <= j + k by A1,XREAL_1:8;
-    hence thesis by A2,XREAL_1:237;
+    i-'k +k <= j + k by A1,XREAL_1:6;
+    hence thesis by A2,XREAL_1:235;
   end;
   suppose
 A3: i <= k;
@@ -1246,8 +1248,8 @@ proof
   assume that
 A1: i <= j -' k and
 A2: j >= k;
-  i + k <= j -' k + k by A1,XREAL_1:8;
-  hence thesis by A2,XREAL_1:237;
+  i + k <= j -' k + k by A1,XREAL_1:6;
+  hence thesis by A2,XREAL_1:235;
 end;
 
 theorem
@@ -1270,9 +1272,9 @@ proof
   assume that
 A1: k <= i and
 A2: i < j;
-  i -' k + k = i by A1,XREAL_1:237;
-  then i -' k + k < j -' k + k by A1,A2,XREAL_1:237,XXREAL_0:2;
-  hence thesis by XREAL_1:8;
+  i -' k + k = i by A1,XREAL_1:235;
+  then i -' k + k < j -' k + k by A1,A2,XREAL_1:235,XXREAL_0:2;
+  hence thesis by XREAL_1:6;
 end;
 
 theorem
@@ -1284,12 +1286,12 @@ A2: k < j;
   per cases;
   suppose k <= i;
     then
-A3: i -' k = i - k by XREAL_1:235;
-    j -' k = j - k by A2,XREAL_1:235;
-    hence thesis by A1,A3,XREAL_1:11;
+A3: i -' k = i - k by XREAL_1:233;
+    j -' k = j - k by A2,XREAL_1:233;
+    hence thesis by A1,A3,XREAL_1:9;
   end;
   suppose k > i;
-    then i - k < 0 by XREAL_1:51;
+    then i - k < 0 by XREAL_1:49;
     then
 A4: i -' k = 0 by XREAL_0:def 2;
     j -' k <> 0 by A2,Th36;
@@ -1304,8 +1306,8 @@ theorem
 proof
   assume
 A1: i <= j;
-  j-'(j-'i) + (j-'i) = j by Th50,XREAL_1:237
-    .= i + (j-'i) by A1,XREAL_1:237;
+  j-'(j-'i) + (j-'i) = j by Th50,XREAL_1:235
+    .= i + (j-'i) by A1,XREAL_1:235;
   hence thesis;
 end;
 
@@ -1316,8 +1318,454 @@ theorem
 proof
   let n,k be Nat such that
 A1: n < k;
-A2: k -' n = k - n by A1,XREAL_1:235;
+A2: k -' n = k - n by A1,XREAL_1:233;
   n+1 <= k by A1,NAT_1:13;
-  then k -' (n+1) = k - (n+1) by XREAL_1:235;
+  then k -' (n+1) = k - (n+1) by XREAL_1:233;
   hence thesis by A2;
 end;
+
+theorem
+  for A being finite set holds A is trivial iff card A < 2
+proof
+  let A be finite set;
+  hereby
+    assume
+A1:  A is trivial;
+    per cases;
+    suppose
+      A is empty;
+      hence card A < 2;
+    end;
+    suppose
+      A is non empty;
+      then ex x being set st A = {x} by A1,ZFMISC_1:131;
+      then card A = 1 by CARD_1:30;
+      hence card A < 2;
+    end;
+  end;
+  assume
+A2: card A < 2;
+  per cases by A2,NAT_1:23;
+  suppose card A = 0;
+    hence thesis;
+  end;
+  suppose card A = 1;
+    then A is 1-element by CARD_1:def 7;
+   hence thesis;
+  end;
+end;
+
+:: from INT_3, 2011.04.28, A.T.
+
+theorem Th8:
+  for n,a,k being Integer holds (n <> 0 implies (a + n * k) div n =
+  (a div n) + k) & (a + n * k) mod n = a mod n
+proof
+  let n,a,k be Integer;
+  thus
+A1: now
+    assume
+A2: n <> 0;
+    thus (a + n * k) div n = [\ (a + n * k)/n /] by INT_1:def 9
+      .= [\ (a + n * k) * n" /] by XCMPLX_0:def 9
+      .= [\ a * n" + (n * n") * k /]
+      .= [\ a * n" + 1 * k /] by A2,XCMPLX_0:def 7
+      .= [\ a * n" /] + k by INT_1:28
+      .= [\ a/n /] + k by XCMPLX_0:def 9
+      .= (a div n) + k by INT_1:def 9;
+  end;
+  per cases;
+  suppose
+A3: n <> 0;
+    hence (a + n * k) mod n = (a + n * k) - ((a div n) + k) * n by A1,
+INT_1:def 10
+      .= a - (a div n) * n
+      .= a mod n by A3,INT_1:def 10;
+  end;
+  suppose
+    n = 0;
+    hence thesis;
+  end;
+end;
+
+theorem Th9:
+  for n being natural number st n > 0 for a being Integer holds a
+  mod n >= 0 & a mod n < n
+proof
+  let n be natural number;
+  assume
+A1: n > 0;
+  let a be Integer;
+  now
+    a div n = [\ a/n /] by INT_1:def 9;
+    then a div n <= a/n by INT_1:def 6;
+    then (a div n) * n <= a/n * n by XREAL_1:64;
+    then (a div n) * n <= (a * n") * n by XCMPLX_0:def 9;
+    then (a div n) * n <= a * (n" * n);
+    then (a div n) * n <= a * 1 by A1,XCMPLX_0:def 7;
+    then (a div n) * n - (a div n) * n <= a - (a div n) * n by XREAL_1:9;
+    hence 0 <= a mod n by INT_1:def 10;
+    assume a mod n >= n;
+    then a - (a div n) * n >= n by A1,INT_1:def 10;
+    then (a + -(a div n) * n) + (a div n) * n >= n + (a div n) * n by XREAL_1:6
+;
+    then a - n >= (n + (a div n) * n) - n by XREAL_1:9;
+    then (a - n) * n" >= ((a div n) * n) * n" by XREAL_1:64;
+    then (a - n) * n" >= (a div n) * (n * n");
+    then a * n" - n * n" >= (a div n) * 1 by A1,XCMPLX_0:def 7;
+    then a * n" - 1 >= (a div n) by A1,XCMPLX_0:def 7;
+    then
+A2: a/n - 1 >= (a div n) by XCMPLX_0:def 9;
+    a div n = [\ a/n /] by INT_1:def 9;
+    hence contradiction by A2,INT_1:def 6;
+  end;
+  hence thesis;
+end;
+
+theorem Th10:
+  for n,a being Integer holds (0 <= a & a < n implies a mod n = a)
+  & (0 > a & a >= -n implies a mod n = n + a)
+proof
+  let n,a be Integer;
+  per cases;
+  suppose
+    n = 0;
+    hence thesis;
+  end;
+  suppose
+A1: n <> 0;
+    hereby
+      assume that
+A2:   0 <= a and
+A3:   a < n;
+      reconsider aa = a as Element of NAT by A2,INT_1:3;
+      reconsider nn = n as Element of NAT by A2,A3,INT_1:3;
+      consider t being Nat such that
+A4:   aa = nn * t + (aa mod nn) and
+      (aa mod nn) < nn by A1,Def2;
+      t = 0
+      proof
+        assume t <> 0;
+        then t >= 1 + 0 by INT_1:7;
+        then
+A5:     t * n >= 1 * n by A2,A3,XREAL_1:64;
+        nn * t + (aa mod nn) >= nn * t by NAT_1:11;
+        hence thesis by A3,A4,A5,XXREAL_0:2;
+      end;
+      hence a mod n = a by A4;
+    end;
+    assume that
+A6: 0 > a and
+A7: a >= -n;
+A8: n >= 0 by A6,A7;
+A9: a/n - 1 < -1
+    proof
+      assume a/n - 1 >= -1;
+      then (a/n - 1) + 1 >= -1 + 1 by XREAL_1:6;
+      then a * n" >= 0 by XCMPLX_0:def 9;
+      then (a * n") * n >= 0 * n by A8;
+      then a * (n" * n) >= 0;
+      then a * 1 >= 0 by A1,XCMPLX_0:def 7;
+      hence thesis by A6;
+    end;
+    a * n" >= (-n) * n" by A7,A8,XREAL_1:64;
+    then a /n >= -(n * n") by XCMPLX_0:def 9;
+    then -1 <= a/n by A1,XCMPLX_0:def 7;
+    then [\ a/n /] = -1 by A9,INT_1:def 6;
+    then
+A10: a div n = -1 by INT_1:def 9;
+    a mod n = a - (a div n) * n by A1,INT_1:def 10;
+    hence thesis by A10;
+  end;
+end;
+
+theorem Th12:
+  for n,a,b being Integer holds (n <> 0 & a mod n = b mod n
+implies a,b are_congruent_mod n) & (a,b are_congruent_mod n implies a mod n = b
+  mod n)
+proof
+  let n,a,b be Integer;
+  hereby
+    assume
+A1: n <> 0;
+    assume a mod n = b mod n;
+    then a - (a div n) * n = b mod n by A1,INT_1:def 10;
+    then a - (a div n) * n = b - (b div n) * n by A1,INT_1:def 10;
+    then a - b = (-(b div n) + (a div n)) * n;
+    then n divides (a-b) by INT_1:def 3;
+    hence a,b are_congruent_mod n by INT_2:15;
+  end;
+  assume a,b are_congruent_mod n;
+  then n divides (a-b) by INT_2:15;
+  then consider k being Integer such that
+A2: n * k = a - b by INT_1:def 3;
+  a = n * k + b by A2;
+  hence thesis by Th8;
+end;
+
+theorem
+  for n being natural number for a being Integer holds (a mod n)
+  mod n = a mod n
+proof
+  let n be natural number;
+  let a be Integer;
+  per cases;
+  suppose
+A1: n = 0;
+    hence (a mod n) mod n = 0 by INT_1:def 10
+      .= a mod n by A1,INT_1:def 10;
+  end;
+  suppose
+    n <> 0;
+    then a mod n >= 0 & a mod n < n by Th9;
+    hence thesis by Th10;
+  end;
+end;
+
+theorem
+  for n,a,b being Integer holds (a + b) mod n = ((a mod n) + (b mod n)) mod n
+proof
+  let n,a,b be Integer;
+  per cases;
+  suppose
+A1: n = 0;
+    hence (a + b) mod n = 0 by INT_1:def 10
+      .= ((a mod n) + (b mod n)) mod n by A1,INT_1:def 10;
+  end;
+  suppose
+    n <> 0;
+    then
+    a mod n + (a div n) * n = (a - (a div n) * n) + (a div n) * n & b mod
+    n + (b div n) * n = (b - (b div n) * n) + (b div n) * n by INT_1:def 10;
+    then (a + b) - ((a mod n) + (b mod n)) = ((a div n) + (b div n)) * n;
+    then n divides (a + b) - ((a mod n) + (b mod n)) by INT_1:def 3;
+    then a+b,(a mod n)+(b mod n) are_congruent_mod n by INT_2:15;
+    hence thesis by Th12;
+  end;
+end;
+
+theorem
+  for n,a,b being Integer holds (a * b) mod n = ((a mod n) * (b mod n)) mod n
+proof
+  let n,a,b be Integer;
+  per cases;
+  suppose
+A1: n = 0;
+    hence (a * b) mod n = 0 by INT_1:def 10
+      .= ((a mod n) * (b mod n)) mod n by A1,INT_1:def 10;
+  end;
+  suppose
+    n <> 0;
+    then
+    a mod n + (a div n) * n = (a - (a div n) * n) + (a div n) * n & b mod
+    n + (b div n) * n = (b - (b div n) * n) + (b div n) * n by INT_1:def 10;
+    then (a * b) - ((a mod n) * (b mod n)) = (((a mod n) * (b div n)) + (((a
+    div n) * (b mod n)) + (((a div n) * n) * (b div n)))) * n;
+    then n divides ((a * b) - ((a mod n) * (b mod n))) by INT_1:def 3;
+    then (a*b),((a mod n)*(b mod n)) are_congruent_mod n by INT_2:15;
+    hence thesis by Th12;
+  end;
+end;
+
+theorem
+  for a,b being Integer ex s,t being Integer st a gcd b = s * a + t * b
+proof
+  let a,b be Integer;
+A1: for a,b being Integer st a > 0 & b > 0 holds ex s,t being Integer st (a
+  gcd b) = (s * a + t * b)
+  proof
+    let a,b be Integer;
+    assume that
+A2: a > 0 and
+A3: b > 0;
+    reconsider a,b as Element of NAT by A2,A3,INT_1:3;
+    set M = {z where z is Element of NAT : ex s,t being Integer st z = s * a +
+    t * b};
+    defpred P[Nat] means ($1 in M & $1 <> 0);
+    a = 1 * a + 0 * b;
+    then
+A4: a in M;
+    then
+A5: ex k being Nat st P[k] by A2;
+    consider g being Nat such that
+A6: P[g] & for n being Nat st P[n] holds g <= n from NAT_1:sch 5(A5);
+    set G = {zz where zz is Element of NAT : ex s being Element of NAT st zz =
+    s * g};
+    ex z being Element of NAT st z = g & ex s,t being Integer st z = s * a
+    + t * b by A6;
+    then consider s,t being Integer such that
+A7: g = s * a + t * b;
+A8: for x being set holds x in M implies x in G
+    proof
+      let x be set;
+      assume x in M;
+      then consider x9 being Element of NAT such that
+A9:   x9 = x and
+A10:  ex u,v being Integer st x9 = u * a + v * b;
+      consider u,v being Integer such that
+A11:  x = u * a + v * b by A9,A10;
+      consider r being Nat such that
+A12:  x9 = g * (x9 div g) + r and
+A13:  r < g by A6,Def1;
+A14:  r in NAT by ORDINAL1:def 12;
+      r = x9 - g * (x9 div g) by A12
+        .= a * (u + -(s * (x9 div g))) + b * (v + -(t * (x9 div g)))
+         by A7,A9,A11;
+      then r in M by A14;
+      then r = 0 by A6,A13;
+      hence thesis by A9,A12;
+    end;
+    for x being set holds x in G implies x in M
+    proof
+      let x be set;
+      assume x in G;
+      then
+A15:  ex x9 being Element of NAT st x9 = x & ex u being Element of NAT st
+      x9 = u * g;
+      then consider u being Integer such that
+A16:  x = u * g;
+      x = (u * s) * a + (u * t) * b by A7,A16;
+      hence thesis by A15;
+    end;
+    then
+A17: G = M by A8,TARSKI:1;
+A18: abs(b) = b by ABSVALUE:def 1;
+A19: abs(a) = a by ABSVALUE:def 1;
+A20: for m being Nat st m divides abs(a) & m divides abs(b) holds m divides g
+    proof
+      ex g9 being Element of NAT st g9 = g & ex s,t being Integer st g9 =
+      s * a + t * b by A6;
+      then consider s,t being Integer such that
+A21:  g = s * a + t * b;
+      let m be Nat;
+      assume that
+A22:  m divides abs(a) and
+A23:  m divides abs(b);
+      consider u being Nat such that
+A24:  a = m * u by A19,A22,Def3;
+      consider v being Nat such that
+A25:  b = m * v by A18,A23,Def3;
+A26:  g = m * (s * u + t * v) by A24,A25,A21;
+      then s * u + t * v >= 0 by A6;
+      then s * u + t * v is Element of NAT by INT_1:3;
+      hence thesis by A26,Def3;
+    end;
+    b = 0 * a + 1 * b;
+    then b in M;
+    then
+    ex b9 being Element of NAT st b9 = b & ex t being Element of NAT st b9
+    = t * g by A17;
+    then
+A27: g divides abs(b) by A18,Def3;
+    ex a9 being Element of NAT st a9 = a & ex s being Element of NAT st a9
+    = s * g by A4,A17;
+    then g divides abs(a) by A19,Def3;
+    then g = abs(a) gcd abs(b) by A27,A20,Def5
+      .= a gcd b by INT_2:34;
+    hence thesis by A7;
+  end;
+  now
+    per cases;
+    case
+A28:  a = 0 or b = 0;
+A29:  for a,b being Integer holds a = 0 implies a gcd b = abs(b)
+      proof
+        let a,b be Integer;
+        assume a = 0;
+        then abs(a) = 0 by ABSVALUE:def 1;
+        then
+A30:    abs(b) divides abs(a) by Th6;
+        a gcd b = abs(a) gcd abs(b) & for m being Nat st m divides abs(a)
+        & m divides abs(b) holds m divides abs(b) by INT_2:34;
+        hence thesis by A30,Def5;
+      end;
+      now
+        per cases by A28;
+        case
+          a = 0;
+          then
+A31:      a gcd b = abs(b) by A29;
+          now
+            per cases;
+            case
+              b >= 0;
+              hence a gcd b = 0 * a + 1 * b by A31,ABSVALUE:def 1;
+            end;
+            case
+              b < 0;
+              hence a gcd b = -(b * 1) by A31,ABSVALUE:def 1
+                .= 0 * a + (-1) * b;
+            end;
+          end;
+          hence thesis;
+        end;
+        case
+          b = 0;
+          then
+A32:      a gcd b = abs(a) by A29;
+          now
+            per cases;
+            case
+              a >= 0;
+              hence a gcd b = 1 * a + 0 * b by A32,ABSVALUE:def 1;
+            end;
+            case
+              a < 0;
+              hence a gcd b = -(a * 1) by A32,ABSVALUE:def 1
+                .= 0 * b + (-1) * a;
+            end;
+          end;
+          hence thesis;
+        end;
+      end;
+      hence thesis;
+    end;
+    case
+A33:  a <> 0 & b <> 0;
+      now
+        per cases;
+        case
+          a >= 0 & b >= 0;
+          hence thesis by A1,A33;
+        end;
+        case
+A34:      a < 0 & b >= 0;
+          then -a > 0 by XREAL_1:58;
+          then consider s,t being Integer such that
+A35:      -a gcd b = s * -a + t * b by A1,A33,A34;
+A36:      a gcd b = abs(a) gcd abs(b) by INT_2:34
+            .= abs((-a)) gcd abs(b) by COMPLEX1:52
+            .= -a gcd b by INT_2:34;
+          s * -a + t * b = (-s) * a + t * b;
+          hence thesis by A35,A36;
+        end;
+        case
+A37:      a >= 0 & b < 0;
+          then -b > 0 by XREAL_1:58;
+          then consider s,t being Integer such that
+A38:      a gcd -b = s * a + t * -b by A1,A33,A37;
+A39:      a gcd b = abs(a) gcd abs(b) by INT_2:34
+            .= abs(a) gcd abs((-b)) by COMPLEX1:52
+            .= a gcd -b by INT_2:34;
+          s * a + t * -b = s * a + (-t) * b;
+          hence thesis by A38,A39;
+        end;
+        case
+          a < 0 & b < 0;
+          then -a > 0 & -b > 0 by XREAL_1:58;
+          then consider s,t being Integer such that
+A40:      -a gcd -b = s * -a + t * -b by A1;
+A41:      a gcd b = abs(a) gcd abs(b) by INT_2:34
+            .= abs(a) gcd abs((-b)) by COMPLEX1:52
+            .= abs((-a)) gcd abs((-b)) by COMPLEX1:52
+            .= -a gcd -b by INT_2:34;
+          s * -a + t * -b = (-s) * a + (-t) * b;
+          hence thesis by A40,A41;
+        end;
+      end;
+      hence thesis;
+    end;
+  end;
+  hence thesis;
+end;
+

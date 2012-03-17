@@ -17,22 +17,23 @@ environ
  vocabularies NUMBERS, SUBSET_1, FUNCT_1, RELAT_1, TARSKI, CARD_1, FINSET_1,
       XXREAL_0, FINSEQ_1, FINSEQ_2, CARD_3, NAT_1, XBOOLE_0, ARYTM_3, XREAL_0,
       ORDINAL1, ARYTM_1, ORDINAL4, GRAPH_1, STRUCT_0, TREES_2, GRAPH_4,
-      PARTFUN1, GLIB_000, REAL_1, GRAPH_5;
+      PARTFUN1, GLIB_000, REAL_1, GRAPH_5, ARYTM_2;
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, CARD_1, NUMBERS, XCMPLX_0,
       XXREAL_0, XREAL_0, RELAT_1, FUNCT_1, PARTFUN1, FINSEQ_1, SEQ_1, FINSEQ_2,
-      FINSEQ_4, FINSET_1, REAL_1, NAT_1, NAT_D, STRUCT_0, GRAPH_1, FUNCT_2,
+      FINSEQ_4, FINSET_1,
+      ARYTM_2, REAL_1, NAT_1, NAT_D, STRUCT_0, GRAPH_1, FUNCT_2,
       GRAPH_4, CARD_3, RVSUM_1;
  constructors XXREAL_0, FINSEQ_4, FINSOP_1, BINARITH, GRAPH_4, SEQ_1, NAT_D,
-      RVSUM_1;
+      RVSUM_1, ARYTM_2, RELSET_1;
  registrations XBOOLE_0, RELAT_1, FUNCT_1, FINSET_1, NUMBERS, XXREAL_0,
       XREAL_0, NAT_1, MEMBERED, FINSEQ_1, GRAPH_1, GRAPH_4, VALUED_0, CARD_1,
-      STRUCT_0;
+      STRUCT_0, ARYTM_2;
  requirements REAL, BOOLE, SUBSET, NUMERALS, ARITHM;
  definitions TARSKI, FUNCT_1, RVSUM_1;
  theorems FUNCT_2, XBOOLE_1, GRAPH_1, FINSEQ_1, GRAPH_4, FUNCT_1, FINSEQ_3,
       FINSEQ_4, NAT_1, TARSKI, YELLOW15, CARD_5, FINSEQ_2, XBOOLE_0, CARD_2,
       RVSUM_1, SUBSET_1, ZFMISC_1, XREAL_1, XXREAL_0, FINSOP_1, PRE_CIRC,
-      ORDINAL1, PARTFUN1, CARD_3;
+      ORDINAL1, PARTFUN1, CARD_3, ARYTM_0, REAL_1;
  schemes FUNCT_1, NAT_1, CLASSES1;
 
 begin :: Preliminaries
@@ -41,16 +42,14 @@ reserve n,m,i,j,k for Element of NAT,
   x,y,e,X,V,U for set,
   W,f,g for Function;
 
-canceled;
-
 theorem Th2:
   rng f c= rng g & x in dom f implies ex y st y in dom g & f.x = g. y
 proof
   assume that
 A1: rng f c= rng g and
 A2: x in dom f;
-  f.x in rng f by A2,FUNCT_1:12;
-  hence thesis by A1,FUNCT_1:def 5;
+  f.x in rng f by A2,FUNCT_1:3;
+  hence thesis by A1,FUNCT_1:def 3;
 end;
 
 scheme
@@ -110,15 +109,15 @@ A4: x=y and
 A5: 1 <= len y & len y <= n by A2;
     consider m being Nat such that
 A6: dom y = Seg m by FINSEQ_1:def 2;
-    m in NAT by ORDINAL1:def 13;
+    m in NAT by ORDINAL1:def 12;
     then
 A7: len y = m by A6,FINSEQ_1:def 3;
     then
-A8: m in dom f by A1,A5,FINSEQ_1:3;
+A8: m in dom f by A1,A5,FINSEQ_1:1;
     y in { s where s is Element of D*: len s = m } by A7;
     then y in m-tuples_on D by FINSEQ_2:def 4;
     then y in f.m by A1,A8;
-    hence thesis by A4,A8,CARD_5:10;
+    hence thesis by A4,A8,CARD_5:2;
   end;
   now
     let x;
@@ -126,9 +125,9 @@ A8: m in dom f by A1,A5,FINSEQ_1:3;
 A9: x in dom f;
     then reconsider z=x as Element of NAT by A1;
     f.z = F(z) by A1,A9;
-    hence f.x is finite by YELLOW15:2;
+    hence f.x is finite by YELLOW15:1;
   end;
-  then Union f is finite by A1,CARD_3:134;
+  then Union f is finite by A1,CARD_2:88;
   hence thesis by A3;
 end;
 
@@ -164,8 +163,6 @@ A4: len x <= n by A1;
   hence thesis by A2;
 end;
 
-canceled;
-
 theorem Th6:
   for D being finite set, k being Element of NAT st card D = k+1
 holds ex x being Element of D,C being Subset of D st D = C \/ { x } & card C =
@@ -183,9 +180,9 @@ A2: x in D by XBOOLE_0:def 1;
   x in {x} by TARSKI:def 1;
   then
 A3: not x in C by XBOOLE_0:def 5;
-  {x} c= D by A2,ZFMISC_1:37;
+  {x} c= D by A2,ZFMISC_1:31;
   hence D=C \/ {x} by XBOOLE_1:45;
-  then card D = card C + 1 by A3,CARD_2:54;
+  then card D = card C + 1 by A3,CARD_2:41;
   hence thesis by A1;
 end;
 
@@ -209,7 +206,7 @@ scheme
   defpred P[Element of NAT] means for A being Subset of D() st $1+1 = card A
 holds ex x being Element of D() st x in A & for y being Element of D() st y in
   A holds F(x) <= F(y);
-A1: card D() -' 1 + 1= card D() -1 +1 by PRE_CIRC:25
+A1: card D() -' 1 + 1= card D() -1 +1 by PRE_CIRC:20
     .=card D();
 A2: D() c= D();
 A3: for k st P[k] holds P[k+1]
@@ -281,7 +278,7 @@ A15: P[0]
     assume 0+1 = card A;
     then consider x being Element of A such that
 A16: A = {x} by Th7;
-    reconsider x as Element of D() by A16,ZFMISC_1:37;
+    reconsider x as Element of D() by A16,ZFMISC_1:31;
     take x;
     thus x in A by A16;
     thus thesis by A16,TARSKI:def 1;
@@ -314,18 +311,16 @@ reserve p,q for FinSequence;
 Lm1: 1 <= n & n <= len p implies p.n = (p^q).n
 proof
   assume 1 <= n & n <= len p;
-  then n in dom p by FINSEQ_3:27;
+  then n in dom p by FINSEQ_3:25;
   hence thesis by FINSEQ_1:def 7;
 end;
 
 Lm2: 1 <= n & n <= len q implies q.n = (p^q).(len p+n)
 proof
   assume 1 <= n & n <= len q;
-  then n in dom q by FINSEQ_3:27;
+  then n in dom q by FINSEQ_3:25;
   hence thesis by FINSEQ_1:def 7;
 end;
-
-canceled;
 
 theorem Th9:
   (for n,m st 1<=n & n<m & m<=len p holds p.n <> p.m) iff p is one-to-one
@@ -340,8 +335,8 @@ A1: for n,m st 1<=n & n<m & m<=len p holds p.n <> p.m;
 A2:   x1 in dom p & x2 in dom p and
 A3:   p.x1 = p.x2;
       reconsider n=x1, m=x2 as Element of NAT by A2;
-A4:   n <= len p & 1 <= m by A2,FINSEQ_3:27;
-A5:   1 <= n & m <= len p by A2,FINSEQ_3:27;
+A4:   n <= len p & 1 <= m by A2,FINSEQ_3:25;
+A5:   1 <= n & m <= len p by A2,FINSEQ_3:25;
       assume
 A6:   x1 <> x2;
       per cases;
@@ -365,18 +360,18 @@ A9: n<m and
 A10: m<=len p;
   n <= len p by A9,A10,XXREAL_0:2;
   then
-A11: n in dom p by A8,FINSEQ_3:27;
+A11: n in dom p by A8,FINSEQ_3:25;
   1 <= m by A8,A9,XXREAL_0:2;
   then
-A12: m in dom p by A10,FINSEQ_3:27;
+A12: m in dom p by A10,FINSEQ_3:25;
   assume p.n = p.m;
-  hence contradiction by A7,A9,A11,A12,FUNCT_1:def 8;
+  hence contradiction by A7,A9,A11,A12,FUNCT_1:def 4;
 end;
 
 theorem Th10:
   (for n,m st 1<=n & n<m & m<=len p holds p.n <> p.m) iff card rng p = len p
 proof
-  p is one-to-one iff card rng p=len p by FINSEQ_4:77;
+  p is one-to-one iff card rng p=len p by FINSEQ_4:62;
   hence thesis by Th9;
 end;
 
@@ -385,7 +380,7 @@ reserve G for Graph,
 
 theorem
   i in dom pe implies (the Source of G).(pe.i) in the carrier of G & (
-  the Target of G).(pe.i) in the carrier of G by FINSEQ_2:13,FUNCT_2:7;
+  the Target of G).(pe.i) in the carrier of G by FINSEQ_2:11,FUNCT_2:5;
 
 theorem Th12:
   q^<*x*> is one-to-one & rng (q^<*x*>) c= rng p implies ex p1,p2
@@ -395,35 +390,35 @@ proof
   assume that
 A1: r is one-to-one and
 A2: rng r c= rng p;
-A3: r.i=x by FINSEQ_1:59;
-  rng q c= rng r by FINSEQ_1:42;
+A3: r.i=x by FINSEQ_1:42;
+  rng q c= rng r by FINSEQ_1:29;
   then
 A4: rng q c= rng p by A2,XBOOLE_1:1;
-  len r =i & 1 <= i by FINSEQ_2:19,NAT_1:11;
+  len r =i & 1 <= i by FINSEQ_2:16,NAT_1:11;
   then
-A5: i in dom r by FINSEQ_3:27;
+A5: i in dom r by FINSEQ_3:25;
   then consider y being set such that
 A6: y in dom p and
 A7: r.i = p.y by A2,Th2;
   reconsider j=y as Element of NAT by A6;
-  j <= len p by A6,FINSEQ_3:27;
+  j <= len p by A6,FINSEQ_3:25;
   then consider k being Nat such that
 A8: len p = j+k by NAT_1:10;
-  reconsider k as Element of NAT by ORDINAL1:def 13;
+  reconsider k as Element of NAT by ORDINAL1:def 12;
   consider s, p2 being FinSequence such that
 A9: len s = j and
   len p2 = k and
-A10: p = s^p2 by A8,FINSEQ_2:25;
-A11: 1 <= j by A6,FINSEQ_3:27;
+A10: p = s^p2 by A8,FINSEQ_2:22;
+A11: 1 <= j by A6,FINSEQ_3:25;
   then ex m being Nat st j = 1 + m by NAT_1:10;
   then consider p1 being FinSequence, d being set such that
-A12: s = p1^<*d*> by A9,FINSEQ_2:21;
-  j in dom s by A9,A11,FINSEQ_3:27;
+A12: s = p1^<*d*> by A9,FINSEQ_2:18;
+  j in dom s by A9,A11,FINSEQ_3:25;
   then
 A13: s.j=x by A7,A10,A3,FINSEQ_1:def 7;
   take p1,p2;
-A14: j = len p1 +1 by A9,A12,FINSEQ_2:19;
-  hence p=p1^<*x*>^p2 by A10,A12,A13,FINSEQ_1:59;
+A14: j = len p1 +1 by A9,A12,FINSEQ_2:16;
+  hence p=p1^<*x*>^p2 by A10,A12,A13,FINSEQ_1:42;
   let y be set;
   assume
 A15: y in rng q;
@@ -434,22 +429,22 @@ A16: y in rng q;
     assume y = x;
     then consider z being set such that
 A17: z in dom q and
-A18: x = q.z by A16,FUNCT_1:def 5;
+A18: x = q.z by A16,FUNCT_1:def 3;
     reconsider n=z as Element of NAT by A17;
-    n <= len q by A17,FINSEQ_3:27;
+    n <= len q by A17,FINSEQ_3:25;
     then
-A19: n <> i by XREAL_1:31;
-    n in dom r & r.n=r.i by A3,A17,A18,FINSEQ_1:def 7,FINSEQ_2:18;
-    hence contradiction by A1,A5,A19,FUNCT_1:def 8;
+A19: n <> i by XREAL_1:29;
+    n in dom r & r.n=r.i by A3,A17,A18,FINSEQ_1:def 7,FINSEQ_2:15;
+    hence contradiction by A1,A5,A19,FUNCT_1:def 4;
   end;
   then
 A20: y <> x by A15;
-  s = p1^<*x*> by A12,A14,A13,FINSEQ_1:59;
-  then rng p = rng (p1^<*x*>) \/ rng p2 by A10,FINSEQ_1:44
-    .= rng p1 \/ rng <*x*> \/ rng p2 by FINSEQ_1:44
+  s = p1^<*x*> by A12,A14,A13,FINSEQ_1:42;
+  then rng p = rng (p1^<*x*>) \/ rng p2 by A10,FINSEQ_1:31
+    .= rng p1 \/ rng <*x*> \/ rng p2 by FINSEQ_1:31
     .= rng p1 \/ rng p2 \/ rng <*x*> by XBOOLE_1:4
-    .= rng (p1^p2) \/ rng <*x*> by FINSEQ_1:44
-    .= rng (p1^p2) \/ {x} by FINSEQ_1:55;
+    .= rng (p1^p2) \/ rng <*x*> by FINSEQ_1:31
+    .= rng (p1^p2) \/ {x} by FINSEQ_1:38;
   then y in rng (p1^p2) or y in {x} by A15,A4,XBOOLE_0:def 3;
   hence thesis by A20,TARSKI:def 1;
 end;
@@ -467,12 +462,12 @@ A2: len f = len r + 1 and
 A3: for n st 1 <= n & n <= len f holds f.n in V and
 A4: for n st 1 <= n & n <= len r ex x, y being Element of V st x = f.n &
   y = f.(n+1) & r.n joins x, y by GRAPH_1:def 12;
-A5: len r = len p + len q by FINSEQ_1:35;
+A5: len r = len p + len q by FINSEQ_1:22;
   then len f = len p + (len q + 1) by A2;
   then consider h1,h2 being FinSequence such that
 A6: len h1 = len p and
 A7: len h2 = len q +1 and
-A8: f = h1^h2 by FINSEQ_2:25;
+A8: f = h1^h2 by FINSEQ_2:22;
 A9: now
     take h2;
     thus len h2 = len q + 1 by A7;
@@ -484,10 +479,10 @@ A11:  n <= len h2;
       n <= len h1+n by NAT_1:11;
       then
 A12:  1 <= len h1 +n by A10,XXREAL_0:2;
-      len h1+n <= len h1 + len h2 by A11,XREAL_1:9;
+      len h1+n <= len h1 + len h2 by A11,XREAL_1:7;
       then
-A13:  len h1+n <= len f by A8,FINSEQ_1:35;
-      n in dom h2 by A10,A11,FINSEQ_3:27;
+A13:  len h1+n <= len f by A8,FINSEQ_1:22;
+      n in dom h2 by A10,A11,FINSEQ_3:25;
       then h2.n=f.(len h1+n) by A8,FINSEQ_1:def 7;
       hence h2.n in V by A3,A13,A12;
     end;
@@ -502,13 +497,13 @@ A15:  n <= len q;
       then consider x, y being Element of V such that
 A16:  x = f.m and
 A17:  y = f.(m+1) and
-A18:  r.m joins x, y by A4,A5,A15,XREAL_1:9;
+A18:  r.m joins x, y by A4,A5,A15,XREAL_1:7;
       take x,y;
       len q <= len h2 by A7,NAT_1:11;
       then n <= len h2 by A15,XXREAL_0:2;
       hence x = h2.n by A6,A8,A14,A16,Lm2;
       1 <= n+1 by NAT_1:11;
-      hence h2.(n+1)=f.(len h1+(n+1)) by A7,A8,A15,Lm2,XREAL_1:9
+      hence h2.(n+1)=f.(len h1+(n+1)) by A7,A8,A15,Lm2,XREAL_1:7
         .=y by A6,A17;
       thus q.n joins x, y by A14,A15,A18,Lm2;
     end;
@@ -517,7 +512,7 @@ A19: len f = len p + 1 +len q by A2,A5;
   then consider f1,f2 being FinSequence such that
 A20: len f1 = len p+1 and
   len f2 = len q and
-A21: f = f1^f2 by FINSEQ_2:25;
+A21: f = f1^f2 by FINSEQ_2:22;
 A22: now
     take f1;
     thus len f1 = len p + 1 by A20;
@@ -530,7 +525,7 @@ A24:  n <= len f1;
       then n <= len f by A24,XXREAL_0:2;
       then
 A25:  f.n in V by A3,A23;
-      n in dom f1 by A23,A24,FINSEQ_3:27;
+      n in dom f1 by A23,A24,FINSEQ_3:25;
       hence f1.n in V by A21,A25,FINSEQ_1:def 7;
     end;
     hereby
@@ -548,26 +543,26 @@ A30:  r.n joins x, y by A4,A26;
       len p <= len f1 by A20,NAT_1:11;
       then n <= len f1 by A27,XXREAL_0:2;
       hence x = f1.n by A21,A26,A28,Lm1;
-      1 <= n+1 & n+1 <= len f1 by A20,A27,NAT_1:11,XREAL_1:9;
-      then n+1 in dom f1 by FINSEQ_3:27;
+      1 <= n+1 & n+1 <= len f1 by A20,A27,NAT_1:11,XREAL_1:7;
+      then n+1 in dom f1 by FINSEQ_3:25;
       hence y = f1.(n+1) by A21,A29,FINSEQ_1:def 7;
       thus p.n joins x, y by A26,A27,A30,Lm1;
     end;
   end;
-A31: p is FinSequence of D by A1,FINSEQ_1:50;
+A31: p is FinSequence of D by A1,FINSEQ_1:36;
   now
     let n;
     assume 1 <= n & n <= len p;
-    then n in dom p by FINSEQ_3:27;
-    hence p.n in D by A31,FINSEQ_2:13;
+    then n in dom p by FINSEQ_3:25;
+    hence p.n in D by A31,FINSEQ_2:11;
   end;
   hence p is Chain of G by A22,GRAPH_1:def 12;
-A32: q is FinSequence of D by A1,FINSEQ_1:50;
+A32: q is FinSequence of D by A1,FINSEQ_1:36;
   now
     let n;
     assume 1 <= n & n <= len q;
-    then n in dom q by FINSEQ_3:27;
-    hence q.n in D by A32,FINSEQ_2:13;
+    then n in dom q by FINSEQ_3:25;
+    hence q.n in D by A32,FINSEQ_2:11;
   end;
   hence thesis by A9,GRAPH_1:def 12;
 end;
@@ -579,7 +574,7 @@ proof
   assume
 A1: p^q is oriented Chain of G;
   set r=p^q;
-A2: len r = len p + len q by FINSEQ_1:35;
+A2: len r = len p + len q by FINSEQ_1:22;
 A3: now
     let n;
     assume that
@@ -593,7 +588,7 @@ A6: 1 <= m by A4,XXREAL_0:2;
     then
 A7: q.(n+1)=r.(len p+(n+1)) by Lm2,NAT_1:11
       .=r.(m+1);
-    m < len r by A2,A5,XREAL_1:10;
+    m < len r by A2,A5,XREAL_1:8;
     then (the Source of G).(r.(m+1))=(the Target of G).(r.m) by A1,A6,
 GRAPH_1:def 13;
     hence (the Source of G).(q.(n+1))=(the Target of G).(q.n) by A4,A5,A7,Lm2;
@@ -629,46 +624,46 @@ A2: p={} or q={};
       per cases by A2;
       suppose
         p={};
-        hence thesis by FINSEQ_1:47;
+        hence thesis by FINSEQ_1:34;
       end;
       suppose
         q={};
-        hence thesis by FINSEQ_1:47;
+        hence thesis by FINSEQ_1:34;
       end;
     end;
   end;
   suppose
 A3: not (p={} or q={});
     consider vs2 being FinSequence of the carrier of G such that
-A4: vs2 is_oriented_vertex_seq_of q by GRAPH_4:10;
+A4: vs2 is_oriented_vertex_seq_of q by GRAPH_4:9;
     len vs2 = len q + 1 by A4,GRAPH_4:def 5;
     then
 A5: len vs2 >= 1 by NAT_1:12;
-    len q >= 1 by A3,FINSEQ_1:28;
+    len q >= 1 by A3,FINSEQ_1:20;
     then q.1 orientedly_joins vs2/.1, vs2/.(1+1) by A4,GRAPH_4:def 5;
     then
 A6: (the Source of G).(q.1)=vs2/.1 by GRAPH_4:def 1
-      .=vs2.1 by A5,FINSEQ_4:24;
+      .=vs2.1 by A5,FINSEQ_4:15;
     consider vs1 being FinSequence of the carrier of G such that
-A7: vs1 is_oriented_vertex_seq_of p by GRAPH_4:10;
+A7: vs1 is_oriented_vertex_seq_of p by GRAPH_4:9;
 A8: len vs1 = len p + 1 by A7,GRAPH_4:def 5;
     then
 A9: len vs1 >= 1 by NAT_1:12;
-    len p >= 1 by A3,FINSEQ_1:28;
+    len p >= 1 by A3,FINSEQ_1:20;
     then p.(len p) orientedly_joins vs1/.(len p), vs1/.(len p+1) by A7,
 GRAPH_4:def 5;
     then (the Target of G).(p.(len p))=vs1/.(len vs1) by A8,GRAPH_4:def 1
-      .=vs1.len vs1 by A9,FINSEQ_4:24;
-    hence thesis by A1,A7,A4,A6,GRAPH_4:15;
+      .=vs1.len vs1 by A9,FINSEQ_4:15;
+    hence thesis by A1,A7,A4,A6,GRAPH_4:14;
   end;
 end;
 
 begin :: Additional Properties of Acyclic Oriented Paths
 
 theorem Th16:
-  {} is Simple (oriented Chain of G)
+  {} is Simple oriented Chain of G
 proof
-  set v =the  Element of G;
+  set v = the Element of G;
   set vs=<*v*>;
 A1: now
     let n,m;
@@ -676,19 +671,19 @@ A1: now
 A2: 1<=n & n<m & m<=len vs and
     vs.n=vs.m;
     assume not (n=1 & m=len vs);
-    len vs =1 by FINSEQ_1:56;
+    len vs =1 by FINSEQ_1:39;
     hence contradiction by A2,XXREAL_0:2;
   end;
-  vs is_oriented_vertex_seq_of {} qua FinSequence by GRAPH_4:9;
+  vs is_oriented_vertex_seq_of {} qua FinSequence by GRAPH_4:8;
   hence thesis by A1,GRAPH_1:14,GRAPH_4:def 7;
 end;
 
 theorem Th17:
-  p^q is Simple (oriented Chain of G) implies p is Simple (
-  oriented Chain of G) & q is Simple (oriented Chain of G)
+  p^q is Simple oriented Chain of G implies p is Simple
+  oriented Chain of G & q is Simple oriented Chain of G
 proof
   assume
-A1: p^q is Simple (oriented Chain of G);
+A1: p^q is Simple oriented Chain of G;
   set r=p^q;
   per cases;
   suppose
@@ -697,11 +692,11 @@ A2: p={} or q={};
       per cases by A2;
       suppose
         p={};
-        hence thesis by A1,Th16,FINSEQ_1:47;
+        hence thesis by A1,Th16,FINSEQ_1:34;
       end;
       suppose
         q={};
-        hence thesis by A1,Th16,FINSEQ_1:47;
+        hence thesis by A1,Th16,FINSEQ_1:34;
       end;
     end;
   end;
@@ -712,19 +707,19 @@ A4: vs is_oriented_vertex_seq_of r and
 A5: for n,m st 1<=n & n<m & m<=len vs & vs.n=vs.m holds n=1 & m=len vs
     by A1,GRAPH_4:def 7;
 A6: len vs = len r + 1 by A4,GRAPH_4:def 5;
-A7: len r = len p + len q by FINSEQ_1:35;
+A7: len r = len p + len q by FINSEQ_1:22;
     then
 A8: len vs = len p + 1 +len q by A6;
     then consider f1,f2 being FinSequence such that
 A9: len f1 = len p+1 and
     len f2 = len q and
-A10: vs = f1^f2 by FINSEQ_2:25;
+A10: vs = f1^f2 by FINSEQ_2:22;
 A11: len vs = len p + (len q + 1) by A6,A7;
     then consider h1,h2 being FinSequence such that
 A12: len h1 = len p and
 A13: len h2 = len q +1 and
-A14: vs = h1^h2 by FINSEQ_2:25;
-    reconsider f1 as FinSequence of the carrier of G by A10,FINSEQ_1:50;
+A14: vs = h1^h2 by FINSEQ_2:22;
+    reconsider f1 as FinSequence of the carrier of G by A10,FINSEQ_1:36;
 A15: now
       let n,m;
       assume that
@@ -739,41 +734,41 @@ A20:  f1.n=vs.n by A10,A16,Lm1;
       then
 A21:  f1.m=vs.m by A10,A18,Lm1;
       assume not (n=1 & m=len f1);
-      len f1 + 0 < len vs by A3,A8,A9,XREAL_1:10;
+      len f1 + 0 < len vs by A3,A8,A9,XREAL_1:8;
       then m < len vs by A18,XXREAL_0:2;
       hence contradiction by A5,A16,A17,A19,A20,A21;
     end;
-    reconsider h2 as FinSequence of the carrier of G by A14,FINSEQ_1:50;
+    reconsider h2 as FinSequence of the carrier of G by A14,FINSEQ_1:36;
     now
       let n;
       assume that
 A22:  1<=n and
 A23:  n <=len q;
       set m=len p+n;
-A24:  m <= len r by A7,A23,XREAL_1:9;
-      then 1 <= m+1 & m+1 <= len vs by A6,NAT_1:11,XREAL_1:9;
+A24:  m <= len r by A7,A23,XREAL_1:7;
+      then 1 <= m+1 & m+1 <= len vs by A6,NAT_1:11,XREAL_1:7;
       then
-A25:  m+1 in dom vs by FINSEQ_3:27;
+A25:  m+1 in dom vs by FINSEQ_3:25;
 A26:  1 <= n+1 by NAT_1:11;
-      n+1 <= len h2 by A13,A23,XREAL_1:9;
-      then n+1 in dom h2 by A26,FINSEQ_3:27;
+      n+1 <= len h2 by A13,A23,XREAL_1:7;
+      then n+1 in dom h2 by A26,FINSEQ_3:25;
       then
-A27:  h2/.(n+1)=h2.(n+1) by PARTFUN1:def 8
-        .=vs.(len h1 +(n+1)) by A13,A14,A23,A26,Lm2,XREAL_1:9
-        .=vs/.(m+1) by A12,A25,PARTFUN1:def 8;
+A27:  h2/.(n+1)=h2.(n+1) by PARTFUN1:def 6
+        .=vs.(len h1 +(n+1)) by A13,A14,A23,A26,Lm2,XREAL_1:7
+        .=vs/.(m+1) by A12,A25,PARTFUN1:def 6;
       n <= m by NAT_1:11;
       then
 A28:  1 <= m by A22,XXREAL_0:2;
       len r <= len vs by A6,NAT_1:11;
       then m <= len vs by A24,XXREAL_0:2;
       then
-A29:  m in dom vs by A28,FINSEQ_3:27;
-A30:  n+ 0 <= len h2 by A13,A23,XREAL_1:9;
-      then n in dom h2 by A22,FINSEQ_3:27;
+A29:  m in dom vs by A28,FINSEQ_3:25;
+A30:  n+ 0 <= len h2 by A13,A23,XREAL_1:7;
+      then n in dom h2 by A22,FINSEQ_3:25;
       then
-A31:  h2/.n=h2.n by PARTFUN1:def 8
+A31:  h2/.n=h2.n by PARTFUN1:def 6
         .=vs.m by A12,A14,A22,A30,Lm2
-        .=vs/.m by A29,PARTFUN1:def 8;
+        .=vs/.m by A29,PARTFUN1:def 6;
       r.m orientedly_joins vs/.m, vs/.(m+1) by A4,A24,A28,GRAPH_4:def 5;
       hence q.n orientedly_joins h2/.n, h2/.(n+1) by A22,A23,A31,A27,Lm2;
     end;
@@ -788,30 +783,30 @@ A35:  1 <= n+1 by NAT_1:11;
       len p <= len r by A7,NAT_1:11;
       then
 A36:  n <= len r by A34,XXREAL_0:2;
-      then n+1 <= len vs by A6,XREAL_1:9;
+      then n+1 <= len vs by A6,XREAL_1:7;
       then
-A37:  n+1 in dom vs by A35,FINSEQ_3:27;
+A37:  n+1 in dom vs by A35,FINSEQ_3:25;
       len p <= len vs by A11,NAT_1:11;
       then n <= len vs by A34,XXREAL_0:2;
       then
-A38:  n in dom vs by A33,FINSEQ_3:27;
-A39:  n+ 0 <= len f1 by A9,A34,XREAL_1:9;
-      then n in dom f1 by A33,FINSEQ_3:27;
+A38:  n in dom vs by A33,FINSEQ_3:25;
+A39:  n+ 0 <= len f1 by A9,A34,XREAL_1:7;
+      then n in dom f1 by A33,FINSEQ_3:25;
       then
-A40:  f1 /. n=f1.n by PARTFUN1:def 8
+A40:  f1 /. n=f1.n by PARTFUN1:def 6
         .=vs.n by A10,A33,A39,Lm1
-        .=vs/.n by A38,PARTFUN1:def 8;
-      n+1 <= len f1 by A9,A34,XREAL_1:9;
-      then n+1 in dom f1 by A35,FINSEQ_3:27;
+        .=vs/.n by A38,PARTFUN1:def 6;
+      n+1 <= len f1 by A9,A34,XREAL_1:7;
+      then n+1 in dom f1 by A35,FINSEQ_3:25;
       then
-A41:  f1/.(n+1)=f1.(n+1) by PARTFUN1:def 8
-        .=vs.(n+1) by A9,A10,A34,A35,Lm1,XREAL_1:9
-        .=vs/.(n+1) by A37,PARTFUN1:def 8;
+A41:  f1/.(n+1)=f1.(n+1) by PARTFUN1:def 6
+        .=vs.(n+1) by A9,A10,A34,A35,Lm1,XREAL_1:7
+        .=vs/.(n+1) by A37,PARTFUN1:def 6;
       r.n orientedly_joins vs/.n, vs/.(n+1) by A4,A33,A36,GRAPH_4:def 5;
       hence p.n orientedly_joins f1/.n, f1/.(n+1) by A33,A34,A40,A41,Lm1;
     end;
     then f1 is_oriented_vertex_seq_of p by A9,GRAPH_4:def 5;
-    hence p is Simple (oriented Chain of G) by A1,A15,Th14,GRAPH_4:def 7;
+    hence p is Simple oriented Chain of G by A1,A15,Th14,GRAPH_4:def 7;
     now
       let n,m;
       assume that
@@ -823,11 +818,11 @@ A45:  h2.n=h2.m;
       then
 A46:  h2.n=vs.(len h1+n) by A14,A42,Lm2;
       assume not (n=1 & m=len h2);
-A47:  len h1+m <= len vs by A11,A12,A13,A44,XREAL_1:9;
+A47:  len h1+m <= len vs by A11,A12,A13,A44,XREAL_1:7;
       1 <= m by A42,A43,XXREAL_0:2;
       then
 A48:  h2.m=vs.(len h1+m) by A14,A44,Lm2;
-      0 +1 < len h1 + n & len h1+n < len h1+m by A3,A12,A42,A43,XREAL_1:10;
+      0 +1 < len h1 + n & len h1+n < len h1+m by A3,A12,A42,A43,XREAL_1:8;
       hence contradiction by A5,A45,A46,A48,A47;
     end;
     hence thesis by A1,A32,Th14,GRAPH_4:def 7;
@@ -835,32 +830,32 @@ A48:  h2.m=vs.(len h1+m) by A14,A44,Lm2;
 end;
 
 theorem Th18:
-  len pe = 1 implies pe is Simple (oriented Chain of G)
+  len pe = 1 implies pe is Simple oriented Chain of G
 proof
   set p=pe;
   set v1=(the Source of G).(p.1), v2=(the Target of G).(p.1);
 A1: now
     let n;
     assume 1 <= n & n <= len p;
-    then n in dom p by FINSEQ_3:27;
-    hence p.n in the carrier' of G by FINSEQ_2:13;
+    then n in dom p by FINSEQ_3:25;
+    hence p.n in the carrier' of G by FINSEQ_2:11;
   end;
   assume
 A2: len p = 1;
-  then 1 in dom p by FINSEQ_3:27;
-  then reconsider v1, v2 as Element of G by FINSEQ_2:13,FUNCT_2:7;
+  then 1 in dom p by FINSEQ_3:25;
+  then reconsider v1, v2 as Element of G by FINSEQ_2:11,FUNCT_2:5;
   set vs=<*v1,v2*>;
-A3: len vs = len p +1 by A2,FINSEQ_1:61;
+A3: len vs = len p +1 by A2,FINSEQ_1:44;
 A4: now
     let n;
     assume 1 <= n & n <= len p;
     then
 A5: n=1 by A2,XXREAL_0:1;
     take v1,v2;
-    thus v1= vs.n & v2 = vs.(n+1) by A5,FINSEQ_1:61;
+    thus v1= vs.n & v2 = vs.(n+1) by A5,FINSEQ_1:44;
     thus p.n joins v1, v2 by A5,GRAPH_1:def 10;
   end;
-A6: len vs = 2 by FINSEQ_1:61;
+A6: len vs = 2 by FINSEQ_1:44;
 A7: now
     let n,m;
     assume that
@@ -872,7 +867,7 @@ A10: m<=len vs and
     then n <= 1 by NAT_1:13;
     hence n=1 by A8,XXREAL_0:1;
     1 < m by A8,A9,XXREAL_0:2;
-    then 1 + 1 < m + 1 by XREAL_1:10;
+    then 1 + 1 < m + 1 by XREAL_1:8;
     then 2 <= m by NAT_1:13;
     hence m=len vs by A6,A10,XXREAL_0:1;
   end;
@@ -886,13 +881,13 @@ A13: n <= len vs;
       n < 1+1;
       then n <= 1 by NAT_1:13;
       then n=1 by A12,XXREAL_0:1;
-      then vs.n=v1 by FINSEQ_1:61;
+      then vs.n=v1 by FINSEQ_1:44;
       hence vs.n in the carrier of G;
     end;
     suppose
       n >= 2;
       then n=2 by A6,A13,XXREAL_0:1;
-      then vs.n=v2 by FINSEQ_1:61;
+      then vs.n=v2 by FINSEQ_1:44;
       hence vs.n in the carrier of G;
     end;
   end;
@@ -903,7 +898,7 @@ A14: for n st 1 <= n & n < len p & (the Source of G).(p.(n+1)) <> (the
     assume 1<=n & n<=len p;
     then
 A15: n=1 by A2,XXREAL_0:1;
-    vs/.1= v1 & vs/.(1+1)= v2 by FINSEQ_4:26;
+    vs/.1= v1 & vs/.(1+1)= v2 by FINSEQ_4:17;
     hence p.n orientedly_joins vs/.n, vs/.(n+1) by A15,GRAPH_4:def 1;
   end;
   then vs is_oriented_vertex_seq_of p by A3,GRAPH_4:def 5;
@@ -911,13 +906,13 @@ A15: n=1 by A2,XXREAL_0:1;
 end;
 
 theorem Th19:
-  for p being Simple (oriented Chain of G), q being FinSequence of
+  for p being Simple oriented Chain of G, q being FinSequence of
 the carrier' of G st len p >=1 & len q=1 & (the Source of G).(q.1)=(the Target
 of G).(p.(len p)) & (the Source of G).(p.1) <> (the Target of G).(p.(len p)) &
 not ex k st 1<=k & k <= len p & (the Target of G).(p.k) =(the Target of G).(q.1
-  ) holds p^q is Simple (oriented Chain of G)
+  ) holds p^q is Simple oriented Chain of G
 proof
-  let p be Simple (oriented Chain of G), q be FinSequence of the carrier' of G;
+  let p be Simple oriented Chain of G, q be FinSequence of the carrier' of G;
   set FS=the Source of G, FT=the Target of G, v1=FS.(q.1), v2=FT.(q.1), vp=(
   the Target of G).(p.len p), E=the carrier' of G, V=the carrier of G;
   assume that
@@ -927,8 +922,8 @@ A3: v1=vp and
 A4: FS.(p.1) <> vp and
 A5: not ex k st 1<=k & k <= len p & FT.(p.k) = v2;
   set lp=len p;
-  1 in dom q by A2,FINSEQ_3:27;
-  then reconsider v1, v2 as Element of V by FINSEQ_2:13,FUNCT_2:7;
+  1 in dom q by A2,FINSEQ_3:25;
+  then reconsider v1, v2 as Element of V by FINSEQ_2:11,FUNCT_2:5;
   consider r being FinSequence of V such that
 A6: r is_oriented_vertex_seq_of p and
 A7: for n,m st 1<=n & n<m & m<=len r & r.n=r.m holds n=1 & m=len r by
@@ -955,11 +950,11 @@ A13:  n=len pq;
       p.m orientedly_joins r/.m, r/.(m+1) by A1,A6,GRAPH_4:def 5;
       then
 A14:  vp = r/.(m+1) by GRAPH_4:def 1;
-A15:  n = len r by A2,A8,A13,FINSEQ_1:35;
-      then n in dom r by A11,FINSEQ_3:27;
-      hence v1 = r.n by A3,A8,A15,A14,PARTFUN1:def 8
+A15:  n = len r by A2,A8,A13,FINSEQ_1:22;
+      then n in dom r by A11,FINSEQ_3:25;
+      hence v1 = r.n by A3,A8,A15,A14,PARTFUN1:def 6
         .=rv.n by A11,A15,Lm1;
-      thus v2 = rv.(n+1) by A15,FINSEQ_1:59;
+      thus v2 = rv.(n+1) by A15,FINSEQ_1:42;
       q.1 joins v1, v2 by GRAPH_1:def 10;
       hence pq.n joins v1, v2 by A2,A8,A15,Lm2;
     end;
@@ -969,15 +964,15 @@ A16:  n<>len pq;
       take y=r/.(n+1);
       n < len pq by A12,A16,XXREAL_0:1;
       then
-A17:  n < len p +1 by A2,FINSEQ_1:35;
+A17:  n < len p +1 by A2,FINSEQ_1:22;
       then
 A18:  n+1 <= len r by A8,NAT_1:13;
-      n in dom r by A8,A11,A17,FINSEQ_3:27;
-      hence x = r.n by PARTFUN1:def 8
+      n in dom r by A8,A11,A17,FINSEQ_3:25;
+      hence x = r.n by PARTFUN1:def 6
         .= rv.n by A8,A11,A17,Lm1;
       1 <= n+1 by NAT_1:12;
-      then n+1 in dom r by A18,FINSEQ_3:27;
-      hence y = r.(n+1) by PARTFUN1:def 8
+      then n+1 in dom r by A18,FINSEQ_3:25;
+      hence y = r.(n+1) by PARTFUN1:def 6
         .=rv.(n+1) by A18,Lm1,NAT_1:12;
 A19:  n <= len p by A17,NAT_1:13;
       then p.n joins r/.n, r/.(n+1) by A9,A11;
@@ -987,17 +982,17 @@ A19:  n <= len p by A17,NAT_1:13;
 A20: now
     let n;
     assume 1 <= n & n <= len pq;
-    then n in dom pq by FINSEQ_3:27;
-    then pq.n in rng pq by FUNCT_1:def 5;
+    then n in dom pq by FINSEQ_3:25;
+    then pq.n in rng pq by FUNCT_1:def 3;
     then
-A21: pq.n in rng p \/ rng q by FINSEQ_1:44;
+A21: pq.n in rng p \/ rng q by FINSEQ_1:31;
     rng p c= E & rng q c= E by FINSEQ_1:def 4;
     then rng p \/ rng q c= E by XBOOLE_1:8;
     hence pq.n in E by A21;
   end;
-A22: len rv = len r + 1 by FINSEQ_2:19;
+A22: len rv = len r + 1 by FINSEQ_2:16;
   then
-A23: len rv = len pq +1 by A2,A8,FINSEQ_1:35;
+A23: len rv = len pq +1 by A2,A8,FINSEQ_1:22;
   p.lp orientedly_joins r/.lp, r/.(lp+1) by A1,A6,GRAPH_4:def 5;
   then
 A24: vp = r/.(lp+1) by GRAPH_4:def 1;
@@ -1017,7 +1012,7 @@ A30: not (n=1 & m=len rv);
 A31:  m <= len r by A22,NAT_1:13;
 A32:  1 <= m by A26,A27,XXREAL_0:2;
       then
-A33:  m in dom r by A31,FINSEQ_3:27;
+A33:  m in dom r by A31,FINSEQ_3:25;
       n < len r by A27,A31,XXREAL_0:2;
       then
 A34:  r.n=rv.n by A26,Lm1
@@ -1026,21 +1021,21 @@ A34:  r.n=rv.n by A26,Lm1
 A35:  m=len r by A7,A26,A27,A31;
 A36:  n=1 by A7,A26,A27,A31,A34;
       then
-A37:  1 in dom r by A27,A35,FINSEQ_3:27;
+A37:  1 in dom r by A27,A35,FINSEQ_3:25;
       p.1 orientedly_joins r/.1, r/.(1+1) by A1,A6,GRAPH_4:def 5;
       then FS.(p.1) = r/.1 by GRAPH_4:def 1
-        .=r.m by A34,A36,A37,PARTFUN1:def 8
-        .=vp by A8,A24,A35,A33,PARTFUN1:def 8;
+        .=r.m by A34,A36,A37,PARTFUN1:def 6
+        .=vp by A8,A24,A35,A33,PARTFUN1:def 6;
       hence contradiction by A4;
     end;
     suppose
 A38:  m >= len rv;
       then m=len rv by A28,XXREAL_0:1;
       then
-A39:  v2 = rv.m by A22,FINSEQ_1:59;
+A39:  v2 = rv.m by A22,FINSEQ_1:42;
       consider k being Nat such that
 A40:  n=k+1 by A26,NAT_1:6;
-      reconsider k as Element of NAT by ORDINAL1:def 13;
+      reconsider k as Element of NAT by ORDINAL1:def 12;
       1 < n by A26,A28,A30,A38,XXREAL_0:1;
       then
 A41:  1 <= k by A40,NAT_1:13;
@@ -1048,11 +1043,11 @@ A41:  1 <= k by A40,NAT_1:13;
       then
 A42:  k+1 <= len r by NAT_1:13;
       then
-A43:  k+1 in dom r by A26,A40,FINSEQ_3:27;
-A44:  k <= len p by A8,A42,XREAL_1:8;
+A43:  k+1 in dom r by A26,A40,FINSEQ_3:25;
+A44:  k <= len p by A8,A42,XREAL_1:6;
       then p.k orientedly_joins r/.k, r/.(k+1) by A6,A41,GRAPH_4:def 5;
       then FT.(p.k) = r/.(k+1) by GRAPH_4:def 1
-        .=r.(k+1) by A43,PARTFUN1:def 8
+        .=r.(k+1) by A43,PARTFUN1:def 6
         .=v2 by A26,A29,A39,A40,A42,Lm1;
       hence contradiction by A5,A41,A44;
     end;
@@ -1072,7 +1067,7 @@ A49:  n+1 <= len p by NAT_1:13;
     end;
     suppose
 A50:  n >= len p;
-      n < len p + 1 by A2,A47,FINSEQ_1:35;
+      n < len p + 1 by A2,A47,FINSEQ_1:22;
       then n <= len p by NAT_1:13;
       then
 A51:  n = len p by A50,XXREAL_0:1;
@@ -1088,7 +1083,7 @@ A54: n <= len rv;
     per cases;
     suppose
       n=len rv;
-      then rv.n=v2 by A22,FINSEQ_1:59;
+      then rv.n=v2 by A22,FINSEQ_1:42;
       hence rv.n in V;
     end;
     suppose
@@ -1096,13 +1091,13 @@ A54: n <= len rv;
       then n < len rv by A54,XXREAL_0:1;
       then
 A55:  n <= len r by A22,NAT_1:13;
-      then n in dom r by A53,FINSEQ_3:27;
-      then r.n in V by FINSEQ_2:13;
+      then n in dom r by A53,FINSEQ_3:25;
+      then r.n in V by FINSEQ_2:11;
       hence rv.n in V by A53,A55,Lm1;
     end;
   end;
   now
-A56: dom r c= dom rv by FINSEQ_1:39;
+A56: dom r c= dom rv by FINSEQ_1:26;
     let n;
     assume that
 A57: 1<=n and
@@ -1111,39 +1106,39 @@ A58: n<=len pq;
     suppose
 A59:  n <= len p;
       then
-A60:  n+1 <= len r by A8,XREAL_1:9;
+A60:  n+1 <= len r by A8,XREAL_1:7;
       1 <= n+1 by NAT_1:12;
       then
-A61:  n+1 in dom r by A60,FINSEQ_3:27;
+A61:  n+1 in dom r by A60,FINSEQ_3:25;
       then
-A62:  r/.(n+1)= r.(n+1) by PARTFUN1:def 8
+A62:  r/.(n+1)= r.(n+1) by PARTFUN1:def 6
         .=rv.(n+1) by A60,Lm1,NAT_1:12
-        .=rv/.(n+1) by A56,A61,PARTFUN1:def 8;
+        .=rv/.(n+1) by A56,A61,PARTFUN1:def 6;
 A63:  p.n orientedly_joins r/.n, r/.(n+1) by A6,A57,A59,GRAPH_4:def 5;
 A64:  n <= len r by A8,A59,NAT_1:12;
       then
-A65:  n in dom r by A57,FINSEQ_3:27;
-      then r/.n= r.n by PARTFUN1:def 8
+A65:  n in dom r by A57,FINSEQ_3:25;
+      then r/.n= r.n by PARTFUN1:def 6
         .=rv.n by A57,A64,Lm1
-        .=rv/.n by A56,A65,PARTFUN1:def 8;
+        .=rv/.n by A56,A65,PARTFUN1:def 6;
       hence pq.n orientedly_joins rv/.n, rv/.(n+1) by A57,A59,A63,A62,Lm1;
     end;
     suppose
 A66:  n > len p;
-A67:  len p+1 >= n by A2,A58,FINSEQ_1:35;
+A67:  len p+1 >= n by A2,A58,FINSEQ_1:22;
       len p +1 <= n by A66,NAT_1:13;
       then
 A68:  n = len r by A8,A67,XXREAL_0:1;
       1 <= n+1 by NAT_1:12;
       then
-A69:  n+1 in dom rv by A22,A68,FINSEQ_3:27;
-A70:  v2 = rv.(n+1) by A68,FINSEQ_1:59
-        .=rv/.(n+1) by A69,PARTFUN1:def 8;
+A69:  n+1 in dom rv by A22,A68,FINSEQ_3:25;
+A70:  v2 = rv.(n+1) by A68,FINSEQ_1:42
+        .=rv/.(n+1) by A69,PARTFUN1:def 6;
 A71:  q.1 orientedly_joins v1, v2 by GRAPH_4:def 1;
-A72:  n in dom r by A8,A57,A67,FINSEQ_3:27;
-      then v1 = r.n by A3,A8,A24,A68,PARTFUN1:def 8
+A72:  n in dom r by A8,A57,A67,FINSEQ_3:25;
+      then v1 = r.n by A3,A8,A24,A68,PARTFUN1:def 6
         .=rv.n by A8,A57,A67,Lm1
-        .=rv/.n by A56,A72,PARTFUN1:def 8;
+        .=rv/.n by A56,A72,PARTFUN1:def 6;
       hence pq.n orientedly_joins rv/.n, rv/.(n+1) by A2,A8,A68,A70,A71,Lm2;
     end;
   end;
@@ -1152,9 +1147,9 @@ A72:  n in dom r by A8,A57,A67,FINSEQ_3:27;
 end;
 
 theorem Th20:
-  for p being Simple (oriented Chain of G) holds p is one-to-one
+  for p being Simple oriented Chain of G holds p is one-to-one
 proof
-  let p be Simple (oriented Chain of G);
+  let p be Simple oriented Chain of G;
   set VV=the carrier of G;
   consider vs being FinSequence of VV such that
 A1: vs is_oriented_vertex_seq_of p and
@@ -1177,16 +1172,16 @@ A10: n <= len p by A5,A6,XXREAL_0:2;
     then
 A11: vs/.n = (the Source of G).(p.m) by A9,GRAPH_4:def 1
       .= vs/.m by A8,GRAPH_4:def 1;
-A12: len p < len vs by A3,XREAL_1:31;
+A12: len p < len vs by A3,XREAL_1:29;
     then n <= len vs by A10,XXREAL_0:2;
-    then n in dom vs by A4,FINSEQ_3:27;
+    then n in dom vs by A4,FINSEQ_3:25;
     then
-A13: vs.n=vs/.n by PARTFUN1:def 8;
+A13: vs.n=vs/.n by PARTFUN1:def 6;
 A14: m <= len vs by A6,A12,XXREAL_0:2;
-    then m in dom vs by A7,FINSEQ_3:27;
-    then vs.m=vs.n by A11,A13,PARTFUN1:def 8;
+    then m in dom vs by A7,FINSEQ_3:25;
+    then vs.m=vs.n by A11,A13,PARTFUN1:def 6;
     then m= len vs by A2,A4,A5,A14;
-    hence contradiction by A3,A6,XREAL_1:31;
+    hence contradiction by A3,A6,XREAL_1:29;
   end;
   hence thesis by Th9;
 end;
@@ -1223,12 +1218,12 @@ definition
 end;
 
 theorem Th21:
-  for p being Simple (oriented Chain of G) st p=pe^qe & len pe >=
+  for p being Simple oriented Chain of G st p=pe^qe & len pe >=
 1 & len qe >= 1 & (the Source of G).(p.1) <> (the Target of G).(p.len p) holds
 not (the Source of G).(p.1) in vertices qe & not (the Target of G).(p.len p) in
   vertices pe
 proof
-  let p be Simple (oriented Chain of G);
+  let p be Simple oriented Chain of G;
   set FT=the Target of G, FS=the Source of G;
   assume that
 A1: p=pe^qe and
@@ -1242,17 +1237,17 @@ A6: for n,m st 1<=n & n<m & m<=len vs & vs.n=vs.m holds n=1 & m=len vs
 A7: len vs = len p + 1 by A5,GRAPH_4:def 5;
   then
 A8: 1 <= len vs by NAT_1:12;
-A9: len p = len pe + len qe by A1,FINSEQ_1:35;
+A9: len p = len pe + len qe by A1,FINSEQ_1:22;
   then
 A10: len p >= 1 by A2,NAT_1:12;
   then p.1 orientedly_joins vs/.1, vs/.(1+1) by A5,GRAPH_4:def 5;
   then
 A11: FS.(p.1)=vs/.1 by GRAPH_4:def 1
-    .=vs.1 by A8,FINSEQ_4:24;
+    .=vs.1 by A8,FINSEQ_4:15;
   p.len p orientedly_joins vs/.len p, vs/.(len p+1) by A5,A10,GRAPH_4:def 5;
   then
 A12: FT.(p.len p)=vs/.(len p+1) by GRAPH_4:def 1
-    .=vs.len vs by A7,A8,FINSEQ_4:24;
+    .=vs.len vs by A7,A8,FINSEQ_4:15;
   hereby
     assume FS.(p.1) in vertices(qe);
     then consider x being Vertex of G such that
@@ -1262,17 +1257,17 @@ A14: ex i st i in dom qe & x in vertices(qe/.i);
 A15: i in dom qe and
 A16: x in vertices(qe/.i) by A14;
     set k=len pe + i;
-A17: qe/.i=qe.i by A15,PARTFUN1:def 8
+A17: qe/.i=qe.i by A15,PARTFUN1:def 6
       .=p.k by A1,A15,FINSEQ_1:def 7;
-    1 <= i by A15,FINSEQ_3:27;
+    1 <= i by A15,FINSEQ_3:25;
     then
 A18: 1 < i+1 by NAT_1:13;
-    i <= len qe by A15,FINSEQ_3:27;
+    i <= len qe by A15,FINSEQ_3:25;
     then
-A19: k <= len p by A9,XREAL_1:9;
+A19: k <= len p by A9,XREAL_1:7;
     then
 A20: k <= len vs by A7,NAT_1:13;
-    1+i <= k by A2,XREAL_1:9;
+    1+i <= k by A2,XREAL_1:7;
     then
 A21: 1 < k by A18,XXREAL_0:2;
     then
@@ -1281,15 +1276,15 @@ A22: p.k orientedly_joins vs/.k, vs/.(k+1) by A5,A19,GRAPH_4:def 5;
     suppose
 A23:  x=FS.(p.k);
       FS.(p.k)=vs/.k by A22,GRAPH_4:def 1
-        .=vs.k by A21,A20,FINSEQ_4:24;
+        .=vs.k by A21,A20,FINSEQ_4:15;
       hence contradiction by A4,A6,A11,A12,A13,A21,A20,A23;
     end;
     suppose
 A24:  x=FT.(p.k);
 A25:  1 < k+1 by A21,NAT_1:13;
-A26:  k+1 <= len vs by A7,A19,XREAL_1:9;
+A26:  k+1 <= len vs by A7,A19,XREAL_1:7;
       FT.(p.k)=vs/.(k+1) by A22,GRAPH_4:def 1
-        .=vs.(k+1) by A26,FINSEQ_4:24,NAT_1:12;
+        .=vs.(k+1) by A26,FINSEQ_4:15,NAT_1:12;
       hence contradiction by A4,A6,A11,A12,A13,A24,A26,A25;
     end;
   end;
@@ -1301,32 +1296,32 @@ A28: ex i st i in dom pe & x in vertices(pe/.i);
     consider i such that
 A29: i in dom pe and
 A30: x in vertices(pe/.i) by A28;
-A31: pe/.i=pe.i by A29,PARTFUN1:def 8
+A31: pe/.i=pe.i by A29,PARTFUN1:def 6
       .=p.i by A1,A29,FINSEQ_1:def 7;
-A32: i <= len pe by A29,FINSEQ_3:27;
+A32: i <= len pe by A29,FINSEQ_3:25;
     then
 A33: i <= len p by A9,NAT_1:12;
     then
 A34: i < len vs by A7,NAT_1:13;
-A35: 1 <= i by A29,FINSEQ_3:27;
+A35: 1 <= i by A29,FINSEQ_3:25;
     then
 A36: p.i orientedly_joins vs/.i, vs/.(i+1) by A5,A33,GRAPH_4:def 5;
     per cases by A30,A31,TARSKI:def 2;
     suppose
 A37:  x=FS.(p.i);
       FS.(p.i)=vs/.i by A36,GRAPH_4:def 1
-        .=vs.i by A35,A34,FINSEQ_4:24;
+        .=vs.i by A35,A34,FINSEQ_4:15;
       hence contradiction by A4,A6,A12,A27,A35,A34,A37;
     end;
     suppose
 A38:  x=FT.(p.i);
-A39:  i+1 <= len vs by A7,A33,XREAL_1:9;
-      len pe+1 <= len pe + len qe & i+1 <= len pe+1 by A3,A32,XREAL_1:9;
+A39:  i+1 <= len vs by A7,A33,XREAL_1:7;
+      len pe+1 <= len pe + len qe & i+1 <= len pe+1 by A3,A32,XREAL_1:7;
       then i+1 <= len p by A9,XXREAL_0:2;
       then
 A40:  1 <= i+1 & i+1 < len vs by A7,NAT_1:12,13;
       FT.(p.i)=vs/.(i+1) by A36,GRAPH_4:def 1
-        .=vs.(i+1) by A39,FINSEQ_4:24,NAT_1:12;
+        .=vs.(i+1) by A39,FINSEQ_4:15,NAT_1:12;
       hence contradiction by A4,A6,A11,A12,A27,A38,A40;
     end;
   end;
@@ -1344,15 +1339,15 @@ A1: vertices pe c= V;
       assume
 A2:   i in dom pe;
       then
-A3:   1<=i & i <= len pe by FINSEQ_3:27;
+A3:   1<=i & i <= len pe by FINSEQ_3:25;
       thus vertices(pe/.i) c= V
       proof
         let x be set;
         assume
 A4:     x in vertices(pe/.i);
         then x = FS.(pe/.i) or x=FT.(pe/.i) by TARSKI:def 2;
-        then x = FS.(pe.i) or x=FT.(pe.i) by A3,FINSEQ_4:24;
-        then reconsider y=x as Vertex of G by A2,FINSEQ_2:13,FUNCT_2:7;
+        then x = FS.(pe.i) or x=FT.(pe.i) by A3,FINSEQ_4:15;
+        then reconsider y=x as Vertex of G by A2,FINSEQ_2:11,FUNCT_2:5;
         y in {v where v is Vertex of G : ex i st i in dom pe & v in
         vertices(pe/.i)} by A2,A4;
         hence thesis by A1;
@@ -1384,35 +1379,35 @@ proof
 A1: ex i be Nat st P[i] by Th22;
   consider k be Nat such that
 A2: P[k] & for n be Nat st P[n] holds k <= n from NAT_1:sch 5(A1);
-  k <= len pe by A2,FINSEQ_3:27;
+  k <= len pe by A2,FINSEQ_3:25;
   then consider j being Nat such that
 A3: len pe=k+j by NAT_1:10;
-  reconsider j as Element of NAT by ORDINAL1:def 13;
-  1 <= k by A2,FINSEQ_3:27;
+  reconsider j as Element of NAT by ORDINAL1:def 12;
+  1 <= k by A2,FINSEQ_3:25;
   then consider i being Nat such that
 A4: k=1+i by NAT_1:10;
-  reconsider i as Element of NAT by ORDINAL1:def 13;
+  reconsider i as Element of NAT by ORDINAL1:def 12;
   len pe=i+(1+j) by A4,A3;
   then consider q,r being FinSequence such that
 A5: len q = i and
   len r = 1+j and
-A6: pe = q^r by FINSEQ_2:25;
-  reconsider q,r as FinSequence of the carrier' of G by A6,FINSEQ_1:50;
+A6: pe = q^r by FINSEQ_2:22;
+  reconsider q,r as FinSequence of the carrier' of G by A6,FINSEQ_1:36;
   take i,q,r;
-  thus i+1 <= len pe & not vertices(pe/.(i+1)) c= V by A2,A4,FINSEQ_3:27;
+  thus i+1 <= len pe & not vertices(pe/.(i+1)) c= V by A2,A4,FINSEQ_3:25;
   thus len q=i & pe=q^r by A5,A6;
   now
     let m be Nat;
     assume
 A7: m in dom q;
     then
-A8: m <= len q by FINSEQ_3:27;
-A9: dom q c= dom pe by A6,FINSEQ_1:39;
+A8: m <= len q by FINSEQ_3:25;
+A9: dom q c= dom pe by A6,FINSEQ_1:26;
     assume
 A10: not vertices(q/.m) c= V;
-    q/.m=q.m by A7,PARTFUN1:def 8
+    q/.m=q.m by A7,PARTFUN1:def 6
       .=pe.m by A6,A7,FINSEQ_1:def 7
-      .=pe/.m by A7,A9,PARTFUN1:def 8;
+      .=pe/.m by A7,A9,PARTFUN1:def 6;
     then k <= m by A2,A7,A10,A9;
     hence contradiction by A4,A5,A8,NAT_1:13;
   end;
@@ -1432,13 +1427,13 @@ A3: ex i st i in dom qe & v in vertices(qe/.i);
   consider i such that
 A4: i in dom qe and
 A5: v in vertices(qe/.i) by A3;
-  qe.i in rng qe by A4,FUNCT_1:def 5;
+  qe.i in rng qe by A4,FUNCT_1:def 3;
   then consider j being set such that
 A6: j in dom pe and
-A7: qe.i = pe.j by A1,FUNCT_1:def 5;
+A7: qe.i = pe.j by A1,FUNCT_1:def 3;
   reconsider j as Element of NAT by A6;
-  qe/.i=qe.i by A4,PARTFUN1:def 8;
-  then pe/.j=qe/.i by A6,A7,PARTFUN1:def 8;
+  qe/.i=qe.i by A4,PARTFUN1:def 6;
+  then pe/.j=qe/.i by A6,A7,PARTFUN1:def 6;
   hence thesis by A2,A5,A6;
 end;
 
@@ -1457,14 +1452,12 @@ theorem Th26:
   vertices(pe^qe) \ X c= V implies vertices(pe) \ X c= V &
   vertices(qe) \ X c= V
 proof
-A1: rng pe c= rng(pe^qe) & rng qe c= rng(pe^qe) by FINSEQ_1:42,43;
+A1: rng pe c= rng(pe^qe) & rng qe c= rng(pe^qe) by FINSEQ_1:29,30;
   assume vertices(pe^qe) \ X c= V;
   hence thesis by A1,Th25;
 end;
 
 reserve v,v1,v2,v3 for Element of G;
-
-canceled;
 
 theorem Th28:
   i in dom pe & (v=(the Source of G).(pe.i) or v=(the Target of G)
@@ -1474,7 +1467,7 @@ proof
   assume that
 A1: i in dom pe and
 A2: v=FS.(pe.i) or v=FT.(pe.i);
-  v=FS.(pe/.i) or v=FT.(pe/.i) by A1,A2,PARTFUN1:def 8;
+  v=FS.(pe/.i) or v=FT.(pe/.i) by A1,A2,PARTFUN1:def 6;
   then v in vertices(pe/.i) by TARSKI:def 2;
   hence thesis by A1;
 end;
@@ -1486,7 +1479,7 @@ proof
   assume
 A1: len pe = 1;
   then
-A2: 1 in dom pe by FINSEQ_3:27;
+A2: 1 in dom pe by FINSEQ_3:25;
   now
     let x be set;
     hereby
@@ -1497,25 +1490,25 @@ A4:   ex i st i in dom pe & y in vertices(pe/.i);
       consider i such that
 A5:   i in dom pe and
 A6:   y in vertices(pe/.i) by A4;
-      1<=i & i <= len pe by A5,FINSEQ_3:27;
+      1<=i & i <= len pe by A5,FINSEQ_3:25;
       hence x in vertices(pe/.1) by A1,A3,A6,XXREAL_0:1;
     end;
     assume
 A7: x in vertices(pe/.1);
     then x=FS.(pe/.1) or x=FT.(pe/.1) by TARSKI:def 2;
-    then x=FS.(pe.1) or x=FT.(pe.1) by A1,FINSEQ_4:24;
-    then reconsider y=x as Vertex of G by A2,FINSEQ_2:13,FUNCT_2:7;
+    then x=FS.(pe.1) or x=FT.(pe.1) by A1,FINSEQ_4:15;
+    then reconsider y=x as Vertex of G by A2,FINSEQ_2:11,FUNCT_2:5;
     y in {v where v is Vertex of G : ex i st i in dom pe & v in vertices(
     pe/.i)} by A2,A7;
     hence x in vertices(pe);
   end;
-  hence thesis by TARSKI:2;
+  hence thesis by TARSKI:1;
 end;
 
 theorem Th30:
   vertices pe c= vertices(pe^qe) & vertices qe c= vertices(pe^qe)
 proof
-  rng pe c= rng (pe^qe) & rng qe c= rng (pe^qe) by FINSEQ_1:42,43;
+  rng pe c= rng (pe^qe) & rng qe c= rng (pe^qe) by FINSEQ_1:29,30;
   hence thesis by Th24;
 end;
 
@@ -1530,7 +1523,7 @@ A1: p = q^pe and
 A2: len q >= 1 and
 A3: len pe = 1;
   set FS=the Source of G, FT=the Target of G, V3={FT.(pe.1)};
-A4: len p = len q + 1 by A1,A3,FINSEQ_1:35;
+A4: len p = len q + 1 by A1,A3,FINSEQ_1:22;
   now
     let x be set;
     hereby
@@ -1541,16 +1534,16 @@ A6:   ex i st i in dom p & y in vertices(p/.i);
       consider i such that
 A7:   i in dom p and
 A8:   y in vertices(p/.i) by A6;
-A9:   1<=i by A7,FINSEQ_3:27;
-A10:  i <= len p by A7,FINSEQ_3:27;
+A9:   1<=i by A7,FINSEQ_3:25;
+A10:  i <= len p by A7,FINSEQ_3:25;
       per cases;
       suppose
 A11:    i <= len q;
         then
-A12:    i in dom q by A9,FINSEQ_3:27;
-        p/.i=p.i by A9,A10,FINSEQ_4:24
+A12:    i in dom q by A9,FINSEQ_3:25;
+        p/.i=p.i by A9,A10,FINSEQ_4:15
           .=q.i by A1,A9,A11,Lm1
-          .=q/.i by A9,A11,FINSEQ_4:24;
+          .=q/.i by A9,A11,FINSEQ_4:15;
         then y in {v where v is Vertex of G : ex j st j in dom q & v in
         vertices(q/.j)} by A8,A12;
         hence x in vertices(q) \/ V3 by A5,XBOOLE_0:def 3;
@@ -1563,16 +1556,16 @@ A13:    i > len q;
 A14:    i = len q+1 by A4,A10,XXREAL_0:1;
 A15:    y=FS.(p/.i) or y=FT.(p/.i) by A8,TARSKI:def 2;
         hereby
-          per cases by A9,A10,A15,FINSEQ_4:24;
+          per cases by A9,A10,A15,FINSEQ_4:15;
           suppose
 A16:        z=FS.(p.i);
             len q < len p by A4,NAT_1:13;
             then z=FT.(p.(len q)) by A2,A14,A16,GRAPH_1:def 13
               .=FT.(q.(len q)) by A1,A2,Lm1
-              .=FT.(q/.(len q)) by A2,FINSEQ_4:24;
+              .=FT.(q/.(len q)) by A2,FINSEQ_4:15;
             then
 A17:        z in vertices(q/.(len q)) by TARSKI:def 2;
-            len q in dom q by A2,FINSEQ_3:27;
+            len q in dom q by A2,FINSEQ_3:25;
             then z in {v where v is Vertex of G : ex j st j in dom q & v in
             vertices(q/.j)} by A17;
             hence x in vertices(q) \/ V3 by A5,XBOOLE_0:def 3;
@@ -1596,20 +1589,20 @@ A19:  x in vertices q;
     end;
     suppose
 A20:  x in V3;
-      1 in dom pe by A3,FINSEQ_3:27;
-      then reconsider y=FT.(pe.1) as Vertex of G by FINSEQ_2:13,FUNCT_2:7;
+      1 in dom pe by A3,FINSEQ_3:25;
+      then reconsider y=FT.(pe.1) as Vertex of G by FINSEQ_2:11,FUNCT_2:5;
 A21:  1 <= len p by A4,NAT_1:12;
       then
-A22:  len p in dom p by FINSEQ_3:27;
+A22:  len p in dom p by FINSEQ_3:25;
       y=FT.(p.(len p)) by A1,A3,A4,Lm2
-        .=FT.(p/.(len p)) by A21,FINSEQ_4:24;
+        .=FT.(p/.(len p)) by A21,FINSEQ_4:15;
       then
 A23:  y in vertices(p/.(len p)) by TARSKI:def 2;
       x = FT.(pe.1) by A20,TARSKI:def 1;
       hence x in vertices(p) by A23,A22;
     end;
   end;
-  hence thesis by TARSKI:2;
+  hence thesis by TARSKI:1;
 end;
 
 theorem Th32:
@@ -1627,19 +1620,19 @@ A4: ex i st i in dom p & u in vertices(p/.i) by A2;
 A5: i in dom p and
 A6: u in vertices(p/.i) by A4;
 A7: u=FS.(p/.i) or u=FT.(p/.i) by A6,TARSKI:def 2;
-A8: 1<=i by A5,FINSEQ_3:27;
-A9: i <= len p by A5,FINSEQ_3:27;
-  per cases by A3,A7,A8,A9,FINSEQ_4:24;
+A8: 1<=i by A5,FINSEQ_3:25;
+A9: i <= len p by A5,FINSEQ_3:25;
+  per cases by A3,A7,A8,A9,FINSEQ_4:15;
   suppose
 A10: v=FT.(p.i);
     take i;
-    thus thesis by A5,A10,FINSEQ_3:27;
+    thus thesis by A5,A10,FINSEQ_3:25;
   end;
   suppose
 A11: v=FS.(p.i);
     consider j being Nat such that
 A12: i=1+j by A8,NAT_1:10;
-    reconsider j as Element of NAT by ORDINAL1:def 13;
+    reconsider j as Element of NAT by ORDINAL1:def 12;
 A13: j < len p by A9,A12,NAT_1:13;
     take j;
     i > 1 by A1,A8,A11,XXREAL_0:1;
@@ -1690,9 +1683,9 @@ proof
   assume
 A1: p is_orientedpath_of v1,v2;
   then p <> {} by Def3;
-  then 1 <= len p by FINSEQ_1:28;
+  then 1 <= len p by FINSEQ_1:20;
   then
-A2: 1 in dom p & len p in dom p by FINSEQ_3:27;
+A2: 1 in dom p & len p in dom p by FINSEQ_3:25;
   (the Source of G).(p.1) = v1 & (the Target of G).(p.(len p))= v2 by A1,Def3;
   hence thesis by A2,Th28;
 end;
@@ -1742,7 +1735,7 @@ A4: len pe=1;
 A5: pe is oriented Chain of G by A4,Th18;
   FT.(p.len p)=v2 & FS.(pe.1)=v2 by A2,A3,Def3,GRAPH_4:def 1;
   then reconsider q=p^pe as oriented Chain of G by A5,Th15;
-A6: len q=len p +1 by A4,FINSEQ_1:35;
+A6: len q=len p +1 by A4,FINSEQ_1:22;
   FT.(pe.1)=v3 by A3,GRAPH_4:def 1;
   then
 A7: FT.(q.(len q))=v3 by A4,A6,Lm2;
@@ -1801,16 +1794,16 @@ definition
   let G be Graph, v1,v2 be Element of G;
   func AcyclicPaths(v1,v2) -> Subset of ((the carrier' of G)*) equals
   {p where
-  p is Simple (oriented Chain of G): p is_acyclicpath_of v1,v2};
+  p is Simple oriented Chain of G: p is_acyclicpath_of v1,v2};
   coherence
   proof
-    set PT={p where p is Simple (oriented Chain of G): p is_acyclicpath_of v1,
+    set PT={p where p is Simple oriented Chain of G: p is_acyclicpath_of v1,
     v2};
     PT c= (the carrier' of G)*
     proof
       let e be set;
       assume e in PT;
-      then ex p being Simple (oriented Chain of G) st ( e=p)&( p
+      then ex p being Simple oriented Chain of G st ( e=p)&( p
       is_acyclicpath_of v1,v2);
       hence thesis by FINSEQ_1:def 11;
     end;
@@ -1822,16 +1815,16 @@ definition
   let G be Graph, v1,v2 be Element of G,V be set;
   func AcyclicPaths(v1,v2,V) -> Subset of ((the carrier' of G)*) equals
   {p
-  where p is Simple (oriented Chain of G) : p is_acyclicpath_of v1,v2,V};
+  where p is Simple oriented Chain of G : p is_acyclicpath_of v1,v2,V};
   coherence
   proof
-    set PT={p where p is Simple (oriented Chain of G): p is_acyclicpath_of v1,
+    set PT={p where p is Simple oriented Chain of G: p is_acyclicpath_of v1,
     v2,V};
     PT c= (the carrier' of G)*
     proof
       let e be set;
       assume e in PT;
-      then ex p being Simple (oriented Chain of G) st ( e=p)&( p
+      then ex p being Simple oriented Chain of G st ( e=p)&( p
       is_acyclicpath_of v1,v2,V);
       hence thesis by FINSEQ_1:def 11;
     end;
@@ -1843,12 +1836,12 @@ definition
   let G be Graph, p be oriented Chain of G;
   func AcyclicPaths(p) -> Subset of ((the carrier' of G)*) equals
   {q where q
-  is Simple (oriented Chain of G) : q <> {} & (the Source of G).(q.1) = (the
+  is Simple oriented Chain of G : q <> {} & (the Source of G).(q.1) = (the
 Source of G).(p.1) & (the Target of G).(q.(len q)) = (the Target of G).(p.(len
   p)) & rng q c= rng p};
   coherence
   proof
-    set PT={q where q is Simple (oriented Chain of G): q <> {} & (the Source
+    set PT={q where q is Simple oriented Chain of G: q <> {} & (the Source
 of G).(q.1) = (the Source of G).(p.1) & (the Target of G).(q.(len q)) = (the
     Target of G).(p.(len p)) & rng q c= rng p};
     PT c= (the carrier' of G)*
@@ -1856,7 +1849,7 @@ of G).(q.1) = (the Source of G).(p.1) & (the Target of G).(q.(len q)) = (the
       let e be set;
       assume e in PT;
       then
-      ex q being Simple (oriented Chain of G) st ( e=q)&( q <> {} )&( (the
+      ex q being Simple oriented Chain of G st ( e=q)&( q <> {} )&( (the
 Source of G).(q.1) = (the Source of G).(p.1))&( (the Target of G).(q.( len q))
       = (the Target of G).(p.(len p)))&( rng q c= rng p);
       hence thesis by FINSEQ_1:def 11;
@@ -1869,15 +1862,15 @@ definition
   let G be Graph;
   func AcyclicPaths(G) -> Subset of (the carrier' of G)* equals
   {q where q is
-  Simple (oriented Chain of G) : not contradiction};
+  Simple oriented Chain of G : not contradiction};
   coherence
   proof
-    set PT={q where q is Simple (oriented Chain of G): not contradiction};
+    set PT={q where q is Simple oriented Chain of G: not contradiction};
     PT c= (the carrier' of G)*
     proof
       let e be set;
       assume e in PT;
-      then ex q being Simple (oriented Chain of G) st ( e=q);
+      then ex q being Simple oriented Chain of G st ( e=q);
       hence thesis by FINSEQ_1:def 11;
     end;
     hence thesis;
@@ -1900,7 +1893,7 @@ theorem
 proof
   let x;
   assume x in AcyclicPaths(v1,v2);
-  then consider p being Simple (oriented Chain of G) such that
+  then consider p being Simple oriented Chain of G such that
 A1: x=p and
 A2: p is_acyclicpath_of v1,v2;
   p is_orientedpath_of v1,v2 by A2,Def6;
@@ -1912,7 +1905,7 @@ theorem Th42:
 proof
   let e be set;
   assume e in AcyclicPaths(p);
-  then ex q being Simple (oriented Chain of G) st ( e=q)&( q <> {} )&( (the
+  then ex q being Simple oriented Chain of G st ( e=q)&( q <> {} )&( (the
 Source of G).(q.1) = (the Source of G).(p.1))&( (the Target of G).(q.( len q))
   = (the Target of G).(p.(len p)))&( rng q c= rng p);
   hence thesis;
@@ -1923,7 +1916,7 @@ theorem Th43:
 proof
   let e be set;
   assume e in AcyclicPaths(v1,v2);
-  then ex q being Simple (oriented Chain of G) st ( e=q)&( q is_acyclicpath_of
+  then ex q being Simple oriented Chain of G st ( e=q)&( q is_acyclicpath_of
   v1,v2);
   hence thesis;
 end;
@@ -1936,7 +1929,7 @@ proof
 A1: (the Source of G).(p.1) = v1 & (the Target of G).(p.(len p)) = v2 by Def3;
   let x;
   assume x in AcyclicPaths(p);
-  then consider q being Simple (oriented Chain of G) such that
+  then consider q being Simple oriented Chain of G such that
 A2: x=q and
 A3: q <> {} & (the Source of G).(q.1) = (the Source of G).(p.1) & (the
   Target of G).(q.(len q)) = (the Target of G).(p.(len p)) and
@@ -1953,7 +1946,7 @@ proof
 A1: p is_orientedpath_of v1,v2,V;
   let x;
   assume x in AcyclicPaths(p);
-  then consider q being Simple (oriented Chain of G) such that
+  then consider q being Simple oriented Chain of G such that
 A2: x=q and
 A3: q <> {} & (the Source of G).(q.1) = (the Source of G).(p.1) & (the
   Target of G).(q.(len q)) = (the Target of G).(p.(len p)) and
@@ -1973,11 +1966,11 @@ end;
 theorem
   q in AcyclicPaths(p) implies len q <= len p
 proof
-A1: card (rng p) <= card (dom p) by CARD_2:66;
+A1: card (rng p) <= card (dom p) by CARD_2:47;
 A2: card (dom p) = card (Seg len p) by FINSEQ_1:def 3
-    .= len p by FINSEQ_1:78;
+    .= len p by FINSEQ_1:57;
   assume q in AcyclicPaths(p);
-  then consider x being Simple (oriented Chain of G) such that
+  then consider x being Simple oriented Chain of G such that
 A3: q=x and
   x <> {} and
   (the Source of G).(x.1) = (the Source of G).(p.1) and
@@ -1985,8 +1978,8 @@ A3: q=x and
 A4: rng (x) c= rng p;
   x is one-to-one by Th20;
   then
-A5: card(rng x)=len x by FINSEQ_4:77;
-  card (rng x) <= card (rng p) by A4,NAT_1:44;
+A5: card(rng x)=len x by FINSEQ_4:62;
+  card (rng x) <= card (rng p) by A4,NAT_1:43;
   hence thesis by A3,A5,A1,A2,XXREAL_0:2;
 end;
 
@@ -2010,26 +2003,26 @@ A3:   k+1+1 = len p and
       consider p1,p2 being FinSequence such that
 A4:   len p1 = k+1 and
 A5:   len p2 = 1 and
-A6:   p = p1^p2 by A3,FINSEQ_2:25;
+A6:   p = p1^p2 by A3,FINSEQ_2:22;
       reconsider p1 as oriented Chain of G by A6,Th14;
 A7:   1 <= len p1 by A4,NAT_1:11;
-      then 1 in dom p1 by FINSEQ_3:27;
-      then reconsider x=FS.(p1.1) as Element of G by FINSEQ_2:13,FUNCT_2:7;
+      then 1 in dom p1 by FINSEQ_3:25;
+      then reconsider x=FS.(p1.1) as Element of G by FINSEQ_2:11,FUNCT_2:5;
 A8:   p1.1=p.1 by A6,A7,Lm1;
-      len p1 in dom p1 by A7,FINSEQ_3:27;
-      then reconsider y=FT.(p1.(len p1)) as Element of G by FINSEQ_2:13
-,FUNCT_2:7;
+      len p1 in dom p1 by A7,FINSEQ_3:25;
+      then reconsider y=FT.(p1.(len p1)) as Element of G by FINSEQ_2:11
+,FUNCT_2:5;
       p1 <> {} by A4;
       then p1 is_orientedpath_of x,y by Def3;
       then AcyclicPaths(p1) <> {} by A2,A4;
       then consider r being set such that
 A9:   r in AcyclicPaths(p1) by XBOOLE_0:def 1;
-A10:  rng p1 c= rng p by A6,FINSEQ_1:42;
-A11:  rng p2 c= rng p by A6,FINSEQ_1:43;
-A12:  1 in dom p2 by A5,FINSEQ_3:27;
+A10:  rng p1 c= rng p by A6,FINSEQ_1:29;
+A11:  rng p2 c= rng p by A6,FINSEQ_1:30;
+A12:  1 in dom p2 by A5,FINSEQ_3:25;
       then
 A13:  p.(len p1+1)=p2.1 by A6,FINSEQ_1:def 7;
-      consider q being Simple (oriented Chain of G) such that
+      consider q being Simple oriented Chain of G such that
       r=q and
 A14:  q <> {} and
 A15:  FS.(q.1) = x and
@@ -2053,16 +2046,16 @@ A23:    len q = k + i by A21,NAT_1:10;
         consider q1,q2 being FinSequence such that
 A24:    len q1 = k and
         len q2 = i and
-A25:    q = q1^q2 by A23,FINSEQ_2:25;
-        reconsider q1 as Simple (oriented Chain of G) by A25,Th17;
+A25:    q = q1^q2 by A23,FINSEQ_2:22;
+        reconsider q1 as Simple oriented Chain of G by A25,Th17;
 A26:    q1 <> {} & FS.(q1.1) = FS.(p.1) by A8,A15,A20,A24,A25,Lm1;
-        rng q1 c= rng q by A25,FINSEQ_1:42;
+        rng q1 c= rng q by A25,FINSEQ_1:29;
         then rng q1 c= rng p1 by A17,XBOOLE_1:1;
         then
 A27:    rng q1 c= rng p by A10,XBOOLE_1:1;
         FT.(q1.(len q1)) = FT.(p.(len p)) by A3,A4,A13,A20,A22,A24,A25,Lm1;
         then
-        q1 in {w where w is Simple (oriented Chain of G) : w <> {} & FS.(
+        q1 in {w where w is Simple oriented Chain of G : w <> {} & FS.(
 w.1) = FS.(p.1) & FT.(w.(len w)) = FT.(p.(len p)) & rng (w) c= rng p} by A27
 ,A26;
         hence AcyclicPaths(p) <> {};
@@ -2075,27 +2068,27 @@ A28:    not ex k st 1<=k & k <= len q & FT.(q.k)=FT.(p2.1);
           suppose
 A29:        FS.(q.1) <> FT.(q.(len q));
             set qp=q^p2;
-            rng qp = rng q \/ rng p2 & rng q c= rng p by A17,A10,FINSEQ_1:44
+            rng qp = rng q \/ rng p2 & rng q c= rng p by A17,A10,FINSEQ_1:31
 ,XBOOLE_1:1;
             then
 A30:        rng qp c= rng p \/ rng p by A11,XBOOLE_1:13;
-A31:        len q >=1 by A14,FINSEQ_1:28;
+A31:        len q >=1 by A14,FINSEQ_1:20;
             then
 A32:        FS.(qp.1) = FS.(p.1) by A8,A15,Lm1;
-            len qp = len q + 1 by A5,FINSEQ_1:35;
+            len qp = len q + 1 by A5,FINSEQ_1:22;
             then
 A33:        qp <> {} & FT.(qp.(len qp)) = FT.(p.(len p)) by A3,A4,A5,A13,Lm2;
-            qp is Simple (oriented Chain of G) by A5,A13,A18,A28,A29,A31,Th19;
-            then qp in {w where w is Simple (oriented Chain of G) : w <> {} &
+            qp is Simple oriented Chain of G by A5,A13,A18,A28,A29,A31,Th19;
+            then qp in {w where w is Simple oriented Chain of G : w <> {} &
 FS.(w.1) = FS.(p.1) & FT.(w.(len w)) = FT.(p.(len p)) & rng (w) c= rng p} by
 A32,A33,A30;
             hence AcyclicPaths(p) <> {};
           end;
           suppose
 A34:        FS.(q.1) = FT.(q.(len q));
-            reconsider p2 as Simple (oriented Chain of G) by A5,Th18;
+            reconsider p2 as Simple oriented Chain of G by A5,Th18;
             p2 <> {} & FT.(p2.(len p2)) =FT.(p.(len p)) by A3,A4,A5,A6,Lm2;
-            then p2 in {w where w is Simple (oriented Chain of G) : w <> {} &
+            then p2 in {w where w is Simple oriented Chain of G : w <> {} &
 FS.(w.1) = FS.(p.1) & FT.(w.(len w)) = FT.(p.(len p)) & rng (w) c= rng p} by A8
 ,A15,A11,A19,A34;
             hence AcyclicPaths(p) <> {};
@@ -2111,10 +2104,10 @@ A35: P[0]
     assume that
 A36: 0+1 = len p and
     p is_orientedpath_of v1,v2;
-    reconsider r=p as Simple (oriented Chain of G) by A36,Th18;
+    reconsider r=p as Simple oriented Chain of G by A36,Th18;
     r <> {} by A36;
     then
-    r in {q where q is Simple (oriented Chain of G) : q <> {} & FS.(q.1) =
+    r in {q where q is Simple oriented Chain of G : q <> {} & FS.(q.1) =
     FS.(p.1) & FT.(q.(len q)) = FT.(p.(len p)) & rng q c= rng p};
     hence thesis;
   end;
@@ -2122,8 +2115,8 @@ A37: for k holds P[k] from NAT_1:sch 1(A35,A1);
   assume
 A38: p is_orientedpath_of v1,v2;
   then p <> {} by Def3;
-  then len p >=1 by FINSEQ_1:28;
-  then len p -' 1 + 1= len p by XREAL_1:237;
+  then len p >=1 by FINSEQ_1:20;
+  then len p -' 1 + 1= len p by XREAL_1:235;
   hence AcyclicPaths(p) <> {} by A38,A37;
   then
 A39: ex x being set st x in AcyclicPaths(p) by XBOOLE_0:def 1;
@@ -2142,9 +2135,9 @@ proof
 A1: p is_orientedpath_of v1,v2,V;
   then p is_orientedpath_of v1,v2 by Def4;
   then p <> {} by Def3;
-  then len p >=1 by FINSEQ_1:28;
+  then len p >=1 by FINSEQ_1:20;
   then
-A2: len p -' 1 + 1= len p by XREAL_1:237;
+A2: len p -' 1 + 1= len p by XREAL_1:235;
 A3: for k st P[k] holds P[k+1]
   proof
     let k;
@@ -2156,7 +2149,7 @@ A4: P[k];
 A5:   len p <= k+1+1 and
 A6:   p is_orientedpath_of v1,v2,V;
       consider vs being FinSequence of the carrier of G such that
-A7:   vs is_oriented_vertex_seq_of p by GRAPH_4:10;
+A7:   vs is_oriented_vertex_seq_of p by GRAPH_4:9;
 A8:   vertices(p) \ {v2} c= V by A6,Def4;
 A9:   len vs = len p + 1 by A7,GRAPH_4:def 5;
       then
@@ -2165,18 +2158,18 @@ A11:  p is_orientedpath_of v1,v2 by A6,Def4;
       then
 A12:  p <> {} by Def3;
       then
-A13:  len p >= 1 by FINSEQ_1:28;
+A13:  len p >= 1 by FINSEQ_1:20;
       then p.(len p) orientedly_joins vs/.(len p), vs/.(len p+1) by A7,
 GRAPH_4:def 5;
       then FT.(p.(len p)) = vs/.(len p+1) by GRAPH_4:def 1;
       then
-A14:  FT.(p.(len p)) = vs.(len vs) by A9,A10,FINSEQ_4:24;
+A14:  FT.(p.(len p)) = vs.(len vs) by A9,A10,FINSEQ_4:15;
       per cases;
       suppose
         for n,m st 1<=n & n<m & m<=len vs & vs.n=vs.m holds n=1 & m= len vs;
         then p is Simple by A7,GRAPH_4:def 7;
         then
-        p in {w where w is Simple (oriented Chain of G) : w <> {} & FS.(w
+        p in {w where w is Simple oriented Chain of G : w <> {} & FS.(w
 .1) = FS.(p.1) & FT.(w.(len w)) = FT.(p.(len p)) & rng (w) c= rng p} by A12;
         hence AcyclicPaths(p) <> {};
       end;
@@ -2190,7 +2183,7 @@ A18:    vs.n=vs.m and
 A19:    not (n=1 & m=len vs);
         consider i being Nat such that
 A20:    m=1+i by A15,A16,NAT_1:10,XXREAL_0:2;
-        reconsider i as Element of NAT by ORDINAL1:def 13;
+        reconsider i as Element of NAT by ORDINAL1:def 12;
 A21:    m >= 1 by A15,A16,XXREAL_0:2;
         hereby
           per cases;
@@ -2207,16 +2200,16 @@ A26:        n <= len vs by A16,A17,XXREAL_0:2;
 GRAPH_4:def 5;
             then
 A27:        FS.(p.m) = vs/.m by GRAPH_4:def 1
-              .=vs.m by A16,A17,A22,FINSEQ_4:24
-              .=vs/.n by A15,A18,A26,FINSEQ_4:24
+              .=vs.m by A16,A17,A22,FINSEQ_4:15
+              .=vs/.n by A15,A18,A26,FINSEQ_4:15
               .=FS.(p.1) by A22,A25,GRAPH_4:def 1
               .=v1 by A11,Def3;
-            reconsider j as Element of NAT by ORDINAL1:def 13;
+            reconsider j as Element of NAT by ORDINAL1:def 12;
 A28:        len p=i+(1+j) by A20,A24;
             then consider p1,p2 being FinSequence such that
 A29:        len p1 = i and
 A30:        len p2 = 1+j and
-A31:        p = p1^p2 by FINSEQ_2:25;
+A31:        p = p1^p2 by FINSEQ_2:22;
 A32:        1 <= len p2 by A30,NAT_1:11;
             then
 A33:        p2.1=p.m by A20,A29,A31,Lm2;
@@ -2224,8 +2217,8 @@ A33:        p2.1=p.m by A20,A29,A31,Lm2;
             then
 A34:        FT.(p2.(len p2))=v2 by A11,Def3;
             reconsider p1,p2 as oriented Chain of G by A31,Th14;
-            i+1+-1 > 1+-1 by A16,A20,A22,XREAL_1:10;
-            then len p2 < len p by A28,A30,XREAL_1:31;
+            i+1+-1 > 1+-1 by A16,A20,A22,XREAL_1:8;
+            then len p2 < len p by A28,A30,XREAL_1:29;
             then len p2 < k+1+1 by A5,XXREAL_0:2;
             then
 A35:        len p2 <= k+1 by NAT_1:13;
@@ -2238,17 +2231,17 @@ A36:        vertices(p2) \ {v2} c= V by Th26;
             then AcyclicPaths(p2) <> {} by A4,A35;
             then consider r being set such that
 A37:        r in AcyclicPaths(p2) by XBOOLE_0:def 1;
-            consider q being Simple (oriented Chain of G) such that
+            consider q being Simple oriented Chain of G such that
             r=q and
 A38:        q <> {} and
 A39:        FS.(q.1) = v1 & FT.(q.(len q)) = v2 and
 A40:        rng q c= rng p2 by A27,A33,A34,A37;
-            rng p2 c= rng p by A31,FINSEQ_1:43;
+            rng p2 c= rng p by A31,FINSEQ_1:30;
             then
 A41:        rng q c= rng p by A40,XBOOLE_1:1;
             FS.(q.1) = FS.(p.1) & FT.(q.(len q)) = FT.(p.(len p)) by A11,A39
 ,Def3;
-            then q in {w where w is Simple (oriented Chain of G) : w <> {} &
+            then q in {w where w is Simple oriented Chain of G : w <> {} &
 FS.(w.1) = FS.(p.1) & FT.(w.(len w)) = FT.(p.(len p)) & rng w c= rng p} by A38
 ,A41;
             hence AcyclicPaths(p) <> {};
@@ -2257,17 +2250,17 @@ FS.(w.1) = FS.(p.1) & FT.(w.(len w)) = FT.(p.(len p)) & rng w c= rng p} by A38
 A42:        n<>1;
             consider n1 being Nat such that
 A43:        n = 1+n1 by A15,NAT_1:10;
-            reconsider n1 as Element of NAT by ORDINAL1:def 13;
+            reconsider n1 as Element of NAT by ORDINAL1:def 12;
 A44:        n < len vs by A16,A17,XXREAL_0:2;
             then
-A45:        n1 < len p by A9,A43,XREAL_1:9;
+A45:        n1 < len p by A9,A43,XREAL_1:7;
             then consider j being Nat such that
 A46:        len p=n1+j by NAT_1:10;
-            reconsider j as Element of NAT by ORDINAL1:def 13;
+            reconsider j as Element of NAT by ORDINAL1:def 12;
             consider p1,p2 being FinSequence such that
 A47:        len p1 = n1 and
             len p2 = j and
-A48:        p = p1^p2 by A46,FINSEQ_2:25;
+A48:        p = p1^p2 by A46,FINSEQ_2:22;
 A49:        n > 1 by A15,A42,XXREAL_0:1;
             then
 A50:        n1 >= 1 by A43,NAT_1:13;
@@ -2276,12 +2269,12 @@ A51:        p1.(len p1)=p.n1 by A47,A48,Lm1;
             p1.1=p.1 by A47,A48,A50,Lm1;
             then
 A52:        FS.(p1.1)=v1 by A11,Def3;
-A53:        rng p1 c= rng p by A48,FINSEQ_1:42;
+A53:        rng p1 c= rng p by A48,FINSEQ_1:29;
             reconsider p1,p2 as oriented Chain of G by A48,Th14;
             p.n1 orientedly_joins vs/.n1,vs/.(n1+1)by A7,A45,A50,GRAPH_4:def 5;
             then
 A54:        FT.(p.n1) = vs/.n by A43,GRAPH_4:def 1
-              .=vs.n by A15,A44,FINSEQ_4:24;
+              .=vs.n by A15,A44,FINSEQ_4:15;
             hereby
               per cases;
               suppose
@@ -2300,7 +2293,7 @@ A57:            len p1 <= k+1 by A47,NAT_1:13;
                 then AcyclicPaths(p1) <> {} by A4,A57;
                 then consider r being set such that
 A58:            r in AcyclicPaths(p1) by XBOOLE_0:def 1;
-                consider q being Simple (oriented Chain of G) such that
+                consider q being Simple oriented Chain of G such that
                 r=q and
 A59:            q <> {} and
 A60:            FS.(q.1) = v1 and
@@ -2309,7 +2302,7 @@ A62:            rng q c= rng p1 by A52,A55,A58;
 A63:            FT.(q.(len q)) = FT.(p.(len p)) by A11,A61,Def3;
                 rng q c= rng p & FS.(q.1) = FS.(p.1) by A11,A53,A60,A62,Def3,
 XBOOLE_1:1;
-                then q in {w where w is Simple (oriented Chain of G): w <> {}
+                then q in {w where w is Simple oriented Chain of G: w <> {}
 & FS.(w.1) = FS.(p.1) & FT.(w.(len w))= FT.(p.(len p)) & rng w c= rng p} by A59
 ,A63;
                 hence AcyclicPaths(p) <> {};
@@ -2325,30 +2318,30 @@ A65:            len p=m+h by NAT_1:10;
 ;
                 then
 A66:            FS.(p.m) = vs/.m by GRAPH_4:def 1
-                  .=FT.(p1.len p1) by A17,A18,A21,A54,A51,FINSEQ_4:24;
-                reconsider h as Element of NAT by ORDINAL1:def 13;
+                  .=FT.(p1.len p1) by A17,A18,A21,A54,A51,FINSEQ_4:15;
+                reconsider h as Element of NAT by ORDINAL1:def 12;
 A67:            len p=i+(1+h) by A20,A65;
                 then consider q1,q2 being FinSequence such that
 A68:            len q1 = i and
 A69:            len q2 = 1+h and
-A70:            p = q1^q2 by FINSEQ_2:25;
+A70:            p = q1^q2 by FINSEQ_2:22;
                 reconsider q2 as oriented Chain of G by A70,Th14;
 A71:            1 <= len q2 by A69,NAT_1:12;
                 then q2.1=p.m by A20,A68,A70,Lm2;
                 then reconsider pq=p1^q2 as oriented Chain of G by A66,Th15;
-                pq.(len pq)=pq.(len p1+len q2) by FINSEQ_1:35
+                pq.(len pq)=pq.(len p1+len q2) by FINSEQ_1:22
                   .=q2.(len q2) by A71,Lm2
                   .=p.(len p) by A67,A68,A69,A70,A71,Lm2;
                 then
 A72:            FT.(pq.(len pq))=v2 by A11,Def3;
-A73:            rng pq = rng p1 \/ rng q2 by FINSEQ_1:44;
-                rng q2 c= rng p by A70,FINSEQ_1:43;
+A73:            rng pq = rng p1 \/ rng q2 by FINSEQ_1:31;
+                rng q2 c= rng p by A70,FINSEQ_1:30;
                 then
 A74:            rng pq c= rng p by A53,A73,XBOOLE_1:8;
                 then
 A75:            vertices(pq) \ {v2} c= V by A8,Th25;
-A76:            len pq = n1 + (1+h) by A47,A69,FINSEQ_1:35;
-                m+h > n+h by A16,XREAL_1:10;
+A76:            len pq = n1 + (1+h) by A47,A69,FINSEQ_1:22;
+                m+h > n+h by A16,XREAL_1:8;
                 then len pq < k+1+1 by A5,A43,A65,A76,XXREAL_0:2;
                 then
 A77:            len pq <= k+1 by NAT_1:13;
@@ -2359,7 +2352,7 @@ A78:            FS.(pq.1)=v1 by A47,A50,A52,Lm1;
                 then AcyclicPaths(pq) <> {} by A4,A77;
                 then consider r being set such that
 A79:            r in AcyclicPaths(pq) by XBOOLE_0:def 1;
-                consider q being Simple (oriented Chain of G) such that
+                consider q being Simple oriented Chain of G such that
                 r=q and
 A80:            q <> {} and
 A81:            FS.(q.1) = v1 & FT.(q.(len q))= v2 and
@@ -2367,7 +2360,7 @@ A82:            rng q c= rng pq by A78,A72,A79;
 A83:            rng q c= rng p by A74,A82,XBOOLE_1:1;
                 FS.(q.1) = FS.(p.1) & FT.(q.(len q)) = FT.(p.(len p ) )
                 by A11,A81,Def3;
-                then q in {w where w is Simple (oriented Chain of G) : w <>
+                then q in {w where w is Simple oriented Chain of G : w <>
 {} & FS.(w.1) = FS.(p.1) & FT.(w.(len w))= FT.(p.(len p)) & rng w c= rng p} by
 A80,A83;
                 hence AcyclicPaths(p) <> {};
@@ -2388,9 +2381,9 @@ A86: p is_orientedpath_of v1,v2,V;
     p is_orientedpath_of v1,v2 by A86,Def4;
     then
 A87: p <> {} by Def3;
-    then len p >= 1 by FINSEQ_1:28;
-    then reconsider r=p as Simple (oriented Chain of G) by A85,Th18,XXREAL_0:1;
-    r in {q where q is Simple (oriented Chain of G) : q <> {} & FS.(q.1) =
+    then len p >= 1 by FINSEQ_1:20;
+    then reconsider r=p as Simple oriented Chain of G by A85,Th18,XXREAL_0:1;
+    r in {q where q is Simple oriented Chain of G : q <> {} & FS.(q.1) =
     FS.(p.1) & FT.(q.(len q)) = FT.(p.(len p)) & rng q c= rng p} by A87;
     hence thesis;
   end;
@@ -2407,36 +2400,27 @@ theorem Th49:
 proof
   let e be set;
   assume e in AcyclicPaths(v1,v2,V);
-  then ex q being Simple (oriented Chain of G) st ( e=q)&( q is_acyclicpath_of
+  then ex q being Simple oriented Chain of G st ( e=q)&( q is_acyclicpath_of
   v1,v2,V);
   hence thesis;
 end;
 
 begin :: Weight Graphs and Their Basic Properties
 
+notation
+ synonym Real>=0 for REAL+;
+end;
+
 definition
-  func Real>=0 -> Subset of REAL equals
+ redefine func Real>=0 -> Subset of REAL equals
   { r where r is Real : r >=0 };
-  coherence
-  proof
-    set IT = {r where r is Real : r >=0 };
-    now
-      let x be set;
-      assume x in IT;
-      then ex r being Real st x=r & r >= 0;
-      hence x in REAL;
-    end;
-    hence thesis by TARSKI:def 3;
-  end;
+  compatibility by REAL_1:1;
+  coherence by ARYTM_0:1;
 end;
 
 registration
   cluster Real>=0 -> non empty;
-  coherence
-  proof
-    1 in Real>=0;
-    hence thesis;
-  end;
+  coherence;
 end;
 
 definition
@@ -2472,11 +2456,11 @@ A4:   W is Function of (the carrier' of G), REAL by A1,Def14;
       assume
 A5:   i in dom f;
       then f.i=W.(p.i) by A2;
-      hence f.i in REAL by A2,A5,A4,FINSEQ_2:13,FUNCT_2:7;
+      hence f.i in REAL by A2,A5,A4,FINSEQ_2:11,FUNCT_2:5;
     end;
     dom f = Seg len p by A2,FINSEQ_1:def 3;
     then f is FinSequence by FINSEQ_1:def 2;
-    then reconsider g=f as FinSequence of REAL by A3,FINSEQ_2:14;
+    then reconsider g=f as FinSequence of REAL by A3,FINSEQ_2:12;
     take g;
     thus dom p = dom g by A2;
     let i;
@@ -2499,7 +2483,7 @@ A10:  i in dom f1;
       hence f1.i=W.(p.i) by A6,A7
         .= f2.i by A6,A9,A10;
     end;
-    hence thesis by A6,A8,FINSEQ_1:17;
+    hence thesis by A6,A8,FINSEQ_1:13;
   end;
 end;
 
@@ -2515,7 +2499,7 @@ theorem Th50:
 proof
   assume W is_weight>=0of G;
   then W is Function of the carrier' of G, Real>=0 by Def13;
-  then W is Function of the carrier' of G, REAL by FUNCT_2:9;
+  then W is Function of the carrier' of G, REAL by FUNCT_2:7;
   hence thesis by Def14;
 end;
 
@@ -2535,7 +2519,7 @@ A5: W is_weight_of G by A1,Th50;
   then
 A6: dom pe = dom f by A2,Def15;
   then f.i=W.(pe.i) by A2,A5,A4,Def15;
-  then f.i in Real>=0 by A6,A3,A4,FINSEQ_2:13,FUNCT_2:7;
+  then f.i in Real>=0 by A6,A3,A4,FINSEQ_2:11,FUNCT_2:5;
   then ex r being Real st f.i=r & r >= 0;
   hence thesis;
 end;
@@ -2569,7 +2553,7 @@ A1: for y being Real st y in rng f holds y >= 0;
     hereby
       let i be Nat;
       assume i in dom f;
-      then f.i in rng f by FUNCT_1:def 5;
+      then f.i in rng f by FUNCT_1:def 3;
       hence f.i >= 0 by A1;
     end;
   end;
@@ -2580,7 +2564,7 @@ A2: for i be Nat st i in dom f holds f.i >= 0;
     assume x in rng f;
     then consider y being set such that
 A3: y in dom f and
-A4: x = f.y by FUNCT_1:def 5;
+A4: x = f.y by FUNCT_1:def 3;
     thus x >= 0 by A2,A3,A4;
   end;
 end;
@@ -2593,10 +2577,10 @@ proof
   assume that
 A1: r=p^q and
 A2: for x being Real st x in rng r holds x >= 0;
-  rng p c= rng r by A1,FINSEQ_1:42;
+  rng p c= rng r by A1,FINSEQ_1:29;
   then for y be Real st y in rng p holds y >= 0 by A2;
   hence for i st i in dom p holds p.i >= 0 by Lm3;
-  rng q c= rng r by A1,FINSEQ_1:43;
+  rng q c= rng r by A1,FINSEQ_1:30;
   then for y be Real st y in rng q holds y >= 0 by A2;
   hence thesis by Lm3;
 end;
@@ -2610,53 +2594,53 @@ A1: len qe = 1 and
 A2: rng qe c= rng pe and
 A3: W is_weight>=0of G;
   set f = RealSequence(pe,W), g = RealSequence(qe,W);
-  1 in dom qe by A1,FINSEQ_3:27;
+  1 in dom qe by A1,FINSEQ_3:25;
   then consider j such that
 A4: j in dom pe and
 A5: f.j = g.1 by A2,A3,Th50,Th52;
 A6: W is_weight_of G by A3,Th50;
   then dom pe = dom f by Def15;
   then
-A7: len pe = len f by FINSEQ_3:31;
+A7: len pe = len f by FINSEQ_3:29;
   dom g = dom qe by A6,Def15;
-  then len g = len qe by FINSEQ_3:31;
-  then g = <*g.1*> by A1,FINSEQ_1:57;
+  then len g = len qe by FINSEQ_3:29;
+  then g = <*g.1*> by A1,FINSEQ_1:40;
   then
-A8: cost(qe,W) = g.1 by FINSOP_1:12;
-  j <= len pe by A4,FINSEQ_3:27;
+A8: cost(qe,W) = g.1 by FINSOP_1:11;
+  j <= len pe by A4,FINSEQ_3:25;
   then consider m being Nat such that
 A9: len f = j+m by A7,NAT_1:10;
-  reconsider m as Element of NAT by ORDINAL1:def 13;
+  reconsider m as Element of NAT by ORDINAL1:def 12;
   consider f1,f2 being FinSequence of REAL such that
 A10: len f1 = j and
   len f2 = m and
-A11: f = f1^f2 by A9,FINSEQ_2:26;
-A12: 1 <= j by A4,FINSEQ_3:27;
+A11: f = f1^f2 by A9,FINSEQ_2:23;
+A12: 1 <= j by A4,FINSEQ_3:25;
   then consider h being FinSequence of REAL,d being Real such that
-A13: f1= h^<*d*> by A10,FINSEQ_2:22;
-  j in dom f1 by A12,A10,FINSEQ_3:27;
+A13: f1= h^<*d*> by A10,FINSEQ_2:19;
+  j in dom f1 by A12,A10,FINSEQ_3:25;
   then
 A14: f1.j = g.1 by A5,A11,FINSEQ_1:def 7;
-  j = len h +1 by A10,A13,FINSEQ_2:19;
+  j = len h +1 by A10,A13,FINSEQ_2:16;
   then
-A15: d=g.1 by A13,A14,FINSEQ_1:59;
+A15: d=g.1 by A13,A14,FINSEQ_1:42;
   for i be Nat st i in dom f holds f.i >= 0 by A3,Th51;
   then
 A16: for y being Real st y in rng f holds y >= 0 by Lm3;
   then for i be Nat st i in dom f2 holds f2.i >= 0 by A11,Lm4;
   then
-A17: Sum f2 >= 0 by RVSUM_1:114;
+A17: Sum f2 >= 0 by RVSUM_1:84;
   for i be Nat st i in dom f1 holds f1.i >= 0 by A11,A16,Lm4;
   then for y being Real st y in rng f1 holds y >= 0 by Lm3;
   then for i be Nat st i in dom h holds h.i >= 0 by A13,Lm4;
   then
-A18: Sum h >= 0 by RVSUM_1:114;
-  Sum f1 = Sum h + Sum <*d*> by A13,RVSUM_1:105
-    .=Sum h + g.1 by A15,FINSOP_1:12;
+A18: Sum h >= 0 by RVSUM_1:84;
+  Sum f1 = Sum h + Sum <*d*> by A13,RVSUM_1:75
+    .=Sum h + g.1 by A15,FINSOP_1:11;
   then
-A19: Sum f1 >= 0 qua Nat+ g.1 by A18,XREAL_1:9;
-  Sum f= Sum f1 + Sum f2 by A11,RVSUM_1:105;
-  hence thesis by A8,A17,A19,XREAL_1:9;
+A19: Sum f1 >= 0 qua Nat+ g.1 by A18,XREAL_1:7;
+  Sum f= Sum f1 + Sum f2 by A11,RVSUM_1:75;
+  hence thesis by A8,A17,A19,XREAL_1:7;
 end;
 
 theorem Th54:
@@ -2665,7 +2649,7 @@ proof
   set f = RealSequence(pe,W);
   assume W is_weight>=0of G;
   then for i be Nat st i in dom f holds f.i >= 0 by Th51;
-  hence thesis by RVSUM_1:114;
+  hence thesis by RVSUM_1:84;
 end;
 
 theorem Th55:
@@ -2676,10 +2660,10 @@ A1: pe = {} and
 A2: W is_weight_of G;
   set f=RealSequence(pe,W);
   dom f = dom pe by A2,Def15;
-  then len f = len pe by FINSEQ_3:31
+  then len f = len pe by FINSEQ_3:29
     .= 0 by A1;
   then f = <*>REAL;
-  hence thesis by RVSUM_1:102;
+  hence thesis by RVSUM_1:72;
 end;
 
 theorem Th56:
@@ -2693,7 +2677,7 @@ proof
 A1: for y being Element of D holds F(x) <= F(y) from MinValue;
   assume D = AcyclicPaths(v1,v2);
   then x in AcyclicPaths(v1,v2);
-  then consider p being Simple (oriented Chain of G) such that
+  then consider p being Simple oriented Chain of G such that
 A2: x=p and
   p is_acyclicpath_of v1,v2;
   take p;
@@ -2716,7 +2700,7 @@ proof
 A1: for y being Element of D holds F(x) <= F(y) from MinValue;
   assume D = AcyclicPaths(v1,v2,V);
   then x in AcyclicPaths(v1,v2,V);
-  then consider p being Simple (oriented Chain of G) such that
+  then consider p being Simple oriented Chain of G such that
 A2: x=p and
   p is_acyclicpath_of v1,v2,V;
   take p;
@@ -2738,25 +2722,25 @@ A1: W is_weight_of G;
   then
 A2: dom pe = dom g by Def15;
   then
-A3: len pe = len g by FINSEQ_3:31;
+A3: len pe = len g by FINSEQ_3:29;
 A4: dom qe = dom h by A1,Def15;
   then
-A5: len qe = len h by FINSEQ_3:31;
+A5: len qe = len h by FINSEQ_3:29;
 A6: dom r = dom f by A1,Def15;
-  then len f = len r by FINSEQ_3:31;
+  then len f = len r by FINSEQ_3:29;
   then
-A7: len f =len g + len h by A3,A5,FINSEQ_1:35;
+A7: len f =len g + len h by A3,A5,FINSEQ_1:22;
 A8: now
     let i;
     assume
 A9: i in dom h;
-    then 1 <= i by FINSEQ_3:27;
+    then 1 <= i by FINSEQ_3:25;
     then
 A10: 1 <= len g +i by NAT_1:12;
-    i <= len h by A9,FINSEQ_3:27;
-    then len g +i <= len f by A7,XREAL_1:9;
+    i <= len h by A9,FINSEQ_3:25;
+    then len g +i <= len f by A7,XREAL_1:7;
     then
-A11: len g + i in dom f by A10,FINSEQ_3:27;
+A11: len g + i in dom f by A10,FINSEQ_3:25;
     h.i=W.(qe.i) & r.(len g +i) = qe.i by A1,A4,A3,A9,Def15,FINSEQ_1:def 7;
     hence f.(len g +i) = h.i by A1,A6,A11,Def15;
   end;
@@ -2764,17 +2748,17 @@ A11: len g + i in dom f by A10,FINSEQ_3:27;
     let i;
     assume
 A12: i in dom g;
-    then i <= len g by FINSEQ_3:27;
+    then i <= len g by FINSEQ_3:25;
     then
 A13: i <= len f by A7,NAT_1:12;
-    1 <= i by A12,FINSEQ_3:27;
+    1 <= i by A12,FINSEQ_3:25;
     then
-A14: i in dom f by A13,FINSEQ_3:27;
+A14: i in dom f by A13,FINSEQ_3:25;
     g.i=W.(pe.i) & r.i = pe.i by A1,A2,A12,Def15,FINSEQ_1:def 7;
     hence f.i = g.i by A1,A6,A14,Def15;
   end;
-  then f=g^h by A7,A8,FINSEQ_3:43;
-  hence thesis by RVSUM_1:105;
+  then f=g^h by A7,A8,FINSEQ_3:38;
+  hence thesis by RVSUM_1:75;
 end;
 
 theorem Th59:
@@ -2799,17 +2783,17 @@ A5:   q is one-to-one and
 A6:   rng q c= rng p and
 A7:   len q = k+1;
       consider q1 being FinSequence, x being set such that
-A8:   q = q1^<*x*> by A7,FINSEQ_2:21;
-A9:   k+1= len q1 +1 by A7,A8,FINSEQ_2:19;
+A8:   q = q1^<*x*> by A7,FINSEQ_2:18;
+A9:   k+1= len q1 +1 by A7,A8,FINSEQ_2:16;
       consider p1,p2 being FinSequence such that
 A10:  p=p1^<*x*>^p2 and
 A11:  rng q1 c= rng (p1^p2) by A5,A6,A8,Th12;
-      reconsider q1 as FinSequence of D by A8,FINSEQ_1:50;
-A12:  p1^<*x*> is FinSequence of D by A10,FINSEQ_1:50;
-      then reconsider y=<*x*> as FinSequence of D by FINSEQ_1:50;
-      reconsider p2 as FinSequence of D by A10,FINSEQ_1:50;
-      reconsider p1 as FinSequence of D by A12,FINSEQ_1:50;
-      q1 is one-to-one by A5,A8,FINSEQ_3:98;
+      reconsider q1 as FinSequence of D by A8,FINSEQ_1:36;
+A12:  p1^<*x*> is FinSequence of D by A10,FINSEQ_1:36;
+      then reconsider y=<*x*> as FinSequence of D by FINSEQ_1:36;
+      reconsider p2 as FinSequence of D by A10,FINSEQ_1:36;
+      reconsider p1 as FinSequence of D by A12,FINSEQ_1:36;
+      q1 is one-to-one by A5,A8,FINSEQ_3:91;
       then
 A13:  cost(q1,W) <= cost(p1^p2,W) by A4,A11,A9;
 A14:  cost(q,W)=cost(q1,W)+cost(y,W) by A2,A8,Th50,Th58;
@@ -2817,7 +2801,7 @@ A14:  cost(q,W)=cost(q1,W)+cost(y,W) by A2,A8,Th50,Th58;
         .=cost(p1,W)+cost(y,W)+cost(p2,W) by A2,Th50,Th58
         .=cost(p1,W)+cost(p2,W)+cost(y,W)
         .=cost(p1^p2,W)+cost(y,W) by A2,Th50,Th58;
-      hence cost(q,W) <= cost(p,W) by A14,A13,XREAL_1:9;
+      hence cost(q,W) <= cost(p,W) by A14,A13,XREAL_1:7;
     end;
     hence thesis;
   end;
@@ -2843,7 +2827,7 @@ proof
   assume that
 A1: pe in AcyclicPaths(p) and
 A2: W is_weight>=0of G;
-A3: ex r being Simple (oriented Chain of G) st ( r=pe)&( r <> {})&( (the
+A3: ex r being Simple oriented Chain of G st ( r=pe)&( r <> {})&( (the
 Source of G).(r.1) = (the Source of G).(p.1))&( (the Target of G).(r .(len r))
   = (the Target of G).(p.(len p)))&( rng r c= rng p) by A1;
   then pe is one-to-one by Th20;
@@ -2875,7 +2859,7 @@ end;
 begin :: Basic Properties of a Graph with Finite carrier
 
 reserve G for finite Graph,
-  ps for Simple (oriented Chain of G),
+  ps for Simple oriented Chain of G,
   P,Q for oriented Chain of G,
   v1,v2,v3 for Element of G,
   pe,qe for FinSequence of the carrier' of G;
@@ -2892,9 +2876,9 @@ A2: for n,m st 1<=n & n<m & m<=len vs & vs.n=vs.m holds n=1 & m=len vs
 A3: len vs = len ps + 1 by A1,GRAPH_4:def 5;
   then vs <> {};
   then consider q being FinSequence, x be set such that
-A4: vs = q^<*x*> by FINSEQ_1:63;
-A5: len ps + 1 = len q + len <*x*> by A3,A4,FINSEQ_1:35
-    .=len q + 1 by FINSEQ_1:56;
+A4: vs = q^<*x*> by FINSEQ_1:46;
+A5: len ps + 1 = len q + len <*x*> by A3,A4,FINSEQ_1:22
+    .=len q + 1 by FINSEQ_1:39;
   now
     let n,m;
     assume that
@@ -2903,12 +2887,12 @@ A7: n<m and
 A8: m<=len q;
     1 <= m by A6,A7,XXREAL_0:2;
     then
-A9: m in dom q by A8,FINSEQ_3:27;
+A9: m in dom q by A8,FINSEQ_3:25;
     n <= len q by A7,A8,XXREAL_0:2;
-    then n in dom q by A6,FINSEQ_3:27;
+    then n in dom q by A6,FINSEQ_3:25;
     then
 A10: vs.n=q.n by A4,FINSEQ_1:def 7;
-    len q < len vs by A3,A5,XREAL_1:31;
+    len q < len vs by A3,A5,XREAL_1:29;
     then
 A11: m < len vs by A8,XXREAL_0:2;
     assume q.n = q.m;
@@ -2917,9 +2901,9 @@ A11: m < len vs by A8,XXREAL_0:2;
   end;
   then
 A12: card(rng q)=len q by Th10;
-  rng vs c= VV & rng q c= rng vs by A4,FINSEQ_1:42,def 4;
-  then card(rng q) <= card V by NAT_1:44,XBOOLE_1:1;
-  hence thesis by A5,A12,GRAPH_1:def 19;
+  rng vs c= VV & rng q c= rng vs by A4,FINSEQ_1:29,def 4;
+  then card(rng q) <= card V by NAT_1:43,XBOOLE_1:1;
+  hence thesis by A5,A12,GRAPH_1:def 17;
 end;
 
 theorem Th62:
@@ -2928,10 +2912,10 @@ proof
   reconsider V=the carrier' of G as finite set;
   rng ps c= the carrier' of G by FINSEQ_1:def 4;
   then
-A1: card rng ps <= card V by NAT_1:44;
+A1: card rng ps <= card V by NAT_1:43;
   ps is one-to-one by Th20;
-  then card rng ps=len ps by FINSEQ_4:77;
-  hence thesis by A1,GRAPH_1:def 20;
+  then card rng ps=len ps by FINSEQ_4:62;
+  hence thesis by A1,GRAPH_1:def 18;
 end;
 
 Lm5: AcyclicPaths(G) is finite
@@ -2942,7 +2926,7 @@ A1: AcyclicPaths(G) c= A
   proof
     let x;
     assume x in AcyclicPaths(G);
-    then consider p being Simple (oriented Chain of G) such that
+    then consider p being Simple oriented Chain of G such that
 A2: x=p;
     p is Element of D* & len p <= n by Th62,FINSEQ_1:def 11;
     hence thesis by A2;
@@ -3004,7 +2988,7 @@ Th57;
 
 theorem
   P is_orientedpath_of v1,v2 & W is_weight>=0of G implies ex q being
-  Simple(oriented Chain of G) st q is_shortestpath_of v1,v2,W
+  Simple oriented Chain of G st q is_shortestpath_of v1,v2,W
 proof
   assume that
 A1: P is_orientedpath_of v1,v2 and
@@ -3014,7 +2998,7 @@ A2: W is_weight>=0of G;
 A3: r in AcyclicPaths(v1,v2) and
 A4: for s being FinSequence of the carrier' of G st s in AcyclicPaths(v1
   ,v2) holds cost(r,W) <= cost(s,W) by Th56;
-  consider t being Simple (oriented Chain of G) such that
+  consider t being Simple oriented Chain of G such that
 A5: r=t and
 A6: t is_acyclicpath_of v1,v2 by A3;
   take t;
@@ -3024,7 +3008,7 @@ A6: t is_acyclicpath_of v1,v2 by A3;
     assume
 A7: s is_orientedpath_of v1,v2;
     then consider x being Element of ((the carrier' of G)*) such that
-A8: x in AcyclicPaths(s) by Th47,SUBSET_1:10;
+A8: x in AcyclicPaths(s) by Th47,SUBSET_1:4;
     AcyclicPaths(s) c= AcyclicPaths(v1,v2) by A7,Th44;
     then
 A9: cost(r,W) <= cost(x,W) by A4,A8;
@@ -3035,7 +3019,7 @@ end;
 
 theorem Th66:
   P is_orientedpath_of v1,v2,V & W is_weight>=0of G implies ex q
-  being Simple (oriented Chain of G) st q is_shortestpath_of v1,v2,V,W
+  being Simple oriented Chain of G st q is_shortestpath_of v1,v2,V,W
 proof
   assume that
 A1: P is_orientedpath_of v1,v2,V and
@@ -3045,7 +3029,7 @@ A2: W is_weight>=0of G;
 A3: r in AcyclicPaths(v1,v2,V) and
 A4: for s being FinSequence of the carrier' of G st s in AcyclicPaths(v1
   ,v2,V) holds cost(r,W) <= cost(s,W) by Th57;
-  consider t being Simple (oriented Chain of G) such that
+  consider t being Simple oriented Chain of G such that
 A5: r=t and
 A6: t is_acyclicpath_of v1,v2,V by A3;
   take t;
@@ -3055,7 +3039,7 @@ A6: t is_acyclicpath_of v1,v2,V by A3;
     assume
 A7: s is_orientedpath_of v1,v2,V;
     then consider x being Element of ((the carrier' of G)*) such that
-A8: x in AcyclicPaths(s) by Th48,SUBSET_1:10;
+A8: x in AcyclicPaths(s) by Th48,SUBSET_1:4;
     AcyclicPaths(s) c= AcyclicPaths(v1,v2,V) by A7,Th45;
     then
 A9: cost(r,W) <= cost(x,W) by A4,A8;
@@ -3095,33 +3079,33 @@ A11:  not vertices(r/.(i+1)) c= V and
 A12:  len s=i and
 A13:  r=s^t and
 A14:  vertices(s) c= V by A9,Th23;
-      i+1 <= len s+len t by A10,A13,FINSEQ_1:35;
+      i+1 <= len s+len t by A10,A13,FINSEQ_1:22;
       then
-A15:  1 <= len t by A12,XREAL_1:8;
+A15:  1 <= len t by A12,XREAL_1:6;
       then consider j being Nat such that
 A16:  len t = 1+j by NAT_1:10;
       reconsider s,t as oriented Chain of G by A13,Th14;
-      reconsider j as Element of NAT by ORDINAL1:def 13;
+      reconsider j as Element of NAT by ORDINAL1:def 12;
       consider t1,t2 being FinSequence such that
 A17:  len t1 = 1 and
       len t2 = j and
-A18:  t = t1^t2 by A16,FINSEQ_2:25;
+A18:  t = t1^t2 by A16,FINSEQ_2:22;
       reconsider t1,t2 as oriented Chain of G by A18,Th14;
 A19:  r.(i+1)=t.1 by A12,A13,A15,Lm2
         .=t1.1 by A17,A18,Lm1;
 A20:  cost(t2,W) >= 0 by A1,Th54;
-A21:  r=s^t1^t2 by A13,A18,FINSEQ_1:45;
+A21:  r=s^t1^t2 by A13,A18,FINSEQ_1:32;
       then cost(r,W)=cost(s^t1,W)+cost(t2,W) by A1,Th50,Th58;
       then
-A22:  cost(r,W) >= cost(s^t1,W)+(0 qua Nat) by A20,XREAL_1:9;
+A22:  cost(r,W) >= cost(s^t1,W)+(0 qua Nat) by A20,XREAL_1:7;
       set e = r/.(i+1);
-A23:  e = r.(i+1) by A10,FINSEQ_4:24,NAT_1:11;
+A23:  e = r.(i+1) by A10,FINSEQ_4:15,NAT_1:11;
       consider x being set such that
 A24:  x in vertices e and
 A25:  not x in V by A11,TARSKI:def 3;
 A26:  x=FS.e or x=FT.e by A24,TARSKI:def 2;
-      1 in dom t1 by A17,FINSEQ_3:27;
-      then reconsider v3=x as Vertex of G by A23,A19,A26,FINSEQ_2:13,FUNCT_2:7;
+      1 in dom t1 by A17,FINSEQ_3:25;
+      then reconsider v3=x as Vertex of G by A23,A19,A26,FINSEQ_2:11,FUNCT_2:5;
 A27:  v1=FS.(r.1) by A8,Def3;
       hereby
         per cases;
@@ -3141,8 +3125,8 @@ A32:        not x in {v3} by XBOOLE_0:def 5;
             then
 A33:        x=FS.(t1/.1) or x=FT.(t1/.1) by TARSKI:def 2;
             FT.(t1/.1) = v3 by A3,A5,A17,A23,A19,A25,A26,A27,A28,Th35,
-FINSEQ_4:24;
-            hence thesis by A6,A17,A29,A32,A33,FINSEQ_4:24,TARSKI:def 1;
+FINSEQ_4:15;
+            hence thesis by A6,A17,A29,A32,A33,FINSEQ_4:15,TARSKI:def 1;
           end;
 A34:      t1 <> {} by A17;
           v1=FS.e by A8,A23,A28,Def3;
@@ -3150,11 +3134,11 @@ A34:      t1 <> {} by A17;
 ,Def3,Th35;
           then
 A35:      t1 is_orientedpath_of v1,v3,V by A30,Def4;
-          then consider q being Simple (oriented Chain of G) such that
+          then consider q being Simple oriented Chain of G such that
 A36:      q is_shortestpath_of v1,v3,V,W by A1,Th66;
           s = {} by A12,A28;
           then
-A37:      s^t1 = t1 by FINSEQ_1:47;
+A37:      s^t1 = t1 by FINSEQ_1:34;
 A38:      cost(q,W) <= cost(t1,W) by A35,A36,Def18;
           cost(P,W) <= cost(q,W) by A4,A25,A36;
           then cost(P,W) <= cost(t1,W) by A38,XXREAL_0:2;
@@ -3164,11 +3148,11 @@ A38:      cost(q,W) <= cost(t1,W) by A35,A36,Def18;
 A39:      i<>0;
           reconsider u=s^t1 as oriented Chain of G by A21,Th14;
 A40:      i < len r by A10,NAT_1:13;
-          i+1 > 0+1 by A39,XREAL_1:10;
+          i+1 > 0+1 by A39,XREAL_1:8;
           then
 A41:      i >= 1 by NAT_1:13;
           then
-A42:      i in dom s by A12,FINSEQ_3:27;
+A42:      i in dom s by A12,FINSEQ_3:25;
 A43:      now
             assume FS.(r.(i+1))=v3;
             then
@@ -3189,9 +3173,9 @@ A47:        x in vertices(u) by XBOOLE_0:def 5;
             then
 A48:        x in vertices(s) or x in V3 by A47,XBOOLE_0:def 3;
             not x in {v3} by A46,XBOOLE_0:def 5;
-            hence thesis by A10,A14,A19,A26,A43,A48,FINSEQ_4:24,NAT_1:11;
+            hence thesis by A10,A14,A19,A26,A43,A48,FINSEQ_4:15,NAT_1:11;
           end;
-          len u = len s + len t1 by FINSEQ_1:35;
+          len u = len s + len t1 by FINSEQ_1:22;
           then
 A49:      u <> {} & u.len u =t1.1 by A17,Lm2;
           u.1 =s.1 by A12,A41,Lm1
@@ -3200,7 +3184,7 @@ A49:      u <> {} & u.len u =t1.1 by A17,Lm2;
           then u is_orientedpath_of v1,v3 by A23,A19,A26,A43,A49,Def3;
           then
 A50:      u is_orientedpath_of v1,v3,V by A45,Def4;
-          then consider q being Simple (oriented Chain of G) such that
+          then consider q being Simple oriented Chain of G such that
 A51:      q is_shortestpath_of v1,v3,V,W by A1,Th66;
 A52:      cost(q,W) <= cost(u,W) by A50,A51,Def18;
           cost(P,W) <= cost(q,W) by A4,A25,A51;
@@ -3282,13 +3266,13 @@ A11: P is_orientedpath_of v1,v2,V by A4,Def18;
   then
 A12: v1 in V by A5,Th35;
   set Eg=the carrier' of G;
-  reconsider pe=<*e*> as FinSequence of Eg by A1,FINSEQ_1:95;
+  reconsider pe=<*e*> as FinSequence of Eg by A1,FINSEQ_1:74;
   set V9=V \/ {v2};
   Q is_orientedpath_of v1,v3,V by A8,Def18;
   then
 A13: Q is_orientedpath_of v1,v3,V9 by Th36,XBOOLE_1:7;
-A14: len pe = 1 & pe.1=e by FINSEQ_1:57;
-  then consider s being Simple (oriented Chain of G) such that
+A14: len pe = 1 & pe.1=e by FINSEQ_1:40;
+  then consider s being Simple oriented Chain of G such that
 A15: s is_shortestpath_of v1,v3,V9,W by A2,A3,A7,A9,A11,Th38,Th66;
 A16: R is_orientedpath_of v1,v3,V9 by A3,A7,A9,A11,A14,Th38;
 A17: now
@@ -3326,20 +3310,20 @@ A22: s is_orientedpath_of v1,v3 by Def4;
 A23: FT.(s.len s)=v3 by Def3;
   s <> {} by A22,Def3;
   then
-A24: len s >= 1 by FINSEQ_1:28;
+A24: len s >= 1 by FINSEQ_1:20;
   per cases;
   suppose
     len s >= 2;
     then consider k being Nat such that
 A25: len s = 1+1 + k by NAT_1:10;
 A26: V9 \ {v2} = V \ {v2} by XBOOLE_1:40;
-    reconsider k as Element of NAT by ORDINAL1:def 13;
+    reconsider k as Element of NAT by ORDINAL1:def 12;
 A27: len s = 1 + (1+k) by A25;
     then consider s1,s2 being FinSequence such that
 A28: len s1 = 1+k and
 A29: len s2 = 1 and
-A30: s = s1^s2 by FINSEQ_2:25;
-    reconsider s1,s2 as Simple (oriented Chain of G) by A30,Th17;
+A30: s = s1^s2 by FINSEQ_2:22;
+    reconsider s1,s2 as Simple oriented Chain of G by A30,Th17;
 A31: len s1 >= 1 by A28,NAT_1:12;
 A32: FS.(s.1)=v1 by A22,Def3;
     then
@@ -3352,7 +3336,7 @@ A35: s2.1 = s.len s by A27,A28,A29,A30,Lm2;
 A36: vertices(s) \ {v3} = vertices(s1) \/ {v3} \ {v3} by A23,A28,A29,A30,Th31,
 NAT_1:12
       .=vertices(s1) \ {v3} by XBOOLE_1:40
-      .=vertices(s1) by A34,ZFMISC_1:65;
+      .=vertices(s1) by A34,ZFMISC_1:57;
     then vertices(s1) c= V9 by A21,Def4;
     then vertices(s1) \ {v2} c= V9 \ {v2} by XBOOLE_1:33;
     then
@@ -3375,7 +3359,7 @@ A45:    i <= len s1 and
 A46:    v2 = FT.(s1.i) by A5,A33,Th32;
         s2/.1 in Eg by A1;
         then
-A47:    s2.1 in Eg by A29,FINSEQ_4:24;
+A47:    s2.1 in Eg by A29,FINSEQ_4:15;
         hereby
           per cases;
           suppose
@@ -3386,10 +3370,10 @@ A48:        FS.(s2.1)=v2;
             then
 A49:        cost(P,W) <= cost(s1,W) by A4,Def18;
             s2.1=e by A1,A23,A20,A35,A47,A48,GRAPH_1:def 5;
-            then s2=pe by A29,FINSEQ_1:57;
+            then s2=pe by A29,FINSEQ_1:40;
             then cost(R,W) = cost(P,W)+cost(s2,W) by A2,A7,Th50,Th58;
             then
-A50:        cost(R,W) <= cost(s,W) by A42,A49,XREAL_1:9;
+A50:        cost(R,W) <= cost(s,W) by A42,A49,XREAL_1:7;
             hereby
               assume cost(Q,W) <= cost(R,W);
               then
@@ -3415,11 +3399,11 @@ A51:          cost(Q,W) <= cost(s,W) by A50,XXREAL_0:2;
           end;
           suppose
 A52:        FS.(s2.1)<>v2;
-            len s1 in dom s1 by A31,FINSEQ_3:27;
-            then reconsider vx=FT.(s1.len s1) as Vertex of G by FINSEQ_2:13
-,FUNCT_2:7;
+            len s1 in dom s1 by A31,FINSEQ_3:25;
+            then reconsider vx=FT.(s1.len s1) as Vertex of G by FINSEQ_2:11
+,FUNCT_2:5;
 A53:        not vx in {v2} by A41,A52,TARSKI:def 1;
-            len s1 in dom s1 by A31,FINSEQ_3:27;
+            len s1 in dom s1 by A31,FINSEQ_3:25;
             then
 A54:        vx in vertices s1 by Th28;
             vertices s1 c= V9 by A21,A36,Def4;
@@ -3433,7 +3417,7 @@ A55:        vx in V by A54,A53,XBOOLE_0:def 3;
             end;
             then
 A56:        V \/ {vx} c= V by XBOOLE_1:8;
-            1 in dom s2 by A29,FINSEQ_3:27;
+            1 in dom s2 by A29,FINSEQ_3:25;
             then vx <> v1 by A25,A28,A35,A40,A43,A39,Th28;
             then consider q9 being oriented Chain of G such that
 A57:        q9 is_shortestpath_of v1,vx,V,W and
@@ -3445,11 +3429,11 @@ A60:        q9 is_orientedpath_of v1,vx,V by A57,Def18;
 A61:        q9 is_orientedpath_of v1,vx by Def4;
             then q9<>{} by Def3;
             then
-A62:        len q9 >= 1 by FINSEQ_1:28;
+A62:        len q9 >= 1 by FINSEQ_1:20;
             FT.(q9.len q9)=vx by A61,Def3;
             then reconsider
             qx=q9^s2 as oriented Chain of G by A25,A28,A35,A40,A39,Th15;
-            len qx = len q9 + 1 by A29,FINSEQ_1:35;
+            len qx = len q9 + 1 by A29,FINSEQ_1:22;
             then
 A63:        qx <> {} & FT.(qx.len qx)=v3 by A23,A29,A35,Lm2;
             FS.(q9.1)=v1 by A61,Def3;
@@ -3467,12 +3451,12 @@ A65:        vertices(q9) \ {v3} c= V \ {v3} by XBOOLE_1:33;
             then qx is_orientedpath_of v1,v3,V by A64,Def4;
             then
 A66:        cost(Q,W) <= cost(qx,W) by A8,Def18;
-            reconsider j as Element of NAT by ORDINAL1:def 13;
+            reconsider j as Element of NAT by ORDINAL1:def 12;
             consider t1,t2 being FinSequence such that
 A67:        len t1 = i and
             len t2 = j and
-A68:        s1 = t1^t2 by A59,FINSEQ_2:25;
-            reconsider t1,t2 as Simple (oriented Chain of G) by A68,Th17;
+A68:        s1 = t1^t2 by A59,FINSEQ_2:22;
+            reconsider t1,t2 as Simple oriented Chain of G by A68,Th17;
 A69:        FT.(t1.len t1)=v2 by A44,A46,A67,A68,Lm1;
             vertices(t1) c= vertices(t1^t2) by Th30;
             then vertices(t1) \ {v2} c= vertices(s1) \ {v2} by A68,XBOOLE_1:33;
@@ -3485,12 +3469,12 @@ A70:        vertices(t1) \ {v2} c= V by A37,XBOOLE_1:1;
 A71:        cost(P,W) <= cost(t1,W) by A4,Def18;
 A72:        cost(t2,W) >= 0 by A2,Th54;
             cost(s1,W)=cost(t1,W)+cost(t2,W) by A2,A68,Th50,Th58;
-            then cost(t1,W) + (0 qua Nat) <= cost(s1,W) by A72,XREAL_1:9;
+            then cost(t1,W) + (0 qua Nat) <= cost(s1,W) by A72,XREAL_1:7;
             then cost(P,W) <= cost(s1,W) by A71,XXREAL_0:2;
             then
 A73:        cost(q9,W) <= cost(s1,W) by A58,XXREAL_0:2;
             cost(qx,W) = cost(q9,W)+cost(s2,W) by A2,Th50,Th58;
-            then cost(qx,W) <= cost(s,W) by A42,A73,XREAL_1:9;
+            then cost(qx,W) <= cost(s,W) by A42,A73,XREAL_1:7;
             then
 A74:        cost(Q,W) <= cost(s,W) by A66,XXREAL_0:2;
             hereby
@@ -3521,7 +3505,7 @@ A75:          cost(R,W) <= cost(s,W) by A74,XXREAL_0:2;
       suppose
         not v2 in vertices(s1);
         then
-A76:    vertices(s1) \ {v2} = vertices(s1) by ZFMISC_1:65;
+A76:    vertices(s1) \ {v2} = vertices(s1) by ZFMISC_1:57;
         then vertices(s1) \ {v2} c= V9 by A21,A36,Def4;
         then vertices(s) \ {v3} c= V by A36,A76,XBOOLE_1:43;
         then s is_orientedpath_of v1,v3,V by A22,Def4;
@@ -3546,9 +3530,9 @@ A81:  not x in {v3} by XBOOLE_0:def 5;
       x in vertices(s/.1) by A79,A80,XBOOLE_0:def 5;
       then
 A82:  x=FS.(s/.1) or x=FT.(s/.1) by TARSKI:def 2;
-A83:  s/.1=s.1 by A24,FINSEQ_4:24;
+A83:  s/.1=s.1 by A24,FINSEQ_4:15;
       v3=FT.(s.len s) by A22,Def3
-        .=FT.(s/.1) by A78,FINSEQ_4:24;
+        .=FT.(s/.1) by A78,FINSEQ_4:15;
       hence thesis by A22,A12,A81,A82,A83,Def3,TARSKI:def 1;
     end;
     then s is_orientedpath_of v1,v3,V by A22,Def4;

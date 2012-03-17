@@ -20,18 +20,19 @@ environ
       FINSEQ_2, NAT_1, XBOOLE_0, REALSET1, VALUED_1, TARSKI, XXREAL_2, XREAL_0,
       ORDINAL1, ORDINAL2, FCONT_2, INTEGRA2, FUNCT_3, SEQ_2, CARD_1, SEQ_1,
       COMPLEX1, MEASURE7, FDIFF_1, SEQ_4, XXREAL_1, ZFMISC_1, VALUED_0, SEQM_3,
-      RCOMP_1, INTEGRA5;
+      RCOMP_1, INTEGRA5, MEASURE5;
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0,
-      RELAT_1, COMPLEX1, XXREAL_2, REALSET1, RELSET_1, FUNCT_2, RCOMP_1,
+      RELAT_1, COMPLEX1, XXREAL_2, ZFMISC_1, RELSET_1, FUNCT_2, RCOMP_1,
       PARTFUN1, MEASURE6, FINSEQ_1, FUNCOP_1, VALUED_1, SEQ_1, RFUNCT_1,
       FINSEQ_2, SEQ_2, SEQ_4, BINOP_2, REAL_1, NAT_1, FDIFF_1, RVSUM_1,
-      INTEGRA1, INTEGRA2, INTEGRA3, FCONT_1, FCONT_2, RFUNCT_2, XXREAL_0;
+      MEASURE5, INTEGRA1, INTEGRA2, INTEGRA3, FCONT_1, FCONT_2, RFUNCT_2,
+      XXREAL_0;
  constructors PARTFUN1, REAL_1, NAT_1, BINOP_2, COMPLEX1, RFUNCT_1, RFUNCT_2,
-      FCONT_1, FCONT_2, FDIFF_1, REALSET1, MEASURE6, INTEGRA2, SEQ_1, XXREAL_2,
+      FCONT_1, FCONT_2, FDIFF_1, ZFMISC_1, MEASURE6, INTEGRA2, SEQ_1, XXREAL_2,
       RVSUM_1, SEQ_4, RELSET_1, FUNCOP_1, SEQ_2, INTEGRA3;
  registrations XBOOLE_0, RELAT_1, NUMBERS, XXREAL_0, XREAL_0, MEMBERED,
       FINSEQ_1, FINSEQ_2, RCOMP_1, INTEGRA1, VALUED_0, VALUED_1, FUNCT_2,
-      FINSET_1, XXREAL_2, CARD_1, SEQ_2, RELSET_1;
+      FINSET_1, XXREAL_2, CARD_1, SEQ_2, RELSET_1, ZFMISC_1, MEASURE5;
  requirements NUMERALS, BOOLE, SUBSET, REAL, ARITHM;
 
 
@@ -39,7 +40,7 @@ begin ::Some useful properties of finite sequence
 
 reserve i,k,n,m for Element of NAT;
 reserve a,b,r,r1,r2,s,x,x1,x2 for Real;
-reserve A for closed-interval Subset of REAL;
+reserve A for non empty closed_interval Subset of REAL;
 reserve X for set;
 
 theorem :: INTEGRA5:1
@@ -78,20 +79,20 @@ theorem :: INTEGRA5:5
   REAL holds (f+g)||C = f||C + g||C;
 
 definition
-  canceled;
-  let A be closed-interval Subset of REAL;
+
+  let A be non empty closed_interval Subset of REAL;
   let f be PartFunc of REAL,REAL;
   pred f is_integrable_on A means
-:: INTEGRA5:def 2
+:: INTEGRA5:def 1
 
   f||A is integrable;
 end;
 
 definition
-  let A be closed-interval Subset of REAL;
+  let A be non empty closed_interval Subset of REAL;
   let f be PartFunc of REAL,REAL;
   func integral(f,A) -> Real equals
-:: INTEGRA5:def 3
+:: INTEGRA5:def 2
   integral(f||A);
 end;
 
@@ -147,11 +148,13 @@ theorem :: INTEGRA5:16
   holds f is_integrable_on A;
 
 theorem :: INTEGRA5:17
-  for f being PartFunc of REAL,REAL, A,B being closed-interval Subset of
+  for f being PartFunc of REAL,REAL,
+  A,B being non empty closed_interval Subset of
   REAL st A c= dom f & f|A is continuous & B c= A holds f is_integrable_on B;
 
 theorem :: INTEGRA5:18
-  for f being PartFunc of REAL,REAL, A,B,C being closed-interval Subset
+  for f being PartFunc of REAL,REAL,
+  A,B,C being non empty closed_interval Subset
 of REAL, X st A c= X & f is_differentiable_on X & (f`|X)|A is continuous
  &lower_bound A
 = lower_bound B & upper_bound B = lower_bound C & upper_bound C = upper_bound A
@@ -162,8 +165,8 @@ definition
   let a,b be real number;
   assume
  a<=b;
-  func [' a,b '] -> closed-interval Subset of REAL equals
-:: INTEGRA5:def 4
+  func [' a,b '] -> non empty closed_interval Subset of REAL equals
+:: INTEGRA5:def 3
 
   [.a,b.];
 end;
@@ -172,18 +175,20 @@ definition
   let a,b be real number;
   let f be PartFunc of REAL,REAL;
   func integral(f,a,b) -> Real equals
-:: INTEGRA5:def 5
+:: INTEGRA5:def 4
 
   integral(f,[' a,b ']) if a<=b
   otherwise -integral(f,[' b,a ']);
 end;
 
 theorem :: INTEGRA5:19
-  for f being PartFunc of REAL,REAL, A being closed-interval Subset of
+  for f being PartFunc of REAL,REAL,
+  A being non empty closed_interval Subset of
   REAL, a,b st A=[.a,b.] holds integral(f,A)=integral(f,a,b);
 
 theorem :: INTEGRA5:20
-  for f being PartFunc of REAL,REAL, A being closed-interval Subset of
+  for f being PartFunc of REAL,REAL,
+   A being non empty closed_interval Subset of
   REAL, a,b st A=[.b,a.] holds -integral(f,A)=integral(f,a,b);
 
 theorem :: INTEGRA5:21

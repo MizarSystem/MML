@@ -19,15 +19,15 @@ environ
       FUNCT_1, CAT_1, FINSEQ_1, GRAPHSP, FUNCT_2, CARD_3, ORDINAL1, ARYTM_3,
       ARYTM_1, SUPINF_2, FUNCOP_1, SCMRING1, GLIB_000, FUNCT_4, ALGSTR_0,
       RECDEF_2, COMPOS_1, AMISTD_2;
- notations TARSKI, XBOOLE_0, ENUMSET1, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1,
-      CARD_1, FUNCT_2, RECDEF_2, STRUCT_0, ALGSTR_0, FUNCSDOM, MCART_1, CARD_3,
-      FINSEQ_1, NUMBERS, FUNCOP_1, FUNCT_4, FUNCT_7, COMPOS_1, EXTPRO_1, AMI_2,
-      AMI_3, SCMRING1;
+ notations TARSKI, XBOOLE_0, ENUMSET1, ZFMISC_1, SUBSET_1, DOMAIN_1, RELAT_1,
+      FUNCT_1, CARD_1, FUNCT_2, RECDEF_2, STRUCT_0, ALGSTR_0, FUNCSDOM,
+      MCART_1, CARD_3, FINSEQ_1, NUMBERS, FUNCOP_1, FUNCT_4, FUNCT_7, MEMSTR_0,
+      COMPOS_1, EXTPRO_1, AMI_2, AMI_3, SCMRING1;
  constructors XXREAL_0, FINSEQ_4, REALSET1, CAT_2, AMI_3, SCMRING1, PRE_POLY,
-      RECDEF_2;
+      RECDEF_2, FUNCT_7, MEMSTR_0, RELSET_1;
  registrations XBOOLE_0, SETFAM_1, ORDINAL1, RELSET_1, FUNCOP_1, FINSEQ_1,
       CARD_3, STRUCT_0, AMI_3, SCMRING1, AMI_2, FUNCT_1, FUNCT_2, ALGSTR_0,
-      ALGSTR_1, GCD_1, COMPOS_1, EXTPRO_1;
+      ALGSTR_1, GCD_1, COMPOS_1, EXTPRO_1, MEMSTR_0, CARD_1;
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
 
 
@@ -40,7 +40,7 @@ reserve I for Element of Segm 8,
   k for Element of NAT;
 
 registration
-  cluster strict trivial Ring;
+  cluster strict trivial for Ring;
 end;
 
 definition
@@ -56,20 +56,19 @@ end;
 
 registration
   let R be good Ring;
-  cluster SCM R -> non empty stored-program standard-ins;
+  cluster SCM R -> non empty standard-ins;
 end;
 
 definition
   let R be good Ring;
   mode Data-Location of R -> Object of SCM R means
 :: SCMRING2:def 2
- it in (the carrier of SCM R) \ (NAT \/ {NAT});
+ it in (the carrier of SCM R) \ ({NAT});
 end;
 
 reserve R for good Ring,
   r for Element of R,
-  a, b, c, d1, d2 for Data-Location
-  of R,
+  a, b, c, d1, d2 for Data-Location of R,
   i1 for Element of NAT;
 
 theorem :: SCMRING2:1
@@ -80,21 +79,19 @@ definition
   redefine func s.a -> Element of R;
 end;
 
-canceled;
-
-theorem :: SCMRING2:3
+theorem :: SCMRING2:2
   [0,{},{}] is Instruction of SCM R;
 
-theorem :: SCMRING2:4
+theorem :: SCMRING2:3
   x in {1,2,3,4} implies [x,{},<*d1,d2*>] in SCM-Instr S;
 
-theorem :: SCMRING2:5
+theorem :: SCMRING2:4
   [5,{},<*d1,t*>] in SCM-Instr S;
 
-theorem :: SCMRING2:6
+theorem :: SCMRING2:5
   [6,<*i1*>,{}] in SCM-Instr S;
 
-theorem :: SCMRING2:7
+theorem :: SCMRING2:6
   [7,<*i1*>,<*d1*>] in SCM-Instr S;
 
 definition
@@ -135,7 +132,7 @@ definition
   [7,<*l*>,<*a*>];
 end;
 
-theorem :: SCMRING2:8
+theorem :: SCMRING2:7
   for I being set holds I is Instruction of SCM R iff I = [0,{},{}] or
 (ex a,b st I = a:=b) or (ex a,b st I = AddTo(a,b)) or (ex a,b st I = SubFrom(a,
 b)) or (ex a,b st I = MultBy(a,b)) or (ex i1 st I = goto(i1,R)) or
@@ -149,56 +146,56 @@ registration
   cluster SCM R -> proper-halt IC-Ins-separated;
 end;
 
-theorem :: SCMRING2:9
+theorem :: SCMRING2:8
   IC SCM R = NAT;
 
-theorem :: SCMRING2:10
+theorem :: SCMRING2:9
   for S being SCM-State of R st S = s holds IC s = IC S;
 
-canceled;
 
-theorem :: SCMRING2:12
+
+theorem :: SCMRING2:10
   for I being Instruction of SCM R for i being Element of
   SCM-Instr R st i = I for S being SCM-State of R st S = s holds Exec(I,s) =
   SCM-Exec-Res(i,S);
 
 begin :: Users guide
 
-theorem :: SCMRING2:13
+theorem :: SCMRING2:11
   Exec(a := b, s).IC SCM R = succ IC s & Exec(a := b, s).a = s.b &
   for c st c <> a holds Exec(a := b, s).c = s.c;
 
-theorem :: SCMRING2:14
+theorem :: SCMRING2:12
   Exec(AddTo(a,b), s).IC SCM R = succ IC s & Exec(AddTo(a,b), s).a
   = s.a + s.b & for c st c <> a holds Exec(AddTo(a,b), s).c = s.c;
 
-theorem :: SCMRING2:15
+theorem :: SCMRING2:13
   Exec(SubFrom(a,b), s).IC SCM R = succ IC s & Exec(SubFrom(a,b),
   s).a = s.a - s.b & for c st c <> a holds Exec(SubFrom(a,b), s).c = s.c;
 
-theorem :: SCMRING2:16
+theorem :: SCMRING2:14
   Exec(MultBy(a,b), s).IC SCM R = succ IC s & Exec(MultBy(a,b), s)
   .a = s.a * s.b & for c st c <> a holds Exec(MultBy(a,b), s).c = s.c;
 
-theorem :: SCMRING2:17
+theorem :: SCMRING2:15
   Exec(goto(i1,R), s).IC SCM R = i1 & Exec(goto(i1,R), s).c = s.c;
 
-theorem :: SCMRING2:18
+theorem :: SCMRING2:16
   (s.a = 0.R implies Exec(a =0_goto i1, s).IC SCM R = i1) & (s.a
 <> 0.R implies Exec(a =0_goto i1, s).IC SCM R = succ IC s) & Exec(a =0_goto i1,
   s).c = s.c;
 
-theorem :: SCMRING2:19
+theorem :: SCMRING2:17
   Exec(a := r, s).IC SCM R = succ IC s & Exec(a := r, s).a = r &
   for c st c <> a holds Exec(a := r, s).c = s.c;
 
 begin  :: Halt instruction
 
-theorem :: SCMRING2:20
+theorem :: SCMRING2:18
   for I being Instruction of SCM R st ex s st Exec(I,s).IC SCM R =
   succ IC s holds I is non halting;
 
-theorem :: SCMRING2:21
+theorem :: SCMRING2:19
   for I being Instruction of SCM R st I = [0,{},{}] holds I is
   halting;
 
@@ -227,20 +224,20 @@ end;
 
 registration
   let R;
-  cluster SCM R -> halting definite realistic;
+  cluster SCM R -> halting;
 end;
 
-canceled 7;
 
-theorem :: SCMRING2:29
+
+theorem :: SCMRING2:20
   for I being Instruction of SCM R st I is halting holds I = halt
   SCM R;
 
-theorem :: SCMRING2:30
+theorem :: SCMRING2:21
   halt SCM R = [0,{},{}];
 
-theorem :: SCMRING2:31
+theorem :: SCMRING2:22
   Data-Locations SCM R = Data-Locations SCM;
 
-theorem :: SCMRING2:32
+theorem :: SCMRING2:23
   x is Data-Location of R iff x in Data-Locations SCM R;

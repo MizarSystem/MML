@@ -25,12 +25,12 @@
 </Typ>
 <Cluster>
 <Adjective nr="33" value="false"/>
-<Adjective nr="46"/>
 <Adjective nr="47"/>
 <Adjective nr="48"/>
-<Adjective nr="50"/>
+<Adjective nr="49"/>
 <Adjective nr="51"/>
-<Adjective nr="64"/>
+<Adjective nr="52"/>
+<Adjective nr="65"/>
 </Cluster>
 </RCluster>
 <RCluster aid="BCIALG_3" nr="2">
@@ -40,12 +40,12 @@
 </Typ>
 <Cluster>
 <Adjective nr="33" value="false"/>
-<Adjective nr="46"/>
 <Adjective nr="47"/>
 <Adjective nr="48"/>
-<Adjective nr="50"/>
-<Adjective nr="67"/>
+<Adjective nr="49"/>
+<Adjective nr="51"/>
 <Adjective nr="68"/>
+<Adjective nr="69"/>
 </Cluster>
 </RCluster>
 <RCluster aid="BCIALG_3" nr="3">
@@ -55,13 +55,13 @@
 </Typ>
 <Cluster>
 <Adjective nr="33" value="false"/>
-<Adjective nr="46"/>
 <Adjective nr="47"/>
 <Adjective nr="48"/>
-<Adjective nr="50"/>
+<Adjective nr="49"/>
 <Adjective nr="51"/>
-<Adjective nr="64"/>
-<Adjective nr="69"/>
+<Adjective nr="52"/>
+<Adjective nr="65"/>
+<Adjective nr="70"/>
 </Cluster>
 </RCluster>
 <RCluster aid="BCIALG_3" nr="4">
@@ -71,53 +71,53 @@
 </Typ>
 <Cluster>
 <Adjective nr="33" value="false"/>
-<Adjective nr="46"/>
 <Adjective nr="47"/>
 <Adjective nr="48"/>
-<Adjective nr="50"/>
+<Adjective nr="49"/>
 <Adjective nr="51"/>
-<Adjective nr="64"/>
-<Adjective nr="69"/>
-<Adjective nr="72"/>
+<Adjective nr="52"/>
+<Adjective nr="65"/>
+<Adjective nr="70"/>
 <Adjective nr="73"/>
 <Adjective nr="74"/>
+<Adjective nr="75"/>
 </Cluster>
 </RCluster>
 <FCluster aid="BCIALG_3" nr="1">
 <ArgTypes/>
 <Func kind="K" nr="97"/>
 <Cluster>
-<Adjective nr="64"/>
+<Adjective nr="65"/>
 </Cluster>
 </FCluster>
 <FCluster aid="BCIALG_3" nr="2">
 <ArgTypes/>
 <Func kind="K" nr="97"/>
 <Cluster>
-<Adjective nr="67"/>
 <Adjective nr="68"/>
+<Adjective nr="69"/>
 </Cluster>
 </FCluster>
 <FCluster aid="BCIALG_3" nr="3">
 <ArgTypes/>
 <Func kind="K" nr="97"/>
 <Cluster>
-<Adjective nr="69"/>
+<Adjective nr="70"/>
 </Cluster>
 </FCluster>
 <FCluster aid="BCIALG_3" nr="4">
 <ArgTypes/>
 <Func kind="K" nr="97"/>
 <Cluster>
-<Adjective nr="72"/>
+<Adjective nr="73"/>
 </Cluster>
 </FCluster>
 <FCluster aid="BCIALG_3" nr="5">
 <ArgTypes/>
 <Func kind="K" nr="97"/>
 <Cluster>
-<Adjective nr="73"/>
 <Adjective nr="74"/>
+<Adjective nr="75"/>
 </Cluster>
 </FCluster>
 </Registrations>

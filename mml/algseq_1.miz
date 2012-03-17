@@ -33,32 +33,28 @@ begin
 reserve i,k,l,m,n for Nat,
   x for set;
 
-canceled 9;
+theorem
+  k in Segm n iff k < n by NAT_1:44;
 
 theorem
-  k in Segm n iff k < n by NAT_1:45;
+  Segm 0 = {} & Segm 1 = { 0 } & Segm 2 = { 0,1 } by CARD_1:49,50;
 
 theorem
-  Segm 0 = {} & Segm 1 = { 0 } & Segm 2 = { 0,1 } by CARD_1:87,88;
+  n in Segm(n+1) by NAT_1:45;
 
 theorem
-  n in Segm(n+1) by NAT_1:46;
-
-theorem
-  n <= m iff Segm n c= Segm m by NAT_1:40;
+  n <= m iff Segm n c= Segm m by NAT_1:39;
 
 theorem
   Segm n = Segm m implies n = m;
 
 theorem
   k <= n implies Segm k = Segm k /\ Segm n & Segm k = Segm n /\ Segm k
-  by NAT_1:47;
+  by NAT_1:46;
 
 theorem
   (Segm k = Segm k /\ Segm n or Segm k = Segm n /\ Segm k) implies k <=
-  n by NAT_1:47;
-
-canceled;
+  n by NAT_1:46;
 
 ::
 ::    Algebraic Sequences
@@ -68,7 +64,7 @@ reserve R for non empty ZeroStr;
 
 definition
   let R;
-  canceled;
+
   let F be sequence of R;
   attr F is finite-Support means
   :Def2:
@@ -77,7 +73,7 @@ end;
 
 registration
   let R;
-  cluster finite-Support sequence of R;
+  cluster finite-Support for sequence of R;
   existence
   proof
     set f = NAT --> 0.R;
@@ -85,8 +81,8 @@ registration
     take f, 0;
     let i;
     assume i >= 0;
-    i in NAT by ORDINAL1:def 13;
-    hence thesis by FUNCOP_1:13;
+    i in NAT by ORDINAL1:def 12;
+    hence thesis by FUNCOP_1:7;
   end;
 end;
 
@@ -113,18 +109,6 @@ A1: for i st i >= n holds p.i = 0.R by Def2;
   thus thesis by A1,Def3;
 end;
 
-Lm2: ex k being Element of NAT st k is_at_least_length_of p & for n st n
-is_at_least_length_of p holds k<=n
-proof
-  defpred P[Nat] means $1 is_at_least_length_of p;
-A1: ex m being Nat st P[m] by Lm1;
-  ex k st P[k] & for n st P[n] holds k<=n from NAT_1:sch 5(A1);
-  then consider k such that
-A2: k is_at_least_length_of p & for n st n is_at_least_length_of p holds k<=n;
-  take k;
-  thus thesis by A2,ORDINAL1:def 13;
-end;
-
 Lm3: k is_at_least_length_of p & (for m st m is_at_least_length_of p holds k<=
 m) & l is_at_least_length_of p & (for m st m is_at_least_length_of p holds l<=m
 ) implies k=l
@@ -141,11 +125,18 @@ definition
   func len p -> Element of NAT means
   :Def4:
   it is_at_least_length_of p & for m st m is_at_least_length_of p holds it<=m;
-  existence by Lm2;
+  existence
+proof
+  defpred P[Nat] means $1 is_at_least_length_of p;
+A1: ex m being Nat st P[m] by Lm1;
+  ex k st P[k] & for n st P[n] holds k<=n from NAT_1:sch 5(A1);
+  then consider k such that
+A2: k is_at_least_length_of p & for n st n is_at_least_length_of p holds k<=n;
+  take k;
+  thus thesis by A2,ORDINAL1:def 12;
+end;
   uniqueness by Lm3;
 end;
-
-canceled 4;
 
 theorem Th22:
   i>=len p implies p.i=0.R
@@ -155,8 +146,6 @@ A1: i>=len p;
   len p is_at_least_length_of p by Def4;
   hence thesis by A1,Def3;
 end;
-
-canceled;
 
 theorem Th24:
   (for i st i < k holds p.i<>0.R) implies len p>=k
@@ -178,7 +167,7 @@ theorem Th25:
 proof
   assume
 A1: len p=k+1;
-  then k<len p by XREAL_1:31;
+  then k<len p by XREAL_1:29;
   then not k is_at_least_length_of p by Def4;
   then consider i such that
 A2: i>=k and
@@ -198,8 +187,6 @@ definition
   Segm len p;
   coherence;
 end;
-
-canceled;
 
 theorem
   k = len p iff Segm k = support p;
@@ -221,10 +208,10 @@ A1: for x being Element of NAT ex y being Element of R() st P[x,y]
 A2: for x being Element of NAT holds x<A()&f.x=F(x) or x>=A()&f.x=0.R();
   ex n st for i st i >= n holds f.i = 0.R()
   proof
-    reconsider n=A() as Element of NAT by ORDINAL1:def 13;
+    reconsider n=A() as Element of NAT by ORDINAL1:def 12;
     take n;
     let i;
-    i in NAT by ORDINAL1:def 13;
+    i in NAT by ORDINAL1:def 12;
     hence thesis by A2;
   end;
   then reconsider f as AlgSequence of R() by Def2;
@@ -233,13 +220,13 @@ A2: for x being Element of NAT holds x<A()&f.x=F(x) or x>=A()&f.x=0.R();
     let i;
     assume
 A3: i>=A();
-    i in NAT by ORDINAL1:def 13;
+    i in NAT by ORDINAL1:def 12;
     hence f.i=0.R() by A2,A3;
   end;
   then A() is_at_least_length_of f by Def3;
   hence len f <= A() by Def4;
   let k;
-  k in NAT by ORDINAL1:def 13;
+  k in NAT by ORDINAL1:def 12;
   hence thesis by A2;
 end;
 
@@ -264,7 +251,7 @@ A4:   k >= len p;
     hence thesis by A2;
   end;
   dom p = NAT & dom q = NAT by FUNCT_2:def 1;
-  hence thesis by A3,FUNCT_1:9;
+  hence thesis by A3,FUNCT_1:2;
 end;
 
 theorem
@@ -275,7 +262,7 @@ proof
   assume D <> {0.R};
   then consider t being set such that
 A1: t in D and
-A2: t <> 0.R by ZFMISC_1:41;
+A2: t <> 0.R by ZFMISC_1:35;
   reconsider y=t as Element of R by A1;
   let k;
   deffunc F(Nat) = y;
@@ -351,8 +338,6 @@ A1: p.0=0.R & len p<=1 by Def6;
   hence thesis by NAT_1:14;
 end;
 
-canceled;
-
 theorem Th31:
   p=<%0.R%> iff len p = 0
 proof
@@ -395,7 +380,7 @@ A1: p=<%0.R%>;
       assume x in rng p;
       then consider i being set such that
 A2:   i in dom p and
-A3:   x = p.i by FUNCT_1:def 5;
+A3:   x = p.i by FUNCT_1:def 3;
       reconsider i as Element of NAT by A2,FUNCT_2:def 1;
       p.i=0.R by A1,Th33;
       hence thesis by A3,TARSKI:def 1;
@@ -408,7 +393,7 @@ A3:   x = p.i by FUNCT_1:def 5;
       then
 A4:   p.0 = x by A1,Def6;
       dom p = NAT by FUNCT_2:def 1;
-      hence thesis by A4,FUNCT_1:def 5;
+      hence thesis by A4,FUNCT_1:def 3;
     end;
   end;
   thus rng p={0.R} implies p=<%0.R%>
@@ -418,9 +403,9 @@ A5: rng p={0.R};
     for k st k>=0 holds p.k=0.R
     proof
       let k;
-      k in NAT by ORDINAL1:def 13;
+      k in NAT by ORDINAL1:def 12;
       then k in dom p by FUNCT_2:def 1;
-      then p.k in rng p by FUNCT_1:def 5;
+      then p.k in rng p by FUNCT_1:def 3;
       hence thesis by A5,TARSKI:def 1;
     end;
     then

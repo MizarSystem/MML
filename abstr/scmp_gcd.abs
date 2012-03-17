@@ -18,16 +18,16 @@ environ
       COMPLEX1, XXREAL_0, CARD_1, NAT_1, AMI_3, AMI_2, ARYTM_1, TURING_1,
       SCMFSA_7, FUNCT_1, RELAT_1, GRAPHSP, SCMPDS_1, TARSKI, CIRCUIT2, INT_2,
       MSUALG_1, FUNCOP_1, FUNCT_4, XBOOLE_0, STRUCT_0, SCMP_GCD, ORDINAL1,
-      PARTFUN1, SCMNORM, SCMFSA6C, PBOOLE;
+      PARTFUN1, SCMNORM, SCMFSA6C, PBOOLE, COMPOS_1;
  notations TARSKI, XBOOLE_0, SUBSET_1, CARD_1, NUMBERS, XCMPLX_0, RELAT_1,
       FUNCT_1, INT_1, NAT_1, DOMAIN_1, PARTFUN1, PBOOLE, STRUCT_0, FUNCT_4,
-      COMPOS_1, EXTPRO_1, AMI_2, AMI_3, SCMPDS_1, SCMPDS_2, SCMPDS_4, INT_2,
-      XXREAL_0;
+      MEMSTR_0, COMPOS_1, EXTPRO_1, AMI_2, AMI_3, SCMPDS_1, SCMPDS_2, SCMPDS_4,
+      INT_2, XXREAL_0;
  constructors DOMAIN_1, XXREAL_0, REAL_1, NAT_1, NAT_D, SCMPDS_1, SCMPDS_4,
-      AMI_3, PBOOLE;
+      AMI_3, PBOOLE, PRE_POLY, AMISTD_2, MEMSTR_0, RELSET_1;
  registrations SETFAM_1, NUMBERS, XREAL_0, INT_1, STRUCT_0, SCMPDS_2, ORDINAL1,
       FINSET_1, XBOOLE_0, SCMPDS_4, COMPOS_1, AFINSQ_1, EXTPRO_1, PBOOLE,
-      RELAT_1, FUNCT_1;
+      RELAT_1, FUNCT_1, MEMSTR_0;
  requirements NUMERALS, REAL, SUBSET, ARITHM, BOOLE;
 
 
@@ -39,7 +39,7 @@ reserve m,n for Element of NAT,
   s,s1,s2 for State of SCMPDS,
   I,J for Program of SCMPDS;
 
-canceled 3;
+
 
 definition
   let k be Nat;
@@ -48,12 +48,12 @@ definition
   dl.k;
 end;
 
-canceled;
 
-theorem :: SCMP_GCD:5
+
+theorem :: SCMP_GCD:1
   for n1,n2 be Element of NAT holds DataLoc(n1,n2) = intpos(n1+n2);
 
-theorem :: SCMP_GCD:6
+theorem :: SCMP_GCD:2
   for s being State of SCMPDS,m1,m2 being Element of NAT st IC s= (m1+m2)
   holds ICplusConst(s,-m2)= m1;
 
@@ -69,19 +69,19 @@ definition
   intpos 1;
 end;
 
-theorem :: SCMP_GCD:7
+theorem :: SCMP_GCD:3
   GBP <> SBP;
 
-theorem :: SCMP_GCD:8
+theorem :: SCMP_GCD:4
   card (I ';' i)= card I + 1;
 
-theorem :: SCMP_GCD:9
+theorem :: SCMP_GCD:5
   card (i ';' j)= 2;
 
-theorem :: SCMP_GCD:10
+theorem :: SCMP_GCD:6
   (I ';' i). card I =i &  card I in dom (I ';' i);
 
-theorem :: SCMP_GCD:11
+theorem :: SCMP_GCD:7
   (I ';' i ';' J). card I =i;
 
 begin :: The Construction of Recursive Euclide Algorithm
@@ -107,13 +107,13 @@ end;
 
 begin :: The Computation of Recursive Euclide Algorithm
 
-theorem :: SCMP_GCD:12
+theorem :: SCMP_GCD:8
   card GCD-Algorithm = 15;
 
-theorem :: SCMP_GCD:13
+theorem :: SCMP_GCD:9
   n < 15 iff  n in dom GCD-Algorithm;
 
-theorem :: SCMP_GCD:14
+theorem :: SCMP_GCD:10
   GCD-Algorithm. 0=GBP:=0 & GCD-Algorithm. 1=SBP:= 7 &
   GCD-Algorithm. 2=saveIC(SBP,RetIC) & GCD-Algorithm. 3=goto 2 &
   GCD-Algorithm. 4=halt SCMPDS &
@@ -127,18 +127,18 @@ theorem :: SCMP_GCD:14
   GCD-Algorithm. 12=goto -7 & GCD-Algorithm. 13=(SBP,2):=(SBP,6) &
   GCD-Algorithm. 14=return SBP;
 
-reserve P,P1,P2 for (the Instructions of SCMPDS)-valued ManySortedSet of NAT;
+reserve P,P1,P2 for Instruction-Sequence of SCMPDS;
 
-theorem :: SCMP_GCD:15
-  for P being (the Instructions of SCMPDS)-valued ManySortedSet of NAT
+theorem :: SCMP_GCD:11
+  for P being Instruction-Sequence of SCMPDS
    st GCD-Algorithm c= P
-  for s being State of SCMPDS st Start-At(0,SCMPDS) c= s
+  for s being 0-started State of SCMPDS
   holds IC Comput(P,s,4) =  5 & Comput(P,s,4).GBP = 0 &
   Comput(P,s,4).SBP = 7 & Comput(P,s,4).intpos(7+RetIC) =  2 &
   Comput(P,s,4).intpos 9 = s.intpos 9 &
   Comput(P,s,4).intpos 10 = s.intpos 10;
 
-theorem :: SCMP_GCD:16
+theorem :: SCMP_GCD:12
   for s being State of SCMPDS st GCD-Algorithm c= P
   & IC s =  5 & s.SBP >0 & s.GBP=0 &
   s.DataLoc(s.SBP,3) >= 0 & s.DataLoc(s.SBP,2) >= s.DataLoc(s.SBP,3) holds
@@ -149,7 +149,7 @@ theorem :: SCMP_GCD:16
   for j be Element of NAT st 1<j & j <= s.SBP+1 holds
   s.intpos j=Comput(P,s,n).intpos j;
 
-theorem :: SCMP_GCD:17
+theorem :: SCMP_GCD:13
   for s being State of SCMPDS st GCD-Algorithm c= P
   & IC s =  5 & s.SBP >0 & s.GBP=0 &
   s.DataLoc(s.SBP,3) >= 0 & s.DataLoc(s.SBP,2) >= 0 holds
@@ -162,16 +162,17 @@ theorem :: SCMP_GCD:17
 
 begin :: The Correctness of Recursive Euclide Algorithm
 
-theorem :: SCMP_GCD:18
-  for s being State of SCMPDS
-   st Start-At(0,SCMPDS) c= s & GCD-Algorithm c= P
+theorem :: SCMP_GCD:14
+  for s being 0-started State of SCMPDS
+   st GCD-Algorithm c= P
   for x, y being Integer st s.intpos 9 = x & s.intpos 10 = y
   & x >= 0 & y >= 0 holds (Result(P,s)).intpos 9 = x gcd y;
 
 begin :: The Autonomy of Recursive Euclide Algorithm
 
-theorem :: SCMP_GCD:19
-  for p being FinPartState of SCMPDS,x,y being Integer st y >= 0 & x >= y
+theorem :: SCMP_GCD:15
+  for p being FinPartState of SCMPDS,
+     x,y being Integer st y >= 0 & x >= y
   & p=(intpos 9,intpos 10) --> (x,y)
-  holds Initialize GCD-Algorithm +* p is autonomic;
+  holds Initialize p is GCD-Algorithm-autonomic;
 

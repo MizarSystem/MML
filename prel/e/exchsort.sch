@@ -122,8 +122,8 @@
 <Adjective nr="11"/>
 <Adjective nr="16"/>
 <Adjective nr="25"/>
-<Adjective nr="99"/>
-<Adjective nr="100">
+<Adjective nr="101"/>
+<Adjective nr="102">
 <Func kind="K" nr="1"/>
 </Adjective>
 </Cluster>

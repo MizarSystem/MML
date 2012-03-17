@@ -20,13 +20,13 @@ environ
       ZFMISC_1, FINSEQ_4, FUNCT_4, GRAPH_2;
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, CARD_1, NUMBERS, XCMPLX_0,
       XXREAL_0, RELAT_1, RELSET_1, XXREAL_2, FINSEQ_1, FUNCT_1, PARTFUN1,
-      FUNCT_2, REALSET1, FINSEQ_2, FINSEQ_4, FUNCT_7, FINSET_1, NAT_1, NAT_D,
+      FUNCT_2, ZFMISC_1, FINSEQ_2, FINSEQ_4, FUNCT_7, FINSET_1, NAT_1, NAT_D,
       INT_1, RECDEF_1, STRUCT_0, GRAPH_1;
  constructors PARTFUN1, WELLORD2, XXREAL_0, NAT_1, INT_1, RECDEF_1, FINSEQ_4,
-      REALSET1, BINARITH, FINSEQ_6, GRAPH_1, FUNCT_7, MEMBERED, XXREAL_2,
+      ZFMISC_1, BINARITH, FINSEQ_6, GRAPH_1, FUNCT_7, MEMBERED, XXREAL_2,
       NAT_D, RELSET_1, FINSEQ_2;
  registrations XBOOLE_0, RELAT_1, FUNCT_1, FINSET_1, XXREAL_0, XREAL_0, NAT_1,
-      INT_1, CARD_1, FINSEQ_1, REALSET1, FINSEQ_6, GRAPH_1, NUMBERS, MEMBERED,
+      INT_1, CARD_1, FINSEQ_1, ZFMISC_1, FINSEQ_6, GRAPH_1, NUMBERS, MEMBERED,
       VALUED_0, XXREAL_2, STRUCT_0, RELSET_1;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
 
@@ -150,7 +150,7 @@ definition
 end;
 
 registration
-  cluster TwoValued Alternating FinSequence;
+  cluster TwoValued Alternating for FinSequence;
 end;
 
 reserve a, a1, a2 for TwoValued Alternating FinSequence;
@@ -174,14 +174,10 @@ begin    :: Finite subsequences of finite sequences
 registration
   let X;
   let fs be FinSequence of X;
-  cluster -> FinSubsequence-like Subset of fs;
+  cluster -> FinSubsequence-like for Subset of fs;
 end;
 
-
-
-canceled 2;
-
-theorem :: GRAPH_2:26
+theorem :: GRAPH_2:24
   for f being FinSubsequence, g, h, fg, fh, fgh being FinSequence
 st rng g c= dom f & rng h c= dom f & fg=f*g & fh=f*h & fgh=f*(g^h) holds fgh =
   fg^fh;
@@ -189,16 +185,16 @@ st rng g c= dom f & rng h c= dom f & fg=f*g & fh=f*h & fgh=f*(g^h) holds fgh =
 reserve fs, fs1, fs2 for FinSequence of X,
   fss, fss2 for Subset of fs;
 
-theorem :: GRAPH_2:27
+theorem :: GRAPH_2:25
   dom fss c= dom fs & rng fss c= rng fs;
 
-theorem :: GRAPH_2:28
+theorem :: GRAPH_2:26
   fs is Subset of fs;
 
-theorem :: GRAPH_2:29
+theorem :: GRAPH_2:27
   fss|Y is Subset of fs;
 
-theorem :: GRAPH_2:30
+theorem :: GRAPH_2:28
   for fss1 being Subset of fs1 st Seq fss = fs1 & Seq fss1 = fs2 &
   fss2 = fss|rng((Sgm dom fss)|dom fss1) holds Seq fss2 = fs2;
 
@@ -208,10 +204,10 @@ reserve G for Graph;
 reserve v, v1, v2, v3, v4 for Element of G,
   e for set;
 
-theorem :: GRAPH_2:31
+theorem :: GRAPH_2:29
   e joins v1,v2 implies e joins v2,v1;
 
-theorem :: GRAPH_2:32
+theorem :: GRAPH_2:30
   e joins v1,v2 & e joins v3,v4 implies v1=v3 & v2=v4 or v1=v4 & v2=v3;
 
 reserve vs, vs1, vs2 for FinSequence of the carrier of G,
@@ -219,9 +215,9 @@ reserve vs, vs1, vs2 for FinSequence of the carrier of G,
 
 definition
   let G, X;
-  canceled;
+
   func G-VSet X -> set equals
-:: GRAPH_2:def 6
+:: GRAPH_2:def 5
   { v: ex e being Element of the carrier' of G st
   e in X & (v = (the Source of G).e or v = (the Target of G).e) };
 end;
@@ -230,24 +226,22 @@ definition
   let G, vs;
   let c be FinSequence;
   pred vs is_vertex_seq_of c means
-:: GRAPH_2:def 7
+:: GRAPH_2:def 6
 
   len vs = len c + 1 & for n st 1<=n &
   n<=len c holds c.n joins vs/.n, vs/.(n+1);
 end;
 
-canceled;
-
-theorem :: GRAPH_2:34
+theorem :: GRAPH_2:31
   c <>{} & vs is_vertex_seq_of c implies G-VSet rng c = rng vs;
 
-theorem :: GRAPH_2:35
+theorem :: GRAPH_2:32
   <*v*> is_vertex_seq_of {};
 
-theorem :: GRAPH_2:36
+theorem :: GRAPH_2:33
   ex vs st vs is_vertex_seq_of c;
 
-theorem :: GRAPH_2:37
+theorem :: GRAPH_2:34
   c <>{} & vs1 is_vertex_seq_of c & vs2 is_vertex_seq_of c & vs1
 <> vs2 implies vs1.1<>vs2.1 & for vs st vs is_vertex_seq_of c holds vs = vs1 or
   vs = vs2;
@@ -256,31 +250,31 @@ definition
   let G;
   let c be FinSequence;
   pred c alternates_vertices_in G means
-:: GRAPH_2:def 8
+:: GRAPH_2:def 7
 
   len c>=1 & card (G-VSet rng c)
 = 2 & for n st n in dom c holds (the Source of G).(c.n) <> (the Target of G).(c
   .n);
 end;
 
-theorem :: GRAPH_2:38
+theorem :: GRAPH_2:35
   c alternates_vertices_in G & vs is_vertex_seq_of c implies for k
   st k in dom c holds vs.k <> vs.(k+1);
 
-theorem :: GRAPH_2:39
+theorem :: GRAPH_2:36
   c alternates_vertices_in G & vs is_vertex_seq_of c implies rng
   vs = {(the Source of G).(c.1), (the Target of G).(c.1)};
 
-theorem :: GRAPH_2:40
+theorem :: GRAPH_2:37
   c alternates_vertices_in G & vs is_vertex_seq_of c implies vs is
   TwoValued Alternating FinSequence;
 
-theorem :: GRAPH_2:41
+theorem :: GRAPH_2:38
   c alternates_vertices_in G implies ex vs1,vs2 st vs1<>vs2 & vs1
   is_vertex_seq_of c & vs2 is_vertex_seq_of c & for vs st vs is_vertex_seq_of c
   holds vs=vs1 or vs=vs2;
 
-theorem :: GRAPH_2:42
+theorem :: GRAPH_2:39
   vs is_vertex_seq_of c implies (card the carrier of G = 1 or c <>
 {} & not c alternates_vertices_in G iff for vs1 st vs1 is_vertex_seq_of c holds
   vs1 = vs);
@@ -290,26 +284,26 @@ definition
   assume
  card the carrier of G = 1 or c <>{} & not c alternates_vertices_in G;
   func vertex-seq c -> FinSequence of the carrier of G means
-:: GRAPH_2:def 9
+:: GRAPH_2:def 8
   it is_vertex_seq_of c;
 end;
 
-theorem :: GRAPH_2:43
+theorem :: GRAPH_2:40
   vs is_vertex_seq_of c & c1 = c|Seg n & vs1= vs|Seg (n+1) implies
   vs1 is_vertex_seq_of c1;
 
-theorem :: GRAPH_2:44
+theorem :: GRAPH_2:41
   1<=m & m<=n & n<=len c & q = (m,n)-cut c implies q is Chain of G;
 
-theorem :: GRAPH_2:45
+theorem :: GRAPH_2:42
   1<=m & m<=n & n<=len c & c1 = (m,n)-cut c & vs is_vertex_seq_of
   c & vs1 = (m,n+1)-cut vs implies vs1 is_vertex_seq_of c1;
 
-theorem :: GRAPH_2:46
+theorem :: GRAPH_2:43
   vs1 is_vertex_seq_of c1 & vs2 is_vertex_seq_of c2 & vs1.len vs1
   = vs2.1 implies c1^c2 is Chain of G;
 
-theorem :: GRAPH_2:47
+theorem :: GRAPH_2:44
   vs1 is_vertex_seq_of c1 & vs2 is_vertex_seq_of c2 & vs1.len vs1
   = vs2.1 & c = c1^c2 & vs = vs1^'vs2 implies vs is_vertex_seq_of c;
 
@@ -319,7 +313,7 @@ definition
   let G;
   let IT be Chain of G;
   attr IT is simple means
-:: GRAPH_2:def 10
+:: GRAPH_2:def 9
 
   ex vs st vs is_vertex_seq_of IT & for n,m st
   1<=n & n<m & m<=len vs & vs.n=vs.m holds n=1 & m=len vs;
@@ -327,20 +321,18 @@ end;
 
 registration
   let G;
-  cluster simple Chain of G;
+  cluster simple for Chain of G;
 end;
 
 reserve sc for simple Chain of G;
 
-canceled;
-
-theorem :: GRAPH_2:49
+theorem :: GRAPH_2:45
   sc|(Seg n) is simple Chain of G;
 
-theorem :: GRAPH_2:50
+theorem :: GRAPH_2:46
   2<len sc & vs1 is_vertex_seq_of sc & vs2 is_vertex_seq_of sc implies vs1=vs2;
 
-theorem :: GRAPH_2:51
+theorem :: GRAPH_2:47
   vs is_vertex_seq_of sc implies for n, m st 1<=n & n<m & m<=len vs & vs
   .n = vs.m holds n=1 & m=len vs;
 
@@ -355,39 +347,39 @@ theorem :: GRAPH_2:51
 ::             .--->.
 :: is a case in point:
 
-theorem :: GRAPH_2:52
+theorem :: GRAPH_2:48
   not c is simple Chain of G & vs is_vertex_seq_of c implies ex fc
   being Subset of c, fvs being Subset of vs, c1, vs1 st len c1 < len c & vs1
 is_vertex_seq_of c1 & len vs1 < len vs & vs.1 = vs1.1 & vs.len vs = vs1.len vs1
   & Seq fc = c1 & Seq fvs = vs1;
 
-theorem :: GRAPH_2:53
+theorem :: GRAPH_2:49
   vs is_vertex_seq_of c implies ex fc being Subset of c, fvs being
 Subset of vs, sc, vs1 st Seq fc = sc & Seq fvs = vs1 & vs1 is_vertex_seq_of sc
   & vs.1 = vs1.1 & vs.len vs = vs1.len vs1;
 
 registration
   let G;
-  cluster empty -> one-to-one Chain of G;
+  cluster empty -> one-to-one for Chain of G;
 end;
 
-theorem :: GRAPH_2:54
+theorem :: GRAPH_2:50
   p is Path of G implies p|Seg(n) is Path of G;
 
 registration
   let G;
-  cluster simple Path of G;
+  cluster simple for Path of G;
 end;
 
-theorem :: GRAPH_2:55
+theorem :: GRAPH_2:51
   2<len sc implies sc is Path of G;
 
-theorem :: GRAPH_2:56
+theorem :: GRAPH_2:52
   sc is Path of G iff len sc = 0 or len sc = 1 or sc.1<>sc.2;
 
 registration
   let G;
-  cluster empty -> oriented Chain of G;
+  cluster empty -> oriented for Chain of G;
 end;
 
 definition
@@ -396,32 +388,32 @@ definition
   assume
  oc <> {};
   func vertex-seq oc -> FinSequence of the carrier of G means
-:: GRAPH_2:def 11
+:: GRAPH_2:def 10
   it is_vertex_seq_of oc & it.1 = (the Source of G).(oc.1);
 end;
 
 begin :: Addenda
 :: from AMISTD_1, 2006.01.12, A.T.
 
-theorem :: GRAPH_2:57
+theorem :: GRAPH_2:53
   for f1 being non empty FinSequence of D, f2 being FinSequence of D
   holds (f1^'f2)/.1 = f1/.1;
 
-theorem :: GRAPH_2:58
+theorem :: GRAPH_2:54
   for f1 being FinSequence of D, f2 being non trivial FinSequence of D
   holds (f1^'f2)/.len(f1^'f2) = f2/.len f2;
 
-theorem :: GRAPH_2:59
+theorem :: GRAPH_2:55
   for f being FinSequence holds f^'{} = f;
 
-theorem :: GRAPH_2:60
+theorem :: GRAPH_2:56
   for f being FinSequence holds f^'<*x*> = f;
 
-theorem :: GRAPH_2:61 :: GRAPH_2:14
+theorem :: GRAPH_2:57 :: GRAPH_2:14
   for f1, f2 being FinSequence of D holds 1<=n & n<=len f1 implies (f1^'
   f2)/.n = f1/.n;
 
-theorem :: GRAPH_2:62 :: GRAPH_2:15
+theorem :: GRAPH_2:58 :: GRAPH_2:15
   for f1, f2 being FinSequence of D holds 1<=n & n<len f2 implies (f1^'
   f2)/.(len f1 + n) = f2/.(n+1);
 
@@ -434,7 +426,7 @@ definition
  m <= n and
  n <= len F;
   func min_at(F, m, n) -> Element of NAT means
-:: GRAPH_2:def 12
+:: GRAPH_2:def 11
 
   ex X being finite non
 empty Subset of INT st X = rng ((m,n)-cut F) & it+1 = (min X)..(m,n)-cut F +m;
@@ -443,18 +435,18 @@ end;
 reserve F, F1 for FinSequence of INT,
   k, m, n, ma for Element of NAT;
 
-theorem :: GRAPH_2:63
+theorem :: GRAPH_2:59
   1 <= m & m <= n & n <= len F implies (ma = min_at(F, m, n) iff m
 <= ma & ma <= n & (for i being Element of NAT st m <= i & i <= n holds F.ma <=
   F.i) & for i being Element of NAT st m <= i & i < ma holds F.ma < F.i);
 
-theorem :: GRAPH_2:64
+theorem :: GRAPH_2:60
   1 <= m & m <= len F implies min_at(F, m, m) = m;
 
 definition
   let F be FinSequence of INT, m, n be Element of NAT;
   pred F is_non_decreasing_on m, n means
-:: GRAPH_2:def 13
+:: GRAPH_2:def 12
 
   for i, j being Element of NAT st m <= i & i <= j & j <= n holds F.i <= F.j;
 end;
@@ -462,24 +454,24 @@ end;
 definition
   let F be FinSequence of INT, n be Element of NAT;
   pred F is_split_at n means
-:: GRAPH_2:def 14
+:: GRAPH_2:def 13
 
   for i, j being Element of NAT st 1 <= i &
   i <= n & n < j & j <= len F holds F.i <= F.j;
 end;
 
-theorem :: GRAPH_2:65
+theorem :: GRAPH_2:61
   k+1 <= len F & ma = min_at(F, k+1, len F) & F is_split_at k & F
   is_non_decreasing_on 1, k & F1 = F+*(k+1, F.ma)+*(ma, F.(k+1)) implies F1
   is_non_decreasing_on 1, k+1;
 
-theorem :: GRAPH_2:66
+theorem :: GRAPH_2:62
   k+1 <= len F & ma = min_at(F, k+1, len F) & F is_split_at k & F1 = F+*
   (k+1, F.ma)+*(ma, F.(k+1)) implies F1 is_split_at k+1;
 
 :: from SCPISORT, 2011.02.13
 
-theorem :: GRAPH_2:67
+theorem :: GRAPH_2:63
   for f being FinSequence of INT,m,n be Element of NAT st m >= n
   holds f is_non_decreasing_on m,n;
 

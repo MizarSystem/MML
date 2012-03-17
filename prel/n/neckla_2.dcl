@@ -30,8 +30,8 @@
 <Cluster>
 <Adjective nr="37" value="false"/>
 <Adjective nr="43"/>
-<Adjective nr="53"/>
-<Adjective nr="59"/>
+<Adjective nr="54"/>
+<Adjective nr="60"/>
 </Cluster>
 </RCluster>
 <FCluster aid="NECKLA_2" nr="1">

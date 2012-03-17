@@ -33,7 +33,7 @@ environ
  theorems TARSKI, ZFMISC_1, MCART_1, SETFAM_1, RELAT_1, RELSET_1, FUNCT_1,
       FINSEQ_1, FINSEQ_2, EQREL_1, CARD_3, FUNCT_2, PARTFUN1, CARD_5, PBOOLE,
       FUNCT_6, MSUALG_1, XBOOLE_0, XBOOLE_1, RELAT_2, ORDERS_1, CARD_1;
- schemes NAT_1, RELSET_1, PARTFUN1, WELLORD2, PBOOLE;
+ schemes NAT_1, RELSET_1, PARTFUN1, FUNCT_1, PBOOLE;
 
 begin :: Preliminary
 ::-------------------------------------------------------------------
@@ -60,7 +60,7 @@ proof
   let p be FinSequence of X, f be Function of X,Y;
 A1: rng p c= X;
   dom f = X by FUNCT_2:def 1;
-  then dom (f*p) = dom p by A1,RELAT_1:46;
+  then dom (f*p) = dom p by A1,RELAT_1:27;
   then
 A2: f*p is FinSequence by Lm1;
   rng (f*p) c= Y;
@@ -69,51 +69,52 @@ end;
 
 registration
   let X be with_non-empty_elements set;
-  cluster -> non-empty FinSequence of X;
+  cluster -> non-empty for FinSequence of X;
   coherence
   proof
     let p be FinSequence of X;
     let x be set;
     assume x in dom p;
-    then p.x in rng p by FUNCT_1:def 5;
+    then p.x in rng p by FUNCT_1:def 3;
     hence thesis;
   end;
 end;
 
 registration
   let A be non empty set;
-  cluster homogeneous quasi_total non-empty non empty PFuncFinSequence of A;
+  cluster homogeneous quasi_total non-empty non empty for
+PFuncFinSequence of A;
   existence
-  proof set a =the  homogeneous quasi_total non empty PartFunc of A*,A;
-    reconsider a as Element of PFuncs(A*,A) by PARTFUN1:119;
+  proof set a = the homogeneous quasi_total non empty PartFunc of A*,A;
+    reconsider a as Element of PFuncs(A*,A) by PARTFUN1:45;
     take <*a*>;
     hereby
       let n be Nat, h be PartFunc of A*,A;
       assume n in dom <*a*>;
-      then n in Seg 1 by FINSEQ_1:55;
-      then n = 1 by FINSEQ_1:4,TARSKI:def 1;
-      hence h = <*a*>.n implies h is homogeneous by FINSEQ_1:57;
+      then n in Seg 1 by FINSEQ_1:38;
+      then n = 1 by FINSEQ_1:2,TARSKI:def 1;
+      hence h = <*a*>.n implies h is homogeneous by FINSEQ_1:40;
     end;
     hereby
       let n be Nat, h be PartFunc of A*,A;
       assume n in dom <*a*>;
-      then n in Seg 1 by FINSEQ_1:55;
-      then n = 1 by FINSEQ_1:4,TARSKI:def 1;
-      hence h = <*a*>.n implies h is quasi_total by FINSEQ_1:57;
+      then n in Seg 1 by FINSEQ_1:38;
+      then n = 1 by FINSEQ_1:2,TARSKI:def 1;
+      hence h = <*a*>.n implies h is quasi_total by FINSEQ_1:40;
     end;
     hereby
       let n be set;
       assume n in dom <*a*>;
-      then n in Seg 1 by FINSEQ_1:55;
-      then n = 1 by FINSEQ_1:4,TARSKI:def 1;
-      hence <*a*>.n is non empty by FINSEQ_1:57;
+      then n in Seg 1 by FINSEQ_1:38;
+      then n = 1 by FINSEQ_1:2,TARSKI:def 1;
+      hence <*a*>.n is non empty by FINSEQ_1:40;
     end;
     thus thesis;
   end;
 end;
 
 registration
-  cluster non-empty -> non empty UAStr;
+  cluster non-empty -> non empty for UAStr;
   coherence
   proof
     let A be UAStr;
@@ -121,13 +122,13 @@ registration
 A1: the charact of A <> {} and
 A2: the charact of A is non-empty;
     reconsider f = the charact of A as non empty Function by A1;
-    set x =the  Element of dom f;
+    set x = the Element of dom f;
     reconsider y = f.x as non empty set by A2;
-A3: y in rng f by FUNCT_1:def 5;
-A4: rng f c= PFuncs((the carrier of A)*, the carrier of A) by FINSEQ_1:def 4;
+A3: y in rng f by FUNCT_1:def 3;
+ rng f c= PFuncs((the carrier of A)*, the carrier of A) by FINSEQ_1:def 4;
     then
-A5: y is PartFunc of (the carrier of A)*, the carrier of A by A3,PARTFUN1:121;
-    reconsider y as non empty Function by A3,A4;
+A5: y is PartFunc of (the carrier of A)*, the carrier of A by A3,PARTFUN1:47;
+    reconsider y as non empty Function;
 
     thus the carrier of A is non empty by A5;
   end;
@@ -140,7 +141,7 @@ proof
   let f,g be non-empty Function;
   assume
 A1: product f c= product g;
-  set h =the  Element of product f;
+  set h = the Element of product f;
   h in product f;
   then
 A2: ex i being Function st h = i & dom i = dom g & for x being set st x in
@@ -152,7 +153,7 @@ A3: ex i being Function st h = i & dom i = dom f & for x being set st x in
   assume
 A4: x in dom f;
   let z be set;
-  set k =the  Element of product f;
+  set k = the Element of product f;
   reconsider k as Function;
   defpred P[set] means $1 = x;
   deffunc F1(set) = z;
@@ -168,10 +169,10 @@ A6: z in f.x;
     assume
 A7: y in dom f;
     then y <> x implies h.y = k.y by A5;
-    hence h.y in f.y by A5,A6,A7,CARD_3:18;
+    hence h.y in f.y by A5,A6,A7,CARD_3:9;
   end;
-  then h in product f by A5,CARD_3:18;
-  then h.x in g.x by A1,A2,A3,A4,CARD_3:18;
+  then h in product f by A5,CARD_3:9;
+  then h.x in g.x by A1,A2,A3,A4,CARD_3:9;
   hence thesis by A4,A5;
 end;
 
@@ -181,7 +182,7 @@ proof
   let f,g be non-empty Function;
   assume
 A1: product f = product g;
-  set h =the  Element of product f;
+  set h = the Element of product f;
 A2: ex i being Function st h = i & dom i = dom g & for x being set st x in
   dom g holds i.x in g.x by A1,CARD_3:def 5;
 A3: ex i being Function st h = i & dom i = dom f & for x being set st x in
@@ -195,7 +196,7 @@ A5: f.x c= g.x by A1,Th1;
     g.x c= f.x by A1,A2,A3,A4,Th1;
     hence f.x = g.x by A5,XBOOLE_0:def 10;
   end;
-  hence thesis by A2,A3,FUNCT_1:9;
+  hence thesis by A2,A3,FUNCT_1:2;
 end;
 
 definition
@@ -212,7 +213,7 @@ definition
   coherence
   proof
     let s be Element of S;
-    thus thesis by PARTFUN1:120;
+    thus thesis by PARTFUN1:46;
   end;
 end;
 
@@ -227,7 +228,7 @@ definition
   let o be OperSymbol of A;
   func Den(o, A) -> operation of A equals
   (the charact of A).o;
-  correctness by FUNCT_1:def 5;
+  correctness by FUNCT_1:def 3;
 end;
 
 begin :: Partitions
@@ -243,7 +244,7 @@ A2: a in P and
 A3: x in b and
 A4: b in P;
   a meets b by A1,A3,XBOOLE_0:3;
-  hence thesis by A2,A4,EQREL_1:def 6;
+  hence thesis by A2,A4,EQREL_1:def 4;
 end;
 
 theorem Th4:
@@ -260,17 +261,17 @@ A2: for i being set st i in dom p ex y being set st y in Y & P[i,y]
   proof
     let i be set;
     assume i in dom p;
-    then p.i in rng p by FUNCT_1:def 5;
+    then p.i in rng p by FUNCT_1:def 3;
     hence thesis by A1;
   end;
   consider q being Function such that
 A3: dom q = dom p & rng q c= Y & for i being set st i in dom p holds P[i,q.i]
-  from WELLORD2:sch 1(A2);
+  from FUNCT_1:sch 5(A2);
   dom p = Seg len p by FINSEQ_1:def 3;
   then q is FinSequence by A3,FINSEQ_1:def 2;
   then
 A4: q is FinSequence of Y by A3,FINSEQ_1:def 4;
-  product p c= product q by A3,CARD_3:38;
+  product p c= product q by A3,CARD_3:27;
   hence thesis by A4;
 end;
 
@@ -287,13 +288,13 @@ A1: for a being set st a in P holds a c= f.a;
 A2: rng p c= P;
   now
     assume P <> {};
-    then reconsider X as non empty set by EQREL_1:41;
+    then reconsider X as non empty set by EQREL_1:32;
     Q is a_partition of X;
     hence Q <> {};
   end;
   then dom f = P by FUNCT_2:def 1;
   then
-A3: dom (f*p) = dom p by A2,RELAT_1:46;
+A3: dom (f*p) = dom p by A2,RELAT_1:27;
   hereby
     assume
 A4: product p c= product q;
@@ -305,19 +306,19 @@ A5: dom p = dom q by Th1;
 A6:   x in dom p;
       then
 A7:   p.x c= q.x by A4,Th1;
-A8:   p.x in rng p by A6,FUNCT_1:def 5;
-A9:   q.x in rng q by A5,A6,FUNCT_1:def 5;
-      reconsider Y = X as non empty set by A8,EQREL_1:41;
+A8:   p.x in rng p by A6,FUNCT_1:def 3;
+A9:   q.x in rng q by A5,A6,FUNCT_1:def 3;
+      reconsider Y = X as non empty set by A8,EQREL_1:32;
       reconsider P9 = P, Q9 = Q as a_partition of Y;
       reconsider a = p.x as Element of P9 by A8;
-      set z =the  Element of a;
+      set z = the Element of a;
 A10:  a c= f.a by A1;
 A11:  z in a;
-      f.a in Q9 by FUNCT_2:7;
+      f.a in Q9 by FUNCT_2:5;
       then q.x = f.a by A7,A9,A10,A11,Th3;
-      hence (f*p).x = q.x by A6,FUNCT_1:23;
+      hence (f*p).x = q.x by A6,FUNCT_1:13;
     end;
-    hence f*p = q by A3,A5,FUNCT_1:9;
+    hence f*p = q by A3,A5,FUNCT_1:2;
   end;
   assume
 A12: f*p = q;
@@ -326,11 +327,11 @@ A12: f*p = q;
     assume
 A13: x in dom p;
     then
-A14: q.x = f.(p.x) by A12,FUNCT_1:23;
-    p.x in rng p by A13,FUNCT_1:def 5;
+A14: q.x = f.(p.x) by A12,FUNCT_1:13;
+    p.x in rng p by A13,FUNCT_1:def 3;
     hence p.x c= q.x by A1,A14;
   end;
-  hence thesis by A3,A12,CARD_3:38;
+  hence thesis by A3,A12,CARD_3:27;
 end;
 
 theorem Th6:
@@ -345,13 +346,13 @@ A2: for x being set st x in dom f ex a being set st a in P & P[x,a]
   proof
     let x be set;
     assume x in dom f;
-    then f.x in rng f by FUNCT_1:def 5;
+    then f.x in rng f by FUNCT_1:def 3;
     then ex a being set st f.x in a & a in P by A1,TARSKI:def 4;
     hence thesis;
   end;
   consider p being Function such that
 A3: dom p = dom f & rng p c= P and
-A4: for x being set st x in dom f holds P[x,p.x] from WELLORD2:sch 1(A2);
+A4: for x being set st x in dom f holds P[x,p.x] from FUNCT_1:sch 5(A2);
   take p;
   thus thesis by A3,A4,CARD_3:def 5;
 end;
@@ -362,7 +363,7 @@ theorem Th7:
 proof
   let X be set, P be a_partition of X, f be FinSequence of X;
 A1: rng f c= X;
-  union P = X by EQREL_1:def 6;
+  union P = X by EQREL_1:def 4;
   then consider p being Function such that
 A2: dom p = dom f and
 A3: rng p c= P and
@@ -400,17 +401,17 @@ proof
       assume
 A1:   [x,y] in [:X,Y:];
       then
-A2:   x in X by ZFMISC_1:106;
-A3:   y in Y by A1,ZFMISC_1:106;
-      X = union P by EQREL_1:def 6;
+A2:   x in X by ZFMISC_1:87;
+A3:   y in Y by A1,ZFMISC_1:87;
+      X = union P by EQREL_1:def 4;
       then consider p being set such that
 A4:   x in p and
 A5:   p in P by A2,TARSKI:def 4;
-      Y = union Q by EQREL_1:def 6;
+      Y = union Q by EQREL_1:def 4;
       then consider q being set such that
 A6:   y in q and
 A7:   q in Q by A3,TARSKI:def 4;
-A8:   [x,y] in [:p,q:] by A4,A6,ZFMISC_1:106;
+A8:   [x,y] in [:p,q:] by A4,A6,ZFMISC_1:87;
       [:p,q:] in PQ by A5,A7;
       hence thesis by A8,TARSKI:def 4;
     end;
@@ -425,11 +426,11 @@ A9: A = [:p,q:];
 A10: B = [:p1,q1:];
     assume A <> B;
     then p <> p1 or q <> q1 by A9,A10;
-    then p misses p1 or q misses q1 by EQREL_1:def 6;
+    then p misses p1 or q misses q1 by EQREL_1:def 4;
     then p /\ p1 = {} or q /\ q1 = {} by XBOOLE_0:def 7;
     then A /\ B = [:{}, q /\ q1:] or A /\ B = [:p /\
-    p1,{}:] by A9,A10,ZFMISC_1:123;
-    then A /\ B = {} by ZFMISC_1:113;
+    p1,{}:] by A9,A10,ZFMISC_1:100;
+    then A /\ B = {} by ZFMISC_1:90;
     hence thesis by XBOOLE_0:def 7;
   end;
   hence thesis;
@@ -465,8 +466,8 @@ A5:   y is FinSequence by A2,A3,FINSEQ_1:def 2;
         assume z in rng f;
         then consider v being set such that
 A6:     v in dom p and
-A7:     z = f.v by A3,FUNCT_1:def 5;
-        p.v in rng p by A6,FUNCT_1:def 5;
+A7:     z = f.v by A3,FUNCT_1:def 3;
+        p.v in rng p by A6,FUNCT_1:def 3;
         then
 A8:     p.v in P;
         z in p.v by A4,A6,A7;
@@ -487,7 +488,7 @@ A8:     p.v in P;
       assume x in X*;
       then reconsider x as FinSequence of X by FINSEQ_1:def 11;
 A9:   rng x c= X;
-      union P = X by EQREL_1:def 6;
+      union P = X by EQREL_1:def 4;
       then consider p being Function such that
 A10:  dom p = dom x and
 A11:  rng p c= P and
@@ -527,14 +528,14 @@ A22:  z in dom p;
       then
 A23:  f.z in p.z by A20;
 A24:  f.z in q.z by A18,A19,A21,A22;
-A25:  p.z in rng p by A22,FUNCT_1:def 5;
-A26:  q.z in rng q by A18,A19,A21,A22,FUNCT_1:def 5;
+A25:  p.z in rng p by A22,FUNCT_1:def 3;
+A26:  q.z in rng q by A18,A19,A21,A22,FUNCT_1:def 3;
 A27:  p.z meets q.z by A23,A24,XBOOLE_0:3;
 A28:  p.z in P by A25;
       q.z in P by A26;
-      hence p.z = q.z by A27,A28,EQREL_1:def 6;
+      hence p.z = q.z by A27,A28,EQREL_1:def 4;
     end;
-    hence contradiction by A13,A14,A15,A18,A19,A21,FUNCT_1:9;
+    hence contradiction by A13,A14,A15,A18,A19,A21,FUNCT_1:2;
   end;
   hence thesis;
 end;
@@ -571,8 +572,8 @@ A5:   dom p = Seg len p by FINSEQ_1:def 3;
         assume z in rng f;
         then consider v being set such that
 A6:     v in dom p and
-A7:     z = f.v by A3,FUNCT_1:def 5;
-        p.v in rng p by A6,FUNCT_1:def 5;
+A7:     z = f.v by A3,FUNCT_1:def 3;
+        p.v in rng p by A6,FUNCT_1:def 3;
         then
 A8:     p.v in P;
         z in p.v by A4,A6,A7;
@@ -581,8 +582,8 @@ A8:     p.v in P;
       then
 A9:   y is FinSequence of X by A2,FINSEQ_1:def 4;
 A10:  len y = len p by A2,A3,A5,FINSEQ_1:def 3;
-      len p = n by CARD_1:def 13;
-      then y is Element of nX by A9,A10,FINSEQ_2:110;
+      len p = n by CARD_1:def 7;
+      then y is Element of nX by A9,A10,FINSEQ_2:92;
       hence thesis;
     end;
     hence thesis;
@@ -597,7 +598,7 @@ A10:  len y = len p by A2,A3,A5,FINSEQ_1:def 3;
       assume x in nX;
       then reconsider x as Element of nX;
 A11:  rng x c= X;
-      union P = X by EQREL_1:def 6;
+      union P = X by EQREL_1:def 4;
       then consider p being Function such that
 A12:  dom p = dom x and
 A13:  rng p c= P and
@@ -606,8 +607,8 @@ A15:  dom p = Seg len x by A12,FINSEQ_1:def 3;
       then reconsider p as FinSequence by FINSEQ_1:def 2;
       reconsider p as FinSequence of P by A13,FINSEQ_1:def 4;
 A16:  len p = len x by A15,FINSEQ_1:def 3;
-      len x = n by CARD_1:def 13;
-      then reconsider p as Element of nP by A16,FINSEQ_2:110;
+      len x = n by CARD_1:def 7;
+      then reconsider p as Element of nP by A16,FINSEQ_2:92;
       product p in PP;
       hence thesis by A14,TARSKI:def 4;
     end;
@@ -639,14 +640,14 @@ A26:  z in dom p;
       then
 A27:  f.z in p.z by A24;
 A28:  f.z in q.z by A22,A23,A25,A26;
-A29:  p.z in rng p by A26,FUNCT_1:def 5;
-A30:  q.z in rng q by A22,A23,A25,A26,FUNCT_1:def 5;
+A29:  p.z in rng p by A26,FUNCT_1:def 3;
+A30:  q.z in rng q by A22,A23,A25,A26,FUNCT_1:def 3;
 A31:  p.z meets q.z by A27,A28,XBOOLE_0:3;
 A32:  p.z in P by A29;
       q.z in P by A30;
-      hence p.z = q.z by A31,A32,EQREL_1:def 6;
+      hence p.z = q.z by A31,A32,EQREL_1:def 4;
     end;
-    hence contradiction by A17,A18,A19,A22,A23,A25,FUNCT_1:9;
+    hence contradiction by A17,A18,A19,A22,A23,A25,FUNCT_1:2;
   end;
   hence thesis;
 end;
@@ -680,7 +681,7 @@ A2: x c= X /\ Y by XBOOLE_1:26;
       let x be set;
       assume
 A3:   x in Y;
-      X = union P by EQREL_1:def 6;
+      X = union P by EQREL_1:def 4;
       then consider p being set such that
 A4:   x in p and
 A5:   p in P by A1,A3,TARSKI:def 4;
@@ -700,7 +701,7 @@ A9: p meets Y;
     then consider p1 being Element of P such that
 A10: B = p1 /\ Y and p1 meets Y;
     assume A <> B;
-    then p misses p1 by A8,A10,EQREL_1:def 6;
+    then p misses p1 by A8,A10,EQREL_1:def 4;
     then A misses p1 by A8,XBOOLE_1:74;
     hence thesis by A10,XBOOLE_1:74;
   end;
@@ -721,7 +722,7 @@ proof
     let x be set;
     assume x in Q;
     then ex p being Element of P st ( x = f|p);
-    then x c= f by RELAT_1:88;
+    then x c= f by RELAT_1:59;
     hence thesis;
   end;
   then reconsider Q as Subset-Family of Y;
@@ -734,7 +735,7 @@ proof
 A1:   [y,z] in f;
       then
 A2:   y in X by RELAT_1:def 4;
-      X = union P by EQREL_1:def 6;
+      X = union P by EQREL_1:def 4;
       then consider p being set such that
 A3:   y in p and
 A4:   p in P by A2,TARSKI:def 4;
@@ -756,7 +757,7 @@ A6: A = f|p;
 A7: B = f|p1;
     assume A <> B;
     then
-A8: p misses p1 by A6,A7,EQREL_1:def 6;
+A8: p misses p1 by A6,A7,EQREL_1:def 4;
     assume A meets B;
     then consider x being set such that
 A9: x in A and
@@ -770,8 +771,6 @@ A12: y in p by A6,A9,A11,RELAT_1:def 11;
   hence thesis;
 end;
 
-canceled;
-
 theorem Th14:
   for X being set, p being FinSequence of SmallestPartition X
   ex q being FinSequence of X st product p = {q}
@@ -779,17 +778,17 @@ proof
   let X be set;
   set P = SmallestPartition X;
   let p be FinSequence of P;
-  set q =the  Element of product p;
-A1: dom q = dom p by CARD_3:18;
+  set q = the Element of product p;
+A1: dom q = dom p by CARD_3:9;
   then reconsider q as FinSequence by Lm1;
 A2: q in product p;
-A3: product p c= Funcs(dom p, Union p) by FUNCT_6:10;
+A3: product p c= Funcs(dom p, Union p) by FUNCT_6:1;
 A4: Union p = union rng p by CARD_3:def 4;
 A5: ex f being Function st q = f & dom f = dom p & rng f c= Union p
   by A2,A3,FUNCT_2:def 2;
-  Union p c= union P by A4,ZFMISC_1:95;
+  Union p c= union P by A4,ZFMISC_1:77;
   then rng q c= union P by A5,XBOOLE_1:1;
-  then rng q c= X by EQREL_1:def 6;
+  then rng q c= X by EQREL_1:def 4;
   then reconsider q as FinSequence of X by FINSEQ_1:def 4;
   take q;
   thus product p c= {q}
@@ -806,33 +805,33 @@ A8: for x being set st x in dom p holds g.x in p.x by CARD_3:def 5;
 A9:   y in dom p;
       then
 A10:  g.y in p.y by A8;
-A11:  q.y in p.y by A9,CARD_3:18;
-A12:  p.y in rng p by A9,FUNCT_1:def 5;
+A11:  q.y in p.y by A9,CARD_3:9;
+A12:  p.y in rng p by A9,FUNCT_1:def 3;
       then
 A13:  p.y in P;
-      reconsider X as non empty set by A12,EQREL_1:41;
-      P = {{z} where z is Element of X: not contradiction} by EQREL_1:46;
+      reconsider X as non empty set by A12,EQREL_1:32;
+      P = {{z} where z is Element of X: not contradiction} by EQREL_1:37;
       then consider z being Element of X such that
 A14:  p.y = {z} by A13;
       thus g.y = z by A10,A14,TARSKI:def 1
         .= q.y by A11,A14,TARSKI:def 1;
     end;
-    then x = q by A1,A6,A7,FUNCT_1:9;
+    then x = q by A1,A6,A7,FUNCT_1:2;
     hence thesis by TARSKI:def 1;
   end;
-  thus thesis by ZFMISC_1:37;
+  thus thesis by ZFMISC_1:31;
 end;
 
 definition
   let X be set;
-  canceled;
+
   mode IndexedPartition of X -> Function means
     :
     Def3: rng it is a_partition of X & it is one-to-one;
   existence
-  proof set p =the  a_partition of X;
+  proof set p = the a_partition of X;
     take id p;
-    thus thesis by RELAT_1:71;
+    thus thesis by RELAT_1:45;
   end;
 end;
 
@@ -845,25 +844,25 @@ end;
 
 registration
   let X be set;
-  cluster -> one-to-one non-empty IndexedPartition of X;
+  cluster -> one-to-one non-empty for IndexedPartition of X;
   coherence
   proof
     let P be IndexedPartition of X;
     thus P is one-to-one by Def3;
     let x be set;
     assume x in dom P;
-    then P.x in rng P by FUNCT_1:def 5;
+    then P.x in rng P by FUNCT_1:def 3;
     hence thesis;
   end;
 end;
 
 registration
   let X be non empty set;
-  cluster -> non empty IndexedPartition of X;
+  cluster -> non empty for IndexedPartition of X;
   coherence
   proof
     let P be IndexedPartition of X;
-    set a =the  Element of rng P;
+    set a = the Element of rng P;
     ex b being set st [b,a] in P by RELAT_1:def 5;
     hence thesis;
   end;
@@ -873,7 +872,7 @@ definition
   let X be set, P be a_partition of X;
   redefine func id P -> IndexedPartition of X;
   coherence
-  proof rng id P = P by RELAT_1:71;
+  proof rng id P = P by RELAT_1:45;
     hence thesis by Def3;
   end;
 end;
@@ -884,7 +883,7 @@ definition
   let x be set;
   assume
 A1: x in X;
-A2: union rng P = X by EQREL_1:def 6;
+A2: union rng P = X by EQREL_1:def 4;
   func P-index_of x -> set means
   : Def4:
   it in dom P & x in P.it;
@@ -892,7 +891,7 @@ A2: union rng P = X by EQREL_1:def 6;
   proof consider a being set such that
 A3: x in a and
 A4: a in rng P by A1,A2,TARSKI:def 4;
-    ex y being set st y in dom P & a = P.y by A4,FUNCT_1:def 5;
+    ex y being set st y in dom P & a = P.y by A4,FUNCT_1:def 3;
     hence thesis by A3;
   end;
   correctness
@@ -903,11 +902,11 @@ A5: y1 in dom P and
 A6: x in P.y1 and
 A7: y2 in dom P and
 A8: x in P.y2;
-A9: P.y1 in rng P by A5,FUNCT_1:def 5;
-A10: P.y2 in rng P by A7,FUNCT_1:def 5;
+A9: P.y1 in rng P by A5,FUNCT_1:def 3;
+A10: P.y2 in rng P by A7,FUNCT_1:def 3;
     P.y1 meets P.y2 by A6,A8,XBOOLE_0:3;
-    then P.y1 = P.y2 by A9,A10,EQREL_1:def 6;
-    hence thesis by A5,A7,FUNCT_1:def 8;
+    then P.y1 = P.y2 by A9,A10,EQREL_1:def 4;
+    hence thesis by A5,A7,FUNCT_1:def 4;
   end;
 end;
 
@@ -923,7 +922,7 @@ A2: for x,y being set st x in dom P & y in dom P & x <> y holds P.x misses P.y;
   proof
     let y be set;
     assume y in rng P;
-    then y c= union rng P by ZFMISC_1:92;
+    then y c= union rng P by ZFMISC_1:74;
     then y c= X by A1,CARD_3:def 4;
     hence thesis;
   end;
@@ -935,11 +934,11 @@ A2: for x,y being set st x in dom P & y in dom P & x <> y holds P.x misses P.y;
     assume
 A3: A in Y;
     then
-A4: ex x being set st x in dom P & A = P.x by FUNCT_1:def 5;
+A4: ex x being set st x in dom P & A = P.x by FUNCT_1:def 3;
     thus A<>{} by A3;
     let B be Subset of X;
     assume B in Y;
-    then ex y being set st y in dom P & B = P.y by FUNCT_1:def 5;
+    then ex y being set st y in dom P & B = P.y by FUNCT_1:def 3;
     hence thesis by A2,A4;
   end;
   hence rng P is a_partition of X;
@@ -949,8 +948,8 @@ A5: x in dom P and
 A6: y in dom P and
 A7: P.x = P.y and
 A8: x <> y;
-  reconsider Px = P.x, Py = P.y as non empty set by A5,A6,FUNCT_1:def 15;
-  set a =the  Element of Px;
+  reconsider Px = P.x, Py = P.y as non empty set by A5,A6,FUNCT_1:def 9;
+  set a = the Element of Px;
   P.x misses P.y by A2,A5,A6,A8;
   then not a in Py by XBOOLE_0:3;
   hence contradiction by A7;
@@ -981,7 +980,7 @@ proof
   consider F being Function such that
 A1: dom F = NAT and
 A2: F.0 = R0() & for n being Nat holds F.(n+1) = G(n,F.n) from NAT_1:sch 11;
-  reconsider F as ManySortedSet of NAT by A1,PARTFUN1:def 4,RELAT_1:def 18;
+  reconsider F as ManySortedSet of NAT by A1,PARTFUN1:def 2,RELAT_1:def 18;
   defpred P[Element of NAT] means F.$1 is Relation of A(),B();
 A3: P[ 0 ] by A2;
 A4: now
@@ -1013,15 +1012,15 @@ A2: for x being Element of A(), y being Element of B() holds
   hereby
     assume
 A3: [x,y] in R1;
-    then reconsider a = x as Element of A() by ZFMISC_1:106;
-    reconsider b = y as Element of B() by A3,ZFMISC_1:106;
+    then reconsider a = x as Element of A() by ZFMISC_1:87;
+    reconsider b = y as Element of B() by A3,ZFMISC_1:87;
     P[a,b] by A1,A3;
     hence [x,y] in R2 by A2;
   end;
   assume
 A4: [x,y] in R2;
-  then reconsider a = x as Element of A() by ZFMISC_1:106;
-  reconsider b = y as Element of B() by A4,ZFMISC_1:106;
+  then reconsider a = x as Element of A() by ZFMISC_1:87;
+  reconsider b = y as Element of B() by A4,ZFMISC_1:87;
   P[a,b] by A2,A4;
   hence thesis by A1;
 end;
@@ -1102,9 +1101,9 @@ A1: DomRel A is_reflexive_in X
       hence thesis by Def5;
     end;
     then
-A2: dom DomRel A = X by ORDERS_1:98;
-A3: field DomRel A = X by A1,ORDERS_1:98;
-    thus DomRel A is total by A2,PARTFUN1:def 4;
+A2: dom DomRel A = X by ORDERS_1:13;
+A3: field DomRel A = X by A1,ORDERS_1:13;
+    thus DomRel A is total by A2,PARTFUN1:def 2;
     DomRel A is_symmetric_in X
     proof
       let x,y be set;
@@ -1268,22 +1267,22 @@ A1: R c= DomRel A;
     let x be set;
     assume x in the carrier of A;
     then reconsider a = x as Element of A;
-A2: [a,a] in R by EQREL_1:11;
+A2: [a,a] in R by EQREL_1:5;
     now
       let f be operation of A, p,q be FinSequence;
       assume that
 A3:   p^<*a*>^q in dom f and p^<*a*>^q in dom f;
-      f.(p^<*a*>^q) in rng f by A3,FUNCT_1:def 5;
-      hence [f.(p^<*a*>^q), f.(p^<*a*>^q)] in R by EQREL_1:11;
+      f.(p^<*a*>^q) in rng f by A3,FUNCT_1:def 3;
+      hence [f.(p^<*a*>^q), f.(p^<*a*>^q)] in R by EQREL_1:5;
     end;
     hence [x,x] in R|^A by A2,Def6;
   end;
   then
 A4: R|^A is_reflexive_in the carrier of A by RELAT_2:def 1;
   then
-A5: dom(R|^A) = the carrier of A by ORDERS_1:98;
-A6: field(R|^A) = the carrier of A by A4,ORDERS_1:98;
-  thus R|^A is total by A5,PARTFUN1:def 4;
+A5: dom(R|^A) = the carrier of A by ORDERS_1:13;
+A6: field(R|^A) = the carrier of A by A4,ORDERS_1:13;
+  thus R|^A is total by A5,PARTFUN1:def 2;
   now
     let x,y be set;
     assume that
@@ -1295,14 +1294,14 @@ A9: [x,y] in R|^A;
     then
 A10: [a,b] in R by Def6;
     now
-      thus [b,a] in R by A10,EQREL_1:12;
+      thus [b,a] in R by A10,EQREL_1:6;
       let f be operation of A;
       let p,q be FinSequence;
       assume that
 A11:  p^<*b*>^q in dom f and
 A12:  p^<*a*>^q in dom f;
       [f.(p^<*a*>^q), f.(p^<*b*>^q)] in R by A9,A11,A12,Def6;
-      hence [f.(p^<*b*>^q), f.(p^<*a*>^q)] in R by EQREL_1:12;
+      hence [f.(p^<*b*>^q), f.(p^<*a*>^q)] in R by EQREL_1:6;
     end;
     hence [y,x] in R|^A by Def6;
   end;
@@ -1327,12 +1326,12 @@ A20:  p^<*a*>^q in dom f & p^<*b*>^q in dom f implies [f.(p^<*a*>^q), f.(p^
       p^<*b*>^q in dom f & p^<*c*>^q in dom f implies [f.(p^<*b*>^q), f.(p^
       <*c*>^q)] in R by A17,Def6;
       hence p^<*a*>^q in dom f & p^<*c*>^q in dom f
-      implies [f.(p^<*a*>^q), f.(p^<*c*>^q)] in R by A1,A19,A20,Def5,EQREL_1:13
+      implies [f.(p^<*a*>^q), f.(p^<*c*>^q)] in R by A1,A19,A20,Def5,EQREL_1:7
 ;
     end;
 A21: [a,b] in R by A16,Def6;
     [b,c] in R by A17,Def6;
-    then [a,c] in R by A21,EQREL_1:13;
+    then [a,c] in R by A21,EQREL_1:7;
     hence [x,z] in R|^A by A18,Def6;
   end;
   then R|^A is_transitive_in the carrier of A by RELAT_2:def 8;
@@ -1349,8 +1348,8 @@ proof
   assume
 A1: [x,y] in R|^A;
   then
-A2: x in the carrier of A by ZFMISC_1:106;
-  y in the carrier of A by A1,ZFMISC_1:106;
+A2: x in the carrier of A by ZFMISC_1:87;
+  y in the carrier of A by A1,ZFMISC_1:87;
   hence thesis by A1,A2,Def6;
 end;
 
@@ -1407,8 +1406,8 @@ proof
   assume
 A1: [x,y] in LimDomRel A;
   then
-A2: x in the carrier of A by ZFMISC_1:106;
-  y in the carrier of A by A1,ZFMISC_1:106;
+A2: x in the carrier of A by ZFMISC_1:87;
+  y in the carrier of A by A1,ZFMISC_1:87;
   then [x,y] in (DomRel A)|^(A,0) by A1,A2,Def8;
   hence thesis by Th17;
 end;
@@ -1425,16 +1424,16 @@ registration
       now
         let i be Element of NAT;
         (DomRel A)|^(A,i) is total symmetric transitive by Th22;
-        hence [a,a] in (DomRel A)|^(A,i) by EQREL_1:11;
+        hence [a,a] in (DomRel A)|^(A,i) by EQREL_1:5;
       end;
       hence [x,x] in LimDomRel A by Def8;
     end;
     then
 A1: LimDomRel A is_reflexive_in the carrier of A by RELAT_2:def 1;
     then
-A2: dom(LimDomRel A) = the carrier of A by ORDERS_1:98;
-A3: field(LimDomRel A) = the carrier of A by A1,ORDERS_1:98;
-    thus LimDomRel A is total by A2,PARTFUN1:def 4;
+A2: dom(LimDomRel A) = the carrier of A by ORDERS_1:13;
+A3: field(LimDomRel A) = the carrier of A by A1,ORDERS_1:13;
+    thus LimDomRel A is total by A2,PARTFUN1:def 2;
     now
       let x,y be set;
       assume that
@@ -1447,7 +1446,7 @@ A6:   [x,y] in LimDomRel A;
         let i be Element of NAT;
 A7:     (DomRel A)|^(A,i) is total symmetric transitive by Th22;
         [a,b] in (DomRel A)|^(A,i) by A6,Def8;
-        hence [b,a] in (DomRel A)|^(A,i) by A7,EQREL_1:12;
+        hence [b,a] in (DomRel A)|^(A,i) by A7,EQREL_1:6;
       end;
       hence [y,x] in LimDomRel A by Def8;
     end;
@@ -1468,7 +1467,7 @@ A12:  [y,z] in LimDomRel A;
 A13:    (DomRel A)|^(A,i) is total symmetric transitive by Th22;
 A14:    [a,b] in (DomRel A)|^(A,i) by A11,Def8;
         [b,c] in (DomRel A)|^(A,i) by A12,Def8;
-        hence [a,c] in (DomRel A)|^(A,i) by A13,A14,EQREL_1:13;
+        hence [a,c] in (DomRel A)|^(A,i) by A13,A14,EQREL_1:7;
       end;
       hence [x,z] in LimDomRel A by Def8;
     end;
@@ -1511,10 +1510,10 @@ proof
     consider q being FinSequence of the carrier of A such that
 A1: product p = {q} by Th14;
     q in dom f & f.q in rng f & rng f c= the carrier of A
-    or not q in dom f by FUNCT_1:def 5;
+    or not q in dom f by FUNCT_1:def 3;
     then consider x being Element of A such that
 A2: q in dom f & x = f.q or not q in dom f;
-    P = {{z} where z is Element of A: not contradiction} by EQREL_1:46;
+    P = {{z} where z is Element of A: not contradiction} by EQREL_1:37;
     then {x} in P;
     then reconsider a = {x} as Element of P;
     take a;
@@ -1525,7 +1524,7 @@ A2: q in dom f & x = f.q or not q in dom f;
       then consider y being set such that
 A3:   y in dom f and
 A4:   y in product p and
-A5:   z = f.y by FUNCT_1:def 12;
+A5:   z = f.y by FUNCT_1:def 6;
       y = q by A1,A4,TARSKI:def 1;
       hence thesis by A2,A3,A5,TARSKI:def 1;
     end;
@@ -1576,30 +1575,30 @@ A15: y() = y1^y2;
 A16: x1 <> {} by A12;
 A17: y1 <> {} by A14;
     consider x9 being FinSequence, xx being set such that
-A18: x1 = x9^<*xx*> by A16,FINSEQ_1:63;
+A18: x1 = x9^<*xx*> by A16,FINSEQ_1:46;
     consider y9 being FinSequence, yy being set such that
-A19: y1 = y9^<*yy*> by A17,FINSEQ_1:63;
+A19: y1 = y9^<*yy*> by A17,FINSEQ_1:46;
 A20: dom x1 = Seg len x1 by FINSEQ_1:def 3;
 A21: dom y1 = Seg len y1 by FINSEQ_1:def 3;
-A22: len <*xx*> = 1 by FINSEQ_1:57;
-A23: len <*yy*> = 1 by FINSEQ_1:57;
-A24: len x1 = len x9+1 by A18,A22,FINSEQ_1:35;
-A25: len y1 = len y9+1 by A19,A23,FINSEQ_1:35;
-A26: x() = x9^(<*xx*>^x2) by A13,A18,FINSEQ_1:45;
-A27: y() = y9^(<*yy*>^ y2) by A15,A19,FINSEQ_1:45;
-A28: i+1 in dom x1 by A12,A20,FINSEQ_1:6;
-A29: dom x1 c= dom x() by A13,FINSEQ_1:39;
-A30: x1.(len x9+1) = xx by A18,FINSEQ_1:59;
-A31: y1.(len y9+1) = yy by A19,FINSEQ_1:59;
+A22: len <*xx*> = 1 by FINSEQ_1:40;
+A23: len <*yy*> = 1 by FINSEQ_1:40;
+A24: len x1 = len x9+1 by A18,A22,FINSEQ_1:22;
+A25: len y1 = len y9+1 by A19,A23,FINSEQ_1:22;
+A26: x() = x9^(<*xx*>^x2) by A13,A18,FINSEQ_1:32;
+A27: y() = y9^(<*yy*>^ y2) by A15,A19,FINSEQ_1:32;
+A28: i+1 in dom x1 by A12,A20,FINSEQ_1:4;
+A29: dom x1 c= dom x() by A13,FINSEQ_1:26;
+A30: x1.(len x9+1) = xx by A18,FINSEQ_1:42;
+A31: y1.(len y9+1) = yy by A19,FINSEQ_1:42;
 A32: P[y9^(<*xx*>^x2)] by A11,A12,A14,A24,A25,A26,A27;
 A33: x().(i+1) = xx by A12,A13,A24,A28,A30,FINSEQ_1:def 7;
 A34: y().(i+1) = yy by A12,A14,A15,A20,A21,A25,A28,A31,FINSEQ_1:def 7;
-    P[y9^<*xx*>^x2] by A32,FINSEQ_1:45;
+    P[y9^<*xx*>^x2] by A32,FINSEQ_1:32;
     hence thesis by A3,A4,A19,A28,A29,A33,A34;
   end;
 A35: for i being Element of NAT holds Q[i] from NAT_1:sch 1(A5,A10);
-A36: x() = x()^{} by FINSEQ_1:47;
-  y() = y()^{} by FINSEQ_1:47;
+A36: x() = x()^{} by FINSEQ_1:34;
+  y() = y()^{} by FINSEQ_1:34;
   hence thesis by A2,A35,A36;
 end;
 
@@ -1612,15 +1611,15 @@ proof
   let f be operation of A;
   hereby
     let p be FinSequence of P;
-    set a0 =the  Element of P;
+    set a0 = the Element of P;
     per cases;
     suppose product p meets dom f;
       then consider x being set such that
 A1:   x in product p and
 A2:   x in dom f by XBOOLE_0:3;
-      f.x in the carrier of A by A2,PARTFUN1:27;
+      f.x in the carrier of A by A2,PARTFUN1:4;
       then reconsider a = Class(LimDomRel A, f.x) as Element of P by
-EQREL_1:def 5;
+EQREL_1:def 3;
       take a;
       thus f.:product p c= a
       proof
@@ -1629,8 +1628,8 @@ EQREL_1:def 5;
         then consider z being set such that
         z in dom f and
 A3:     z in product p and
-A4:     y = f.z by FUNCT_1:def 12;
-A5:     product p c= Funcs(dom p, Union p) by FUNCT_6:10;
+A4:     y = f.z by FUNCT_1:def 6;
+A5:     product p c= Funcs(dom p, Union p) by FUNCT_6:1;
         then
 A6:     ex f being Function st x = f & dom f = dom p & rng f c= Union p by A1,
 FUNCT_2:def 2;
@@ -1644,7 +1643,7 @@ A8:     dom p = Seg len p by FINSEQ_1:def 3;
         len x = len p by A6,A8,FINSEQ_1:def 3;
         then
 A9:     len x = len z by A7,A8,FINSEQ_1:def 3;
-A10:    P[x] by A2,EQREL_1:28,PARTFUN1:27;
+A10:    P[x] by A2,EQREL_1:20,PARTFUN1:4;
 A11:    for p1,q1 being FinSequence, z1,z2 being set
         st P[p1^<*z1*>^q1] & R[z1,z2] holds P[p1^<*z2*>^q1]
         proof
@@ -1653,14 +1652,14 @@ A11:    for p1,q1 being FinSequence, z1,z2 being set
 A12:      p1^<*z1*>^q1 in dom f and
 A13:      f.(p1^<*z1*>^q1) in a and
 A14:      [z1,z2] in LimDomRel A;
-A15:      [f.(p1^<*z1*>^q1), f.x] in LimDomRel A by A13,EQREL_1:27;
+A15:      [f.(p1^<*z1*>^q1), f.x] in LimDomRel A by A13,EQREL_1:19;
 A16:      LimDomRel A c= DomRel A by Th23;
-A17:      z1 in the carrier of A by A14,ZFMISC_1:106;
-A18:      z2 in the carrier of A by A14,ZFMISC_1:106;
+A17:      z1 in the carrier of A by A14,ZFMISC_1:87;
+A18:      z2 in the carrier of A by A14,ZFMISC_1:87;
           hence
 A19:      p1^<*z2*>^q1 in dom f by A12,A14,A16,A17,Def5;
-A20:      f.(p1^<*z1*>^q1) in rng f by A12,FUNCT_1:def 5;
-A21:      f.(p1^<*z2*>^q1) in rng f by A19,FUNCT_1:def 5;
+A20:      f.(p1^<*z1*>^q1) in rng f by A12,FUNCT_1:def 3;
+A21:      f.(p1^<*z2*>^q1) in rng f by A19,FUNCT_1:def 3;
           now
             let i be Element of NAT;
             [z1,z2] in (DomRel A)|^(A,i+1) by A14,A17,A18,Def8;
@@ -1671,19 +1670,19 @@ f.(p1^<*z1*>^q1),f.(p1^<*z2*>^q1)] in (DomRel A)|^(A,i) by A12,A17,A18,A19,Def6
 ;
             (DomRel A)|^(A,i) is total symmetric transitive by Th22;
             hence [f.(p1^<*z2*>^q1),f.(p1^<*z1*>^q1)] in (DomRel A)|^(A,i)
-            by A22,EQREL_1:12;
+            by A22,EQREL_1:6;
           end;
           then [f.(p1^<*z2*>^q1),f.(p1^<*z1*>^q1)] in LimDomRel A by A20,A21
 ,Def8;
-          then [f.(p1^<*z2*>^q1), f.x] in LimDomRel A by A15,EQREL_1:13;
-          hence thesis by EQREL_1:27;
+          then [f.(p1^<*z2*>^q1), f.x] in LimDomRel A by A15,EQREL_1:7;
+          hence thesis by EQREL_1:19;
         end;
 A23:    for i being Element of NAT st i in dom x holds R[x.i, z.i]
         proof
           let i be Element of NAT;
           assume
 A24:      i in dom x;
-          then p.i in rng p by A6,FUNCT_1:def 5;
+          then p.i in rng p by A6,FUNCT_1:def 3;
           then reconsider a = p.i as Element of P;
 A25:      ex
  g being Function st x = g & dom g = dom p & for x being set st x in
@@ -1692,10 +1691,10 @@ A26:      ex
  g being Function st z = g & dom g = dom p & for x being set st x in
           dom p holds g.x in p.x by A3,CARD_3:def 5;
 A27:      ex b being set st b in the carrier of A & a = Class(LimDomRel A, b)
-          by EQREL_1:def 5;
+          by EQREL_1:def 3;
 A28:      x.i in a by A24,A25;
           z.i in a by A24,A25,A26;
-          hence thesis by A27,A28,EQREL_1:30;
+          hence thesis by A27,A28,EQREL_1:22;
         end;
         P[z] from FiniteTransitivity(A10,A9,A11,A23);
         hence thesis by A4;
@@ -1703,8 +1702,8 @@ A28:      x.i in a by A24,A25;
     end;
     suppose product p misses dom f;
       then (product p) /\ dom f = {} by XBOOLE_0:def 7;
-      then f.:product p = f.:{} by RELAT_1:145
-        .= {} by RELAT_1:149;
+      then f.:product p = f.:{} by RELAT_1:112
+        .= {} by RELAT_1:116;
       then f.:product p c= a0 by XBOOLE_1:2;
       hence ex a being Element of P st f.:product p c= a;
     end;
@@ -1717,7 +1716,7 @@ A30: x in dom f by XBOOLE_0:3;
   let y be set;
   assume
 A31: y in product p;
-A32: product p c= Funcs(dom p, Union p) by FUNCT_6:10;
+A32: product p c= Funcs(dom p, Union p) by FUNCT_6:1;
   then
 A33: ex f being Function st x = f & dom f = dom p & rng f c= Union p by A29,
 FUNCT_2:def 2;
@@ -1740,8 +1739,8 @@ A38: for p1,q1 being FinSequence, z1,z2 being set
 A39: p1^<*z1*>^q1 in dom f and
 A40: [z1,z2] in LimDomRel A;
 A41: LimDomRel A c= DomRel A by Th23;
-A42: z1 in the carrier of A by A40,ZFMISC_1:106;
-    z2 in the carrier of A by A40,ZFMISC_1:106;
+A42: z1 in the carrier of A by A40,ZFMISC_1:87;
+    z2 in the carrier of A by A40,ZFMISC_1:87;
     hence thesis by A39,A40,A41,A42,Def5;
   end;
 A43: for i being Element of NAT st i in dom x holds R[x.i, z.i]
@@ -1749,17 +1748,17 @@ A43: for i being Element of NAT st i in dom x holds R[x.i, z.i]
     let i be Element of NAT;
     assume
 A44: i in dom x;
-    then p.i in rng p by A33,FUNCT_1:def 5;
+    then p.i in rng p by A33,FUNCT_1:def 3;
     then reconsider a = p.i as Element of P;
 A45: ex g being Function st x = g & dom g = dom p & for x being set st x in
     dom p holds g.x in p.x by A29,CARD_3:def 5;
 A46: ex g being Function st z = g & dom g = dom p & for x being set st x in
     dom p holds g.x in p.x by A31,CARD_3:def 5;
 A47: ex b being set st b in the carrier of A & a = Class(LimDomRel A, b)
-    by EQREL_1:def 5;
+    by EQREL_1:def 3;
 A48: x.i in a by A44,A45;
     z.i in a by A44,A45,A46;
-    hence thesis by A47,A48,EQREL_1:30;
+    hence thesis by A47,A48,EQREL_1:22;
   end;
   P[z] from FiniteTransitivity(A37,A36,A38,A43);
   hence thesis;
@@ -1784,9 +1783,9 @@ definition
     :
     Def12: rng it is a_partition of A;
   existence
-  proof set P =the  a_partition of A;
+  proof set P = the a_partition of A;
     take id P;
-    thus thesis by RELAT_1:71;
+    thus thesis by RELAT_1:45;
   end;
 end;
 
@@ -1826,29 +1825,29 @@ A3: y in a;
 A4: ex g being Function st p^<*x*>^q = g & dom g = dom pp &
     for x being set st x in dom pp holds g.x in pp.x by A1,CARD_3:def 5;
     thus dom (p^<*y*>^q) = Seg len (p^<*y*>^q) by FINSEQ_1:def 3
-      .= Seg (len (p^<*y*>)+len q) by FINSEQ_1:35
-      .= Seg ((len p+len <*y*>)+len q) by FINSEQ_1:35
-      .= Seg ((len p+1)+len q) by FINSEQ_1:57
-      .= Seg ((len p+len <*x*>)+len q) by FINSEQ_1:57
-      .= Seg (len (p^<*x*>)+len q) by FINSEQ_1:35
-      .= Seg len (p^<*x*>^q) by FINSEQ_1:35
+      .= Seg (len (p^<*y*>)+len q) by FINSEQ_1:22
+      .= Seg ((len p+len <*y*>)+len q) by FINSEQ_1:22
+      .= Seg ((len p+1)+len q) by FINSEQ_1:40
+      .= Seg ((len p+len <*x*>)+len q) by FINSEQ_1:40
+      .= Seg (len (p^<*x*>)+len q) by FINSEQ_1:22
+      .= Seg len (p^<*x*>^q) by FINSEQ_1:22
       .= dom pp by A4,FINSEQ_1:def 3;
     let i be set;
     assume
 A5: i in dom pp;
     then reconsider ii = i as Element of NAT;
-A6: len <*x*> = 1 by FINSEQ_1:57;
-A7: len <*y*> = 1 by FINSEQ_1:57;
-A8: dom <*x*> = Seg 1 by FINSEQ_1:55;
-A9: len (p^<*x*>) = len p+1 by A6,FINSEQ_1:35;
-A10: len (p^<*y*>) = len p+1 by A7,FINSEQ_1:35;
+A6: len <*x*> = 1 by FINSEQ_1:40;
+A7: len <*y*> = 1 by FINSEQ_1:40;
+A8: dom <*x*> = Seg 1 by FINSEQ_1:38;
+A9: len (p^<*x*>) = len p+1 by A6,FINSEQ_1:22;
+A10: len (p^<*y*>) = len p+1 by A7,FINSEQ_1:22;
 A11: dom (p^<*x*>) = Seg (len p+1) by A9,FINSEQ_1:def 3;
 A12: dom (p^<*y*>) = Seg (len p+1) by A10,FINSEQ_1:def 3;
     A13: ii
  in dom (p^<*x*>) or ex n being Nat st n in dom q & ii = len (p^<*x*>)+n
-    by A4,A5,FINSEQ_1:38;
-A14: dom p c= dom (p^<*y*>) by FINSEQ_1:39;
-    per cases by A13,FINSEQ_1:38;
+    by A4,A5,FINSEQ_1:25;
+A14: dom p c= dom (p^<*y*>) by FINSEQ_1:26;
+    per cases by A13,FINSEQ_1:25;
     suppose
 A15:  ii in dom p;
       then
@@ -1862,20 +1861,20 @@ A18:  (p^<*y*>^q).i = p.i by A14,A15,A16,FINSEQ_1:def 7;
       then consider n being Nat such that
 A19:  n in Seg 1 and
 A20:  ii = len p+n by A8;
-A21:  n = 1 by A19,FINSEQ_1:4,TARSKI:def 1;
+A21:  n = 1 by A19,FINSEQ_1:2,TARSKI:def 1;
       then
-A22:  (p^<*x*>).ii = x by A20,FINSEQ_1:59;
-A23:  (p^<*y*>).ii = y by A20,A21,FINSEQ_1:59;
-A24:  ii in dom (p^<*y*>) by A12,A20,A21,FINSEQ_1:6;
+A22:  (p^<*x*>).ii = x by A20,FINSEQ_1:42;
+A23:  (p^<*y*>).ii = y by A20,A21,FINSEQ_1:42;
+A24:  ii in dom (p^<*y*>) by A12,A20,A21,FINSEQ_1:4;
       then
 A25:  (p^<*x*>^q).ii = x by A11,A12,A22,FINSEQ_1:def 7;
 A26:  (p^<*y*>^q).ii = y by A23,A24,FINSEQ_1:def 7;
 A27:  x in pp.i by A4,A5,A25;
-      pp.i in rng pp by A5,FUNCT_1:def 5;
+      pp.i in rng pp by A5,FUNCT_1:def 3;
       then
 A28:  pp.i in P;
       a meets pp.i by A27,XBOOLE_0:3;
-      then pp.i = a by A28,EQREL_1:def 6;
+      then pp.i = a by A28,EQREL_1:def 4;
       hence (p^<*y*>^q).i in pp.i by A26;
     end;
     suppose
@@ -1898,13 +1897,13 @@ proof
   let A be partial non-empty UAStr;
   let P be a_partition of A;
   consider EP being Equivalence_Relation of the carrier of A such that
-A1: P = Class EP by EQREL_1:43;
+A1: P = Class EP by EQREL_1:34;
   let a be set;
   assume a in P;
   then reconsider aa = a as Element of P;
-  set x =the  Element of aa;
+  set x = the Element of aa;
   take Class(LimDomRel A, x);
-  thus Class(LimDomRel A, x) in Class LimDomRel A by EQREL_1:def 5;
+  thus Class(LimDomRel A, x) in Class LimDomRel A by EQREL_1:def 3;
   let y be set;
   assume y in a;
   then reconsider y as Element of aa;
@@ -1915,10 +1914,10 @@ A2: P[ 0 ]
     let x,y be set;
     assume
 A3: [x,y] in EP;
-    then reconsider x,y as Element of A by ZFMISC_1:106;
-    reconsider a = Class(EP, y) as Element of P by A1,EQREL_1:def 5;
-A4: x in a by A3,EQREL_1:27;
-A5: y in a by EQREL_1:28;
+    then reconsider x,y as Element of A by ZFMISC_1:87;
+    reconsider a = Class(EP, y) as Element of P by A1,EQREL_1:def 3;
+A4: x in a by A3,EQREL_1:19;
+A5: y in a by EQREL_1:20;
     for f being operation of A, p,q being FinSequence holds
     p^<*x*>^q in dom f iff p^<*y*>^q in dom f
     proof
@@ -1950,8 +1949,8 @@ A11: EP c= (DomRel A)|^(A,i);
     let x,y be set;
     assume
 A12: [x,y] in EP;
-    then reconsider x,y as Element of A by ZFMISC_1:106;
-    reconsider a = Class(EP, y) as Element of P by A1,EQREL_1:def 5;
+    then reconsider x,y as Element of A by ZFMISC_1:87;
+    reconsider a = Class(EP, y) as Element of P by A1,EQREL_1:def 3;
     now
       let f be operation of A, p,q be FinSequence;
       assume that
@@ -1964,15 +1963,15 @@ A15:  p^<*x*>^q in product pp by Th7;
       then f is_partitable_wrt P by Def10;
       then consider c being Element of P such that
 A16:  f.:product pp c= c by Def9;
-A17:  x in a by A12,EQREL_1:27;
-      y in a by EQREL_1:28;
+A17:  x in a by A12,EQREL_1:19;
+      y in a by EQREL_1:20;
       then
 A18:  p^<*y*>^q in product pp by A15,A17,Th27;
-A19:  f.(p^<*x*>^q) in f.:product pp by A13,A15,FUNCT_1:def 12;
-A20:  f.(p^<*y*>^q) in f.:product pp by A14,A18,FUNCT_1:def 12;
+A19:  f.(p^<*x*>^q) in f.:product pp by A13,A15,FUNCT_1:def 6;
+A20:  f.(p^<*y*>^q) in f.:product pp by A14,A18,FUNCT_1:def 6;
       ex x being set st x in the carrier of A & c = Class(EP,x) by A1,
-EQREL_1:def 5;
-      then [f.(p^<*x*>^q), f.(p^<*y*>^q)] in EP by A16,A19,A20,EQREL_1:30;
+EQREL_1:def 3;
+      then [f.(p^<*x*>^q), f.(p^<*y*>^q)] in EP by A16,A19,A20,EQREL_1:22;
       hence [f.(p^<*x*>^q), f.(p^<*y*>^q)] in (DomRel A)|^(A,i) by A11;
     end;
     then [x,y] in (DomRel A)|^(A,i)|^A by A11,A12,Def6;
@@ -1982,15 +1981,15 @@ A21: for i being Element of NAT holds P[i] from NAT_1:sch 1(A2,A10);
   now
     let i be Element of NAT;
     ex x being set st x in the carrier of A & aa = Class(EP, x)
-    by A1,EQREL_1:def 5;
+    by A1,EQREL_1:def 3;
     then
-A22: [x,y] in EP by EQREL_1:30;
+A22: [x,y] in EP by EQREL_1:22;
     EP c= (DomRel A)|^(A,i) by A21;
     hence [x,y] in (DomRel A)|^(A,i) by A22;
   end;
   then [x,y] in LimDomRel A by Def8;
-  then [y,x] in LimDomRel A by EQREL_1:12;
-  hence thesis by EQREL_1:27;
+  then [y,x] in LimDomRel A by EQREL_1:6;
+  hence thesis by EQREL_1:19;
 end;
 
 begin :: Morphisms between manysorted signatures
@@ -2016,19 +2015,19 @@ proof
   set f = id the carrier of S, g = id the carrier' of S;
 A1: dom the ResultSort of S = the carrier' of S by FUNCT_2:def 1;
   rng the ResultSort of S c= the carrier of S;
-  then f*the ResultSort of S = the ResultSort of S by RELAT_1:79;
+  then f*the ResultSort of S = the ResultSort of S by RELAT_1:53;
   hence dom f = the carrier of S & dom g = the carrier' of S &
   rng f c= the carrier of S & rng g c= the carrier' of S &
-  f*the ResultSort of S = (the ResultSort of S)*g by A1,RELAT_1:71,78;
+  f*the ResultSort of S = (the ResultSort of S)*g by A1,RELAT_1:45,52;
   let o be set, p be Function;
   assume that
 A2: o in the carrier' of S and
 A3: p = (the Arity of S).o;
-A4: g.o = o by A2,FUNCT_1:34;
-  p in (the carrier of S)* by A2,A3,FUNCT_2:7;
+A4: g.o = o by A2,FUNCT_1:17;
+  p in (the carrier of S)* by A2,A3,FUNCT_2:5;
   then p is FinSequence of the carrier of S by FINSEQ_1:def 11;
   then rng p c= the carrier of S by FINSEQ_1:def 4;
-  hence thesis by A3,A4,RELAT_1:79;
+  hence thesis by A3,A4,RELAT_1:53;
 end;
 
 theorem Th30:
@@ -2056,22 +2055,22 @@ A12: for o being set, p being Function
   holds f2*p = (the Arity of S3).(g2.o);
   set f = f2*f1, g = g2*g1;
   thus dom f = the carrier of S1 & dom g = the carrier' of S1
-  by A1,A2,A3,A4,A7,A8,RELAT_1:46;
-A13: rng f c= rng f2 by RELAT_1:45;
-  rng g c= rng g2 by RELAT_1:45;
+  by A1,A2,A3,A4,A7,A8,RELAT_1:27;
+A13: rng f c= rng f2 by RELAT_1:26;
+  rng g c= rng g2 by RELAT_1:26;
   hence rng f c= the carrier of S3 & rng g c= the carrier' of S3
   by A9,A10,A13,XBOOLE_1:1;
-  thus f*the ResultSort of S1 = f2*((the ResultSort of S2)*g1) by A5,RELAT_1:55
-    .= f2*(the ResultSort of S2)*g1 by RELAT_1:55
-    .= (the ResultSort of S3)*g by A11,RELAT_1:55;
+  thus f*the ResultSort of S1 = f2*((the ResultSort of S2)*g1) by A5,RELAT_1:36
+    .= f2*(the ResultSort of S2)*g1 by RELAT_1:36
+    .= (the ResultSort of S3)*g by A11,RELAT_1:36;
   let o be set, p be Function;
   assume that
 A14: o in the carrier' of S1 and
 A15: p = (the Arity of S1).o;
 A16: f1*p = (the Arity of S2).(g1.o) by A6,A14,A15;
-A17: g1.o in rng g1 by A2,A14,FUNCT_1:def 5;
-A18: f*p = f2*(f1*p) by RELAT_1:55;
-  g.o = g2.(g1.o) by A2,A14,FUNCT_1:23;
+A17: g1.o in rng g1 by A2,A14,FUNCT_1:def 3;
+A18: f*p = f2*(f1*p) by RELAT_1:36;
+  g.o = g2.(g1.o) by A2,A14,FUNCT_1:13;
   hence thesis by A4,A12,A16,A17,A18;
 end;
 
@@ -2091,7 +2090,7 @@ definition
     take f = id the carrier of S, g = id the carrier' of S;
     thus f,g form_morphism_between S,S &
     rng f = the carrier of S & rng g = the carrier' of S
-    by Th29,RELAT_1:71;
+    by Th29,RELAT_1:45;
   end;
 end;
 
@@ -2112,7 +2111,7 @@ A6: rng g2 = the carrier' of S2;
   thus f,g form_morphism_between S3,S1 by A1,A4,Th30;
 A7: dom f1 = the carrier of S2 by A1,Def13;
   dom g1 = the carrier' of S2 by A1,Def13;
-  hence thesis by A2,A3,A5,A6,A7,RELAT_1:47;
+  hence thesis by A2,A3,A5,A6,A7,RELAT_1:28;
 end;
 
 begin :: Manysorted signature of partital algebra
@@ -2158,12 +2157,12 @@ A4:   o = [f,p] and product p meets dom Den(f,A);
     end;
     consider Ar being Function such that
 A5: dom Ar = O & rng Ar c= P* and
-A6: for o being set st o in O holds Q[o,Ar.o] from WELLORD2:sch 1(A1);
-    reconsider Ar as Function of O, P* by A5,FUNCT_2:4;
+A6: for o being set st o in O holds Q[o,Ar.o] from FUNCT_1:sch 5(A1);
+    reconsider Ar as Function of O, P* by A5,FUNCT_2:2;
     consider R being Function such that
 A7: dom R = O & rng R c= P and
-A8: for o being set st o in O holds S[o,R.o] from WELLORD2:sch 1(A3);
-    reconsider R as Function of O, P by A7,FUNCT_2:4;
+A8: for o being set st o in O holds S[o,R.o] from FUNCT_1:sch 5(A3);
+    reconsider R as Function of O, P by A7,FUNCT_2:2;
     take S = ManySortedSign(#P, O, Ar, R#);
     thus the carrier of S = P & the carrier' of S = O;
     let f be OperSymbol of A, p be Element of P*;
@@ -2177,8 +2176,8 @@ A10: ex f1 being OperSymbol of A, q1 being Element of P* st ( q1
     consider f2 being OperSymbol of A, q2 being Element of P* such that
 A11: o = [f2,q2] and
 A12: Den(f2,A).:product q2 c= R.o by A8,A9;
-    q2 = p by A11,ZFMISC_1:33;
-    hence thesis by A10,A11,A12,ZFMISC_1:33;
+    q2 = p by A11,ZFMISC_1:27;
+    hence thesis by A10,A11,A12,ZFMISC_1:27;
   end;
   correctness
   proof
@@ -2207,11 +2206,11 @@ A22:  product p meets dom Den(f,A);
         .= (the Arity of S2).o by A18,A21,A22;
     end;
     then
-A23: the Arity of S1 = the Arity of S2 by A19,A20,FUNCT_1:9;
+A23: the Arity of S1 = the Arity of S2 by A19,A20,FUNCT_1:2;
 A24: dom the ResultSort of S1 = O by A13,A14,FUNCT_2:def 1;
 A25: dom the ResultSort of S2 = O by A16,A17,FUNCT_2:def 1;
     consider R being Equivalence_Relation of the carrier of A such that
-A26: P = Class R by EQREL_1:43;
+A26: P = Class R by EQREL_1:34;
     now
       let o be set;
       assume
@@ -2222,20 +2221,20 @@ A29:  product p meets dom Den(f,A);
       consider x being set such that
 A30:  x in product p and
 A31:  x in dom Den(f,A) by A29,XBOOLE_0:3;
-A32:  Den(f,A).x in Den(f,A).:product p by A30,A31,FUNCT_1:def 12;
+A32:  Den(f,A).x in Den(f,A).:product p by A30,A31,FUNCT_1:def 6;
 A33:  Den(f,A).:product p c= (the ResultSort of S1).o by A15,A28,A29;
 A34:  Den(f,A).:product p c= (the ResultSort of S2).o by A18,A28,A29;
-A35:  (the ResultSort of S1).o in P by A13,A14,A27,FUNCT_2:7;
-A36:  (the ResultSort of S2).o in P by A16,A17,A27,FUNCT_2:7;
+A35:  (the ResultSort of S1).o in P by A13,A14,A27,FUNCT_2:5;
+A36:  (the ResultSort of S2).o in P by A16,A17,A27,FUNCT_2:5;
 A37:  ex y being set st y in the carrier of A & (the ResultSort of S1).o =
-      Class(R,y) by A26,A35,EQREL_1:def 5;
+      Class(R,y) by A26,A35,EQREL_1:def 3;
 A38:  ex y being set st y in the carrier of A & (the ResultSort of S2).o =
-      Class(R,y) by A26,A36,EQREL_1:def 5;
-      (the ResultSort of S1).o = Class(R,Den(f,A).x) by A32,A33,A37,EQREL_1:31;
+      Class(R,y) by A26,A36,EQREL_1:def 3;
+      (the ResultSort of S1).o = Class(R,Den(f,A).x) by A32,A33,A37,EQREL_1:23;
       hence (the ResultSort of S1).o = (the ResultSort of S2).o by A32,A34,A38,
-EQREL_1:31;
+EQREL_1:23;
     end;
-    hence thesis by A13,A14,A16,A17,A23,A24,A25,FUNCT_1:9;
+    hence thesis by A13,A14,A16,A17,A23,A24,A25,FUNCT_1:2;
   end;
 end;
 
@@ -2246,10 +2245,10 @@ registration
   coherence
   proof
     thus the carrier of MSSign(A,P) is non empty by Def15;
-    set g =the  OperSymbol of A;
-    set x =the  Element of dom Den(g,A);
+    set g = the OperSymbol of A;
+    set x = the Element of dom Den(g,A);
     reconsider x as Element of (the carrier of A)*;
-A1: union P = the carrier of A by EQREL_1:def 6;
+A1: union P = the carrier of A by EQREL_1:def 4;
     rng x c= the carrier of A;
     then consider q being Function such that
 A2: dom q = dom x and
@@ -2328,7 +2327,7 @@ A1: for o being OperSymbol of S holds D.o = F1(o) from PBOOLE:sch 5;
   deffunc F2(OperSymbol of A) = {a where a is OperSymbol of S: a`1 = $1};
   consider Q being ManySortedSet of dom the charact of A such that
 A2: for o being OperSymbol of A holds Q.o = F2(o) from PBOOLE:sch 5;
-A3: dom Q = dom the charact of A by PARTFUN1:def 4;
+A3: dom Q = dom the charact of A by PARTFUN1:def 2;
 A4: the carrier of S = P by Def15;
 A5: the carrier' of S = {[o,p] where o is OperSymbol of A, p is Element of P
   *: product p meets dom Den(o,A)} by Def15;
@@ -2336,11 +2335,11 @@ A5: the carrier' of S = {[o,p] where o is OperSymbol of A, p is Element of P
   proof
     let x be set;
     assume x in dom Q;
-    then reconsider o = x as OperSymbol of A by PARTFUN1:def 4;
-    set y =the  Element of dom Den(o,A);
+    then reconsider o = x as OperSymbol of A by PARTFUN1:def 2;
+    set y = the Element of dom Den(o,A);
     reconsider y as Element of (the carrier of A)*;
 A6: rng y c= the carrier of A;
-    the carrier of A = union P by EQREL_1:def 6;
+    the carrier of A = union P by EQREL_1:def 4;
     then consider f being Function such that
 A7: dom f = dom y and
 A8: rng f c= P and
@@ -2371,21 +2370,21 @@ A15: rng the ResultSort of S c= the carrier of S;
 A16: dom the Arity of S = the carrier' of S by FUNCT_2:def 1;
 A17: rng p c= P;
 A18: (the Arity of S).x = p by A13,A14,Def15;
-A19: (Z# ).p = product(Z*p) by A4,PBOOLE:def 19;
-    Z*p = p by A17,RELAT_1:79;
+A19: (Z# ).p = product(Z*p) by A4,FINSEQ_2:def 5;
+    Z*p = p by A17,RELAT_1:53;
     then
-A20: (Z# * the Arity of S).x = product p by A12,A16,A18,A19,FUNCT_1:23;
+A20: (Z# * the Arity of S).x = product p by A12,A16,A18,A19,FUNCT_1:13;
 A21: Den(o, A).:product p c= (the ResultSort of S).x by A13,A14,Def15;
 A22: xx`2 = p by A13,MCART_1:7;
 A23: xx`1 = o by A13,MCART_1:7;
-A24: rng (Den(o, A)|product p) = Den(o, A).:product p by RELAT_1:148;
+A24: rng (Den(o, A)|product p) = Den(o, A).:product p by RELAT_1:115;
 A25: D.xx = Den(o, A)|product p by A1,A22,A23;
     Den(o,A) is_exactly_partitable_wrt P by Def11;
     then
 A26: product p c= dom Den(o,A) by A14,Def10;
-A27: Z * the ResultSort of S = the ResultSort of S by A4,A15,RELAT_1:79;
-    dom (Den(o, A)|product p) = product p by A26,RELAT_1:91;
-    hence thesis by A20,A21,A24,A25,A27,FUNCT_2:4;
+A27: Z * the ResultSort of S = the ResultSort of S by A4,A15,RELAT_1:53;
+    dom (Den(o, A)|product p) = product p by A26,RELAT_1:62;
+    hence thesis by A20,A21,A24,A25,A27,FUNCT_2:2;
   end;
   then reconsider D as ManySortedFunction of
   Z# * the Arity of S, Z * the ResultSort of S;
@@ -2396,8 +2395,8 @@ A28: Union Q = the carrier' of S
       assume x in Union Q;
       then consider y being set such that
 A29:  y in dom Q and
-A30:  x in Q.y by CARD_5:10;
-      reconsider y as OperSymbol of A by A29,PARTFUN1:def 4;
+A30:  x in Q.y by CARD_5:2;
+      reconsider y as OperSymbol of A by A29,PARTFUN1:def 2;
       Q.y = {a where a is OperSymbol of S: a`1 = y} by A2;
       then ex a being OperSymbol of S st x = a & a`1 = y by A30;
       hence x in the carrier' of S;
@@ -2407,7 +2406,7 @@ A30:  x in Q.y by CARD_5:10;
     then reconsider b = x as OperSymbol of S;
     Q.b`1 = {a where a is OperSymbol of S: a`1 = b`1} by A2;
     then b in Q.b`1;
-    hence thesis by A3,CARD_5:10;
+    hence thesis by A3,CARD_5:2;
   end;
   now
     let x,y be set;
@@ -2415,7 +2414,7 @@ A30:  x in Q.y by CARD_5:10;
 A31: x in dom Q and
 A32: y in dom Q and
 A33: x <> y;
-    reconsider a = x, b = y as OperSymbol of A by A31,A32,PARTFUN1:def 4;
+    reconsider a = x, b = y as OperSymbol of A by A31,A32,PARTFUN1:def 2;
     thus Q.x misses Q.y
     proof
       assume Q.x meets Q.y;
@@ -2431,19 +2430,19 @@ A38:  ex c1 being OperSymbol of S st z = c1 & c1`1 = a by A34,A36;
   end;
   then reconsider Q as IndexedPartition of the carrier' of S by A28,Th15;
   take G = MSAlgebra(#Z, D#), Q;
-  rng id P is a_partition of A by RELAT_1:71;
+  rng id P is a_partition of A by RELAT_1:45;
   hence the Sorts of G is IndexedPartition of A by Def12;
-  thus dom Q = dom the charact of A by PARTFUN1:def 4;
+  thus dom Q = dom the charact of A by PARTFUN1:def 2;
   let o be OperSymbol of A;
   reconsider PP = {product p where p is Element of P*: not contradiction}
   as a_partition of (the carrier of A)* by Th9;
   reconsider QQ = {a /\ dom Den(o,A) where a is Element of PP:
   a meets dom Den(o,A)} as a_partition of dom Den(o,A) by Th11;
   set F = (the Charact of G)|(Q.o);
-A39: Q.o in rng Q by A3,FUNCT_1:def 5;
-A40: dom D = the carrier' of S by PARTFUN1:def 4;
+A39: Q.o in rng Q by A3,FUNCT_1:def 3;
+A40: dom D = the carrier' of S by PARTFUN1:def 2;
   then
-A41: dom F = Q.o by A39,RELAT_1:91;
+A41: dom F = Q.o by A39,RELAT_1:62;
   reconsider F as non empty Function by A39,A40;
   reconsider Qo = Q.o as non empty set;
   reconsider RR = {Den(o,A)|a where a is Element of QQ: not contradiction}
@@ -2455,8 +2454,8 @@ A42: Q.o = {a where a is OperSymbol of S: a`1 = o} by A2;
     assume y in rng F;
     then consider x be set such that
 A43: x in dom F and
-A44: y = F.x by FUNCT_1:def 5;
-    x in dom (the Charact of G) /\ (Q.o) by A43,RELAT_1:90;
+A44: y = F.x by FUNCT_1:def 3;
+    x in dom (the Charact of G) /\ (Q.o) by A43,RELAT_1:61;
     then x in Q.o by XBOOLE_0:def 4;
     then consider a being OperSymbol of S such that
 A45: x = a and
@@ -2474,10 +2473,10 @@ A53: (product p) /\ dom Den(o,A) in QQ by A48,A49,A51;
     then product p in QQ by A53,XBOOLE_1:28;
     then
 A54: Den(o,A)|product p in RR;
-    y = D.a by A43,A44,A45,FUNCT_1:70;
+    y = D.a by A43,A44,A45,FUNCT_1:47;
     hence thesis by A1,A46,A50,A54;
   end;
-  then reconsider F as Function of Qo, RR by A41,FUNCT_2:4;
+  then reconsider F as Function of Qo, RR by A41,FUNCT_2:2;
 A55: RR c= rng F
   proof
     let x be set;
@@ -2498,10 +2497,10 @@ A60: b = a by A57,A59,XBOOLE_1:28;
 A61: [o,p] in the carrier' of S by A5,A58,A59;
 A62: [o,p]`1 = o by MCART_1:7;
 A63: [o,p]`2 = p by MCART_1:7;
-A64: [o,p] in dom D by A61,PARTFUN1:def 4;
+A64: [o,p] in dom D by A61,PARTFUN1:def 2;
 A65: [o,p] in Q.o by A42,A61,A62;
     D.[o,p] = x by A1,A56,A59,A60,A61,A62,A63;
-    hence thesis by A64,A65,FUNCT_1:73;
+    hence thesis by A64,A65,FUNCT_1:50;
   end;
   F is one-to-one
   proof
@@ -2524,8 +2523,8 @@ A74: product p1 meets dom Den(o1,A) by A5;
     then consider o2 being OperSymbol of A, p2 being Element of P* such that
 A75: a2 = [o2,p2] and
 A76: product p2 meets dom Den(o2,A) by A5;
-A77: F.x1 = D.a1 by A66,A69,FUNCT_1:70;
-A78: F.x1 = D.a2 by A67,A68,A71,FUNCT_1:70;
+A77: F.x1 = D.a1 by A66,A69,FUNCT_1:47;
+A78: F.x1 = D.a2 by A67,A68,A71,FUNCT_1:47;
 A79: a1`2 = p1 by A73,MCART_1:7;
 A80: a2`2 = p2 by A75,MCART_1:7;
 A81: F.x1 = Den(o,A)|product p1 by A1,A70,A77,A79;
@@ -2535,8 +2534,8 @@ A84: o = o1 by A70,A73,MCART_1:7;
 A85: o = o2 by A72,A75,MCART_1:7;
 A86: product p1 c= dom Den(o,A) by A74,A83,A84,Def10;
 A87: product p2 c= dom Den(o,A) by A76,A83,A85,Def10;
-    product p1 = dom (Den(o,A)|product p1) by A86,RELAT_1:91;
-    hence thesis by A69,A71,A73,A75,A81,A82,A84,A85,A87,Th2,RELAT_1:91;
+    product p1 = dom (Den(o,A)|product p1) by A86,RELAT_1:62;
+    hence thesis by A69,A71,A73,A75,A81,A82,A84,A85,A87,Th2,RELAT_1:62;
   end;
   hence thesis by A55,Th16;
 end;
@@ -2559,27 +2558,27 @@ A2: dom Q = dom the charact of A and
 A3: for o being OperSymbol of A holds
   (the Charact of G)|(Q.o) is IndexedPartition of Den(o, A);
   reconsider R = the Sorts of G as IndexedPartition of A by A1;
-  dom R = the carrier of S2 by PARTFUN1:def 4;
+  dom R = the carrier of S2 by PARTFUN1:def 2;
   then reconsider SG = the Sorts of G as Function of the carrier of S2, rng R
-  by RELSET_1:11;
+  by RELSET_1:4;
   let o be OperSymbol of A, r be FinSequence of rng the Sorts of G;
   reconsider p = r as Element of (rng R)* by FINSEQ_1:def 11;
   assume
 A4: product r c= dom Den(o,A);
   reconsider P = (the Charact of G)|(Q.o) as IndexedPartition of Den(o, A)
   by A3;
-  set h =the  Element of product p;
+  set h = the Element of product p;
   h in product r;
   then
-A5: [h,Den(o,A).h] in Den(o, A) by A4,FUNCT_1:def 4;
+A5: [h,Den(o,A).h] in Den(o, A) by A4,FUNCT_1:def 2;
   then
 A6: P-index_of [h,Den(o,A).h] in dom P by Def4;
 A7: [h,Den(o,A).h] in P.(P-index_of [h,Den(o,A).h]) by A5,Def4;
-  reconsider Qo = Q.o as Element of rng Q by A2,FUNCT_1:def 5;
-A8: dom the Charact of G = the carrier' of S2 by PARTFUN1:def 4;
+  reconsider Qo = Q.o as Element of rng Q by A2,FUNCT_1:def 3;
+A8: dom the Charact of G = the carrier' of S2 by PARTFUN1:def 2;
   then
-A9: dom P = Qo by RELAT_1:91;
-reconsider s = P-index_of [h,Den(o,A).h] as Element of Qo by A6,A8,RELAT_1:91;
+A9: dom P = Qo by RELAT_1:62;
+reconsider s = P-index_of [h,Den(o,A).h] as Element of Qo by A6,A8,RELAT_1:62;
   reconsider q = SG*the_arity_of s as FinSequence of rng R by Lm2;
   reconsider q as Element of (rng R)* by FINSEQ_1:def 11;
   reconsider Q = {product t where t is Element of (rng R)*
@@ -2587,11 +2586,11 @@ reconsider s = P-index_of [h,Den(o,A).h] as Element of Qo by A6,A8,RELAT_1:91;
   take s;
   dom the Arity of S2 = the carrier' of S2 by FUNCT_2:def 1;
   then
-A10: Args(s,G) = (the Sorts of G)# .((the Arity of S2).s) by FUNCT_1:23
-    .= product q by PBOOLE:def 19;
+A10: Args(s,G) = (the Sorts of G)# .((the Arity of S2).s) by FUNCT_1:13
+    .= product q by FINSEQ_2:def 5;
 A11: product q in Q;
 A12: product p in Q;
-  P.s = (the Charact of G).s by A9,FUNCT_1:70;
+  P.s = (the Charact of G).s by A9,FUNCT_1:47;
   then h in dom Den(s,G) by A7,RELAT_1:def 4;
   hence (the Sorts of G)*the_arity_of s = r by A10,A11,A12,Th2,Th3;
   thus thesis;
@@ -2613,11 +2612,11 @@ A1: P = Class LimDomRel A;
 A2: A can_be_characterized_by S2,G,Q;
 A3: the Sorts of G is IndexedPartition of A by A2,Def16;
 A4: dom Q = dom the charact of A by A2,Def16;
-  reconsider G as non-empty MSAlgebra over S2 by A3,MSUALG_1:def 8;
+  reconsider G as non-empty MSAlgebra over S2 by A3,MSUALG_1:def 3;
   reconsider R = the Sorts of G as IndexedPartition of A by A2,Def16;
-A5: dom R = the carrier of S2 by PARTFUN1:def 4;
+A5: dom R = the carrier of S2 by PARTFUN1:def 2;
   then reconsider SG = the Sorts of G as Function of the carrier of S2, rng R
-  by RELSET_1:11;
+  by RELSET_1:4;
 A6: the carrier' of S1 = {[o,p] where o is OperSymbol of A, p is Element of P*:
   product p meets dom Den(o,A)} by Def15;
 A7: the carrier of S1 = P by Def15;
@@ -2628,12 +2627,12 @@ A9: for r being set st r in rng R ex p being set st p in P & Q[r,p]
   by SETFAM_1:def 2;
   consider em being Function such that
 A10: dom em = rng R & rng em c= P and
-A11: for r being set st r in rng R holds Q[r,em.r] from WELLORD2:sch 1(A9);
-  reconsider em as Function of rng R, P by A10,FUNCT_2:4;
-A12: dom (em*R) = dom R by A10,RELAT_1:46;
-  rng (em*R) = rng em by A10,RELAT_1:47;
+A11: for r being set st r in rng R holds Q[r,em.r] from FUNCT_1:sch 5(A9);
+  reconsider em as Function of rng R, P by A10,FUNCT_2:2;
+A12: dom (em*R) = dom R by A10,RELAT_1:27;
+  rng (em*R) = rng em by A10,RELAT_1:28;
   then reconsider f = em*R as Function of the carrier of S2, the carrier of S1
-  by A5,A7,A12,FUNCT_2:4;
+  by A5,A7,A12,FUNCT_2:2;
   take f;
   defpred S[set,set] means
   ex p being FinSequence of P, o being OperSymbol of S2 st
@@ -2650,22 +2649,22 @@ A14: product (SG*the_arity_of s2) c= product p by A1,Th4,Th28;
     reconsider p as Element of P* by FINSEQ_1:def 11;
     take s1 = [Q-index_of s2, p];
     reconsider o = Q-index_of s2 as OperSymbol of A by A4,Def4;
-    set aa =the  Element of Args(s2,G);
+    set aa = the Element of Args(s2,G);
 A15: aa in Args(s2,G);
 A16: dom Den(s2,G) = Args(s2,G) by FUNCT_2:def 1;
-A17: dom the Arity of S2 = the carrier' of S2 by PARTFUN1:def 4;
-A18: dom the Charact of G = the carrier' of S2 by PARTFUN1:def 4;
+A17: dom the Arity of S2 = the carrier' of S2 by PARTFUN1:def 2;
+A18: dom the Charact of G = the carrier' of S2 by PARTFUN1:def 2;
     (the Charact of G)|(Q.o) is IndexedPartition of Den(o, A) by A2,Def16;
     then rng ((the Charact of G)|(Q.o)) is a_partition of Den(o, A) by Def3;
     then
-A19: (the Charact of G).:(Q.o) is a_partition of Den(o, A) by RELAT_1:148;
+A19: (the Charact of G).:(Q.o) is a_partition of Den(o, A) by RELAT_1:115;
     s2 in Q.o by Def4;
     then (the Charact of G).s2 in (the Charact of G).:(Q.o) by A18,
-FUNCT_1:def 12;
+FUNCT_1:def 6;
     then
-A20: dom Den(s2, G) c= dom Den(o, A) by A19,RELAT_1:25;
-A21: Args(s2,G) = (the Sorts of G)# .((the Arity of S2).s2) by A17,FUNCT_1:23
-      .= product(SG*the_arity_of s2) by PBOOLE:def 19;
+A20: dom Den(s2, G) c= dom Den(o, A) by A19,RELAT_1:11;
+A21: Args(s2,G) = (the Sorts of G)# .((the Arity of S2).s2) by A17,FUNCT_1:13
+      .= product(SG*the_arity_of s2) by FINSEQ_2:def 5;
     then product p meets dom Den(o,A) by A14,A15,A16,A20,XBOOLE_0:3;
     hence s1 in the carrier' of S1 by A6;
     take p, s2;
@@ -2674,9 +2673,9 @@ A21: Args(s2,G) = (the Sorts of G)# .((the Arity of S2).s2) by A17,FUNCT_1:23
   consider g being Function such that
 A22: dom g = the carrier' of S2 & rng g c= the carrier' of S1 &
   for s being set st s in the carrier' of S2 holds S[s,g.s]
-  from WELLORD2:sch 1(A13);
+  from FUNCT_1:sch 5(A13);
   reconsider g as Function of the carrier' of S2, the carrier' of S1
-  by A22,FUNCT_2:4;
+  by A22,FUNCT_2:2;
   take g;
   thus
 A23: dom f = the carrier of S2 & dom g = the carrier' of S2 &
@@ -2685,50 +2684,50 @@ A23: dom f = the carrier of S2 & dom g = the carrier' of S2 &
   now
     let c be OperSymbol of S2;
     set s = (the ResultSort of S2).c;
-A24: R.s = ((the Sorts of G)*the ResultSort of S2).c by FUNCT_2:21;
-A25: (f*the ResultSort of S2).c = f.s by FUNCT_2:21;
-    R.s in rng R by A5,FUNCT_1:def 5;
+A24: R.s = ((the Sorts of G)*the ResultSort of S2).c by FUNCT_2:15;
+A25: (f*the ResultSort of S2).c = f.s by FUNCT_2:15;
+    R.s in rng R by A5,FUNCT_1:def 3;
     then R.s c= em.(R.s) by A11;
     then
-A26: R.s c= f.s by A5,FUNCT_1:23;
+A26: R.s c= f.s by A5,FUNCT_1:13;
     consider p being FinSequence of P, o being OperSymbol of S2 such that
 A27: g.c = [Q-index_of c, p] and
 A28: c = o and
 A29: Args(o,G) c= product p by A22;
     reconsider p as Element of P* by FINSEQ_1:def 11;
     reconsider s2 = Q-index_of c as OperSymbol of A by A4,Def4;
-    set aa =the  Element of Args(o,G);
+    set aa = the Element of Args(o,G);
     (the Charact of G)|(Q.s2) is IndexedPartition of Den(s2, A) by A2,Def16;
     then
 A30: rng ((the Charact of G)|(Q.s2)) is a_partition of Den(s2, A) by Def3;
 A31: o in Q.s2 by A28,Def4;
-A32: dom the Charact of G = the carrier' of S2 by PARTFUN1:def 4;
-A33: (the Charact of G).:(Q.s2) is a_partition of Den(s2, A) by A30,RELAT_1:148
+A32: dom the Charact of G = the carrier' of S2 by PARTFUN1:def 2;
+A33: (the Charact of G).:(Q.s2) is a_partition of Den(s2, A) by A30,RELAT_1:115
 ;
 A34: (the Charact of G).o in (the Charact of G).:(Q.s2) by A31,A32,
-FUNCT_1:def 12;
+FUNCT_1:def 6;
 A35: dom Den(o,G) = Args(o,G) by FUNCT_2:def 1;
-A36: dom Den(o,G) c= dom Den(s2,A) by A33,A34,RELAT_1:25;
+A36: dom Den(o,G) c= dom Den(s2,A) by A33,A34,RELAT_1:11;
     aa in Args(o,G);
     then product p meets dom Den(s2,A) by A29,A35,A36,XBOOLE_0:3;
     then
 A37: Den(s2, A).:product p c= (the ResultSort of S1).(g.c) by A27,Def15;
-    rng Den(c,G) = Den(c,G).:Args(c,G) by A28,A35,RELAT_1:146;
+    rng Den(c,G) = Den(c,G).:Args(c,G) by A28,A35,RELAT_1:113;
     then
-A38: rng Den(c,G) c= Den(c,G).:product p by A28,A29,RELAT_1:156;
-    Den(c,G).:product p c= Den(s2,A).: product p by A28,A33,A34,RELAT_1:157;
+A38: rng Den(c,G) c= Den(c,G).:product p by A28,A29,RELAT_1:123;
+    Den(c,G).:product p c= Den(s2,A).: product p by A28,A33,A34,RELAT_1:124;
     then rng Den(c,G) c= Den(s2,A).:product p by A38,XBOOLE_1:1;
     then
 A39: rng Den(c,G) c= (the ResultSort of S1).(g.c) by A37,XBOOLE_1:1;
-A40: Den(c,G).aa in rng Den(c,G) by A28,A35,FUNCT_1:def 5;
+A40: Den(c,G).aa in rng Den(c,G) by A28,A35,FUNCT_1:def 3;
     then
 A41: Den(c,G).aa in ((the Sorts of G)*the ResultSort of S2).c;
     Den(c,G).aa in (the ResultSort of S1).(g.c) by A39,A40;
-    then Den(c,G).aa in ((the ResultSort of S1)*g).c by FUNCT_2:21;
+    then Den(c,G).aa in ((the ResultSort of S1)*g).c by FUNCT_2:15;
     hence (f*the ResultSort of S2).c = ((the ResultSort of S1)*g).c by A7,A24
 ,A25,A26,A41,Th3;
   end;
-  hence f*the ResultSort of S2 = (the ResultSort of S1)*g by FUNCT_2:113;
+  hence f*the ResultSort of S2 = (the ResultSort of S1)*g by FUNCT_2:63;
   hereby
     let o be set, p be Function;
     assume o in the carrier' of S2;
@@ -2745,13 +2744,13 @@ A45: Args(o9,G) c= product p9 by A22;
     then consider o1 being OperSymbol of A, p1 being Element of P* such that
 A46: g.s = [o1,p1] and
 A47: product p1 meets dom Den(o1,A) by A6;
-    p9 = p1 by A43,A46,ZFMISC_1:33;
+    p9 = p1 by A43,A46,ZFMISC_1:27;
     then
 A48: (the Arity of S1).(g.o) = p9 by A46,A47,Def15;
-    Args(o9,G) = (the Sorts of G)# .q by A44,FUNCT_2:21
-      .= product r by PBOOLE:def 19;
+    Args(o9,G) = (the Sorts of G)# .q by A44,FUNCT_2:15
+      .= product r by FINSEQ_2:def 5;
     then em*r = p9 by A11,A45,Th5;
-    hence f*p = (the Arity of S1).(g.o) by A42,A48,RELAT_1:55;
+    hence f*p = (the Arity of S1).(g.o) by A42,A48,RELAT_1:36;
   end;
   thus rng f c= the carrier of S1;
   thus the carrier of S1 c= rng f
@@ -2759,14 +2758,14 @@ A48: (the Arity of S1).(g.o) = p9 by A46,A47,Def15;
     let s be set;
     assume s in the carrier of S1;
     then reconsider s as Element of P by Def15;
-    set a =the  Element of s;
+    set a = the Element of s;
 A49: R-index_of a in dom R by Def4;
 A50: a in R.(R-index_of a) by Def4;
-A51: R.(R-index_of a) in rng R by A49,FUNCT_1:def 5;
-    em.(R.(R-index_of a)) = f.(R-index_of a) by A49,FUNCT_1:23;
+A51: R.(R-index_of a) in rng R by A49,FUNCT_1:def 3;
+    em.(R.(R-index_of a)) = f.(R-index_of a) by A49,FUNCT_1:13;
     then
 A52: R.(R-index_of a) c= f.(R-index_of a) by A11,A51;
-A53: f.(R-index_of a) in rng f by A5,A23,A49,FUNCT_1:def 5;
+A53: f.(R-index_of a) in rng f by A5,A23,A49,FUNCT_1:def 3;
     rng f c= P by A23,Def15;
     hence thesis by A50,A52,A53,Th3;
   end;
@@ -2785,18 +2784,18 @@ A57: a = h and
 A58: dom h = dom p and
 A59: for x being set st x in dom p holds h.x in p.x by A56,CARD_3:def 5;
     reconsider h as FinSequence by A58,Lm1;
-    product p c= Funcs(dom p, Union p) by FUNCT_6:10;
+    product p c= Funcs(dom p, Union p) by FUNCT_6:1;
     then
 A60: ex f being Function st h = f & dom f = dom p & rng f c= Union p by A56,A57
 ,FUNCT_2:def 2;
 A61: Union p = union rng p by CARD_3:def 4;
-A62: union rng p c= union P by ZFMISC_1:95;
-    union P = the carrier of A by EQREL_1:def 6;
+A62: union rng p c= union P by ZFMISC_1:77;
+    union P = the carrier of A by EQREL_1:def 4;
     then rng h c= the carrier of A by A60,A61,A62,XBOOLE_1:1;
     then h is FinSequence of the carrier of A by FINSEQ_1:def 4;
     then consider r being FinSequence of rng R such that
 A63: h in product r by Th7;
-A64: dom h = dom r by A63,CARD_3:18;
+A64: dom h = dom r by A63,CARD_3:9;
 A65: Den(o,A) is_exactly_partitable_wrt P by Def11;
     now
       let x be set;
@@ -2804,14 +2803,14 @@ A65: Den(o,A) is_exactly_partitable_wrt P by Def11;
 A66:  x in dom r;
       then
 A67:  h.x in p.x by A58,A59,A64;
-A68:  h.x in r.x by A63,A66,CARD_3:18;
-A69:  r.x in rng r by A66,FUNCT_1:def 5;
-A70:  p.x in rng p by A58,A64,A66,FUNCT_1:def 5;
+A68:  h.x in r.x by A63,A66,CARD_3:9;
+A69:  r.x in rng r by A66,FUNCT_1:def 3;
+A70:  p.x in rng p by A58,A64,A66,FUNCT_1:def 3;
       ex c being set st ( c in P)&( r.x c= c) by A8,A69,SETFAM_1:def 2;
       hence r.x c= p.x by A67,A68,A70,Th3;
     end;
     then
-A71: product r c= product p by A58,A64,CARD_3:38;
+A71: product r c= product p by A58,A64,CARD_3:27;
     product p c= dom Den(o,A) by A55,A65,Def10;
     then consider s2 being OperSymbol of S2 such that
 A72: (the Sorts of G)*the_arity_of s2 = r and
@@ -2821,12 +2820,12 @@ A74: g.s2 = [Q-index_of s2, p9] and
 A75: s2 = o9 and
 A76: Args(o9,G) c= product p9 by A22;
     dom the Arity of S2 = the carrier' of S2 by FUNCT_2:def 1;
-    then Args(s2,G) = (the Sorts of G)# .((the Arity of S2).s2) by FUNCT_1:23
-      .= product r by A72,PBOOLE:def 19;
+    then Args(s2,G) = (the Sorts of G)# .((the Arity of S2).s2) by FUNCT_1:13
+      .= product r by A72,FINSEQ_2:def 5;
     then
 A77: p9 = em*r by A11,A75,A76,Th5;
 A78: p = em*r by A11,A71,Th5;
     Q-index_of s2 = o by A4,A73,Def4;
-    hence thesis by A22,A54,A74,A77,A78,FUNCT_1:def 5;
+    hence thesis by A22,A54,A74,A77,A78,FUNCT_1:def 3;
   end;
 end;

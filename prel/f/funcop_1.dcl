@@ -622,4 +622,36 @@
 <Adjective nr="18"/>
 </Cluster>
 </CCluster>
+<CCluster aid="FUNCOP_1" nr="2">
+<ArgTypes/>
+<Cluster>
+<Adjective nr="1"/>
+<Adjective nr="6"/>
+<Adjective nr="18"/>
+</Cluster>
+<Typ kind="M" nr="1">
+<Cluster/>
+</Typ>
+<Cluster>
+<Adjective nr="1"/>
+<Adjective nr="6"/>
+<Adjective nr="19"/>
+</Cluster>
+</CCluster>
+<CCluster aid="FUNCOP_1" nr="3">
+<ArgTypes/>
+<Cluster>
+<Adjective nr="1"/>
+<Adjective nr="6"/>
+<Adjective nr="11"/>
+</Cluster>
+<Typ kind="M" nr="1">
+<Cluster/>
+</Typ>
+<Cluster>
+<Adjective nr="1"/>
+<Adjective nr="6"/>
+<Adjective nr="18"/>
+</Cluster>
+</CCluster>
 </Registrations>

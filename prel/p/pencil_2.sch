@@ -64,13 +64,11 @@
 </Func>
 </Pred>
 <Pred kind="R" nr="14">
-<Func kind="K" nr="132">
-<Func kind="K" nr="52"/>
+<Func kind="K" nr="133">
 <Func kind="F" nr="3"/>
 <Var nr="1"/>
 </Func>
-<Func kind="K" nr="132">
-<Func kind="K" nr="52"/>
+<Func kind="K" nr="133">
 <Func kind="F" nr="3"/>
 <Func kind="F" nr="4"/>
 </Func>

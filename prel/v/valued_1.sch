@@ -43,7 +43,7 @@
 </ArgTypes>
 <Not>
 <For>
-<Typ kind="M" nr="6">
+<Typ kind="M" nr="7">
 <Cluster/>
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>

@@ -20,14 +20,15 @@ environ
       TARSKI, XCMPLX_0, RLSUB_1, REALSET1, NORMSP_1, PRE_TOPC, REAL_1,
       FUNCOP_1, NAT_1, SEQ_2, XREAL_0, ORDINAL1, ORDINAL2, CLVECT_1, NORMSP_0,
       METRIC_1, RELAT_2;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0,
-      XXREAL_0, XREAL_0, DOMAIN_1, COMPLEX1, REAL_1, RELAT_1, FUNCT_1, FUNCT_2,
-      FUNCOP_1, BINOP_1, REALSET1, FINSEQ_1, NAT_1, FUNCT_3, FUNCT_5, STRUCT_0,
-      ALGSTR_0, PRE_TOPC, RLVECT_1, PARTFUN1, SEQ_1, SEQ_2, NORMSP_0, NORMSP_1,
-      CFUNCT_1;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, CARD_1, NUMBERS,
+      XCMPLX_0, XXREAL_0, XREAL_0, DOMAIN_1, COMPLEX1, REAL_1, RELAT_1,
+      FUNCT_1, FUNCT_2, FUNCOP_1, BINOP_1, REALSET1, FINSEQ_1, NAT_1, FUNCT_3,
+      FUNCT_5, FINSEQ_4,
+      STRUCT_0, ALGSTR_0, PRE_TOPC, RLVECT_1, PARTFUN1, SEQ_1, SEQ_2,
+      NORMSP_0, NORMSP_1, CFUNCT_1;
  constructors PARTFUN1, BINOP_1, FUNCOP_1, ARYTM_0, REAL_1, SQUARE_1, NAT_1,
       COMPLEX1, SEQ_2, REALSET1, NORMSP_1, SEQ_1, FUNCT_3, FUNCT_5, VALUED_1,
-      RELSET_1;
+      RELSET_1, FINSEQ_4;
  registrations XBOOLE_0, SUBSET_1, ORDINAL1, RELSET_1, NUMBERS, XCMPLX_0,
       XXREAL_0, XREAL_0, MEMBERED, REALSET1, STRUCT_0, ALGSTR_0, FINSEQ_1,
       ZFMISC_1, CARD_1, NORMSP_0;
@@ -49,11 +50,11 @@ definition
 end;
 
 registration
-  cluster non empty CLSStruct;
+  cluster non empty for CLSStruct;
   existence
   proof
 
-set ZS =the  non empty set,O =the  Element of ZS,F =the  BinOp of ZS,G =the
+set ZS = the non empty set,O = the Element of ZS,F = the BinOp of ZS,G =the
 Function of [:COMPLEX,ZS:],ZS;
     take CLSStruct(#ZS,O,F,G#);
     thus the carrier of CLSStruct(#ZS,O,F,G#) is non empty;
@@ -100,14 +101,18 @@ definition
 end;
 
 registration
-  cluster Trivial-CLSStruct -> trivial non empty;
-  coherence by CARD_1:87;
+  cluster Trivial-CLSStruct -> 1-element;
+  coherence
+   proof
+     the carrier of Trivial-CLSStruct = {0} by CARD_1:49;
+    hence the carrier of Trivial-CLSStruct is 1-element;
+   end;
 end;
 
 registration
   cluster strict Abelian add-associative right_zeroed right_complementable
     vector-distributive scalar-distributive scalar-associative scalar-unital
-     (non empty CLSStruct);
+     for non empty CLSStruct;
   existence
   proof
     take S = Trivial-CLSStruct;
@@ -146,10 +151,8 @@ end;
 definition
   mode ComplexLinearSpace is Abelian add-associative right_zeroed
     right_complementable vector-distributive scalar-distributive
-    scalar-associative scalar-unital (non empty CLSStruct);
+    scalar-associative scalar-unital non empty CLSStruct;
 end;
-
-canceled;
 
 ::
 ::  Axioms of complex linear space.
@@ -171,15 +174,15 @@ A2:   z = 0c;
       v + 0c * v = 1r * v + 0c * v by Def5
         .= (1r + 0c) * v by Def3
         .= v by Def5
-        .= v + 0.V by RLVECT_1:10;
-      hence thesis by A2,RLVECT_1:21;
+        .= v + 0.V by RLVECT_1:4;
+      hence thesis by A2,RLVECT_1:8;
     end;
     suppose
 A3:   v = 0.V;
       z * 0.V + z * 0.V = z * (0.V + 0.V) by Def2
-        .= z * 0.V by RLVECT_1:10
-        .= z * 0.V + 0.V by RLVECT_1:10;
-      hence thesis by A3,RLVECT_1:21;
+        .= z * 0.V by RLVECT_1:4
+        .= z * 0.V + 0.V by RLVECT_1:4;
+      hence thesis by A3,RLVECT_1:8;
     end;
   end;
   hence thesis;
@@ -203,18 +206,18 @@ proof
   v + (- 1r) * v = 1r * v + (- 1r) * v by Def5
     .= (1r + (- 1r)) * v by Def3
     .= 0.V by Th2;
-  hence (- v) = (- v) + (v + (- 1r) * v) by RLVECT_1:10
-    .= ((- v) + v) + (- 1r) * v by RLVECT_1:def 6
-    .= 0.V + (- 1r) * v by RLVECT_1:16
-    .= (- 1r) * v by RLVECT_1:10;
+  hence (- v) = (- v) + (v + (- 1r) * v) by RLVECT_1:4
+    .= ((- v) + v) + (- 1r) * v by RLVECT_1:def 3
+    .= 0.V + (- 1r) * v by RLVECT_1:5
+    .= (- 1r) * v by RLVECT_1:4;
 end;
 
 theorem Th5:
   v = - v implies v = 0.V
 proof
   assume v = - v;
-  then 0.V = v - (- v) by RLVECT_1:28
-    .= v + v by RLVECT_1:30
+  then 0.V = v - (- v) by RLVECT_1:15
+    .= v + v by RLVECT_1:17
     .= 1r * v + v by Def5
     .= 1r * v + 1r * v by Def5
     .= (1r + 1r) * v by Def3;
@@ -225,7 +228,7 @@ theorem
   v + v = 0.V implies v = 0.V
 proof
   assume v + v = 0.V;
-  then v = - v by RLVECT_1:def 13;
+  then v = - v by RLVECT_1:def 10;
   hence thesis by Th5;
 end;
 
@@ -274,10 +277,10 @@ proof
   assume that
 A1: z <> 0 and
 A2: z * v = z * u;
-  0.V = z * v - z * u by A2,RLVECT_1:28
+  0.V = z * v - z * u by A2,RLVECT_1:15
     .= z * (v - u) by Th10;
   then v - u = 0.V by A1,Th3;
-  hence thesis by RLVECT_1:35;
+  hence thesis by RLVECT_1:21;
 end;
 
 theorem
@@ -286,7 +289,7 @@ proof
   assume that
 A1: v <> 0.V and
 A2: z1 * v = z2 * v;
-  0.V = z1 * v - z2 * v by A2,RLVECT_1:28
+  0.V = z1 * v - z2 * v by A2,RLVECT_1:15
     .= (z1 - z2) * v by Th11;
   then (- z2) + z1 = 0 by A1,Th3;
   hence thesis;
@@ -298,7 +301,7 @@ proof
   set S = <*>(the carrier of V);
   ex f being Function of NAT, the carrier of V st Sum(S) = f.(len S) & f.0
 = 0.V & for j being Element of NAT, v being Element of V st j < len S & v = S.(
-  j + 1) holds f.(j + 1) = f.j + v by RLVECT_1:def 15;
+  j + 1) holds f.(j + 1) = f.j + v by RLVECT_1:def 12;
   hence thesis;
 end;
 
@@ -335,37 +338,37 @@ A4: len H = n + 1 and
 A5: for k being Element of NAT, v being VECTOR of V st k in Seg len H
     & v = I.k holds H.k = z * v;
     reconsider p = H | (Seg n),q = I | (Seg n) as FinSequence of the carrier
-    of V by FINSEQ_1:23;
+    of V by FINSEQ_1:18;
 A6: n <= n + 1 by NAT_1:12;
     then
-A7: len q = n by A3,A4,FINSEQ_1:21;
-A8: len p = n by A4,A6,FINSEQ_1:21;
+A7: len q = n by A3,A4,FINSEQ_1:17;
+A8: len p = n by A4,A6,FINSEQ_1:17;
 A9: now
-      len p <= len H by A4,A6,FINSEQ_1:21;
+      len p <= len H by A4,A6,FINSEQ_1:17;
       then
-A10:  Seg len p c= Seg len H by FINSEQ_1:7;
-A11:  dom p = Seg n by A4,A6,FINSEQ_1:21;
+A10:  Seg len p c= Seg len H by FINSEQ_1:5;
+A11:  dom p = Seg n by A4,A6,FINSEQ_1:17;
       let k be Element of NAT;
       let v be VECTOR of V;
       assume that
 A12:  k in Seg len p and
 A13:  v = q.k;
-      dom q = Seg n by A3,A4,A6,FINSEQ_1:21;
-      then I.k = q.k by A8,A12,FUNCT_1:70;
+      dom q = Seg n by A3,A4,A6,FINSEQ_1:17;
+      then I.k = q.k by A8,A12,FUNCT_1:47;
       then H.k = z * v by A5,A12,A13,A10;
-      hence p.k = z * v by A8,A12,A11,FUNCT_1:70;
+      hence p.k = z * v by A8,A12,A11,FUNCT_1:47;
     end;
-    n + 1 in Seg(n + 1) by FINSEQ_1:6;
+    n + 1 in Seg(n + 1) by FINSEQ_1:4;
     then n +1 in dom H & n +1 in dom I by A3,A4,FINSEQ_1:def 3;
-    then reconsider v1 = H.(n + 1),v2 = I.(n + 1) as VECTOR of V by FUNCT_1:172
+    then reconsider v1 = H.(n + 1),v2 = I.(n + 1) as VECTOR of V by FUNCT_1:102
 ;
-A14: v1 = z * v2 by A4,A5,FINSEQ_1:6;
+A14: v1 = z * v2 by A4,A5,FINSEQ_1:4;
 A15: dom q = Seg len q by FINSEQ_1:def 3;
     dom p = Seg len p by FINSEQ_1:def 3;
-    hence Sum(H) = Sum(p) + v1 by A4,A8,RLVECT_1:55
+    hence Sum(H) = Sum(p) + v1 by A4,A8,RLVECT_1:38
       .= z * Sum(q) + z * v2 by A2,A8,A7,A9,A14
       .= z * (Sum(q) + v2) by Def2
-      .= z * Sum(I) by A3,A4,A7,A15,RLVECT_1:55;
+      .= z * Sum(I) by A3,A4,A7,A15,RLVECT_1:38;
   end;
   then
 A16: for n being Element of NAT st P[n] holds P[n+1];
@@ -391,14 +394,14 @@ theorem
 theorem
   z * Sum<* v,u *> = z * v + z * u
 proof
-  thus z * Sum<* v,u *> = z * (v + u) by RLVECT_1:62
+  thus z * Sum<* v,u *> = z * (v + u) by RLVECT_1:45
     .= z * v + z * u by Def2;
 end;
 
 theorem
   z * Sum<* u,v1,v2 *> = z * u + z * v1 + z * v2
 proof
-  thus z * Sum<* u,v1,v2 *> = z * (u + v1 + v2) by RLVECT_1:63
+  thus z * Sum<* u,v1,v2 *> = z * (u + v1 + v2) by RLVECT_1:46
     .= z * (u + v1) + z * v2 by Def2
     .= z * u + z * v1 + z * v2 by Def2;
 end;
@@ -406,7 +409,7 @@ end;
 theorem Th18:
   Sum<* v,v *> = (1r+1r) * v
 proof
-  thus Sum<* v,v *> = v + v by RLVECT_1:62
+  thus Sum<* v,v *> = v + v by RLVECT_1:45
     .= 1r * v + v by Def5
     .= 1r * v + 1r * v by Def5
     .= (1r+1r) * v by Def3;
@@ -416,8 +419,8 @@ theorem
   Sum<* - v,- v *> = (-(1r+1r)) * v
 proof
   reconsider 2r = 2+0*<i> as Element of COMPLEX by XCMPLX_0:def 2;
-  thus Sum<* - v,- v *> = - (v + v) by RLVECT_1:78
-    .= - Sum<* v,v *> by RLVECT_1:62
+  thus Sum<* - v,- v *> = - (v + v) by RLVECT_1:60
+    .= - Sum<* v,v *> by RLVECT_1:45
     .= - ((1r+1r) * v) by Th18
     .= - 2r * v
     .= (- 1r) * (2r * v) by Th4
@@ -429,7 +432,7 @@ theorem
   Sum<* v,v,v *> = (1r+1r+1r) * v
 proof
   reconsider 2r = 2+0*<i> as Element of COMPLEX by XCMPLX_0:def 2;
-  thus Sum<* v,v,v *> = Sum<* v,v *> + v by RLVECT_1:84
+  thus Sum<* v,v,v *> = Sum<* v,v *> + v by RLVECT_1:66
     .= (1r+1r) * v + v by Th18
     .= (1r+1r) * v + 1r * v by Def5
     .= ((1r+1r) + 1r) * v by Def3
@@ -456,7 +459,7 @@ proof
   assume that
 A1: V1 <> {} and
 A2: V1 is linearly-closed;
-  set x =the  Element of V1;
+  set x = the Element of V1;
   reconsider x as Element of V by A1,TARSKI:def 3;
   0c * x in V1 by A1,A2,Def7;
   hence thesis by Th2;
@@ -497,7 +500,7 @@ proof
     let v,u be VECTOR of V;
     assume v in {0.V} & u in {0.V};
     then v = 0.V & u = 0.V by TARSKI:def 1;
-    then v + u = 0.V by RLVECT_1:10;
+    then v + u = 0.V by RLVECT_1:4;
     hence thesis by TARSKI:def 1;
   end;
   let z be Complex;
@@ -538,9 +541,9 @@ A6: v1 in V1 & v2 in V2 by A2,A3;
     consider u1,u2 be VECTOR of V such that
 A7: u = u1 + u2 and
 A8: u1 in V1 & u2 in V2 by A2,A4;
-A9: v + u = ((v1 + v2) + u1) + u2 by A5,A7,RLVECT_1:def 6
-      .= ((v1 + u1) + v2) + u2 by RLVECT_1:def 6
-      .= (v1 + u1) + (v2 + u2) by RLVECT_1:def 6;
+A9: v + u = ((v1 + v2) + u1) + u2 by A5,A7,RLVECT_1:def 3
+      .= ((v1 + u1) + v2) + u2 by RLVECT_1:def 3
+      .= (v1 + u1) + (v2 + u2) by RLVECT_1:def 3;
     v1 + u1 in V1 & v2 + u2 in V2 by A1,A6,A8,Def7;
     hence thesis by A2,A9;
   end;
@@ -595,7 +598,7 @@ the carrier of V & 0.it = 0.V & the addF of it = (the addF of V)||the carrier
   existence
   proof
     the addF of V = (the addF of V)||the carrier of V & the Mult of V = (
-    the Mult of V) | [:COMPLEX, the carrier of V:] by RELSET_1:34;
+    the Mult of V) | [:COMPLEX, the carrier of V:] by RELSET_1:19;
     hence thesis;
   end;
 end;
@@ -628,7 +631,7 @@ end;
 theorem Th30:
   w is VECTOR of V
 proof
-  w in V by Th29,RLVECT_1:3;
+  w in V by Th29,RLVECT_1:1;
   hence thesis by STRUCT_0:def 5;
 end;
 
@@ -648,7 +651,7 @@ proof
   assume
 A1: v = w1 & u = w2;
   w1 + w2 = ((the addF of V)||the carrier of W).[w1,w2] by Def8;
-  hence thesis by A1,FUNCT_1:72;
+  hence thesis by A1,FUNCT_1:49;
 end;
 
 theorem Th34:
@@ -657,7 +660,7 @@ proof
   assume
 A1: w = v;
   z * w = ((the Mult of V) | [:COMPLEX, the carrier of W:]).[z,w] by Def8;
-  hence thesis by A1,FUNCT_1:72;
+  hence thesis by A1,FUNCT_1:49;
 end;
 
 theorem Th35:
@@ -705,7 +708,7 @@ end;
 theorem Th37:
   0.V in W
 proof
-  0.W in W by RLVECT_1:3;
+  0.W in W by RLVECT_1:1;
   hence thesis by Def8;
 end;
 
@@ -717,7 +720,7 @@ proof
 end;
 
 theorem
-  0.W in V by Th29,RLVECT_1:3;
+  0.W in V by Th29,RLVECT_1:1;
 
 theorem Th40:
   u in W & v in W implies u + v in W
@@ -777,7 +780,7 @@ A3: A = (the addF of V)||V1 and
 A4: M = (the Mult of V) | [:COMPLEX,V1:];
   set W = CLSStruct (# D,d1,A,M #);
 A5: for x,y being VECTOR of W holds x + y = (the addF of V).[x,y] by A1,A3,
-FUNCT_1:72;
+FUNCT_1:49;
 A6: W is Abelian add-associative right_zeroed right_complementable
   vector-distributive scalar-distributive scalar-associative scalar-unital
   proof
@@ -797,7 +800,7 @@ A6: W is Abelian add-associative right_zeroed right_complementable
       reconsider x1 = x, y1 = y, z1 = z as VECTOR of V by A1,TARSKI:def 3;
       thus (x + y) + z = AV.[x + y,z1] by A5
         .= (x1 + y1) + z1 by A5
-        .= x1 + (y1 + z1) by RLVECT_1:def 6
+        .= x1 + (y1 + z1) by RLVECT_1:def 3
         .= AV.[x1,y + z] by A5
         .= x + (y + z) by A5;
     end;
@@ -806,7 +809,7 @@ A6: W is Abelian add-associative right_zeroed right_complementable
       let x be VECTOR of W;
       reconsider y = x as VECTOR of V by A1,TARSKI:def 3;
       thus x + 0.W = y + 0.V by A2,A5
-        .= x by RLVECT_1:10;
+        .= x by RLVECT_1:4;
     end;
     thus W is right_complementable
     proof
@@ -814,9 +817,9 @@ A6: W is Abelian add-associative right_zeroed right_complementable
       reconsider x1 = x as VECTOR of V by A1,TARSKI:def 3;
       consider v such that
 A7:   x1 + v = 0.V by ALGSTR_0:def 11;
-      v = - x1 by A7,RLVECT_1:def 13
+      v = - x1 by A7,RLVECT_1:def 10
         .= (- 1r) * x1 by Th4
-        .= (- 1r) * x by A1,A4,FUNCT_1:72;
+        .= (- 1r) * x by A1,A4,FUNCT_1:49;
       then reconsider y = v as VECTOR of W;
       take y;
       thus thesis by A2,A5,A7;
@@ -826,12 +829,12 @@ A7:   x1 + v = 0.V by ALGSTR_0:def 11;
       let z;
       let x,y be VECTOR of W;
       reconsider x1 = x, y1 = y as VECTOR of V by A1,TARSKI:def 3;
-      thus z * (x + y) = MV.[z,x + y] by A1,A4,FUNCT_1:72
+      thus z * (x + y) = MV.[z,x + y] by A1,A4,FUNCT_1:49
         .= z * (x1 + y1) by A5
         .= z * x1 + z * y1 by Def2
-        .= AV.[MV.[z,x1],z * y] by A1,A4,FUNCT_1:72
-        .= AV.[z * x, z * y] by A1,A4,FUNCT_1:72
-        .= z * x + z * y by A1,A3,FUNCT_1:72;
+        .= AV.[MV.[z,x1],z * y] by A1,A4,FUNCT_1:49
+        .= AV.[z * x, z * y] by A1,A4,FUNCT_1:49
+        .= z * x + z * y by A1,A3,FUNCT_1:49;
     end;
     thus for z1,z2 for x being VECTOR of W holds (z1 + z2) * x = z1 * x + z2 *
     x
@@ -839,25 +842,25 @@ A7:   x1 + v = 0.V by ALGSTR_0:def 11;
       let z1,z2;
       let x be VECTOR of W;
       reconsider y = x as VECTOR of V by A1,TARSKI:def 3;
-      thus (z1 + z2) * x = (z1 + z2) * y by A1,A4,FUNCT_1:72
+      thus (z1 + z2) * x = (z1 + z2) * y by A1,A4,FUNCT_1:49
         .= z1 * y + z2 * y by Def3
-        .= AV.[MV.[z1,y],z2 * x] by A1,A4,FUNCT_1:72
-        .= AV.[z1 * x,z2 * x] by A1,A4,FUNCT_1:72
-        .= z1 * x + z2 * x by A1,A3,FUNCT_1:72;
+        .= AV.[MV.[z1,y],z2 * x] by A1,A4,FUNCT_1:49
+        .= AV.[z1 * x,z2 * x] by A1,A4,FUNCT_1:49
+        .= z1 * x + z2 * x by A1,A3,FUNCT_1:49;
     end;
     thus for z1,z2 for x being VECTOR of W holds (z1 * z2) * x = z1 * (z2 * x)
     proof
       let z1,z2;
       let x be VECTOR of W;
       reconsider y = x as VECTOR of V by A1,TARSKI:def 3;
-      thus (z1 * z2) * x = (z1 * z2) * y by A1,A4,FUNCT_1:72
+      thus (z1 * z2) * x = (z1 * z2) * y by A1,A4,FUNCT_1:49
         .= z1 * (z2 * y) by Def4
-        .= MV.[z1,z2 * x] by A1,A4,FUNCT_1:72
-        .= z1 * (z2 * x) by A1,A4,FUNCT_1:72;
+        .= MV.[z1,z2 * x] by A1,A4,FUNCT_1:49
+        .= z1 * (z2 * x) by A1,A4,FUNCT_1:49;
     end;
     let x be VECTOR of W;
     reconsider y = x as VECTOR of V by A1,TARSKI:def 3;
-    thus 1r * x = 1r * y by A1,A4,FUNCT_1:72
+    thus 1r * x = 1r * y by A1,A4,FUNCT_1:49
       .= x by Def5;
   end;
   0.W = 0.V by A2;
@@ -868,7 +871,7 @@ theorem Th45:
   V is Subspace of V
 proof
   thus the carrier of V c= the carrier of V & 0.V = 0.V;
-  thus thesis by RELSET_1:34;
+  thus thesis by RELSET_1:19;
 end;
 
 theorem Th46:
@@ -888,12 +891,12 @@ A3: VV = VX by XBOOLE_0:def 10;
   set AV = the addF of V;
   AV = AX||VV & AX = AV||VX by A1,A2,Def8;
   then
-A4: AV = AX by A3,RELAT_1:101;
+A4: AV = AX by A3,RELAT_1:72;
   set MX = the Mult of X;
   set MV = the Mult of V;
 A5: MX = MV | [:COMPLEX,VX:] by A2,Def8;
   0.V = 0.X & MV = MX | [:COMPLEX,VV:] by A1,Def8;
-  hence thesis by A3,A4,A5,RELAT_1:101;
+  hence thesis by A3,A4,A5,RELAT_1:72;
 end;
 
 theorem Th47:
@@ -916,10 +919,10 @@ A2: X is Subspace of Y;
     set AV = the addF of V;
     VV c= VX by A1,Def8;
     then
-A3: [:VV,VV:] c= [:VX,VX:] by ZFMISC_1:119;
+A3: [:VV,VV:] c= [:VX,VX:] by ZFMISC_1:96;
     AV = AX||VV by A1,Def8;
     then AV = AY||VX||VV by A2,Def8;
-    hence thesis by A3,FUNCT_1:82;
+    hence thesis by A3,FUNCT_1:51;
   end;
   set MY = the Mult of Y;
   set MX = the Mult of X;
@@ -928,10 +931,10 @@ A3: [:VV,VV:] c= [:VX,VX:] by ZFMISC_1:119;
   set VV = the carrier of V;
   VV c= VX by A1,Def8;
   then
-A4: [:COMPLEX,VV:] c= [:COMPLEX,VX:] by ZFMISC_1:118;
+A4: [:COMPLEX,VV:] c= [:COMPLEX,VX:] by ZFMISC_1:95;
   MV = MX | [:COMPLEX,VV:] by A1,Def8;
   then MV = (MY | [:COMPLEX,VX:]) | [:COMPLEX,VV:] by A2,Def8;
-  hence thesis by A4,FUNCT_1:82;
+  hence thesis by A4,FUNCT_1:51;
 end;
 
 theorem Th48:
@@ -944,15 +947,15 @@ proof
   assume
 A1: the carrier of W1 c= the carrier of W2;
   then
-A2: [:VW1,VW1:] c= [:VW2,VW2:] by ZFMISC_1:119;
+A2: [:VW1,VW1:] c= [:VW2,VW2:] by ZFMISC_1:96;
   0.W1 = 0.V by Def8;
   hence the carrier of W1 c= the carrier of W2 & 0.W1 = 0.W2 by A1,Def8;
   the addF of W1 = AV||VW1 & the addF of W2 = AV||VW2 by Def8;
-  hence the addF of W1 = (the addF of W2)||the carrier of W1 by A2,FUNCT_1:82;
-A3: [:COMPLEX,VW1:] c= [:COMPLEX,VW2:] by A1,ZFMISC_1:118;
+  hence the addF of W1 = (the addF of W2)||the carrier of W1 by A2,FUNCT_1:51;
+A3: [:COMPLEX,VW1:] c= [:COMPLEX,VW2:] by A1,ZFMISC_1:95;
   the Mult of W1 = MV | [:COMPLEX,VW1:] & the Mult of W2 = MV | [:COMPLEX,
   VW2 :] by Def8;
-  hence thesis by A3,FUNCT_1:82;
+  hence thesis by A3,FUNCT_1:51;
 end;
 
 theorem
@@ -976,13 +979,13 @@ end;
 
 registration
   let V;
-  cluster strict Subspace of V;
+  cluster strict for Subspace of V;
   existence
   proof
     the carrier of V is Subset of V iff the carrier of V c= the carrier of V;
     then reconsider V1 = the carrier of V as Subset of V;
     the addF of V = (the addF of V)||V1 & the Mult of V = (the Mult of V)
-    | [: COMPLEX,V1:] by RELSET_1:34;
+    | [: COMPLEX,V1:] by RELSET_1:19;
     then CLSStruct(#the carrier of V,0.V,the addF of V,the Mult of V #) is
     Subspace of V by Th44;
     hence thesis;
@@ -1026,7 +1029,7 @@ A3: x in the carrier of W2;
     then v in W1 by A1;
     hence thesis by STRUCT_0:def 5;
   end;
-  then the carrier of W1 = the carrier of W2 by TARSKI:2;
+  then the carrier of W1 = the carrier of W2 by TARSKI:1;
   hence thesis by Th50;
 end;
 
@@ -1067,8 +1070,8 @@ A2: V1 is linearly-closed;
   set VV = the carrier of V;
   dom(the Mult of V) = [:COMPLEX,VV:] by FUNCT_2:def 1;
   then
-A3: dom M = [:COMPLEX,VV:] /\ [:COMPLEX,V1:] by RELAT_1:90;
-  [:COMPLEX,V1:] c= [:COMPLEX ,VV:] by ZFMISC_1:118;
+A3: dom M = [:COMPLEX,VV:] /\ [:COMPLEX,V1:] by RELAT_1:61;
+  [:COMPLEX,V1:] c= [:COMPLEX ,VV:] by ZFMISC_1:95;
   then
 A4: dom M = [:COMPLEX,D:] by A3,XBOOLE_1:28;
   now
@@ -1078,8 +1081,8 @@ A4: dom M = [:COMPLEX,D:] by A3,XBOOLE_1:28;
       assume
 A5:   y in D;
       then reconsider v1 = y as Element of VV;
-A6:   [1r,y] in [:COMPLEX,D:] by A5,ZFMISC_1:106;
-      then M.[1r,y] = 1r * v1 by FUNCT_1:72
+A6:   [1r,y] in [:COMPLEX,D:] by A5,ZFMISC_1:87;
+      then M.[1r,y] = 1r * v1 by FUNCT_1:49
         .= y by Def5;
       hence thesis by A4,A6;
     end;
@@ -1092,19 +1095,19 @@ A10: x2 in D and
 A11: x = [x1,x2] by A4,A7,ZFMISC_1:def 2;
     reconsider xx1 = x1 as Complex by A9;
     reconsider v2 = x2 as Element of VV by A10;
-    [x1,x2] in [:COMPLEX,V1:] by A9,A10,ZFMISC_1:106;
-    then y = xx1 * v2 by A8,A11,FUNCT_1:72;
+    [x1,x2] in [:COMPLEX,V1:] by A9,A10,ZFMISC_1:87;
+    then y = xx1 * v2 by A8,A11,FUNCT_1:49;
     hence y in D by A2,A10,Def7;
   end;
-  then D = rng M by FUNCT_1:def 5;
+  then D = rng M by FUNCT_1:def 3;
   then reconsider M as Function of [:COMPLEX,D:],D by A4,FUNCT_2:def 1
-,RELSET_1:11;
+,RELSET_1:4;
   set A = (the addF of V)||V1;
   reconsider d1 = 0.V as Element of D by A2,Th21;
   dom(the addF of V) = [:VV,VV:] by FUNCT_2:def 1;
-  then dom A = [:VV,VV:] /\ [:V1,V1:] by RELAT_1:90;
+  then dom A = [:VV,VV:] /\ [:V1,V1:] by RELAT_1:61;
   then
-A12: dom A = [:D,D:] by XBOOLE_1:28,ZFMISC_1:119;
+A12: dom A = [:D,D:] by XBOOLE_1:28,ZFMISC_1:96;
   now
     let y be set;
     thus y in D implies ex x being set st x in dom A & y = A.x
@@ -1112,9 +1115,9 @@ A12: dom A = [:D,D:] by XBOOLE_1:28,ZFMISC_1:119;
       assume
 A13:  y in D;
       then reconsider v1 = y, v0 = d1 as Element of VV;
-A14:  [d1,y] in [:D,D:] by A13,ZFMISC_1:106;
-      then A.[d1,y] = v0 + v1 by FUNCT_1:72
-        .= y by RLVECT_1:10;
+A14:  [d1,y] in [:D,D:] by A13,ZFMISC_1:87;
+      then A.[d1,y] = v0 + v1 by FUNCT_1:49
+        .= y by RLVECT_1:4;
       hence thesis by A12,A14;
     end;
     given x being set such that
@@ -1124,12 +1127,12 @@ A16: y = A.x;
 A17: x1 in D & x2 in D and
 A18: x = [x1,x2] by A12,A15,ZFMISC_1:def 2;
     reconsider v1 = x1, v2 = x2 as Element of VV by A17;
-    [x1,x2] in [:V1,V1:] by A17,ZFMISC_1:106;
-    then y = v1 + v2 by A16,A18,FUNCT_1:72;
+    [x1,x2] in [:V1,V1:] by A17,ZFMISC_1:87;
+    then y = v1 + v2 by A16,A18,FUNCT_1:49;
     hence y in D by A2,A17,Def7;
   end;
-  then D = rng A by FUNCT_1:def 5;
-  then reconsider A as Function of [:D,D:],D by A12,FUNCT_2:def 1,RELSET_1:11;
+  then D = rng A by FUNCT_1:def 3;
+  then reconsider A as Function of [:D,D:],D by A12,FUNCT_2:def 1,RELSET_1:4;
   set W = CLSStruct (# D,d1,A,M #);
   W is Subspace of V by Th44;
   hence thesis;
@@ -1156,14 +1159,14 @@ A1: for u,v,w being VECTOR of W holds (u + v) + w = u + (v + w)
     proof
       let u,v,w be VECTOR of W;
       reconsider u9=u,v9=v,w9=w as VECTOR of V;
-      thus (u + v) + w = (u9 + v9) + w9 .= u9 + (v9 + w9) by RLVECT_1:def 6
+      thus (u + v) + w = (u9 + v9) + w9 .= u9 + (v9 + w9) by RLVECT_1:def 3
         .= u + (v + w);
     end;
 A2: for v being VECTOR of W holds v + 0.W = v
     proof
       let v be VECTOR of W;
       reconsider v9=v as VECTOR of V;
-      thus v + 0.W = v9 + 0.V .= v by RLVECT_1:10;
+      thus v + 0.W = v9 + 0.V .= v by RLVECT_1:4;
     end;
 A3: W is right_complementable
     proof
@@ -1215,11 +1218,11 @@ A9: for v,w being VECTOR of W holds v + w = w + v
       thus 1r * v = 1r * v9 .= v by Def5;
     end;
     then reconsider W as ComplexLinearSpace
-     by A9,A1,A2,A3,A7,A6,A5,Def2,Def3,Def4,Def5,RLVECT_1:def 5,def 6,def 7;
+     by A9,A1,A2,A3,A7,A6,A5,Def2,Def3,Def4,Def5,RLVECT_1:def 2,def 3,def 4;
 A10: the Mult of W = (the Mult of V) | [:COMPLEX, the carrier of W:] by
-RELSET_1:34;
+RELSET_1:19;
     0.W = 0.V & the addF of W = (the addF of V)||the carrier of W by
-RELSET_1:34;
+RELSET_1:19;
     hence thesis by A10,Def8;
   end;
 end;
@@ -1314,7 +1317,7 @@ A1: the carrier of W c= A
 A2: x in W by STRUCT_0:def 5;
     then x in V by Th29;
     then reconsider y = x as Element of V by STRUCT_0:def 5;
-    0.V + y = x by RLVECT_1:10;
+    0.V + y = x by RLVECT_1:4;
     hence thesis by A2;
   end;
   A c= the carrier of W
@@ -1324,7 +1327,7 @@ A2: x in W by STRUCT_0:def 5;
     then consider u such that
 A3: x = 0.V + u and
 A4: u in W;
-    x = u by A3,RLVECT_1:10;
+    x = u by A3,RLVECT_1:4;
     hence thesis by A4,STRUCT_0:def 5;
   end;
   hence thesis by A1,XBOOLE_0:def 10;
@@ -1358,13 +1361,13 @@ proof
     then consider u such that
 A1: 0.V = v + u and
 A2: u in W;
-    v = - u by A1,RLVECT_1:def 13;
+    v = - u by A1,RLVECT_1:def 10;
     hence thesis by A2,Th42;
   end;
   assume v in W;
   then
 A3: - v in W by Th42;
-  0.V = v - v by RLVECT_1:28
+  0.V = v - v by RLVECT_1:15
     .= v + (- v);
   hence thesis by A3;
 end;
@@ -1372,7 +1375,7 @@ end;
 theorem Th63:
   v in v + W
 proof
-  v + 0.V = v & 0.V in W by Th37,RLVECT_1:10;
+  v + 0.V = v & 0.V in W by Th37,RLVECT_1:4;
   hence thesis;
 end;
 
@@ -1392,20 +1395,20 @@ A2: u in (0).V;
 A3: the carrier of (0).V = {0.V} by Def9;
     u in the carrier of (0).V by A2,STRUCT_0:def 5;
     then u = 0.V by A3,TARSKI:def 1;
-    then x = v by A1,RLVECT_1:10;
+    then x = v by A1,RLVECT_1:4;
     hence thesis by TARSKI:def 1;
   end;
   let x be set;
   assume x in {v};
   then
 A4: x = v by TARSKI:def 1;
-  0.V in (0).V & v = v + 0.V by Th37,RLVECT_1:10;
+  0.V in (0).V & v = v + 0.V by Th37,RLVECT_1:4;
   hence thesis by A4;
 end;
 
 Lm5: v in W iff v + W = the carrier of W
 proof
-  0.V in W & v + 0.V = v by Th37,RLVECT_1:10;
+  0.V in W & v + 0.V = v by Th37,RLVECT_1:4;
   then
 A1: v in {v + u : u in W};
   thus v in W implies v + W = the carrier of W
@@ -1426,10 +1429,10 @@ A4:   u in W;
     assume x in the carrier of W;
     then reconsider y = x, z = v as Element of W by A2,STRUCT_0:def 5;
     reconsider y1 = y, z1 = z as VECTOR of V by Th30;
-A5: z + (y - z) = (y + z) - z by RLVECT_1:def 6
-      .= y + (z - z) by RLVECT_1:def 6
-      .= y + 0.W by RLVECT_1:28
-      .= x by RLVECT_1:10;
+A5: z + (y - z) = (y + z) - z by RLVECT_1:def 3
+      .= y + (z - z) by RLVECT_1:def 3
+      .= y + 0.W by RLVECT_1:15
+      .= x by RLVECT_1:4;
     y - z in W by STRUCT_0:def 5;
     then
 A6: y1 - z1 in W by Th36;
@@ -1483,10 +1486,10 @@ A4: x in the carrier of W;
 A5: x in W by STRUCT_0:def 5;
   the carrier of W c= the carrier of V by Def8;
   then reconsider y = x as Element of V by A4;
-A6: z * v + (y - z * v) = (y + z * v) - z * v by RLVECT_1:def 6
-    .= y + (z * v - z * v) by RLVECT_1:def 6
-    .= y + 0.V by RLVECT_1:28
-    .= x by RLVECT_1:10;
+A6: z * v + (y - z * v) = (y + z * v) - z * v by RLVECT_1:def 3
+    .= y + (z * v - z * v) by RLVECT_1:def 3
+    .= y + 0.V by RLVECT_1:15
+    .= x by RLVECT_1:4;
   z * v in W by A1,Th41;
   then y - z * v in W by A5,Th43;
   hence thesis by A6;
@@ -1504,7 +1507,7 @@ A2: (z * v) + W = the carrier of W;
   then not z" * (z * v) in W by Def4;
   then
 A3: not z * v in W by Th41;
-  0.V in W & z * v + 0.V = z * v by Th37,RLVECT_1:10;
+  0.V in W & z * v + 0.V = z * v by Th37,RLVECT_1:4;
   then z * v in {z * v + u : u in W};
   hence contradiction by A2,A3,STRUCT_0:def 5;
 end;
@@ -1530,11 +1533,11 @@ A1: u in W;
       then consider v1 such that
 A2:   x = v + v1 and
 A3:   v1 in W;
-A4:   (v + u) + (v1 - u) = v + (u + (v1 - u)) by RLVECT_1:def 6
-        .= v + ((v1 + u) - u) by RLVECT_1:def 6
-        .= v + (v1 + (u - u)) by RLVECT_1:def 6
-        .= v + (v1 + 0.V) by RLVECT_1:28
-        .= x by A2,RLVECT_1:10;
+A4:   (v + u) + (v1 - u) = v + (u + (v1 - u)) by RLVECT_1:def 3
+        .= v + ((v1 + u) - u) by RLVECT_1:def 3
+        .= v + (v1 + (u - u)) by RLVECT_1:def 3
+        .= v + (v1 + 0.V) by RLVECT_1:15
+        .= x by A2,RLVECT_1:4;
       v1 - u in W by A1,A3,Th43;
       hence thesis by A4;
     end;
@@ -1543,20 +1546,20 @@ A4:   (v + u) + (v1 - u) = v + (u + (v1 - u)) by RLVECT_1:def 6
     then consider v2 such that
 A5: x = (v + u) + v2 and
 A6: v2 in W;
-A7: x = v + (u + v2) by A5,RLVECT_1:def 6;
+A7: x = v + (u + v2) by A5,RLVECT_1:def 3;
     u + v2 in W by A1,A6,Th40;
     hence thesis by A7;
   end;
   assume
 A8: v + W = (v + u) + W;
-  0.V in W & v + 0.V = v by Th37,RLVECT_1:10;
+  0.V in W & v + 0.V = v by Th37,RLVECT_1:4;
   then v in (v + u) + W by A8;
   then consider u1 such that
 A9: v = (v + u) + u1 and
 A10: u1 in W;
-  v = v + 0.V & v = v + (u + u1) by A9,RLVECT_1:10,def 6;
-  then u + u1 = 0.V by RLVECT_1:21;
-  then u = - u1 by RLVECT_1:def 13;
+  v = v + 0.V & v = v + (u + u1) by A9,RLVECT_1:4,def 3;
+  then u + u1 = 0.V by RLVECT_1:8;
+  then u = - u1 by RLVECT_1:def 10;
   hence thesis by A10,Th42;
 end;
 
@@ -1567,7 +1570,7 @@ A1: - u in W implies u in W
   proof
     assume - u in W;
     then - (- u) in W by Th42;
-    hence thesis by RLVECT_1:30;
+    hence thesis by RLVECT_1:17;
   end;
   -u in W iff v+W = (v+(-u))+W by Th72;
   hence thesis by A1,Th42;
@@ -1589,11 +1592,11 @@ A2: z in W;
       then consider v1 such that
 A3:   x = u + v1 and
 A4:   v1 in W;
-      v - z = u + (z - z) by A1,RLVECT_1:def 6
-        .= u + 0.V by RLVECT_1:28
-        .= u by RLVECT_1:10;
+      v - z = u + (z - z) by A1,RLVECT_1:def 3
+        .= u + 0.V by RLVECT_1:15
+        .= u by RLVECT_1:4;
       then
-A5:   x = v + (v1 + (- z)) by A3,RLVECT_1:def 6
+A5:   x = v + (v1 + (- z)) by A3,RLVECT_1:def 3
         .= v + (v1 - z);
       v1 - z in W by A2,A4,Th43;
       hence thesis by A5;
@@ -1602,7 +1605,7 @@ A5:   x = v + (v1 + (- z)) by A3,RLVECT_1:def 6
     assume x in v + W;
     then consider v2 such that
 A6: x = v + v2 & v2 in W;
-    z + v2 in W & x = u + (z + v2) by A1,A2,A6,Th40,RLVECT_1:def 6;
+    z + v2 in W & x = u + (z + v2) by A1,A2,A6,Th40,RLVECT_1:def 3;
     hence thesis;
   end;
   thus thesis by Th63;
@@ -1618,13 +1621,13 @@ proof
     then consider u such that
 A1: v = - v + u and
 A2: u in W;
-    0.V = v - (- v + u) by A1,RLVECT_1:28
-      .= (v - (- v)) - u by RLVECT_1:41
-      .= (v + v) - u by RLVECT_1:30
+    0.V = v - (- v + u) by A1,RLVECT_1:15
+      .= (v - (- v)) - u by RLVECT_1:27
+      .= (v + v) - u by RLVECT_1:17
       .= (1r * v + v) - u by Def5
       .= (1r * v + 1r * v) - u by Def5
       .= (1r+1r) * v - u by Def3;
-    then (1r+1r)" * ((1r+1r) * v) = (1r+1r)" * u by RLVECT_1:35;
+    then (1r+1r)" * ((1r+1r) * v) = (1r+1r)" * u by RLVECT_1:21;
     then ((1r+1r)" * (1r+1r)) * v = (1r+1r)" * u by Def4;
     then v = (1r+1r)" * u by Def5;
     hence thesis by A2,Th41;
@@ -1657,11 +1660,11 @@ A8: u1 in W;
     x2 - x1 in W by A4,A6,Th43;
     then
 A9: (x2 - x1) + u1 in W by A8,Th40;
-    u - x1 = v1 + (x1 - x1) by A3,RLVECT_1:def 6
-      .= v1 + 0.V by RLVECT_1:28
-      .= v1 by RLVECT_1:10;
-    then x = (v2 + (x2 - x1)) + u1 by A5,A7,RLVECT_1:def 6
-      .= v2 + ((x2 - x1) + u1) by RLVECT_1:def 6;
+    u - x1 = v1 + (x1 - x1) by A3,RLVECT_1:def 3
+      .= v1 + 0.V by RLVECT_1:15
+      .= v1 by RLVECT_1:4;
+    then x = (v2 + (x2 - x1)) + u1 by A5,A7,RLVECT_1:def 3
+      .= v2 + ((x2 - x1) + u1) by RLVECT_1:def 3;
     hence thesis by A9;
   end;
   let x be set;
@@ -1672,11 +1675,11 @@ A11: u1 in W;
   x1 - x2 in W by A4,A6,Th43;
   then
 A12: (x1 - x2) + u1 in W by A11,Th40;
-  u - x2 = v2 + (x2 - x2) by A5,RLVECT_1:def 6
-    .= v2 + 0.V by RLVECT_1:28
-    .= v2 by RLVECT_1:10;
-  then x = (v1 + (x1 - x2)) + u1 by A3,A10,RLVECT_1:def 6
-    .= v1 + ((x1 - x2) + u1) by RLVECT_1:def 6;
+  u - x2 = v2 + (x2 - x2) by A5,RLVECT_1:def 3
+    .= v2 + 0.V by RLVECT_1:15
+    .= v2 by RLVECT_1:4;
+  then x = (v1 + (x1 - x2)) + u1 by A3,A10,RLVECT_1:def 3
+    .= v1 + ((x1 - x2) + u1) by RLVECT_1:def 3;
   hence thesis by A12;
 end;
 
@@ -1698,9 +1701,9 @@ A3: z - 1r <> 0 by A1;
   consider u such that
 A4: z * v = v + u and
 A5: u in W by A2;
-  u = u + 0.V by RLVECT_1:10
-    .= u + (v - v) by RLVECT_1:28
-    .= z * v - v by A4,RLVECT_1:def 6
+  u = u + 0.V by RLVECT_1:4
+    .= u + (v - v) by RLVECT_1:15
+    .= z * v - v by A4,RLVECT_1:def 3
     .= z * v - 1r * v by Def5
     .= (z - 1r) * v by Th11;
   then (z - 1r)" * u = ((z - 1r)" * (z - 1r)) * v by Def4;
@@ -1734,7 +1737,7 @@ proof
   proof
     assume u + v in v + W;
     then ex v1 st u + v = v + v1 & v1 in W;
-    hence thesis by RLVECT_1:21;
+    hence thesis by RLVECT_1:8;
   end;
   assume u in W;
   hence thesis;
@@ -1746,7 +1749,7 @@ proof
 A1: v - u = (- u) + v;
 A2: - u in W implies - (- u) in W by Th42;
   u in W implies - u in W by Th42;
-  hence thesis by A1,A2,Th81,RLVECT_1:30;
+  hence thesis by A1,A2,Th81,RLVECT_1:17;
 end;
 
 theorem Th83:
@@ -1774,7 +1777,7 @@ A1: u = v + v1 and
 A2: v1 in W;
     take x = - v1;
     thus x in W by A2,Th42;
-    thus thesis by A1,RLVECT_1:30;
+    thus thesis by A1,RLVECT_1:17;
   end;
   given v1 such that
 A3: v1 in W and
@@ -1797,11 +1800,11 @@ A4: v2 = v + u2 by A2,Th83;
     consider u1 such that
 A5: u1 in W and
 A6: v1 = v + u1 by A1,Th83;
-    v1 - v2 = (u1 + v) + ((- v) - u2) by A6,A4,RLVECT_1:44
-      .= ((u1 + v) + (- v)) - u2 by RLVECT_1:def 6
-      .= (u1 + (v + (- v))) - u2 by RLVECT_1:def 6
-      .= (u1 + 0.V) - u2 by RLVECT_1:16
-      .= u1 - u2 by RLVECT_1:10;
+    v1 - v2 = (u1 + v) + ((- v) - u2) by A6,A4,RLVECT_1:30
+      .= ((u1 + v) + (- v)) - u2 by RLVECT_1:def 3
+      .= (u1 + (v + (- v))) - u2 by RLVECT_1:def 3
+      .= (u1 + 0.V) - u2 by RLVECT_1:5
+      .= u1 - u2 by RLVECT_1:4;
     hence thesis by A5,A3,Th43;
   end;
   assume v1 - v2 in W;
@@ -1809,10 +1812,10 @@ A6: v1 = v + u1 by A1,Th83;
 A7: - (v1 - v2) in W by Th42;
   take v1;
   thus v1 in v1 + W by Th63;
-  v1 + (- (v1 - v2)) = v1 + ((- v1) + v2) by RLVECT_1:47
-    .= (v1 + (- v1)) + v2 by RLVECT_1:def 6
-    .= 0.V + v2 by RLVECT_1:16
-    .= v2 by RLVECT_1:10;
+  v1 + (- (v1 - v2)) = v1 + ((- v1) + v2) by RLVECT_1:33
+    .= (v1 + (- v1)) + v2 by RLVECT_1:def 3
+    .= 0.V + v2 by RLVECT_1:5
+    .= v2 by RLVECT_1:4;
   hence thesis by A7;
 end;
 
@@ -1825,14 +1828,14 @@ proof
 A1: v = u + u1 and
 A2: u1 in W;
   take v1 = u - v;
-  0.V = (u + u1) - v by A1,RLVECT_1:28
-    .= u1 + (u - v) by RLVECT_1:def 6;
-  then v1 = - u1 by RLVECT_1:def 13;
+  0.V = (u + u1) - v by A1,RLVECT_1:15
+    .= u1 + (u - v) by RLVECT_1:def 3;
+  then v1 = - u1 by RLVECT_1:def 10;
   hence v1 in W by A2,Th42;
-  thus v + v1 = (u + v) - v by RLVECT_1:def 6
-    .= u + (v - v) by RLVECT_1:def 6
-    .= u + 0.V by RLVECT_1:28
-    .= u by RLVECT_1:10;
+  thus v + v1 = (u + v) - v by RLVECT_1:def 3
+    .= u + (v - v) by RLVECT_1:def 3
+    .= u + 0.V by RLVECT_1:15
+    .= u by RLVECT_1:4;
 end;
 
 theorem Th87:
@@ -1844,13 +1847,13 @@ proof
 A1: u = v + u1 and
 A2: u1 in W;
   take v1 = v - u;
-  0.V = (v + u1) - u by A1,RLVECT_1:28
-    .= u1 + (v - u) by RLVECT_1:def 6;
-  then v1 = - u1 by RLVECT_1:def 13;
+  0.V = (v + u1) - u by A1,RLVECT_1:15
+    .= u1 + (v - u) by RLVECT_1:def 3;
+  then v1 = - u1 by RLVECT_1:def 10;
   hence v1 in W by A2,Th42;
-  thus v - v1 = (v - v) + u by RLVECT_1:43
-    .= 0.V + u by RLVECT_1:28
-    .= u by RLVECT_1:10;
+  thus v - v1 = (v - v) + u by RLVECT_1:29
+    .= 0.V + u by RLVECT_1:15
+    .= u by RLVECT_1:4;
 end;
 
 theorem Th88:
@@ -1876,7 +1879,7 @@ A3:     x in the carrier of W1;
         then consider u such that
 A4:     z = v + u and
 A5:     u in W2;
-        y = u by A4,RLVECT_1:21;
+        y = u by A4,RLVECT_1:8;
         hence thesis by A5,STRUCT_0:def 5;
       end;
       let x be set;
@@ -1890,7 +1893,7 @@ A6:   x in the carrier of W2;
       then consider u such that
 A7:   z = v + u and
 A8:   u in W1;
-      y = u by A7,RLVECT_1:21;
+      y = u by A7,RLVECT_1:8;
       hence thesis by A8,STRUCT_0:def 5;
     end;
     hence thesis by Th50;
@@ -1909,7 +1912,7 @@ A1: v + W1 = u + W2;
   assume
 A2: W1 <> W2;
 A3: now
-    set x =the  Element of V1 \ V2;
+    set x = the Element of V1 \ V2;
     assume V1 \ V2 <> {};
     then x in V1 by XBOOLE_0:def 5;
     then
@@ -1921,19 +1924,19 @@ A4: x in W1 by STRUCT_0:def 5;
     then consider u1 such that
 A5: z = u + u1 and
 A6: u1 in W2;
-    x = 0.V + x by RLVECT_1:10
-      .= v - v + x by RLVECT_1:28
-      .= - v + (u + u1) by A5,RLVECT_1:def 6;
+    x = 0.V + x by RLVECT_1:4
+      .= v - v + x by RLVECT_1:15
+      .= - v + (u + u1) by A5,RLVECT_1:def 3;
     then
 A7: (v + (- v + (u + u1))) + W1 = v + W1 by A4,Th72;
-    v + (- v + (u + u1)) = (v - v) + (u + u1) by RLVECT_1:def 6
-      .= 0.V + (u + u1) by RLVECT_1:28
-      .= u + u1 by RLVECT_1:10;
+    v + (- v + (u + u1)) = (v - v) + (u + u1) by RLVECT_1:def 3
+      .= 0.V + (u + u1) by RLVECT_1:15
+      .= u + u1 by RLVECT_1:4;
     then (u + u1) + W2 = (u + u1) + W1 by A1,A6,A7,Th72;
     hence thesis by A2,Th88;
   end;
 A8: now
-    set x =the  Element of V2 \ V1;
+    set x = the Element of V2 \ V1;
     assume V2 \ V1 <> {};
     then x in V2 by XBOOLE_0:def 5;
     then
@@ -1945,14 +1948,14 @@ A9: x in W2 by STRUCT_0:def 5;
     then consider u1 such that
 A10: z = v + u1 and
 A11: u1 in W1;
-    x = 0.V + x by RLVECT_1:10
-      .= u - u + x by RLVECT_1:28
-      .= - u + (v + u1) by A10,RLVECT_1:def 6;
+    x = 0.V + x by RLVECT_1:4
+      .= u - u + x by RLVECT_1:15
+      .= - u + (v + u1) by A10,RLVECT_1:def 3;
     then
 A12: (u + (- u + (v + u1))) + W2 = u + W2 by A9,Th72;
-    u + (- u + (v + u1)) = (u - u) + (v + u1) by RLVECT_1:def 6
-      .= 0.V + (v + u1) by RLVECT_1:28
-      .= v + u1 by RLVECT_1:10;
+    u + (- u + (v + u1)) = (u - u) + (v + u1) by RLVECT_1:def 3
+      .= 0.V + (v + u1) by RLVECT_1:15
+      .= v + u1 by RLVECT_1:4;
     then (v + u1) + W1 = (v + u1) + W2 by A1,A11,A12,Th72;
     hence thesis by A2,Th88;
   end;
@@ -2016,7 +2019,7 @@ end;
 theorem
   the carrier of V is Coset of (Omega).V
 proof
-  set v =the  VECTOR of V;
+  set v = the VECTOR of V;
   the carrier of V is Subset of V iff the carrier of V c= the carrier of V;
   then reconsider A = the carrier of V as Subset of V;
   A = v + (Omega).V by Th66;
@@ -2104,40 +2107,37 @@ definition
 end;
 
 registration
-  cluster non empty CNORMSTR;
+  cluster non empty for CNORMSTR;
   existence
   proof
 
-set A =the  non empty set,Z =the  Element of A,a =the  BinOp of A,M =the
-Function of [:COMPLEX,A:],A,n =the  Function of A,REAL;
+set A = the non empty set,Z = the Element of A,a = the BinOp of A,M =the
+Function of [:COMPLEX,A:],A,n = the Function of A,REAL;
     take CNORMSTR(#A,Z,a,M,n#);
     thus the carrier of CNORMSTR(#A,Z,a,M,n#) is non empty;
   end;
 end;
 
-
-
-
 deffunc 09(CNORMSTR) = 0.$1;
-set V =the  ComplexLinearSpace;
+set V = the ComplexLinearSpace;
 
 Lm6: the carrier of (0).V = {0.V} by Def9;
 
 reconsider niltonil = (the carrier of (0).V) --> 0 as Function of the carrier
-of (0).V, REAL by FUNCOP_1:57;
+of (0).V, REAL by FUNCOP_1:45;
 
 0.V is VECTOR of (0).V by Lm6,TARSKI:def 1;
 then
 
-Lm7: niltonil.(0.V) = 0 by FUNCOP_1:13;
+Lm7: niltonil.(0.V) = 0 by FUNCOP_1:7;
 
 Lm8: for u being VECTOR of (0).V, z holds niltonil.(z * u) = |.z.| * niltonil.
 u
 proof
   let u be VECTOR of (0).V;
   let z;
-  niltonil.u = 0 by FUNCOP_1:13;
-  hence thesis by FUNCOP_1:13;
+  niltonil.u = 0 by FUNCOP_1:7;
+  hence thesis by FUNCOP_1:7;
 end;
 
 Lm9: for u, v being VECTOR of (0).V holds niltonil.(u + v) <= niltonil.u +
@@ -2156,7 +2156,7 @@ Lm10: now
   let z;
   reconsider u = x, w = y as VECTOR of (0).V;
   09(X) = 0.V by Def8;
-  hence ||.x.|| = 0 iff x = 09(X) by Lm6,FUNCOP_1:13,TARSKI:def 1;
+  hence ||.x.|| = 0 iff x = 09(X) by Lm6,FUNCOP_1:7,TARSKI:def 1;
   z * x = z * u;
   hence ||.z * x.|| = |.z.| * ||.x.|| by Lm8;
   x + y = u + w;
@@ -2164,7 +2164,7 @@ Lm10: now
 end;
 
 definition
- canceled;
+
   let IT be non empty CNORMSTR;
   attr IT is ComplexNormSpace-like means
   :Def14:
@@ -2176,7 +2176,7 @@ registration
   cluster reflexive discerning ComplexNormSpace-like
   vector-distributive scalar-distributive scalar-associative scalar-unital
   Abelian add-associative right_zeroed right_complementable
-  strict (non empty CNORMSTR);
+  strict for non empty CNORMSTR;
   existence
   proof
     take X;
@@ -2232,14 +2232,14 @@ A1: for x,y be VECTOR of X for x9,y9 be VECTOR of (0).V st x = x9 & y = y9
     proof
       let u,v,w be VECTOR of X;
       reconsider u9= u, v9= v, w9= w as VECTOR of (0).V;
-      thus (u + v) + w = (u9 + v9) + w9 .= u9 + (v9 + w9) by RLVECT_1:def 6
+      thus (u + v) + w = (u9 + v9) + w9 .= u9 + (v9 + w9) by RLVECT_1:def 3
         .= u + (v + w);
     end;
     thus for v being VECTOR of X holds v + 0.X = v
     proof
       let v be VECTOR of X;
       reconsider v9= v as VECTOR of (0).V;
-      thus v + 0.X = v9+ 0.(0).V .=v by RLVECT_1:10;
+      thus v + 0.X = v9+ 0.(0).V .=v by RLVECT_1:4;
     end;
     thus X is right_complementable
     proof
@@ -2259,7 +2259,7 @@ definition
   mode ComplexNormSpace is reflexive discerning ComplexNormSpace-like
   vector-distributive scalar-distributive scalar-associative scalar-unital
   Abelian add-associative right_zeroed right_complementable
-    (non empty CNORMSTR);
+    non empty CNORMSTR;
 end;
 
 reserve CNS for ComplexNormSpace;
@@ -2271,7 +2271,7 @@ theorem
 theorem Th104:
   ||.-x.|| = ||.x.||
 proof
-A1: |.-1r.| = 1 by COMPLEX1:134,138;
+A1: |.-1r.| = 1 by COMPLEX1:48,52;
   ||.-x.|| = ||.(-1r) * x.|| by Th4
     .= |.-1r.| * ||.x.|| by Def14;
   hence thesis by A1;
@@ -2287,7 +2287,7 @@ end;
 theorem Th106:
   0 <= ||.x.||
 proof
-  ||.x - x.|| = ||.09(CNS).|| by RLVECT_1:28
+  ||.x - x.|| = ||.09(CNS).|| by RLVECT_1:15
     .= 0;
   then 0 <= (||.x.|| + ||.x.||)/2 by Th105;
   hence thesis;
@@ -2305,48 +2305,48 @@ theorem Th108:
   ||.x - y.|| = 0 iff x = y
 proof
   ||.x - y.|| = 0 iff x - y = 09(CNS) by NORMSP_0:def 5;
-  hence thesis by RLVECT_1:28,35;
+  hence thesis by RLVECT_1:15,21;
 end;
 
 theorem Th109:
   ||.x - y.|| = ||.y - x.||
 proof
-  x - y = - (y - x) by RLVECT_1:47;
+  x - y = - (y - x) by RLVECT_1:33;
   hence thesis by Th104;
 end;
 
 theorem Th110:
   ||.x.|| - ||.y.|| <= ||.x - y.||
 proof
-  (x - y) + y = x - (y - y) by RLVECT_1:43
-    .= x - 09(CNS) by RLVECT_1:28
-    .= x by RLVECT_1:26;
+  (x - y) + y = x - (y - y) by RLVECT_1:29
+    .= x - 09(CNS) by RLVECT_1:15
+    .= x by RLVECT_1:13;
   then ||.x.|| <= ||.x - y.|| + ||.y.|| by Def14;
-  hence thesis by XREAL_1:22;
+  hence thesis by XREAL_1:20;
 end;
 
 theorem Th111:
   abs(||.x.|| - ||.y.||) <= ||.x - y.||
 proof
-  (y - x) + x = y - (x - x) by RLVECT_1:43
-    .= y - 09(CNS) by RLVECT_1:28
-    .= y by RLVECT_1:26;
+  (y - x) + x = y - (x - x) by RLVECT_1:29
+    .= y - 09(CNS) by RLVECT_1:15
+    .= y by RLVECT_1:13;
   then ||.y.|| <= ||.y - x.|| + ||.x.|| by Def14;
-  then ||.y.|| - ||.x.|| <= ||.y - x.|| by XREAL_1:22;
+  then ||.y.|| - ||.x.|| <= ||.y - x.|| by XREAL_1:20;
   then ||.y.|| - ||.x.|| <= ||.x - y.|| by Th109;
   then
-A1: - ||.x - y.|| <= -(||.y.|| - ||.x.||) by XREAL_1:26;
+A1: - ||.x - y.|| <= -(||.y.|| - ||.x.||) by XREAL_1:24;
   ||.x.|| - ||.y.|| <= ||.x - y.|| by Th110;
-  hence thesis by A1,ABSVALUE:12;
+  hence thesis by A1,ABSVALUE:5;
 end;
 
 theorem Th112:
   ||.x - w.|| <= ||.x - y.|| + ||.y - w.||
 proof
-  x - w = x + (09(CNS) + (-w)) by RLVECT_1:10
-    .= x + (((-y) + y) + (-w)) by RLVECT_1:16
-    .= x + ((-y) + (y + (-w))) by RLVECT_1:def 6
-    .= (x - y) + (y - w) by RLVECT_1:def 6;
+  x - w = x + (09(CNS) + (-w)) by RLVECT_1:4
+    .= x + (((-y) + y) + (-w)) by RLVECT_1:5
+    .= x + ((-y) + (y + (-w))) by RLVECT_1:def 3
+    .= (x - y) + (y - w) by RLVECT_1:def 3;
   hence thesis by Def14;
 end;
 
@@ -2382,7 +2382,7 @@ A2: for n holds S2.n = z * S.n;
       S1.n = z * S.n by A1;
       hence thesis by A2;
     end;
-    hence thesis by FUNCT_2:113;
+    hence thesis by FUNCT_2:63;
   end;
 end;
 
@@ -2393,8 +2393,6 @@ definition
   :Def16:
   ex g st for r st 0 < r ex m st for n st m <= n holds ||.(S.n) - g.|| < r;
 end;
-
-canceled;
 
 theorem Th115:
   S1 is convergent & S2 is convergent implies S1 + S2 is convergent
@@ -2424,17 +2422,17 @@ A8: k <= n;
   then
 A9: ||.(S2.n) - g2.|| < r/2 by A7;
 A10: ||.(S1 + S2).n - g.|| = ||.-(g1+g2) + ((S1.n) + (S2.n)).|| by
-NORMSP_1:def 5
-    .= ||.((-g1)+(-g2)) + ((S1.n) + (S2.n)).|| by RLVECT_1:45
-    .= ||.(S1.n) + ((-g1)+(-g2)) + (S2.n).|| by RLVECT_1:def 6
-    .= ||.(S1.n) - g1 + (-g2) + (S2.n).|| by RLVECT_1:def 6
-    .= ||.(S1.n) - g1 + ((S2.n) - g2).|| by RLVECT_1:def 6;
+NORMSP_1:def 2
+    .= ||.((-g1)+(-g2)) + ((S1.n) + (S2.n)).|| by RLVECT_1:31
+    .= ||.(S1.n) + ((-g1)+(-g2)) + (S2.n).|| by RLVECT_1:def 3
+    .= ||.(S1.n) - g1 + (-g2) + (S2.n).|| by RLVECT_1:def 3
+    .= ||.(S1.n) - g1 + ((S2.n) - g2).|| by RLVECT_1:def 3;
 A11: ||.(S1.n) - g1 + ((S2.n) - g2).|| <= ||.(S1.n) - g1.|| + ||.(S2.n) - g2
   .|| by Def14;
   m1 <= m1 + m2 by NAT_1:12;
   then m1 <= n by A8,XXREAL_0:2;
   then ||.(S1.n) - g1.|| < r/2 by A6;
-  then ||.(S1.n) - g1.|| + ||.(S2.n) - g2.|| < r/2 + r/2 by A9,XREAL_1:10;
+  then ||.(S1.n) - g1.|| + ||.(S2.n) - g2.|| < r/2 + r/2 by A9,XREAL_1:8;
   hence thesis by A10,A11,XXREAL_0:2;
 end;
 
@@ -2466,17 +2464,17 @@ A8: k <= n;
   then
 A9: ||.(S2.n) - g2.|| < r/2 by A7;
 A10: ||.(S1 - S2).n - g.|| = ||.((S1.n) - (S2.n)) - (g1 - g2).|| by
-NORMSP_1:def 6
-    .= ||.(((S1.n) - (S2.n)) - g1) + g2.|| by RLVECT_1:43
-    .= ||. ((S1.n) - (g1 + (S2.n))) + g2.|| by RLVECT_1:41
-    .= ||. (((S1.n) - g1 ) - (S2.n)) + g2.|| by RLVECT_1:41
-    .= ||. ((S1.n) - g1 ) - ((S2.n) - g2).|| by RLVECT_1:43;
+NORMSP_1:def 3
+    .= ||.(((S1.n) - (S2.n)) - g1) + g2.|| by RLVECT_1:29
+    .= ||. ((S1.n) - (g1 + (S2.n))) + g2.|| by RLVECT_1:27
+    .= ||. (((S1.n) - g1 ) - (S2.n)) + g2.|| by RLVECT_1:27
+    .= ||. ((S1.n) - g1 ) - ((S2.n) - g2).|| by RLVECT_1:29;
 A11: ||.((S1.n) - g1) - ((S2.n) - g2).|| <= ||.(S1.n) - g1.|| + ||.(S2.n) -
   g2.|| by Th105;
   m1 <= m1 + m2 by NAT_1:12;
   then m1 <= n by A8,XXREAL_0:2;
   then ||.(S1.n) - g1.|| < r/2 by A6;
-  then ||.(S1.n) - g1.|| + ||.(S2.n) - g2.|| < r/2 + r/2 by A9,XREAL_1:10;
+  then ||.(S1.n) - g1.|| + ||.(S2.n) - g2.|| < r/2 + r/2 by A9,XREAL_1:8;
   hence thesis by A10,A11,XXREAL_0:2;
 end;
 
@@ -2496,12 +2494,12 @@ A2: for n st m1 <= n holds ||.(S.n) - g.|| < r by A1;
   assume k <= n;
   then
 A3: ||.(S.n) - g.|| < r by A2;
-  ||.(S.n) - g.|| = ||.((S.n) - 09(CNS)) - g.|| by RLVECT_1:26
-    .= ||.((S.n) - (x - x)) - g.|| by RLVECT_1:28
-    .= ||.(((S.n) - x) + x) - g.|| by RLVECT_1:43
-    .= ||.((S.n) - x) + ((-g) + x).|| by RLVECT_1:def 6
-    .= ||.((S.n) - x) - h.|| by RLVECT_1:47;
-  hence thesis by A3,NORMSP_1:def 7;
+  ||.(S.n) - g.|| = ||.((S.n) - 09(CNS)) - g.|| by RLVECT_1:13
+    .= ||.((S.n) - (x - x)) - g.|| by RLVECT_1:15
+    .= ||.(((S.n) - x) + x) - g.|| by RLVECT_1:29
+    .= ||.((S.n) - x) + ((-g) + x).|| by RLVECT_1:def 3
+    .= ||.((S.n) - x) - h.|| by RLVECT_1:33;
+  hence thesis by A3,NORMSP_1:def 4;
 end;
 
 theorem Th118:
@@ -2515,7 +2513,7 @@ A2: now
     assume
 A3: z <> 0c;
     then
-A4: 0 < |.z.| by COMPLEX1:133;
+A4: 0 < |.z.| by COMPLEX1:47;
     let r;
     assume 0 < r;
     then consider m1 such that
@@ -2525,14 +2523,14 @@ A5: for n st m1 <= n holds ||.(S.n) - g.|| < r/|.z.| by A1,A4;
     assume k <= n;
     then
 A6: ||.(S.n) - g.|| < r/|.z.| by A5;
-A7: 0 <> |.z.| by A3,COMPLEX1:133;
+A7: 0 <> |.z.| by A3,COMPLEX1:47;
 A8: |.z.| * (r/|.z.|) = |.z.| * (|.z.|" * r) by XCMPLX_0:def 9
       .= |.z.| *|.z.|" * r
       .= 1 * r by A7,XCMPLX_0:def 7
       .= r;
     ||.(z * (S.n)) - (z * g).|| = ||.z * ((S.n) - g).|| by Th10
       .= |.z.| * ||.(S.n) - g.|| by Def14;
-    then ||.(z *(S.n)) - h.|| < r by A4,A6,A8,XREAL_1:70;
+    then ||.(z *(S.n)) - h.|| < r by A4,A6,A8,XREAL_1:68;
     hence ||.(z * S).n - h.|| < r by Def15;
   end;
   now
@@ -2549,7 +2547,7 @@ A10: for n st m1 <= n holds ||.(S.n) - g.|| < r by A1;
 A11: ||.(S.n) - g.|| < r by A10;
     ||.z * (S.n) - z * g.|| = ||.0c * (S.n) - 09(CNS).|| by A9,Th2
       .= ||.09(CNS) - 09(CNS).|| by Th2
-      .= ||.09(CNS).|| by RLVECT_1:26
+      .= ||.09(CNS).|| by RLVECT_1:13
       .= 0;
     then ||.z * (S.n) - h.|| < r by A11,Th106;
     hence ||.(z * S).n - h.|| < r by Def15;
@@ -2583,7 +2581,7 @@ A4:   ||.(S.n) - g.|| < r by A3;
 end;
 
 definition
- canceled;
+
   let CNS;
   let S;
   assume
@@ -2618,9 +2616,9 @@ A11:    ||.(S.m1) - y.|| < ||.x - y.||/4 by A8;
         ||.(S.m1) - x.|| < ||.x - y.||/4 by A7;
         then
         ||.(S.m1) - x.|| + ||.(S.m1) - y.|| < ||.x - y.||/4 + ||.x - y.||
-        /4 by A11,XREAL_1:10;
+        /4 by A11,XREAL_1:8;
         then not ||.x - y.||/2 < ||.x - y.|| by A10,XXREAL_0:2;
-        hence contradiction by A6,A5,XREAL_1:218;
+        hence contradiction by A6,A5,XREAL_1:216;
       end;
       now
         ||.x - y.|| <= ||.x - (S.m2).|| + ||.(S.m2) - y.|| by Th112;
@@ -2632,9 +2630,9 @@ A13:    ||.(S.m2) - x.|| < ||.x - y.||/4 by A7;
         ||.(S.m2) - y.|| < ||.x - y.||/4 by A8;
         then
         ||.(S.m2) - x.|| + ||.(S.m2) - y.|| < ||.x - y.||/4 + ||.x - y.||
-        /4 by A13,XREAL_1:10;
+        /4 by A13,XREAL_1:8;
         then not ||.x - y.||/2 < ||.x - y.|| by A12,XXREAL_0:2;
-        hence contradiction by A6,A5,XREAL_1:218;
+        hence contradiction by A6,A5,XREAL_1:216;
       end;
       hence contradiction by A9;
     end;
@@ -2661,12 +2659,12 @@ A5: for n st m1 <= n holds ||.(S.n) - g.|| < r by A1,A2,A4,Def18;
     assume k <= n;
     then ||.(S.n) - g.|| < r by A5;
     then
-A6: ||.((S.n) - g ) - 09(CNS).|| < r by RLVECT_1:26;
+A6: ||.((S.n) - g ) - 09(CNS).|| < r by RLVECT_1:13;
     abs(||.(S.n) - g.|| - ||.09(CNS).||) <= ||.((S.n) - g ) - 09(CNS).||
     by Th111;
     then abs(||.(S.n) - g.|| - ||.09(CNS).||) < r by A6,XXREAL_0:2;
     then abs((||.(S.n) - g.|| - 0)) < r;
-    then abs((||.(S - g).n.|| - 0)) < r by NORMSP_1:def 7;
+    then abs((||.(S - g).n.|| - 0)) < r by NORMSP_1:def 4;
     hence abs((||.S - g.||.n - 0)) < r by NORMSP_0:def 4;
   end;
   ||.S - g.|| is convergent by A1,Th117,Th119;
@@ -2699,17 +2697,17 @@ A7: k <= n;
     then
 A8: ||.(S2.n) - g2.|| < r/2 by A6;
 A9: ||.(S1 + S2).n - g.|| = ||.-(g1+g2) + ((S1.n) + (S2.n)).|| by
-NORMSP_1:def 5
-      .= ||.((-g1)+(-g2)) + ((S1.n) + (S2.n)).|| by RLVECT_1:45
-      .= ||.(S1.n) + ((-g1)+(-g2)) + (S2.n).|| by RLVECT_1:def 6
-      .= ||.(S1.n) - g1 + (-g2) + (S2.n).|| by RLVECT_1:def 6
-      .= ||.(S1.n) - g1 + ((S2.n) - g2).|| by RLVECT_1:def 6;
+NORMSP_1:def 2
+      .= ||.((-g1)+(-g2)) + ((S1.n) + (S2.n)).|| by RLVECT_1:31
+      .= ||.(S1.n) + ((-g1)+(-g2)) + (S2.n).|| by RLVECT_1:def 3
+      .= ||.(S1.n) - g1 + (-g2) + (S2.n).|| by RLVECT_1:def 3
+      .= ||.(S1.n) - g1 + ((S2.n) - g2).|| by RLVECT_1:def 3;
 A10: ||.(S1.n) - g1 + ((S2.n) - g2).|| <= ||.(S1.n) - g1.|| + ||.(S2.n) -
     g2.|| by Def14;
     m1 <= m1 + m2 by NAT_1:12;
     then m1 <= n by A7,XXREAL_0:2;
     then ||.(S1.n) - g1.|| < r/2 by A5;
-    then ||.(S1.n) - g1.|| + ||.(S2.n) - g2.|| < r/2 + r/2 by A8,XREAL_1:10;
+    then ||.(S1.n) - g1.|| + ||.(S2.n) - g2.|| < r/2 + r/2 by A8,XREAL_1:8;
     hence ||.(S1 + S2).n - g.|| < r by A9,A10,XXREAL_0:2;
   end;
   S1 + S2 is convergent by A1,A2,Th115;
@@ -2742,17 +2740,17 @@ A7: k <= n;
     then
 A8: ||.(S2.n) - g2.|| < r/2 by A6;
 A9: ||.(S1 - S2).n - g.|| = ||.((S1.n) - (S2.n)) - (g1 - g2).|| by
-NORMSP_1:def 6
-      .= ||.(((S1.n) - (S2.n)) - g1) + g2.|| by RLVECT_1:43
-      .= ||. ((S1.n) - (g1 + (S2.n))) + g2.|| by RLVECT_1:41
-      .= ||. (((S1.n) - g1 ) - (S2.n)) + g2.|| by RLVECT_1:41
-      .= ||. ((S1.n) - g1 ) - ((S2.n) - g2).|| by RLVECT_1:43;
+NORMSP_1:def 3
+      .= ||.(((S1.n) - (S2.n)) - g1) + g2.|| by RLVECT_1:29
+      .= ||. ((S1.n) - (g1 + (S2.n))) + g2.|| by RLVECT_1:27
+      .= ||. (((S1.n) - g1 ) - (S2.n)) + g2.|| by RLVECT_1:27
+      .= ||. ((S1.n) - g1 ) - ((S2.n) - g2).|| by RLVECT_1:29;
 A10: ||.((S1.n) - g1) - ((S2.n) - g2).|| <= ||.(S1.n) - g1.|| + ||.(S2.n)
     - g2.|| by Th105;
     m1 <= m1 + m2 by NAT_1:12;
     then m1 <= n by A7,XXREAL_0:2;
     then ||.(S1.n) - g1.|| < r/2 by A5;
-    then ||.(S1.n) - g1.|| + ||.(S2.n) - g2.|| < r/2 + r/2 by A8,XREAL_1:10;
+    then ||.(S1.n) - g1.|| + ||.(S2.n) - g2.|| < r/2 + r/2 by A8,XREAL_1:8;
     hence ||.(S1 - S2).n - g.|| < r by A9,A10,XXREAL_0:2;
   end;
   S1 - S2 is convergent by A1,A2,Th116;
@@ -2776,12 +2774,12 @@ A3: for n st m1 <= n holds ||.(S.n) - g.|| < r by A1,Def18;
     assume k <= n;
     then
 A4: ||.(S.n) - g.|| < r by A3;
-    ||.(S.n) - g.|| = ||.((S.n) - 09(CNS)) - g.|| by RLVECT_1:26
-      .= ||.((S.n) - (x - x)) - g.|| by RLVECT_1:28
-      .= ||.(((S.n) - x) + x) - g.|| by RLVECT_1:43
-      .= ||.((S.n) - x) + ((-g) + x).|| by RLVECT_1:def 6
-      .= ||.((S.n) - x) - h.|| by RLVECT_1:47;
-    hence ||.(S - x).n - h.|| < r by A4,NORMSP_1:def 7;
+    ||.(S.n) - g.|| = ||.((S.n) - 09(CNS)) - g.|| by RLVECT_1:13
+      .= ||.((S.n) - (x - x)) - g.|| by RLVECT_1:15
+      .= ||.(((S.n) - x) + x) - g.|| by RLVECT_1:29
+      .= ||.((S.n) - x) + ((-g) + x).|| by RLVECT_1:def 3
+      .= ||.((S.n) - x) - h.|| by RLVECT_1:33;
+    hence ||.(S - x).n - h.|| < r by A4,NORMSP_1:def 4;
   end;
   S - x is convergent by A1,Th117;
   hence thesis by A2,Def18;
@@ -2808,7 +2806,7 @@ A4: for n st m1 <= n holds ||.(S.n) - g.|| < r by A1,Def18;
 A5: ||.(S.n) - g.|| < r by A4;
     ||.z * (S.n) - z * g.|| = ||.0c * (S.n) - 09(CNS).|| by A3,Th2
       .= ||.09(CNS) - 09(CNS).|| by Th2
-      .= ||.09(CNS).|| by RLVECT_1:26
+      .= ||.09(CNS).|| by RLVECT_1:13
       .= 0;
     then ||.z * (S.n) - h.|| < r by A5,Th106;
     hence ||.(z * S).n - h.|| < r by Def15;
@@ -2817,7 +2815,7 @@ A6: now
     assume
 A7: z <> 0c;
     then
-A8: 0 < |.z.| by COMPLEX1:133;
+A8: 0 < |.z.| by COMPLEX1:47;
     let r;
     assume 0 < r;
     then consider m1 such that
@@ -2827,14 +2825,14 @@ A9: for n st m1 <= n holds ||.(S.n) - g.|| < r/|.z.| by A1,A8,Def18;
     assume k <= n;
     then
 A10: ||.(S.n) - g.|| < r/|.z.| by A9;
-A11: 0 <> |.z.| by A7,COMPLEX1:133;
+A11: 0 <> |.z.| by A7,COMPLEX1:47;
 A12: |.z.| * (r/|.z.|) = |.z.| * (|.z.|" * r) by XCMPLX_0:def 9
       .= |.z.| *|.z.|" * r
       .= 1 * r by A11,XCMPLX_0:def 7
       .= r;
     ||.(z * (S.n)) - (z * g).|| = ||.z * ((S.n) - g).|| by Th10
       .= |.z.| * ||.(S.n) - g.|| by Def14;
-    then ||.(z *(S.n)) - h.|| < r by A8,A10,A12,XREAL_1:70;
+    then ||.(z *(S.n)) - h.|| < r by A8,A10,A12,XREAL_1:68;
     hence ||.(z * S).n - h.|| < r by Def15;
   end;
   z * S is convergent by A1,Th118;

@@ -1,6 +1,6 @@
 Mizar Language Syntax
 
-Last modified: June 17, 2009
+Last modified: May 11, 2011
 
 System terms:
       File-Name,
@@ -57,11 +57,9 @@ Registration-Item = Registration-Block ";" .
 
 Notation-Item = Notation-Block ";" .
 
-Definitional-Block = "definition" { Definition-Item | Definition } [ Redefinition-Block ] "end" .
+Definitional-Block = "definition" { Definition-Item | Definition | Redefinition } "end" .
 
-Redefinition-Block = "redefine" { Definition-Item | Definition } .
-
-Registration-Block = "registration" { Loci-Declaration | Cluster-Registration | Identify-Registration | Canceled-Registration } "end" .
+Registration-Block = "registration" { Loci-Declaration | Cluster-Registration | Identify-Registration | Properties-Registration | Canceled-Registration } "end" .
 
 Notation-Block = "notation" { Loci-Declaration | Notation-Declaration } "end" .
 
@@ -74,6 +72,8 @@ Loci-Declaration = "let" Qualified-Variables [ "such" Conditions ] ";" .
 Permissive-Assumption = Assumption .
 
 Definition = Structure-Definition | Mode-Definition | Functor-Definition | Predicate-Definition | Attribute-Definition | Canceled-Definition .
+
+Redefinition = "redefine" ( Mode-Definition | Functor-Definition | Predicate-Definition | Attribute-Definition ) .
 
 Structure-Definition = "struct" [ "(" Ancestors ")" ] Structure-Symbol [ "over" Loci ] "(#" Fields "#)" ";" .
 
@@ -161,17 +161,19 @@ Canceled-Registration = "canceled" [ Numeral ] ";" .
 
 Cluster-Registration = Existential-Registration | Conditional-Registration | Functorial-Registration .
 
-Existential-Registration = "cluster" Adjective-Cluster Type-Expression ";" Correctness-Conditions .
+Existential-Registration = "cluster" Adjective-Cluster "for" Type-Expression ";" Correctness-Conditions .
 
 Adjective-Cluster = { Adjective } .
 
 Adjective = [ "non" ] [ Adjective-Arguments ] Attribute-Symbol .
 
-Conditional-Registration = "cluster" Adjective-Cluster "->" Adjective-Cluster Type-Expression ";" Correctness-Conditions .
+Conditional-Registration = "cluster" Adjective-Cluster "->" Adjective-Cluster "for" Type-Expression ";" Correctness-Conditions .
 
-Functorial-Registration = "cluster" Term-Expression "->" Adjective-Cluster [ Type-Expression ] ";" Correctness-Conditions .
+Functorial-Registration = "cluster" Term-Expression "->" Adjective-Cluster [ "for" Type-Expression ] ";" Correctness-Conditions .
 
 Identify-Registration = "identify" Functor-Pattern "with" Functor-Pattern [ "when" Locus "=" Locus { "," Locus "=" Locus } ] ";" Correctness-Conditions .
+
+Properties-Registration = "sethood" "of" Type-Expression Justification ";" .
 
 Correctness-Conditions = { Correctness-Condition } [ "correctness" Justification ";" ] .
 
@@ -181,7 +183,7 @@ Theorem = "theorem" Compact-Statement .
 
 Scheme-Item = Scheme-Block ";" .
 
-Scheme-Block = "scheme" Scheme-Identifier "{" Scheme-Parameters "}" ":" Scheme-Conclusion [ "provided" Scheme-Premise { "and" Scheme-Premise } ] Proof .
+Scheme-Block = "scheme" Scheme-Identifier "{" Scheme-Parameters "}" ":" Scheme-Conclusion [ "provided" Scheme-Premise { "and" Scheme-Premise } ] ";" Reasoning "end" .
 
 Scheme-Identifier = Identifier .
 
@@ -221,7 +223,7 @@ Private-Functor-Pattern = Functor-Identifier "(" [ Type-Expression-List ] ")" .
 
 Private-Predicate-Pattern = Predicate-Identifier "[" [ Type-Expression-List ] "]" .
 
-Reasoning = { Reasoning-Item } [ "per" "cases" Simple-Justification ";" ( Case-List | Suppose-List ) ] .
+Reasoning = { Reasoning-Item } [ [ "then" ] "per" "cases" Simple-Justification ";" ( Case-List | Suppose-List ) ] .
 
 Case-List = Case { Case } .
 
@@ -259,7 +261,7 @@ Linkable-Statement = Compact-Statement | Choice-Statement | Type-Changing-Statem
 
 Compact-Statement = Proposition Justification ";" .
 
-Choice-Statement = "consider" Qualified-Variables [ "such" Conditions ] Simple-Justification ";" .
+Choice-Statement = "consider" Qualified-Variables "such" Conditions Simple-Justification ";" .
 
 Type-Changing-Statement = "reconsider" Type-Change-List "as" Type-Expression Simple-Justification ";" .
 
@@ -327,9 +329,9 @@ Variables = Variable-Identifier { "," Variable-Identifier } .
 
 Qualification = ( "being" | "be" ) Type-Expression .
 
-Type-Expression = "(" Type-Expression ")" | Adjective-Cluster Type-Expression | Radix-Type .
+Type-Expression = "(" Radix-Type ")" | Adjective-Cluster Type-Expression | Radix-Type .
 
-Structure-Type-Expression = "(" Structure-Type-Expression ")" | Adjective-Cluster Structure-Symbol [ "over" Term-Expression-List ] .
+Structure-Type-Expression = "(" Structure-Symbol [ "over" Term-Expression-List ] ")" | Adjective-Cluster Structure-Symbol [ "over" Term-Expression-List ] .
 
 Radix-Type = Mode-Symbol [ "of" Term-Expression-List ] | Structure-Symbol [ "over" Term-Expression-List ] .
 

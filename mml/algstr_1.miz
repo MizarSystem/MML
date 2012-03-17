@@ -20,7 +20,8 @@ environ
  notations TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, REAL_1, BINOP_2, STRUCT_0,
       ALGSTR_0, GROUP_1, VECTSP_1, RLVECT_1;
  constructors BINOP_1, BINOP_2, VECTSP_1, RLVECT_1, FUNCT_5, XXREAL_0, REAL_1;
- registrations NUMBERS, VECTSP_1, ALGSTR_0, REAL_1, NAT_1, XREAL_0;
+ registrations NUMBERS, VECTSP_1, ALGSTR_0, REAL_1, NAT_1, XREAL_0, CARD_1,
+      ORDINAL1, STRUCT_0;
  requirements NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions STRUCT_0, VECTSP_1, ALGSTR_0, RLVECT_1, GROUP_1;
  theorems RLVECT_1, VECTSP_1, TARSKI, XCMPLX_1, BINOP_2, GROUP_1, CARD_1,
@@ -80,20 +81,18 @@ end;
 
 definition
   let x be set;
-  canceled 2;
+
   func Extract x -> Element of {x} equals
   x;
   coherence by TARSKI:def 1;
 end;
 
-canceled;
-
 theorem Th5:
   for a,b being Element of Trivial-addLoopStr holds a = b
 proof
   let a,b be Element of Trivial-addLoopStr;
-  thus a = {} by CARD_1:87,TARSKI:def 1
-    .= b by CARD_1:87,TARSKI:def 1;
+  thus a = {} by CARD_1:49,TARSKI:def 1
+    .= b by CARD_1:49,TARSKI:def 1;
 end;
 
 theorem
@@ -125,7 +124,7 @@ for a,x,y be Element of Trivial-addLoopStr holds x+a=y+a implies x=y by Th5;
 
 definition
   let IT be non empty addLoopStr;
-  canceled;
+
   attr IT is left_zeroed means
   :Def5:
   for a being Element of IT holds 0.IT + a = a;
@@ -133,7 +132,7 @@ end;
 
 definition
   let L be non empty addLoopStr;
-  canceled 2;
+
   attr L is add-left-invertible means
   :Def8:
   for a,b be Element of L ex x being Element of L st x + a = b;
@@ -144,7 +143,7 @@ end;
 
 definition
   let IT be non empty addLoopStr;
-  canceled 2;
+
   attr IT is Loop-like means
   :Def12:
   IT is left_add-cancelable
@@ -153,10 +152,10 @@ end;
 
 registration
   cluster Loop-like -> left_add-cancelable right_add-cancelable
-    add-left-invertible add-right-invertible (non empty addLoopStr);
+    add-left-invertible add-right-invertible for non empty addLoopStr;
   coherence by Def12;
   cluster left_add-cancelable right_add-cancelable add-left-invertible
-    add-right-invertible -> Loop-like (non empty addLoopStr);
+    add-right-invertible -> Loop-like for non empty addLoopStr;
   coherence by Def12;
 end;
 
@@ -196,11 +195,11 @@ Lm6: for a,b be Element of Trivial-addLoopStr holds a+b = b+a by Th5;
 registration
   cluster Trivial-addLoopStr -> add-associative Loop-like right_zeroed
     left_zeroed;
-  coherence by Def5,Lm1,Lm2,Lm3,Lm4,Lm5,Th7,RLVECT_1:def 6,def 7;
+  coherence by Def5,Lm1,Lm2,Lm3,Lm4,Lm5,Th7,RLVECT_1:def 3,def 4;
 end;
 
 registration
-  cluster strict left_zeroed right_zeroed Loop-like (non empty addLoopStr);
+  cluster strict left_zeroed right_zeroed Loop-like for non empty addLoopStr;
   existence
   proof
     take Trivial-addLoopStr;
@@ -209,11 +208,11 @@ registration
 end;
 
 definition
-  mode Loop is left_zeroed right_zeroed Loop-like (non empty addLoopStr);
+  mode Loop is left_zeroed right_zeroed Loop-like non empty addLoopStr;
 end;
 
 registration
-  cluster strict add-associative Loop;
+  cluster strict add-associative for Loop;
   existence
   proof
     take Trivial-addLoopStr;
@@ -222,45 +221,43 @@ registration
 end;
 
 registration
-  cluster Loop-like -> add-left-invertible (non empty addLoopStr);
+  cluster Loop-like -> add-left-invertible for non empty addLoopStr;
   coherence;
   cluster add-associative right_zeroed right_complementable -> left_zeroed
-    Loop-like (non empty addLoopStr);
+    Loop-like for non empty addLoopStr;
   coherence
   proof
     let L;
     assume
 A1: L is add-associative right_zeroed right_complementable;
     then reconsider
-    G = L as add-associative right_zeroed right_complementable (non
-    empty addLoopStr);
-A2: for a,x,y be Element of L holds x+a=y +a implies x=y by A1,RLVECT_1:21;
-    thus for a holds 0.L + a = a by A1,RLVECT_1:10;
+    G = L as add-associative right_zeroed right_complementable non
+    empty addLoopStr;
+A2: for a,x,y be Element of L holds x+a=y +a implies x=y by A1,RLVECT_1:8;
+    thus for a holds 0.L + a = a by A1,RLVECT_1:4;
 A3: for a,b ex x st x+a=b
     proof
       let a,b;
       reconsider a9 = a, b9 = b as Element of G;
       reconsider x = b9 + -a9 as Element of L;
       take x;
-      (b9+-a9)+a9 = b9+(-a9+a9) by RLVECT_1:def 6
-        .= b9+0.G by RLVECT_1:16
-        .= b by RLVECT_1:10;
+      (b9+-a9)+a9 = b9+(-a9+a9) by RLVECT_1:def 3
+        .= b9+0.G by RLVECT_1:5
+        .= b by RLVECT_1:4;
       hence thesis;
     end;
     ( for a,b ex x st a+x=b)& for a,x,y be Element of L holds a+x=a+y
-    implies x=y by A1,RLVECT_1:20,21;
+    implies x=y by A1,RLVECT_1:7,8;
     hence thesis by A3,A2,Th7;
   end;
 end;
-
-canceled;
 
 theorem Th9:
   L is AddGroup iff (for a holds a + 0.L = a) & (for a ex x st a+x
   = 0.L) & for a,b,c holds (a+b)+c = a+(b+c)
 proof
   thus L is AddGroup implies (for a holds a + 0.L = a) & (for a ex x st a+x =
-  0.L) & for a,b,c holds (a+b)+c = a+(b+c) by Th7,RLVECT_1:def 6,def 7;
+  0.L) & for a,b,c holds (a+b)+c = a+(b+c) by Th7,RLVECT_1:def 3,def 4;
   assume that
 A1: for a holds a + 0.L = a and
 A2: for a ex x st a+x = 0.L and
@@ -270,16 +267,16 @@ A3: for a,b,c holds (a+b)+c = a+(b+c);
     let a be Element of L;
     thus ex x st a+x = 0.L by A2;
   end;
-  hence thesis by A1,A3,RLVECT_1:def 6,def 7;
+  hence thesis by A1,A3,RLVECT_1:def 3,def 4;
 end;
 
 registration
   cluster Trivial-addLoopStr -> Abelian;
-  coherence by Lm6,RLVECT_1:def 5;
+  coherence by Lm6,RLVECT_1:def 2;
 end;
 
 registration
-  cluster strict Abelian AddGroup;
+  cluster strict Abelian for AddGroup;
   existence
   proof
     take Trivial-addLoopStr;
@@ -287,26 +284,22 @@ registration
   end;
 end;
 
-canceled;
-
 theorem
   L is Abelian AddGroup iff (for a holds a + 0.L = a) & (for a ex x st a
   +x = 0.L) & (for a,b,c holds (a+b)+c = a+(b+c)) & for a,b holds a+b = b+a by
-Th9,RLVECT_1:def 5;
+Th9,RLVECT_1:def 2;
 
 registration
   cluster Trivial-multLoopStr -> non empty;
   coherence;
 end;
 
-canceled 6;
-
 theorem Th18:
   for a,b being Element of Trivial-multLoopStr holds a = b
 proof
   let a,b be Element of Trivial-multLoopStr;
-  thus a = {} by CARD_1:87,TARSKI:def 1
-    .= b by CARD_1:87,TARSKI:def 1;
+  thus a = {} by CARD_1:49,TARSKI:def 1
+    .= b by CARD_1:49,TARSKI:def 1;
 end;
 
 theorem
@@ -335,13 +328,13 @@ end;
 
 definition
   let IT be non empty multLoopStr;
-  canceled;
+
   attr IT is invertible means
   :Def14:
   (for a,b be Element of IT ex x being
 Element of IT st a*x=b) & for a,b be Element of IT ex x being Element of IT st
   x*a=b;
-  canceled;
+
 end;
 
 notation
@@ -350,32 +343,32 @@ notation
 end;
 
 registration
-  cluster strict well-unital invertible cancelable (non empty multLoopStr);
+  cluster strict well-unital invertible cancelable for non empty multLoopStr;
   existence
   proof
     Trivial-multLoopStr is well-unital invertible cancelable by Def14,Lm7,Lm8
-,Lm9,VECTSP_1:def 16;
+,Lm9,VECTSP_1:def 6;
     hence thesis;
   end;
 end;
 
 definition
-  mode multLoop is well-unital invertible cancelable (non empty multLoopStr);
+  mode multLoop is well-unital invertible cancelable non empty multLoopStr;
 end;
 
 registration
   cluster Trivial-multLoopStr -> well-unital invertible cancelable;
-  coherence by Def14,Lm7,Lm8,Lm9,VECTSP_1:def 16;
+  coherence by Def14,Lm7,Lm8,Lm9,VECTSP_1:def 6;
 end;
 
 Lm10: for a,b,c be Element of Trivial-multLoopStr holds (a*b)*c = a*(b*c) by
 Th18;
 
 registration
-  cluster strict associative multLoop;
+  cluster strict associative for multLoop;
   existence
   proof
-    Trivial-multLoopStr is associative by Lm10,GROUP_1:def 4;
+    Trivial-multLoopStr is associative by Lm10,GROUP_1:def 3;
     hence thesis;
   end;
 end;
@@ -431,14 +424,12 @@ A4: a * x = 1.L by A2;
   hence thesis;
 end;
 
-canceled 2;
-
 theorem Th22:
   L is multGroup iff (for a holds a * 1.L = a) & (for a ex x st a*
   x = 1.L) & for a,b,c holds (a*b)*c = a*(b*c)
 proof
   thus L is multGroup implies (for a holds a * 1.L = a) & (for a ex x st a*x =
-1.L) & for a,b,c holds (a*b)*c = a*(b*c) by Def14,GROUP_1:def 4,VECTSP_1:def 16
+1.L) & for a,b,c holds (a*b)*c = a*(b*c) by Def14,GROUP_1:def 3,VECTSP_1:def 6
   ;
   assume that
 A1: for a holds a * 1.L = a and
@@ -490,41 +481,39 @@ A11: a*y = 1.L by A2;
     thus a*x = 1.L * b by A3,A11
       .= b by A6;
   end;
-  hence thesis by A1,A3,A6,A4,A7,A9,Def14,GROUP_1:def 4,VECTSP_1:def 16;
+  hence thesis by A1,A3,A6,A4,A7,A9,Def14,GROUP_1:def 3,VECTSP_1:def 6;
 end;
 
 registration
   cluster Trivial-multLoopStr -> associative;
-  coherence by Lm10,GROUP_1:def 4;
+  coherence by Lm10,GROUP_1:def 3;
 end;
 
 Lm14: for a,b be Element of Trivial-multLoopStr holds a*b = b*a by Th18;
 
 registration
-  cluster strict commutative multGroup;
+  cluster strict commutative for multGroup;
   existence
   proof
-    Trivial-multLoopStr is commutative by Lm14,GROUP_1:def 16;
+    Trivial-multLoopStr is commutative by Lm14,GROUP_1:def 12;
     hence thesis;
   end;
 end;
 
-canceled;
-
 theorem
   L is commutative multGroup iff (for a holds a * 1.L = a) & (for a ex x
   st a*x = 1.L) & (for a,b,c holds (a*b)*c = a*(b*c)) & for a,b holds a*b = b*a
-  by Th22,GROUP_1:def 16;
+  by Th22,GROUP_1:def 12;
 
 notation
-  let L be invertible cancelable (non empty multLoopStr);
+  let L be invertible cancelable non empty multLoopStr;
   let x be Element of L;
   synonym x" for /x;
 end;
 
 registration
-  let L be invertible cancelable (non empty multLoopStr);
-  cluster -> left_invertible Element of L;
+  let L be invertible cancelable non empty multLoopStr;
+  cluster -> left_invertible for Element of L;
   coherence
   proof
     let x be Element of L;
@@ -534,8 +523,6 @@ end;
 
 reserve G for multGroup;
 reserve a,b,c,x for Element of G;
-
-canceled;
 
 theorem
   a"*a=1.G & a*(a") = 1.G
@@ -548,8 +535,8 @@ A2: for a,b,c holds (a*b)*c = a*(b*c) by Th22;
 end;
 
 definition
-  canceled 3;
-  let L be invertible cancelable (non empty multLoopStr);
+
+  let L be invertible cancelable non empty multLoopStr;
   let a, b be Element of L;
   func a/b -> Element of L equals
   a*(b");
@@ -557,7 +544,7 @@ definition
 end;
 
 definition
-  canceled 3;
+
   func multEX_0 -> strict multLoopStr_0 equals
   multLoopStr_0 (# REAL, multreal
     , 0, 1 #);
@@ -593,8 +580,6 @@ Lm16: 0 = 0.multEX_0;
 
 Lm17: 1 = 1_multEX_0;
 
-canceled 5;
-
 theorem Th32:
   for q,p be Real st q<>0 ex y be Real st p=q*y
 proof
@@ -603,7 +588,7 @@ proof
   assume
 A1: q<>0;
   take y;
-  thus thesis by A1,XCMPLX_1:88;
+  thus thesis by A1,XCMPLX_1:87;
 end;
 
 theorem Th33:
@@ -614,7 +599,7 @@ proof
   assume
 A1: q<>0;
   take y;
-  thus thesis by A1,XCMPLX_1:88;
+  thus thesis by A1,XCMPLX_1:87;
 end;
 
 Lm18: for a,b be Element of multEX_0 st a<>0.multEX_0 ex x be Element of
@@ -694,7 +679,7 @@ end;
 
 definition
   let IT be non empty multLoopStr_0;
-  canceled;
+
   attr IT is multLoop_0-like means
   :Def26:
   IT is almost_invertible
@@ -765,14 +750,14 @@ A9: x <> 0.L;
 end;
 
 registration
-  cluster multLoop_0-like -> almost_invertible almost_cancelable (non empty
-    multLoopStr_0);
+  cluster multLoop_0-like -> almost_invertible almost_cancelable for non empty
+    multLoopStr_0;
   coherence by Def26;
 end;
 
 registration
-  cluster strict well-unital multLoop_0-like non degenerated (non empty
-    multLoopStr_0);
+  cluster strict well-unital multLoop_0-like non degenerated for non empty
+    multLoopStr_0;
   existence
   proof
     multEX_0 is well-unital multLoop_0-like non degenerated by Lm17,Lm18,Lm19
@@ -782,8 +767,8 @@ registration
 end;
 
 definition
-  mode multLoop_0 is well-unital non degenerated multLoop_0-like (non empty
-    multLoopStr_0);
+  mode multLoop_0 is well-unital non degenerated multLoop_0-like non empty
+    multLoopStr_0;
 end;
 
 registration
@@ -803,10 +788,10 @@ A1: b*c = q*r by BINOP_2:def 11;
 end;
 
 registration
-  cluster strict associative non degenerated multLoop_0;
+  cluster strict associative non degenerated for multLoop_0;
   existence
   proof
-    multEX_0 is associative non degenerated by Lm16,Lm17,Lm24,GROUP_1:def 4
+    multEX_0 is associative non degenerated by Lm16,Lm17,Lm24,GROUP_1:def 3
 ,STRUCT_0:def 8;
     hence thesis;
   end;
@@ -816,14 +801,9 @@ definition
   mode multGroup_0 is associative non degenerated multLoop_0;
 end;
 
-
-
-
-canceled 2;
-
 registration
   cluster multEX_0 -> associative;
-  coherence by Lm24,GROUP_1:def 4;
+  coherence by Lm24,GROUP_1:def 3;
 end;
 
 Lm25: for a,b be Element of multEX_0 holds a*b = b*a
@@ -835,19 +815,17 @@ proof
 end;
 
 registration
-  cluster strict commutative multGroup_0;
+  cluster strict commutative for multGroup_0;
   existence
   proof
-    multEX_0 is commutative non degenerated by Lm16,Lm17,Lm25,GROUP_1:def 16
+    multEX_0 is commutative non degenerated by Lm16,Lm17,Lm25,GROUP_1:def 12
 ,STRUCT_0:def 8;
     hence thesis;
   end;
 end;
 
-canceled 2;
-
 definition
-  let L be almost_invertible almost_cancelable (non empty multLoopStr_0);
+  let L be almost_invertible almost_cancelable non empty multLoopStr_0;
   let x be Element of L;
   assume
 A1: x<>0.L;
@@ -865,11 +843,9 @@ A2: x is left_invertible by ALGSTR_0:def 27;
   end;
 end;
 
-reserve G for associative almost_invertible almost_cancelable well-unital (non
-  empty multLoopStr_0);
+reserve G for associative almost_invertible almost_cancelable well-unital non
+  empty multLoopStr_0;
 reserve a,x for Element of G;
-
-canceled;
 
 theorem
   a<>0.G implies a"*a=1.G & a*(a") = 1.G
@@ -880,13 +856,13 @@ A1: a<>0.G;
 A2: a"*a = 1.G by Def27;
   consider x such that
 A3: a*x = 1.G by A1,Def24;
-  a"*a*x = a" * 1.G by A3,GROUP_1:def 4;
-  then x = a" * 1.G by A2,VECTSP_1:def 19;
-  hence thesis by A3,VECTSP_1:def 13;
+  a"*a*x = a" * 1.G by A3,GROUP_1:def 3;
+  then x = a" * 1.G by A2,VECTSP_1:def 8;
+  hence thesis by A3,VECTSP_1:def 4;
 end;
 
 definition
-  let L be almost_invertible almost_cancelable (non empty multLoopStr_0);
+  let L be almost_invertible almost_cancelable non empty multLoopStr_0;
   let a, b be Element of L;
   func a/b -> Element of L equals
   a*(b");
@@ -896,21 +872,20 @@ end;
 :: from SCMRING1, 2010,02.06, A.T.
 
 registration
-  cluster trivial -> Abelian add-associative right_zeroed right_complementable
-    (non empty addLoopStr);
+  cluster  -> Abelian add-associative right_zeroed right_complementable
+    for 1-element addLoopStr;
   coherence
   proof
-    let S be non empty addLoopStr;
-    assume
-A1: S is trivial;
-    hence (for v, w being Element of S holds v + w = w + v) & (for u, v, w
+    let S be 1-element addLoopStr;
+    thus (for v, w being Element of S holds v + w = w + v) & (for u, v, w
 being Element of S holds u + v + w = u + (v + w)) & for v being Element of S
     holds v + 0.S = v by STRUCT_0:def 10;
     let v be Element of S;
     take v;
-    thus thesis by A1,STRUCT_0:def 10;
+    thus thesis by STRUCT_0:def 10;
   end;
-  cluster trivial -> well-unital right-distributive (non empty doubleLoopStr);
+  cluster trivial -> well-unital right-distributive for
+non empty doubleLoopStr;
   coherence
   proof
     let S be non empty doubleLoopStr such that
@@ -923,22 +898,21 @@ STRUCT_0:def 10;
 end;
 
 registration
-  cluster trivial -> Group-like associative commutative (non empty multMagma);
+  cluster -> Group-like associative commutative for 1-element multMagma;
   coherence
   proof
-    let H be non empty multMagma such that
-A1: H is trivial;
+    let H be 1-element multMagma;
     hereby
-      set e =the  Element of H;
+      set e = the Element of H;
       take e;
       let h be Element of H;
-      thus h * e = h & e * h = h by A1,STRUCT_0:def 10;
+      thus h * e = h & e * h = h by STRUCT_0:def 10;
       take g = e;
-      thus h * g = e & g * h = e by A1,STRUCT_0:def 10;
+      thus h * g = e & g * h = e by STRUCT_0:def 10;
     end;
-    thus for x, y, z being Element of H holds x*y*z = x*(y*z) by A1,
+    thus for x, y, z being Element of H holds x*y*z = x*(y*z) by
 STRUCT_0:def 10;
     let x, y be Element of H;
-    thus thesis by A1,STRUCT_0:def 10;
+    thus thesis by STRUCT_0:def 10;
   end;
 end;

@@ -32,9 +32,8 @@
 <Cluster>
 <Adjective nr="45" value="false"/>
 <Adjective nr="50" value="false"/>
-<Adjective nr="67"/>
 <Adjective nr="68"/>
-<Adjective nr="92"/>
+<Adjective nr="69"/>
 <Adjective nr="93"/>
 <Adjective nr="94"/>
 <Adjective nr="95"/>
@@ -43,6 +42,7 @@
 <Adjective nr="98"/>
 <Adjective nr="99"/>
 <Adjective nr="100"/>
+<Adjective nr="101"/>
 </Cluster>
 </RCluster>
 <FCluster aid="ANPROJ_1" nr="1">
@@ -51,18 +51,18 @@
 <Cluster>
 <Adjective nr="45" value="false"/>
 <Adjective nr="50" value="false"/>
-<Adjective nr="68"/>
-<Adjective nr="93"/>
+<Adjective nr="69"/>
 <Adjective nr="94"/>
 <Adjective nr="95"/>
 <Adjective nr="96"/>
 <Adjective nr="97"/>
 <Adjective nr="98"/>
 <Adjective nr="99"/>
+<Adjective nr="100"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="142">
+<Func kind="K" nr="140">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -75,23 +75,23 @@
 <Cluster>
 <Adjective nr="45" value="false"/>
 <Adjective nr="50" value="false"/>
-<Adjective nr="68"/>
-<Adjective nr="93"/>
+<Adjective nr="69"/>
 <Adjective nr="94"/>
 <Adjective nr="95"/>
 <Adjective nr="96"/>
 <Adjective nr="97"/>
 <Adjective nr="98"/>
 <Adjective nr="99"/>
+<Adjective nr="100"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="144">
+<Func kind="K" nr="142">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
 <Adjective nr="45" value="false"/>
-<Adjective nr="101"/>
+<Adjective nr="102"/>
 </Cluster>
 </FCluster>
 </Registrations>

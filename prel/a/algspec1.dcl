@@ -21,9 +21,9 @@
 <ArticleID name="PROB_1"/>
 <ArticleID name="PROB_2"/>
 <ArticleID name="FUNCOP_1"/>
+<ArticleID name="STRUCT_0"/>
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="FINSEQ_2"/>
-<ArticleID name="STRUCT_0"/>
 <ArticleID name="UNIALG_1"/>
 <ArticleID name="PBOOLE"/>
 <ArticleID name="MSUALG_1"/>
@@ -44,19 +44,19 @@
 <ArgTypes>
 <Typ kind="G" nr="7">
 <Cluster>
-<Adjective nr="97"/>
+<Adjective nr="99"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Typ kind="M" nr="33">
+<Typ kind="M" nr="32">
 <Cluster/>
 <LocusVar nr="1"/>
 </Typ>
 <Cluster>
-<Adjective nr="54" value="false"/>
-<Adjective nr="63" value="false"/>
-<Adjective nr="71"/>
-<Adjective nr="97"/>
+<Adjective nr="52" value="false"/>
+<Adjective nr="61" value="false"/>
+<Adjective nr="73"/>
+<Adjective nr="99"/>
 </Cluster>
 </RCluster>
 <FCluster aid="ALGSPEC1" nr="1">
@@ -74,7 +74,7 @@
 <Adjective nr="6"/>
 <Adjective nr="15">
 <LocusVar nr="2"/>
-<Func kind="K" nr="174">
+<Func kind="K" nr="183">
 <LocusVar nr="1"/>
 </Func>
 </Adjective>
@@ -82,7 +82,7 @@
 <Func kind="K" nr="21">
 <Func kind="K" nr="22">
 <LocusVar nr="2"/>
-<Func kind="K" nr="174">
+<Func kind="K" nr="183">
 <LocusVar nr="1"/>
 </Func>
 </Func>
@@ -111,24 +111,24 @@
 <LocusVar nr="4"/>
 </Func>
 <Cluster>
-<Adjective nr="63" value="false"/>
-<Adjective nr="71"/>
+<Adjective nr="61" value="false"/>
+<Adjective nr="73"/>
 </Cluster>
 </FCluster>
 <FCluster aid="ALGSPEC1" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="7">
 <Cluster>
-<Adjective nr="63" value="false"/>
-<Adjective nr="97"/>
+<Adjective nr="61" value="false"/>
+<Adjective nr="99"/>
 </Cluster>
 </Typ>
 <Typ kind="G" nr="9">
 <Cluster>
-<Adjective nr="74">
+<Adjective nr="76">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="76">
+<Adjective nr="78">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -159,36 +159,36 @@
 <ArgTypes>
 <Typ kind="G" nr="7">
 <Cluster>
-<Adjective nr="54" value="false"/>
-<Adjective nr="97"/>
+<Adjective nr="52" value="false"/>
+<Adjective nr="99"/>
 </Cluster>
 </Typ>
 </ArgTypes>
 <Cluster/>
-<Typ kind="M" nr="33">
+<Typ kind="M" nr="32">
 <Cluster/>
 <LocusVar nr="1"/>
 </Typ>
 <Cluster>
-<Adjective nr="54" value="false"/>
+<Adjective nr="52" value="false"/>
 </Cluster>
 </CCluster>
 <CCluster aid="ALGSPEC1" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="7">
 <Cluster>
-<Adjective nr="63" value="false"/>
-<Adjective nr="97"/>
+<Adjective nr="61" value="false"/>
+<Adjective nr="99"/>
 </Cluster>
 </Typ>
 </ArgTypes>
 <Cluster/>
-<Typ kind="M" nr="33">
+<Typ kind="M" nr="32">
 <Cluster/>
 <LocusVar nr="1"/>
 </Typ>
 <Cluster>
-<Adjective nr="63" value="false"/>
+<Adjective nr="61" value="false"/>
 </Cluster>
 </CCluster>
 </Registrations>

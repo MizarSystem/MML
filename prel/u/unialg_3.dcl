@@ -33,9 +33,9 @@
 <Typ kind="G" nr="9">
 <Cluster>
 <Adjective nr="36" value="false"/>
-<Adjective nr="73"/>
-<Adjective nr="74"/>
 <Adjective nr="75"/>
+<Adjective nr="76"/>
+<Adjective nr="77"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -52,22 +52,22 @@
 <Typ kind="G" nr="9">
 <Cluster>
 <Adjective nr="36" value="false"/>
-<Adjective nr="72"/>
-<Adjective nr="73"/>
 <Adjective nr="74"/>
 <Adjective nr="75"/>
-<Adjective nr="88"/>
+<Adjective nr="76"/>
+<Adjective nr="77"/>
+<Adjective nr="90"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="213">
+<Func kind="K" nr="216">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
 <Adjective nr="36" value="false"/>
-<Adjective nr="49"/>
-<Adjective nr="56"/>
-<Adjective nr="61"/>
+<Adjective nr="50"/>
+<Adjective nr="57"/>
+<Adjective nr="62"/>
 </Cluster>
 </FCluster>
 <CCluster aid="UNIALG_3" nr="1">
@@ -75,10 +75,10 @@
 <Typ kind="G" nr="9">
 <Cluster>
 <Adjective nr="36" value="false"/>
-<Adjective nr="73"/>
-<Adjective nr="74"/>
 <Adjective nr="75"/>
-<Adjective nr="88"/>
+<Adjective nr="76"/>
+<Adjective nr="77"/>
+<Adjective nr="90"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -88,7 +88,7 @@
 <LocusVar nr="1"/>
 </Typ>
 <Cluster>
-<Adjective nr="88"/>
+<Adjective nr="90"/>
 </Cluster>
 </CCluster>
 </Registrations>

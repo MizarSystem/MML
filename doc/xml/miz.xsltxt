@@ -117,6 +117,8 @@ $print_identifiers = { "1"; }
 // it should be turned off for item generating
 $print_lab_identifiers = { "1"; }
 
+// print "for" in registrations - newly in version 1132
+#regs_use_for = { "1"; }
 
 // tells whether relative or absolute names are shown
 #relnames= { "1"; }
@@ -179,6 +181,9 @@ $lbydlicgipref= { `concat($lbydlicgi,"?url=",$lbydliurl)`; }
 // add editing, history, and possibly other links for wiki
 // the namespace for the scripts is taken from #ltptproot
 #wiki_links = { "0"; }
+
+// add buttons for editing wiki sections
+#wiki_sections = { "0"; }
 
 // domain name of the "wiki" server
 #lwikihost = { "mws.cs.ru.nl"; }
@@ -2897,7 +2902,7 @@ tpl rc
     @NAME=`concat("RC",$nr1)`;
     pkeyword(#str="cluster "); 
   }
-  if [ErrorCluster] { "errorcluster"; } else { apply[*[3]](#all="1"); " "; apply[*[2]]; }
+  if [ErrorCluster] { "errorcluster"; } else { apply[*[3]](#all="1"); if[$regs_use_for=1] { " for"; } " "; apply[*[2]]; }
   ";"; <br; if [$mml="1"] { <br; }
 }
 
@@ -2932,7 +2937,8 @@ tpl cc
        { 
           apply[*[2]](#all="1"); 
 	  pkeyword(#str=" -> "); 
-	  apply[*[4]]; " "; 
+	  apply[*[4]]; 
+	  if[$regs_use_for=1] { " for"; } " "; 
 	  apply[*[3]]; 
        }
        ";"; <br; 
@@ -2961,7 +2967,7 @@ tpl fc
    <a { @NAME=`concat("FC",$nr1)`;
    pkeyword(#str="cluster "); }
    if [ErrorCluster] { "errorcluster"; }
-   else { apply[*[2]]; pkeyword(#str=" -> "); apply[*[3]]; apply[Typ];}
+   else { apply[*[2]]; pkeyword(#str=" -> "); apply[*[3]]; if[Typ] { if[$regs_use_for=1] { " for"; } apply[Typ]; }}
    ";"; <br; if [$mml="1"] { <br; }
 }
 
@@ -3142,6 +3148,18 @@ tpl jt
        { 
           idv_for_item(#k="t", #nr=$nr1);
        }
+       if [$wiki_sections = 1]
+       {
+         $endpos = { if [Proof] { `Proof[1]/EndPosition[1]/@line`; }
+                     else { if [By|From]  { `*[2]/@line`; } 
+		     else { "0"; } }}  
+
+         if [$endpos > 0]
+	 {
+           " "; wiki_edit_section_for(#k="t", #nr=$nr1, #line1=`Proposition[1]/@line`, #line2=$endpos);
+         }
+
+       }      
        if [$thms_tptp_links = 1]
        {
           tptp_for_thm(#line=`Proposition[1]/@line`, #col=`Proposition[1]/@col`);
@@ -3287,6 +3305,23 @@ tpl edit_for_thm(#line, #col)
     "[edit]";
   }
 }
+
+tpl wiki_edit_section_for(#k, #nr, #line1, #line2)
+{
+  $section = `concat($k,$nr,"_",$line1,"_",$line2)`;
+// // <xsl:document href="{$anamelc}__{$k}{$nr}.itm">
+//  $bogus=`1`;
+//  $section;
+// // </xsl:document>
+  <a
+  {
+    @href= `concat($lmwikicgi,"?p=",$lgitproject,";a=edit;f=mml/",$anamelc,".miz;s=",$section)`; 
+    @rel="nofollow";
+    @class="edit";
+    " [edit]";
+  }
+}
+
 
 
 tpl [DefTheorem] 

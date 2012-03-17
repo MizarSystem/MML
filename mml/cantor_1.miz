@@ -18,9 +18,9 @@ environ
       FINSET_1, XBOOLE_0, FINSUB_1, SETWISEO, ZFMISC_1, STRUCT_0, FUNCT_1,
       RELAT_1, CARD_3, NUMBERS, FUNCOP_1, CARD_1, NAT_1, CANTOR_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, NAT_1, SETFAM_1,
-      RELAT_1, FUNCT_1, FUNCT_2, FINSET_1, FINSUB_1, SETWISEO, STRUCT_0,
-      PRE_TOPC, TOPS_2, CARD_3, FUNCOP_1;
- constructors SETFAM_1, FUNCOP_1, SETWISEO, CARD_3, TOPS_2, RELSET_1;
+      RELAT_1, FUNCT_1, FUNCT_2, FINSET_1, FINSUB_1, SETWISEO, PROB_1,
+      STRUCT_0, PRE_TOPC, TOPS_2, CARD_3, FUNCOP_1;
+ constructors SETFAM_1, FUNCOP_1, SETWISEO, CARD_3, TOPS_2, RELSET_1, PROB_1;
  registrations XBOOLE_0, SUBSET_1, RELSET_1, FUNCOP_1, FINSET_1, CARD_3,
       PRE_TOPC, FUNCT_1, TOPS_2;
  requirements BOOLE, SUBSET;
@@ -58,7 +58,7 @@ A2: for x being Subset of X holds x in F2 iff ex Y being Subset-Family
       x in F1 iff ex Y being Subset-Family of X st Y c=A & x = union Y by A1;
       hence x in F1 iff x in F2 by A2;
     end;
-    hence thesis by SUBSET_1:8;
+    hence thesis by SUBSET_1:3;
   end;
 end;
 
@@ -78,16 +78,16 @@ registration
     let A be set;
     assume
 A1: A in F;
-    then reconsider B = {A} as Subset-Family of X by SUBSET_1:63;
-A2: B c= F by A1,ZFMISC_1:37;
-    A = union B by ZFMISC_1:31;
+    then reconsider B = {A} as Subset-Family of X by SUBSET_1:41;
+A2: B c= F by A1,ZFMISC_1:31;
+    A = union B by ZFMISC_1:25;
     hence A in UniCl F by A2,Def1;
   end;
 end;
 
 registration
   let X be TopStruct;
-  cluster open quasi_basis Subset-Family of X;
+  cluster open quasi_basis for Subset-Family of X;
   existence
   proof
     take the topology of X;
@@ -109,9 +109,9 @@ proof
   assume
 A1: x in A;
   then reconsider x9=x as Subset of X;
-  reconsider s = {x9} as Subset-Family of X by SUBSET_1:63;
-A2: x = union s by ZFMISC_1:31;
-  s c= A by A1,ZFMISC_1:37;
+  reconsider s = {x9} as Subset-Family of X by SUBSET_1:41;
+A2: x = union s by ZFMISC_1:25;
+  s c= A by A1,ZFMISC_1:31;
   hence thesis by A2,Def1;
 end;
 
@@ -124,7 +124,7 @@ theorem
 definition
   let X be set;
   let A be Subset-Family of X;
-  canceled;
+
   func FinMeetCl(A) -> Subset-Family of X means
   :Def4:
   for x being Subset of X holds x in it iff
@@ -150,7 +150,7 @@ A2: for x being Subset of X holds x in B2 iff ex Y being Subset-Family
       = Intersect Y by A2;
       hence x in B2 iff x in B1 by A1;
     end;
-    hence thesis by SUBSET_1:8;
+    hence thesis by SUBSET_1:3;
   end;
 end;
 
@@ -163,11 +163,11 @@ proof
   assume
 A1: x in A;
   then reconsider x9=x as Subset of X;
-  reconsider s = {x9} as Subset-Family of X by SUBSET_1:63;
-  x = meet s by SETFAM_1:11;
+  reconsider s = {x9} as Subset-Family of X by SUBSET_1:41;
+  x = meet s by SETFAM_1:10;
   then
-A2: x = Intersect s by SETFAM_1:def 10;
-  s c= A by A1,ZFMISC_1:37;
+A2: x = Intersect s by SETFAM_1:def 9;
+  s c= A by A1,ZFMISC_1:31;
   hence thesis by A2,Def4;
 end;
 
@@ -182,13 +182,13 @@ A1: for B9 being Element of Fin X, b being Element of X holds P[B9] implies
   P[B9 \/ {b}]
   proof
     let B9 be Element of Fin X, b be Element of X;
-A2: meet {b} = b by SETFAM_1:11;
+A2: meet {b} = b by SETFAM_1:10;
     assume
 A3: meet B9 in X;
     per cases;
     suppose
       B9 <> {};
-      then meet (B9 \/ {b}) = meet B9 /\ meet {b} by SETFAM_1:10;
+      then meet (B9 \/ {b}) = meet B9 /\ meet {b} by SETFAM_1:9;
       hence thesis by A2,A3,PRE_TOPC:def 1;
     end;
     suppose
@@ -197,7 +197,7 @@ A3: meet B9 in X;
     end;
   end;
   thus the topology of T c= FinMeetCl the topology of T by Th4;
-A4: P[{}.X] by PRE_TOPC:5,SETFAM_1:2;
+A4: P[{}.X] by PRE_TOPC:1,SETFAM_1:1;
 A5: for B being Element of Fin X holds P[B] from SETWISEO:sch 4(A4,A1);
   now
     let x be Subset of T;
@@ -210,18 +210,18 @@ A7: x = Intersect y by Def4;
     suppose
 A8:   y <> {};
 A9:   y in Fin X by A6,FINSUB_1:def 5;
-      x = meet y by A7,A8,SETFAM_1:def 10;
+      x = meet y by A7,A8,SETFAM_1:def 9;
       hence x in X by A5,A9;
     end;
     suppose
 A10:  y = {};
       reconsider aa = {} bool the carrier of T as Subset-Family of the carrier
       of T;
-      Intersect aa = the carrier of T by SETFAM_1:def 10;
+      Intersect aa = the carrier of T by SETFAM_1:def 9;
       hence x in X by A7,A10,PRE_TOPC:def 1;
     end;
   end;
-  hence thesis by SUBSET_1:7;
+  hence thesis by SUBSET_1:2;
 end;
 
 theorem Th6:
@@ -254,7 +254,7 @@ proof
   {} is Subset-Family of X by XBOOLE_1:2;
   then consider y being Subset-Family of X such that
 A1: y = {};
-  y c= A & Intersect y = X by A1,SETFAM_1:def 10,XBOOLE_1:2;
+  y c= A & Intersect y = X by A1,SETFAM_1:def 9,XBOOLE_1:2;
   hence thesis by A1,Def4;
 end;
 
@@ -275,8 +275,6 @@ A4: x9 = union T by A2,Def1;
   T c=B by A1,A3,XBOOLE_1:1;
   hence thesis by A4,Def1;
 end;
-
-canceled 2;
 
 theorem Th12:
   for X being set for R being non empty Subset-Family of bool X, F
@@ -301,10 +299,10 @@ A4:   d in R by TARSKI:def 4;
       reconsider d as Subset-Family of X by A4;
       reconsider d as Subset-Family of X;
       Intersect d in F by A1,A4;
-      then c in Intersect d by A2,SETFAM_1:58;
-      hence thesis by A3,SETFAM_1:58;
+      then c in Intersect d by A2,SETFAM_1:43;
+      hence thesis by A3,SETFAM_1:43;
     end;
-    hence c in Intersect union R by A2,SETFAM_1:58;
+    hence c in Intersect union R by A2,SETFAM_1:43;
   end;
   let c be set;
   assume
@@ -315,35 +313,10 @@ A5: c in Intersect union R;
     assume Y in F;
     then consider x being Element of R such that
 A6: Y = Intersect x by A1;
-    Intersect union R c= Intersect x by SETFAM_1:59,ZFMISC_1:92;
+    Intersect union R c= Intersect x by SETFAM_1:44,ZFMISC_1:74;
     hence thesis by A5,A6;
   end;
-  hence thesis by A5,SETFAM_1:58;
-end;
-
-definition
-  let X, Y be set;
-  let A be Subset-Family of X;
-  let F be Function of Y, bool A;
-  let x be set;
-  redefine func F.x -> Subset-Family of X;
-  coherence
-  proof
-    per cases;
-    suppose
-A1:   x in dom F;
-A2:   rng F c= bool A by RELAT_1:def 19;
-A3:   bool A c= bool bool X by ZFMISC_1:79;
-      F.x in rng F by A1,FUNCT_1:def 5;
-      then F.x in bool A by A2;
-      hence thesis by A3;
-    end;
-    suppose
-      not x in dom F;
-      then F.x = {} by FUNCT_1:def 4;
-      hence thesis by XBOOLE_1:2;
-    end;
-  end;
+  hence thesis by A5,SETFAM_1:43;
 end;
 
 theorem Th13:
@@ -385,15 +358,15 @@ A10: l = Intersect s and
 A11: s in rng f;
     consider v being set such that
 A12: v in dom f and
-A13: s = f.v by A11,FUNCT_1:def 5;
+A13: s = f.v by A11,FUNCT_1:def 3;
     v in Y by A12,FUNCT_2:def 1;
     then P[v, f.v] by A8;
     hence thesis by A10,A12,A13,FUNCT_2:def 1;
   end;
   rng f c= bool A by RELAT_1:def 19;
-  then union rng f c= union bool A by ZFMISC_1:95;
+  then union rng f c= union bool A by ZFMISC_1:77;
   then
-A14: union rng f c= A by ZFMISC_1:99;
+A14: union rng f c= A by ZFMISC_1:81;
   then reconsider y = union rng f as Subset-Family of X by XBOOLE_1:1;
   reconsider y as Subset-Family of X;
   Y c= fz
@@ -406,7 +379,7 @@ A16: l = Intersect C and
 A17: C = f.l and
     f.l is finite by A8;
     l in dom f by A15,FUNCT_2:def 1;
-    then C in rng f by A17,FUNCT_1:def 5;
+    then C in rng f by A17,FUNCT_1:def 3;
     hence thesis by A16;
   end;
   then
@@ -416,7 +389,7 @@ A19: x = Intersect y
     per cases;
     suppose
 A20:  rng f <> {};
-      rng f c= bool A & bool A c= bool bool X by RELAT_1:def 19,ZFMISC_1:79;
+      rng f c= bool A & bool A c= bool bool X by RELAT_1:def 19,ZFMISC_1:67;
       then reconsider GGG = rng f as non empty Subset-Family of bool X by A20,
 XBOOLE_1:1;
       reconsider GGG as non empty Subset-Family of bool X;
@@ -440,7 +413,7 @@ XBOOLE_1:1;
     suppose
 A21:  rng f = {};
       Y = dom f by FUNCT_2:def 1;
-      hence thesis by A4,A21,RELAT_1:60,64,ZFMISC_1:2;
+      hence thesis by A4,A21,RELAT_1:38,41,ZFMISC_1:2;
     end;
   end;
   for V being set st V in rng f holds V is finite
@@ -449,7 +422,7 @@ A21:  rng f = {};
     assume V in rng f;
     then consider x being set such that
 A22: x in dom f and
-A23: V = f.x by FUNCT_1:def 5;
+A23: V = f.x by FUNCT_1:def 3;
     x in Y by A22,FUNCT_2:def 1;
     then reconsider x as Subset of X;
     reconsider G = f.x as Subset-Family of X;
@@ -457,7 +430,7 @@ A23: V = f.x by FUNCT_1:def 5;
     then P[x,G] by A8;
     hence thesis by A23;
   end;
-  then union rng f is finite by A3,FINSET_1:25;
+  then union rng f is finite by A3,FINSET_1:7;
   hence thesis by A14,A19,Def4;
 end;
 
@@ -468,12 +441,12 @@ proof
   let X be set, A be Subset-Family of X, a, b be set;
   assume
 A1: a in FinMeetCl A & b in FinMeetCl A;
-  then reconsider M = {a,b} as Subset-Family of X by ZFMISC_1:38;
+  then reconsider M = {a,b} as Subset-Family of X by ZFMISC_1:32;
   reconsider M as Subset-Family of X;
-  a /\ b = meet M by SETFAM_1:12;
+  a /\ b = meet M by SETFAM_1:11;
   then
-A2: a /\ b = Intersect M by SETFAM_1:def 10;
-  M c= FinMeetCl A by A1,ZFMISC_1:38;
+A2: a /\ b = Intersect M by SETFAM_1:def 9;
+  M c= FinMeetCl A by A1,ZFMISC_1:32;
   then Intersect M in FinMeetCl FinMeetCl A by Def4;
   hence thesis by A2,Th13;
 end;
@@ -492,12 +465,12 @@ A1: a c= FinMeetCl A & b c= FinMeetCl A;
 A2: V in a & B in b and
 A3: Z = V /\ B by SETFAM_1:def 5;
   V in FinMeetCl A & B in FinMeetCl A by A1,A2;
-  then reconsider M = {V,B} as Subset-Family of X by ZFMISC_1:38;
+  then reconsider M = {V,B} as Subset-Family of X by ZFMISC_1:32;
   reconsider M as Subset-Family of X;
-  V /\ B = meet M by SETFAM_1:12;
+  V /\ B = meet M by SETFAM_1:11;
   then
-A4: V /\ B = Intersect M by SETFAM_1:def 10;
-  M c= FinMeetCl A by A1,A2,ZFMISC_1:38;
+A4: V /\ B = Intersect M by SETFAM_1:def 9;
+  M c= FinMeetCl A by A1,A2,ZFMISC_1:32;
   then Intersect M in FinMeetCl FinMeetCl A by Def4;
   hence thesis by A3,A4,Th13;
 end;
@@ -534,11 +507,11 @@ proof
   set T = TopStruct (#X,UniCl FinMeetCl A#);
 A1: [#]T in FinMeetCl A by Th8;
   now
-    reconsider Y = {[#]T} as Subset-Family of X by ZFMISC_1:80;
+    reconsider Y = {[#]T} as Subset-Family of X by ZFMISC_1:68;
     reconsider Y as Subset-Family of X;
     take Y;
-    thus Y c= FinMeetCl A by A1,ZFMISC_1:37;
-    thus [#]T = union Y by ZFMISC_1:31;
+    thus Y c= FinMeetCl A by A1,ZFMISC_1:31;
+    thus [#]T = union Y by ZFMISC_1:25;
   end;
   hence the carrier of T in the topology of T by Def1;
   thus for a being Subset-Family of T st a c= the topology of T holds union a
@@ -573,7 +546,7 @@ A9:   B in b;
       hence thesis by A8;
     end;
     union union b = union { union B where B is Subset of FinMeetCl A: B
-    in b } & union b c= bool X by EQREL_1:63,XBOOLE_1:1;
+    in b } & union b c= bool X by EQREL_1:54,XBOOLE_1:1;
     hence thesis by A4,Def1;
   end;
   let a,b be Subset of T;
@@ -585,7 +558,7 @@ A11: a = union F by Def1;
   then consider G being Subset-Family of X such that
 A12: G c= FinMeetCl A and
 A13: b = union G by Def1;
-A14: union INTERSECTION(F,G) = a /\ b by A11,A13,SETFAM_1:39;
+A14: union INTERSECTION(F,G) = a /\ b by A11,A13,SETFAM_1:28;
 A15: INTERSECTION(F,G) c= FinMeetCl A by A10,A12,Th15;
   then INTERSECTION(F,G) is Subset-Family of X by XBOOLE_1:1;
   hence thesis by A15,A14,Def1;
@@ -606,14 +579,14 @@ registration
     take the topology of X;
     thus thesis by Th4;
   end;
-  cluster -> quasi_prebasis Basis of X;
+  cluster -> quasi_prebasis for Basis of X;
   coherence
   proof
     let F be Basis of X;
     take F;
     thus thesis by Th4;
   end;
-  cluster open quasi_prebasis Subset-Family of X;
+  cluster open quasi_prebasis for Subset-Family of X;
   existence
   proof
     take the topology of X;
@@ -632,7 +605,7 @@ theorem Th18:
 proof
   let X be non empty set, Y be Subset-Family of X;
   Y c= UniCl Y by Th1;
-  hence thesis by Def2,TOPS_2:78;
+  hence thesis by Def2,TOPS_2:64;
 end;
 
 theorem Th19:
@@ -645,11 +618,11 @@ A2: P is prebasis of T2;
   reconsider P9 = P as prebasis of T2 by A2;
   consider B1 being Basis of T1 such that
 A3: B1 c= FinMeetCl P by Def5;
-  P c= the topology of T1 by TOPS_2:78;
+  P c= the topology of T1 by TOPS_2:64;
   then FinMeetCl P c= FinMeetCl the topology of T1 by Th16;
   then
 A4: UniCl FinMeetCl P c= UniCl FinMeetCl the topology of T1 by Th9;
-  P9 c= the topology of T2 by TOPS_2:78;
+  P9 c= the topology of T2 by TOPS_2:64;
   then FinMeetCl P9 c= FinMeetCl the topology of T2 by Th16;
   then
 A5: UniCl FinMeetCl P9 c= UniCl FinMeetCl the topology of T2 by Th9;
@@ -680,7 +653,7 @@ proof
   now
     A9 c= FinMeetCl A & FinMeetCl A c= the topology of T by Th1,Th4;
     then A9 c= the topology of T by XBOOLE_1:1;
-    hence A9 is open by TOPS_2:78;
+    hence A9 is open by TOPS_2:64;
     thus A9 is quasi_prebasis
     proof
       reconsider B = FinMeetCl A9 as Basis of T by Th18;
@@ -737,7 +710,7 @@ A7: for X being Subset of product (NAT-->{0,1}) holds X in P2 iff ex N
       -->{0,1}) holds F in x iff F.N=n by A6;
       hence x in P1 iff x in P2 by A7;
     end;
-    then P1 = P2 by A2,A4,SUBSET_1:8;
+    then P1 = P2 by A2,A4,SUBSET_1:3;
     hence thesis by A2,A4,Th19;
   end;
 end;

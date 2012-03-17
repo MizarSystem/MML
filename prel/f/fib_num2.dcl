@@ -37,7 +37,7 @@
 <Adjective nr="1" value="false"/>
 <Adjective nr="4"/>
 <Adjective nr="31"/>
-<Adjective nr="55"/>
+<Adjective nr="56"/>
 </Cluster>
 </RCluster>
 <FCluster aid="FIB_NUM2" nr="1">
@@ -45,7 +45,7 @@
 <Typ kind="M" nr="1">
 <Cluster>
 <Adjective nr="16"/>
-<Adjective nr="58" value="false"/>
+<Adjective nr="59" value="false"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -54,7 +54,7 @@
 </Func>
 <Cluster>
 <Adjective nr="14"/>
-<Adjective nr="58" value="false"/>
+<Adjective nr="59" value="false"/>
 </Cluster>
 </FCluster>
 <FCluster aid="FIB_NUM2" nr="2">
@@ -62,7 +62,7 @@
 <Typ kind="M" nr="1">
 <Cluster>
 <Adjective nr="16"/>
-<Adjective nr="58"/>
+<Adjective nr="59"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -71,7 +71,7 @@
 </Func>
 <Cluster>
 <Adjective nr="14"/>
-<Adjective nr="58"/>
+<Adjective nr="59"/>
 </Cluster>
 </FCluster>
 <FCluster aid="FIB_NUM2" nr="3">
@@ -95,7 +95,7 @@
 <Cluster>
 <Adjective nr="4"/>
 <Adjective nr="31"/>
-<Adjective nr="55"/>
+<Adjective nr="56"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -112,7 +112,7 @@
 <ArgTypes/>
 <Func kind="K" nr="36"/>
 <Cluster>
-<Adjective nr="65"/>
+<Adjective nr="66"/>
 </Cluster>
 </FCluster>
 <FCluster aid="FIB_NUM2" nr="5">

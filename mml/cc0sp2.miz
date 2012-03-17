@@ -1,0 +1,2631 @@
+:: Banach Algebra of Complex-Valued Continuous Functionals and Space of 
+:: Complex-valued Continuous Functionals with Bounded Support
+::  by Katuhiko Kanazashi , Hiroyuki Okazaki and Yasunari Shidama
+:: 
+:: Received May 30, 2011
+:: Copyright (c) 2011 Association of Mizar Users
+::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
+:: This code can be distributed under the GNU General Public Licence
+:: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
+:: License version 3.0 or later, subject to the binding interpretation
+:: detailed in file COPYING.interpretation.
+:: See COPYING.GPL and COPYING.CC-BY-SA for the full text of these
+:: licenses, or see http://www.gnu.org/licenses/gpl.html and
+:: http://creativecommons.org/licenses/by-sa/3.0/.
+
+environ
+
+ vocabularies STRUCT_0, XREAL_0, ORDINAL1, FUNCOP_1, NUMBERS, PRE_TOPC,
+      ORDINAL2, SUBSET_1, RELAT_1, XBOOLE_0, FUNCT_1, TARSKI, CARD_1, ARYTM_3,
+      ARYTM_1, COMPLEX1, ALGSTR_0, FUNCSDOM, REAL_1, FUNCT_2, C0SP1, IDEAL_1,
+      VALUED_1, MESFUNC1, RSSPACE, BINOP_1, SUPINF_2, GROUP_1, REALSET1,
+      ZFMISC_1, XXREAL_2, XXREAL_0, NORMSP_1, CFUNCDOM, CLVECT_1, VECTSP_1,
+      RELAT_2, CFUNCT_1, CLOPBAN2, METRIC_1, XCMPLX_0, RCOMP_1, CONNSP_2,
+      CC0SP1, CC0SP2, RLVECT_1, XXREAL_1, NAT_1, CLOPBAN1, SEQ_2, RSSPACE3,
+      LOPBAN_2, SEQFUNC, REWRITE1, CSSPACE4, PARTFUN1, PRE_POLY, RLSUB_1,
+      SEQ_4;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1,
+      RELSET_1, PARTFUN1, FUNCT_2, BINOP_1, DOMAIN_1, FUNCOP_1, NUMBERS,
+      XCMPLX_0, XXREAL_0, XREAL_0, REAL_1, COMPLEX1, XXREAL_2, REALSET1,
+      VALUED_1, SEQ_2, SEQ_4, RCOMP_1, CFUNCT_1, CFDIFF_1, SEQFUNC, PRE_POLY,
+      STRUCT_0, ALGSTR_0, PRE_TOPC, RLVECT_1, GROUP_1, VECTSP_1, COMPTS_1,
+      NORMSP_0, CONNSP_2, PSCOMP_1, IDEAL_1, CLVECT_1, CSSPACE, CSSPACE3,
+      CLOPBAN1, CFUNCDOM, CLOPBAN2, NCFCONT1, C0SP1, CC0SP1;
+ constructors REAL_1, REALSET1, IDEAL_1, SEQ_1, C0SP1, PARTFUN3, BINOP_2,
+      SEQ_4, MEASURE6, CSSPACE3, COMSEQ_3, CFDIFF_1, CC0SP1, WEIERSTR,
+      PSCOMP_1, NCFCONT1, SEQFUNC, INTEGRA2, PRE_POLY, C0SP2, RLSUB_1, RSSPACE,
+      TOPREAL6;
+ registrations XBOOLE_0, SUBSET_1, STRUCT_0, XREAL_0, REALSET1, NUMBERS,
+      MEMBERED, RELAT_1, VECTSP_1, VECTSP_2, VALUED_0, XXREAL_0, FUNCT_2,
+      VALUED_1, COMPLEX1, CFUNCDOM, XCMPLX_0, PRE_TOPC, CC0SP1, PSCOMP_1,
+      ORDINAL1, NORMSP_0, CLOPBAN2, COMPTS_1, TOPREAL6, RELSET_1;
+ requirements NUMERALS, BOOLE, SUBSET, ARITHM, REAL;
+ definitions REALSET1, ALGSTR_0, TARSKI, XCMPLX_0, STRUCT_0, GROUP_1, BINOP_1,
+      VALUED_1, CFUNCDOM, CLVECT_1, COMPLEX1, NORMSP_0, SUBSET_1, CC0SP1;
+ theorems FUNCT_1, SEQ_2, COMPLEX1, ZFMISC_1, TARSKI, IDEAL_1, RELAT_1,
+      XREAL_0, XXREAL_0, FUNCT_2, XBOOLE_0, XREAL_1, XCMPLX_0, FUNCOP_1,
+      VECTSP_1, VALUED_1, C0SP1, CFUNCDOM, CLVECT_1, CFUNCT_1, NORMSP_0,
+      XBOOLE_1, XCMPLX_1, ABSVALUE, CFDIFF_1, PRE_TOPC, TOPS_1, CONNSP_2,
+      CC0SP1, RLVECT_1, RCOMP_1, C0SP2, CLOPBAN1, NCFCONT1, CSSPACE3, NORMSP_1,
+      PARTFUN1, CLOPBAN2, PRE_POLY, COMPTS_1, CSSPACE, RFUNCT_1, JORDAN_A,
+      TOPREAL6, MEMBERED;
+
+begin :: Banach Algebra of Complex-Valued Continuous Functionals
+
+definition
+  let X be TopStruct;
+  let f be Function of the carrier of X,COMPLEX;
+  attr f is continuous means :Def1: :: PSCOMP_1:def 25
+  for Y being Subset of COMPLEX st Y is closed holds
+  f " Y is closed;
+end;
+
+definition
+  let X be 1-sorted, y be complex number;
+  func X --> y -> Function of the carrier of X,COMPLEX equals
+  (the carrier of X) --> y;
+coherence
+proof
+  y in COMPLEX by XCMPLX_0:def 2;
+  hence thesis by FUNCOP_1:45;
+end;
+end;
+
+theorem Th1:
+  for X being non empty TopSpace
+  for y being complex number
+  for f being Function of the carrier of X,COMPLEX st f=X --> y
+      holds f is continuous
+proof
+  let X be non empty TopSpace;
+  let y be complex number;
+  let f be Function of the carrier of X,COMPLEX such that
+K1:   f = X --> y;
+  set H = the carrier of X;
+  set HX=[#] X;
+  let P1 be Subset of COMPLEX such that P1 is closed;
+  per cases;
+  suppose y in P1;
+    then f"P1 = HX by FUNCOP_1:14,K1;
+    hence f"P1 is closed;
+  end;
+  suppose not y in P1;
+    then f"P1 = {}X by FUNCOP_1:16,K1;
+    hence f"P1 is closed;
+  end;
+end;
+
+registration
+  let X be non empty TopSpace, y be complex number;
+  cluster X --> y -> continuous;
+  coherence by Th1;
+end;
+
+registration
+  let X be non empty TopSpace;
+  cluster continuous for Function of the carrier of X,COMPLEX;
+existence
+proof
+  take f = X --> 0c;
+  thus thesis;
+end;
+end;
+
+theorem Th2:
+  for X being non empty TopSpace,
+      f being Function of the carrier of X,COMPLEX holds
+  ( f is continuous iff for Y being Subset of COMPLEX st Y is open holds
+    f " Y is open )
+proof
+  let X be non empty TopSpace,
+      f be Function of the carrier of X,COMPLEX;
+  hereby
+    assume
+A1: f is continuous;
+    let Y be Subset of COMPLEX;
+    assume Y is open;
+    then Y` is closed by CFDIFF_1:def 11;
+    then
+A2: f"(Y`) is closed by A1,Def1;
+    f"(Y`) = (f"COMPLEX) \ f"(Y) by FUNCT_1:69
+      .= ([#]X) \ f"Y by FUNCT_2:40;
+    then ([#]X) \ (([#]X) \ f"(Y)) is open by A2,PRE_TOPC:def 3;
+    hence f"Y is open by PRE_TOPC:3;
+  end;
+  assume
+A3: for Y being Subset of COMPLEX st Y is open holds f"Y is open;
+  let Y be Subset of COMPLEX;
+  assume
+A4: Y is closed;
+  Y = Y``;
+  then Y` is open by A4,CFDIFF_1:def 11;
+  then
+A5: f"(Y`) is open by A3;
+  f"(Y`) = (f"COMPLEX) \ f"(Y) by FUNCT_1:69
+        .= ([#]X) \ f"Y by FUNCT_2:40;
+  hence f"Y is closed by A5,PRE_TOPC:def 3;
+end;
+
+theorem Th3: :: LMcont
+  for X being non empty TopSpace
+  for f be Function of the carrier of X,COMPLEX holds
+  (f is continuous iff for x being Point of X
+  for V being Subset of COMPLEX st f.x in V & V is open holds
+    ex W being Subset of X st (x in W & W is open & f.:W c= V))
+proof
+  let X be non empty TopSpace;
+  let f be Function of the carrier of X,COMPLEX;
+  hereby
+    assume
+A1:   f is continuous;
+    now
+      let x be Point of X;
+      let V be Subset of COMPLEX;
+      set z = f.x;
+      reconsider z0 = z as Complex;
+      assume z in V & V is open; then
+      consider N be Neighbourhood of z0 such that
+A2:    N c= V by CFDIFF_1:9;
+      consider g being Real such that
+A3:   0<g & {y where y is Complex:|.(y-z0).| < g } c= N by CFDIFF_1:def 5;
+      set S={y where y is Complex:|.(y-z0).| < g };
+      S c= COMPLEX
+      proof
+        let z be set;
+        assume z in S;
+        then ex y being Complex st z = y & |.(y - z0).| < g;
+        hence z in COMPLEX;
+      end;
+      then
+      reconsider S1=S as Subset of COMPLEX;
+      take W = f"S;
+A4:   S1 is open by CFDIFF_1:13;
+      S is Neighbourhood of z0 by CFDIFF_1:6,A3;
+      then f.x in S by CFDIFF_1:7;
+      hence x in W by FUNCT_2:38;
+      thus W is open by A1,A4,Th2;
+      f.:(f"S) c= S by FUNCT_1:75;
+      then f.:W c= N by A3, XBOOLE_1:1;
+      hence f .: W c= V by A2, XBOOLE_1:1;
+    end;
+    hence for x being Point of X
+    for V being Subset of COMPLEX st f . x in V & V is open holds
+      ex W being Subset of X st x in W & W is open & f .: W c= V;
+  end;
+  assume
+A5: for x being Point of X
+  for V being Subset of COMPLEX st f . x in V & V is open holds
+  ex W being Subset of X st x in W & W is open & f .: W c= V;
+  now
+    let Y be Subset of COMPLEX;
+    assume Y is closed;
+    then (Y`)` is closed;
+    then
+A6:   Y` is open by CFDIFF_1:def 11;
+    for x being Point of X st x in (f " Y)` holds
+    ex W being Subset of X st W is a_neighborhood of x & W c= (f " Y)`
+    proof
+      let x be Point of X;
+      assume x in (f"Y)`;
+      then x in f " (Y`) by FUNCT_2:100;
+      then f.x in Y` by FUNCT_2:38;
+      then consider V being Subset of COMPLEX such that
+A7:   f.x in V & V is open & V c= Y` by A6;
+      consider W being Subset of X such that
+A8:   x in W & W is open & f .: W c= V by A5, A7;
+      take W;
+      thus W is a_neighborhood of x by A8,CONNSP_2:3;
+      f .: W c= Y` by A7, A8, XBOOLE_1:1;
+      then
+A9:     f " (f .: W) c= f"(Y`) by RELAT_1:143;
+      W c= f " (f .: W) by FUNCT_2:42;
+      then W c= f " (Y`) by A9, XBOOLE_1:1;
+      hence W c= (f"Y)` by FUNCT_2:100;
+    end;
+    then (f " Y)` is open by CONNSP_2:7;
+    then ((f " Y)`)` is closed by TOPS_1:4;
+    hence f " Y is closed;
+  end;
+  hence f is continuous by Def1;
+end;
+
+theorem Th4:
+  for X being non empty TopSpace
+  for f,g being continuous Function of the carrier of X,COMPLEX
+   holds f+g is continuous Function of the carrier of X,COMPLEX
+proof
+  let X be non empty TopSpace,
+  f,g be continuous Function of the carrier of X,COMPLEX;
+  set h=f+g;
+X: rng h c= COMPLEX by MEMBERED:1;
+  dom h = dom f /\ dom g by VALUED_1:def 1
+     .= (the carrier of X) /\ dom g by PARTFUN1:def 2
+     .= (the carrier of X) /\ the carrier of X by PARTFUN1:def 2;
+  then reconsider h as Function of the carrier of X,COMPLEX by X,FUNCT_2:2;
+A1:for x be Point of X holds h.x=f.x + g.x by VALUED_1:1;
+  for p being Point of X,V being Subset of COMPLEX
+    st h.p in V & V is open holds
+      ex W being Subset of X st p in W & W is open & h.:W c= V
+  proof
+    let p be Point of X,V be Subset of COMPLEX;
+    assume
+A2:   h.p in V & V is open;
+    reconsider z0=h.p as Complex;
+    consider N being Neighbourhood of z0 such that
+A3:   N c= V by A2,CFDIFF_1:9;
+    consider r being Real such that
+A4: 0<r & {y where y is Complex:|.(y-z0).| < r } c= N by CFDIFF_1:def 5;
+    set S={y where y is Complex:|.(y-z0).| < r };
+A5: r/2 is Real by XREAL_0:def 1;
+    reconsider z1=f.p as Complex;
+    set S1={y where y is Complex:|.(y-z1).| < r/2 };
+    S1 c= COMPLEX
+    proof
+      let z be set;
+      assume z in S1;
+      then ex y being Complex st z = y & |.(y - z1).| < r/2;
+      hence z in COMPLEX;
+    end; then
+    reconsider T1=S1 as Subset of COMPLEX;
+A6: T1 is open by CFDIFF_1:13,A5;
+    |.(z1 - z1).|=0;
+    then z1 in S1 by A4;
+    then consider W1 being Subset of X such that
+A7:     p in W1 & W1 is open & f.:W1 c= S1 by A6,Th3;
+    reconsider z2=g.p as Complex;
+    set S2={y where y is Complex:|.(y-z2).| < r/2 };
+    S2 c= COMPLEX
+    proof
+      let z be set;
+      assume z in S2;
+      then ex y being Complex st z = y & |.(y - z2).| < r/2;
+      hence z in COMPLEX;
+    end;
+    then reconsider T2=S2 as Subset of COMPLEX;
+A8: T2 is open by CFDIFF_1:13,A5;
+    |.(z2 - z2).|=0;
+    then z2 in S2 by A4;
+    then consider W2 being Subset of X such that
+A9: p in W2 & W2 is open & g.:W2 c= S2 by A8,Th3;
+    set W=W1 /\ W2;
+A10:W is open by A7,A9,TOPS_1:11;
+A11:p in W by A7,A9,XBOOLE_0:def 4;
+    h.:W c= S
+    proof
+        let z3 be set;
+        assume z3 in h.:W;
+        then consider x3 being set such that
+A12:      x3 in dom h & x3 in W & h.x3=z3 by FUNCT_1:def 6;
+A13:    x3 in W1 by A12,XBOOLE_0:def 4;
+        reconsider px=x3 as Point of X by A12;
+A14:    px in the carrier of X;
+        then px in dom f by FUNCT_2:def 1;
+        then f.px in f.:W1 by A13,FUNCT_1:def 6;
+        then
+A15:    f.px in S1 by A7;
+        reconsider a1=f.px as Complex;
+a16:    ex aa1 be Complex st f.px = aa1 & |.(aa1-z1).| < r/2 by A15;
+A17:    x3 in W2 by A12,XBOOLE_0:def 4;
+        px in dom g by A14,FUNCT_2:def 1;
+        then g.px in g.:W2 by A17,FUNCT_1:def 6;
+        then
+A18:      g.px in S2 by A9;
+        reconsider a2=g.px as Complex;
+        ex aa2 be Complex st g.px = aa2 & |.(aa2-z2).| < r/2 by A18;
+        then
+A19:      |.(a2 - z2).| < r/2;
+        |.(h.x3 - z0).| = |.((f.px+g.px) - z0).| by A1
+                       .= |.((f.px+g.px) - (f.p+g.p)).| by A1
+                       .= |.((a1 - z1) + (a2 - z2)).|;
+        then
+A21:      |.(h.px - z0).| <= |.(a1-z1).|+|.(a2-z2).| by COMPLEX1:56;
+A22:    |.(a1-z1).|+|.(a2-z2).| < r/2 + |.(a2-z2).| by a16,XREAL_1:8;
+        r/2 + |.(a2-z2).| < r/2 + r/2 by A19,XREAL_1:8;
+        then |.(a1-z1).|+|.(a2-z2).| < r by A22,XXREAL_0:2;
+        then |.(h.px - z0).| < r by A21,XXREAL_0:2;
+        hence z3 in S by A12;
+    end;
+    then h.:W c= N by A4,XBOOLE_1:1;
+    hence ex W being Subset of X st p in W & W is open & h.:W c= V
+                                        by A10,A11,A3,XBOOLE_1:1;
+  end;
+  hence thesis by Th3;
+end;
+
+theorem Th5:
+  for X being non empty TopSpace
+  for a being complex number
+  for f being continuous Function of the carrier of X,COMPLEX
+   holds a(#)f is continuous Function of the carrier of X,COMPLEX
+proof
+  let X be non empty TopSpace;
+  let a be complex number;
+  let f be continuous Function of the carrier of X,COMPLEX;
+  set h=a(#)f;
+A1:for x be Point of X holds h.x=a*f.x by VALUED_1:6;
+  now per cases;
+  suppose
+L1: a<>0;
+    for p being Point of X,V being Subset of COMPLEX st h.p in V & V is open
+      holds ex W being Subset of X st p in W & W is open & h.:W c= V
+    proof
+      let p be Point of X,V be Subset of COMPLEX;
+      assume
+A2:     h.p in V & V is open;
+      reconsider z0=h.p as Complex;
+      consider N being Neighbourhood of z0 such that
+A3:     N c= V by A2,CFDIFF_1:9;
+      consider r being Real such that
+A4:   0<r & {y where y is Complex:|.(y-z0).| < r }c= N by CFDIFF_1:def 5;
+      set S={y where y is Complex:|.(y-z0).| < r };
+A5:  |.a.|>0 by L1;
+A6:    r/|.a.| is Real by XREAL_0:def 1;
+A7:  r/|.a.|>0 by L1,A4;
+      reconsider z1=f.p as Complex;
+      set S1={y where y is Complex:|.(y-z1).| < r/|.a.| };
+      S1 c= COMPLEX
+      proof
+        let z be set;
+        assume z in S1;
+        then ex y being Complex st
+        z = y & |.(y - z1).| < r/|.a.|;
+        hence z in COMPLEX;
+      end;
+      then reconsider T1=S1 as Subset of COMPLEX;
+A8:   T1 is open by CFDIFF_1:13,A6;
+      |.(z1 - z1).|=0;
+      then z1 in S1 by A7;
+      then consider W1 being Subset of X such that
+A9:       p in W1 & W1 is open & f.:W1 c= S1 by A8,Th3;
+      set W=W1;
+A10:  W is open by A9;
+A11:  p in W by A9;
+      h.:W c= S
+      proof
+          let z3 be set;
+          assume z3 in h.:W;
+          then consider x3 being set such that
+A12:          x3 in dom h & x3 in W & h.x3=z3 by FUNCT_1:def 6;
+          reconsider px=x3 as Point of X by A12;
+          px in the carrier of X;
+          then px in dom f by FUNCT_2:def 1;
+          then f.px in f.:W1 by A12,FUNCT_1:def 6;
+          then
+A14:        f.px in S1 by A9;
+          reconsider a1=f.px as Complex;
+          ex aa1 be Complex st f.px = aa1 & |.(aa1-z1).| < r/|.a.| by A14;
+          then
+A15:        |.(a1 - z1).| < r/|.a.|;
+A16:      |.(h.x3 - z0).| = |.(a*f.px - z0).| by A1
+                         .= |.(a*f.px  - a*f.p).| by A1
+                         .= |.a*(f.px - f.p).|
+                         .= |.a.| * |.(a1 - z1).| by COMPLEX1:65;
+A17:      |.a.|*|.(a1 - z1).| <  |.a.|*(r/|.a.|) by A5,A15,XREAL_1:68;
+          |.a.|*(r/|.a.|) = r*(|.a.|/|.a.|)
+                         .= r*1 by XCMPLX_1:60,A5
+                         .= r;
+          then |.(h.px - z0).| < r by A16,A17;
+          hence z3 in S by A12;
+      end;
+      then h.:W c= N by A4,XBOOLE_1:1;
+      hence ex W being Subset of X st p in W & W is open & h.:W c= V
+                                        by A10,A11,A3,XBOOLE_1:1;
+    end;
+    hence a(#)f is continuous by Th3;
+  end;
+  suppose
+L2: a=0;
+    set g = X --> 0c;
+    set CX=the carrier of X;
+A18:dom g = CX by FUNCOP_1:13;
+    dom h = CX by FUNCT_2:def 1;
+    then
+A19:  dom g = dom h by A18;
+    for z be set st z in dom h holds g.z =h.z
+    proof
+      let z be set;
+      assume
+A20:    z in dom h;
+      h.z = 0*(f.z) by L2,VALUED_1:6
+         .= 0;
+      hence thesis by A20,FUNCOP_1:7;
+    end;
+    hence a(#)f is continuous by A19,FUNCT_1:def 11;
+  end;
+  end;
+  hence thesis;
+end;
+
+theorem
+  for X being non empty TopSpace,
+  f,g be continuous Function of the carrier of X,COMPLEX
+   holds f-g is continuous Function of the carrier of X,COMPLEX
+proof
+  let X be non empty TopSpace;
+  let f,g be continuous Function of the carrier of X,COMPLEX;
+  (-1)(#)g is continuous by Th5;
+  hence thesis by Th4;
+end;
+
+theorem Th7:
+  for X being non empty TopSpace,
+  f,g be continuous Function of the carrier of X,COMPLEX
+   holds f(#)g is continuous Function of the carrier of X,COMPLEX
+proof
+  let X be non empty TopSpace,
+  f,g be continuous Function of the carrier of X,COMPLEX;
+  set h=f(#)g;
+A1:for x be Point of X holds h.x=f.x * g.x by VALUED_1:5;
+  for p being Point of X,V being Subset of COMPLEX
+    st h.p in V & V is open holds
+      ex W being Subset of X st p in W & W is open & h.:W c= V
+  proof
+    let p be Point of X,V be Subset of COMPLEX;
+    assume
+A2:   h.p in V & V is open;
+    reconsider z0=h.p as Complex;
+    consider N being Neighbourhood of z0 such that
+A3:   N c= V by A2,CFDIFF_1:9;
+    consider r being Real such that
+A4: 0<r & {y where y is Complex:|.(y-z0).| < r }c= N by CFDIFF_1:def 5;
+    set S={y where y is Complex:|.(y-z0).| < r };
+    reconsider z1=f.p as Complex;
+    reconsider z2=g.p as Complex;
+    set a = |.z1.| + |.z2.|+1;
+A5: r/a is Real by XREAL_0:def 1;
+    set S1={y where y is Complex:|.(y-z1).| < r/a };
+    S1 c= COMPLEX
+    proof
+      let z be set;
+      assume z in S1;
+      then ex y being Complex st z = y & |.(y - z1).| < r/a;
+      hence z in COMPLEX;
+    end;
+    then reconsider T1=S1 as Subset of COMPLEX;
+A6: T1 is open by CFDIFF_1:13,A5;
+    |.(z1 - z1).|=0;
+    then z1 in S1 by A4;
+    then consider W1 being Subset of X such that
+A7: p in W1 & W1 is open & f.:W1 c= S1 by A6,Th3;
+    set S2={y where y is Complex:|.(y-z2).| < r/a };
+    S2 c= COMPLEX
+    proof
+      let z be set;
+      assume z in S2;
+      then ex y being Complex st z = y & |.(y - z2).| < r/a;
+      hence z in COMPLEX;
+    end;
+    then
+    reconsider T2=S2 as Subset of COMPLEX;
+A8: T2 is open by CFDIFF_1:13,A5;
+    |.(z2 - z2).|=0;
+    then z2 in S2 by A4;
+    then consider W2 being Subset of X such that
+A9:     p in W2 & W2 is open & g.:W2 c= S2 by A8,Th3;
+    set S3={y where y is Complex:|.(y-z1).| < 1 };
+    S3 c= COMPLEX
+    proof
+      let z be set;
+      assume z in S3;
+      then ex y being Complex st
+      z = y & |.(y - z1).| < 1;
+      hence z in COMPLEX;
+    end;
+    then reconsider T3=S3 as Subset of COMPLEX;
+A10:T3 is open by CFDIFF_1:13;
+    |.(z1 - z1).|=0;
+    then z1 in S3;
+    then consider W3 being Subset of X such that
+A11:p in W3 & W3 is open & f.:W3 c= S3 by A10,Th3;
+    set W = W1 /\ W2 /\ W3;
+    W1 /\ W2 is open by A7,A9,TOPS_1:11;
+    then
+A12:  W is open by A11,TOPS_1:11;
+    p in W1 /\ W2 by A7,A9,XBOOLE_0:def 4;
+    then
+A13:  p in W by A11,XBOOLE_0:def 4;
+    h.:W c= S
+    proof
+        let z3 be set;
+        assume z3 in h.:W;
+        then consider x3 being set such that
+A14:    x3 in dom h & x3 in W & h.x3=z3 by FUNCT_1:def 6;
+A15:    x3 in W1 /\ W2 by A14,XBOOLE_0:def 4;
+        then
+A16:      x3 in W1 by XBOOLE_0:def 4;
+        reconsider px=x3 as Point of X by A14;
+A17:    px in the carrier of X;
+        then px in dom f by FUNCT_2:def 1;
+        then f.px in f.:W1 by A16,FUNCT_1:def 6;
+        then
+A18:      f.px in S1 by A7;
+        reconsider a1=f.px as Complex;
+        ex aa1 be Complex st f.px = aa1 & |.(aa1-z1).| < r/a by A18;
+        then
+A19:      |.(a1 - z1).| < r/a;
+A20:    x3 in W2 by XBOOLE_0:def 4,A15;
+        px in dom g by A17,FUNCT_2:def 1;
+        then g.px in g.:W2 by A20,FUNCT_1:def 6;
+        then
+A21:      g.px in S2 by A9;
+        reconsider a2=g.px as Complex;
+        ex aa2 be Complex st g.px = aa2 & |.(aa2-z2).| < r/a by A21;
+        then
+A22:      |.(a2 - z2).| < r/a;
+A23:    x3 in W3 by A14,XBOOLE_0:def 4;
+        px in dom f by A17,FUNCT_2:def 1;
+        then f.px in f.:W3 by A23,FUNCT_1:def 6;
+        then
+A24:      f.px in S3 by A11;
+        reconsider a3=f.px as Complex;
+        ex aa3 be Complex st f.px = aa3 & |.(aa3-z1).| < 1 by A24;
+        then
+A25:      |.(a3 - z1).| < 1;
+        |.a1-z1+z1.| <= |.a1-z1.| + |.z1.| by COMPLEX1:56;
+        then |.a1.|-|.z1.| <= |.a1-z1.|+|.z1.|-|.z1.| by XREAL_1:9;
+        then |.a1.|-|.z1.| < 1 by A25,XXREAL_0:2;
+        then (|.a1.|-|.z1.|)+|.z1.| < 1+|.z1.| by XREAL_1:8;
+        then
+A26:      |.a1.|< 1+|.z1.|;
+A27:    |.h.x3 - z0.| = |.(f.px)*(g.px) - z0.| by A1
+                       .= |.a1*a2 - z1*z2.| by A1
+                       .= |.(a1*a2 - a1*z2) + (a1*z2 -z1*z2).|;
+A28:      |.(h.x3 - z0).| <= |.a1*a2 - a1*z2.|+|.a1*z2 -z1*z2.|
+            by A27,COMPLEX1:56;
+        |.a1*a2-a1*z2.|+|.a1*z2-z1*z2.|=|.a1*(a2-z2).|+|.z2*(a1-z1).|
+                      .=|.a1.|*|.a2-z2.|+|.z2*(a1-z1).| by COMPLEX1:65
+                      .=|.a1.|*|.a2-z2.|+|.z2.|*|.a1-z1.| by COMPLEX1:65;
+        then
+A29:      |.(h.x3 - z0).| <= |.a1.|*|.a2-z2.|+|.z2.|*|.a1-z1.| by A28;
+
+A30:    |.a1.|*|.a2-z2.|<=|.a1.|*(r/a) by A22,XREAL_1:66;
+        |.a1.|*(r/a) < (1+|.z1.|)*(r/a) by A26,A4,XREAL_1:68;
+        then
+A31:      |.a1.|*|.a2-z2.| < (1+|.z1.|)*(r/a) by A30,XXREAL_0:2;
+A32:    |.z2.|*|.a1-z1.|<=|.z2.|*(r/a) by A19,XREAL_1:66;
+A33:    |.a1.|*|.a2-z2.|+|.z2.|*|.a1-z1.|<(1+|.z1.|)*(r/a)+|.z2.|*|.a1-z1.|
+                                       by A31,XREAL_1:8;
+        (1+|.z1.|)*(r/a)+|.z2.|*|.a1-z1.|<=(1+|.z1.|)*(r/a)+|.z2.|*(r/a)
+                                       by A32,XREAL_1:6;
+        then
+          |.a1.|*|.a2-z2.|+|.z2.|*|.a1-z1.| < (1+|.z1.|)*(r/a)+|.z2.|*(r/a)
+                                       by A33,XXREAL_0:2;
+        then
+A34:      |.(h.x3 - z0).| < r*(a/a) by A29,XXREAL_0:2;
+        a/a = 1 by XCMPLX_0:def 7;
+        then |.(h.px - z0).| < r by A34;
+        hence z3 in S by A14;
+    end;
+    then h.:W c= N by A4,XBOOLE_1:1;
+    hence ex W being Subset of X st p in W & W is open & h.:W c= V
+                                        by A12,A13,A3,XBOOLE_1:1;
+  end;
+  hence thesis by Th3;
+end;
+
+theorem Th8:
+  for X being non empty TopSpace
+  for f being continuous Function of the carrier of X,COMPLEX
+      holds ( |.f.| is Function of the carrier of X,REAL &
+         |.f.| is continuous)
+proof
+  let X be non empty TopSpace,
+  f be continuous Function of the carrier of X,COMPLEX;
+  reconsider h = |.f.| as Function of the carrier of X,REAL;
+  for p being Point of X,V being Subset of REAL
+      st h.p in V & V is open holds
+        ex W being Subset of X st p in W & W is open & h.:W c= V
+   proof
+     let p be Point of X,V be Subset of REAL;
+     assume
+A2:    h.p in V & V is open;
+     reconsider r0=h.p as Real;
+     consider r being real number such that
+A3:    0<r & ].r0-r,r0+r.[ c= V by A2,RCOMP_1:19;
+    set S=].r0-r,r0+r.[;
+    reconsider z1=f.p as Complex;
+    set S1={y where y is Complex:|.(y-z1).| < r };
+    S1 c= COMPLEX
+    proof
+      let z be set;
+      assume z in S1;
+      then ex y being Complex st
+      z = y & |.(y - z1).| < r;
+      hence z in COMPLEX;
+    end; then
+    reconsider T1=S1 as Subset of COMPLEX;
+    r is Real by XREAL_0:def 1;
+    then
+A4:   T1 is open by CFDIFF_1:13;
+    |.(z1 - z1).|=0;
+    then z1 in S1 by A3;
+    then consider W1 being Subset of X such that
+A5: p in W1 & W1 is open & f.:W1 c= S1 by A4,Th3;
+    set W=W1;
+A6: W is open by A5;
+A7: p in W by A5;
+    h.:W c= ].r0-r,r0+r.[
+    proof
+        let x be set;
+        assume x in h.:W;
+        then consider z being set such that
+A8:         z in dom h & z in W & h.z=x by FUNCT_1:def 6;
+A9:     z in W1 by A8;
+        reconsider pz=z as Point of X by A8;
+        pz in the carrier of X;
+        then pz in dom f by FUNCT_2:def 1;
+        then f.pz in f.:W1 by A9,FUNCT_1:def 6;
+        then
+A10:      f.pz in S1 by A5;
+        reconsider a1=f.pz as Complex;
+        ex aa1 be Complex st f.pz = aa1 & |.(aa1-z1).| < r by A10;
+        then
+A11:      |.(a1 - z1).| < r;
+A12:    |.(h.z - r0).| = |. |.(f.pz).| - (|.f.|).p .| by VALUED_1:18
+                      .= |. |.(f.pz).| - |.(f.p).| .| by VALUED_1:18;
+        |. |.(f.pz).| - |.(f.p).| .|
+                    <= |. (f.pz) - (f.p).| by COMPLEX1:64;
+        then |. |.(f.pz).| - |.(f.p).| .| < r by A11,XXREAL_0:2;
+        hence x in S by A8,RCOMP_1:1,A12;
+    end;
+    hence ex W being Subset of X st p in W & W is open & h.:W c= V
+                                        by A6,A7,A3,XBOOLE_1:1;
+  end;
+  hence thesis by C0SP2:1;
+end;
+
+definition
+  let X be non empty TopSpace;
+  func CContinuousFunctions(X) -> Subset of CAlgebra the carrier of X equals
+  { f where f is continuous Function of the carrier of X,COMPLEX
+                                    : not contradiction };
+correctness
+proof
+  set A = { f where f is continuous Function of the carrier of X,COMPLEX
+                                                  :not contradiction };
+  A c= Funcs(the carrier of X,COMPLEX)
+  proof
+    let x be set;
+    assume x in A;
+    then ex f be continuous Function of the carrier of X,COMPLEX st x=f;
+    hence x in Funcs(the carrier of X,COMPLEX) by FUNCT_2:8;
+  end;
+  hence thesis;
+end;
+end;
+
+registration
+  let X be non empty TopSpace;
+  cluster CContinuousFunctions(X) -> non empty;
+coherence
+proof
+  X-->0c in { f where f is continuous Function of the carrier of X,COMPLEX
+                                                  : not contradiction };
+  hence thesis;
+end;
+end;
+
+registration
+  let X be non empty TopSpace;
+  cluster CContinuousFunctions X -> Cadditively-linearly-closed
+                                multiplicatively-closed;
+  coherence
+proof
+  set W = CContinuousFunctions X;
+  set V = CAlgebra the carrier of X;
+  for v,u be Element of V st v in W & u in W holds v + u in W
+  proof
+    let v,u be Element of V such that
+A1:   v in W & u in W;
+    consider v1 be continuous Function of the carrier of X,COMPLEX such that
+A2:   v1=v by A1;
+    consider u1 be continuous Function of the carrier of X,COMPLEX such that
+A3:   u1=u by A1;
+    reconsider h = v+u as Element of Funcs(the carrier of X,COMPLEX);
+A4: ex f being Function st
+      h = f & dom f = the carrier of X & rng f c= COMPLEX by FUNCT_2:def 2;
+    dom v1 /\ dom u1 = (the carrier of X) /\ dom u1 by FUNCT_2:def 1;
+    then
+A5:   dom v1 /\ dom u1 = (the carrier of X) /\ (the carrier of X)
+                                       by FUNCT_2:def 1;
+    for x be set st x in dom h holds h.x = v1.x + u1.x
+                                       by A2,A3,CFUNCDOM:1;
+    then
+A6:   v+u=v1+u1 by A5,A4,VALUED_1:def 1;
+    v1+u1 is continuous Function of the carrier of X,COMPLEX by Th4;
+    hence v+u in W by A6;
+  end; then
+A7:W is add-closed by IDEAL_1:def 1;
+  for v be Element of V st v in W holds -v in W
+  proof
+    let v be Element of V such that
+A8:   v in W;
+    consider v1 be continuous Function of the carrier of X,COMPLEX such that
+A9:   v1=v by A8;
+    reconsider h = -v, v2 = v as Element of Funcs(the carrier of X,COMPLEX);
+    reconsider e =-1r as Complex;
+A10:h=e*v by CLVECT_1:3;
+A11:ex f being Function st
+       h = f & dom f = the carrier of X & rng f c= COMPLEX by FUNCT_2:def 2;
+A12:dom v1 =the carrier of X by FUNCT_2:def 1;
+    now let x be set;
+      assume x in dom h;
+      then reconsider y=x as Element of the carrier of X;
+      h.x = (-1)*(v2.y) by A10,CFUNCDOM:4;
+      hence h.x = -v1.x by A9;
+    end;
+    then
+A13:  -v=-v1 by A12,A11,VALUED_1:9;
+    e(#)v1 is continuous Function of the carrier of X,COMPLEX by Th5;
+    hence -v in W by A13;
+  end;
+  then
+A14:W is having-inverse by C0SP1:def 1;
+  for a be Complex, u be Element of V st u in W holds a * u in W
+  proof
+    let a be Complex, u be Element of V such that
+A15:  u in W;
+    consider u1 be continuous Function of the carrier of X,COMPLEX such that
+A16:  u1=u by A15;
+    reconsider h = a*u as Element of Funcs(the carrier of X,COMPLEX);
+A17:ex f being Function st
+      h = f & dom f = the carrier of X & rng f c= COMPLEX by FUNCT_2:def 2;
+A18:dom u1 = the carrier of X by FUNCT_2:def 1;
+    for x be set st x in dom h holds h.x = a*(u1.x) by A16,CFUNCDOM:4;
+    then
+A19:  a*u=a(#)u1 by A18,A17,VALUED_1:def 5;
+    a(#)u1 is continuous Function of the carrier of X,COMPLEX by Th5;
+    hence a*u in W by A19;
+  end;
+  hence CContinuousFunctions X is Cadditively-linearly-closed
+                                          by A7,A14,CC0SP1:def 2;
+A20:for v,u be Element of V st v in W & u in W holds v * u in W
+  proof
+    let v,u be Element of V such that
+A21:  v in W & u in W;
+    consider v1 be continuous Function of the carrier of X,COMPLEX such that
+A22:  v1=v by A21;
+    consider u1 be continuous Function of the carrier of X,COMPLEX such that
+A23:  u1=u by A21;
+    reconsider h = v*u as Element of Funcs(the carrier of X,COMPLEX);
+A24:ex f being Function st
+       h = f & dom f = the carrier of X & rng f c= COMPLEX by FUNCT_2:def 2;
+    dom v1 /\ dom u1 = (the carrier of X) /\ dom u1 by FUNCT_2:def 1;
+    then
+A25:  dom v1 /\ dom u1 = (the carrier of X) /\ (the carrier of X)
+                                        by FUNCT_2:def 1;
+    for x be set st x in dom h holds h.x = v1.x *u1.x
+                                        by A22,A23,CFUNCDOM:2; then
+A26:  v*u=v1(#)u1 by A25,A24,VALUED_1:def 4;
+    v1(#)u1 is continuous Function of the carrier of X,COMPLEX by Th7;
+    hence v*u in W by A26;
+  end;
+  reconsider g = ComplexFuncUnit the carrier of X
+    as Function of the carrier of X,COMPLEX;
+  g = X --> 1r;
+  then 1.V in W;
+  hence thesis by A20,C0SP1:def 4;
+end;
+end;
+
+definition
+  let X be non empty TopSpace;
+  func C_Algebra_of_ContinuousFunctions X -> ComplexAlgebra equals
+  ComplexAlgebraStr (# CContinuousFunctions X,
+    mult_(CContinuousFunctions X,CAlgebra the carrier of X),
+    Add_(CContinuousFunctions X,CAlgebra the carrier of X),
+    Mult_(CContinuousFunctions X,CAlgebra the carrier of X),
+    One_(CContinuousFunctions X,CAlgebra the carrier of X),
+    Zero_(CContinuousFunctions X,CAlgebra the carrier of X) #);
+  coherence by CC0SP1:2;
+end;
+
+theorem
+  for X be non empty TopSpace holds C_Algebra_of_ContinuousFunctions X
+   is ComplexSubAlgebra of CAlgebra the carrier of X by CC0SP1:2;
+
+registration
+  let X be non empty TopSpace;
+  cluster C_Algebra_of_ContinuousFunctions X -> strict non empty;
+  coherence;
+end;
+
+registration
+  let X be non empty TopSpace;
+  cluster C_Algebra_of_ContinuousFunctions X -> Abelian add-associative
+    right_zeroed right_complementable vector-distributive scalar-distributive
+    scalar-associative scalar-unital
+    commutative associative right_unital right-distributive
+    vector-distributive scalar-distributive scalar-associative
+    vector-associative;
+coherence
+proof
+  now let v be VECTOR of C_Algebra_of_ContinuousFunctions X;
+    reconsider v1=v as VECTOR of CAlgebra the carrier of X by TARSKI:def 3;
+    C_Algebra_of_ContinuousFunctions X
+    is ComplexSubAlgebra of CAlgebra the carrier of X by CC0SP1:2;
+    then 1r * v = 1r*v1 by CC0SP1:3;
+    hence 1r * v =v by CFUNCDOM:12;
+  end;
+  hence thesis by CLVECT_1:def 5;
+end;
+end;
+
+theorem Th10:
+  for X being non empty TopSpace
+  for F, G, H being VECTOR of (C_Algebra_of_ContinuousFunctions X)
+  for f, g, h being Function of the carrier of X,COMPLEX
+                                    st f = F & g = G & h = H holds
+    ( H = F + G iff for x being Element of the carrier of X holds
+                                           h . x = (f . x) + (g . x) )
+proof
+  let X be non empty TopSpace;
+  let F, G, H be VECTOR of (C_Algebra_of_ContinuousFunctions X);
+  let f, g, h be Function of the carrier of X,COMPLEX;
+  assume
+A1: f = F & g = G & h = H;
+A2:C_Algebra_of_ContinuousFunctions X is
+            ComplexSubAlgebra of CAlgebra the carrier of X by CC0SP1:2;
+  reconsider f1 = F, g1 = G, h1 = H
+              as VECTOR of (CAlgebra the carrier of X) by TARSKI:def 3;
+  hereby
+    assume A3: H = F + G;
+    let x be Element of the carrier of X;
+    h1 = f1 + g1 by A2, A3, CC0SP1:3;
+    hence h . x = (f . x) + (g . x) by A1, CFUNCDOM:1;
+  end;
+  assume for x being Element of X holds h . x = (f . x) + (g . x);
+  then h1 = f1 + g1 by A1, CFUNCDOM:1;
+  hence H = F + G by A2, CC0SP1:3;
+end;
+
+theorem Th11:
+  for X being non empty TopSpace
+  for F, G being VECTOR of (C_Algebra_of_ContinuousFunctions X)
+  for f, g being Function of the carrier of X,COMPLEX
+  for a being Complex st f = F & g = G holds
+  ( G = a * F iff for x being Element of X holds g . x = a * (f . x) )
+proof
+  let X be non empty TopSpace;
+  let F, G be VECTOR of (C_Algebra_of_ContinuousFunctions X);
+  let f, g be Function of the carrier of X,COMPLEX;
+  let a be Complex;
+  assume
+A1: f = F & g = G;
+A2:C_Algebra_of_ContinuousFunctions X
+          is ComplexSubAlgebra of CAlgebra the carrier of X by CC0SP1:2;
+  reconsider f1 = F, g1 = G
+      as VECTOR of (CAlgebra the carrier of X) by TARSKI:def 3;
+  hereby
+    assume
+A3: G = a * F;
+    let x be Element of the carrier of X;
+    g1 = a * f1 by A2, A3, CC0SP1:3;
+    hence g . x = a * (f . x) by A1, CFUNCDOM:4;
+  end;
+  assume for x being Element of the carrier of X holds g . x = a * (f . x);
+  then g1 = a * f1 by A1, CFUNCDOM:4;
+  hence G = a * F by A2, CC0SP1:3;
+end;
+
+theorem Th12:
+  for X being non empty TopSpace
+  for F, G, H being VECTOR of (C_Algebra_of_ContinuousFunctions X)
+  for f, g, h being Function of the carrier of X,COMPLEX
+                    st f = F & g = G & h = H holds
+  ( H = F * G iff for x being Element of the carrier of X holds
+                          h . x = (f . x) * (g . x) )
+proof
+  let X be non empty TopSpace;
+  let F, G, H be VECTOR of (C_Algebra_of_ContinuousFunctions X);
+  let f, g, h be Function of the carrier of X,COMPLEX;
+  assume
+A1: f = F & g = G & h = H;
+A2:C_Algebra_of_ContinuousFunctions X
+           is ComplexSubAlgebra of CAlgebra the carrier of X by CC0SP1:2;
+  reconsider f1 = F, g1 = G, h1 = H
+        as VECTOR of (CAlgebra the carrier of X) by TARSKI:def 3;
+  hereby
+    assume
+A3: H = F * G;
+    let x be Element of the carrier of X;
+    h1 = f1 * g1 by A2, A3, CC0SP1:3;
+    hence h . x = (f . x) * (g . x) by A1, CFUNCDOM:2;
+  end;
+  assume for x being Element of X holds h . x = (f . x) * (g . x);
+  then h1 = f1 * g1 by A1, CFUNCDOM:2;
+  hence H = F * G by A2, CC0SP1:3;
+end;
+
+theorem Th13:
+  for X being non empty TopSpace holds
+    0.(C_Algebra_of_ContinuousFunctions X) = X --> 0c
+proof
+  let X be non empty TopSpace;
+A1:C_Algebra_of_ContinuousFunctions X
+           is ComplexSubAlgebra of CAlgebra the carrier of X by CC0SP1:2;
+  0.(CAlgebra the carrier of X) = X --> 0c;
+  hence 0.(C_Algebra_of_ContinuousFunctions X) = X --> 0 by A1, CC0SP1:3;
+end;
+
+theorem Th14:
+  for X being non empty TopSpace holds
+   1_(C_Algebra_of_ContinuousFunctions X) = X --> 1r
+proof
+  let X be non empty TopSpace;
+A1:C_Algebra_of_ContinuousFunctions X
+           is ComplexSubAlgebra of CAlgebra the carrier of X by CC0SP1:2;
+  1_(CAlgebra the carrier of X) = X --> 1r;
+  hence 1_(C_Algebra_of_ContinuousFunctions X) = X --> 1r by A1, CC0SP1:3;
+end;
+
+theorem Th15:
+  for A being ComplexAlgebra
+  for A1, A2 being ComplexSubAlgebra of A st
+                    the carrier of A1 c= the carrier of A2 holds
+  A1 is ComplexSubAlgebra of A2
+proof
+  let A be ComplexAlgebra;
+  let A1, A2 be ComplexSubAlgebra of A;
+  assume
+L1: the carrier of A1 c= the carrier of A2;
+  set CA1 = the carrier of A1;
+  set CA2 = the carrier of A2;
+  set AA = the addF of A;
+  set mA = the multF of A;
+  set MA = the Mult of A;
+L2:0.A1 = 0.A & 0.A2 = 0.A & 1.A1 = 1.A & 1.A2 = 1.A by CC0SP1:def 1;
+L3:the addF of A1 = (the addF of A2)||(the carrier of A1)
+  proof
+    ( the addF of A1 = (the addF of A)||(the carrier of A1) &
+      the addF of A2 = (the addF of A)||(the carrier of A2) &
+      [: the carrier of A1, the carrier of A1:]
+               c= [: the carrier of A2, the carrier of A2:] )
+                                    by L1, CC0SP1:def 1, ZFMISC_1:96;
+    hence the addF of A1 = (the addF of A2)||(the carrier of A1)
+                                    by FUNCT_1:51;
+  end;
+L4:the multF of A1 = (the multF of A2)||(the carrier of A1)
+  proof
+    ( the multF of A1 = (the multF of A)||(the carrier of A1) &
+      the multF of A2 = (the multF of A)||(the carrier of A2) &
+      [: the carrier of A1, the carrier of A1:]
+               c= [: the carrier of A2, the carrier of A2:] )
+                                    by L1, CC0SP1:def 1, ZFMISC_1:96;
+    hence the multF of A1 = (the multF of A2)||(the carrier of A1)
+                                               by FUNCT_1:51;
+  end;
+  the Mult of A1 = (the Mult of A2)|[:COMPLEX, the carrier of A1:]
+  proof
+    ( the Mult of A1 = (the Mult of A)|[:COMPLEX, the carrier of A1:] &
+     the Mult of A2 = (the Mult of A)|[:COMPLEX, the carrier of A2:] &
+     [:COMPLEX, the carrier of A1:] c= [:COMPLEX, the carrier of A2:] )
+                                     by L1, CC0SP1:def 1, ZFMISC_1:96;
+    hence the Mult of A1 = (the Mult of A2)|[:COMPLEX, the carrier of A1:]
+                                     by FUNCT_1:51;
+  end;
+  hence A1 is ComplexSubAlgebra of A2 by L1, L2, L3, L4, CC0SP1:def 1;
+end;
+
+Lm1:
+  for X being compact non empty TopSpace
+  for x being set st x in CContinuousFunctions X holds
+  x in ComplexBoundedFunctions the carrier of X
+proof
+  let X be compact non empty TopSpace;
+  let x be set;
+  assume x in CContinuousFunctions X; then
+  consider h being continuous Function of the carrier of X,COMPLEX such that
+A1:   x = h;
+   |.h.| is Function of the carrier of X,REAL & |.h.| is continuous
+                                          by Th8; then
+    consider h1 being Function of the carrier of X,REAL such that
+A3:   h1=|.h.| & h1 is continuous;
+  ( h1 is bounded_above & h1 is bounded_below ) by SEQ_2:def 8,A3;
+  then consider r1 being real number such that
+A4:   for y being set st y in dom h1 holds h1.y < r1 by SEQ_2:def 1;
+A5:for y being set st y in dom h holds abs (h.y) < r1
+  proof
+    let y be set;
+    assume
+A6:   y in dom h;
+A7: dom h1 = dom h by A3,VALUED_1:def 11;
+    h1.y = |.h.y.| by A3,VALUED_1:18
+        .= abs (h.y);
+    hence thesis by A4,A6,A7;
+  end;
+  h is bounded by A5,SEQ_2:def 5;
+  then h|(the carrier of X) is bounded by FUNCT_2:33;
+  hence x in ComplexBoundedFunctions the carrier of X by A1;
+end;
+
+theorem
+for X being non empty compact TopSpace holds
+  C_Algebra_of_ContinuousFunctions X is
+    ComplexSubAlgebra of C_Algebra_of_BoundedFunctions the carrier of X
+proof
+  let X be non empty compact TopSpace;
+A1:the carrier of (C_Algebra_of_ContinuousFunctions X)
+     c= the carrier of (C_Algebra_of_BoundedFunctions the carrier of X)
+  proof
+    for x being set st x in CContinuousFunctions X holds
+      x in ComplexBoundedFunctions the carrier of X by Lm1;
+    hence the carrier of (C_Algebra_of_ContinuousFunctions X)
+        c= the carrier of (C_Algebra_of_BoundedFunctions the carrier of X)
+                                                  by TARSKI:def 3;
+  end;
+A2:C_Algebra_of_ContinuousFunctions X
+    is ComplexSubAlgebra of CAlgebra the carrier of X by CC0SP1:2;
+  C_Algebra_of_BoundedFunctions the carrier of X
+    is ComplexSubAlgebra of CAlgebra the carrier of X by CC0SP1:4;
+  hence C_Algebra_of_ContinuousFunctions X
+    is ComplexSubAlgebra of C_Algebra_of_BoundedFunctions the carrier of X
+                                   by A1, A2, Th15;
+end;
+
+definition
+  let X be non empty compact TopSpace;
+  func CContinuousFunctionsNorm X -> Function of (CContinuousFunctions X),REAL
+    equals
+  (ComplexBoundedFunctionsNorm the carrier of X) | (CContinuousFunctions X);
+correctness
+proof
+  for x being set st x in CContinuousFunctions X holds
+  x in ComplexBoundedFunctions the carrier of X by Lm1;
+  then CContinuousFunctions X c= ComplexBoundedFunctions the carrier of X
+                                                       by TARSKI:def 3;
+  hence thesis by FUNCT_2:32;
+end;
+end;
+
+definition
+  let X be non empty compact TopSpace;
+  func C_Normed_Algebra_of_ContinuousFunctions X -> Normed_Complex_AlgebraStr
+    equals
+  Normed_Complex_AlgebraStr(# (CContinuousFunctions X),
+    (mult_ ((CContinuousFunctions X),(CAlgebra the carrier of X))),
+    (Add_ ((CContinuousFunctions X),(CAlgebra the carrier of X))),
+    (Mult_ ((CContinuousFunctions X),(CAlgebra the carrier of X))),
+    (One_ ((CContinuousFunctions X),(CAlgebra the carrier of X))),
+    (Zero_ ((CContinuousFunctions X),(CAlgebra the carrier of X))),
+    (CContinuousFunctionsNorm X) #);
+correctness;
+end;
+
+registration
+  let X be non empty compact TopSpace;
+  cluster C_Normed_Algebra_of_ContinuousFunctions X -> non empty strict;
+  correctness;
+end;
+
+UNITAL:
+now
+  let X be non empty compact TopSpace;
+  set F = C_Normed_Algebra_of_ContinuousFunctions X;
+  let x, e be Element of (C_Normed_Algebra_of_ContinuousFunctions X);
+  assume
+A1: e = One_ ((CContinuousFunctions X),(CAlgebra the carrier of X));
+  set X1 = CContinuousFunctions X;
+  reconsider f = x as Element of CContinuousFunctions X;
+  1_ (CAlgebra the carrier of X) = X --> 1
+              .= 1_ (C_Algebra_of_ContinuousFunctions X) by Th14;
+  then
+A2: ( [f,(1_ (CAlgebra the carrier of X))]
+            in [:(CContinuousFunctions X),(CContinuousFunctions X):] &
+      [(1_ (CAlgebra the carrier of X)),f]
+            in [:(CContinuousFunctions X),(CContinuousFunctions X):] )
+                                     by ZFMISC_1:87;
+  x*e = (mult_ ((CContinuousFunctions X),(CAlgebra the carrier of X)))
+              .(f,(1_ (CAlgebra the carrier of X))) by A1, C0SP1:def 8;
+  then
+    x*e = ((the multF of CAlgebra the carrier of X)||CContinuousFunctions X)
+              .(f,1_CAlgebra the carrier of X) by C0SP1:def 6;
+  then
+    x * e = f * (1_ (CAlgebra the carrier of X)) by A2, FUNCT_1:49;
+  hence x * e = x by VECTSP_1:def 4;
+  e*x = (mult_ ((CContinuousFunctions X),(CAlgebra the carrier of X)))
+             .((1_ (CAlgebra the carrier of X)),f) by A1, C0SP1:def 8;
+  then
+    e*x = ((the multF of CAlgebra the carrier of X)||CContinuousFunctions X)
+             .(1_CAlgebra the carrier of X,f) by C0SP1:def 6; then
+  e*x = (1_CAlgebra the carrier of X) * f by A2, FUNCT_1:49;
+  hence e * x = x by VECTSP_1:def 4;
+end;
+
+registration
+  let X be non empty compact TopSpace;
+  cluster C_Normed_Algebra_of_ContinuousFunctions X -> unital;
+  correctness
+proof
+  reconsider e = One_(CContinuousFunctions X,CAlgebra the carrier of X) as
+                      Element of C_Normed_Algebra_of_ContinuousFunctions X;
+  take e;
+  thus for b1 being Element of
+            the carrier of (C_Normed_Algebra_of_ContinuousFunctions X) holds
+  b1 * e = b1 & e * b1 = b1 by UNITAL;
+end;
+end;
+
+Lm2:
+  for X being non empty compact TopSpace
+  for x being Point of C_Normed_Algebra_of_ContinuousFunctions X
+  for y being Point of C_Normed_Algebra_of_BoundedFunctions the carrier of X
+    st x = y holds ||.x.|| = ||.y.|| by FUNCT_1:49;
+
+Lm3:
+  for X being non empty compact TopSpace
+  for x1, x2 being Point of C_Normed_Algebra_of_ContinuousFunctions X
+  for y1, y2 being Point of
+    C_Normed_Algebra_of_BoundedFunctions the carrier of X st x1 = y1 & x2 = y2
+     holds x1 + x2 = y1 + y2
+proof
+  let X be non empty compact TopSpace;
+  let x1, x2 be Point of C_Normed_Algebra_of_ContinuousFunctions X;
+  let y1, y2 be Point of C_Normed_Algebra_of_BoundedFunctions the carrier of X;
+  assume
+A1: x1 = y1 & x2 = y2;
+A2:CContinuousFunctions X is add-closed by CC0SP1:def 2;
+A3:ComplexBoundedFunctions the carrier of X is add-closed by CC0SP1:def 2;
+  thus
+    x1+x2 = ((the addF of CAlgebra the carrier of X)
+            ||(CContinuousFunctions X)).([x1,x2]) by C0SP1:def 5,A2
+         .= (the addF of CAlgebra the carrier of X).([x1,x2]) by FUNCT_1:49
+         .= ((the addF of CAlgebra the carrier of X)
+            ||(ComplexBoundedFunctions the carrier of X)).([y1,y2])
+                                                           by A1, FUNCT_1:49
+         .= y1 + y2 by C0SP1:def 5,A3;
+end;
+
+Lm4:
+  for X being non empty compact TopSpace
+  for a being Complex
+  for x being Point of C_Normed_Algebra_of_ContinuousFunctions X
+  for y being Point of C_Normed_Algebra_of_BoundedFunctions the carrier of X
+    st x = y holds a * x = a * y
+proof
+  let X be non empty compact TopSpace;
+  let a be Complex;
+  let x be Point of C_Normed_Algebra_of_ContinuousFunctions X;
+  let y be Point of C_Normed_Algebra_of_BoundedFunctions the carrier of X;
+  assume
+A1: x = y;
+  thus a * x = ((the Mult of CAlgebra the carrier of X)|
+             [:COMPLEX,(CContinuousFunctions X):]).([a,x]) by CC0SP1:def 3
+       .= (the Mult of CAlgebra the carrier of X).([a,x]) by FUNCT_1:49
+       .= ((the Mult of CAlgebra the carrier of X)|
+             [:COMPLEX,(ComplexBoundedFunctions the carrier of X):]).([a,y])
+                                                     by A1, FUNCT_1:49
+       .= a * y by CC0SP1:def 3;
+end;
+
+Lm5:
+  for X being non empty compact TopSpace
+  for x1, x2 being Point of C_Normed_Algebra_of_ContinuousFunctions X
+  for y1, y2 being Point of
+    C_Normed_Algebra_of_BoundedFunctions the carrier of X
+      st x1 = y1 & x2 = y2 holds x1 * x2 = y1 * y2
+proof
+  let X be non empty compact TopSpace;
+  let x1, x2 be Point of C_Normed_Algebra_of_ContinuousFunctions X;
+  let y1, y2 be Point of C_Normed_Algebra_of_BoundedFunctions the carrier of X;
+  assume
+A1: x1 = y1 & x2 = y2;
+  thus
+  x1 * x2 =((the multF of CAlgebra the carrier of X)||
+                (CContinuousFunctions X)).([x1,x2]) by C0SP1:def 6
+         .=(the multF of CAlgebra the carrier of X).([x1,x2]) by FUNCT_1:49
+         .=((the multF of CAlgebra the carrier of X)||
+                (ComplexBoundedFunctions the carrier of X)).([y1,y2])
+                                                          by A1, FUNCT_1:49
+         .= y1 * y2 by C0SP1:def 6;
+end;
+
+theorem Th18:
+  for X being non empty compact TopSpace holds
+  C_Normed_Algebra_of_ContinuousFunctions X is ComplexAlgebra
+proof
+  let X being non empty compact TopSpace;
+  1.(C_Normed_Algebra_of_ContinuousFunctions X)
+     = 1_C_Algebra_of_ContinuousFunctions X;
+   hence thesis by CC0SP1:14;
+end;
+
+registration
+  let X be non empty compact TopSpace;
+  cluster C_Normed_Algebra_of_ContinuousFunctions X -> right_complementable
+  Abelian add-associative right_zeroed vector-distributive scalar-distributive
+  scalar-associative associative commutative right-distributive right_unital
+  vector-associative;
+coherence by Th18;
+end;
+
+theorem
+  for X being non empty compact TopSpace
+  for F being Point of C_Normed_Algebra_of_ContinuousFunctions X holds
+    (Mult_(CContinuousFunctions X,CAlgebra the carrier of X)).(1r,F) = F
+proof
+  let X be non empty compact TopSpace;
+  let F be Point of C_Normed_Algebra_of_ContinuousFunctions X;
+  set X1 = CContinuousFunctions X;
+  reconsider f1 = F as Element of CContinuousFunctions X;
+A1:[1,f1] in [:COMPLEX,(CContinuousFunctions X):] by ZFMISC_1:87;
+  (Mult_ ((CContinuousFunctions X),(CAlgebra the carrier of X))).(1,F)
+     = (( the Mult of CAlgebra the carrier of X) |
+                 [:COMPLEX,(CContinuousFunctions X):]).(1,f1) by CC0SP1:def 3
+    .= (the Mult of CAlgebra the carrier of X).(1,f1) by A1, FUNCT_1:49
+    .= F by CFUNCDOM:12;
+  hence thesis;
+end;
+
+registration
+  let X be non empty compact TopSpace;
+  cluster C_Normed_Algebra_of_ContinuousFunctions X -> vector-distributive
+    scalar-distributive scalar-associative scalar-unital;
+coherence
+proof
+  for v being Point of C_Normed_Algebra_of_ContinuousFunctions X holds
+                            1r * v = v
+  proof
+    let v be Point of C_Normed_Algebra_of_ContinuousFunctions X;
+    reconsider v1 = v as Element of CContinuousFunctions X;
+A1: 1r*v = ((the Mult of CAlgebra the carrier of X)|
+             [:COMPLEX,(CContinuousFunctions X):]).([1r,v1]) by CC0SP1:def 3
+        .= (the Mult of CAlgebra the carrier of X).(1r,v1) by FUNCT_1:49
+        .= v1 by CFUNCDOM:12;
+    thus thesis by A1;
+  end;
+  hence C_Normed_Algebra_of_ContinuousFunctions X is vector-distributive &
+        C_Normed_Algebra_of_ContinuousFunctions X is scalar-distributive
+        scalar-associative scalar-unital by CLVECT_1:def 5;
+end;
+end;
+
+theorem
+  for X being non empty compact TopSpace holds
+  C_Normed_Algebra_of_ContinuousFunctions X is ComplexLinearSpace;
+
+theorem Th21:
+  for X being non empty compact TopSpace holds
+  X --> 0 = 0.(C_Normed_Algebra_of_ContinuousFunctions X)
+proof
+  let X be non empty compact TopSpace;
+  X --> 0 = 0.(C_Algebra_of_ContinuousFunctions X) by Th13;
+  hence X --> 0 = 0.(C_Normed_Algebra_of_ContinuousFunctions X);
+end;
+
+Lm6:
+  for X being non empty compact TopSpace holds
+    0.(C_Normed_Algebra_of_ContinuousFunctions X)
+      = 0.(C_Normed_Algebra_of_BoundedFunctions the carrier of X)
+proof
+  let X be non empty compact TopSpace;
+  thus 0.(C_Normed_Algebra_of_ContinuousFunctions X) = X --> 0 by Th21
+      .= 0.(C_Normed_Algebra_of_BoundedFunctions the carrier of X)
+                                        by CC0SP1:18;
+end;
+
+Lm7:
+  for X being non empty compact TopSpace holds
+  1.(C_Normed_Algebra_of_ContinuousFunctions X)
+    = 1.(C_Normed_Algebra_of_BoundedFunctions the carrier of X)
+proof
+  let X be non empty compact TopSpace;
+  thus 1.(C_Normed_Algebra_of_ContinuousFunctions X)
+        = 1_ (C_Algebra_of_ContinuousFunctions X)
+       .= X --> 1r by Th14
+       .= 1_(C_Algebra_of_BoundedFunctions the carrier of X) by CC0SP1:9
+       .= 1.(C_Normed_Algebra_of_BoundedFunctions the carrier of X);
+end;
+
+theorem
+  for X being non empty compact TopSpace
+  for F being Point of C_Normed_Algebra_of_ContinuousFunctions X holds
+               0 <= ||.F.||
+proof
+  let X be non empty compact TopSpace;
+  let F be Point of C_Normed_Algebra_of_ContinuousFunctions X;
+  reconsider F1 = F as
+       Point of C_Normed_Algebra_of_BoundedFunctions the carrier of X by Lm1;
+  ||.F.|| = ||.F1.|| by FUNCT_1:49;
+  hence 0 <= ||.F.|| by CC0SP1:20;
+end;
+
+theorem Th24:
+  for X being non empty compact TopSpace
+  for f, g, h being Function of the carrier of X,COMPLEX
+  for F, G, H being Point of C_Normed_Algebra_of_ContinuousFunctions X st
+    f = F & g = G & h = H holds
+     (H = F+G iff for x being Element of X holds h.x=(f.x)+(g.x))
+proof
+  let X be non empty compact TopSpace;
+  let f, g, h be Function of the carrier of X,COMPLEX;
+  let F, G, H be Point of C_Normed_Algebra_of_ContinuousFunctions X;
+  reconsider f1 = F, g1 = G, h1 = H as
+    VECTOR of C_Algebra_of_ContinuousFunctions X;
+  (H=F+G iff h1=f1+g1);
+  hence thesis by Th10;
+end;
+
+theorem
+  for a being Complex
+  for X being non empty compact TopSpace
+  for f, g being Function of the carrier of X,COMPLEX
+  for F, G being Point of C_Normed_Algebra_of_ContinuousFunctions X st
+              f = F & g = G holds
+  (G = a*F iff for x being Element of X holds g.x = a*(f.x))
+proof
+  let a be Complex;
+  let X be non empty compact TopSpace;
+  let f, g be Function of the carrier of X,COMPLEX;
+  let F, G be Point of C_Normed_Algebra_of_ContinuousFunctions X;
+  reconsider f1 = F, g1 = G as VECTOR of C_Algebra_of_ContinuousFunctions X;
+  (G = a*F iff g1 = a*f1);
+  hence thesis by Th11;
+end;
+
+theorem
+  for X being non empty compact TopSpace
+  for f, g, h being Function of the carrier of X,COMPLEX
+  for F, G, H being Point of C_Normed_Algebra_of_ContinuousFunctions X st
+              f = F & g = G & h = H holds
+  ( H= F*G iff for x being Element of X holds h.x = (f.x)*(g.x))
+proof
+  let X be non empty compact TopSpace;
+  let f, g, h be Function of the carrier of X,COMPLEX;
+  let F, G, H be Point of C_Normed_Algebra_of_ContinuousFunctions X;
+  reconsider f1 = F, g1 = G, h1 = H
+                        as VECTOR of C_Algebra_of_ContinuousFunctions X;
+  H = F*G iff h1 = f1*g1;
+  hence thesis by Th12;
+end;
+
+theorem Th27a:
+  for X being non empty compact TopSpace holds
+  ||.0.C_Normed_Algebra_of_ContinuousFunctions X.|| = 0
+proof
+  let X be non empty compact TopSpace;
+  set F = 0.C_Normed_Algebra_of_ContinuousFunctions X;
+  reconsider F1 = F
+    as Point of C_Normed_Algebra_of_BoundedFunctions the carrier of X by Lm1;
+  (||.F1.|| = 0 iff F1
+     = 0.(C_Normed_Algebra_of_BoundedFunctions the carrier of X)) by CC0SP1:25;
+  hence thesis by Lm6, FUNCT_1:49;
+end;
+
+theorem Th27b:
+  for X being non empty compact TopSpace
+  for F being Point of C_Normed_Algebra_of_ContinuousFunctions X holds
+  ||.F.|| = 0 implies F = 0.C_Normed_Algebra_of_ContinuousFunctions X
+proof
+  let X be non empty compact TopSpace;
+  let F be Point of C_Normed_Algebra_of_ContinuousFunctions X;
+  reconsider F1 = F
+    as Point of C_Normed_Algebra_of_BoundedFunctions the carrier of X by Lm1;
+  (||.F1.|| = 0 iff F1
+     = 0.(C_Normed_Algebra_of_BoundedFunctions the carrier of X)) by CC0SP1:25;
+  hence thesis by Lm6, FUNCT_1:49;
+end;
+
+theorem Th27c:
+  for a being Complex
+  for X being non empty compact TopSpace
+  for F being Point of C_Normed_Algebra_of_ContinuousFunctions X holds
+  ||.(a*F).|| = (abs a)*||.F.||
+proof
+  let a be Complex;
+  let X be non empty compact TopSpace;
+  let F be Point of C_Normed_Algebra_of_ContinuousFunctions X;
+  reconsider F1 = F
+    as Point of C_Normed_Algebra_of_BoundedFunctions the carrier of X by Lm1;
+  thus ||.(a * F).|| = ||.(a * F1).|| by Lm4, Lm2
+                 .= (abs a) * ||.F1.|| by CC0SP1:25
+                 .= (abs a) * ||.F.|| by FUNCT_1:49;
+end;
+
+theorem Th27d:
+  for X being non empty compact TopSpace
+  for F, G being Point of C_Normed_Algebra_of_ContinuousFunctions X holds
+  ||.(F + G).|| <= ||.F.|| + ||.G.||
+proof
+  let X be non empty compact TopSpace;
+  let F, G be Point of C_Normed_Algebra_of_ContinuousFunctions X;
+  reconsider F1 = F, G1 = G
+    as Point of C_Normed_Algebra_of_BoundedFunctions the carrier of X by Lm1;
+A1:||.F.|| = ||.F1.|| by FUNCT_1:49;
+A2:||.G.|| = ||.G1.|| by FUNCT_1:49;
+A3:||.(F + G).|| = ||.(F1 + G1).|| by Lm3, Lm2;
+  thus ||.(F + G).|| <= ||.F.|| + ||.G.|| by A1, A2, A3, CC0SP1:25;
+end;
+
+registration
+  let X be non empty compact TopSpace;
+  cluster C_Normed_Algebra_of_ContinuousFunctions X ->
+    discerning reflexive ComplexNormSpace-like;
+coherence
+proof
+  set C = C_Normed_Algebra_of_ContinuousFunctions X;
+A1:||.(0.C_Normed_Algebra_of_ContinuousFunctions X).|| = 0 by Th27a;
+A2:for x, y being Point of C_Normed_Algebra_of_ContinuousFunctions X
+  for a being Complex holds
+    ((||.x.|| = 0 implies x = 0.(C_Normed_Algebra_of_ContinuousFunctions X)) &
+    (x = 0.(C_Normed_Algebra_of_ContinuousFunctions X) implies ||.x.|| = 0 ) &
+    ||.(a * x).|| = (abs a) * ||.x.|| & ||.(x + y).|| <= ||.x.|| + ||.y.|| )
+                                      by Th27a,Th27b,Th27c,Th27d;
+  thus C_Normed_Algebra_of_ContinuousFunctions X is discerning
+  reflexive ComplexNormSpace-like by NORMSP_0:def 5,NORMSP_0:def 6,
+                 CLVECT_1:def 13,A1,A2;
+end;
+end;
+
+Lm8:
+  for X being non empty compact TopSpace
+  for x1, x2 being Point of C_Normed_Algebra_of_ContinuousFunctions X
+  for y1, y2 being Point of
+    C_Normed_Algebra_of_BoundedFunctions the carrier of X
+       st x1 = y1 & x2 = y2 holds x1 - x2 = y1 - y2
+proof
+  let X be non empty compact TopSpace;
+  let x1, x2 be Point of C_Normed_Algebra_of_ContinuousFunctions X;
+  let y1, y2 be Point of C_Normed_Algebra_of_BoundedFunctions the carrier of X;
+  assume
+A1:  x1 = y1 & x2 = y2;
+  reconsider z2=x2 as VECTOR of C_Normed_Algebra_of_ContinuousFunctions X;
+  reconsider e =-1r as Complex;
+  -x2 = e * x2 by CLVECT_1:3
+     .= e * y2 by A1, Lm4
+     .= - y2 by CLVECT_1:3;
+  hence x1 - x2 = y1 - y2 by A1, Lm3;
+end;
+
+theorem
+  for X being non empty compact TopSpace
+  for f, g, h being Function of the carrier of X,COMPLEX
+  for F, G, H being Point of C_Normed_Algebra_of_ContinuousFunctions X st
+    f = F & g = G & h = H holds
+      ( H = F - G iff for x being Element of X holds h.x = (f.x)-(g.x))
+proof
+  let X be non empty compact TopSpace;
+  let f, g, h be Function of the carrier of X,COMPLEX;
+  let F, G, H be Point of C_Normed_Algebra_of_ContinuousFunctions X;
+  assume
+A1: f = F & g = G & h = H;
+A2:now
+    assume H = F - G;
+    then
+      H + G = F - (G - G) by RLVECT_1:29;
+    then
+      H + G = F - (0.C_Normed_Algebra_of_ContinuousFunctions X)
+                                                          by RLVECT_1:15;
+    then
+A3:   H + G = F by RLVECT_1:13;
+    now
+      let x be Element of X;
+      f.x = (h.x) + (g.x) by A1, A3, Th24;
+      hence (f.x) - (g.x) = h.x;
+    end;
+    hence for x being Element of X holds h . x = (f . x) - (g . x);
+  end;
+  now
+    assume
+A4:   for x being Element of X holds h.x = (f.x) - (g.x);
+    now
+      let x be Element of X;
+      h . x = (f . x) - (g . x) by A4;
+      hence (h . x) + (g . x) = f . x;
+    end;
+    then F = H + G by A1, Th24;
+    then F - G = H + (G - G) by RLVECT_1:def 3;
+    then F - G = H + (0.C_Normed_Algebra_of_ContinuousFunctions X)
+                                                   by RLVECT_1:15;
+    hence F - G = H by RLVECT_1:4;
+  end;
+  hence H = F - G iff for x being Element of X holds h.x = (f.x)-(g.x)
+                                                     by A2;
+end;
+
+theorem Th29:
+  for X being ComplexBanachSpace
+  for Y being Subset of X
+  for seq being sequence of X st Y is closed & rng seq c= Y
+                                      & seq is CCauchy
+   holds seq is convergent & lim seq in Y
+proof
+  let X be ComplexBanachSpace;
+  let Y be Subset of X;
+  let seq be sequence of X;
+  assume
+A1: Y is closed & rng seq c= Y & seq is CCauchy;
+  hence seq is convergent by CLOPBAN1:def 13;
+  hence lim seq in Y by A1, NCFCONT1:def 3;
+end;
+
+theorem Th30:
+  for X being non empty compact TopSpace
+  for Y being Subset of (C_Normed_Algebra_of_BoundedFunctions the carrier of X)
+          st Y = CContinuousFunctions X holds Y is closed
+proof
+  let X be non empty compact TopSpace;
+  let Y be Subset of C_Normed_Algebra_of_BoundedFunctions the carrier of X;
+  assume
+A1:Y = CContinuousFunctions X;
+  now
+    let seq be sequence of
+      C_Normed_Algebra_of_BoundedFunctions the carrier of X;
+    assume
+A2:   rng seq c= Y & seq is convergent;
+    lim seq in ComplexBoundedFunctions the carrier of X;
+    then
+      consider f being Function of the carrier of X,COMPLEX such that
+A3:     f = lim seq & f | the carrier of X is bounded;
+    now
+      let z be set;
+      assume z in ComplexBoundedFunctions the carrier of X;
+      then
+        ex f being Function of the carrier of X,COMPLEX st
+          f = z & f | the carrier of X is bounded;
+      hence z in PFuncs (the carrier of X,COMPLEX) by PARTFUN1:45;
+    end;
+    then
+      ComplexBoundedFunctions the carrier of X
+                    c= PFuncs ( the carrier of X,COMPLEX) by TARSKI:def 3;
+    then reconsider H = seq as Functional_Sequence of the carrier of X,COMPLEX
+                                                             by FUNCT_2:7;
+A4: for p being Real st p > 0 holds
+      ex k being Element of NAT st
+        for n being Element of NAT
+        for x being set st n >= k & x in the carrier of X holds
+             abs (((H . n) . x) - (f . x)) < p
+    proof
+      let p be Real;
+      assume p > 0;
+      then
+        consider k being Element of NAT such that
+A5:       for n being Element of NAT st n >= k holds
+            ||.((seq . n) - (lim seq)).|| < p by A2, CLVECT_1:def 16;
+      take k;
+      hereby
+        let n be Element of NAT;
+        let x be set;
+        assume
+A6:       n >= k & x in the carrier of X;
+        then
+A7:       ||.((seq . n) - (lim seq)).|| < p by A5;
+        (seq . n) - (lim seq) in ComplexBoundedFunctions the carrier of X;
+        then
+          consider g being Function of the carrier of X,COMPLEX such that
+A8:         ( g = (seq . n) - (lim seq) & g | the carrier of X is bounded );
+        seq . n in ComplexBoundedFunctions the carrier of X;
+        then
+          consider s being Function of the carrier of X,COMPLEX such that
+A9:         ( s = seq . n & s | the carrier of X is bounded );
+        reconsider x0 = x as Element of the carrier of X by A6;
+A10:    g . x0 = (s . x0) - (f . x0) by A8, A9, A3, CC0SP1:26;
+        abs (g . x0) <= ||.((seq . n) - (lim seq)).|| by A8, CC0SP1:19;
+        hence abs (((H . n) . x) - (f . x)) < p by A10, A9, A7, XXREAL_0:2;
+      end;
+    end;
+    f is continuous
+    proof
+      set n = the Element of NAT;
+      for x being Point of X
+      for V being Subset of COMPLEX st f.x in V & V is open holds
+        ex W being Subset of X st
+          x in W & W is open & f .: W c= V
+      proof
+        let x be Point of X;
+        let V be Subset of COMPLEX;
+        assume
+A11:      f.x in V & V is open;
+        reconsider z0=f.x as Complex;
+        consider N being Neighbourhood of z0 such that
+A12:       N c= V by A11,CFDIFF_1:9;
+        consider r being Real such that
+A13:      0<r & {p where p is Complex:|.(p-z0).| < r }c= N
+                                        by CFDIFF_1:def 5;
+        set S={p where p is Complex:|.(p-z0).| < r };
+A14:    r/3>0 & r/3 is Real by A13,XREAL_0:def 1;
+        consider k being Element of NAT such that
+A15:      for n be Element of NAT,x be set st n>=k & x in the carrier of X
+           holds abs((H.n).x - f.x) < r/3 by A4,A14;
+        k in NAT;
+        then k in dom seq by NORMSP_1:12;
+        then H.k in rng seq by FUNCT_1:def 3;
+        then H.k in Y by A2;
+        then
+          consider h be continuous Function of the carrier of X,COMPLEX
+            such that
+A16:        H.k=h by A1;
+        set z1 = h.x;
+        set G1 = {p where p is Complex:|.(p-z1).| < r/3 };
+        G1 c= COMPLEX
+        proof
+          let z be set;
+          assume z in G1;
+          then ex y being Complex st
+          z = y & |.(y - z1).| < r/3;
+          hence z in COMPLEX;
+        end;
+        then
+          reconsider T1=G1 as Subset of COMPLEX;
+A17:    T1 is open by CFDIFF_1:13,A14;
+        |.(z1 - z1).|=0;
+        then z1 in G1 by A13;
+        then
+          consider W1 being Subset of X such that
+A18:        x in W1 & W1 is open & h.:W1 c= G1 by A17,Th3;
+        now
+          let zz0 be set;
+          assume
+A19:        zz0 in f.:W1;
+          then
+            consider xx0 being set such that
+A20:          ( xx0 in dom f & xx0 in W1 & f.xx0 = zz0 ) by FUNCT_1:def 6;
+          h.xx0 in h.:W1 by A20, FUNCT_2:35;
+          then
+            h.xx0 in G1 by A18;
+          then
+            consider hx0 being Complex such that
+A21:          hx0=h.xx0 & |.hx0-z1.| < r/3;
+          |. h.xx0 - f.xx0 .| <r/3 by A20,A15,A16;
+          then
+            |. -(h.xx0 - f.xx0) .| <r/3 by COMPLEX1:52;
+          then
+A22:        |. f.xx0 - h.xx0 .| <r/3;
+A23:      |. h.x - f.x .| <r/3 by A15,A16;
+          |. f.xx0 - h.xx0 .|+|.h.xx0-h.x.|<r/3 + r/3 by A21,A22,XREAL_1:8;
+          then
+            |. f.xx0 - h.xx0 .|+|.h.xx0-h.x.|+|. h.x - f.x .| <r/3 + r/3 + r/3
+                                              by A23,XREAL_1:8;
+          then
+A24:        |. f.xx0 - h.xx0 .|+|.h.xx0-h.x.|+|. h.x - f.x .| <r;
+          |. f.xx0 -f.x .| = |.(f.xx0 - h.xx0)+(h.xx0-h.x)+(h.x - f.x).|;
+          then
+A25:        |. f.xx0 -f.x .| <= |.(f.xx0 - h.xx0)+(h.xx0-h.x).| +|.h.x - f.x.|
+                                                by COMPLEX1:56;
+          |.(f.xx0 - h.xx0)+(h.xx0-h.x).| <= |.f.xx0 - h.xx0.|+|.h.xx0-h.x.|
+                                                by COMPLEX1:56;
+          then
+            |.(f.xx0 - h.xx0)+(h.xx0-h.x).| +|.h.x - f.x.|
+               <=|. f.xx0 - h.xx0 .|+|.h.xx0-h.x.|+|.h.x-f.x.| by XREAL_1:6;
+          then
+            |. f.xx0 -f.x .| <= |.f.xx0 - h.xx0.|+|.h.xx0-h.x.| +|.h.x-f.x.|
+                                                by A25,XXREAL_0:2;
+          then |. f.xx0 -f.x .| < r by A24,XXREAL_0:2;
+          hence zz0 in S by A20,A19;
+        end;
+        then f.:W1 c= S by TARSKI:def 3;
+        then f.:W1 c= N by A13,XBOOLE_1:1;
+        hence ex W being Subset of X st
+          x in W & W is open & f .: W c= V by A18,A12,XBOOLE_1:1;
+      end;
+      hence f is continuous by Th3;
+    end;
+    hence lim seq in Y by A3, A1;
+  end;
+  hence Y is closed by NCFCONT1:def 3;
+end;
+
+theorem Th31:
+  for X being non empty compact TopSpace
+  for seq being sequence of (C_Normed_Algebra_of_ContinuousFunctions X)
+    st seq is CCauchy holds seq is convergent
+proof
+  let X be non empty compact TopSpace;
+  let vseq be sequence of (C_Normed_Algebra_of_ContinuousFunctions X);
+  assume
+A1: vseq is CCauchy;
+A2:for x being set st x in CContinuousFunctions X holds
+         x in ComplexBoundedFunctions the carrier of X by Lm1;
+  then
+    CContinuousFunctions X c= ComplexBoundedFunctions the carrier of X
+                                                by TARSKI:def 3;
+  then
+    rng vseq c= ComplexBoundedFunctions the carrier of X by XBOOLE_1:1;
+  then
+    reconsider vseq1 = vseq
+        as sequence of (C_Normed_Algebra_of_BoundedFunctions the carrier of X)
+                                                by FUNCT_2:6;
+  now
+    let e be Real;
+    assume
+A3:   e > 0;
+    consider k being Element of NAT such that
+A4:   for n, m being Element of NAT st n >= k & m >= k holds
+    ||.((vseq . n) - (vseq . m)).|| < e by A1, A3, CSSPACE3:8;
+    take k;
+    now
+      let n, m be Element of NAT;
+      assume n >= k & m >= k;
+      then ||.((vseq . n) - (vseq . m)).|| < e by A4;
+      hence ||.((vseq1 . n) - (vseq1 . m)).|| < e by Lm8, Lm2;
+    end;
+    hence for n, m being Element of NAT st n >= k & m >= k holds
+      ||.((vseq1 . n) - (vseq1 . m)).|| < e;
+  end; then
+A5: vseq1 is CCauchy by CSSPACE3:8;
+  then
+A6: vseq1 is convergent by CC0SP1:27;
+  reconsider Y = CContinuousFunctions X
+    as Subset of (C_Normed_Algebra_of_BoundedFunctions the carrier of X)
+                                                   by A2, TARSKI:def 3;
+A7:rng vseq c= CContinuousFunctions X;
+  Y is closed by Th30;
+  then
+    reconsider tv = lim vseq1
+      as Point of (C_Normed_Algebra_of_ContinuousFunctions X) by A7, A5, Th29;
+  for e being Real st e > 0 holds ex k being Element of NAT st
+    for n being Element of NAT st n >= k holds ||.((vseq . n) - tv).|| < e
+  proof
+    let e be Real;
+    assume e > 0;
+    then
+      consider k being Element of NAT such that
+A8:     for n being Element of NAT st n >= k holds
+          ||.((vseq1 . n) - (lim vseq1)).|| < e by A6, CLVECT_1:def 16;
+    take k;
+    now
+      let n be Element of NAT;
+      assume n >= k;
+      then ||.((vseq1 . n) - (lim vseq1)).|| < e by A8;
+      hence ||.((vseq . n) - tv).|| < e by Lm8, Lm2;
+    end;
+    hence for n being Element of NAT st n >= k holds
+      ||.((vseq . n) - tv).|| < e;
+  end;
+  hence vseq is convergent by CLVECT_1:def 15;
+end;
+
+registration
+  let X be non empty compact TopSpace;
+  cluster C_Normed_Algebra_of_ContinuousFunctions X -> complete;
+coherence
+proof
+  for seq being sequence of (C_Normed_Algebra_of_ContinuousFunctions X)
+    st seq is CCauchy holds seq is convergent by Th31;
+  hence C_Normed_Algebra_of_ContinuousFunctions X is complete
+                                         by CLOPBAN1:def 13;
+end;
+end;
+
+registration
+  let X be non empty compact TopSpace;
+  cluster C_Normed_Algebra_of_ContinuousFunctions X -> Banach_Algebra-like;
+coherence
+proof
+  set B = C_Normed_Algebra_of_ContinuousFunctions X;
+A1:now
+    let f, g be Element of (C_Normed_Algebra_of_ContinuousFunctions X);
+    reconsider f1 = f, g1 = g
+      as Point of (C_Normed_Algebra_of_BoundedFunctions the carrier of X)
+                                          by Lm1;
+A2: ( ||.f.|| = ||.f1.|| & ||.g.|| = ||.g1.|| &
+      ||.(f * g).|| = ||.(f1 * g1).|| ) by Lm5, Lm2;
+    C_Normed_Algebra_of_BoundedFunctions the carrier of X is
+                Banach_Algebra-like_1 by CC0SP1:28;
+    hence ||.(f * g).|| <= ||.f.|| * ||.g.|| by A2, CLOPBAN2:def 9;
+  end;
+A3:C_Normed_Algebra_of_BoundedFunctions the carrier of X is
+                Banach_Algebra-like_2 by CC0SP1:28;
+A4:||.(1. (C_Normed_Algebra_of_ContinuousFunctions X)).||
+       = ||.(1. (C_Normed_Algebra_of_BoundedFunctions the carrier of X)).||
+                                                          by Lm7, Lm2
+      .= 1 by A3, CLOPBAN2:def 10;
+A5:now
+    let a be Complex;
+    let f, g be Element of (C_Normed_Algebra_of_ContinuousFunctions X);
+    reconsider f1 = f, g1 = g
+       as Point of (C_Normed_Algebra_of_BoundedFunctions the carrier of X)
+                                         by Lm1;
+A6: a * g1 = a * g by Lm4;
+A7: f * g = f1 * g1 by Lm5;
+A8: C_Normed_Algebra_of_BoundedFunctions the carrier of X is
+                Banach_Algebra-like_3 by CC0SP1:28;
+    a * (f * g) = a * (f1 * g1) by A7, Lm4;
+    then
+      a * (f * g) = f1 * (a * g1) by A8, CLOPBAN2:def 11;
+    hence a * (f * g) = f * (a * g) by A6, Lm5;
+  end;
+  now
+    let f, g, h be Element of (C_Normed_Algebra_of_ContinuousFunctions X);
+    reconsider f1 = f, g1 = g, h1 = h
+      as Point of (C_Normed_Algebra_of_BoundedFunctions the carrier of X)
+                                         by Lm1;
+A9: g + h = g1 + h1 by Lm3;
+A10:( g * f = g1 * f1 & h * f = h1 * f1 ) by Lm5;
+A11:C_Normed_Algebra_of_BoundedFunctions the carrier of X is
+                           left-distributive by CC0SP1:28;
+    thus (g + h) * f = (g1 + h1) * f1 by Lm5, A9
+                    .= (g1 * f1) + (h1 * f1) by A11, VECTSP_1:def 3
+                    .= (g * f) + (h * f) by Lm3, A10;
+  end;
+  then C_Normed_Algebra_of_ContinuousFunctions X is
+    left-distributive left_unital complete Banach_Algebra-like_1
+     Banach_Algebra-like_2 Banach_Algebra-like_3 Normed_Complex_Algebra
+       by A1, A4, A5, CLOPBAN2:def 9, CLOPBAN2:def 10, CLOPBAN2:def 11,
+            VECTSP_1:def 3;
+  hence C_Normed_Algebra_of_ContinuousFunctions X is Banach_Algebra-like;
+end;
+end;
+
+:: Some properties of support
+
+theorem Th32:
+  for X being non empty TopSpace
+  for f,g being Function of the carrier of X,COMPLEX
+                  holds support(f+g) c= support(f) \/ support(g)
+proof
+  let X be non empty TopSpace;
+  let f,g be Function of the carrier of X,COMPLEX;
+  set CX= the carrier of X;
+  set h=f+g;
+X: rng h c= COMPLEX by MEMBERED:1;
+  dom h = dom f /\ dom g by VALUED_1:def 1
+     .= (the carrier of X) /\ dom g by PARTFUN1:def 2
+     .= (the carrier of X) /\ the carrier of X by PARTFUN1:def 2;
+  then reconsider h as Function of the carrier of X,COMPLEX by X,FUNCT_2:2;
+  dom f = CX & dom g = CX & dom h = CX by FUNCT_2:def 1;
+  then
+A1: support(f) c= CX & support(g) c= CX & support(h) c= CX by PRE_POLY:37;
+  now let x be set;
+    assume
+      x in (CX\ support(f)) /\ (CX\ support(g));
+    then
+      x in (CX\ support(f)) & x in (CX\ support(g)) by XBOOLE_0:def 4;
+    then
+      x in CX & not x in support(f) & x in CX & not x in support(g)
+                                        by XBOOLE_0:def 5;
+    then
+A2:   x in CX & f.x =0 & (g.x)=0 by PRE_POLY:def 7;
+    then
+      (f+g).x = ( f.x) + (g.x) by VALUED_1:1
+             .= 0 by A2; then
+A3:   x in CX & (f+g).x =0 by A2;
+    not x in support(f+g)
+    proof
+      assume x in support(f+g);
+      hence contradiction by A3,PRE_POLY:def 7;
+    end;
+    hence x in CX\ support(f+g) by A3,XBOOLE_0:def 5;
+  end;
+  then
+    (CX\ support(f)) /\ (CX\ support(g)) c= CX\ support(f+g) by TARSKI:def 3;
+  then
+    CX\ ( support(f) \/ support(g) ) c= CX\ support(f+g) by XBOOLE_1:53;
+  then CX\ (CX\ support(f+g)) c=CX\ (CX\ (support(f) \/ support(g)))
+                                                 by XBOOLE_1:34;
+  then
+    CX/\ support(f+g) c=CX\ (CX\ (support(f) \/ support(g))) by XBOOLE_1:48;
+  then
+    CX/\ support(f+g) c= CX/\ (support(f) \/ support(g)) by XBOOLE_1:48;
+  then
+    support(f+g) c= CX/\ (support(f) \/ support(g)) by XBOOLE_1:28,A1;
+  then support(f+g) c= (CX/\ support(f)) \/ (CX/\ support(g))
+                                                   by XBOOLE_1:23;
+  then support(f+g) c= support(f) \/ (CX/\ support(g)) by A1,XBOOLE_1:28;
+  hence support(f+g) c= support(f) \/ support(g) by A1,XBOOLE_1:28;
+end;
+
+theorem Th33:
+  for X being non empty TopSpace
+  for a be Complex,f be Function of the carrier of X,COMPLEX
+                      holds support(a(#)f) c= support(f)
+proof
+  let X be non empty TopSpace;
+  let a be Complex,f be Function of the carrier of X,COMPLEX;
+  set CX= the carrier of X;
+  reconsider h=a(#)f as Function of the carrier of X,COMPLEX;
+  let x be set;
+  assume x in support(a(#)f);
+  then (a(#)f).x <>0 by PRE_POLY:def 7;
+  then a*f.x <> 0 by VALUED_1:6;
+  then f.x <> 0;
+  hence x in support(f) by PRE_POLY:def 7;
+end;
+
+theorem
+  for X being non empty TopSpace
+  for f,g be Function of the carrier of X,COMPLEX
+     holds support(f(#)g) c= support(f) \/ support(g)
+proof
+  let X be non empty TopSpace;
+  let f,g be Function of the carrier of X,COMPLEX;
+  set CX = the carrier of X;
+  reconsider h=f(#)g as Function of the carrier of X,COMPLEX;
+  dom f = CX & dom g = CX & dom h = CX by FUNCT_2:def 1;
+  then
+A1: support(f) c= CX & support(g) c= CX & support(h) c= CX by PRE_POLY:37;
+  now let x be set;
+    assume x in (CX\ support(f)) /\ (CX\ support(g));
+    then
+      x in (CX\ support(f)) & x in (CX\ support(g)) by XBOOLE_0:def 4;
+    then
+      x in CX& not x in support(f) & x in CX & not x in support(g)
+                                        by XBOOLE_0:def 5;
+    then
+A2:   x in CX& f.x =0 & g.x=0 by PRE_POLY:def 7;
+    (f(#)g).x = 0 * 0 by A2,VALUED_1:5;
+    then
+A3:   x in CX & (f(#)g).x =0 by A2;
+    not x in support(f(#)g)
+    proof
+      assume x in support(f(#)g);
+      hence contradiction by A3,PRE_POLY:def 7;
+    end;
+    hence x in CX\ support(f(#)g) by A3,XBOOLE_0:def 5;
+  end;
+  then (CX\ support(f)) /\ (CX\ support(g)) c= CX\ support(f(#)g)
+                                        by TARSKI:def 3;
+  then
+    CX\ (support(f) \/ support(g) ) c= CX\ support(f(#)g) by XBOOLE_1:53;
+  then CX\ (CX\ support(f(#)g)) c=CX\ (CX\ (support(f) \/ support(g)))
+                                        by XBOOLE_1:34;
+  then
+    CX/\ support(f(#)g) c=CX\ (CX\ (support(f) \/ support(g))) by XBOOLE_1:48;
+  then
+    CX/\ support(f(#)g) c= CX/\ (support(f) \/ support(g)) by XBOOLE_1:48;
+  then
+    support(f(#)g) c= CX/\ (support(f) \/ support(g)) by XBOOLE_1:28,A1;
+  then
+    support(f(#)g) c= (CX/\ support(f)) \/ (CX/\ support(g)) by XBOOLE_1:23;
+  then support(f(#)g) c= support(f) \/ (CX/\ support(g)) by A1,XBOOLE_1:28;
+  hence support(f(#)g) c= support(f) \/ support(g) by A1,XBOOLE_1:28;
+end;
+
+:: Space of Complex-Valued Continuous Functionals with bounded support
+
+definition
+  let X be non empty TopSpace;
+  func CC_0_Functions(X) -> non empty Subset of
+                           ComplexVectSpace the carrier of X equals
+  { f where f is Function of the carrier of X,COMPLEX : f is continuous &
+    ex Y be non empty Subset of X st( Y is compact &
+    (for A being Subset of X st A=support(f) holds Cl(A) is Subset of Y))};
+correctness
+proof
+L1:{ f where f is Function of the carrier of X,COMPLEX : f is continuous &
+    ex Y be non empty Subset of X st( Y is compact &
+      (for A being Subset of X st A=support(f) holds Cl(A) is Subset of Y))}
+                               c= Funcs(the carrier of X,COMPLEX)
+  proof
+      let x be set;
+      assume x in { f where f is Function of the carrier of X,COMPLEX
+          : f is continuous &
+      ex Y be non empty Subset of X st( Y is compact &
+      (for A being Subset of X st A=support(f) holds Cl(A) is Subset of Y))};
+      then
+        ex f be Function of the carrier of X,COMPLEX
+          st x=f & f is continuous & ex Y be non empty
+            Subset of X st ( Y is compact &
+        (for A being Subset of X st A=support(f) holds Cl(A) is Subset of Y));
+      hence x in Funcs(the carrier of X,COMPLEX) by FUNCT_2:8;
+  end;
+  { f where f is Function of the carrier of X,COMPLEX : f is continuous &
+    ex Y be non empty Subset of X st( Y is compact &
+    (for A being Subset of X st A=support(f) holds Cl(A) is Subset of Y))}
+                                             is non empty
+  proof
+    set g= (the carrier of X) --> 0c;
+    reconsider g as Function of the carrier of X,COMPLEX;
+A1: g is continuous
+    proof
+      for P being Subset of COMPLEX st P is closed holds g"P is closed
+      proof
+        let P being Subset of COMPLEX such that P is closed;
+        set F = (the carrier of X) --> 0, H = the carrier of X;
+        set HX=[#] X;
+        per cases;
+        suppose 0 in P;
+         then g"P = HX by FUNCOP_1:14;
+          hence g"P is closed;
+        end;
+        suppose not 0 in P;
+          then F"P = {}X by FUNCOP_1:16;
+          hence g"P is closed;
+        end;
+      end;
+      hence thesis by Def1;
+    end;
+A3: ex Y be non empty Subset of X st( Y is compact &
+      (for A being Subset of X st A=support(g) holds Cl(A) is Subset of Y))
+    proof
+      set S = the compact non empty Subset of X;
+      for A being Subset of X st A=support(g) holds Cl(A) is Subset of S
+        proof
+          let A be Subset of X;
+          assume
+A5:         A=support(g);
+A6:       A={}
+          proof
+            assume
+A7:         not thesis;
+            set p = the Element of support(g);
+A8:         p in A by A7,A5; then
+            g.p<>0 by PRE_POLY:def 7,A5;
+            hence contradiction by FUNCOP_1:7,A8;
+          end;
+          Cl({}X)={} by PRE_TOPC:22;
+          hence thesis by XBOOLE_1:2,A6;
+        end;
+        hence thesis;
+      end;
+      g in { f where f is Function of the carrier of X,COMPLEX
+              : f is continuous &
+       ex Y be non empty Subset of X st( Y is compact &
+      (for A being Subset of X st A=support(f) holds Cl(A) is Subset of Y))}
+                             by A1,A3;
+      hence thesis;
+    end;
+  hence thesis by L1;
+  end;
+end;
+
+theorem
+  for X being non empty TopSpace
+ holds CC_0_Functions(X) is non empty Subset of CAlgebra the carrier of X;
+
+Lm9:
+  for X being non empty TopSpace
+  for v,u be Element of CAlgebra the carrier of X
+     st v in CC_0_Functions(X) & u in CC_0_Functions(X)
+                  holds v + u in CC_0_Functions(X)
+proof
+  let X be non empty TopSpace;
+  set W = CC_0_Functions(X);
+  set V = CAlgebra the carrier of X;
+  let u,v be Element of V such that
+A1:u in W & v in W;
+  consider u1 be Function of the carrier of X,COMPLEX such that
+A2: u1=u & u1 is continuous
+    & (ex Y1 be non empty Subset of X st Y1 is compact
+    & (for A1 being Subset of X st A1=support(u1)
+                          holds Cl(A1) is Subset of Y1)) by A1;
+  consider Y1 be non empty Subset of X such that
+A3: (Y1 is compact & (for A1 being Subset of X st A1=support(u1)
+                       holds Cl(A1) is Subset of Y1)) by A2;
+  consider v1 be Function of the carrier of X,COMPLEX such that
+A4: v1=v & v1 is continuous
+    & (ex Y2 be non empty Subset of X st Y2 is compact
+    & (for A2 being Subset of X st A2=support(v1)
+                          holds Cl(A2) is Subset of Y2)) by A1;
+  consider Y2 be non empty Subset of X such that
+A5: (Y2 is compact & (for A2 being Subset of X st A2=support(v1)
+                       holds Cl(A2) is Subset of Y2)) by A4;
+A6:u in CContinuousFunctions(X) by A2;
+A7:v in CContinuousFunctions(X) by A4;
+  CContinuousFunctions(X) is add-closed by CC0SP1:def 2;
+  then v + u in CContinuousFunctions(X) by A6,A7,IDEAL_1:def 1;
+  then
+    consider fvu be continuous Function of the carrier of X,COMPLEX such that
+A8:   v+u = fvu;
+A9:Y1 \/ Y2 is compact by A3,A5,COMPTS_1:10;
+  dom u1 = the carrier of X & dom v1 = the carrier of X by FUNCT_2:def 1;
+  then
+A10:support(u1) c= the carrier of X & support(v1) c= the carrier of X
+                                 by PRE_POLY:37;
+  then reconsider A1= support(u1),A2= support(v1) as Subset of X;
+A11:dom v1 /\ dom u1 = (the carrier of X) /\ dom u1 by FUNCT_2:def 1
+                    .= (the carrier of X) /\ (the carrier of X)
+                                                   by FUNCT_2:def 1
+                    .= the carrier of X;
+  dom (v1+u1) = dom v1 /\ dom u1 by VALUED_1:def 1;
+  then
+A12:support(v1+u1) c= the carrier of X by A11,PRE_POLY:37;
+  reconsider A1= support(u1),A2= support(v1) as Subset of X by A10;
+  reconsider A3= support(v1+u1) as Subset of X by A12;
+A13:Cl(A3) c= Cl(A2 \/ A1) by PRE_TOPC:19,Th32;
+A14:Cl(A3) c= Cl(A2) \/ Cl(A1) by A13,PRE_TOPC:20;
+  Cl(A1) is Subset of Y1 by A3;
+  then
+A15:Cl(A1) c= Y1;
+  Cl(A2) is Subset of Y2 by A5;
+  then Cl(A2) \/ Cl(A1) c= Y2 \/ Y1 by A15,XBOOLE_1:13;
+  then
+A16:for A3 being Subset of X st A3=support(v1+u1) holds Cl(A3)
+                        is Subset of Y2 \/ Y1 by XBOOLE_1:1,A14;
+  reconsider vv1=v as Element of Funcs((the carrier of X),COMPLEX);
+  reconsider uu1=u as Element of Funcs((the carrier of X),COMPLEX);
+  reconsider fvu1=v+u as Element of Funcs((the carrier of X),COMPLEX);
+A17:for x be Element of the carrier of X
+                        holds fvu1.x = vv1.x + uu1.x by CFUNCDOM:1;
+A18:dom fvu1 = the carrier of X by FUNCT_2:def 1;
+  for c being set st c in dom fvu1 holds fvu1.c = v1.c + u1.c
+  proof
+    let c be set;
+    assume c in dom fvu1;
+    then
+    reconsider c1 = c as Element of the carrier of X;
+    thus fvu1.c = vv1.c1 + uu1.c1 by A17
+          .= v1.c + u1.c by A2,A4;
+  end;
+  then fvu1 = v1+u1 by A18,A11,VALUED_1:def 1;
+  hence thesis by A8,A9,A16;
+end;
+
+Lm10:
+  for X being non empty TopSpace
+  for a be Complex,u be Element of CAlgebra the carrier of X
+     st u in CC_0_Functions(X)
+                  holds a * u in CC_0_Functions(X)
+proof
+  let X be non empty TopSpace;
+  set W = CC_0_Functions(X);
+  set V = CAlgebra the carrier of X;
+  let a be Complex;
+  let u be Element of V;
+  assume
+A1: u in W;
+  consider u1 be Function of the carrier of X,COMPLEX such that
+A2:   u1=u & u1 is continuous
+      & (ex Y1 be non empty Subset of X st Y1 is compact
+      & (for A1 being Subset of X st A1=support(u1)
+                          holds Cl(A1) is Subset of Y1)) by A1;
+  consider Y1 be non empty Subset of X such that
+A3: (Y1 is compact & (for A1 being Subset of X st A1=support(u1)
+                       holds Cl(A1) is Subset of Y1)) by A2;
+A4:u in CContinuousFunctions(X) by A2;
+    a * u in CContinuousFunctions(X) by A4,CC0SP1:def 2;
+  then
+    consider fau be continuous Function of the carrier of X,COMPLEX such that
+A5:           a*u = fau;
+  dom u1 = the carrier of X by FUNCT_2:def 1;
+  then
+A6: support(u1) c= the carrier of X by PRE_POLY:37;
+  then
+    reconsider A1= support(u1) as Subset of X;
+A7:dom u1 = (the carrier of X) by FUNCT_2:def 1;
+  dom (a(#)u1) = dom u1 by VALUED_1:def 5;
+  then
+A8: support(a(#)u1) c= the carrier of X by PRE_POLY:37,A7;
+  reconsider A1= support(u1) as Subset of X by A6;
+  reconsider A3= support(a(#)u1) as Subset of X by A8;
+  Cl(A1) is Subset of Y1 by A3;
+  then
+A9: Cl(A1) c= Y1;
+  Cl(A3) c= Cl(A1) by PRE_TOPC:19,Th33;
+  then
+A10:for A3 being Subset of X st A3=support(a(#)u1) holds Cl(A3)
+                        is Subset of Y1 by A9,XBOOLE_1:1;
+  reconsider uu1=u as Element of Funcs((the carrier of X),COMPLEX);
+  reconsider fau1=a*u as Element of Funcs((the carrier of X),COMPLEX);
+A11:for x be Element of the carrier of X
+                    holds fau1.x = a * uu1.x by CFUNCDOM:4;
+A12:dom fau1 = the carrier of X by FUNCT_2:def 1;
+A13:dom u1 = the carrier of X by FUNCT_2:def 1;
+  for c being set st c in dom fau1 holds fau1.c = a * u1.c
+  proof
+    let c be set;
+    assume c in dom fau1;
+    then reconsider c1 = c as Element of the carrier of X;
+    thus fau1.c = a * uu1.c1 by A11
+            .= a * u1.c by A2;
+  end;
+  then fau1 = a(#)u1 by A12,A13,VALUED_1:def 5;
+  hence thesis by A5,A3,A10;
+end;
+
+Lm12:
+  for X being non empty TopSpace
+  for u be Element of CAlgebra the carrier of X st u in CC_0_Functions(X)
+                  holds -u in CC_0_Functions(X)
+proof
+  let X be non empty TopSpace;
+  set W = CC_0_Functions(X);
+  set V = CAlgebra the carrier of X;
+  let u be Element of V;
+  assume
+A1: u in W;
+  set a=-1r;
+  -u = a*u by CLVECT_1:3;
+  hence thesis by A1,Lm10;
+end;
+
+theorem
+  for X being non empty TopSpace
+  for W be non empty Subset of CAlgebra the carrier of X
+                                                 st W= CC_0_Functions X
+         holds W is Cadditively-linearly-closed
+proof
+  let X being non empty TopSpace;
+  let W be non empty Subset of CAlgebra the carrier of X;
+  assume
+A1: W= CC_0_Functions X;
+  set V = CAlgebra the carrier of X;
+  for v,u be Element of V st v in W & u in W holds v + u in W by A1,Lm9;
+  then
+A2: W is add-closed by IDEAL_1:def 1;
+  for v be Element of V st v in W holds -v in W by A1,Lm12;
+  then
+A3: W is having-inverse by C0SP1:def 1;
+  for a be Complex, u be Element of V st u in W holds a * u in W
+                                                            by A1,Lm10;
+  hence W is Cadditively-linearly-closed  by A2,A3,CC0SP1:def 2;
+end;
+
+theorem Th37:
+  for X being non empty TopSpace holds
+  CC_0_Functions X is add-closed
+proof
+  let X be non empty TopSpace;
+  set Y = CC_0_Functions X;
+  set V = ComplexVectSpace(the carrier of X);
+  for v,u be VECTOR of V st v in Y & u in Y holds v + u in Y
+  proof
+    let v,u be VECTOR of V;
+    assume
+A1:   v in Y & u in Y;
+    reconsider v2=v, u2=u as VECTOR of CAlgebra the carrier of X;
+    v2+u2 in Y by A1,Lm9;
+    hence thesis;
+  end;
+hence thesis by IDEAL_1:def 1;
+end;
+
+theorem Th38:
+  for X being non empty TopSpace holds
+  CC_0_Functions X is linearly-closed
+proof
+  let X be non empty TopSpace;
+  set Y = CC_0_Functions X;
+  set V = ComplexVectSpace(the carrier of X);
+L1:for v,u be VECTOR of V st v in Y & u in Y holds v + u in Y
+  proof
+    let v,u be VECTOR of V;
+    assume
+A1:   v in Y & u in Y;
+    reconsider v1=v, u1=u as Element of Funcs((the carrier of X),COMPLEX);
+    reconsider v2=v, u2=u as VECTOR of CAlgebra the carrier of X;
+    v2+u2 in Y by A1,Lm9;
+    hence thesis;
+  end;
+L2:for a be Complex, v be Element of V st v in Y holds a * v in Y
+  proof
+    let a be Complex, v be VECTOR of V;
+    assume
+A2:   v in Y;
+    reconsider v1=v as Element of Funcs((the carrier of X),COMPLEX);
+    reconsider v2=v as VECTOR of CAlgebra the carrier of X;
+    a*v2 in Y by A2,Lm10;
+    hence thesis;
+  end;
+  thus thesis by L1,L2,CLVECT_1:def 7;
+end;
+
+registration
+  let X being non empty TopSpace;
+  cluster CC_0_Functions X -> non empty linearly-closed;
+  correctness by Th38;
+end;
+
+theorem Th39: :: CSSPACE:13
+  for V being ComplexLinearSpace
+  for V1 being Subset of V st V1 is linearly-closed & not V1 is empty holds
+  CLSStruct(# V1,(Zero_(V1,V)),(Add_ (V1,V)),(Mult_ (V1,V)) #) is Subspace of V
+proof
+  let V be ComplexLinearSpace;
+  let V1 be Subset of V;
+  assume that
+A1: V1 is linearly-closed and
+A2: not V1 is empty;
+  for v, u being VECTOR of V st v in V1 & u in V1 holds
+     v + u in V1 by A1,CLVECT_1:def 7;
+  then V1 is add-closed by IDEAL_1:def 1;
+  then
+A3: Add_ (V1,V) = (the addF of V)|| V1  by A2,C0SP1:def 5;
+A4:Mult_ (V1,V) = (the Mult of V) | [:COMPLEX,V1:] by A1, CSSPACE:def 9;
+  Zero_ (V1,V) = 0. V by A1, A2, CSSPACE:def 10;
+  hence CLSStruct(# V1,(Zero_ (V1,V)),(Add_ (V1,V)),(Mult_ (V1,V)) #)
+            is Subspace of V by A2, A3, A4, CLVECT_1:43;
+end;
+
+theorem Th40:
+  for X being non empty TopSpace holds
+  CLSStruct (# CC_0_Functions X,
+    Zero_(CC_0_Functions X, ComplexVectSpace(the carrier of X)),
+    Add_(CC_0_Functions X, ComplexVectSpace(the carrier of X)),
+    Mult_(CC_0_Functions X, ComplexVectSpace(the carrier of X)) #)
+      is Subspace of ComplexVectSpace(the carrier of X) by Th39;
+
+definition
+  let X be non empty TopSpace;
+  func C_VectorSpace_of_C_0_Functions X -> ComplexLinearSpace equals
+  CLSStruct (# CC_0_Functions X,
+  Zero_(CC_0_Functions X, ComplexVectSpace(the carrier of X)),
+  Add_(CC_0_Functions X, ComplexVectSpace(the carrier of X)),
+  Mult_(CC_0_Functions X, ComplexVectSpace(the carrier of X)) #);
+  correctness by Th40;
+end;
+
+theorem Th41:
+  for X be non empty TopSpace
+  for x being set st x in CC_0_Functions(X) holds
+  x in ComplexBoundedFunctions the carrier of X
+proof
+  let X be non empty TopSpace;
+  let x be set such that
+A1:       x in CC_0_Functions(X);
+  consider f be Function of the carrier of X,COMPLEX such that
+A2:        f=x & f is continuous
+           & (ex Y be non empty Subset of X st Y is compact
+           & (for A being Subset of X st A=support(f)
+                          holds Cl(A) is Subset of Y)) by A1;
+  consider Y be non empty Subset of X such that
+A3:      Y is compact & (for A being Subset of X st A=support(f)
+                       holds Cl(A) is Subset of Y) by A2;
+  dom f = the carrier of X by FUNCT_2:def 1;
+  then reconsider A= support(f) as Subset of X by PRE_POLY:37;
+  |.f.| is Function of the carrier of X,REAL &
+        |.f.| is continuous by Th8,A2;
+  then consider f1 being Function of the carrier of X,REAL such that
+A5:   f1=|.f.| & f1 is continuous;
+    f1.:Y is compact by JORDAN_A:1,A5,A3;
+  then reconsider Y1 = f1.:Y as bounded Subset of REAL by RCOMP_1:10;
+A6:Y1 c= [. lower_bound Y1,upper_bound Y1 .] by TOPREAL6:18;
+  reconsider r1 = lower_bound Y1 as real number;
+  reconsider r2 = upper_bound Y1 as real number;
+  consider r be real number such that
+A7:   r=abs(r1)+abs(r2)+1;
+  for p being Element of Y holds r>0 & -r < f1.p & f1.p <r
+  proof
+    let p be Element of Y;
+    f1.p in Y1 by FUNCT_2:35;
+    then f1.p in [.r1,r2.] by A6;
+    then f1.p in {t where t is Real: r1<=t & t<=r2 } by RCOMP_1:def 1;
+    then consider r3 be Element of REAL such that
+A8:                     r3=f1.p & r1<=r3 & r3<=r2;
+    -abs(r1) <= r1 by ABSVALUE:4;
+    then -abs(r1) - abs(r2) <= r1 - 0 by XREAL_1:13;
+    then -abs(r1) - abs(r2) - 1 < r1 - 0 by XREAL_1:15;
+    then
+A9:   -r < r1 by A7;
+    r2 <= abs(r2) by ABSVALUE:4;
+    then r2 + 0 <= abs(r2)+abs(r1) by XREAL_1:7;
+    then
+A10:  r2 < r by A7,XREAL_1:8;
+    -r < f1.p by A8,A9,XXREAL_0:2;
+    hence thesis by A8,A10,XXREAL_0:2;
+  end;
+  then consider r be real number such that
+A12: for p being Element of Y holds r>0 & -r< f1.p & f1.p <r;
+  for x be Point of X holds -r< f1.x & f1.x <r
+  proof
+    let x be Point of X;
+A14:x in (the carrier of X) \ Y or x in Y by XBOOLE_0:def 5;
+    per cases by A14;
+    suppose
+      x in (the carrier of X) \ Y;
+      then
+A15:  x in (the carrier of X) & not x in Y by XBOOLE_0:def 5;
+      Cl(A) is Subset of Y by A3;
+      then
+A16:    Cl(A) c= Y;
+      support(f) c= Cl(A) by PRE_TOPC:18;
+      then
+        support(f) c= Y by A16,XBOOLE_1:1;
+      then
+A17:    not x in support(f) by A15;
+      f.x=0 by PRE_POLY:def 7,A17;
+      then |.f.x.| = 0; then
+      f1.x = 0 by A5,VALUED_1:18;
+      hence -r< f1.x & f1.x <r by A12;
+    end;
+    suppose x in Y;
+      hence thesis by A12;
+    end;
+  end;
+  then
+    consider s1 be real number such that
+A21:       for x be Point of X holds (-s1< f1.x & f1.x <s1);
+  for y being set st y in (the carrier of X) /\ dom f1 holds f1.y<=s1 by A21;
+  then
+A22:f1|(the carrier of X) is bounded_above by RFUNCT_1:70;
+  for y being set st y in (the carrier of X) /\ dom f1
+                   holds -s1<=f1.y by A21;
+  then
+A23:f1|(the carrier of X) is bounded_below by RFUNCT_1:71;
+  (the carrier of X ) /\ (the carrier of X ) =(the carrier of X );
+  then f1|(the carrier of X ) is bounded by RFUNCT_1:75,A22,A23;
+  then |. f|(the carrier of X ) .| is bounded by A5,RFUNCT_1:46;
+  then f|(the carrier of X) is bounded by CFUNCT_1:85;
+  hence x in ComplexBoundedFunctions the carrier of X by A2;
+end;
+
+definition
+  let X be non empty TopSpace;
+  func CC_0_FunctionsNorm X -> Function of CC_0_Functions(X),REAL equals
+  (ComplexBoundedFunctionsNorm the carrier of X)|(CC_0_Functions(X));
+correctness
+proof
+  for x being set st x in CC_0_Functions(X) holds
+    x in ComplexBoundedFunctions the carrier of X by Th41; then
+    CC_0_Functions X c= ComplexBoundedFunctions the carrier of X
+                                               by TARSKI:def 3;
+  hence thesis by FUNCT_2:32;
+end;
+end;
+
+definition
+  let X be non empty TopSpace;
+  func C_Normed_Space_of_C_0_Functions X -> CNORMSTR equals
+  CNORMSTR (# CC_0_Functions X,
+    Zero_(CC_0_Functions X, ComplexVectSpace(the carrier of X)),
+    Add_(CC_0_Functions X, ComplexVectSpace(the carrier of X)),
+    Mult_(CC_0_Functions X, ComplexVectSpace(the carrier of X)),
+          CC_0_FunctionsNorm X #);
+  correctness;
+end;
+
+registration
+  let X be non empty TopSpace;
+  cluster C_Normed_Space_of_C_0_Functions X -> strict non empty;
+  correctness;
+end;
+
+theorem
+  for X be non empty TopSpace
+  for x be set st x in CC_0_Functions(X) holds
+    x in CContinuousFunctions X
+proof
+  let X be non empty TopSpace;
+  let x be set such that
+A1: x in CC_0_Functions(X);
+  consider f be Function of the carrier of X,COMPLEX such that
+A2:        f=x & f is continuous
+           & (ex Y be non empty Subset of X st Y is compact
+           & (for A being Subset of X st A=support(f)
+                          holds Cl(A) is Subset of Y)) by A1;
+  thus thesis by A2;
+end;
+
+theorem Th43:
+  for X be non empty TopSpace holds
+  0.C_VectorSpace_of_C_0_Functions X = X --> 0
+proof
+  let X be non empty TopSpace;
+A1: C_VectorSpace_of_C_0_Functions X is
+    Subspace of ComplexVectSpace(the carrier of X) by Th40;
+  0.ComplexVectSpace(the carrier of X) = X -->0;
+  hence thesis by A1,CLVECT_1:30;
+end;
+
+theorem Th44:
+  for X be non empty TopSpace holds
+  0.C_Normed_Space_of_C_0_Functions X = X --> 0
+proof
+  let X be non empty TopSpace;
+  0.C_Normed_Space_of_C_0_Functions X
+            =0.C_VectorSpace_of_C_0_Functions X
+           .=X --> 0 by Th43;
+  hence thesis;
+end;
+
+Lm14:
+  for X be non empty TopSpace
+  for x1,x2 be Point of C_Normed_Space_of_C_0_Functions X,
+  y1,y2 be Point of C_Normed_Algebra_of_BoundedFunctions the carrier of X
+                    st x1=y1 & x2=y2 holds x1+x2=y1+y2
+proof
+  let X be non empty TopSpace;
+  let x1,x2 be Point of C_Normed_Space_of_C_0_Functions X,
+  y1,y2 be Point of C_Normed_Algebra_of_BoundedFunctions the carrier of X;
+A1:CC_0_Functions X is add-closed by Th37;
+A2:ComplexBoundedFunctions the carrier of X is add-closed by CC0SP1:def 2;
+   assume
+A3:  x1=y1 & x2=y2;
+   thus x1+x2
+       = ((the addF of ComplexVectSpace(the carrier of X))
+            ||CC_0_Functions X).([x1,x2]) by C0SP1:def 5,A1
+      .= (the addF of CAlgebra the carrier of X).([x1,x2]) by FUNCT_1:49
+      .= ((the addF of CAlgebra the carrier of X)
+          ||(ComplexBoundedFunctions the carrier of X)).([y1,y2])
+                                                      by FUNCT_1:49,A3
+      .=y1+y2 by C0SP1:def 5,A2;
+end;
+
+Lm15:
+  for X be non empty TopSpace
+  for a be Complex,x be Point of C_Normed_Space_of_C_0_Functions(X),
+  y be Point of C_Normed_Algebra_of_BoundedFunctions the carrier of X
+                     st x=y holds a*x=a*y
+proof
+  let X be non empty TopSpace;
+  let a be Complex, x be Point of C_Normed_Space_of_C_0_Functions(X),
+  y be Point of C_Normed_Algebra_of_BoundedFunctions the carrier of X;
+  assume
+A1: x=y;
+  thus a*x = ((the Mult of CAlgebra the carrier of X)|
+                 [:COMPLEX,(CC_0_Functions(X)):]).([a,x]) by CSSPACE:def 9
+     .= (the Mult of CAlgebra the carrier of X).([a,x]) by FUNCT_1:49
+     .= ((the Mult of CAlgebra the carrier of X)
+       |[:COMPLEX,(ComplexBoundedFunctions the carrier of X):]).([a,y])
+                                      by FUNCT_1:49,A1
+     .=a*y by CC0SP1:def 3;
+end;
+
+theorem Th45:
+  for a be Complex
+  for X be non empty TopSpace
+  for F,G be Point of C_Normed_Space_of_C_0_Functions(X) holds
+  (||.F.|| = 0 iff F = 0.C_Normed_Space_of_C_0_Functions(X) ) &
+  ||.a*F.|| = abs a * ||.F.|| & ||.F+G.|| <= ||.F.|| + ||.G.||
+proof
+  let a be Complex;
+  let X be non empty TopSpace;
+  let F,G be Point of C_Normed_Space_of_C_0_Functions(X);
+L1:||.F.|| = 0 iff F = 0.C_Normed_Space_of_C_0_Functions(X)
+  proof
+    reconsider FB=F as
+         Point of C_Normed_Algebra_of_BoundedFunctions the carrier of X
+           by Th41;
+A2: ||.FB.||=||.F.|| by FUNCT_1:49;
+A3: 0.C_Normed_Algebra_of_BoundedFunctions the carrier of X
+                      =X-->0 by CC0SP1:18;
+A4: 0.C_Normed_Space_of_C_0_Functions(X) =X-->0 by Th44;
+    ||.FB.|| = 0 iff
+          FB = 0.C_Normed_Algebra_of_BoundedFunctions the carrier of X
+                                                    by CC0SP1:25;
+    hence thesis by A2,A3,A4;
+  end;
+L2:||.a*F.|| = abs a * ||.F.||
+  proof
+    reconsider FB=F as
+         Point of C_Normed_Algebra_of_BoundedFunctions the carrier of X
+           by Th41;
+A6: ||.FB.||=||.F.|| by FUNCT_1:49;
+A7:   a*FB=a*F by Lm15;
+      reconsider aFB=a*FB as Point of C_Normed_Algebra_of_BoundedFunctions
+                                                 the carrier of X;
+    reconsider aF=a*F as Point of C_Normed_Space_of_C_0_Functions(X);
+A8: ||.aFB.||=||.aF.|| by FUNCT_1:49,A7;
+    ||.a*FB.|| = abs a * ||.FB.|| by CC0SP1:25;
+    hence thesis by A6,A8;
+  end;
+  ||.F+G.|| <= ||.F.|| + ||.G.||
+  proof
+A9:   F in ComplexBoundedFunctions the carrier of X &
+        G in ComplexBoundedFunctions the carrier of X by Th41;
+      reconsider FB=F,GB=G as
+        Point of C_Normed_Algebra_of_BoundedFunctions the carrier of X
+                                             by A9;
+A10:||.FB.||=||.F.|| & ||.GB.||=||.G.|| by FUNCT_1:49;
+      FB+GB=F+G by Lm14; then
+A11:  ||.FB+GB.||=||.F+G.|| by FUNCT_1:49;
+      reconsider aFB=FB+GB as Point of C_Normed_Algebra_of_BoundedFunctions
+                                                 the carrier of X;
+    reconsider aF=F,aG=G as Point of C_Normed_Space_of_C_0_Functions(X);
+    ||.FB+GB.|| <= ||.FB.|| + ||.GB.|| by CC0SP1:25;
+    hence thesis by A11,A10;
+  end;
+  hence thesis by L1,L2;
+end;
+
+Th46: for X be non empty TopSpace holds
+  C_Normed_Space_of_C_0_Functions(X) is ComplexNormSpace-like
+proof
+  let X be non empty TopSpace;
+  for x, y being Point of C_Normed_Space_of_C_0_Functions(X)
+  for a be Complex holds
+    ||.a*x.|| = abs(a) * ||.x.|| &
+      ||.x+y.|| <= ||.x.|| + ||.y.|| by Th45;
+  hence thesis by CLVECT_1:def 13;
+end;
+
+registration
+  let X be non empty TopSpace;
+  cluster C_Normed_Space_of_C_0_Functions(X) -> reflexive discerning
+  ComplexNormSpace-like vector-distributive scalar-distributive
+  scalar-associative scalar-unital Abelian add-associative right_zeroed
+  right_complementable;
+coherence
+proof
+A1:C_VectorSpace_of_C_0_Functions(X) is ComplexLinearSpace;
+A2:for x be Point of C_Normed_Space_of_C_0_Functions(X)
+       holds ( ||.x.|| = 0 implies
+         x = 0.(C_Normed_Space_of_C_0_Functions(X)) ) by Th45;
+  ||.0.(C_Normed_Space_of_C_0_Functions(X)).|| = 0 by Th45;
+  hence thesis by A1,A2,CSSPACE3:2,NORMSP_0:def 5,NORMSP_0:def 6,Th46;
+end;
+end;
+
+theorem
+  for X be non empty TopSpace holds
+  C_Normed_Space_of_C_0_Functions(X) is ComplexNormSpace;

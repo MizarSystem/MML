@@ -16,12 +16,8 @@
 <ArticleID name="CARD_1"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="BINOP_1"/>
-<ArticleID name="NUMBERS"/>
-<ArticleID name="FINSEQ_1"/>
 <ArticleID name="MULTOP_1"/>
 <ArticleID name="FUNCOP_1"/>
-<ArticleID name="FINSEQ_2"/>
-<ArticleID name="CARD_3"/>
 <ArticleID name="PBOOLE"/>
 <ArticleID name="ALTCAT_1"/>
 </Signature>
@@ -42,7 +38,7 @@
 <For>
 <Typ kind="G" nr="7">
 <Cluster>
-<Adjective nr="63"/>
+<Adjective nr="57"/>
 </Cluster>
 </Typ>
 <Not>
@@ -93,7 +89,7 @@
 <Func kind="F" nr="1"/>
 </Typ>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="124">
+<Func kind="K" nr="99">
 <Func kind="U" nr="6">
 <Var nr="1"/>
 </Func>
@@ -101,7 +97,7 @@
 <Var nr="5"/>
 <Var nr="6"/>
 </Func>
-<Func kind="K" nr="180">
+<Func kind="K" nr="135">
 <Func kind="F" nr="2">
 <Var nr="4"/>
 <Var nr="5"/>
@@ -203,13 +199,13 @@
 <For>
 <Typ kind="G" nr="7">
 <Cluster>
-<Adjective nr="63"/>
+<Adjective nr="57"/>
 </Cluster>
 </Typ>
 <For>
 <Typ kind="G" nr="7">
 <Cluster>
-<Adjective nr="63"/>
+<Adjective nr="57"/>
 </Cluster>
 </Typ>
 <Not>
@@ -260,7 +256,7 @@
 <Func kind="F" nr="1"/>
 </Typ>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="124">
+<Func kind="K" nr="99">
 <Func kind="U" nr="6">
 <Var nr="1"/>
 </Func>
@@ -268,7 +264,7 @@
 <Var nr="6"/>
 <Var nr="7"/>
 </Func>
-<Func kind="K" nr="180">
+<Func kind="K" nr="135">
 <Func kind="F" nr="2">
 <Var nr="5"/>
 <Var nr="6"/>
@@ -331,7 +327,7 @@
 <Func kind="F" nr="1"/>
 </Typ>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="124">
+<Func kind="K" nr="99">
 <Func kind="U" nr="6">
 <Var nr="2"/>
 </Func>
@@ -339,7 +335,7 @@
 <Var nr="6"/>
 <Var nr="7"/>
 </Func>
-<Func kind="K" nr="180">
+<Func kind="K" nr="135">
 <Func kind="F" nr="2">
 <Var nr="5"/>
 <Var nr="6"/>

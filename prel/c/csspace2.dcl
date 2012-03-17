@@ -33,32 +33,32 @@
 </Typ>
 <Cluster>
 <Adjective nr="37" value="false"/>
-<Adjective nr="60"/>
-<Adjective nr="85"/>
+<Adjective nr="61"/>
 <Adjective nr="86"/>
 <Adjective nr="87"/>
-<Adjective nr="101"/>
+<Adjective nr="88"/>
 <Adjective nr="102"/>
 <Adjective nr="103"/>
 <Adjective nr="104"/>
-<Adjective nr="110"/>
-<Adjective nr="114"/>
+<Adjective nr="105"/>
+<Adjective nr="111"/>
+<Adjective nr="115"/>
 </Cluster>
 </RCluster>
 <FCluster aid="CSSPACE2" nr="1">
 <ArgTypes/>
-<Func kind="K" nr="173"/>
+<Func kind="K" nr="171"/>
 <Cluster>
 <Adjective nr="37" value="false"/>
-<Adjective nr="110"/>
+<Adjective nr="111"/>
 </Cluster>
 </FCluster>
 <FCluster aid="CSSPACE2" nr="2">
 <ArgTypes/>
-<Func kind="K" nr="173"/>
+<Func kind="K" nr="171"/>
 <Cluster>
 <Adjective nr="37" value="false"/>
-<Adjective nr="114"/>
+<Adjective nr="115"/>
 </Cluster>
 </FCluster>
 </Registrations>

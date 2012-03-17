@@ -35,7 +35,7 @@ environ
       ZFMISC_1, FUNCT_1, FUNCT_2, FUNCT_3, CARD_1, CARD_2, FINSEQ_2, FINSEQ_3,
       FUNCT_5, MONOID_0, GRFUNC_1, RELAT_1, RELSET_1, XBOOLE_0, XBOOLE_1,
       GROUP_1;
- schemes NAT_1, FUNCT_2, MONOID_0, PARTFUN1, WELLORD2, BINOP_1;
+ schemes NAT_1, FUNCT_2, MONOID_0, PARTFUN1, FUNCT_1, BINOP_1;
 
 begin :: Updating
 
@@ -64,7 +64,7 @@ definition
     reconsider g = f.(x1,x2) as Element of Funcs(A,D);
 A1: [x1,x2] in [:D1,D2:];
     dom f = [:D1,D2:] & dom g = A by FUNCT_2:def 1;
-    then f..(x1,x2,x) = g.x by A1,FUNCT_5:45;
+    then f..(x1,x2,x) = g.x by A1,FUNCT_5:38;
     hence thesis;
   end;
 end;
@@ -94,7 +94,7 @@ definition
   let A be non empty set;
   let n be Element of NAT, x be Element of A;
   redefine func n .--> x -> FinSequence of A;
-  coherence by FINSEQ_2:77;
+  coherence by FINSEQ_2:63;
 end;
 
 definition
@@ -102,7 +102,7 @@ definition
   redefine func A --> d -> Element of Funcs(A,D);
   coherence
   proof
-    dom (A --> d) = A & rng (A --> d) c= {d} by FUNCOP_1:19;
+    dom (A --> d) = A & rng (A --> d) c= {d} by FUNCOP_1:13;
     hence thesis by FUNCT_2:def 2;
   end;
 end;
@@ -139,13 +139,11 @@ definition
   end;
 end;
 
-canceled;
-
 theorem
   for f,g being Function, X being set holds (f|X)*g = f*(X|g)
 proof
   let f,g be Function, X be set;
-A1: dom (f|X) = dom f /\ X by RELAT_1:90;
+A1: dom (f|X) = dom f /\ X by RELAT_1:61;
 A2: dom ((f|X)*g) = dom (f*(X|g))
   proof
     thus dom ((f|X)*g) c= dom (f*(X|g))
@@ -154,41 +152,41 @@ A2: dom ((f|X)*g) = dom (f*(X|g))
       assume
 A3:   x in dom ((f|X)*g);
       then
-A4:   x in dom g by FUNCT_1:21;
-A5:   g.x in dom (f|X) by A3,FUNCT_1:21;
+A4:   x in dom g by FUNCT_1:11;
+A5:   g.x in dom (f|X) by A3,FUNCT_1:11;
       then
 A6:   g.x in dom f by A1,XBOOLE_0:def 4;
       g.x in X by A1,A5,XBOOLE_0:def 4;
       then
-A7:   x in dom (X|g) by A4,FUNCT_1:85;
-      then g.x = (X|g).x by FUNCT_1:85;
-      hence thesis by A6,A7,FUNCT_1:21;
+A7:   x in dom (X|g) by A4,FUNCT_1:53;
+      then g.x = (X|g).x by FUNCT_1:53;
+      hence thesis by A6,A7,FUNCT_1:11;
     end;
     let x;
     assume
 A8: x in dom (f*(X|g));
     then
-A9: x in dom (X|g) by FUNCT_1:21;
+A9: x in dom (X|g) by FUNCT_1:11;
     then
-A10: x in dom g by FUNCT_1:85;
-    (X|g).x in dom f by A8,FUNCT_1:21;
+A10: x in dom g by FUNCT_1:53;
+    (X|g).x in dom f by A8,FUNCT_1:11;
     then
-A11: g.x in dom f by A9,FUNCT_1:85;
-    g.x in X by A9,FUNCT_1:85;
+A11: g.x in dom f by A9,FUNCT_1:53;
+    g.x in X by A9,FUNCT_1:53;
     then g.x in dom (f|X) by A1,A11,XBOOLE_0:def 4;
-    hence thesis by A10,FUNCT_1:21;
+    hence thesis by A10,FUNCT_1:11;
   end;
   now
     let x;
     assume
 A12: x in dom ((f|X)*g);
-    then ((f|X)*g).x = (f|X).(g.x) & g.x in dom (f|X) by FUNCT_1:21,22;
+    then ((f|X)*g).x = (f|X).(g.x) & g.x in dom (f|X) by FUNCT_1:11,12;
     then
-A13: ((f|X)*g).x = f.(g.x) by FUNCT_1:70;
-    (f*(X|g)).x = f.((X|g).x) & x in dom (X|g) by A2,A12,FUNCT_1:21,22;
-    hence ((f|X)*g).x = (f*(X|g)).x by A13,FUNCT_1:85;
+A13: ((f|X)*g).x = f.(g.x) by FUNCT_1:47;
+    (f*(X|g)).x = f.((X|g).x) & x in dom (X|g) by A2,A12,FUNCT_1:11,12;
+    hence ((f|X)*g).x = (f*(X|g)).x by A13,FUNCT_1:53;
   end;
-  hence thesis by A2,FUNCT_1:9;
+  hence thesis by A2,FUNCT_1:2;
 end;
 
 scheme
@@ -208,8 +206,8 @@ A3: P[x,y] by A1;
   end;
   consider f being Function such that
 A4: dom f = X() & rng f c= Y() & for x st x in X() holds P[x,f.x] from
-  WELLORD2:sch 1(A2);
-  reconsider f as Function of X(), Y() by A4,FUNCT_2:def 1,RELSET_1:11;
+  FUNCT_1:sch 5(A2);
+  reconsider f as Function of X(), Y() by A4,FUNCT_2:def 1,RELSET_1:4;
   take f;
   thus thesis by A4;
 end;
@@ -270,8 +268,8 @@ A2: ((f,D).:A).(f1,f2) = f.:(f1,f2) & [f1,f2] = [f1,f2] by Def2;
   let x such that
 A3: x in A;
   dom ((f,D).:A) = [:Funcs(A,D1), Funcs(A,D2):] & (f.:(f1,f2)).x = f.(f1.x
-  ,f2. x) by A3,A1,FUNCOP_1:28,FUNCT_2:def 1;
-  hence thesis by A3,A1,A2,FUNCT_5:45;
+  ,f2. x) by A3,A1,FUNCOP_1:22,FUNCT_2:def 1;
+  hence thesis by A3,A1,A2,FUNCT_5:38;
 end;
 
 reserve A for set,
@@ -292,13 +290,13 @@ A4: o.(a,b) = o.(b,a);
     let x;
     assume
 A5: x in A;
-    then f.x in rng f & g.x in rng g by A2,FUNCT_1:def 5;
+    then f.x in rng f & g.x in rng g by A2,FUNCT_1:def 3;
     then reconsider a = f.x, b = g.x as Element of D;
-    thus (o.:(f,g)).x = o.(a,b) by A1,A5,FUNCOP_1:28
+    thus (o.:(f,g)).x = o.(a,b) by A1,A5,FUNCOP_1:22
       .= o.(b,a) by A4
-      .= (o.:(g,f)).x by A3,A5,FUNCOP_1:28;
+      .= (o.:(g,f)).x by A3,A5,FUNCOP_1:22;
   end;
-  hence thesis by A1,A3,FUNCT_1:9;
+  hence thesis by A1,A3,FUNCT_1:2;
 end;
 
 theorem Th5:
@@ -317,16 +315,16 @@ A7: o.(o.(a,b),c) = o.(a,o.(b,c));
     assume
 A8: x in A;
     then
-A9: h.x in rng h by A5,FUNCT_1:def 5;
-    f.x in rng f & g.x in rng g by A3,A8,FUNCT_1:def 5;
+A9: h.x in rng h by A5,FUNCT_1:def 3;
+    f.x in rng f & g.x in rng g by A3,A8,FUNCT_1:def 3;
     then reconsider a = f.x, b = g.x, c = h.x as Element of D by A9;
-    thus (o.:(o.:(f,g),h)).x = o.((o.:(f,g)).x,c) by A4,A8,FUNCOP_1:28
-      .= o.(o.(a,b),c) by A1,A8,FUNCOP_1:28
+    thus (o.:(o.:(f,g),h)).x = o.((o.:(f,g)).x,c) by A4,A8,FUNCOP_1:22
+      .= o.(o.(a,b),c) by A1,A8,FUNCOP_1:22
       .= o.(a,o.(b,c)) by A7
-      .= o.(a,(o.:(g,h)).x) by A2,A8,FUNCOP_1:28
-      .= (o.:(f,o.:(g,h))).x by A6,A8,FUNCOP_1:28;
+      .= o.(a,(o.:(g,h)).x) by A2,A8,FUNCOP_1:22
+      .= (o.:(f,o.:(g,h))).x by A6,A8,FUNCOP_1:22;
   end;
-  hence thesis by A4,A6,FUNCT_1:9;
+  hence thesis by A4,A6,FUNCT_1:2;
 end;
 
 theorem Th6:
@@ -340,23 +338,23 @@ A3: dom (o[;](a,f)) = A by FUNCT_2:def 1;
     let x;
     assume
 A4: x in A;
-    then f.x in rng f by A2,FUNCT_1:def 5;
+    then f.x in rng f by A2,FUNCT_1:def 3;
     then reconsider b = f.x as Element of D;
-    thus (o[;](a,f)).x = o.(a,b) by A3,A4,FUNCOP_1:42
-      .= f.x by A1,BINOP_1:11;
+    thus (o[;](a,f)).x = o.(a,b) by A3,A4,FUNCOP_1:32
+      .= f.x by A1,BINOP_1:3;
   end;
-  hence o[;](a,f) = f by A3,A2,FUNCT_1:9;
+  hence o[;](a,f) = f by A3,A2,FUNCT_1:2;
 A5: dom (o[:](f,a)) = A by FUNCT_2:def 1;
   now
     let x;
     assume
 A6: x in A;
-    then f.x in rng f by A2,FUNCT_1:def 5;
+    then f.x in rng f by A2,FUNCT_1:def 3;
     then reconsider b = f.x as Element of D;
-    thus (o[:](f,a)).x = o.(b,a) by A5,A6,FUNCOP_1:35
-      .= f.x by A1,BINOP_1:11;
+    thus (o[:](f,a)).x = o.(b,a) by A5,A6,FUNCOP_1:27
+      .= f.x by A1,BINOP_1:3;
   end;
-  hence thesis by A5,A2,FUNCT_1:9;
+  hence thesis by A5,A2,FUNCT_1:2;
 end;
 
 theorem Th7:
@@ -369,12 +367,12 @@ A3: now
     let x;
     assume
 A4: x in A;
-    then reconsider a = f.x as Element of D by FUNCT_2:7;
-    thus o.:(f,f).x = o.(a,a) by A1,A4,FUNCOP_1:28
+    then reconsider a = f.x as Element of D by FUNCT_2:5;
+    thus o.:(f,f).x = o.(a,a) by A1,A4,FUNCOP_1:22
       .= f.x by A2;
   end;
   dom f = A by FUNCT_2:def 1;
-  hence thesis by A1,A3,FUNCT_1:9;
+  hence thesis by A1,A3,FUNCT_1:2;
 end;
 
 theorem Th8:
@@ -414,13 +412,13 @@ A1: a is_a_unity_wrt o;
     let f be Element of Funcs(A,D);
 A2: dom f = A by FUNCT_2:def 1;
     thus F.(e,f) = o.:(e,f) by Def2
-      .= o[;](a,f) by A2,FUNCOP_1:41
+      .= o[;](a,f) by A2,FUNCOP_1:31
       .= f by A1,Th6;
     thus F.(f,e) = o.:(f,e) by Def2
-      .= o[:](f,a) by A2,FUNCOP_1:34
+      .= o[:](f,a) by A2,FUNCOP_1:26
       .= f by A1,Th6;
   end;
-  hence thesis by BINOP_1:11;
+  hence thesis by BINOP_1:3;
 end;
 
 theorem Th11:
@@ -457,7 +455,7 @@ A2: for x st x in A ex c st P[x,c]
   proof
     let x;
     assume x in A;
-    then reconsider a = f.x, b = g.x as Element of D by FUNCT_2:7;
+    then reconsider a = f.x, b = g.x as Element of D by FUNCT_2:5;
     consider r,l such that
 A3: o.(a,r) = b and
     o.(l,a) = b by A1;
@@ -471,7 +469,7 @@ A5: for x st x in A ex c st Q[x,c]
   proof
     let x;
     assume x in A;
-    then reconsider a = f.x, b = g.x as Element of D by FUNCT_2:7;
+    then reconsider a = f.x, b = g.x as Element of D by FUNCT_2:5;
     consider r,l such that
     o.(a,r) = b and
 A6: o.(l,a) = b by A1;
@@ -490,21 +488,21 @@ A11: now
     let x;
     assume
 A12: x in A;
-    hence o.:(f,h1).x = o.(f.x,h1.x) by A10,FUNCOP_1:28
+    hence o.:(f,h1).x = o.(f.x,h1.x) by A10,FUNCOP_1:22
       .= g.x by A4,A12;
   end;
   o.:(f,h1) = ((o,D).:A).(f,h1) by Def2;
-  hence ((o,D).:A).(f,h1) = g by A10,A9,A11,FUNCT_1:9;
+  hence ((o,D).:A).(f,h1) = g by A10,A9,A11,FUNCT_1:2;
 A13: dom (o.:(h2,f)) = A by FUNCT_2:def 1;
 A14: now
     let x;
     assume
 A15: x in A;
-    hence o.:(h2,f).x = o.(h2.x,f.x) by A13,FUNCOP_1:28
+    hence o.:(h2,f).x = o.(h2.x,f.x) by A13,FUNCOP_1:22
       .= g.x by A7,A15;
   end;
   o.:(h2,f) = ((o,D).:A).(h2,f) by Def2;
-  hence thesis by A13,A9,A14,FUNCT_1:9;
+  hence thesis by A13,A9,A14,FUNCT_1:2;
 end;
 
 theorem Th14:
@@ -522,13 +520,13 @@ A7: now
     let x;
     assume
 A8: x in A;
-    then reconsider a = f.x, b = g.x, c = h.x as Element of D by FUNCT_2:7;
-A9: o.:(g,f).x = o.(b,a) & o.:(h,f).x = o.(c,a) by A3,A8,FUNCOP_1:28;
-    o.:(f,g).x = o.(a,b) & o.:(f,h).x = o.(a,c) by A5,A8,FUNCOP_1:28;
+    then reconsider a = f.x, b = g.x, c = h.x as Element of D by FUNCT_2:5;
+A9: o.:(g,f).x = o.(b,a) & o.:(h,f).x = o.(c,a) by A3,A8,FUNCOP_1:22;
+    o.:(f,g).x = o.(a,b) & o.:(f,h).x = o.(a,c) by A5,A8,FUNCOP_1:22;
     hence g.x = h.x by A1,A2,A6,A4,A9;
   end;
   dom g = A & dom h = A by FUNCT_2:def 1;
-  hence thesis by A7,FUNCT_1:9;
+  hence thesis by A7,FUNCT_1:2;
 end;
 
 theorem Th15:
@@ -547,25 +545,25 @@ A7: now
     let x;
     assume
 A8: x in A;
-    then reconsider a = f.x, b = g.x as Element of D by FUNCT_2:7;
+    then reconsider a = f.x, b = g.x as Element of D by FUNCT_2:5;
     (o.:(f,g)).x = o.(a,b) & (A --> the_unity_wrt o).x = the_unity_wrt o
-    by A5,A8,FUNCOP_1:13,28;
+    by A5,A8,FUNCOP_1:7,22;
     hence f.x = g.x by A2,A4,A6,A3;
   end;
 A9: now
     let x;
     assume
 A10: x in A;
-    then reconsider a = f.x, b = g.x as Element of D by FUNCT_2:7;
+    then reconsider a = f.x, b = g.x as Element of D by FUNCT_2:5;
     (o.:(f,g)).x = o.(a,b) & (A --> the_unity_wrt o).x = the_unity_wrt o
-    by A5,A10,FUNCOP_1:13,28;
+    by A5,A10,FUNCOP_1:7,22;
     hence g.x = (A --> the_unity_wrt o).x by A2,A4,A6,A3;
   end;
 A11: dom g = A by FUNCT_2:def 1;
   dom f = A by FUNCT_2:def 1;
-  hence f = g by A11,A7,FUNCT_1:9;
+  hence f = g by A11,A7,FUNCT_1:2;
   dom (A --> the_unity_wrt o) = A by FUNCT_2:def 1;
-  hence thesis by A3,A11,A9,FUNCT_1:9;
+  hence thesis by A3,A11,A9,FUNCT_1:2;
 end;
 
 theorem
@@ -580,15 +578,15 @@ A4: now
     let x;
     assume
 A5: x in A;
-    then reconsider a = f.x, b = g.x as Element of D by FUNCT_2:7;
+    then reconsider a = f.x, b = g.x as Element of D by FUNCT_2:5;
     (o.:(f,o9.:(f,g))).x = o.(a,(o9.:(f,g)).x) & (o9.:(f,g)).x = o9.(a,b )
-    by A3,A2,A5,FUNCOP_1:28;
+    by A3,A2,A5,FUNCOP_1:22;
     hence f.x = (o.:(f,o9.:(f,g))).x by A1;
   end;
 A6: dom f = A by FUNCT_2:def 1;
   ((o9,D).:A).(f,g) = o9.:(f,g) & ((o,D).:A).(f,o9.:(f,g)) = o.:(f,o9.: (f
   ,g)) by Def2;
-  hence thesis by A6,A2,A4,FUNCT_1:9;
+  hence thesis by A6,A2,A4,FUNCT_1:2;
 end;
 
 theorem Th17:
@@ -602,14 +600,14 @@ A1: dom o1 = [:D1,D2:] by FUNCT_2:def 1;
   assume
 A2: o1 c= o2;
   then
-A3: dom o1 c= dom o2 by GRFUNC_1:8;
+A3: dom o1 c= dom o2 by GRFUNC_1:2;
 A4: dom o2 = [:E1,E2:] by FUNCT_2:def 1;
-  then D2 c= E2 by A3,A1,ZFMISC_1:138;
+  then D2 c= E2 by A3,A1,ZFMISC_1:114;
   then
-A5: Funcs(A,D2) c= Funcs(A,E2) by FUNCT_5:63;
-  D1 c= E1 by A3,A1,A4,ZFMISC_1:138;
+A5: Funcs(A,D2) c= Funcs(A,E2) by FUNCT_5:56;
+  D1 c= E1 by A3,A1,A4,ZFMISC_1:114;
   then
-A6: Funcs(A,D1) c= Funcs(A,E1) by FUNCT_5:63;
+A6: Funcs(A,D1) c= Funcs(A,E1) by FUNCT_5:56;
 A7: now
     let x;
     assume x in dom (o1,D).:A;
@@ -624,22 +622,22 @@ A10: now
       let z be set;
       assume
 A11:  z in A;
-      then f1.z in rng f1 & f2.z in rng f2 by A9,FUNCT_1:def 5;
+      then f1.z in rng f1 & f2.z in rng f2 by A9,FUNCT_1:def 3;
       then
-A12:  [f1.z,f2.z] in dom o1 by A1,ZFMISC_1:106;
+A12:  [f1.z,f2.z] in dom o1 by A1,ZFMISC_1:87;
       (o2.:(g1,g2)).z = o2.(g1.z,g2.z) & (o1.:(f1,f2)).z = o1.(f1.z, f2.
-      z) by A8,A11,FUNCOP_1:28;
-      hence (o2.:(g1,g2)).z = (o1.:(f1,f2)).z by A2,A12,GRFUNC_1:8;
+      z) by A8,A11,FUNCOP_1:22;
+      hence (o2.:(g1,g2)).z = (o1.:(f1,f2)).z by A2,A12,GRFUNC_1:2;
     end;
-A13: [f1,f2] = x by MCART_1:23;
+A13: [f1,f2] = x by MCART_1:21;
     ((o1,D).:A).(f1,f2) = o1.:(f1,f2) & ((o2,E).:A).(g1,g2) = o2.:(g1,g2)
     by Def2;
-    hence ((o1,D).:A).x = ((o2,E).:A).x by A8,A10,A13,FUNCT_1:9;
+    hence ((o1,D).:A).x = ((o2,E).:A).x by A8,A10,A13,FUNCT_1:2;
   end;
   dom (o1,D).:A = [:Funcs(A,D1),Funcs(A,D2):] & dom (o2,E).:A = [:Funcs(A,
   E1), Funcs(A,E2):] by FUNCT_2:def 1;
-  then dom (o1,D).:A c= dom (o2,E).:A by A6,A5,ZFMISC_1:119;
-  hence thesis by A7,GRFUNC_1:8;
+  then dom (o1,D).:A c= dom (o2,E).:A by A6,A5,ZFMISC_1:96;
+  hence thesis by A7,GRFUNC_1:2;
 end;
 
 definition
@@ -733,7 +731,7 @@ theorem Th21:
 proof
   let f,g be Element of .:(G,X);
   dom f = X & dom g = X by Th20;
-  hence thesis by FUNCT_1:9;
+  hence thesis by FUNCT_1:2;
 end;
 
 definition
@@ -745,7 +743,7 @@ definition
   proof
     dom f = A by Th20;
     then
-A1: f.a in rng f by FUNCT_1:def 5;
+A1: f.a in rng f by FUNCT_1:def 3;
     rng f c= carr(G) by Th20;
     hence thesis by A1;
   end;
@@ -757,9 +755,9 @@ registration
   cluster rng f -> non empty;
   coherence
   proof
-    set a =the  Element of A;
+    set a = the Element of A;
     dom f = A by Th20;
-    then f.a in rng f by FUNCT_1:def 5;
+    then f.a in rng f by FUNCT_1:def 3;
     hence thesis;
   end;
 end;
@@ -772,14 +770,14 @@ proof
   reconsider g1 = f1, g2 = f2 as Element of Funcs(D, carr(G)) by Th18;
   op(.:(G,D)) = (op(G),carr(G)).:D by Th18;
   then dom (op(G).:(g1,g2)) = D & f1*f2 = op(G).:(g1,g2) by Def2,FUNCT_2:def 1;
-  hence thesis by FUNCOP_1:28;
+  hence thesis by FUNCOP_1:22;
 end;
 
 definition
-  let G be unital (non empty multMagma);
+  let G be unital non empty multMagma;
   let A be set;
-  redefine func .:(G,A) -> well-unital constituted-Functions strict (non empty
-  multLoopStr);
+  redefine func .:(G,A) -> well-unital constituted-Functions strict non empty
+  multLoopStr;
   coherence
   proof
     set M = multLoopStr(#Funcs(A, carr(G)), (op(G),carr(G)).:A, (A -->
@@ -795,10 +793,10 @@ A2: 1.M = A --> the_unity_wrt the multF of G & .:(G,A) = M by Def3;
 end;
 
 theorem Th23:
-  for G being unital (non empty multMagma) holds 1..:(G,X) = X -->
+  for G being unital non empty multMagma holds 1..:(G,X) = X -->
   the_unity_wrt the multF of G
 proof
-  let G be unital (non empty multMagma);
+  let G be unital non empty multMagma;
   .:(G,X) = multLoopStr(#Funcs(X, carr(G)), (op(G), carr(G)).:X, (X -->
     the_unity_wrt op(G))#) by Def3;
   hence thesis;
@@ -855,16 +853,16 @@ A1: op(.:(H,X)) = (op(H), carr(H)).:X by Th18;
 end;
 
 theorem
-  for G being unital (non empty multMagma), H being non empty SubStr of
+  for G being unital non empty multMagma, H being non empty SubStr of
   G st the_unity_wrt the multF of G in the carrier of H holds .:(H,X) is
   MonoidalSubStr of .:(G,X)
 proof
-  let G be unital (non empty multMagma), H be non empty SubStr of G;
+  let G be unital non empty multMagma, H be non empty SubStr of G;
   assume
 A1: the_unity_wrt the multF of G in carr(H);
-  then reconsider G9 = G, H9 = H as unital (non empty multMagma) by MONOID_0:32
+  then reconsider G9 = G, H9 = H as unital non empty multMagma by MONOID_0:30
 ;
-A2: the_unity_wrt op(H9) = the_unity_wrt op(G9) by A1,MONOID_0:32;
+A2: the_unity_wrt op(H9) = the_unity_wrt op(G9) by A1,MONOID_0:30;
 A3: op(.:(H,X)) = (op(H), carr(H)).:X by Th18;
   op(H) c= op(G) & op(.:(G,X)) = (op(G), carr(G)).:X by Th18,MONOID_0:def 23;
   then
@@ -875,8 +873,8 @@ A4: op(.:(H,X)) c= op(.:(G,X)) by A3,Th17;
 end;
 
 definition
-  let G be unital associative commutative cancelable uniquely-decomposable (
-  non empty multMagma);
+  let G be unital associative commutative cancelable uniquely-decomposable
+  non empty multMagma;
   let A be set;
   redefine func .:(G,A) -> commutative cancelable uniquely-decomposable
   constituted-Functions strict Monoid;
@@ -902,8 +900,8 @@ theorem Th27:
   MultiSet_over X = (addnat,NAT).:X & 1.MultiSet_over X = X --> 0
 proof
   the multMagma of <NAT,+,0> = <NAT,+> & the_unity_wrt op(<NAT,+>) = 0 by
-MONOID_0:44,def 22;
-  hence thesis by Th18,Th23,MONOID_0:52;
+MONOID_0:40,def 22;
+  hence thesis by Th18,Th23,MONOID_0:46;
 end;
 
 definition
@@ -935,15 +933,15 @@ definition
   let A be non empty set;
   let m be Multiset of A;
   redefine func rng m -> Subset of NAT;
-  coherence by Th20,MONOID_0:52;
+  coherence by Th20,MONOID_0:46;
   let a be Element of A;
   redefine func m.a -> Element of NAT;
   coherence
   proof
     dom m = A by Th20;
     then
-A1: m.a in rng m by FUNCT_1:def 5;
-    rng m c= NAT by Th20,MONOID_0:52;
+A1: m.a in rng m by FUNCT_1:def 3;
+    rng m c= NAT by Th20,MONOID_0:46;
     hence thesis by A1;
   end;
 end;
@@ -956,7 +954,7 @@ proof
   let m1,m2 be Multiset of D, a be Element of D;
   reconsider f1 = m1, f2 = m2 as Element of .:(N,D);
   thus (m1 [*] m2).a = (f1.a)*(f2.a) by Th22
-    .= (m1.a)+(m2.a) by MONOID_0:51;
+    .= (m1.a)+(m2.a) by MONOID_0:45;
 end;
 
 theorem Th31:
@@ -1045,30 +1043,30 @@ A6:   dom f = A & dom g = A by FUNCT_2:def 1;
         let x;
         assume
 A7:     x in h"(NAT\{0});
-        then h.x in NAT\{0} by FUNCT_1:def 13;
+        then h.x in NAT\{0} by FUNCT_1:def 7;
         then
 A8:     not h.x in {0} by XBOOLE_0:def 5;
-        f.x in rng f & g.x in rng g by A6,A7,FUNCT_1:def 5;
+        f.x in rng f & g.x in rng g by A6,A7,FUNCT_1:def 3;
         then reconsider n = f.x, m = g.x as Element of NAT;
         h.x = n+m by A2,A4,A7,Th30;
         then n <> 0 or m <> 0 by A8,TARSKI:def 1;
         then not n in {0} or not m in {0} by TARSKI:def 1;
         then n in NAT\{0} or m in NAT\{0} by XBOOLE_0:def 5;
-        then x in f"(NAT\{0}) or x in g"(NAT\{0}) by A6,A7,FUNCT_1:def 13;
+        then x in f"(NAT\{0}) or x in g"(NAT\{0}) by A6,A7,FUNCT_1:def 7;
         hence thesis by XBOOLE_0:def 3;
       end;
       hence thesis by A3,A5;
     end;
-A9: dom e = A by FUNCOP_1:19;
+A9: dom e = A by FUNCOP_1:13;
     now
-      set x =the  Element of e"(NAT\{0});
+      set x = the Element of e"(NAT\{0});
       assume
 A10:  e"(NAT\{0}) <> {};
-      then e.x in NAT\{0} by FUNCT_1:def 13;
+      then e.x in NAT\{0} by FUNCT_1:def 7;
       then
 A11:  not e.x in {0} by XBOOLE_0:def 5;
-      x in A by A9,A10,FUNCT_1:def 13;
-      then e.x = 0 by FUNCOP_1:13;
+      x in A by A9,A10,FUNCT_1:def 7;
+      then e.x = 0 by FUNCOP_1:7;
       hence contradiction by A11,TARSKI:def 1;
     end;
     then
@@ -1099,8 +1097,8 @@ A13: for a being Multiset of A holds a in the carrier of M iff P[a]
 A14: for f being Multiset of A holds f in carr(M1) iff f"(NAT\{0}) is
     finite and
 A15: for f being Multiset of A holds f in carr(M2) iff f"(NAT\{0}) is finite;
-A16: carr(M2) c= carr(M) by MONOID_0:25;
-A17: carr(M1) c= carr(M) by MONOID_0:25;
+A16: carr(M2) c= carr(M) by MONOID_0:23;
+A17: carr(M1) c= carr(M) by MONOID_0:23;
     carr(M1) = carr(M2)
     proof
       thus carr(M1) c= carr(M2)
@@ -1119,7 +1117,7 @@ A19:  x in carr(M2);
       f"(NAT\{0}) is finite by A15,A19;
       hence thesis by A14;
     end;
-    hence thesis by MONOID_0:29;
+    hence thesis by MONOID_0:27;
   end;
 end;
 
@@ -1131,9 +1129,9 @@ proof
     let x;
     assume
 A1: x in (chi a)"(NAT\{0});
-    then x in dom chi a by FUNCT_1:def 13;
+    then x in dom chi a by FUNCT_1:def 7;
     then reconsider y = x as Element of A by Th29;
-    (chi a).x in NAT\{0} by A1,FUNCT_1:def 13;
+    (chi a).x in NAT\{0} by A1,FUNCT_1:def 7;
     then not (chi a).y in {0} by XBOOLE_0:def 5;
     then (chi a).y <> 0 by TARSKI:def 1;
     then y = a by Th32;
@@ -1148,24 +1146,24 @@ proof
   thus dom ({x}|(p^<*x*>)) c= dom ({x}|p) \/ {len p+1}
   proof
     let a be set;
-A1: len <*x*> = 1 by FINSEQ_1:57;
+A1: len <*x*> = 1 by FINSEQ_1:40;
 A2: Seg len p = dom p by FINSEQ_1:def 3;
     assume
 A3: a in dom ({x}|(p^<*x*>));
     then
-A4: a in dom (p^<*x*>) by FUNCT_1:86;
+A4: a in dom (p^<*x*>) by FUNCT_1:54;
     then a in Seg (len p+len <*x*>) by FINSEQ_1:def 7;
-    then a in Seg len p \/ {len p+1} by A1,FINSEQ_1:11;
+    then a in Seg len p \/ {len p+1} by A1,FINSEQ_1:9;
     then
 A5: a in dom p or a in {len p+1} by A2,XBOOLE_0:def 3;
-A6: (p^<*x*>).a in {x} by A3,FUNCT_1:86;
+A6: (p^<*x*>).a in {x} by A3,FUNCT_1:54;
     reconsider a as Element of NAT by A4;
     a in dom p implies (p^<*x*>).a = p.a by FINSEQ_1:def 7;
-    then a in dom p implies a in dom ({x}|p) by A6,FUNCT_1:86;
+    then a in dom p implies a in dom ({x}|p) by A6,FUNCT_1:54;
     hence thesis by A5,XBOOLE_0:def 3;
   end;
   let a be set;
-  len <*x*> = 1 by FINSEQ_1:57;
+  len <*x*> = 1 by FINSEQ_1:40;
   then
 A7: dom (p^<*x*>) = Seg (len p+1) by FINSEQ_1:def 7;
   assume
@@ -1173,15 +1171,15 @@ A8: a in dom ({x}|p) \/ {len p+1};
   then a in dom ({x}|p) or a in {len p+1} by XBOOLE_0:def 3;
   then
 A9: a in dom p & p.a in {x} or a in {len p+1} & a = len p+1 & x in {x} by
-FUNCT_1:86,TARSKI:def 1;
-  Seg len p = dom p & Seg (len p+1) = Seg len p \/ {len p+1} by FINSEQ_1:11
+FUNCT_1:54,TARSKI:def 1;
+  Seg len p = dom p & Seg (len p+1) = Seg len p \/ {len p+1} by FINSEQ_1:9
 ,def 3;
   then
-A10: (p^<*x*>).(len p+1) = x & a in dom (p^<*x*>) by A9,A7,FINSEQ_1:59
+A10: (p^<*x*>).(len p+1) = x & a in dom (p^<*x*>) by A9,A7,FINSEQ_1:42
 ,XBOOLE_0:def 3;
   reconsider a as Element of NAT by A8;
   a in dom p implies (p^<*x*>).a = p.a by FINSEQ_1:def 7;
-  hence thesis by A9,A10,FUNCT_1:86;
+  hence thesis by A9,A10,FUNCT_1:54;
 end;
 
 theorem Th36:
@@ -1192,38 +1190,38 @@ A1: x <> y;
   thus dom ({x}|(p^<*y*>)) c= dom ({x}|p)
   proof
     let a be set;
-A2: len <*y*> = 1 by FINSEQ_1:57;
+A2: len <*y*> = 1 by FINSEQ_1:40;
 A3: Seg len p = dom p by FINSEQ_1:def 3;
     assume
 A4: a in dom ({x}|(p^<*y*>));
     then
-A5: a in dom (p^<*y*>) by FUNCT_1:86;
+A5: a in dom (p^<*y*>) by FUNCT_1:54;
     then a in Seg (len p+len <*y*>) by FINSEQ_1:def 7;
-    then a in Seg len p \/ {len p+1} by A2,FINSEQ_1:11;
+    then a in Seg len p \/ {len p+1} by A2,FINSEQ_1:9;
     then
 A6: a in dom p or a in {len p+1} by A3,XBOOLE_0:def 3;
-A7: (p^<*y*>).a in {x} by A4,FUNCT_1:86;
+A7: (p^<*y*>).a in {x} by A4,FUNCT_1:54;
     reconsider a as Element of NAT by A5;
-A8: (p^<*y*>).(len p+1) = y & not y in {x} by A1,FINSEQ_1:59,TARSKI:def 1;
+A8: (p^<*y*>).(len p+1) = y & not y in {x} by A1,FINSEQ_1:42,TARSKI:def 1;
     then (p^<*y*>).a = p.a by A7,A6,FINSEQ_1:def 7,TARSKI:def 1;
-    hence thesis by A7,A6,A8,FUNCT_1:86,TARSKI:def 1;
+    hence thesis by A7,A6,A8,FUNCT_1:54,TARSKI:def 1;
   end;
   let a be set;
   assume
 A9: a in dom ({x}|p);
   then
-A10: a in dom p by FUNCT_1:86;
-  len <*y*> = 1 by FINSEQ_1:57;
+A10: a in dom p by FUNCT_1:54;
+  len <*y*> = 1 by FINSEQ_1:40;
   then
 A11: dom (p^<*y*>) = Seg (len p+1) by FINSEQ_1:def 7;
-  Seg len p = dom p & Seg (len p+1) = Seg len p \/ {len p+1} by FINSEQ_1:11
+  Seg len p = dom p & Seg (len p+1) = Seg len p \/ {len p+1} by FINSEQ_1:9
 ,def 3;
   then
 A12: a in dom (p^<*y*>) by A10,A11,XBOOLE_0:def 3;
-A13: p.a in {x} by A9,FUNCT_1:86;
+A13: p.a in {x} by A9,FUNCT_1:54;
   reconsider a as Element of NAT by A9;
   (p^<*y*>).a = p.a by A10,FINSEQ_1:def 7;
-  hence thesis by A13,A12,FUNCT_1:86;
+  hence thesis by A13,A12,FUNCT_1:54;
 end;
 
 definition
@@ -1256,9 +1254,9 @@ end;
 theorem
   |.<*> A.|.a = 0
 proof
-  dom ({a}|{}) c= dom {} by FUNCT_1:89;
+  dom ({a}|{}) c= dom {} by FUNCT_1:56;
   then dom ({a}|<*> A) = {};
-  hence thesis by Def7,CARD_1:47;
+  hence thesis by Def7,CARD_1:27;
 end;
 
 theorem Th38:
@@ -1269,28 +1267,28 @@ A1: now
     assume x in A;
     then reconsider a = x as Element of A;
     thus |.<*>A.|.x = card dom ({a}|{}) by Def7
-      .= 0 by CARD_1:47,RELAT_1:60,138;
+      .= 0 by CARD_1:27,RELAT_1:38,107;
   end;
   dom |.<*>A.| = A by Th29;
-  hence thesis by A1,FUNCOP_1:17;
+  hence thesis by A1,FUNCOP_1:11;
 end;
 
 theorem
   |.<*a*>.| = chi a
 proof
-A1: rng <*a*> = {a} by FINSEQ_1:56;
+A1: rng <*a*> = {a} by FINSEQ_1:39;
   now
     let b be Element of A;
     set x = b;
-A2: dom <*a*> = Seg 1 & card Seg 1 = 1 by FINSEQ_1:55,78;
-    a <> x implies {x} misses {a} by ZFMISC_1:17;
+A2: dom <*a*> = Seg 1 & card Seg 1 = 1 by FINSEQ_1:38,57;
+    a <> x implies {x} misses {a} by ZFMISC_1:11;
     then
 A3: a <> x implies {x}/\{a} = {} by XBOOLE_0:def 7;
-A4: (chi a).a = 1 & {a}|<*a*> = <*a*> by A1,Th32,RELAT_1:125;
-    <*a*> = (rng<*a*>)|<*a*> by RELAT_1:125;
-    then {x}|<*a*> = ({x}/\rng<*a*>)|<*a*> by RELAT_1:127;
+A4: (chi a).a = 1 & {a}|<*a*> = <*a*> by A1,Th32,RELAT_1:94;
+    <*a*> = (rng<*a*>)|<*a*> by RELAT_1:94;
+    then {x}|<*a*> = ({x}/\rng<*a*>)|<*a*> by RELAT_1:96;
     then x <> a implies {x}|<*a*> = {} & (chi a).b = 0 by A1,A3,Th32;
-    hence |.<*a*>.|.x = (chi a).x by A2,A4,Def7,CARD_1:47,RELAT_1:60;
+    hence |.<*a*>.|.x = (chi a).x by A2,A4,Def7,CARD_1:27,RELAT_1:38;
   end;
   hence thesis by Th33;
 end;
@@ -1303,16 +1301,16 @@ proof
   now
     reconsider pa = p^<*a*> as FinSequence of A;
     let b be Element of A;
-    len p < len p+1 & dom ({b}|p) c= dom p by FUNCT_1:89,NAT_1:13;
+    len p < len p+1 & dom ({b}|p) c= dom p by FUNCT_1:56,NAT_1:13;
     then
-A1: not len p+1 in dom ({b}|p) by FINSEQ_3:27;
+A1: not len p+1 in dom ({b}|p) by FINSEQ_3:25;
 A2: |.p^<*a*>.|.b = card dom ({b}|pa) & |.p.|.b = card dom ({b}|p) by Def7;
 A3: a <> b implies dom ({b}|(p^<*a*>)) = dom ({b}|p) & (chi a).b = 0 by Th32
 ,Th36;
 A4: (|.p.| [*] chi a).b = (|.p.|.b) + ((chi a).b) by Th30;
     dom ({a}|(p^<*a*>)) = dom ({a}|p) \/ {len p+1} & (chi a).a = 1 by Th32,Th35
 ;
-    hence |.p^<*a*>.|.b = (|.p.| [*] chi a).b by A1,A2,A3,A4,CARD_2:54;
+    hence |.p^<*a*>.|.b = (|.p.| [*] chi a).b by A1,A2,A3,A4,CARD_2:41;
   end;
   hence thesis by Th33;
 end;
@@ -1332,20 +1330,20 @@ A3: for q st len q = n holds |.p^q.| = |.p.|[*]|.q.|;
 A4: len q = n+1;
     then q <> {};
     then consider r being FinSequence, x being set such that
-A5: q = r^<*x*> by FINSEQ_1:63;
-    rng <*x*> = {x} by FINSEQ_1:56;
-    then {x} c= rng q by A5,FINSEQ_1:43;
+A5: q = r^<*x*> by FINSEQ_1:46;
+    rng <*x*> = {x} by FINSEQ_1:39;
+    then {x} c= rng q by A5,FINSEQ_1:30;
     then
 A6: {x} c= A by XBOOLE_1:1;
-    reconsider r as FinSequence of A by A5,FINSEQ_1:50;
-    len <*x*> = 1 by FINSEQ_1:57;
+    reconsider r as FinSequence of A by A5,FINSEQ_1:36;
+    len <*x*> = 1 by FINSEQ_1:40;
     then
-A7: n+1 = len r+1 by A4,A5,FINSEQ_1:35;
-    reconsider x as Element of A by A6,ZFMISC_1:37;
-    thus |.p^q.| = |.p^r^<*x*>.| by A5,FINSEQ_1:45
+A7: n+1 = len r+1 by A4,A5,FINSEQ_1:22;
+    reconsider x as Element of A by A6,ZFMISC_1:31;
+    thus |.p^q.| = |.p^r^<*x*>.| by A5,FINSEQ_1:32
       .= |.p^r.|[*] chi x by Th40
       .= |.p.|[*]|.r.|[*] chi x by A3,A7
-      .= |.p.|[*](|.r.|[*] chi x) by GROUP_1:def 4
+      .= |.p.|[*](|.r.|[*] chi x) by GROUP_1:def 3
       .= |.p.|[*]|.q.| by A5,Th40;
   end;
 A8: P[0]
@@ -1355,8 +1353,8 @@ A9: |.<*>A.| = A-->0 & A-->0 = un(MultiSet_over A) by Th27,Th38;
     assume len q = 0;
     then
 A10: q = {};
-    then p^q = p by FINSEQ_1:47;
-    hence thesis by A10,A9,MONOID_0:18;
+    then p^q = p by FINSEQ_1:34;
+    hence thesis by A10,A9,MONOID_0:16;
   end;
   for n holds P[n] from NAT_1:sch 1(A8,A2);
   hence thesis by A1;
@@ -1367,17 +1365,17 @@ theorem Th42:
   n .--> a.|.b = 0
 proof
   defpred P[Element of NAT] means |.$1 .--> a.|.a = $1;
-A1: 0.-->a = {} & {} = <*>A by FINSEQ_2:72;
+A1: 0.-->a = {} & {} = <*>A by FINSEQ_2:58;
 A2: for n st P[n] holds P[n+1]
   proof
     let n such that
 A3: |.n .--> a.|.a = n;
-    thus |.(n+1) .--> a.|.a = |.(n .--> a)^<*a*>.|.a by FINSEQ_2:74
+    thus |.(n+1) .--> a.|.a = |.(n .--> a)^<*a*>.|.a by FINSEQ_2:60
       .= (|.n .--> a.|[*]chi a).a by Th40
       .= n+(chi a).a by A3,Th30
       .= n+1 by Th32;
   end;
-  (A-->0).a = 0 by FUNCOP_1:13;
+  (A-->0).a = 0 by FUNCOP_1:7;
   then
 A4: P[0] by A1,Th38;
   for n holds P[n] from NAT_1:sch 1(A4,A2);
@@ -1389,12 +1387,12 @@ A6: for n st P[n] holds P[(n+1)]
   proof
     let n such that
 A7: |.n .--> a.|.b = 0;
-    thus |.(n+1) .--> a.|.b = |.(n .--> a)^<*a*>.|.b by FINSEQ_2:74
+    thus |.(n+1) .--> a.|.b = |.(n .--> a)^<*a*>.|.b by FINSEQ_2:60
       .= (|.n .--> a.|[*]chi a).b by Th40
       .= 0+(chi a).b by A7,Th30
       .= 0 by A5,Th32;
   end;
-  (A-->0).b = 0 by FUNCOP_1:13;
+  (A-->0).b = 0 by FUNCOP_1:7;
   then
 A8: P[0] by A1,Th38;
   for n holds P[n] from NAT_1:sch 1(A8,A6);
@@ -1420,18 +1418,18 @@ A3: for p st len p = n holds P[p];
 A4: len p = n+1;
     then p <> {};
     then consider r being FinSequence, x being set such that
-A5: p = r^<*x*> by FINSEQ_1:63;
-    rng <*x*> = {x} by FINSEQ_1:56;
-    then {x} c= rng p by A5,FINSEQ_1:43;
+A5: p = r^<*x*> by FINSEQ_1:46;
+    rng <*x*> = {x} by FINSEQ_1:39;
+    then {x} c= rng p by A5,FINSEQ_1:30;
     then
 A6: {x} c= A by XBOOLE_1:1;
-    reconsider r as FinSequence of A by A5,FINSEQ_1:50;
-A7: len <*x*> = 1 by FINSEQ_1:57;
-    reconsider x as Element of A by A6,ZFMISC_1:37;
-    n+1 = len r+1 by A4,A5,A7,FINSEQ_1:35;
+    reconsider r as FinSequence of A by A5,FINSEQ_1:36;
+A7: len <*x*> = 1 by FINSEQ_1:40;
+    reconsider x as Element of A by A6,ZFMISC_1:31;
+    n+1 = len r+1 by A4,A5,A7,FINSEQ_1:22;
     then reconsider r9 = |.r.|, a = chi x as Element of M by A3,Th34;
-    M is SubStr of MultiSet_over A by MONOID_0:23;
-    then r9[*]a = |.r.|[*]chi x by MONOID_0:27
+    M is SubStr of MultiSet_over A by MONOID_0:21;
+    then r9[*]a = |.r.|[*]chi x by MONOID_0:25
       .= |.p.| by A5,Th40;
     hence thesis;
   end;
@@ -1456,7 +1454,7 @@ proof
   NAT\{0}) holds card V = $1 ex p st fm = |.p.|;
   assume x is Element of finite-MultiSet_over A;
   then reconsider m = x as Element of finite-MultiSet_over A;
-  carr(finite-MultiSet_over A) c= carr(MultiSet_over A) by MONOID_0:25;
+  carr(finite-MultiSet_over A) c= carr(MultiSet_over A) by MONOID_0:23;
   then m is Multiset of A by TARSKI:def 3;
   then reconsider V = m"(NAT\{0}) as finite set by Def6;
 A1: for V9 being finite set st V9 = m"(NAT\{0}) holds card V9 = card V;
@@ -1469,13 +1467,13 @@ A3: for fm st for V being finite set st V = fm"(NAT\{0}) holds card V
     let fm such that
 A4: for V being finite set st V = fm"(NAT\{0}) holds card V = n+1;
     deffunc G(set) = fm.$1;
-    set x =the  Element of fm"(NAT\{0});
-    carr(finite-MultiSet_over A) c= carr(MultiSet_over A) by MONOID_0:25;
+    set x = the Element of fm"(NAT\{0});
+    carr(finite-MultiSet_over A) c= carr(MultiSet_over A) by MONOID_0:23;
     then reconsider m = fm as Multiset of A by TARSKI:def 3;
     reconsider V = m"(NAT\{0}) as finite set by Def6;
 A5: card V = n+1 by A4;
 A6: dom m = A by Th29;
-    then reconsider x as Element of A by A5,CARD_1:47,FUNCT_1:def 13;
+    then reconsider x as Element of A by A5,CARD_1:27,FUNCT_1:def 7;
     defpred C[set] means x = $1;
     consider f being Function such that
 A7: dom f = A & for a being set st a in A holds (C[a] implies f.a = F
@@ -1486,12 +1484,12 @@ A7: dom f = A & for a being set st a in A holds (C[a] implies f.a = F
       assume y in rng f;
       then consider z being set such that
 A8:   z in dom f and
-A9:   y = f.z by FUNCT_1:def 5;
+A9:   y = f.z by FUNCT_1:def 3;
       reconsider z as Element of A by A7,A8;
       y = 0 or y = m.z by A7,A9;
       hence thesis;
     end;
-    then reconsider f as Function of A,NAT by A7,FUNCT_2:def 1,RELSET_1:11;
+    then reconsider f as Function of A,NAT by A7,FUNCT_2:def 1,RELSET_1:4;
     reconsider f as Multiset of A by Th28;
 A10: f"(NAT\{0}) = (fm"(NAT\{0}))\{x}
     proof
@@ -1500,8 +1498,8 @@ A10: f"(NAT\{0}) = (fm"(NAT\{0}))\{x}
         let y;
         assume
 A11:    y in f"(NAT\{0});
-        then reconsider a = y as Element of A by A7,FUNCT_1:def 13;
-A12:    f.y in NAT\{0} by A11,FUNCT_1:def 13;
+        then reconsider a = y as Element of A by A7,FUNCT_1:def 7;
+A12:    f.y in NAT\{0} by A11,FUNCT_1:def 7;
         then not f.a in {0} by XBOOLE_0:def 5;
         then
 A13:    f.a <> 0 by TARSKI:def 1;
@@ -1509,26 +1507,26 @@ A13:    f.a <> 0 by TARSKI:def 1;
         then
 A14:    not a in {x} by TARSKI:def 1;
         f.a = fm.a by A7,A13;
-        then a in fm"(NAT\{0}) by A6,A12,FUNCT_1:def 13;
+        then a in fm"(NAT\{0}) by A6,A12,FUNCT_1:def 7;
         hence thesis by A14,XBOOLE_0:def 5;
       end;
       let y;
       assume
 A15:  y in (fm"(NAT\{0}))\{x};
       then
-A16:  y in dom fm by FUNCT_1:def 13;
-A17:  fm.y in NAT\{0} by A15,FUNCT_1:def 13;
+A16:  y in dom fm by FUNCT_1:def 7;
+A17:  fm.y in NAT\{0} by A15,FUNCT_1:def 7;
       not y in {x} by A15,XBOOLE_0:def 5;
       then y <> x by TARSKI:def 1;
       then fm.y = f.y by A6,A7,A16;
-      hence thesis by A6,A7,A16,A17,FUNCT_1:def 13;
+      hence thesis by A6,A7,A16,A17,FUNCT_1:def 7;
     end;
     then reconsider f9 = f as Element of finite-MultiSet_over A by A5,Def6;
     set g = |.(m.x) .--> x.|;
-A18: card {x} = 1 by CARD_1:50;
+A18: card {x} = 1 by CARD_1:30;
     reconsider V9 = f9"(NAT\{0}) as finite set by Def6;
-    {x} c= fm"(NAT\{0}) by A5,CARD_1:47,ZFMISC_1:37;
-    then card V9 = n+1-1 by A5,A10,A18,CARD_2:63
+    {x} c= fm"(NAT\{0}) by A5,CARD_1:27,ZFMISC_1:31;
+    then card V9 = n+1-1 by A5,A10,A18,CARD_2:44
       .= n;
     then for V being finite set st V = f9"(NAT\{0}) holds card V = n;
     then consider p such that
@@ -1546,15 +1544,15 @@ A21:  a <> x implies f.a = m.a & g.a = 0 by A7,Th42;
   end;
 A22: Z[0]
   proof
-    set a =the  Element of A;
+    set a = the Element of A;
     let fm such that
 A23: for V being finite set st V = fm"(NAT\{0}) holds card V = 0;
-    carr(finite-MultiSet_over A) c= carr(MultiSet_over A) by MONOID_0:25;
+    carr(finite-MultiSet_over A) c= carr(MultiSet_over A) by MONOID_0:23;
     then reconsider m = fm as Multiset of A by TARSKI:def 3;
     reconsider V = m"(NAT\{0}) as finite set by Def6;
     card V = 0 by A23;
     then fm"(NAT\{0}) = {};
-    then rng fm misses (NAT\{0}) by RELAT_1:173;
+    then rng fm misses (NAT\{0}) by RELAT_1:138;
     then
 A24: {} = rng fm /\ (NAT\{0}) by XBOOLE_0:def 7
       .= (rng fm /\ NAT)\{0} by XBOOLE_1:49;
@@ -1565,11 +1563,11 @@ A24: {} = rng fm /\ (NAT\{0}) by XBOOLE_0:def 7
 A25: rng fm c= {0} by A24,XBOOLE_1:37;
 A26: dom m = A by Th29;
     then
-A27: fm.a in rng fm by FUNCT_1:def 5;
+A27: fm.a in rng fm by FUNCT_1:def 3;
     then fm.a = 0 by A25,TARSKI:def 1;
-    then {0} c= rng fm by A27,ZFMISC_1:37;
+    then {0} c= rng fm by A27,ZFMISC_1:31;
     then rng fm = {0} by A25,XBOOLE_0:def 10;
-    hence fm = A --> 0 by A26,FUNCOP_1:15
+    hence fm = A --> 0 by A26,FUNCOP_1:9
       .= |.p.| by Th38;
   end;
   for n holds Z[n] from NAT_1:sch 1(A22,A2);
@@ -1604,7 +1602,7 @@ A2: for x being Element of [:bool D1, bool D2:] holds F2.x = f.:[:x`1, x`2:];
       thus F1.x = f.:[:x`1,x`2:] by A1
         .= F2.x by A2;
     end;
-    hence thesis by FUNCT_2:113;
+    hence thesis by FUNCT_2:63;
   end;
 end;
 
@@ -1632,8 +1630,8 @@ A2: x2 in X2;
   reconsider b = x2 as Element of D2 by A2;
   reconsider a = x1 as Element of D1 by A1;
 A3: (f.:^2).(X1,X2) = f.:[:X1,X2:] & dom f = [:D1,D2:] by Th45,FUNCT_2:def 1;
-  [a,b] in [:X1,X2:] by A1,A2,ZFMISC_1:106;
-  hence thesis by A3,FUNCT_1:def 12;
+  [a,b] in [:X1,X2:] by A1,A2,ZFMISC_1:87;
+  hence thesis by A3,FUNCT_1:def 6;
 end;
 
 theorem
@@ -1653,11 +1651,11 @@ A1: (f.:^2).(X1,X2) = f.:[:X1,X2:] by Th45;
     then consider y such that
     y in dom f and
 A2: y in [:X1,X2:] and
-A3: x = f.y by A1,FUNCT_1:def 12;
+A3: x = f.y by A1,FUNCT_1:def 6;
     consider y1,y2 being set such that
 A4: y1 in X1 and
 A5: y2 in X2 and
-A6: y = [y1,y2] by A2,ZFMISC_1:103;
+A6: y = [y1,y2] by A2,ZFMISC_1:84;
     reconsider y2 as Element of D2 by A5;
     reconsider y1 as Element of D1 by A4;
     x = f.(y1,y2) by A3,A6;
@@ -1684,15 +1682,15 @@ A1: o.(a,b) = o.(b,a);
       then consider y such that
 A2:   y in dom o and
 A3:   y in [:X,Y:] and
-A4:   x = o.y by FUNCT_1:def 12;
+A4:   x = o.y by FUNCT_1:def 6;
       reconsider y as Element of [:D,D:] by A2;
-      y = [y`1,y`2] by MCART_1:23;
-      then y`1 in X & y`2 in Y by A3,ZFMISC_1:106;
+      y = [y`1,y`2] by MCART_1:21;
+      then y`1 in X & y`2 in Y by A3,ZFMISC_1:87;
       then
-A5:   [y`2,y`1] in [:Y,X:] by ZFMISC_1:106;
+A5:   [y`2,y`1] in [:Y,X:] by ZFMISC_1:87;
 A6:   dom o = [:D,D:] & o.(y`1,y`2) = o.(y`2,y`1 ) by A1,FUNCT_2:def 1;
-      x = o.(y`1,y`2) by A4,MCART_1:23;
-      hence thesis by A6,A5,FUNCT_1:def 12;
+      x = o.(y`1,y`2) by A4,MCART_1:21;
+      hence thesis by A6,A5,FUNCT_1:def 6;
     end;
   end;
   hence o.:[:X,Y:] c= o.:[:Y,X:] & o.:[:Y,X:] c= o.:[:X,Y:];
@@ -1711,58 +1709,58 @@ A2: o.(o.(a,b),c) = o.(a,o.(b,c));
     then consider y such that
 A3: y in dom o and
 A4: y in [:o.:[:X,Y:],Z:] and
-A5: x = o.y by FUNCT_1:def 12;
+A5: x = o.y by FUNCT_1:def 6;
     reconsider y as Element of [:D,D:] by A3;
-A6: y = [y`1,y`2] by MCART_1:23;
+A6: y = [y`1,y`2] by MCART_1:21;
     then
-A7: y`2 in Z by A4,ZFMISC_1:106;
-    y`1 in o.:[:X,Y:] by A4,A6,ZFMISC_1:106;
+A7: y`2 in Z by A4,ZFMISC_1:87;
+    y`1 in o.:[:X,Y:] by A4,A6,ZFMISC_1:87;
     then consider z such that
 A8: z in dom o and
 A9: z in [:X,Y:] and
-A10: y`1 = o.z by FUNCT_1:def 12;
+A10: y`1 = o.z by FUNCT_1:def 6;
     reconsider z as Element of [:D,D:] by A8;
-A11: y`1 = o.(z`1,z`2) by A10,MCART_1:23;
-A12: z = [z`1,z`2] by MCART_1:23;
-    then z`2 in Y by A9,ZFMISC_1:106;
-    then [z`2,y`2] in [:Y,Z:] by A7,ZFMISC_1:106;
+A11: y`1 = o.(z`1,z`2) by A10,MCART_1:21;
+A12: z = [z`1,z`2] by MCART_1:21;
+    then z`2 in Y by A9,ZFMISC_1:87;
+    then [z`2,y`2] in [:Y,Z:] by A7,ZFMISC_1:87;
     then
-A13: o.(z`2,y`2) in o.:[:Y,Z:] by A1,FUNCT_1:def 12;
-    z`1 in X by A9,A12,ZFMISC_1:106;
+A13: o.(z`2,y`2) in o.:[:Y,Z:] by A1,FUNCT_1:def 6;
+    z`1 in X by A9,A12,ZFMISC_1:87;
     then
-A14: [z`1,o.(z`2,y`2)] in [:X,o.:[:Y,Z:]:] by A13,ZFMISC_1:106;
-    x = o.(y`1,y`2) by A5,MCART_1:23;
+A14: [z`1,o.(z`2,y`2)] in [:X,o.:[:Y,Z:]:] by A13,ZFMISC_1:87;
+    x = o.(y`1,y`2) by A5,MCART_1:21;
     then x = o.(z`1,o.(z`2,y`2)) by A2,A11;
-    hence thesis by A1,A14,FUNCT_1:def 12;
+    hence thesis by A1,A14,FUNCT_1:def 6;
   end;
   let x;
   assume x in o.:[:X,o.:[:Y,Z:]:];
   then consider y such that
 A15: y in dom o and
 A16: y in [:X,o.:[:Y,Z:]:] and
-A17: x = o.y by FUNCT_1:def 12;
+A17: x = o.y by FUNCT_1:def 6;
   reconsider y as Element of [:D,D:] by A15;
-A18: y = [y`1,y`2] by MCART_1:23;
+A18: y = [y`1,y`2] by MCART_1:21;
   then
-A19: y`1 in X by A16,ZFMISC_1:106;
-  y`2 in o.:[:Y,Z:] by A16,A18,ZFMISC_1:106;
+A19: y`1 in X by A16,ZFMISC_1:87;
+  y`2 in o.:[:Y,Z:] by A16,A18,ZFMISC_1:87;
   then consider z such that
 A20: z in dom o and
 A21: z in [:Y,Z:] and
-A22: y`2 = o.z by FUNCT_1:def 12;
+A22: y`2 = o.z by FUNCT_1:def 6;
   reconsider z as Element of [:D,D:] by A20;
-A23: y`2 = o.(z`1,z`2) by A22,MCART_1:23;
-A24: z = [z`1,z`2] by MCART_1:23;
-  then z`1 in Y by A21,ZFMISC_1:106;
-  then [y`1,z`1] in [:X,Y:] by A19,ZFMISC_1:106;
+A23: y`2 = o.(z`1,z`2) by A22,MCART_1:21;
+A24: z = [z`1,z`2] by MCART_1:21;
+  then z`1 in Y by A21,ZFMISC_1:87;
+  then [y`1,z`1] in [:X,Y:] by A19,ZFMISC_1:87;
   then
-A25: o.(y`1,z`1) in o.:[:X,Y:] by A1,FUNCT_1:def 12;
-  z`2 in Z by A21,A24,ZFMISC_1:106;
+A25: o.(y`1,z`1) in o.:[:X,Y:] by A1,FUNCT_1:def 6;
+  z`2 in Z by A21,A24,ZFMISC_1:87;
   then
-A26: [o.(y`1,z`1),z`2] in [:o.:[:X,Y:],Z:] by A25,ZFMISC_1:106;
-  x = o.(y`1,y`2) by A17,MCART_1:23;
+A26: [o.(y`1,z`1),z`2] in [:o.:[:X,Y:],Z:] by A25,ZFMISC_1:87;
+  x = o.(y`1,y`2) by A17,MCART_1:21;
   then x = o.(o.(y`1,z`1),z`2) by A2,A23;
-  hence thesis by A1,A26,FUNCT_1:def 12;
+  hence thesis by A1,A26,FUNCT_1:def 6;
 end;
 
 theorem Th50:
@@ -1801,15 +1799,15 @@ A1: a is_a_unity_wrt o;
     then consider y such that
 A2: y in dom o and
 A3: y in [:{a},X:] and
-A4: x = o.y by FUNCT_1:def 12;
+A4: x = o.y by FUNCT_1:def 6;
     reconsider y as Element of [:D,D:] by A2;
-A5: x = o.(y`1,y`2) by A4,MCART_1:23;
-A6: y = [y`1,y`2] by MCART_1:23;
-    then y`1 in {a} by A3,ZFMISC_1:106;
+A5: x = o.(y`1,y`2) by A4,MCART_1:21;
+A6: y = [y`1,y`2] by MCART_1:21;
+    then y`1 in {a} by A3,ZFMISC_1:87;
     then
 A7: y`1 = a by TARSKI:def 1;
-A8: o.(a,y`2) = y`2 by A1,BINOP_1:11;
-    y`2 in X by A3,A6,ZFMISC_1:106;
+A8: o.(a,y`2) = y`2 by A1,BINOP_1:3;
+    y`2 in X by A3,A6,ZFMISC_1:87;
     hence thesis by A5,A8,A7,XBOOLE_0:def 4;
   end;
 A9: dom o = [:D,D:] by FUNCT_2:def 1;
@@ -1820,11 +1818,11 @@ A10: a in {a} by TARSKI:def 1;
     assume
 A11: x in D /\ X;
     then reconsider d = x as Element of D by XBOOLE_0:def 4;
-A12: x = o.(a,d) by A1,BINOP_1:11
+A12: x = o.(a,d) by A1,BINOP_1:3
       .= o.[a,x];
     x in X by A11,XBOOLE_0:def 4;
-    then [a,d] in [:{a},X:] by A10,ZFMISC_1:106;
-    hence thesis by A9,A12,FUNCT_1:def 12;
+    then [a,d] in [:{a},X:] by A10,ZFMISC_1:87;
+    hence thesis by A9,A12,FUNCT_1:def 6;
   end;
   thus o.:[:X,{a}:] c= D /\ X
   proof
@@ -1833,15 +1831,15 @@ A12: x = o.(a,d) by A1,BINOP_1:11
     then consider y such that
 A13: y in dom o and
 A14: y in [:X,{a}:] and
-A15: x = o.y by FUNCT_1:def 12;
+A15: x = o.y by FUNCT_1:def 6;
     reconsider y as Element of [:D,D:] by A13;
-A16: x = o.(y`1,y`2) by A15,MCART_1:23;
-A17: y = [y`1,y`2] by MCART_1:23;
-    then y`2 in {a} by A14,ZFMISC_1:106;
+A16: x = o.(y`1,y`2) by A15,MCART_1:21;
+A17: y = [y`1,y`2] by MCART_1:21;
+    then y`2 in {a} by A14,ZFMISC_1:87;
     then
 A18: y`2 = a by TARSKI:def 1;
-A19: o.(y`1,a) = y`1 by A1,BINOP_1:11;
-    y`1 in X by A14,A17,ZFMISC_1:106;
+A19: o.(y`1,a) = y`1 by A1,BINOP_1:3;
+    y`1 in X by A14,A17,ZFMISC_1:87;
     hence thesis by A16,A19,A18,XBOOLE_0:def 4;
   end;
   thus D /\ X c= o.:[:X,{a}:]
@@ -1851,11 +1849,11 @@ A20: a in {a} by TARSKI:def 1;
     assume
 A21: x in D /\ X;
     then reconsider d = x as Element of D by XBOOLE_0:def 4;
-A22: x = o.(d,a) by A1,BINOP_1:11
+A22: x = o.(d,a) by A1,BINOP_1:3
       .= o.[x,a];
     x in X by A21,XBOOLE_0:def 4;
-    then [d,a] in [:X,{a}:] by A20,ZFMISC_1:106;
-    hence thesis by A9,A22,FUNCT_1:def 12;
+    then [d,a] in [:X,{a}:] by A20,ZFMISC_1:87;
+    hence thesis by A9,A22,FUNCT_1:def 6;
   end;
 end;
 
@@ -1875,7 +1873,7 @@ A1: a is_a_unity_wrt o;
       .= x by XBOOLE_1:28;
   end;
   hence
-A2: {a} is_a_unity_wrt o.:^2 by BINOP_1:11;
+A2: {a} is_a_unity_wrt o.:^2 by BINOP_1:3;
   hence ex A being Subset of D st A is_a_unity_wrt o.:^2;
   thus thesis by A2,BINOP_1:def 8;
 end;
@@ -1901,17 +1899,17 @@ A2: o.(a,b) = the_unity_wrt o implies a = b & b = the_unity_wrt o;
 A3: (o.:^2).(A,B) = the_unity_wrt o.:^2;
   set a = the_unity_wrt o;
 A4: the_unity_wrt o.:^2 = {a} by A1,Th54;
-  set a1 =the  Element of A,a2 =the  Element of B;
+  set a1 = the Element of A,a2 = the Element of B;
   o.:[:A,B:] = (o.:^2).(A,B) by Th45;
-  then dom o meets [:A,B:] by A3,A4,RELAT_1:151;
+  then dom o meets [:A,B:] by A3,A4,RELAT_1:118;
   then dom o /\ [:A,B:] <> {} by XBOOLE_0:def 7;
   then
 A5: [:A,B:] <> {};
   then
-A6: A <> {} by ZFMISC_1:113;
-A7: B <> {} by A5,ZFMISC_1:113;
+A6: A <> {} by ZFMISC_1:90;
+A7: B <> {} by A5,ZFMISC_1:90;
   then reconsider a1,a2 as Element of D by A6,TARSKI:def 3;
-A8: {a1} c= A by A6,ZFMISC_1:37;
+A8: {a1} c= A by A6,ZFMISC_1:31;
   o.(a1,a2) in {a} by A3,A4,A6,A7,Th46;
   then
 A9: o.(a1,a2) = a by TARSKI:def 1;
@@ -1940,7 +1938,7 @@ A14: x in B;
     hence thesis by TARSKI:def 1;
   end;
 A15: a1 = a2 by A2,A9;
-  {a2} c= B by A7,ZFMISC_1:37;
+  {a2} c= B by A7,ZFMISC_1:31;
   then B = {a} by A10,A13,XBOOLE_0:def 10;
   hence thesis by A1,A15,A10,A8,A11,Th54,XBOOLE_0:def 10;
 end;
@@ -1979,8 +1977,8 @@ registration
 end;
 
 definition
-  let G be unital (non empty multMagma);
-  redefine func bool G -> well-unital strict (non empty multLoopStr);
+  let G be unital non empty multMagma;
+  redefine func bool G -> well-unital strict non empty multLoopStr;
   coherence
   proof
     set M = multLoopStr(#bool carr(G), op(G).:^2,{the_unity_wrt op(G)}#);
@@ -2002,10 +2000,10 @@ proof
 end;
 
 theorem
-  for G being unital (non empty multMagma) holds 1.bool G = {
+  for G being unital non empty multMagma holds 1.bool G = {
   the_unity_wrt the multF of G}
 proof
-  let G be unital (non empty multMagma);
+  let G be unital non empty multMagma;
   bool G = multLoopStr(#bool carr(G), op(G).:^2,{the_unity_wrt op(G)}#) by Def9
 ;
   hence thesis;

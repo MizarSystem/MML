@@ -1,6 +1,6 @@
 :: Representation Theorem for Stacks
 ::  by Grzegorz Bancerek
-:: 
+::
 :: Received February 22, 2011
 :: Copyright (c) 2011 Association of Mizar Users
 ::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
@@ -52,11 +52,6 @@ end;
 
 theorem :: STACKS_1:1
   Del({},i) = {};
-
-theorem :: STACKS_1:2
-  for D being non empty set
-  for s being FinSequence of D st s <> {}
-  ex w being FinSequence of D, n being Element of D st s = <*n*>^w;
 
 scheme :: STACKS_1:sch 1
  IndSeqD{D()->non empty set, P[set]}:
@@ -133,7 +128,7 @@ registration
 end;
 
 registration
-  cluster non empty non void strict StackSystem;
+  cluster non empty non void strict for StackSystem;
 end;
 
 definition
@@ -142,17 +137,27 @@ definition
 end;
 
 definition
-  let X be non empty non void StackSystem;
+  let X be StackSystem;
   let s be stack of X;
   pred emp s means
 :: STACKS_1:def 3
  s in the s_empty of X;
+end;
+
+definition
+  let X be non void StackSystem;
+  let s be stack of X;
   func pop s -> stack of X equals
 :: STACKS_1:def 4
 (the s_pop of X).s;
   func top s -> Element of X equals
 :: STACKS_1:def 5
 (the s_top of X).s;
+end;
+
+definition
+  let X be non empty non void StackSystem;
+  let s be stack of X;
   let e be Element of X;
   func push(e,s) -> stack of X equals
 :: STACKS_1:def 6
@@ -181,12 +186,12 @@ reserve m for stack of StandardStackSystem A;
 
 registration
   let A;
-  cluster -> Relation-like Function-like stack of StandardStackSystem A;
+  cluster the carrier' of StandardStackSystem A -> functional;
 end;
 
 registration
   let A;
-  cluster -> FinSequence-like stack of StandardStackSystem A;
+  cluster -> FinSequence-like for stack of StandardStackSystem A;
 end;
 ::$H-
 
@@ -235,27 +240,27 @@ end;
 
 registration
   cluster pop-finite push-pop top-push pop-push push-non-empty
-  strict (non empty non void StackSystem);
+  strict for non empty non void StackSystem;
 end;
 
 definition
   mode StackAlgebra is pop-finite push-pop top-push pop-push push-non-empty
-  (non empty non void StackSystem);
+  non empty non void StackSystem;
 end;
 
-theorem :: STACKS_1:3
+theorem :: STACKS_1:2
   for X being non empty non void StackSystem st X is pop-finite
   ex s being stack of X st emp s;
 
 registration
-  let X be pop-finite (non empty non void StackSystem);
+  let X be pop-finite non empty non void StackSystem;
   cluster the s_empty of X -> non empty;
 end;
 
-theorem :: STACKS_1:4
+theorem :: STACKS_1:3
   X is top-push pop-push & push(e1,s1) = push(e2,s2) implies e1 = e2 & s1 = s2;
 
-theorem :: STACKS_1:5
+theorem :: STACKS_1:4
   X is push-pop & not emp s1 & not emp s2 &
   pop s1 = pop s2 & top s1 = top s2 implies s1 = s2;
 
@@ -317,28 +322,28 @@ definition
   for s1, e holds F.push(e,s1) = <*e*>^(F.s1);
 end;
 
-theorem :: STACKS_1:6
+theorem :: STACKS_1:5
   emp s implies |.s.| = {};
 
-theorem :: STACKS_1:7
+theorem :: STACKS_1:6
   not emp s implies |.s.| = <*top s*>^|.pop s.|;
 
-theorem :: STACKS_1:8
+theorem :: STACKS_1:7
   not emp s implies |.pop s.| = Del(|.s.|,1);
 
-theorem :: STACKS_1:9
+theorem :: STACKS_1:8
   |.push(e,s).| = <*e*>^|.s.|;
 
-theorem :: STACKS_1:10
+theorem :: STACKS_1:9
   not emp s implies top s = |.s.|.1;
 
-theorem :: STACKS_1:11
+theorem :: STACKS_1:10
   |.s.| = {} implies emp s;
 
-theorem :: STACKS_1:12
+theorem :: STACKS_1:11
   for s being stack of StandardStackSystem A holds |.s.| = s;
 
-theorem :: STACKS_1:13
+theorem :: STACKS_1:12
   for x being Element of (the carrier of X)*
   ex s st |.s.| = x;
 
@@ -351,22 +356,22 @@ definition
   symmetry;
 end;
 
-theorem :: STACKS_1:14
+theorem :: STACKS_1:13
   s1 == s2 & s2 == s3 implies s1 == s3;
 
-theorem :: STACKS_1:15
+theorem :: STACKS_1:14
   s1 == s2 & emp s1 implies emp s2;
 
-theorem :: STACKS_1:16
+theorem :: STACKS_1:15
   emp s1 & emp s2 implies s1 == s2;
 
-theorem :: STACKS_1:17
+theorem :: STACKS_1:16
   s1 == s2 implies push(e,s1) == push(e,s2);
 
-theorem :: STACKS_1:18
+theorem :: STACKS_1:17
   s1 == s2 & not emp s1 implies pop s1 == pop s2;
 
-theorem :: STACKS_1:19
+theorem :: STACKS_1:18
   s1 == s2 & not emp s1 implies top s1 = top s2;
 
 definition
@@ -395,7 +400,7 @@ registration
   cluster ==_X -> total symmetric transitive;
 end;
 
-theorem :: STACKS_1:20
+theorem :: STACKS_1:19
   emp s implies Class(==_X, s) = the s_empty of X;
 
 definition
@@ -413,20 +418,20 @@ definition
   holds it c= A;
 end;
 
-theorem :: STACKS_1:21
+theorem :: STACKS_1:20
   (push(e,s) in coset s1 implies s in coset s1) &
   (not emp s & pop s in coset s1 implies s in coset s1);
 
-theorem :: STACKS_1:22
+theorem :: STACKS_1:21
   s in coset push(e,s) & (not emp s implies s in coset pop s);
 
-theorem :: STACKS_1:23
+theorem :: STACKS_1:22
   ex s1 st emp s1 & s1 in coset s;
 
 registration
   let A;
   let R be Relation of A;
-  cluster A-valued RedSequence of R;
+  cluster A-valued for RedSequence of R;
 end;
 
 definition
@@ -437,7 +442,7 @@ definition
   [s1,s2] in it iff (not emp s1 & s2 = pop s1) or ex e st s2 = push(e,s1);
 end;
 
-theorem :: STACKS_1:24
+theorem :: STACKS_1:23
   for R being Relation of A
   for t being RedSequence of R holds t.1 in A iff t is A-valued;
 
@@ -451,11 +456,11 @@ scheme :: STACKS_1:sch 6
  for x,y being Element of X() st R() reduces x1(),x & [x,y] in R() &
     P[x] holds P[y];
 
-theorem :: STACKS_1:25
+theorem :: STACKS_1:24
   for t being RedSequence of ConstructionRed X
   st s = t.1 holds rng t c= coset s;
 
-theorem :: STACKS_1:26
+theorem :: STACKS_1:25
   coset s = {s1: ConstructionRed X reduces s,s1};
 
 definition
@@ -469,29 +474,29 @@ definition
   for i st 1 <= i & i < len t holds not emp t/.i & t/.(i+1) = pop(t/.i);
 end;
 
-theorem :: STACKS_1:27
+theorem :: STACKS_1:26
   emp s implies core s = s;
 
-theorem :: STACKS_1:28
+theorem :: STACKS_1:27
   core push(e,s) = core s;
 
-theorem :: STACKS_1:29
+theorem :: STACKS_1:28
   not emp s implies core pop s = core s;
 
-theorem :: STACKS_1:30
+theorem :: STACKS_1:29
   core s in coset s;
 
-theorem :: STACKS_1:31
+theorem :: STACKS_1:30
   for x being Element of (the carrier of X)*
   ex s1 st |.s1.| = x & s1 in coset s;
 
-theorem :: STACKS_1:32
+theorem :: STACKS_1:31
   s1 in coset s implies core s1 = core s;
 
-theorem :: STACKS_1:33
+theorem :: STACKS_1:32
   s1 in coset s & s2 in coset s & |.s1.| = |.s2.| implies s1 = s2;
 
-theorem :: STACKS_1:34
+theorem :: STACKS_1:33
   ex s st (coset s1)/\Class(==_X, s2) = {s};
 
 begin :: Quotient Stack System
@@ -515,28 +520,28 @@ registration
   cluster X/== -> non empty non void;
 end;
 
-theorem :: STACKS_1:35
+theorem :: STACKS_1:34
   for S being stack of X/== ex s st S = Class(==_X, s);
 
-theorem :: STACKS_1:36
+theorem :: STACKS_1:35
   Class(==_X, s) is stack of X/==;
 
-theorem :: STACKS_1:37
+theorem :: STACKS_1:36
   for S being stack of X/== st S = Class(==_X, s) holds emp s iff emp S;
 
-theorem :: STACKS_1:38
+theorem :: STACKS_1:37
   for S being stack of X/== holds emp S iff S = the s_empty of X;
 
-theorem :: STACKS_1:39
+theorem :: STACKS_1:38
   for S being stack of X/==, E being Element of X/==
   st S = Class(==_X, s) & E = e holds
   push(e, s) in push(E, S) & Class(==_X, push(e, s)) = push(E, S);
 
-theorem :: STACKS_1:40
+theorem :: STACKS_1:39
   for S being stack of X/== st S = Class(==_X, s) & not emp s holds
   pop s in pop S & Class(==_X, pop s) = pop S;
 
-theorem :: STACKS_1:41
+theorem :: STACKS_1:40
   for S being stack of X/== st S = Class(==_X, s) & not emp s holds
   top S = top s;
 
@@ -549,7 +554,7 @@ registration
   cluster X/== -> push-non-empty;
 end;
 
-theorem :: STACKS_1:42
+theorem :: STACKS_1:41
   for S being stack of X/== st S = Class(==_X, s) holds |.S.| = |.s.|;
 
 registration
@@ -558,7 +563,7 @@ registration
 end;
 
 registration
-  cluster proper-for-identity StackAlgebra;
+  cluster proper-for-identity for StackAlgebra;
 end;
 
 begin :: Representation Theorem for Stacks
@@ -581,19 +586,19 @@ end;
 reserve X1,X2,X3 for StackAlgebra;
 reserve F,F1,F2,G,G1,G2 for Function;
 
-theorem :: STACKS_1:43
+theorem :: STACKS_1:42
   id the carrier of X, id the carrier' of X form_isomorphism_between X,X;
 
-theorem :: STACKS_1:44
+theorem :: STACKS_1:43
   F,G form_isomorphism_between X1,X2 implies
   F",G" form_isomorphism_between X2,X1;
 
-theorem :: STACKS_1:45
+theorem :: STACKS_1:44
   F1,G1 form_isomorphism_between X1,X2 &
   F2,G2 form_isomorphism_between X2,X3 implies
   F2*F1,G2*G1 form_isomorphism_between X1,X3;
 
-theorem :: STACKS_1:46
+theorem :: STACKS_1:45
   F,G form_isomorphism_between X1,X2 implies
   for s1 being stack of X1, s2 being stack of X2 st s2 = G.s1
   holds |.s2.| = F*|.s1.|;
@@ -607,19 +612,19 @@ definition
   symmetry;
 end;
 
-theorem :: STACKS_1:47
+theorem :: STACKS_1:46
   X1,X2 are_isomorphic & X2,X3 are_isomorphic implies X1,X3 are_isomorphic;
 
-theorem :: STACKS_1:48
+theorem :: STACKS_1:47
   X1,X2 are_isomorphic & X1 is proper-for-identity implies
   X2 is proper-for-identity;
 
-theorem :: STACKS_1:49
+theorem :: STACKS_1:48
   for X being proper-for-identity StackAlgebra holds
   ex G st (for s being stack of X holds G.s = |.s.|) &
   id the carrier of X, G form_isomorphism_between
   X, StandardStackSystem the carrier of X;
 
-theorem :: STACKS_1:50
+theorem :: STACKS_1:49
   for X being proper-for-identity StackAlgebra holds
   X, StandardStackSystem the carrier of X are_isomorphic;

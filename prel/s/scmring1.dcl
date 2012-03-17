@@ -20,6 +20,8 @@
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="ALGSTR_0"/>
 <ArticleID name="RLVECT_1"/>
+<ArticleID name="ENUMSET1"/>
+<ArticleID name="DOMAIN_1"/>
 <ArticleID name="INT_1"/>
 <ArticleID name="GROUP_1"/>
 <ArticleID name="VECTSP_1"/>
@@ -29,7 +31,7 @@
 </Signature>
 <FCluster aid="SCMRING1" nr="1">
 <ArgTypes/>
-<Func kind="K" nr="174"/>
+<Func kind="K" nr="198"/>
 <Cluster>
 <Adjective nr="18" value="false"/>
 <Adjective nr="19" value="false"/>
@@ -43,7 +45,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="186">
+<Func kind="K" nr="210">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -62,17 +64,17 @@
 <Cluster>
 <Adjective nr="13"/>
 <Adjective nr="32">
-<Func kind="K" nr="186">
+<Func kind="K" nr="210">
 <LocusVar nr="1"/>
 </Func>
 <Func kind="K" nr="102">
-<Func kind="K" nr="161">
-<Func kind="K" nr="187">
+<Func kind="K" nr="184">
+<Func kind="K" nr="211">
 <LocusVar nr="1"/>
 </Func>
 </Func>
-<Func kind="K" nr="161">
-<Func kind="K" nr="187">
+<Func kind="K" nr="184">
+<Func kind="K" nr="211">
 <LocusVar nr="1"/>
 </Func>
 </Func>
@@ -81,17 +83,17 @@
 </Cluster>
 <Func kind="K" nr="29">
 <Func kind="K" nr="30">
-<Func kind="K" nr="186">
+<Func kind="K" nr="210">
 <LocusVar nr="1"/>
 </Func>
 <Func kind="K" nr="102">
-<Func kind="K" nr="161">
-<Func kind="K" nr="187">
+<Func kind="K" nr="184">
+<Func kind="K" nr="211">
 <LocusVar nr="1"/>
 </Func>
 </Func>
-<Func kind="K" nr="161">
-<Func kind="K" nr="187">
+<Func kind="K" nr="184">
+<Func kind="K" nr="211">
 <LocusVar nr="1"/>
 </Func>
 </Func>
@@ -101,7 +103,7 @@
 </Typ>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="186">
+<Func kind="K" nr="210">
 <LocusVar nr="1"/>
 </Func>
 </Typ>
@@ -124,7 +126,7 @@
 </Typ>
 </ArgTypes>
 <Func kind="K" nr="2">
-<Func kind="K" nr="186">
+<Func kind="K" nr="210">
 <LocusVar nr="1"/>
 </Func>
 </Func>
@@ -135,15 +137,13 @@
 <CCluster aid="SCMRING1" nr="1">
 <ArgTypes/>
 <Cluster>
-<Adjective nr="37" value="false"/>
 <Adjective nr="42"/>
 </Cluster>
 <Typ kind="G" nr="1">
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="37" value="false"/>
-<Adjective nr="117"/>
+<Adjective nr="118"/>
 </Cluster>
 </CCluster>
 </Registrations>

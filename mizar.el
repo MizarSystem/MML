@@ -17,10 +17,11 @@
 ;; a mode for Unix version of Mizar-MSE.
 ;;
 ;; Since April 3 2000, rewritten and maintained by 
-;; Josef Urban (urban@kti.ms.mff.cuni.cz) for use with Mizar Version >= 6.
+;; Josef Urban (Josef do Urban at gmail dot com) for use with Mizar Version >= 6.
 ;;
-;; Go to http://kti.ms.mff.cuni.cz/cgi-bin/viewcvs.cgi/mizarmode/mizar.el
-;; to see complete revision history.
+;; Go to https://github.com/JUrban/mizarmode
+;; to see complete revision history. The latest release is at
+;; https://raw.github.com/JUrban/mizarmode/master/mizar.el .
 
 
 ;;; Usage
@@ -28,7 +29,8 @@
 ;; If you obtained this with your Mizar distribution, just append
 ;; the .emacs file enclosed there to your .emacs.
 ;; Otherwise, the latest version of .emacs is downloadable from
-;; http://kti.ms.mff.cuni.cz/cgi-bin/viewcvs.cgi/mizarmode/.emacs .
+;; https://raw.github.com/JUrban/mizarmode/master/.emacs .
+
 
 
 ;;; TODO: 
@@ -372,7 +374,7 @@ MoMM should be installed for this."
 
 
 (defcustom mizar-main-keywords 
-(list "theorem" "scheme" "definition" "registration" "notation")
+(list "theorem" "scheme" "definition" "registration" "notation" "axiom")
 "*Keywords starting main mizar text items." 
 :type '(repeat string)
 :group 'mizar-faces)
@@ -406,8 +408,8 @@ MoMM should be installed for this."
  "pred" "provided" "qua" "reconsider" "redefine" "reflexivity" 
  "reserve" "struct" "such" "synonym" 
  "that" "then" "thesis" "when" "where" "with""is" 
- "associativity" "commutativity" "connectedness" "irreflexivity" 
- "reflexivity" "symmetry" "uniqueness" "transitivity" "idempotence" 
+ "associativity" "commutativity" "connectedness" "irreflexivity" "reduce" "reducibility"
+ "reflexivity" "symmetry" "sethood" "uniqueness" "transitivity" "idempotence" 
  "asymmetry" "projectivity" "involutiveness")
 "*Mizar keywords not mentioned in other place."
 :type '(repeat string)
@@ -1339,8 +1341,9 @@ Used automatically if `mizar-atp-completion' is on."
     (if (looking-at " by;")
 	(progn 
 	  (replace-match " ; :: ATP asked ... ")
-	  ;; we leave one space in the beg and end without the added properties
-	  ;; not to get sticky behavior for unsuspecting users
+	  ;; We leave one space in the beg and end without the added properties
+	  ;; not to get sticky behavior for unsuspecting users.
+	  ;; Problem is that the mizar error position is right after the formula
 	  (mizar-mark-call-atp pos1 (- (point) 1)))))))
 
 (defun mizar-mark-call-atp (beg end)
@@ -1350,12 +1353,14 @@ Used automatically if `mizar-atp-completion' is on."
   (let* ((mod (buffer-modified-p))
 	 (line (current-line))
 	 (col (current-column))
+	 (miz-col (- col 1))
 	 (pos (concat (number-to-string line) ":" (number-to-string col)))
+	 (miz-pos (concat (number-to-string line) ":" (number-to-string miz-col)))
 	 (buf (buffer-name))
 	 (msg (concat "ATP was called on this step, awaiting response for position " pos)))
     (put-text-property beg end 'help-echo msg)
     (put-text-property beg end 'atp-asked (intern pos))
-    (mizar-remote-solve-atp pos (concat buf "__" pos) (list buf line col beg))
+    (mizar-remote-solve-atp "Positions" miz-pos (concat buf "__" pos) (list buf line col beg))
     (message "Calling ATP on position %s " pos)
     (set-buffer-modified-p mod))))
 
@@ -1522,22 +1527,31 @@ Print diagnostic message if we want, but cannot."
 	(setenv mizar-mml-order-var-name  
 		(mapconcat '(lambda (x) (concat x "." ext)) l1 " "))
 	(setq flist (if (eq mizar-emacs 'winemacs) 
-			(concat "%" mizar-mml-order-var-name "%")
+			(if (equal ext "abs") "abstr abs" "mml miz")
+;			(concat "%" mizar-mml-order-var-name "%")
 		      (concat "$" mizar-mml-order-var-name))))))
   flist))
+
+(defvar ordered-grep-name 
+  (if (and (eq mizar-emacs 'winemacs) (executable-find (concat mizfiles "mizgrep.bat")))
+      (concat mizfiles "mizgrep.bat")
+    "grep")
+"Default grepping program"
+)
 
 (defun mizar-grep-abs (exp)
 "Grep MML abstracts for regexp EXP.
 Variable `mizar-grep-case-sensitive' controls case sensitivity.
 The results are shown and clickable in the Compilation buffer."
   (interactive "sregexp: ")
-  (let ((old default-directory) (flist (mizar-grep-prepare-flist "abs")))
+  (let ((old default-directory) (flist (mizar-grep-prepare-flist "abs"))
+	(grep-name (if mizar-grep-in-mml-order ordered-grep-name "grep")))
     (unwind-protect
 	(progn
 	  (cd mizar-abstr)
 	  (if mizar-grep-case-sensitive
-	      (grep (concat "grep -n -E \"" exp "\" " flist))
-	    (grep (concat "grep -i -n -E \"" exp "\" " flist))))
+	      (grep (concat grep-name " -n -E \"" exp "\" " flist))
+	    (grep (concat grep-name " -in -E \"" exp "\" " flist))))
       (cd old)
     )))
 
@@ -1546,13 +1560,14 @@ The results are shown and clickable in the Compilation buffer."
 Variable `mizar-grep-case-sensitive' controls case sensitivity.
 The results are shown and clickable in the Compilation buffer."
   (interactive "sregexp: ")
-  (let ((old default-directory) (flist (mizar-grep-prepare-flist "miz")))
+  (let ((old default-directory) (flist (mizar-grep-prepare-flist "miz"))
+	(grep-name (if mizar-grep-in-mml-order ordered-grep-name "grep")))
     (unwind-protect
 	(progn
 	  (cd mizar-mml)
 	  (if mizar-grep-case-sensitive
-	      (grep (concat "grep -n -E \"" exp "\" " flist))
-	    (grep (concat "grep -i -n -E \"" exp "\" " flist))))
+	      (grep (concat grep-name " -n -E \"" exp "\" " flist))
+	    (grep (concat grep-name " -in -E \"" exp "\" " flist))))
       (cd old)
       )))
 
@@ -1679,13 +1694,14 @@ Variable `mizar-grep-case-sensitive' controls case sensitivity.
 The results are shown and clickable in the Compilation buffer."
   (interactive "sregexp: ")
   (let ((olddir default-directory) (flist (mizar-grep-prepare-flist "gab.raw"))
-	(compilation-process-setup-function 'mizar-gab-compilation-setup))
+	(compilation-process-setup-function 'mizar-gab-compilation-setup)
+	(grep-name (if mizar-grep-in-mml-order ordered-grep-name "grep")))
     (unwind-protect
 	(progn
 	  (cd mmlquery-abstracts)	  
 	  (if mizar-grep-case-sensitive
-	      (compile (concat "grep -n -E \"" exp "\" " flist))
-	    (compile (concat "grep -i -n -E \"" exp "\" " flist))))
+	      (compile (concat grep-name " -n -E \"" exp "\" " flist))
+	    (compile (concat grep-name " -i -n -E \"" exp "\" " flist))))
       (cd olddir)
     )))
 
@@ -5762,7 +5778,8 @@ file suffix to use."
       (goto-char pos1)
       (if (not (looking-at "; :: ATP asked ... *"))
 	  (message "Position for ATP solution of %s user-edited. No inserting." mizpos)
-	(replace-match (concat "by " atpres ";")))))))
+	(replace-match (concat "by " atpres ";"))
+	(mizar-bubble-ref-incremental))))))
 
 (defvar mizar-invis-button-map
   (let ((map (make-sparse-keymap)))
@@ -5818,13 +5835,13 @@ The value 1 is default - no parallelization."
 
 
 ;; frontend
-(defun mizar-remote-solve-atp (&optional positions output-buffer pushback)
+(defun mizar-remote-solve-atp (&optional solve positions output-buffer pushback)
 "Send the current article to a remote server for verification and
 ask a remote ATP for solving of all Mizar-unsolved problems.
 Calls `mizar-remote-solve'.
 "
 (interactive "*P")
-(mizar-remote-solve t positions output-buffer pushback))
+(mizar-remote-solve (or solve t) positions output-buffer pushback))
 
 ;; this is good, but only for getting errors or other text info
 ;; it does not launch browser
@@ -5841,6 +5858,7 @@ and put the verification message into OUTPUT-BUFFER.
        (dir (file-name-directory (buffer-file-name)))
        (errfile (concat (file-name-sans-extension (buffer-file-name)) ".err"))
        (vocfile (car (file-expand-wildcards (concat dir "../dict/*.voc") t)))
+       (mmlversion (mizar-mml-version))
        (solve-it (if solve
 		     (if (equal solve "Positions") '("ProveUnsolved" . "Positions")
 		       '("ProveUnsolved" . "All"))))
@@ -5856,7 +5874,7 @@ and put the verification message into OUTPUT-BUFFER.
       (my-url-http-post 
        (concat ar4mizar-server ar4mizar-cgi) 
        `(("Formula" . ,(buffer-substring-no-properties (point-min) (point-max)))
-	 ("Name" . ,aname) ("MMLVersion" . "4.145.1096") ("Verify" . "1") 
+	 ("Name" . ,aname) ("MMLVersion" . ,mmlversion) ("Verify" . "1") 
 	 ("Parallelize" . ,(number-to-string mizar-remote-parallelization)) 
 	 ("MODE" . "TEXT") ,solve-it
 	 ,(if positions (cons "Positions" positions))
@@ -5872,7 +5890,7 @@ and put the verification message into OUTPUT-BUFFER.
 	   (my-url-http-post 
 	    (concat ar4mizar-server ar4mizar-cgi) 
 	    `(("Formula" . ,(buffer-substring-no-properties (point-min) (point-max))) 
-	      ("Name" . ,aname) ("MMLVersion" . "4.145.1096") ("Verify" . "1") 
+	      ("Name" . ,aname) ("MMLVersion" . ,mmlversion) ("Verify" . "1") 
 	      ("Parallelize" . ,(number-to-string mizar-remote-parallelization)) ("MODE" . "TEXT") ,solve-it
 	      ,(if vocfile (cons "VocSource" "CONTENT"))
 	      ,(if vocfile (cons "VocName" vocname))
@@ -5914,17 +5932,19 @@ the previous is set to `browse-url-generic') also the variable
        (dir (file-name-directory (buffer-file-name)))
        (vocfile (car (file-expand-wildcards (concat dir "../dict/*.voc") t)))
        (vocname (if vocfile (file-name-nondirectory vocfile)))
+       (mmlversion (mizar-mml-version))
        (vocstring (if vocfile (with-temp-buffer
 				(insert-file-contents vocfile)
 				(htmlize-protect-string (buffer-substring-no-properties (point-min) (point-max))))))
        (requestfile (concat fname ".html"))
        (contents (htmlize-protect-string (buffer-substring-no-properties (point-min) (point-max))))
        (htmlcontents (concat 
-		      mizar-ar4mizar-html-start contents 
+		      mizar-ar4mizar-html-start1 ar4mizar-server ar4mizar-cgi 
+		      mizar-ar4mizar-html-start2 contents 
 		      "</textarea><INPUT TYPE=\"hidden\" NAME=\"Name\" VALUE=\"" aname 
 		      "\"> <INPUT TYPE=\"submit\" VALUE=\"Send\">"
-		      "<INPUT TYPE=\"hidden\" NAME=\"MMLVersion\" VALUE=\"4.145.1096\">"
-		      "<INPUT TYPE=\"hidden\" NAME=\"HTMLize\" VALUE=\"1\">"
+		      "<INPUT TYPE=\"hidden\" NAME=\"MMLVersion\" VALUE=\"" mmlversion
+		      "\"> <INPUT TYPE=\"hidden\" NAME=\"HTMLize\" VALUE=\"1\">"
 		      "<INPUT TYPE=\"hidden\" NAME=\"Parallelize\" VALUE=\"" 
 		      (number-to-string mizar-remote-parallelization) "\">" 
 		      (if (not vocfile) "" 
@@ -5972,7 +5992,7 @@ the previous is set to `browse-url-generic') also the variable
 (defun htmlize-protect-string (string)
   (mapconcat (lambda (char) (aref htmlize-basic-character-table char)) string ""))
 
-(defvar  mizar-ar4mizar-html-start "
+(defvar  mizar-ar4mizar-html-start1 "
 <html> <head> <title>Automated Reasoning for Mizar</title>
 <script language=\"JavaScript\">
 function myfunc () {
@@ -5982,11 +6002,14 @@ frm.submit();
 window.onload = myfunc;
 </script>
   </head> <body>Posting to the server ...<div style=\"display:none\">
-        <FORM ID=\"myform\" METHOD=\"POST\"  ACTION=\"http://mws.cs.ru.nl/~mptp/cgi-bin/MizAR1096.cgi\" enctype=\"multipart/form-data\">
+        <FORM ID=\"myform\" METHOD=\"POST\"  ACTION=\"" 
+)
+
+(defvar  mizar-ar4mizar-html-start2 
+"\" enctype=\"multipart/form-data\">
             <INPUT TYPE=\"hidden\" NAME=\"ProblemSource\" VALUE=\"Formula\">
 		<textarea name=\"Formula\" tabindex=\"3\"  rows=\"8\" cols=\"80\" id=\"FORMULAEProblemTextBox\">"
 )
-
 
 ;; Menu for the mizar editing buffers
 (defvar mizar-menu
@@ -6154,6 +6177,9 @@ window.onload = myfunc;
 	  ["Reserv. before point" mizar-make-reserve-summary t]
 	  "-"
 	  '("Remote solving"
+            ["Change remote server" (customize-variable 'ar4mizar-server) t]
+            ["by; triggers ATP completion"
+	     (customize-variable 'mizar-atp-completion) :style toggle :selected mizar-atp-completion :active t]
 	    ["Verify remotely" mizar-it-remote (mizar-buf-verifiable-p)]
 	    ["Verify and HTMLize remotely" (mizar-browse-remote t) t]
 	    ["Solve with ATP remotely" mizar-remote-solve-atp (mizar-buf-verifiable-p)]

@@ -131,7 +131,7 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Pred kind="V" nr="29">
+<Pred kind="V" nr="30">
 <Fraenkel>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -148,7 +148,7 @@
 </Pred>
 </Fraenkel>
 </Pred>
-<Pred kind="V" nr="29">
+<Pred kind="V" nr="30">
 <Func kind="F" nr="1"/>
 </Pred>
 <For>
@@ -343,7 +343,7 @@
 <Adjective nr="4"/>
 <Adjective nr="9"/>
 <Adjective nr="28"/>
-<Adjective nr="36"/>
+<Adjective nr="37"/>
 </Cluster>
 </Typ>
 <Pred kind="P" nr="1">
@@ -359,7 +359,7 @@
 <Adjective nr="4"/>
 <Adjective nr="9"/>
 <Adjective nr="28"/>
-<Adjective nr="36"/>
+<Adjective nr="37"/>
 </Cluster>
 </Typ>
 <Not>

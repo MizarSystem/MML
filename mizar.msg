@@ -95,6 +95,8 @@ Unexpected proof
 Invalid exemplification in a diffuse statement
 # 65
 "thesis" is only allowed inside a proof
+# 66
+"axiom" is only allowed in an axiomatic file
 # 68
 Nongeneralizable variable in the skeleton of a reasoning
 # 69
@@ -377,6 +379,8 @@ Local predicates are not allowed in library items
 Local functors are not allowed in library items
 # 222
 Local constants are not allowed in library items  
+# 223
+Adjective cluster expected
 # 228
 Unexpected "reconsider"
 # 229
@@ -401,6 +405,8 @@ Directives are not allowed in the text proper
 "means" or "equals" expected
 # 255
 It is not allowed for expandable modes
+# 256
+"of" expected
 # 271
 Redefined mode cannot be expandable
 # 272
@@ -533,6 +539,14 @@ Still not implemented
 "not" expected
 # 402
 A bare infinitive expected
+# 403
+"such" expected
+# 404
+"to" expected
+# 405
+"for" expected
+# 406
+"for" or "->" expected
 # 450
 Too many variables
 # 451

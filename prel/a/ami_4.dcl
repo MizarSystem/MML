@@ -10,9 +10,11 @@
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XREAL_0"/>
 <ArticleID name="INT_1"/>
+<ArticleID name="ENUMSET1"/>
 <ArticleID name="RELAT_1"/>
 <ArticleID name="FUNCT_1"/>
 <ArticleID name="MCART_1"/>
+<ArticleID name="DOMAIN_1"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
@@ -23,78 +25,51 @@
 <ArticleID name="CARD_3"/>
 <ArticleID name="RECDEF_2"/>
 <ArticleID name="SETFAM_1"/>
-<ArticleID name="FUNCOP_1"/>
-<ArticleID name="FUNCT_7"/>
 <ArticleID name="ORDINAL2"/>
 <ArticleID name="CLASSES2"/>
 <ArticleID name="ORDINAL4"/>
 <ArticleID name="AFINSQ_1"/>
 <ArticleID name="COMPOS_1"/>
+<ArticleID name="MEMSTR_0"/>
 <ArticleID name="EXTPRO_1"/>
+<ArticleID name="FUNCOP_1"/>
 <ArticleID name="AMI_3"/>
 <ArticleID name="AMI_4"/>
 </Signature>
 <FCluster aid="AMI_4" nr="1">
 <ArgTypes/>
-<Func kind="K" nr="311"/>
+<Func kind="K" nr="308"/>
 <Cluster>
 <Adjective nr="13"/>
 <Adjective nr="16">
 <Func kind="K" nr="32"/>
 </Adjective>
-<Adjective nr="16">
-<Func kind="U" nr="1">
-<Func kind="K" nr="297"/>
-</Func>
-</Adjective>
 <Adjective nr="17">
 <Func kind="U" nr="5">
-<Func kind="K" nr="20">
-<Func kind="K" nr="31"/>
-</Func>
-<Func kind="K" nr="297"/>
+<Func kind="K" nr="295"/>
 </Func>
 </Adjective>
 <Adjective nr="18"/>
-<Adjective nr="22">
-<Func kind="U" nr="7">
-<Func kind="K" nr="20">
-<Func kind="K" nr="31"/>
-</Func>
-<Func kind="K" nr="297"/>
-</Func>
-</Adjective>
 <Adjective nr="23"/>
 </Cluster>
 </FCluster>
 <FCluster aid="AMI_4" nr="2">
 <ArgTypes/>
-<Func kind="K" nr="311"/>
+<Func kind="K" nr="308"/>
 <Cluster>
 <Adjective nr="13"/>
 <Adjective nr="16">
 <Func kind="K" nr="32"/>
 </Adjective>
-<Adjective nr="16">
-<Func kind="U" nr="1">
-<Func kind="K" nr="297"/>
+<Adjective nr="17">
+<Func kind="U" nr="5">
+<Func kind="K" nr="295"/>
 </Func>
 </Adjective>
 <Adjective nr="18"/>
-<Adjective nr="22">
-<Func kind="U" nr="7">
-<Func kind="K" nr="20">
-<Func kind="K" nr="31"/>
-</Func>
-<Func kind="K" nr="297"/>
-</Func>
-</Adjective>
 <Adjective nr="23"/>
-<Adjective nr="67" value="false">
-<Func kind="K" nr="20">
-<Func kind="K" nr="31"/>
-</Func>
-<Func kind="K" nr="297"/>
+<Adjective nr="64" value="false">
+<Func kind="K" nr="295"/>
 </Adjective>
 </Cluster>
 </FCluster>

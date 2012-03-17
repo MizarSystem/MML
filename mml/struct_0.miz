@@ -16,15 +16,17 @@ environ
 
  vocabularies XBOOLE_0, SUBSET_1, SETFAM_1, FUNCT_1, FINSEQ_1, PBOOLE, RELAT_1,
       NAT_1, PARTFUN1, SUPINF_2, MESFUNC1, ZFMISC_1, CARD_1, FINSET_1,
-      XCMPLX_0, FUNCT_7, FUNCOP_1, VALUED_0, BINOP_1, STRUCT_0;
- notations TARSKI, XBOOLE_0, SUBSET_1, SETFAM_1, FINSET_1, CARD_1, RELAT_1,
-      RELSET_1, PARTFUN1, FUNCT_2, BINOP_1, NAT_1, FINSEQ_1, FUNCOP_1,
-      REALSET1, PBOOLE, FUNCT_7;
- constructors PARTFUN1, PBOOLE, REALSET1, FUNCT_7, SETFAM_1, RELSET_1;
- registrations XBOOLE_0, FUNCT_1, FUNCT_2, REALSET1, CARD_5, ZFMISC_1;
- requirements BOOLE, SUBSET;
- definitions SUBSET_1, TARSKI, XBOOLE_0, REALSET1;
- theorems TARSKI, REALSET1, XBOOLE_0, SUBSET_1, CARD_1, FUNCT_7, ZFMISC_1;
+      XCMPLX_0, FUNCT_7, FUNCOP_1, VALUED_0, BINOP_1, STRUCT_0, ORDINAL1;
+ notations TARSKI, XBOOLE_0, SUBSET_1, DOMAIN_1, SETFAM_1, FINSET_1, ORDINAL1,
+      CARD_1, RELAT_1, XCMPLX_0, RELSET_1, PARTFUN1, FUNCT_2, BINOP_1, NAT_1,
+      FINSEQ_1, FUNCOP_1, ZFMISC_1, PBOOLE, FUNCT_7;
+ constructors PARTFUN1, PBOOLE, ZFMISC_1, FUNCT_7, SETFAM_1, RELSET_1,
+      XCMPLX_0, DOMAIN_1;
+ registrations XBOOLE_0, FUNCT_1, FUNCT_2, ZFMISC_1, CARD_5, ORDINAL1,
+      XCMPLX_0, CARD_1, FINSET_1, RELSET_1;
+ requirements BOOLE, SUBSET, NUMERALS;
+ definitions SUBSET_1, TARSKI, XBOOLE_0, ZFMISC_1;
+ theorems TARSKI, ZFMISC_1, XBOOLE_0, SUBSET_1, CARD_1, FUNCT_7, XBOOLE_1;
 
 begin
 
@@ -40,7 +42,7 @@ definition
 end;
 
 registration
-  cluster strict empty 1-sorted;
+  cluster strict empty for 1-sorted;
   existence
   proof
     take T = 1-sorted(#{}#);
@@ -50,7 +52,7 @@ registration
 end;
 
 registration
-  cluster strict non empty 1-sorted;
+  cluster strict non empty for 1-sorted;
   existence
   proof
     take 1-sorted(#{{}}#);
@@ -132,7 +134,7 @@ end;
 
 registration
   let S be non empty 1-sorted;
-  cluster non empty Subset of S;
+  cluster non empty for Subset of S;
   existence
   proof
     take [#]S;
@@ -200,7 +202,7 @@ definition
 end;
 
 registration
-  cluster strict non empty ZeroStr;
+  cluster strict non empty for ZeroStr;
   existence
   proof
     set A = the non empty set, a = the Element of A;
@@ -248,14 +250,14 @@ definition
 end;
 
 registration
-  cluster empty -> trivial 1-sorted;
+  cluster empty -> trivial for 1-sorted;
   coherence
   proof
     let S be 1-sorted;
     assume the carrier of S is empty;
     hence the carrier of S is trivial;
   end;
-  cluster non trivial -> non empty 1-sorted;
+  cluster non trivial -> non empty for 1-sorted;
   coherence;
 end;
 
@@ -265,45 +267,29 @@ definition
   :Def10:
   for x,y being Element of S holds x = y;
   compatibility
-  proof
-    set I = the carrier of S;
+  proof set I = the carrier of S;
     per cases;
     suppose
 A1:   I is non empty;
       thus S is trivial implies for x,y being Element of I holds x = y
       proof
-        assume I is trivial;
-        then consider a being set such that
-A2:     I = {a} by A1,REALSET1:def 4;
-        let x, y be Element of I;
-        thus x = a by A2,TARSKI:def 1
-          .= y by A2,TARSKI:def 1;
+       assume
+Z:      I is trivial;
+       let x,y be Element of I;
+       thus thesis by Z,A1,ZFMISC_1:def 10;
       end;
-      consider a being set such that
-A3:   a in I by A1,XBOOLE_0:def 1;
       assume
 A4:   for x,y being Element of I holds x = y;
-      I = {a}
-      proof
-        hereby
-          let i be set;
-          assume i in I;
-          then a = i by A4,A3;
-          hence i in {a} by TARSKI:def 1;
-        end;
-        let i be set;
-        assume i in {a};
-        hence thesis by A3,TARSKI:def 1;
-      end;
-      hence I is empty or ex x being set st I = {x};
+      let x,y be set;
+      thus thesis by A4;
     end;
     suppose
 A5:   I is empty;
       for x,y being Element of I holds x = y
       proof
         let x, y be Element of I;
-        thus x = {} by A5,SUBSET_1:def 2
-          .= y by A5,SUBSET_1:def 2;
+        thus x = {} by A5,SUBSET_1:def 1
+          .= y by A5,SUBSET_1:def 1;
       end;
       hence thesis by A5;
     end;
@@ -311,7 +297,7 @@ A5:   I is empty;
 end;
 
 registration
-  cluster non degenerated -> non trivial ZeroOneStr;
+  cluster non degenerated -> non trivial for ZeroOneStr;
   coherence
   proof
     let L be ZeroOneStr;
@@ -324,23 +310,19 @@ A1: L is non degenerated;
 end;
 
 registration
-  cluster trivial non empty 1-sorted;
+  cluster trivial non empty strict for 1-sorted;
   existence
   proof
     take 1-sorted (#1#);
-    thus thesis by Def9,CARD_1:87;
+    thus thesis by Def9,CARD_1:49;
   end;
-  cluster non trivial non empty 1-sorted;
+  cluster non trivial strict for 1-sorted;
   existence
   proof
-    take Y = 1-sorted (#2#);
-    thus Y is non trivial
-    proof
-      reconsider x=0, y=1 as Element of Y by CARD_1:88,TARSKI:def 2;
-      take x,y;
-      thus thesis;
-    end;
-    thus thesis;
+   take Y = 1-sorted (#2#);
+   reconsider x=0, y=1 as Element of Y by CARD_1:50,TARSKI:def 2;
+   x <> y;
+   hence thesis by Def10;
   end;
 end;
 
@@ -366,7 +348,7 @@ definition
 end;
 
 registration
-  cluster strict finite non empty 1-sorted;
+  cluster strict finite non empty for 1-sorted;
   existence
   proof
     take 1-sorted(#{{}}#);
@@ -381,7 +363,7 @@ registration
 end;
 
 registration
-  cluster -> finite (empty 1-sorted);
+  cluster -> finite for empty 1-sorted;
   coherence
   proof
     let S be empty 1-sorted;
@@ -395,7 +377,7 @@ notation
 end;
 
 registration
-  cluster strict infinite 1-sorted;
+  cluster strict infinite for 1-sorted;
   existence
   proof
     take A = 1-sorted(#the infinite set#);
@@ -411,14 +393,14 @@ registration
 end;
 
 registration
-  cluster -> non empty (infinite 1-sorted);
+  cluster -> non empty for infinite 1-sorted;
   coherence;
 end;
 
 :: from YELLOW_13, 2007.04.12, A.T.
 
 registration
-  cluster trivial -> finite 1-sorted;
+  cluster trivial -> finite for 1-sorted;
   coherence
   proof
     let S be 1-sorted;
@@ -430,14 +412,13 @@ registration
 end;
 
 registration
-  cluster infinite -> non trivial 1-sorted;
+  cluster infinite -> non trivial for 1-sorted;
   coherence;
 end;
 
 definition
   let S be ZeroStr, x be Element of S;
-  attr x is zero means
-  :Def12:
+  attr x is zero means  :Def12:
   x = 0.S;
 end;
 
@@ -448,12 +429,12 @@ registration
 end;
 
 registration
-  cluster strict non degenerated ZeroOneStr;
+  cluster strict non degenerated for ZeroOneStr;
   existence
   proof
     take S = ZeroOneStr(#2,In(0,2),In(1,2)#);
-    0 in 2 by CARD_1:88,TARSKI:def 2;
-    then 1 in 2 & In(0,2) = 0 by CARD_1:88,FUNCT_7:def 1,TARSKI:def 2;
+    0 in 2 by CARD_1:50,TARSKI:def 2;
+    then 1 in 2 & In(0,2) = 0 by CARD_1:50,FUNCT_7:def 1,TARSKI:def 2;
     then 0.S <> 1.S by FUNCT_7:def 1;
     hence thesis by Def8;
   end;
@@ -499,7 +480,7 @@ definition
 end;
 
 registration
-  cluster strict empty void 2-sorted;
+  cluster strict empty void for 2-sorted;
   existence
   proof
     take S = 2-sorted(#{},{}#);
@@ -516,7 +497,7 @@ registration
 end;
 
 registration
-  cluster strict non empty non void 2-sorted;
+  cluster strict non empty non void for 2-sorted;
   existence
   proof
     take S = 2-sorted(#1,1#);
@@ -535,7 +516,7 @@ end;
 :: from BORSUK_1, 2008.07.07, A.T.
 
 definition
-  let X be 1-sorted,Y be non empty 1-sorted, y be Element of Y;
+  let X be 1-sorted, Y be non empty 1-sorted, y be Element of Y;
   func X --> y -> Function of X,Y equals
   (the carrier of X) --> y;
   coherence;
@@ -543,7 +524,7 @@ end;
 
 registration
   let S be ZeroStr;
-  cluster zero Element of S;
+  cluster zero for Element of S;
   existence
   proof
     take 0.S;
@@ -552,18 +533,18 @@ registration
 end;
 
 registration
-  cluster strict non trivial ZeroStr;
+  cluster strict non trivial for ZeroStr;
   existence
   proof
     take ZeroStr(#2,In(0,2)#);
-    0 in 2 & 1 in 2 by CARD_1:88,TARSKI:def 2;
+    0 in 2 & 1 in 2 by CARD_1:50,TARSKI:def 2;
     hence thesis by Def10;
   end;
 end;
 
 registration
   let S be non trivial ZeroStr;
-  cluster non zero Element of S;
+  cluster non zero for Element of S;
   existence
   proof
     consider x,y being Element of S such that
@@ -585,7 +566,7 @@ end;
 :: comp. NDIFF_1, 2008.08.29, A.T.
 
 definition
-  canceled;
+
   let X be set, S be ZeroStr, R be Relation of X, the carrier of S;
   attr R is non-zero means
   not 0.S in rng R;
@@ -626,11 +607,10 @@ proof
   thus u in NonZero S implies u is not zero
   proof
     assume u in NonZero S;
-    then u <> 0.S by ZFMISC_1:64;
+    then u <> 0.S by ZFMISC_1:56;
     hence thesis by Def12;
   end;
-                         :: usunac !!! ???
-  thus u is not zero implies u in NonZero S by ZFMISC_1:64;
+  thus u is not zero implies u in NonZero S by ZFMISC_1:56;
 end;
 
 definition
@@ -655,16 +635,39 @@ registration
   coherence
   proof
     ex u being Element of V st u <> 0.V by Def19;
-    hence thesis by ZFMISC_1:64;
+    hence thesis by ZFMISC_1:56;
   end;
 end;
 
 registration
+ cluster trivial non empty for ZeroStr;
+ existence
+  proof
+   take ZeroStr(#1,In(0,1)#);
+   thus thesis by CARD_1:49;
+  end;
+end;
+
+registration
+  let S be trivial non empty ZeroStr;
+  cluster NonZero S -> empty;
+  coherence
+   proof
+    assume NonZero S is not empty;
+     then consider x being Element of S such that
+W1:   x in NonZero S by SUBSET_1:4;
+     not x in {0.S} by W1,XBOOLE_0:def 5;
+     then x <> 0.S by TARSKI:def 1;
+    hence contradiction by Def19;
+   end;
+end;
+
+registration
   let S be non empty 1-sorted;
-  cluster non empty trivial Subset of S;
+  cluster non empty trivial for Subset of S;
   existence
   proof
-    {the Element of S} is Subset of S by ZFMISC_1:37;
+    {the Element of S} is Subset of S;
     hence thesis;
   end;
 end;
@@ -676,3 +679,100 @@ proof
   not 1.F in {0.F} by TARSKI:def 1;
   hence thesis by XBOOLE_0:def 5;
 end;
+
+:: 2011.03.01, A.T.
+
+registration
+ let S be finite 1-sorted;
+ cluster card S -> natural;
+ coherence;
+end;
+
+registration
+ let S be finite non empty 1-sorted;
+ cluster card S -> non zero for natural number;
+ coherence;
+end;
+
+registration
+  let T be non trivial 1-sorted;
+  cluster non trivial for Subset of T;
+  existence
+  proof
+    consider x, y being Element of T such that
+A1: x <> y by Def10;
+     reconsider A = {x,y} as Subset of T;
+    take A, x, y;
+    thus x in A by TARSKI:def 2;
+    thus y in A by TARSKI:def 2;
+    thus thesis by A1;
+  end;
+end;
+
+:: 2011.04.05, A.T.
+
+theorem :: COMPOS_1:56
+ for S being ZeroStr holds not 0.S in NonZero S
+ proof let S be ZeroStr;
+  assume 0.S in NonZero S;
+   then not 0.S in {0.S} by XBOOLE_0:def 5;
+  hence thesis by TARSKI:def 1;
+ end;
+
+theorem :: COMPOS_1:160
+ for S being non empty ZeroStr
+  holds the carrier of S = {0.S} \/ NonZero S by XBOOLE_1:45;
+
+:: 2011.05.02, A.T.
+
+definition let C be set, X be 1-sorted;
+ attr X is C-element means
+:Def20: the carrier of X is C-element;
+end;
+
+registration let C be Cardinal;
+ cluster C-element for 1-sorted;
+ existence
+  proof
+   take X = 1-sorted(#the C-element set#);
+   thus the carrier of X is C-element;
+  end;
+end;
+
+registration let C be Cardinal, X be C-element 1-sorted;
+ cluster the carrier of X -> C-element;
+ coherence by Def20;
+end;
+
+registration
+ cluster empty -> 0-element for 1-sorted;
+ coherence
+  proof let S be 1-sorted;
+   assume S is empty;
+   hence the carrier of S is 0-element;
+  end;
+ cluster 0-element -> empty for 1-sorted;
+ coherence
+  proof let S be 1-sorted;
+   assume S is 0-element;
+   hence the carrier of S is empty;
+  end;
+ cluster non empty trivial -> 1-element for 1-sorted;
+ coherence
+ proof let S be 1-sorted;
+   assume
+A: the carrier of S is non empty;
+   assume S is trivial;
+   hence the carrier of S is 1-element by A;
+ end;
+ cluster 1-element -> non empty trivial for 1-sorted;
+ coherence
+  proof let S be 1-sorted;
+   assume
+Z:  S is 1-element;
+   hence the carrier of S is non empty;
+    the carrier of S is trivial by Z;
+   hence thesis;
+  end;
+end;
+

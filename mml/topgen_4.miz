@@ -21,23 +21,23 @@ environ
       OPENLATT, EQREL_1, NAT_1, TOPGEN_4;
  notations TARSKI, XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, CARD_1, ORDINAL1,
       NUMBERS, CARD_3, MCART_1, WELLORD2, FINSET_1, SETFAM_1, DOMAIN_1, NAT_1,
-      STRUCT_0, CONNSP_2, REALSET1, OPENLATT, MEASURE1, PRE_TOPC, TOPS_1,
+      CONNSP_2, ZFMISC_1, STRUCT_0, OPENLATT, MEASURE1, PRE_TOPC, TOPS_1,
       TOPS_2, CONNSP_1, TDLAT_3, WAYBEL23, PROB_1, TOPMETR, CANTOR_1, ORDERS_4,
       TOPGEN_1, TOPGEN_3, PCOMPS_1;
- constructors REALSET1, MEASURE1, TOPS_1, CONNSP_1, TOPS_2, COMPTS_1, URYSOHN1,
+ constructors ZFMISC_1, MEASURE1, TOPS_1, CONNSP_1, TOPS_2, COMPTS_1, URYSOHN1,
       TDLAT_3, T_0TOPSP, TOPMETR, OPENLATT, WAYBEL23, TOPGEN_2, ORDERS_4,
       TOPGEN_1, TOPGEN_3, SUPINF_1, PCOMPS_1;
  registrations XBOOLE_0, SUBSET_1, RELSET_1, FINSET_1, NUMBERS, CARD_1,
       MEASURE1, STRUCT_0, PRE_TOPC, TOPS_1, TDLAT_3, TOPMETR, YELLOW13,
-      BORSUK_3, TOPREAL6, TOPGEN_2, TOPGEN_1, CARD_3;
+      BORSUK_3, TOPREAL6, TOPGEN_2, TOPGEN_1, CARD_3, ORDINAL1, COMPTS_1;
  requirements NUMERALS, BOOLE, SUBSET;
  definitions TARSKI, XBOOLE_0, CARD_3, MEASURE1, TOPS_2, SUBSET_1, STRUCT_0,
       OPENLATT;
  theorems TARSKI, SETFAM_1, FUNCT_1, FUNCT_2, ZFMISC_1, PRE_TOPC, TOPS_1,
       XBOOLE_1, SUBSET_1, YELLOW_8, WAYBEL23, TOPMETR, NUMBERS, CONNSP_1,
       CONNSP_2, CARD_4, CARD_1, PCOMPS_1, XBOOLE_0, TOPGEN_1, TOPS_2, MEASURE1,
-      WAYBEL12, MCART_1, REALSET1, BORSUK_4, TSP_1, TOPGEN_2, TOPGEN_3, PROB_1,
-      CARD_2, TOPS_3, NAT_1, CARD_3;
+      WAYBEL12, MCART_1, BORSUK_4, TSP_1, TOPGEN_2, TOPGEN_3, PROB_1, CARD_2,
+      TOPS_3, NAT_1, CARD_3;
  schemes FUNCT_1, TREES_2, BORSUK_2, SUBSET_1, XBOOLE_0;
 
 begin :: Preliminaries
@@ -46,7 +46,7 @@ definition
   let T be 1-sorted;
   func TotFam T -> Subset-Family of T equals
   bool the carrier of T;
-  coherence;
+  coherence by ZFMISC_1:def 1;
 end;
 
 theorem Th1:
@@ -54,13 +54,13 @@ theorem Th1:
   iff COMPLEMENT F is countable
 proof
   let T be set, F be Subset-Family of T;
-  F, COMPLEMENT F are_equipotent by YELLOW_8:4;
-  hence thesis by YELLOW_8:5;
+  F, COMPLEMENT F are_equipotent by YELLOW_8:3;
+  hence thesis by YELLOW_8:4;
 end;
 
 registration
   cluster RAT -> countable;
-  coherence by CARD_3:def 15,TOPGEN_3:17;
+  coherence by CARD_3:def 14,TOPGEN_3:17;
 end;
 
 Lm1: for X being set holds X is countable iff ex f being Function st dom f =
@@ -70,10 +70,10 @@ proof
   thus X is countable implies ex f be Function st dom f = RAT & X c= rng f
   proof
     assume card X c= omega;
-    hence thesis by CARD_1:28,TOPGEN_3:17;
+    hence thesis by CARD_1:12,TOPGEN_3:17;
   end;
   assume ex f be Function st dom f = RAT & X c= rng f;
-  hence card X c= omega by CARD_1:28,TOPGEN_3:17;
+  hence card X c= omega by CARD_1:12,TOPGEN_3:17;
 end;
 
 scheme FraenCoun11 { P[set] } :
@@ -91,7 +91,7 @@ A1: dom f = RAT & for x being set st x in RAT holds f.x = g(x) from
 A2: x = {n} and
     P[n];
     f.n = x by A1,A2;
-    hence thesis by A1,FUNCT_1:def 5;
+    hence thesis by A1,FUNCT_1:def 3;
   end;
   hence thesis by A1,Lm1;
 end;
@@ -119,7 +119,7 @@ A2: z in Cl (A \ {z});
 end;
 
 registration
-  cluster finite -> second-countable TopStruct;
+  cluster finite -> second-countable for TopStruct;
   coherence
   proof
     let T be TopStruct;
@@ -136,15 +136,15 @@ registration
   coherence
   proof
     assume REAL is countable;
-    then card REAL c= omega by CARD_3:def 15;
+    then card REAL c= omega by CARD_3:def 14;
     hence thesis by TOPGEN_3:30,def 4;
   end;
 end;
 
 registration
-  cluster non countable -> non finite set;
+  cluster non countable -> non finite for set;
   coherence;
-  cluster non finite -> non trivial set;
+  cluster non finite -> non trivial for set;
   coherence
   proof
     let S be set;
@@ -152,7 +152,7 @@ registration
 A1: S is non finite;
     assume
 A2: S is trivial;
-    per cases by A2,REALSET1:def 4;
+    per cases by A2,ZFMISC_1:131;
     suppose
       S is empty;
       then reconsider T = S as empty set;
@@ -164,7 +164,7 @@ A2: S is trivial;
       hence thesis by A1;
     end;
   end;
-  cluster non countable non empty set;
+  cluster non countable non empty for set;
   existence
   proof
     take REAL;
@@ -182,13 +182,13 @@ proof
   hereby
     assume A is closed;
     then
-A1: A = Cl A by PRE_TOPC:52;
-    Cl A = A \/ Der A by TOPGEN_1:31;
+A1: A = Cl A by PRE_TOPC:22;
+    Cl A = A \/ Der A by TOPGEN_1:29;
     hence Der A c= A by A1,XBOOLE_1:7;
   end;
   assume
 A2: Der A c= A;
-  Cl A = A \/ Der A by TOPGEN_1:31
+  Cl A = A \/ Der A by TOPGEN_1:29
     .= A by A2,XBOOLE_1:12;
   hence thesis;
 end;
@@ -204,7 +204,7 @@ A1: V is open and
 A2: V <> {};
   consider x being set such that
 A3: x in V by A2,XBOOLE_0:def 1;
-  V = union { G where G is Subset of T : G in B & G c= V } by A1,YELLOW_8:18;
+  V = union { G where G is Subset of T : G in B & G c= V } by A1,YELLOW_8:9;
   then consider Y being set such that
 A4: x in Y and
 A5: Y in { G where G is Subset of T : G in B & G c= V } by A3,TARSKI:def 4;
@@ -220,10 +220,10 @@ theorem Th5:
 proof
   defpred P[set] means $1 <> {};
   deffunc F(set) = choose $1;
-  set B =the  Basis of T;
+  set B = the Basis of T;
   consider B1 being Basis of T such that
   B1 c= B and
-A1: card B1 = weight T by TOPGEN_2:20;
+A1: card B1 = weight T by TOPGEN_2:18;
   set A = { F(BB) where BB is Element of bool the carrier of T : BB in B1 & P[
   BB] };
   A c= the carrier of T
@@ -249,7 +249,7 @@ A6: W <> {} by Th4;
     choose W in A & choose W in W by A4,A6;
     hence thesis by A5,XBOOLE_0:3;
   end;
-  then A is dense by TOPS_1:80;
+  then A is dense by TOPS_1:45;
   then
 A7: density T c= card A by TOPGEN_1:def 12;
   card { F(w) where w is Element of bool the carrier of T : w in B1 & P[w
@@ -266,12 +266,12 @@ A1: A is dense and
 A2: density T = card A by TOPGEN_1:def 12;
     assume T is separable;
     then density T c= omega by TOPGEN_1:def 13;
-    then A is countable by A2,CARD_3:def 15;
+    then A is countable by A2,CARD_3:def 14;
     hence ex A being Subset of T st A is dense countable by A1;
   end;
   given A being Subset of T such that
 A3: A is dense countable;
-  density T c= card A & card A c= omega by A3,CARD_3:def 15,TOPGEN_1:def 12;
+  density T c= card A & card A c= omega by A3,CARD_3:def 14,TOPGEN_1:def 12;
   then density T c= omega by XBOOLE_1:1;
   hence thesis by TOPGEN_1:def 13;
 end;
@@ -290,7 +290,7 @@ A1: weight T c= omega by WAYBEL23:def 6;
 end;
 
 registration
-  cluster second-countable -> separable (non empty TopSpace);
+  cluster second-countable -> separable for non empty TopSpace;
   coherence by Th7;
 end;
 
@@ -302,12 +302,12 @@ theorem :: Exercise 1.3.A.
 proof
   let T be non empty TopSpace, A, B be Subset of T;
 A1: Fr A \/ Fr B = Fr (A \/ B) \/ Fr (A /\ B) \/ (Fr A /\ Fr B) & Fr {}T =
-  {} by TOPS_1:70;
+  {} by TOPS_1:36;
   assume
 A2: A, B are_separated;
   then
 A3: A misses Cl B by CONNSP_1:def 1;
-  A misses B by A2,CONNSP_1:2;
+  A misses B by A2,CONNSP_1:1;
   then
 A4: A /\ B = {} by XBOOLE_0:def 7;
 A5: Cl A misses B by A2,CONNSP_1:def 1;
@@ -335,18 +335,18 @@ A9:   x in A` by A7,XBOOLE_0:def 5;
 A10:  x in Cl A by XBOOLE_0:def 4;
       then x in Cl A \/ Cl B by XBOOLE_0:def 3;
       then
-A11:  x in Cl (A \/ B) by PRE_TOPC:50;
+A11:  x in Cl (A \/ B) by PRE_TOPC:20;
       not x in B by A5,A10,XBOOLE_0:3;
       then x in B` by A7,XBOOLE_0:def 5;
       then x in A` /\ B` by A9,XBOOLE_0:def 4;
       then
 A12:  x in (A \/ B)` by XBOOLE_1:53;
-      (A \/ B)` c= Cl (A \/ B)` by PRE_TOPC:48;
+      (A \/ B)` c= Cl (A \/ B)` by PRE_TOPC:18;
       then x in Cl (A \/ B) /\ Cl (A \/ B)` by A11,A12,XBOOLE_0:def 4;
       hence thesis by TOPS_1:def 2;
     end;
   end;
-  Fr (A \/ B) c= Fr A \/ Fr B by TOPS_1:67;
+  Fr (A \/ B) c= Fr A \/ Fr B by TOPS_1:33;
   hence thesis by A6,XBOOLE_0:def 10;
 end;
 
@@ -357,7 +357,7 @@ theorem :: Ex. 1.3.B. a)
 proof
   assume F is locally_finite;
   then
-A1: Cl union F = union clf F by PCOMPS_1:23;
+A1: Cl union F = union clf F by PCOMPS_1:20;
   let x be set;
   assume x in Fr union F;
   then
@@ -370,10 +370,10 @@ A4: x in A and
 A5: A in clf F by A1,TARSKI:def 4;
   consider B being Subset of T such that
 A6: A = Cl B and
-A7: B in F by A5,PCOMPS_1:def 3;
-  B c= union F by A7,ZFMISC_1:92;
-  then (union F)` c= B` by SUBSET_1:31;
-  then Cl (union F)` c= Cl B` by PRE_TOPC:49;
+A7: B in F by A5,PCOMPS_1:def 2;
+  B c= union F by A7,ZFMISC_1:74;
+  then (union F)` c= B` by SUBSET_1:12;
+  then Cl (union F)` c= Cl B` by PRE_TOPC:19;
   then x in Cl B /\ Cl B` by A4,A6,A3,XBOOLE_0:def 4;
   then
 A8: x in Fr B by TOPS_1:def 2;
@@ -395,7 +395,7 @@ TOPGEN_1:def 12;
     hence card [#]T c= omega by A1,TOPS_3:19;
   end;
   assume card [#]T c= omega;
-  then T is countable by TOPGEN_1:3;
+  then T is countable by TOPGEN_1:2;
   hence thesis;
 end;
 
@@ -405,7 +405,7 @@ theorem
 proof
   let T be discrete non empty TopSpace;
   T is separable iff card [#]T c= omega by Th10;
-  hence thesis by TOPGEN_1:3;
+  hence thesis by TOPGEN_1:2;
 end;
 
 begin :: Families of Subsets Closed for Countable Unions and Complement
@@ -443,17 +443,17 @@ A2: G c= F;
   per cases;
   suppose
     G is empty;
-    hence thesis by A1,PROB_1:10,ZFMISC_1:2;
+    hence thesis by A1,PROB_1:4,ZFMISC_1:2;
   end;
   suppose
     G is non empty;
-    hence thesis by A1,A2,MEASURE1:def 9;
+    hence thesis by A1,A2,MEASURE1:def 5;
   end;
 end;
 
 registration
   let T be set;
-  cluster -> closed_for_countable_unions SigmaField of T;
+  cluster -> closed_for_countable_unions for SigmaField of T;
   coherence by Lm2;
 end;
 
@@ -470,7 +470,7 @@ end;
 
 registration
   let T be set;
-  cluster closed_for_countable_unions -> non empty Subset-Family of T;
+  cluster closed_for_countable_unions -> non empty for Subset-Family of T;
   coherence by Th12;
 end;
 
@@ -547,13 +547,13 @@ A1: F is compl-closed;
 A2: x in F;
     then reconsider x9 = x as Subset of T;
     x9` in F by A1,A2,PROB_1:def 1;
-    hence thesis by SETFAM_1:def 8;
+    hence thesis by SETFAM_1:def 7;
   end;
   let x be set;
   assume
 A3: x in COMPLEMENT F;
   then reconsider x9 = x as Subset of T;
-  x9` in F by A3,SETFAM_1:def 8;
+  x9` in F by A3,SETFAM_1:def 7;
   then x9`` in F by A1,PROB_1:def 1;
   hence thesis;
 end;
@@ -569,7 +569,7 @@ A1: F c= G & G is compl-closed;
   assume
 A2: x in COMPLEMENT F;
   then reconsider x9 = x as Subset of T;
-  x9` in F by A2,SETFAM_1:def 8;
+  x9` in F by A2,SETFAM_1:def 7;
   then x9`` in G by A1,PROB_1:def 1;
   hence thesis;
 end;
@@ -591,7 +591,7 @@ A2:   G c= F;
       per cases;
       suppose
         G = {};
-        hence thesis by A1,A2,Def5,SETFAM_1:2,ZFMISC_1:2;
+        hence thesis by A1,A2,Def5,SETFAM_1:1,ZFMISC_1:2;
       end;
       suppose
         G <> {};
@@ -599,7 +599,7 @@ A2:   G c= F;
         COMPLEMENT G9 c= F & COMPLEMENT G9 is countable by A1,A2,Th1,Th16;
         then
 A3:     meet COMPLEMENT G9 in F by A1,Def5;
-        (meet COMPLEMENT G9)` = (union G9)`` by TOPS_2:11
+        (meet COMPLEMENT G9)` = (union G9)`` by TOPS_2:6
           .= union G9;
         hence thesis by A1,A3,PROB_1:def 1;
       end;
@@ -616,7 +616,7 @@ A5: G c= F;
     per cases;
     suppose
       G = {};
-      hence thesis by A4,A5,Def4,SETFAM_1:2,ZFMISC_1:2;
+      hence thesis by A4,A5,Def4,SETFAM_1:1,ZFMISC_1:2;
     end;
     suppose
       G <> {};
@@ -624,7 +624,7 @@ A5: G c= F;
       COMPLEMENT G9 c= F & COMPLEMENT G9 is countable by A4,A5,Th1,Th16;
       then
 A6:   union COMPLEMENT G9 in F by A4,Def4;
-      (union COMPLEMENT G9)` = (meet G9)`` by TOPS_2:12
+      (union COMPLEMENT G9)` = (meet G9)`` by TOPS_2:7
         .= meet G9;
       hence thesis by A4,A6,PROB_1:def 1;
     end;
@@ -635,10 +635,10 @@ end;
 registration
   let T;
   cluster all-open-containing compl-closed closed_for_countable_unions ->
-    all-closed-containing closed_for_countable_meets Subset-Family of T;
+    all-closed-containing closed_for_countable_meets for Subset-Family of T;
   coherence by Th14,Th17;
   cluster all-closed-containing compl-closed closed_for_countable_meets ->
-    all-open-containing closed_for_countable_unions Subset-Family of T;
+    all-open-containing closed_for_countable_unions for Subset-Family of T;
   coherence by Th14,Th17;
 end;
 
@@ -653,7 +653,7 @@ end;
 
 registration
   let T be TopSpace;
-  cluster empty -> open closed Subset-Family of T;
+  cluster empty -> open closed for Subset-Family of T;
   coherence
   proof
     let F be Subset-Family of T;
@@ -666,7 +666,7 @@ end;
 
 registration
   let T be TopSpace;
-  cluster countable open closed Subset-Family of T;
+  cluster countable open closed for Subset-Family of T;
   existence
   proof
     {}bool the carrier of T is open;
@@ -683,7 +683,7 @@ proof
 end;
 
 registration
-  cluster empty -> countable set;
+  cluster empty -> countable for set;
   coherence;
 end;
 
@@ -865,7 +865,7 @@ A6: a = X /\ Y by SETFAM_1:def 5;
     reconsider X,Y as Subset of T by A5;
     set XY = [X,Y];
 A7: XY`1 = X & XY`2 = Y by MCART_1:7;
-    XY in XX by A5,ZFMISC_1:106;
+    XY in XX by A5,ZFMISC_1:87;
     hence thesis by A6,A7;
   end;
   card { F(w) where w is Element of A : w in XX } c= card XX from TREES_2:
@@ -904,7 +904,7 @@ A5: a = X \/ Y by SETFAM_1:def 4;
     reconsider X,Y as Subset of T by A4;
     set XY = [X,Y];
 A6: XY`1 = X & XY`2 = Y by MCART_1:7;
-    XY in XX by A4,ZFMISC_1:106;
+    XY in XX by A4,ZFMISC_1:87;
     hence thesis by A5,A6;
   end;
   card { F(w) where w is Element of A : w in XX } c= card XX from TREES_2:
@@ -1064,7 +1064,7 @@ proof
   assume
 A1: F <> {} & G <> {};
   thus meet UNION(F,G) c= meet F \/ meet G by Th32;
-  thus thesis by A1,SETFAM_1:40;
+  thus thesis by A1,SETFAM_1:29;
 end;
 
 theorem Th34:
@@ -1144,7 +1144,7 @@ end;
 
 registration
   let T;
-  cluster empty -> F_sigma G_delta Subset of T;
+  cluster empty -> F_sigma G_delta for Subset of T;
   coherence
    proof let S be Subset of T;
     assume S is empty;
@@ -1157,18 +1157,16 @@ proof
   hence thesis by Def6,A1;
 end;
   reconsider F = { {}T } as Subset-Family of T;
-  F is open & {}T = meet F by Th19,SETFAM_1:11;
+  F is open & {}T = meet F by Th19,SETFAM_1:10;
   hence thesis by Def7,A1;
    end;
 end;
-
-canceled 2;
 
 theorem Th37:
   [#]T is F_sigma
 proof
   reconsider F = { [#]T } as Subset-Family of T;
-  F is closed & [#]T = union F by Th20,ZFMISC_1:31;
+  F is closed & [#]T = union F by Th20,ZFMISC_1:25;
   hence thesis by Def6;
 end;
 
@@ -1176,7 +1174,7 @@ theorem Th38:
   [#]T is G_delta
 proof
   reconsider F = { [#]T } as Subset-Family of T;
-  F is open & [#]T = meet F by Th19,SETFAM_1:11;
+  F is open & [#]T = meet F by Th19,SETFAM_1:10;
   hence thesis by Def7;
 end;
 
@@ -1196,8 +1194,8 @@ A1: A = union F by Def6;
   suppose
 A2: F <> {};
     set G = COMPLEMENT F;
-A3: G is open by TOPS_2:16;
-    (union F)` = meet COMPLEMENT F by A2,TOPS_2:11;
+A3: G is open by TOPS_2:9;
+    (union F)` = meet COMPLEMENT F by A2,TOPS_2:6;
     hence thesis by A1,A3,Def7;
   end;
   suppose
@@ -1217,13 +1215,13 @@ A1: A = meet F by Def7;
   suppose
 A2: F <> {};
     set G = COMPLEMENT F;
-A3: G is closed by TOPS_2:17;
-    (meet F)` = union COMPLEMENT F by A2,TOPS_2:12;
+A3: G is closed by TOPS_2:10;
+    (meet F)` = union COMPLEMENT F by A2,TOPS_2:7;
     hence thesis by A1,A3,Def6;
   end;
   suppose
     F = {};
-    then A` = [#]T by A1,SETFAM_1:2;
+    then A` = [#]T by A1,SETFAM_1:1;
     hence thesis;
   end;
 end;
@@ -1240,10 +1238,10 @@ A3: A = union F by A1,Def6;
 A4: B = union G by A2,Def6;
   reconsider H = INTERSECTION (F,G) as Subset-Family of T;
 A5: H is closed by Th21;
-  card H c= card [:F,G:] & [:F,G:] is countable by Th25,CARD_4:55;
+  card H c= card [:F,G:] & [:F,G:] is countable by Th25,CARD_4:7;
   then
-A6: H is countable by WAYBEL12:2;
-  A /\ B = union H by A3,A4,SETFAM_1:39;
+A6: H is countable by WAYBEL12:1;
+  A /\ B = union H by A3,A4,SETFAM_1:28;
   hence thesis by A5,A6,Def6;
 end;
 
@@ -1262,9 +1260,9 @@ A4: B = union G by A2,Def6;
   suppose
 A5: A <> {} & B <> {};
 A6: H is closed by Th22;
-    card H c= card [:F,G:] & [:F,G:] is countable by Th26,CARD_4:55;
+    card H c= card [:F,G:] & [:F,G:] is countable by Th26,CARD_4:7;
     then
-A7: H is countable by WAYBEL12:2;
+A7: H is countable by WAYBEL12:1;
     A \/ B = union H by A3,A4,A5,Th28,ZFMISC_1:2;
     hence thesis by A6,A7,Def6;
   end;
@@ -1293,12 +1291,12 @@ A4: B = meet G by A2,Def7;
   suppose
 A5: F <> {} & G <> {};
 A6: meet UNION(F,G) c= meet F \/ meet G by Th32;
-    meet F \/ meet G c= meet UNION(F,G) by A5,SETFAM_1:40;
+    meet F \/ meet G c= meet UNION(F,G) by A5,SETFAM_1:29;
     then
 A7: A \/ B = meet H by A3,A4,A6,XBOOLE_0:def 10;
-    card H c= card [:F,G:] & [:F,G:] is countable by Th26,CARD_4:55;
+    card H c= card [:F,G:] & [:F,G:] is countable by Th26,CARD_4:7;
     then
-A8: H is countable by WAYBEL12:2;
+A8: H is countable by WAYBEL12:1;
     H is open by Th24;
     hence thesis by A7,A8,Def7;
   end;
@@ -1324,9 +1322,9 @@ A4: B = meet G by A2,Def7;
   suppose
 A5: F <> {} & G <> {};
 A6: H is open by Th23;
-    card H c= card [:F,G:] & [:F,G:] is countable by Th25,CARD_4:55;
+    card H c= card [:F,G:] & [:F,G:] is countable by Th25,CARD_4:7;
     then
-A7: H is countable by WAYBEL12:2;
+A7: H is countable by WAYBEL12:1;
     A /\ B = meet H by A3,A4,A5,Th34;
     hence thesis by A6,A7,Def7;
   end;
@@ -1345,7 +1343,7 @@ proof
   assume A is closed;
   then reconsider F = {A} as closed countable Subset-Family of T by Th20;
   take F;
-  thus thesis by ZFMISC_1:31;
+  thus thesis by ZFMISC_1:25;
 end;
 
 theorem
@@ -1355,7 +1353,7 @@ proof
   assume A is open;
   then reconsider F = {A} as open countable Subset-Family of T by Th19;
   take F;
-  thus thesis by SETFAM_1:11;
+  thus thesis by SETFAM_1:10;
 end;
 
 theorem
@@ -1368,13 +1366,13 @@ proof
   from XBOOLE_0:sch 1;
   then consider F being set such that
 A1: for x being set holds x in F iff x in bool RAT & P[x];
-A2: bool RAT c= bool REAL by NUMBERS:12,ZFMISC_1:79;
+A2: bool RAT c= bool REAL by NUMBERS:12,ZFMISC_1:67;
   F c= bool the carrier of R^1
   proof
     let x be set;
     assume x in F;
     then x in bool RAT by A1;
-    hence thesis by A2,TOPMETR:24;
+    hence thesis by A2,TOPMETR:17;
   end;
   then reconsider F as Subset-Family of R^1;
   assume
@@ -1444,7 +1442,7 @@ A1: T is T_1;
   for A being Subset of T holds Der A is closed
   proof
     let A be Subset of T;
-    Der A = Cl Der A by A1,TOPGEN_1:35;
+    Der A = Cl Der A by A1,TOPGEN_1:33;
     hence thesis;
   end;
   hence thesis by Def8;
@@ -1468,20 +1466,20 @@ A4: y in Cl {x};
       set X = (Der {x})`;
       not x in Der {x}
       proof
-        set U =the  a_neighborhood of x;
+        set U = the a_neighborhood of x;
         consider V being Subset of T such that
 A5:     V is open and
         V c= U and
-A6:     x in V by CONNSP_2:8;
+A6:     x in V by CONNSP_2:6;
         assume x in Der {x};
         then consider z being Point of T such that
 A7:     z in {x} /\ V and
-A8:     x <> z by A5,A6,TOPGEN_1:19;
+A8:     x <> z by A5,A6,TOPGEN_1:17;
         z in {x} by A7,XBOOLE_0:def 4;
         hence thesis by A8,TARSKI:def 1;
       end;
       then
-A9:   x in (Der {x})` by SUBSET_1:50;
+A9:   x in (Der {x})` by SUBSET_1:29;
       assume
 A10:  for G being Subset of T st G is open holds y in G implies {x} meets G;
       for U being open Subset of T st y in U ex r being Point of T st r in
@@ -1491,25 +1489,25 @@ A10:  for G being Subset of T st G is open holds y in G implies {x} meets G;
         assume y in U;
         then {x} meets U by A10;
         then
-A11:    x in U by ZFMISC_1:56;
+A11:    x in U by ZFMISC_1:50;
         x in {x} by TARSKI:def 1;
         then x in {x} /\ U by A11,XBOOLE_0:def 4;
         hence thesis by A2;
       end;
-      then y in Der {x} by TOPGEN_1:19;
+      then y in Der {x} by TOPGEN_1:17;
       then
 A12:  not y in X by XBOOLE_0:def 5;
       Der {x} is closed by A1,Def8;
-      then {y} meets X by A3,A9,PRE_TOPC:54;
-      hence thesis by A12,ZFMISC_1:56;
+      then {y} meets X by A3,A9,PRE_TOPC:24;
+      hence thesis by A12,ZFMISC_1:50;
     end;
-    hence contradiction by A4,PRE_TOPC:54;
+    hence contradiction by A4,PRE_TOPC:24;
   end;
   hence thesis by TSP_1:def 6;
 end;
 
 registration
-  cluster T_1/2 -> T_0 TopSpace;
+  cluster T_1/2 -> T_0 for TopSpace;
   coherence
   proof
     let T be TopSpace;
@@ -1524,11 +1522,11 @@ registration
     suppose
       T is empty;
       then reconsider T9 = T as empty TopSpace;
-      T9 is T_0 by TSP_1:def 4;
+      T9 is T_0;
       hence thesis;
     end;
   end;
-  cluster T_1 -> T_1/2 TopSpace;
+  cluster T_1 -> T_1/2 for TopSpace;
   coherence by Th48;
 end;
 
@@ -1544,8 +1542,6 @@ definition
 end;
 
 reserve x for Point of T;
-
-canceled;
 
 theorem Th51:
   x is_a_condensation_point_of A & A c= B implies x
@@ -1597,16 +1593,16 @@ A1: p is_a_condensation_point_of A;
   proof
     let U be open Subset of T;
     assume p in U;
-    then reconsider N = U as a_neighborhood of p by CONNSP_2:5;
+    then reconsider N = U as a_neighborhood of p by CONNSP_2:3;
     reconsider NU = N /\ A as non empty non countable set by A1,Def9;
     consider q being Element of NU such that
-A2: p <> q by BORSUK_4:3;
+A2: p <> q by BORSUK_4:2;
     q in NU;
     then reconsider q as Point of T;
     q in A & q in U by XBOOLE_0:def 4;
     hence thesis by A2;
   end;
-  hence thesis by TOPGEN_1:23;
+  hence thesis by TOPGEN_1:21;
 end;
 
 theorem
@@ -1618,13 +1614,13 @@ A1: x in A^0;
   then reconsider p = x as Point of T;
   p is_a_condensation_point_of A by A1,Def10;
   then p is_an_accumulation_point_of A by Th52;
-  hence thesis by TOPGEN_1:18;
+  hence thesis by TOPGEN_1:16;
 end;
 
 theorem
   A^0 = Cl (A^0)
 proof
-  thus A^0 c= Cl (A^0) by PRE_TOPC:48;
+  thus A^0 c= Cl (A^0) by PRE_TOPC:18;
   let x be set;
   assume
 A1: x in Cl (A^0);
@@ -1635,13 +1631,13 @@ A1: x in Cl (A^0);
     consider N1 being Subset of T such that
 A2: N1 is open and
 A3: N1 c= N and
-A4: p in N1 by CONNSP_2:8;
-    A^0 meets N1 by A1,A2,A4,PRE_TOPC:54;
+A4: p in N1 by CONNSP_2:6;
+    A^0 meets N1 by A1,A2,A4,PRE_TOPC:24;
     then consider y being set such that
 A5: y in A^0 and
 A6: y in N1 by XBOOLE_0:3;
     reconsider y9 = y as Point of T by A5;
-    reconsider N1 as a_neighborhood of y9 by A2,A6,CONNSP_2:8;
+    reconsider N1 as a_neighborhood of y9 by A2,A6,CONNSP_2:6;
 A7: N1 /\ A c= N /\ A by A3,XBOOLE_1:26;
     y9 is_a_condensation_point_of A by A5,Def10;
     hence thesis by A7,Def9;
@@ -1677,9 +1673,9 @@ A3: not x is_a_condensation_point_of B;
 A4: N1 /\ A is countable by A2,Def9;
   consider N2 being a_neighborhood of x such that
 A5: N2 /\ B is countable by A3,Def9;
-  reconsider N3 = N1 /\ N2 as a_neighborhood of x by CONNSP_2:4;
+  reconsider N3 = N1 /\ N2 as a_neighborhood of x by CONNSP_2:2;
   N3 /\ A c= N1 /\ A & N3 /\ B c= N2 /\ B by XBOOLE_1:17,26;
-  then (N3 /\ A) \/ (N3 /\ B) is countable by A4,A5,CARD_3:128;
+  then (N3 /\ A) \/ (N3 /\ B) is countable by A4,A5,CARD_2:85;
   then N3 /\ (A \/ B) is countable by XBOOLE_1:23;
   hence thesis by A1,Def9;
 end;
@@ -1711,9 +1707,9 @@ proof
 A1: A is countable;
   given x being Point of T such that
 A2: x is_a_condensation_point_of A;
-  set N =the  a_neighborhood of x;
+  set N = the a_neighborhood of x;
   N /\ A is not countable by A2,Def9;
-  hence thesis by A1,CARD_3:129;
+  hence thesis by A1,CARD_3:94;
 end;
 
 theorem Th59:
@@ -1739,22 +1735,22 @@ end;
 theorem
   T is second-countable implies ex B being Basis of T st B is countable
 proof
-  set B =the  Basis of T;
+  set B = the Basis of T;
   consider B1 being Basis of T such that
   B1 c= B and
-A1: card B1 = weight T by TOPGEN_2:20;
+A1: card B1 = weight T by TOPGEN_2:18;
   assume T is second-countable;
   then card B1 c= omega by A1,WAYBEL23:def 6;
-  then card card B1 c= card omega by CARD_1:27;
-  then B1 is countable by WAYBEL12:2;
+  then card card B1 c= card omega by CARD_1:11;
+  then B1 is countable by WAYBEL12:1;
   hence thesis;
 end;
 
 registration
-  cluster second-countable non empty TopSpace;
+  cluster second-countable non empty for TopSpace;
   existence
   proof
-    set T =the  finite non empty TopSpace;
+    set T = the finite non empty TopSpace;
     take T;
     thus thesis;
   end;
@@ -1788,14 +1784,12 @@ theorem
   rng A is countable non empty Subset-Family of T
 proof
   let T be set, A be SetSequence of T;
-  A.1 in rng A by FUNCT_2:6;
+  A.1 in rng A by FUNCT_2:4;
   then reconsider AA = rng A as non empty Subset-Family of T;
-  card rng A c= card dom A & dom A is countable by CARD_2:80,FUNCT_2:def 1;
-  then AA is countable by WAYBEL12:2;
+  card rng A c= card dom A & dom A is countable by CARD_2:61,FUNCT_2:def 1;
+  then AA is countable by WAYBEL12:1;
   hence thesis;
 end;
-
-canceled;
 
 theorem Th63:
   for F, G being Subset-Family of T st F is all-open-containing &
@@ -1841,7 +1835,7 @@ end;
 registration
   let T be non empty TopSpace;
   cluster compl-closed closed_for_countable_unions closed_for_countable_meets
-    all-closed-containing all-open-containing Subset-Family of T;
+    all-closed-containing all-open-containing for Subset-Family of T;
   existence
   proof
     take TotFam T;
@@ -1854,7 +1848,7 @@ theorem Th65:
   closed_for_countable_unions
 proof
   set E = sigma TotFam T;
-  TotFam T c= sigma TotFam T by PROB_1:def 14;
+  TotFam T c= sigma TotFam T by PROB_1:def 9;
   hence E is all-open-containing by Th63;
   thus E is compl-closed;
   thus thesis;
@@ -1870,7 +1864,7 @@ end;
 registration
   let T be non empty 1-sorted;
   cluster sigma-additive compl-closed closed_for_countable_unions non empty
-    Subset-Family of T;
+    for Subset-Family of T;
   existence
   proof
     take sigma TotFam T;
@@ -1880,7 +1874,7 @@ end;
 
 registration
   let T be non empty TopSpace;
-  cluster -> closed_for_countable_unions SigmaField of T;
+  cluster -> closed_for_countable_unions for SigmaField of T;
   coherence;
 end;
 
@@ -1890,7 +1884,7 @@ theorem
 
 registration
   let T be non empty TopSpace;
-  cluster all-open-containing SigmaField of T;
+  cluster all-open-containing for SigmaField of T;
   existence
   proof
     take sigma TotFam T;
@@ -1908,13 +1902,13 @@ registration
     proof
       let A be Subset of T;
       assume A in E;
-      hence thesis by PRE_TOPC:def 5;
+      hence thesis by PRE_TOPC:def 2;
     end;
     E is all-open-containing
     proof
       let A be Subset of T;
       assume A is open;
-      hence thesis by PRE_TOPC:def 5;
+      hence thesis by PRE_TOPC:def 2;
     end;
     hence thesis;
   end;
@@ -1975,13 +1969,13 @@ A9:   S is all-open-containing compl-closed
       closed_for_countable_unions Subset-Family of T;
       now
         let n be Nat;
-        BSeq.n in rng BSeq by NAT_1:52;
+        BSeq.n in rng BSeq by NAT_1:51;
         hence BSeq.n in Z by A6,A7,SETFAM_1:def 1;
       end;
       then
-A10:  rng BSeq c= Z by NAT_1:53;
+A10:  rng BSeq c= Z by NAT_1:52;
       S is SigmaField of T by A9,Th13;
-      hence Intersection BSeq in Z by A8,A10,PROB_1:def 8;
+      hence Intersection BSeq in Z by A8,A10,PROB_1:def 6;
     end;
     hence thesis by A2,SETFAM_1:def 1;
   end;
@@ -1992,10 +1986,10 @@ A10:  rng BSeq c= Z by NAT_1:53;
 all-open-containing compl-closed closed_for_countable_unions Subset-Family of T
     ;
     then Z is Field_Subset of the carrier of T by Th13;
-    hence {} in Z by PROB_1:10;
+    hence {} in Z by PROB_1:4;
   end;
   then {} in Y by A2,SETFAM_1:def 1;
-  then reconsider Y as SigmaField of T by A2,A5,A3,PROB_1:32,SETFAM_1:4;
+  then reconsider Y as SigmaField of T by A2,A5,A3,PROB_1:15,SETFAM_1:3;
   for A being Subset of T st A is open holds A in Y
   proof
     let A be Subset of T;
@@ -2026,9 +2020,9 @@ A13: Z is all-open-containing compl-closed closed_for_countable_unions
     Subset-Family of T;
     reconsider Z as Subset-Family of T by A13;
     Z in V by A12,A13;
-    hence thesis by SETFAM_1:4;
+    hence thesis by SETFAM_1:3;
   end;
-  hence thesis by A2,A1,SETFAM_1:6;
+  hence thesis by A2,A1,SETFAM_1:5;
 end;
 
 definition
@@ -2113,7 +2107,7 @@ A3: Z is SigmaField of T;
     hence thesis by Def11;
   end;
   X c= BT by Th69;
-  hence thesis by A1,PROB_1:def 14;
+  hence thesis by A1,PROB_1:def 9;
 end;
 
 definition
@@ -2125,7 +2119,7 @@ end;
 
 registration
   let T;
-  cluster F_sigma -> Borel Subset of T;
+  cluster F_sigma -> Borel for Subset of T;
   coherence
   proof
     let A be Subset of T;
@@ -2140,7 +2134,7 @@ end;
 
 registration
   let T;
-  cluster G_delta -> Borel Subset of T;
+  cluster G_delta -> Borel for Subset of T;
   coherence
   proof
     let A be Subset of T;

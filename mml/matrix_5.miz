@@ -23,7 +23,7 @@ environ
       NUMBERS, MATRIX_4, COMPLEX1, COMPLFLD, XCMPLX_0, GROUP_1, BINOP_2,
       XXREAL_0, VECTSP_1, RLVECT_1;
  constructors BINOP_1, XXREAL_0, COMPLFLD, FVSUM_1, MATRIX_3, MATRIX_4,
-      BINOP_2, NAT_D, RVSUM_1;
+      BINOP_2, NAT_D, RVSUM_1, RELSET_1;
  registrations RELSET_1, NUMBERS, XCMPLX_0, XREAL_0, STRUCT_0, VECTSP_1,
       COMPLFLD, ORDINAL1, RVSUM_1;
  requirements NUMERALS, BOOLE, SUBSET, ARITHM;
@@ -36,10 +36,10 @@ environ
 begin
 
 theorem
-  1 = 1_F_Complex by COMPLEX1:def 7,COMPLFLD:10;
+  1 = 1_F_Complex by COMPLEX1:def 4,COMPLFLD:8;
 
 theorem
-  0.F_Complex = 0 by COMPLFLD:9;
+  0.F_Complex = 0 by COMPLFLD:7;
 
 definition
   let A be Matrix of COMPLEX;
@@ -134,8 +134,6 @@ theorem
   for A being Matrix of F_Complex holds len A =len Field2COMPLEX A &
   width A=width Field2COMPLEX A;
 
-canceled;
-
 theorem Th10:
   for K being Field, M being Matrix of K holds (1_K)*M=M
 proof
@@ -143,7 +141,7 @@ proof
 A1: for i,j being Nat st [i,j] in Indices M holds ((1_K)*M)*(i,j)=M*(i,j)
   proof
     let i,j be Nat;
-A2: (1_K)*(M*(i,j))=M*(i,j) by VECTSP_1:def 19;
+A2: (1_K)*(M*(i,j))=M*(i,j) by VECTSP_1:def 8;
     assume [i,j] in Indices M;
     hence thesis by A2,MATRIX_3:def 5;
   end;
@@ -156,7 +154,7 @@ theorem
 proof
   set e=1_F_Complex;
   let M be Matrix of COMPLEX;
-  1*M=Field2COMPLEX (e*(COMPLEX2Field M)) by Def7,COMPLEX1:def 7,COMPLFLD:10;
+  1*M=Field2COMPLEX (e*(COMPLEX2Field M)) by Def7,COMPLEX1:def 4,COMPLFLD:8;
   hence thesis by Th10;
 end;
 
@@ -181,7 +179,7 @@ A8: Indices ((b*M))=Indices (M) by A5,MATRIX_4:55;
 A9: Indices (a*(b*M))=Indices ((b*M)) by A2,A3,MATRIX_4:55;
     then (a*(b*M))*(i,j) = (a*((b*M)*(i,j))) by A7,MATRIX_3:def 5
       .= (a*(b*(M*(i,j)))) by A7,A9,A8,MATRIX_3:def 5
-      .= (a*b)*(M*(i,j)) by GROUP_1:def 4;
+      .= (a*b)*(M*(i,j)) by GROUP_1:def 3;
     hence thesis by A7,A9,A8,MATRIX_3:def 5;
   end;
   len (a*(b*M)) =len M by A2,MATRIX_3:def 5;
@@ -206,7 +204,7 @@ A5: Indices ((a+b)*M)=Indices M by A2,MATRIX_4:55;
     then (a*M + b*M)*(i,j) =(a*M)*(i,j)+(b*M)*(i,j) by A4,A5,MATRIX_3:def 3
       .=a*(M*(i,j))+(b*M)*(i,j) by A4,A5,MATRIX_3:def 5
       .=a*(M*(i,j))+b*(M*(i,j)) by A4,A5,MATRIX_3:def 5
-      .=(a+b)*(M*(i,j)) by VECTSP_1:def 18;
+      .=(a+b)*(M*(i,j)) by VECTSP_1:def 7;
     hence thesis by A4,A5,MATRIX_3:def 5;
   end;
   len (a*M + b*M)=len (a*M) & width (a*M + b*M)=width (a*M) by MATRIX_3:def 3;
@@ -219,8 +217,8 @@ proof
   reconsider e2=(1_F_Complex) + (1_F_Complex) as Element of F_Complex;
   let M be Matrix of COMPLEX;
 A1: (1_F_Complex)*(COMPLEX2Field M)= COMPLEX2Field M by Th10;
-  2 * M = Field2COMPLEX (e2*(COMPLEX2Field M)) by Def7,COMPLEX1:def 7
-,COMPLFLD:10
+  2 * M = Field2COMPLEX (e2*(COMPLEX2Field M)) by Def7,COMPLEX1:def 4
+,COMPLFLD:8
     .=Field2COMPLEX ((COMPLEX2Field M)+(COMPLEX2Field M)) by A1,Th13;
   hence thesis;
 end;
@@ -234,11 +232,11 @@ proof
   let M be Matrix of COMPLEX;
 A1: len M =len COMPLEX2Field M & width M=width COMPLEX2Field M;
 A2: (1_F_Complex) + (1_F_Complex) =(the addF of F_Complex).(1_F_Complex,
-  1_F_Complex) by RLVECT_1:5
-    .=addcomplex.(1r,1r) by COMPLFLD:10,def 1
-    .=1+1 by BINOP_2:def 3,COMPLEX1:def 7;
+  1_F_Complex) by RLVECT_1:2
+    .=addcomplex.(1r,1r) by COMPLFLD:8,def 1
+    .=1+1 by BINOP_2:def 3,COMPLEX1:def 4;
   (1_F_Complex) + (1_F_Complex) + (1_F_Complex) = (the addF of F_Complex).
-  (((1_F_Complex) + (1_F_Complex)),1_F_Complex) by RLVECT_1:5
+  (((1_F_Complex) + (1_F_Complex)),1_F_Complex) by RLVECT_1:2
     .= addcomplex.(1+1,1) by A2,COMPLFLD:def 1
     .= rr + 1 by BINOP_2:def 3
     .= 3;
@@ -253,7 +251,7 @@ A2: (1_F_Complex) + (1_F_Complex) =(the addF of F_Complex).(1_F_Complex,
   COMPLEX2Field M))) by Th10
     .=Field2COMPLEX (COMPLEX2Field M+(COMPLEX2Field M+COMPLEX2Field M)) by Th10
     .=Field2COMPLEX (COMPLEX2Field M+COMPLEX2Field M+COMPLEX2Field M) by A1,
-MATRIX_3:5;
+MATRIX_3:3;
   hence thesis;
 end;
 
@@ -268,8 +266,6 @@ theorem
   for n,m being Element of NAT holds COMPLEX2Field 0_Cx(n,m)=0.(
   F_Complex,n,m);
 
-canceled 4;
-
 theorem :: MATRIX_4:6
   for M1,M2 being Matrix of COMPLEX st len M1=len M2 & width M1=width M2
   & M1 = M1 + M2 holds M2 = 0_Cx(len M1,width M1)
@@ -280,12 +276,10 @@ A1: len M1=len M2 & width M1=width M2 and
 A2: M1 = M1 + M2;
   0_Cx(len M1,width M1)=M1+M2+(-M1) by A2,MATRIX_4:2
     .=Field2COMPLEX ((COMPLEX2Field M2)+(COMPLEX2Field M1) -(COMPLEX2Field
-  M1)) by A1,MATRIX_3:4
+  M1)) by A1,MATRIX_3:2
     .=M2 by A1,MATRIX_4:21;
   hence thesis;
 end;
-
-canceled;
 
 theorem :: MATRIX_4:8
   for M1,M2 being Matrix of COMPLEX st len M1=len M2 & width M1=width M2
@@ -302,8 +296,6 @@ A3: len -M2=len M2 & width -M2=width M2 by MATRIX_3:def 2;
   hence thesis by MATRIX_4:1;
 end;
 
-canceled;
-
 theorem :: MATRIX_4:10
   for M1,M2 being Matrix of COMPLEX st len M1=len M2 & width M1=width M2
   & M2 - M1 = M2 holds M1=0_Cx(len M1,width M1)
@@ -316,8 +308,6 @@ A2: M2 - M1 = M2;
 MATRIX_4:22;
   hence thesis by A1,MATRIX_4:6;
 end;
-
-canceled 9;
 
 theorem
   for M being Matrix of COMPLEX holds M + 0_Cx(len M,width M) = M
@@ -356,7 +346,7 @@ A9: Indices (M1+M2)=Indices M1 by A2,MATRIX_4:55;
 MATRIX_3:def 3
       .=b*(M1*(i,j))+(b*M2)*(i,j) by A6,A8,A9,MATRIX_3:def 5
       .=b*(M1*(i,j))+b*(M2*(i,j)) by A6,A8,A9,A7,MATRIX_3:def 5
-      .=(b*(M1*(i,j)+M2*(i,j))) by VECTSP_1:def 18;
+      .=(b*(M1*(i,j)+M2*(i,j))) by VECTSP_1:def 7;
     then (b*M1 + b*M2)*(i,j) = (b*((M1 + M2)*(i,j))) by A6,A8,A9,MATRIX_3:def 3
       .= (b*(M1 + M2)*(i,j)) by A6,A8,MATRIX_3:def 5;
     hence thesis;
@@ -395,7 +385,7 @@ proof
 A1: width M1=len M2 and
 A2: len M1>0 and
 A3: len M2>0;
-A4: len (0.(K,len M1,width M1))=len M1 by MATRIX_1:def 3;
+A4: len (0.(K,len M1,width M1))=len M1 by MATRIX_1:def 2;
   then
 A5: width (0.(K,len M1,width M1))=width M1 by A2,MATRIX_1:20;
   then
@@ -406,13 +396,13 @@ A7: width ((0.(K,len M1,width M1))*M2)=width M2 by A1,A5,MATRIX_3:def 4;
 A8: width -((0.(K,len M1,width M1))*M2)=width ((0.(K,len M1,width M1))*M2)
   by MATRIX_3:def 2;
   (0.(K,len M1,width M1))*M2 =((0.(K,len M1,width M1)+(0.(K,len M1,width
-  M1))))*M2 by MATRIX_3:6
+  M1))))*M2 by MATRIX_3:4
     .=((0.(K,len M1,width M1)))*M2+((0.(K,len M1,width M1)))*M2 by A1,A2,A3,A4
 ,A5,MATRIX_4:63;
   then
   len -((0.(K,len M1,width M1))*M2)=len ((0.(K,len M1,width M1))*M2) & 0.
   (K, len M1,width M2)=B+B+(-B) by A4,A6,A7,MATRIX_3:def 2,MATRIX_4:2;
-  then 0.(K,len M1,width M2) =B+(B-B) by A8,MATRIX_3:5
+  then 0.(K,len M1,width M2) =B+(B-B) by A8,MATRIX_3:3
     .=(0.(K,len M1,width M1))*M2 by A6,A8,MATRIX_4:20;
   hence thesis;
 end;
@@ -432,7 +422,7 @@ theorem Th40:
   0.(K,len M1,width M1)
 proof
   let K be Field,M1 be Matrix of K;
-A1: len (0.(K,len M1,width M1))=len M1 by MATRIX_1:def 3;
+A1: len (0.(K,len M1,width M1))=len M1 by MATRIX_1:def 2;
   assume len M1>0;
   then
 A2: width (0.(K,len M1,width M1))=width M1 by A1,MATRIX_1:20;
@@ -445,8 +435,8 @@ A4: [i,j] in Indices (0.(K,len M1,width M1));
     Indices (0.(K,len M1,width M1))= Indices M1 by A1,A2,MATRIX_4:55;
     then
 A5: ((0.K)*M1)*(i,j)=(0.K)*(M1*(i,j)) by A4,MATRIX_3:def 5;
-    (0.(K,len M1,width M1))*(i,j)=0.K by A4,MATRIX_3:3;
-    hence thesis by A5,VECTSP_1:36;
+    (0.(K,len M1,width M1))*(i,j)=0.K by A4,MATRIX_3:1;
+    hence thesis by A5,VECTSP_1:6;
   end;
   len (0.K*M1)=len M1 & width (0.K*M1)=width M1 by MATRIX_3:def 5;
   hence thesis by A1,A2,A3,MATRIX_1:21;
@@ -461,7 +451,7 @@ proof
   assume
 A1: len M1>0;
   0*M1 = Field2COMPLEX (ea*(COMPLEX2Field M1)) by Def7
-    .=0_Cx(len M1,width M1) by A1,Th40,COMPLFLD:9;
+    .=0_Cx(len M1,width M1) by A1,Th40,COMPLFLD:7;
   hence thesis;
 end;
 
@@ -474,12 +464,12 @@ definition
     suppose
 A1:   k in dom s;
 A2:   rng s c= COMPLEX by VALUED_0:def 1;
-      s.k in rng s by A1,FUNCT_1:def 5;
+      s.k in rng s by A1,FUNCT_1:def 3;
       hence thesis by A2;
     end;
     suppose
       not k in dom s;
-      then s.k = 0c by FUNCT_1:def 4;
+      then s.k = 0c by FUNCT_1:def 2;
       hence thesis;
     end;
   end;
@@ -519,8 +509,8 @@ A4:   i2+1+1<=len M2;
       suppose
 A5:     1 <= i2+1;
 A6:     len q3 = len q2+len (<* q2.(k0+1)+(M1*(i,k0+1+1))*(M2*(k0+1+1,j))
-        *>) by FINSEQ_1:35
-          .=i2+1+1 by A3,A4,A5,FINSEQ_1:56,NAT_1:13;
+        *>) by FINSEQ_1:22
+          .=i2+1+1 by A3,A4,A5,FINSEQ_1:39,NAT_1:13;
 A7:     for k2 being Element of NAT st 1<=k2 & k2<i2+1+1 holds q3.(k2+1)=
         q3.k2+(M1*(i,k2+1))*(M2*(k2+1,j))
         proof
@@ -535,21 +525,21 @@ A11:        k2<i2+1;
             then k2 < len q3 by A6,NAT_1:13;
             then
             k2 < len q2 + len <* q2.(k0+1)+(M1*(i,k0+1+1))*(M2*(k0+1+1,j)
-            )*> by FINSEQ_1:35;
-            then k2 < len q2 + 1 by FINSEQ_1:56;
+            )*> by FINSEQ_1:22;
+            then k2 < len q2 + 1 by FINSEQ_1:39;
             then k2 <= len q2 by NAT_1:13;
-            then k2 in dom q2 by A8,FINSEQ_3:27;
+            then k2 in dom q2 by A8,FINSEQ_3:25;
             then
 A12:        q3.k2=q2.k2 by FINSEQ_1:def 7;
-            k2+1 < i2 + 1+1 by A11,XREAL_1:8;
+            k2+1 < i2 + 1+1 by A11,XREAL_1:6;
             then
             k2+1 < len q2 + len <* q2.(k0+1)+(M1*(i,k0+1+1))*(M2*(k0+1+1,
-            j))*> by A6,FINSEQ_1:35;
-            then k2+1 < len q2 + 1 by FINSEQ_1:56;
+            j))*> by A6,FINSEQ_1:22;
+            then k2+1 < len q2 + 1 by FINSEQ_1:39;
             then
 A13:        k2+1 <= len q2 by NAT_1:13;
             1 <= k2+1 by A8,NAT_1:13;
-            then k2+1 in dom q2 by A13,FINSEQ_3:27;
+            then k2+1 in dom q2 by A13,FINSEQ_3:25;
             then q3.(k2+1)=q2.(k2+1) by FINSEQ_1:def 7;
             hence thesis by A3,A4,A5,A8,A11,A12,NAT_1:13;
           end;
@@ -558,13 +548,13 @@ A14:        k2=i2+1;
             then k2 < i2 + 1+1 by NAT_1:13;
             then
             k2 < len q2 + len <* q2.(k0+1)+(M1*(i,k0+1+1))*(M2*(k0+1+1,j)
-            )*> by A6,FINSEQ_1:35;
-            then k2 < len q2 + 1 by FINSEQ_1:56;
+            )*> by A6,FINSEQ_1:22;
+            then k2 < len q2 + 1 by FINSEQ_1:39;
             then k2 <= len q2 by NAT_1:13;
-            then k2 in dom q2 by A8,FINSEQ_3:27;
+            then k2 in dom q2 by A8,FINSEQ_3:25;
             then
 A15:        q3.k2=q2.k2 by FINSEQ_1:def 7;
-            1 in Seg 1 by FINSEQ_1:5;
+            1 in Seg 1 by FINSEQ_1:3;
             then
             (<* q2.(k0+1)+(M1*(i,k0+1+1))*(M2*(k0+1+1,j)) *>).1 = q2.(k0+
 1)+(M1*(i,k0+1+1 ))*(M2*(k0+1+1,j)) & 1 in dom (<* q2.(k0+1)+(M1*(i,k0+1+1))*(
@@ -575,23 +565,23 @@ A15:        q3.k2=q2.k2 by FINSEQ_1:def 7;
         1 < len (q2^<* q2.(k0+1)+(M1*(i,k0+1+1))*(M2*(k0+1+1,j)) *>) by A5,A6,
 NAT_1:13;
         then 1 < len q2 + len <* q2.(k0+1)+(M1*(i,k0+1+1))*(M2*(k0+1+1,j))*>
-        by FINSEQ_1:35;
-        then 1 < len q2 + 1 by FINSEQ_1:56;
+        by FINSEQ_1:22;
+        then 1 < len q2 + 1 by FINSEQ_1:39;
         then 1 <= len q2 by NAT_1:13;
-        then 1 in dom q2 by FINSEQ_3:27;
+        then 1 in dom q2 by FINSEQ_3:25;
         hence thesis by A3,A4,A5,A6,A7,FINSEQ_1:def 7,NAT_1:13;
       end;
     end;
     hence thesis;
   end;
-  len q0 = 1 & q0.1=(M1*(i,1))*(M2*(1,j)) by FINSEQ_1:56,def 8;
+  len q0 = 1 & q0.1=(M1*(i,1))*(M2*(1,j)) by FINSEQ_1:39,def 8;
   then
 A16: P[0] by A1;
 A17: for j being Element of NAT holds P[j] from NAT_1:sch 1(A16,A2);
   assume
 A18: len M2>0;
   then 0+1<=len M2 by NAT_1:8;
-  then 0+1-1<=len M2-1 by XREAL_1:11;
+  then 0+1-1<=len M2-1 by XREAL_1:9;
   then
 A19: len M2-'1=len M2-1 by XREAL_0:def 2;
   then 0+1<=(len M2)-'1+1 by A18,NAT_1:8;

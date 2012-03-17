@@ -42,7 +42,7 @@ theorem :: DTCONSTR:2
 
 registration
   let D be non empty set, T be DTree-set of D;
-  cluster -> DTree-yielding FinSequence of T;
+  cluster -> DTree-yielding for FinSequence of T;
 end;
 
 definition
@@ -187,9 +187,9 @@ p = q & o ==> pr1 roots q };
 
 definition
   let G be non empty DTConstrStr;
-  canceled 3;
+
   func TS(G) -> Subset of FinTrees(the carrier of G) means
-:: DTCONSTR:def 4
+:: DTCONSTR:def 1
 
   (for d being Symbol of G st d in Terminals G holds root-tree d in it) &
   (for o being Symbol of G, p being FinSequence of it st o ==> roots p
@@ -236,7 +236,7 @@ begin
 
 definition
   func PeanoNat -> strict non empty DTConstrStr means
-:: DTCONSTR:def 5
+:: DTCONSTR:def 2
 
   the carrier of it = {0, 1} &
   for x being Symbol of it, y being FinSequence of the carrier of it
@@ -250,15 +250,15 @@ begin
 definition
   let G be non empty DTConstrStr;
   attr G is with_terminals means
-:: DTCONSTR:def 6
+:: DTCONSTR:def 3
 
   Terminals G <> {};
   attr G is with_nonterminals means
-:: DTCONSTR:def 7
+:: DTCONSTR:def 4
 
   NonTerminals G <> {};
   attr G is with_useful_nonterminals means
-:: DTCONSTR:def 8
+:: DTCONSTR:def 5
 
   for nt being Symbol of G st nt in NonTerminals G
   ex p being FinSequence of TS(G) st nt ==> roots p;
@@ -266,68 +266,68 @@ end;
 
 registration
   cluster with_terminals with_nonterminals with_useful_nonterminals strict
-    (non empty DTConstrStr);
+    for non empty DTConstrStr;
 end;
 
 definition
-  let G be with_terminals (non empty DTConstrStr);
+  let G be with_terminals non empty DTConstrStr;
   redefine func Terminals G -> non empty Subset of G;
 end;
 
 registration
-  let G be with_terminals (non empty DTConstrStr);
+  let G be with_terminals non empty DTConstrStr;
   cluster TS G -> non empty;
 end;
 
 registration
-  let G be with_useful_nonterminals (non empty DTConstrStr);
+  let G be with_useful_nonterminals non empty DTConstrStr;
   cluster TS G -> non empty;
 end;
 
 definition
-  let G be with_nonterminals (non empty DTConstrStr);
+  let G be with_nonterminals non empty DTConstrStr;
   redefine func NonTerminals G -> non empty Subset of G;
 end;
 
 definition
-  let G be with_terminals (non empty DTConstrStr);
+  let G be with_terminals non empty DTConstrStr;
   mode Terminal of G is Element of Terminals G;
 end;
 
 definition
-  let G be with_nonterminals (non empty DTConstrStr);
+  let G be with_nonterminals non empty DTConstrStr;
   mode NonTerminal of G is Element of NonTerminals G;
 end;
 
 definition
-  let G be with_nonterminals with_useful_nonterminals (non empty DTConstrStr);
+  let G be with_nonterminals with_useful_nonterminals non empty DTConstrStr;
   let nt be NonTerminal of G;
   mode SubtreeSeq of nt -> FinSequence of TS(G) means
-:: DTCONSTR:def 9
+:: DTCONSTR:def 6
 
     nt ==> roots it;
 end;
 
 definition
-  let G be with_terminals (non empty DTConstrStr);
+  let G be with_terminals non empty DTConstrStr;
   let t be Terminal of G;
   redefine func root-tree t -> Element of TS(G);
 end;
 
 definition
-  let G be with_nonterminals with_useful_nonterminals (non empty DTConstrStr);
+  let G be with_nonterminals with_useful_nonterminals non empty DTConstrStr;
   let nt be NonTerminal of G;
   let p be SubtreeSeq of nt;
   redefine func nt-tree p -> Element of TS(G);
 end;
 
 theorem :: DTCONSTR:9
-  for G being with_terminals (non empty DTConstrStr),
+  for G being with_terminals non empty DTConstrStr,
   tsg being Element of TS G, s being Terminal of G
   st tsg.{} = s holds tsg = root-tree s;
 
 theorem :: DTCONSTR:10
-  for G being with_terminals with_nonterminals (non empty DTConstrStr),
+  for G being with_terminals with_nonterminals non empty DTConstrStr,
   tsg being Element of TS G, nt being NonTerminal of G st tsg.{} = nt
   ex ts being FinSequence of TS G st tsg = nt-tree ts & nt ==> roots ts;
 
@@ -348,13 +348,13 @@ end;
 definition
   let x be FinSequence of NAT;
   func plus-one x -> Element of NAT equals
-:: DTCONSTR:def 10
+:: DTCONSTR:def 7
   (x.1) + 1;
 end;
 
 definition
   func PN-to-NAT -> Function of TS(PeanoNat), NAT means
-:: DTCONSTR:def 11
+:: DTCONSTR:def 8
 
   (for t being Symbol of PeanoNat st t in Terminals PeanoNat
   holds it.(root-tree t) = 0) & for nt being Symbol of PeanoNat,
@@ -365,13 +365,13 @@ end;
 definition
   let x be Element of TS(PeanoNat);
   func PNsucc x -> Element of TS(PeanoNat) equals
-:: DTCONSTR:def 12
+:: DTCONSTR:def 9
   1-tree <*x*>;
 end;
 
 definition
   func NAT-to-PN -> Function of NAT, TS(PeanoNat) means
-:: DTCONSTR:def 13
+:: DTCONSTR:def 10
 
   it.0 = root-tree 0 & for n being Nat holds it.(n+1) = PNsucc it.n;
 end;
@@ -388,11 +388,11 @@ begin
 
 definition
   let G be non empty DTConstrStr, tsg be DecoratedTree of the carrier of G;
-  canceled;
+
   assume
  tsg in TS G;
   func TerminalString tsg -> FinSequence of Terminals G means
-:: DTCONSTR:def 15
+:: DTCONSTR:def 11
 
   ex f being Function of (TS G), (Terminals G)* st it = f.tsg &
   (for t being Symbol of G st t in Terminals G
@@ -400,7 +400,7 @@ definition
   ts being FinSequence of TS(G) st nt ==> roots ts
   holds f.(nt-tree ts) = FlattenSeq(f * ts);
   func PreTraversal tsg -> FinSequence of the carrier of G means
-:: DTCONSTR:def 16
+:: DTCONSTR:def 12
 
   ex f being Function of (TS G), (the carrier of G)* st it = f.tsg &
   (for t being Symbol of G st t in Terminals G
@@ -410,7 +410,7 @@ definition
   for x being FinSequence of (the carrier of G)* st x = f * ts
   holds f.(nt-tree ts) = <*nt*>^FlattenSeq(x);
   func PostTraversal tsg -> FinSequence of the carrier of G means
-:: DTCONSTR:def 17
+:: DTCONSTR:def 13
 
   ex f being Function of (TS G), (the carrier of G)* st it = f.tsg &
   (for t being Symbol of G st t in Terminals G
@@ -422,46 +422,44 @@ definition
 end;
 
 definition
-  let G be with_nonterminals non empty (non empty DTConstrStr),
+  let G be with_nonterminals non empty non empty DTConstrStr,
   nt be Symbol of G;
   func TerminalLanguage nt -> Subset of (Terminals G)* equals
-:: DTCONSTR:def 18
+:: DTCONSTR:def 14
   { TerminalString tsg where tsg is Element of FinTrees the carrier of G :
   tsg in TS G & tsg.{} = nt };
   func PreTraversalLanguage nt -> Subset of (the carrier of G)* equals
-:: DTCONSTR:def 19
+:: DTCONSTR:def 15
   { PreTraversal tsg where tsg is Element of FinTrees the carrier of G :
   tsg in TS G & tsg.{} = nt };
   func PostTraversalLanguage nt -> Subset of (the carrier of G)* equals
-:: DTCONSTR:def 20
+:: DTCONSTR:def 16
   { PostTraversal tsg where tsg is Element of FinTrees the carrier of G :
   tsg in TS G & tsg.{} = nt };
 end;
 
-canceled;
-
-theorem :: DTCONSTR:14
+theorem :: DTCONSTR:13
   for t being DecoratedTree of the carrier of PeanoNat
   st t in TS PeanoNat holds TerminalString t = <*0*>;
 
-theorem :: DTCONSTR:15
+theorem :: DTCONSTR:14
   for nt being Symbol of PeanoNat holds TerminalLanguage nt = {<*0*>};
 
-theorem :: DTCONSTR:16
+theorem :: DTCONSTR:15
   for t being Element of TS PeanoNat
   holds PreTraversal t = ((height dom t) |-> 1)^<*0*>;
 
-theorem :: DTCONSTR:17
+theorem :: DTCONSTR:16
   for nt being Symbol of PeanoNat holds
   (nt = 0 implies PreTraversalLanguage nt = {<*0*>}) &
   (nt = 1 implies PreTraversalLanguage nt = { (n|->1)^<*0*>
   where n is Element of NAT : n <> 0 });
 
-theorem :: DTCONSTR:18
+theorem :: DTCONSTR:17
   for t being Element of TS PeanoNat
   holds PostTraversal t = <*0*>^((height dom t) |-> 1);
 
-theorem :: DTCONSTR:19
+theorem :: DTCONSTR:18
   for nt being Symbol of PeanoNat holds
   (nt = 0 implies PostTraversalLanguage nt = {<*0*>}) &
   (nt = 1 implies PostTraversalLanguage nt = { <*0*>^(n|->1)

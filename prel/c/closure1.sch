@@ -12,13 +12,6 @@
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="FUNCOP_1"/>
-<ArticleID name="ORDINAL1"/>
-<ArticleID name="NUMBERS"/>
-<ArticleID name="FINSET_1"/>
-<ArticleID name="CARD_1"/>
-<ArticleID name="FINSEQ_1"/>
-<ArticleID name="FINSEQ_2"/>
-<ArticleID name="CARD_3"/>
 <ArticleID name="PBOOLE"/>
 </Signature>
 <Scheme>
@@ -70,14 +63,14 @@
 <And>
 <Not>
 <And>
-<Pred kind="R" nr="19">
+<Pred kind="R" nr="18">
 <Func kind="F" nr="1"/>
 <Var nr="1"/>
 <Func kind="F" nr="2"/>
 </Pred>
 <Not>
 <And>
-<Pred kind="R" nr="19">
+<Pred kind="R" nr="18">
 <Func kind="F" nr="1"/>
 <Var nr="1"/>
 <Func kind="F" nr="3"/>
@@ -91,7 +84,7 @@
 </Not>
 <Not>
 <And>
-<Pred kind="R" nr="19">
+<Pred kind="R" nr="18">
 <Func kind="F" nr="1"/>
 <Var nr="1"/>
 <Func kind="F" nr="3"/>
@@ -100,7 +93,7 @@
 <Var nr="1"/>
 </Pred>
 <Not>
-<Pred kind="R" nr="19">
+<Pred kind="R" nr="18">
 <Func kind="F" nr="1"/>
 <Var nr="1"/>
 <Func kind="F" nr="2"/>
@@ -111,7 +104,7 @@
 </And>
 </For>
 <Not>
-<Pred kind="R" nr="20">
+<Pred kind="R" nr="19">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 <Func kind="F" nr="3"/>

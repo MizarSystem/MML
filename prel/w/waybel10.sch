@@ -35,8 +35,8 @@
 <Typ kind="M" nr="9">
 <Cluster>
 <Adjective nr="33" value="false"/>
-<Adjective nr="47"/>
-<Adjective nr="56">
+<Adjective nr="48"/>
+<Adjective nr="57">
 <Func kind="F" nr="1"/>
 </Adjective>
 </Cluster>
@@ -326,7 +326,7 @@
 <Typ kind="M" nr="9">
 <Cluster>
 <Adjective nr="33" value="false"/>
-<Adjective nr="56">
+<Adjective nr="57">
 <Func kind="F" nr="1"/>
 </Adjective>
 </Cluster>
@@ -335,7 +335,7 @@
 <Typ kind="M" nr="9">
 <Cluster>
 <Adjective nr="33" value="false"/>
-<Adjective nr="56">
+<Adjective nr="57">
 <Func kind="F" nr="1"/>
 </Adjective>
 </Cluster>
@@ -457,7 +457,7 @@
 <Typ kind="M" nr="9">
 <Cluster>
 <Adjective nr="33" value="false"/>
-<Adjective nr="56">
+<Adjective nr="57">
 <Func kind="F" nr="1"/>
 </Adjective>
 </Cluster>
@@ -466,7 +466,7 @@
 <Typ kind="M" nr="9">
 <Cluster>
 <Adjective nr="33" value="false"/>
-<Adjective nr="56">
+<Adjective nr="57">
 <Func kind="F" nr="1"/>
 </Adjective>
 </Cluster>

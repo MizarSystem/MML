@@ -25,38 +25,9 @@
 <ArticleID name="VALUED_0"/>
 <ArticleID name="MEMBERED"/>
 <ArticleID name="XXREAL_2"/>
+<ArticleID name="MEASURE5"/>
 <ArticleID name="INTEGRA1"/>
 </Signature>
-<RCluster aid="INTEGRA1" nr="1">
-<ArgTypes/>
-<Typ kind="M" nr="2">
-<Cluster/>
-<Func kind="K" nr="21">
-<Func kind="K" nr="50"/>
-</Func>
-</Typ>
-<Cluster>
-<Adjective nr="55"/>
-<Adjective nr="56"/>
-<Adjective nr="57"/>
-<Adjective nr="68"/>
-</Cluster>
-</RCluster>
-<RCluster aid="INTEGRA1" nr="2">
-<ArgTypes/>
-<Typ kind="M" nr="2">
-<Cluster/>
-<Func kind="K" nr="21">
-<Func kind="K" nr="50"/>
-</Func>
-</Typ>
-<Cluster>
-<Adjective nr="55"/>
-<Adjective nr="56"/>
-<Adjective nr="57"/>
-<Adjective nr="68"/>
-</Cluster>
-</RCluster>
 <FCluster aid="INTEGRA1" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="2">
@@ -69,7 +40,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="144">
+<Func kind="K" nr="147">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -80,7 +51,8 @@
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster>
-<Adjective nr="68"/>
+<Adjective nr="11" value="false"/>
+<Adjective nr="69"/>
 </Cluster>
 <Func kind="K" nr="21">
 <Func kind="K" nr="50"/>
@@ -97,12 +69,12 @@
 </Func>
 </Func>
 </Typ>
-<Typ kind="M" nr="12">
+<Typ kind="M" nr="13">
 <Cluster/>
 <LocusVar nr="1"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="147">
+<Func kind="K" nr="150">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
@@ -115,7 +87,8 @@
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster>
-<Adjective nr="68"/>
+<Adjective nr="11" value="false"/>
+<Adjective nr="69"/>
 </Cluster>
 <Func kind="K" nr="21">
 <Func kind="K" nr="50"/>
@@ -132,12 +105,12 @@
 </Func>
 </Func>
 </Typ>
-<Typ kind="M" nr="12">
+<Typ kind="M" nr="13">
 <Cluster/>
 <LocusVar nr="1"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="148">
+<Func kind="K" nr="151">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
@@ -149,7 +122,7 @@
 <CCluster aid="INTEGRA1" nr="1">
 <ArgTypes/>
 <Cluster>
-<Adjective nr="68"/>
+<Adjective nr="69"/>
 </Cluster>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -158,14 +131,14 @@
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="11" value="false"/>
 <Adjective nr="30"/>
 </Cluster>
 </CCluster>
 <CCluster aid="INTEGRA1" nr="2">
 <ArgTypes/>
 <Cluster>
-<Adjective nr="68"/>
+<Adjective nr="11" value="false"/>
+<Adjective nr="69"/>
 </Cluster>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -192,7 +165,7 @@
 <Cluster/>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="144">
+<Func kind="K" nr="147">
 <LocusVar nr="1"/>
 </Func>
 </Typ>
@@ -216,7 +189,7 @@
 <Cluster/>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="144">
+<Func kind="K" nr="147">
 <LocusVar nr="1"/>
 </Func>
 </Typ>

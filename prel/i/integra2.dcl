@@ -24,6 +24,7 @@
 <ArticleID name="XXREAL_0"/>
 <ArticleID name="XXREAL_1"/>
 <ArticleID name="RCOMP_1"/>
+<ArticleID name="MEASURE5"/>
 <ArticleID name="INTEGRA1"/>
 <ArticleID name="XXREAL_3"/>
 <ArticleID name="MEMBER_1"/>
@@ -31,7 +32,7 @@
 </Signature>
 <RCluster aid="INTEGRA2" nr="1">
 <ArgTypes/>
-<Typ kind="M" nr="7">
+<Typ kind="M" nr="8">
 <Cluster/>
 <Func kind="K" nr="50"/>
 </Typ>
@@ -50,7 +51,7 @@
 <Adjective nr="46"/>
 <Adjective nr="53"/>
 <Adjective nr="54"/>
-<Adjective nr="66"/>
+<Adjective nr="69"/>
 </Cluster>
 </RCluster>
 </Registrations>

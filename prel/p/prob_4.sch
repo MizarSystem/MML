@@ -72,7 +72,7 @@
 <Adjective nr="17"/>
 <Adjective nr="23">
 <Func kind="K" nr="32"/>
-<Func kind="K" nr="116">
+<Func kind="K" nr="117">
 <Func kind="F" nr="1"/>
 </Func>
 </Adjective>
@@ -80,7 +80,7 @@
 <Func kind="K" nr="6">
 <Func kind="K" nr="7">
 <Func kind="K" nr="32"/>
-<Func kind="K" nr="116">
+<Func kind="K" nr="117">
 <Func kind="F" nr="1"/>
 </Func>
 </Func>
@@ -94,7 +94,7 @@
 <Func kind="K" nr="32"/>
 </Typ>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="217">
+<Func kind="K" nr="220">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 <Var nr="1"/>

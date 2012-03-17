@@ -36,20 +36,20 @@
 <Typ kind="G" nr="11">
 <Cluster>
 <Adjective nr="50" value="false"/>
-<Adjective nr="119"/>
 <Adjective nr="120"/>
+<Adjective nr="121"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="223">
+<Func kind="K" nr="225">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
 <Adjective nr="50" value="false"/>
-<Adjective nr="63"/>
-<Adjective nr="70"/>
-<Adjective nr="73"/>
+<Adjective nr="64"/>
+<Adjective nr="71"/>
 <Adjective nr="74"/>
+<Adjective nr="75"/>
 </Cluster>
 </FCluster>
 </Registrations>

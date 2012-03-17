@@ -21,40 +21,39 @@ environ
       VALUED_1, XBOOLE_0, FSM_1, SCMFSA_9, SCMFSA6C, SCMFSA6B, CIRCUIT2,
       GRAPHSP, MSUALG_1, SCM_HALT, XXREAL_0, UNIALG_2, NAT_1, SCMFSA8C,
       FINSEQ_1, ARYTM_1, GLIB_000, INT_1, COMPLEX1, PARTFUN1, CLASSES1,
-      VALUED_0, SCMBSORT, STRUCT_0, SCMISORT, PBOOLE, ORDINAL1, RELOC;
+      VALUED_0, SCMBSORT, STRUCT_0, SCMISORT, PBOOLE, ORDINAL1, RELOC,
+      COMPOS_1;
  notations TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, CARD_1, NUMBERS, XCMPLX_0,
       FUNCOP_1, RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2, FUNCT_4, FUNCT_7,
-      FINSEQ_1, CARD_3, VALUED_1, PBOOLE, STRUCT_0, COMPOS_1, EXTPRO_1,
-      AMISTD_2, SCMFSA_2, SCMFSA6A, SF_MASTR, SCMFSA6B, SCMFSA6C, SCMFSA7B,
-      SCMFSA8A, SCMFSA_9, SCMFSA8B, INT_1, SCMBSORT, FINSUB_1, SCMFSA8C,
-      CLASSES1, RFINSEQ, SCM_HALT, INT_2, NAT_1, XXREAL_0;
- constructors DOMAIN_1, SETWISEO, XXREAL_0, REAL_1, SEQ_1, INT_2, SCMFSA6A,
-      SCMFSA6B, SCMFSA6C, SCMFSA8A, SCMFSA8B, SCMFSA8C, SCMFSA_9, SFMASTR1,
-      SCM_HALT, SCMBSORT, CLASSES1, AMISTD_2, RELSET_1, PRE_POLY, PBOOLE,
-      SCMFSA7B, AMISTD_1, SCMFSA_3;
+      FINSEQ_1, CARD_3, VALUED_1, PBOOLE, STRUCT_0, MEMSTR_0, COMPOS_1,
+      EXTPRO_1, AMISTD_2, SCMFSA_2, SCMFSA6A, SF_MASTR, SCMFSA6B, SCMFSA6C,
+      SCMFSA7B, SCMFSA8A, SCMFSA_9, SCMFSA8B, INT_1, SCMBSORT, FINSUB_1,
+      SCMFSA8C, CLASSES1, RFINSEQ, SCM_HALT, INT_2, NAT_1, XXREAL_0;
+ constructors DOMAIN_1, SETWISEO, XXREAL_0, REAL_1, SEQ_1, INT_2, MEMSTR_0,
+      SCMFSA6A, SCMFSA6B, SCMFSA6C, SCMFSA8A, SCMFSA8B, SCMFSA8C, SCMFSA_9,
+      SFMASTR1, SCM_HALT, SCMBSORT, CLASSES1, AMISTD_2, RELSET_1, PRE_POLY,
+      PBOOLE, SCMFSA7B, AMISTD_1, SCMFSA_3, FUNCT_4;
  registrations XBOOLE_0, SETFAM_1, FUNCT_1, RELSET_1, FUNCOP_1, FINSUB_1,
       NUMBERS, XXREAL_0, XREAL_0, NAT_1, INT_1, CARD_3, STRUCT_0, SCMFSA_2,
       SF_MASTR, SCMFSA8C, SCMFSA6C, SCMFSA8A, SCMFSA_9, SCM_HALT, VALUED_0,
-      ORDINAL1, FINSET_1, VALUED_1, FUNCT_2, FUNCT_4, RELAT_1, AMISTD_2,
-      SCMFSA10, SCMFSA6A, COMPOS_1, SFMASTR1, EXTPRO_1, PBOOLE;
+      ORDINAL1, FINSET_1, VALUED_1, FUNCT_2, FUNCT_4, RELAT_1, MEMSTR_0,
+      AMISTD_2, SCMFSA10, SCMFSA6A, COMPOS_1, SFMASTR1, EXTPRO_1, PBOOLE;
  requirements BOOLE, REAL, NUMERALS, SUBSET, ARITHM;
 
 
 begin :: Preliminaries
 
-canceled;
-
-theorem :: SCMISORT:2
+theorem :: SCMISORT:1
   for p be preProgram of SCM+FSA,l be Element of NAT,
   ic be Instruction of SCM+FSA st l in dom p &
   (ex pc be Instruction of SCM+FSA st pc=p.l & UsedIntLoc pc=UsedIntLoc ic)
    holds UsedIntLoc p = UsedIntLoc (p+*(l.-->ic));
 
-theorem :: SCMISORT:3
+theorem :: SCMISORT:2
   for a being Int-Location,I being Program of SCM+FSA
    holds if>0(a, I';' Goto  0,Stop SCM+FSA).(card I +4) = goto  (card I +4);
 
-theorem :: SCMISORT:4
+theorem :: SCMISORT:3
   for p be preProgram of SCM+FSA,l be Element of NAT,
   ic be Instruction of SCM+FSA st l in dom p & (ex pc be Instruction of SCM+FSA
 st pc=p.l & UsedInt*Loc pc=UsedInt*Loc ic) holds UsedInt*Loc p = UsedInt*Loc (p
@@ -67,136 +66,119 @@ reserve s for State of SCM+FSA,
 
 reserve i,j,k,n for Element of NAT;
 
-canceled;
-
-theorem :: SCMISORT:6
+theorem :: SCMISORT:4
   for s be State of SCM+FSA,I be Program of SCM+FSA st s.intloc 0=1
-  & IC s =  0 holds s = s+*Initialize((intloc 0).-->1);
+  & IC s =  0 holds s = Initialized s;
 
-theorem :: SCMISORT:7
+theorem :: SCMISORT:5
   for I being Program of SCM+FSA,a,b being Int-Location st I
   does not destroy b holds while>0(a,I) does not destroy b;
 
-canceled 2;
+
 
 reserve P,P1,P2,Q
- for (the Instructions of SCM+FSA)-valued ManySortedSet of NAT;
+ for Instruction-Sequence of SCM+FSA;
 
-theorem :: SCMISORT:10
+theorem :: SCMISORT:6
   for s being State of SCM+FSA, I being Program of SCM+FSA st I
   is_halting_on Initialized s,P holds for a be Int-Location
    holds IExec(I,P,s).a =
-Comput(P +* I,(Initialize Initialized s),
-  LifeSpan(P +* I,Initialize Initialized s)).a;
+    Comput(P +* I,(Initialize Initialized s),
+      LifeSpan(P +* I,Initialize Initialized s)).a;
 
-theorem :: SCMISORT:11  ::SCMFSA6B_28
+theorem :: SCMISORT:7  ::SCMFSA6B_28
   for s1,s2 be State of SCM+FSA,I be InitHalting Program of
 SCM+FSA st Initialize ((intloc 0) .--> 1) c= s1 &
   Initialize ((intloc 0) .--> 1) c= s2 &
  I c= P1 & I c= P2 &
- NPP s1 = NPP s2
+  s1 =  s2
  for k be Element of NAT
-  holds NPP Comput(P1, s1,k) = NPP Comput(P2, s2,k) &
+  holds  Comput(P1, s1,k) =  Comput(P2, s2,k) &
    CurInstr(P1,Comput(P1,s1,k))
    = CurInstr(P2,Comput(P2,s2,k));
 
-theorem :: SCMISORT:12  ::SCMFSA6B_29
+theorem :: SCMISORT:8  ::SCMFSA6B_29
   for s1,s2 be State of SCM+FSA,I be InitHalting Program of
 SCM+FSA st Initialize ((intloc 0) .--> 1) c= s1 &
     Initialize ((intloc 0) .--> 1) c= s2 &
     I c= P1 & I c= P2 &
-     NPP s1 = NPP s2
+      s1 =  s2
   holds LifeSpan(P1,s1) = LifeSpan(P2,s2) &
-   NPP Result(P1,s1) = NPP Result(P2,s2);
+    Result(P1,s1) =  Result(P2,s2);
 
-theorem :: SCMISORT:13  ::SCMFSA6A_49
-  for I be Program of SCM+FSA, f be FinSeq-Location holds not f in
-  dom I;
+theorem :: SCMISORT:9  ::SCMFSA6A_49
+  for I be Program of SCM+FSA, f be FinSeq-Location holds not f in dom I;
 
-theorem :: SCMISORT:14  ::SCMFSA6A_48
+theorem :: SCMISORT:10  ::SCMFSA6A_48
   for I be Program of SCM+FSA, a be Int-Location holds not a in
   dom I;
 
 begin  :: -- Basic property of while Macro ---
 
-canceled;
 
-theorem :: SCMISORT:16
+
+theorem :: SCMISORT:11
   for s being State of SCM+FSA, I being Program of SCM+FSA, a
 being read-write Int-Location st s.a <= 0
  holds while>0(a,I) is_halting_onInit s,P &
      while>0(a,I) is_closed_onInit s,P;
 
-theorem :: SCMISORT:17
+theorem :: SCMISORT:12
   for a being Int-Location, I being Program of SCM+FSA, s being State of
-SCM+FSA,k being Element of NAT st I is_closed_onInit s,P &
-I is_halting_onInit s,P
-& k < LifeSpan(P +* I,s+*Initialize((intloc 0).-->1)) &
- IC Comput(P +* while>0(a,I),
-  (s+*Initialize((intloc 0).-->1)),1 + k) = IC Comput(P +* I, (s +*
-Initialize((intloc 0).-->1)),k) + 4 & DataPart
-Comput(P +* while>0(a,I), (s+*Initialize((intloc 0).-->1)),1 + k)
- = DataPart Comput(P +* I, (s
-+* Initialize((intloc 0).-->1)),k)
- holds IC Comput(P +* while>0(a,I),
- (s+*Initialize((intloc 0).-->1)),1 +
-k+1) = IC Comput(P +* I, (s+*Initialize((intloc 0).-->1)),k+1)
-+ 4 & DataPart Comput(P +* while>0(a,I), (s
-+* Initialize((intloc 0).-->1)),1 + k+1)
- = DataPart Comput(P +* I, (s+*Initialize((intloc 0).-->1)),k+1);
+SCM+FSA,k being Element of NAT
+ st I is_closed_onInit s,P & I is_halting_onInit s,P &
+  k < LifeSpan(P +* I,Initialized s) &
+ IC Comput(P +* while>0(a,I), Initialized s,1 + k)
+  = IC Comput(P +* I, Initialized s,k) + 4 &
+ DataPart Comput(P +* while>0(a,I), Initialized s,1 + k)
+ = DataPart Comput(P +* I, Initialized s,k)
+ holds IC Comput(P +* while>0(a,I), Initialized s,1 + k+1)
+  = IC Comput(P +* I, Initialized s,k+1) + 4 &
+  DataPart Comput(P +* while>0(a,I), Initialized s,1 + k+1)
+ = DataPart Comput(P +* I, Initialized s,k+1);
 
-theorem :: SCMISORT:18
+theorem :: SCMISORT:13
   for a being Int-Location, I being Program of SCM+FSA, s being State of
 SCM+FSA st I is_closed_onInit s,P & I is_halting_onInit s,P &
-IC Comput(P +* while>0(a,I), (s +*
-Initialize((intloc 0).-->1)),1 + LifeSpan(P +* I,s +*
-Initialize((intloc 0).-->1))) = IC Comput(P +* I,
-  (s+*Initialize((intloc 0).-->1)),
-  LifeSpan(P +* I,s+*Initialize((intloc 0).-->1))) + 4
+ IC Comput(P +* while>0(a,I), Initialized s,1 + LifeSpan(P +* I,Initialized s))
+  = IC Comput(P +* I, Initialized s, LifeSpan(P +* I,Initialized s)) + 4
    holds CurInstr(P +* while>0(a,I),
-     Comput(P +* while>0(a,I),(s+*Initialize((intloc 0).-->1)),
-     1 + LifeSpan(P +* I,s+*Initialize((intloc 0).-->1))))
-  = goto  (card I +4);
+    Comput(P +* while>0(a,I),Initialized s,1 + LifeSpan(P +* I,Initialized s)))
+  = goto (card I +4);
 
-theorem :: SCMISORT:19
+theorem :: SCMISORT:14
   for s being State of SCM+FSA, I being Program of SCM+FSA, a
 being read-write Int-Location st I is_closed_onInit s,P &
-I is_halting_onInit s,P &
-  s.a >0 holds
-   IC Comput(P +* while>0(a,I),s+*Initialize((intloc 0).-->1),
-    LifeSpan(P +* I,s+*Initialize((intloc 0).-->1)) + 3) =  0 &
+I is_halting_onInit s,P & s.a >0 holds
+   IC Comput(P +* while>0(a,I),Initialized s,
+    LifeSpan(P +* I,Initialized s) + 3) =  0 &
 for k being Element of NAT
- st k <= LifeSpan(P +* I,s+*Initialize((intloc 0).-->1)) + 3
- holds IC Comput(P +* while>0(a,I),
- (s+*Initialize((intloc 0).-->1)),k) in dom while>0(a,I);
+ st k <= LifeSpan(P +* I,Initialized s) + 3
+ holds IC Comput(P +* while>0(a,I),Initialized s,k) in dom while>0(a,I);
 
-theorem :: SCMISORT:20 ::SCM_9_36
+theorem :: SCMISORT:15 ::SCM_9_36
   for s being State of SCM+FSA, I being Program of SCM+FSA,a be
 read-write Int-Location st I is_closed_onInit s,P &
 I is_halting_onInit s,P & s.a >
   0 holds for k being Element of NAT st
-   k <= LifeSpan(P +* I,s+*Initialize((intloc 0).-->1)) + 3
-  holds IC Comput(P +* while>0(a,I), (s +*
-Initialize((intloc 0).-->1)),k) in dom while>0(a,I);
+   k <= LifeSpan(P +* I,Initialized s) + 3
+  holds IC Comput(P +* while>0(a,I), Initialized s,k) in dom while>0(a,I);
 
-theorem :: SCMISORT:21  ::SCM_9_37
+theorem :: SCMISORT:16   ::SCM_9_37
   for s being State of SCM+FSA, I be Program of SCM+FSA,a be
 read-write Int-Location st I is_closed_onInit s,P &
 I is_halting_onInit s,P & s.a >
-  0 holds IC Comput(P +* while>0(a,I), (s +*
-Initialize((intloc 0).-->1)), (LifeSpan(P +* I,s +*
-  Initialize((intloc 0).-->1)) + 3)) =  0 &
-   DataPart Comput(P +* while>0(a,I), (s+*Initialize((intloc 0).-->1)),
-    (LifeSpan(P +* I,s+*Initialize((intloc 0).-->1)) +
-3)) = DataPart Comput(P +* I, (s
-  +* Initialize((intloc 0).-->1)),
-  LifeSpan(P +* I,s+*Initialize((intloc 0).-->1)));
+  0 holds IC Comput(P +* while>0(a,I), Initialized s,
+     LifeSpan(P +* I,Initialized s) + 3) =  0 &
+   DataPart Comput(P +* while>0(a,I), Initialized s,
+    LifeSpan(P +* I,Initialized s) + 3)
+     = DataPart Comput(P +* I, Initialized s,LifeSpan(P +* I,Initialized s));
 
-theorem :: SCMISORT:22
+theorem :: SCMISORT:17
   for s be State of SCM+FSA, I be InitHalting Program of SCM+FSA, a be
   read-write Int-Location st s.a > 0 holds ex s2 be State of SCM+FSA, k be
-  Element of NAT st s2 = s+*Initialize((intloc 0).-->1) &
-   k =LifeSpan(P +* I,s+*Initialize((intloc 0).-->1)) + 3 &
+  Element of NAT st s2 = Initialized s &
+   k =LifeSpan(P +* I,Initialized s) + 3 &
    IC Comput(P +* while>0(a,I), s2,k) =  0 &
     (for b be Int-Location
   holds Comput(P +* while>0(a,I), s2,k).b = IExec(I,P,s).b) &
@@ -212,38 +194,35 @@ definition
   it.0 = s &
    for i being Nat
     holds it.(i+1)
-    = Comput(P +* while>0(a,I), it.i +* Initialize((intloc 0).-->1),
-     (LifeSpan(P +* while>0(a,I) +* I,
-     it.i +* Initialize((intloc 0).-->1)) + 3));
+    = Comput(P +* while>0(a,I), Initialized it.i,
+     LifeSpan(P +* while>0(a,I) +* I,Initialized it.i) + 3);
 end;
 
-canceled 2;
-
-theorem :: SCMISORT:25
+theorem :: SCMISORT:18
   StepWhile>0(a,P,s,I).(k+1) =StepWhile>0(a,P,StepWhile>0(a,P,s,I).k,I).1;
 
-theorem :: SCMISORT:26
+theorem :: SCMISORT:19
   for I being Program of SCM+FSA,a being read-write Int-Location,
   s being State of SCM+FSA holds StepWhile>0(a,P,s,I).(0+1)
-  = Comput(P +* while>0(a,I), s+*Initialize((intloc 0).-->1),
-   LifeSpan(P +* while>0(a,I) +* I,s+* Initialize((intloc 0).-->1)) + 3);
+  = Comput(P +* while>0(a,I), Initialized s,
+   LifeSpan(P +* while>0(a,I) +* I,Initialized s) + 3);
 
-theorem :: SCMISORT:27
+theorem :: SCMISORT:20
   for I be Program of SCM+FSA,a be read-write Int-Location, s be
   State of SCM+FSA,k,n be Element of NAT st
    IC StepWhile>0(a,P,s,I).k = 0 &
    StepWhile>0(a,P,s,I).k
-    = Comput(P +* while>0(a,I),s+*Initialize((intloc 0).-->1),n) &
-   StepWhile>0(a,P,s,I).k.intloc 0=1
+    = Comput(P +* while>0(a,I),Initialized s,n) &
+    StepWhile>0(a,P,s,I).k.intloc 0=1
   holds
    StepWhile>0(a,P,s,I).k
-    = StepWhile>0(a,P,s,I).k +* Initialize((intloc 0).-->1) &
+    = Initialized StepWhile>0(a,P,s,I).k &
    StepWhile>0(a,P,s,I).(k+1)
-    = Comput(P +* while>0(a,I), s +* Initialize((intloc 0).-->1),
-           (n +(LifeSpan(P +* while>0(a,I) +* I,
-       StepWhile>0(a,P,s,I).k +* Initialize((intloc 0).-->1)) + 3)));
+    = Comput(P +* while>0(a,I), Initialized s,
+           n +(LifeSpan(P +* while>0(a,I) +* I,
+       Initialized StepWhile>0(a,P,s,I).k) + 3));
 
-theorem :: SCMISORT:28
+theorem :: SCMISORT:21
   for I be Program of SCM+FSA,a be read-write Int-Location, s be State
 of SCM+FSA st ex f being Function of product the Object-Kind of SCM+FSA,NAT st
   (for k being Element of NAT holds ( f.(StepWhile>0(a,P,s,I).k) <> 0
@@ -255,17 +234,17 @@ of SCM+FSA st ex f being Function of product the Object-Kind of SCM+FSA,NAT st
     holds while>0(a,I) is_halting_onInit s,P & while>0(a,I)
   is_closed_onInit s,P;
 
-theorem :: SCMISORT:29
+theorem :: SCMISORT:22
   for I be good InitHalting Program of SCM+FSA,a be read-write
 Int-Location st (for s be State of SCM+FSA,P holds (s.a > 0
  implies IExec(I,P,s).a < s.a )) holds while>0(a,I) is InitHalting;
 
-theorem :: SCMISORT:30
+theorem :: SCMISORT:23
   for I be good InitHalting Program of SCM+FSA,a be read-write
 Int-Location st (for s be State of SCM+FSA,P holds IExec(I,P,s).a < s.a or
 IExec(I,P,s).a <= 0) holds while>0(a,I) is InitHalting;
 
-theorem :: SCMISORT:31
+theorem :: SCMISORT:24
   for I be good InitHalting Program of SCM+FSA,a be read-write
 Int-Location st ex f being Function of (product the Object-Kind of SCM+FSA),INT
 st (for s,t be State of SCM+FSA,P
@@ -273,36 +252,36 @@ st (for s,t be State of SCM+FSA,P
   (DataPart s = DataPart t implies f.s=f.t) & ( f.s <= 0 iff s.a <= 0 ) ) holds
   while>0(a,I) is InitHalting;
 
-theorem :: SCMISORT:32
+theorem :: SCMISORT:25
   for s be State of SCM+FSA, I be Program of SCM+FSA, a be
   read-write Int-Location st s.a <= 0
    holds DataPart IExec(while>0(a,I),P,s) =
   DataPart Initialized s;
 
-theorem :: SCMISORT:33
+theorem :: SCMISORT:26
   for s be State of SCM+FSA, I be good InitHalting Program of
 SCM+FSA, a be read-write Int-Location st s.a > 0 & while>0(a,I) is InitHalting
 holds DataPart IExec(while>0(a,I),P,s) =
  DataPart IExec(while>0(a,I),P,IExec(I,P,s));
 
-theorem :: SCMISORT:34
+theorem :: SCMISORT:27
   for s be State of SCM+FSA, I be Program of SCM+FSA, f be
 FinSeq-Location,a be read-write Int-Location st s.a <= 0
  holds IExec(while>0(a,I),P,s).f=s.f;
 
-theorem :: SCMISORT:35
+theorem :: SCMISORT:28
   for s be State of SCM+FSA, I be Program of SCM+FSA, b be
 Int-Location,a be read-write Int-Location st s.a <= 0
  holds IExec(while>0(a,I),P,s).b=(Initialized s).b;
 
-theorem :: SCMISORT:36
+theorem :: SCMISORT:29
   for s be State of SCM+FSA, I be good InitHalting Program of
 SCM+FSA, f be FinSeq-Location,a be read-write Int-Location st s.a > 0 & while>0
 (a,I) is InitHalting
  holds IExec(while>0(a,I),P,s).f =IExec(while>0(a,I),P,IExec(I,P,
   s)).f;
 
-theorem :: SCMISORT:37
+theorem :: SCMISORT:30
   for s be State of SCM+FSA, I be good InitHalting Program of
 SCM+FSA, b be Int-Location,a be read-write Int-Location st s.a > 0 & while>0(a,
 I) is InitHalting holds IExec(while>0(a,I),P,s).b
@@ -347,33 +326,33 @@ definition
   insert-sort fsloc 0;
 end;
 
-theorem :: SCMISORT:38
+theorem :: SCMISORT:31
   for f being FinSeq-Location holds UsedIntLoc (insert-sort f) = {
   intloc 0,intloc 1,intloc 2,intloc 3,intloc 4,intloc 5,intloc 6};
 
-theorem :: SCMISORT:39
+theorem :: SCMISORT:32
   for f being FinSeq-Location holds UsedInt*Loc (insert-sort f) =
   {f};
 
-theorem :: SCMISORT:40
+theorem :: SCMISORT:33
   for k1,k2,k3,k4 being Instruction of SCM+FSA holds card( k1 ';'
   k2 ';' k3 ';' k4) =8;
 
-theorem :: SCMISORT:41
+theorem :: SCMISORT:34
   for k1,k2,k3,k4,k5 being Instruction of SCM+FSA holds card( k1
   ';' k2 ';' k3 ';' k4 ';'k5) =10;
 
-theorem :: SCMISORT:42
+theorem :: SCMISORT:35
   for f being FinSeq-Location holds card insert-sort f = 82;
 
-theorem :: SCMISORT:43
+theorem :: SCMISORT:36
   for f being FinSeq-Location, k being Element of NAT st k < 82
   holds  k in dom (insert-sort f);
 
-theorem :: SCMISORT:44
+theorem :: SCMISORT:37
   insert-sort (fsloc 0) is keepInt0_1 InitHalting;
 
-theorem :: SCMISORT:45
+theorem :: SCMISORT:38
   for s be State of SCM+FSA
    holds s.(fsloc 0), IExec(insert-sort (fsloc 0),P,s).(fsloc 0)
     are_fiberwise_equipotent &
@@ -382,30 +361,31 @@ theorem :: SCMISORT:45
      x2=IExec(insert-sort (fsloc 0),P,s).(fsloc 0).j
   holds x1 >= x2;
 
-theorem :: SCMISORT:46
-  for i being Element of NAT, s being State of SCM+FSA, w being
-  FinSequence of INT, P
-   st NPP(Initialized Insert-Sort-Algorithm +* ((fsloc 0) .--> w)) c= s &
-    Insert-Sort-Algorithm c= P
-   holds IC Comput(P, s,i) in dom Insert-Sort-Algorithm;
+theorem :: SCMISORT:39
+  for i being Element of NAT, s being State of SCM+FSA,
+  P being Instruction-Sequence of SCM+FSA
+   st Insert-Sort-Algorithm c= P
+  for w being FinSequence of INT
+  st (Initialized ((fsloc 0) .--> w)) c= s
+  holds IC Comput(P,s,i) in dom Insert-Sort-Algorithm;
 
-theorem :: SCMISORT:47
-  for s be State of SCM+FSA,t be FinSequence of INT, P st Initialized
-  Insert-Sort-Algorithm +*(fsloc 0 .--> t) c= s &
+theorem :: SCMISORT:40
+  for s be State of SCM+FSA,t be FinSequence of INT, P st
+  Initialize((intloc 0).-->1) +*(fsloc 0 .--> t) c= s &
   Insert-Sort-Algorithm c= P
    ex u being FinSequence of
   REAL st t,u are_fiberwise_equipotent & u is non-increasing & u is FinSequence
   of INT & (Result(P,s)).(fsloc 0) = u;
 
-theorem :: SCMISORT:48
+theorem :: SCMISORT:41
   for w being FinSequence of INT holds Initialized
-  Insert-Sort-Algorithm +* ((fsloc 0) .--> w) is autonomic;
+   ((fsloc 0) .--> w) is Insert-Sort-Algorithm-autonomic;
 
 registration
  cluster Insert-Sort-Algorithm -> non halt-free;
 end;
 
-theorem :: SCMISORT:49
-  Insert-Sort-Algorithm, Initialized Insert-Sort-Algorithm
+theorem :: SCMISORT:42
+  Insert-Sort-Algorithm, Initialize((intloc 0).-->1)
      computes Sorting-Function;
 

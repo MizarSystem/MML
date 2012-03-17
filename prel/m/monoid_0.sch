@@ -43,10 +43,10 @@
 </ArgTypes>
 <Not>
 <For>
-<Typ kind="M" nr="12">
+<Typ kind="M" nr="13">
 <Cluster>
 <Adjective nr="40" value="false"/>
-<Adjective nr="65"/>
+<Adjective nr="66"/>
 </Cluster>
 <Func kind="F" nr="1"/>
 </Typ>
@@ -118,7 +118,7 @@
 </Pred>
 <Not>
 <Pred kind="P" nr="1">
-<Func kind="K" nr="146">
+<Func kind="K" nr="148">
 <Func kind="F" nr="1"/>
 <Var nr="1"/>
 <Var nr="2"/>
@@ -155,10 +155,10 @@
 </ArgTypes>
 <Not>
 <For>
-<Typ kind="M" nr="13">
+<Typ kind="M" nr="14">
 <Cluster>
 <Adjective nr="40" value="false"/>
-<Adjective nr="72"/>
+<Adjective nr="73"/>
 </Cluster>
 <Func kind="F" nr="1"/>
 </Typ>
@@ -230,7 +230,7 @@
 </Pred>
 <Not>
 <Pred kind="P" nr="1">
-<Func kind="K" nr="146">
+<Func kind="K" nr="148">
 <Func kind="F" nr="1"/>
 <Var nr="1"/>
 <Var nr="2"/>
@@ -242,7 +242,7 @@
 </For>
 </For>
 <Pred kind="P" nr="1">
-<Func kind="K" nr="137">
+<Func kind="K" nr="139">
 <Func kind="F" nr="1"/>
 </Func>
 </Pred>

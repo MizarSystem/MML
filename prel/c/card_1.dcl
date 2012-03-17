@@ -98,6 +98,26 @@
 </Adjective>
 </Cluster>
 </RCluster>
+<RCluster aid="CARD_1" nr="7">
+<ArgTypes>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="18" value="false"/>
+</Cluster>
+</Typ>
+</ArgTypes>
+<Typ kind="M" nr="2">
+<Cluster/>
+<Func kind="K" nr="31">
+<LocusVar nr="1"/>
+</Func>
+</Typ>
+<Cluster>
+<Adjective nr="27">
+<Num nr="1"/>
+</Adjective>
+</Cluster>
+</RCluster>
 <FCluster aid="CARD_1" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
@@ -412,6 +432,36 @@
 <Cluster>
 <Adjective nr="27">
 <Func kind="K" nr="26"/>
+</Adjective>
+</Cluster>
+</CCluster>
+<CCluster aid="CARD_1" nr="9">
+<ArgTypes/>
+<Cluster>
+<Adjective nr="27">
+<Num nr="1"/>
+</Adjective>
+</Cluster>
+<Typ kind="M" nr="1">
+<Cluster/>
+</Typ>
+<Cluster>
+<Adjective nr="18" value="false"/>
+<Adjective nr="19"/>
+</Cluster>
+</CCluster>
+<CCluster aid="CARD_1" nr="10">
+<ArgTypes/>
+<Cluster>
+<Adjective nr="18" value="false"/>
+<Adjective nr="19"/>
+</Cluster>
+<Typ kind="M" nr="1">
+<Cluster/>
+</Typ>
+<Cluster>
+<Adjective nr="27">
+<Num nr="1"/>
 </Adjective>
 </Cluster>
 </CCluster>

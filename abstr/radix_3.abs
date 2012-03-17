@@ -20,9 +20,10 @@ environ
  notations TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, XCMPLX_0, XXREAL_0, INT_1,
       NAT_1, NAT_D, FUNCT_1, PARTFUN1, NEWTON, POWER, FINSEQ_1, FINSEQ_2,
       GR_CY_1, RADIX_1;
- constructors REAL_1, NAT_D, NEWTON, POWER, BINARITH, GR_CY_1, RADIX_1;
+ constructors REAL_1, NAT_D, NEWTON, POWER, BINARITH, GR_CY_1, RADIX_1,
+      RELSET_1;
  registrations RELSET_1, FINSET_1, NUMBERS, XXREAL_0, XREAL_0, NAT_1, INT_1,
-      MEMBERED, NEWTON, XBOOLE_0, VALUED_0, FINSEQ_2, CARD_1;
+      MEMBERED, NEWTON, XBOOLE_0, VALUED_0, FINSEQ_2, CARD_1, FINSEQ_1;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
 
 
@@ -43,36 +44,34 @@ definition
   e <= Radix(k -' 1) };
 end;
 
-canceled;
-
-theorem :: RADIX_3:2
+theorem :: RADIX_3:1
   i1 in k-SD_Sub implies -Radix(k-'1) - 1 <= i1 & i1 <= Radix(k-'1);
 
-theorem :: RADIX_3:3
+theorem :: RADIX_3:2
   k-SD_Sub_S c= k-SD_Sub;
 
-theorem :: RADIX_3:4
+theorem :: RADIX_3:3
   k-SD_Sub_S c= (k+1)-SD_Sub_S;
 
-theorem :: RADIX_3:5
+theorem :: RADIX_3:4
   2 <= k implies k-SD_Sub c= k-SD;
 
-theorem :: RADIX_3:6
+theorem :: RADIX_3:5
   0 in 0-SD_Sub_S;
 
-theorem :: RADIX_3:7
+theorem :: RADIX_3:6
   0 in k-SD_Sub_S;
 
-theorem :: RADIX_3:8
+theorem :: RADIX_3:7
   0 in k-SD_Sub;
 
-theorem :: RADIX_3:9
+theorem :: RADIX_3:8
   for e being set st e in k-SD_Sub holds e is Integer;
 
-theorem :: RADIX_3:10
+theorem :: RADIX_3:9
   k-SD_Sub c= INT;
 
-theorem :: RADIX_3:11
+theorem :: RADIX_3:10
   k-SD_Sub_S c= INT;
 
 registration
@@ -94,7 +93,7 @@ end;
 reserve a for Tuple of n,k-SD;
 reserve aSub for Tuple of n,k-SD_Sub;
 
-theorem :: RADIX_3:12
+theorem :: RADIX_3:11
   i in Seg n implies aSub.i is Element of k-SD_Sub;
 
 begin :: Definition for new carry calculation method
@@ -116,23 +115,23 @@ definition
   k);
 end;
 
-theorem :: RADIX_3:13
+theorem :: RADIX_3:12
   for x be Integer, k be Nat holds -1 <= SDSub_Add_Carry(x,k) &
   SDSub_Add_Carry(x,k) <= 1;
 
-theorem :: RADIX_3:14
+theorem :: RADIX_3:13
   2 <= k & i1 in k-SD implies SDSub_Add_Data(i1,k) >= -Radix(k-'1)
   & SDSub_Add_Data(i1,k) <= Radix(k-'1) - 1;
 
-theorem :: RADIX_3:15
+theorem :: RADIX_3:14
   for x be Integer, k be Nat st 2 <= k holds SDSub_Add_Carry(x,k) in k-SD_Sub_S
 ;
 
-theorem :: RADIX_3:16
+theorem :: RADIX_3:15
   2 <= k & i1 in k-SD implies SDSub_Add_Data(i1,k) +
   SDSub_Add_Carry(i2,k) in k-SD_Sub;
 
-theorem :: RADIX_3:17
+theorem :: RADIX_3:16
   SDSub_Add_Carry(0,k) = 0;
 
 begin :: Definition for translation from Radix-2^k SD number
@@ -155,7 +154,7 @@ k)+SDSub_Add_Carry(DigA(x,i-'1),k) if i in Seg n, SDSub_Add_Carry(DigA(x,i-'1),
   k) if i = n + 1 otherwise 0;
 end;
 
-theorem :: RADIX_3:18
+theorem :: RADIX_3:17
   2 <= k & i in Seg (n+1) implies SD2SDSubDigit(a,i,k) is Element of k-SD_Sub;
 
 definition
@@ -177,10 +176,10 @@ definition
   in Seg (n+1) holds DigA_SDSub(it,i) = SD2SDSubDigitS(x,i,k);
 end;
 
-theorem :: RADIX_3:19
+theorem :: RADIX_3:18
   i in Seg n implies DigA_SDSub(aSub,i) is Element of k-SD_Sub;
 
-theorem :: RADIX_3:20
+theorem :: RADIX_3:19
   2 <= k & i1 in k-SD & i2 in k-SD_Sub implies SDSub_Add_Data(i1+i2,k)
   in k-SD_Sub_S;
 
@@ -216,11 +215,11 @@ definition
   Sum SDSub2INT(x);
 end;
 
-theorem :: RADIX_3:21
+theorem :: RADIX_3:20
   for i st i in Seg n holds 2 <= k implies DigA_SDSub(SD2SDSub(
 DecSD(m,n+1,k)),i) = DigA_SDSub(SD2SDSub(DecSD((m mod (Radix(k) |^ n)),n,k)),i)
 ;
 
-theorem :: RADIX_3:22
+theorem :: RADIX_3:21
   for n st n >= 1 holds for k,x st k >= 2 & x is_represented_by n,k
   holds x = SDSub2IntOut( SD2SDSub(DecSD(x,n,k)) );

@@ -17,20 +17,20 @@ environ
  vocabularies XBOOLE_0, RELAT_1, SUBSET_1, ZFMISC_1, TARSKI, FUNCT_5, FUNCT_1,
       RELAT_2, ORDERS_2, XXREAL_0, ORDINAL2, LATTICE3, BINOP_1, QMAX_1,
       STRUCT_0, ROBBINS1, WAYBEL_0, YELLOW_0, EQREL_1, WAYBEL_1, LATTICES,
-      OPOSET_1;
+      OPOSET_1, CARD_1;
  notations TARSKI, XBOOLE_0, SUBSET_1, ZFMISC_1, FUNCT_1, RELAT_1, RELAT_2,
-      FUNCT_2, RELSET_1, PARTFUN1, BINOP_1, DOMAIN_1, FUNCT_5, STRUCT_0,
-      ORDERS_2, LATTICE3, ROBBINS1, WAYBEL_0, WAYBEL_1, YELLOW_0, NECKLACE,
-      QMAX_1, PARTIT_2;
+      FUNCT_2, RELSET_1, PARTFUN1, BINOP_1, DOMAIN_1, FUNCT_5, CARD_1,
+      STRUCT_0, ORDERS_2, LATTICE3, ROBBINS1, WAYBEL_0, WAYBEL_1, YELLOW_0,
+      NECKLACE, QMAX_1, PARTIT_2;
  constructors REALSET2, LATTICE3, WAYBEL_1, NECKLACE, QMAX_1, FUNCT_5,
       RELSET_1, PARTIT_2;
  registrations XBOOLE_0, RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2, STRUCT_0,
-      YELLOW_0, WAYBEL24, TOLER_1, PARTIT_2;
- requirements BOOLE, SUBSET;
- definitions RELAT_2, PARTIT_2, ORDERS_2, NECKLACE;
+      YELLOW_0, WAYBEL24, TOLER_1, PARTIT_2, ZFMISC_1, CARD_1, ORDINAL1;
+ requirements BOOLE, SUBSET, NUMERALS;
+ definitions RELAT_2, PARTIT_2, ORDERS_2, NECKLACE, STRUCT_0;
  theorems FUNCT_1, FUNCT_2, LATTICE3, ORDERS_2, PARTIT_2, RELAT_1, RELAT_2,
       RELSET_1, TARSKI, WAYBEL_0, WAYBEL_1, YELLOW_0, ENUMSET1, SYSREL,
-      NECKLACE, REALSET1, CARD_1;
+      NECKLACE, REALSET1, CARD_1, ZFMISC_1, STRUCT_0;
 
 begin
 
@@ -38,8 +38,6 @@ reserve  X for non empty set,
   R for Relation of X;
 
 :: Some basic definitions and theorems for later examples;
-
-canceled 3;
 
 theorem
   for L being non empty reflexive antisymmetric RelStr for x,y being
@@ -79,13 +77,11 @@ end;
 
 :: for various types of relations needed for Posets
 
-canceled 12;
-
 :: Some existence conditions on non-empty relations
 
 registration
   let X be set;
-  cluster irreflexive asymmetric transitive Relation of X;
+  cluster irreflexive asymmetric transitive for Relation of X;
   existence
   proof
     {}(X,X) = {};
@@ -101,10 +97,10 @@ registration
 end;
 
 registration
-  cluster non empty strict OrthoRelStr;
+  cluster non empty strict for OrthoRelStr;
   existence
   proof
-    set X =the  non empty set,R =the  (Relation of X),C =the  UnOp of X;
+    set X = the non empty set,R = the (Relation of X),C = the UnOp of X;
     take OrthoRelStr(#X,R,C#);
     thus thesis;
   end;
@@ -112,11 +108,9 @@ end;
 
 :: Double negation property of the internal Complement
 
-canceled 3;
-
 registration
   let O be non empty OrthoRelStr;
-  cluster involutive Function of O,O;
+  cluster involutive for Function of O,O;
   existence
   proof
     set C = the carrier of O;
@@ -130,7 +124,7 @@ end;
 :: Small example structures
 
 definition
-  canceled 3;
+
   func TrivOrthoRelStr -> strict OrthoRelStr equals
   :Def4:
   OrthoRelStr (# 1, id 1, op1 #);
@@ -142,8 +136,12 @@ notation
 end;
 
 registration
-  cluster TrivOrthoRelStr -> non empty trivial;
-  coherence by CARD_1:87,REALSET1:def 4;
+  cluster TrivOrthoRelStr -> 1-element;
+  coherence
+   proof
+     the carrier of TrivOrthoRelStr = {{}} by CARD_1:49;
+    hence the carrier of TrivOrthoRelStr is 1-element;
+   end;
 end;
 
 definition
@@ -164,15 +162,13 @@ definition
   ex f being Function of O,O st f = the Compl of O & f is involutive;
 end;
 
-canceled;
-
 registration
   cluster TrivOrthoRelStr -> Dneg;
   coherence by Def6;
 end;
 
 registration
-  cluster Dneg (non empty OrthoRelStr);
+  cluster Dneg for non empty OrthoRelStr;
   existence by Def4;
 end;
 
@@ -180,7 +176,7 @@ end;
 
 definition
   let O be non empty RelStr;
-  canceled 2;
+
   attr O is SubReFlexive means
   :Def9:
   the InternalRel of O is reflexive;
@@ -193,8 +189,8 @@ theorem
 proof
   set RO = the InternalRel of O;
   assume O is reflexive;
-  then RO is_reflexive_in the carrier of O by ORDERS_2:def 4;
-  then RO is reflexive by PARTIT_2:23;
+  then RO is_reflexive_in the carrier of O by ORDERS_2:def 2;
+  then RO is reflexive by PARTIT_2:21;
   hence thesis by Def9;
 end;
 
@@ -202,10 +198,10 @@ theorem Th22:
   TrivOrthoRelStr is reflexive
 proof
 A1: rng id {{}} = {{}} & field id {{}} = dom id {{}} \/ rng id {{}} by
-RELAT_1:71,def 6;
-  id {{}} is_reflexive_in (field id {{}}) & dom id {{}} = {{}} by RELAT_1:71
+RELAT_1:45,def 6;
+  id {{}} is_reflexive_in (field id {{}}) & dom id {{}} = {{}} by RELAT_1:45
 ,RELAT_2:def 9;
-  hence thesis by A1,CARD_1:87,ORDERS_2:def 4;
+  hence thesis by A1,CARD_1:49,ORDERS_2:def 2;
 end;
 
 registration
@@ -214,20 +210,20 @@ registration
 end;
 
 registration
-  cluster reflexive strict (non empty OrthoRelStr);
+  cluster reflexive strict for non empty OrthoRelStr;
   existence by Th22;
 end;
 
 definition
   let O;
-  canceled;
+
   redefine attr O is irreflexive means
   :Def11:
   the InternalRel of O is irreflexive;
   compatibility
   proof
   set RO = the InternalRel of O;
-A1: field RO c= (the carrier of O) \/ the carrier of O by RELSET_1:19;
+A1: field RO c= (the carrier of O) \/ the carrier of O by RELSET_1:8;
     thus O is irreflexive implies RO is irreflexive
     proof
       assume
@@ -235,7 +231,7 @@ A2:      O is irreflexive;
       let x be set;
       assume x in field RO;
        then x in the carrier of O by A1;
-      hence thesis by A2,NECKLACE:def 6;
+      hence thesis by A2,NECKLACE:def 5;
     end;
     assume
 A3:   RO is_irreflexive_in field RO;
@@ -246,7 +242,7 @@ A3:   RO is_irreflexive_in field RO;
     hence not [x,x] in RO by A3,RELAT_2:def 2;
     end;
     suppose not x in field RO;
-    hence not [x,x] in RO by RELAT_1:30;
+    hence not [x,x] in RO by RELAT_1:15;
     end;
   end;
   redefine attr O is irreflexive means
@@ -259,17 +255,15 @@ A3:   RO is_irreflexive_in field RO;
     proof
       assume O is irreflexive;
       then for x being set st x in the carrier of O holds not [x,x] in the
-      InternalRel of O by NECKLACE:def 6;
+      InternalRel of O by NECKLACE:def 5;
       hence thesis by RELAT_2:def 2;
     end;
     assume the InternalRel of O is_irreflexive_in the carrier of O;
     then for x being set st x in the carrier of O holds not [x,x] in the
     InternalRel of O by RELAT_2:def 2;
-    hence thesis by NECKLACE:def 6;
+    hence thesis by NECKLACE:def 5;
   end;
 end;
-
-canceled;
 
 theorem Th24:
   TrivAsymOrthoRelStr is irreflexive
@@ -277,7 +271,7 @@ proof
   set IntRel = {}({{}},{{}});
   for x being set st x in {{}} holds not [x,x] in IntRel;
   then IntRel is_irreflexive_in {{}} by RELAT_2:def 2;
-  hence thesis by Def12,CARD_1:87;
+  hence thesis by Def12,CARD_1:49;
 end;
 
 registration
@@ -286,7 +280,7 @@ registration
 end;
 
 registration
-  cluster irreflexive strict (non empty OrthoRelStr);
+  cluster irreflexive strict for non empty OrthoRelStr;
   existence by Th24;
 end;
 
@@ -304,24 +298,22 @@ definition
      proof
       assume the InternalRel of O is_symmetric_in the carrier of O;
       hence the InternalRel of O is symmetric Relation of the carrier of O
-         by PARTIT_2:24;
+         by PARTIT_2:22;
      end;
     assume the InternalRel of O is symmetric Relation of the carrier of O;
-    hence the InternalRel of O is_symmetric_in the carrier of O by PARTIT_2:25;
+    hence the InternalRel of O is_symmetric_in the carrier of O by PARTIT_2:23;
    end;
 end;
-
-canceled;
 
 theorem Th26:
   TrivOrthoRelStr is symmetric
 proof
-  id {{}} is_symmetric_in {{}} by PARTIT_2:25;
-  hence thesis by CARD_1:87,NECKLACE:def 4;
+  id {{}} is_symmetric_in {{}} by PARTIT_2:23;
+  hence thesis by CARD_1:49,NECKLACE:def 3;
 end;
 
 registration
-  cluster symmetric strict (non empty OrthoRelStr);
+  cluster symmetric strict for non empty OrthoRelStr;
   existence by Th26;
 end;
 
@@ -329,7 +321,7 @@ end;
 
 definition
   let O;
-  canceled;
+
   redefine attr O is antisymmetric means
   the InternalRel of O is antisymmetric Relation of the carrier of O;
   compatibility
@@ -339,15 +331,13 @@ definition
      proof
       assume the InternalRel of O is_antisymmetric_in the carrier of O;
       hence the InternalRel of O is antisymmetric Relation of the carrier of O
-                           by PARTIT_2:27;
+                           by PARTIT_2:25;
      end;
     assume the InternalRel of O is antisymmetric Relation of the carrier of O;
     hence the InternalRel of O is_antisymmetric_in the carrier of O
-                       by PARTIT_2:26;
+                       by PARTIT_2:24;
    end;
 end;
-
-canceled;
 
 Lm1: TrivOrthoRelStr is antisymmetric;
 
@@ -357,7 +347,7 @@ registration
 end;
 
 registration
-  cluster symmetric antisymmetric strict (non empty OrthoRelStr);
+  cluster symmetric antisymmetric strict for non empty OrthoRelStr;
   existence by Lm1;
 end;
 
@@ -365,7 +355,7 @@ end;
 
 definition
   let O;
-  canceled 2;
+
   redefine attr O is asymmetric means
   :Def18:
   the InternalRel of O is_asymmetric_in the carrier of O;
@@ -376,21 +366,19 @@ definition
     proof
      assume the InternalRel of O is asymmetric;
      hence the InternalRel of O is_asymmetric_in the carrier of O
-      by PARTIT_2:30;
+      by PARTIT_2:28;
     end;
     assume the InternalRel of O is_asymmetric_in the carrier of O;
-    hence the InternalRel of O is asymmetric by PARTIT_2:31;
+    hence the InternalRel of O is asymmetric by PARTIT_2:29;
    end;
 end;
-
-canceled 2;
 
 theorem Th30:
   TrivAsymOrthoRelStr is asymmetric
 proof
   set IntRel = {}({{}},{{}});
-  IntRel is_asymmetric_in {{}} by PARTIT_2:30;
-  hence thesis by Def18,CARD_1:87;
+  IntRel is_asymmetric_in {{}} by PARTIT_2:28;
+  hence thesis by Def18,CARD_1:49;
 end;
 
 registration
@@ -399,7 +387,7 @@ registration
 end;
 
 registration
-  cluster asymmetric strict (non empty OrthoRelStr);
+  cluster asymmetric strict for non empty OrthoRelStr;
   existence by Th30;
 end;
 
@@ -417,30 +405,26 @@ definition
     proof
      assume the InternalRel of O is_transitive_in the carrier of O;
      hence the InternalRel of O is transitive Relation of the carrier of O
-                       by PARTIT_2:29;
+                       by PARTIT_2:27;
     end;
     assume the InternalRel of O is transitive Relation of the carrier of O;
     hence the InternalRel of O is_transitive_in the carrier of O
-                   by PARTIT_2:28;
+                   by PARTIT_2:26;
    end;
 end;
 
-canceled;
-
 registration
-  cluster reflexive symmetric antisymmetric transitive strict (non empty
-    OrthoRelStr);
+  cluster reflexive symmetric antisymmetric transitive strict for non empty
+    OrthoRelStr;
   existence by Lm1;
 end;
-
-canceled;
 
 theorem Th33:
   TrivAsymOrthoRelStr is transitive
 proof
   set IntRel = the InternalRel of TrivAsymOrthoRelStr;
-  IntRel is_transitive_in {{}} by PARTIT_2:28;
-  hence thesis by CARD_1:87,ORDERS_2:def 5;
+  IntRel is_transitive_in {{}} by PARTIT_2:26;
+  hence thesis by CARD_1:49,ORDERS_2:def 3;
 end;
 
 registration
@@ -449,7 +433,7 @@ registration
 end;
 
 registration
-  cluster irreflexive asymmetric transitive strict (non empty OrthoRelStr);
+  cluster irreflexive asymmetric transitive strict for non empty OrthoRelStr;
   existence by Th24;
 end;
 
@@ -468,8 +452,8 @@ proof
   set R = the InternalRel of O;
   assume O is irreflexive & O is transitive;
   then R is irreflexive & R is transitive by Def11,Def19;
-  then R is asymmetric by RELAT_2:25;
-  hence thesis by NECKLACE:def 5;
+  then R is asymmetric by RELAT_2:8;
+  hence thesis by NECKLACE:def 4;
 end;
 
 theorem Th36:
@@ -477,12 +461,10 @@ theorem Th36:
 proof
   set R = the InternalRel of O;
   assume O is asymmetric;
-  then R is asymmetric by NECKLACE:def 5;
-  then R is irreflexive by RELAT_2:26;
+  then R is asymmetric by NECKLACE:def 4;
+  then R is irreflexive by RELAT_2:9;
   hence thesis by Def11;
 end;
-
-canceled 5;
 
 begin
 
@@ -490,7 +472,7 @@ begin
 
 definition
   let O;
-  canceled;
+
   attr O is SubQuasiOrdered means
   :Def21:
   O is SubReFlexive transitive;
@@ -521,19 +503,19 @@ proof
   assume
 A1: O is QuasiOrdered;
   then O is transitive by Def22;
-  then IntRel is_transitive_in CO by ORDERS_2:def 5;
-  then IntRel is transitive by PARTIT_2:29;
+  then IntRel is_transitive_in CO by ORDERS_2:def 3;
+  then IntRel is transitive by PARTIT_2:27;
   then
 A2: O is transitive by Def19;
   O is reflexive by A1,Def22;
-  then IntRel is_reflexive_in CO by ORDERS_2:def 4;
-  then IntRel is reflexive by PARTIT_2:23;
+  then IntRel is_reflexive_in CO by ORDERS_2:def 2;
+  then IntRel is reflexive by PARTIT_2:21;
   then O is SubReFlexive by Def9;
   hence thesis by A2,Def21;
 end;
 
 registration
-  cluster QuasiOrdered -> SubQuasiOrdered (non empty OrthoRelStr);
+  cluster QuasiOrdered -> SubQuasiOrdered for non empty OrthoRelStr;
   correctness by Th42;
 end;
 
@@ -554,7 +536,7 @@ definition
 end;
 
 registration
-  cluster QuasiPure Dneg QuasiOrdered strict (non empty OrthoRelStr);
+  cluster QuasiPure Dneg QuasiOrdered strict for non empty OrthoRelStr;
   existence
   proof
     TrivOrthoRelStr is QuasiPure by Def23;
@@ -568,27 +550,25 @@ registration
 end;
 
 definition
-  mode QuasiPureOrthoRelStr is QuasiPure (non empty OrthoRelStr);
+  mode QuasiPureOrthoRelStr is QuasiPure non empty OrthoRelStr;
 end;
 
 :: Partial Order ---> Poset
 
 definition
- canceled;
+
   let O;
   attr O is PartialOrdered means
   :Def25:
   O is reflexive antisymmetric transitive;
 end;
 
-canceled;
-
 registration
-  cluster PartialOrdered -> reflexive antisymmetric transitive (non empty
-    OrthoRelStr);
+  cluster PartialOrdered -> reflexive antisymmetric transitive for non empty
+    OrthoRelStr;
   coherence by Def25;
-  cluster reflexive antisymmetric transitive -> PartialOrdered (non empty
-    OrthoRelStr);
+  cluster reflexive antisymmetric transitive -> PartialOrdered for non empty
+    OrthoRelStr;
   coherence by Def25;
 end;
 
@@ -602,7 +582,7 @@ definition
 end;
 
 registration
-  cluster Pure Dneg PartialOrdered strict (non empty OrthoRelStr);
+  cluster Pure Dneg PartialOrdered strict for non empty OrthoRelStr;
   existence
   proof
     TrivOrthoRelStr is Pure by Def26;
@@ -616,13 +596,13 @@ registration
 end;
 
 definition
-  mode PureOrthoRelStr is Pure (non empty OrthoRelStr);
+  mode PureOrthoRelStr is Pure non empty OrthoRelStr;
 end;
 
 :: Strict Poset
 
 definition
- canceled;
+
   let O;
   attr O is StrictPartialOrdered means
   :Def28:
@@ -634,8 +614,6 @@ notation
   synonym O is StrictOrdered for O is StrictPartialOrdered;
 end;
 
-canceled;
-
 theorem Th45:
   O is StrictPartialOrdered implies O is irreflexive
 proof
@@ -645,14 +623,12 @@ proof
 end;
 
 registration
-  cluster StrictPartialOrdered -> irreflexive (non empty OrthoRelStr);
+  cluster StrictPartialOrdered -> irreflexive for non empty OrthoRelStr;
   coherence by Th45;
 end;
 
-canceled 2;
-
 registration
-  cluster StrictPartialOrdered -> irreflexive (non empty OrthoRelStr);
+  cluster StrictPartialOrdered -> irreflexive for non empty OrthoRelStr;
   coherence;
 end;
 
@@ -662,7 +638,7 @@ registration
 end;
 
 registration
-  cluster irreflexive StrictPartialOrdered (non empty strict OrthoRelStr);
+  cluster irreflexive StrictPartialOrdered for non empty strict OrthoRelStr;
   existence
   proof
     TrivAsymOrthoRelStr is StrictPartialOrdered;
@@ -672,7 +648,7 @@ end;
 
 :: Quasiorder to Partial Order
 
-reserve QO for QuasiOrdered (non empty OrthoRelStr);
+reserve QO for QuasiOrdered non empty OrthoRelStr;
 
 theorem
   QO is antisymmetric implies QO is PartialOrdered
@@ -684,15 +660,15 @@ A1: QO is antisymmetric;
 end;
 
 registration
-  cluster PartialOrdered -> reflexive transitive antisymmetric (non empty
-    OrthoRelStr);
+  cluster PartialOrdered -> reflexive transitive antisymmetric for non empty
+    OrthoRelStr;
   correctness;
 end;
 
 definition
   let PO be non empty RelStr;
   let f be UnOp of the carrier of PO;
-  canceled 3;
+
   attr f is Orderinvolutive means
   :Def32:
   ex g being Function of PO, PO st g = f & g is involutive antitone;
@@ -705,14 +681,12 @@ definition
   ex f being Function of PO,PO st f = the Compl of PO & f is Orderinvolutive;
 end;
 
-canceled;
-
 theorem Th50:
   the Compl of TrivOrthoRelStr is Orderinvolutive
 proof
   set O = TrivOrthoRelStr;
   set C = the Compl of O;
-  reconsider Emp = {} as Element of O by CARD_1:87,TARSKI:def 1;
+  reconsider Emp = {} as Element of O by CARD_1:49,TARSKI:def 1;
   C is antitone Function of O,O
   proof
     reconsider f = C as Function of O,O;
@@ -721,8 +695,8 @@ proof
     proof
       let a1,a2 be Element of O;
       set b1 = f.a1;
-      b1 = Emp by CARD_1:87,FUNCT_2:65;
-      then f.a2 <= b1 by CARD_1:87,FUNCT_2:65;
+      b1 = Emp by CARD_1:49,FUNCT_2:50;
+      then f.a2 <= b1 by CARD_1:49,FUNCT_2:50;
       hence thesis;
     end;
     hence thesis by WAYBEL_0:def 5;
@@ -736,7 +710,7 @@ registration
 end;
 
 registration
-  cluster OrderInvolutive Pure PartialOrdered (non empty OrthoRelStr);
+  cluster OrderInvolutive Pure PartialOrdered for non empty OrthoRelStr;
   existence
   proof
     take TrivOrthoRelStr;
@@ -745,8 +719,8 @@ registration
 end;
 
 definition
-  mode PreOrthoPoset is OrderInvolutive Pure PartialOrdered (non empty
-    OrthoRelStr);
+  mode PreOrthoPoset is OrderInvolutive Pure PartialOrdered non empty
+    OrthoRelStr;
 end;
 
 definition
@@ -766,7 +740,7 @@ definition
   st f = the Compl of PO & f QuasiOrthoComplement_on PO;
 end;
 
-Lm2: id {{}} = {[{},{}]} by SYSREL:30;
+Lm2: id {{}} = {[{},{}]} by SYSREL:13;
 
 theorem Th51:
   TrivOrthoRelStr is QuasiOrthocomplemented
@@ -780,8 +754,8 @@ proof
 A1: for x being Element of S holds {x,op1.x} = {x}
     proof
       let a be Element of S;
-      a = op1.a by Lm2,CARD_1:87,FUNCT_1:34,PARTIT_2:21;
-      hence thesis by ENUMSET1:69;
+      a = op1.a by Lm2,CARD_1:49,FUNCT_1:17,PARTIT_2:19;
+      hence thesis by ENUMSET1:29;
     end;
     for x being Element of O holds sup {x,f.x} = x & inf {x,f.x} = x &
     ex_sup_of {x,f.x},O & ex_inf_of {x,f.x},O
@@ -842,8 +816,8 @@ proof
 A1: for x being Element of S holds {x,op1.x} = {x}
     proof
       let a be Element of S;
-      a = op1.a by Lm2,CARD_1:87,FUNCT_1:34,PARTIT_2:21;
-      hence thesis by ENUMSET1:69;
+      a = op1.a by Lm2,CARD_1:49,FUNCT_1:17,PARTIT_2:19;
+      hence thesis by ENUMSET1:29;
     end;
 A2: for x being Element of O holds ex_sup_of {x,f.x},O & ex_inf_of {x,f.x}
     ,O & sup {x,f.x} = x & inf {x,f.x} = x
@@ -875,7 +849,7 @@ A6:   ex_inf_of {a,f.a},O by A2;
       reconsider a0 = a as Element of S;
       {a0,f.a0} = {a0} by A1;
       then
-A7:   {a0,f.a0} = S by CARD_1:87,TARSKI:def 1;
+A7:   {a0,f.a0} = S by CARD_1:49,TARSKI:def 1;
       a is_maximum_of {a,f.a} & a is_minimum_of {a,f.a} by A4;
       hence thesis by A2,A7;
     end;
@@ -890,8 +864,9 @@ registration
 end;
 
 registration
-  cluster Orthocomplemented QuasiOrthocomplemented PartialOrdered (non empty
-    OrthoRelStr);
+  cluster Orthocomplemented QuasiOrthocomplemented PartialOrdered for
+non empty
+    OrthoRelStr;
   correctness
   proof
     take TrivOrthoRelStr;
@@ -900,7 +875,7 @@ registration
 end;
 
 definition
-  mode QuasiOrthoPoset is QuasiOrthocomplemented PartialOrdered (non empty
-    OrthoRelStr);
-  mode OrthoPoset is Orthocomplemented PartialOrdered (non empty OrthoRelStr);
+  mode QuasiOrthoPoset is QuasiOrthocomplemented PartialOrdered non empty
+    OrthoRelStr;
+  mode OrthoPoset is Orthocomplemented PartialOrdered non empty OrthoRelStr;
 end;

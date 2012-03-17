@@ -22,7 +22,7 @@
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
-<Adjective nr="45"/>
+<Adjective nr="46"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -31,9 +31,9 @@
 <LocusVar nr="1"/>
 </Typ>
 <Cluster>
-<Adjective nr="44"/>
 <Adjective nr="45"/>
-<Adjective nr="56">
+<Adjective nr="46"/>
+<Adjective nr="57">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -43,7 +43,7 @@
 <Typ kind="G" nr="6">
 <Cluster>
 <Adjective nr="33" value="false"/>
-<Adjective nr="45"/>
+<Adjective nr="46"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -53,9 +53,9 @@
 </Typ>
 <Cluster>
 <Adjective nr="33" value="false"/>
-<Adjective nr="44"/>
 <Adjective nr="45"/>
-<Adjective nr="56">
+<Adjective nr="46"/>
+<Adjective nr="57">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>

@@ -54,20 +54,20 @@
 <Func kind="K" nr="32"/>
 </Typ>
 </ArgTypes>
-<Typ kind="M" nr="11">
+<Typ kind="M" nr="12">
 <Cluster/>
-<Func kind="K" nr="281">
+<Func kind="K" nr="282">
 <LocusVar nr="1"/>
 </Func>
 </Typ>
 <Cluster>
 <Adjective nr="63" value="false"/>
-<Adjective nr="74"/>
 <Adjective nr="75"/>
-<Adjective nr="79"/>
+<Adjective nr="76"/>
 <Adjective nr="80"/>
 <Adjective nr="81"/>
-<Adjective nr="86"/>
+<Adjective nr="82"/>
+<Adjective nr="87"/>
 </Cluster>
 </RCluster>
 <FCluster aid="JORDAN5A" nr="1">
@@ -77,12 +77,12 @@
 <Func kind="K" nr="32"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="281">
+<Func kind="K" nr="282">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="152"/>
-<Adjective nr="177"/>
+<Adjective nr="153"/>
+<Adjective nr="178"/>
 </Cluster>
 </FCluster>
 </Registrations>

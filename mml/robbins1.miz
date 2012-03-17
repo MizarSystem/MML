@@ -15,11 +15,13 @@
 environ
 
  vocabularies STRUCT_0, BINOP_1, LATTICES, FUNCT_5, XBOOLE_0, ZFMISC_1,
-      SUBSET_1, FUNCT_1, ARYTM_3, EQREL_1, XXREAL_2, ARYTM_1, ROBBINS1;
- notations STRUCT_0, LATTICES, BINOP_1, FUNCT_2, FUNCT_5;
+      SUBSET_1, FUNCT_1, ARYTM_3, EQREL_1, XXREAL_2, ARYTM_1, ROBBINS1, CARD_1;
+ notations TARSKI, CARD_1, STRUCT_0, LATTICES, BINOP_1, FUNCT_2, FUNCT_5;
  constructors BINOP_1, LATTICES, FUNCT_5;
- registrations RELSET_1, STRUCT_0, LATTICES, LATTICE2, XBOOLE_0, ZFMISC_1;
- definitions LATTICES;
+ registrations RELSET_1, STRUCT_0, LATTICES, LATTICE2, XBOOLE_0, ZFMISC_1,
+      CARD_1, ORDINAL1;
+ requirements SUBSET, NUMERALS;
+ definitions LATTICES, STRUCT_0;
  theorems STRUCT_0, LATTICES, BINOP_1, CARD_1;
  schemes BINOP_1;
 
@@ -58,20 +60,28 @@ definition
 end;
 
 registration
-  cluster TrivComplLat -> non empty trivial;
-  coherence by CARD_1:87;
-  cluster TrivOrtLat -> non empty trivial;
-  coherence by CARD_1:87;
+  cluster TrivComplLat -> 1-element;
+  coherence
+   proof
+    the carrier of TrivComplLat = {0} by CARD_1:49;
+    hence the carrier of TrivComplLat is 1-element;
+   end;
+  cluster TrivOrtLat -> 1-element;
+  coherence
+   proof
+    the carrier of TrivOrtLat = {0} by CARD_1:49;
+    hence the carrier of TrivOrtLat is 1-element;
+   end;
 end;
 
 registration
-  cluster strict non empty trivial OrthoLattStr;
+  cluster strict 1-element for OrthoLattStr;
   existence
   proof
     take TrivOrtLat;
     thus thesis;
   end;
-  cluster strict non empty trivial ComplLLattStr;
+  cluster strict 1-element for ComplLLattStr;
   existence
   proof
     take TrivComplLat;
@@ -80,13 +90,16 @@ registration
 end;
 
 registration
-  let L be non empty trivial ComplLLattStr;
-  cluster the ComplStr of L -> non empty trivial;
-  coherence;
+  let L be 1-element ComplLLattStr;
+  cluster the ComplStr of L -> 1-element;
+  coherence
+   proof
+    thus the carrier of the ComplStr of L is 1-element;
+   end;
 end;
 
 registration
-  cluster strict non empty trivial ComplStr;
+  cluster strict 1-element for ComplStr;
   existence
   proof
     take the ComplStr of TrivOrtLat;
@@ -181,7 +194,7 @@ end;
 
 registration
   cluster strict join-associative join-commutative Robbins join-idempotent
-    Huntington (non empty ComplLLattStr);
+    Huntington for non empty ComplLLattStr;
   existence
   proof
     take TrivComplLat;
@@ -190,7 +203,7 @@ registration
 end;
 
 registration
-  cluster strict Lattice-like Robbins Huntington (non empty OrthoLattStr);
+  cluster strict Lattice-like Robbins Huntington for non empty OrthoLattStr;
   existence
   proof
     take TrivOrtLat;
@@ -199,22 +212,22 @@ registration
 end;
 
 definition
-  let L be join-commutative (non empty ComplLLattStr), x,y be Element of L;
+  let L be join-commutative non empty ComplLLattStr, x,y be Element of L;
   redefine func x + y;
   commutativity by LATTICES:def 4;
 end;
 
 theorem Th1: :: 4.8
-  for L being Huntington join-commutative join-associative (non
-empty ComplLLattStr), a, b being Element of L holds (a *' b) + (a *' b`) = a
+  for L being Huntington join-commutative join-associative non
+empty ComplLLattStr, a, b being Element of L holds (a *' b) + (a *' b`) = a
 by Def6;
 
 theorem Th2: :: 4.9
-  for L being Huntington join-commutative join-associative (non
-  empty ComplLLattStr), a being Element of L holds a + a` = a` + a``
+  for L being Huntington join-commutative join-associative non
+  empty ComplLLattStr, a being Element of L holds a + a` = a` + a``
 proof
-  let L be Huntington join-commutative join-associative (non empty
-  ComplLLattStr), a be Element of L;
+  let L be Huntington join-commutative join-associative non empty
+  ComplLLattStr, a be Element of L;
   set y = a`, z = y``;
   a = ((a` + y``)` + (a` + y`)`) & a` = ((a`` + a```)` + (a`` + a``)`) by Def6;
   then a + a` = (y + z)` + (y + y`)` + (y` + y`)` + (y` + z)` by LATTICES:def 5
@@ -226,22 +239,22 @@ proof
 end;
 
 theorem Th3: :: 4.10
-  for L being join-commutative join-associative Huntington (non
-  empty ComplLLattStr), x being Element of L holds x`` = x
+  for L being join-commutative join-associative Huntington non
+  empty ComplLLattStr, x being Element of L holds x`` = x
 proof
-  let L be join-commutative join-associative Huntington (non empty
-  ComplLLattStr), x be Element of L;
+  let L be join-commutative join-associative Huntington non empty
+  ComplLLattStr, x be Element of L;
   set y = x`;
   (y`` + y`)` + (y`` + y)` = y` & (y + y``)` + (y + y`)` = x by Def6;
   hence thesis by Th2;
 end;
 
 theorem Th4: :: 4.11 revised p. 557 without idempotency
-  for L being join-commutative join-associative Huntington (non
-  empty ComplLLattStr), a, b being Element of L holds a + a` = b + b`
+  for L being join-commutative join-associative Huntington non
+  empty ComplLLattStr, a, b being Element of L holds a + a` = b + b`
 proof
-  let L be join-commutative join-associative Huntington (non empty
-  ComplLLattStr), a, b be Element of L;
+  let L be join-commutative join-associative Huntington non empty
+  ComplLLattStr, a, b be Element of L;
   thus a + a` = (a` + b``)` + (a` + b`)` + a` by Def6
     .= (a` + b``)` + (a` + b`)` + ((a`` + b``)` + (a`` + b`)`) by Def6
     .= (a`` + b`)` + ((a`` + b``)` + ((a` + b``)` + (a` + b`)`)) by
@@ -256,12 +269,12 @@ end;
 
 theorem Th5: :: 4.12
   for L being join-commutative join-associative join-idempotent
-  Huntington (non empty ComplLLattStr) ex c being Element of L st for a being
+  Huntington non empty ComplLLattStr ex c being Element of L st for a being
   Element of L holds c + a = c & a + a` = c
 proof
-  let L be join-commutative join-associative join-idempotent Huntington (non
-  empty ComplLLattStr);
-  set b =the  Element of L;
+  let L be join-commutative join-associative join-idempotent Huntington non
+  empty ComplLLattStr;
+  set b = the Element of L;
   take c = b` + b;
   let a be Element of L;
   thus c + a = a` + a + a by Th4
@@ -273,10 +286,10 @@ end;
 
 theorem Th6: :: 4.12
   for L being join-commutative join-associative join-idempotent
-  Huntington (non empty ComplLLattStr) holds L is upper-bounded
+  Huntington non empty ComplLLattStr holds L is upper-bounded
 proof
-  let L be join-commutative join-associative join-idempotent Huntington (non
-  empty ComplLLattStr);
+  let L be join-commutative join-associative join-idempotent Huntington non
+  empty ComplLLattStr;
   consider c being Element of L such that
 A1: for a being Element of L holds c + a = c & a + a` = c by Th5;
   for a being Element of L holds a + c = c & a + a` = c by A1;
@@ -285,13 +298,13 @@ end;
 
 registration
   cluster join-commutative join-associative join-idempotent Huntington ->
-    upper-bounded (non empty ComplLLattStr);
+    upper-bounded for non empty ComplLLattStr;
   coherence by Th6;
 end;
 
 definition
-  let L be join-commutative join-associative join-idempotent Huntington (non
-  empty ComplLLattStr);
+  let L be join-commutative join-associative join-idempotent Huntington non
+  empty ComplLLattStr;
   redefine func Top L means
   :Def8:
   ex a being Element of L st it = a + a`;
@@ -299,7 +312,7 @@ definition
   proof
     let IT be Element of L;
     hereby
-      set a =the  Element of L;
+      set a = the Element of L;
       assume
 A1:   IT = Top L;
       take a;
@@ -333,12 +346,12 @@ end;
 
 theorem Th7: :: 4.13
   for L being join-commutative join-associative join-idempotent
-  Huntington (non empty ComplLLattStr) ex c being Element of L st for a being
+  Huntington non empty ComplLLattStr ex c being Element of L st for a being
   Element of L holds c *' a = c & (a + a`)` = c
 proof
-  let L be join-commutative join-associative join-idempotent Huntington (non
-  empty ComplLLattStr);
-  set b =the  Element of L;
+  let L be join-commutative join-associative join-idempotent Huntington non
+  empty ComplLLattStr;
+  set b = the Element of L;
   take c = (b` + b)`;
   let a be Element of L;
   thus c *' a = ((b` + b) + a`)` by Th3
@@ -350,7 +363,7 @@ proof
 end;
 
 definition
-  let L be join-commutative join-associative (non empty ComplLLattStr);
+  let L be join-commutative join-associative non empty ComplLLattStr;
   let x,y be Element of L;
   redefine func x *' y;
   commutativity
@@ -361,8 +374,8 @@ end;
 end;
 
 definition
-  let L be join-commutative join-associative join-idempotent Huntington (non
-  empty ComplLLattStr);
+  let L be join-commutative join-associative join-idempotent Huntington non
+  empty ComplLLattStr;
   func Bot L -> Element of L means
   :Def9:
   for a being Element of L holds it *' a = it;
@@ -382,15 +395,13 @@ A2: for a being Element of L holds c2 *' a = c2;
   end;
 end;
 
-canceled;
-
 theorem Th9:
   for L being join-commutative join-associative join-idempotent
-Huntington (non empty ComplLLattStr), a being Element of L
+Huntington non empty ComplLLattStr, a being Element of L
  holds Bot L = (a + a`)`
 proof
-  let L be join-commutative join-associative join-idempotent Huntington (non
-  empty ComplLLattStr), a be Element of L;
+  let L be join-commutative join-associative join-idempotent Huntington non
+  empty ComplLLattStr, a be Element of L;
   for b being Element of L holds (a + a`)` *' b = (a + a`)`
   proof
     let b be Element of L;
@@ -406,23 +417,23 @@ end;
 
 theorem Th10:
   for L being join-commutative join-associative join-idempotent
-  Huntington (non empty ComplLLattStr)
+  Huntington non empty ComplLLattStr
    holds (Top L)` = Bot L & Top L = (Bot L)`
 proof
-  let L be join-commutative join-associative join-idempotent Huntington (non
-  empty ComplLLattStr);
-  set a =the  Element of L;
+  let L be join-commutative join-associative join-idempotent Huntington non
+  empty ComplLLattStr;
+  set a = the Element of L;
   thus (Top L)` = (a + a`)` by Def8
     .= Bot L by Th9;
   hence thesis by Th3;
 end;
 
 theorem Th11: :: 4.14
-  for L being join-commutative join-associative Huntington (non
-  empty ComplLLattStr), a, b being Element of L st a` = b` holds a = b
+  for L being join-commutative join-associative Huntington non
+  empty ComplLLattStr, a, b being Element of L st a` = b` holds a = b
 proof
-  let L be join-commutative join-associative Huntington (non empty
-  ComplLLattStr), a, b being Element of L;
+  let L be join-commutative join-associative Huntington non empty
+  ComplLLattStr, a, b being Element of L;
   assume
 A1: a` = b`;
   thus a = a`` by Th3
@@ -430,11 +441,11 @@ A1: a` = b`;
 end;
 
 theorem Th12: :: 4.15 proof without join-idempotency, no top at all
-  for L being join-commutative join-associative Huntington (non
-  empty ComplLLattStr), a, b being Element of L holds a + (b + b`)` = a
+  for L being join-commutative join-associative Huntington non
+  empty ComplLLattStr, a, b being Element of L holds a + (b + b`)` = a
 proof
-  let L be join-commutative join-associative Huntington (non empty
-  ComplLLattStr), a, b be Element of L;
+  let L be join-commutative join-associative Huntington non empty
+  ComplLLattStr, a, b be Element of L;
   set O = b + b`;
 A1: O`` = O by Th3;
 A2: O` = (O`` + O``)` + (O`` + O`)` by Def6
@@ -453,11 +464,11 @@ A4: O + O = O + O + (O + O)` by LATTICES:def 5
 end;
 
 theorem Th13: :: 4.5
-  for L being join-commutative join-associative Huntington (non
-  empty ComplLLattStr), a being Element of L holds a + a = a
+  for L being join-commutative join-associative Huntington non
+  empty ComplLLattStr, a being Element of L holds a + a = a
 proof
-  let L be join-commutative join-associative Huntington (non empty
-  ComplLLattStr), a be Element of L;
+  let L be join-commutative join-associative Huntington non empty
+  ComplLLattStr, a be Element of L;
 A1: (a + a)` = (a`` + a`)` + (a + a)` by Th12
     .= (a`` + a`)` + (a`` + a)` by Th3
     .= a` by Def6;
@@ -466,8 +477,9 @@ A1: (a + a)` = (a`` + a`)` + (a + a)` by Th12
 end;
 
 registration
-  cluster join-commutative join-associative Huntington -> join-idempotent (non
-    empty ComplLLattStr);
+  cluster join-commutative join-associative Huntington -> join-idempotent for
+non
+    empty ComplLLattStr;
   coherence
   proof
     let L be non empty ComplLLattStr;
@@ -478,11 +490,11 @@ registration
 end;
 
 theorem Th14: :: 4.15
-  for L being join-commutative join-associative Huntington (non
-  empty ComplLLattStr), a being Element of L holds a + Bot L = a
+  for L being join-commutative join-associative Huntington non
+  empty ComplLLattStr, a being Element of L holds a + Bot L = a
 proof
-  let L be join-commutative join-associative Huntington (non empty
-  ComplLLattStr), a be Element of L;
+  let L be join-commutative join-associative Huntington non empty
+  ComplLLattStr, a be Element of L;
   a = (a` + a`)` + (a` + a)` by Def6
     .= a`` + (a` + a)` by Def7
     .= a + (a` + a)` by Th3;
@@ -490,11 +502,11 @@ proof
 end;
 
 theorem :: 4.16
-  for L being join-commutative join-associative Huntington (non empty
-  ComplLLattStr), a being Element of L holds a *' Top L = a
+  for L being join-commutative join-associative Huntington non empty
+  ComplLLattStr, a being Element of L holds a *' Top L = a
 proof
-  let L be join-commutative join-associative Huntington (non empty
-  ComplLLattStr), a be Element of L;
+  let L be join-commutative join-associative Huntington non empty
+  ComplLLattStr, a be Element of L;
   a *' Top L = (a` + Bot L)` by Th10
     .= a`` by Th14
     .= a by Th3;
@@ -502,54 +514,54 @@ proof
 end;
 
 theorem Th16: :: 4.17
-  for L being join-commutative join-associative Huntington (non
-  empty ComplLLattStr), a being Element of L holds a *' a` = Bot L
+  for L being join-commutative join-associative Huntington non
+  empty ComplLLattStr, a being Element of L holds a *' a` = Bot L
 proof
-  let L be join-commutative join-associative Huntington (non empty
-  ComplLLattStr), a be Element of L;
+  let L be join-commutative join-associative Huntington non empty
+  ComplLLattStr, a be Element of L;
   thus a *' a` = (Top L)` by Def8
     .= Bot L by Th10;
 end;
 
 theorem Th17: :: 4.19
-  for L being join-commutative join-associative Huntington (non
-empty ComplLLattStr), a, b, c being Element of L
+  for L being join-commutative join-associative Huntington non
+empty ComplLLattStr, a, b, c being Element of L
  holds a *' (b *' c) = a *' b *' c
 proof
-  let L be join-commutative join-associative Huntington (non empty
-  ComplLLattStr), a, b, c be Element of L;
+  let L be join-commutative join-associative Huntington non empty
+  ComplLLattStr, a, b, c be Element of L;
   thus a *' b *' c = (a` + b` + c`)` by Th3
     .= (a` + (b` + c`))` by LATTICES:def 5
     .= a *' (b *' c) by Th3;
 end;
 
 theorem Th18: :: 4.20
-  for L being join-commutative join-associative Huntington (non
-  empty ComplLLattStr), a, b being Element of L holds a + b = (a` *' b`)`
+  for L being join-commutative join-associative Huntington non
+  empty ComplLLattStr, a, b being Element of L holds a + b = (a` *' b`)`
 proof
-  let L be join-commutative join-associative Huntington (non empty
-  ComplLLattStr), a, b be Element of L;
+  let L be join-commutative join-associative Huntington non empty
+  ComplLLattStr, a, b be Element of L;
   a` *' b` = (a`` + b)` by Th3
     .= (a + b)` by Th3;
   hence thesis by Th3;
 end;
 
 theorem :: 4.21
-  for L being join-commutative join-associative Huntington (non empty
-  ComplLLattStr), a being Element of L holds a *' a = a
+  for L being join-commutative join-associative Huntington non empty
+  ComplLLattStr, a being Element of L holds a *' a = a
 proof
-  let L be join-commutative join-associative Huntington (non empty
-  ComplLLattStr), a be Element of L;
+  let L be join-commutative join-associative Huntington non empty
+  ComplLLattStr, a be Element of L;
   thus a *' a = a`` by Def7
     .= a by Th3;
 end;
 
 theorem :: 4.22
-  for L being join-commutative join-associative Huntington (non empty
-  ComplLLattStr), a being Element of L holds a + Top L = Top L
+  for L being join-commutative join-associative Huntington non empty
+  ComplLLattStr, a being Element of L holds a + Top L = Top L
 proof
-  let L be join-commutative join-associative Huntington (non empty
-  ComplLLattStr), a be Element of L;
+  let L be join-commutative join-associative Huntington non empty
+  ComplLLattStr, a be Element of L;
   thus a + Top L = a + (a + a`) by Def8
     .= a + a + a` by LATTICES:def 5
     .= a + a` by Def7
@@ -557,11 +569,11 @@ proof
 end;
 
 theorem Th21: :: 4.24
-  for L being join-commutative join-associative Huntington (non
-  empty ComplLLattStr), a, b being Element of L holds a + (a *' b) = a
+  for L being join-commutative join-associative Huntington non
+  empty ComplLLattStr, a, b being Element of L holds a + (a *' b) = a
 proof
-  let L be join-commutative join-associative Huntington (non empty
-  ComplLLattStr), a,b be Element of L;
+  let L be join-commutative join-associative Huntington non empty
+  ComplLLattStr, a,b be Element of L;
   thus a + (a *' b) = (a *' b) + ((a *' b) + (a *' b`)) by Def6
     .= (a *' b) + (a *' b) + (a *' b`) by LATTICES:def 5
     .= (a *' b) + (a *' b`) by Def7
@@ -569,11 +581,11 @@ proof
 end;
 
 theorem Th22: :: 4.25
-  for L being join-commutative join-associative Huntington (non
-  empty ComplLLattStr), a, b being Element of L holds a *' (a + b) = a
+  for L being join-commutative join-associative Huntington non
+  empty ComplLLattStr, a, b being Element of L holds a *' (a + b) = a
 proof
-  let L be join-commutative join-associative Huntington (non empty
-  ComplLLattStr), a,b be Element of L;
+  let L be join-commutative join-associative Huntington non empty
+  ComplLLattStr, a,b be Element of L;
   thus a *' (a + b) = (a` + (a` *' b`)``)` by Th18
     .= (a` + (a` *' b`))` by Th3
     .= a`` by Th21
@@ -581,13 +593,13 @@ proof
 end;
 
 theorem Th23: :: 4.26
-  for L being join-commutative join-associative Huntington (non
-empty ComplLLattStr), a, b being Element of L
+  for L being join-commutative join-associative Huntington non
+empty ComplLLattStr, a, b being Element of L
    st a` + b = Top L & b` + a = Top L
   holds a = b
 proof
-  let L be join-commutative join-associative Huntington (non empty
-  ComplLLattStr), a, b be Element of L;
+  let L be join-commutative join-associative Huntington non empty
+  ComplLLattStr, a, b be Element of L;
   assume
 A1: a` + b = Top L & b` + a = Top L;
   thus a = (a` + b`)` + (a` + b)` by Def6
@@ -595,12 +607,12 @@ A1: a` + b = Top L & b` + a = Top L;
 end;
 
 theorem Th24: :: 4.27
-  for L being join-commutative join-associative Huntington (non
-empty ComplLLattStr), a, b being Element of L st a + b = Top L & a *' b = Bot L
+  for L being join-commutative join-associative Huntington non
+empty ComplLLattStr, a, b being Element of L st a + b = Top L & a *' b = Bot L
   holds a` = b
 proof
-  let L be join-commutative join-associative Huntington (non empty
-  ComplLLattStr), a, b be Element of L;
+  let L be join-commutative join-associative Huntington non empty
+  ComplLLattStr, a, b be Element of L;
   assume a + b = Top L;
   then
 A1: a`` + b = Top L by Th3;
@@ -612,14 +624,14 @@ A2: a *' b = Bot L;
 end;
 
 theorem Th25: :: 4.28
-  for L being join-commutative join-associative Huntington (non
-  empty ComplLLattStr), a, b, c being Element of L
+  for L being join-commutative join-associative Huntington non
+  empty ComplLLattStr, a, b, c being Element of L
    holds (a *' b *' c) + (a *' b
 *' c`) + (a *' b` *' c) + (a *' b` *' c`) + (a` *' b *' c) + (a` *' b *' c`) +
   (a` *' b` *' c) + (a` *' b` *' c`) = Top L
 proof
-  let L be join-commutative join-associative Huntington (non empty
-  ComplLLattStr), a, b, c be Element of L;
+  let L be join-commutative join-associative Huntington non empty
+  ComplLLattStr, a, b, c be Element of L;
   set A = a *' b *' c, B = a *' b *' c`, C = a *' b` *' c;
   set D = a *' b` *' c`, E = a` *' b *' c, F = a` *' b *' c`;
   set G = a` *' b` *' c, H = a` *' b` *' c`;
@@ -637,15 +649,15 @@ proof
 end;
 
 theorem Th26: :: 4.29
-  for L being join-commutative join-associative Huntington (non
-  empty ComplLLattStr), a, b, c being Element of L
+  for L being join-commutative join-associative Huntington non
+  empty ComplLLattStr, a, b, c being Element of L
    holds (a *' c) *' (b *' c`) =
 Bot L & (a *' b *' c) *' (a` *' b *' c) = Bot L & (a *' b` *' c) *' (a` *' b *'
   c) = Bot L & (a *' b *' c) *' (a` *' b` *' c) = Bot L & (a *' b *' c`) *' (a`
   *' b` *' c`) = Bot L
 proof
-  let L be join-commutative join-associative Huntington (non empty
-  ComplLLattStr), a, b, c be Element of L;
+  let L be join-commutative join-associative Huntington non empty
+  ComplLLattStr, a, b, c be Element of L;
 A1: for a, b, c being Element of L holds (a *' c) *' (b *' c`) = Bot L
   proof
     let a, b, c be Element of L;
@@ -683,12 +695,12 @@ Th17
 end;
 
 theorem Th27: :: 4.30
-  for L being join-commutative join-associative Huntington (non
-empty ComplLLattStr), a, b, c being Element of L holds (a *' b) + (a *' c) = (a
+  for L being join-commutative join-associative Huntington non
+empty ComplLLattStr, a, b, c being Element of L holds (a *' b) + (a *' c) = (a
   *' b *' c) + (a *' b *' c`) + (a *' b` *' c)
 proof
-  let L be join-commutative join-associative Huntington (non empty
-  ComplLLattStr), a, b, c be Element of L;
+  let L be join-commutative join-associative Huntington non empty
+  ComplLLattStr, a, b, c be Element of L;
   set A = a *' b *' c;
   a *' c = (a *' c *' b) + (a *' c *' b`) by Def6
     .= A + (a *' c *' b`) by Th17
@@ -700,14 +712,14 @@ proof
 end;
 
 theorem Th28: :: 4.31
-  for L being join-commutative join-associative Huntington (non
-empty ComplLLattStr), a, b, c being Element of L
+  for L being join-commutative join-associative Huntington non
+empty ComplLLattStr, a, b, c being Element of L
  holds (a *' (b + c))` = (a *' b
 ` *' c`) + (a` *' b *' c) + (a` *' b *' c`) + (a` *' b` *' c) + (a` *' b` *' c`
   )
 proof
-  let L be join-commutative join-associative Huntington (non empty
-  ComplLLattStr), a, b, c be Element of L;
+  let L be join-commutative join-associative Huntington non empty
+  ComplLLattStr, a, b, c be Element of L;
   set D = a *' b` *' c`, E = a` *' b *' c, F = a` *' b *' c`;
   set G = a` *' b` *' c, H = a` *' b` *' c`;
 A1: a` = (a` *' b) + (a` *' b`) by Def6
@@ -730,12 +742,12 @@ A2: b` *' c` = (a *' (b` *' c`)) + (a` *' (b` *' c`)) by Th1
 end;
 
 theorem Th29: :: 4.32
-  for L being join-commutative join-associative Huntington (non
-empty ComplLLattStr), a, b, c being Element of L
+  for L being join-commutative join-associative Huntington non
+empty ComplLLattStr, a, b, c being Element of L
  holds ((a *' b) + (a *' c)) + (a *' (b + c))` = Top L
 proof
-  let L be join-commutative join-associative Huntington (non empty
-  ComplLLattStr), a, b, c be Element of L;
+  let L be join-commutative join-associative Huntington non empty
+  ComplLLattStr, a, b, c be Element of L;
   set A = a *' b *' c, B = a *' b *' c`, C = a *' b` *' c;
   set D = a *' b` *' c`, E = a` *' b *' c, F = a` *' b *' c`;
   set G = a` *' b` *' c, H = a` *' b` *' c`;
@@ -757,12 +769,12 @@ LATTICES:def 5
 end;
 
 theorem Th30: :: 4.33
-  for L being join-commutative join-associative Huntington (non
-empty ComplLLattStr), a, b, c being Element of L holds ((a *' b) + (a *' c)) *'
+  for L being join-commutative join-associative Huntington non
+empty ComplLLattStr, a, b, c being Element of L holds ((a *' b) + (a *' c)) *'
   (a *' (b + c))` = Bot L
 proof
-  let L be join-commutative join-associative Huntington (non empty
-  ComplLLattStr), a, b, c be Element of L;
+  let L be join-commutative join-associative Huntington non empty
+  ComplLLattStr, a, b, c be Element of L;
   set A = a *' b *' c, B = a *' b *' c`, C = a *' b` *' c;
   set D = a *' b` *' c`, E = a` *' b *' c, F = a` *' b *' c`;
   set G = a` *' b` *' c, H = a` *' b` *' c`;
@@ -864,12 +876,12 @@ A8: Bot L = ((A + B + C) *' (DEFG + H))`` by Th10
 end;
 
 theorem Th31: :: 4.34
-  for L being join-commutative join-associative Huntington (non
-empty ComplLLattStr), a, b, c being Element of L
+  for L being join-commutative join-associative Huntington non
+empty ComplLLattStr, a, b, c being Element of L
  holds a *' (b + c) = (a *' b) + (a *' c)
 proof
-  let L be join-commutative join-associative Huntington (non empty
-  ComplLLattStr), a, b, c be Element of L;
+  let L be join-commutative join-associative Huntington non empty
+  ComplLLattStr, a, b, c be Element of L;
   (a *' b) + (a *' c) + (a *' (b + c))` = Top L & ((a *' b) + (a *' c)) *'
   (a *' (b + c))` = Bot L by Th29,Th30;
   then ((a *' b) + (a *' c))` = (a *' (b + c))` by Th24;
@@ -877,12 +889,12 @@ proof
 end;
 
 theorem :: 4.35
-  for L being join-commutative join-associative Huntington (non empty
-ComplLLattStr), a, b, c being Element of L holds a + (b *' c) = (a + b) *' (a +
+  for L being join-commutative join-associative Huntington non empty
+ComplLLattStr, a, b, c being Element of L holds a + (b *' c) = (a + b) *' (a +
   c)
 proof
-  let L be join-commutative join-associative Huntington (non empty
-  ComplLLattStr), a, b, c be Element of L;
+  let L be join-commutative join-associative Huntington non empty
+  ComplLLattStr, a, b, c be Element of L;
   thus a + (b *' c) = (a` *' (b` + c`)``)` by Th18
     .= (a` *' (b` + c`))` by Th3
     .= ((a` *' b`) + (a` *' c`))` by Th31
@@ -930,11 +942,11 @@ registration
 end;
 
 definition
-  mode preOrthoLattice is Lattice-like (non empty OrthoLattStr);
+  mode preOrthoLattice is Lattice-like non empty OrthoLattStr;
 end;
 
 registration
-  cluster strict Boolean well-complemented preOrthoLattice;
+  cluster strict Boolean well-complemented for preOrthoLattice;
   existence
   proof
     take TrivOrtLat;
@@ -953,7 +965,7 @@ proof
 A1: x`` + x` = Top L & x`` "/\" x` = Bottom L by LATTICES:def 18;
   x` is_a_complement_of x by Def10;
   then x` "\/" x = Top L & x` "/\" x = Bottom L by LATTICES:def 18;
-  hence thesis by A1,LATTICES:32;
+  hence thesis by A1,LATTICES:12;
 end;
 
 theorem Th34:
@@ -962,8 +974,8 @@ theorem Th34:
 proof
   let L be bounded distributive well-complemented preOrthoLattice;
   let x, y be Element of L;
-A1: x` "\/" Top L = Top L by LATTICES:44;
-A2: y` "\/" Top L = Top L by LATTICES:44;
+A1: x` "\/" Top L = Top L by LATTICES:18;
+A2: y` "\/" Top L = Top L by LATTICES:18;
 A3: y` is_a_complement_of y by Def10;
   then
 A4: y` "\/" y = Top L by LATTICES:def 18;
@@ -980,15 +992,15 @@ A10: (x` "\/" y`) "/\" (x "/\" y) = (x "/\" y "/\" x`) "\/" (x "/\" y "/\" y`
   ) by LATTICES:def 11
     .= (y "/\" (x "/\" x`)) "\/" (x "/\" y "/\" y`) by LATTICES:def 7
     .= (y "/\" Bottom L) "\/" (x "/\" (y "/\" y`)) by A9,LATTICES:def 7
-    .= Bottom L "\/" (x "/\" Bottom L) by A8,LATTICES:40
-    .= Bottom L "\/" Bottom L by LATTICES:40
-    .= Bottom L by LATTICES:39;
+    .= Bottom L "\/" (x "/\" Bottom L) by A8,LATTICES:15
+    .= Bottom L "\/" Bottom L by LATTICES:15
+    .= Bottom L by LATTICES:14;
   (x` "\/" y`) "\/" (x "/\" y) = (x` "\/" y` "\/" x) "/\" (x` "\/" y`
-  "\/" y) by LATTICES:31
+  "\/" y) by LATTICES:11
     .= (y` "\/" x` "\/" x) "/\" Top L by A4,A1,LATTICES:def 5
     .= Top L "/\" Top L by A7,A2,LATTICES:def 5
-    .= Top L by LATTICES:43;
-  then (x "/\" y)` = x` "\/" y` by A10,A5,LATTICES:32;
+    .= Top L by LATTICES:17;
+  then (x "/\" y)` = x` "\/" y` by A10,A5,LATTICES:12;
   hence thesis by Th33;
 end;
 
@@ -1043,7 +1055,7 @@ registration
 end;
 
 registration
-  let L be join-commutative (non empty ComplLLattStr);
+  let L be join-commutative non empty ComplLLattStr;
   cluster CLatt L -> join-commutative;
   coherence
   proof
@@ -1055,7 +1067,7 @@ registration
 end;
 
 registration
-  let L be join-associative (non empty ComplLLattStr);
+  let L be join-associative non empty ComplLLattStr;
   cluster CLatt L -> join-associative;
   coherence
   proof
@@ -1067,7 +1079,7 @@ registration
 end;
 
 registration
-  let L be join-commutative join-associative (non empty ComplLLattStr);
+  let L be join-commutative join-associative non empty ComplLLattStr;
   cluster CLatt L -> meet-commutative;
   coherence
   proof
@@ -1084,8 +1096,8 @@ being Element of CLatt L st a = a9 & b = b9 holds a *' b = a9 "/\" b9 & a + b =
   a9 "\/" b9 & a` = a9` by Def11;
 
 registration
-  let L be join-commutative join-associative Huntington (non empty
-  ComplLLattStr);
+  let L be join-commutative join-associative Huntington non empty
+  ComplLLattStr;
   cluster CLatt L -> meet-associative join-absorbing meet-absorbing;
   coherence
   proof
@@ -1114,7 +1126,7 @@ A1:   b9 *' c9 = b "/\" c by Def11;
 end;
 
 registration
-  let L be Huntington (non empty ComplLLattStr);
+  let L be Huntington non empty ComplLLattStr;
   cluster CLatt L -> Huntington;
   coherence
   proof
@@ -1133,8 +1145,8 @@ A2: (x` + y`)` = (x9` + y9`)` by Def11;
 end;
 
 registration
-  let L be join-commutative join-associative Huntington (non empty
-  ComplLLattStr);
+  let L be join-commutative join-associative Huntington non empty
+  ComplLLattStr;
   cluster CLatt L -> lower-bounded;
   coherence
   proof
@@ -1153,11 +1165,11 @@ registration
 end;
 
 theorem Th36:
-  for L being join-commutative join-associative Huntington (non
-  empty ComplLLattStr) holds Bot L = Bottom CLatt L
+  for L being join-commutative join-associative Huntington non
+  empty ComplLLattStr holds Bot L = Bottom CLatt L
 proof
-  let L be join-commutative join-associative Huntington (non empty
-  ComplLLattStr);
+  let L be join-commutative join-associative Huntington non empty
+  ComplLLattStr;
   reconsider C = Bot L as Element of CLatt L by Def11;
   for a being Element of CLatt L holds C "/\" a = C & a "/\" C = C
   proof
@@ -1171,8 +1183,8 @@ proof
 end;
 
 registration
-  let L be join-commutative join-associative Huntington (non empty
-  ComplLLattStr);
+  let L be join-commutative join-associative Huntington non empty
+  ComplLLattStr;
   cluster CLatt L -> complemented distributive bounded;
   coherence
   proof
@@ -1212,7 +1224,7 @@ notation
 end;
 
 definition
-  let G be join-commutative (non empty ComplLLattStr);
+  let G be join-commutative non empty ComplLLattStr;
   redefine attr G is Huntington means
   :Def12:
   for x, y being Element of G holds -(-x + -y) + -(x + -y) = y;
@@ -1236,8 +1248,8 @@ definition
   correctness;
 end;
 
-reserve G for Robbins join-associative join-commutative (non empty
-  ComplLLattStr);
+reserve G for Robbins join-associative join-commutative non empty
+  ComplLLattStr;
 reserve x, y, z, u, v for Element of G;
 
 definition
@@ -1309,8 +1321,6 @@ proof
 Th41
     .= x _0 by Th37;
 end;
-
-canceled;
 
 theorem Th44:
   x _4 + x _0 = x _3 + x _1
@@ -1434,7 +1444,7 @@ end;
 theorem :: Winker Second Condition
   ex y, z st -(y + z) = -z
 proof
-  set x =the  Element of G;
+  set x = the Element of G;
   take y = x _1, z = x _3;
   -(y + z) = \delta (\beta x, x) by Th55
     .= -z by Th54;
@@ -1531,15 +1541,15 @@ registration
   cluster TrivComplLat -> with_idempotent_element;
   coherence
   proof
-    set x =the  Element of TrivComplLat;
+    set x = the Element of TrivComplLat;
     take x;
     thus x = x + x by STRUCT_0:def 10;
   end;
 end;
 
 registration
-  cluster with_idempotent_element -> Huntington (Robbins join-associative
-    join-commutative (non empty ComplLLattStr));
+  cluster with_idempotent_element -> Huntington for Robbins join-associative
+    join-commutative non empty ComplLLattStr;
   coherence by Th58;
 end;
 
@@ -1747,18 +1757,19 @@ A15: now
     + -(x + Double x)) by A13
       .= -(-(Double x + x) + x) + Double x by A14;
   end;
-  set x =the  Element of G;
+  set x = the Element of G;
   set c = Double x, d = -(-(Double x + x) + x);
   take d, c;
   thus thesis by A15;
 end;
 
 registration
-  cluster Robbins -> Huntington (join-associative join-commutative (non empty
-    ComplLLattStr));
+  cluster Robbins -> Huntington for
+join-associative join-commutative non empty
+    ComplLLattStr;
   coherence
   proof
-    let K be join-associative join-commutative (non empty ComplLLattStr);
+    let K be join-associative join-commutative non empty ComplLLattStr;
     assume
 A1: K is Robbins;
     then ex y, z be Element of K st y + z = z by Th60;
@@ -1789,11 +1800,11 @@ end;
 
 theorem Th61:
   for L being well-complemented join-commutative meet-commutative
-(non empty OrthoLattStr), x being Element of L holds x + x` = Top L & x "/\" x`
+non empty OrthoLattStr, x being Element of L holds x + x` = Top L & x "/\" x`
   = Bottom L
 proof
-  let L be well-complemented join-commutative meet-commutative (non empty
-  OrthoLattStr), x be Element of L;
+  let L be well-complemented join-commutative meet-commutative non empty
+  OrthoLattStr, x be Element of L;
 A1: x` is_a_complement_of x by Def10;
   hence x + x` = Top L by LATTICES:def 18;
   thus thesis by A1,LATTICES:def 18;
@@ -1804,7 +1815,7 @@ theorem Th62:
   preOrthoLattice holds (Top L)` = Bottom L
 proof
   let L be bounded distributive well-complemented preOrthoLattice;
-  set x =the  Element of L;
+  set x = the Element of L;
   (Top L)` = (x`` + x`)` by Th61
     .= x` "/\" x by Th34
     .= Bottom L by Th61;
@@ -1821,7 +1832,7 @@ registration
 end;
 
 registration
-  cluster strict de_Morgan Boolean Robbins Huntington preOrthoLattice;
+  cluster strict de_Morgan Boolean Robbins Huntington for preOrthoLattice;
   existence
   proof
     take TrivOrtLat;
@@ -1830,14 +1841,15 @@ registration
 end;
 
 registration
-  cluster join-associative join-commutative de_Morgan -> meet-commutative (non
-    empty OrthoLattStr);
+  cluster join-associative join-commutative de_Morgan -> meet-commutative for
+non
+    empty OrthoLattStr;
   coherence
   proof
    let L be non empty OrthoLattStr;
    assume L is join-associative join-commutative de_Morgan;
     then reconsider L1 = L as join-associative join-commutative de_Morgan
-                     (non empty OrthoLattStr);
+                     non empty OrthoLattStr;
    let a,b be Element of L;
     reconsider a1=a, b1=b as Element of L1;
    thus a "/\" b = a1 *' b1 by Def23
@@ -1864,24 +1876,24 @@ A1: for a being Element of L holds C "/\" a = C & a "/\" C = C
 end;
 
 registration
-  cluster Boolean -> Huntington (well-complemented preOrthoLattice);
+  cluster Boolean -> Huntington for well-complemented preOrthoLattice;
   coherence
   proof
     let L be well-complemented preOrthoLattice;
     assume
 A1: L is Boolean;
     then reconsider L9 = L as Boolean preOrthoLattice;
-A2: for x being Element of L9 holds Top L9 "/\" x = x by LATTICES:43;
+A2: for x being Element of L9 holds Top L9 "/\" x = x by LATTICES:17;
     now
       let x, y be Element of L;
       thus (x` "\/" y`)` "\/" (x` "\/" y)` = (x "/\" y) + (x` + y)` by A1,Th34
-        .= (x + (x` + y)`) "/\" (y + (x` + y)`) by A1,LATTICES:31
+        .= (x + (x` + y)`) "/\" (y + (x` + y)`) by A1,LATTICES:11
         .= (x + (x` + y``)`) "/\" (y + (x` + y)`) by A1,Th33
         .= (x + (x "/\" y`)) "/\" (y + (x` + y)`) by A1,Th34
         .= x "/\" (y + (x` + y)`) by LATTICES:def 8
         .= x "/\" (y + (x` + y``)`) by A1,Th33
         .= x "/\" (y + (x "/\" y`)) by A1,Th34
-        .= x "/\" ((y + x) "/\" (y + y`)) by A1,LATTICES:31
+        .= x "/\" ((y + x) "/\" (y + y`)) by A1,LATTICES:11
         .= (x "/\" (y + x)) "/\" (y + y`) by LATTICES:def 7
         .= x "/\" (y + y`) by LATTICES:def 9
         .= x "/\" Top L by Th61
@@ -1892,7 +1904,7 @@ A2: for x being Element of L9 holds Top L9 "/\" x = x by LATTICES:43;
 end;
 
 registration
-  cluster Huntington -> Boolean (de_Morgan preOrthoLattice);
+  cluster Huntington -> Boolean for de_Morgan preOrthoLattice;
   coherence
   proof
     let L be de_Morgan preOrthoLattice;
@@ -1936,9 +1948,9 @@ A4:   a "/\" b = a *' b & a "/\" c = a *' c by Def23;
 end;
 
 registration
-  cluster Robbins de_Morgan -> Boolean preOrthoLattice;
+  cluster Robbins de_Morgan -> Boolean for preOrthoLattice;
   coherence;
-  cluster Boolean -> Robbins (well-complemented preOrthoLattice);
+  cluster Boolean -> Robbins for well-complemented preOrthoLattice;
   coherence
   proof
     let L be well-complemented preOrthoLattice;
@@ -1955,7 +1967,7 @@ registration
         .= x + (y` + y``)` by LATTICES:def 8
         .= x + (Top L9)` by Th61
         .= x + Bottom L9 by Th62
-        .= x by LATTICES:39;
+        .= x by LATTICES:14;
     end;
     hence thesis by Def5;
   end;

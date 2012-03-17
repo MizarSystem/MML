@@ -34,8 +34,8 @@
 <Cluster>
 <Adjective nr="39" value="false"/>
 <Adjective nr="48" value="false"/>
-<Adjective nr="60"/>
-<Adjective nr="70"/>
+<Adjective nr="61"/>
+<Adjective nr="71"/>
 </Cluster>
 </RCluster>
 <RCluster aid="NATTRA_1" nr="2">
@@ -44,7 +44,7 @@
 <Cluster>
 <Adjective nr="39" value="false"/>
 <Adjective nr="48" value="false"/>
-<Adjective nr="60"/>
+<Adjective nr="61"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -55,9 +55,9 @@
 <Cluster>
 <Adjective nr="39" value="false"/>
 <Adjective nr="48" value="false"/>
-<Adjective nr="59"/>
 <Adjective nr="60"/>
-<Adjective nr="70"/>
+<Adjective nr="61"/>
+<Adjective nr="71"/>
 </Cluster>
 </RCluster>
 </Registrations>

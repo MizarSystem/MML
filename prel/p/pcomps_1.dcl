@@ -30,8 +30,8 @@
 </Typ>
 <Cluster>
 <Adjective nr="34" value="false"/>
-<Adjective nr="46"/>
-<Adjective nr="73"/>
+<Adjective nr="47"/>
+<Adjective nr="74"/>
 </Cluster>
 </RCluster>
 <RCluster aid="PCOMPS_1" nr="2">
@@ -41,9 +41,9 @@
 </Typ>
 <Cluster>
 <Adjective nr="34" value="false"/>
-<Adjective nr="45"/>
 <Adjective nr="46"/>
-<Adjective nr="52"/>
+<Adjective nr="47"/>
+<Adjective nr="53"/>
 </Cluster>
 </RCluster>
 <RCluster aid="PCOMPS_1" nr="3">
@@ -53,9 +53,9 @@
 </Typ>
 <Cluster>
 <Adjective nr="34" value="false"/>
-<Adjective nr="45"/>
 <Adjective nr="46"/>
-<Adjective nr="74"/>
+<Adjective nr="47"/>
+<Adjective nr="75"/>
 </Cluster>
 </RCluster>
 <FCluster aid="PCOMPS_1" nr="1">
@@ -68,8 +68,8 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="45"/>
 <Adjective nr="46"/>
+<Adjective nr="47"/>
 </Cluster>
 </FCluster>
 <FCluster aid="PCOMPS_1" nr="2">

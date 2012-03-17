@@ -36,12 +36,12 @@
 <ArgTypes>
 <Typ kind="G" nr="12">
 <Cluster>
-<Adjective nr="48"/>
-<Adjective nr="76"/>
+<Adjective nr="49"/>
 <Adjective nr="77"/>
 <Adjective nr="78"/>
-<Adjective nr="101"/>
+<Adjective nr="79"/>
 <Adjective nr="102"/>
+<Adjective nr="103"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -56,7 +56,7 @@
 </Typ>
 <Not>
 <And>
-<Pred kind="V" nr="49">
+<Pred kind="V" nr="50">
 <Func kind="F" nr="1"/>
 <Var nr="1"/>
 </Pred>
@@ -72,10 +72,10 @@
 <For>
 <Typ kind="M" nr="2">
 <Cluster>
-<Adjective nr="59">
+<Adjective nr="60">
 <Func kind="F" nr="1"/>
 </Adjective>
-<Adjective nr="108">
+<Adjective nr="109">
 <Func kind="F" nr="1"/>
 </Adjective>
 </Cluster>

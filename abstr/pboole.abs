@@ -16,14 +16,11 @@ environ
 
  vocabularies FUNCT_1, RELAT_1, SETFAM_1, XBOOLE_0, SUBSET_1, PARTFUN1,
       FUNCOP_1, TARSKI, CARD_3, NUMBERS, FINSEQ_2, FINSEQ_1, FUNCT_2, ZFMISC_1,
-      MEMBER_1, FUNCT_4, PBOOLE, VALUED_1, NAT_1, ARYTM_3;
+      MEMBER_1, FUNCT_4, PBOOLE, VALUED_1, NAT_1, ARYTM_3, ORDINAL1;
  notations TARSKI, ZFMISC_1, XBOOLE_0, SUBSET_1, SETFAM_1, RELAT_1, FUNCT_1,
-      PARTFUN1, FUNCT_2, FUNCT_4, FUNCOP_1, FINSEQ_1, FINSEQ_2, CARD_3,
-      NUMBERS, XCMPLX_0, NAT_1, VALUED_1;
- constructors SETFAM_1, FUNCOP_1, FINSEQ_2, CARD_3, RELSET_1, PARTFUN1,
-      FUNCT_4, NAT_1, VALUED_1;
- registrations XBOOLE_0, FUNCT_1, ORDINAL1, RELSET_1, FUNCOP_1, FUNCT_4,
-      CARD_3, NAT_1;
+      ORDINAL1, PARTFUN1, FUNCT_2, FUNCT_4, FUNCOP_1;
+ constructors SETFAM_1, FUNCOP_1, ORDINAL1, RELSET_1, PARTFUN1, FUNCT_4;
+ registrations XBOOLE_0, FUNCT_1, ORDINAL1, RELSET_1, FUNCOP_1, FUNCT_4;
  requirements BOOLE, SUBSET;
 
 
@@ -43,13 +40,13 @@ reserve I for set; :: of indices
 
 registration
   let I;
-  cluster total (I-defined Function);
+  cluster total for I-defined Function;
 end;
 
 definition
   let I;
-  canceled 3;
-  mode ManySortedSet of I is total (I-defined Function);
+
+  mode ManySortedSet of I is total I-defined Function;
 end;
 
 reserve x,X,Y,Z,V for ManySortedSet of I;
@@ -64,11 +61,11 @@ provided
 definition
   let I,X,Y;
   pred X in Y means
-:: PBOOLE:def 4
+:: PBOOLE:def 1
 
   for i st i in I holds X.i in Y.i;
   pred X c= Y means
-:: PBOOLE:def 5
+:: PBOOLE:def 2
 
   for i st i in I holds X.i c= Y.i;
   reflexivity;
@@ -92,35 +89,32 @@ theorem :: PBOOLE:3
 definition
   let I;
   func [[0]]I -> ManySortedSet of I equals
-:: PBOOLE:def 6
+:: PBOOLE:def 3
   I --> {};
   let X,Y;
   func X \/ Y -> ManySortedSet of I means
-:: PBOOLE:def 7
+:: PBOOLE:def 4
 
-  for i st i in I holds it.i =
-  X.i \/ Y.i;
+  for i st i in I holds it.i = X.i \/ Y.i;
   commutativity;
   idempotence;
   func X /\ Y -> ManySortedSet of I means
-:: PBOOLE:def 8
+:: PBOOLE:def 5
 
-  for i st i in I holds it.i =
-  X.i /\ Y.i;
+  for i st i in I holds it.i = X.i /\ Y.i;
   commutativity;
   idempotence;
   func X \ Y -> ManySortedSet of I means
-:: PBOOLE:def 9
+:: PBOOLE:def 6
 
-  for i st i in I holds it.i = X
-  .i \ Y.i;
+  for i st i in I holds it.i = X.i \ Y.i;
   pred X overlaps Y means
-:: PBOOLE:def 10
+:: PBOOLE:def 7
 
   for i st i in I holds X.i meets Y.i;
   symmetry;
   pred X misses Y means
-:: PBOOLE:def 11
+:: PBOOLE:def 8
 
   for i st i in I holds X.i misses Y.i;
   symmetry;
@@ -135,7 +129,7 @@ end;
 definition
   let I,X,Y;
   func X \+\ Y -> ManySortedSet of I equals
-:: PBOOLE:def 12
+:: PBOOLE:def 9
   (X \ Y) \/ (Y \ X);
   commutativity;
 end;
@@ -172,353 +166,339 @@ begin :: Lattice properties
 definition
   let I,X,Y;
   redefine pred X = Y means
-:: PBOOLE:def 13
+:: PBOOLE:def 10
 
   X c= Y & Y c= X;
 end;
 
-canceled 2;
-
-theorem :: PBOOLE:15
+theorem :: PBOOLE:13
   X c= Y & Y c= Z implies X c= Z;
 
-theorem :: PBOOLE:16
+theorem :: PBOOLE:14
   X c= X \/ Y & Y c= X \/ Y;
 
-theorem :: PBOOLE:17
+theorem :: PBOOLE:15
   X /\ Y c= X & X /\ Y c= Y;
 
-theorem :: PBOOLE:18
+theorem :: PBOOLE:16
   X c= Z & Y c= Z implies X \/ Y c= Z;
 
-theorem :: PBOOLE:19
+theorem :: PBOOLE:17
   Z c= X & Z c= Y implies Z c= X /\ Y;
 
-theorem :: PBOOLE:20
+theorem :: PBOOLE:18
   X c= Y implies X \/ Z c= Y \/ Z & Z \/ X c= Z \/ Y;
 
-theorem :: PBOOLE:21
+theorem :: PBOOLE:19
   X c= Y implies X /\ Z c= Y /\ Z & Z /\ X c= Z /\ Y;
 
-theorem :: PBOOLE:22
+theorem :: PBOOLE:20
   X c= Y & Z c= V implies X \/ Z c= Y \/ V;
 
-theorem :: PBOOLE:23
+theorem :: PBOOLE:21
   X c= Y & Z c= V implies X /\ Z c= Y /\ V;
 
-theorem :: PBOOLE:24
+theorem :: PBOOLE:22
   X c= Y implies X \/ Y = Y & Y \/ X = Y;
 
-theorem :: PBOOLE:25
+theorem :: PBOOLE:23
   X c= Y implies X /\ Y = X & Y /\ X = X;
 
-theorem :: PBOOLE:26
+theorem :: PBOOLE:24
   X /\ Y c= X \/ Z;
 
-theorem :: PBOOLE:27
+theorem :: PBOOLE:25
   X c= Z implies X \/ Y /\ Z = (X \/ Y) /\ Z;
 
-theorem :: PBOOLE:28
+theorem :: PBOOLE:26
   X = Y \/ Z iff Y c= X & Z c= X & for V st Y c= V & Z c= V holds X c= V;
 
-theorem :: PBOOLE:29
+theorem :: PBOOLE:27
   X = Y /\ Z iff X c= Y & X c= Z & for V st V c= Y & V c= Z holds V c= X;
 
-canceled 4;
-
-theorem :: PBOOLE:34
+theorem :: PBOOLE:28
   (X \/ Y) \/ Z = X \/ (Y \/ Z);
 
-theorem :: PBOOLE:35
+theorem :: PBOOLE:29
   (X /\ Y) /\ Z = X /\ (Y /\ Z);
 
-theorem :: PBOOLE:36
+theorem :: PBOOLE:30
   X /\ (X \/ Y) = X & (X \/ Y) /\ X = X & X /\ (Y \/ X) = X & (Y
   \/ X) /\ X = X;
 
-theorem :: PBOOLE:37
+theorem :: PBOOLE:31
   X \/ (X /\ Y) = X & (X /\ Y) \/ X = X & X \/ (Y /\ X) = X & (Y
   /\ X) \/ X = X;
 
-theorem :: PBOOLE:38
+theorem :: PBOOLE:32
   X /\ (Y \/ Z) = X /\ Y \/ X /\ Z;
 
-theorem :: PBOOLE:39
+theorem :: PBOOLE:33
   X \/ Y /\ Z = (X \/ Y) /\ (X \/ Z) & Y /\ Z \/ X = (Y \/ X) /\ (
   Z \/ X);
 
-theorem :: PBOOLE:40
+theorem :: PBOOLE:34
   (X /\ Y) \/ (X /\ Z) = X implies X c= Y \/ Z;
 
-theorem :: PBOOLE:41
+theorem :: PBOOLE:35
   (X \/ Y) /\ (X \/ Z) = X implies Y /\ Z c= X;
 
-theorem :: PBOOLE:42
+theorem :: PBOOLE:36
   (X /\ Y) \/ (Y /\ Z) \/ (Z /\ X) = (X \/ Y) /\ (Y \/ Z) /\ (Z \/ X);
 
-theorem :: PBOOLE:43 :: SETWISEO:7
+theorem :: PBOOLE:37 :: SETWISEO:7
   X \/ Y c= Z implies X c= Z & Y c= Z;
 
-theorem :: PBOOLE:44 :: SYSREL:4
+theorem :: PBOOLE:38 :: SYSREL:4
   X c= Y /\ Z implies X c= Y & X c= Z;
 
-theorem :: PBOOLE:45 :: SYSREL:2
+theorem :: PBOOLE:39 :: SYSREL:2
   X \/ Y \/ Z = (X \/ Z) \/ (Y \/ Z) & X \/ (Y \/ Z) = (X \/ Y) \/ (X \/
   Z);
 
-theorem :: PBOOLE:46
+theorem :: PBOOLE:40
   X /\ Y /\ Z = (X /\ Z) /\ (Y /\ Z) & X /\ (Y /\ Z) = (X /\ Y) /\ (X /\
   Z);
 
-theorem :: PBOOLE:47 :: SYSREL:3
+theorem :: PBOOLE:41 :: SYSREL:3
   X \/ (X \/ Y) = X \/ Y & X \/ Y \/ Y = X \/ Y;
 
-theorem :: PBOOLE:48
+theorem :: PBOOLE:42
   X /\ (X /\ Y) = X /\ Y & X /\ Y /\ Y = X /\ Y;
 
 begin :: ManySortedSet with empty components
 
-theorem :: PBOOLE:49
+theorem :: PBOOLE:43
   [[0]]I c= X;
 
-theorem :: PBOOLE:50
+theorem :: PBOOLE:44
   X c= [[0]]I implies X = [[0]]I;
 
-theorem :: PBOOLE:51
+theorem :: PBOOLE:45
   X c= Y & X c= Z & Y /\ Z = [[0]]I implies X = [[0]]I;
 
-theorem :: PBOOLE:52
+theorem :: PBOOLE:46
   X c= Y & Y /\ Z = [[0]]I implies X /\ Z = [[0]]I;
 
-theorem :: PBOOLE:53
+theorem :: PBOOLE:47
   X \/ [[0]]I = X & [[0]]I \/ X = X;
 
-theorem :: PBOOLE:54
+theorem :: PBOOLE:48
   X \/ Y = [[0]]I implies X = [[0]]I & Y = [[0]]I;
 
-theorem :: PBOOLE:55
+theorem :: PBOOLE:49
   X /\ [[0]]I = [[0]]I & [[0]]I /\ X = [[0]]I;
 
-theorem :: PBOOLE:56
+theorem :: PBOOLE:50
   X c= (Y \/ Z) & X /\ Z = [[0]]I implies X c= Y;
 
-theorem :: PBOOLE:57
+theorem :: PBOOLE:51
   Y c= X & X /\ Y = [[0]]I implies Y = [[0]]I;
 
 begin :: Difference and symmetric difference
 
-theorem :: PBOOLE:58
+theorem :: PBOOLE:52
   X \ Y = [[0]]I iff X c= Y;
 
-theorem :: PBOOLE:59
+theorem :: PBOOLE:53
   X c= Y implies X \ Z c= Y \ Z;
 
-theorem :: PBOOLE:60
+theorem :: PBOOLE:54
   X c= Y implies Z \ Y c= Z \ X;
 
-theorem :: PBOOLE:61
+theorem :: PBOOLE:55
   X c= Y & Z c= V implies X \ V c= Y \ Z;
 
-theorem :: PBOOLE:62
+theorem :: PBOOLE:56
   X \ Y c= X;
 
-theorem :: PBOOLE:63
+theorem :: PBOOLE:57
   X c= Y \ X implies X = [[0]]I;
 
-theorem :: PBOOLE:64
+theorem :: PBOOLE:58
   X \ X = [[0]]I;
 
-theorem :: PBOOLE:65
+theorem :: PBOOLE:59
   X \ [[0]]I = X;
 
-theorem :: PBOOLE:66
+theorem :: PBOOLE:60
   [[0]]I \ X = [[0]]I;
 
-theorem :: PBOOLE:67
+theorem :: PBOOLE:61
   X \ (X \/ Y) = [[0]]I & X \ (Y \/ X) = [[0]]I;
 
-theorem :: PBOOLE:68
+theorem :: PBOOLE:62
   X /\ (Y \ Z) = (X /\ Y) \ Z;
 
-theorem :: PBOOLE:69
+theorem :: PBOOLE:63
   (X \ Y) /\ Y = [[0]]I & Y /\ (X \ Y) = [[0]]I;
 
-theorem :: PBOOLE:70
+theorem :: PBOOLE:64
   X \ (Y \ Z) = (X \ Y) \/ X /\ Z;
 
-theorem :: PBOOLE:71
+theorem :: PBOOLE:65
   (X \ Y) \/ X /\ Y = X & X /\ Y \/ (X \ Y) = X;
 
-theorem :: PBOOLE:72
+theorem :: PBOOLE:66
   X c= Y implies Y = X \/ (Y \ X) & Y = (Y \ X) \/ X;
 
-theorem :: PBOOLE:73
+theorem :: PBOOLE:67
   X \/ (Y \ X) = X \/ Y & (Y \ X) \/ X = Y \/ X;
 
-theorem :: PBOOLE:74
+theorem :: PBOOLE:68
   X \ (X \ Y) = X /\ Y;
 
-theorem :: PBOOLE:75
+theorem :: PBOOLE:69
   X \ (Y /\ Z) = (X \ Y) \/ (X \ Z);
 
-theorem :: PBOOLE:76
+theorem :: PBOOLE:70
   X \ X /\ Y = X \ Y & X \ Y /\ X = X \ Y;
 
-theorem :: PBOOLE:77
+theorem :: PBOOLE:71
   X /\ Y = [[0]]I iff X \ Y = X;
 
-theorem :: PBOOLE:78
+theorem :: PBOOLE:72
   (X \/ Y) \ Z = (X \ Z) \/ (Y \ Z);
 
-theorem :: PBOOLE:79
+theorem :: PBOOLE:73
   (X \ Y) \ Z = X \ (Y \/ Z);
 ::  TSEP_1, LEMMA3
 
-theorem :: PBOOLE:80
+theorem :: PBOOLE:74
   (X /\ Y) \ Z = (X \ Z) /\ (Y \ Z);
 
-theorem :: PBOOLE:81
+theorem :: PBOOLE:75
   (X \/ Y) \ Y = X \ Y;
 
-theorem :: PBOOLE:82
+theorem :: PBOOLE:76
   X c= Y \/ Z implies X \ Y c= Z & X \ Z c= Y;
 
-theorem :: PBOOLE:83
+theorem :: PBOOLE:77
   (X \/ Y) \ (X /\ Y) = (X \ Y) \/ (Y \ X);
 
-theorem :: PBOOLE:84
+theorem :: PBOOLE:78
   (X \ Y) \ Y = X \ Y;
 
-theorem :: PBOOLE:85
+theorem :: PBOOLE:79
   X \ (Y \/ Z) = (X \ Y) /\ (X \ Z);
 
-theorem :: PBOOLE:86
+theorem :: PBOOLE:80
   X \ Y = Y \ X implies X = Y;
 
-theorem :: PBOOLE:87
+theorem :: PBOOLE:81
   X /\ (Y \ Z) = X /\ Y \ X /\ Z;
 
-theorem :: PBOOLE:88 :: NORMFORM:2
+theorem :: PBOOLE:82 :: NORMFORM:2
   X \ Y c= Z implies X c= Y \/ Z;
 
-theorem :: PBOOLE:89
+theorem :: PBOOLE:83
   X \ Y c= X \+\ Y;
 
-canceled;
-
-theorem :: PBOOLE:91
+theorem :: PBOOLE:84
   X \+\ [[0]]I = X & [[0]]I \+\ X = X;
 
-theorem :: PBOOLE:92
+theorem :: PBOOLE:85
   X \+\ X = [[0]]I;
 
-canceled;
-
-theorem :: PBOOLE:94
+theorem :: PBOOLE:86
   X \/ Y = (X \+\ Y) \/ X /\ Y;
 
-theorem :: PBOOLE:95
+theorem :: PBOOLE:87
   X \+\ Y = (X \/ Y) \ X /\ Y;
 
-theorem :: PBOOLE:96
+theorem :: PBOOLE:88
   (X \+\ Y) \ Z = (X \ (Y \/ Z)) \/ (Y \ (X \/ Z));
 
-theorem :: PBOOLE:97
+theorem :: PBOOLE:89
   X \ (Y \+\ Z) = X \ (Y \/ Z) \/ X /\ Y /\ Z;
 
-theorem :: PBOOLE:98
+theorem :: PBOOLE:90
   (X \+\ Y) \+\ Z = X \+\ (Y \+\ Z);
 
-theorem :: PBOOLE:99
+theorem :: PBOOLE:91
   X \ Y c= Z & Y \ X c= Z implies X \+\ Y c= Z;
 
-theorem :: PBOOLE:100
+theorem :: PBOOLE:92
   X \/ Y = X \+\ (Y \ X);
 
-theorem :: PBOOLE:101
+theorem :: PBOOLE:93
   X /\ Y = X \+\ (X \ Y);
 
-theorem :: PBOOLE:102
+theorem :: PBOOLE:94
   X \ Y = X \+\ (X /\ Y);
 
-theorem :: PBOOLE:103
+theorem :: PBOOLE:95
   Y \ X = X \+\ (X \/ Y);
 
-theorem :: PBOOLE:104 :: FINSUB_1:4
+theorem :: PBOOLE:96 :: FINSUB_1:4
   X \/ Y = X \+\ Y \+\ X /\ Y;
 
-theorem :: PBOOLE:105 :: FINSUB_1:6
+theorem :: PBOOLE:97 :: FINSUB_1:6
   X /\ Y = X \+\ Y \+\ (X \/ Y);
 
 begin :: Meeting and overlap(p?)ing
 
-theorem :: PBOOLE:106
+theorem :: PBOOLE:98
   X overlaps Y or X overlaps Z implies X overlaps Y \/ Z;
 
-canceled;
-
-theorem :: PBOOLE:108
+theorem :: PBOOLE:99
   X overlaps Y & Y c= Z implies X overlaps Z;
 
-theorem :: PBOOLE:109
+theorem :: PBOOLE:100
   X overlaps Y & X c= Z implies Z overlaps Y;
 
-theorem :: PBOOLE:110  :: NORMFORM:1
+theorem :: PBOOLE:101  :: NORMFORM:1
   X c= Y & Z c= V & X overlaps Z implies Y overlaps V;
 
-theorem :: PBOOLE:111
+theorem :: PBOOLE:102
   X overlaps Y /\ Z implies X overlaps Y & X overlaps Z;
 
-theorem :: PBOOLE:112 :: BORSUK_1:1
+theorem :: PBOOLE:103 :: BORSUK_1:1
   X overlaps Z & X c= V implies X overlaps Z /\ V;
 
-theorem :: PBOOLE:113
+theorem :: PBOOLE:104
   X overlaps Y \ Z implies X overlaps Y;
 
-theorem :: PBOOLE:114 :: PROB_2:7, RPR_1:36
+theorem :: PBOOLE:105 :: PROB_2:7, RPR_1:36
   Y does not overlap Z implies X /\ Y does not overlap X /\ Z;
 
-theorem :: PBOOLE:115 :: AMI_2:1
+theorem :: PBOOLE:106 :: AMI_2:1
   X overlaps Y \ Z implies Y overlaps X \ Z;
 
-theorem :: PBOOLE:116
+theorem :: PBOOLE:107
   X meets Y & Y c= Z implies X meets Z;
 
-canceled;
-
-theorem :: PBOOLE:118
+theorem :: PBOOLE:108
   Y misses X \ Y;
 
-theorem :: PBOOLE:119
+theorem :: PBOOLE:109
   X /\ Y misses X \ Y;
 
-theorem :: PBOOLE:120
+theorem :: PBOOLE:110
   X /\ Y misses X \+\ Y;
 
-theorem :: PBOOLE:121
+theorem :: PBOOLE:111
   X misses Y implies X /\ Y = [[0]]I;
 
-theorem :: PBOOLE:122
+theorem :: PBOOLE:112
   X <> [[0]]I implies X meets X;
 
-theorem :: PBOOLE:123
+theorem :: PBOOLE:113
   X c= Y & X c= Z & Y misses Z implies X = [[0]]I;
 
-theorem :: PBOOLE:124 :: SETWISEO:9
+theorem :: PBOOLE:114 :: SETWISEO:9
   Z \/ V = X \/ Y & X misses Z & Y misses V implies X = V & Y = Z;
 
-canceled;
-
-theorem :: PBOOLE:126
+theorem :: PBOOLE:115
   X misses Y implies X \ Y = X;
 
-theorem :: PBOOLE:127 :: FINSUB_1:2
+theorem :: PBOOLE:116 :: FINSUB_1:2
   X misses Y implies (X \/ Y) \ Y = X;
 
-theorem :: PBOOLE:128 :: RPR_1:32
+theorem :: PBOOLE:117 :: RPR_1:32
   X \ Y = X implies X misses Y;
 
-theorem :: PBOOLE:129 :: RLVECT_2:102
+theorem :: PBOOLE:118 :: RLVECT_2:102
   X \ Y misses Y \ X;
 
 begin :: Roughly speaking
@@ -526,47 +506,45 @@ begin :: Roughly speaking
 definition
   let I,X,Y;
   pred X [= Y means
-:: PBOOLE:def 14
+:: PBOOLE:def 11
 
   for x st x in X holds x in Y;
   reflexivity;
 end;
 
-theorem :: PBOOLE:130
+theorem :: PBOOLE:119
   X c= Y implies X [= Y;
 
-canceled;
-
-theorem :: PBOOLE:132
+theorem :: PBOOLE:120
   X [= Y & Y [= Z implies X [= Z;
 
 begin :: Non empty set of sorts
 
-theorem :: PBOOLE:133
+theorem :: PBOOLE:121
   [[0]]{} in [[0]]{};
 
-theorem :: PBOOLE:134
+theorem :: PBOOLE:122
   for X being ManySortedSet of {} holds X = {};
 
 reserve I for non empty set,
   x,X,Y for ManySortedSet of I;
 
-theorem :: PBOOLE:135
+theorem :: PBOOLE:123
   X overlaps Y implies X meets Y;
 
-theorem :: PBOOLE:136
+theorem :: PBOOLE:124
   not ex x st x in [[0]]I;
 
-theorem :: PBOOLE:137
+theorem :: PBOOLE:125
   x in X & x in Y implies X /\ Y <> [[0]]I;
 
-theorem :: PBOOLE:138
+theorem :: PBOOLE:126
   X does not overlap [[0]]I;
 
-theorem :: PBOOLE:139
+theorem :: PBOOLE:127
   X /\ Y = [[0]]I implies X does not overlap Y;
 
-theorem :: PBOOLE:140
+theorem :: PBOOLE:128
   X overlaps X implies X <> [[0]]I;
 
 begin :: Empty and non-empty ManySortedSets
@@ -578,52 +556,52 @@ definition
   let I be set;
   let X be ManySortedSet of I;
   redefine attr X is empty-yielding means
-:: PBOOLE:def 15
+:: PBOOLE:def 12
 
   for i st i in I holds X.i is
   empty;
   redefine attr X is non-empty means
-:: PBOOLE:def 16
+:: PBOOLE:def 13
 
   for i st i in I holds X.i is non empty;
 end;
 
 registration
   let I be set;
-  cluster empty-yielding ManySortedSet of I;
-  cluster non-empty ManySortedSet of I;
+  cluster empty-yielding for ManySortedSet of I;
+  cluster non-empty for ManySortedSet of I;
 end;
 
 registration
   let I be non empty set;
-  cluster non-empty -> non empty-yielding ManySortedSet of I;
-  cluster empty-yielding -> non non-empty ManySortedSet of I;
+  cluster non-empty -> non empty-yielding for ManySortedSet of I;
+  cluster empty-yielding -> non non-empty for ManySortedSet of I;
 end;
 
-theorem :: PBOOLE:141
+theorem :: PBOOLE:129
   X is empty-yielding iff X = [[0]]I;
 
-theorem :: PBOOLE:142
+theorem :: PBOOLE:130
   Y is empty-yielding & X c= Y implies X is empty-yielding;
 
-theorem :: PBOOLE:143
+theorem :: PBOOLE:131
   X is non-empty & X c= Y implies Y is non-empty;
 
-theorem :: PBOOLE:144
+theorem :: PBOOLE:132
   X is non-empty & X [= Y implies X c= Y;
 
-theorem :: PBOOLE:145
+theorem :: PBOOLE:133
   X is non-empty & X [= Y implies Y is non-empty;
 
 reserve X for non-empty ManySortedSet of I;
 
-theorem :: PBOOLE:146
+theorem :: PBOOLE:134
   ex x st x in X;
 
-theorem :: PBOOLE:147
+theorem :: PBOOLE:135
   (for x holds x in X iff x in Y) implies X = Y;
 
-theorem :: PBOOLE:148
+theorem :: PBOOLE:136
   (for x holds x in X iff x in Y & x in Z) implies X = Y /\ Z;
 
 begin :: Addenda
@@ -646,7 +624,7 @@ scheme :: PBOOLE:sch 4
 
 registration
   let I be set;
-  cluster Function-yielding ManySortedSet of I;
+  cluster Function-yielding for ManySortedSet of I;
 end;
 
 definition
@@ -658,7 +636,7 @@ end;
 
 begin :: Preliminaries
 
-theorem :: PBOOLE:149
+theorem :: PBOOLE:137
   not ex M being non-empty ManySortedSet of I st {} in rng M;
 
 definition
@@ -667,11 +645,11 @@ definition
   mode Component of M is Element of rng M;
 end;
 
-theorem :: PBOOLE:150
+theorem :: PBOOLE:138
   for I being non empty set for M being ManySortedSet of I, A being
   Component of M ex i st i in I & A = M.i;
 
-theorem :: PBOOLE:151
+theorem :: PBOOLE:139
   for M being ManySortedSet of I, i st i in I holds M.i is Component of
   M;
 
@@ -679,7 +657,7 @@ definition
   let I;
   let B be ManySortedSet of I;
   mode Element of B -> ManySortedSet of I means
-:: PBOOLE:def 17
+:: PBOOLE:def 14
     for i st i in I holds it.i is
     Element of B.i;
 end;
@@ -690,7 +668,7 @@ definition
   let I;
   let A be ManySortedSet of I, B be ManySortedSet of I;
   mode ManySortedFunction of A,B -> ManySortedSet of I means
-:: PBOOLE:def 18
+:: PBOOLE:def 15
 
     for i st
     i in I holds it.i is Function of A.i, B.i;
@@ -699,23 +677,7 @@ end;
 registration
   let I;
   let A be ManySortedSet of I, B be ManySortedSet of I;
-  cluster ->Function-yielding ManySortedFunction of A,B;
-end;
-
-definition
-  let I be set;
-  let M be ManySortedSet of I;
-  func M# -> ManySortedSet of I* means
-:: PBOOLE:def 19
-
-  for i being Element of I* holds
-  it.i = product(M*i);
-end;
-
-registration
-  let I be set;
-  let M be non-empty ManySortedSet of I;
-  cluster M# -> non-empty;
+  cluster ->Function-yielding for ManySortedFunction of A,B;
 end;
 
 registration
@@ -723,29 +685,11 @@ registration
   let J be non empty set;
   let O be Function of I,J;
   let F be ManySortedSet of J;
-  cluster F*O -> total (I-defined Function);
-end;
-
-definition
-  let a be set;
-  func *-->a -> Function of NAT,{a}* means
-:: PBOOLE:def 20
-
-  for n being Element of NAT
-  holds it.n = n |-> a;
+  cluster F*O -> total for I-defined Function;
 end;
 
 reserve D for non empty set,
-  n for Element of NAT;
-
-theorem :: PBOOLE:152
-  for a,b being set holds (a .--> b)*(n|->a) = n |-> b;
-
-theorem :: PBOOLE:153
-  for a being set for M being ManySortedSet of {a} st M = a .--> D holds
-  (M#* *-->a).n = Funcs(Seg n, D);
-
-:: from PRALG_2
+  n for natural number;
 
 scheme :: PBOOLE:sch 5
 
@@ -764,11 +708,11 @@ end;
 reserve X,Y for ManySortedSet of I;
 
 definition
+
   let I, X,Y;
   func [|X,Y|] -> ManySortedSet of I means
-:: PBOOLE:def 21
-  for i st i in I holds it.i = [:X.i,
-  Y.i:];
+:: PBOOLE:def 16
+  for i st i in I holds it.i = [:X.i,Y.i:];
 end;
 
 :: from AUTALG_1
@@ -776,9 +720,8 @@ end;
 definition
   let I, X, Y;
   func MSFuncs (X, Y) -> ManySortedSet of I means
-:: PBOOLE:def 22
-  for i be set st i in I holds
-  it.i = Funcs(X.i, Y.i);
+:: PBOOLE:def 17
+  for i be set st i in I holds it.i = Funcs(X.i, Y.i);
 end;
 
 :: from MSUALG_2
@@ -786,33 +729,37 @@ end;
 definition
   let I be set, M be ManySortedSet of I;
   mode ManySortedSubset of M -> ManySortedSet of I means
-:: PBOOLE:def 23
+:: PBOOLE:def 18
 
     it c= M;
 end;
 
 registration
   let I be set, M be non-empty ManySortedSet of I;
-  cluster non-empty ManySortedSubset of M;
+  cluster non-empty for ManySortedSubset of M;
 end;
 
 :: from MSUALG_3
 
 definition
   let F,G be Function-yielding Function;
-  func G**F -> Function-yielding Function means
-:: PBOOLE:def 24
+  func G**F -> Function means
+:: PBOOLE:def 19
 
-  dom it = (dom F) /\ (
-  dom G) & for i be set st i in dom it holds it.i = (G.i)*(F.i);
+  dom it = (dom F) /\ (dom G) &
+  for i be set st i in dom it holds it.i = (G.i)*(F.i);
+end;
+
+registration
+  let F,G be Function-yielding Function;
+  cluster G**F -> Function-yielding;
 end;
 
 definition
   let I be set, A be ManySortedSet of I, F be ManySortedFunction of I;
   func F.:.:A -> ManySortedSet of I means
-:: PBOOLE:def 25
-  for i be set st i in I holds it.i =
-  (F.i).:(A.i);
+:: PBOOLE:def 20
+  for i be set st i in I holds it.i = (F.i).:(A.i);
 end;
 
 :: missing, 2005.11.13, A.T.
@@ -835,75 +782,52 @@ provided
 
 registration
   let A be non empty set;
-  cluster non-empty -> non empty-yielding ManySortedSet of A;
+  cluster non-empty -> non empty-yielding for ManySortedSet of A;
 end;
 
 registration
   let X be non empty set;
-  cluster -> non empty ManySortedSet of X;
+  cluster -> non empty for ManySortedSet of X;
 end;
 
 :: from AUTALG_1, 2008.07.06, A.T
 
-theorem :: PBOOLE:154
-  for F, G, H be Function-yielding Function holds (H ** G) ** F = H ** (
-  G ** F);
+theorem :: PBOOLE:140
+  for F, G, H be Function-yielding Function holds
+  (H ** G) ** F = H ** (G ** F);
 
 :: 2009.10.01, A.T.
 
 registration
  let I be set, f be non-empty ManySortedSet of I;
- cluster total (I-defined f-compatible Function);
+ cluster total for I-defined f-compatible Function;
 end;
 
-theorem :: PBOOLE:155
- for I being set, f being non-empty ManySortedSet of I
- for s being f-compatible ManySortedSet of I
-  holds s in product f;
-
-theorem :: PBOOLE:156
+theorem :: PBOOLE:141
  for I being set, f being non-empty ManySortedSet of I
  for p being f-compatible I-defined Function
   ex s being f-compatible ManySortedSet of I st p c= s;
 
-registration
- let I be set, f be non-empty ManySortedSet of I;
- cluster -> total Element of product f;
-end;
-
-theorem :: PBOOLE:157
+theorem :: PBOOLE:142
   for I,A be set
   for s,ss being ManySortedSet of I
   holds (ss +* s | A) | A = s | A;
 
-definition
- let I be set, f be non-empty ManySortedSet of I;
- let M be f-compatible ManySortedSet of I;
- func down M -> Element of product f equals
-:: PBOOLE:def 26
-M;
-end;
-
 registration
  let X be non empty set, Y be set;
- cluster X-valued ManySortedSet of Y;
+ cluster X-valued for ManySortedSet of Y;
 end;
 
-theorem :: PBOOLE:158
+theorem :: PBOOLE:143
   for I,Y being non empty set, M be Y-valued ManySortedSet of I,
      x be Element of I
   holds M.x = M/.x;
 
-theorem :: PBOOLE:159
- for F being total (NAT-defined Function), p be NAT-defined Function,
-     n be Element of NAT st Shift(p,n) c= F
- for i being Element of NAT st i in dom p holds F.(n+i) = p.i;
-
-theorem :: PBOOLE:160
+theorem :: PBOOLE:144
  for f being Function, M being ManySortedSet of I
    holds (f+*M)|I = M;
 
-theorem :: PBOOLE:161
+theorem :: PBOOLE:145
  for I being set, Y being non empty set
  for p being Y-valued I-defined Function
   ex s being Y-valued ManySortedSet of I st p c= s;

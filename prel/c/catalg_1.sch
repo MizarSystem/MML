@@ -18,18 +18,18 @@
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="FINSEQ_4"/>
 <ArticleID name="FUNCOP_1"/>
-<ArticleID name="FINSEQ_2"/>
-<ArticleID name="CARD_3"/>
 <ArticleID name="PBOOLE"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="GRAPH_1"/>
 <ArticleID name="CAT_1"/>
+<ArticleID name="FINSEQ_2"/>
 <ArticleID name="UNIALG_1"/>
 <ArticleID name="MSUALG_1"/>
 <ArticleID name="FUNCT_3"/>
 <ArticleID name="TREES_1"/>
 <ArticleID name="TREES_2"/>
 <ArticleID name="TREES_3"/>
+<ArticleID name="CARD_3"/>
 <ArticleID name="FUNCT_6"/>
 <ArticleID name="TREES_4"/>
 <ArticleID name="LANG1"/>
@@ -64,7 +64,7 @@
 <For>
 <Typ kind="G" nr="11">
 <Cluster>
-<Adjective nr="80">
+<Adjective nr="77">
 <Func kind="K" nr="333">
 <Func kind="F" nr="1"/>
 </Func>
@@ -114,7 +114,7 @@
 </Typ>
 <Pred kind="R" nr="1">
 <Func kind="K" nr="47">
-<Func kind="K" nr="203">
+<Func kind="K" nr="190">
 <Func kind="K" nr="333">
 <Func kind="F" nr="1"/>
 </Func>
@@ -175,7 +175,7 @@
 <Not>
 <Pred kind="R" nr="1">
 <Func kind="K" nr="47">
-<Func kind="K" nr="203">
+<Func kind="K" nr="190">
 <Func kind="K" nr="333">
 <Func kind="F" nr="1"/>
 </Func>

@@ -50,14 +50,14 @@
 <Cluster>
 <Adjective nr="4"/>
 <Adjective nr="16"/>
-<Adjective nr="33"/>
+<Adjective nr="34"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
 <Cluster>
 <Adjective nr="4"/>
 <Adjective nr="16"/>
-<Adjective nr="33"/>
+<Adjective nr="34"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -67,7 +67,7 @@
 <LocusVar nr="3"/>
 </Func>
 <Cluster>
-<Adjective nr="101"/>
+<Adjective nr="103"/>
 </Cluster>
 </FCluster>
 </Registrations>

@@ -1,0 +1,290 @@
+:: Elementary Introduction to Stochastic Finance in Discrete Time
+::  by Peter Jaeger
+::
+:: Received March 22, 2011
+:: Copyright (c) 2011 Association of Mizar Users
+::           (Stowarzyszenie Uzytkownikow Mizara, Bialystok, Poland).
+:: This code can be distributed under the GNU General Public Licence
+:: version 3.0 or later, or the Creative Commons Attribution-ShareAlike
+:: License version 3.0 or later, subject to the binding interpretation
+:: detailed in file COPYING.interpretation.
+:: See COPYING.GPL and COPYING.CC-BY-SA for the full text of these
+:: licenses, or see http://www.gnu.org/licenses/gpl.html and
+:: http://creativecommons.org/licenses/by-sa/3.0/.
+
+environ
+
+ vocabularies FINANCE1, NUMBERS, XBOOLE_0, PROB_1, SUBSET_1, FUNCT_1, TARSKI,
+      RELAT_1, CARD_1, ARYTM_1, CARD_3, PROB_3, NAT_1, ARYTM_3, XREAL_0,
+      ORDINAL1, XXREAL_0, SERIES_1, EQREL_1, MEASURE6, SEQ_1, XXREAL_1,
+      MESFUNC1, RANDOM_1, RANDOM_2, FUNCOP_1, VALUED_1;
+ notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, XXREAL_0, NAT_1, XREAL_0,
+      NUMBERS, FUNCT_1, RELSET_1, FUNCT_2, PROB_3, SERIES_1, PROB_1, MEASURE6,
+      SEQ_1, BINOP_2, MESFUNC1, MESFUNC6, RANDOM_1, INT_1, KOLMOG01, XXREAL_1,
+      RCOMP_1, FUNCOP_1, VALUED_1, RANDOM_2;
+ constructors REAL_1, SEQ_1, PROB_3, SERIES_1, BINOP_2, RELSET_1, MEASURE6,
+      RCOMP_1, MESFUNC1, MESFUNC6, KOLMOG01, RANDOM_2, FUNCOP_1;
+ registrations XBOOLE_0, SUBSET_1, ORDINAL1, RELSET_1, NUMBERS, XREAL_0,
+      MEMBERED, PROB_1, VALUED_0, XXREAL_0, NAT_1, XCMPLX_0, VALUED_1, FUNCT_2;
+ requirements SUBSET, NUMERALS, BOOLE, ARITHM, REAL;
+
+
+begin
+
+ reserve Omega, Omega2 for non empty set;
+ reserve Sigma, F for SigmaField of Omega;
+ reserve Sigma2, F2 for SigmaField of Omega2;
+
+notation
+  let a,r be real number;
+  synonym halfline_fin(a,r) for [.a,r.[;
+end;
+
+definition
+  let a,r be real number;
+  redefine func halfline_fin(a,r) -> Subset of REAL;
+end;
+
+theorem :: FINANCE1:1
+  for k being real number holds REAL \ [.k,+infty.[ = ].-infty,k.[;
+
+theorem :: FINANCE1:2
+  for k being real number holds REAL \ ].-infty,k.[ = [.k,+infty.[;
+
+definition
+  let a,b be real number;
+  func half_open_sets(a,b) -> SetSequence of REAL means
+:: FINANCE1:def 1
+  it.0 = halfline_fin(a,b+1) &
+  for n being Element of NAT holds it.(n+1) = halfline_fin(a,b+1/(n+1));
+end;
+
+definition
+  mode pricefunction -> Real_Sequence means
+:: FINANCE1:def 2
+  it.0 = 1 & for n being Element of NAT holds it.n >= 0;
+end;
+
+notation
+  let phi,jpi be Real_Sequence;
+  synonym ElementsOfBuyPortfolio(phi,jpi) for phi (#) jpi;
+end;
+
+definition
+  let phi,jpi be Real_Sequence;
+  redefine func ElementsOfBuyPortfolio(phi,jpi) -> Real_Sequence;
+end;
+
+definition
+  let d be natural number;
+  let phi,jpi be Real_Sequence;
+  func BuyPortfolioExt(phi,jpi,d) -> Element of REAL equals
+:: FINANCE1:def 3
+  Partial_Sums(ElementsOfBuyPortfolio(phi,jpi)).d;
+
+  func BuyPortfolio(phi,jpi,d) -> Element of REAL equals
+:: FINANCE1:def 4
+  Partial_Sums(ElementsOfBuyPortfolio(phi,jpi)^\1).(d-1);
+end;
+
+definition
+  let Omega, Omega2 be set;
+  let Sigma be SigmaField of Omega;
+  let Sigma2 be SigmaField of Omega2;
+  let X be Function;
+  pred X is_random_variable_on Sigma,Sigma2 means
+:: FINANCE1:def 5
+  for x being Element of Sigma2 holds
+  {y where y is Element of Omega: X.y is Element of x} is Element of Sigma;
+end;
+
+definition
+  let Omega, Omega2 be set;
+  let F be SigmaField of Omega;
+  let F2 be SigmaField of Omega2;
+  func set_of_random_variables_on (F,F2) equals
+:: FINANCE1:def 6
+  {f where f is Function of Omega,Omega2: f is_random_variable_on F,F2};
+end;
+
+registration
+  let Omega,Omega2,F,F2;
+  cluster set_of_random_variables_on(F,F2) -> non empty;
+end;
+
+definition
+  let Omega, Omega2 be non empty set;
+  let F be SigmaField of Omega;
+  let F2 be SigmaField of Omega2;
+  let X be set such that
+X = set_of_random_variables_on(F,F2);
+  let k be Element of X;
+  func Change_Element_to_Func(F,F2,k) -> Function of Omega,Omega2 equals
+:: FINANCE1:def 7
+
+  k;
+end;
+
+definition
+  let Omega be non empty set;
+  let F be SigmaField of Omega;
+  let X be non empty set;
+  let k be Element of X;
+  func ElementsOfPortfolioValueProb_fut(F,k) -> Function of Omega,REAL means
+:: FINANCE1:def 8
+
+  for w being Element of Omega holds
+  it.w = Change_Element_to_Func(F,Borel_Sets,k).w;
+end;
+
+definition
+  let p be Nat;
+  let Omega, Omega2 be non empty set;
+  let F be SigmaField of Omega;
+  let F2 be SigmaField of Omega2;
+  let X be set such that
+ X = set_of_random_variables_on(F,F2);
+  let G be Function of NAT,X;
+  func Element_Of(F,F2,G,p) -> Function of Omega,Omega2 equals
+:: FINANCE1:def 9
+  G.p;
+end;
+
+definition
+  let r be real number;
+  let Omega be non empty set;
+  let F be SigmaField of Omega;
+  let X be non empty set;
+  let w be Element of Omega;
+  let G be Function of NAT,X;
+  let phi be Real_Sequence;
+  func ElementsOfPortfolioValue_fut(r,phi,F,w,G) -> Real_Sequence means
+:: FINANCE1:def 10
+
+  for n being Element of NAT holds
+   it.n = ElementsOfPortfolioValueProb_fut(F,G.n).w * phi.n;
+end;
+
+definition
+  let r be real number;
+  let d be natural number;
+  let phi be Real_Sequence;
+  let Omega be non empty set;
+  let F be SigmaField of Omega;
+  let X be non empty set;
+  let G be Function of NAT,X;
+  let w be Element of Omega;
+  func PortfolioValueFutExt(r,d,phi,F,G,w) -> Element of REAL equals
+:: FINANCE1:def 11
+  Partial_Sums(ElementsOfPortfolioValue_fut(r,phi,F,w,G)).d;
+
+  func PortfolioValueFut(r,d,phi,F,G,w) -> Element of REAL equals
+:: FINANCE1:def 12
+  Partial_Sums(ElementsOfPortfolioValue_fut(r,phi,F,w,G)^\1).(d-1);
+end;
+
+registration
+  cluster non empty for Element of Borel_Sets;
+end;
+
+theorem :: FINANCE1:3
+  for k being real number holds
+  [.k,+infty.[ is Element of Borel_Sets &
+  ].-infty,k.[ is Element of Borel_Sets;
+
+theorem :: FINANCE1:4
+  for k1,k2 being real number holds
+  [.k2,k1.[ is Element of Borel_Sets;
+
+theorem :: FINANCE1:5
+  for a,b being real number holds
+   Intersection half_open_sets(a,b) is Element of Borel_Sets;
+
+theorem :: FINANCE1:6
+  for a,b being real number holds
+  Intersection half_open_sets(a,b) = [.a,b.];
+
+theorem :: FINANCE1:7
+  for a,b being real number, n being natural number holds
+  (Partial_Intersection half_open_sets(a,b)).n is Element of Borel_Sets;
+
+theorem :: FINANCE1:8
+for k1,k2 being real number holds [.k2,k1.] is Element of Borel_Sets;
+
+theorem :: FINANCE1:9
+for X being Function of Omega,REAL st
+   X is_random_variable_on Sigma,Borel_Sets holds
+(for k being real number holds
+{w where w is Element of Omega: X.w >=k} is Element of Sigma &
+{w where w is Element of Omega: X.w <k} is Element of Sigma) &
+(for k1,k2 being real number st k1<k2 holds
+{w where w is Element of Omega: k1 <= X.w & X.w < k2} is Element of Sigma)
+             &
+(for k1,k2 being real number st k1<=k2 holds
+{w where w is Element of Omega: k1 <= X.w & X.w <= k2} is Element of Sigma)
+             &
+(for r being real number holds
+       less_dom(X,r) = {w where w is Element of Omega: X.w <r}) &
+(for r being real number holds
+       great_eq_dom(X,r) = {w where w is Element of Omega: X.w >=r}) &
+(for r being real number holds
+       eq_dom(X,r) = {w where w is Element of Omega: X.w =r}) &
+(for r being real number holds eq_dom(X,r) is Element of Sigma);
+
+theorem :: FINANCE1:10
+  for s being real number holds
+    Omega --> s is_random_variable_on Sigma,Borel_Sets;
+
+theorem :: FINANCE1:11
+  for phi being Real_Sequence, jpi being pricefunction,
+      d being natural number st d>0 holds
+  BuyPortfolioExt(phi,jpi,d) = phi.0 + BuyPortfolio(phi,jpi,d);
+
+theorem :: FINANCE1:12
+for d being natural number st d>0 holds
+for r being real number
+for phi being Real_Sequence
+for G being Function of NAT,set_of_random_variables_on(F,Borel_Sets) st
+ Element_Of(F,Borel_Sets,G,0) = Omega-->1+r holds
+ for w being Element of Omega holds
+PortfolioValueFutExt(r,d,phi,F,G,w)
+       = ((1+r) * phi.0) + PortfolioValueFut(r,d,phi,F,G,w);
+
+theorem :: FINANCE1:13
+for d being natural number st d>0 holds
+for r being real number st r>-1 holds
+for phi being Real_Sequence,
+    jpi being pricefunction holds
+for G being Function of NAT,set_of_random_variables_on(F,Borel_Sets) st
+ Element_Of(F,Borel_Sets,G,0) = Omega-->1+r holds
+for w being Element of Omega holds
+ BuyPortfolioExt(phi,jpi,d)<=0 implies
+(PortfolioValueFutExt(r,d,phi,F,G,w) <=
+ PortfolioValueFut(r,d,phi,F,G,w) - (1+r)*BuyPortfolio(phi,jpi,d));
+
+theorem :: FINANCE1:14
+for d being natural number st d>0 holds
+for r being real number st r>-1 holds
+for phi being Real_Sequence,
+    jpi being pricefunction holds
+for G being Function of NAT,set_of_random_variables_on (F,Borel_Sets) st
+ Element_Of(F,Borel_Sets,G,0) = Omega-->1+r holds
+(BuyPortfolioExt(phi,jpi,d)<=0 implies
+({w where w is Element of Omega:
+      PortfolioValueFutExt(r,d,phi,F,G,w) >= 0} c=
+     {w where w is Element of Omega:
+      PortfolioValueFut(r,d,phi,F,G,w)
+                    >= (1+r)*BuyPortfolio(phi,jpi,d)} &
+{w where w is Element of Omega: PortfolioValueFutExt(r,d,phi,F,G,w) > 0} c=
+{w where w is Element of Omega: PortfolioValueFut(r,d,phi,F,G,w)
+                    > (1+r)*BuyPortfolio(phi,jpi,d)}));
+
+theorem :: FINANCE1:15
+for f being Function of Omega,REAL st
+    f is_random_variable_on Sigma,Borel_Sets holds
+          f is_measurable_on [#]Sigma &
+          f is Real-Valued-Random-Variable of Sigma;
+
+theorem :: FINANCE1:16
+  set_of_random_variables_on (Sigma,Borel_Sets) c=
+    Real-Valued-Random-Variables-Set Sigma;

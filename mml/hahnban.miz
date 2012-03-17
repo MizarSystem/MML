@@ -27,7 +27,7 @@ environ
       RLVECT_2, RLVECT_3, NORMSP_1, XXREAL_2, RELSET_1, XXREAL_1;
  registrations XBOOLE_0, SUBSET_1, RELSET_1, PARTFUN1, NUMBERS, XXREAL_0,
       XREAL_0, MEMBERED, STRUCT_0, RLVECT_1, RLSUB_1, ALGSTR_0, FUNCT_2,
-      FUNCT_1, RELAT_1;
+      FUNCT_1, RELAT_1, DOMAIN_1;
  requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, RLSUB_1, RLSUB_2, RLVECT_1, ORDINAL1, XBOOLE_0, STRUCT_0,
       ALGSTR_0, XXREAL_2, SUPINF_1;
@@ -35,240 +35,8 @@ environ
       FUNCT_1, GRFUNC_1, RLVECT_1, RLSUB_2, RLVECT_4, MCART_1, RLVECT_3,
       ABSVALUE, NORMSP_1, RELAT_1, RELSET_1, XBOOLE_0, XBOOLE_1, XCMPLX_0,
       XCMPLX_1, XREAL_1, XXREAL_0, NUMBERS, STRUCT_0, ALGSTR_0, XXREAL_2,
-      NORMSP_0;
+      NORMSP_0, SETFAM_1;
  schemes ORDERS_1, DOMAIN_1, FUNCT_2;
-
-begin
-
-canceled 2;
-
-theorem Th3:
-  for A being non empty set, b being set st A <> {b} ex a being
-  Element of A st a <> b
-proof
-  let A be non empty set, b be set such that
-A1: A <> {b};
-  assume
-A2: for a being Element of A holds a = b;
-  now
-    set a0 =the  Element of A;
-    let a be set;
-    thus a in A implies a = b by A2;
-    assume
-A3: a = b;
-    a0 = b by A2;
-    hence a in A by A3;
-  end;
-  hence contradiction by A1,TARSKI:def 1;
-end;
-
-theorem
-  for X,Y being set, B being non empty Subset of PFuncs(X,Y) holds B is
-  non empty functional set;
-
-theorem Th5:
-  for B being non empty functional set, f being Function st f =
-union B holds dom f = union { dom g where g is Element of B: not contradiction
-  } & rng f = union { rng g where g is Element of B: not contradiction }
-proof
-  let B be non empty functional set, f be Function such that
-A1: f = union B;
-  set X = { dom g where g is Element of B: not contradiction };
-  now
-    let x be set;
-    hereby
-      assume x in dom f;
-      then [x,f.x] in f by FUNCT_1:8;
-      then consider g being set such that
-A2:   [x,f.x] in g and
-A3:   g in B by A1,TARSKI:def 4;
-      reconsider g as Function by A3;
-      take Z = dom g;
-      thus x in Z & Z in X by A2,A3,FUNCT_1:8;
-    end;
-    given Z being set such that
-A4: x in Z and
-A5: Z in X;
-    consider g being Element of B such that
-A6: Z = dom g by A5;
-    [x,g.x] in g by A4,A6,FUNCT_1:8;
-    then [x,g.x] in f by A1,TARSKI:def 4;
-    hence x in dom f by FUNCT_1:8;
-  end;
-  hence dom f = union X by TARSKI:def 4;
-  set X = { rng g where g is Element of B: not contradiction };
-  now
-    let y be set;
-    hereby
-      assume y in rng f;
-      then consider x being set such that
-A7:   x in dom f & y = f.x by FUNCT_1:def 5;
-      [x,y] in f by A7,FUNCT_1:8;
-      then consider g being set such that
-A8:   [x,y] in g and
-A9:   g in B by A1,TARSKI:def 4;
-      reconsider g as Function by A9;
-      take Z = rng g;
-      x in dom g & y = g.x by A8,FUNCT_1:8;
-      hence y in Z & Z in X by A9,FUNCT_1:def 5;
-    end;
-    given Z being set such that
-A10: y in Z and
-A11: Z in X;
-    consider g being Element of B such that
-A12: Z = rng g by A11;
-    consider x being set such that
-A13: x in dom g & y = g.x by A10,A12,FUNCT_1:def 5;
-    [x,y] in g by A13,FUNCT_1:8;
-    then [x,y] in f by A1,TARSKI:def 4;
-    hence y in rng f by RELAT_1:20;
-  end;
-  hence thesis by TARSKI:def 4;
-end;
-
-theorem
-  for A being non empty Subset of ExtREAL st for r being R_eal st r in A
-  holds r <= -infty holds A = {-infty}
-proof
-  let A be non empty Subset of ExtREAL such that
-A1: for r being R_eal st r in A holds r <= -infty;
-  assume A <> {-infty};
-  then ex a being Element of A st a <> -infty by Th3;
-  hence contradiction by A1,XXREAL_0:6;
-end;
-
-theorem
-  for A being non empty Subset of ExtREAL st for r being R_eal st r in A
-  holds +infty <= r holds A = {+infty}
-proof
-  let A be non empty Subset of ExtREAL such that
-A1: for r being R_eal st r in A holds +infty <= r;
-  assume A <> {+infty};
-  then ex a being Element of A st a <> +infty by Th3;
-  hence contradiction by A1,XXREAL_0:4;
-end;
-
-theorem Th8:
-  for A being non empty Subset of ExtREAL, r being ext-real number
-  st r < sup A ex s being R_eal st s in A & r < s
-proof
-  let A be non empty Subset of ExtREAL, r be ext-real number;
-  assume
-A1: r < sup A;
-  assume
-A2: for s being R_eal st s in A holds not r < s;
-  r is UpperBound of A
-  proof
-    let x be ext-real number;
-    assume x in A;
-    hence thesis by A2;
-  end;
-  hence contradiction by A1,XXREAL_2:def 3;
-end;
-
-theorem Th9:
-  for A being non empty Subset of ExtREAL, r being R_eal st inf A <
-  r ex s being R_eal st s in A & s < r
-proof
-  let A be non empty Subset of ExtREAL, r be R_eal;
-  assume
-A1: inf A < r;
-  assume
-A2: for s being R_eal st s in A holds not s < r;
-  r is LowerBound of A
-  proof
-    let x be ext-real number;
-    assume x in A;
-    hence thesis by A2;
-  end;
-  hence contradiction by A1,XXREAL_2:def 4;
-end;
-
-theorem Th10:
-  for A,B being non empty Subset of ExtREAL st for r,s being R_eal
-  st r in A & s in B holds r <= s holds sup A <= inf B
-proof
-  let A,B be non empty Subset of ExtREAL;
-  assume
-A1: for r,s being R_eal st r in A & s in B holds r <= s;
-  assume not sup A <= inf B;
-  then consider s1 being R_eal such that
-A2: s1 in A and
-A3: inf B < s1 by Th8;
-  ex s2 being R_eal st s2 in B & s2 < s1 by A3,Th9;
-  hence contradiction by A1,A2;
-end;
-
-begin :: Chains of Functions
-
-registration
-  let A be non empty set;
-  cluster c=-linear non empty Subset of A;
-  existence
-  proof
-    set a =the  Element of A;
-    reconsider B = { a } as non empty Subset of A;
-    take B;
-    B is c=-linear
-    proof
-      let x,y be set;
-      assume that
-A1:   x in B and
-A2:   y in B;
-      x = a by A1,TARSKI:def 1;
-      hence thesis by A2,TARSKI:def 1;
-    end;
-    hence thesis;
-  end;
-end;
-
-canceled 2;
-
-theorem Th13:
-  for X,Y being set for B being c=-linear Subset of PFuncs(X,Y)
-  holds union B in PFuncs(X,Y)
-proof
-  let X,Y be set;
-  let B be c=-linear Subset of PFuncs(X,Y);
-  for x be set st x in B holds x is Function;
-  then reconsider f = union B as Function by TREES_2:36;
-  per cases;
-  suppose
-    B <> {};
-    then reconsider D = B as non empty functional set;
-A1: now
-      let x be set;
-      assume x in { dom g where g is Element of D: not contradiction };
-      then consider g being Element of D such that
-A2:   x = dom g;
-      g in PFuncs(X,Y) by TARSKI:def 3;
-      then ex f being Function st g = f & dom f c= X & rng f c= Y by
-PARTFUN1:def 5;
-      hence x c= X by A2;
-    end;
-A3: now
-      let x be set;
-      assume x in { rng g where g is Element of D: not contradiction };
-      then consider g being Element of D such that
-A4:   x = rng g;
-      g in PFuncs(X,Y) by TARSKI:def 3;
-      then ex f being Function st g = f & dom f c= X & rng f c= Y by
-PARTFUN1:def 5;
-      hence x c= Y by A4;
-    end;
-    rng f = union { rng g where g is Element of D: not contradiction } by Th5;
-    then
-A5: rng f c= Y by A3,ZFMISC_1:94;
-    dom f = union { dom g where g is Element of D: not contradiction } by Th5;
-    then dom f c= X by A1,ZFMISC_1:94;
-    hence thesis by A5,PARTFUN1:def 5;
-  end;
-  suppose
-A6: B = {};
-    {} is PartFunc of X, Y by RELSET_1:25;
-    hence thesis by A6,PARTFUN1:119,ZFMISC_1:2;
-  end;
-end;
 
 begin :: Some Facts on Real Vector Spaces
 
@@ -284,7 +52,7 @@ proof
 A1: x in the carrier of W1;
   the carrier of W1 c= the carrier of V by RLSUB_1:def 2;
   then reconsider w = x as VECTOR of V by A1;
-A2: w + 0.V = w & 0.V in W2 by RLSUB_1:25,RLVECT_1:10;
+A2: w + 0.V = w & 0.V in W2 by RLSUB_1:17,RLVECT_1:4;
   x in W1 by A1,STRUCT_0:def 5;
   then x in {v + u where v,u is VECTOR of V : v in W1 & u in W2} by A2;
   hence thesis by RLSUB_2:def 1;
@@ -347,7 +115,7 @@ A5: (v |-- (W1,W2))`2 = v2 by A2,MCART_1:7;
   then
 A6: v2 in W2 by A1,RLSUB_2:def 6;
   v = v2 + v1 by A1,A3,A5,RLSUB_2:def 6;
-  hence thesis by A1,A4,A6,Th15,RLSUB_2:46;
+  hence thesis by A1,A4,A6,Th15,RLSUB_2:38;
 end;
 
 theorem Th19:
@@ -358,7 +126,7 @@ proof
 A1: V is_the_direct_sum_of W1,W2;
   let v be VECTOR of V such that
 A2: v in W1;
-  0.V in W2 & v + 0.V = v by RLSUB_1:25,RLVECT_1:10;
+  0.V in W2 & v + 0.V = v by RLSUB_1:17,RLVECT_1:4;
   hence thesis by A1,A2,Th15;
 end;
 
@@ -371,8 +139,8 @@ proof
 A1: V is_the_direct_sum_of W1,W2;
   let v be VECTOR of V;
   assume v in W2;
-  then v |-- (W2,W1) = [v,0.V] by A1,Th19,RLSUB_2:46;
-  hence thesis by A1,Th18,RLSUB_2:46;
+  then v |-- (W2,W1) = [v,0.V] by A1,Th19,RLSUB_2:38;
+  hence thesis by A1,Th18,RLSUB_2:38;
 end;
 
 theorem Th21:
@@ -392,7 +160,7 @@ theorem Th22:
 proof
   let V1,V2,W be Subspace of V, W1,W2 be Subspace of W such that
 A1: W1 = V1 & W2 = V2;
-  reconsider W3 = W1 + W2 as Subspace of V by RLSUB_1:35;
+  reconsider W3 = W1 + W2 as Subspace of V by RLSUB_1:27;
   now
     let v be VECTOR of V;
 A2: the carrier of W1 c= the carrier of W & the carrier of W2 c= the
@@ -403,21 +171,21 @@ A3:   v in W3;
       then reconsider w = v as VECTOR of W by Th21;
       consider w1,w2 being VECTOR of W such that
 A4:   w1 in W1 & w2 in W2 and
-A5:   w = w1 + w2 by A3,RLSUB_2:5;
-      reconsider v1 = w1, v2 = w2 as VECTOR of V by RLSUB_1:18;
-      v = v1 + v2 by A5,RLSUB_1:21;
-      hence v in V1 + V2 by A1,A4,RLSUB_2:5;
+A5:   w = w1 + w2 by A3,RLSUB_2:1;
+      reconsider v1 = w1, v2 = w2 as VECTOR of V by RLSUB_1:10;
+      v = v1 + v2 by A5,RLSUB_1:13;
+      hence v in V1 + V2 by A1,A4,RLSUB_2:1;
     end;
     assume v in V1 + V2;
     then consider v1,v2 being VECTOR of V such that
 A6: v1 in V1 & v2 in V2 and
-A7: v = v1 + v2 by RLSUB_2:5;
+A7: v = v1 + v2 by RLSUB_2:1;
     v1 in the carrier of W1 & v2 in the carrier of W2 by A1,A6,STRUCT_0:def 5;
     then reconsider w1 = v1, w2 = v2 as VECTOR of W by A2;
-    v = w1 + w2 by A7,RLSUB_1:21;
-    hence v in W3 by A1,A6,RLSUB_2:5;
+    v = w1 + w2 by A7,RLSUB_1:13;
+    hence v in W3 by A1,A6,RLSUB_2:1;
   end;
-  hence thesis by RLSUB_1:39;
+  hence thesis by RLSUB_1:31;
 end;
 
 theorem Th23:
@@ -427,23 +195,23 @@ proof
   let W be Subspace of V;
   let v be VECTOR of V, w be VECTOR of W such that
 A1: v = w;
-  reconsider W1 = Lin{w} as Subspace of V by RLSUB_1:35;
+  reconsider W1 = Lin{w} as Subspace of V by RLSUB_1:27;
   now
     let u be VECTOR of V;
     hereby
       assume u in W1;
       then consider a being Real such that
-A2:   u = a * w by RLVECT_4:11;
-      u = a * v by A1,A2,RLSUB_1:22;
-      hence u in Lin{v} by RLVECT_4:11;
+A2:   u = a * w by RLVECT_4:8;
+      u = a * v by A1,A2,RLSUB_1:14;
+      hence u in Lin{v} by RLVECT_4:8;
     end;
     assume u in Lin{v};
     then consider a being Real such that
-A3: u = a * v by RLVECT_4:11;
-    u = a * w by A1,A3,RLSUB_1:22;
-    hence u in W1 by RLVECT_4:11;
+A3: u = a * v by RLVECT_4:8;
+    u = a * w by A1,A3,RLSUB_1:14;
+    hence u in W1 by RLVECT_4:8;
   end;
-  hence thesis by RLSUB_1:39;
+  hence thesis by RLSUB_1:31;
 end;
 
 theorem Th24:
@@ -461,28 +229,28 @@ A3: W = X;
   hence the RLSStruct of X + Lin{v} = W + Lin{y} by A3,Th22;
   assume W /\ Lin{y} <> (0).(X + Lin{v});
   then consider z being VECTOR of X + Lin{v} such that
-A4: not(z in W /\ Lin{y} iff z in (0).(X + Lin{v})) by RLSUB_1:39;
+A4: not(z in W /\ Lin{y} iff z in (0).(X + Lin{v})) by RLSUB_1:31;
   per cases by A4;
   suppose that
 A5: z in W /\ Lin{y} and
 A6: not z in (0).(X + Lin{v});
-    z in Lin{y} by A5,RLSUB_2:7;
+    z in Lin{y} by A5,RLSUB_2:3;
     then consider a being Real such that
-A7: z = a * y by RLVECT_4:11;
-A8: z in W by A5,RLSUB_2:7;
+A7: z = a * y by RLVECT_4:8;
+A8: z in W by A5,RLSUB_2:3;
     now
       per cases;
       suppose
         a = 0;
-        then z = 0.(X + Lin{v}) by A7,RLVECT_1:23;
-        hence contradiction by A6,RLSUB_1:25;
+        then z = 0.(X + Lin{v}) by A7,RLVECT_1:10;
+        hence contradiction by A6,RLSUB_1:17;
       end;
       suppose
 A9:     a <> 0;
-        y = 1*y by RLVECT_1:def 11
+        y = 1*y by RLVECT_1:def 8
           .= a"*a*y by A9,XCMPLX_0:def 7
-          .= a"*(a*y) by RLVECT_1:def 10;
-        hence contradiction by A1,A2,A3,A8,A7,RLSUB_1:29;
+          .= a"*(a*y) by RLVECT_1:def 7;
+        hence contradiction by A1,A2,A3,A8,A7,RLSUB_1:21;
       end;
     end;
     hence contradiction;
@@ -490,8 +258,8 @@ A9:     a <> 0;
   suppose that
 A10: not z in W /\ Lin{y} and
 A11: z in (0).(X + Lin{v});
-    z = 0.(X + Lin{v}) by A11,RLVECT_3:36;
-    hence contradiction by A10,RLSUB_1:25;
+    z = 0.(X + Lin{v}) by A11,RLVECT_3:29;
+    hence contradiction by A10,RLSUB_1:17;
   end;
 end;
 
@@ -504,8 +272,8 @@ proof
   Subspace of X + Lin{v};
   assume v = y & X = W & not v in X;
   then X + Lin{v} is_the_direct_sum_of W,Lin{y} by Th24;
-  then y |-- (W,Lin{y}) = [0.(X + Lin{v}),y] by Th20,RLVECT_4:12;
-  hence thesis by RLSUB_1:19;
+  then y |-- (W,Lin{y}) = [0.(X + Lin{v}),y] by Th20,RLVECT_4:9;
+  hence thesis by RLSUB_1:11;
 end;
 
 theorem Th26:
@@ -522,7 +290,7 @@ A4: X + Lin{v} is_the_direct_sum_of W,Lin{y} by A1,A2,A3,Th24;
   let w be VECTOR of X + Lin{v};
   assume w in X;
   then w |-- (W,Lin{y}) = [w,0.(X + Lin{v})] by A2,A4,Th19;
-  hence thesis by RLSUB_1:19;
+  hence thesis by RLSUB_1:11;
 end;
 
 theorem Th27:
@@ -531,7 +299,7 @@ theorem Th27:
 proof
   let v be VECTOR of V, W1,W2 be Subspace of V;
   take (v |-- (W1,W2))`1,(v |-- (W1,W2))`2;
-  thus thesis by MCART_1:23;
+  thus thesis by MCART_1:21;
 end;
 
 theorem Th28:
@@ -553,9 +321,9 @@ A5: X + Lin{v} is_the_direct_sum_of W,Lin{y} by A1,A2,A3,Th24;
   then reconsider x = v1 as VECTOR of X by A2,STRUCT_0:def 5;
   v2 in Lin{y} by A5,A4,Th17;
   then consider r being Real such that
-A6: v2 = r * y by RLVECT_4:11;
+A6: v2 = r * y by RLVECT_4:8;
   take x,r;
-  thus thesis by A1,A4,A6,RLSUB_1:22;
+  thus thesis by A1,A4,A6,RLSUB_1:14;
 end;
 
 theorem Th29:
@@ -576,28 +344,28 @@ A4: X + Lin{v} is_the_direct_sum_of W,Lin{y} by A1,A2,A3,Th24;
   that
 A5: w1 |-- (W,Lin{y}) = [x1,r1*v] and
 A6: w2 |-- (W,Lin{y}) = [x2,r2*v];
-  reconsider y1 = x1, y2 = x2 as VECTOR of X + Lin{v} by A2,RLSUB_1:18;
-A7: r2*v = r2*y by A1,RLSUB_1:22;
+  reconsider y1 = x1, y2 = x2 as VECTOR of X + Lin{v} by A2,RLSUB_1:10;
+A7: r2*v = r2*y by A1,RLSUB_1:14;
   then
 A8: y2 in W by A4,A6,Th17;
-  (r1+r2)*v = (r1+r2)*y by A1,RLSUB_1:22;
+  (r1+r2)*v = (r1+r2)*y by A1,RLSUB_1:14;
   then
-A9: (r1+r2)*v in Lin{y} by RLVECT_4:11;
-  reconsider z1 = x1, z2 = x2 as VECTOR of V by RLSUB_1:18;
-A10: y1 + y2 = z1 + z2 by RLSUB_1:21
-    .= x1 + x2 by RLSUB_1:21;
-A11: r1*v = r1*y by A1,RLSUB_1:22;
+A9: (r1+r2)*v in Lin{y} by RLVECT_4:8;
+  reconsider z1 = x1, z2 = x2 as VECTOR of V by RLSUB_1:10;
+A10: y1 + y2 = z1 + z2 by RLSUB_1:13
+    .= x1 + x2 by RLSUB_1:13;
+A11: r1*v = r1*y by A1,RLSUB_1:14;
   then y1 in W by A4,A5,Th17;
   then
-A12: y1 + y2 in W by A8,RLSUB_1:28;
+A12: y1 + y2 in W by A8,RLSUB_1:20;
 A13: w2 = y2 + r2*y by A4,A6,A7,Th16;
   w1 = y1 + r1*y by A4,A5,A11,Th16;
   then
-A14: w1 + w2 = y1 + r1*y + y2 + r2*y by A13,RLVECT_1:def 6
-    .= y1 + y2 + r1*y + r2*y by RLVECT_1:def 6
-    .= y1 + y2 + (r1*y + r2*y) by RLVECT_1:def 6
-    .= y1 + y2 + (r1+r2)*y by RLVECT_1:def 9;
-  (r1+r2)*y = (r1+r2)*v by A1,RLSUB_1:22;
+A14: w1 + w2 = y1 + r1*y + y2 + r2*y by A13,RLVECT_1:def 3
+    .= y1 + y2 + r1*y + r2*y by RLVECT_1:def 3
+    .= y1 + y2 + (r1*y + r2*y) by RLVECT_1:def 3
+    .= y1 + y2 + (r1+r2)*y by RLVECT_1:def 6;
+  (r1+r2)*y = (r1+r2)*v by A1,RLSUB_1:14;
   hence thesis by A4,A12,A9,A14,A10,Th15;
 end;
 
@@ -616,17 +384,17 @@ A3: not v in X;
 A4: X + Lin{v} is_the_direct_sum_of W,Lin{y} by A1,A2,A3,Th24;
   let w be VECTOR of X + Lin{v}, x be VECTOR of X, t,r be Real such that
 A5: w |-- (W,Lin{y}) = [x,r*v];
-  reconsider z = x as VECTOR of X + Lin{v} by A2,RLSUB_1:18;
-  r*y = r*v by A1,RLSUB_1:22;
+  reconsider z = x as VECTOR of X + Lin{v} by A2,RLSUB_1:10;
+  r*y = r*v by A1,RLSUB_1:14;
   then
 A6: t*w = t*(z + r*y) by A4,A5,Th16
-    .= t*z + t*(r*y) by RLVECT_1:def 8
-    .= t*z + t*r*y by RLVECT_1:def 10;
-  reconsider u = x as VECTOR of V by RLSUB_1:18;
-A7: t*r*y in Lin{y} by RLVECT_4:11;
-A8: t*r*y = t*r*v by A1,RLSUB_1:22;
-A9: t*z = t*u by RLSUB_1:22
-    .= t*x by RLSUB_1:22;
+    .= t*z + t*(r*y) by RLVECT_1:def 5
+    .= t*z + t*r*y by RLVECT_1:def 7;
+  reconsider u = x as VECTOR of V by RLSUB_1:10;
+A7: t*r*y in Lin{y} by RLVECT_4:8;
+A8: t*r*y = t*r*v by A1,RLSUB_1:14;
+A9: t*z = t*u by RLSUB_1:14
+    .= t*x by RLSUB_1:14;
   then t*z in W by A2,STRUCT_0:def 5;
   hence thesis by A4,A9,A8,A7,A6,Th15;
 end;
@@ -641,7 +409,7 @@ end;
 definition
   let V;
   let IT be Functional of V;
-  canceled 2;
+
   attr IT is subadditive means
   :Def3:
   for x,y being VECTOR of V holds IT.(x+y) <= IT.x+IT.y;
@@ -667,7 +435,7 @@ end;
 
 registration
   let V;
-  cluster additive -> subadditive Functional of V;
+  cluster additive -> subadditive for Functional of V;
   coherence
   proof
     let f be Functional of V;
@@ -676,7 +444,7 @@ A1: f is additive;
     let x,y be VECTOR of V;
     thus thesis by A1,Def4;
   end;
-  cluster homogeneous -> positively_homogeneous Functional of V;
+  cluster homogeneous -> positively_homogeneous for Functional of V;
   coherence
   proof
     let f be Functional of V;
@@ -685,7 +453,7 @@ A2: f is homogeneous;
     let x be VECTOR of V, r be Real;
     thus thesis by A2,Def5;
   end;
-  cluster semi-homogeneous -> positively_homogeneous Functional of V;
+  cluster semi-homogeneous -> positively_homogeneous for Functional of V;
   coherence
   proof
     let f be Functional of V;
@@ -695,17 +463,17 @@ A3: f is semi-homogeneous;
     assume r > 0;
     hence thesis by A3,Def7;
   end;
-  cluster semi-homogeneous -> 0-preserving Functional of V;
+  cluster semi-homogeneous -> 0-preserving for Functional of V;
   coherence
   proof
     let f be Functional of V;
     assume
 A4: f is semi-homogeneous;
-    thus f.(0.V) = f.(0*0.V) by RLVECT_1:23
+    thus f.(0.V) = f.(0*0.V) by RLVECT_1:10
       .= 0*f.(0.V) by A4,Def7
       .= 0;
   end;
-  cluster absolutely_homogeneous -> semi-homogeneous Functional of V;
+  cluster absolutely_homogeneous -> semi-homogeneous for Functional of V;
   coherence
   proof
     let f be Functional of V;
@@ -716,7 +484,8 @@ A5: f is absolutely_homogeneous;
     then abs r = r by ABSVALUE:def 1;
     hence thesis by A5,Def8;
   end;
-  cluster 0-preserving positively_homogeneous -> semi-homogeneous Functional
+  cluster 0-preserving positively_homogeneous -> semi-homogeneous for
+Functional
     of V;
   coherence
   proof
@@ -728,7 +497,7 @@ A8: r >= 0;
     per cases by A8;
     suppose
 A9:   r = 0;
-      hence f.(r*x) = f.(0.V) by RLVECT_1:23
+      hence f.(r*x) = f.(0.V) by RLVECT_1:10
         .= r*f.x by A6,A9,Def9;
     end;
     suppose
@@ -740,25 +509,25 @@ end;
 
 registration
   let V;
-  cluster additive absolutely_homogeneous homogeneous Functional of V;
+  cluster additive absolutely_homogeneous homogeneous for Functional of V;
   existence
   proof
     reconsider f = (the carrier of V) --> 0 as Functional of V;
     take f;
     hereby
       let x,y be VECTOR of V;
-      thus f.(x+y) = 0+0 by FUNCOP_1:13
-        .= f.x+0 by FUNCOP_1:13
-        .= f.x+f.y by FUNCOP_1:13;
+      thus f.(x+y) = 0+0 by FUNCOP_1:7
+        .= f.x+0 by FUNCOP_1:7
+        .= f.x+f.y by FUNCOP_1:7;
     end;
     hereby
       let x be VECTOR of V, r be Real;
-      thus f.(r*x) = abs(r)*0 by FUNCOP_1:13
-        .= abs(r)*f.x by FUNCOP_1:13;
+      thus f.(r*x) = abs(r)*0 by FUNCOP_1:7
+        .= abs(r)*f.x by FUNCOP_1:7;
     end;
     let x be VECTOR of V, r be Real;
-    thus f.(r*x) = r*0 by FUNCOP_1:13
-      .= r*f.x by FUNCOP_1:13;
+    thus f.(r*x) = r*0 by FUNCOP_1:7
+      .= r*f.x by FUNCOP_1:7;
   end;
 end;
 
@@ -774,7 +543,7 @@ theorem Th31:
   holds L.(-v) = - L.v
 proof
   let L be homogeneous Functional of V, v be VECTOR of V;
-  thus L.(-v) = L.((-1)*v) by RLVECT_1:29
+  thus L.(-v) = L.((-1)*v) by RLVECT_1:16
     .= (-1)*L.v by Def5
     .= - L.v;
 end;
@@ -793,7 +562,7 @@ theorem Th33:
   for L being additive Functional of V holds L.(0.V) = 0
 proof
   let L be additive Functional of V;
-  L.(0.V) + 0 = L.(0.V + 0.V) by RLVECT_1:10
+  L.(0.V) + 0 = L.(0.V + 0.V) by RLVECT_1:4
     .= L.(0.V) + L.(0.V) by Def4;
   hence thesis;
 end;
@@ -808,7 +577,7 @@ proof
   VECTOR of X + Lin{v} such that
 A1: v = y and
 A2: not v in X;
-  reconsider W1 = X as Subspace of X + Lin{v} by RLSUB_2:11;
+  reconsider W1 = X as Subspace of X + Lin{v} by RLSUB_2:7;
   let r be Real;
   defpred P[VECTOR of X + Lin{v},Real] means for x being VECTOR of X, s being
 Real st ($1 |-- (W1,Lin{y}))`1 = x & ($1 |-- (W1,Lin{y}))`2 = s*v holds $2 = fi
@@ -823,8 +592,8 @@ A4: e |-- (W1,Lin{y}) = [x,s*v] by A1,A2,Th28;
       let x9 be VECTOR of X, t be Real such that
 A5:   (e |-- (W1,Lin{y}))`1 = x9 and
 A6:   (e |-- (W1,Lin{y}))`2 = t*v;
-      v <> 0.V by A2,RLSUB_1:25;
-      then t = s by A4,A6,MCART_1:7,RLVECT_1:51;
+      v <> 0.V by A2,RLSUB_1:17;
+      then t = s by A4,A6,MCART_1:7,RLVECT_1:37;
       hence thesis by A4,A5,MCART_1:7;
     end;
   end;
@@ -839,7 +608,7 @@ A8: now
     then reconsider v1 = x as VECTOR of X + Lin{v} by TARSKI:def 3;
     v1 in X by STRUCT_0:def 5;
     then (v1 |-- (W1,Lin{y})) = [v1,0.V] by A1,A2,Th26
-      .= [v1,0*v] by RLVECT_1:23;
+      .= [v1,0*v] by RLVECT_1:10;
     then
 A9: (v1 |-- (W1,Lin{y}))`1 = x & (v1 |-- (W1,Lin{y}))`2 = 0*v by MCART_1:7;
     thus fi.a = fi.x + 0*r .= f.a by A7,A9;
@@ -889,9 +658,9 @@ MCART_1:7;
   dom fi = the carrier of X & dom f = the carrier of X + Lin{v} by
 FUNCT_2:def 1;
   then dom fi = dom f /\ the carrier of X by Th14,XBOOLE_1:28;
-  hence f|the carrier of X=fi by A8,FUNCT_1:68;
+  hence f|the carrier of X=fi by A8,FUNCT_1:46;
   (y |-- (W1,Lin{y}))`2 = y by A10,MCART_1:7
-    .= 1*v by A1,RLVECT_1:def 11;
+    .= 1*v by A1,RLVECT_1:def 8;
   hence f.y = fi.(0.X) + 1*r by A7,A11
     .= 0 + 1*r by Th33
     .= r;
@@ -909,12 +678,12 @@ proof
   assume not v in the carrier of X;
   then
 A1: not v in X by STRUCT_0:def 5;
-  v in Lin{v} by RLVECT_4:12;
+  v in Lin{v} by RLVECT_4:9;
   then
 A2: v in the carrier of Lin{v} by STRUCT_0:def 5;
   the carrier of Lin{v} c= the carrier of Lin{v} + X by Th14;
-  then reconsider x0 = v as VECTOR of X + Lin{v} by A2,RLSUB_2:9;
-  set x1 =the  VECTOR of X;
+  then reconsider x0 = v as VECTOR of X + Lin{v} by A2,RLSUB_2:5;
+  set x1 = the VECTOR of X;
   let q be Banach-Functional of V, fi be linear-Functional of X such that
 A3: for x being VECTOR of X, v being VECTOR of V st x=v holds fi.x <= q. v;
   set A = { fi.x - q.(y - v) where x is VECTOR of X, y is VECTOR of V : x = y
@@ -922,18 +691,18 @@ A3: for x being VECTOR of X, v being VECTOR of V st x=v holds fi.x <= q. v;
 A4: now
     let x1,x2 be VECTOR of X, y1,y2 be VECTOR of V;
     assume x1 = y1 & x2 = y2;
-    then fi.(x1 - x2) <= q.(y1 - y2) by A3,RLSUB_1:24;
+    then fi.(x1 - x2) <= q.(y1 - y2) by A3,RLSUB_1:16;
     then
 A5: fi.x1 - fi.x2 <= q.(y1 - y2) by Th32;
-    y1 - y2 = y1 + 0.V + -y2 by RLVECT_1:10
-      .= y1 + (-v + v) + -y2 by RLVECT_1:16
-      .= y1 - v + v + -y2 by RLVECT_1:def 6
-      .= y1 - v + (v - y2) by RLVECT_1:def 6;
+    y1 - y2 = y1 + 0.V + -y2 by RLVECT_1:4
+      .= y1 + (-v + v) + -y2 by RLVECT_1:5
+      .= y1 - v + v + -y2 by RLVECT_1:def 3
+      .= y1 - v + (v - y2) by RLVECT_1:def 3;
     then q.(y1 - y2) <= q.(y1 - v) + q.(v - y2) by Def3;
     then fi.x1 - fi.x2 <= q.(v - y2) + q.(y1 - v) by A5,XXREAL_0:2;
-    then fi.x1 <= fi.x2 + (q.(v - y2) + q.(y1 - v)) by XREAL_1:22;
+    then fi.x1 <= fi.x2 + (q.(v - y2) + q.(y1 - v)) by XREAL_1:20;
     then fi.x1 <= fi.x2 + q.(v - y2) + q.(y1 - v);
-    hence fi.x1 - q.(y1 - v) <= fi.x2 + q.(v - y2) by XREAL_1:22;
+    hence fi.x1 - q.(y1 - v) <= fi.x2 + q.(v - y2) by XREAL_1:20;
   end;
 A6: now
     let a,b be R_eal;
@@ -947,7 +716,7 @@ A7: ex x1 being VECTOR of X, y1 being VECTOR of V st a = fi.x1 - q.(y1 - v
     ) & x2 = y2;
     hence a <= b by A4,A7;
   end;
-  reconsider v1 = x1 as VECTOR of V by RLSUB_1:18;
+  reconsider v1 = x1 as VECTOR of V by RLSUB_1:10;
 A8: A c= REAL
   proof
     let a be set;
@@ -969,10 +738,10 @@ A9: B c= REAL
   fi.x1 - q.(v1 - v) in A & fi.x1 + q.(v - v1) in B;
   then reconsider A, B as non empty Subset of ExtREAL by A8,A9,NUMBERS:31
 ,XBOOLE_1:1;
-A10: sup A <= inf B by A6,Th10;
+A10: sup A <= inf B by A6,XXREAL_2:96;
 A11: A is bounded_above
   proof
-    set b =the  Element of B;
+    set b = the Element of B;
     reconsider b as real number by A9;
     take b;
       let x be ext-real number;
@@ -980,7 +749,7 @@ A11: A is bounded_above
   end;
   A <> {-infty}
   proof
-    set x =the  Element of A;
+    set x = the Element of A;
     assume A = {-infty};
     then x = -infty by TARSKI:def 1;
     hence contradiction by A8;
@@ -997,55 +766,55 @@ A14: y = u;
   then consider y1,y29 being VECTOR of V such that
 A15: y1 in X and
 A16: y29 in Lin{v} and
-A17: y = y1 + y29 by RLSUB_2:5;
-  y1 in X + Lin{v} by A15,RLSUB_2:6;
+A17: y = y1 + y29 by RLSUB_2:1;
+  y1 in X + Lin{v} by A15,RLSUB_2:2;
   then reconsider x = y1 as VECTOR of X + Lin{v} by STRUCT_0:def 5;
   reconsider x1 = x as VECTOR of X by A15,STRUCT_0:def 5;
   consider t being Real such that
-A18: y29 = t * v by A16,RLVECT_4:11;
+A18: y29 = t * v by A16,RLVECT_4:8;
   per cases;
   suppose
     t = 0;
-    then y29 = 0.V by A18,RLVECT_1:23;
+    then y29 = 0.V by A18,RLVECT_1:10;
     then
-A19: y = x1 by A17,RLVECT_1:10;
+A19: y = x1 by A17,RLVECT_1:4;
     then fi.x1 <= q.u by A3,A14;
-    hence thesis by A12,A19,FUNCT_1:72;
+    hence thesis by A12,A19,FUNCT_1:49;
   end;
   suppose
 A20: t > 0;
     reconsider b = psi.((-t)"*x) + q.(v - (-t)"*y1) as R_eal by XBOOLE_0:def 3
 ,XXREAL_0:def 4;
-A21: v - (-t)"*y1 = v - (-t")*y1 by XCMPLX_1:224
-      .= v + - -t"*y1 by RLVECT_4:6
-      .= v + t"*y1 by RLVECT_1:30;
-A22: (-t)"*x1 = (-t)"*y1 by RLSUB_1:22;
-    then (-t)"*x1 = (-t)"*x by RLSUB_1:22;
-    then fi.((-t)"*x1) = psi.((-t)"*x) by A12,FUNCT_1:72;
+A21: v - (-t)"*y1 = v - (-t")*y1 by XCMPLX_1:222
+      .= v + - -t"*y1 by RLVECT_4:3
+      .= v + t"*y1 by RLVECT_1:17;
+A22: (-t)"*x1 = (-t)"*y1 by RLSUB_1:14;
+    then (-t)"*x1 = (-t)"*x by RLSUB_1:14;
+    then fi.((-t)"*x1) = psi.((-t)"*x) by A12,FUNCT_1:49;
     then psi.((-t)"*x) + q.(v - (-t)"*y1) in B by A22;
     then inf B <= b by XXREAL_2:3;
     then sup A <= b by A10,XXREAL_0:2;
-    then psi.((-t)"*x) >= r - q.(v - (-t)"*y1) by XREAL_1:22;
+    then psi.((-t)"*x) >= r - q.(v - (-t)"*y1) by XREAL_1:20;
     then
-A23: - psi.((-t)"*x) <= - (r - q.(v - (-t)"*y1)) by XREAL_1:26;
+A23: - psi.((-t)"*x) <= - (r - q.(v - (-t)"*y1)) by XREAL_1:24;
     - psi.((-t)"*x) = (-1)*psi.((-t)"*x) .= psi.((-1)*((-t)"*x)) by Def5
-      .= psi.((-1)*(-t)"*x) by RLVECT_1:def 10
-      .= psi.((-1)*(-t")*x) by XCMPLX_1:224
+      .= psi.((-1)*(-t)"*x) by RLVECT_1:def 7
+      .= psi.((-1)*(-t")*x) by XCMPLX_1:222
       .= psi.(t"*x);
     then
 A24: psi.(t"*x) <= q.(v + t"*y1) - r by A23,A21;
-    t"*u = t"*y1 + t"*y29 by A14,A17,RLVECT_1:def 8
-      .= t"*y1 + t"*t*v by A18,RLVECT_1:def 10
+    t"*u = t"*y1 + t"*y29 by A14,A17,RLVECT_1:def 5
+      .= t"*y1 + t"*t*v by A18,RLVECT_1:def 7
       .= t"*y1 + 1*v by A20,XCMPLX_0:def 7
-      .= v + t"*y1 by RLVECT_1:def 11;
-    then psi.(t"*x) + r <= q.(t"*u) by A24,XREAL_1:21;
+      .= v + t"*y1 by RLVECT_1:def 8;
+    then psi.(t"*x) + r <= q.(t"*u) by A24,XREAL_1:19;
     then
 A25: psi.(t"*x) + r <= t"*(q.u) by A20,Def6;
-    y29 in X + Lin{v} by A16,RLSUB_2:6;
+    y29 in X + Lin{v} by A16,RLSUB_2:2;
     then reconsider y2 = y29 as VECTOR of X + Lin{v} by STRUCT_0:def 5;
-    y2 = t*x0 by A18,RLSUB_1:22;
+    y2 = t*x0 by A18,RLSUB_1:14;
     then
-A26: y = x + t*x0 by A17,RLSUB_1:21;
+A26: y = x + t*x0 by A17,RLSUB_1:13;
 A27: t*(t"*(q.u)) = t*t"*(q.u) .= 1*(q.u) by A20,XCMPLX_0:def 7
       .= q.u;
     psi.(x + t*x0) = psi.x + psi.(t*x0) by Def4
@@ -1054,33 +823,33 @@ A27: t*(t"*(q.u)) = t*t"*(q.u) .= 1*(q.u) by A20,XCMPLX_0:def 7
       .= t*(t"*(psi.x) + t"*t*psi.x0)
       .= t*(t"*(psi.x) + 1*psi.x0) by A20,XCMPLX_0:def 7
       .= t*(psi.(t"*x) + r) by A13,Def5;
-    hence thesis by A20,A26,A27,A25,XREAL_1:66;
+    hence thesis by A20,A26,A27,A25,XREAL_1:64;
   end;
   suppose
 A28: t < 0;
-    -y29 in Lin{v} by A16,RLSUB_1:30;
-    then -y29 in X + Lin{v} by RLSUB_2:6;
+    -y29 in Lin{v} by A16,RLSUB_1:22;
+    then -y29 in X + Lin{v} by RLSUB_2:2;
     then reconsider y2 = -y29 as VECTOR of X + Lin{v} by STRUCT_0:def 5;
     reconsider a = psi.((-t)"*x) - q.((-t)"*y1 - v) as R_eal by XBOOLE_0:def 3
 ,XXREAL_0:def 4;
-A29: y = y1 - -y29 by A17,RLVECT_1:30;
-A30: -y29 = (-t)*v by A18,RLVECT_4:6;
-    then y2 = (-t)*x0 by RLSUB_1:22;
+A29: y = y1 - -y29 by A17,RLVECT_1:17;
+A30: -y29 = (-t)*v by A18,RLVECT_4:3;
+    then y2 = (-t)*x0 by RLSUB_1:14;
     then
-A31: y = x - (-t)*x0 by A29,RLSUB_1:24;
-A32: (-t)"*x1 = (-t)"*y1 by RLSUB_1:22;
-    then (-t)"*x1 = (-t)"*x by RLSUB_1:22;
-    then fi.((-t)"*x1) = psi.((-t)"*x) by A12,FUNCT_1:72;
+A31: y = x - (-t)*x0 by A29,RLSUB_1:16;
+A32: (-t)"*x1 = (-t)"*y1 by RLSUB_1:14;
+    then (-t)"*x1 = (-t)"*x by RLSUB_1:14;
+    then fi.((-t)"*x1) = psi.((-t)"*x) by A12,FUNCT_1:49;
     then psi.((-t)"*x) - q.((-t)"*y1 - v) in A by A32;
     then a <= sup A by XXREAL_2:4;
     then
-A33: psi.((-t)"*x) <= r + q.((-t)"*y1 - v) by XREAL_1:22;
-A34: -t > 0 by A28,XREAL_1:60;
-    (-t)"*u = (-t)"*y1 - (-t)"*-y29 by A14,A29,RLVECT_1:48
-      .= (-t)"*y1 - (-t)"*(-t)*v by A30,RLVECT_1:def 10
+A33: psi.((-t)"*x) <= r + q.((-t)"*y1 - v) by XREAL_1:20;
+A34: -t > 0 by A28,XREAL_1:58;
+    (-t)"*u = (-t)"*y1 - (-t)"*-y29 by A14,A29,RLVECT_1:34
+      .= (-t)"*y1 - (-t)"*(-t)*v by A30,RLVECT_1:def 7
       .= (-t)"*y1 - 1*v by A34,XCMPLX_0:def 7
-      .= (-t)"*y1 - v by RLVECT_1:def 11;
-    then psi.((-t)"*x) - r <= q.((-t)"*u) by A33,XREAL_1:22;
+      .= (-t)"*y1 - v by RLVECT_1:def 8;
+    then psi.((-t)"*x) - r <= q.((-t)"*u) by A33,XREAL_1:20;
     then
 A35: psi.((-t)"*x) - r <= (-t)"*(q.u) by A34,Def6;
 A36: (-t)*((-t)"*(q.u)) = (-t)*(-t)"*(q.u) .= 1*(q.u) by A34,XCMPLX_0:def 7
@@ -1091,7 +860,7 @@ A36: (-t)*((-t)"*(q.u)) = (-t)*(-t)"*(q.u) .= 1*(q.u) by A34,XCMPLX_0:def 7
       .= (-t)*((-t)"*(psi.x) - (-t)"*(-t)*psi.x0)
       .= (-t)*((-t)"*(psi.x) - 1*psi.x0) by A34,XCMPLX_0:def 7
       .= (-t)*(psi.((-t)"*x) - r) by A13,Def5;
-    hence thesis by A28,A31,A36,A35,XREAL_1:66;
+    hence thesis by A28,A31,A36,A35,XREAL_1:64;
   end;
 end;
 
@@ -1112,13 +881,13 @@ A1: for v9,w9 be VECTOR of V, v,w be VECTOR of the RLSStruct of V st v = v9
     hereby
       let u,v,w be VECTOR of the RLSStruct of V;
       reconsider u9 = u, v9 = v, w9 = w as VECTOR of V;
-      thus (u + v) + w = (u9 + v9) + w9 .= u9 + (v9 + w9) by RLVECT_1:def 6
+      thus (u + v) + w = (u9 + v9) + w9 .= u9 + (v9 + w9) by RLVECT_1:def 3
         .= u + (v + w);
     end;
     hereby
       let v be VECTOR of the RLSStruct of V;
       reconsider v9 = v as VECTOR of V;
-      thus v + 0.the RLSStruct of V = v9 + 0.V .= v by RLVECT_1:10;
+      thus v + 0.the RLSStruct of V = v9 + 0.V .= v by RLVECT_1:4;
     end;
     thus the RLSStruct of V is right_complementable
     proof
@@ -1133,24 +902,24 @@ A2:   v9 + w9 = 0.V by ALGSTR_0:def 11;
     hereby
       let a be real number, v,w be VECTOR of the RLSStruct of V;
       reconsider v9 = v, w9 = w as VECTOR of V;
-      thus a * (v + w) = a * (v9 + w9) .= a * v9 + a * w9 by RLVECT_1:def 8
+      thus a * (v + w) = a * (v9 + w9) .= a * v9 + a * w9 by RLVECT_1:def 5
         .= a * v + a * w;
     end;
     hereby
       let a,b be real number, v be VECTOR of the RLSStruct of V;
       reconsider v9 = v as VECTOR of V;
-      thus (a + b) * v = (a + b) * v9 .= a * v9 + b * v9 by RLVECT_1:def 9
+      thus (a + b) * v = (a + b) * v9 .= a * v9 + b * v9 by RLVECT_1:def 6
         .= a * v + b * v;
     end;
     hereby
       let a,b be real number, v be VECTOR of the RLSStruct of V;
       reconsider v9 = v as VECTOR of V;
-      thus (a * b) * v = (a * b) * v9 .= a * (b * v9) by RLVECT_1:def 10
+      thus (a * b) * v = (a * b) * v9 .= a * (b * v9) by RLVECT_1:def 7
         .= a * (b * v);
     end;
     let v be VECTOR of the RLSStruct of V;
     reconsider v9 = v as VECTOR of V;
-    thus 1 * v = 1 * v9 .= v by RLVECT_1:def 11;
+    thus 1 * v = 1 * v9 .= v by RLVECT_1:def 8;
   end;
   hence thesis;
 end;
@@ -1232,7 +1001,7 @@ proof
   fi be linear-Functional of X;
   the carrier of X c= the carrier of V by RLSUB_1:def 2;
   then fi in PFuncs(the carrier of X,REAL) & PFuncs(the carrier of X,REAL) c=
-  PFuncs(the carrier of V,REAL) by PARTFUN1:119,128;
+  PFuncs(the carrier of V,REAL) by PARTFUN1:45,50;
   then reconsider fi9 = fi as Element of PFuncs(the carrier of V,REAL);
   reconsider RLS = the RLSStruct of V as RealLinearSpace by Lm2;
   defpred P[Element of PFuncs(the carrier of V,REAL)] means ex Y being
@@ -1241,7 +1010,7 @@ fi & ex f9 being linear-Functional of Y st $1 = f9 & for y being VECTOR of Y, v
   being VECTOR of V st y = v holds f9.y <= q.v;
   reconsider A = { f where f is Element of PFuncs(the carrier of V,REAL): P[f]
   } as Subset of PFuncs(the carrier of V,REAL) from DOMAIN_1:sch 7;
-A1: fi9|the carrier of X = fi by RELSET_1:34;
+A1: fi9|the carrier of X = fi by RELSET_1:19;
   assume
   for x being VECTOR of X, v being VECTOR of V st x=v holds fi.x <= q. v;
   then fi in A by A1;
@@ -1257,7 +1026,7 @@ A6: for x,y being Element of A st x in B & y in B holds P[x,y] or P[y ,x];
     per cases;
     suppose
 A7:   B = {};
-      set u =the  Element of A;
+      set u = the Element of A;
       take u;
       let x be Element of A;
       assume x in B;
@@ -1273,11 +1042,11 @@ A9:   B is c=-linear
       end;
       B is Subset of PFuncs(the carrier of V,REAL) by A5,XBOOLE_1:1;
       then reconsider
-      u = union B as Element of PFuncs(the carrier of V,REAL) by A9,Th13;
+      u = union B as Element of PFuncs(the carrier of V,REAL) by A9,TREES_2:40;
       reconsider E = B as non empty functional set by A5,A8;
-      set t =the  Element of B;
+      set t = the Element of B;
       set K = { dom g where g is Element of E: not contradiction };
-A10:  dom u = union K by Th5;
+A10:  dom u = union K by FUNCT_1:110;
 A11:  now
         let t be set;
         assume t in A;
@@ -1326,8 +1095,8 @@ A21:    g = f9 and
       then ex Y being Subspace of V, f9 being linear-Functional of Y st t = f9
 & the carrier of X c= the carrier of Y & f9|the carrier of X = fi & for y being
       VECTOR of Y, v being VECTOR of V st y = v holds f9.y <= q.v by A11;
-      then u <> {} by A8,XBOOLE_1:3,ZFMISC_1:92;
-      then reconsider D = dom u as non empty Subset of V by A10,A19,ZFMISC_1:94
+      then u <> {} by A8,XBOOLE_1:3,ZFMISC_1:74;
+      then reconsider D = dom u as non empty Subset of V by A10,A19,ZFMISC_1:76
 ;
       D is linearly-closed
       proof
@@ -1361,12 +1130,12 @@ A32:      g = f9 and
           for y being VECTOR of Y, v being VECTOR of V st y = v holds f9.y
           <= q.v by A11;
 A33:      dom g = the carrier of Y by A32,FUNCT_2:def 1;
-          D2 c= dom g by A29,A31,RELAT_1:25;
+          D2 c= dom g by A29,A31,RELAT_1:11;
           then
 A34:      u in Y by A27,A33,STRUCT_0:def 5;
-          D1 c= dom g by A26,A30,RELAT_1:25;
+          D1 c= dom g by A26,A30,RELAT_1:11;
           then v in Y by A24,A33,STRUCT_0:def 5;
-          then v + u in Y by A34,RLSUB_1:28;
+          then v + u in Y by A34,RLSUB_1:20;
           then
 A35:      v + u in dom g by A33,STRUCT_0:def 5;
           dom g in K;
@@ -1390,22 +1159,22 @@ A39:    g = f9 and
         <= q.v by A11;
 A40:    dom g = the carrier of Y by A39,FUNCT_2:def 1;
         then v in Y by A36,A38,STRUCT_0:def 5;
-        then a * v in Y by RLSUB_1:29;
+        then a * v in Y by RLSUB_1:21;
         then
 A41:    a * v in dom g by A40,STRUCT_0:def 5;
         dom g in K;
         hence thesis by A10,A41,TARSKI:def 4;
       end;
       then consider Y being strict Subspace of V such that
-A42:  the carrier of Y = dom u by RLSUB_1:43;
-      set t =the  Element of dom u;
+A42:  the carrier of Y = dom u by RLSUB_1:35;
+      set t = the Element of dom u;
       consider XX being set such that
       t in XX and
 A43:  XX in K by A10,A42,TARSKI:def 4;
       ex f being Function st u = f & dom f c= the carrier of V & rng f c=
-      REAL by PARTFUN1:def 5;
+      REAL by PARTFUN1:def 3;
       then reconsider f9 = u as Function of the carrier of Y, REAL by A42,
-FUNCT_2:def 1,RELSET_1:11;
+FUNCT_2:def 1,RELSET_1:4;
       reconsider f9 as Functional of Y;
       consider gg being Element of E such that
 A44:  XX = dom gg by A43;
@@ -1436,18 +1205,18 @@ A54:    gg = ff and
         ff|the carrier of X = fi and
         for y being VECTOR of YY, v being VECTOR of V st y = v holds ff.y
         <= q.v by A11;
-        dom ggx c= dom gg & dom ggy c= dom gg by A53,RELAT_1:25;
+        dom ggx c= dom gg & dom ggy c= dom gg by A53,RELAT_1:11;
         then reconsider x9 = x, y9 = y as VECTOR of YY by A46,A48,A49,A51,A54,
 FUNCT_2:def 1;
-A55:    ff c= f9 by A54,ZFMISC_1:92;
+A55:    ff c= f9 by A54,ZFMISC_1:74;
 A56:    dom ff = the carrier of YY by FUNCT_2:def 1;
-        then YY is Subspace of Y by A10,A42,A47,A48,A50,A51,A52,A54,RLSUB_1:36
-,ZFMISC_1:92;
-        then x + y = x9 + y9 by RLSUB_1:21;
-        hence f9.(x+y) = ff.(x9+y9) by A56,A55,GRFUNC_1:8
+        then YY is Subspace of Y by A10,A42,A47,A48,A50,A51,A52,A54,RLSUB_1:28
+,ZFMISC_1:74;
+        then x + y = x9 + y9 by RLSUB_1:13;
+        hence f9.(x+y) = ff.(x9+y9) by A56,A55,GRFUNC_1:2
           .= ff.x9 + ff.y9 by Def4
-          .= f9.x+ff.y9 by A56,A55,GRFUNC_1:8
-          .= f9.x+f9.y by A56,A55,GRFUNC_1:8;
+          .= f9.x+ff.y9 by A56,A55,GRFUNC_1:2
+          .= f9.x+f9.y by A56,A55,GRFUNC_1:2;
       end;
       f9 is homogeneous
       proof
@@ -1467,13 +1236,13 @@ A60:    gg = ff and
         for y being VECTOR of YY, v being VECTOR of V st y = v holds ff.y
         <= q.v by A11;
         reconsider x9 = x as VECTOR of YY by A57,A59,A60,FUNCT_2:def 1;
-A61:    ff c= f9 by A60,ZFMISC_1:92;
+A61:    ff c= f9 by A60,ZFMISC_1:74;
 A62:    dom ff = the carrier of YY by FUNCT_2:def 1;
-        then YY is Subspace of Y by A10,A42,A58,A59,A60,RLSUB_1:36,ZFMISC_1:92;
-        then r*x = r*x9 by RLSUB_1:22;
-        hence f9.(r*x) = ff.(r*x9) by A62,A61,GRFUNC_1:8
+        then YY is Subspace of Y by A10,A42,A58,A59,A60,RLSUB_1:28,ZFMISC_1:74;
+        then r*x = r*x9 by RLSUB_1:14;
+        hence f9.(r*x) = ff.(r*x9) by A62,A61,GRFUNC_1:2
           .= r*ff.x9 by Def5
-          .= r*f9.x by A62,A61,GRFUNC_1:8;
+          .= r*f9.x by A62,A61,GRFUNC_1:2;
       end;
       then reconsider f9 as linear-Functional of Y by A45;
 A63:  now
@@ -1494,9 +1263,9 @@ A68:    gg = ff and
 A69:    for y being VECTOR of YY, v being VECTOR of V st y = v holds
         ff.y <= q.v by A11;
         reconsider y9 = y as VECTOR of YY by A65,A67,A68,FUNCT_2:def 1;
-A70:    dom ff = the carrier of YY & ff c= f9 by A68,FUNCT_2:def 1,ZFMISC_1:92;
+A70:    dom ff = the carrier of YY & ff c= f9 by A68,FUNCT_2:def 1,ZFMISC_1:74;
         ff.y9 <= q.v by A64,A69;
-        hence f9.y <= q.v by A70,GRFUNC_1:8;
+        hence f9.y <= q.v by A70,GRFUNC_1:2;
       end;
       gg in A by A5,TARSKI:def 3;
       then consider
@@ -1509,8 +1278,8 @@ A73:  ff|the carrier of X = fi and
       q.v by A11;
       the carrier of X c= dom ff by A72,FUNCT_2:def 1;
       then
-A74:  u|the carrier of X = fi by A71,A73,GRFUNC_1:88,ZFMISC_1:92;
-A75:  XX c= dom u by A10,A43,ZFMISC_1:92;
+A74:  u|the carrier of X = fi by A71,A73,GRFUNC_1:27,ZFMISC_1:74;
+A75:  XX c= dom u by A10,A43,ZFMISC_1:74;
       XX = the carrier of YY by A44,A71,FUNCT_2:def 1;
       then the carrier of X c= the carrier of Y by A42,A72,A75,XBOOLE_1:1;
       then u in A by A74,A63;
@@ -1518,7 +1287,7 @@ A75:  XX c= dom u by A10,A43,ZFMISC_1:92;
       take u;
       let x be Element of A;
       assume x in B;
-      hence P[x,u] by ZFMISC_1:92;
+      hence P[x,u] by ZFMISC_1:74;
     end;
   end;
 A76: for x being Element of A holds P[x,x];
@@ -1545,7 +1314,7 @@ A85: RLSY is Subspace of RLS by Lm3;
 A86: now
     assume the RLSStruct of Y <> the RLSStruct of V;
     then
-A87: the carrier of Y <> the carrier of V by A85,RLSUB_1:40;
+A87: the carrier of Y <> the carrier of V by A85,RLSUB_1:32;
     the carrier of Y c= the carrier of V by RLSUB_1:def 2;
     then the carrier of Y c< the carrier of V by A87,XBOOLE_0:def 8;
     then consider v being set such that
@@ -1563,21 +1332,21 @@ A93: the carrier of X c= the carrier of Y + Lin{v} by A80,XBOOLE_1:1;
 A94: dom phi = the carrier of Y + Lin{v} by FUNCT_2:def 1;
     then dom phi c= the carrier of V by RLSUB_1:def 2;
     then reconsider phi as Element of PFuncs(the carrier of V,REAL) by A92,
-PARTFUN1:def 5;
+PARTFUN1:def 3;
     (the carrier of Y) /\ the carrier of X = the carrier of X by A80,
 XBOOLE_1:28;
-    then phi|the carrier of X = fi by A81,A83,A90,RELAT_1:100;
+    then phi|the carrier of X = fi by A81,A83,A90,RELAT_1:71;
     then
 A95: phi in A by A91,A93;
-    v in Lin{v} by RLVECT_4:12;
+    v in Lin{v} by RLVECT_4:9;
     then
 A96: v in the carrier of Lin{v} by STRUCT_0:def 5;
     reconsider phi as Element of A by A95;
     the carrier of Lin{v} c= the carrier of Lin{v} + Y by Th14;
     then dom f9 = the carrier of Y & v in the carrier of Lin{v} + Y by A96,
 FUNCT_2:def 1;
-    then phi <> psi by A78,A83,A89,A94,RLSUB_2:9;
-    hence contradiction by A77,A78,A83,A90,RELAT_1:88;
+    then phi <> psi by A78,A83,A89,A94,RLSUB_2:5;
+    hence contradiction by A77,A78,A83,A90,RELAT_1:59;
   end;
   reconsider ggh = f9 as linear-Functional of RLSY by Lm5;
   f = ggh by A83;
@@ -1599,13 +1368,13 @@ A1: N is subadditive
     let x,y be VECTOR of V;
 A2: N.(x+y) = ||.x+y.|| by NORMSP_0:def 1;
     N.(x) = ||.x.|| & N.(y) = ||.y.|| by NORMSP_0:def 1;
-    hence thesis by A2,NORMSP_1:def 2;
+    hence thesis by A2,NORMSP_1:def 1;
   end;
   N is absolutely_homogeneous
   proof
     let x be VECTOR of V, r be Real;
     thus N.(r*x) = ||.r*x.|| by NORMSP_0:def 1
-      .= abs(r)*||.x.|| by NORMSP_1:def 2
+      .= abs(r)*||.x.|| by NORMSP_1:def 1
       .= abs(r)*N.x by NORMSP_0:def 1;
   end;
   hence thesis by A1;

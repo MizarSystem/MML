@@ -33,7 +33,7 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="80"/>
+<Adjective nr="82"/>
 </Cluster>
 </RCluster>
 <RCluster aid="FINTOPO2" nr="2">
@@ -42,8 +42,8 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="48" value="false"/>
-<Adjective nr="80"/>
+<Adjective nr="49" value="false"/>
+<Adjective nr="82"/>
 </Cluster>
 </RCluster>
 </Registrations>

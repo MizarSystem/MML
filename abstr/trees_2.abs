@@ -17,15 +17,15 @@ environ
  vocabularies NUMBERS, TREES_1, SUBSET_1, FUNCT_1, XBOOLE_0, FINSEQ_1,
       ORDINAL4, XXREAL_0, ARYTM_3, RELAT_1, TARSKI, CARD_1, NAT_1, ORDINAL1,
       FINSET_1, REAL_1, ARYTM_1, ZFMISC_1, FUNCOP_1, TREES_2, AMISTD_3,
-      FINSEQ_2;
+      FINSEQ_2, PARTFUN1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, RELAT_1, XCMPLX_0,
-      FUNCT_1, REAL_1, NAT_1, CARD_1, NUMBERS, FINSEQ_1, FINSEQ_2, FINSET_1,
-      RELSET_1, BINOP_1, FUNCT_2, FUNCOP_1, TREES_1, XXREAL_0;
+      FUNCT_1, PARTFUN1, REAL_1, NAT_1, CARD_1, NUMBERS, FINSEQ_1, FINSEQ_2,
+      FINSET_1, RELSET_1, BINOP_1, FUNCT_2, FUNCOP_1, TREES_1, XXREAL_0;
  constructors WELLORD2, BINOP_1, FUNCOP_1, XXREAL_0, REAL_1, NAT_1, TREES_1,
       RELSET_1, FINSEQ_2;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1, FUNCOP_1,
       FINSET_1, NUMBERS, XXREAL_0, XREAL_0, NAT_1, FINSEQ_1, TREES_1, CARD_1,
-      RELSET_1, FINSEQ_2;
+      RELSET_1, FINSEQ_2, DOMAIN_1, PARTFUN1;
  requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
 
 
@@ -48,14 +48,10 @@ theorem :: TREES_2:2
   for v1,v2,v st v1 is_a_proper_prefix_of v & v2 is_a_prefix_of v holds
   v1,v2 are_c=-comparable;
 
-canceled;
-
-theorem :: TREES_2:4
+theorem :: TREES_2:3
   len v1 = k+1 implies ex v2,x st v1 = v2^<*x*> & len v2 = k;
 
-canceled;
-
-theorem :: TREES_2:6
+theorem :: TREES_2:4
   ProperPrefixes (v^<*x*>) = ProperPrefixes v \/ {v};
 
 scheme :: TREES_2:sch 1
@@ -65,7 +61,7 @@ provided
  P[{}] and
  for t being Element of T(), n st P[t] & t^<*n*> in T() holds P[t^<*n*>];
 
-theorem :: TREES_2:7
+theorem :: TREES_2:5
   (for p holds p in W1 iff p in W2) implies W1 = W2;
 
 definition
@@ -75,14 +71,14 @@ definition
   for p holds p in W1 iff p in W2;
 end;
 
-theorem :: TREES_2:8
+theorem :: TREES_2:6
   p in W implies W = W with-replacement (p,W|p);
 
-theorem :: TREES_2:9
+theorem :: TREES_2:7
   p in W & q in W & not p is_a_prefix_of q implies
   q in W with-replacement (p,W1);
 
-theorem :: TREES_2:10
+theorem :: TREES_2:8
   p in W & q in W & not p,q are_c=-comparable implies
   (W with-replacement (p,W1)) with-replacement (q,W2) =
   (W with-replacement (q,W2)) with-replacement (p,W1);
@@ -95,7 +91,7 @@ definition
 end;
 
 registration
-  cluster finite-order Tree;
+  cluster finite-order for Tree;
 end;
 
 definition
@@ -114,13 +110,13 @@ definition
   { w^<*n*>: w^<*n*> in W };
 end;
 
-theorem :: TREES_2:11
+theorem :: TREES_2:9
   for L being Level of W holds L is AntiChain_of_Prefixes of W;
 
-theorem :: TREES_2:12
+theorem :: TREES_2:10
   succ w is AntiChain_of_Prefixes of W;
 
-theorem :: TREES_2:13
+theorem :: TREES_2:11
   for A being AntiChain_of_Prefixes of W, C being Chain of W
   ex w st A /\ C c= {w};
 
@@ -132,19 +128,19 @@ definition
   { w: len w = n };
 end;
 
-theorem :: TREES_2:14
+theorem :: TREES_2:12
   w^<*n*> in succ w iff w^<*n*> in W;
 
-theorem :: TREES_2:15
+theorem :: TREES_2:13
   w = {} implies W-level 1 = succ w;
 
-theorem :: TREES_2:16
+theorem :: TREES_2:14
   W = union { W-level n: not contradiction };
 
-theorem :: TREES_2:17
+theorem :: TREES_2:15
   for W being finite Tree holds W = union { W-level n: n <= height W };
 
-theorem :: TREES_2:18
+theorem :: TREES_2:16
   for L being Level of W ex n st L = W-level n;
 
 scheme :: TREES_2:sch 2
@@ -157,11 +153,11 @@ scheme :: TREES_2:sch 3
 provided
  Y() = { F(w) where w is Element of A(): w in X() };
 
-theorem :: TREES_2:19
+theorem :: TREES_2:17
   W is finite-order implies ex n st for w holds
   ex B being finite set st B = succ w & card B <= n;
 
-theorem :: TREES_2:20
+theorem :: TREES_2:18
   W is finite-order implies succ w is finite;
 
 registration
@@ -170,15 +166,15 @@ registration
   cluster succ w -> finite;
 end;
 
-theorem :: TREES_2:21
+theorem :: TREES_2:19
   {} is Chain of W;
 
-theorem :: TREES_2:22
+theorem :: TREES_2:20
   {{}} is Chain of W;
 
 registration
   let W;
-  cluster non empty Chain of W;
+  cluster non empty for Chain of W;
 end;
 
 definition
@@ -193,7 +189,7 @@ end;
 
 registration
   let W;
-  cluster Branch-like Chain of W;
+  cluster Branch-like for Chain of W;
 end;
 
 definition
@@ -203,40 +199,40 @@ end;
 
 registration
   let W;
-  cluster Branch-like -> non empty Chain of W;
+  cluster Branch-like -> non empty for Chain of W;
 end;
 
 reserve C for Chain of W,
   B for Branch of W;
 
-theorem :: TREES_2:23
+theorem :: TREES_2:21
   v1 in C & v2 in C implies v1 in ProperPrefixes v2 or v2 is_a_prefix_of v1;
 
-theorem :: TREES_2:24
+theorem :: TREES_2:22
   v1 in C & v2 in C & v is_a_prefix_of v2 implies
   v1 in ProperPrefixes v or v is_a_prefix_of v1;
 
 registration
   let W;
-  cluster finite Chain of W;
+  cluster finite for Chain of W;
 end;
 
-theorem :: TREES_2:25
+theorem :: TREES_2:23
   for C being finite Chain of W st card C > n ex p st p in C & len p >= n;
 
-theorem :: TREES_2:26
+theorem :: TREES_2:24
   for C holds { w: ex p st p in C & w is_a_prefix_of p } is Chain of W;
 
-theorem :: TREES_2:27
+theorem :: TREES_2:25
   p is_a_prefix_of q & q in B implies p in B;
 
-theorem :: TREES_2:28
+theorem :: TREES_2:26
   {} in B;
 
-theorem :: TREES_2:29
+theorem :: TREES_2:27
   p in C & q in C & len p <= len q implies p is_a_prefix_of q;
 
-theorem :: TREES_2:30
+theorem :: TREES_2:28
   ex B st C c= B;
 
 scheme :: TREES_2:sch 4
@@ -254,13 +250,13 @@ provided
  a() in X() & Q[a()] and
  for x st x in X() & Q[x] ex y st y in X() & P[x,y] & Q[y];
 
-theorem :: TREES_2:31
+theorem :: TREES_2:29
   for T being Tree st (for n ex C being finite Chain of T st card C = n) &
   for t being Element of T holds succ t is finite
   ex B being Chain of T st not B is finite;
 
 ::$N Koenig Lemma
-theorem :: TREES_2:32
+theorem :: TREES_2:30
   for T being finite-order Tree st
   for n ex C being finite Chain of T st card C = n
   ex B being Chain of T st not B is finite;
@@ -274,7 +270,7 @@ definition
 end;
 
 registration
-  cluster DecoratedTree-like Function;
+  cluster DecoratedTree-like for Function;
 end;
 
 definition
@@ -290,7 +286,7 @@ end;
 
 registration
   let D;
-  cluster DecoratedTree-like D-valued Function;
+  cluster DecoratedTree-like D-valued for Function;
 end;
 
 definition
@@ -303,7 +299,7 @@ definition
   redefine func T.t -> Element of D;
 end;
 
-theorem :: TREES_2:33
+theorem :: TREES_2:31
   dom T1 = dom T2 & (for p st p in dom T1 holds T1.p = T2.p) implies T1 = T2;
 
 scheme :: TREES_2:sch 6
@@ -317,19 +313,19 @@ scheme :: TREES_2:sch 7
   ex T st dom T = T() & for p st p in T() holds T.p = f(p);
 
 definition
-  canceled;
+
   let T;
   func Leaves T -> set equals
-:: TREES_2:def 10
+:: TREES_2:def 9
   T.:Leaves dom T;
   let p;
   func T|p -> DecoratedTree means
-:: TREES_2:def 11
+:: TREES_2:def 10
 
    dom it = (dom T)|p & for q st q in (dom T)|p holds it.q = T.(p^q);
 end;
 
-theorem :: TREES_2:34
+theorem :: TREES_2:32
   p in dom T implies rng (T|p) c= rng T;
 
 definition
@@ -350,7 +346,7 @@ definition
   assume
  p in dom T;
   func T with-replacement (p,T1) -> DecoratedTree means
-:: TREES_2:def 12
+:: TREES_2:def 11
   dom it = dom T with-replacement (p,dom T1) &
   for q st q in dom T with-replacement (p,dom T1) holds
   not p is_a_prefix_of q & it.q = T.q or
@@ -362,18 +358,18 @@ registration
   cluster W --> x -> DecoratedTree-like;
 end;
 
-theorem :: TREES_2:35
+theorem :: TREES_2:33
   (for x st x in D holds x is Tree) implies union D is Tree;
 
-theorem :: TREES_2:36
+theorem :: TREES_2:34
   (for x st x in X holds x is Function) & X is c=-linear implies
   union X is Relation-like Function-like;
 
-theorem :: TREES_2:37
+theorem :: TREES_2:35
   (for x st x in D holds x is DecoratedTree) & D is c=-linear
   implies union D is DecoratedTree;
 
-theorem :: TREES_2:38
+theorem :: TREES_2:36
   (for x st x in D9 holds x is DecoratedTree of D) & D9 is c=-linear implies
   union D9 is DecoratedTree of D;
 
@@ -406,22 +402,22 @@ end;
 definition
   let Tr be finite Tree, v be Element of Tr;
   func branchdeg v equals
-:: TREES_2:def 13
+:: TREES_2:def 12
   card succ v;
 end;
 
 registration
-  cluster finite DecoratedTree;
+  cluster finite for DecoratedTree;
 end;
 
 registration
   let D be non empty set;
-  cluster finite DecoratedTree of D;
+  cluster finite for DecoratedTree of D;
 end;
 
 registration
   let a,b be non empty set;
-  cluster non empty Relation of a,b;
+  cluster non empty for Relation of a,b;
 end;
 
 :: from MODAL_1, 2007.03.14, A.T.
@@ -429,7 +425,7 @@ end;
 reserve x1,x2 for set,
   w for FinSequence of NAT;
 
-theorem :: TREES_2:39
+theorem :: TREES_2:37
   for Z1,Z2 being Tree,p being FinSequence of NAT st p in Z1 holds
   for v being Element of Z1 with-replacement (p,Z2),w being Element of Z2
   st v = p^w holds succ v,succ w are_equipotent;
@@ -446,10 +442,14 @@ provided
 
 :: from AMISTD_3, 2010.01.10, A.T.
 
-theorem :: TREES_2:40
+theorem :: TREES_2:38
   for T1, T2 being Tree st
      for n being Element of NAT holds T1-level n = T2-level n
    holds T1 = T2;
 
-theorem :: TREES_2:41
+theorem :: TREES_2:39
   for n being Element of NAT holds TrivialInfiniteTree-level n = { n |-> 0 };
+
+theorem :: TREES_2:40
+  for X,Y being set for B being c=-linear Subset of PFuncs(X,Y)
+  holds union B in PFuncs(X,Y);
